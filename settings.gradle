@@ -1,0 +1,3 @@
+rootProject.name = 'aws-sdk-kotlin'
+rootProject.buildFileName = 'build.gradle.kts'
+
