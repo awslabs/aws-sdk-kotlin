@@ -1,0 +1,4 @@
+package software.amazon.awssdk.kotlin.codegen
+
+val NAME = "@name@"
+val VERSION = "@version@"
