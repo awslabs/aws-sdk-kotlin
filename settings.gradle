@@ -2,4 +2,5 @@ rootProject.name = 'aws-sdk-kotlin'
 rootProject.buildFileName = 'build.gradle.kts'
 include 'codegen'
 include 'codegen-gradle-plugin'
+include 'codegen-maven-plugin'
 
