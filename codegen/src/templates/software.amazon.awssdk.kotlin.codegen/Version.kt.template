@@ -1,4 +1,4 @@
 package software.amazon.awssdk.kotlin.codegen
 
-val NAME = "@name@"
+val NAME = "aws-sdk-kotlin"
 val VERSION = "@version@"

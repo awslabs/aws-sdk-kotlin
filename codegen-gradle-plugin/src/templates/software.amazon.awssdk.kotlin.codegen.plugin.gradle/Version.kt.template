@@ -1,0 +1,4 @@
+package software.amazon.awssdk.kotlin.codegen.plugin.gradle
+
+val USER_AGENT_PLUGIN_NAME = "aws-kotlin-gradle"
+val USER_AGENT_PLUGIN_VERSION = "@version@"

@@ -9,6 +9,7 @@ import org.gradle.api.tasks.TaskAction
 import software.amazon.awssdk.kotlin.codegen.*
 import software.amazon.awssdk.kotlin.codegen.plugin.gradle.Constants.GENERATION_DIR
 import software.amazon.awssdk.kotlin.codegen.plugin.gradle.Constants.PLUGIN_NAME
+
 import java.io.File
 import java.io.InputStream
 import java.net.URLClassLoader
@@ -39,11 +40,10 @@ open class CodeGenerationTask : DefaultTask() {
         val outputDirectory = configuration().outputDir ?: defaultOutputDirectory
         val configuration = configuration().toImmutable()
 
-        val codeGeneratorBuilder = CodeGenerator.builder(outputDirectory.toPath()).let {
-            if (configuration.minimizeFiles != null) it.minimizeFiles(configuration.minimizeFiles) else it
-        }.let {
-            if (configuration.targetBasePackage != null) it.targetPackageBase(configuration.targetBasePackage) else it
-        }
+        val codeGeneratorBuilder = CodeGenerator.builder(outputDirectory.toPath())
+                .let { if (configuration.minimizeFiles != null) it.minimizeFiles(configuration.minimizeFiles) else it }
+                .let { if (configuration.targetBasePackage != null) it.targetBasePackage(configuration.targetBasePackage) else it }
+                .apiName(USER_AGENT_PLUGIN_NAME, USER_AGENT_PLUGIN_VERSION)
 
         configuration().services.map { objectToServiceModelInputStream(it) }
                 .forEach {
@@ -92,10 +92,8 @@ open class CodeGenerationTask : DefaultTask() {
         }
     }
 
-    private fun loadServiceModelFromArtifact(artifactId: String): Pair<InputStream, InputStream?> {
-        val pair = loadServiceModelFromArtifactId("software.amazon.awssdk", artifactId)
-        return pair
-    }
+    private fun loadServiceModelFromArtifact(artifactId: String): Pair<InputStream, InputStream?>
+        = loadServiceModelFromArtifactId("software.amazon.awssdk", artifactId)
 
     private fun loadServiceModelFromArtifactId(groupId: String, artifactId: String): Pair<InputStream, InputStream?> {
         val artifact = project.configurations.findByName("compile")

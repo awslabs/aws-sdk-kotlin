@@ -12,7 +12,8 @@ import software.amazon.awssdk.kotlin.codegen.NAME
 import software.amazon.awssdk.kotlin.codegen.VERSION
 
 class SyncClientSpec(private val model: IntermediateModel,
-                     private val poetExtensions: PoetExtensions) : ClassSpec(model.metadata.syncClient) {
+                     private val poetExtensions: PoetExtensions,
+                     private val apiName: ApiName?) : ClassSpec(model.metadata.syncClient) {
     private val baseClass = poetExtensions.javaSdkClientClass(model.metadata.syncInterface)
     override fun typeSpec(): TypeSpec {
         return TypeSpec.classBuilder(model.metadata.syncClient)
@@ -26,6 +27,12 @@ class SyncClientSpec(private val model: IntermediateModel,
                         .addModifiers(KModifier.PRIVATE)
                         .initializer("client").build())
                 .addProperty(userAgent())
+                .apply {
+                    if (apiName != null) {
+                        this.addProperty(userAgent(apiName))
+                    }
+                }
+                .addAnnotation(poetExtensions.generated)
                 .addFunctions(functionSpecs())
                 .addFunction(userAgentExtension())
                 .build()
@@ -53,6 +60,11 @@ class SyncClientSpec(private val model: IntermediateModel,
                 .initializer("%T.builder().name(%S).version(%S).build()", ApiName::class, NAME, VERSION).build()
     }
 
+    private fun userAgent(apiName: ApiName): PropertySpec {
+        return PropertySpec.builder("pluginApiName", ApiName::class.asClassName(), KModifier.PRIVATE)
+                .initializer("%T.builder().name(%S).version(%S).build()", ApiName::class, apiName.name(), apiName.version()).build()
+    }
+
     private fun userAgentExtension(): FunSpec {
         val parameterizedType = TypeVariableName.invoke("T", AwsRequest::class)
 
@@ -61,9 +73,14 @@ class SyncClientSpec(private val model: IntermediateModel,
                 .addTypeVariable(parameterizedType)
                 .receiver(parameterizedType)
                 .returns(parameterizedType)
-                .addCode("val %L = this.requestOverrideConfig().map { it.toBuilder() }.orElseGet { %T.builder() }.addApiName(apiName).build()",
+                .addCode("val %L = this.requestOverrideConfig().map { it.toBuilder() }.orElseGet { %T.builder() }.addApiName(apiName)",
                         "cfg",
                         AwsRequestOverrideConfig::class)
+                .apply {
+                    if (apiName != null) {
+                        this.addCode(".addApiName(pluginApiName)")
+                    }
+                }.addCode(".build()")
                 .addCode("\n@%T(%S)\nreturn this.toBuilder().requestOverrideConfig(%L).build() as T", Suppress::class, "UNCHECKED_CAST", "cfg")
                 .build()
     }

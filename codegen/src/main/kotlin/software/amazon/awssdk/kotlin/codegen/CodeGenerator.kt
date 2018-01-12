@@ -9,6 +9,7 @@ import software.amazon.awssdk.codegen.model.intermediate.IntermediateModel
 import software.amazon.awssdk.codegen.model.intermediate.ShapeModel
 import software.amazon.awssdk.codegen.model.intermediate.ShapeType
 import software.amazon.awssdk.codegen.model.service.ServiceModel
+import software.amazon.awssdk.core.ApiName
 import software.amazon.awssdk.kotlin.codegen.poet.PoetExtensions
 import software.amazon.awssdk.kotlin.codegen.poet.PoetSpec
 import software.amazon.awssdk.kotlin.codegen.poet.specs.EnumModelSpec
@@ -20,12 +21,12 @@ import java.nio.file.Path
 
 class CodeGenerator private constructor(private val params: Builder) {
     private val serviceModel = loadModel(ServiceModel::class.java, params.serviceModel)!!
-    private val customization = loadModel(CustomizationConfig::class.java,params.customizationConfig) ?: CustomizationConfig.DEFAULT
+    private val customization = loadModel(CustomizationConfig::class.java, params.customizationConfig) ?: CustomizationConfig.DEFAULT
     private val intermediateModel = IntermediateModelBuilder(C2jModels.builder()
             .serviceModel(serviceModel)
             .customizationConfig(customization)
             .build()).build()
-    private val packageForService = intermediateModel.metadata.fullClientPackageName.replace("software.amazon.awssdk", params.targetPackageBase)
+    private val packageForService = intermediateModel.metadata.fullClientPackageName.replace("software.amazon.awssdk", params.targetBasePackage)
     private val poetExtensions = PoetExtensions(packageForService, intermediateModel.metadata.fullClientPackageName)
 
     fun execute() {
@@ -53,7 +54,7 @@ class CodeGenerator private constructor(private val params: Builder) {
 
     private fun generateClients(intermediateModel: IntermediateModel) {
         FileSpec.builder(poetExtensions.basePackage, intermediateModel.metadata.syncClient)
-                .apply { SyncClientSpec(intermediateModel, poetExtensions).appendTo(this) }
+                .apply { SyncClientSpec(intermediateModel, poetExtensions, params.apiName).appendTo(this) }
                 .build()
                 .writeTo(params.outputDirectory)
     }
@@ -96,13 +97,15 @@ class CodeGenerator private constructor(private val params: Builder) {
     data class Builder internal constructor(internal val outputDirectory: Path,
                                             internal val serviceModel: InputStream? = null,
                                             internal val customizationConfig: InputStream? = null,
-                                            internal val targetPackageBase: String = "software.amazon.awssdk.kotlin",
-                                            internal val minimizeFiles: Boolean = false) {
+                                            internal val targetBasePackage: String = "software.amazon.awssdk.kotlin",
+                                            internal val minimizeFiles: Boolean = false,
+                                            internal val apiName: ApiName? = null) {
 
-        fun targetPackageBase(targetPackageBase: String): Builder = copy(targetPackageBase = targetPackageBase)
+        fun targetBasePackage(targetBasePackage: String): Builder = copy(targetBasePackage = targetBasePackage)
         fun minimizeFiles(minimizeFiles: Boolean): Builder = copy(minimizeFiles = minimizeFiles)
         fun serviceModel(serviceModel: InputStream): Builder = copy(serviceModel = serviceModel)
         fun customizationConfig(customizationConfig: InputStream): Builder = copy(customizationConfig = customizationConfig)
+        fun apiName(name: String, version: String): Builder = copy(apiName = ApiName.builder().name(name).version(version).build())
         fun build(): CodeGenerator = CodeGenerator(this)
     }
 

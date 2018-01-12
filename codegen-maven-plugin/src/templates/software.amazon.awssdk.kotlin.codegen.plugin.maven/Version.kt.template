@@ -1,0 +1,4 @@
+package software.amazon.awssdk.kotlin.codegen.plugin.maven
+
+val USER_AGENT_PLUGIN_NAME = "aws-kotlin-maven"
+val USER_AGENT_PLUGIN_VERSION = "@version@"

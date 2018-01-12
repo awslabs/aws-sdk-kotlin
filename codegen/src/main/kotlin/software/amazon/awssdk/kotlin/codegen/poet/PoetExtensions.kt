@@ -1,11 +1,13 @@
 package software.amazon.awssdk.kotlin.codegen.poet
 
-import software.amazon.awssdk.kotlin.codegen.GenerationException
 import com.squareup.kotlinpoet.*
+import software.amazon.awssdk.kotlin.codegen.CodeGenerator
+import software.amazon.awssdk.kotlin.codegen.GenerationException
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.time.Instant
+import javax.annotation.Generated
 
 class PoetExtensions(val basePackage: String, val javaSdkBasePackage: String) {
     val modelPackage = "$basePackage.model"
@@ -18,6 +20,10 @@ class PoetExtensions(val basePackage: String, val javaSdkBasePackage: String) {
     fun javaSdkModelClass(type: String): ClassName = ClassName(javaSdkModelPackage, type)
 
     fun javaSdkClientClass(type: String): ClassName = ClassName(javaSdkBasePackage, type)
+
+    val generated: AnnotationSpec = AnnotationSpec.builder(Generated::class)
+            .addMember("%S", CodeGenerator::class.java.name)
+            .build()
 
     companion object {
         private val simpleTypeMap = mapOf(

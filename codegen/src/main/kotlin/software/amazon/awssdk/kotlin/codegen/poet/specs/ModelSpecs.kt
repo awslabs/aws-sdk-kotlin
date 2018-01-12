@@ -25,6 +25,7 @@ class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: 
                                 .addProperties(params.map { PropertySpec.builder(it.name, it.type).initializer(it.name).build() })
                     }
                 }
+                .addAnnotation(poetExtensions.generated)
                 .build()
     }
 

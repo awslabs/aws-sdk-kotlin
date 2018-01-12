@@ -5,6 +5,7 @@ configurations {
 dependencies {
     compile "org.apache.maven:maven-plugin-api:3.5.0"
     compile 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.5'
+    compile 'org.apache.maven:maven-project:2.2.1'
     compile project(":codegen")
 
     mavenEmbedder 'org.apache.maven:maven-embedder:3.5.0'

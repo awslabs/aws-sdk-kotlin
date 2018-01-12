@@ -1,3 +1,4 @@
+import org.apache.tools.ant.filters.ReplaceTokens
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "software.amazon.awssdk.kotlin"
@@ -37,6 +38,30 @@ subprojects {
 
     dependencies {
         compile(kotlinModule("stdlib-jdk8", kotlin_version))
+    }
+
+    task("copyTemplates", type = Copy::class) {
+
+        val tokens = mapOf("version" to project.version)
+        inputs.properties(tokens)
+
+        from("src/templates") {
+            include("**/*.template")
+            rename("(.*)(\\.template)", "$1")
+            filter<ReplaceTokens>("tokens" to tokens)
+        }
+
+        into("$buildDir/generated-src/kotlin")
+
+        project.tasks.findByName("compileKotlin").dependsOn(project.tasks.findByName("copyTemplates"))
+
+        the<JavaPluginConvention>().sourceSets {
+            "main" {
+                java {
+                    srcDirs("$buildDir/generated-src/kotlin")
+                }
+            }
+        }
     }
 
     tasks.withType<KotlinCompile> {

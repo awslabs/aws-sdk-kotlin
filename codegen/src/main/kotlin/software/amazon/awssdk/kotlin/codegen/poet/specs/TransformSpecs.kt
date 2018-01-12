@@ -9,7 +9,7 @@ import software.amazon.awssdk.codegen.model.intermediate.ShapeType
 import software.amazon.awssdk.kotlin.codegen.poet.PoetExtensions
 import software.amazon.awssdk.kotlin.codegen.poet.PoetSpec
 
-class ModelTransformerSpec(private val model: ShapeModel, poetExtensions: PoetExtensions) : PoetSpec {
+class ModelTransformerSpec(private val model: ShapeModel, private val poetExtensions: PoetExtensions) : PoetSpec {
     private val javaSdkClass = poetExtensions.javaSdkModelClass(model.variable.variableType)
     private val kotlinSdkClass = poetExtensions.modelClass(model.variable.variableType)
     override val name: String = model.shapeName
@@ -22,6 +22,7 @@ class ModelTransformerSpec(private val model: ShapeModel, poetExtensions: PoetEx
 
     private fun asKotlinSdkFunction(): FunSpec {
         return FunSpec.builder("asKotlinSdk")
+                .addAnnotation(poetExtensions.generated)
                 .returns(kotlinSdkClass)
                 .receiver(javaSdkClass)
                 .apply {
@@ -54,6 +55,7 @@ class ModelTransformerSpec(private val model: ShapeModel, poetExtensions: PoetEx
 
     private fun asJavaSdkFunction(): FunSpec {
         return FunSpec.builder("asJavaSdk")
+                .addAnnotation(poetExtensions.generated)
                 .returns(javaSdkClass)
                 .receiver(kotlinSdkClass).apply {
             if (model.shapeType == ShapeType.Enum) {
