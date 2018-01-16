@@ -1,4 +1,5 @@
 import org.apache.tools.ant.filters.ReplaceTokens
+import org.gradle.api.tasks.Copy
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "software.amazon.awssdk.kotlin"
@@ -15,7 +16,6 @@ buildscript {
     dependencies {
         classpath(kotlinModule("gradle-plugin", kotlin_version))
     }
-
 }
 
 val kotlin_version: String by extra
@@ -40,7 +40,15 @@ subprojects {
         compile(kotlinModule("stdlib-jdk8", kotlin_version))
     }
 
+    task("integrationTest", type = Test::class) {
+        description = "Runs the integration tests."
+        group = "Verification"
+        dependsOn(tasks.findByName("compileTestKotlin"))
+    }
+
     task("copyTemplates", type = Copy::class) {
+
+        description = "Copies templates from the templates directory."
 
         val tokens = mapOf("version" to project.version)
         inputs.properties(tokens)

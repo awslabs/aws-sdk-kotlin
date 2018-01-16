@@ -4,6 +4,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskAction
 import software.amazon.awssdk.kotlin.codegen.*
@@ -29,6 +30,8 @@ class GradleCodeGenerationPlugin : Plugin<Project> {
 
 open class CodeGenerationTask : DefaultTask() {
 
+    private val defaultOutputDirectory = project.file("${project.buildDir}/$GENERATION_DIR")
+
     @Input
     fun configuration(): CodeGenerationPluginExtension {
         return project.extensions.findByName(PLUGIN_NAME) as CodeGenerationPluginExtension
@@ -36,8 +39,7 @@ open class CodeGenerationTask : DefaultTask() {
 
     @TaskAction
     fun generateCode() {
-        val defaultOutputDirectory = project.file("${project.buildDir}/$GENERATION_DIR")
-        val outputDirectory = configuration().outputDir ?: defaultOutputDirectory
+        val outputDirectory = outputDirectory()
         val configuration = configuration().toImmutable()
 
         val codeGeneratorBuilder = CodeGenerator.builder(outputDirectory.toPath())
@@ -60,6 +62,9 @@ open class CodeGenerationTask : DefaultTask() {
             sources.findByName("main").java.srcDir(outputDirectory)
         }
     }
+
+    @OutputDirectory
+    fun outputDirectory() = configuration().outputDir ?: defaultOutputDirectory
 
     private fun objectToServiceModelInputStream(it: Any): Pair<InputStream, InputStream?> {
         return when {
