@@ -1,23 +1,23 @@
 val compileTestProject = task(name = "compileTestProject", type = GradleBuild::class) {
     description = "Generate Kotlin SDK in test project using gradle plugin and compile."
-    buildFile = file("${project.parent.projectDir}/test-project/build.gradle")
-    tasks = listOf("compileTestKotlin")
     outputs.file("${project.parent.projectDir}/test-project/build/generated-src")
     dependsOn(":codegen:install", "install")
-}
+    project.tasks.findByName("test").dependsOn(this)
 
-tasks.findByName("test").dependsOn(compileTestProject)
+    buildFile = file("${project.parent.projectDir}/test-project/build.gradle")
+    tasks = listOf("compileTestKotlin")
+}
 
 val integrationTestProject = task(name = "integrationTestProject",
         type = GradleBuild::class) {
     description = "Runs integration tests on test project."
-    buildFile = file("${project.parent.projectDir}/test-project/build.gradle")
-    tasks = listOf("test")
     inputs.file("${project.parent.projectDir}/test-project/build/generated-src")
     dependsOn(compileTestProject)
-}
+    project.tasks.findByName("integrationTest").dependsOn(this)
 
-tasks.findByName("integrationTest").dependsOn(integrationTestProject)
+    buildFile = file("${project.parent.projectDir}/test-project/build.gradle")
+    tasks = listOf("test")
+}
 
 (tasks.findByName("clean") as Delete).delete("${project.parent.projectDir}/test-project/build")
 
