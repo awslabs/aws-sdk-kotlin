@@ -33,7 +33,7 @@ val compileTestProject = task(name = "compileTestProject", type = JavaExec::clas
 
     classpath(mavenEmbedder)
     main = "org.apache.maven.cli.MavenCli"
-    args = listOf("test-compile", "--file", testProjectDir)
+    args = listOf("test-compile", "--file", testProjectDir, "-B")
 
     inputs.files("$testProjectDir/src", "$testProjectDir/pom.xml")
     outputs.file("${project.parent.projectDir}/test-project/build/generated-sources")
@@ -48,7 +48,7 @@ val integrationTestProject = task("integrationTestProject", type = JavaExec::cla
 
     classpath(mavenEmbedder)
     main = "org.apache.maven.cli.MavenCli"
-    args = listOf("test", "--file", testProjectDir)
+    args = listOf("test", "--file", testProjectDir, "-B")
 
     inputs.file("${project.parent.projectDir}/test-project/build/generated-sources")
     dependsOn(compileTestProject)
