@@ -8,6 +8,7 @@ import software.amazon.awssdk.core.regions.Region
 import software.amazon.awssdk.kotlin.services.s3.S3Client
 import software.amazon.awssdk.kotlin.services.s3.model.BucketLocationConstraint.US_WEST_1
 import software.amazon.awssdk.kotlin.services.s3.model.ListBucketsRequest
+import software.amazon.awssdk.services.s3.model.NoSuchBucketException
 import java.time.Instant
 import software.amazon.awssdk.services.s3.S3Client as JavaS3Client
 
@@ -35,8 +36,12 @@ class BasicCodeGenerationIntegrationTest {
 
     @After
     fun cleanUp() {
-        client.deleteBucket {
-            bucket = bucketName
+        try {
+            client.deleteBucket {
+                bucket = bucketName
+            }
+        } catch(e : NoSuchBucketException) {
+            //ignore
         }
     }
 }
