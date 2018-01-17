@@ -40,7 +40,6 @@ dependencies {
 
 awsKotlin {
     services = [ "s3" ]
-    outputDir = $p
     minimizeFiles = true
 }
 

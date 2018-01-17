@@ -3,10 +3,7 @@ package software.amazon.awssdk.kotlin.codegen.plugin.gradle
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.OutputDirectory
-import org.gradle.api.tasks.SourceSetContainer
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 import software.amazon.awssdk.kotlin.codegen.*
 import software.amazon.awssdk.kotlin.codegen.plugin.gradle.Constants.GENERATION_DIR
 import software.amazon.awssdk.kotlin.codegen.plugin.gradle.Constants.PLUGIN_NAME
@@ -64,7 +61,7 @@ open class CodeGenerationTask : DefaultTask() {
     }
 
     @OutputDirectory
-    fun outputDirectory() = configuration().outputDir ?: defaultOutputDirectory
+    fun outputDirectory() = configuration().outputDirectory ?: defaultOutputDirectory
 
     private fun objectToServiceModelInputStream(it: Any): Pair<InputStream, InputStream?> {
         return when {
@@ -117,16 +114,16 @@ open class CodeGenerationTask : DefaultTask() {
 
 open class CodeGenerationPluginExtension {
     var services: List<Any> = listOf()
-    var outputDir: File? = null
+    var outputDirectory: File? = null
     var minimizeFiles: Boolean? = false
     var targetBasePackage: String? = null
 
-    internal fun toImmutable(): ImmutableConfiguration = ImmutableConfiguration(services, outputDir, minimizeFiles, targetBasePackage)
+    internal fun toImmutable(): ImmutableConfiguration = ImmutableConfiguration(services, outputDirectory, minimizeFiles, targetBasePackage)
 }
 
-internal data class ImmutableConfiguration(val services: List<Any>, val outputDir: File?, val minimizeFiles: Boolean?, val targetBasePackage: String?)
+internal data class ImmutableConfiguration(val services: List<Any>, val outputDirectory: File?, val minimizeFiles: Boolean?, val targetBasePackage: String?)
 
 private object Constants {
-    val GENERATION_DIR = "generated-src/awsKotlin"
+    val GENERATION_DIR = "generated-src/ktSdk"
     val PLUGIN_NAME = "awsKotlin"
 }
