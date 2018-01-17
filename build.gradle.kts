@@ -7,7 +7,7 @@ version = "1.0-SNAPSHOT"
 
 buildscript {
     var kotlin_version: String by extra
-    kotlin_version = "1.2.10"
+    kotlin_version = "1.2.20"
     val dokka_version = "0.9.15"
 
     repositories {
