@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.FunSpec
 import software.amazon.awssdk.codegen.model.intermediate.MemberModel
 import software.amazon.awssdk.codegen.model.intermediate.ShapeModel
 import software.amazon.awssdk.codegen.model.intermediate.ShapeType
+import software.amazon.awssdk.kotlin.codegen.isSimpleScalarOrSimpleCollection
 import software.amazon.awssdk.kotlin.codegen.poet.PoetExtensions
 import software.amazon.awssdk.kotlin.codegen.poet.PoetSpec
 
@@ -115,7 +116,4 @@ class ModelTransformerSpec(private val model: ShapeModel, private val poetExtens
     }
 }
 
-private val MemberModel.isSimpleScalarOrSimpleCollection: Boolean get() = this.isSimple || this.isSimpleCollection
-private val MemberModel.isSimpleCollection: Boolean get() = (this.isMap || this.isList)
-        && !this.isCollectionWithBuilderMember
-        && this.listModel?.listMemberModel?.enumType.isNullOrEmpty()
+

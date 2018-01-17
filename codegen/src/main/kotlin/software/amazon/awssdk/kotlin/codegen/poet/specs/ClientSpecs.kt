@@ -16,13 +16,14 @@ class SyncClientSpec(private val model: IntermediateModel,
                      private val apiName: ApiName?) : ClassSpec(model.metadata.syncClient) {
     private val baseClass = poetExtensions.javaSdkClientClass(model.metadata.syncInterface)
     override fun typeSpec(): TypeSpec {
-        return TypeSpec.classBuilder(model.metadata.syncClient)
+        return TypeSpec.classBuilder(model.metadata.syncInterface)
                 .primaryConstructor(FunSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder("client", baseClass)
                                 .defaultValue(CodeBlock.of("%T.create()", baseClass))
                                 .addModifiers(KModifier.PRIVATE)
                                 .build())
                         .build())
+                .addFunction(builderConstructor())
                 .addProperty(PropertySpec.builder("client", baseClass)
                         .addModifiers(KModifier.PRIVATE)
                         .initializer("client").build())
@@ -33,24 +34,58 @@ class SyncClientSpec(private val model: IntermediateModel,
                     }
                 }
                 .addAnnotation(poetExtensions.generated)
-                .addFunctions(functionSpecs())
+                .addFunctions(operationSpecs())
                 .addFunction(userAgentExtension())
+                .build()
+    }
+
+    private fun builderConstructor(): FunSpec {
+        val javaSdkBuilder = poetExtensions.javaSdkClientClass(model.metadata.syncBuilderInterface)
+        val block = LambdaTypeName.get(javaSdkBuilder, returnType = Unit::class.asTypeName())
+        return FunSpec.constructorBuilder()
+                .addParameter("block", block)
+                .addCode("this(client = %T.builder().apply(block).build())", baseClass)
                 .build()
     }
 
     override fun appendHook(file: FileSpec.Builder) {
         file.addStaticImport(poetExtensions.transformPackage, "*")
+        file.addAliasedImport(baseClass, "JavaSdk${model.metadata.syncInterface}")
     }
 
-    private fun functionSpecs() = model.operations.values
+    private fun operationSpecs() = model.operations.values
             .filterNotNull()
             .filterNot { it.isStreaming }
-            .map { functionSpec(it) }
+            .flatMap { operationSpec(it) }
 
-    private fun functionSpec(model: OperationModel): FunSpec {
+    private fun operationSpec(model: OperationModel): Iterable<FunSpec> {
+        val basic = basicOperationSpec(model)
+        if (model.inputShape?.nonStreamingMembers?.isNotEmpty() == true) {
+            return listOf(basic, builderOverloadSpec(model))
+        }
+        return listOf(basic)
+    }
+
+    private fun builderOverloadSpec(model: OperationModel): FunSpec {
+        val inputType = poetExtensions.modelClass(model.input.variableType)
+        val builder = inputType.nestedClass("Builder")
+        val block = LambdaTypeName.get(builder, returnType = Unit::class.asTypeName())
+
         return FunSpec.builder(model.methodName)
-                .addParameter(model.input.variableName, poetExtensions.modelClass(model.input.variableType))
                 .returns(poetExtensions.modelClass(model.returnType.returnType))
+                .addParameter("block", block)
+                .addCode("return %N(%T().apply(block).build())", model.methodName, builder)
+                .build()
+    }
+
+    private fun funcs(blck: TypeSpec.Builder.() -> Unit) {
+
+    }
+
+    private fun basicOperationSpec(model: OperationModel): FunSpec {
+        return FunSpec.builder(model.methodName)
+                .returns(poetExtensions.modelClass(model.returnType.returnType))
+                .addParameter(model.input.variableName, poetExtensions.modelClass(model.input.variableType))
                 .addCode("return %N.%L(%N.asJavaSdk().withUserAgent()).asKotlinSdk()", "client", model.methodName, model.input.variableName)
                 .build()
     }

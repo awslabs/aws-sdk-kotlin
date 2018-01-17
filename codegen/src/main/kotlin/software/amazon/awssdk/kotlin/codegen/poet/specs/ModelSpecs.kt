@@ -7,6 +7,7 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.KModifier.DATA
 import software.amazon.awssdk.codegen.model.intermediate.MemberModel
 import software.amazon.awssdk.codegen.model.intermediate.ShapeModel
+import software.amazon.awssdk.kotlin.codegen.isCollection
 
 
 class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: PoetExtensions) : ClassSpec(model.shapeName) {
@@ -15,7 +16,8 @@ class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: 
 
         val params = parameters()
 
-        return TypeSpec.classBuilder(model.shapeName)
+        val className = poetExtensions.modelClass(model.shapeName)
+        return TypeSpec.classBuilder(className)
                 .apply {
                     if (params.isNotEmpty()) {
                         this.addModifiers(DATA)
@@ -23,10 +25,45 @@ class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: 
                                         .addParameters(params)
                                         .build())
                                 .addProperties(params.map { PropertySpec.builder(it.name, it.type).initializer(it.name).build() })
+                                .addType(TypeSpec.classBuilder("Builder")
+                                        .addModifiers(DATA)
+                                        .primaryConstructor(FunSpec.constructorBuilder().addParameters(params).build())
+                                        .addProperties(params.map { PropertySpec.builder(it.name, it.type).initializer(it.name).mutable(true).build() })
+                                        .addFunction(builderBuildMethod(params, className))
+                                        .addFunctions(complexBuilderSetters(model.nonStreamingMembers.filterNotNull()))
+                                        .build())
                     }
                 }
                 .addAnnotation(poetExtensions.generated)
                 .build()
+    }
+
+    private fun builderBuildMethod(params: List<ParameterSpec>, className: ClassName): FunSpec {
+
+        val assignments = params.map { CodeBlock.of("%1N = %1N", it.name) }
+
+        return FunSpec.builder("build")
+                .returns(className)
+                .addCode(CodeBlock.builder().add("return %T(", className).apply {
+                    if (assignments.size > 1) {
+                        assignments.dropLast(1).forEach { this.add(it).add(",") }
+                    }
+                    if (assignments.isNotEmpty()) {
+                        this.add(assignments.last())
+                    }
+                }.add(")").build()).build()
+    }
+
+    private fun complexBuilderSetters(params: List<MemberModel>): Iterable<FunSpec> {
+        return params.filterNot { it.isCollection || it.isSimple }.filter { it.variable != null }.map {
+            val builder = poetExtensions.modelClass(it.variable.variableType).nestedClass("Builder")
+            val block = LambdaTypeName.get(builder, returnType = Unit::class.asTypeName())
+
+            FunSpec.builder(it.variable.variableName)
+                    .addParameter("block", block)
+                    .addCode("%N = %T().apply(block).build()", it.variable.variableName, builder)
+                    .build()
+        }
     }
 
     private fun parameters(): List<ParameterSpec> {

@@ -53,7 +53,7 @@ class CodeGenerator private constructor(private val params: Builder) {
     }
 
     private fun generateClients(intermediateModel: IntermediateModel) {
-        FileSpec.builder(poetExtensions.basePackage, intermediateModel.metadata.syncClient)
+        FileSpec.builder(poetExtensions.basePackage, intermediateModel.metadata.syncInterface)
                 .apply { SyncClientSpec(intermediateModel, poetExtensions, params.apiName).appendTo(this) }
                 .build()
                 .writeTo(params.outputDirectory)
