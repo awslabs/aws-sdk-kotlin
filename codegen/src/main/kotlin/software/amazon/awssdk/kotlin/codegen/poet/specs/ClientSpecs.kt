@@ -44,7 +44,7 @@ class SyncClientSpec(private val model: IntermediateModel,
         val block = LambdaTypeName.get(javaSdkBuilder, returnType = Unit::class.asTypeName())
         return FunSpec.constructorBuilder()
                 .addParameter("block", block)
-                .addCode("this(client = %T.builder().apply(block).build())", baseClass)
+                .callThisConstructor(CodeBlock.of("client = %T.builder().apply(block).build()", baseClass))
                 .build()
     }
 
