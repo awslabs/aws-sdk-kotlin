@@ -8,13 +8,16 @@ version = "1.0-SNAPSHOT"
 buildscript {
     var kotlin_version: String by extra
     kotlin_version = "1.2.10"
+    val dokka_version = "0.9.15"
 
     repositories {
+        jcenter()
         mavenCentral()
     }
 
     dependencies {
         classpath(kotlinModule("gradle-plugin", kotlin_version))
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version")
     }
 }
 
@@ -34,6 +37,7 @@ subprojects {
     apply {
         plugin("kotlin")
         plugin("maven")
+        plugin("org.jetbrains.dokka")
     }
 
     dependencies {
@@ -44,6 +48,11 @@ subprojects {
         description = "Runs the integration tests."
         group = "Verification"
         dependsOn(tasks.findByName("compileTestKotlin"))
+    }
+
+    project.apply {
+        // This is in a Groovy file because the Dokka task type is not reachable
+        from("${project.parent.projectDir}/gradle/dokka.gradle")
     }
 
     task("copyTemplates", type = Copy::class) {

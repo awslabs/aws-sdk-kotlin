@@ -1,0 +1,6 @@
+
+dokka {
+    outputFormat = "javadoc"
+    outputDirectory = "$buildDir/javadoc"
+    jdkVersion = 8
+}
