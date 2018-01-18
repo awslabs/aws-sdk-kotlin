@@ -26,6 +26,9 @@ class GenerateCodeMojo : AbstractMojo() {
     @Parameter(property = "targetBasePackage")
     private var targetBasePackage: String? = null
 
+    @Parameter(property = "builderSyntax")
+    private var builderSyntax: Boolean? = null
+
     @Parameter(defaultValue = "\${project}", readonly = true)
     var project: MavenProject? = null
 
@@ -33,9 +36,11 @@ class GenerateCodeMojo : AbstractMojo() {
     override fun execute() {
         val minimizeFiles = minimizeFiles
         val targetBasePackage = targetBasePackage
+        val builderSyntax = builderSyntax
         val codeGenBuilder = CodeGenerator.builder(outputDirectory!!.toPath())
                 .let { if (minimizeFiles != null) it.minimizeFiles(minimizeFiles) else it }
                 .let { if (targetBasePackage != null) it.targetBasePackage(targetBasePackage) else it }
+                .let { if (builderSyntax != null) it.builderSyntax(builderSyntax) else it }
                 .apiName(USER_AGENT_PLUGIN_NAME, USER_AGENT_PLUGIN_VERSION)
 
         services.map {

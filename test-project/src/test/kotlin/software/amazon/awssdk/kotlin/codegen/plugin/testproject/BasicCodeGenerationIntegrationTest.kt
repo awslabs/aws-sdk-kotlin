@@ -1,6 +1,7 @@
 package software.amazon.awssdk.kotlin.codegen.plugin.testproject
 
 import com.natpryce.hamkrest.assertion.assert
+import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.present
 import org.junit.After
 import org.junit.Test
@@ -8,8 +9,8 @@ import software.amazon.awssdk.core.regions.Region
 import software.amazon.awssdk.kotlin.services.s3.S3Client
 import software.amazon.awssdk.kotlin.services.s3.model.BucketLocationConstraint.US_WEST_1
 import software.amazon.awssdk.kotlin.services.s3.model.ListBucketsRequest
+import software.amazon.awssdk.kotlin.services.ses.model.*
 import software.amazon.awssdk.services.s3.model.NoSuchBucketException
-import software.amazon.awssdk.kotlin.services.ses.model.SendEmailRequest
 import java.time.Instant
 import software.amazon.awssdk.services.s3.S3Client as JavaS3Client
 
@@ -37,7 +38,26 @@ class BasicCodeGenerationIntegrationTest {
 
     @Test
     fun heavilyNestedRequest() {
-        SendEmailRequest {
+
+        val standardSyntax = SendEmailRequest(
+                destination = Destination(
+                        toAddresses = listOf("someone@example.com")
+                ),
+                replyToAddresses = listOf("someone_else@example.com"),
+                message = Message(
+                        subject = Content(
+                                data = "The Email Subject"
+                        ),
+                        body = Body(
+                                text = Content(
+                                        data = "The email body",
+                                        charset = "UTF-8"
+                                )
+                        )
+                )
+        )
+
+        val prettySyntax = SendEmailRequest {
             destination {
                 toAddresses = listOf("someone@example.com")
             }
@@ -54,6 +74,8 @@ class BasicCodeGenerationIntegrationTest {
                 }
             }
         }
+
+        assert.that(standardSyntax, equalTo(prettySyntax))
     }
 
     @After
@@ -62,7 +84,7 @@ class BasicCodeGenerationIntegrationTest {
             client.deleteBucket {
                 bucket = bucketName
             }
-        } catch(e : NoSuchBucketException) {
+        } catch (e: NoSuchBucketException) {
             //ignore
         }
     }

@@ -8,12 +8,14 @@ import software.amazon.awssdk.kotlin.codegen.poet.PoetExtensions
 import software.amazon.awssdk.core.ApiName
 import software.amazon.awssdk.core.AwsRequest
 import software.amazon.awssdk.core.AwsRequestOverrideConfig
+import software.amazon.awssdk.kotlin.codegen.CodeGenerator
 import software.amazon.awssdk.kotlin.codegen.NAME
 import software.amazon.awssdk.kotlin.codegen.VERSION
 
 class SyncClientSpec(private val model: IntermediateModel,
                      private val poetExtensions: PoetExtensions,
-                     private val apiName: ApiName?) : ClassSpec(model.metadata.syncClient) {
+                     private val apiName: ApiName?,
+                     val codeGenOptions: CodeGenerator.CodeGenOptions) : ClassSpec(model.metadata.syncClient) {
     private val baseClass = poetExtensions.javaSdkClientClass(model.metadata.syncInterface)
     override fun typeSpec(): TypeSpec {
         return TypeSpec.classBuilder(model.metadata.syncInterface)
@@ -60,7 +62,7 @@ class SyncClientSpec(private val model: IntermediateModel,
 
     private fun operationSpec(model: OperationModel): Iterable<FunSpec> {
         val basic = basicOperationSpec(model)
-        if (model.inputShape?.nonStreamingMembers?.isNotEmpty() == true) {
+        if (model.inputShape?.nonStreamingMembers?.isNotEmpty() == true && codeGenOptions.builderSyntax) {
             return listOf(basic, builderOverloadSpec(model))
         }
         return listOf(basic)
@@ -76,10 +78,6 @@ class SyncClientSpec(private val model: IntermediateModel,
                 .addParameter("block", block)
                 .addCode("return %N(%T().apply(block).build())", model.methodName, builder)
                 .build()
-    }
-
-    private fun funcs(blck: TypeSpec.Builder.() -> Unit) {
-
     }
 
     private fun basicOperationSpec(model: OperationModel): FunSpec {

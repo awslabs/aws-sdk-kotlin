@@ -8,10 +8,11 @@ import com.squareup.kotlinpoet.KModifier.DATA
 import com.squareup.kotlinpoet.KModifier.PRIVATE
 import software.amazon.awssdk.codegen.model.intermediate.MemberModel
 import software.amazon.awssdk.codegen.model.intermediate.ShapeModel
+import software.amazon.awssdk.kotlin.codegen.CodeGenerator
 import software.amazon.awssdk.kotlin.codegen.isCollection
 
 
-class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: PoetExtensions) : ClassSpec(model.shapeName) {
+class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: PoetExtensions, val codeGenOptions: CodeGenerator.CodeGenOptions) : ClassSpec(model.shapeName) {
 
     private val className = poetExtensions.modelClass(model.shapeName)
     private val members = model.nonStreamingMembers.filterNotNull()
@@ -27,16 +28,19 @@ class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: 
                                 .primaryConstructor(FunSpec.constructorBuilder()
                                         .addParameters(params)
                                         .build())
-                                .addProperties(params.map { PropertySpec.builder(it.name, it.type).initializer(it.name).build() })
-                                .addFunction(builderConstructor())
-                                .addFunction(applyConstructor())
-                                .addType(TypeSpec.classBuilder("Builder")
-                                        .addModifiers(DATA)
-                                        .primaryConstructor(FunSpec.constructorBuilder().addParameters(params).build())
-                                        .addProperties(params.map { PropertySpec.builder(it.name, it.type).initializer(it.name).mutable(true).build() })
-                                        .addFunction(builderBuildMethod())
-                                        .addFunctions(complexBuilderSetters())
-                                        .build())
+                                .addProperties(params.map { PropertySpec.builder(it.name, it.type).initializer(it.name).build() }).apply {
+                            if (codeGenOptions.builderSyntax) {
+                                this.addFunction(builderConstructor())
+                                        .addFunction(applyConstructor())
+                                        .addType(TypeSpec.classBuilder("Builder")
+                                                .addModifiers(DATA)
+                                                .primaryConstructor(FunSpec.constructorBuilder().addParameters(params).build())
+                                                .addProperties(params.map { PropertySpec.builder(it.name, it.type).initializer(it.name).mutable(true).build() })
+                                                .addFunction(builderBuildMethod())
+                                                .addFunctions(complexBuilderSetters())
+                                                .build())
+                            }
+                        }
                     }
                 }
                 .addAnnotation(poetExtensions.generated)
@@ -85,11 +89,11 @@ class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: 
 
     private fun parameters(): List<ParameterSpec> {
         return members.map {
-                    val typeName = determineTypeName(it)
-                    ParameterSpec.builder(it.variable.variableName, typeName.asNullable())
-                            .defaultValue("null")
-                            .build()
-                }
+            val typeName = determineTypeName(it)
+            ParameterSpec.builder(it.variable.variableName, typeName.asNullable())
+                    .defaultValue("null")
+                    .build()
+        }
     }
 
     private fun determineTypeName(memberModel: MemberModel): TypeName {

@@ -42,6 +42,7 @@ open class CodeGenerationTask : DefaultTask() {
         val codeGeneratorBuilder = CodeGenerator.builder(outputDirectory.toPath())
                 .let { if (configuration.minimizeFiles != null) it.minimizeFiles(configuration.minimizeFiles) else it }
                 .let { if (configuration.targetBasePackage != null) it.targetBasePackage(configuration.targetBasePackage) else it }
+                .let { if (configuration.builderSyntax != null) it.builderSyntax(configuration.builderSyntax) else it }
                 .apiName(USER_AGENT_PLUGIN_NAME, USER_AGENT_PLUGIN_VERSION)
 
         configuration().services.map { objectToServiceModelInputStream(it) }
@@ -115,13 +116,14 @@ open class CodeGenerationTask : DefaultTask() {
 open class CodeGenerationPluginExtension {
     var services: List<Any> = listOf()
     var outputDirectory: File? = null
-    var minimizeFiles: Boolean? = false
+    var minimizeFiles: Boolean? = null
     var targetBasePackage: String? = null
+    var builderSyntax: Boolean? = null
 
-    internal fun toImmutable(): ImmutableConfiguration = ImmutableConfiguration(services, outputDirectory, minimizeFiles, targetBasePackage)
+    internal fun toImmutable(): ImmutableConfiguration = ImmutableConfiguration(services, outputDirectory, minimizeFiles, targetBasePackage, builderSyntax)
 }
 
-internal data class ImmutableConfiguration(val services: List<Any>, val outputDirectory: File?, val minimizeFiles: Boolean?, val targetBasePackage: String?)
+internal data class ImmutableConfiguration(val services: List<Any>, val outputDirectory: File?, val minimizeFiles: Boolean?, val targetBasePackage: String?, val builderSyntax: Boolean?)
 
 private object Constants {
     val GENERATION_DIR = "generated-src/ktSdk"

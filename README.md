@@ -14,10 +14,10 @@ client.createBucket {
 }
 ```
 
-Prettier statically typed DSL - useful for creating heavily hierachial request objects:
+Prettier statically typed DSL - useful for creating heavily hierarchical request objects:
 
 ```kotlin
-SendEmailRequest {
+val request = SendEmailRequest {
     destination {
         toAddresses = listOf("someone@example.com")
     }
@@ -80,6 +80,9 @@ awsKotlin {
     
     // Base package name to generate wrappers into
     targetBasePackage = "software.amazon.awssdk.kotlin"
+    
+    // Generate builders required to support the `client.createBucket { bucket = "bucket" }` style syntax
+    builderSyntax = true
 }
 ```
 
@@ -101,7 +104,9 @@ To use with Maven add the following to your `<build>` configuration:
                         <goal>generate</goal>
                     </goals>
                     <configuration>
-                        <services>s3</services>
+                        <services>
+                            <service>s3</service>
+                        </services>
                     </configuration>
                 </execution>
             </executions>
@@ -130,6 +135,9 @@ Similar to gradle, there are several configurable options (with their defaults s
     
     <!-- Base package name to generate wrappers into -->
     <targetBasePackage>software.amazon.awssdk.kotlin</targetBasePackage>
+    
+    <!-- Generate builders required to support the `client.createBucket { bucket = "bucket" }` style syntax -->
+    <builderSyntax>true</builderSyntax>
 </configuration>
 ```
 
