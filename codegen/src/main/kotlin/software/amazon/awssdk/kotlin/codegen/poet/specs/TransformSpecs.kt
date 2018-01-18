@@ -37,7 +37,7 @@ class ModelTransformerSpec(private val model: ShapeModel, private val poetExtens
                                 !it.enumType.isNullOrEmpty() -> javaToKtCodeBlockBuildable(it)
                                 it.isSimpleScalarOrSimpleCollection -> javaToKtCodeBlockSimple(it)
                                 it.isList -> javaToKtCodeBlockList(it)
-                                it.isMap -> TODO("implement complex maps")
+                                it.isMap -> javaToKtCodeBlockMap(it)
                                 else -> javaToKtCodeBlockBuildable(it)
                             }
                         }
@@ -70,7 +70,7 @@ class ModelTransformerSpec(private val model: ShapeModel, private val poetExtens
                                 !it.enumType.isNullOrEmpty() -> ktToJavaCodeBlockBuildable(it)
                                 it.isSimpleScalarOrSimpleCollection -> ktToJavaCodeBlockSimple(it)
                                 it.isList -> ktToJavaCodeBlockList(it)
-                                it.isMap -> TODO("implement complex maps")
+                                it.isMap -> ktToJavaCodeBlockMap(it)
                                 else -> ktToJavaCodeBlockBuildable(it)
                             }
                 }.forEach { entry ->
@@ -92,6 +92,13 @@ class ModelTransformerSpec(private val model: ShapeModel, private val poetExtens
         return CodeBlock.of("%1L = %1L()?.map { it.asKotlinSdk() }", memberModel.variable.variableName)
     }
 
+    private fun javaToKtCodeBlockMap(memberModel: MemberModel): CodeBlock {
+        if (memberModel.mapModel?.keyModel?.enumType != null || !memberModel.mapModel.keyModel.isSimple) {
+            TODO("Can't handle enums or complex types as keys yet got $memberModel")
+        }
+        return CodeBlock.of("%1L = %1L()?.mapValues { it.value.asKotlinSdk() }", memberModel.variable.variableName)
+    }
+
     private fun javaToKtCodeBlockSimple(memberModel: MemberModel): CodeBlock {
         return CodeBlock.of("%1L = %1L()", memberModel.variable.variableName)
     }
@@ -109,6 +116,13 @@ class ModelTransformerSpec(private val model: ShapeModel, private val poetExtens
         } else {
             TODO("Nested list of collections")
         }
+    }
+
+    private fun ktToJavaCodeBlockMap(memberModel: MemberModel): CodeBlock {
+        if (memberModel.mapModel?.keyModel?.enumType != null || !memberModel.mapModel.keyModel.isSimple) {
+            TODO("Can't handle enums or complex types as keys yet got $memberModel")
+        }
+        return CodeBlock.of("%1L(%1L.mapValues { it.value.asJavaSdk() })", memberModel.variable.variableName)
     }
 
     private fun ktToJavaCodeBlockSimple(memberModel: MemberModel): CodeBlock {

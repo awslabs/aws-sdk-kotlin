@@ -31,6 +31,7 @@ repositories {
 
 dependencies {
     compile "software.amazon.awssdk:s3:2.0.0-preview-7"
+    compile "software.amazon.awssdk:ses:2.0.0-preview-7"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     testCompile "junit:junit:4.12"
     testCompile group: 'com.natpryce', name: 'hamkrest', version: '1.4.2.2'
@@ -39,7 +40,7 @@ dependencies {
 }
 
 awsKotlin {
-    services = [ "s3" ]
+    services = [ "s3", "ses" ]
     minimizeFiles = true
 }
 

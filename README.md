@@ -14,6 +14,28 @@ client.createBucket {
 }
 ```
 
+Prettier statically typed DSL - useful for creating heavily hierachial request objects:
+
+```kotlin
+SendEmailRequest {
+    destination {
+        toAddresses = listOf("someone@example.com")
+    }
+    replyToAddresses = listOf("someone_else@example.com")
+    message {
+        subject {
+            data = "The Email Subject"
+        }
+        body {
+            text {
+                data = "The email body"
+                charset = "UTF-8"
+            }
+        }
+    }
+}
+```
+
 This is distributed as a build plugin that ties into your build system (supported build systems: `maven` & `gradle`) and generates the Kotlin wrappers for the services that you require in your project.
 
 ### Gradle Plugin

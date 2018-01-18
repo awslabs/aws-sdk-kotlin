@@ -9,6 +9,7 @@ import software.amazon.awssdk.kotlin.services.s3.S3Client
 import software.amazon.awssdk.kotlin.services.s3.model.BucketLocationConstraint.US_WEST_1
 import software.amazon.awssdk.kotlin.services.s3.model.ListBucketsRequest
 import software.amazon.awssdk.services.s3.model.NoSuchBucketException
+import software.amazon.awssdk.kotlin.services.ses.model.SendEmailRequest
 import java.time.Instant
 import software.amazon.awssdk.services.s3.S3Client as JavaS3Client
 
@@ -32,6 +33,27 @@ class BasicCodeGenerationIntegrationTest {
         }
 
         assert.that(response.location, present())
+    }
+
+    @Test
+    fun heavilyNestedRequest() {
+        SendEmailRequest {
+            destination {
+                toAddresses = listOf("someone@example.com")
+            }
+            replyToAddresses = listOf("someone_else@example.com")
+            message {
+                subject {
+                    data = "The Email Subject"
+                }
+                body {
+                    text {
+                        data = "The email body"
+                        charset = "UTF-8"
+                    }
+                }
+            }
+        }
     }
 
     @After

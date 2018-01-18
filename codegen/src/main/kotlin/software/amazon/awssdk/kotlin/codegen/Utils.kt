@@ -10,6 +10,7 @@ fun serviceModelInputStreamFromClass(clz: Class<*>): Pair<InputStream, InputStre
     return loadServiceModelFromJar(File(clz.protectionDomain.codeSource.location.file))
 }
 
+//TODO: Handle case where there's more than one service-2.json (e.g. dynamodb / dynamddb streams)
 fun loadServiceModelFromJar(jarFile: File): Pair<InputStream, InputStream?> {
     try {
         val jar = JarFile(jarFile)
