@@ -44,6 +44,7 @@ class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: 
                     }
                 }
                 .addAnnotation(poetExtensions.generated)
+                .addKdoc("See [%L]", poetExtensions.javaSdkModelClass(model.shapeName).canonicalName)
                 .build()
     }
 
@@ -118,11 +119,13 @@ class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: 
     }
 }
 
-class EnumModelSpec(private val model: ShapeModel) : ClassSpec(model.shapeName) {
+class EnumModelSpec(private val model: ShapeModel, private val poetExtensions: PoetExtensions) : ClassSpec(model.shapeName) {
     override fun typeSpec(): TypeSpec {
         val builder = TypeSpec.enumBuilder(model.shapeName)
         model.enums.forEach { builder.addEnumConstant(it.name) }
         builder.addEnumConstant("SDK_UNKNOWN")
+        builder.addKdoc("See [%L]", poetExtensions.javaSdkModelClass(model.shapeName).canonicalName)
+
         return builder.build()
     }
 

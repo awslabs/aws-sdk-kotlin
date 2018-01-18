@@ -62,7 +62,7 @@ class CodeGenerator private constructor(private val params: Builder) {
 
     private fun convertToTypeSpec(shapeModel: ShapeModel): PoetSpec {
         return if (shapeModel.shapeType == ShapeType.Enum) {
-            EnumModelSpec(shapeModel)
+            EnumModelSpec(shapeModel, poetExtensions)
         } else {
             ShapeModelSpec(shapeModel, poetExtensions, params.codeGenOptions)
         }

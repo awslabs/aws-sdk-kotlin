@@ -3,14 +3,17 @@ package software.amazon.awssdk.kotlin.codegen.poet.specs
 import com.squareup.kotlinpoet.*
 import software.amazon.awssdk.codegen.model.intermediate.IntermediateModel
 import software.amazon.awssdk.codegen.model.intermediate.OperationModel
-import software.amazon.awssdk.kotlin.codegen.poet.ClassSpec
-import software.amazon.awssdk.kotlin.codegen.poet.PoetExtensions
 import software.amazon.awssdk.core.ApiName
 import software.amazon.awssdk.core.AwsRequest
 import software.amazon.awssdk.core.AwsRequestOverrideConfig
+import software.amazon.awssdk.core.sync.RequestBody
+import software.amazon.awssdk.core.sync.StreamingResponseHandler
+import software.amazon.awssdk.http.AbortableInputStream
 import software.amazon.awssdk.kotlin.codegen.CodeGenerator
 import software.amazon.awssdk.kotlin.codegen.NAME
 import software.amazon.awssdk.kotlin.codegen.VERSION
+import software.amazon.awssdk.kotlin.codegen.poet.ClassSpec
+import software.amazon.awssdk.kotlin.codegen.poet.PoetExtensions
 
 class SyncClientSpec(private val model: IntermediateModel,
                      private val poetExtensions: PoetExtensions,
@@ -57,15 +60,16 @@ class SyncClientSpec(private val model: IntermediateModel,
 
     private fun operationSpecs() = model.operations.values
             .filterNotNull()
-            .filterNot { it.isStreaming }
             .flatMap { operationSpec(it) }
 
     private fun operationSpec(model: OperationModel): Iterable<FunSpec> {
-        val basic = basicOperationSpec(model)
-        if (model.inputShape?.nonStreamingMembers?.isNotEmpty() == true && codeGenOptions.builderSyntax) {
-            return listOf(basic, builderOverloadSpec(model))
+        return when {
+            model.hasStreamingInput() && model.hasStreamingOutput() -> TODO("Streaming input/output operations not yet supported")
+            model.hasStreamingInput() -> listOf(streamingInputOperationSpec(model))
+            model.hasStreamingOutput() -> listOf(streamingOutputOperationSpec(model))
+            model.inputShape?.members?.isEmpty() == false && codeGenOptions.builderSyntax -> listOf(basicOperationSpec(model), builderOverloadSpec(model))
+            else -> listOf(basicOperationSpec(model))
         }
-        return listOf(basic)
     }
 
     private fun builderOverloadSpec(model: OperationModel): FunSpec {
@@ -77,6 +81,7 @@ class SyncClientSpec(private val model: IntermediateModel,
                 .returns(poetExtensions.modelClass(model.returnType.returnType))
                 .addParameter("block", block)
                 .addCode("return %N(%T().apply(block).build())", model.methodName, builder)
+                .addKdoc(documentation(model))
                 .build()
     }
 
@@ -85,7 +90,56 @@ class SyncClientSpec(private val model: IntermediateModel,
                 .returns(poetExtensions.modelClass(model.returnType.returnType))
                 .addParameter(model.input.variableName, poetExtensions.modelClass(model.input.variableType))
                 .addCode("return %N.%L(%N.asJavaSdk().withUserAgent()).asKotlinSdk()", "client", model.methodName, model.input.variableName)
+                .addKdoc(documentation(model))
                 .build()
+    }
+
+    private fun streamingInputOperationSpec(model: OperationModel): FunSpec {
+        return FunSpec.builder(model.methodName)
+                .returns(poetExtensions.modelClass(model.returnType.returnType))
+                .addParameter(model.input.variableName, poetExtensions.modelClass(model.input.variableType))
+                .addParameter("body", RequestBody::class.asTypeName())
+                .addCode("return %N.%L(%N.asJavaSdk().withUserAgent(), body).asKotlinSdk()", "client", model.methodName, model.input.variableName)
+                .addKdoc(documentation(model))
+                .build()
+    }
+
+    private fun streamingOutputOperationSpec(model: OperationModel): FunSpec {
+        val parameterizedType = TypeVariableName("ReturnT")
+        val handler = ParameterizedTypeName.get(StreamingResponseHandler::class.asTypeName(),
+                poetExtensions.modelClass(model.returnType.returnType),
+                parameterizedType)
+
+        val javaSdkHandler = ParameterizedTypeName.get(StreamingResponseHandler::class.asTypeName(), poetExtensions.javaSdkModelClass(model.returnType.returnType), parameterizedType)
+        val inputStreamType = AbortableInputStream::class.asTypeName().asNullable()
+
+        val handlerWrapper = TypeSpec.anonymousClassBuilder("")
+                .addSuperinterface(javaSdkHandler)
+                .addFunction(FunSpec.builder("apply")
+                        .addModifiers(KModifier.OVERRIDE)
+                        .returns(parameterizedType)
+                        .addParameter("javaResponse", poetExtensions.javaSdkModelClass(model.returnType.returnType))
+                        .addParameter("stream", inputStreamType)
+                        .addCode("return handler.apply(javaResponse.asKotlinSdk(), stream)")
+                        .build())
+                .addFunction(FunSpec.builder("needsConnectionLeftOpen")
+                        .addModifiers(KModifier.OVERRIDE)
+                        .returns(Boolean::class)
+                        .addCode("return handler.needsConnectionLeftOpen()")
+                        .build())
+                .build().toString().replace("ReturnT>()", "ReturnT>") //HACK: KotlinPoet doesn't properly handle interfaces on anonymous objects
+
+        return FunSpec.builder(model.methodName)
+                .returns(parameterizedType)
+                .addTypeVariable(parameterizedType)
+                .addParameter(model.input.variableName, poetExtensions.modelClass(model.input.variableType))
+                .addParameter("handler", handler)
+                .addCode("return %N.%L(%N.asJavaSdk().withUserAgent(), %L)", "client", model.methodName, model.input.variableName, handlerWrapper)
+                .build()
+    }
+
+    private fun documentation(model: OperationModel): CodeBlock {
+        return CodeBlock.of("See [%T.%N]\n", baseClass, model.methodName)
     }
 
     private fun userAgent(): PropertySpec {
@@ -99,7 +153,7 @@ class SyncClientSpec(private val model: IntermediateModel,
     }
 
     private fun userAgentExtension(): FunSpec {
-        val parameterizedType = TypeVariableName.invoke("T", AwsRequest::class)
+        val parameterizedType = TypeVariableName("T", AwsRequest::class)
 
         return FunSpec.builder("withUserAgent")
                 .addModifiers(KModifier.PRIVATE)
