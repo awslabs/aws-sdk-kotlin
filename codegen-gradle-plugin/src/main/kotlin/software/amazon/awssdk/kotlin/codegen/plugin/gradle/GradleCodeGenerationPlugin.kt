@@ -3,13 +3,14 @@ package software.amazon.awssdk.kotlin.codegen.plugin.gradle
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.TaskAction
 import software.amazon.awssdk.kotlin.codegen.*
 import software.amazon.awssdk.kotlin.codegen.plugin.gradle.Constants.GENERATION_DIR
 import software.amazon.awssdk.kotlin.codegen.plugin.gradle.Constants.PLUGIN_NAME
-
 import java.io.File
-import java.io.InputStream
 import java.net.URLClassLoader
 
 class GradleCodeGenerationPlugin : Plugin<Project> {
@@ -39,21 +40,13 @@ open class CodeGenerationTask : DefaultTask() {
         val outputDirectory = outputDirectory()
         val configuration = configuration().toImmutable()
 
-        val codeGeneratorBuilder = CodeGenerator.builder(outputDirectory.toPath())
+        CodeGeneratorExecutor.builder(outputDirectory.toPath())
                 .let { if (configuration.minimizeFiles != null) it.minimizeFiles(configuration.minimizeFiles) else it }
                 .let { if (configuration.targetBasePackage != null) it.targetBasePackage(configuration.targetBasePackage) else it }
                 .let { if (configuration.builderSyntax != null) it.builderSyntax(configuration.builderSyntax) else it }
                 .apiName(USER_AGENT_PLUGIN_NAME, USER_AGENT_PLUGIN_VERSION)
-
-        configuration().services.map { objectToServiceModelInputStream(it) }
-                .forEach {
-                    val config = it.second
-                    codeGeneratorBuilder.serviceModel(it.first)
-                            .let {
-                                if (config != null) it.customizationConfig(config) else it
-                            }
-                            .build().execute()
-                }
+                .modelProvider(AggregateModelProvider(configuration().services.map { objectToServiceModelInputStream(it) }))
+                .execute()
 
         if (outputDirectory != defaultOutputDirectory) {
             val sources = project.properties["sourceSets"] as SourceSetContainer
@@ -64,14 +57,14 @@ open class CodeGenerationTask : DefaultTask() {
     @OutputDirectory
     fun outputDirectory() = configuration().outputDirectory ?: defaultOutputDirectory
 
-    private fun objectToServiceModelInputStream(it: Any): Pair<InputStream, InputStream?> {
+    private fun objectToServiceModelInputStream(it: Any): ModelProvider {
         return when {
-            it is Class<*> -> serviceModelInputStreamFromClass(it)
-            it is String && it.startsWith("software.amazon.awssdk.services") -> serviceModelInputStreamFromClass(loadClass(it))
-            it is String && it.isDependencyNotationWithoutVersion -> loadServiceModelFromArtifactId(it.split(":")[0], it.split(":")[1])
-            it is String && it.containsOnlyLettersAndDigits -> loadServiceModelFromArtifact(it)
-            it is File && it.endsWith(".jar") -> loadServiceModelFromJar(it)
-            it is File && it.endsWith("service-2.json") -> it.inputStream() to null
+            it is Class<*> -> ClassModelProvider(it)
+            it is String && it.startsWith("software.amazon.awssdk.services") -> ClassModelProvider(loadClass(it))
+            it is String && it.isDependencyNotationWithoutVersion -> jarFromArtifactId(it.split(":")[0], it.split(":")[1])
+            it is String && it.containsOnlyLettersAndDigits -> jarFromArtifactId(it)
+            it is File && it.endsWith(".jar") -> JarFileModelProvider(it)
+            it is File && it.endsWith("service-2.json") -> FileModelProvider(it)
             else -> throw GenerationException("Unknown type for service source $it. Should be an AWS Java SDK v2 Class (e.g. software.amazon.awssdk.services.s3.S3Client), an AWS SDK v2 Jar File, Model File (e.g. service-2.json) or String that in one of the following formats:" +
                     "\n - fully-qualified AWS Java SDK v2 class name (e.g. software.amazon.awssdk.services.sqs.SQSClient)" +
                     "\n - an artifact ID containing a service-2.json model (e.g. \"software.amazon.awssdk:s3\" or \"s3\")")
@@ -95,17 +88,16 @@ open class CodeGenerationTask : DefaultTask() {
         }
     }
 
-    private fun loadServiceModelFromArtifact(artifactId: String): Pair<InputStream, InputStream?>
-        = loadServiceModelFromArtifactId("software.amazon.awssdk", artifactId)
+    private fun jarFromArtifactId(artifactId: String): ModelProvider = jarFromArtifactId("software.amazon.awssdk", artifactId)
 
-    private fun loadServiceModelFromArtifactId(groupId: String, artifactId: String): Pair<InputStream, InputStream?> {
+    private fun jarFromArtifactId(groupId: String, artifactId: String): ModelProvider {
         val artifact = project.configurations.findByName("compile")
                 .resolvedConfiguration
                 .resolvedArtifacts
                 .find { it.moduleVersion.id.group == groupId && it.moduleVersion.id.name == artifactId }
 
         if (artifact != null) {
-            return loadServiceModelFromJar(artifact.file)
+            return JarFileModelProvider(artifact.file)
         }
 
         throw GenerationException("Unable load service model from artifact $groupId:$artifactId, has it been included as a compile dependency?")

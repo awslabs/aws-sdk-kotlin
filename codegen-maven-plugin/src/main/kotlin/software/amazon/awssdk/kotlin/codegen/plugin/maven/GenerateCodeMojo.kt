@@ -8,7 +8,6 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import software.amazon.awssdk.kotlin.codegen.*
 import java.io.File
-import java.io.InputStream
 
 
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
@@ -37,39 +36,34 @@ class GenerateCodeMojo : AbstractMojo() {
         val minimizeFiles = minimizeFiles
         val targetBasePackage = targetBasePackage
         val builderSyntax = builderSyntax
-        val codeGenBuilder = CodeGenerator.builder(outputDirectory!!.toPath())
+        CodeGeneratorExecutor.builder(outputDirectory!!.toPath())
                 .let { if (minimizeFiles != null) it.minimizeFiles(minimizeFiles) else it }
                 .let { if (targetBasePackage != null) it.targetBasePackage(targetBasePackage) else it }
                 .let { if (builderSyntax != null) it.builderSyntax(builderSyntax) else it }
                 .apiName(USER_AGENT_PLUGIN_NAME, USER_AGENT_PLUGIN_VERSION)
-
-        services.map {
-            when {
-                it.startsWith("software.amazon.awssdk.services") -> serviceModelInputStreamFromClass(Class.forName(it))
-                it.containsOnlyLettersAndDigits -> loadServiceModelFromArtifactId(it)
-                it.isDependencyNotationWithoutVersion -> loadServiceModelFromArtifactId(it.split(":")[0], it.split(":")[1])
-                else -> throw GenerationException("Unknown format for service source [$it]. Must be one of the following formats:" +
-                        "\n - fully-qualified AWS Java SDK v2 class name (e.g. software.amazon.awssdk.services.sqs.SQSClient)" +
-                        "\n - an artifact ID containing a service-2.json model (e.g. \"software.amazon.awssdk:s3\" or \"s3\")")
-            }
-        }.forEach {
-            val (serviceModel, customization) = it
-            codeGenBuilder.serviceModel(serviceModel)
-                    .let { if (customization != null) it.customizationConfig(customization) else it }
-                    .build().execute()
-        }
+                .modelProvider(
+                        services.map {
+                            when {
+                                it.startsWith("software.amazon.awssdk.services") -> ClassModelProvider(Class.forName(it))
+                                it.containsOnlyLettersAndDigits -> providerFromArtifact(it)
+                                it.isDependencyNotationWithoutVersion -> providerFromArtifact(it.split(":")[0], it.split(":")[1])
+                                else -> throw GenerationException("Unknown format for service source [$it]. Must be one of the following formats:" +
+                                        "\n - fully-qualified AWS Java SDK v2 class name (e.g. software.amazon.awssdk.services.sqs.SQSClient)" +
+                                        "\n - an artifact ID containing a service-2.json model (e.g. \"software.amazon.awssdk:s3\" or \"s3\")")
+                            }
+                        })
+                .execute()
     }
 
-    private fun loadServiceModelFromArtifactId(artifactId: String): Pair<InputStream, InputStream?> =
-            loadServiceModelFromArtifactId("software.amazon.awssdk", artifactId)
+    private fun providerFromArtifact(artifactId: String): ModelProvider = providerFromArtifact("software.amazon.awssdk", artifactId)
 
-    private fun loadServiceModelFromArtifactId(groupId: String, artifactId: String): Pair<InputStream, InputStream?> {
+    private fun providerFromArtifact(groupId: String, artifactId: String): ModelProvider {
         val artifact = project!!.dependencyArtifacts
                 .map { it as Artifact }
                 .find { it.groupId == groupId && it.artifactId == artifactId }
 
         if (artifact != null) {
-            return loadServiceModelFromJar(artifact.file)
+            return JarFileModelProvider(artifact.file)
         }
 
         throw GenerationException("Unable load service model from artifact $groupId:$artifactId, has it been included as a compile dependency?")

@@ -19,19 +19,20 @@ import software.amazon.awssdk.kotlin.codegen.poet.specs.SyncClientSpec
 import java.io.InputStream
 import java.nio.file.Path
 
-class CodeGenerator private constructor(private val params: Builder) {
-    private val serviceModel = loadModel(ServiceModel::class.java, params.serviceModel)!!
-    private val customization = loadModel(CustomizationConfig::class.java, params.customizationConfig)
-            ?: CustomizationConfig.DEFAULT
+class CodeGenerator internal constructor(private val model: Model,
+                                        private val outputDirectory: Path,
+                                        targetBasePackage: String,
+                                        private val codeGenOptions: CodeGenOptions,
+                                        private val apiName: ApiName?) {
     private val intermediateModel = IntermediateModelBuilder(C2jModels.builder()
-            .serviceModel(serviceModel)
-            .customizationConfig(customization)
+            .serviceModel(model.serviceModel)
+            .customizationConfig(model.customizationConfig ?: CustomizationConfig.DEFAULT)
             .build()).build()
-    private val packageForService = intermediateModel.metadata.fullClientPackageName.replace("software.amazon.awssdk", params.targetBasePackage)
+    private val packageForService = intermediateModel.metadata.fullClientPackageName.replace("software.amazon.awssdk", targetBasePackage)
     private val poetExtensions = PoetExtensions(packageForService, intermediateModel.metadata.fullClientPackageName)
 
     fun execute() {
-        println("Generating AWS Kotlin SDK for ${serviceModel.name}")
+        println("Generating AWS Kotlin SDK for ${model.serviceModel.name}")
         generateModelShapes(intermediateModel)
         generateTransformers(intermediateModel)
         generateClients(intermediateModel)
@@ -55,31 +56,31 @@ class CodeGenerator private constructor(private val params: Builder) {
 
     private fun generateClients(intermediateModel: IntermediateModel) {
         FileSpec.builder(poetExtensions.basePackage, intermediateModel.metadata.syncInterface)
-                .apply { SyncClientSpec(intermediateModel, poetExtensions, params.apiName, params.codeGenOptions).appendTo(this) }
+                .apply { SyncClientSpec(intermediateModel, poetExtensions, apiName, codeGenOptions).appendTo(this) }
                 .build()
-                .writeTo(params.outputDirectory)
+                .writeTo(outputDirectory)
     }
 
     private fun convertToTypeSpec(shapeModel: ShapeModel): PoetSpec {
         return if (shapeModel.shapeType == ShapeType.Enum) {
             EnumModelSpec(shapeModel, poetExtensions)
         } else {
-            ShapeModelSpec(shapeModel, poetExtensions, params.codeGenOptions)
+            ShapeModelSpec(shapeModel, poetExtensions, codeGenOptions)
         }
     }
 
     private fun writeToFile(packageName: String, combinedFileName: String, specs: Iterable<PoetSpec>) {
-        if (params.codeGenOptions.minimizeFiles) {
+        if (codeGenOptions.minimizeFiles) {
             FileSpec.builder(packageName, combinedFileName)
                     .apply { specs.forEach { it.appendTo(this) } }
                     .build()
-                    .writeTo(params.outputDirectory)
+                    .writeTo(outputDirectory)
         } else {
             specs.map {
                 FileSpec.builder(packageName, it.name)
                         .apply { it.appendTo(this) }
                         .build()
-            }.forEach { it.writeTo(params.outputDirectory) }
+            }.forEach { it.writeTo(outputDirectory) }
         }
     }
 
@@ -95,28 +96,41 @@ class CodeGenerator private constructor(private val params: Builder) {
 
     private val ServiceModel.name: String get() = this.metadata.serviceFullName ?: this.metadata.serviceAbbreviation
 
-    data class Builder internal constructor(internal val outputDirectory: Path,
-                                            internal val serviceModel: InputStream? = null,
-                                            internal val customizationConfig: InputStream? = null,
-                                            internal val targetBasePackage: String = "software.amazon.awssdk.kotlin",
-                                            internal val codeGenOptions: CodeGenOptions = CodeGenOptions(),
-                                            internal val apiName: ApiName? = null) {
+}
 
-        fun targetBasePackage(targetBasePackage: String): Builder = copy(targetBasePackage = targetBasePackage)
-        fun minimizeFiles(minimizeFiles: Boolean): Builder = copy(codeGenOptions = codeGenOptions.copy(minimizeFiles = minimizeFiles))
-        fun serviceModel(serviceModel: InputStream): Builder = copy(serviceModel = serviceModel)
-        fun customizationConfig(customizationConfig: InputStream): Builder = copy(customizationConfig = customizationConfig)
-        fun apiName(name: String, version: String): Builder = copy(apiName = ApiName.builder().name(name).version(version).build())
-        fun builderSyntax(builderSyntax: Boolean): Builder = copy(codeGenOptions = codeGenOptions.copy(builderSyntax = builderSyntax))
-        fun build(): CodeGenerator = CodeGenerator(this)
+
+data class CodeGenOptions internal constructor(internal val minimizeFiles: Boolean = false,
+        //TODO: come up with a better name for this
+                                               internal val builderSyntax: Boolean = true)
+
+
+data class CodeGeneratorExecutor internal constructor(internal val outputDirectory: Path,
+                                        internal val modelProvider: ModelProvider? = null,
+                                        internal val targetBasePackage: String = "software.amazon.awssdk.kotlin",
+                                        internal val codeGenOptions: CodeGenOptions = CodeGenOptions(),
+                                        internal val apiName: ApiName? = null) {
+
+    fun targetBasePackage(targetBasePackage: String): CodeGeneratorExecutor = copy(targetBasePackage = targetBasePackage)
+    fun minimizeFiles(minimizeFiles: Boolean): CodeGeneratorExecutor = copy(codeGenOptions = codeGenOptions.copy(minimizeFiles = minimizeFiles))
+    fun apiName(name: String, version: String): CodeGeneratorExecutor = copy(apiName = ApiName.builder().name(name).version(version).build())
+    fun builderSyntax(builderSyntax: Boolean): CodeGeneratorExecutor = copy(codeGenOptions = codeGenOptions.copy(builderSyntax = builderSyntax))
+    fun modelProvider(modelProvider: ModelProvider) = copy(modelProvider = modelProvider)
+    fun modelProvider(modelProviders: Iterable<ModelProvider>) = copy(modelProvider = AggregateModelProvider(modelProviders))
+    fun execute() {
+        val provider = requireNotNull(modelProvider, {"modelProvider cannot be null"})
+        provider.models().forEach {
+            CodeGenerator(
+                    model = it,
+                    outputDirectory = outputDirectory,
+                    targetBasePackage = targetBasePackage,
+                    codeGenOptions = codeGenOptions,
+                    apiName = apiName
+            ).execute()
+        }
     }
 
-    data class CodeGenOptions internal constructor(internal val minimizeFiles: Boolean = false,
-                                                   //TODO: come up with a better name for this
-                                                   internal val builderSyntax: Boolean = true)
-
     companion object {
-        fun builder(outputDirectory: Path): Builder = Builder(outputDirectory)
+        fun builder(outputDirectory: Path): CodeGeneratorExecutor = CodeGeneratorExecutor(outputDirectory)
     }
 }
 

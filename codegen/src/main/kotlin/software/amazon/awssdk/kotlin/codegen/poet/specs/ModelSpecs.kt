@@ -8,11 +8,11 @@ import com.squareup.kotlinpoet.KModifier.DATA
 import com.squareup.kotlinpoet.KModifier.PRIVATE
 import software.amazon.awssdk.codegen.model.intermediate.MemberModel
 import software.amazon.awssdk.codegen.model.intermediate.ShapeModel
-import software.amazon.awssdk.kotlin.codegen.CodeGenerator
+import software.amazon.awssdk.kotlin.codegen.CodeGenOptions
 import software.amazon.awssdk.kotlin.codegen.isCollection
 
 
-class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: PoetExtensions, val codeGenOptions: CodeGenerator.CodeGenOptions) : ClassSpec(model.shapeName) {
+class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: PoetExtensions, val codeGenOptions: CodeGenOptions) : ClassSpec(model.shapeName) {
 
     private val className = poetExtensions.modelClass(model.shapeName)
     private val members = model.nonStreamingMembers.filterNotNull()

@@ -9,7 +9,7 @@ import software.amazon.awssdk.core.AwsRequestOverrideConfig
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.core.sync.StreamingResponseHandler
 import software.amazon.awssdk.http.AbortableInputStream
-import software.amazon.awssdk.kotlin.codegen.CodeGenerator
+import software.amazon.awssdk.kotlin.codegen.CodeGenOptions
 import software.amazon.awssdk.kotlin.codegen.NAME
 import software.amazon.awssdk.kotlin.codegen.VERSION
 import software.amazon.awssdk.kotlin.codegen.poet.ClassSpec
@@ -18,7 +18,7 @@ import software.amazon.awssdk.kotlin.codegen.poet.PoetExtensions
 class SyncClientSpec(private val model: IntermediateModel,
                      private val poetExtensions: PoetExtensions,
                      private val apiName: ApiName?,
-                     val codeGenOptions: CodeGenerator.CodeGenOptions) : ClassSpec(model.metadata.syncClient) {
+                     val codeGenOptions: CodeGenOptions) : ClassSpec(model.metadata.syncClient) {
     private val baseClass = poetExtensions.javaSdkClientClass(model.metadata.syncInterface)
     override fun typeSpec(): TypeSpec {
         return TypeSpec.classBuilder(model.metadata.syncInterface)
