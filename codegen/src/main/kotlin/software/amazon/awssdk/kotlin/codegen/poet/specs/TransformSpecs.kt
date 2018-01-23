@@ -3,6 +3,7 @@ package software.amazon.awssdk.kotlin.codegen.poet.specs
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.joinToCode
 import software.amazon.awssdk.codegen.model.intermediate.MemberModel
 import software.amazon.awssdk.codegen.model.intermediate.ShapeModel
 import software.amazon.awssdk.codegen.model.intermediate.ShapeType
@@ -42,14 +43,7 @@ class ModelTransformerSpec(private val model: ShapeModel, private val poetExtens
                             }
                         }
 
-                        if (assignments.size > 1) {
-                            assignments.dropLast(1).forEach { codeBlock.add(it).add(",") }
-                        }
-                        if (assignments.isNotEmpty()) {
-                            codeBlock.add(assignments.last())
-                        }
-
-                        this.addCode(codeBlock.add(")").build())
+                        this.addCode(codeBlock.add(assignments.joinToCode(",", suffix = ")")).build())
                     }
                 }.build()
     }
