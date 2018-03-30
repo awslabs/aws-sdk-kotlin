@@ -1,5 +1,8 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.tasks.Copy
+import org.gradle.kotlin.dsl.extra
+import org.gradle.kotlin.dsl.kotlinModule
+import org.gradle.kotlin.dsl.the
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "software.amazon.awssdk.kotlin"
@@ -7,8 +10,8 @@ version = "1.0-SNAPSHOT"
 
 buildscript {
     var kotlin_version: String by extra
-    kotlin_version = "1.2.20"
-    val dokka_version = "0.9.15"
+    kotlin_version = "1.2.30"
+    val dokka_version = "0.9.16"
 
     repositories {
         jcenter()
@@ -22,6 +25,10 @@ buildscript {
 }
 
 val kotlin_version: String by extra
+
+plugins {
+    java
+}
 
 allprojects {
     repositories {
@@ -52,7 +59,7 @@ subprojects {
 
     project.apply {
         // This is in a Groovy file because the Dokka task type is not reachable
-        from("${project.parent.projectDir}/gradle/dokka.gradle")
+        from("${project.parent?.projectDir}/gradle/dokka.gradle")
     }
 
     task("copyTemplates", type = Copy::class) {
@@ -70,7 +77,7 @@ subprojects {
 
         into("$buildDir/generated-src/kotlin")
 
-        project.tasks.findByName("compileKotlin").dependsOn(project.tasks.findByName("copyTemplates"))
+        project.tasks.findByName("compileKotlin")?.dependsOn(project.tasks.findByName("copyTemplates"))
 
         the<JavaPluginConvention>().sourceSets {
             "main" {
@@ -86,4 +93,3 @@ subprojects {
     }
 
 }
-

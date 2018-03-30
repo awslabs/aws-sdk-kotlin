@@ -1,6 +1,7 @@
 package software.amazon.awssdk.kotlin.codegen.plugin.gradle
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.NamedDomainObjectCollection
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
@@ -19,10 +20,10 @@ class GradleCodeGenerationPlugin : Plugin<Project> {
         val generate = project.tasks.create("generateAwsKotlin", CodeGenerationTask::class.java).apply {
             description = "Generates AWS SDK Kotlin sources."
         }
-        project.tasks.findByName("compileKotlin").dependsOn(generate)
+        project.tasks.findByName("compileKotlin")?.dependsOn(generate)
         val sources = project.properties.get("sourceSets") as SourceSetContainer
 
-        sources.findByName("main").java.srcDir("${project.buildDir}/$GENERATION_DIR")
+        sources.findRequiredByName("main").java.srcDir("${project.buildDir}/$GENERATION_DIR")
     }
 }
 
@@ -50,7 +51,7 @@ open class CodeGenerationTask : DefaultTask() {
 
         if (outputDirectory != defaultOutputDirectory) {
             val sources = project.properties["sourceSets"] as SourceSetContainer
-            sources.findByName("main").java.srcDir(outputDirectory)
+            sources.findByName("main")?.java?.srcDir(outputDirectory)
         }
     }
 
@@ -77,7 +78,8 @@ open class CodeGenerationTask : DefaultTask() {
         } catch (_: ClassNotFoundException) {
             try {
                 val sources = project.properties["sourceSets"] as SourceSetContainer
-                val classPath = sources.findByName("main").compileClasspath.files.map { it.toURI().toURL() }.toTypedArray()
+
+                val classPath = sources.findRequiredByName("main").compileClasspath.files.map { it.toURI().toURL() }.toTypedArray()
 
                 val cl = URLClassLoader(classPath, ClassLoader.getSystemClassLoader())
 
@@ -91,7 +93,7 @@ open class CodeGenerationTask : DefaultTask() {
     private fun jarFromArtifactId(artifactId: String): ModelProvider = jarFromArtifactId("software.amazon.awssdk", artifactId)
 
     private fun jarFromArtifactId(groupId: String, artifactId: String): ModelProvider {
-        val artifact = project.configurations.findByName("compile")
+        val artifact = project.configurations.findRequiredByName("compile")
                 .resolvedConfiguration
                 .resolvedArtifacts
                 .find { it.moduleVersion.id.group == groupId && it.moduleVersion.id.name == artifactId }
@@ -102,7 +104,6 @@ open class CodeGenerationTask : DefaultTask() {
 
         throw GenerationException("Unable load service model from artifact $groupId:$artifactId, has it been included as a compile dependency?")
     }
-
 }
 
 open class CodeGenerationPluginExtension {
@@ -121,3 +122,5 @@ private object Constants {
     val GENERATION_DIR = "generated-src/ktSdk"
     val PLUGIN_NAME = "awsKotlin"
 }
+
+private fun <T> NamedDomainObjectCollection<T>.findRequiredByName(name: String): T = findByName(name) ?: throw RuntimeException("Required object not found by name $name")

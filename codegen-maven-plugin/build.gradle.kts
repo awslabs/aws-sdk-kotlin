@@ -1,7 +1,7 @@
 import org.gradle.api.publication.maven.internal.deployer.BaseMavenInstaller
 
 val mavenEmbedder: Configuration = configurations.create("mavenEmbedder")
-val testProjectDir = "${project.parent.projectDir}/test-project/"
+val testProjectDir = "${project.parent?.projectDir}/test-project/"
 val install = tasks.findByName("install") as Upload
 val mavenInstaller = install.repositories.findByName("mavenInstaller") as BaseMavenInstaller
 
@@ -29,11 +29,11 @@ mavenInstaller.pom.apply {
 val compileTestProject = task(name = "compileTestProject", type = JavaExec::class) {
     description = "Generate Kotlin SDK in test project using gradle plugin and compile."
     inputs.files("$testProjectDir/src", "$testProjectDir/pom.xml")
-    outputs.file("${project.parent.projectDir}/test-project/build/generated-sources")
+    outputs.file("${project.parent?.projectDir}/test-project/build/generated-sources")
     dependsOn(":codegen:install", "install")
-    tasks.findByName("test").dependsOn(this)
+    tasks?.findByName("test")?.dependsOn(this)
 
-    systemProperty("maven.multiModuleProjectDirectory", "${project.parent.projectDir}/test-project")
+    systemProperty("maven.multiModuleProjectDirectory", "${project.parent?.projectDir}/test-project")
     classpath(mavenEmbedder)
     main = "org.apache.maven.cli.MavenCli"
     args = listOf("test-compile", "--file", testProjectDir, "-B")
@@ -41,25 +41,25 @@ val compileTestProject = task(name = "compileTestProject", type = JavaExec::clas
 
 task("integrationTestProject", type = JavaExec::class) {
     description = "Runs integration tests on test project."
-    inputs.file("${project.parent.projectDir}/test-project/build/generated-sources")
+    inputs.file("${project.parent?.projectDir}/test-project/build/generated-sources")
     dependsOn(compileTestProject)
-    tasks.findByName("integrationTest").dependsOn(this)
+    tasks?.findByName("integrationTest")?.dependsOn(this)
 
-    systemProperty("maven.multiModuleProjectDirectory", "${project.parent.projectDir}/test-project")
+    systemProperty("maven.multiModuleProjectDirectory", "${project.parent?.projectDir}/test-project")
     classpath(mavenEmbedder)
     main = "org.apache.maven.cli.MavenCli"
     args = listOf("test", "--file", testProjectDir, "-B")
 }
 
-(tasks.findByName("clean") as Delete).delete("${project.parent.projectDir}/test-project/target")
+(tasks?.findByName("clean") as Delete).delete("${project.parent?.projectDir}/test-project/target")
 
 val generatePluginDescriptor = task("generatePluginDescriptor", type = JavaExec::class) {
-    val compileKotlin = tasks.findByName("compileKotlin")
-    val kotlinDestinationDir = compileKotlin.property("destinationDir") as File
+    val compileKotlin = tasks?.findByName("compileKotlin")
+    val kotlinDestinationDir = compileKotlin?.property("destinationDir") as File
     val pomFile = file("$buildDir/pom.xml")
     val pluginDescriptor = File(kotlinDestinationDir, "META-INF/maven/plugin.xml")
 
-    inputs.files(compileKotlin.outputs.files)
+    inputs.files(compileKotlin?.outputs?.files)
     outputs.file(pluginDescriptor)
 
     classpath(mavenEmbedder)
@@ -92,6 +92,6 @@ val generatePluginDescriptor = task("generatePluginDescriptor", type = JavaExec:
         logger.info("Plugin descriptor is generated in ${pluginDescriptor.canonicalPath}")
     }
 
-    dependsOn(tasks.findByName("compileKotlin"))
-    tasks.findByName("jar").dependsOn(this)
+    dependsOn(tasks?.findByName("compileKotlin"))
+    tasks?.findByName("jar")?.dependsOn(this)
 }
