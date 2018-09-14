@@ -9,8 +9,6 @@ val String.isDependencyNotationWithoutVersion: Boolean get() = contains(":") && 
 val String.containsOnlyLettersAndDigits: Boolean get() = filter { it.isLetterOrDigit() }.length == length
 
 val MemberModel.isSimpleScalarOrSimpleCollection: Boolean get() = this.isSimple || this.isSimpleCollection
-val MemberModel.isSimpleCollection: Boolean get() = (this.isMap || this.isList)
-        && !this.isCollectionWithBuilderMember
-        && this.listModel?.listMemberModel?.enumType.isNullOrEmpty()
+val MemberModel.isSimpleCollection: Boolean get() = (this.isMap || this.isList) && !this.isCollectionWithBuilderMember
 
 val MemberModel.isCollection: Boolean get() = this.isMap || this.isList

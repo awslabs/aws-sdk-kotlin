@@ -1,6 +1,7 @@
 package software.amazon.awssdk.kotlin.codegen.poet
 
 import com.squareup.kotlinpoet.*
+import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.kotlin.codegen.CodeGenerator
 import software.amazon.awssdk.kotlin.codegen.GenerationException
 import java.math.BigDecimal
@@ -41,7 +42,9 @@ class PoetExtensions(val basePackage: String, val javaSdkBasePackage: String) {
                 "java.time.Instant" to Instant::class.asClassName(),
                 "Object" to Any::class.asClassName(),
                 "ByteBuffer" to ByteBuffer::class.asClassName(),
-                "java.nio.ByteBuffer" to ByteBuffer::class.asClassName()
+                "java.nio.ByteBuffer" to ByteBuffer::class.asClassName(),
+                "software.amazon.awssdk.core.SdkBytes" to SdkBytes::class.asClassName(),
+                "SdkBytes" to SdkBytes::class.asClassName()
         )
 
         @JvmStatic

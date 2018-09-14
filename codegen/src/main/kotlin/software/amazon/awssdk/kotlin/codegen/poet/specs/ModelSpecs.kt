@@ -99,7 +99,7 @@ class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: 
 
     private fun determineTypeName(memberModel: MemberModel): TypeName {
         if (!memberModel.enumType.isNullOrEmpty()) {
-            return poetExtensions.modelClass(memberModel.enumType)
+            return poetExtensions.javaSdkModelClass(memberModel.enumType)
         }
 
         if (memberModel.isSimple) {
@@ -117,16 +117,4 @@ class ShapeModelSpec(private val model: ShapeModel, private val poetExtensions: 
         }
         return poetExtensions.modelClass(memberModel.variable.variableType)
     }
-}
-
-class EnumModelSpec(private val model: ShapeModel, private val poetExtensions: PoetExtensions) : ClassSpec(model.shapeName) {
-    override fun typeSpec(): TypeSpec {
-        val builder = TypeSpec.enumBuilder(model.shapeName)
-        model.enums.forEach { builder.addEnumConstant(it.name) }
-        builder.addEnumConstant("SDK_UNKNOWN")
-        builder.addKdoc("See [%L]", poetExtensions.javaSdkModelClass(model.shapeName).canonicalName)
-
-        return builder.build()
-    }
-
 }

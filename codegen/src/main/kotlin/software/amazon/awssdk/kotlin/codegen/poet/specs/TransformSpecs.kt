@@ -17,6 +17,7 @@ class ModelTransformerSpec(private val model: ShapeModel, private val poetExtens
     override val name: String = model.shapeName
 
     override fun appendTo(file: FileSpec.Builder) {
+        if (model.shapeType == ShapeType.Enum) return
         if (model.shapeType != ShapeType.Request) { file.addFunction(asKotlinSdkFunction()) }
         if (model.shapeType != ShapeType.Response) { file.addFunction(asJavaSdkFunction()) }
         file.addAliasedImport(kotlinSdkClass, "Kt${model.variable.variableType}")
@@ -28,23 +29,21 @@ class ModelTransformerSpec(private val model: ShapeModel, private val poetExtens
                 .returns(kotlinSdkClass)
                 .receiver(javaSdkClass)
                 .apply {
-                    if (model.shapeType == ShapeType.Enum) {
-                        this.addCode("return %T.valueOf(name)", kotlinSdkClass)
-                    } else {
-                        val codeBlock = CodeBlock.builder().add("return %T(", kotlinSdkClass)
 
-                        val assignments = model.nonStreamingMembers.map {
-                            when {
-                                !it.enumType.isNullOrEmpty() -> javaToKtCodeBlockBuildable(it)
-                                it.isSimpleScalarOrSimpleCollection -> javaToKtCodeBlockSimple(it)
-                                it.isList -> javaToKtCodeBlockList(it)
-                                it.isMap -> javaToKtCodeBlockMap(it)
-                                else -> javaToKtCodeBlockBuildable(it)
-                            }
+                    val codeBlock = CodeBlock.builder().add("return %T(", kotlinSdkClass)
+
+                    val assignments = model.nonStreamingMembers.map {
+                        when {
+                            !it.enumType.isNullOrEmpty() -> javaToKtCodeBlockSimple(it)
+                            it.isSimpleScalarOrSimpleCollection -> javaToKtCodeBlockSimple(it)
+                            it.isList -> javaToKtCodeBlockList(it)
+                            it.isMap -> javaToKtCodeBlockMap(it)
+                            else -> javaToKtCodeBlockBuildable(it)
                         }
-
-                        this.addCode(codeBlock.add(assignments.joinToCode(",", suffix = ")")).build())
                     }
+
+                    this.addCode(codeBlock.add(assignments.joinToCode(",", suffix = ")")).build())
+
                 }.build()
     }
 
@@ -53,28 +52,25 @@ class ModelTransformerSpec(private val model: ShapeModel, private val poetExtens
                 .addAnnotation(poetExtensions.generated)
                 .returns(javaSdkClass)
                 .receiver(kotlinSdkClass).apply {
-            if (model.shapeType == ShapeType.Enum) {
-                this.addCode("return %T.valueOf(name)", javaSdkClass)
-            } else {
                 val codeBlock = CodeBlock.builder().add("return %T.builder()", javaSdkClass)
 
                 model.nonStreamingMembers.map {
                     it.variable.variableName to
                             when {
-                                !it.enumType.isNullOrEmpty() -> ktToJavaCodeBlockBuildable(it)
+                                !it.enumType.isNullOrEmpty() -> ktToJavaCodeBlockSimple(it)
                                 it.isSimpleScalarOrSimpleCollection -> ktToJavaCodeBlockSimple(it)
                                 it.isList -> ktToJavaCodeBlockList(it)
                                 it.isMap -> ktToJavaCodeBlockMap(it)
                                 else -> ktToJavaCodeBlockBuildable(it)
                             }
                 }.forEach { entry ->
-                    codeBlock.add(".apply { if (%N != null) { it.", entry.first)
+                    codeBlock.add(".apply { if (%N != null) { ", entry.first)
                             .add(entry.second)
                             .add("} }")
                 }
 
                 this.addCode(codeBlock.add(".build()").build())
-            }
+
         }.build()
     }
 

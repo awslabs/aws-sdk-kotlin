@@ -12,7 +12,6 @@ import software.amazon.awssdk.codegen.model.service.ServiceModel
 import software.amazon.awssdk.core.ApiName
 import software.amazon.awssdk.kotlin.codegen.poet.PoetExtensions
 import software.amazon.awssdk.kotlin.codegen.poet.PoetSpec
-import software.amazon.awssdk.kotlin.codegen.poet.specs.EnumModelSpec
 import software.amazon.awssdk.kotlin.codegen.poet.specs.ModelTransformerSpec
 import software.amazon.awssdk.kotlin.codegen.poet.specs.ShapeModelSpec
 import software.amazon.awssdk.kotlin.codegen.poet.specs.SyncClientSpec
@@ -26,7 +25,7 @@ class CodeGenerator internal constructor(private val model: Model,
                                         private val apiName: ApiName?) {
     private val intermediateModel = IntermediateModelBuilder(C2jModels.builder()
             .serviceModel(model.serviceModel)
-            .customizationConfig(model.customizationConfig ?: CustomizationConfig.DEFAULT)
+            .customizationConfig(model.customizationConfig ?: CustomizationConfig.create())
             .build()).build()
     private val packageForService = intermediateModel.metadata.fullClientPackageName.replace("software.amazon.awssdk", targetBasePackage)
     private val poetExtensions = PoetExtensions(packageForService, intermediateModel.metadata.fullClientPackageName)
@@ -61,13 +60,7 @@ class CodeGenerator internal constructor(private val model: Model,
                 .writeTo(outputDirectory)
     }
 
-    private fun convertToTypeSpec(shapeModel: ShapeModel): PoetSpec {
-        return if (shapeModel.shapeType == ShapeType.Enum) {
-            EnumModelSpec(shapeModel, poetExtensions)
-        } else {
-            ShapeModelSpec(shapeModel, poetExtensions, codeGenOptions)
-        }
-    }
+    private fun convertToTypeSpec(shapeModel: ShapeModel): PoetSpec = ShapeModelSpec(shapeModel, poetExtensions, codeGenOptions)
 
     private fun writeToFile(packageName: String, combinedFileName: String, specs: Iterable<PoetSpec>) {
         if (codeGenOptions.minimizeFiles) {
@@ -92,7 +85,7 @@ class CodeGenerator internal constructor(private val model: Model,
     }
 
     private val IntermediateModel.kotlinSupportedShapes: List<ShapeModel>
-        get() = this.shapes.values.filter { it.shapeType != ShapeType.Exception }
+        get() = this.shapes.values.filter { it.shapeType != ShapeType.Exception && it.shapeType != ShapeType.Enum }
 
     private val ServiceModel.name: String get() = this.metadata.serviceFullName ?: this.metadata.serviceAbbreviation
 

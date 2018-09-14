@@ -1,14 +1,12 @@
 package software.amazon.awssdk.kotlin.codegen.poet.specs
 
 import com.squareup.kotlinpoet.*
+import software.amazon.awssdk.awscore.AwsRequest
 import software.amazon.awssdk.codegen.model.intermediate.IntermediateModel
 import software.amazon.awssdk.codegen.model.intermediate.OperationModel
 import software.amazon.awssdk.core.ApiName
-import software.amazon.awssdk.core.AwsRequest
-import software.amazon.awssdk.core.AwsRequestOverrideConfig
 import software.amazon.awssdk.core.sync.RequestBody
-import software.amazon.awssdk.core.sync.StreamingResponseHandler
-import software.amazon.awssdk.http.AbortableInputStream
+import software.amazon.awssdk.core.sync.ResponseTransformer
 import software.amazon.awssdk.kotlin.codegen.CodeGenOptions
 import software.amazon.awssdk.kotlin.codegen.NAME
 import software.amazon.awssdk.kotlin.codegen.VERSION
@@ -106,35 +104,20 @@ class SyncClientSpec(private val model: IntermediateModel,
 
     private fun streamingOutputOperationSpec(model: OperationModel): FunSpec {
         val parameterizedType = TypeVariableName("ReturnT")
-        val handler = ParameterizedTypeName.get(StreamingResponseHandler::class.asTypeName(),
+        val transformer = ParameterizedTypeName.get(ResponseTransformer::class.asTypeName(),
                 poetExtensions.modelClass(model.returnType.returnType),
                 parameterizedType)
 
-        val javaSdkHandler = ParameterizedTypeName.get(StreamingResponseHandler::class.asTypeName(), poetExtensions.javaSdkModelClass(model.returnType.returnType), parameterizedType)
-        val inputStreamType = AbortableInputStream::class.asTypeName().asNullable()
-
-        val handlerWrapper = TypeSpec.anonymousClassBuilder("")
-                .addSuperinterface(javaSdkHandler)
-                .addFunction(FunSpec.builder("apply")
-                        .addModifiers(KModifier.OVERRIDE)
-                        .returns(parameterizedType)
-                        .addParameter("javaResponse", poetExtensions.javaSdkModelClass(model.returnType.returnType))
-                        .addParameter("stream", inputStreamType)
-                        .addCode("return handler.apply(javaResponse.asKotlinSdk(), stream)")
-                        .build())
-                .addFunction(FunSpec.builder("needsConnectionLeftOpen")
-                        .addModifiers(KModifier.OVERRIDE)
-                        .returns(Boolean::class)
-                        .addCode("return handler.needsConnectionLeftOpen()")
-                        .build())
-                .build().toString().replace("ReturnT>()", "ReturnT>") //HACK: KotlinPoet doesn't properly handle interfaces on anonymous objects
+        val handlerWrapper = CodeBlock.of("{ response, stream -> transformer.transform(response.asKotlinSdk(), stream) }",
+                ResponseTransformer::class.asTypeName()
+            )
 
         return FunSpec.builder(model.methodName)
                 .returns(parameterizedType)
                 .addTypeVariable(parameterizedType)
                 .addParameter(model.input.variableName, poetExtensions.modelClass(model.input.variableType))
-                .addParameter("handler", handler)
-                .addCode("return %N.%L(%N.asJavaSdk().withUserAgent(), %L)", "client", model.methodName, model.input.variableName, handlerWrapper)
+                .addParameter("transformer", transformer)
+                .addCode("return %N.%L(%N.asJavaSdk().withUserAgent()) %L", "client", model.methodName, model.input.variableName, handlerWrapper)
                 .build()
     }
 
@@ -157,18 +140,16 @@ class SyncClientSpec(private val model: IntermediateModel,
 
         return FunSpec.builder("withUserAgent")
                 .addModifiers(KModifier.PRIVATE)
+                .addAnnotation(AnnotationSpec.builder(Suppress::class).addMember("%S", "UNCHECKED_CAST").build())
                 .addTypeVariable(parameterizedType)
                 .receiver(parameterizedType)
                 .returns(parameterizedType)
-                .addCode("val %L = this.requestOverrideConfig().map { it.toBuilder() }.orElseGet { %T.builder() }.addApiName(apiName)",
-                        "cfg",
-                        AwsRequestOverrideConfig::class)
+                .addCode("return this.toBuilder().overrideConfiguration { it.addApiName(apiName)")
                 .apply {
                     if (apiName != null) {
                         this.addCode(".addApiName(pluginApiName)")
                     }
-                }.addCode(".build()")
-                .addCode("\n@%T(%S)\nreturn this.toBuilder().requestOverrideConfig(%L).build() as T", Suppress::class, "UNCHECKED_CAST", "cfg")
+                }.addCode(" }.build() as T")
                 .build()
     }
 
