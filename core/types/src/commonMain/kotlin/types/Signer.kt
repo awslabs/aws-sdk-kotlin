@@ -36,9 +36,9 @@ interface Signer {
     /**
      * Method that takes in an request and returns a signed version of the request.
      *
-     * @param request The request to sign
+     * @param originalRequest The request to sign
      * @param signingOptions Contains the attributes required for signing the request
      * @return A signed version of the input request
      */
-    fun sign(request: HttpRequest, signingOptions: RequestSigningArguments?): HttpRequest
+    fun sign(originalRequest: HttpRequest, signingOptions: RequestSigningArguments?): HttpRequest
 }
