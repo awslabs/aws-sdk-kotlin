@@ -16,6 +16,7 @@ kotlin {
                 api(kotlin("stdlib-jdk8"))
 
                 api("com.soywiz.korlibs.klock:klock:1.8.6")
+                api("com.squareup.okio:okio:2.4.3")
             }
         }
 
