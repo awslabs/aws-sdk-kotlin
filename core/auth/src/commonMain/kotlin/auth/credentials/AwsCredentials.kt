@@ -34,4 +34,4 @@ interface AwsCredentials {
     val expiration: Long? // TODO: klock?
 }
 
-fun AwsCredentials.isAnonymous() = this is AnonymousCredentials
+//fun AwsCredentials.isAnonymous() = this is AnonymousCredentials

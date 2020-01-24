@@ -35,6 +35,8 @@ data class AwsCredentials(
      */
     val expiration: DateTime?
 ) {
+    constructor(accessKeyId: String, secretAccessKey: String) : this(accessKeyId, secretAccessKey, null, null)
+
     override fun toString(): String {
         return "AwsCredentials(accessKeyId='$accessKeyId', expiration=$expiration)"
     }
