@@ -13,22 +13,6 @@ open class SigningArguments(
 )
 
 class RequestSigningArguments(
-    /**
-     * A set of strings whose members represents headers that cannot be signed.
-     * All headers in the provided request will have their names converted to
-     * lower case and then checked for existence in the unsignableHeaders set.
-     */
-    val unsignableHeaders: Set<String>?,
-    /**
-     * A set of strings whose members represents headers that should be signed.
-     * Any values passed here will override those provided via unsignableHeaders,
-     * allowing them to be signed.
-     *
-     * All headers in the provided request will have their names converted to
-     * lower case before signing.
-     */
-    val signableHeaders: Set<String>?,
-
     signingDate: DateTime = DateTime.now()
 ) : SigningArguments(signingDate)
 

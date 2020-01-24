@@ -23,7 +23,7 @@ import utils.collections.ConcurrentMap
  * service unless an explicit endpoint is available for that region in [RegionMetadata].
  *
  */
-class Region private constructor(private val id: String, val isGlobalRegion: Boolean) {
+class Region private constructor(val id: String, val isGlobalRegion: Boolean) {
     private object RegionCache {
         private val VALUES: ConcurrentMap<String, Region> = ConcurrentMap()
 

@@ -37,13 +37,13 @@ interface Endpoint {
 
 data class HttpRequest(
     override val headers: Headers,
-    override val body: Content?,
+    override val body: Content? = null,
     override val protocol: String,
     override val hostname: String,
     val method: String, // TODO: Worth making an enum?
-    override val port: Int?,
+    override val port: Int? = null,
     override val path: String,
-    override val queryParameters: QueryParameters?
+    override val queryParameters: QueryParameters? = null
 ) : HttpMessage, Endpoint
 
 interface HttpResponse : HttpMessage {
