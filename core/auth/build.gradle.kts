@@ -21,7 +21,7 @@ kotlin {
                 api(project(":regions"))
                 api(project(":types"))
 
-                api("com.squareup.okio:okio:2.4.3")
+                api("com.squareup.okio:okio-multiplatform:2.4.3")
             }
         }
 
