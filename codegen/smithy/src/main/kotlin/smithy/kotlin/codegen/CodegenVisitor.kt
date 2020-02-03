@@ -1,5 +1,7 @@
 package smithy.kotlin.codegen
 
+import smithy.kotlin.codegen.generators.ServiceDefinitionGenerator
+import smithy.kotlin.codegen.generators.StructureGenerator
 import smithy.kotlin.codegen.integration.KotlinIntegration
 import smithy.kotlin.codegen.integration.ProtocolGenerator
 import smithy.kotlin.codegen.utils.getLogger
@@ -10,10 +12,11 @@ import software.amazon.smithy.model.neighbor.Walker
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.Shape
 import software.amazon.smithy.model.shapes.ShapeVisitor
+import software.amazon.smithy.model.shapes.StructureShape
 import java.util.ServiceLoader
 import java.util.TreeSet
 
-class CodegenVisitor(context: PluginContext) : ShapeVisitor.Default<Void>() {
+class CodegenVisitor(context: PluginContext) : ShapeVisitor.Default<Unit>() {
     companion object {
         private val LOGGER = getLogger<CodegenVisitor>()
     }
@@ -30,8 +33,10 @@ class CodegenVisitor(context: PluginContext) : ShapeVisitor.Default<Void>() {
 
     private val integrations: List<KotlinIntegration>
 
+    private val sdkWriter = SdkWriter(fileManifest)
+
     init {
-        LOGGER.info { "Generating TypeScript client for service ${service.id}" }
+        LOGGER.info { "Generating Kotlin client for service ${service.id}" }
 
         // Load all integrations.
         val loader = context.pluginClassLoader.orElse(javaClass.classLoader)
@@ -84,6 +89,8 @@ class CodegenVisitor(context: PluginContext) : ShapeVisitor.Default<Void>() {
         shapeMap.values.forEach {
             it.accept(this)
         }
+
+        sdkWriter.writeFiles()
     }
 
     private fun condenseShapes(shapes: Set<Shape>): Map<String, Shape> {
@@ -132,7 +139,30 @@ class CodegenVisitor(context: PluginContext) : ShapeVisitor.Default<Void>() {
         return false
     }
 
-    override fun getDefault(shape: Shape): Void {
-        TODO("Not yet implemented")
+    override fun serviceShape(shape: ServiceShape) {
+        if (service != shape) {
+            LOGGER.fine { "Skipping `${service.id}` because it is not `${service.id}`" }
+            return
+        }
+
+        val serviceSymbol = symbolProvider.toSymbol(shape)
+        val clientInterfaceName = serviceSymbol.name.removeSuffix("Client")
+        val fileName = "$clientInterfaceName.kt"
+
+        sdkWriter.useFile(fileName) {
+            ServiceDefinitionGenerator(settings, model, symbolProvider, it).run()
+        }
+    }
+
+    override fun structureShape(shape: StructureShape) {
+        val structureSymbol = symbolProvider.toSymbol(shape)
+
+        sdkWriter.useFile(structureSymbol.definitionFile) {
+            StructureGenerator(model, symbolProvider, shape, it).generate()
+        }
+    }
+
+    override fun getDefault(shape: Shape) {
+        println("Unsupported shape $shape")
     }
 }

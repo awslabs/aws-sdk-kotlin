@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "plugins": {
+    "kotlin-codegen": {
+      "service": "com.amazonaws.workmailmessageflow.service#GiraffeMessageInTransitService",
+      "package": "workmailmessageflow",
+      "packageVersion": "0.0.1"
+    }
+  }
+}

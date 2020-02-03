@@ -1,5 +1,19 @@
 package smithy.kotlin.codegen
 
+import com.soywiz.klock.DateTime
+import com.squareup.kotlinpoet.BOOLEAN
+import com.squareup.kotlinpoet.BYTE
+import com.squareup.kotlinpoet.BYTE_ARRAY
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.DOUBLE
+import com.squareup.kotlinpoet.FLOAT
+import com.squareup.kotlinpoet.INT
+import com.squareup.kotlinpoet.LIST
+import com.squareup.kotlinpoet.LONG
+import com.squareup.kotlinpoet.MAP
+import com.squareup.kotlinpoet.SET
+import com.squareup.kotlinpoet.SHORT
+import com.squareup.kotlinpoet.STRING
 import smithy.kotlin.codegen.utils.getLogger
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.ReservedWordSymbolProvider
@@ -8,8 +22,6 @@ import software.amazon.smithy.codegen.core.ReservedWordsBuilder
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.codegen.core.Symbol.Builder
 import software.amazon.smithy.codegen.core.SymbolProvider
-import software.amazon.smithy.codegen.core.SymbolReference
-import software.amazon.smithy.codegen.core.SymbolReference.ContextOption.DECLARE
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.knowledge.OperationIndex
 import software.amazon.smithy.model.shapes.BigDecimalShape
@@ -31,7 +43,6 @@ import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.SetShape
 import software.amazon.smithy.model.shapes.Shape
 import software.amazon.smithy.model.shapes.ShapeType
-import software.amazon.smithy.model.shapes.ShapeType.OPERATION
 import software.amazon.smithy.model.shapes.ShapeVisitor
 import software.amazon.smithy.model.shapes.ShortShape
 import software.amazon.smithy.model.shapes.StringShape
@@ -77,10 +88,9 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
             }
     }
 
-
     override fun toSymbol(shape: Shape): Symbol {
         val symbol = shape.accept(this)
-        LOGGER.fine { "Creating symbol from $shape: $symbol" }
+        LOGGER.info { "Creating symbol from $shape: $symbol" }
         return escaper.escapeSymbol(shape, symbol)
     }
 
@@ -90,112 +100,86 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
 
     override fun blobShape(shape: BlobShape): Symbol {
         return if (!shape.hasTrait(StreamingTrait::class.java)) {
-            createSymbolBuilder(shape, "Uint8Array").build()
-        } else createSymbolBuilder(shape, "ArrayBuffer | ArrayBufferView | string | Readable | Blob", null)
-            .addReference(
-                Symbol.builder().name("Readable").namespace("stream", "/").build()
-            )
-            .build()
-
-        // Note: `Readable` needs an import and a dependency.
+            createSymbolBuilder(shape, BYTE_ARRAY).build()
+        } else {
+            TODO()
+        }
     }
 
     override fun booleanShape(shape: BooleanShape): Symbol {
-        return createSymbolBuilder(shape, "boolean").build()
+        return createSymbolBuilder(shape, BOOLEAN).build()
     }
 
     override fun listShape(shape: ListShape): Symbol {
         val reference = toSymbol(shape.member)
-        return createSymbolBuilder(shape, String.format("Array<%s>", reference.name), null)
+
+        return createSymbolBuilder(shape, LIST)
             .addReference(reference)
             .build()
     }
 
     override fun setShape(shape: SetShape): Symbol {
         val reference = toSymbol(shape.member)
-        return createSymbolBuilder(shape, String.format("Set<%s>", reference.name), null)
+
+        return createSymbolBuilder(shape, SET)
             .addReference(reference)
             .build()
     }
 
-    /**
-     * Maps get generated as an inline interface with a fixed value type.
-     *
-     *
-     * For example:
-     *
-     * <pre>`interface MyStructureShape {
-     * memberPointingToMap: {[key: string]: string};
-     * }
-    `</pre> *
-     *
-     * @inheritDoc
-     */
     override fun mapShape(shape: MapShape): Symbol {
-        val reference = toSymbol(shape.value)
-        return createSymbolBuilder(shape, String.format("{ [key: string]: %s }", reference.name), null)
-            .addReference(reference)
+        val keyReference = toSymbol(shape.key)
+        val valueReference = toSymbol(shape.value)
+
+        return createSymbolBuilder(shape, MAP)
+            .addReference(keyReference)
+            .addReference(valueReference)
             .build()
     }
 
     override fun byteShape(shape: ByteShape): Symbol {
-        return createNumber(shape)
+        return createSymbolBuilder(shape, BYTE).build()
     }
 
     override fun shortShape(shape: ShortShape): Symbol {
-        return createNumber(shape)
+        return createSymbolBuilder(shape, SHORT).build()
     }
 
     override fun integerShape(shape: IntegerShape): Symbol {
-        return createNumber(shape)
+        return createSymbolBuilder(shape, INT).build()
     }
 
     override fun longShape(shape: LongShape): Symbol {
-        return createNumber(shape)
+        return createSymbolBuilder(shape, LONG).build()
     }
 
     override fun floatShape(shape: FloatShape): Symbol {
-        return createNumber(shape)
+        return createSymbolBuilder(shape, FLOAT).build()
     }
 
     override fun doubleShape(shape: DoubleShape): Symbol {
-        return createNumber(shape)
-    }
-
-    private fun createNumber(shape: Shape): Symbol {
-        return createSymbolBuilder(shape, "number").build()
+        return createSymbolBuilder(shape, DOUBLE).build()
     }
 
     override fun bigIntegerShape(shape: BigIntegerShape): Symbol {
-        // BigInt is not supported across all environments, use big.js instead.
-        return createBigJsSymbol(shape)
+        TODO()
     }
 
     override fun bigDecimalShape(shape: BigDecimalShape): Symbol {
-        return createBigJsSymbol(shape)
-    }
-
-    private fun createBigJsSymbol(shape: Shape): Symbol {
         TODO()
-//        return createSymbolBuilder(shape, "Big", TypeScriptDependency.TYPES_BIG_JS.packageName)
-//            .addDependency(TypeScriptDependency.TYPES_BIG_JS)
-//            .addDependency(TypeScriptDependency.BIG_JS)
-//            .build()
     }
 
     override fun documentShape(shape: DocumentShape): Symbol {
-        return addSmithyImport(createSymbolBuilder(shape, "_smithy.DocumentType.Value")).build()
+        TODO()
     }
 
     override fun operationShape(shape: OperationShape): Symbol {
-        val commandName = flattenShapeName(shape) + "Command"
-        val moduleName = formatModuleName(shape.type, commandName)
-        val intermediate =
-            createGeneratedSymbolBuilder(shape, commandName, moduleName).build()
+        val operationName = flattenShapeName(shape)
+//        val packageName = formatPackageName(shape.type, operationName)
+        val intermediate = createSymbolBuilder(shape, ClassName("", operationName)).build()
         val builder = intermediate.toBuilder()
         // Add input and output type symbols (XCommandInput / XCommandOutput).
-        builder.putProperty("inputType", intermediate.toBuilder().name(commandName + "Input").build())
-        builder.putProperty("outputType", intermediate.toBuilder().name(commandName + "Output").build())
+        builder.putProperty("inputType", intermediate.toBuilder().name(operationName + "Input").build())
+        builder.putProperty("outputType", intermediate.toBuilder().name(operationName + "Output").build())
         return builder.build()
     }
 
@@ -203,16 +187,10 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
         // Enums that provide a name for each variant create an actual enum type.
         return shape.getTrait(EnumTrait::class.java)
             .map { enumTrait: EnumTrait ->
-                createEnumSymbol(
-                    shape,
-                    enumTrait
-                )
+                createEnumSymbol(shape, enumTrait)
             }
             .orElseGet {
-                createSymbolBuilder(
-                    shape,
-                    "string"
-                ).build()
+                createSymbolBuilder(shape, STRING).build()
             }
     }
 
@@ -227,40 +205,13 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
     }
 
     override fun serviceShape(shape: ServiceShape): Symbol {
-        val name =
-            StringUtils.capitalize(shape.id.name) + "Client"
-        val moduleName = formatModuleName(shape.type, name)
-        return createGeneratedSymbolBuilder(shape, name, moduleName).build()
+        val name = StringUtils.capitalize(shape.id.name) + "Client"
+        val packageName = formatPackageName(shape.type, name)
+        return createGeneratedSymbolBuilder(shape, ClassName(packageName, name)).build()
     }
 
     override fun structureShape(shape: StructureShape): Symbol {
-        val builder = createObjectSymbolBuilder(shape)
-        addSmithyImport(builder)
-        if (outputShapes.contains(shape)) {
-            val reference = SymbolReference.builder()
-                .options(DECLARE)
-                .alias("\$MetadataBearer")
-//                .symbol(TypeScriptDependency.AWS_SDK_TYPES.createSymbol("MetadataBearer"))
-                .putProperty(IMPLEMENTS_INTERFACE_PROPERTY, true)
-                .build()
-            builder.addReference(reference)
-            builder.putProperty("isOutput", true)
-        }
-        return builder.build()
-    }
-
-    private fun addSmithyImport(builder: Builder): Builder {
-        val importSymbol =
-            Symbol.builder()
-                .name("*")
-                .namespace("@aws-sdk/smithy-client", "/")
-                .build()
-        val reference = SymbolReference.builder()
-            .symbol(importSymbol)
-            .alias("_smithy")
-            .options(DECLARE)
-            .build()
-        return builder.addReference(reference)
+        return createObjectSymbolBuilder(shape).build()
     }
 
     override fun unionShape(shape: UnionShape): Symbol {
@@ -271,9 +222,12 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
         val targetShape = model.getShape(shape.target)
             .orElseThrow { CodegenException("Shape not found: " + shape.target) }
         val targetSymbol = toSymbol(targetShape)
+
         return if (targetSymbol.properties.containsKey(EnumTrait::class.java.name)) {
             createMemberSymbolWithEnumTarget(targetSymbol)
-        } else targetSymbol
+        } else {
+            targetSymbol
+        }
     }
 
     private fun createMemberSymbolWithEnumTarget(targetSymbol: Symbol): Symbol {
@@ -285,7 +239,10 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
     }
 
     override fun timestampShape(shape: TimestampShape): Symbol {
-        return createSymbolBuilder(shape, "Date").build()
+        return createSymbolBuilder(
+            shape,
+            ClassName(DateTime::class.java.packageName, DateTime::class.java.simpleName)
+        ).build()
     }
 
     private fun flattenShapeName(id: ToShapeId): String {
@@ -294,50 +251,45 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
 
     private fun createObjectSymbolBuilder(shape: Shape): Builder {
         val name = flattenShapeName(shape)
-        val moduleName = formatModuleName(shape.type, name)
-        return createGeneratedSymbolBuilder(shape, name, moduleName)
+        val packageName = formatPackageName(shape.type, name)
+        return createGeneratedSymbolBuilder(shape, ClassName(packageName, name))
     }
 
-    private fun createSymbolBuilder(
-        shape: Shape,
-        typeName: String
-    ): Builder {
-        return Symbol.builder().putProperty("shape", shape).name(typeName)
+    private fun createSymbolBuilder(shape: Shape, className: ClassName): Builder {
+        val builder = Symbol.builder()
+            .putProperty("shape", shape)
+            .name(className.simpleName)
+
+        if (className.packageName.isNotEmpty()) {
+            builder.namespace(className.packageName, ".")
+        }
+
+        return builder
     }
 
-    private fun createSymbolBuilder(
-        shape: Shape,
-        typeName: String,
-        namespace: String?
-    ): Builder {
+    private fun createSymbolBuilder(shape: Shape, typeName: String, namespace: String): Builder {
         return Symbol.builder()
             .putProperty("shape", shape)
             .name(typeName)
-            .namespace(namespace, "/")
+            .namespace(namespace, ".")
     }
 
-    private fun createGeneratedSymbolBuilder(
-        shape: Shape,
-        typeName: String,
-        namespace: String
-    ): Builder {
-        return createSymbolBuilder(shape, typeName, namespace)
-            .definitionFile(toFilename(namespace))
+    private fun createGeneratedSymbolBuilder(shape: Shape, className: ClassName): Builder {
+        return createSymbolBuilder(shape, className)
+            .definitionFile(toFilename(className))
     }
 
-    private fun formatModuleName(shapeType: ShapeType, name: String): String {
+    private fun formatPackageName(shapeType: ShapeType, name: String): String {
+        // TODO: Package name prefix
         // All shapes except for the service and operations are stored in models.
-        return if (shapeType == ShapeType.SERVICE) {
-            "./$name"
-        } else if (shapeType == OPERATION) {
-            "./commands/$name"
-        } else {
-            "./models/index"
+        return when (shapeType) {
+            ShapeType.SERVICE -> name
+            else -> "models"
         }
     }
 
-    private fun toFilename(namespace: String): String {
-        return "$namespace.kt"
+    private fun toFilename(className: ClassName): String {
+        return "${className.packageName.replace('.', '/')}/${className.simpleName}.kt"
     }
 
     companion object {

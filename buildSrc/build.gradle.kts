@@ -10,7 +10,7 @@ repositories {
 
 gradlePlugin {
     plugins {
-        register("greet-plugin") {
+        register("smithy-plugin-fork") {
             id = "software.amazon.smithy-fork"
             implementationClass = "software.amazon.smithy.gradle.SmithyPlugin"
         }

@@ -48,7 +48,7 @@ public final class SmithyPlugin implements Plugin<Project> {
         // Ensure that the Java plugin is applied.
         project.getPluginManager().apply(JavaPlugin.class);
 
-        project.getConfigurations().create("smithy");
+        project.getConfigurations().create("smithyCli");
 
         // Register the Smithy extension so that software.amazon.smithy.gradle.tasks can be configured.
         SmithyExtension extension = project.getExtensions().create("smithy", SmithyExtension.class);
