@@ -60,8 +60,7 @@ import software.amazon.smithy.utils.StringUtils
  * Reserved words for Kotlin are automatically escaped so that they are
  * prefixed with "_". See "reserved-words.txt" for the list of words.
  */
-internal class SymbolVisitor(private val model: Model) : SymbolProvider,
-    ShapeVisitor<Symbol> {
+internal class SymbolVisitor(private val model: Model) : SymbolProvider, ShapeVisitor<Symbol> {
     private val escaper: Escaper
     private val outputShapes = mutableSetOf<StructureShape>()
 
@@ -74,16 +73,14 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
             // Only escape words when the symbol has a definition file to
             // prevent escaping intentional references to built-in types.
             .nameReservedWords(reservedWords)
-            .escapePredicate { _: Shape, symbol: Symbol ->
-                !StringUtils.isEmpty(symbol.definitionFile)
-            }
+            .escapePredicate { _, symbol -> !StringUtils.isEmpty(symbol.definitionFile) }
             .buildEscaper()
 
         // Get each structure that's used as output or errors.
         val operationIndex = model.getKnowledge(OperationIndex::class.java)
         model.shapes(OperationShape::class.java)
-            .forEach { operationShape: OperationShape? ->
-                operationIndex.getOutput(operationShape).ifPresent { e: StructureShape -> outputShapes.add(e) }
+            .forEach { operationShape ->
+                operationIndex.getOutput(operationShape).ifPresent { outputShapes.add(it) }
                 outputShapes.addAll(operationIndex.getErrors(operationShape))
             }
     }
@@ -186,12 +183,8 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
     override fun stringShape(shape: StringShape): Symbol {
         // Enums that provide a name for each variant create an actual enum type.
         return shape.getTrait(EnumTrait::class.java)
-            .map { enumTrait: EnumTrait ->
-                createEnumSymbol(shape, enumTrait)
-            }
-            .orElseGet {
-                createSymbolBuilder(shape, STRING).build()
-            }
+            .map { createEnumSymbol(shape, it) }
+            .orElseGet { createSymbolBuilder(shape, STRING).build() }
     }
 
     private fun createEnumSymbol(shape: StringShape, enumTrait: EnumTrait): Symbol {
@@ -220,22 +213,8 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
 
     override fun memberShape(shape: MemberShape): Symbol {
         val targetShape = model.getShape(shape.target)
-            .orElseThrow { CodegenException("Shape not found: " + shape.target) }
-        val targetSymbol = toSymbol(targetShape)
-
-        return if (targetSymbol.properties.containsKey(EnumTrait::class.java.name)) {
-            createMemberSymbolWithEnumTarget(targetSymbol)
-        } else {
-            targetSymbol
-        }
-    }
-
-    private fun createMemberSymbolWithEnumTarget(targetSymbol: Symbol): Symbol {
-        return targetSymbol.toBuilder()
-            .namespace(null, "/")
-            .name(targetSymbol.name + " | string")
-            .addReference(targetSymbol)
-            .build()
+            .orElseThrow { CodegenException("Shape not found: ${shape.target}") }
+        return toSymbol(targetShape)
     }
 
     override fun timestampShape(shape: TimestampShape): Symbol {
@@ -265,13 +244,6 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider,
         }
 
         return builder
-    }
-
-    private fun createSymbolBuilder(shape: Shape, typeName: String, namespace: String): Builder {
-        return Symbol.builder()
-            .putProperty("shape", shape)
-            .name(typeName)
-            .namespace(namespace, ".")
     }
 
     private fun createGeneratedSymbolBuilder(shape: Shape, className: ClassName): Builder {
