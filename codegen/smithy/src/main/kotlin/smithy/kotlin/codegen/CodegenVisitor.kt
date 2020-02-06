@@ -46,7 +46,7 @@ class CodegenVisitor(context: PluginContext) : ShapeVisitor.Default<Unit>() {
         }.toList()
 
         // Decorate the symbol provider using integrations.
-        var resolvedProvider: SymbolProvider = SymbolVisitor(model)
+        var resolvedProvider: SymbolProvider = SymbolVisitor(model, settings)
         integrations.forEach {
             resolvedProvider = it.decorateSymbolProvider(settings, model, resolvedProvider)
         }
@@ -146,18 +146,16 @@ class CodegenVisitor(context: PluginContext) : ShapeVisitor.Default<Unit>() {
         }
 
         val serviceSymbol = symbolProvider.toSymbol(shape)
-        val clientInterfaceName = serviceSymbol.name.removeSuffix("Client")
-        val fileName = "$clientInterfaceName.kt"
 
-        sdkWriter.useFile(fileName) {
-            ServiceDefinitionGenerator(settings, model, symbolProvider, it).run()
+        sdkWriter.useFile(serviceSymbol.namespace, serviceSymbol.name, serviceSymbol.definitionFile) {
+            ServiceDefinitionGenerator(settings, model, symbolProvider, it).generate()
         }
     }
 
     override fun structureShape(shape: StructureShape) {
         val structureSymbol = symbolProvider.toSymbol(shape)
 
-        sdkWriter.useFile(structureSymbol.definitionFile) {
+        sdkWriter.useFile(structureSymbol.namespace, structureSymbol.name, structureSymbol.definitionFile) {
             StructureGenerator(model, symbolProvider, shape, it).generate()
         }
     }

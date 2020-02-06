@@ -25,14 +25,13 @@ import java.util.function.BiConsumer
 import java.util.function.Consumer
 
 /**
- * Java SPI for customizing TypeScript code generation, registering
+ * Java SPI for customizing Kotlin code generation, registering
  * new protocol code generators, renaming shapes, modifying the model,
  * adding custom code, etc.
  */
 interface KotlinIntegration {
     /**
      * Preprocess the model before code generation.
-     *
      *
      * This can be used to remove unsupported features, remove traits
      * from shapes (e.g., make members optional), etc.
@@ -47,7 +46,6 @@ interface KotlinIntegration {
 
     /**
      * Updates the [SymbolProvider] used when generating code.
-     *
      *
      * This can be used to customize the names of shapes, the package
      * that code is generated into, add dependencies, add imports, etc.
@@ -169,7 +167,7 @@ interface KotlinIntegration {
      * For example, the following code adds two fields to a client:
      *
      * ```
-     * `public final class MyIntegration implements TypeScriptIntegration {
+     * public final class MyIntegration implements KotlinIntegration {
      * public void addConfigInterfaceFields(
      * KotlinSettings settings,
      * Model model,
@@ -183,7 +181,7 @@ interface KotlinIntegration {
      * writer.write("bar?: string;");
      * }
      * }
-    `</pre> *
+     * ```
      *
      * @param settings Settings used to generate.
      * @param model Model to generate from.

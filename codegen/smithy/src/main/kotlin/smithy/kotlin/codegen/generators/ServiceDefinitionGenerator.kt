@@ -20,15 +20,13 @@ class ServiceDefinitionGenerator(
     private val model: Model,
     private val symbolProvider: SymbolProvider,
     private val writer: KotlinWriter
-) : Runnable {
-
+) {
     private val service = settings.getService(model)
     private val serviceSymbol = symbolProvider.toSymbol(service)
 
-    override fun run() {
+    fun generate() {
         val topDownIndex = model.getKnowledge(TopDownIndex::class.java)
         val clientName = serviceSymbol.name.replace("Client", "")
-        println("clientName = $clientName")
         val clientType = TypeSpec.interfaceBuilder(clientName)
 
         topDownIndex.getContainedOperations(service).sorted().forEach { operation ->

@@ -4,9 +4,9 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.TypeSpec
 import software.amazon.smithy.utils.CodeWriter
 
-class KotlinWriter(fileName: String) : CodeWriter() {
+class KotlinWriter(packageName: String, fileName: String) : CodeWriter() {
     // TODO package name
-    private val fileBuilder = FileSpec.builder("", fileName)
+    private val fileBuilder = FileSpec.builder(packageName, fileName)
 
     fun addType(type: TypeSpec) {
         fileBuilder.addType(type)

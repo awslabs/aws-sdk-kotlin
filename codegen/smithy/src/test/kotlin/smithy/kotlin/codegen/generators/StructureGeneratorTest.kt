@@ -95,7 +95,7 @@ class StructureGeneratorTest {
         val model = assembler.assemble().unwrap()
         val writer = KotlinWriter("./Bar.kt")
 
-        StructureGenerator(model, SymbolVisitor(model), struct, writer).generate()
+        StructureGenerator(model, SymbolVisitor(model, settings), struct, writer).generate()
 
         val output = writer.toString()
         println(output)
@@ -111,7 +111,7 @@ class StructureGeneratorTest {
         val model = assembler.assemble().unwrap()
         val writer = KotlinWriter("./Foo.kt")
 
-        StructureGenerator(model, SymbolVisitor(model), struct, writer).generate()
+        StructureGenerator(model, SymbolVisitor(model, settings), struct, writer).generate()
 
         val output = writer.toString()
 //        assertThat(output, containsString("export interface Bar extends \$MetadataBearer {"))

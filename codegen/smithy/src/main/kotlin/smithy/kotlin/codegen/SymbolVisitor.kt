@@ -60,7 +60,10 @@ import software.amazon.smithy.utils.StringUtils
  * Reserved words for Kotlin are automatically escaped so that they are
  * prefixed with "_". See "reserved-words.txt" for the list of words.
  */
-internal class SymbolVisitor(private val model: Model) : SymbolProvider, ShapeVisitor<Symbol> {
+internal class SymbolVisitor(
+    private val model: Model,
+    private val settings: KotlinSettings
+) : SymbolProvider, ShapeVisitor<Symbol> {
     private val escaper: Escaper
     private val outputShapes = mutableSetOf<StructureShape>()
 
@@ -171,8 +174,8 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider, ShapeVi
 
     override fun operationShape(shape: OperationShape): Symbol {
         val operationName = flattenShapeName(shape)
-//        val packageName = formatPackageName(shape.type, operationName)
-        val intermediate = createSymbolBuilder(shape, ClassName("", operationName)).build()
+        val packageName = formatPackageName(shape.type)
+        val intermediate = createSymbolBuilder(shape, ClassName(packageName, operationName)).build()
         val builder = intermediate.toBuilder()
         // Add input and output type symbols (XCommandInput / XCommandOutput).
         builder.putProperty("inputType", intermediate.toBuilder().name(operationName + "Input").build())
@@ -199,7 +202,7 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider, ShapeVi
 
     override fun serviceShape(shape: ServiceShape): Symbol {
         val name = StringUtils.capitalize(shape.id.name) + "Client"
-        val packageName = formatPackageName(shape.type, name)
+        val packageName = formatPackageName(shape.type)
         return createGeneratedSymbolBuilder(shape, ClassName(packageName, name)).build()
     }
 
@@ -230,7 +233,7 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider, ShapeVi
 
     private fun createObjectSymbolBuilder(shape: Shape): Builder {
         val name = flattenShapeName(shape)
-        val packageName = formatPackageName(shape.type, name)
+        val packageName = formatPackageName(shape.type)
         return createGeneratedSymbolBuilder(shape, ClassName(packageName, name))
     }
 
@@ -251,12 +254,10 @@ internal class SymbolVisitor(private val model: Model) : SymbolProvider, ShapeVi
             .definitionFile(toFilename(className))
     }
 
-    private fun formatPackageName(shapeType: ShapeType, name: String): String {
-        // TODO: Package name prefix
-        // All shapes except for the service and operations are stored in models.
+    private fun formatPackageName(shapeType: ShapeType): String {
         return when (shapeType) {
-            ShapeType.SERVICE -> name
-            else -> "models"
+            ShapeType.SERVICE -> settings.packageName
+            else -> "${settings.packageName}.models"
         }
     }
 

@@ -17,7 +17,6 @@ private const val PACKAGE_DESCRIPTION = "packageDescription"
 private const val PACKAGE_VERSION = "packageVersion"
 private const val SERVICE = "service"
 private const val PROTOCOL = "protocol"
-private const val TARGET_NAMESPACE = "targetNamespace"
 
 class KotlinSettings private constructor(
     val packageName: String,
@@ -68,8 +67,7 @@ class KotlinSettings private constructor(
                     PACKAGE,
                     PACKAGE_DESCRIPTION,
                     PACKAGE_VERSION,
-                    SERVICE,
-                    TARGET_NAMESPACE
+                    SERVICE
                 )
             )
 
