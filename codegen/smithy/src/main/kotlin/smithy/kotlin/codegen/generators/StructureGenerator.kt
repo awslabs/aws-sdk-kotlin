@@ -2,12 +2,15 @@ package smithy.kotlin.codegen.generators
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.LIST
+import com.squareup.kotlinpoet.MAP
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.SET
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import smithy.kotlin.codegen.KotlinWriter
 import smithy.kotlin.codegen.utils.addKdoc
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.MemberShape
@@ -57,7 +60,8 @@ class StructureGenerator(
 
         members.forEach { member ->
             val isNullable = isNullableMember(member)
-            val typeName = createTypeName(member).copy(nullable = isNullable)
+            val symbol = symbolProvider.toSymbol(member)
+            val typeName = createTypeName(symbol).copy(nullable = isNullable)
             val propertyName = StringUtils.uncapitalize(member.memberName)
             this.addProperty(
                 PropertySpec.builder(propertyName, typeName)
@@ -69,13 +73,21 @@ class StructureGenerator(
         return this;
     }
 
-    private fun createTypeName(member: Shape): TypeName {
-        val symbol = symbolProvider.toSymbol(member)
+    private fun createTypeName(symbol: Symbol): TypeName {
         val targetShape = symbol.expectProperty("shape", Shape::class.java)
         return when {
             targetShape.isListShape -> {
                 val genericSymbol = symbol.references.first().symbol
-                LIST.parameterizedBy(ClassName(genericSymbol.namespace, genericSymbol.name))
+                LIST.parameterizedBy(createTypeName(genericSymbol))
+            }
+            targetShape.isSetShape -> {
+                val genericSymbol = symbol.references.first().symbol
+                SET.parameterizedBy(createTypeName(genericSymbol))
+            }
+            targetShape.isMapShape -> {
+                val keySymbol = symbol.references[0].symbol
+                val valueSymbol = symbol.references[1].symbol
+                MAP.parameterizedBy(createTypeName(keySymbol), createTypeName(valueSymbol))
             }
             else -> ClassName(symbol.namespace, symbol.name)
         }
