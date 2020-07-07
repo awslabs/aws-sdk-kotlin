@@ -1,3 +1,13 @@
-.gradle
-build
-/.idea/
+.DS_Store
+/dist
+/ideaSDK
+/android-studio/sdk
+out/
+/tmp
+workspace.xml
+*.versionsBackup
+.gradle/
+build/
+*.iml
+.idea/
+local.properties
