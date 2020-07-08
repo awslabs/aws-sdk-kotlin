@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "projections": {
+    "aws-restjson": {
+      "transforms": [
+        {
+          "name": "includeServices",
+          "args": {
+            "services": ["aws.protocoltests.restjson#RestJson"]
+          }
+        }
+      ],
+      "plugins": {
+        "kotlin-codegen": {
+          "service": "aws.protocoltests.restjson#RestJson",
+          "module": "software.aws.kotlinsdk.protocoltest.awsrestjson",
+          "moduleVersion": "1.0"
+        }
+      }
+    }
+  }
+}
