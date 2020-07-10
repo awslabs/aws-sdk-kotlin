@@ -14,20 +14,16 @@
  */
 package software.amazon.smithy.aws.kotlin.codegen
 
-import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
+import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
+import software.amazon.smithy.model.shapes.ShapeId
 
 /**
- * Integration that registers protocol generators this package provides
+ * Handles generating the aws.rest-json protocol for services.
+ *
+ * @inheritDoc
+ * @see RestJsonProtocolGenerator
  */
-class AddProtocols : KotlinIntegration {
-    /**
-     * Gets the sort order of the customization from -128 to 127, with lowest
-     * executed first.
-     *
-     * @return Returns the sort order, defaults to -10.
-     */
-    override val order: Byte = -10
-
-    override val protocolGenerators: List<ProtocolGenerator> = listOf(AwsRestJson1())
+class AwsRestJson1 : RestJsonProtocolGenerator() {
+    override val defaultContentType: String = "application/json"
+    override val protocol: ShapeId = RestJson1Trait.ID
 }
