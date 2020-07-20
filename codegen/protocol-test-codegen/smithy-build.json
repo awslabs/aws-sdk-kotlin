@@ -14,7 +14,10 @@
         "kotlin-codegen": {
           "service": "aws.protocoltests.restjson#RestJson",
           "module": "software.aws.kotlinsdk.protocoltest.awsrestjson",
-          "moduleVersion": "1.0"
+          "moduleVersion": "1.0",
+          "build":  {
+              "rootProject": true
+          }
         }
       }
     }
