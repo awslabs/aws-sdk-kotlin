@@ -1,0 +1,3 @@
+[*.{kt,kts}]
+# ktlint rules to disable
+disabled_rules=no-wildcard-imports

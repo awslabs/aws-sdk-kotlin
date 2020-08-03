@@ -17,10 +17,7 @@ package software.amazon.smithy.aws.kotlin.codegen
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.integration.HttpBindingProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
-import software.amazon.smithy.kotlin.codegen.integration.HttpSerde
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.integration.*
 import software.amazon.smithy.model.traits.TimestampFormatTrait
 
 class JsonSerdeFeature : HttpSerde("JsonSerdeProvider") {
@@ -41,7 +38,15 @@ class JsonSerdeFeature : HttpSerde("JsonSerdeProvider") {
 abstract class RestJsonProtocolGenerator : HttpBindingProtocolGenerator() {
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 
-    override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {}
+    override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
+        val invalidTests = setOf(
+            // TODO - sparse lists not supported - this test needs removed
+            "RestJsonListsSerializeNull"
+        )
+
+        val requestTestBuilder = HttpProtocolUnitTestRequestGenerator.Builder()
+        HttpProtocolTestGenerator(ctx, requestTestBuilder, invalidTests).generateProtocolTests()
+    }
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val features = super.getHttpFeatures(ctx).toMutableList()
