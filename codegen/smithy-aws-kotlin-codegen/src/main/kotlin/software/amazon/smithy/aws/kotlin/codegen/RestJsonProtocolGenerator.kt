@@ -44,11 +44,19 @@ abstract class RestJsonProtocolGenerator : HttpBindingProtocolGenerator() {
             "RestJsonSerializesNullMapValues", // TODO - sparse maps not supported - this test needs removed
             // FIXME - document type not fully supported yet
             "InlineDocumentInput",
-            "InlineDocumentAsPayloadInput"
+            "InlineDocumentAsPayloadInput",
+            "InlineDocumentOutput",
+            "InlineDocumentAsPayloadInputOutput"
         )
 
         val requestTestBuilder = HttpProtocolUnitTestRequestGenerator.Builder()
-        HttpProtocolTestGenerator(ctx, requestTestBuilder, ignoredTests).generateProtocolTests()
+        val responseTestBuilder = HttpProtocolUnitTestResponseGenerator.Builder()
+        HttpProtocolTestGenerator(
+            ctx,
+            requestTestBuilder,
+            responseTestBuilder,
+            ignoredTests
+        ).generateProtocolTests()
     }
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
