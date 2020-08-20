@@ -39,6 +39,9 @@ tasks.create<SmithyBuild>("buildSdk") {
 // Run the `buildSdk` automatically.
 tasks["build"].finalizedBy(tasks["buildSdk"])
 
+// force rebuild every time while developing
+tasks["buildSdk"].outputs.upToDateWhen { false }
+
 //// ensure built artifacts are put into the SDK's folders
 //tasks.create<Exec>("copyGoCodegen") {
 //    dependsOn ("buildSdk")
