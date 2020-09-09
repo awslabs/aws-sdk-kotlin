@@ -75,11 +75,11 @@ class RestJsonError(private val registry: ExceptionRegistry) : Feature {
                 modeledException.requestId = wrappedResponse.headers[X_AMZN_REQUEST_ID_HEADER] ?: ""
                 modeledException.errorCode = error.code ?: ""
                 modeledException.errorMessage = error.message ?: ""
-                // TODO - add protocol response
+                modeledException.protocolResponse = wrappedResponse
             }
 
             // this should never happen...
-            val ex = modeledException as? Throwable ?: throw ClientException("registered deserializer for modeled error did not produce an exception instance")
+            val ex = modeledException as? Throwable ?: throw ClientException("registered deserializer for modeled error did not produce an instance of Throwable")
             throw ex
         }
     }

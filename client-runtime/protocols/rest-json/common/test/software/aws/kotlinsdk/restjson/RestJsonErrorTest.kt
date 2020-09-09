@@ -26,6 +26,7 @@ import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.HttpResponseContext
 import software.aws.clientrt.http.response.TypeInfo
+import software.aws.clientrt.http.response.header
 import software.aws.clientrt.serde.Deserializer
 import software.aws.clientrt.serde.SdkFieldDescriptor
 import software.aws.clientrt.serde.SdkObjectDescriptor
@@ -131,6 +132,9 @@ class RestJsonErrorTest {
         // check it actually deserialized the shape
         assertEquals(ex.headerInt, 12)
         assertEquals(ex.payloadString, "hello world")
+
+        // verify the ProtocolResponse instance was stashed and we can pull out raw protocol details if needed
+        assertEquals("12", ex.protocolResponse?.header("X-Test-Header"))
     }
 
     @Test
