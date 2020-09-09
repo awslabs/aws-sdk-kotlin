@@ -40,7 +40,7 @@ class RestJsonErrorDeserializerTest {
         // header tests
         for (value in tests) {
             val headers = Headers {
-                append(AMZN_ERROR_TYPE_HEADER_NAME, value)
+                append(X_AMZN_ERROR_TYPE_HEADER_NAME, value)
             }
 
             val resp = HttpResponse(HttpStatusCode.BadRequest, headers, HttpBody.Empty, HttpRequestBuilder().build())

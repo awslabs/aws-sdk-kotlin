@@ -37,7 +37,7 @@ fun projectNeedsPlatform(project: Project, platform: String ): Boolean {
     return files.any{ it.name == platform || (it.name == "common" && platform == "jvm")}
 }
 
-allprojects {
+subprojects {
     group = "software.aws.kotlin"
     version = "0.0.1"
 
