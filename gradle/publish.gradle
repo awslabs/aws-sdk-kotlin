@@ -1,0 +1,5 @@
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+
+// TODO - fill in publishing details including license, etc

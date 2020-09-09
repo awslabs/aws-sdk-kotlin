@@ -81,5 +81,6 @@ subprojects {
         outputDirectory = "$buildDir/kdoc"
     }
 
+    apply(from = rootProject.file("gradle/publish.gradle"))
 }
 

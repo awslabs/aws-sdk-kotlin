@@ -104,7 +104,7 @@ class RestJsonErrorTest {
         }
         val client = sdkHttpClient(mockEngine) {
             install(RestJsonError) {
-                register("FooError", FooErrorDeserializer(), HttpStatusCode.fromValue(502))
+                register("FooError", FooErrorDeserializer(), 502)
             }
         }
 
@@ -140,7 +140,7 @@ class RestJsonErrorTest {
         }
         val client = sdkHttpClient(mockEngine) {
             install(RestJsonError) {
-                register("FooError", FooErrorDeserializer(), HttpStatusCode.fromValue(502))
+                register("FooError", FooErrorDeserializer(), 502)
             }
         }
 

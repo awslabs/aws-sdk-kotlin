@@ -39,8 +39,8 @@ class RestJsonError(private val registry: ExceptionRegistry) : Feature {
          * Register a modeled service exception for the given [code]. The deserializer registered MUST provide
          * an [AwsServiceException] when invoked.
          */
-        fun register(code: String, deserializer: HttpDeserialize, httpStatusCode: HttpStatusCode? = null) {
-            registry.register(ExceptionMetadata(code, deserializer, httpStatusCode))
+        fun register(code: String, deserializer: HttpDeserialize, httpStatusCode: Int? = null) {
+            registry.register(ExceptionMetadata(code, deserializer, httpStatusCode?.let { HttpStatusCode.fromValue(it) }))
         }
     }
 
