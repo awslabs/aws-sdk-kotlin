@@ -20,18 +20,6 @@ import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.*
 import software.amazon.smithy.model.traits.TimestampFormatTrait
 
-class JsonSerdeFeature : HttpSerde("JsonSerdeProvider") {
-    override fun addImportsAndDependencies(writer: KotlinWriter) {
-        super.addImportsAndDependencies(writer)
-        val jsonSerdeSymbol = Symbol.builder()
-            .name("JsonSerdeProvider")
-            .namespace(KotlinDependency.CLIENT_RT_SERDE_JSON.namespace, ".")
-            .addDependency(KotlinDependency.CLIENT_RT_SERDE_JSON)
-            .build()
-        writer.addImport(jsonSerdeSymbol, "")
-    }
-}
-
 /**
  * Shared base protocol generator for all AWS JSON protocol variants
  */
@@ -63,8 +51,34 @@ abstract class RestJsonProtocolGenerator : HttpBindingProtocolGenerator() {
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val features = super.getHttpFeatures(ctx).toMutableList()
-        val jsonFeatures = listOf(JsonSerdeFeature())
+        val jsonFeatures = listOf(JsonSerdeFeature(), RestJsonErrorFeature(ctx))
         features.addAll(jsonFeatures)
         return features
+    }
+}
+
+class JsonSerdeFeature : HttpSerde("JsonSerdeProvider") {
+    override fun addImportsAndDependencies(writer: KotlinWriter) {
+        super.addImportsAndDependencies(writer)
+        val jsonSerdeSymbol = Symbol.builder()
+            .name("JsonSerdeProvider")
+            .namespace(KotlinDependency.CLIENT_RT_SERDE_JSON.namespace, ".")
+            .addDependency(KotlinDependency.CLIENT_RT_SERDE_JSON)
+            .build()
+        writer.addImport(jsonSerdeSymbol, "")
+    }
+}
+
+class RestJsonErrorFeature(ctx: ProtocolGenerator.GenerationContext) : ModeledExceptionsFeature(ctx) {
+    override val name: String = "RestJsonError"
+
+    override fun addImportsAndDependencies(writer: KotlinWriter) {
+        super.addImportsAndDependencies(writer)
+        val restJsonSymbol = Symbol.builder()
+            .name("RestJsonError")
+            .namespace(AwsKotlinDependency.REST_JSON_FEAT.namespace, ".")
+            .addDependency(AwsKotlinDependency.REST_JSON_FEAT)
+            .build()
+        writer.addImport(restJsonSymbol, "")
     }
 }
