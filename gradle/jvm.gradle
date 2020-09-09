@@ -1,0 +1,33 @@
+
+
+kotlin {
+    targets {
+        fromPreset(presets.jvm, 'jvm')
+    }
+
+    sourceSets {
+        jvmMain.dependencies {
+            api group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: kotlinVersion
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+        }
+
+        jvmTest.dependencies {
+            api 'org.jetbrains.kotlin:kotlin-test'
+            api 'org.jetbrains.kotlin:kotlin-test-junit'
+            api 'junit:junit:$junitVersion'
+
+            api group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit', version: kotlinVersion
+            api group: 'junit', name: 'junit', version: junitVersion
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-debug:$coroutinesVersion"
+            implementation "io.kotest:kotest-assertions-core-jvm:$kotestVersion"
+        }
+    }
+
+}
+
+jvmTest {
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStandardStreams = true
+    }
+}
