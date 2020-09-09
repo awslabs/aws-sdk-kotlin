@@ -23,7 +23,7 @@ import software.amazon.smithy.model.traits.TimestampFormatTrait
 /**
  * Shared base protocol generator for all AWS JSON protocol variants
  */
-abstract class RestJsonProtocolGenerator : HttpBindingProtocolGenerator() {
+abstract class RestJsonProtocolGenerator : AwsHttpBindingProtocolGenerator() {
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
