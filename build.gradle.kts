@@ -43,10 +43,6 @@ tasks.register<JavaExec>("ktlint") {
     args = lintPaths
 }
 
-//tasks.named("check") {
-//    dependsOn(":ktlint")
-//}
-
 tasks.register<JavaExec>("ktlintFormat") {
     description = "Auto fix Kotlin code style violations"
     group = "formatting"

@@ -22,7 +22,7 @@ import software.aws.clientrt.serde.deserializeStruct
 import software.aws.clientrt.serde.json.JsonDeserializer
 
 // header identifying the error code
-const val AMZN_ERROR_TYPE_HEADER_NAME = "X-Amzn-Errortype"
+const val X_AMZN_ERROR_TYPE_HEADER_NAME = "X-Amzn-Errortype"
 
 // returned by RESTFUL services that do no send a payload (like in a HEAD request)
 const val X_AMZN_ERROR_MESSAGE_HEADER_NAME = "x-amzn-error-message"
@@ -57,7 +57,7 @@ internal object RestJsonErrorDeserializer {
     }
 
     fun deserialize(response: HttpResponse, payload: ByteArray?): RestJsonErrorDetails {
-        var code: String? = response.headers[AMZN_ERROR_TYPE_HEADER_NAME]
+        var code: String? = response.headers[X_AMZN_ERROR_TYPE_HEADER_NAME]
         var message: String? = response.headers[X_AMZN_ERROR_MESSAGE_HEADER_NAME]
         if (message == null) {
             message = response.headers[X_AMZN_EVENT_ERROR_MESSAGE_HEADER_NAME]
