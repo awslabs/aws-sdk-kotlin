@@ -55,8 +55,9 @@ class RestJsonError(private val registry: ExceptionRegistry) : Feature {
     override fun install(client: SdkHttpClient) {
         // intercept at first chance we get
         client.responsePipeline.intercept(HttpResponsePipeline.Receive) {
-            // TODO - we should probable register the success code as part of the user context and check against that instead; otherwise we won't know if we should really throw an error or not
-            if (context.response.status.isSuccess()) return@intercept
+            val expectedStatus = context.executionCtx?.expectedHttpStatus
+            val status = context.response.status
+            if (expectedStatus == status || (expectedStatus == null && status.isSuccess())) return@intercept
 
             val payload = context.response.body.readAll()
 
