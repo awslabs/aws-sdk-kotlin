@@ -26,10 +26,11 @@ version = "0.1.0"
 
 val smithyVersion: String by project
 val kotestVersion: String by project
+val smithyKotlinVersion: String by project
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    api("software.amazon.smithy:smithy-kotlin-codegen:0.1.0")
+    api("software.amazon.smithy:smithy-kotlin-codegen:$smithyKotlinVersion")
     api("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
     implementation("software.amazon.smithy:smithy-protocol-test-traits:$smithyVersion")
     testImplementation("org.junit.jupiter:junit-jupiter:5.6.1")
