@@ -11,7 +11,6 @@ kotlin {
                 api(project(":client-runtime:aws-client-rt"))
 
                 api("software.aws.smithy.kotlin:http:$smithyKotlinClientRtVersion")
-                api("software.aws.smithy.kotlin:http-serde:$smithyKotlinClientRtVersion")
             }
         }
     }
