@@ -15,10 +15,7 @@
 package software.aws.kotlinsdk.restjson
 
 import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.serde.Deserializer
-import software.aws.clientrt.serde.SdkFieldDescriptor
-import software.aws.clientrt.serde.SdkObjectDescriptor
-import software.aws.clientrt.serde.deserializeStruct
+import software.aws.clientrt.serde.*
 import software.aws.clientrt.serde.json.JsonDeserializer
 
 // header identifying the error code
@@ -40,13 +37,13 @@ internal data class RestJsonErrorDetails(val code: String? = null, val message: 
  */
 internal object RestJsonErrorDeserializer {
     // alternative field descriptors for error codes embedded in the document
-    private val ERR_CODE_ALT1_DESCRIPTOR = SdkFieldDescriptor("code")
-    private val ERR_CODE_ALT2_DESCRIPTOR = SdkFieldDescriptor("__type")
+    private val ERR_CODE_ALT1_DESCRIPTOR = SdkFieldDescriptor("code", SerialKind.Integer)
+    private val ERR_CODE_ALT2_DESCRIPTOR = SdkFieldDescriptor("__type", SerialKind.Integer)
 
     // alternative field descriptors for the error message embedded in the document
-    private val MESSAGE_ALT1_DESCRIPTOR = SdkFieldDescriptor("message")
-    private val MESSAGE_ALT2_DESCRIPTOR = SdkFieldDescriptor("Message")
-    private val MESSAGE_ALT3_DESCRIPTOR = SdkFieldDescriptor("errorMessage")
+    private val MESSAGE_ALT1_DESCRIPTOR = SdkFieldDescriptor("message", SerialKind.String)
+    private val MESSAGE_ALT2_DESCRIPTOR = SdkFieldDescriptor("Message", SerialKind.String)
+    private val MESSAGE_ALT3_DESCRIPTOR = SdkFieldDescriptor("errorMessage", SerialKind.String)
 
     private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
         field(ERR_CODE_ALT1_DESCRIPTOR)
@@ -65,15 +62,15 @@ internal object RestJsonErrorDeserializer {
 
         if (payload != null) {
             val deserializer = JsonDeserializer(payload)
-            deserializer.deserializeStruct(null) {
+            deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
                 loop@while (true) {
-                    when (nextField(OBJ_DESCRIPTOR)) {
+                    when (findNextFieldIndex()) {
                         ERR_CODE_ALT1_DESCRIPTOR.index,
                         ERR_CODE_ALT2_DESCRIPTOR.index -> code = deserializeString()
                         MESSAGE_ALT1_DESCRIPTOR.index,
                         MESSAGE_ALT2_DESCRIPTOR.index,
                         MESSAGE_ALT3_DESCRIPTOR.index -> message = deserializeString()
-                        Deserializer.FieldIterator.EXHAUSTED -> break@loop
+                        null -> break@loop
                         else -> skipValue()
                     }
                 }
