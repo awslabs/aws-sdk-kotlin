@@ -28,7 +28,7 @@ import software.amazon.smithy.model.traits.HttpTrait
  */
 abstract class ModeledExceptionsFeature(protected val ctx: ProtocolGenerator.GenerationContext) : HttpFeature {
     private fun getModeledErrors(): Set<Shape> {
-        val topDownIndex: TopDownIndex = ctx.model.getKnowledge(TopDownIndex::class.java)
+        val topDownIndex: TopDownIndex = TopDownIndex.of(ctx.model)
         val operations = topDownIndex.getContainedOperations(ctx.service)
             .filter { it.hasTrait(HttpTrait::class.java) }.toList<OperationShape>()
 
