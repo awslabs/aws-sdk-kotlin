@@ -27,10 +27,7 @@ import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.HttpResponseContext
 import software.aws.clientrt.http.response.TypeInfo
 import software.aws.clientrt.http.response.header
-import software.aws.clientrt.serde.Deserializer
-import software.aws.clientrt.serde.SdkFieldDescriptor
-import software.aws.clientrt.serde.SdkObjectDescriptor
-import software.aws.clientrt.serde.deserializeStruct
+import software.aws.clientrt.serde.*
 import software.aws.kotlinsdk.AwsServiceException
 import software.aws.kotlinsdk.UnknownServiceException
 import software.aws.kotlinsdk.http.X_AMZN_REQUEST_ID_HEADER
@@ -69,7 +66,7 @@ class RestJsonErrorTest {
 
     class FooErrorDeserializer : HttpDeserialize {
         companion object {
-            val PAYLOAD_STRING_DESCRIPTOR = SdkFieldDescriptor("string")
+            val PAYLOAD_STRING_DESCRIPTOR = SdkFieldDescriptor("string", SerialKind.String)
             val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
                 field(PAYLOAD_STRING_DESCRIPTOR)
             }
@@ -82,11 +79,11 @@ class RestJsonErrorTest {
             val payload = response.body.readAll()
             if (payload != null) {
                 val deserializer = provider(payload)
-                deserializer.deserializeStruct(null) {
+                deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
                     loop@while (true) {
-                        when (nextField(OBJ_DESCRIPTOR)) {
+                        when (findNextFieldIndex()) {
                             PAYLOAD_STRING_DESCRIPTOR.index -> builder.payloadString = deserializeString()
-                            Deserializer.FieldIterator.EXHAUSTED -> break@loop
+                            null -> break@loop
                             else -> skipValue()
                         }
                     }
