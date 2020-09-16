@@ -1,3 +1,8 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
 pluginManagement {
     repositories {
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }

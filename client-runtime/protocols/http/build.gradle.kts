@@ -1,3 +1,8 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
 description = "HTTP core for AWS service clients"
 extra["displayName"] = "Software :: AWS :: KotlinSdk :: HTTP"
 extra["moduleName"] = "software.aws.kotlinsdk.http"

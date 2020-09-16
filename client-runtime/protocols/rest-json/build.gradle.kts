@@ -1,3 +1,8 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
 description = "JSON protocol support for AWS service clients"
 extra["displayName"] = "Software :: AWS :: KotlinSdk :: RestJSON"
 extra["moduleName"] = "software.aws.kotlinsdk.restjson"
