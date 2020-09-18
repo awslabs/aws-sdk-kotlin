@@ -4,7 +4,7 @@
  */
 
 description = "JSON protocol support for AWS service clients"
-extra["displayName"] = "Software :: AWS :: KotlinSdk :: RestJSON"
+extra["displayName"] = "Software :: AWS :: Kotlin SDK :: RestJSON"
 extra["moduleName"] = "software.aws.kotlinsdk.restjson"
 
 val smithyKotlinClientRtVersion: String by project
