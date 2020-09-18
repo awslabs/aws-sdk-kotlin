@@ -4,7 +4,7 @@
  */
 
 description = "HTTP core for AWS service clients"
-extra["displayName"] = "Software :: AWS :: KotlinSdk :: HTTP"
+extra["displayName"] = "Software :: AWS :: Kotlin SDK :: HTTP"
 extra["moduleName"] = "software.aws.kotlinsdk.http"
 
 val smithyKotlinClientRtVersion: String by project

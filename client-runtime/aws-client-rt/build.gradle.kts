@@ -4,7 +4,7 @@
  */
 
 description = "AWS client runtime support for generated service clients"
-extra["displayName"] = "Software :: AWS :: KotlinSdk :: Client Runtime"
+extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Client Runtime"
 extra["moduleName"] = "software.aws.kotlinsdk"
 
 
