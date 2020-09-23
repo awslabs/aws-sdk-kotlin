@@ -3,9 +3,9 @@ name: CI
 on:
 #  Following triggers are disabled until dependency resolution to smithy-kotlin is resolved.  
 #  push:
-#    branches: [ mainline ]
+#    branches: [ main ]
 #  pull_request:
-#    branches: [ mainline ]
+#    branches: [ main ]
   workflow_dispatch:
 
 jobs:
