@@ -37,6 +37,10 @@ fun projectNeedsPlatform(project: Project, platform: String ): Boolean {
     return files.any{ it.name == platform || (it.name == "common" && platform == "jvm")}
 }
 
+kotlin {
+    jvm() // Create a JVM target with the default name 'jvm'
+}
+
 subprojects {
     group = "software.aws.kotlin"
     version = "0.0.1"
