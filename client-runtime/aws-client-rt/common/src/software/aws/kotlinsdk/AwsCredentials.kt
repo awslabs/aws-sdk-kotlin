@@ -46,6 +46,9 @@ expect fun <T> platformFileReader(customFilePath: String? = null, block: (Sequen
 
 /**
  * Parses the AWS credentials file for aws access and secret keys for default or specified profile.
+ *
+ * @param profileFilePath A custom path to look for the credentials file.  If not passed, the default path is used.
+ * @param profileName The profile name in the credentials file to return.
  */
 class ProfileAwsCredentialsProvider(private val profileFilePath: String? = null, private val profileName: String = "default") : AwsCredentialsProvider {
 
