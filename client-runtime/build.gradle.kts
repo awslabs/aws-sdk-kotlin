@@ -19,7 +19,7 @@ plugins {
     jacoco
 }
 
-val platforms = listOf("common", "jvm")
+val platforms = listOf("common", "jvm", "js")
 
 // Allow subprojects to use internal API's
 // See: https://kotlinlang.org/docs/reference/opt-in-requirements.html#opting-in-to-using-api
@@ -34,7 +34,7 @@ fun projectNeedsPlatform(project: Project, platform: String ): Boolean {
     if (hasDarwin && platform == "posix") return false
     if (!hasPosix && !hasDarwin && platform == "darwin") return false
     // add implicit JVM target if it has a common module
-    return files.any{ it.name == platform || (it.name == "common" && platform == "jvm")}
+    return files.any { it.name == "common" || it.name == platform }
 }
 
 kotlin {
