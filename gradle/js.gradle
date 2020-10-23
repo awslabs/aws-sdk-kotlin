@@ -1,0 +1,52 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
+kotlin {
+    js {
+        nodejs {
+            testTask {
+                useMocha {
+                    timeout = 10000
+                }
+                debug = false
+            }
+        }
+
+        browser {
+            testTask {
+                useKarma {
+                    useChromeHeadless()
+                    useConfigDirectory(new File(project.rootProject.projectDir, "karma"))
+                }
+            }
+        }
+
+        compilations.main.kotlinOptions {
+            metaInfo = true
+            sourceMap = true
+            moduleKind = 'umd'
+            main = 'noCall'
+            sourceMapEmbedSources = 'always'
+        }
+        compilations.test.kotlinOptions {
+            metaInfo = true
+            sourceMap = true
+            moduleKind = 'umd'
+            main = 'call'
+            sourceMapEmbedSources = 'always'
+        }
+    }
+
+    sourceSets {
+        jsMain.dependencies {
+            api "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+            api(npm("text-encoding", text_encoding_version))
+        }
+        jsTest.dependencies {
+            api "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+            api(npm("puppeteer", "*"))
+        }
+    }
+}
