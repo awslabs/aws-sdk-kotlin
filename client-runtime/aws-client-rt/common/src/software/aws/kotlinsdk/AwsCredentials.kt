@@ -31,12 +31,12 @@ typealias AwsCredentialsProvider = () -> AwsCredentialDescriptor?
  * will be evaluated in order and the first function to return non-null value will be used to supply
  * the credentials.
  */
-typealias AwsCredentialsProviderChain = List<AwsCredentialsProvider>
+typealias AwsCredentialsProviders = List<AwsCredentialsProvider>
 
 /**
  * Scan a list of AwsCredentialProviders and return the first one that is able to resole credentials.
  */
-fun AwsCredentialsProviderChain.find(): AwsCredentialDescriptor? =
+fun AwsCredentialsProviders.find(): AwsCredentialDescriptor? =
         map { it.invoke() }.first { it != null }
 
 /**
