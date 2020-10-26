@@ -16,5 +16,5 @@ interface AwsServiceConfig {
      * AWS service calls.  If not provided a default credential provider chain is used.
      * TODO: Define/describe the default credential provider chain
      */
-    val credentialProviderChain: AwsCredentialsProviderChain?
+    val credentialProviders: AwsCredentialsProviders?
 }
