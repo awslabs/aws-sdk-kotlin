@@ -5,7 +5,7 @@ package software.aws.kotlinsdk
  * This may be replaced by something else that is generated from the endpoint.json
  * model.
  */
-internal data class AwsPartition(
+public data class AwsPartition(
         val id: String,
         val name: String,
         val hostName: String,
@@ -18,7 +18,7 @@ internal data class AwsPartition(
  * This may be replaced by something else that is generated from the endpoint.json
  * model.
  */
-internal data class AwsRegion(
+public data class AwsRegion(
         val id: String,
         val domain: String,
         val partition: AwsPartition,
