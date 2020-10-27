@@ -18,5 +18,11 @@ kotlin {
                 api("software.aws.smithy.kotlin:http:$smithyKotlinClientRtVersion")
             }
         }
+
+        commonTest {
+            dependencies {
+                implementation(project(":client-runtime:testing"))
+            }
+        }
     }
 }
