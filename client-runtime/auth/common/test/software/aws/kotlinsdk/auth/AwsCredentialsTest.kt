@@ -1,4 +1,4 @@
-package software.aws.kotlinsdk
+package software.aws.kotlinsdk.auth
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

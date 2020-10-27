@@ -5,15 +5,21 @@ import software.aws.clientrt.http.FeatureKey
 import software.aws.clientrt.http.HttpClientFeatureFactory
 import software.aws.clientrt.http.SdkHttpClient
 import software.aws.clientrt.http.request.HttpRequestPipeline
-import software.aws.kotlinsdk.AwsPartition
-import software.aws.kotlinsdk.AwsRegion
+import software.aws.kotlinsdk.regions.AwsRegionEndpointResolver
+import software.aws.kotlinsdk.regions.AwsRegionResolver
+import software.aws.kotlinsdk.regions.DemoAwsRegionEndpointResolver
+import software.aws.kotlinsdk.regions.DemoAwsRegionResolver
 
 /**
  *  Http feature for resolving the service endpoint.
  *
- *  TODO: Consider how this type would work with non HTTP protocols.
+ *  TODO: Determine how/if this type would work with non HTTP protocols.
  */
-class ServiceEndpointResolver(private val awsRegionId: String?, private val awsRegionResolver: AwsRegionResolver = DemoAwsRegionResolver(), private val serviceEndpointResolver: AwsRegionEndpointResolver = DemoAwsRegionEndpointResolver()) : Feature {
+class ServiceEndpointResolver(
+    private val awsRegionId: String?,
+    private val awsRegionResolver: AwsRegionResolver = DemoAwsRegionResolver(),
+    private val serviceEndpointResolver: AwsRegionEndpointResolver = DemoAwsRegionEndpointResolver()
+) : Feature {
 
     class Config {
         internal var awsRegionId: String? = null
@@ -33,7 +39,8 @@ class ServiceEndpointResolver(private val awsRegionId: String?, private val awsR
             val regionId = awsRegionId ?: determineDefaultEndpointRegionId()
 
             context.url.host = serviceEndpointResolver.resolve(
-                awsRegionResolver.resolveRegion(regionId) ?: error("Unable to resolve region id")) ?: error("Unable to find endpoint mapping for service")
+                awsRegionResolver.resolveRegion(regionId) ?: error("Unable to resolve region id")
+            ) ?: error("Unable to find endpoint mapping for service")
         }
     }
 
@@ -44,43 +51,3 @@ class ServiceEndpointResolver(private val awsRegionId: String?, private val awsR
 
 /*************************************** Missing ****************************/
 
-fun interface AwsRegionEndpointResolver {
-    fun resolve(region: AwsRegion): String?
-}
-
-class DemoAwsRegionEndpointResolver : AwsRegionEndpointResolver {
-    override fun resolve(region: AwsRegion): String? {
-        //TODO implement
-        return "127.0.0.1"
-    }
-}
-
-/**
- * A facility to return a possible [software.aws.kotlinsdk.AwsRegion] based on an input string.
- */
-fun interface AwsRegionResolver {
-    fun resolveRegion(id: String): AwsRegion?
-}
-
-/**
- * The following function is a sample of what would be custom (not smithy) codegened from endpoints.json.
- */
-class DemoAwsRegionResolver : AwsRegionResolver {
-    override fun resolveRegion(id: String): AwsRegion? {
-        return when (id) {
-            "us-east-1" -> AwsRegion(
-                    "us-east-1",
-                    "amazonaws.com",
-                    AwsPartition(
-                            "aws",
-                            "AWS Standard",
-                            "{service}.{region}.{dnsSuffix}",
-                            "amazonaws.com",
-                            "^(us|eu|ap|sa|ca|me|af)\\-\\w+\\-\\d+$"
-                    ),
-                    "US East (N. Virginia)"
-            )
-            else -> null
-        }
-    }
-}

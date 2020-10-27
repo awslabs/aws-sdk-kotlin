@@ -1,4 +1,4 @@
-package software.aws.kotlinsdk
+package software.aws.kotlinsdk.regions
 
 /**
  * This is a provisional Partition type modeled from the Java v2 SDK's PartitionMetadata type.
@@ -19,10 +19,10 @@ public data class AwsPartition(
  * model.
  */
 public data class AwsRegion(
-        val id: String,
-        val domain: String,
-        val partition: AwsPartition,
-        val description: String
+    val id: String,
+    val domain: String,
+    val partition: AwsPartition,
+    val description: String
 )
 
 /**

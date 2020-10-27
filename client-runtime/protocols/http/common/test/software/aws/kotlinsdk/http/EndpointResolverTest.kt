@@ -4,8 +4,10 @@ import software.aws.clientrt.http.*
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
-import software.aws.kotlinsdk.AwsPartition
-import software.aws.kotlinsdk.AwsRegion
+import software.aws.kotlinsdk.regions.AwsPartition
+import software.aws.kotlinsdk.regions.AwsRegion
+import software.aws.kotlinsdk.regions.AwsRegionEndpointResolver
+import software.aws.kotlinsdk.regions.AwsRegionResolver
 import kotlin.test.Test
 import software.aws.kotlinsdk.testing.runSuspendTest
 import kotlin.test.assertEquals
@@ -56,10 +58,7 @@ class EndpointResolverTest {
         }
 
         val client = sdkHttpClient(mockEngine) {
-            install(ServiceEndpointResolver) {
-                awsRegionResolver = TestAwsRegionResolver()
-                serviceEndpointResolver = TestAwsRegionEndpointResolver()
-            }
+            install(ServiceEndpointResolver)
         }
 
         val response = client.roundTrip<HttpResponse>(requestBuilder)

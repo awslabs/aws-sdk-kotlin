@@ -1,14 +1,16 @@
-package software.aws.kotlinsdk
+package software.aws.kotlinsdk.auth
 
 /*
 This implementation is modeled from the Java SDK v2 Credentials APIs.  The API is reduced from the Java version.
  */
-
 interface AwsCredentialDescriptor {
     val accessKey: String
     val secretKey: String
 }
 
+/**
+ * Basic type to hold access/secret pair.
+ */
 data class AwsCredentials(override val accessKey: String, override val secretKey: String) : AwsCredentialDescriptor
 
 /**

@@ -1,5 +1,6 @@
+package software.aws.kotlinsdk.auth
+
 import org.junit.Test
-import software.aws.kotlinsdk.ProfileAwsCredentialsProvider
 import kotlin.test.assertNotNull
 
 class AwsCredentialsTestJVM {
