@@ -1,5 +1,10 @@
 package software.aws.kotlinsdk.regions
 
+/**
+ * The following types are used to facilitate testing of new functionality but will
+ * likely exist in other places in final form.
+ */
+
 fun interface AwsRegionEndpointResolver {
     fun resolve(region: AwsRegion): String?
 }

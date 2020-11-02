@@ -34,7 +34,7 @@ fun projectNeedsPlatform(project: Project, platform: String ): Boolean {
     if (hasDarwin && platform == "posix") return false
     if (!hasPosix && !hasDarwin && platform == "darwin") return false
     // add implicit JVM target if it has a common module
-    return files.any { it.name == "common" || it.name == platform }
+    return files.any{ it.name == platform || (it.name == "common" && platform == "jvm")}
 }
 
 kotlin {

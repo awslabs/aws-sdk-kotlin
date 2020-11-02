@@ -48,6 +48,3 @@ class ServiceEndpointResolver(
     // TODO: Implement.  Likely need something per service.
     private fun determineDefaultEndpointRegionId(): String = "us-east-1"
 }
-
-/*************************************** Missing ****************************/
-
