@@ -7,7 +7,7 @@ kotlin.sourceSets {
     commonMain.dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
         implementation group: "org.jetbrains.kotlin", name: "kotlin-stdlib-common", version: kotlinVersion
-        implementation group: "org.jetbrains.kotlinx", name: "kotlinx-coroutines-core-common", version: coroutinesVersion
+        implementation group: "org.jetbrains.kotlinx", name: "kotlinx-coroutines-core", version: coroutinesVersion
     }
     commonTest.dependencies {
         implementation "org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion"
