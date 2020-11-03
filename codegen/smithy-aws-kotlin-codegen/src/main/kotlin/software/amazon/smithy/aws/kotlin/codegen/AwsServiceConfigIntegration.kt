@@ -24,46 +24,40 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             writer.onSection(SECTION_SERVICE_CONFIG_PARENT_TYPE) { text -> writer.appendWithDelimiter(text, "AuthConfig") }
             writer.onSection(SECTION_SERVICE_CONFIG_PARENT_TYPE) { text -> writer.appendWithDelimiter(text, "RegionConfig") }
 
-            writer.onSection(SECTION_SERVICE_CONFIG_PROPERTIES) {
-                writer.write(it)
-                writer.write("override val credentialProviders: AwsCredentialsProviders? = builder.credentialProviders")
-                writer.write("override val region: String? = builder.region")
-                writer.write("override val signingRegion: String? = builder.signingRegion")
+            writer.appendToSection(SECTION_SERVICE_CONFIG_PROPERTIES) {
+                write("override val credentialProviders: AwsCredentialsProviders? = builder.credentialProviders")
+                write("override val region: String? = builder.region")
+                write("override val signingRegion: String? = builder.signingRegion")
             }
 
-            writer.onSection(SECTION_SERVICE_CONFIG_BUILDER_BODY) {
-                writer.write(it)
-                writer.write("fun credentialProviders(credentialProviders: AwsCredentialsProviders): Builder")
-                writer.write("fun region(region: String): Builder")
-                writer.write("fun signingRegion(signingRegion: String): Builder")
+            writer.appendToSection(SECTION_SERVICE_CONFIG_BUILDER_BODY) {
+                write("fun credentialProviders(credentialProviders: AwsCredentialsProviders): Builder")
+                write("fun region(region: String): Builder")
+                write("fun signingRegion(signingRegion: String): Builder")
             }
 
-            writer.onSection(SECTION_SERVICE_CONFIG_DSL_BUILDER_BODY) {
-                writer.write(it)
-                writer.write("var credentialProviders: AwsCredentialsProviders?")
-                writer.write("var region: String?")
-                writer.write("var signingRegion: String?")
+            writer.appendToSection(SECTION_SERVICE_CONFIG_DSL_BUILDER_BODY) {
+                write("var credentialProviders: AwsCredentialsProviders?")
+                write("var region: String?")
+                write("var signingRegion: String?")
             }
 
-            writer.onSection(SECTION_SERVICE_CONFIG_BUILDER_IMPL_PROPERTIES) {
-                writer.write(it)
-                writer.write("override var credentialProviders: AwsCredentialsProviders? = null")
-                writer.write("override var region: String? = null")
-                writer.write("override var signingRegion: String? = null")
+            writer.appendToSection(SECTION_SERVICE_CONFIG_BUILDER_IMPL_PROPERTIES) {
+                write("override var credentialProviders: AwsCredentialsProviders? = null")
+                write("override var region: String? = null")
+                write("override var signingRegion: String? = null")
             }
 
-            writer.onSection(SECTION_SERVICE_CONFIG_BUILDER_IMPL_CONSTRUCTOR) {
-                writer.write(it)
-                writer.write("this.credentialProviders = config.credentialProviders")
-                writer.write("this.region = config.region")
-                writer.write("this.signingRegion = config.signingRegion")
+            writer.appendToSection(SECTION_SERVICE_CONFIG_BUILDER_IMPL_CONSTRUCTOR) {
+                write("this.credentialProviders = config.credentialProviders")
+                write("this.region = config.region")
+                write("this.signingRegion = config.signingRegion")
             }
 
-            writer.onSection(SECTION_SERVICE_CONFIG_BUILDER_IMPL_BODY) {
-                writer.write(it)
-                writer.write("override fun credentialProviders(credentialProviders: AwsCredentialsProviders): Builder = apply { this.credentialProviders = credentialProviders }")
-                writer.write("override fun region(region: String): Builder = apply { this.region = region }")
-                writer.write("override fun signingRegion(signingRegion: String): Builder = apply { this.signingRegion = signingRegion }")
+            writer.appendToSection(SECTION_SERVICE_CONFIG_BUILDER_IMPL_BODY) {
+                write("override fun credentialProviders(credentialProviders: AwsCredentialsProviders): Builder = apply { this.credentialProviders = credentialProviders }")
+                write("override fun region(region: String): Builder = apply { this.region = region }")
+                write("override fun signingRegion(signingRegion: String): Builder = apply { this.signingRegion = signingRegion }")
             }
         }
 
