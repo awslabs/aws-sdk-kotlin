@@ -1,5 +1,9 @@
 package software.aws.kotlinsdk.auth
 
+/**
+ * Note: the code in this file is a placeholder for another implementation with CRT taken into account.
+ */
+
 /*
 This implementation is modeled from the Java SDK v2 Credentials APIs.  The API is reduced from the Java version.
  */
