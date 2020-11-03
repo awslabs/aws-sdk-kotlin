@@ -26,6 +26,7 @@ fun module(path: String) {
 module("codegen")
 module("codegen/smithy-aws-kotlin-codegen")
 module("codegen/protocol-test-codegen")
+module("codegen/sdk-codegen")
 include(":client-runtime")
 include(":client-runtime:aws-client-rt")
 include(":client-runtime:testing")
