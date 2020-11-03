@@ -43,7 +43,7 @@ typealias AwsCredentialsProviders = List<AwsCredentialsProvider>
  * Scan a list of AwsCredentialProviders and return the first one that is able to resolve credentials.
  */
 fun AwsCredentialsProviders.find(): AwsCredentialDescriptor? =
-    find { it.invoke() != null }?.invoke()
+    asSequence().map { it.invoke() }.first { it != null }
 
 /**
  * Platform function to pass a file to an input function as a sequence of lines.
