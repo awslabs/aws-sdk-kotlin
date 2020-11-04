@@ -4,9 +4,6 @@
  */
 package software.aws.kotlinsdk.restjson
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
@@ -22,6 +19,9 @@ import software.aws.kotlinsdk.AwsServiceException
 import software.aws.kotlinsdk.UnknownServiceException
 import software.aws.kotlinsdk.http.X_AMZN_REQUEST_ID_HEADER
 import software.aws.kotlinsdk.testing.runSuspendTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 @OptIn(ExperimentalStdlibApi::class)
 class RestJsonErrorTest {

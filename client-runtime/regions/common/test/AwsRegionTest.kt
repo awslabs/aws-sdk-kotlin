@@ -1,6 +1,5 @@
 package software.aws.kotlinsdk.regions
 
-import software.aws.kotlinsdk.regions.awsRegionByIdResolver
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

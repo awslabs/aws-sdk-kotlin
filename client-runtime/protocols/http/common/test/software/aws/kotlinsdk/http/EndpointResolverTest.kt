@@ -8,8 +8,8 @@ import software.aws.kotlinsdk.regions.AwsPartition
 import software.aws.kotlinsdk.regions.AwsRegion
 import software.aws.kotlinsdk.regions.AwsRegionEndpointResolver
 import software.aws.kotlinsdk.regions.AwsRegionResolver
-import kotlin.test.Test
 import software.aws.kotlinsdk.testing.runSuspendTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -28,16 +28,16 @@ class EndpointResolverTest {
         override fun resolveRegion(id: String): AwsRegion? {
             return when (id) {
                 "us-east-1" -> AwsRegion(
-                        "us-east-1",
+                    "us-east-1",
+                    "amazonaws.com",
+                    AwsPartition(
+                        "aws",
+                        "AWS Standard",
+                        "{service}.{region}.{dnsSuffix}",
                         "amazonaws.com",
-                        AwsPartition(
-                                "aws",
-                                "AWS Standard",
-                                "{service}.{region}.{dnsSuffix}",
-                                "amazonaws.com",
-                                "^(us|eu|ap|sa|ca|me|af)\\-\\w+\\-\\d+$"
-                        ),
-                        "US East (N. Virginia)"
+                        "^(us|eu|ap|sa|ca|me|af)\\-\\w+\\-\\d+$"
+                    ),
+                    "US East (N. Virginia)"
                 )
                 else -> null
             }

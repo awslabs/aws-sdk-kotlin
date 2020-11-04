@@ -11,7 +11,7 @@ fun interface AwsRegionEndpointResolver {
 
 class DemoAwsRegionEndpointResolver : AwsRegionEndpointResolver {
     override fun resolve(region: AwsRegion): String? {
-        //TODO implement
+        // TODO implement
         return "127.0.0.1"
     }
 }

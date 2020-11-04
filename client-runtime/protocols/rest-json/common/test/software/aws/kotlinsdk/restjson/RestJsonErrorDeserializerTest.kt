@@ -4,14 +4,14 @@
  */
 package software.aws.kotlinsdk.restjson
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
 import software.aws.clientrt.http.Headers
 import software.aws.clientrt.http.HttpBody
 import software.aws.clientrt.http.HttpStatusCode
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class RestJsonErrorDeserializerTest {
 

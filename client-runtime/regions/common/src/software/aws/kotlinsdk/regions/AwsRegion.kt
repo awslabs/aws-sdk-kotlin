@@ -6,11 +6,11 @@ package software.aws.kotlinsdk.regions
  * model.
  */
 public data class AwsPartition(
-        val id: String,
-        val name: String,
-        val hostName: String,
-        val dnsSuffix: String,
-        val regionRegex: String, //TODO: is there a better type for this than String?
+    val id: String,
+    val name: String,
+    val hostName: String,
+    val dnsSuffix: String,
+    val regionRegex: String // TODO: is there a better type for this than String?
 )
 
 /**
@@ -29,18 +29,18 @@ public data class AwsRegion(
  * The following function is a sample of what would be custom (not smithy) codegened from endpoints.json.
  */
 internal fun awsRegionByIdResolver(id: String): AwsRegion? =
-        when (id) {
-            "us-east-1" -> AwsRegion(
-                    "us-east-1",
-                    "amazonaws.com",
-                    AwsPartition(
-                            "aws",
-                            "AWS Standard",
-                            "{service}.{region}.{dnsSuffix}",
-                            "amazonaws.com",
-                            "^(us|eu|ap|sa|ca|me|af)\\-\\w+\\-\\d+$"
-                    ),
-                    "US East (N. Virginia)"
-            )
-            else -> null
-        }
+    when (id) {
+        "us-east-1" -> AwsRegion(
+            "us-east-1",
+            "amazonaws.com",
+            AwsPartition(
+                "aws",
+                "AWS Standard",
+                "{service}.{region}.{dnsSuffix}",
+                "amazonaws.com",
+                "^(us|eu|ap|sa|ca|me|af)\\-\\w+\\-\\d+$"
+            ),
+            "US East (N. Virginia)"
+        )
+        else -> null
+    }

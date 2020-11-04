@@ -7,7 +7,7 @@ package software.aws.kotlinsdk.auth
 /*
 This implementation is modeled from the Java SDK v2 Credentials APIs.  The API is reduced from the Java version.
  */
-interface AwsCredentialDescriptor {
+interface AwsCredentials {
     val accessKey: String
     val secretKey: String
 }
@@ -15,12 +15,17 @@ interface AwsCredentialDescriptor {
 /**
  * Basic type to hold access/secret pair.
  */
-data class AwsCredentials(override val accessKey: String, override val secretKey: String) : AwsCredentialDescriptor
+data class BasicAwsCredentials(override val accessKey: String, override val secretKey: String) : AwsCredentials
+
+/**
+ * Aws Credentials with session token.
+ */
+data class SessionAwsCredentials(override val accessKey: String, override val secretKey: String, val sessionToken: String) : AwsCredentials
 
 /**
  * A special instance of AWS credentials that signals that no credentials are to be supplied in association with an operation.
  */
-object ANONYMOUS_AWS_CREDENTIALS : AwsCredentialDescriptor {
+object ANONYMOUS_AWS_CREDENTIALS : AwsCredentials {
     override val accessKey: String
         get() = error("Anonymous AWS Credentials supplies no data.")
     override val secretKey: String
@@ -30,7 +35,7 @@ object ANONYMOUS_AWS_CREDENTIALS : AwsCredentialDescriptor {
 /**
  * A function that may return AWS credentials or return null if none available or found.
  */
-typealias AwsCredentialsProvider = () -> AwsCredentialDescriptor?
+typealias AwsCredentialsProvider = () -> AwsCredentials?
 
 /**
  * A list that contains functions that may return AWS credentials.  It is expected that the list
@@ -42,7 +47,7 @@ typealias AwsCredentialsProviders = List<AwsCredentialsProvider>
 /**
  * Scan a list of AwsCredentialProviders and return the first one that is able to resolve credentials.
  */
-fun AwsCredentialsProviders.find(): AwsCredentialDescriptor? =
+fun AwsCredentialsProviders.find(): AwsCredentials? =
     asSequence().map { it.invoke() }.first { it != null }
 
 /**
@@ -58,8 +63,8 @@ expect fun <T> platformFileReader(customFilePath: String? = null, block: (Sequen
  */
 class ProfileAwsCredentialsProvider(private val profileFilePath: String? = null, private val profileName: String = "default") : AwsCredentialsProvider {
 
-    override fun invoke(): AwsCredentialDescriptor? =
-        platformFileReader(profileFilePath, ::loadCredentials)?.let { AwsCredentials(it.first, it.second) }
+    override fun invoke(): AwsCredentials? =
+        platformFileReader(profileFilePath, ::loadCredentials)?.let { BasicAwsCredentials(it.first, it.second) }
 
     private fun loadCredentials(credentialsFile: Sequence<String>): Pair<String, String>? {
         var profileFound = false
@@ -83,8 +88,7 @@ class ProfileAwsCredentialsProvider(private val profileFilePath: String? = null,
     }
 
     private fun String.profileNameMatch(name: String): Boolean = this.startsWith("[") && this.endsWith("]") && this.removeSurrounding("[", "]") == name
-    private fun String.accessKeyMatch(): Boolean =  this.startsWith("aws_access_key_id") && this.contains('=')
-    private fun String.secretKeyMatch(): Boolean =  this.startsWith("aws_secret_access_key") && this.contains('=')
+    private fun String.accessKeyMatch(): Boolean = this.startsWith("aws_access_key_id") && this.contains('=')
+    private fun String.secretKeyMatch(): Boolean = this.startsWith("aws_secret_access_key") && this.contains('=')
     private fun String.parseValue(): String = this.split('=')[1].trim()
 }
-

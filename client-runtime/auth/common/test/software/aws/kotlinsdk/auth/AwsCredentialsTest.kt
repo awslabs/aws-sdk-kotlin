@@ -8,12 +8,12 @@ class AwsCredentialsTest {
     @Test
     fun `it can iterate over providers until one matches`() {
         val unit: AwsCredentialsProviders = listOf(
-                { null },
-                { AwsCredentials("access", "secret") },
-                { AwsCredentials("bad", "worse") }
+            { null },
+            { BasicAwsCredentials("access", "secret") },
+            { BasicAwsCredentials("bad", "worse") }
         )
 
-        val expected = AwsCredentials("access", "secret")
+        val expected = BasicAwsCredentials("access", "secret")
 
         assertEquals(expected, unit.find())
     }
