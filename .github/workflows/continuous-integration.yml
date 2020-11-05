@@ -15,11 +15,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
-        with: 
-          repository: awslabs/smithy-kotlin
-      - name: Debug
-        run: find .  
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
