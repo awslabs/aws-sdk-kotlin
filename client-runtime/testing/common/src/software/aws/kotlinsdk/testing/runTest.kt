@@ -4,9 +4,9 @@
  */
 package software.aws.kotlinsdk.testing
 
+import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
-import kotlinx.coroutines.CoroutineScope
 
 /**
  * MPP compatible runBlocking to run suspend tests in common modules
