@@ -24,7 +24,6 @@ dependencies {
 tasks["jar"].enabled = false
 
 // Run the SmithyBuild task manually since this project needs the built JAR
-// from smithy-aws-typescript-codegen.
 tasks["smithyBuildJar"].enabled = false
 
 tasks.create<SmithyBuild>("buildSdk") {
