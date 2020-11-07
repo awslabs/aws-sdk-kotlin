@@ -7,6 +7,7 @@ package software.amazon.smithy.aws.kotlin.codegen
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.hasIdempotentTokenMember
 import software.amazon.smithy.kotlin.codegen.integration.*
 import software.amazon.smithy.model.traits.TimestampFormatTrait
 
@@ -43,13 +44,16 @@ abstract class RestJsonProtocolGenerator : AwsHttpBindingProtocolGenerator() {
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val features = super.getHttpFeatures(ctx).toMutableList()
-        val jsonFeatures = listOf(JsonSerdeFeature(), RestJsonErrorFeature(ctx))
+        val jsonFeatures = listOf(
+                JsonSerdeFeature(ctx.service.hasIdempotentTokenMember(ctx.model)),
+                RestJsonErrorFeature(ctx)
+        )
         features.addAll(jsonFeatures)
         return features
     }
 }
 
-class JsonSerdeFeature : HttpSerde("JsonSerdeProvider") {
+class JsonSerdeFeature(generateIdempotencyTokenConfig: Boolean) : HttpSerde("JsonSerdeProvider", generateIdempotencyTokenConfig) {
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         super.addImportsAndDependencies(writer)
         val jsonSerdeSymbol = Symbol.builder()
