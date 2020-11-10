@@ -30,6 +30,9 @@ tasks.create<SmithyBuild>("buildSdk") {
     addRuntimeClasspath = true
 }
 
+// force rebuild every time while developing
+tasks["build"].outputs.upToDateWhen { false }
+
 // Generates a smithy-build.json file by creating a new projection for every
 // JSON file found in aws-models/. The generated smithy-build.json file is
 // not committed to git since it's rebuilt each time codegen is performed.
