@@ -47,7 +47,7 @@ class RestJsonError(private val registry: ExceptionRegistry) : Feature {
         client.responsePipeline.intercept(HttpResponsePipeline.Receive) {
             val expectedStatus = context.executionCtx?.expectedHttpStatus
             val status = context.response.status
-            if (expectedStatus == status || (expectedStatus == null && status.isSuccess())) return@intercept
+            if (status.matches(expectedStatus)) return@intercept
 
             val payload = context.response.body.readAll()
 
@@ -75,3 +75,7 @@ class RestJsonError(private val registry: ExceptionRegistry) : Feature {
         }
     }
 }
+
+// Provides the policy of what constitutes a status code match in service response
+internal fun HttpStatusCode.matches(expected: HttpStatusCode?): Boolean =
+        expected == this || (expected == null && this.isSuccess()) || expected?.category() == this.category()

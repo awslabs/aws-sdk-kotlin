@@ -25,9 +25,7 @@ abstract class RestJsonProtocolGenerator : AwsHttpBindingProtocolGenerator() {
             "InlineDocumentInput",
             "InlineDocumentAsPayloadInput",
             "InlineDocumentOutput",
-            "InlineDocumentAsPayloadInputOutput",
-            // TODO - New test added after updating Smithy to 1.3. Currently failing.
-            "RestJsonHttpResponseCode"
+            "InlineDocumentAsPayloadInputOutput"
         )
 
         val requestTestBuilder = HttpProtocolUnitTestRequestGenerator.Builder()

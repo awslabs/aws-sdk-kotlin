@@ -19,9 +19,7 @@ import software.aws.kotlinsdk.AwsServiceException
 import software.aws.kotlinsdk.UnknownServiceException
 import software.aws.kotlinsdk.http.X_AMZN_REQUEST_ID_HEADER
 import software.aws.kotlinsdk.testing.runSuspendTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import kotlin.test.*
 
 @OptIn(ExperimentalStdlibApi::class)
 class RestJsonErrorTest {
@@ -154,5 +152,17 @@ class RestJsonErrorTest {
         assertEquals(ex.errorCode, "BarError")
         assertEquals(ex.requestId, "guid")
         assertEquals(ex.errorMessage, "server do better next time")
+    }
+
+    @Test
+    fun `it handles http status code matching`() {
+        // positive cases
+        assertTrue(HttpStatusCode.OK.matches(null))  // Expected is null, actual is success
+        assertTrue(HttpStatusCode.OK.matches(HttpStatusCode.OK))
+        assertTrue(HttpStatusCode.OK.matches(HttpStatusCode.Created))
+
+        // negative cases
+        assertFalse(HttpStatusCode.OK.matches(HttpStatusCode.BadGateway))
+        assertFalse(HttpStatusCode.BadRequest.matches(null)) // Expected is null, actual is error
     }
 }
