@@ -34,3 +34,20 @@ include(":client-runtime:regions")
 include(":client-runtime:auth")
 include(":client-runtime:protocols:http")
 include(":client-runtime:protocols:rest-json")
+
+val compositeProjectList = try {
+    val localProperties = java.util.Properties()
+    localProperties.load(File(rootProject.projectDir, "local.properties").inputStream())
+    localProperties.getProperty("compositeProjects")
+        ?.splitToSequence(",")
+        ?.map { file(it) }
+        ?.toList()
+        ?: emptyList()
+} catch (e: Throwable) {
+    listOf(file("../smithy-kotlin"))
+}
+
+compositeProjectList.filter { it.exists() }.forEach {
+    println("Including build '$it'")
+    includeBuild(it)
+}
