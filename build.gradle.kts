@@ -21,7 +21,7 @@ dependencies {
 }
 
 val lintPaths = listOf(
-    "codegen/**/*.kt",
+    "codegen/smithy-aws-kotlin-codegen/**/*.kt",
     "client-runtime/**/*.kt"
 )
 

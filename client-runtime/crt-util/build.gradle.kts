@@ -3,21 +3,20 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-description = "AWS Service Authentication"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Auth"
-extra["moduleName"] = "software.aws.kotlinsdk.auth"
+description = "Utilities for working with AWS CRT Kotlin"
+extra["displayName"] = "Software :: AWS :: Kotlin SDK :: CRT :: Util"
+extra["moduleName"] = "software.aws.kotlinsdk.crt"
 
 val smithyKotlinClientRtVersion: String by project
+val crtKotlinVersion: String by project
 
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                val crtKotlinVersion: String by project
                 api(project(":client-runtime:aws-client-rt"))
+                api("software.amazon.awssdk.crt:aws-crt-kotlin:$crtKotlinVersion")
                 api("software.aws.smithy.kotlin:http:$smithyKotlinClientRtVersion")
-                implementation(project(":client-runtime:crt-util"))
-                implementation("software.amazon.awssdk.crt:aws-crt-kotlin:$crtKotlinVersion")
             }
         }
     }
