@@ -36,6 +36,10 @@ include(":client-runtime:protocols:http")
 include(":client-runtime:protocols:rest-json")
 include(":client-runtime:crt-util")
 
+// service client examples/playground for exploring design space
+module("design/lambda-example")
+module("design/s3-example")
+
 
 /**
  * The following code enables to optionally include aws-sdk-kotlin dependencies in source form for easier
@@ -76,5 +80,4 @@ compositeProjectList.forEach { projectRoot ->
         }
         false -> println("Ignoring invalid build directory '$projectRoot'.")
     }
-
 }
