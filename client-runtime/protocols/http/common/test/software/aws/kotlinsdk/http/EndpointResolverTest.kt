@@ -61,7 +61,8 @@ class EndpointResolverTest {
             install(ServiceEndpointResolver)
         }
 
-        val response = client.roundTrip<HttpResponse>(requestBuilder)
+        val ctx = ExecutionContext()
+        val response = client.roundTrip<HttpResponse>(ctx, requestBuilder)
 
         assertNotNull(response)
     }

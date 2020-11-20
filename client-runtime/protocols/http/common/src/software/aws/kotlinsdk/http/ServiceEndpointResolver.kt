@@ -38,7 +38,7 @@ class ServiceEndpointResolver(
         client.requestPipeline.intercept(HttpRequestPipeline.Initialize) {
             val regionId = awsRegionId ?: determineDefaultEndpointRegionId()
 
-            context.url.host = serviceEndpointResolver.resolve(
+            subject.url.host = serviceEndpointResolver.resolve(
                 awsRegionResolver.resolveRegion(regionId) ?: error("Unable to resolve region id")
             ) ?: error("Unable to find endpoint mapping for service")
         }

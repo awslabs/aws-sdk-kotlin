@@ -21,20 +21,20 @@ import software.aws.kotlinsdk.http.*
  * see if one of the registered errors matches
  */
 @InternalAPI
-class RestJsonError(private val registry: ExceptionRegistry) : Feature {
-    class Config {
+public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
+    public class Config {
         internal val registry = ExceptionRegistry()
 
         /**
          * Register a modeled service exception for the given [code]. The deserializer registered MUST provide
          * an [AwsServiceException] when invoked.
          */
-        fun register(code: String, deserializer: HttpDeserialize, httpStatusCode: Int? = null) {
+        public fun register(code: String, deserializer: HttpDeserialize, httpStatusCode: Int? = null) {
             registry.register(ExceptionMetadata(code, deserializer, httpStatusCode?.let { HttpStatusCode.fromValue(it) }))
         }
     }
 
-    companion object Feature : HttpClientFeatureFactory<Config, RestJsonError> {
+    public companion object Feature : HttpClientFeatureFactory<Config, RestJsonError> {
         override val key: FeatureKey<RestJsonError> = FeatureKey("RestJsonError")
         override fun create(block: Config.() -> Unit): RestJsonError {
             val config = Config().apply(block)
@@ -45,7 +45,7 @@ class RestJsonError(private val registry: ExceptionRegistry) : Feature {
     override fun install(client: SdkHttpClient) {
         // intercept at first chance we get
         client.responsePipeline.intercept(HttpResponsePipeline.Receive) {
-            val expectedStatus = context.executionCtx?.expectedHttpStatus
+            val expectedStatus = context.executionContext.getOrNull(SdkOperation.ExpectedHttpStatus)?.let { HttpStatusCode.fromValue(it) }
             val status = context.response.status
             if (status.matches(expectedStatus)) return@intercept
 
