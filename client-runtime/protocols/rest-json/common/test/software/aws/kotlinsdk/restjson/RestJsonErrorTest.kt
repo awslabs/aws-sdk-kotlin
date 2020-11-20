@@ -103,7 +103,7 @@ class RestJsonErrorTest {
         val payload = """{"baz":"quux","string":"hello world","message":"server do better next time"}"""
         val body = ByteArrayContent(payload.encodeToByteArray())
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
-        val context = HttpResponseContext(httpResp, TypeInfo(Int::class), null)
+        val context = HttpResponseContext(httpResp, TypeInfo(Int::class), ExecutionContext())
 
         val ex = assertFailsWith(FooError::class) {
             client.responsePipeline.execute(context, httpResp.body)
@@ -142,7 +142,7 @@ class RestJsonErrorTest {
         val payload = """{"baz":"quux","string":"hello world","message":"server do better next time"}"""
         val body = ByteArrayContent(payload.encodeToByteArray())
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
-        val context = HttpResponseContext(httpResp, TypeInfo(Int::class), null)
+        val context = HttpResponseContext(httpResp, TypeInfo(Int::class), ExecutionContext())
 
         val ex = assertFailsWith(UnknownServiceException::class) {
             client.responsePipeline.execute(context, httpResp.body)
