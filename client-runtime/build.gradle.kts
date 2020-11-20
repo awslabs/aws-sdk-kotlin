@@ -23,7 +23,7 @@ val platforms = listOf("common", "jvm")
 
 // Allow subprojects to use internal API's
 // See: https://kotlinlang.org/docs/reference/opt-in-requirements.html#opting-in-to-using-api
-val experimentalAnnotations = listOf("kotlin.RequiresOptIn", "software.aws.clientrt.util.InternalAPI")
+val experimentalAnnotations = listOf("kotlin.RequiresOptIn", "software.aws.clientrt.util.InternalAPI", "software.aws.kotlinsdk.InternalSdkApi")
 
 fun projectNeedsPlatform(project: Project, platform: String ): Boolean {
     val files = project.projectDir.listFiles()
@@ -66,6 +66,9 @@ subprojects {
     }
 
     kotlin {
+        // TODO - refactor this to error `explicitApi()`
+        explicitApiWarning()
+
         sourceSets {
             all {
                 val srcDir = if (name.endsWith("Main")) "src" else "test"
