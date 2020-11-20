@@ -34,6 +34,8 @@ include(":client-runtime:regions")
 include(":client-runtime:auth")
 include(":client-runtime:protocols:http")
 include(":client-runtime:protocols:rest-json")
+include(":client-runtime:crt-util")
+
 
 /**
  * The following code enables to optionally include aws-sdk-kotlin dependencies in source form for easier
@@ -74,4 +76,5 @@ compositeProjectList.forEach { projectRoot ->
         }
         false -> println("Ignoring invalid build directory '$projectRoot'.")
     }
+
 }

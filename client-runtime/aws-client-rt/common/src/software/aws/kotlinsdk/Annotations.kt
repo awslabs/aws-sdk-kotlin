@@ -1,10 +1,10 @@
+// ktlint-disable filename
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
 
 package software.aws.kotlinsdk
-
 
 /**
  * API marked with this annotation is internal to the client runtime/generated SDK and it is not intended to be used outside.
