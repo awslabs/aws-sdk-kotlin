@@ -18,6 +18,7 @@ import com.amazonaws.service.lambda.model.AliasConfiguration
 import com.amazonaws.service.lambda.model.CreateAliasRequest
 import com.amazonaws.service.lambda.model.InvokeRequest
 import com.amazonaws.service.lambda.model.InvokeResponse
+import com.amazonaws.service.runtime.AwsClientConfig
 import software.aws.clientrt.SdkClient
 import software.aws.clientrt.config.IdempotencyTokenConfig
 import software.aws.clientrt.config.IdempotencyTokenProvider
@@ -37,9 +38,7 @@ interface LambdaClient: SdkClient {
         }
     }
 
-    class Config private constructor(builder: BuilderImpl): HttpClientConfig, IdempotencyTokenConfig {
-        override val httpClientEngine: HttpClientEngine? = builder.httpClientEngine
-        override val httpClientEngineConfig: HttpClientEngineConfig? = builder.httpClientEngineConfig
+    class Config private constructor(builder: BuilderImpl): AwsClientConfig(builder), IdempotencyTokenConfig {
         override val idempotencyTokenProvider: IdempotencyTokenProvider? = builder.idempotencyTokenProvider
 
         companion object {
@@ -49,39 +48,29 @@ interface LambdaClient: SdkClient {
             fun dslBuilder(): DslBuilder = BuilderImpl()
 
             operator fun invoke(block: DslBuilder.() -> Unit): Config = BuilderImpl().apply(block).build()
+
+            // This is where services would register custom options/execution attributes??
         }
 
         fun copy(block: DslBuilder.() -> Unit = {}): Config = BuilderImpl(this).apply(block).build()
 
         interface Builder {
             fun build(): Config
-            fun httpClientEngine(httpClientEngine: HttpClientEngine): Builder
-            fun httpClientEngineConfig(httpClientEngineConfig: HttpClientEngineConfig): Builder
             fun idempotencyTokenProvider(idempotencyTokenProvider: IdempotencyTokenProvider): Builder
         }
 
-        interface DslBuilder {
-            var httpClientEngine: HttpClientEngine?
-            var httpClientEngineConfig: HttpClientEngineConfig?
+        interface DslBuilder: AwsClientConfig.DslBuilder {
             var idempotencyTokenProvider: IdempotencyTokenProvider?
-
-            fun build(): Config
         }
 
-        internal class BuilderImpl() : Builder, DslBuilder {
-            override var httpClientEngine: HttpClientEngine? = null
-            override var httpClientEngineConfig: HttpClientEngineConfig? = null
+        internal class BuilderImpl() : Builder, DslBuilder, AwsClientConfig.BuilderImpl() {
             override var idempotencyTokenProvider: IdempotencyTokenProvider? = null
 
             constructor(x: Config) : this() {
-                this.httpClientEngine = x.httpClientEngine
-                this.httpClientEngineConfig = x.httpClientEngineConfig
                 this.idempotencyTokenProvider = x.idempotencyTokenProvider
             }
 
             override fun build(): Config = Config(this)
-            override fun httpClientEngine(httpClientEngine: HttpClientEngine): Builder = apply { this.httpClientEngine = httpClientEngine }
-            override fun httpClientEngineConfig(httpClientEngineConfig: HttpClientEngineConfig): Builder = apply { this.httpClientEngineConfig = httpClientEngineConfig }
             override fun idempotencyTokenProvider(idempotencyTokenProvider: IdempotencyTokenProvider): Builder = apply { this.idempotencyTokenProvider = idempotencyTokenProvider }
         }
     }

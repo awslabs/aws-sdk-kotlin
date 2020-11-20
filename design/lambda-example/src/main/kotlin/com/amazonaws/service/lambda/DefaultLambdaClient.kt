@@ -7,6 +7,8 @@ package com.amazonaws.service.lambda
 
 import com.amazonaws.service.lambda.model.*
 import com.amazonaws.service.lambda.transform.*
+import com.amazonaws.service.runtime.AwsClientConfig
+import com.amazonaws.service.runtime.AwsHttpServiceClient
 import kotlinx.coroutines.runBlocking
 import software.aws.clientrt.SdkBaseException
 import software.aws.clientrt.ServiceException
@@ -19,9 +21,13 @@ import software.aws.clientrt.http.feature.DefaultRequest
 import software.aws.clientrt.http.feature.DefaultValidateResponse
 import software.aws.clientrt.http.feature.HttpSerde
 import software.aws.clientrt.serde.json.JsonSerdeProvider
+import software.aws.clientrt.util.InternalAPI
+import software.aws.kotlinsdk.restjson.RestJsonError
 
-class DefaultLambdaClient(config: LambdaClient.Config): LambdaClient {
-    private val client: SdkHttpClient
+@OptIn(InternalAPI::class)
+class DefaultLambdaClient(config: LambdaClient.Config): LambdaClient, AwsHttpServiceClient() {
+    override val client: SdkHttpClient
+    override val awsClientConfig: AwsClientConfig = config
 
     init {
         val engineConfig = HttpClientEngineConfig()
@@ -40,8 +46,9 @@ class DefaultLambdaClient(config: LambdaClient.Config): LambdaClient {
                 url.port = 8000
             }
 
-            // this is what will be installed by the generic smithy-kotlin codegenerator
-            install(DefaultValidateResponse)
+            install(RestJsonError) {
+                // here is where we would register exception deserializers
+            }
         }
     }
 
@@ -61,6 +68,7 @@ class DefaultLambdaClient(config: LambdaClient.Config): LambdaClient {
             service = serviceName
             operationName = "Invoke"
         }
+        mergeServiceDefaults(execCtx)
         return client.roundTrip(execCtx)
     }
 
@@ -76,6 +84,7 @@ class DefaultLambdaClient(config: LambdaClient.Config): LambdaClient {
             service = serviceName
             operationName = "CreateAlias"
         }
+        mergeServiceDefaults(execCtx)
         return client.roundTrip(execCtx)
     }
 
@@ -86,7 +95,10 @@ class DefaultLambdaClient(config: LambdaClient.Config): LambdaClient {
 
 
 fun main() = runBlocking{
-    val client = LambdaClient()
+    val client = LambdaClient {
+
+    }
+
     val request = InvokeRequest {
         functionName = "myfunction"
         payload = "some payload".toByteArray()

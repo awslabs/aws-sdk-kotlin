@@ -13,11 +13,17 @@ val smithyKotlinGroup: String = "software.aws.smithy.kotlin"
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    // whitelabel client-runtime
     implementation("$smithyKotlinGroup:client-rt-core:$smithyKotlinClientRtVersion")
     implementation("$smithyKotlinGroup:http:$smithyKotlinClientRtVersion")
     implementation("$smithyKotlinGroup:http-client-engine-ktor:$smithyKotlinClientRtVersion")
     implementation("$smithyKotlinGroup:serde:$smithyKotlinClientRtVersion")
     implementation("$smithyKotlinGroup:serde-json:$smithyKotlinClientRtVersion")
+
+    // aws-runtime
+    implementation(project(":client-runtime:auth"))
+    implementation(project(":client-runtime:regions"))
+    implementation(project(":client-runtime:protocols:rest-json"))
 
     // FIXME - this is only necessary for a conversion from ByteStream to HttpBody (which belongs in client runtime)
     implementation("$smithyKotlinGroup:io:$smithyKotlinClientRtVersion")
