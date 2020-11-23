@@ -78,4 +78,4 @@ class RestJsonError(private val registry: ExceptionRegistry) : Feature {
 
 // Provides the policy of what constitutes a status code match in service response
 internal fun HttpStatusCode.matches(expected: HttpStatusCode?): Boolean =
-        expected == this || (expected == null && this.isSuccess()) || expected?.category() == this.category()
+    expected == this || (expected == null && this.isSuccess()) || expected?.category() == this.category()

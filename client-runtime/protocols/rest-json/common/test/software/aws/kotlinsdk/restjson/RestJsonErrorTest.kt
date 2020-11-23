@@ -157,7 +157,7 @@ class RestJsonErrorTest {
     @Test
     fun `it handles http status code matching`() {
         // positive cases
-        assertTrue(HttpStatusCode.OK.matches(null))  // Expected is null, actual is success
+        assertTrue(HttpStatusCode.OK.matches(null)) // Expected is null, actual is success
         assertTrue(HttpStatusCode.OK.matches(HttpStatusCode.OK))
         assertTrue(HttpStatusCode.OK.matches(HttpStatusCode.Created))
 

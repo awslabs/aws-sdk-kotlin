@@ -43,8 +43,8 @@ abstract class RestJsonProtocolGenerator : AwsHttpBindingProtocolGenerator() {
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val features = super.getHttpFeatures(ctx).toMutableList()
         val jsonFeatures = listOf(
-                JsonSerdeFeature(ctx.service.hasIdempotentTokenMember(ctx.model)),
-                RestJsonErrorFeature(ctx)
+            JsonSerdeFeature(ctx.service.hasIdempotentTokenMember(ctx.model)),
+            RestJsonErrorFeature(ctx)
         )
         features.addAll(jsonFeatures)
         return features
