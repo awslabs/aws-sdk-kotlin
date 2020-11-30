@@ -5,14 +5,27 @@
 
 package software.aws.kotlinsdk.auth
 
-import software.aws.clientrt.util.AttributeKey
+import software.aws.clientrt.client.ClientOption
+import software.aws.clientrt.time.Instant
 
 /**
- * Operation attributes related to auth
+ * Operation (execution) options related to authorization
  */
 public object AuthAttributes {
     /**
-     * Mark a request as unsigned
+     * AWS region to be used for signing the request
      */
-    public val UnsignedRequest: AttributeKey<Boolean> = AttributeKey("UnsignedRequest")
+    public val SigningRegion: ClientOption<String> = ClientOption("AwsSigningRegion")
+
+    /**
+     * Mark a request payload as unsigned
+     * See: https://awslabs.github.io/smithy/1.0/spec/aws/aws-auth.html#aws-auth-unsignedpayload-trait
+     */
+    public val UnsignedPayload: ClientOption<Boolean> = ClientOption("UnsignedPayload")
+
+    /**
+     * Override the date to complete the signing process with. Defaults to current time when not specified.
+     * NOTE: This is not a common option.
+     */
+    public val SigningDate: ClientOption<Instant> = ClientOption("SigningDate")
 }
