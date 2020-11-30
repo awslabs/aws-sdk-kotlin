@@ -6,3 +6,18 @@
 description = "AWS Region Support"
 extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Regions"
 extra["moduleName"] = "software.aws.kotlinsdk.regions"
+
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                api(project(":client-runtime:aws-client-rt"))
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation(project(":client-runtime:testing"))
+            }
+        }
+    }
+}
