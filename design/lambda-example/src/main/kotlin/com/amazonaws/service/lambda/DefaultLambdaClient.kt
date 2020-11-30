@@ -7,27 +7,24 @@ package com.amazonaws.service.lambda
 
 import com.amazonaws.service.lambda.model.*
 import com.amazonaws.service.lambda.transform.*
-import com.amazonaws.service.runtime.AwsClientConfig
-import com.amazonaws.service.runtime.AwsHttpServiceClient
+import com.amazonaws.service.runtime.AwsServiceClient
 import kotlinx.coroutines.runBlocking
 import software.aws.clientrt.SdkBaseException
 import software.aws.clientrt.ServiceException
 import software.aws.clientrt.config.IdempotencyTokenProvider
 import software.aws.clientrt.http.*
-import software.aws.clientrt.http.ExecutionContext
 import software.aws.clientrt.http.engine.HttpClientEngineConfig
 import software.aws.clientrt.http.engine.ktor.KtorEngine
 import software.aws.clientrt.http.feature.DefaultRequest
-import software.aws.clientrt.http.feature.DefaultValidateResponse
 import software.aws.clientrt.http.feature.HttpSerde
 import software.aws.clientrt.serde.json.JsonSerdeProvider
 import software.aws.clientrt.util.InternalAPI
+import software.aws.kotlinsdk.auth.AwsSigv4Signer
 import software.aws.kotlinsdk.restjson.RestJsonError
 
 @OptIn(InternalAPI::class)
-class DefaultLambdaClient(config: LambdaClient.Config): LambdaClient, AwsHttpServiceClient() {
-    override val client: SdkHttpClient
-    override val awsClientConfig: AwsClientConfig = config
+class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient, AwsServiceClient(config) {
+    private val client: SdkHttpClient
 
     init {
         val engineConfig = HttpClientEngineConfig()
@@ -48,6 +45,10 @@ class DefaultLambdaClient(config: LambdaClient.Config): LambdaClient, AwsHttpSer
 
             install(RestJsonError) {
                 // here is where we would register exception deserializers
+            }
+
+            install(AwsSigv4Signer) {
+                credentialsProvider = config.credentialProvider
             }
         }
     }
@@ -89,6 +90,7 @@ class DefaultLambdaClient(config: LambdaClient.Config): LambdaClient, AwsHttpSer
     }
 
     override fun close() {
+        // TODO - whether we close this or not is dependent on whether we own the engine or not
         client.close()
     }
 }
@@ -96,7 +98,6 @@ class DefaultLambdaClient(config: LambdaClient.Config): LambdaClient, AwsHttpSer
 
 fun main() = runBlocking{
     val client = LambdaClient {
-
     }
 
     val request = InvokeRequest {

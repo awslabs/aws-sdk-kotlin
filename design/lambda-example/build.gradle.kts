@@ -11,6 +11,15 @@ plugins {
 val smithyKotlinClientRtVersion: String by project
 val smithyKotlinGroup: String = "software.aws.smithy.kotlin"
 
+val experimentalAnnotations = listOf("kotlin.RequiresOptIn", "software.aws.clientrt.util.InternalAPI", "software.aws.kotlinsdk.InternalSdkApi")
+kotlin {
+    sourceSets {
+        all {
+            experimentalAnnotations.forEach { languageSettings.useExperimentalAnnotation(it) }
+        }
+    }
+}
+
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     // whitelabel client-runtime
