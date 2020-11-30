@@ -20,5 +20,10 @@ kotlin {
                 implementation("software.amazon.awssdk.crt:aws-crt-kotlin:$crtKotlinVersion")
             }
         }
+        commonTest {
+            dependencies {
+                implementation(project(":client-runtime:testing"))
+            }
+        }
     }
 }
