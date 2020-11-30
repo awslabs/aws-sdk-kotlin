@@ -18,7 +18,6 @@ import software.aws.clientrt.util.get
 import software.aws.kotlinsdk.InternalSdkApi
 import software.aws.kotlinsdk.crt.toSignableCrtRequest
 import software.aws.kotlinsdk.crt.update
-import software.amazon.awssdk.kotlin.crt.auth.credentials.Credentials as CredentialsCrt
 
 /**
  * HTTP request pipeline middleware that signs outgoing requests
@@ -71,5 +70,3 @@ public class AwsSigv4Signer internal constructor(config: Config) : Feature {
  * Check if the current operation should be signed or not
  */
 private fun ExecutionContext.isUnsignedRequest(): Boolean = getOrNull(AuthAttributes.UnsignedPayload) ?: false
-
-private fun Credentials.toCrt(): CredentialsCrt = CredentialsCrt(accessKeyId, secretAccessKey, sessionToken)
