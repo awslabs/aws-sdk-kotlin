@@ -7,10 +7,11 @@ package com.amazonaws.service.lambda
 
 import com.amazonaws.service.lambda.model.*
 import com.amazonaws.service.lambda.transform.*
-import com.amazonaws.service.runtime.AwsServiceClient
 import kotlinx.coroutines.runBlocking
 import software.aws.clientrt.SdkBaseException
 import software.aws.clientrt.ServiceException
+import software.aws.clientrt.client.ExecutionContext
+import software.aws.clientrt.client.SdkClientOption
 import software.aws.clientrt.config.IdempotencyTokenProvider
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.engine.HttpClientEngineConfig
@@ -19,11 +20,15 @@ import software.aws.clientrt.http.feature.DefaultRequest
 import software.aws.clientrt.http.feature.HttpSerde
 import software.aws.clientrt.serde.json.JsonSerdeProvider
 import software.aws.clientrt.util.InternalAPI
+import software.aws.clientrt.util.putIfAbsent
+import software.aws.kotlinsdk.auth.AuthAttributes
 import software.aws.kotlinsdk.auth.AwsSigv4Signer
+import software.aws.kotlinsdk.client.AwsClientOption
+import software.aws.kotlinsdk.regions.resolveRegionForOperation
 import software.aws.kotlinsdk.restjson.RestJsonError
 
 @OptIn(InternalAPI::class)
-class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient, AwsServiceClient(config) {
+class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient {
     private val client: SdkHttpClient
 
     init {
@@ -92,6 +97,16 @@ class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient
     override fun close() {
         // TODO - whether we close this or not is dependent on whether we own the engine or not
         client.close()
+    }
+
+    // merge the defaults configured for the service into the execution context before firing off a request
+    private fun mergeServiceDefaults(ctx: ExecutionContext) {
+        val region = resolveRegionForOperation(ctx, config)
+        ctx.putIfAbsent(AwsClientOption.Region, region)
+        ctx.putIfAbsent(AuthAttributes.SigningRegion, config.signingRegion ?: region)
+        ctx.putIfAbsent(SdkClientOption.ServiceName, serviceName)
+
+        // ... any other service defaults
     }
 }
 

@@ -18,13 +18,15 @@ import com.amazonaws.service.lambda.model.AliasConfiguration
 import com.amazonaws.service.lambda.model.CreateAliasRequest
 import com.amazonaws.service.lambda.model.InvokeRequest
 import com.amazonaws.service.lambda.model.InvokeResponse
-import com.amazonaws.service.runtime.AwsClientConfig
 import software.aws.clientrt.SdkClient
 import software.aws.clientrt.config.IdempotencyTokenConfig
 import software.aws.clientrt.config.IdempotencyTokenProvider
 import software.aws.clientrt.http.config.HttpClientConfig
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.engine.HttpClientEngineConfig
+import software.aws.kotlinsdk.auth.AuthConfig
+import software.aws.kotlinsdk.auth.CredentialsProvider
+import software.aws.kotlinsdk.regions.RegionConfig
 
 
 interface LambdaClient: SdkClient {
@@ -38,7 +40,13 @@ interface LambdaClient: SdkClient {
         }
     }
 
-    class Config private constructor(builder: BuilderImpl): AwsClientConfig(builder), IdempotencyTokenConfig {
+    // generated per/client
+    class Config private constructor(builder: BuilderImpl): AuthConfig, RegionConfig, HttpClientConfig, IdempotencyTokenConfig {
+        override val region: String? = builder.region
+        override val signingRegion: String? = builder.signingRegion
+        override val credentialProvider: CredentialsProvider? = builder.credentialProvider
+        override val httpClientEngine: HttpClientEngine? = builder.httpClientEngine
+        override val httpClientEngineConfig: HttpClientEngineConfig? = builder.httpClientEngineConfig
         override val idempotencyTokenProvider: IdempotencyTokenProvider? = builder.idempotencyTokenProvider
 
         companion object {
@@ -48,29 +56,74 @@ interface LambdaClient: SdkClient {
             fun dslBuilder(): DslBuilder = BuilderImpl()
 
             operator fun invoke(block: DslBuilder.() -> Unit): Config = BuilderImpl().apply(block).build()
-
-            // This is where services would register custom options/execution attributes??
         }
 
         fun copy(block: DslBuilder.() -> Unit = {}): Config = BuilderImpl(this).apply(block).build()
 
         interface Builder {
             fun build(): Config
+            fun httpClientEngine(httpClientEngine: HttpClientEngine): Builder
+            fun httpClientEngineConfig(httpClientEngineConfig: HttpClientEngineConfig): Builder
             fun idempotencyTokenProvider(idempotencyTokenProvider: IdempotencyTokenProvider): Builder
+            // TODO - missing region, cred provider, etc
         }
 
-        interface DslBuilder: AwsClientConfig.DslBuilder {
+        interface DslBuilder {
+            /**
+             * The AWS region the client should use. Note this is not always the same as [signingRegion] in
+             * the case of global services like IAM
+             */
+            var region: String?
+
+            /**
+             * AWS region to be used for signing the request
+             */
+            var signingRegion: String?
+
+            /**
+             * The [CredentialsProvider] the client should use to sign requests with. If not specified a default
+             * provider will be used.
+             */
+            var credentialProvider: CredentialsProvider?
+
+            /**
+             * Override the HTTP client engine used to make requests with. This is a more advanced option that allows
+             * you to BYO client engine or share engines across service clients. Caller is responsible for any cleanup
+             * associated with the engine and ensuring it's resources are disposed of properly.
+             */
+            var httpClientEngine: HttpClientEngine?
+
+            /**
+             * Override the default HTTP client engine config
+             */
+            var httpClientEngineConfig: HttpClientEngineConfig?
+
             var idempotencyTokenProvider: IdempotencyTokenProvider?
+
+            fun build(): Config
         }
 
-        internal class BuilderImpl() : Builder, DslBuilder, AwsClientConfig.BuilderImpl() {
+        internal class BuilderImpl() : Builder, DslBuilder {
+            // TODO - we could inherit from ClientOptionsBuilder and delegate some of these into a default PropertyBag
+            override var region: String? = null
+            override var signingRegion: String? = null
+            override var credentialProvider: CredentialsProvider? = null
+            override var httpClientEngine: HttpClientEngine? = null
+            override var httpClientEngineConfig: HttpClientEngineConfig? = null
             override var idempotencyTokenProvider: IdempotencyTokenProvider? = null
 
             constructor(x: Config) : this() {
+                this.region = x.region
+                this.signingRegion = x.signingRegion
+                this.credentialProvider = x.credentialProvider
+                this.httpClientEngine = x.httpClientEngine
+                this.httpClientEngineConfig = x.httpClientEngineConfig
                 this.idempotencyTokenProvider = x.idempotencyTokenProvider
             }
 
             override fun build(): Config = Config(this)
+            override fun httpClientEngine(httpClientEngine: HttpClientEngine): Builder = apply { this.httpClientEngine = httpClientEngine }
+            override fun httpClientEngineConfig(httpClientEngineConfig: HttpClientEngineConfig): Builder = apply { this.httpClientEngineConfig = httpClientEngineConfig }
             override fun idempotencyTokenProvider(idempotencyTokenProvider: IdempotencyTokenProvider): Builder = apply { this.idempotencyTokenProvider = idempotencyTokenProvider }
         }
     }
