@@ -23,6 +23,7 @@ import software.aws.clientrt.util.InternalAPI
 import software.aws.clientrt.util.putIfAbsent
 import software.aws.kotlinsdk.auth.AuthAttributes
 import software.aws.kotlinsdk.auth.AwsSigv4Signer
+import software.aws.kotlinsdk.auth.DefaultChainCredentialsProvider
 import software.aws.kotlinsdk.client.AwsClientOption
 import software.aws.kotlinsdk.regions.resolveRegionForOperation
 import software.aws.kotlinsdk.restjson.RestJsonError
@@ -53,7 +54,7 @@ class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient
             }
 
             install(AwsSigv4Signer) {
-                credentialsProvider = config.credentialProvider
+                credentialsProvider = config.credentialProvider ?: DefaultChainCredentialsProvider()
             }
         }
     }
