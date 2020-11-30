@@ -9,6 +9,8 @@ import software.amazon.awssdk.kotlin.crt.auth.signing.AwsSignedBodyValue
 import software.amazon.awssdk.kotlin.crt.auth.signing.AwsSigner
 import software.amazon.awssdk.kotlin.crt.auth.signing.AwsSigningAlgorithm
 import software.amazon.awssdk.kotlin.crt.auth.signing.AwsSigningConfig
+import software.aws.clientrt.client.ExecutionContext
+import software.aws.clientrt.client.SdkClientOption
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.request.HttpRequestPipeline
 import software.aws.clientrt.time.epochMilliseconds
@@ -48,7 +50,7 @@ public class AwsSigv4Signer internal constructor(config: Config) : Feature {
 
             val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
                 region = context.executionContext[AuthAttributes.SigningRegion]
-                service = context.executionContext[SdkOperation.ServiceName]
+                service = context.executionContext[SdkClientOption.ServiceName]
                 credentials = resolvedCredentials.toCrt()
                 algorithm = AwsSigningAlgorithm.SIGV4
                 date = context.executionContext.getOrNull(AuthAttributes.SigningDate)?.epochMilliseconds

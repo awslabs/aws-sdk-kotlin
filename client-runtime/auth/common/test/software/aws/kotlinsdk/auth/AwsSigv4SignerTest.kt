@@ -5,9 +5,9 @@
 
 package software.aws.kotlinsdk.auth
 
-import software.aws.clientrt.http.ExecutionContext
+import software.aws.clientrt.client.ExecutionContext
+import software.aws.clientrt.client.SdkClientOption
 import software.aws.clientrt.http.HttpMethod
-import software.aws.clientrt.http.SdkOperation
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.request.HttpRequestBuilder
@@ -41,7 +41,7 @@ class AwsSigv4SignerTest {
         val ctx = ExecutionContext().apply {
             set(AuthAttributes.SigningRegion, "us-east-1")
             set(AuthAttributes.SigningDate, Instant.fromIso8601("2020-10-16T19:56:00Z"))
-            set(SdkOperation.ServiceName, "demo")
+            set(SdkClientOption.ServiceName, "demo")
         }
 
         return Pair(builder, ctx)

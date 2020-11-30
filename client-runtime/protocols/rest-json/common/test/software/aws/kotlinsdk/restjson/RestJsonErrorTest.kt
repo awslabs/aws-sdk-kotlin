@@ -4,6 +4,7 @@
  */
 package software.aws.kotlinsdk.restjson
 
+import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
