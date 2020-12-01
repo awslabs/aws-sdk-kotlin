@@ -25,7 +25,9 @@ abstract class RestJsonProtocolGenerator : AwsHttpBindingProtocolGenerator() {
             "InlineDocumentInput",
             "InlineDocumentAsPayloadInput",
             "InlineDocumentOutput",
-            "InlineDocumentAsPayloadInputOutput"
+            "InlineDocumentAsPayloadInputOutput",
+            // TODO - New sparse tests in Smith 1.4
+            "RestJsonDeserializesNullMapValues"
         )
 
         val requestTestBuilder = AwsHttpProtocolUnitTestRequestGenerator.Builder()
