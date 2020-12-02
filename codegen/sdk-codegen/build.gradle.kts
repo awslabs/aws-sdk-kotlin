@@ -10,7 +10,9 @@ import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.gradle.tasks.SmithyBuild
+import software.amazon.smithy.model.node.ObjectNode
 import kotlin.streams.toList
+import java.util.Properties
 
 plugins {
     id("software.amazon.smithy") version "0.5.1"
@@ -31,7 +33,27 @@ tasks.create<SmithyBuild>("buildSdk") {
 }
 
 // force rebuild every time while developing
-tasks["build"].outputs.upToDateWhen { false }
+tasks["buildSdk"].outputs.upToDateWhen { false }
+
+// get a project propety by name if it exists (including from local.properties)
+fun getProperty(name: String): String? {
+    if (project.hasProperty(name)) {
+        return project.properties[name].toString()
+    }
+
+    val localProperties = Properties()
+    val propertiesFile: File = rootProject.file("local.properties")
+    if (propertiesFile.exists()) {
+        propertiesFile.inputStream().use { localProperties.load(it) }
+
+        if (localProperties.containsKey(name)) {
+            return localProperties.get(name).toString()
+        }
+    }
+    return null
+}
+
+fun ObjectNode.Builder.call(block: ObjectNode.Builder.() -> Unit): ObjectNode.Builder = apply(block)
 
 // Generates a smithy-build.json file by creating a new projection for every
 // JSON file found in aws-models/. The generated smithy-build.json file is
@@ -42,7 +64,12 @@ tasks.register("generate-smithy-build") {
         val modelsDirProp: String by project
         val models = project.file(modelsDirProp)
 
-        fileTree(models).filter { it.isFile }.files.forEach { file ->
+        val generateServices = getProperty("aws.services")?.split(",")
+        println(generateServices)
+
+        fileTree(models).filter {
+            it.isFile && (generateServices?.contains(it.name.split(".")[0]) ?: true)
+        }.files.forEach { file ->
             val model = Model.assembler()
                 .addImport(file.absolutePath)
                 // Grab the result directly rather than worrying about checking for errors via unwrap.
@@ -64,6 +91,13 @@ tasks.register("generate-smithy-build") {
                         .withMember("service", service.id.toString())
                         .withMember("module", "aws.sdk.kotlin." + sdkId.toLowerCase())
                         .withMember("moduleVersion", "1.0")
+                        .call {
+                            val buildStandaloneSdk = getProperty("buildStandaloneSdk")?.toBoolean() ?: false
+                            withMember("build", Node.objectNodeBuilder()
+                                .withMember("rootProject", buildStandaloneSdk)
+                                .build()
+                            )
+                        }
                         .build()))
                 .build()
             projectionsBuilder.withMember(sdkId + "." + version.toLowerCase(), projectionContents)
