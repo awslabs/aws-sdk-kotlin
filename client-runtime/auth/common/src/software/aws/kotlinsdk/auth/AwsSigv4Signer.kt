@@ -10,7 +10,6 @@ import software.amazon.awssdk.kotlin.crt.auth.signing.AwsSigner
 import software.amazon.awssdk.kotlin.crt.auth.signing.AwsSigningAlgorithm
 import software.amazon.awssdk.kotlin.crt.auth.signing.AwsSigningConfig
 import software.aws.clientrt.client.ExecutionContext
-import software.aws.clientrt.client.SdkClientOption
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.request.HttpRequestPipeline
 import software.aws.clientrt.time.epochMilliseconds
@@ -25,13 +24,22 @@ import software.aws.kotlinsdk.crt.update
 @InternalSdkApi
 public class AwsSigv4Signer internal constructor(config: Config) : Feature {
     private val credentialsProvider = requireNotNull(config.credentialsProvider) { "AwsSigv4Signer requires a credentialsProvider" }
+    private val signingService = requireNotNull(config.signingService) { "AwsSigv4Signer requires a signing service" }
 
     public class Config {
+        /**
+         * The credentials provider used to sign requests with
+         */
         public var credentialsProvider: CredentialsProvider? = null
+
+        /**
+         * The credential scope service name to sign requests for
+         */
+        public var signingService: String? = null
     }
 
     public companion object Feature : HttpClientFeatureFactory<Config, AwsSigv4Signer> {
-        override val key: FeatureKey<AwsSigv4Signer> = FeatureKey("Signer")
+        override val key: FeatureKey<AwsSigv4Signer> = FeatureKey("AwsSigv4Signer")
 
         override fun create(block: Config.() -> Unit): AwsSigv4Signer {
             val config = Config().apply(block)
@@ -49,7 +57,7 @@ public class AwsSigv4Signer internal constructor(config: Config) : Feature {
 
             val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
                 region = context.executionContext[AuthAttributes.SigningRegion]
-                service = context.executionContext[SdkClientOption.ServiceName]
+                service = context.executionContext.getOrNull(AuthAttributes.SigningService) ?: signingService
                 credentials = resolvedCredentials.toCrt()
                 algorithm = AwsSigningAlgorithm.SIGV4
                 date = context.executionContext.getOrNull(AuthAttributes.SigningDate)?.epochMilliseconds

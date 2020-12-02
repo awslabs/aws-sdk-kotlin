@@ -18,6 +18,12 @@ public object AuthAttributes {
     public val SigningRegion: ClientOption<String> = ClientOption("AwsSigningRegion")
 
     /**
+     * The signature version 4 service signing name to use in the credential scope when signing requests.
+     * See: https://docs.aws.amazon.com/general/latest/gr/sigv4_elements.html
+     */
+    public val SigningService: ClientOption<String> = ClientOption("AwsSigningService")
+
+    /**
      * Mark a request payload as unsigned
      * See: https://awslabs.github.io/smithy/1.0/spec/aws/aws-auth.html#aws-auth-unsignedpayload-trait
      */

@@ -6,7 +6,6 @@
 package software.aws.kotlinsdk.auth
 
 import software.aws.clientrt.client.ExecutionContext
-import software.aws.clientrt.client.SdkClientOption
 import software.aws.clientrt.http.HttpMethod
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
@@ -41,7 +40,7 @@ class AwsSigv4SignerTest {
         val ctx = ExecutionContext().apply {
             set(AuthAttributes.SigningRegion, "us-east-1")
             set(AuthAttributes.SigningDate, Instant.fromIso8601("2020-10-16T19:56:00Z"))
-            set(SdkClientOption.ServiceName, "demo")
+            set(AuthAttributes.SigningService, "demo")
         }
 
         return Pair(builder, ctx)
@@ -54,6 +53,7 @@ class AwsSigv4SignerTest {
         val client = sdkHttpClient(mockEngine) {
             install(AwsSigv4Signer) {
                 credentialsProvider = TestCredentialsProvider
+                signingService = "demo"
             }
         }
         return client.requestPipeline.execute(HttpRequestContext(ctx), builder)
