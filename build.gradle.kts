@@ -40,3 +40,7 @@ tasks.register<JavaExec>("ktlintFormat") {
     main = "com.pinterest.ktlint.Main"
     args = listOf("-F") + lintPaths
 }
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}

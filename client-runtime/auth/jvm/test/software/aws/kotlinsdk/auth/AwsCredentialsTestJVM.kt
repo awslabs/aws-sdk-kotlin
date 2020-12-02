@@ -1,6 +1,6 @@
 package software.aws.kotlinsdk.auth
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertNotNull
 
 class AwsCredentialsTestJVM {
