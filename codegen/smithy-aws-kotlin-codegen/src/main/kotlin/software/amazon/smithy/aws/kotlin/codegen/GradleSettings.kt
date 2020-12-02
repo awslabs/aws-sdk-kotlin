@@ -13,6 +13,9 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 class GradleSettings : KotlinIntegration {
     override val customBuildSettings: GradleBuildSettings?
         get() = GradleBuildSettings().apply {
-            experimentalAnnotations += "software.aws.clientrt.util.InternalAPI"
+            experimentalAnnotations += listOf(
+                "software.aws.clientrt.util.InternalAPI",
+                "software.aws.kotlinsdk.InternalSdkApi"
+            )
         }
 }
