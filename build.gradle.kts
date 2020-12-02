@@ -14,7 +14,7 @@ allprojects {
     }
 }
 
-val ktlint by configurations.creating
+val ktlint: Configuration by configurations.creating
 val ktlintVersion: String by project
 dependencies {
     ktlint("com.pinterest:ktlint:$ktlintVersion")
@@ -39,8 +39,4 @@ tasks.register<JavaExec>("ktlintFormat") {
     classpath = configurations.getByName("ktlint")
     main = "com.pinterest.ktlint.Main"
     args = listOf("-F") + lintPaths
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
