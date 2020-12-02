@@ -19,5 +19,5 @@ class AddProtocols : KotlinIntegration {
      */
     override val order: Byte = -10
 
-    override val protocolGenerators: List<ProtocolGenerator> = listOf(AwsRestJson1())
+    override val protocolGenerators: List<ProtocolGenerator> = listOf(AwsJson1_0())
 }

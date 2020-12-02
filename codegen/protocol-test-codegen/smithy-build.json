@@ -1,22 +1,24 @@
 {
   "version": "1.0",
   "projections": {
-    "aws-restjson": {
+    "json_rpc10": {
       "transforms": [
         {
           "name": "includeServices",
           "args": {
-            "services": ["aws.protocoltests.restjson#RestJson"]
+            "services": [
+              "aws.protocoltests.json10#JsonRpc10"
+            ]
           }
         }
       ],
       "plugins": {
         "kotlin-codegen": {
-          "service": "aws.protocoltests.restjson#RestJson",
-          "module": "software.aws.kotlinsdk.protocoltest.awsrestjson",
+          "service": "aws.protocoltests.json10#JsonRpc10",
+          "module": "json_rpc10",
           "moduleVersion": "1.0",
-          "build":  {
-              "rootProject": true
+          "build": {
+            "rootProject": true
           }
         }
       }
