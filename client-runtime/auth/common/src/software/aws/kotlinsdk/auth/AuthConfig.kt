@@ -9,5 +9,5 @@ public interface AuthConfig {
      * Specifies zero or more credential providers that will be called to resolve credentials before making
      * AWS service calls.  If not provided a default credential provider chain is used.
      */
-    public val credentialProvider: CredentialsProvider?
+    public val credentialsProvider: CredentialsProvider?
 }

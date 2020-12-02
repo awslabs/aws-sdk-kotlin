@@ -54,7 +54,7 @@ class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient
             }
 
             install(AwsSigv4Signer) {
-                credentialsProvider = config.credentialProvider ?: DefaultChainCredentialsProvider()
+                credentialsProvider = config.credentialsProvider ?: DefaultChainCredentialsProvider()
             }
         }
     }

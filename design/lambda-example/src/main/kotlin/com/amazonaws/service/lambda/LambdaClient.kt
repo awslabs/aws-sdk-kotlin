@@ -44,7 +44,7 @@ interface LambdaClient: SdkClient {
     class Config private constructor(builder: BuilderImpl): AuthConfig, RegionConfig, HttpClientConfig, IdempotencyTokenConfig {
         override val region: String? = builder.region
         override val signingRegion: String? = builder.signingRegion
-        override val credentialProvider: CredentialsProvider? = builder.credentialProvider
+        override val credentialsProvider: CredentialsProvider? = builder.credentialsProvider
         override val httpClientEngine: HttpClientEngine? = builder.httpClientEngine
         override val httpClientEngineConfig: HttpClientEngineConfig? = builder.httpClientEngineConfig
         override val idempotencyTokenProvider: IdempotencyTokenProvider? = builder.idempotencyTokenProvider
@@ -84,7 +84,7 @@ interface LambdaClient: SdkClient {
              * The [CredentialsProvider] the client should use to sign requests with. If not specified a default
              * provider will be used.
              */
-            var credentialProvider: CredentialsProvider?
+            var credentialsProvider: CredentialsProvider?
 
             /**
              * Override the HTTP client engine used to make requests with. This is a more advanced option that allows
@@ -107,7 +107,7 @@ interface LambdaClient: SdkClient {
             // TODO - we could inherit from ClientOptionsBuilder and delegate some of these into a default PropertyBag
             override var region: String? = null
             override var signingRegion: String? = null
-            override var credentialProvider: CredentialsProvider? = null
+            override var credentialsProvider: CredentialsProvider? = null
             override var httpClientEngine: HttpClientEngine? = null
             override var httpClientEngineConfig: HttpClientEngineConfig? = null
             override var idempotencyTokenProvider: IdempotencyTokenProvider? = null
@@ -115,7 +115,7 @@ interface LambdaClient: SdkClient {
             constructor(x: Config) : this() {
                 this.region = x.region
                 this.signingRegion = x.signingRegion
-                this.credentialProvider = x.credentialProvider
+                this.credentialsProvider = x.credentialsProvider
                 this.httpClientEngine = x.httpClientEngine
                 this.httpClientEngineConfig = x.httpClientEngineConfig
                 this.idempotencyTokenProvider = x.idempotencyTokenProvider
