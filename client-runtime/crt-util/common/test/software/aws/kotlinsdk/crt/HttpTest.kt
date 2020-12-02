@@ -73,4 +73,30 @@ class HttpTest {
         assertTrue(builder.url.parameters.contains("foo", "bar"))
         assertTrue(builder.url.parameters.contains("baz", "quux"))
     }
+
+    @Test
+    fun testRequestBuilderUpdateNoQuery() {
+        val builder = HttpRequestBuilder().apply {
+            method = HttpMethod.POST
+            url {
+                scheme = Protocol.HTTPS
+                host = "test.com"
+                path = "/foo"
+            }
+        }
+
+        // build a slightly modified crt request (e.g. after signing new headers or query params will be present)
+        val crtHeaders = HeadersCrt.build { append("k1", "v1") }
+        val crtRequest = HttpRequestCrt("POST", "/foo", crtHeaders, null)
+
+        builder.update(crtRequest)
+
+        // crt request doesn't have all the same elements (e.g. host/scheme) since some of them live off
+        // HttpConnectionManager for instance
+        // ensure we don't overwrite the originals
+        assertEquals("test.com", builder.url.host)
+        assertEquals(Protocol.HTTPS, builder.url.scheme)
+
+        assertEquals("/foo", builder.url.path)
+    }
 }

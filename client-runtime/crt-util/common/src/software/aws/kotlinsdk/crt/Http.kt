@@ -88,5 +88,5 @@ public fun HttpRequestCrt.queryParameters(): QueryParameters? {
 @InternalSdkApi
 public fun HttpRequestCrt.path(): String {
     val idx = encodedPath.indexOf("?")
-    return if (idx > 0) encodedPath.substring(0, idx) else ""
+    return if (idx > 0) encodedPath.substring(0, idx) else encodedPath
 }
