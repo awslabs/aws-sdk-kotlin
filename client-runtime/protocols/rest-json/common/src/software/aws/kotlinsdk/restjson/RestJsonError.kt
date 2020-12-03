@@ -6,12 +6,13 @@ package software.aws.kotlinsdk.restjson
 
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.feature.HttpDeserialize
+import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.HttpResponsePipeline
 import software.aws.clientrt.serde.json.JsonSerdeProvider
 import software.aws.clientrt.util.InternalAPI
 import software.aws.kotlinsdk.AwsServiceException
 import software.aws.kotlinsdk.ClientException
-import software.aws.kotlinsdk.UnknownServiceException
+import software.aws.kotlinsdk.UnknownServiceErrorException
 import software.aws.kotlinsdk.http.*
 
 /**
@@ -50,24 +51,26 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
             if (status.matches(expectedStatus)) return@intercept
 
             val payload = context.response.body.readAll()
+            val wrappedResponse = context.response.withPayload(payload)
 
             // attempt to match the AWS error code
-            val error = RestJsonErrorDeserializer.deserialize(context.response, payload)
+            val error: RestJsonErrorDetails
+
+            try {
+                error = RestJsonErrorDeserializer.deserialize(context.response, payload)
+            } catch (ex: Exception) {
+                throw UnknownServiceErrorException("failed to parse response as restJson protocol error", ex).also {
+                    setAseFields(it, wrappedResponse, null)
+                }
+            }
 
             val provider = JsonSerdeProvider()
 
             // we already consumed the response body, wrap it to allow the modeled exception to deserialize
             // any members that may be bound to the document
-            val wrappedResponse = context.response.withPayload(payload)
             val deserializer = registry[error.code]?.deserializer
-            val modeledException = deserializer?.deserialize(wrappedResponse, provider::deserializer) ?: UnknownServiceException()
-            if (modeledException is AwsServiceException) {
-                // set ase specific details
-                modeledException.requestId = wrappedResponse.headers[X_AMZN_REQUEST_ID_HEADER] ?: ""
-                modeledException.errorCode = error.code ?: ""
-                modeledException.errorMessage = error.message ?: ""
-                modeledException.protocolResponse = wrappedResponse
-            }
+            val modeledException = deserializer?.deserialize(wrappedResponse, provider::deserializer) ?: UnknownServiceErrorException()
+            setAseFields(modeledException, wrappedResponse, error)
 
             // this should never happen...
             val ex = modeledException as? Throwable ?: throw ClientException("registered deserializer for modeled error did not produce an instance of Throwable")
@@ -79,3 +82,15 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
 // Provides the policy of what constitutes a status code match in service response
 internal fun HttpStatusCode.matches(expected: HttpStatusCode?): Boolean =
     expected == this || (expected == null && this.isSuccess()) || expected?.category() == this.category()
+
+/**
+ * pull the ase specific details from the response / error
+ */
+private fun setAseFields(exception: Any, response: HttpResponse, error: RestJsonErrorDetails?) {
+    if (exception is AwsServiceException) {
+        exception.requestId = response.headers[X_AMZN_REQUEST_ID_HEADER] ?: ""
+        exception.errorCode = error?.code ?: ""
+        exception.errorMessage = error?.message ?: ""
+        exception.protocolResponse = response
+    }
+}

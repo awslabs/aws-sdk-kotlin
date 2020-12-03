@@ -17,7 +17,7 @@ import software.aws.clientrt.http.response.TypeInfo
 import software.aws.clientrt.http.response.header
 import software.aws.clientrt.serde.*
 import software.aws.kotlinsdk.AwsServiceException
-import software.aws.kotlinsdk.UnknownServiceException
+import software.aws.kotlinsdk.UnknownServiceErrorException
 import software.aws.kotlinsdk.http.X_AMZN_REQUEST_ID_HEADER
 import software.aws.kotlinsdk.testing.runSuspendTest
 import kotlin.test.*
@@ -145,7 +145,7 @@ class RestJsonErrorTest {
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
         val context = HttpResponseContext(httpResp, TypeInfo(Int::class), ExecutionContext())
 
-        val ex = assertFailsWith(UnknownServiceException::class) {
+        val ex = assertFailsWith(UnknownServiceErrorException::class) {
             client.responsePipeline.execute(context, httpResp.body)
         }
 
@@ -165,5 +165,43 @@ class RestJsonErrorTest {
         // negative cases
         assertFalse(HttpStatusCode.OK.matches(HttpStatusCode.BadGateway))
         assertFalse(HttpStatusCode.BadRequest.matches(null)) // Expected is null, actual is error
+    }
+
+    @Test
+    fun `it handles non-json payloads`() = runSuspendTest {
+        // the service itself may talk rest-json but errors (like signature mismatch) may return unknown payloads
+        val mockEngine = object : HttpClientEngine {
+            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { throw NotImplementedError() }
+        }
+        val client = sdkHttpClient(mockEngine) {
+            install(RestJsonError) {
+                register("FooError", FooErrorDeserializer(), 502)
+            }
+        }
+
+        val req = HttpRequestBuilder().build()
+        val headers = Headers {
+            append("X-Test-Header", "12")
+            append(X_AMZN_REQUEST_ID_HEADER, "guid")
+            append(X_AMZN_ERROR_TYPE_HEADER_NAME, "BarError")
+        }
+        val payload = """
+           <AccessDeniedException>
+                <Message>Could not determine service to authorize</Message>
+           </AccessDeniedException>
+        """.trimIndent()
+
+        val body = ByteArrayContent(payload.encodeToByteArray())
+        val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
+        val context = HttpResponseContext(httpResp, TypeInfo(Int::class), ExecutionContext())
+
+        val ex = assertFailsWith(UnknownServiceErrorException::class) {
+            client.responsePipeline.execute(context, httpResp.body)
+        }
+
+        // verify it pulls out the error details/meta
+        assertEquals(ex.errorCode, "")
+        assertEquals(ex.requestId, "guid")
+        assertEquals(ex.message, "failed to parse response as restJson protocol error")
     }
 }
