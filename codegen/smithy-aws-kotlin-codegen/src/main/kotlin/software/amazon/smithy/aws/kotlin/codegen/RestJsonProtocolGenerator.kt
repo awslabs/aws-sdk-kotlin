@@ -28,9 +28,9 @@ abstract class RestJsonProtocolGenerator : AwsHttpBindingProtocolGenerator() {
             "InlineDocumentAsPayloadInputOutput"
         )
 
-        val requestTestBuilder = HttpProtocolUnitTestRequestGenerator.Builder()
-        val responseTestBuilder = HttpProtocolUnitTestResponseGenerator.Builder()
-        val errorTestBuilder = HttpProtocolUnitTestErrorGenerator.Builder()
+        val requestTestBuilder = AwsHttpProtocolUnitTestRequestGenerator.Builder()
+        val responseTestBuilder = AwsHttpProtocolUnitTestResponseGenerator.Builder()
+        val errorTestBuilder = AwsHttpProtocolUnitTestErrorGenerator.Builder()
         HttpProtocolTestGenerator(
             ctx,
             requestTestBuilder,
