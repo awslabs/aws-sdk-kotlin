@@ -14,7 +14,7 @@ allprojects {
     }
 }
 
-val ktlint by configurations.creating
+val ktlint: Configuration by configurations.creating
 val ktlintVersion: String by project
 dependencies {
     ktlint("com.pinterest:ktlint:$ktlintVersion")

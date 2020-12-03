@@ -16,7 +16,7 @@ kotlin {
 
         jvmTest.dependencies {
             api group: 'org.jetbrains.kotlin', name: 'kotlin-test', version: kotlinVersion
-            api group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit', version: kotlinVersion
+            api group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit5', version: kotlinVersion
 
             implementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: junitVersion
             implementation "org.jetbrains.kotlinx:kotlinx-coroutines-debug:$coroutinesVersion"
@@ -30,4 +30,6 @@ jvmTest {
         events("passed", "skipped", "failed")
         showStandardStreams = true
     }
+
+    useJUnitPlatform()
 }
