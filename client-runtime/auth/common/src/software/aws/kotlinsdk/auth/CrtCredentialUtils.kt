@@ -13,9 +13,7 @@ import software.amazon.awssdk.kotlin.crt.auth.credentials.CredentialsProvider as
  */
 internal class CrtCredentialsProvider(private val provider: CredentialsProvider) : CredentialsProviderCrt {
     override suspend fun getCredentials(): CredentialsCrt {
-        return provider.getCredentials().let {
-            CredentialsCrt(it.accessKeyId, it.secretAccessKey, it.sessionToken)
-        }
+        return provider.getCredentials().toCrt()
     }
 
     override fun close() {}

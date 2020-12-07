@@ -13,10 +13,10 @@ class StaticCredentialsProviderTest {
     @Test
     fun testStaticProvider() = runSuspendTest {
         val expected = Credentials("access_key_id", "secret_access_key", "session_token")
-        val provider = StaticCredentialsProvider.fromCredentials(expected)
+        val provider = StaticCredentialsProvider(expected)
         assertEquals(expected, provider.getCredentials())
 
-        val provider2 = StaticCredentialsProvider.build {
+        val provider2 = StaticCredentialsProvider {
             accessKeyId = expected.accessKeyId
             secretAccessKey = expected.secretAccessKey
             sessionToken = expected.sessionToken
