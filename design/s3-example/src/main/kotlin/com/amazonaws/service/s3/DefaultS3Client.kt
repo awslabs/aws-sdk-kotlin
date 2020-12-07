@@ -51,7 +51,7 @@ class DefaultS3Client(config: S3Client.Config): S3Client {
     }
 
     override suspend fun <T> getObject(input: GetObjectRequest, block: suspend (GetObjectResponse) -> T): T {
-        val execCtx = SdkOperation.build {
+        val execCtx = SdkHttpOperation.build {
             serializer = GetObjectRequestSerializer(input)
             deserializer = GetObjectResponseDeserializer()
             service = serviceName
@@ -61,7 +61,7 @@ class DefaultS3Client(config: S3Client.Config): S3Client {
     }
 
     override suspend fun getBucketTagging(input: GetBucketTaggingRequest): GetBucketTaggingResponse {
-        val execCtx = SdkOperation.build {
+        val execCtx = SdkHttpOperation.build {
             serializer = GetBucketTaggingRequestSerializer(input)
             deserializer = GetBucketTaggingResponseDeserializer()
             service = serviceName
@@ -71,7 +71,7 @@ class DefaultS3Client(config: S3Client.Config): S3Client {
     }
 
     override suspend fun putObject(input: PutObjectRequest): PutObjectResponse {
-        val execCtx = SdkOperation.build {
+        val execCtx = SdkHttpOperation.build {
             serializer = PutObjectRequestSerializer(input)
             deserializer = PutObjectResponseDeserializer()
             service = serviceName

@@ -69,7 +69,7 @@ class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient
      * @throws ServiceException
      */
     override suspend fun invoke(input: InvokeRequest): InvokeResponse {
-        val execCtx = SdkOperation.build {
+        val execCtx = SdkHttpOperation.build {
             serializer = InvokeRequestSerializer(input)
             deserializer = InvokeResponseDeserializer()
             service = serviceName
@@ -85,7 +85,7 @@ class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient
      * @throws ServiceException
      */
     override suspend fun createAlias(input: CreateAliasRequest): AliasConfiguration {
-        val execCtx = SdkOperation.build {
+        val execCtx = SdkHttpOperation.build {
             serializer = CreateAliasRequestSerializer(input)
             deserializer = AliasConfigurationDeserializer()
             service = serviceName
