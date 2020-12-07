@@ -46,7 +46,7 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
     override fun install(client: SdkHttpClient) {
         // intercept at first chance we get
         client.responsePipeline.intercept(HttpResponsePipeline.Receive) {
-            val expectedStatus = context.executionContext.getOrNull(SdkOperation.ExpectedHttpStatus)?.let { HttpStatusCode.fromValue(it) }
+            val expectedStatus = context.executionContext.getOrNull(SdkHttpOperation.ExpectedHttpStatus)?.let { HttpStatusCode.fromValue(it) }
             val status = context.response.status
             if (status.matches(expectedStatus)) return@intercept
 
