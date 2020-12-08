@@ -18,8 +18,8 @@ abstract class RestJsonProtocolGenerator : AwsHttpBindingProtocolGenerator() {
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
-        val ignoredTests = setOf(
-            "RestJsonSerializesNullMapValues", // TODO - sparse maps not supported - this test needs removed
+        val ignoredTests = TestMemberDelta(
+            setOf(
             // FIXME - document type not fully supported yet
             "InlineDocumentInput",
             "InlineDocumentAsPayloadInput",
@@ -27,11 +27,17 @@ abstract class RestJsonProtocolGenerator : AwsHttpBindingProtocolGenerator() {
             "InlineDocumentAsPayloadInputOutput",
             // TODO - New sparse tests in Smith 1.4
             "RestJsonDeserializesNullMapValues"
+            ),
+            true
         )
+
+        // The following can be used to generate a specific test by name.
+        //val targetedTest = MemberDeltaSpecification(setOf("RestJsonSerializesNullMapValues"), false)
 
         val requestTestBuilder = AwsHttpProtocolUnitTestRequestGenerator.Builder()
         val responseTestBuilder = AwsHttpProtocolUnitTestResponseGenerator.Builder()
         val errorTestBuilder = AwsHttpProtocolUnitTestErrorGenerator.Builder()
+
         HttpProtocolTestGenerator(
             ctx,
             requestTestBuilder,
