@@ -25,8 +25,7 @@ abstract class RestJsonProtocolGenerator : AwsHttpBindingProtocolGenerator() {
                 "InlineDocumentAsPayloadInput",
                 "InlineDocumentOutput",
                 "InlineDocumentAsPayloadInputOutput"
-            ),
-            true
+            )
         )
 
         // The following can be used to generate only a specific test by name.
