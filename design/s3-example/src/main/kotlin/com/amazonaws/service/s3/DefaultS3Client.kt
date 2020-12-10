@@ -57,7 +57,7 @@ class DefaultS3Client(config: S3Client.Config): S3Client {
             service = serviceName
             operationName = "GetObject"
         }
-        return client.execute(execCtx, block)
+        return client.execute(execCtx, null, block)
     }
 
     override suspend fun getBucketTagging(input: GetBucketTaggingRequest): GetBucketTaggingResponse {
