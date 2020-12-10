@@ -7,4 +7,32 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 
-// TODO - fill in publishing details including license, etc
+publishing {
+    repositories {
+        maven { name = "testLocal"; url = "$rootProject.buildDir/m2" }
+    }
+
+    publications.all {
+        pom {
+            url = "https://github.com/awslabs/aws-sdk-kotlin"
+            licenses {
+                license {
+                    name = "The Apache License, Version 2.0"
+                    url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                }
+            }
+            developers {
+                developer {
+                    id = "aws-sdk-kotlin"
+                    name = "AWS SDK Kotlin Team"
+                    // TODO - team email?
+                }
+            }
+            scm {
+                connection = "scm:git:git://github.com/awslabs/aws-sdk-kotlin.git"
+                developerConnection = "scm:git:ssh://github.com/awslabs/aws-sdk-kotlin.git"
+                url = "https://github.com/awslabs/aws-sdk-kotlin"
+            }
+        }
+    }
+}
