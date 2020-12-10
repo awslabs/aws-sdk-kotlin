@@ -1,0 +1,113 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
+allprojects {
+    apply plugin: "jacoco"
+
+    jacoco {
+        toolVersion = "$jacocoVersion"
+        reportsDir = file("${buildDir}/jacoco-reports")
+    }
+}
+
+def excludedProjects = [
+    "protocol-test-codegen",
+    "sdk-codegen",
+    "lambda-example",
+    "s3-example"
+]
+
+subprojects {
+    // create a coverage task for each subproject.
+    // do this regardless of whether it generates coverage so that the root task can depend on it
+    task testCoverage(type: JacocoReport) {
+        group = "Reporting"
+        description = "Generate Jacoco coverage reports."
+
+        def coverageSourceDirs = [
+                "common/src",
+                "jvm/src",
+                "src/main/kotlin"
+        ]
+
+        // do not add excluded projects coverage info
+        if (!excludedProjects.contains(project.name)) {
+            classDirectories.from files(fileTree(dir: "${buildDir}/classes/kotlin/jvm/main"), fileTree(dir: "${buildDir}/classes/kotlin/main"))
+            sourceDirectories.from files(coverageSourceDirs)
+            additionalSourceDirs.from files(coverageSourceDirs)
+        }
+
+        // Add corresponding test.exec file according to platforms in the project
+        def execFiles = ["test.exec", "jvmTest.exec"]
+        def execData = execFiles.collect{ "${buildDir}/jacoco/$it" }.find {file(it).exists() }
+
+        if (execData != null) {
+            executionData.from files(execData)
+        }
+
+        reports {
+            xml.enabled true
+            csv.enabled false
+            html.enabled true
+
+            html.destination file("${buildDir}/jacoco-reports/html")
+        }
+    }
+
+    // wire up coverage task to depend on the relevant test task.
+    // ...this build file is applied at root build script, test tasks aren't configured until subprojects are (fully) evaluated
+    afterEvaluate {
+        def testTask = null
+        if (tasks.findByName("jvmTest")) {
+            // KMP subproject
+            testTask = tasks.jvmTest
+        }else if(tasks.findByName("test")){
+            // normal JVM project
+            testTask = tasks.test
+        }
+
+        if (testTask != null) {
+            tasks.testCoverage.dependsOn(testTask)
+        }
+    }
+}
+
+// create the root coverage task which combines coverage information from subproject results
+task testCoverage(type: JacocoReport) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports."
+    dependsOn subprojects.testCoverage
+
+    def classes = files(subprojects.collect {
+        files(
+            fileTree(dir: "${it.buildDir}/classes/kotlin/jvm/main").filter({file -> !file.absolutePath.contains('design')}),
+            fileTree(dir: "${it.buildDir}/classes/kotlin/main").filter({file -> !file.absolutePath.contains('design')})
+        )
+    })
+
+    def samples = files(subprojects.testCoverage.executionData).findAll { it.exists() }
+
+    def coverageSourceDirs = [
+            "common/src",
+            "jvm/src",
+            "src/main/kotlin"
+    ]
+
+    def coverageSources = subprojects.findResults {
+        it.files(coverageSourceDirs)
+    }
+
+    classDirectories.from files(classes)
+    executionData.from(samples)
+    sourceDirectories.from files(coverageSources)
+    additionalSourceDirs.from files(coverageSources)
+
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+        html.destination file("${buildDir}/jacoco-reports/html")
+    }
+}

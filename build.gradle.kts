@@ -40,3 +40,6 @@ tasks.register<JavaExec>("ktlintFormat") {
     main = "com.pinterest.ktlint.Main"
     args = listOf("-F") + lintPaths
 }
+
+// configure coverage for the entire project
+apply(from = rootProject.file("gradle/codecoverage.gradle"))
