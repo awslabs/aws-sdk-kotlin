@@ -25,11 +25,12 @@ abstract class RestJsonProtocolGenerator : AwsHttpBindingProtocolGenerator() {
                 "InlineDocumentAsPayloadInput",
                 "InlineDocumentOutput",
                 "InlineDocumentAsPayloadInputOutput"
-            )
+            ),
+            TestContainmentMode.EXCLUDE_TESTS
         )
 
         // The following can be used to generate only a specific test by name.
-        // val targetedTest = TestMemberDelta(setOf("RestJsonComplexErrorWithNoMessage"), false)
+        // val targetedTest = TestMemberDelta(setOf("RestJsonComplexErrorWithNoMessage"), TestContainmentMode.RUN_TESTS)
 
         val requestTestBuilder = AwsHttpProtocolUnitTestRequestGenerator.Builder()
         val responseTestBuilder = AwsHttpProtocolUnitTestResponseGenerator.Builder()
