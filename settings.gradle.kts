@@ -59,6 +59,7 @@ val compositeProjectList = try {
     val filePaths = localProperties.getProperty("compositeProjects")
         ?.splitToSequence(",")  // Split comma delimited string into sequence
         ?.map { it.replaceFirst("^~".toRegex(), System.getProperty("user.home")) } // expand user dir
+        ?.filter { it.isNotBlank() }
         ?.map { file(it) } // Create file from path
         ?.toList()
         ?: emptyList()
