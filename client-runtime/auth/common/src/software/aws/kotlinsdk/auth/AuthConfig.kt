@@ -10,4 +10,9 @@ public interface AuthConfig {
      * AWS service calls.  If not provided a default credential provider chain is used.
      */
     public val credentialsProvider: CredentialsProvider?
+
+    /**
+     * AWS Region to be used for signing the request. This is not always same as `region` in case of global services.
+     */
+    public val signingRegion: String?
 }

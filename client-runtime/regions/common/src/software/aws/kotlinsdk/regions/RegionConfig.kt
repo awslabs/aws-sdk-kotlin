@@ -9,9 +9,4 @@ public interface RegionConfig {
      * services like IAM.
      */
     public val region: String?
-
-    /**
-     * AWS Region to be used for signing the request. This is not always same as [region] in case of global services.
-     */
-    public val signingRegion: String?
 }
