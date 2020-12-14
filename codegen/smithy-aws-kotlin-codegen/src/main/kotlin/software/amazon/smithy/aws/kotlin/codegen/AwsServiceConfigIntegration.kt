@@ -1,66 +1,64 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
 package software.amazon.smithy.aws.kotlin.codegen
 
-import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.Shape
-import software.amazon.smithy.model.shapes.ShapeType
 
 class AwsServiceConfigIntegration : KotlinIntegration {
+    companion object {
+        // RegionConfig properties
+        val RegionProp: ClientConfigProperty
 
-    override fun onShapeWriterUse(
-        settings: KotlinSettings,
-        model: Model,
-        symbolProvider: SymbolProvider,
-        writer: KotlinWriter,
-        definedShape: Shape
-    ) {
-        if (definedShape.type == ShapeType.SERVICE) {
-            writer.addImport("AuthConfig", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
-            writer.addImport("CredentialsProvider", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
-            writer.addImport("RegionConfig", AwsKotlinDependency.AWS_CLIENT_RT_REGIONS)
+        // AuthConfig properties
+        val CredentialsProviderProp: ClientConfigProperty
+        val SigningRegionProp: ClientConfigProperty
 
-            writer.onSection(SECTION_SERVICE_CONFIG_PARENT_TYPE) { text -> writer.appendWithDelimiter(text, "AuthConfig") }
-            writer.onSection(SECTION_SERVICE_CONFIG_PARENT_TYPE) { text -> writer.appendWithDelimiter(text, "RegionConfig") }
-
-            writer.appendToSection(SECTION_SERVICE_CONFIG_PROPERTIES) {
-                write("override val credentialsProvider: CredentialsProvider? = builder.credentialsProvider")
-                write("override val region: String? = builder.region")
-                write("override val signingRegion: String? = builder.signingRegion")
+        init {
+            val regionConfigSymbol = buildSymbol {
+                name = "RegionConfig"
+                namespace(AwsKotlinDependency.AWS_CLIENT_RT_REGIONS)
             }
 
-            writer.appendToSection(SECTION_SERVICE_CONFIG_BUILDER_BODY) {
-                write("fun credentialsProvider(credentialsProvider: CredentialsProvider): Builder")
-                write("fun region(region: String): Builder")
-                write("fun signingRegion(signingRegion: String): Builder")
+            RegionProp = ClientConfigProperty.String(
+                "region",
+                documentation = """
+                    AWS region to make requests to
+                """.trimIndent(),
+                baseClass = regionConfigSymbol
+            )
+
+            val authConfigSymbol = buildSymbol {
+                name = "AuthConfig"
+                namespace(AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
             }
 
-            writer.appendToSection(SECTION_SERVICE_CONFIG_DSL_BUILDER_BODY) {
-                write("var credentialsProvider: CredentialsProvider?")
-                write("var region: String?")
-                write("var signingRegion: String?")
-            }
+            SigningRegionProp = ClientConfigProperty.String(
+                "signingRegion",
+                documentation = """
+                    AWS region to be used for signing the request. This is not necessarily the same as `region`
+                    in the case of global services like IAM
+                """.trimIndent(),
+                baseClass = authConfigSymbol
+            )
 
-            writer.appendToSection(SECTION_SERVICE_CONFIG_BUILDER_IMPL_PROPERTIES) {
-                write("override var credentialsProvider: CredentialsProvider? = null")
-                write("override var region: String? = null")
-                write("override var signingRegion: String? = null")
-            }
-
-            writer.appendToSection(SECTION_SERVICE_CONFIG_BUILDER_IMPL_CONSTRUCTOR) {
-                write("this.credentialsProvider = config.credentialsProvider")
-                write("this.region = config.region")
-                write("this.signingRegion = config.signingRegion")
-            }
-
-            writer.appendToSection(SECTION_SERVICE_CONFIG_BUILDER_IMPL_BODY) {
-                write("override fun credentialsProvider(credentialsProvider: CredentialsProvider): Builder = apply { this.credentialsProvider = credentialsProvider }")
-                write("override fun region(region: String): Builder = apply { this.region = region }")
-                write("override fun signingRegion(signingRegion: String): Builder = apply { this.signingRegion = signingRegion }")
+            CredentialsProviderProp = ClientConfigProperty {
+                symbol = buildSymbol {
+                    name = "CredentialsProvider"
+                    namespace(AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+                }
+                baseClass = authConfigSymbol
+                documentation = """
+                    The AWS credentials provider to use for authenticating requests. If not provided a
+                    [DefaultChainCredentialsProvider] instance will be used.
+                """.trimIndent()
             }
         }
+    }
 
-        super.onShapeWriterUse(settings, model, symbolProvider, writer, definedShape)
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> {
+        return listOf(RegionProp, SigningRegionProp, CredentialsProviderProp)
     }
 }
