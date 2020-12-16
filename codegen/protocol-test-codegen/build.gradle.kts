@@ -5,14 +5,14 @@
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 
 plugins {
-    id("software.amazon.smithy") version "0.5.0"
+    id("software.amazon.smithy") version "0.5.2"
 }
 
 val smithyVersion: String by project
 
 dependencies {
     implementation("software.amazon.smithy:smithy-aws-protocol-tests:$smithyVersion")
-    compile(project(":smithy-aws-kotlin-codegen"))
+    implementation(project(":smithy-aws-kotlin-codegen"))
 }
 
 // This project doesn't produce a JAR.
@@ -32,3 +32,58 @@ tasks["build"].finalizedBy(tasks["buildSdk"])
 // force rebuild every time while developing
 tasks["buildSdk"].outputs.upToDateWhen { false }
 
+
+open class ProtocolTestTask : DefaultTask() {
+    /**
+     * The protocol name
+     */
+    @get:Input
+    var protocol: String = ""
+
+    /**
+     * The plugin name to use
+     */
+    @get:Input
+    var plugin: String = ""
+
+    @TaskAction
+    fun runTests(){
+        require(protocol.isNotEmpty()) { "protocol name must be specified" }
+        require(plugin.isNotEmpty()) { "plugin name must be specified" }
+
+        val generatedBuildDir = project.file("${project.buildDir}/smithyprojections/${project.name}/$protocol/$plugin")
+        println("[$protocol] buildDir: $generatedBuildDir")
+        if (!generatedBuildDir.exists()) {
+            throw GradleException("$generatedBuildDir does not exist")
+        }
+        val gradlew = project.rootProject.file("gradlew").absolutePath
+
+        // FIXME - this still requires us to publish to maven local.
+        // We might be able to do something clever with an init script by overriding dependencies or something
+        // and passing as a cli arg to gradle invocation
+        // https://docs.gradle.org/current/userguide/init_scripts.html
+        project.exec {
+            workingDir = generatedBuildDir
+            executable = gradlew
+            args = listOf("test")
+        }
+    }
+}
+
+val enabledProtocols = listOf("aws-restjson")
+
+enabledProtocols.forEach {
+    tasks.register<ProtocolTestTask>("testProtocol-${it}") {
+        dependsOn(tasks.build)
+        group = "Verification"
+        protocol = it
+        plugin = "kotlin-codegen"
+    }
+}
+
+
+tasks.register("allProtocolTests") {
+    group = "Verification"
+    val allTests = tasks.withType<ProtocolTestTask>()
+    dependsOn(allTests)
+}
