@@ -4,25 +4,26 @@
  */
 package software.amazon.smithy.aws.kotlin.codegen
 
+import software.amazon.smithy.aws.traits.protocols.AwsJson1_0Trait
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
+import software.amazon.smithy.codegen.core.Symbol
+import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingDescriptor
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
+import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
 import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.knowledge.TopDownIndex
 import software.amazon.smithy.model.pattern.UriPattern
-import software.amazon.smithy.model.shapes.OperationShape
-import software.amazon.smithy.model.shapes.ShapeId
-import software.amazon.smithy.model.shapes.StructureShape
-import software.amazon.smithy.model.shapes.ToShapeId
+import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.HttpTrait
 import software.amazon.smithy.model.traits.TimestampFormatTrait
 
 /**
- * Handles generating the aws.protocols#restJson1 protocol for services.
+ * Handles generating the aws.protocols#awsJson1_0 protocol for services.
  *
  * @inheritDoc
- * @see RestJsonProtocolGenerator
+ * @see AwsHttpBindingProtocolGenerator
  */
 class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
     // TODO consider decomposition of GC
@@ -68,7 +69,7 @@ class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
             }
         }
 
-        override fun determineRequestContentType(operationShape: OperationShape): String = "application/json"
+        override fun determineRequestContentType(operationShape: OperationShape): String = "application/x-amz-json-1.0"
 
         // TODO consider passing function to return timestamp format
         override fun determineTimestampFormat(
@@ -78,8 +79,48 @@ class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
         ): TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
     }
 
+    class AwsJsonModeledExceptionsFeature(
+        generationContext: ProtocolGenerator.GenerationContext,
+        httpBindingResolver: HttpBindingResolver
+    ) : ModeledExceptionsFeature(generationContext, httpBindingResolver) {
+        override val name: String = this::class.java.simpleName
+
+        override fun renderConfigure(writer: KotlinWriter) {
+            val errors = getModeledErrors()
+
+            errors.forEach { errShape ->
+                val code = errShape.id.name
+                val symbol = ctx.symbolProvider.toSymbol(errShape)
+                val deserializerName = "${symbol.name}Deserializer"
+
+                writer.write("register(code = \$S, deserializer = $deserializerName())", code)
+            }
+        }
+    }
+
+    override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
+        val parentFeatures = super.getHttpFeatures(ctx)
+        val awsJsonFeatures = listOf(AwsJsonTargetHeaderFeature(), AwsJsonModeledExceptionsFeature(ctx, getProtocolHttpBindingResolver(ctx)))
+
+        return parentFeatures + awsJsonFeatures
+    }
+
     override fun getProtocolHttpBindingResolver(generationContext: ProtocolGenerator.GenerationContext): HttpBindingResolver = AwsJsonHttpBindingResolver(generationContext)
 
-    override val protocol: ShapeId = RestJson1Trait.ID
+    override val protocol: ShapeId = AwsJson1_0Trait.ID
 
+}
+
+class AwsJsonTargetHeaderFeature : HttpFeature {
+    override val name: String = "AwsJsonTargetHeader"
+
+    override fun addImportsAndDependencies(writer: KotlinWriter) {
+        super.addImportsAndDependencies(writer)
+        val awsJsonTargetHeaderSymbol = Symbol.builder()
+            .name("AwsJsonTargetHeader")
+            .namespace(AwsKotlinDependency.REST_JSON_FEAT.namespace, ".")
+            .addDependency(AwsKotlinDependency.REST_JSON_FEAT)
+            .build()
+        writer.addImport(awsJsonTargetHeaderSymbol, "")
+    }
 }

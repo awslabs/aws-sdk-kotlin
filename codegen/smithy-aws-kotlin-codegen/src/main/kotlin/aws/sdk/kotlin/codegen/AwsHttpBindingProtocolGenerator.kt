@@ -31,16 +31,14 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val features = super.getHttpFeatures(ctx).toMutableList()
+
         features.add(DummyEndpointResolver())
         if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
             val signingName = AwsSignatureVersion4.signingServiceName(ctx.model, ctx.service)
             features.add(AwsSignatureVersion4(signingName))
         }
-        val jsonFeatures = listOf(
-            JsonSerdeFeature(ctx.service.hasIdempotentTokenMember(ctx.model)),
-            JsonErrorFeature(ctx)
-        )
-        features.addAll(jsonFeatures)
+        features.add(JsonSerdeFeature(ctx.service.hasIdempotentTokenMember(ctx.model)))
+
         return features
     }
 
@@ -84,20 +82,6 @@ class JsonSerdeFeature(generateIdempotencyTokenConfig: Boolean) : HttpSerde("Jso
             .addDependency(KotlinDependency.CLIENT_RT_SERDE_JSON)
             .build()
         writer.addImport(jsonSerdeSymbol, "")
-    }
-}
-
-class JsonErrorFeature(ctx: ProtocolGenerator.GenerationContext) : ModeledExceptionsFeature(ctx) {
-    override val name: String = "RestJsonError"
-
-    override fun addImportsAndDependencies(writer: KotlinWriter) {
-        super.addImportsAndDependencies(writer)
-        val restJsonSymbol = Symbol.builder()
-            .name("RestJsonError")
-            .namespace(AwsKotlinDependency.REST_JSON_FEAT.namespace, ".")
-            .addDependency(AwsKotlinDependency.REST_JSON_FEAT)
-            .build()
-        writer.addImport(restJsonSymbol, "")
     }
 }
 

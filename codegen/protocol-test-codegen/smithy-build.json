@@ -20,6 +20,26 @@
           }
         }
       }
+    },
+    "aws-json-10": {
+      "transforms": [
+        {
+          "name": "includeServices",
+          "args": {
+            "services": ["aws.protocoltests.json10#JsonRpc10"]
+          }
+        }
+      ],
+      "plugins": {
+        "kotlin-codegen": {
+          "service": "aws.protocoltests.json10#JsonRpc10",
+          "module": "software.aws.kotlinsdk.protocoltest.awsjson10",
+          "moduleVersion": "1.0",
+          "build":  {
+            "rootProject": true
+          }
+        }
+      }
     }
   }
 }
