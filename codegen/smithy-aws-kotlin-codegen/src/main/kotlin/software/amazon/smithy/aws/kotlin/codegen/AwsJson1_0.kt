@@ -83,7 +83,7 @@ class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
         generationContext: ProtocolGenerator.GenerationContext,
         httpBindingResolver: HttpBindingResolver
     ) : ModeledExceptionsFeature(generationContext, httpBindingResolver) {
-        override val name: String = this::class.java.simpleName
+        override val name: String = "RestJsonError"
 
         override fun renderConfigure(writer: KotlinWriter) {
             val errors = getModeledErrors()

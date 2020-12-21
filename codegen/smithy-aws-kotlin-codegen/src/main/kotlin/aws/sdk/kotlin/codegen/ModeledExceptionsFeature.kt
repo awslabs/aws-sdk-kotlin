@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.codegen
 
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
@@ -21,6 +22,16 @@ abstract class ModeledExceptionsFeature(
     protected val ctx: ProtocolGenerator.GenerationContext,
     protected val httpBindingResolver: HttpBindingResolver
     ) : HttpFeature {
+
+    override fun addImportsAndDependencies(writer: KotlinWriter) {
+        super.addImportsAndDependencies(writer)
+        val restJsonSymbol = Symbol.builder()
+            .name("RestJsonError")
+            .namespace(AwsKotlinDependency.REST_JSON_FEAT.namespace, ".")
+            .addDependency(AwsKotlinDependency.REST_JSON_FEAT)
+            .build()
+        writer.addImport(restJsonSymbol, "")
+    }
 
     protected fun getModeledErrors(): Set<Shape> {
         val operations = httpBindingResolver.resolveBindingOperations()

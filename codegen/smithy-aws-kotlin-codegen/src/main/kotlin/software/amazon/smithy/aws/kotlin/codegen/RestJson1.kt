@@ -25,23 +25,13 @@ typealias RestJsonHttpBindingResolver = DefaultHttpBindingResolver
  * Handles generating the aws.protocols#restJson1 protocol for services.
  *
  * @inheritDoc
- * @see RestJsonProtocolGenerator
+ * @see AwsHttpBindingProtocolGenerator
  */
 class RestJson1 : AwsHttpBindingProtocolGenerator() {
     class RestJsonErrorFeature(ctx: ProtocolGenerator.GenerationContext,
                                httpBindingResolver: HttpBindingResolver
     ) : ModeledExceptionsFeature(ctx, httpBindingResolver) {
         override val name: String = "RestJsonError"
-
-        override fun addImportsAndDependencies(writer: KotlinWriter) {
-            super.addImportsAndDependencies(writer)
-            val restJsonSymbol = Symbol.builder()
-                .name("RestJsonError")
-                .namespace(AwsKotlinDependency.REST_JSON_FEAT.namespace, ".")
-                .addDependency(AwsKotlinDependency.REST_JSON_FEAT)
-                .build()
-            writer.addImport(restJsonSymbol, "")
-        }
 
         override fun renderConfigure(writer: KotlinWriter) {
             val errors = getModeledErrors()
