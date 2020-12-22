@@ -2,8 +2,10 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package software.amazon.smithy.aws.kotlin.codegen
+package aws.sdk.kotlin.codegen.restjson
 
+import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
+import aws.sdk.kotlin.codegen.ModeledExceptionsFeature
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
@@ -28,25 +30,6 @@ typealias RestJsonHttpBindingResolver = DefaultHttpBindingResolver
  * @see AwsHttpBindingProtocolGenerator
  */
 class RestJson1 : AwsHttpBindingProtocolGenerator() {
-    class RestJsonErrorFeature(ctx: ProtocolGenerator.GenerationContext,
-                               httpBindingResolver: HttpBindingResolver
-    ) : ModeledExceptionsFeature(ctx, httpBindingResolver) {
-        override val name: String = "RestJsonError"
-
-        override fun renderConfigure(writer: KotlinWriter) {
-            val errors = getModeledErrors()
-
-            errors.forEach { errShape ->
-                val code = errShape.id.name
-                val symbol = ctx.symbolProvider.toSymbol(errShape)
-                val deserializerName = "${symbol.name}Deserializer"
-                val httpStatusCode: Int? = errShape.getTrait(HttpErrorTrait::class.java).map { it.code }.orElse(null)
-                if (httpStatusCode != null) {
-                    writer.write("register(code = \$S, deserializer = $deserializerName(), httpStatusCode = $httpStatusCode)", code)
-                }
-            }
-        }
-    }
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val features = super.getHttpFeatures(ctx)
