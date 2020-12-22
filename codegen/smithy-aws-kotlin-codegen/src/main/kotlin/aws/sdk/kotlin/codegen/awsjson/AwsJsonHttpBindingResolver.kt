@@ -49,9 +49,10 @@ class AwsJsonHttpBindingResolver(
      * Returns all inputs as Document bindings for awsJson protocol.
      */
     override fun resolveRequestBindings(operationShape: OperationShape): List<HttpBindingDescriptor> {
+        if (!operationShape.input.isPresent) return emptyList()
+
         val inputs = generationContext.model.expectShape(operationShape.input.get())
 
-        // TODO consider factory function from MemberShape
         return inputs.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT, "")  }.toList()
     }
 
@@ -61,6 +62,8 @@ class AwsJsonHttpBindingResolver(
     override fun resolveResponseBindings(shapeId: ShapeId): List<HttpBindingDescriptor> {
         return when (val shape = generationContext.model.expectShape(shapeId)) {
             is OperationShape -> {
+                if (!shape.output.isPresent) return emptyList()
+
                 val outputs = generationContext.model.expectShape(shape.output.get())
 
                 outputs.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT, "")  }.toList()
