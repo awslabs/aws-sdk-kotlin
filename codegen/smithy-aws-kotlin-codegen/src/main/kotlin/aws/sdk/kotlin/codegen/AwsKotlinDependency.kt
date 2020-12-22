@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package software.amazon.smithy.aws.kotlin.codegen
+package aws.sdk.kotlin.codegen
 
 import software.amazon.smithy.kotlin.codegen.GradleConfiguration
 import software.amazon.smithy.kotlin.codegen.KotlinDependency

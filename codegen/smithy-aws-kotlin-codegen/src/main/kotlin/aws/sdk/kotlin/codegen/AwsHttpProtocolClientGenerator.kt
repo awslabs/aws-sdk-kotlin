@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package software.amazon.smithy.aws.kotlin.codegen
+package aws.sdk.kotlin.codegen
 
 import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.kotlin.codegen.KotlinDependency
@@ -48,7 +48,10 @@ class AwsHttpProtocolClientGenerator(
         writer.addImport("SdkClientOption", KotlinDependency.CLIENT_RT_CORE, "${KotlinDependency.CLIENT_RT_CORE.namespace}.client")
         writer.addImport("resolveRegionForOperation", AwsKotlinDependency.AWS_CLIENT_RT_REGIONS)
         writer.addImport("AuthAttributes", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
-        writer.addImport("AwsClientOption", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "${AwsKotlinDependency.AWS_CLIENT_RT_CORE.namespace}.client")
+        writer.addImport(
+            "AwsClientOption",
+            AwsKotlinDependency.AWS_CLIENT_RT_CORE, "${AwsKotlinDependency.AWS_CLIENT_RT_CORE.namespace}.client"
+        )
         writer.addImport("putIfAbsent", KotlinDependency.CLIENT_RT_UTILS)
 
         writer.dokka("merge the defaults configured for the service into the execution context before firing off a request")
