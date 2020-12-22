@@ -21,7 +21,6 @@ class AwsRegionTest {
         // from context
         val config = object : RegionConfig {
             override val region: String? = "us-west-2"
-            override val signingRegion: String? = region
         }
 
         val actual = resolveRegionForOperation(ctx = ExecutionContext().apply { set(AwsClientOption.Region, "us-east-1") }, config)
