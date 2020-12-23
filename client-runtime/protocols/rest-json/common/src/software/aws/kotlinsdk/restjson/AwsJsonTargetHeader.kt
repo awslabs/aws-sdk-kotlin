@@ -30,10 +30,11 @@ public class AwsJsonTargetHeader() : Feature {
 
     override fun install(client: SdkHttpClient) {
         client.requestPipeline.intercept(HttpRequestPipeline.Initialize) {
+            val serviceName = this.context.executionContext[SdkClientOption.ServiceName]
             val operationName = this.context.executionContext[SdkClientOption.OperationName]
 
             //TODO - associate this operation a link to future awsJson1_0 spec.
-            this.subject.headers.append("X-Amz-Target", "JsonRpc10.$operationName")
+            this.subject.headers.append("X-Amz-Target", "$serviceName.$operationName")
 
             // TODO - in the case of awsJson requests without inputs, there is no serializer associated w/ the operation
             //  As-is the serializer is responsible for populating the Content-Type header.  This may change
