@@ -6,8 +6,9 @@ import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
 import software.amazon.smithy.model.traits.HttpErrorTrait
 
-class RestJsonErrorFeature(ctx: ProtocolGenerator.GenerationContext,
-                           httpBindingResolver: HttpBindingResolver
+class RestJsonErrorFeature(
+    ctx: ProtocolGenerator.GenerationContext,
+    httpBindingResolver: HttpBindingResolver
 ) : ModeledExceptionsFeature(ctx, httpBindingResolver) {
     override val name: String = "RestJsonError"
 

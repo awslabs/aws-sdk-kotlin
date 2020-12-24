@@ -33,7 +33,7 @@ public class AwsJsonTargetHeader() : Feature {
             val serviceName = this.context.executionContext[SdkClientOption.ServiceName]
             val operationName = this.context.executionContext[SdkClientOption.OperationName]
 
-            //TODO - associate this operation a link to future awsJson1_0 spec.
+            // TODO - associate this operation a link to future awsJson1_0 spec.
             this.subject.headers.append("X-Amz-Target", "$serviceName.$operationName")
 
             // TODO - in the case of awsJson requests without inputs, there is no serializer associated w/ the operation

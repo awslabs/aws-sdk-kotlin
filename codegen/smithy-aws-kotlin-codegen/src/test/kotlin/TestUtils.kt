@@ -1,7 +1,6 @@
 package aws.sdk.kotlin.codegen.awsjson
 
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
-import software.amazon.smithy.build.FileManifest
 import software.amazon.smithy.build.MockManifest
 import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.*

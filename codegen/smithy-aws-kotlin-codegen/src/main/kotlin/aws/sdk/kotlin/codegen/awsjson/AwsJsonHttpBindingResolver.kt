@@ -19,7 +19,7 @@ import software.amazon.smithy.model.traits.TimestampFormatTrait
 class AwsJsonHttpBindingResolver(
     private val generationContext: ProtocolGenerator.GenerationContext,
     private val topDownIndex: TopDownIndex = TopDownIndex.of(generationContext.model)
-): HttpBindingResolver {
+) : HttpBindingResolver {
 
     companion object {
         // A non-model source instance of HttpTrait w/ static properties used in awsJson protocols.
@@ -53,7 +53,7 @@ class AwsJsonHttpBindingResolver(
 
         val inputs = generationContext.model.expectShape(operationShape.input.get())
 
-        return inputs.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT, "")  }.toList()
+        return inputs.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT, "") }.toList()
     }
 
     /**
@@ -66,12 +66,12 @@ class AwsJsonHttpBindingResolver(
 
                 val outputs = generationContext.model.expectShape(shape.output.get())
 
-                outputs.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT, "")  }.toList()
+                outputs.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT, "") }.toList()
             }
             is StructureShape -> {
                 val outputs = shape.members()
 
-                outputs.map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT, "")  }.toList()
+                outputs.map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT, "") }.toList()
             }
             else -> {
                 error("Unimplemented shape type for http response bindings: $shape")
@@ -81,7 +81,7 @@ class AwsJsonHttpBindingResolver(
 
     // TODO ~ link to future awsJson spec which describes this content type
     override fun determineRequestContentType(operationShape: OperationShape): String = "application/x-amz-json-1.0"
-    
+
     override fun determineTimestampFormat(
         member: ToShapeId?,
         location: HttpBinding.Location?,

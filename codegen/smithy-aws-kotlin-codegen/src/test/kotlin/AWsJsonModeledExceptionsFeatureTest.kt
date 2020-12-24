@@ -31,7 +31,7 @@ class AWsJsonModeledExceptionsFeatureTest {
             register(code = "GetFooError", deserializer = GetFooErrorDeserializer())
         """.trimIndent()
 
-        val ctx  = testModel.generateTestContext("smithy.example", "Example")
+        val ctx = testModel.generateTestContext("smithy.example", "Example")
 
         val bindingResolver = AwsJsonHttpBindingResolver(ctx)
         val unit = AwsJsonModeledExceptionsFeature(ctx, bindingResolver)
@@ -57,7 +57,7 @@ class AWsJsonModeledExceptionsFeatureTest {
             operation GetFoo { }
         """.asSmithyModel()
 
-        val ctx  = testModel.generateTestContext("smithy.example", "Example")
+        val ctx = testModel.generateTestContext("smithy.example", "Example")
         val bindingResolver = AwsJsonHttpBindingResolver(ctx)
         val unit = AwsJsonModeledExceptionsFeature(ctx, bindingResolver)
 

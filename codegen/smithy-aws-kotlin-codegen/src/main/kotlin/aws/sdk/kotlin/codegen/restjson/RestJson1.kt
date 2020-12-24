@@ -5,16 +5,12 @@
 package aws.sdk.kotlin.codegen.restjson
 
 import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
-import aws.sdk.kotlin.codegen.ModeledExceptionsFeature
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
-import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.DefaultHttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
 import software.amazon.smithy.model.shapes.ShapeId
-import software.amazon.smithy.model.traits.HttpErrorTrait
 
 // The default Http Binding resolver is used for both white-label smithy-kotlin tests
 // and as the restJson1 binding resolver.  If/when AWS-specific logic needs to
