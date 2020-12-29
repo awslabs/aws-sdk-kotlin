@@ -17,17 +17,9 @@ import software.amazon.smithy.model.traits.TimestampFormatTrait
 /**
  * Load and initialize a model from a String (from smithy-rs)
  */
-private const val SmithyVersion = "1.0"
 fun String.asSmithyModel(sourceLocation: String? = null): Model {
-    val processed = letIf(!this.startsWith("\$version")) { "\$version: ${SmithyVersion.doubleQuote()}\n$it" }
+    val processed = if (this.startsWith("\$version")) this else "\$version: \"1.0\"\n$this"
     return Model.assembler().discoverModels().addUnparsedModel(sourceLocation ?: "test.smithy", processed).assemble().unwrap()
-}
-fun String.doubleQuote(): String = "\"${this.slashEscape('\\').slashEscape('"')}\""
-fun String.slashEscape(char: Char) = this.replace(char.toString(), """\$char""")
-fun <T> T.letIf(cond: Boolean, f: (T) -> T): T {
-    return if (cond) {
-        f(this)
-    } else this
 }
 
 // A ProtocolGenerator for tests.

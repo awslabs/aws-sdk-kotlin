@@ -14,6 +14,7 @@ val smithyVersion: String by project
 val kotestVersion: String by project
 val junitVersion: String by project
 val smithyKotlinVersion: String by project
+val kotlinJVMTargetVersion: String by project
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -25,11 +26,11 @@ dependencies {
 }
 
 tasks.compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = kotlinJVMTargetVersion
 }
 
 tasks.compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = kotlinJVMTargetVersion
 }
 
 // Reusable license copySpec
