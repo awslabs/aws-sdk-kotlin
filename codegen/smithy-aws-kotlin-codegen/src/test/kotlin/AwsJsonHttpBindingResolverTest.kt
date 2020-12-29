@@ -45,7 +45,7 @@ class AwsJsonHttpBindingResolverTest {
         val unit = AwsJsonHttpBindingResolver(ctx)
 
         val expectedOperations = listOf("GetEmptyFoo", "GetFoo")
-        val actualOperations = unit.resolveBindingOperations().map { operationShape -> operationShape.id.name }.sorted()
+        val actualOperations = unit.bindingOperations().map { operationShape -> operationShape.id.name }.sorted()
 
         Assertions.assertEquals(expectedOperations, actualOperations)
     }
@@ -56,7 +56,7 @@ class AwsJsonHttpBindingResolverTest {
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetEmptyFoo")
         val unit = AwsJsonHttpBindingResolver(ctx)
 
-        val actualRequestBindings = unit.resolveRequestBindings(operation)
+        val actualRequestBindings = unit.requestBindings(operation)
 
         Assertions.assertTrue(actualRequestBindings.isEmpty())
     }
@@ -67,7 +67,7 @@ class AwsJsonHttpBindingResolverTest {
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetFoo")
         val unit = AwsJsonHttpBindingResolver(ctx)
 
-        val actualRequestBindings = unit.resolveRequestBindings(operation)
+        val actualRequestBindings = unit.requestBindings(operation)
 
         Assertions.assertTrue(actualRequestBindings.size == 1)
         val binding = actualRequestBindings.first()
@@ -84,7 +84,7 @@ class AwsJsonHttpBindingResolverTest {
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetEmptyFoo")
         val unit = AwsJsonHttpBindingResolver(ctx)
 
-        val actualResponseBindings = unit.resolveResponseBindings(operation.toShapeId())
+        val actualResponseBindings = unit.responseBindings(operation)
 
         Assertions.assertTrue(actualResponseBindings.isEmpty())
     }
@@ -95,7 +95,7 @@ class AwsJsonHttpBindingResolverTest {
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetFoo")
         val unit = AwsJsonHttpBindingResolver(ctx)
 
-        val actualResponseBindings = unit.resolveResponseBindings(operation.toShapeId())
+        val actualResponseBindings = unit.responseBindings(operation)
 
         Assertions.assertTrue(actualResponseBindings.size == 1)
         val binding = actualResponseBindings.first()
@@ -112,7 +112,7 @@ class AwsJsonHttpBindingResolverTest {
         val structure = testModel.expectShape<StructureShape>("smithy.example#GetFooError")
         val unit = AwsJsonHttpBindingResolver(ctx)
 
-        val actualResponseBindings = unit.resolveResponseBindings(structure.toShapeId())
+        val actualResponseBindings = unit.responseBindings(structure)
 
         Assertions.assertTrue(actualResponseBindings.isEmpty())
     }
@@ -123,7 +123,7 @@ class AwsJsonHttpBindingResolverTest {
         val structure = testModel.expectShape<StructureShape>("smithy.example#GetFooOutput")
         val unit = AwsJsonHttpBindingResolver(ctx)
 
-        val actualResponseBindings = unit.resolveResponseBindings(structure.toShapeId())
+        val actualResponseBindings = unit.responseBindings(structure)
 
         Assertions.assertTrue(actualResponseBindings.size == 1)
         val binding = actualResponseBindings.first()

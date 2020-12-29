@@ -4,9 +4,9 @@ import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
 import software.amazon.smithy.build.MockManifest
 import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.*
-import software.amazon.smithy.kotlin.codegen.integration.DefaultHttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
+import software.amazon.smithy.kotlin.codegen.integration.HttpTraitResolver
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.node.Node
@@ -25,7 +25,8 @@ fun String.asSmithyModel(sourceLocation: String? = null): Model {
 // A ProtocolGenerator for tests.
 class MockHttpProtocolGenerator : HttpBindingProtocolGenerator() {
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
-    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver = DefaultHttpBindingResolver(ctx)
+    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
+        HttpTraitResolver(ctx, "application/json")
 
     override val protocol: ShapeId = RestJson1Trait.ID
 

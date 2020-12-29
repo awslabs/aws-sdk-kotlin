@@ -6,10 +6,7 @@ import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
 import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.knowledge.TopDownIndex
 import software.amazon.smithy.model.pattern.UriPattern
-import software.amazon.smithy.model.shapes.OperationShape
-import software.amazon.smithy.model.shapes.ShapeId
-import software.amazon.smithy.model.shapes.StructureShape
-import software.amazon.smithy.model.shapes.ToShapeId
+import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.HttpTrait
 import software.amazon.smithy.model.traits.TimestampFormatTrait
 
@@ -35,7 +32,7 @@ class AwsJsonHttpBindingResolver(
     /**
      * All operations are binding for awsJson model.
      */
-    override fun resolveBindingOperations(): List<OperationShape> =
+    override fun bindingOperations(): List<OperationShape> =
         topDownIndex.getContainedOperations(generationContext.service).toList()
 
     /**
@@ -43,12 +40,12 @@ class AwsJsonHttpBindingResolver(
      * because for awsJson these data elements are static, we can supply an instance
      * that provides the necessary details to drive codegen.
      */
-    override fun resolveHttpTrait(operationShape: OperationShape): HttpTrait = awsJsonHttpTrait
+    override fun httpTrait(operationShape: OperationShape): HttpTrait = awsJsonHttpTrait
 
     /**
      * Returns all inputs as Document bindings for awsJson protocol.
      */
-    override fun resolveRequestBindings(operationShape: OperationShape): List<HttpBindingDescriptor> {
+    override fun requestBindings(operationShape: OperationShape): List<HttpBindingDescriptor> {
         if (!operationShape.input.isPresent) return emptyList()
 
         val inputs = generationContext.model.expectShape(operationShape.input.get())
@@ -59,8 +56,8 @@ class AwsJsonHttpBindingResolver(
     /**
      * Returns all outputs as Document bindings for awsJson protocol.
      */
-    override fun resolveResponseBindings(shapeId: ShapeId): List<HttpBindingDescriptor> {
-        return when (val shape = generationContext.model.expectShape(shapeId)) {
+    override fun responseBindings(shape: Shape): List<HttpBindingDescriptor> {
+        return when (shape) {
             is OperationShape -> {
                 if (!shape.output.isPresent) return emptyList()
 
@@ -83,8 +80,8 @@ class AwsJsonHttpBindingResolver(
     override fun determineRequestContentType(operationShape: OperationShape): String = "application/x-amz-json-1.0"
 
     override fun determineTimestampFormat(
-        member: ToShapeId?,
-        location: HttpBinding.Location?,
-        defaultFormat: TimestampFormatTrait.Format?
+        member: ToShapeId,
+        location: HttpBinding.Location,
+        defaultFormat: TimestampFormatTrait.Format
     ): TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 }

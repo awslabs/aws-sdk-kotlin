@@ -30,7 +30,7 @@ abstract class ModeledExceptionsFeature(
     }
 
     protected fun getModeledErrors(): Set<Shape> {
-        val operations = httpBindingResolver.resolveBindingOperations()
+        val operations = httpBindingResolver.bindingOperations()
 
         return operations.flatMap { it.errors }.map { ctx.model.expectShape(it) }.toSet()
     }
