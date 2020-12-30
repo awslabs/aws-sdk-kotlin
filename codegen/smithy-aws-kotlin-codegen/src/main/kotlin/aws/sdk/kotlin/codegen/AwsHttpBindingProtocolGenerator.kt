@@ -11,9 +11,7 @@ import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.addImport
-import software.amazon.smithy.kotlin.codegen.hasIdempotentTokenMember
 import software.amazon.smithy.kotlin.codegen.integration.*
-import software.amazon.smithy.model.traits.TimestampFormatTrait
 
 /**
  * Base class for all AWS HTTP protocol generators

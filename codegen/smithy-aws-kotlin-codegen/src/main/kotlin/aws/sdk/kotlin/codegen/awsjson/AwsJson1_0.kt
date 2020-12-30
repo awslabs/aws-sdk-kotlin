@@ -8,7 +8,6 @@ import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.JsonSerdeFeature
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_0Trait
-import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.buildSymbol
 import software.amazon.smithy.kotlin.codegen.hasIdempotentTokenMember
