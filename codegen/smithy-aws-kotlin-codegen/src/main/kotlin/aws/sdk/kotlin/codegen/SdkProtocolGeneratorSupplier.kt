@@ -21,5 +21,7 @@ class SdkProtocolGeneratorSupplier : KotlinIntegration {
      */
     override val order: Byte = -10
 
+    // NOTE: Adding protocol tests as gradle test targets can be enabled here:
+    // codegen/protocol-test-codegen/build.gradle.kts:73
     override val protocolGenerators: List<ProtocolGenerator> = listOf(AwsJson1_0(), RestJson1())
 }

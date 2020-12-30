@@ -40,12 +40,9 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             val signingName = AwsSignatureVersion4.signingServiceName(ctx.model, ctx.service)
             features.add(AwsSignatureVersion4(signingName))
         }
-        features.add(JsonSerdeFeature(ctx.service.hasIdempotentTokenMember(ctx.model)))
 
         return features
     }
-
-    override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
         val ignoredTests = TestMemberDelta(
