@@ -51,7 +51,7 @@ class AwsJsonTargetHeaderFeature : HttpFeature {
         super.addImportsAndDependencies(writer)
         val awsJsonTargetHeaderSymbol = buildSymbol {
             name = "AwsJsonTargetHeader"
-            namespace(AwsKotlinDependency.REST_JSON_FEAT, ".")
+            namespace(AwsKotlinDependency.REST_JSON_FEAT)
             dependency(AwsKotlinDependency.REST_JSON_FEAT)
         }
 
