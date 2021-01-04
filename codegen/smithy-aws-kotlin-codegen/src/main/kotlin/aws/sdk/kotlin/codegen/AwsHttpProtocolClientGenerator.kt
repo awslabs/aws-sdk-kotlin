@@ -9,9 +9,7 @@ import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.kotlin.codegen.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.addImport
-import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
-import software.amazon.smithy.kotlin.codegen.integration.HttpProtocolClientGenerator
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.integration.*
 import software.amazon.smithy.model.knowledge.OperationIndex
 import software.amazon.smithy.model.shapes.OperationShape
 
@@ -21,8 +19,9 @@ import software.amazon.smithy.model.shapes.OperationShape
 class AwsHttpProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
     rootNamespace: String,
-    features: List<HttpFeature>
-) : HttpProtocolClientGenerator(ctx, rootNamespace, features) {
+    features: List<HttpFeature>,
+    httpBindingResolver: HttpBindingResolver
+) : HttpProtocolClientGenerator(ctx, rootNamespace, features, httpBindingResolver) {
 
     override fun renderOperationSetup(writer: KotlinWriter, opIndex: OperationIndex, op: OperationShape) {
         super.renderOperationSetup(writer, opIndex, op)
