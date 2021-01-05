@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.awsjson.AwsJson1_0
+import aws.sdk.kotlin.codegen.awsjson.AwsJson1_1
 import aws.sdk.kotlin.codegen.restjson.RestJson1
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
@@ -21,7 +22,5 @@ class SdkProtocolGeneratorSupplier : KotlinIntegration {
      */
     override val order: Byte = -10
 
-    // NOTE: Adding protocol tests as gradle test targets can be enabled here:
-    // codegen/protocol-test-codegen/build.gradle.kts:73
-    override val protocolGenerators: List<ProtocolGenerator> = listOf(AwsJson1_0(), RestJson1())
+    override val protocolGenerators: List<ProtocolGenerator> = listOf(AwsJson1_0(), AwsJson1_1(), RestJson1())
 }

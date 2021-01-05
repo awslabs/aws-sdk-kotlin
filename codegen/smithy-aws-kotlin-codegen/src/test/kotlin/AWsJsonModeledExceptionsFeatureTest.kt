@@ -33,7 +33,7 @@ class AWsJsonModeledExceptionsFeatureTest {
 
         val ctx = testModel.generateTestContext("smithy.example", "Example")
 
-        val bindingResolver = AwsJsonHttpBindingResolver(ctx)
+        val bindingResolver = AwsJsonHttpBindingResolver(ctx, "application/json")
         val unit = AwsJsonModeledExceptionsFeature(ctx, bindingResolver)
 
         val actual = generateCode(unit::renderConfigure)
@@ -58,7 +58,7 @@ class AWsJsonModeledExceptionsFeatureTest {
         """.asSmithyModel()
 
         val ctx = testModel.generateTestContext("smithy.example", "Example")
-        val bindingResolver = AwsJsonHttpBindingResolver(ctx)
+        val bindingResolver = AwsJsonHttpBindingResolver(ctx, "application/json")
         val unit = AwsJsonModeledExceptionsFeature(ctx, bindingResolver)
 
         val actual = generateCode(unit::renderConfigure)

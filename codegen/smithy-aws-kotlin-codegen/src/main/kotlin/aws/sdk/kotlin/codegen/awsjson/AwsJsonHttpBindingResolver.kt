@@ -15,6 +15,7 @@ import software.amazon.smithy.model.traits.TimestampFormatTrait
  */
 class AwsJsonHttpBindingResolver(
     private val generationContext: ProtocolGenerator.GenerationContext,
+    private val defaultContentType: String,
     private val topDownIndex: TopDownIndex = TopDownIndex.of(generationContext.model)
 ) : HttpBindingResolver {
 
@@ -77,7 +78,7 @@ class AwsJsonHttpBindingResolver(
     }
 
     // TODO ~ link to future awsJson spec which describes this content type
-    override fun determineRequestContentType(operationShape: OperationShape): String = "application/x-amz-json-1.0"
+    override fun determineRequestContentType(operationShape: OperationShape): String = defaultContentType
 
     override fun determineTimestampFormat(
         member: ToShapeId,

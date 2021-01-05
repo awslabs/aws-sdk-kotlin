@@ -40,6 +40,26 @@
           }
         }
       }
+    },
+    "aws-json-11": {
+      "transforms": [
+        {
+          "name": "includeServices",
+          "args": {
+            "services": ["aws.protocoltests.json#JsonProtocol"]
+          }
+        }
+      ],
+      "plugins": {
+        "kotlin-codegen": {
+          "service": "aws.protocoltests.json#JsonProtocol",
+          "module": "software.aws.kotlinsdk.protocoltest.awsjson11",
+          "moduleVersion": "1.0",
+          "build":  {
+            "rootProject": true
+          }
+        }
+      }
     }
   }
 }

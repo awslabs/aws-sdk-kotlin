@@ -30,21 +30,26 @@ class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
         val parentFeatures = super.getHttpFeatures(ctx)
         val awsJsonFeatures = listOf(
             JsonSerdeFeature(ctx.service.hasIdempotentTokenMember(ctx.model)),
-            AwsJsonTargetHeaderFeature(),
+            AwsJsonTargetHeaderFeature("1.0"),
             AwsJsonModeledExceptionsFeature(ctx, getProtocolHttpBindingResolver(ctx))
         )
 
         return parentFeatures + awsJsonFeatures
     }
 
-    override fun getProtocolHttpBindingResolver(generationContext: ProtocolGenerator.GenerationContext): HttpBindingResolver = AwsJsonHttpBindingResolver(generationContext)
+    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
+        AwsJsonHttpBindingResolver(ctx, "application/x-amz-json-1.0")
 
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 
     override val protocol: ShapeId = AwsJson1_0Trait.ID
 }
 
-class AwsJsonTargetHeaderFeature : HttpFeature {
+/**
+ * Configure the AwsJsonTargetHeader feature
+ * @param protocolVersion The AWS JSON protocol version (e.g. "1.0", "1.1", etc)
+ */
+class AwsJsonTargetHeaderFeature(val protocolVersion: String) : HttpFeature {
     override val name: String = "AwsJsonTargetHeader"
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
@@ -52,9 +57,12 @@ class AwsJsonTargetHeaderFeature : HttpFeature {
         val awsJsonTargetHeaderSymbol = buildSymbol {
             name = "AwsJsonTargetHeader"
             namespace(AwsKotlinDependency.REST_JSON_FEAT)
-            dependency(AwsKotlinDependency.REST_JSON_FEAT)
         }
 
-        writer.addImport(awsJsonTargetHeaderSymbol, "")
+        writer.addImport(awsJsonTargetHeaderSymbol)
+    }
+
+    override fun renderConfigure(writer: KotlinWriter) {
+        writer.write("version = \$S", protocolVersion)
     }
 }
