@@ -23,6 +23,17 @@ class AwsHttpProtocolClientGenerator(
     httpBindingResolver: HttpBindingResolver
 ) : HttpProtocolClientGenerator(ctx, rootNamespace, features, httpBindingResolver) {
 
+    override fun render(writer: KotlinWriter) {
+        writer.write("\n\n")
+        writer.write("const val ServiceId: String = \$S", ctx.service.sdkId)
+        writer.write("const val ServiceApiVersion: String = \$S", ctx.service.version)
+        writer.write("\n\n")
+        super.render(writer)
+
+        // render internal files used by the implementation
+        renderInternals()
+    }
+
     override fun renderOperationSetup(writer: KotlinWriter, opIndex: OperationIndex, op: OperationShape) {
         super.renderOperationSetup(writer, opIndex, op)
 
@@ -60,5 +71,9 @@ class AwsHttpProtocolClientGenerator(
             writer.write("ctx.putIfAbsent(AuthAttributes.SigningRegion, config.signingRegion ?: region)")
             writer.write("ctx.putIfAbsent(SdkClientOption.ServiceName, serviceName)")
         }
+    }
+
+    private fun renderInternals() {
+        EndpointResolverGenerator().render(ctx)
     }
 }

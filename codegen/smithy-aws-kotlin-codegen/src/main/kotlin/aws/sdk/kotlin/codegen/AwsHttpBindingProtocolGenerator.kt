@@ -33,7 +33,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val features = super.getHttpFeatures(ctx).toMutableList()
 
-        features.add(DummyEndpointResolver())
+        features.add(EndpointResolverFeature(ctx))
         if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
             val signingName = AwsSignatureVersion4.signingServiceName(ctx.model, ctx.service)
             features.add(AwsSignatureVersion4(signingName))
@@ -84,22 +84,5 @@ class JsonSerdeFeature(generateIdempotencyTokenConfig: Boolean) : HttpSerde("Jso
             .addDependency(KotlinDependency.CLIENT_RT_SERDE_JSON)
             .build()
         writer.addImport(jsonSerdeSymbol, "")
-    }
-}
-
-// FIXME - this is temporary hack to generate a working service. This sets the host to make a service request against.
-// This needs designed as a more generic middleware that deals with endpoint resolution:
-// ticket: https://www.pivotaltracker.com/story/show/174869500
-class DummyEndpointResolver : HttpFeature {
-    override val name: String = "DefaultRequest"
-
-    override fun addImportsAndDependencies(writer: KotlinWriter) {
-        writer.addImport("DefaultRequest", KotlinDependency.CLIENT_RT_HTTP, "${KotlinDependency.CLIENT_RT_HTTP.namespace}.feature")
-    }
-
-    override fun renderConfigure(writer: KotlinWriter) {
-        writer.writeWithNoFormatting("url.host = \"\${serviceName.toLowerCase()}.\${config.region}.amazonaws.com\"")
-        writer.write("url.scheme = Protocol.HTTPS")
-        writer.write("headers.append(\"Host\", url.host)")
     }
 }

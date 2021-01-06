@@ -1,50 +1,49 @@
 package software.aws.kotlinsdk.http
 
-import software.aws.clientrt.http.Feature
-import software.aws.clientrt.http.FeatureKey
-import software.aws.clientrt.http.HttpClientFeatureFactory
-import software.aws.clientrt.http.SdkHttpClient
+import software.aws.clientrt.http.*
 import software.aws.clientrt.http.request.HttpRequestPipeline
-import software.aws.kotlinsdk.regions.AwsRegionEndpointResolver
-import software.aws.kotlinsdk.regions.AwsRegionResolver
-import software.aws.kotlinsdk.regions.DemoAwsRegionEndpointResolver
-import software.aws.kotlinsdk.regions.DemoAwsRegionResolver
+import software.aws.clientrt.util.get
+import software.aws.kotlinsdk.client.AwsClientOption
+import software.aws.kotlinsdk.endpoint.EndpointResolver
 
 /**
  *  Http feature for resolving the service endpoint.
- *
- *  TODO: Determine how/if this type would work with non HTTP protocols.
  */
-class ServiceEndpointResolver(
-    private val awsRegionId: String?,
-    private val awsRegionResolver: AwsRegionResolver = DemoAwsRegionResolver(),
-    private val serviceEndpointResolver: AwsRegionEndpointResolver = DemoAwsRegionEndpointResolver()
+public class ServiceEndpointResolver(
+    config: Config
 ) : Feature {
 
-    class Config {
-        internal var awsRegionId: String? = null
+    private val serviceId: String = requireNotNull(config.serviceId) { "ServiceId must not be null" }
+    private val resolver: EndpointResolver = requireNotNull(config.resolver) { "EndpointResolver must not be null" }
+
+    public class Config {
+        /**
+         * The AWS service ID to resolve endpoints for
+         */
+        public var serviceId: String? = null
+
+        /**
+         * The resolver to use
+         */
+        public var resolver: EndpointResolver? = null
     }
 
-    companion object Feature : HttpClientFeatureFactory<Config, ServiceEndpointResolver> {
+    public companion object Feature : HttpClientFeatureFactory<Config, ServiceEndpointResolver> {
         override val key: FeatureKey<ServiceEndpointResolver> = FeatureKey("ServiceEndpointResolver")
 
         override fun create(block: Config.() -> Unit): ServiceEndpointResolver {
             val config = Config().apply(block)
-            return ServiceEndpointResolver(config.awsRegionId)
+            return ServiceEndpointResolver(config)
         }
     }
 
     override fun install(client: SdkHttpClient) {
         client.requestPipeline.intercept(HttpRequestPipeline.Initialize) {
-            val regionId = awsRegionId ?: determineDefaultEndpointRegionId()
-
-            subject.url.host = serviceEndpointResolver.resolve(
-                awsRegionResolver.resolveRegion(regionId) ?: error("Unable to resolve region id")
-            ) ?: error("Unable to find endpoint mapping for service")
+            val region = context.executionContext[AwsClientOption.Region]
+            val endpoint = resolver.resolve(serviceId, region)
+            subject.url.scheme = Protocol.parse(endpoint.protocol)
+            subject.url.host = endpoint.hostname
+            subject.headers["Host"] = endpoint.hostname
         }
     }
-
-    // Function to supply a region id if one isn't provided in client configuration.
-    // TODO: Implement.  Likely need something per service.
-    private fun determineDefaultEndpointRegionId(): String = "us-east-1"
 }
