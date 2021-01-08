@@ -30,7 +30,7 @@ class AliasRoutingConfigurationDeserializer {
             field(ADDITIONAL_VERSION_WEIGHTS_FIELD_DESCRIPTOR)
         }
 
-        fun deserialize(deserializer: Deserializer): AliasRoutingConfiguration {
+        suspend fun deserialize(deserializer: Deserializer): AliasRoutingConfiguration {
             val builder = AliasRoutingConfiguration.dslBuilder()
 
             deserializer.deserializeStruct(OBJ_DESCRIPTOR) {

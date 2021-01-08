@@ -25,7 +25,7 @@ class Tag private constructor(builder: BuilderImpl) {
             field(VALUE_FIELD_DESCRIPTOR)
         }
 
-        fun deserialize(deserializer: Deserializer): Tag {
+        suspend fun deserialize(deserializer: Deserializer): Tag {
             val builder = builder()
 
             deserializer.deserializeStruct(OBJ_DESCRIPTOR) {

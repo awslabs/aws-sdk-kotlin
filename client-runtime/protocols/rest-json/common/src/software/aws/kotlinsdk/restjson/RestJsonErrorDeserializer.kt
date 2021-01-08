@@ -43,7 +43,7 @@ internal object RestJsonErrorDeserializer {
         field(MESSAGE_ALT3_DESCRIPTOR)
     }
 
-    fun deserialize(response: HttpResponse, payload: ByteArray?): RestJsonErrorDetails {
+    suspend fun deserialize(response: HttpResponse, payload: ByteArray?): RestJsonErrorDetails {
         var code: String? = response.headers[X_AMZN_ERROR_TYPE_HEADER_NAME]
         var message: String? = response.headers[X_AMZN_ERROR_MESSAGE_HEADER_NAME]
         if (message == null) {
