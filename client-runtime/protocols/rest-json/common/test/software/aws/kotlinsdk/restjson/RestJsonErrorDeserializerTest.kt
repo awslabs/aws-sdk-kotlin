@@ -10,6 +10,7 @@ import software.aws.clientrt.http.HttpStatusCode
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
+import software.aws.kotlinsdk.testing.runSuspendTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -17,7 +18,7 @@ class RestJsonErrorDeserializerTest {
 
     @OptIn(ExperimentalStdlibApi::class)
     @Test
-    fun `it deserializes aws restJson error codes`() {
+    fun `it deserializes aws restJson error codes`() = runSuspendTest {
         val tests = listOf(
             "FooError",
             "FooError:http://amazon.com/smithy/com.amazon.smithy.validate/",
@@ -73,7 +74,7 @@ class RestJsonErrorDeserializerTest {
 
     @OptIn(ExperimentalStdlibApi::class)
     @Test
-    fun `it deserializes aws restJson error messages`() {
+    fun `it deserializes aws restJson error messages`() = runSuspendTest {
         val expected = "one ring to rule bring them all, and in the darkness bind them"
 
         // header tests

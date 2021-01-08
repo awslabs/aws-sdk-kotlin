@@ -27,7 +27,7 @@ class AliasArnTypeDeserializer {
             field(ALIAS_EC2_ARN_FIELD_DESCRIPTOR)
         }
 
-        fun deserialize(deserializer: Deserializer): AliasArnType? {
+        suspend fun deserialize(deserializer: Deserializer): AliasArnType? {
             var aliasArnType: AliasArnType? = null
 
             deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
