@@ -16,7 +16,7 @@ import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.traits.TimestampFormatTrait
 
 /**
- * Handles gener0ting the aws.protocols#awsJson1_1 protocol for services.
+ * Handles generating the aws.protocols#awsJson1_1 protocol for services.
  *
  * @inheritDoc
  * @see AwsHttpBindingProtocolGenerator
