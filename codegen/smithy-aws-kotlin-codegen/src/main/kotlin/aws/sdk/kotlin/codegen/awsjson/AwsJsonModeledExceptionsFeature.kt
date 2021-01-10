@@ -5,7 +5,6 @@ import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
 
-// TODO consider decomposition of GC
 class AwsJsonModeledExceptionsFeature(
     generationContext: ProtocolGenerator.GenerationContext,
     httpBindingResolver: HttpBindingResolver

@@ -15,16 +15,23 @@ import software.aws.clientrt.util.get
 
 /**
  * Http feature that populates the target header for awsJson protocol-based requests.
- *
- * TODO ~ enable this type to handle both awsJson1_0 and awsJson1_1 protocols.
  */
 @InternalAPI
-public class AwsJsonTargetHeader() : Feature {
+public class AwsJsonTargetHeader(config: Config) : Feature {
+    private val version: String = requireNotNull(config.version) { "AWS JSON Protocol version must be specified" }
 
-    public companion object Feature : HttpClientFeatureFactory<Unit, AwsJsonTargetHeader> {
+    public class Config {
+        /**
+         * The protocol version e.g. "1.0"
+         */
+        public var version: String? = null
+    }
+
+    public companion object Feature : HttpClientFeatureFactory<Config, AwsJsonTargetHeader> {
         override val key: FeatureKey<AwsJsonTargetHeader> = FeatureKey("AwsJsonTargetHeader")
-        override fun create(block: Unit.() -> Unit): AwsJsonTargetHeader {
-            return AwsJsonTargetHeader()
+        override fun create(block: Config.() -> Unit): AwsJsonTargetHeader {
+            val config = Config().apply(block)
+            return AwsJsonTargetHeader(config)
         }
     }
 
@@ -41,7 +48,7 @@ public class AwsJsonTargetHeader() : Feature {
             //  when synthetic inputs are added such that all operations have inputs.  Readdress this issue after that work
             //  is complete.
             if (!subject.headers.contains("Content-Type")) {
-                subject.headers.append("Content-Type", "application/x-amz-json-1.0")
+                subject.headers.append("Content-Type", "application/x-amz-json-$version")
             }
         }
     }

@@ -46,10 +46,14 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         val ignoredTests = TestMemberDelta(
             setOf(
                 // FIXME - document type not fully supported yet
+                // restJson
                 "InlineDocumentInput",
                 "InlineDocumentAsPayloadInput",
                 "InlineDocumentOutput",
-                "InlineDocumentAsPayloadInputOutput"
+                "InlineDocumentAsPayloadInputOutput",
+
+                // awsJson1.1
+                "PutAndGetInlineDocumentsInput"
             ),
             TestContainmentMode.EXCLUDE_TESTS
         )
