@@ -15,7 +15,7 @@
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.dokka") version "0.10.0"
+    id("org.jetbrains.dokka") version "1.4.20"
     jacoco
 }
 
@@ -81,11 +81,6 @@ subprojects {
                 experimentalAnnotations.forEach { languageSettings.useExperimentalAnnotation(it) }
             }
         }
-    }
-
-    tasks.dokka {
-        outputFormat = "html"
-        outputDirectory = "$buildDir/kdoc"
     }
 
     apply(from = rootProject.file("gradle/publish.gradle"))
