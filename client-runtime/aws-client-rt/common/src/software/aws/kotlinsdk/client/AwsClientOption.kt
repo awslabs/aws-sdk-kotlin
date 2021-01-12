@@ -18,12 +18,6 @@ public object AwsClientOption {
      */
     public val Region: ClientOption<String> = ClientOption("AwsRegion")
 
-    /**
-     * The first part of the URL in the DNS name for the service. Eg. in the endpoint "dynamodb.amazonaws.com"
-     * this is the "dynamodb" part
-     */
-    public val EndpointPrefix: ClientOption<String> = ClientOption("EndpointPrefix")
-
     // FIXME - endpoints are whitelabel material as well. Should we have an `SdkClientOption` object in whitelabel for some of these
     /**
      * Whether or not endpoint discovery is enabled or not. Default is true

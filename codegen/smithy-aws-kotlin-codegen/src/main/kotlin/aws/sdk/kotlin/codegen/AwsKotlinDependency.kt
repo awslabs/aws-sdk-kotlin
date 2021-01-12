@@ -21,6 +21,7 @@ const val AWS_CLIENT_RT_VERSION = "0.0.1"
  */
 object AwsKotlinDependency {
     val AWS_CLIENT_RT_CORE = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-client-rt", AWS_CLIENT_RT_VERSION)
+    val AWS_CLIENT_RT_HTTP = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.http", AWS_CLIENT_RT_GROUP, "http", AWS_CLIENT_RT_VERSION)
     val AWS_CLIENT_RT_AUTH = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_AUTH_NS, AWS_CLIENT_RT_GROUP, "auth", AWS_CLIENT_RT_VERSION)
     val AWS_CLIENT_RT_REGIONS = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_REGIONS_NS, AWS_CLIENT_RT_GROUP, "regions", AWS_CLIENT_RT_VERSION)
     val REST_JSON_FEAT = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.restjson", AWS_CLIENT_RT_GROUP, "rest-json", AWS_CLIENT_RT_VERSION)
