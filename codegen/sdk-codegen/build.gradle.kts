@@ -6,16 +6,21 @@
 // This build file has been adapted from the Go v2 SDK, here:
 // https://github.com/aws/aws-sdk-go-v2/blob/master/codegen/sdk-codegen/build.gradle.kts
 
-import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.node.Node
-import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.gradle.tasks.SmithyBuild
-import software.amazon.smithy.model.node.ObjectNode
+import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.ServiceShape
+import java.util.*
 import kotlin.streams.toList
-import java.util.Properties
 
 plugins {
-    id("software.amazon.smithy") version "0.5.1"
+    id("software.amazon.smithy") version "0.5.2"
+}
+
+buildscript {
+    val smithyVersion: String by project
+    dependencies {
+        classpath("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
+    }
 }
 
 dependencies {
@@ -35,7 +40,7 @@ tasks.create<SmithyBuild>("buildSdk") {
 // force rebuild every time while developing
 tasks["buildSdk"].outputs.upToDateWhen { false }
 
-// get a project propety by name if it exists (including from local.properties)
+// get a project property by name if it exists (including from local.properties)
 fun getProperty(name: String): String? {
     if (project.hasProperty(name)) {
         return project.properties[name].toString()
@@ -47,70 +52,99 @@ fun getProperty(name: String): String? {
         propertiesFile.inputStream().use { localProperties.load(it) }
 
         if (localProperties.containsKey(name)) {
-            return localProperties.get(name).toString()
+            return localProperties[name].toString()
         }
     }
     return null
 }
 
-fun ObjectNode.Builder.call(block: ObjectNode.Builder.() -> Unit): ObjectNode.Builder = apply(block)
+// Represents information needed to generate a smithy projection JSON stanza
+data class AwsService(
+    val name: String,
+    val moduleName: String,
+    val moduleVersion: String = "1.0",
+    val modelFile: File,
+    val projectionName: String,
+    val sdkId: String
+)
 
-// Generates a smithy-build.json file by creating a new projection for every
-// JSON file found in aws-models/. The generated smithy-build.json file is
-// not committed to git since it's rebuilt each time codegen is performed.
-tasks.register("generate-smithy-build") {
-    doLast {
-        val projectionsBuilder = Node.objectNodeBuilder()
-        val modelsDirProp: String by project
-        val models = project.file(modelsDirProp)
+// Generates a smithy-build.json file by creating a new projection.
+// The generated smithy-build.json file is not committed to git since
+// it's rebuilt each time codegen is performed.
+fun generateSmithyBuild(services: List<AwsService>): String {
+    val buildStandaloneSdk = getProperty("buildStandaloneSdk")?.toBoolean() ?: false
 
-        val generateServices = getProperty("aws.services")?.split(",")
-        println(generateServices)
-
-        fileTree(models).filter {
-            it.isFile && (generateServices?.contains(it.name.split(".")[0]) ?: true)
-        }.files.forEach { file ->
-            val model = Model.assembler()
-                .addImport(file.absolutePath)
-                // Grab the result directly rather than worrying about checking for errors via unwrap.
-                // All we care about here is the service shape, any unchecked errors will be exposed
-                // as part of the actual build task done by the smithy gradle plugin.
-                .assemble().result.get()
-            val services = model.shapes(ServiceShape::class.javaObjectType).sorted().toList()
-            if (services.size != 1) {
-                throw Exception("There must be exactly one service in each aws model file, but found " +
-                        "${services.size} in ${file.name}: ${services.map { it.id }}")
+    val projections = services.joinToString(",") { service ->
+        """
+            "${service.projectionName}": {
+                "imports": ["${service.modelFile.absolutePath}"],
+                "plugins": {
+                    "kotlin-codegen": {
+                      "service": "${service.name}",
+                      "module": "${service.moduleName}",
+                      "moduleVersion": "${service.moduleVersion}",
+                      "sdkId": "${service.sdkId}",
+                      "build": {
+                        "rootProject": $buildStandaloneSdk
+                      }
+                    }
+                }
             }
-            val service = services[0]
-            var (sdkId, version, _) = file.name.split(".")
-            sdkId = sdkId.replace("-", "").toLowerCase()
-            val projectionContents = Node.objectNodeBuilder()
-                .withMember("imports", Node.fromStrings("${models.absolutePath}${File.separator}${file.name}"))
-                .withMember("plugins", Node.objectNode()
-                    .withMember("kotlin-codegen", Node.objectNodeBuilder()
-                        .withMember("service", service.id.toString())
-                        .withMember("module", "aws.sdk.kotlin." + sdkId.toLowerCase())
-                        .withMember("moduleVersion", "1.0")
-                        .call {
-                            val buildStandaloneSdk = getProperty("buildStandaloneSdk")?.toBoolean() ?: false
-                            withMember("build", Node.objectNodeBuilder()
-                                .withMember("rootProject", buildStandaloneSdk)
-                                .build()
-                            )
-                        }
-                        .build()))
-                .build()
-            projectionsBuilder.withMember(sdkId + "." + version.toLowerCase(), projectionContents)
+        """
+    }
+    return """
+    {
+        "version": "1.0",
+        "projections": {
+            $projections
         }
+    }
+    """.trimIndent()
+}
 
-        file("smithy-build.json").writeText(Node.prettyPrintJson(Node.objectNodeBuilder()
-            .withMember("version", "1.0")
-            .withMember("projections", projectionsBuilder.build())
-            .build()))
+// Returns an AwsService model for every JSON file found in in directory defined by property `modelsDirProp`
+fun discoverServices(): List<AwsService> {
+    val modelsDirProp: String by project
+    val modelsDir = project.file(modelsDirProp)
+    val serviceIncludeList = getProperty("aws.services")?.split(",")?.map { it.trim() }
+
+    return fileTree(modelsDir)
+        .filter { serviceIncludeList?.contains(it.name.split(".").first()) ?: true }
+        .map { file ->
+            val model = Model.assembler().addImport(file.absolutePath).assemble().result.get()
+            val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
+            require(services.size == 1) { "Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}" }
+            val service = services.first()
+            val serviceApi = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
+                ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
+            val (name, version, _) = file.name.split(".")
+
+            AwsService(
+                name = service.id.toString(),
+                moduleName = "aws.sdk.kotlin.$name",
+                modelFile = file,
+                projectionName = name + "." + version.toLowerCase(),
+                sdkId = serviceApi.sdkId
+            )
+        }
+}
+
+fun <T> java.util.Optional<T>.orNull(): T? = this.orElse(null)
+
+// Generate smithy-build.json as first step in build task
+task("generateSmithyBuild") {
+    description = "generate smithy-build.json"
+    doFirst {
+        projectDir.resolve("smithy-build.json").writeText(generateSmithyBuild(discoverServices()))
     }
 }
 
 // Run the `buildSdk` automatically.
 tasks["build"]
-    .dependsOn(tasks["generate-smithy-build"])
+    .dependsOn(tasks["generateSmithyBuild"])
     .finalizedBy(tasks["buildSdk"])
+
+// Remove generated model file for clean
+tasks["clean"].doFirst {
+    delete("smithy-build.json")
+}

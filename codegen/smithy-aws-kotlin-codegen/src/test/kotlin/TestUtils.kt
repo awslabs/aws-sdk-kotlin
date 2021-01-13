@@ -42,7 +42,7 @@ fun Model.generateTestContext(namespace: String, serviceName: String): ProtocolG
             .withMember("moduleVersion", Node.from("1.0.0"))
             .build()
     )
-    val provider: SymbolProvider = KotlinCodegenPlugin.createSymbolProvider(this, namespace)
+    val provider: SymbolProvider = KotlinCodegenPlugin.createSymbolProvider(this, namespace, serviceName)
     val service = this.expectShape<ServiceShape>("$namespace#$serviceName")
     val generator: ProtocolGenerator = MockHttpProtocolGenerator()
     val manifest = MockManifest()
