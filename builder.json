@@ -1,0 +1,41 @@
+{
+    "name": "aws-sdk-kotlin",
+    "needs_compiler": false,
+    "packages": [],
+    "build_steps": [
+        "./gradlew -x test -x jvmTest -x allTests build"
+    ],
+    "test_steps": [
+        "./gradlew test allTests"
+    ],
+    "imports": [
+        "JDK8"
+    ],
+    "build_dir": "target/build",
+    "env": {
+        "JAVA_HOME": "{java_home}"
+    },
+    "hosts": {
+        "ubuntu": {
+            "packages": [
+                "openjdk-8-jdk-headless"
+            ]
+        },
+        "debian": {
+            "packages": [
+                "openjdk-8-jdk-headless"
+            ]
+        }
+    },
+    "upstream": [
+        {
+            "name": "smithy-kotlin",
+            "pre_build_steps": [
+                "echo pre build from aws-sdk-kotlin"
+            ],
+            "post_build_steps": [
+                "./gradlew publishToMavenLocal"
+            ]
+        }
+    ]
+}
