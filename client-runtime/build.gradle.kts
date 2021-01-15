@@ -86,6 +86,11 @@ subprojects {
     apply(from = rootProject.file("gradle/publish.gradle"))
 }
 
+// resolves build deadlock with aws-client-rt when using composite builds
+subprojects.filter { it.name != "aws-client-rt" }.forEach { proj ->
+    proj.tasks.findByName("generatePomFileForJvmPublication")?.dependsOn(":client-runtime:aws-client-rt:generatePomFileForJvmPublication")
+}
+
 task<org.jetbrains.kotlin.gradle.testing.internal.KotlinTestReport>("rootAllTest"){
     destinationDir = File(project.buildDir, "reports/tests/rootAllTest")
     val rootAllTest = this

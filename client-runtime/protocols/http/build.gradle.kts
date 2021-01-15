@@ -27,6 +27,3 @@ kotlin {
     }
 }
 
-// Resolves build deadlock with aws-client-rt
-tasks["generatePomFileForJvmPublication"]
-    .dependsOn(":client-runtime:aws-client-rt:generatePomFileForJvmPublication")
