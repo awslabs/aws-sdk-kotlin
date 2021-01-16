@@ -33,7 +33,7 @@ class AliasArnTypeDeserializer {
             deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
                 when(findNextFieldIndex()) {
                     ALIAS_S3_ARN_FIELD_DESCRIPTOR.index -> aliasArnType = deserializeString()?.let { S3ArnType(it) }
-                    ALIAS_EC2_ARN_FIELD_DESCRIPTOR.index -> aliasArnType = deserializeInt()?.let { EC2ArnType(it) }
+                    ALIAS_EC2_ARN_FIELD_DESCRIPTOR.index -> aliasArnType = deserializeInteger()?.let { EC2ArnType(it) }
                     ALIAS_MULTI_ARN_FIELD_DESCRIPTOR.index -> aliasArnType = deserializer.deserializeList(ALIAS_MULTI_ARN_FIELD_DESCRIPTOR) {
                         val list0 = mutableListOf<String>()
                         while(hasNextElement()) {
