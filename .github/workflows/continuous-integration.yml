@@ -28,11 +28,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Checkout sources
       uses: actions/checkout@v2
-    - name: Configure CI Credentials
-      # configure a git credentials helper for checking out private dependencies using crt-builder
-      run: |
-        git config --local credential.https://github.com/awslabs.helper "./scripts/git-ci-cred-helper.py"
-        cat .git/config
     - name: Build and Test ${{ env.PACKAGE_NAME }}
       env:
         CI_USER: ${{ secrets.CI_USER}}
@@ -40,4 +35,4 @@ jobs:
       run: |
         python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
         chmod a+x builder
-        ./builder build -p ${{ env.PACKAGE_NAME }}
+        GIT_ASKPASS="$(pwd)/scripts/git-ci-askpass.sh" ./builder build -p ${{ env.PACKAGE_NAME }}
