@@ -32,7 +32,7 @@ jobs:
       # configure a git credentials helper for checking out private dependencies using crt-builder
       run: |
         git config --local credential.https://github.com/awslabs.helper "./scripts/git-ci-cred-helper.py"
-        cat ./git/config
+        cat .git/config
     - name: Build and Test ${{ env.PACKAGE_NAME }}
       env:
         CI_USER: ${{ secrets.CI_USER}}
