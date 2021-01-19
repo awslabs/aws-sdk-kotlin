@@ -1,13 +1,13 @@
 name: CI
 
 on:
- push:
-   branches:
-     - '*'
-     - '!main'
+  push:
+    branches:
+      - '*'
+      - '!main'
   pull_request:
     branches:
-     - 'main'
+      - 'main'
 
 env:
   BUILDER_VERSION: fix-dependency-steps
@@ -27,7 +27,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Checkout sources
-      - uses: actions/checkout@v2
+      uses: actions/checkout@v2
     - name: Configure CI Credentials
       # configure a git credentials helper for checking out private dependencies using crt-builder
       run: |
