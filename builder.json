@@ -36,6 +36,13 @@
             "post_build_steps": [
                 "./gradlew publishToMavenLocal"
             ]
+        },
+        {
+            "name": "aws-crt-kotlin",
+            "revision": "bootstrap-jvm",
+            "post_build_steps": [
+                "./gradlew publishToMavenLocal"
+            ]
         }
     ]
 }
