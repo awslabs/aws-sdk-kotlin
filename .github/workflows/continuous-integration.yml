@@ -1,29 +1,42 @@
 name: CI
 
 on:
-#  Following triggers are disabled until dependency resolution to smithy-kotlin is resolved.  
-#  push:
-#    branches: [ main ]
-#  pull_request:
-#    branches: [ main ]
-  workflow_dispatch:
+ push:
+   branches:
+     - '*'
+     - '!main'
+  pull_request:
+    branches:
+     - 'main'
+
+env:
+  BUILDER_VERSION: fix-dependency-steps
+  BUILDER_SOURCE: channels
+  BUILDER_HOST: https://d19elf31gohf1l.cloudfront.net
+  PACKAGE_NAME: aws-sdk-kotlin
+  LINUX_BASE_IMAGE: ubuntu-16-x64
+  RUN: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
-  CI:
+  linux-compat:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        image:
+          - manylinux2014-x64
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout sources
       - uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 8
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew build -x test -x jvmTest
-      - name: Unit Tests
-        run: ./gradlew test rootAllTest
-      - name: Lint
-        run: ./gradlew ktlint
+    - name: Configure CI Credentials
+      # configure a git credentials helper for checking out private dependencies using crt-builder
+      run: |
+        git config --local credential.https://github.com/awslabs.helper "./scripts/git-ci-cred-helper.py"
+    - name: Build and Test ${{ env.PACKAGE_NAME }}
+      env:
+        CI_USER: ${{ secrets.CI_USER}}
+        CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
+      run: |
+        python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder')"
+        chmod a+x builder
+        ./builder build -p ${{ env.PACKAGE_NAME }} --target=linux-${{ matrix.arch }}
