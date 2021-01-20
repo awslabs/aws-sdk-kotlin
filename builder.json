@@ -5,10 +5,8 @@
     "build_steps": [
         "./gradlew -x test -x jvmTest -x allTests build"
     ],
-    "post_build_steps": [
-        "./gradlew publishToMavenLocal"
-    ],
     "test_steps": [
+        "./gradlew publishToMavenLocal",
         "./gradlew test allTests testAllProtocols"
     ],
     "imports": [
