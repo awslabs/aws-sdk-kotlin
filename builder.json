@@ -7,7 +7,8 @@
     ],
     "test_steps": [
         "./gradlew publishToMavenLocal",
-        "./gradlew test allTests testAllProtocols"
+        "./gradlew test allTests",
+        "./gradlew testAllProtocols"
     ],
     "imports": [
         "JDK8"
