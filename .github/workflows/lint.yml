@@ -10,7 +10,7 @@ env:
   PACKAGE_NAME: aws-sdk-kotlin
 
 jobs:
-  linux-compat:
+  ktlint:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout sources
