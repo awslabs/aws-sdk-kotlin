@@ -43,8 +43,8 @@ class RestJson1 : AwsHttpBindingProtocolGenerator() {
 
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 
-    override fun getProtocolHttpBindingResolver(generationContext: ProtocolGenerator.GenerationContext): HttpBindingResolver =
-        RestJsonHttpBindingResolver(generationContext, "application/json")
+    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
+        RestJsonHttpBindingResolver(ctx, "application/json")
 
     override val protocol: ShapeId = RestJson1Trait.ID
 }
