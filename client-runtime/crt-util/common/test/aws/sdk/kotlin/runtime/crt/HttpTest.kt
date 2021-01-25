@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.runtime.crt
 
-import aws.sdk.kotlin.runtime.InternalSdkApi
 import software.aws.clientrt.http.HttpMethod
 import software.aws.clientrt.http.Protocol
 import software.aws.clientrt.http.parameters
@@ -20,7 +19,6 @@ import aws.sdk.kotlin.runtime.crt.http.Headers as HeadersCrt
 import aws.sdk.kotlin.runtime.crt.http.HttpRequest as HttpRequestCrt
 
 class HttpTest {
-    @InternalSdkApi
     @Test
     fun testRequestBuilderUpdate() {
         // test updating HttpRequestBuilder from a (signed) crt request
@@ -76,7 +74,6 @@ class HttpTest {
         assertTrue(builder.url.parameters.contains("baz", "quux"))
     }
 
-    @InternalSdkApi
     @Test
     fun testRequestBuilderUpdateNoQuery() {
         val builder = HttpRequestBuilder().apply {

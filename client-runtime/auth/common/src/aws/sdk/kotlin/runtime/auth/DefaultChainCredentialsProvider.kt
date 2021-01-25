@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.crt.auth.credentials.build
 import aws.sdk.kotlin.runtime.crt.SdkDefaultIO
 import aws.sdk.kotlin.runtime.crt.auth.credentials.DefaultChainCredentialsProvider as DefaultChainCredentialsProviderCrt
@@ -27,14 +26,12 @@ import aws.sdk.kotlin.runtime.crt.auth.credentials.DefaultChainCredentialsProvid
  * @return the newly-constructed credentials provider
  */
 public class DefaultChainCredentialsProvider : CredentialsProvider {
-    @InternalSdkApi
     private val crtProvider by lazy {
         DefaultChainCredentialsProviderCrt.build {
             clientBootstrap = SdkDefaultIO.ClientBootstrap
         }
     }
 
-    @InternalSdkApi
     override suspend fun getCredentials(): Credentials {
         return crtProvider.getCredentials().toSdk()
     }

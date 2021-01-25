@@ -7,6 +7,8 @@
 
 package aws.sdk.kotlin.runtime.http
 
+import aws.sdk.kotlin.runtime.endpoint.Endpoint
+import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
@@ -37,9 +39,9 @@ class ServiceEndpointResolverTest {
         val client = sdkHttpClient(mockEngine) {
             install(ServiceEndpointResolver) {
                 serviceId = "TestService"
-                resolver = object : aws.sdk.kotlin.runtime.endpoint.EndpointResolver {
-                    override suspend fun resolve(service: String, region: String): aws.sdk.kotlin.runtime.endpoint.Endpoint {
-                        return aws.sdk.kotlin.runtime.endpoint.Endpoint("test.com", "https")
+                resolver = object : EndpointResolver {
+                    override suspend fun resolve(service: String, region: String): Endpoint {
+                        return Endpoint("test.com", "https")
                     }
                 }
             }

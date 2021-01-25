@@ -6,6 +6,11 @@
 package com.amazonaws.service.lambda
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.auth.AuthAttributes
+import aws.sdk.kotlin.runtime.auth.AwsSigv4Signer
+import aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider
+import aws.sdk.kotlin.runtime.regions.resolveRegionForOperation
+import aws.sdk.kotlin.runtime.restjson.RestJsonError
 import com.amazonaws.service.lambda.model.*
 import com.amazonaws.service.lambda.transform.*
 import kotlinx.coroutines.runBlocking
@@ -22,15 +27,8 @@ import software.aws.clientrt.http.feature.HttpSerde
 import software.aws.clientrt.serde.json.JsonSerdeProvider
 import software.aws.clientrt.util.InternalAPI
 import software.aws.clientrt.util.putIfAbsent
-import aws.sdk.kotlin.runtime.auth.AuthAttributes
-import aws.sdk.kotlin.runtime.auth.AwsSigv4Signer
-import aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider
-import aws.sdk.kotlin.runtime.regions.resolveRegionForOperation
-import aws.sdk.kotlin.runtime.restjson.RestJsonError
-import aws.sdk.kotlin.runtime.client.AwsClientOption
 
 
-@InternalSdkApi
 @OptIn(InternalAPI::class)
 class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient {
     private val client: SdkHttpClient
@@ -114,8 +112,6 @@ class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient
     }
 }
 
-
-@InternalSdkApi
 fun main() = runBlocking{
     val client = LambdaClient {
     }

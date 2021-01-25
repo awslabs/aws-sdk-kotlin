@@ -9,19 +9,20 @@ import aws.sdk.kotlin.runtime.crt.auth.signing.AwsSignedBodyValue
 import aws.sdk.kotlin.runtime.crt.auth.signing.AwsSigner
 import aws.sdk.kotlin.runtime.crt.auth.signing.AwsSigningAlgorithm
 import aws.sdk.kotlin.runtime.crt.auth.signing.AwsSigningConfig
+import aws.sdk.kotlin.runtime.crt.toSignableCrtRequest
+import aws.sdk.kotlin.runtime.crt.update
 import software.aws.clientrt.client.ExecutionContext
-import software.aws.clientrt.http.*
+import software.aws.clientrt.http.Feature
+import software.aws.clientrt.http.FeatureKey
+import software.aws.clientrt.http.HttpClientFeatureFactory
+import software.aws.clientrt.http.SdkHttpClient
 import software.aws.clientrt.http.request.HttpRequestPipeline
 import software.aws.clientrt.time.epochMilliseconds
 import software.aws.clientrt.util.get
-import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.crt.toSignableCrtRequest
-import aws.sdk.kotlin.runtime.crt.update
 
 /**
  * HTTP request pipeline middleware that signs outgoing requests
  */
-@InternalSdkApi
 public class AwsSigv4Signer internal constructor(config: Config) : Feature {
     private val credentialsProvider = requireNotNull(config.credentialsProvider) { "AwsSigv4Signer requires a credentialsProvider" }
     private val signingService = requireNotNull(config.signingService) { "AwsSigv4Signer requires a signing service" }

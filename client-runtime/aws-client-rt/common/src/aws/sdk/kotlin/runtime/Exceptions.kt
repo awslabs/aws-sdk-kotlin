@@ -47,7 +47,7 @@ public open class ClientException : ClientException {
  * An exception that is thrown when the returned (error) response is not known by this version of the SDK
  * (i.e. the modeled error code is not known)
  */
-public class UnknownServiceErrorException : aws.sdk.kotlin.runtime.AwsServiceException {
+public class UnknownServiceErrorException : AwsServiceException {
 
     public constructor() : super()
 

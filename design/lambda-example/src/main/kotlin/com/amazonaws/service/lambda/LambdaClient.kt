@@ -14,7 +14,6 @@
  */
 package com.amazonaws.service.lambda
 
-import aws.sdk.kotlin.runtime.InternalSdkApi
 import com.amazonaws.service.lambda.model.AliasConfiguration
 import com.amazonaws.service.lambda.model.CreateAliasRequest
 import com.amazonaws.service.lambda.model.InvokeRequest
@@ -35,7 +34,6 @@ interface LambdaClient: SdkClient {
         get() = "lambda"
 
     companion object {
-        @InternalSdkApi
         operator fun invoke(block: Config.DslBuilder.() -> Unit = {}): LambdaClient {
             val config = Config.BuilderImpl().apply(block).build()
             return DefaultLambdaClient(config)

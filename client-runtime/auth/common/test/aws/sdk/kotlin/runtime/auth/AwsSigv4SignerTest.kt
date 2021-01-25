@@ -7,7 +7,6 @@
 
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.HttpMethod
@@ -49,7 +48,6 @@ class AwsSigv4SignerTest {
         return Pair(builder, ctx)
     }
 
-    @InternalSdkApi
     private suspend fun getSignedRequest(builder: HttpRequestBuilder, ctx: ExecutionContext): HttpRequestBuilder {
         val mockEngine = object : HttpClientEngine {
             override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { throw NotImplementedError() }
@@ -63,7 +61,6 @@ class AwsSigv4SignerTest {
         return client.requestPipeline.execute(HttpRequestContext(ctx), builder)
     }
 
-    @InternalSdkApi
     @Test
     fun testSignRequest() = runSuspendTest {
         val (builder, ctx) = buildBaseRequest()
@@ -77,7 +74,6 @@ class AwsSigv4SignerTest {
         assertEquals(expectedSig, signed.headers["Authorization"])
     }
 
-    @InternalSdkApi
     @Test
     fun testUnsignedRequest() = runSuspendTest {
         val (builder, ctx) = buildBaseRequest()

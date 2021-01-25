@@ -21,7 +21,7 @@ public class ServiceEndpointResolver(
 ) : Feature {
 
     private val serviceId: String = requireNotNull(config.serviceId) { "ServiceId must not be null" }
-    private val resolver: aws.sdk.kotlin.runtime.endpoint.EndpointResolver = requireNotNull(config.resolver) { "EndpointResolver must not be null" }
+    private val resolver:EndpointResolver = requireNotNull(config.resolver) { "EndpointResolver must not be null" }
 
     public class Config {
         /**
@@ -32,7 +32,7 @@ public class ServiceEndpointResolver(
         /**
          * The resolver to use
          */
-        public var resolver: aws.sdk.kotlin.runtime.endpoint.EndpointResolver? = null
+        public var resolver:EndpointResolver? = null
     }
 
     public companion object Feature : HttpClientFeatureFactory<Config, ServiceEndpointResolver> {

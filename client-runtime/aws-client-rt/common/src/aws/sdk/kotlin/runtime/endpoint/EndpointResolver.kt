@@ -15,5 +15,5 @@ public interface EndpointResolver {
     /**
      * Resolve the [Endpoint] for the given service and region
      */
-    public suspend fun resolve(service: String, region: String): aws.sdk.kotlin.runtime.endpoint.Endpoint
+    public suspend fun resolve(service: String, region: String):Endpoint
 }

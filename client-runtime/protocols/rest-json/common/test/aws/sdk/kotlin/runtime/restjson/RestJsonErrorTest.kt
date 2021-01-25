@@ -6,6 +6,7 @@
  */
 package aws.sdk.kotlin.runtime.restjson
 
+import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.UnknownServiceErrorException
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
@@ -26,7 +27,7 @@ import kotlin.test.*
 @OptIn(ExperimentalStdlibApi::class)
 class RestJsonErrorTest {
 
-    class FooError private constructor(builder: BuilderImpl) : aws.sdk.kotlin.runtime.AwsServiceException() {
+    class FooError private constructor(builder: BuilderImpl) : AwsServiceException() {
         val headerInt: Int? = builder.headerInt
         val payloadString: String? = builder.payloadString
 
