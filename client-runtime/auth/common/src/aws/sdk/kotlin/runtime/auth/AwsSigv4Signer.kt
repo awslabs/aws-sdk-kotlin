@@ -5,12 +5,12 @@
 
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.runtime.crt.auth.signing.AwsSignedBodyValue
-import aws.sdk.kotlin.runtime.crt.auth.signing.AwsSigner
-import aws.sdk.kotlin.runtime.crt.auth.signing.AwsSigningAlgorithm
-import aws.sdk.kotlin.runtime.crt.auth.signing.AwsSigningConfig
-import aws.sdk.kotlin.runtime.crt.toSignableCrtRequest
-import aws.sdk.kotlin.runtime.crt.update
+import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyValue
+import aws.sdk.kotlin.crt.auth.signing.AwsSigner
+import aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm
+import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
+import aws.sdk.kotlin.crt.toSignableCrtRequest
+import aws.sdk.kotlin.crt.update
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.Feature
 import software.aws.clientrt.http.FeatureKey

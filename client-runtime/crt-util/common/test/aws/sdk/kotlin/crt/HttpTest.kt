@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.crt
+package aws.sdk.kotlin.crt
 
 import software.aws.clientrt.http.HttpMethod
 import software.aws.clientrt.http.Protocol
@@ -15,8 +15,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import aws.sdk.kotlin.runtime.crt.http.Headers as HeadersCrt
-import aws.sdk.kotlin.runtime.crt.http.HttpRequest as HttpRequestCrt
+import aws.sdk.kotlin.crt.http.Headers as HeadersCrt
+import aws.sdk.kotlin.crt.http.HttpRequest as HttpRequestCrt
 
 class HttpTest {
     @Test

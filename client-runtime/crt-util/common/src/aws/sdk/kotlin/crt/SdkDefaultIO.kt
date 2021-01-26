@@ -1,15 +1,13 @@
 /*
- *
- *  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  * SPDX-License-Identifier: Apache-2.0.
- *
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.crt
+package aws.sdk.kotlin.crt
 
-import aws.sdk.kotlin.runtime.crt.io.ClientBootstrap
-import aws.sdk.kotlin.runtime.crt.io.EventLoopGroup
-import aws.sdk.kotlin.runtime.crt.io.HostResolver
+import aws.sdk.kotlin.crt.io.ClientBootstrap
+import aws.sdk.kotlin.crt.io.EventLoopGroup
+import aws.sdk.kotlin.crt.io.HostResolver
 import aws.sdk.kotlin.runtime.InternalSdkApi
 
 private const val DEFAULT_EVENT_LOOP_THREAD_COUNT: Int = 1

@@ -17,7 +17,7 @@ kotlin {
                 api(project(":client-runtime:aws-client-rt"))
                 api("software.aws.smithy.kotlin:http:$smithyKotlinClientRtVersion")
                 implementation(project(":client-runtime:crt-util"))
-                implementation("aws.sdk.kotlin.runtime.crt:aws-crt-kotlin:$crtKotlinVersion")
+                implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
             }
         }
         commonTest {

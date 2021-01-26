@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.runtime.crt.auth.credentials.Credentials as CredentialsCrt
-import aws.sdk.kotlin.runtime.crt.auth.credentials.CredentialsProvider as CredentialsProviderCrt
+import aws.sdk.kotlin.crt.auth.credentials.Credentials as CredentialsCrt
+import aws.sdk.kotlin.crt.auth.credentials.CredentialsProvider as CredentialsProviderCrt
 
 /**
  * Proxy an instance of the Kotlin SDK version of [CredentialsProvider] as a CRT provider

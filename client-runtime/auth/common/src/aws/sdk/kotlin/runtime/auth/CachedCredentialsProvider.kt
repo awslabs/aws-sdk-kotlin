@@ -5,10 +5,10 @@
 
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.runtime.crt.auth.credentials.build
+import aws.sdk.kotlin.crt.auth.credentials.build
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import aws.sdk.kotlin.runtime.crt.auth.credentials.CachedCredentialsProvider as CachedCredentialsProviderCrt
+import aws.sdk.kotlin.crt.auth.credentials.CachedCredentialsProvider as CachedCredentialsProviderCrt
 
 /**
  * Creates a provider that functions as a caching decorating of another provider.

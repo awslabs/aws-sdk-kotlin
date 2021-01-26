@@ -5,9 +5,9 @@
 
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.runtime.crt.auth.credentials.build
-import aws.sdk.kotlin.runtime.crt.SdkDefaultIO
-import aws.sdk.kotlin.runtime.crt.auth.credentials.DefaultChainCredentialsProvider as DefaultChainCredentialsProviderCrt
+import aws.sdk.kotlin.crt.auth.credentials.build
+import aws.sdk.kotlin.crt.SdkDefaultIO
+import aws.sdk.kotlin.crt.auth.credentials.DefaultChainCredentialsProvider as DefaultChainCredentialsProviderCrt
 
 
 
