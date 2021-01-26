@@ -5,11 +5,11 @@
 
 package aws.sdk.kotlin.runtime.http
 
+import aws.sdk.kotlin.runtime.client.AwsClientOption
+import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.request.HttpRequestPipeline
 import software.aws.clientrt.util.get
-import aws.sdk.kotlin.runtime.client.AwsClientOption
-import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 
 /**
  *  Http feature for resolving the service endpoint.
@@ -19,7 +19,7 @@ public class ServiceEndpointResolver(
 ) : Feature {
 
     private val serviceId: String = requireNotNull(config.serviceId) { "ServiceId must not be null" }
-    private val resolver:EndpointResolver = requireNotNull(config.resolver) { "EndpointResolver must not be null" }
+    private val resolver: EndpointResolver = requireNotNull(config.resolver) { "EndpointResolver must not be null" }
 
     public class Config {
         /**
@@ -30,7 +30,7 @@ public class ServiceEndpointResolver(
         /**
          * The resolver to use
          */
-        public var resolver:EndpointResolver? = null
+        public var resolver: EndpointResolver? = null
     }
 
     public companion object Feature : HttpClientFeatureFactory<Config, ServiceEndpointResolver> {
@@ -44,7 +44,7 @@ public class ServiceEndpointResolver(
 
     override fun install(client: SdkHttpClient) {
         client.requestPipeline.intercept(HttpRequestPipeline.Initialize) {
-            val region = context.executionContext[aws.sdk.kotlin.runtime.client.AwsClientOption.Region]
+            val region = context.executionContext[AwsClientOption.Region]
             val endpoint = resolver.resolve(serviceId, region)
             subject.url.scheme = Protocol.parse(endpoint.protocol)
             subject.url.host = endpoint.hostname

@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.runtime.restjson
 
 import aws.sdk.kotlin.runtime.AwsServiceException
+import aws.sdk.kotlin.runtime.UnknownServiceErrorException
 import aws.sdk.kotlin.runtime.http.ExceptionMetadata
 import aws.sdk.kotlin.runtime.http.ExceptionRegistry
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
@@ -15,7 +16,6 @@ import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.HttpResponsePipeline
 import software.aws.clientrt.serde.json.JsonSerdeProvider
 import software.aws.clientrt.util.InternalAPI
-
 
 /**
  * Http feature that inspects responses and throws the appropriate modeled service error that matches
@@ -61,7 +61,7 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
             try {
                 error = RestJsonErrorDeserializer.deserialize(context.response, payload)
             } catch (ex: Exception) {
-                throw aws.sdk.kotlin.runtime.UnknownServiceErrorException(
+                throw UnknownServiceErrorException(
                     "failed to parse response as restJson protocol error",
                     ex
                 ).also {
@@ -74,7 +74,7 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
             // we already consumed the response body, wrap it to allow the modeled exception to deserialize
             // any members that may be bound to the document
             val deserializer = registry[error.code]?.deserializer
-            val modeledException = deserializer?.deserialize(wrappedResponse, provider::deserializer) ?: aws.sdk.kotlin.runtime.UnknownServiceErrorException()
+            val modeledException = deserializer?.deserialize(wrappedResponse, provider::deserializer) ?: UnknownServiceErrorException()
             setAseFields(modeledException, wrappedResponse, error)
 
             // this should never happen...

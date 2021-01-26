@@ -5,11 +5,11 @@
 
 package aws.sdk.kotlin.runtime.regions
 
-import software.aws.clientrt.client.ExecutionContext
 import aws.sdk.kotlin.runtime.ClientException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.client.AwsAdvancedClientOption
 import aws.sdk.kotlin.runtime.client.AwsClientOption
+import software.aws.clientrt.client.ExecutionContext
 
 /**
  * Attempt to resolve the region to make requests to.

@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http
 
+import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.endpoint.Endpoint
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
@@ -46,7 +47,7 @@ class ServiceEndpointResolverTest {
         }
 
         val ctx = ExecutionContext()
-        ctx[aws.sdk.kotlin.runtime.client.AwsClientOption.Region] = "us-east-1"
+        ctx[AwsClientOption.Region] = "us-east-1"
         val response = client.roundTrip<HttpResponse>(ctx, requestBuilder)
         assertNotNull(response)
     }

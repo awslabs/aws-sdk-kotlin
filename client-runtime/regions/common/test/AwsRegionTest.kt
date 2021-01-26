@@ -1,7 +1,7 @@
 package aws.sdk.kotlin.runtime.regions
 
-import software.aws.clientrt.client.ExecutionContext
 import aws.sdk.kotlin.runtime.client.AwsClientOption
+import software.aws.clientrt.client.ExecutionContext
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -5,10 +5,10 @@
 
 package com.amazonaws.service.lambda
 
-import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.AuthAttributes
 import aws.sdk.kotlin.runtime.auth.AwsSigv4Signer
 import aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider
+import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.regions.resolveRegionForOperation
 import aws.sdk.kotlin.runtime.restjson.RestJsonError
 import com.amazonaws.service.lambda.model.*
@@ -104,7 +104,7 @@ class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient
     // merge the defaults configured for the service into the execution context before firing off a request
     private fun mergeServiceDefaults(ctx: ExecutionContext) {
         val region = resolveRegionForOperation(ctx, config)
-        ctx.putIfAbsent(aws.sdk.kotlin.runtime.client.AwsClientOption.Region, region)
+        ctx.putIfAbsent(AwsClientOption.Region, region)
         ctx.putIfAbsent(AuthAttributes.SigningRegion, config.signingRegion ?: region)
         ctx.putIfAbsent(SdkClientOption.ServiceName, serviceName)
 
