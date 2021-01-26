@@ -10,6 +10,7 @@ import aws.sdk.kotlin.runtime.http.ExceptionMetadata
 import aws.sdk.kotlin.runtime.http.ExceptionRegistry
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
 import aws.sdk.kotlin.runtime.http.withPayload
+import aws.sdk.kotlin.runtime.ClientException
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.feature.HttpDeserialize
 import software.aws.clientrt.http.response.HttpResponse
@@ -78,7 +79,7 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
             setAseFields(modeledException, wrappedResponse, error)
 
             // this should never happen...
-            val ex = modeledException as? Throwable ?: throw aws.sdk.kotlin.runtime.ClientException("registered deserializer for modeled error did not produce an instance of Throwable")
+            val ex = modeledException as? Throwable ?: throw ClientException("registered deserializer for modeled error did not produce an instance of Throwable")
             throw ex
         }
     }
