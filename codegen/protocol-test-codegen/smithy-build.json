@@ -13,7 +13,7 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.restjson#RestJson",
-          "module": "software.aws.kotlinsdk.protocoltest.awsrestjson",
+          "module": "aws.sdk.kotlin.runtime.protocoltest.awsrestjson",
           "moduleVersion": "1.0",
           "build":  {
               "rootProject": true
@@ -33,7 +33,7 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.json10#JsonRpc10",
-          "module": "software.aws.kotlinsdk.protocoltest.awsjson10",
+          "module": "aws.sdk.kotlin.runtime.protocoltest.awsjson10",
           "moduleVersion": "1.0",
           "build":  {
             "rootProject": true
@@ -53,7 +53,7 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.json#JsonProtocol",
-          "module": "software.aws.kotlinsdk.protocoltest.awsjson11",
+          "module": "aws.sdk.kotlin.runtime.protocoltest.awsjson11",
           "moduleVersion": "1.0",
           "build":  {
             "rootProject": true

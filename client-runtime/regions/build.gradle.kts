@@ -5,7 +5,7 @@
 
 description = "AWS Region Support"
 extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Regions"
-extra["moduleName"] = "software.aws.kotlinsdk.regions"
+extra["moduleName"] = "aws.sdk.kotlin.runtime.regions"
 
 kotlin {
     sourceSets {

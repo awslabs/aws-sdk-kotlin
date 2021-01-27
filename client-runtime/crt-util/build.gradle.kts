@@ -5,7 +5,7 @@
 
 description = "Utilities for working with AWS CRT Kotlin"
 extra["displayName"] = "Software :: AWS :: Kotlin SDK :: CRT :: Util"
-extra["moduleName"] = "software.aws.kotlinsdk.crt"
+extra["moduleName"] = "aws.sdk.kotlin.runtime.crt"
 
 val smithyKotlinClientRtVersion: String by project
 val crtKotlinVersion: String by project

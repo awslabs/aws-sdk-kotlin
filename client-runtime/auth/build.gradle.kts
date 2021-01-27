@@ -5,7 +5,7 @@
 
 description = "AWS Service Authentication"
 extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Auth"
-extra["moduleName"] = "software.aws.kotlinsdk.auth"
+extra["moduleName"] = "aws.sdk.kotlin.runtime.auth"
 
 val smithyKotlinClientRtVersion: String by project
 
