@@ -5,12 +5,12 @@
 package aws.sdk.kotlin.runtime.restjson
 
 import aws.sdk.kotlin.runtime.AwsServiceException
+import aws.sdk.kotlin.runtime.ClientException
 import aws.sdk.kotlin.runtime.UnknownServiceErrorException
 import aws.sdk.kotlin.runtime.http.ExceptionMetadata
 import aws.sdk.kotlin.runtime.http.ExceptionRegistry
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
 import aws.sdk.kotlin.runtime.http.withPayload
-import aws.sdk.kotlin.runtime.ClientException
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.feature.HttpDeserialize
 import software.aws.clientrt.http.response.HttpResponse
