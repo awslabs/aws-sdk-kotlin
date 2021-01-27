@@ -15,7 +15,7 @@ class GradleSettings : KotlinIntegration {
         get() = GradleBuildSettings().apply {
             experimentalAnnotations += listOf(
                 "software.aws.clientrt.util.InternalAPI",
-                "software.aws.kotlinsdk.InternalSdkApi"
+                "aws.sdk.kotlin.runtime.InternalSdkApi"
             )
         }
 }
