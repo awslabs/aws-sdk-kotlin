@@ -13,7 +13,7 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.restjson#RestJson",
-          "module": "software.aws.kotlinsdk.protocoltest.awsrestjson",
+          "module": "aws.sdk.kotlin.protocoltest.awsrestjson",
           "moduleVersion": "1.0",
           "build":  {
               "rootProject": true
@@ -33,7 +33,7 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.json10#JsonRpc10",
-          "module": "software.aws.kotlinsdk.protocoltest.awsjson10",
+          "module": "aws.sdk.kotlin.protocoltest.awsjson10",
           "moduleVersion": "1.0",
           "build":  {
             "rootProject": true
@@ -53,7 +53,7 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.json#JsonProtocol",
-          "module": "software.aws.kotlinsdk.protocoltest.awsjson11",
+          "module": "aws.sdk.kotlin.protocoltest.awsjson11",
           "moduleVersion": "1.0",
           "build":  {
             "rootProject": true
@@ -73,7 +73,27 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.restxml#RestXml",
-          "module": "software.aws.kotlinsdk.protocoltest.restxml",
+          "module": "aws.sdk.kotlin.protocoltest.restxml",
+          "moduleVersion": "1.0",
+          "build":  {
+            "rootProject": true
+          }
+        }
+      }
+    },
+    "aws-restxml-xmlns": {
+      "transforms": [
+        {
+          "name": "includeServices",
+          "args": {
+            "services": ["aws.protocoltests.restxml.xmlns#RestXmlWithNamespace"]
+          }
+        }
+      ],
+      "plugins": {
+        "kotlin-codegen": {
+          "service": "aws.protocoltests.restxml.xmlns#RestXmlWithNamespace",
+          "module": "aws.sdk.kotlin.protocoltest.restxmlns",
           "moduleVersion": "1.0",
           "build":  {
             "rootProject": true
