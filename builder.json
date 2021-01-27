@@ -31,20 +31,11 @@
     },
     "upstream": [
         {
-            "name": "smithy-kotlin",
-            "pre_build_steps": [
-                "echo pre build from aws-sdk-kotlin"
-            ],
-            "post_build_steps": [
-                "./gradlew publishToMavenLocal"
-            ]
+            "name": "smithy-kotlin"
         },
         {
             "name": "aws-crt-kotlin",
-            "revision": "bootstrap-jvm",
-            "post_build_steps": [
-                "./gradlew publishToMavenLocal"
-            ]
+            "revision": "bootstrap-jvm"
         }
     ]
 }
