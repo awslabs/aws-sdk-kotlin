@@ -8,12 +8,12 @@ import software.amazon.smithy.kotlin.codegen.GradleConfiguration
 import software.amazon.smithy.kotlin.codegen.KotlinDependency
 
 // root namespace for the AWS client-runtime
-const val AWS_CLIENT_RT_ROOT_NS = "software.aws.kotlinsdk"
-const val AWS_CLIENT_RT_AUTH_NS = "software.aws.kotlinsdk.auth"
-const val AWS_CLIENT_RT_REGIONS_NS = "software.aws.kotlinsdk.regions"
+const val AWS_CLIENT_RT_ROOT_NS = "aws.sdk.kotlin.runtime"
+const val AWS_CLIENT_RT_AUTH_NS = "aws.sdk.kotlin.runtime.auth"
+const val AWS_CLIENT_RT_REGIONS_NS = "aws.sdk.kotlin.runtime.regions"
 
 // publishing info
-const val AWS_CLIENT_RT_GROUP = "software.aws.kotlin"
+const val AWS_CLIENT_RT_GROUP = "aws.sdk.kotlin.runtime"
 const val AWS_CLIENT_RT_VERSION = "0.0.1"
 
 /**

@@ -11,7 +11,7 @@ plugins {
 val smithyKotlinClientRtVersion: String by project
 val smithyKotlinGroup: String = "software.aws.smithy.kotlin"
 
-val experimentalAnnotations = listOf("kotlin.RequiresOptIn", "software.aws.clientrt.util.InternalAPI", "software.aws.kotlinsdk.InternalSdkApi")
+val experimentalAnnotations = listOf("kotlin.RequiresOptIn", "software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi")
 kotlin {
     sourceSets {
         all {

@@ -36,7 +36,7 @@ kotlin {
 }
 
 subprojects {
-    group = "software.aws.kotlin"
+    group = "aws.sdk.kotlin.runtime"
     version = "0.0.1"
 
     apply {
