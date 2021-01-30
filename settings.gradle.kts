@@ -20,6 +20,7 @@ rootProject.name = "aws-sdk-kotlin"
 enableFeaturePreview("GRADLE_METADATA")
 
 
+include(":build-tools")
 include(":dokka-aws")
 include(":codegen:sdk")
 include(":codegen:smithy-aws-kotlin-codegen")

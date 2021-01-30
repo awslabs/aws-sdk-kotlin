@@ -8,6 +8,8 @@ workspace.xml
 *.versionsBackup
 .gradle/
 build/
+!build-tools/
+!build-tools/src/**
 *.iml
 .idea/
 local.properties
