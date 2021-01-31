@@ -20,6 +20,9 @@ rootProject.name = "aws-sdk-kotlin"
 enableFeaturePreview("GRADLE_METADATA")
 
 
+includeBuild("./service-plugin")
+
+
 include(":build-tools")
 include(":dokka-aws")
 include(":codegen:sdk")

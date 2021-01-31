@@ -13,6 +13,10 @@ import java.io.FileWriter
 import java.io.IOException
 import java.nio.file.Paths
 
+// TODO - process documentation and title from the model? e.g.
+// "smithy.api#documentation": "<fullname>Amazon API Gateway</fullname>\n        <p>Amazon API Gateway helps developers deliver robust, secure, and scalable mobile and web application back ends. API Gateway allows developers to securely connect mobile and web applications to APIs that run on AWS Lambda, Amazon EC2, or other publicly addressable web services that are hosted outside of AWS.</p>",
+// "smithy.api#title": "Amazon API Gateway"
+
 /**
  * Create service project scaffolding
  *
@@ -45,6 +49,7 @@ import java.nio.file.Paths
 class Scaffold : Subcommand("scaffold", "create a new service client project/build") {
     val model: String by option(ArgType.String, "model", "m", "The path to the model file").required()
     val outputDir: String? by option(ArgType.String, "output-dir", "o", "the parent output directory to create the scaffolding")
+    val overwrite: Boolean by option(ArgType.Boolean, "overwrite", description="overwrite an existing project build if one exists").default(false)
 
     override fun execute() {
         // commands are always started in the root project directory
@@ -59,7 +64,7 @@ class Scaffold : Subcommand("scaffold", "create a new service client project/bui
         }
         val buildFile = sdkDir.resolve("build.gradle.kts").toFile()
 
-        if (buildFile.exists()) {
+        if (buildFile.exists() && !overwrite) {
             println("$buildFile already exists, nothing to do")
             kotlin.system.exitProcess(0)
         }
@@ -69,7 +74,7 @@ class Scaffold : Subcommand("scaffold", "create a new service client project/bui
         try {
             sdkDir.toFile().mkdirs()
             FileWriter(buildFile.absolutePath).use { fw ->
-                fw.write(buildFileTemplate(serviceId))
+                fw.write(buildFileTemplate(modelFile))
             }
             println("new project created in: $sdkDir")
         } catch (e: IOException) {
@@ -79,13 +84,13 @@ class Scaffold : Subcommand("scaffold", "create a new service client project/bui
     }
 }
 
-private fun buildFileTemplate(serviceName: String): String {
+private fun buildFileTemplate(modelFile: File): String {
     return """
     plugins {
         kotlin("jvm")
     }
     
-    val svc: String = "$serviceName"
+    val model: String = "${modelFile.name}"
 
     """.trimIndent()
 }
