@@ -24,7 +24,7 @@ buildscript {
 }
 
 dependencies {
-    implementation(project(":smithy-aws-kotlin-codegen"))
+    implementation(project(":codegen:smithy-aws-kotlin-codegen"))
 }
 
 // This project doesn't produce a JAR.

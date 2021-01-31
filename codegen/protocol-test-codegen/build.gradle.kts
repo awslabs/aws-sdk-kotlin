@@ -5,14 +5,14 @@
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 
 plugins {
-    id("software.amazon.smithy") version "0.5.2"
+    id("software.amazon.smithy")
 }
 
 val smithyVersion: String by project
 
 dependencies {
     implementation("software.amazon.smithy:smithy-aws-protocol-tests:$smithyVersion")
-    implementation(project(":smithy-aws-kotlin-codegen"))
+    implementation(project(":codegen:smithy-aws-kotlin-codegen"))
 }
 
 // This project doesn't produce a JAR.

@@ -10,23 +10,24 @@ pluginManagement {
 
         gradlePluginPortal()
     }
+
+    // configure the smithy-gradle plugin version
+    plugins {
+        id("software.amazon.smithy") version "0.5.2"
+    }
 }
 
 rootProject.name = "aws-sdk-kotlin"
 enableFeaturePreview("GRADLE_METADATA")
 
 
-fun module(path: String) {
-    val name = path.replace('\\', '/').substringAfterLast('/')
-    include(name)
-    project(":$name").projectDir = file(path)
-}
+includeBuild("./service-plugin")
 
 
-module("codegen")
-module("codegen/sdk-codegen")
-module("codegen/smithy-aws-kotlin-codegen")
-module("codegen/protocol-test-codegen")
+include(":codegen")
+include(":codegen:sdk-codegen")
+include(":codegen:smithy-aws-kotlin-codegen")
+include(":codegen:protocol-test-codegen")
 include(":build-tools")
 include(":client-runtime")
 include(":client-runtime:aws-client-rt")
@@ -38,9 +39,22 @@ include(":client-runtime:protocols:rest-json")
 include(":client-runtime:crt-util")
 
 // service client examples/playground for exploring design space
-module("design/lambda-example")
-module("design/s3-example")
+include(":design:lambda-example")
+include(":design:s3-example")
 
+// generated services
+fun File.isServiceDir(): Boolean {
+    if (isDirectory)  {
+        return toPath().resolve("build.gradle.kts").toFile().exists()
+    }
+    return false
+}
+
+file("services").listFiles().forEach {
+    if (it.isServiceDir()) {
+        include(":services:${it.name}")
+    }
+}
 
 /**
  * The following code enables to optionally include aws-sdk-kotlin dependencies in source form for easier
