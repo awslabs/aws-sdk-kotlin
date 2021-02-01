@@ -22,15 +22,22 @@ subprojects {
         plugin("org.jetbrains.kotlin.jvm")
     }
 
+
+    // compile the generated sources
+    kotlin.sourceSets.main {
+        kotlin.srcDir(projectDir.resolve("generated-sdk/src"))
+    }
+
+    // have generated sdk's opt-in to internal runtime features
     kotlin.sourceSets.all {
         experimentalAnnotations.forEach { languageSettings.useExperimentalAnnotation(it) }
     }
 
-//tasks.test {
-//    useJUnitPlatform()
-//    testLogging {
-//        events("passed", "skipped", "failed")
-//        showStandardStreams = true
-//    }
-//}
+    tasks.test {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
+            showStandardStreams = true
+        }
+    }
 }
