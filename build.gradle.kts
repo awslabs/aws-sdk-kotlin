@@ -83,6 +83,7 @@ val lintPaths = listOf(
     "examples/**/*.kt",
     "dokka-aws/**/*.kt",
     "build-tools/**/*.kt",
+    "gradle/sdk-plugins/**/*.kt",
 )
 
 tasks.register<JavaExec>("ktlint") {

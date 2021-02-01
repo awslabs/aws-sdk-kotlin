@@ -10,7 +10,7 @@ workspace.xml
 build/
 !build-tools/src/**
 !buildSrc/src/**
-!service-plugin/src/**
+!gradle/sdk-plugin/src/**
 *.iml
 .idea/
 local.properties

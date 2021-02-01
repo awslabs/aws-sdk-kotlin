@@ -21,6 +21,7 @@ repositories {
     gradlePluginPortal()
 }
 
+// FIXME - load from root project gradle.properties
 val kotlinVersion: String = "1.4.20"
 val smithyVersion: String = "1.5.1"
 
@@ -32,10 +33,9 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        val awsServicePlugin by creating {
-            // FIXME - rename this, we are generating clients not services
-            id = "aws.sdk.kotlin.service"
-            implementationClass = "aws.sdk.kotlin.build.plugin.AwsServicePlugin"
+        val awsSdkPlugin by creating {
+            id = "aws.sdk.kotlin.sdk"
+            implementationClass = "aws.sdk.kotlin.build.plugin.AwsSdkPlugin"
         }
     }
 }
