@@ -6,11 +6,11 @@
 
 package aws.sdk.kotlin.build.plugin
 
+import aws.sdk.kotlin.build.plugin.smithy.resolveSdkDependencies
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.provideDelegate
-import java.io.File
 
 class AwsServicePlugin : Plugin<Project> {
     private val AWS_SERVICE_EXTENSION_NAME = "awsService"
@@ -52,49 +52,8 @@ class AwsServicePlugin : Plugin<Project> {
         // add aws traits to the compile classpath so that the smithy build task can discover them
         dependencies.add("compileClasspath", "software.amazon.smithy:smithy-aws-traits:$smithyVersion")
 
-        // TODO - resolve dependencies from the model file
+        resolveSdkDependencies()
     }
 }
 
 class AwsServicePluginException(message: String) : GradleException(message)
-
-internal val Project.awsModelFile: File
-    get() = file("model/service.json")
-
-
-
-
-//plugins {
-//    kotlin("jvm")
-//}
-//
-//dependencies {
-//    implementation(kotlin("stdlib"))
-//    implementation("software.aws.smithy.kotlin:http:0.0.1")
-//    implementation("software.aws.smithy.kotlin:http-client-engine-ktor:0.0.1")
-//    implementation("aws.sdk.kotlin.runtime:rest-json:0.0.1")
-//    implementation("software.aws.smithy.kotlin:serde:0.0.1")
-//    implementation("software.aws.smithy.kotlin:serde-json:0.0.1")
-//    implementation("software.aws.smithy.kotlin:utils:0.0.1")
-//    api("aws.sdk.kotlin.runtime:auth:0.0.1")
-//    api("aws.sdk.kotlin.runtime:aws-client-rt:0.0.1")
-//    api("software.aws.smithy.kotlin:client-rt-core:0.0.1")
-//    api("aws.sdk.kotlin.runtime:http:0.0.1")
-//    api("aws.sdk.kotlin.runtime:regions:0.0.1")
-//}
-//
-//val experimentalAnnotations = listOf(
-//    "software.aws.clientrt.util.InternalAPI",
-//    "aws.sdk.kotlin.runtime.InternalSdkApi"
-//)
-//kotlin.sourceSets.all {
-//    experimentalAnnotations.forEach { languageSettings.useExperimentalAnnotation(it) }
-//}
-//
-//tasks.test {
-//    useJUnitPlatform()
-//    testLogging {
-//        events("passed", "skipped", "failed")
-//        showStandardStreams = true
-//    }
-//}
