@@ -76,6 +76,15 @@ class Scaffold : Subcommand("scaffold", "create a new service client project/bui
             FileWriter(buildFile.absolutePath).use { fw ->
                 fw.write(buildFileTemplate(modelFile))
             }
+
+            // copy the model file into the generated project for our own tooling/plugin to find
+            val modelDir = sdkDir.resolve("model").toFile()
+            if (!modelDir.exists()) {
+                modelDir.mkdir()
+            }
+
+            modelFile.copyTo(modelDir.resolve("service.json"))
+
             println("new project created in: $sdkDir")
         } catch (e: IOException) {
             e.printStackTrace()
@@ -88,6 +97,7 @@ private fun buildFileTemplate(modelFile: File): String {
     return """
     plugins {
         kotlin("jvm")
+        id("aws.sdk.kotlin.sdk")
     }
     
     val model: String = "${modelFile.name}"

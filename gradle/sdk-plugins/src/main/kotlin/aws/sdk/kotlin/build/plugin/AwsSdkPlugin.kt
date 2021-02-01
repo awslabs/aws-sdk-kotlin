@@ -12,8 +12,19 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.provideDelegate
 
-class AwsServicePlugin : Plugin<Project> {
-    private val AWS_SERVICE_EXTENSION_NAME = "awsService"
+/**
+ * Custom gradle plugin for AWS services. This plugin handles:
+ *
+ * - setting up codegen tasks to generate the Kotlin sources from their respective smithy models. Compilation
+ *   tasks are then configured to depend on these tasks.
+ * - configuring dependencies for the generated SDK by inspecting the model and updating the project
+ *
+ * SDK projects are scaffolded by tooling to setup the `build.gradle.kts` for the project which relies on this
+ * plugin. The convention expected by this plugin is to have a `model` directory which contains a Smithy
+ * model named `service.json`.
+ */
+class AwsSdkPlugin : Plugin<Project> {
+    private val AWS_SDK_EXTENSION_NAME = "awsSdk"
     override fun apply(target: Project) = target.run {
         validateModel()
         configurePlugins()
@@ -23,15 +34,15 @@ class AwsServicePlugin : Plugin<Project> {
         val extension = installExtension()
     }
 
-    private fun Project.installExtension(): AwsServiceExtension {
-        return extensions.create(AWS_SERVICE_EXTENSION_NAME, AwsServiceExtension::class.java, project)
+    private fun Project.installExtension(): AwsSdkExtension {
+        return extensions.create(AWS_SDK_EXTENSION_NAME, AwsSdkExtension::class.java, project)
     }
 
     private fun Project.validateModel() {
-        logger.aws("looking for model file in: $awsModelFile")
         if (!awsModelFile.exists()) {
             throw AwsServicePluginException("model not found for project: $name")
         }
+        logger.aws("found model file in: $awsModelFile")
     }
 
     private fun Project.configurePlugins() {
