@@ -74,7 +74,7 @@ class Scaffold : Subcommand("scaffold", "create a new service client project/bui
         try {
             sdkDir.toFile().mkdirs()
             FileWriter(buildFile.absolutePath).use { fw ->
-                fw.write(buildFileTemplate(modelFile))
+                fw.write(buildFileTemplate())
             }
 
             // copy the model file into the generated project for our own tooling/plugin to find
@@ -93,14 +93,12 @@ class Scaffold : Subcommand("scaffold", "create a new service client project/bui
     }
 }
 
-private fun buildFileTemplate(modelFile: File): String {
+private fun buildFileTemplate(): String {
     return """
     plugins {
         kotlin("jvm")
         id("aws.sdk.kotlin.sdk")
     }
-    
-    val model: String = "${modelFile.name}"
 
     """.trimIndent()
 }
@@ -112,7 +110,5 @@ private fun getServiceDirName(modelFile: File): String {
     require(services.size == 1) { "Expected one service per aws model, but found ${services.size} in ${modelFile.absolutePath}: ${services.map { it.id }}" }
     val service = services.first()
     val serviceApi = service.expectTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java)
-    return serviceApi.sdkId.split(" ").map {
-        it.toLowerCase()
-    }.joinToString("")
+    return serviceApi.sdkId.split(" ").joinToString("") { it.toLowerCase() }
 }
