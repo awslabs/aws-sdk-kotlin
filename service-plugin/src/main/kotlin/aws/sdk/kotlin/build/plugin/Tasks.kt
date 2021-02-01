@@ -7,10 +7,7 @@ package aws.sdk.kotlin.build.plugin
 
 import org.gradle.api.Project
 import software.amazon.smithy.gradle.tasks.SmithyBuild
-import software.amazon.smithy.model.shapes.ServiceShape
-import software.amazon.smithy.model.Model
 import java.io.File
-import kotlin.streams.toList
 
 /**
  * register the `generateSdk` task that `build` depends on
@@ -24,7 +21,6 @@ fun Project.registerCodegenTasks() {
         addRuntimeClasspath = true
         // TODO - move the smithy-build.json to buildDir?
         // TODO - set output dir for generated SDK
-        this.outputDirectory
     }
 
     // generate the projection file for smithy to consume
@@ -54,14 +50,7 @@ data class AwsService(
 // The generated smithy-build.json file is not committed since
 // it is rebuilt each time codegen is performed.
 private fun Project.generateSmithyBuild(): String {
-    val model = Model.assembler().addImport(awsModelFile.absolutePath).assemble().result.get()
-    val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).toList()
-    require(services.size == 1) { "Expected one service per aws model, but found ${services.size} in ${awsModelFile.absolutePath}" }
-    val serviceShape = services.first()
-    val serviceApi = serviceShape.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
-        ?: error { "Expected aws.api#service trait attached to model ${awsModelFile.absolutePath}" }
-
-    val sdkIdLower = serviceApi.sdkId.split(" ").map {
+    val sdkIdLower = awsServiceTrait.sdkId.split(" ").map {
         it.toLowerCase()
     }.joinToString()
 
@@ -70,7 +59,7 @@ private fun Project.generateSmithyBuild(): String {
         moduleName = "aws.sdk.kotlin.$sdkIdLower",
         modelFile = awsModelFile,
         projectionName = sdkIdLower,
-        sdkId = serviceApi.sdkId
+        sdkId = awsServiceTrait.sdkId
     )
 
     val projections = """
@@ -99,4 +88,3 @@ private fun Project.generateSmithyBuild(): String {
     }
     """.trimIndent()
 }
-

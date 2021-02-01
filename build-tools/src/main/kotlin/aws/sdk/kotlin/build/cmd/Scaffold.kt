@@ -49,7 +49,7 @@ import java.nio.file.Paths
 class Scaffold : Subcommand("scaffold", "create a new service client project/build") {
     val model: String by option(ArgType.String, "model", "m", "The path to the model file").required()
     val outputDir: String? by option(ArgType.String, "output-dir", "o", "the parent output directory to create the scaffolding")
-    val overwrite: Boolean by option(ArgType.Boolean, "overwrite", description="overwrite an existing project build if one exists").default(false)
+    val overwrite: Boolean by option(ArgType.Boolean, "overwrite", description = "overwrite an existing project build if one exists").default(false)
 
     override fun execute() {
         // commands are always started in the root project directory
