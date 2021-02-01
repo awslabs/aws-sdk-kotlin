@@ -100,7 +100,7 @@ data class SdkMetadata(
 )
 
 fun Project.generatedSdkMetadata(): SdkMetadata {
-    val sdkIdLower = awsServiceTrait.sdkId.split(" ").joinToString {
+    val sdkIdLower = awsServiceTrait.sdkId.split(" ").joinToString(separator = "") {
         it.toLowerCase()
     }
 
