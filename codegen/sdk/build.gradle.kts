@@ -81,7 +81,7 @@ fun generateSmithyBuild(services: List<AwsService>): String {
                       "moduleDescription": "${service.description}",
                       "sdkId": "${service.sdkId}",
                       "build": {
-                          "generateBuildFiles": false
+                          "generateDefaultBuildFiles": false
                       }
                     }
                 }
