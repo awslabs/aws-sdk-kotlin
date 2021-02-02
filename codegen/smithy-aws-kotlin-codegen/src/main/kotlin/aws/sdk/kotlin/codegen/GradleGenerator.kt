@@ -8,6 +8,9 @@ import software.amazon.smithy.kotlin.codegen.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.utils.CodeWriter
 
+// TODO - would be nice to allow integrations to define custom settings in the plugin
+// e.g. we could then more consistently apply this integration if we could define a property like: `build.isAwsSdk: true`
+
 /**
  * Integration that generates custom gradle build files
  */
@@ -21,20 +24,24 @@ class GradleGenerator : KotlinIntegration {
      * gradle build needs to be stripped down.
      */
     private fun generateGradleBuild(ctx: CodegenContext, delegator: KotlinDelegator) {
+        if (ctx.settings.build.generateDefaultBuildFiles) {
+            // plugin settings are configured such that we should let smithy-kotlin generate the build
+            // otherwise assume we are responsible
+            return
+        }
+
         val writer = CodeWriter().apply {
             trimBlankLines()
             trimTrailingSpaces()
             setIndentText("    ")
         }
 
-        val dependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
-
-        writer.write("\n")
-
+        writer.write("")
         if (ctx.settings.moduleDescription.isNotEmpty()) {
             writer.write("description = \$S", ctx.settings.moduleDescription)
         }
 
+        val dependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
         writer.withBlock("\ndependencies {", "}\n") {
             val orderedDependencies = dependencies.sortedWith(compareBy({ it.config }, { it.artifact }))
             for (dependency in orderedDependencies) {

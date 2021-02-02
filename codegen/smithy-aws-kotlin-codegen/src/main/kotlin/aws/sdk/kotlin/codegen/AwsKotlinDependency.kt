@@ -36,9 +36,9 @@ private val sameProjectDeps = mapOf(
     AwsKotlinDependency.REST_JSON_FEAT to """project(":client-runtime:protocols:rest-json")"""
 )
 
-internal fun KotlinDependency.dependencyNotation(): String {
+internal fun KotlinDependency.dependencyNotation(allowProjectNotation: Boolean = true): String {
     val dep = this
-    return if (sameProjectDeps.contains(dep)) {
+    return if (allowProjectNotation && sameProjectDeps.contains(dep)) {
         val projectNotation = sameProjectDeps[dep]
         "${dep.config}($projectNotation)"
     } else {
