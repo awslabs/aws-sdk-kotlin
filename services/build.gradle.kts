@@ -23,12 +23,6 @@ subprojects {
     }
 
 
-    // compile the generated sources
-//    kotlin.sourceSets.main {
-//        kotlin.srcDir(projectDir.resolve("generated-sdk/src"))
-//        kotlin.srcDir(projectDir.resolve("custom/src"))
-//    }
-
     // have generated sdk's opt-in to internal runtime features
     kotlin.sourceSets.all {
         experimentalAnnotations.forEach { languageSettings.useExperimentalAnnotation(it) }
