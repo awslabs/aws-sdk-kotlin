@@ -37,9 +37,11 @@ kotlin {
     jvm() // Create a JVM target with the default name 'jvm'
 }
 
+val sdkVersion: String by project
+
 subprojects {
-    group = "aws.sdk.kotlin.runtime"
-    version = "0.0.1"
+    group = "aws.sdk.kotlin"
+    version = sdkVersion
 
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")

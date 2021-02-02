@@ -13,7 +13,7 @@ const val AWS_CLIENT_RT_AUTH_NS = "aws.sdk.kotlin.runtime.auth"
 const val AWS_CLIENT_RT_REGIONS_NS = "aws.sdk.kotlin.runtime.regions"
 
 // publishing info
-const val AWS_CLIENT_RT_GROUP = "aws.sdk.kotlin.runtime"
+const val AWS_CLIENT_RT_GROUP = "aws.sdk.kotlin"
 const val AWS_CLIENT_RT_VERSION = "0.0.1"
 
 /**
@@ -41,7 +41,7 @@ internal fun KotlinDependency.dependencyNotation(): String {
     return if (sameProjectDeps.contains(dep)) {
         val projectNotation = sameProjectDeps[dep]
         "${dep.config}($projectNotation)"
-    }else {
+    } else {
         "${dep.config}(\"${dep.group}:${dep.artifact}:${dep.version}\")"
     }
 }
