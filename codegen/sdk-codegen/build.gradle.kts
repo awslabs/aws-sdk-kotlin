@@ -60,15 +60,14 @@ data class AwsService(
     val moduleVersion: String = "1.0",
     val modelFile: File,
     val projectionName: String,
-    val sdkId: String
+    val sdkId: String,
+    val description: String = ""
 )
 
 // Generates a smithy-build.json file by creating a new projection.
 // The generated smithy-build.json file is not committed to git since
 // it's rebuilt each time codegen is performed.
 fun generateSmithyBuild(services: List<AwsService>): String {
-//    val buildStandaloneSdk = getProperty("buildStandaloneSdk")?.toBoolean() ?: false
-    val buildStandaloneSdk = false
 
     val projections = services.joinToString(",") { service ->
         """
@@ -79,9 +78,10 @@ fun generateSmithyBuild(services: List<AwsService>): String {
                       "service": "${service.name}",
                       "module": "${service.moduleName}",
                       "moduleVersion": "${service.moduleVersion}",
+                      "moduleDescription": "${service.description}",
                       "sdkId": "${service.sdkId}",
                       "build": {
-                        "rootProject": $buildStandaloneSdk
+                          "generateBuildFiles": false
                       }
                     }
                 }
@@ -122,6 +122,8 @@ fun discoverServices(): List<AwsService> {
                 ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
             val (name, version, _) = file.name.split(".")
 
+            val description = service.getTrait(software.amazon.smithy.model.traits.TitleTrait::class.java).map { it.value }.orElse("")
+
             logger.info("discovered service: ${serviceApi.sdkId}")
 
             AwsService(
@@ -129,7 +131,8 @@ fun discoverServices(): List<AwsService> {
                 moduleName = "aws.sdk.kotlin.$name",
                 modelFile = file,
                 projectionName = name + "." + version.toLowerCase(),
-                sdkId = serviceApi.sdkId
+                sdkId = serviceApi.sdkId,
+                description = description
             )
         }
 }
