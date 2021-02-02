@@ -14,7 +14,7 @@ Generated sources are not checked into the repository, you first have to generat
 
 
 ```
-./gradlew :codegen:sdk-codegen:bootstrap
+./gradlew :codegen:sdk:bootstrap
 ```
 
 NOTE: This task will respect the AWS services specified by project properties. See options below.
@@ -45,7 +45,7 @@ An example config with the various properties is below:
 # This is useful for local development of smithy-kotlin in particular 
 compositeProjects=../smithy-kotlin
 
-# comma separated list of services to generate from sdk-codegen. When not specified all services are generated
+# comma separated list of services to generate from codegen/sdk/aws-models. When not specified all services are generated
 # service names match the filenames in the models directory `service.VERSION.json`
 aws.services=lambda
 ```
@@ -55,7 +55,7 @@ aws.services=lambda
 See the local.properties definition above to specify this in a config file.
 
 ```
-./gradlew -Paws.services=lambda  :codegen:sdk-codegen:bootstrap
+./gradlew -Paws.services=lambda  :codegen:sdk:bootstrap
 ```
 
 ##### Testing Locally

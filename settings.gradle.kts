@@ -21,9 +21,9 @@ rootProject.name = "aws-sdk-kotlin"
 enableFeaturePreview("GRADLE_METADATA")
 
 
-include(":codegen:sdk-codegen")
+include(":codegen:sdk")
 include(":codegen:smithy-aws-kotlin-codegen")
-include(":codegen:protocol-test-codegen")
+include(":codegen:protocol-tests")
 include(":client-runtime")
 include(":client-runtime:aws-client-rt")
 include(":client-runtime:testing")
