@@ -153,9 +153,6 @@ tasks.create<SmithyBuild>("generateSdk") {
     inputs.file(projectDir.resolve("smithy-build.json"))
 }
 
-// force rebuild every time while developing
-//tasks["generateSdk"].outputs.upToDateWhen { false }
-
 // Remove generated model file for clean
 tasks["clean"].doFirst {
     delete("smithy-build.json")
