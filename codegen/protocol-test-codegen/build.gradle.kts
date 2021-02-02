@@ -8,6 +8,8 @@ plugins {
     id("software.amazon.smithy")
 }
 
+description = "Smithy protocol test suite"
+
 val smithyVersion: String by project
 
 dependencies {

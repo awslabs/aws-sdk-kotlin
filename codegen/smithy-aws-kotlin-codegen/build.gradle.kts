@@ -7,6 +7,7 @@ plugins {
     jacoco
 }
 
+description = "Codegen support for AWS protocols"
 group = "software.amazon.smithy"
 version = "0.1.0"
 

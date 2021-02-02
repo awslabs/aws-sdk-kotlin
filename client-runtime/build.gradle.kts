@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
+description = "AWS client runtime support for generated service clients"
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka") version "1.4.20"
