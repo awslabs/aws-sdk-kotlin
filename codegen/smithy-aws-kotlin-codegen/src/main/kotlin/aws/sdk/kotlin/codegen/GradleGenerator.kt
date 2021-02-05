@@ -42,12 +42,15 @@ class GradleGenerator : KotlinIntegration {
         }
 
         val dependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
-        writer.withBlock("\ndependencies {", "}\n") {
-            val orderedDependencies = dependencies.sortedWith(compareBy({ it.config }, { it.artifact }))
-            for (dependency in orderedDependencies) {
-                write(dependency.dependencyNotation())
+
+        writer.write("")
+            .withBlock("dependencies {", "}") {
+                val orderedDependencies = dependencies.sortedWith(compareBy({ it.config }, { it.artifact }))
+                for (dependency in orderedDependencies) {
+                    write(dependency.dependencyNotation())
+                }
             }
-        }
+            .write("")
 
         val contents = writer.toString()
         delegator.fileManifest.writeFile("build.gradle.kts", contents)
