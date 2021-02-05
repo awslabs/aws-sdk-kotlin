@@ -167,7 +167,8 @@ val AwsService.destinationDir: String
         return rootProject.file("services/${sanitizedName}").absolutePath
     }
 
-task("relocateSdks") {
+task("stageSdks") {
+    description = "relocate generated SDK(s) from build directory to services/ dir"
     dependsOn("generateSdk")
     doLast {
         discoveredServices.forEach {
@@ -184,5 +185,5 @@ tasks.create("bootstrap") {
     description = "Generate AWS SDK's and register them with the build"
 
     dependsOn(tasks["generateSdk"])
-    finalizedBy(tasks["relocateSdks"])
+    finalizedBy(tasks["stageSdks"])
 }
