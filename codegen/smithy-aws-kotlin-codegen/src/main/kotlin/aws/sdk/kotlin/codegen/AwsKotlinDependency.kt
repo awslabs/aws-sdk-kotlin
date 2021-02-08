@@ -13,7 +13,7 @@ const val AWS_CLIENT_RT_AUTH_NS = "aws.sdk.kotlin.runtime.auth"
 const val AWS_CLIENT_RT_REGIONS_NS = "aws.sdk.kotlin.runtime.regions"
 
 // publishing info
-const val AWS_CLIENT_RT_GROUP = "aws.sdk.kotlin.runtime"
+const val AWS_CLIENT_RT_GROUP = "aws.sdk.kotlin"
 const val AWS_CLIENT_RT_VERSION = "0.0.1"
 
 /**
@@ -25,4 +25,23 @@ object AwsKotlinDependency {
     val AWS_CLIENT_RT_AUTH = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_AUTH_NS, AWS_CLIENT_RT_GROUP, "auth", AWS_CLIENT_RT_VERSION)
     val AWS_CLIENT_RT_REGIONS = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_REGIONS_NS, AWS_CLIENT_RT_GROUP, "regions", AWS_CLIENT_RT_VERSION)
     val REST_JSON_FEAT = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.restjson", AWS_CLIENT_RT_GROUP, "rest-json", AWS_CLIENT_RT_VERSION)
+}
+
+// remap aws-sdk-kotlin dependencies to project notation
+private val sameProjectDeps = mapOf(
+    AwsKotlinDependency.AWS_CLIENT_RT_CORE to """project(":client-runtime:aws-client-rt")""",
+    AwsKotlinDependency.AWS_CLIENT_RT_HTTP to """project(":client-runtime:protocols:http")""",
+    AwsKotlinDependency.AWS_CLIENT_RT_AUTH to """project(":client-runtime:auth")""",
+    AwsKotlinDependency.AWS_CLIENT_RT_REGIONS to """project(":client-runtime:regions")""",
+    AwsKotlinDependency.REST_JSON_FEAT to """project(":client-runtime:protocols:rest-json")"""
+)
+
+internal fun KotlinDependency.dependencyNotation(allowProjectNotation: Boolean = true): String {
+    val dep = this
+    return if (allowProjectNotation && sameProjectDeps.contains(dep)) {
+        val projectNotation = sameProjectDeps[dep]
+        "${dep.config}($projectNotation)"
+    } else {
+        "${dep.config}(\"${dep.group}:${dep.artifact}:${dep.version}\")"
+    }
 }

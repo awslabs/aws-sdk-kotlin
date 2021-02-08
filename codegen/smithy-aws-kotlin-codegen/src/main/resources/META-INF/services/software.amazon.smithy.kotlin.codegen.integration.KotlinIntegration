@@ -1,3 +1,3 @@
 aws.sdk.kotlin.codegen.SdkProtocolGeneratorSupplier
-aws.sdk.kotlin.codegen.GradleSettings
+aws.sdk.kotlin.codegen.GradleGenerator
 aws.sdk.kotlin.codegen.AwsServiceConfigIntegration

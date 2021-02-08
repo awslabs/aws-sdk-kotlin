@@ -7,6 +7,7 @@ plugins {
     jacoco
 }
 
+description = "Codegen support for AWS protocols"
 group = "software.amazon.smithy"
 version = "0.1.0"
 
@@ -20,7 +21,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     api("software.amazon.smithy:smithy-kotlin-codegen:$smithyKotlinVersion")
     api("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
-    implementation("software.amazon.smithy:smithy-protocol-test-traits:$smithyVersion")
+    api("software.amazon.smithy:smithy-protocol-test-traits:$smithyVersion")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
 }

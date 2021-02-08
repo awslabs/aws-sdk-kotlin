@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
+description = "AWS client runtime support for generated service clients"
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka") version "1.4.20"
@@ -35,16 +37,18 @@ kotlin {
     jvm() // Create a JVM target with the default name 'jvm'
 }
 
+val sdkVersion: String by project
+
 subprojects {
-    group = "aws.sdk.kotlin.runtime"
-    version = "0.0.1"
+    group = "aws.sdk.kotlin"
+    version = sdkVersion
 
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
         plugin("org.jetbrains.dokka")
     }
 
-    println("Configuring: $project")
+    logger.info("configuring: $project")
 
     // this works by iterating over each platform name and inspecting the projects files. If the project contains
     // a directory with the corresponding platform name we apply the common configuration settings for that platform
@@ -53,7 +57,7 @@ subprojects {
     platforms.forEach { platform ->
         if (projectNeedsPlatform(project, platform)) {
             configure(listOf(project)){
-                println("${project.name} needs platform: $platform")
+                logger.info("${project.name} needs platform: $platform")
                 apply(from = rootProject.file("gradle/${platform}.gradle"))
             }
         }

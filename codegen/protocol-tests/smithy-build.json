@@ -16,7 +16,8 @@
           "module": "aws.sdk.kotlin.runtime.protocoltest.awsrestjson",
           "moduleVersion": "1.0",
           "build":  {
-              "rootProject": true
+              "rootProject": true,
+              "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
           }
         }
       }
@@ -36,7 +37,8 @@
           "module": "aws.sdk.kotlin.runtime.protocoltest.awsjson10",
           "moduleVersion": "1.0",
           "build":  {
-            "rootProject": true
+            "rootProject": true,
+            "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
           }
         }
       }
@@ -56,7 +58,8 @@
           "module": "aws.sdk.kotlin.runtime.protocoltest.awsjson11",
           "moduleVersion": "1.0",
           "build":  {
-            "rootProject": true
+            "rootProject": true,
+            "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
           }
         }
       }

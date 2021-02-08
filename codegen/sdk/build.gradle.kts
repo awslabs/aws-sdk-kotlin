@@ -12,6 +12,8 @@ import software.amazon.smithy.model.shapes.ServiceShape
 import java.util.*
 import kotlin.streams.toList
 
+description = "AWS SDK codegen tasks"
+
 plugins {
     id("software.amazon.smithy") version "0.5.2"
 }
@@ -24,7 +26,7 @@ buildscript {
 }
 
 dependencies {
-    implementation(project(":smithy-aws-kotlin-codegen"))
+    implementation(project(":codegen:smithy-aws-kotlin-codegen"))
 }
 
 // This project doesn't produce a JAR.
@@ -32,13 +34,6 @@ tasks["jar"].enabled = false
 
 // Run the SmithyBuild task manually since this project needs the built JAR
 tasks["smithyBuildJar"].enabled = false
-
-tasks.create<SmithyBuild>("buildSdk") {
-    addRuntimeClasspath = true
-}
-
-// force rebuild every time while developing
-tasks["buildSdk"].outputs.upToDateWhen { false }
 
 // get a project property by name if it exists (including from local.properties)
 fun getProperty(name: String): String? {
@@ -65,14 +60,14 @@ data class AwsService(
     val moduleVersion: String = "1.0",
     val modelFile: File,
     val projectionName: String,
-    val sdkId: String
+    val sdkId: String,
+    val description: String = ""
 )
 
 // Generates a smithy-build.json file by creating a new projection.
 // The generated smithy-build.json file is not committed to git since
 // it's rebuilt each time codegen is performed.
 fun generateSmithyBuild(services: List<AwsService>): String {
-    val buildStandaloneSdk = getProperty("buildStandaloneSdk")?.toBoolean() ?: false
 
     val projections = services.joinToString(",") { service ->
         """
@@ -83,9 +78,10 @@ fun generateSmithyBuild(services: List<AwsService>): String {
                       "service": "${service.name}",
                       "module": "${service.moduleName}",
                       "moduleVersion": "${service.moduleVersion}",
+                      "moduleDescription": "${service.description}",
                       "sdkId": "${service.sdkId}",
                       "build": {
-                        "rootProject": $buildStandaloneSdk
+                          "generateDefaultBuildFiles": false
                       }
                     }
                 }
@@ -102,14 +98,21 @@ fun generateSmithyBuild(services: List<AwsService>): String {
     """.trimIndent()
 }
 
+val discoveredServices: List<AwsService> by lazy { discoverServices() }
+
 // Returns an AwsService model for every JSON file found in in directory defined by property `modelsDirProp`
 fun discoverServices(): List<AwsService> {
-    val modelsDirProp: String by project
-    val modelsDir = project.file(modelsDirProp)
+    val modelsDir: String by project
     val serviceIncludeList = getProperty("aws.services")?.split(",")?.map { it.trim() }
 
-    return fileTree(modelsDir)
-        .filter { serviceIncludeList?.contains(it.name.split(".").first()) ?: true }
+    return fileTree(project.file(modelsDir))
+        .filter {
+            val includeModel = serviceIncludeList?.contains(it.name.split(".").first()) ?: true
+            if (!includeModel) {
+                logger.info("skipping ${it.absolutePath}, name not included in aws.services")
+            }
+            includeModel
+        }
         .map { file ->
             val model = Model.assembler().addImport(file.absolutePath).assemble().result.get()
             val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
@@ -119,12 +122,17 @@ fun discoverServices(): List<AwsService> {
                 ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
             val (name, version, _) = file.name.split(".")
 
+            val description = service.getTrait(software.amazon.smithy.model.traits.TitleTrait::class.java).map { it.value }.orElse("")
+
+            logger.info("discovered service: ${serviceApi.sdkId}")
+
             AwsService(
                 name = service.id.toString(),
                 moduleName = "aws.sdk.kotlin.$name",
                 modelFile = file,
                 projectionName = name + "." + version.toLowerCase(),
-                sdkId = serviceApi.sdkId
+                sdkId = serviceApi.sdkId,
+                description = description
             )
         }
 }
@@ -135,16 +143,47 @@ fun <T> java.util.Optional<T>.orNull(): T? = this.orElse(null)
 task("generateSmithyBuild") {
     description = "generate smithy-build.json"
     doFirst {
-        projectDir.resolve("smithy-build.json").writeText(generateSmithyBuild(discoverServices()))
+        projectDir.resolve("smithy-build.json").writeText(generateSmithyBuild(discoveredServices))
     }
 }
 
-// Run the `buildSdk` automatically.
-tasks["build"]
-    .dependsOn(tasks["generateSmithyBuild"])
-    .finalizedBy(tasks["buildSdk"])
+tasks.create<SmithyBuild>("generateSdk") {
+    addRuntimeClasspath = true
+    dependsOn(tasks["generateSmithyBuild"])
+    inputs.file(projectDir.resolve("smithy-build.json"))
+}
 
 // Remove generated model file for clean
 tasks["clean"].doFirst {
     delete("smithy-build.json")
+}
+
+val AwsService.outputDir: String
+    get() = project.file("${project.buildDir}/smithyprojections/${project.name}/${projectionName}/kotlin-codegen").absolutePath
+
+val AwsService.destinationDir: String
+    get(){
+        val sanitizedName = projectionName.split(".")[0]
+        return rootProject.file("services/${sanitizedName}").absolutePath
+    }
+
+task("stageSdks") {
+    description = "relocate generated SDK(s) from build directory to services/ dir"
+    dependsOn("generateSdk")
+    doLast {
+        discoveredServices.forEach {
+            logger.info("copying ${it.outputDir} to ${it.destinationDir}")
+            copy {
+                from(it.outputDir)
+                into(it.destinationDir)
+            }
+        }
+    }
+}
+
+tasks.create("bootstrap") {
+    description = "Generate AWS SDK's and register them with the build"
+
+    dependsOn(tasks["generateSdk"])
+    finalizedBy(tasks["stageSdks"])
 }
