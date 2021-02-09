@@ -70,9 +70,11 @@ data class AwsService(
 fun generateSmithyBuild(services: List<AwsService>): String {
 
     val projections = services.joinToString(",") { service ->
+        // escape windows paths for valid json
+        val absModelPath = service.modelFile.absolutePath.replace("\\", "\\\\")
         """
             "${service.projectionName}": {
-                "imports": ["${service.modelFile.absolutePath}"],
+                "imports": ["$absModelPath"],
                 "plugins": {
                     "kotlin-codegen": {
                       "service": "${service.name}",
