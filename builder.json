@@ -3,7 +3,7 @@
     "needs_compiler": false,
     "packages": [],
     "variables": {
-        "gradlew": "{project_source_dir}/gradlew -p {project_source_dir}"
+        "gradlew": "{source_dir}/gradlew -p {source_dir}"
     },
     "build_steps": [
         "{gradlew} -x test -x jvmTest -x allTests build"
