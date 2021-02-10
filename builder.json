@@ -2,13 +2,16 @@
     "name": "aws-sdk-kotlin",
     "needs_compiler": false,
     "packages": [],
+    "variables": {
+        "gradlew": "{project_source_dir}/gradlew -p {project_source_dir}"
+    },
     "build_steps": [
-        "./gradlew -x test -x jvmTest -x allTests build"
+        "{gradlew} -x test -x jvmTest -x allTests build"
     ],
     "test_steps": [
-        "./gradlew publishToMavenLocal",
-        "./gradlew test allTests",
-        "./gradlew testAllProtocols"
+        "{gradlew} publishToMavenLocal",
+        "{gradlew} test allTests",
+        "{gradlew} testAllProtocols"
     ],
     "imports": [
         "JDK8"
