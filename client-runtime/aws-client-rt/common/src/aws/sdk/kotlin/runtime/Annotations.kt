@@ -28,4 +28,4 @@ package aws.sdk.kotlin.runtime
     AnnotationTarget.FIELD,
     AnnotationTarget.CONSTRUCTOR
 )
-annotation class InternalSdkApi
+public annotation class InternalSdkApi
