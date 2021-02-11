@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  BUILDER_VERSION: fix-dependency-steps
-  BUILDER_SOURCE: channels
+  BUILDER_VERSION: v0.8.0
+  BUILDER_SOURCE: releases
   BUILDER_HOST: https://d19elf31gohf1l.cloudfront.net
   PACKAGE_NAME: aws-sdk-kotlin
   LINUX_BASE_IMAGE: ubuntu-16-x64
