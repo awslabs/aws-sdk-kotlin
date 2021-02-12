@@ -16,6 +16,7 @@ package com.amazonaws.service.lambda.transform
 
 import com.amazonaws.service.lambda.model.AliasRoutingConfiguration
 import software.aws.clientrt.serde.*
+import software.aws.clientrt.serde.json.JsonSerialName
 
 
 // TODO: Decision needed: only HttpSerialize/HttpDeserialize for operation inputs/outputs. Here this type is only
@@ -24,7 +25,7 @@ import software.aws.clientrt.serde.*
 // can but this type itself cannot)
 class AliasRoutingConfigurationDeserializer {
     companion object {
-        private val ADDITIONAL_VERSION_WEIGHTS_FIELD_DESCRIPTOR = SdkFieldDescriptor("AdditionalVersionWeights", SerialKind.Map)
+        private val ADDITIONAL_VERSION_WEIGHTS_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Map, JsonSerialName("AdditionalVersionWeights"))
 
         private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build() {
             field(ADDITIONAL_VERSION_WEIGHTS_FIELD_DESCRIPTOR)

@@ -7,6 +7,7 @@ package software.aws.kotlinsdk.restjson
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.serde.*
 import software.aws.clientrt.serde.json.JsonDeserializer
+import software.aws.clientrt.serde.json.JsonSerialName
 
 // header identifying the error code
 const val X_AMZN_ERROR_TYPE_HEADER_NAME = "X-Amzn-Errortype"
@@ -27,13 +28,13 @@ internal data class RestJsonErrorDetails(val code: String? = null, val message: 
  */
 internal object RestJsonErrorDeserializer {
     // alternative field descriptors for error codes embedded in the document
-    private val ERR_CODE_ALT1_DESCRIPTOR = SdkFieldDescriptor("code", SerialKind.Integer)
-    private val ERR_CODE_ALT2_DESCRIPTOR = SdkFieldDescriptor("__type", SerialKind.Integer)
+    private val ERR_CODE_ALT1_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, JsonSerialName("code"))
+    private val ERR_CODE_ALT2_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, JsonSerialName("__type"))
 
     // alternative field descriptors for the error message embedded in the document
-    private val MESSAGE_ALT1_DESCRIPTOR = SdkFieldDescriptor("message", SerialKind.String)
-    private val MESSAGE_ALT2_DESCRIPTOR = SdkFieldDescriptor("Message", SerialKind.String)
-    private val MESSAGE_ALT3_DESCRIPTOR = SdkFieldDescriptor("errorMessage", SerialKind.String)
+    private val MESSAGE_ALT1_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("message"))
+    private val MESSAGE_ALT2_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Message"))
+    private val MESSAGE_ALT3_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("errorMessage"))
 
     private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
         field(ERR_CODE_ALT1_DESCRIPTOR)

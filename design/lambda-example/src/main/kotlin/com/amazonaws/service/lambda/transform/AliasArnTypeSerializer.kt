@@ -3,6 +3,7 @@ package com.amazonaws.service.lambda.transform
 import com.amazonaws.service.lambda.model.AliasArnType
 import com.amazonaws.service.lambda.model.AliasArnType.*
 import software.aws.clientrt.serde.*
+import software.aws.clientrt.serde.json.JsonSerialName
 
 /**
  * This is a hypothetical type that is not modeled in the Lambda service.  Rather,
@@ -15,12 +16,12 @@ import software.aws.clientrt.serde.*
 class AliasArnTypeSerializer(val input: AliasArnType) : SdkSerializable {
 
     companion object {
-        private val ALIAS_TYPE_S3_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor("S3ArnType", SerialKind.String)
-        private val ALIAS_TYPE_EC2_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor("EC2ArnType", SerialKind.Long)
-        private val ALIAS_TYPE_MULTI_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor("MultiArnType", SerialKind.Long)
+        private val ALIAS_TYPE_S3_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("S3ArnType"))
+        private val ALIAS_TYPE_EC2_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Long, JsonSerialName("EC2ArnType"))
+        private val ALIAS_TYPE_MULTI_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Long, JsonSerialName("MultiArnType"))
 
-        private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build() {
-            serialName = "AliasArnType"
+        private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+            JsonSerialName("AliasArnType")
             field(ALIAS_TYPE_S3_TYPE_FIELD_DESCRIPTOR)
             field(ALIAS_TYPE_EC2_TYPE_FIELD_DESCRIPTOR)
         }
