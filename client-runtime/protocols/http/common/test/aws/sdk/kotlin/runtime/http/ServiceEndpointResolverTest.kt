@@ -51,4 +51,34 @@ class ServiceEndpointResolverTest {
         val response = client.roundTrip<HttpResponse>(ctx, requestBuilder)
         assertNotNull(response)
     }
+
+    @Test
+    fun `it prepends hostPrefix when present`(): Unit = runSuspendTest {
+        val requestBuilder = HttpRequestBuilder()
+
+        val expectedHost = "prefix.test.com"
+        val mockEngine = object : HttpClientEngine {
+            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
+                assertEquals(expectedHost, requestBuilder.url.host)
+                return HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty, requestBuilder.build())
+            }
+        }
+
+        val client = sdkHttpClient(mockEngine) {
+            install(ServiceEndpointResolver) {
+                serviceId = "TestService"
+                resolver = object : EndpointResolver {
+                    override suspend fun resolve(service: String, region: String): Endpoint {
+                        return Endpoint("test.com", "https")
+                    }
+                }
+            }
+        }
+
+        val ctx = ExecutionContext()
+        ctx[AwsClientOption.Region] = "us-east-1"
+        ctx[SdkHttpOperation.HostPrefix] = "prefix."
+        val response = client.roundTrip<HttpResponse>(ctx, requestBuilder)
+        assertNotNull(response)
+    }
 }

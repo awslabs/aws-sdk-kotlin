@@ -17,7 +17,6 @@ import java.util.*
  */
 class EndpointResolverGenerator {
 
-//    private val endpointData = Node.parse(IoUtils.readUtf8Resource(this::class.java, "endpoints.json")).expectObjectNode();
     private val endpointData = Node.parse(
         EndpointResolverGenerator::class.java.getResource("endpoints.json").readText()
     ).expectObjectNode()

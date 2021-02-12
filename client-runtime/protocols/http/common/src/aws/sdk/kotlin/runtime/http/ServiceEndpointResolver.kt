@@ -46,9 +46,11 @@ public class ServiceEndpointResolver(
         client.requestPipeline.intercept(HttpRequestPipeline.Initialize) {
             val region = context.executionContext[AwsClientOption.Region]
             val endpoint = resolver.resolve(serviceId, region)
+            val hostPrefix = context.executionContext.getOrNull(SdkHttpOperation.HostPrefix) ?: ""
+            val hostname = "${hostPrefix}${endpoint.hostname}"
             subject.url.scheme = Protocol.parse(endpoint.protocol)
-            subject.url.host = endpoint.hostname
-            subject.headers["Host"] = endpoint.hostname
+            subject.url.host = hostname
+            subject.headers["Host"] = hostname
         }
     }
 }
