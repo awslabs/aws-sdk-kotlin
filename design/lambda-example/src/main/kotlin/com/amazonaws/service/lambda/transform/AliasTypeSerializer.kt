@@ -5,6 +5,7 @@ import software.aws.clientrt.http.feature.HttpSerialize
 import software.aws.clientrt.http.feature.SerializationProvider
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.serde.*
+import software.aws.clientrt.serde.json.JsonSerialName
 
 /**
  * This is a hypothetical type that is not modeled in the Lambda service.  Rather,
@@ -17,12 +18,12 @@ import software.aws.clientrt.serde.*
 class AliasTypeSerializer(val input: AliasType) : SdkSerializable {
 
     companion object {
-        private val EXPIRING_ALIAS_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor("ExpiringAliasType", SerialKind.String)
-        private val REMOTE_ALIAS_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor("RemoteAliasType", SerialKind.Long)
-        private val MULTI_ALIAS_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor("MultiAliasType", SerialKind.List)
+        private val EXPIRING_ALIAS_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("ExpiringAliasType"))
+        private val REMOTE_ALIAS_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Long, JsonSerialName("RemoteAliasType"))
+        private val MULTI_ALIAS_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, JsonSerialName("MultiAliasType"))
 
-        private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build() {
-            serialName = "AliasType"
+        private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+            JsonSerialName("AliasType")
             field(EXPIRING_ALIAS_TYPE_FIELD_DESCRIPTOR)
             field(REMOTE_ALIAS_TYPE_FIELD_DESCRIPTOR)
         }

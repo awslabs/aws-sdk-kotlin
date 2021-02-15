@@ -6,6 +6,7 @@
 package com.amazonaws.service.s3.model
 
 import software.aws.clientrt.serde.*
+import software.aws.clientrt.serde.xml.XmlSerialName
 
 class Tag private constructor(builder: BuilderImpl) {
 
@@ -16,11 +17,11 @@ class Tag private constructor(builder: BuilderImpl) {
         operator fun invoke(block: DslBuilder.() -> Unit) = BuilderImpl().apply(block).build()
         fun builder(): DslBuilder = BuilderImpl()
 
-        private val KEY_FIELD_DESCRIPTOR = SdkFieldDescriptor("Key", SerialKind.String)
-        private val VALUE_FIELD_DESCRIPTOR = SdkFieldDescriptor("Value", SerialKind.String)
+        private val KEY_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Key"))
+        private val VALUE_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Value"))
 
         private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build() {
-            serialName = "Tag"
+            XmlSerialName("Tag")
             field(KEY_FIELD_DESCRIPTOR)
             field(VALUE_FIELD_DESCRIPTOR)
         }

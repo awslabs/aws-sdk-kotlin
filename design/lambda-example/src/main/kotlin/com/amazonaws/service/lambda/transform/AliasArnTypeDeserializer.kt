@@ -5,6 +5,7 @@ import com.amazonaws.service.lambda.model.AliasArnType.EC2ArnType
 import com.amazonaws.service.lambda.model.AliasArnType.MultiArnType
 import com.amazonaws.service.lambda.model.AliasArnType.S3ArnType
 import software.aws.clientrt.serde.*
+import software.aws.clientrt.serde.json.JsonSerialName
 
 /**
  * This is a hypothetical type that is not modeled in the Lambda service.  Rather,
@@ -17,12 +18,12 @@ import software.aws.clientrt.serde.*
 class AliasArnTypeDeserializer {
 
     companion object {
-        private val ALIAS_S3_ARN_FIELD_DESCRIPTOR = SdkFieldDescriptor("S3AliasArn", SerialKind.String)
-        private val ALIAS_EC2_ARN_FIELD_DESCRIPTOR = SdkFieldDescriptor("EC2AliasArn", SerialKind.Integer)
-        private val ALIAS_MULTI_ARN_FIELD_DESCRIPTOR = SdkFieldDescriptor("MultiAliasArn", SerialKind.Integer)
+        private val ALIAS_S3_ARN_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("S3AliasArn"))
+        private val ALIAS_EC2_ARN_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, JsonSerialName("EC2AliasArn"))
+        private val ALIAS_MULTI_ARN_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, JsonSerialName("MultiAliasArn"))
 
         private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build() {
-            serialName = "AliasArn"
+            JsonSerialName("AliasArn")
             field(ALIAS_S3_ARN_FIELD_DESCRIPTOR)
             field(ALIAS_EC2_ARN_FIELD_DESCRIPTOR)
         }
@@ -32,12 +33,12 @@ class AliasArnTypeDeserializer {
 
             deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
                 when(findNextFieldIndex()) {
-                    ALIAS_S3_ARN_FIELD_DESCRIPTOR.index -> aliasArnType = deserializeString()?.let { S3ArnType(it) }
-                    ALIAS_EC2_ARN_FIELD_DESCRIPTOR.index -> aliasArnType = deserializeInt()?.let { EC2ArnType(it) }
+                    ALIAS_S3_ARN_FIELD_DESCRIPTOR.index -> aliasArnType = S3ArnType(deserializeString())
+                    ALIAS_EC2_ARN_FIELD_DESCRIPTOR.index -> aliasArnType = EC2ArnType(deserializeInt())
                     ALIAS_MULTI_ARN_FIELD_DESCRIPTOR.index -> aliasArnType = deserializer.deserializeList(ALIAS_MULTI_ARN_FIELD_DESCRIPTOR) {
                         val list0 = mutableListOf<String>()
                         while(hasNextElement()) {
-                            list0.add(deserializeString()!!)
+                            list0.add(deserializeString())
                         }
                         MultiArnType(list0)
                     }

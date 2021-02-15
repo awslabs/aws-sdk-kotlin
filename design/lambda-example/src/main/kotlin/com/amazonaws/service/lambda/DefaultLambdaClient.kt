@@ -28,6 +28,7 @@ import software.aws.kotlinsdk.client.AwsClientOption
 import software.aws.kotlinsdk.regions.resolveRegionForOperation
 import software.aws.kotlinsdk.restjson.RestJsonError
 
+
 @OptIn(InternalAPI::class)
 class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient {
     private val client: SdkHttpClient
@@ -110,7 +111,6 @@ class DefaultLambdaClient(private val config: LambdaClient.Config): LambdaClient
         // ... any other service defaults
     }
 }
-
 
 fun main() = runBlocking{
     val client = LambdaClient {

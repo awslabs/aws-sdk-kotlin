@@ -12,16 +12,17 @@ import software.aws.clientrt.http.feature.HttpDeserialize
 import software.aws.clientrt.http.readAll
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.serde.*
-import software.aws.clientrt.serde.xml.XmlList
+import software.aws.clientrt.serde.xml.XmlCollectionName
+import software.aws.clientrt.serde.xml.XmlSerialName
 
 class GetBucketTaggingResponseDeserializer : HttpDeserialize {
 
     companion object {
         private val TAG_SET_FIELD_DESCRIPTOR =
-            SdkFieldDescriptor("TagSet", SerialKind.List, 0, XmlList(elementName = "Tag"))
+            SdkFieldDescriptor(SerialKind.List, XmlSerialName("TagSet"), XmlCollectionName(element = "Tag"))
 
         private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build() {
-            serialName = "Tagging"
+            XmlSerialName("Tagging")
             field(TAG_SET_FIELD_DESCRIPTOR)
         }
     }

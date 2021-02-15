@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package software.aws.kotlinsdk.restjson
+package aws.sdk.kotlin.runtime.restjson
 
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
@@ -16,9 +16,13 @@ import software.aws.clientrt.http.response.HttpResponseContext
 import software.aws.clientrt.http.response.TypeInfo
 import software.aws.clientrt.http.response.header
 import software.aws.clientrt.serde.*
+import software.aws.clientrt.serde.json.JsonSerialName
 import software.aws.kotlinsdk.AwsServiceException
 import software.aws.kotlinsdk.UnknownServiceErrorException
 import software.aws.kotlinsdk.http.X_AMZN_REQUEST_ID_HEADER
+import software.aws.kotlinsdk.restjson.RestJsonError
+import software.aws.kotlinsdk.restjson.X_AMZN_ERROR_TYPE_HEADER_NAME
+import software.aws.kotlinsdk.restjson.matches
 import software.aws.kotlinsdk.testing.runSuspendTest
 import kotlin.test.*
 
@@ -55,7 +59,7 @@ class RestJsonErrorTest {
 
     class FooErrorDeserializer : HttpDeserialize {
         companion object {
-            val PAYLOAD_STRING_DESCRIPTOR = SdkFieldDescriptor("string", SerialKind.String)
+            val PAYLOAD_STRING_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("string"))
             val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
                 field(PAYLOAD_STRING_DESCRIPTOR)
             }

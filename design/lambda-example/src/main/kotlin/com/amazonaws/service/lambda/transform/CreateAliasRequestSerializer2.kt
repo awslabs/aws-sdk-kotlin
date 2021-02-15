@@ -26,6 +26,7 @@ import software.aws.clientrt.http.request.url
 import software.aws.clientrt.serde.SdkFieldDescriptor
 import software.aws.clientrt.serde.SdkObjectDescriptor
 import software.aws.clientrt.serde.SerialKind
+import software.aws.clientrt.serde.json.JsonSerialName
 import software.aws.clientrt.serde.serializeStruct
 
 /**
@@ -39,14 +40,14 @@ import software.aws.clientrt.serde.serializeStruct
 class CreateAliasRequestSerializer2(val input: CreateAliasRequest2): HttpSerialize {
 
     companion object {
-        private val DESCRIPTION_FIELD_DESCRIPTOR = SdkFieldDescriptor("Description", SerialKind.String)
-        private val FUNCTION_VERSION_DESCRIPTOR = SdkFieldDescriptor("FunctionVersion", SerialKind.String)
-        private val NAME_DESCRIPTOR = SdkFieldDescriptor("Name", SerialKind.String)
-        private val ROUTING_CONFIG_DESCRIPTOR = SdkFieldDescriptor("RoutingConfig", SerialKind.Struct)
-        private val ALIAS_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor("AliasType", SerialKind.Struct)
+        private val DESCRIPTION_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Description"))
+        private val FUNCTION_VERSION_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("FunctionVersion"))
+        private val NAME_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Name"))
+        private val ROUTING_CONFIG_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, JsonSerialName("RoutingConfig"))
+        private val ALIAS_TYPE_FIELD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, JsonSerialName("AliasType"))
 
-        private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build() {
-            serialName = "CreateAliasRequest"
+        private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+            JsonSerialName("CreateAliasRequest")
             field(DESCRIPTION_FIELD_DESCRIPTOR)
             field(FUNCTION_VERSION_DESCRIPTOR)
             field(NAME_DESCRIPTOR)
