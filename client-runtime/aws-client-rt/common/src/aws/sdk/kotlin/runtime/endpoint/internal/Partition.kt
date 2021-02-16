@@ -41,7 +41,7 @@ public data class EndpointDefinition(
     /**
      * A list of supported protocols for the endpoint (e.g. "https", "http", etc)
      */
-    val protocols: List<String>? = null,
+    val protocols: List<String> = emptyList(),
 
     /**
      * A custom signing constraint for the endpoint
@@ -51,7 +51,7 @@ public data class EndpointDefinition(
     /**
      * A list of allowable signature versions for the endpoint (e.g. "v4", "v2", "v3", "s3v3", etc)
      */
-    val signatureVersions: List<String>? = null
+    val signatureVersions: List<String> = emptyList()
 )
 
 /**
@@ -140,18 +140,18 @@ internal fun EndpointDefinition.resolve(region: String, defaults: EndpointDefini
  */
 private fun mergeDefinitions(into: EndpointDefinition, from: EndpointDefinition): EndpointDefinition {
     val hostname = into.hostname ?: from.hostname
-    val protocols = into.protocols ?: from.protocols
+    val protocols = if (into.protocols.isNotEmpty()) into.protocols else from.protocols
     val credentialScope = CredentialScope(
         region = into.credentialScope?.region ?: from.credentialScope?.region,
         service = into.credentialScope?.service ?: from.credentialScope?.service
     )
-    val signatureVersions = into.signatureVersions ?: from.signatureVersions
+    val signatureVersions = if (into.signatureVersions.isNotEmpty()) into.signatureVersions else from.signatureVersions
     return EndpointDefinition(hostname, protocols, credentialScope, signatureVersions)
 }
 
 // find the highest priority value out of [from] given the prioritized list [priority]. Otherwise use the default
-private fun getByPriority(from: List<String>?, priority: List<String>, default: String): String {
-    if (from == null || from.isEmpty()) return default
+private fun getByPriority(from: List<String>, priority: List<String>, default: String): String {
+    if (from.isEmpty()) return default
 
     for (p in priority) {
         val candidate = from.find { it == p }
