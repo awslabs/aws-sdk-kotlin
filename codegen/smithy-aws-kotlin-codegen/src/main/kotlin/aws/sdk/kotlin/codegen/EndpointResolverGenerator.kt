@@ -14,12 +14,9 @@ import java.util.*
 
 /**
  * Generates a per/service endpoint resolver (internal to the generated SDK) using endpoints.json
+ * @param endpointData Parsed endpoints.json [ObjectNode]
  */
-class EndpointResolverGenerator {
-
-    private val endpointData = Node.parse(
-        EndpointResolverGenerator::class.java.getResource("endpoints.json").readText()
-    ).expectObjectNode()
+class EndpointResolverGenerator(private val endpointData: ObjectNode) {
 
     fun render(ctx: ProtocolGenerator.GenerationContext) {
         ctx.delegator.useFileWriter("DefaultEndpointResolver.kt", "${ctx.settings.moduleName}.internal") {
