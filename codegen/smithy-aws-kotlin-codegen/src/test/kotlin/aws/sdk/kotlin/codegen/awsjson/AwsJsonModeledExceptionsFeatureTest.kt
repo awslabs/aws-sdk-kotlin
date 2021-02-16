@@ -1,10 +1,15 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
 package aws.sdk.kotlin.codegen.awsjson
 
 import io.kotest.matchers.string.shouldContainOnlyOnce
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-class AWsJsonModeledExceptionsFeatureTest {
+class AwsJsonModeledExceptionsFeatureTest {
 
     @Test
     fun `it generates the registration of error deserializers for operations with errors`() {
