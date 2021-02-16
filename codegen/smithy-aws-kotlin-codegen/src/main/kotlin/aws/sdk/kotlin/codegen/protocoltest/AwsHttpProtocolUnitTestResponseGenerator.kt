@@ -16,8 +16,7 @@ import software.amazon.smithy.protocoltests.traits.HttpResponseTestCase
 open class AwsHttpProtocolUnitTestResponseGenerator(builder: Builder) : HttpProtocolUnitTestResponseGenerator(builder) {
     override fun renderConfigureServiceClient(test: HttpResponseTestCase) {
         super.renderConfigureServiceClient(test)
-        // specify a default region
-        writer.write("region = \"us-east-1\"")
+        renderConfigureAwsServiceClient(writer, model, serviceShape, operation)
     }
 
     open class Builder : HttpProtocolUnitTestResponseGenerator.Builder() {
@@ -34,8 +33,7 @@ class AwsHttpProtocolUnitTestErrorGenerator(builder: Builder) : HttpProtocolUnit
 
     override fun renderConfigureServiceClient(test: HttpResponseTestCase) {
         super.renderConfigureServiceClient(test)
-        // specify a default region
-        writer.write("region = \"us-east-1\"")
+        renderConfigureAwsServiceClient(writer, model, serviceShape, operation)
     }
 
     class Builder : HttpProtocolUnitTestErrorGenerator.Builder() {

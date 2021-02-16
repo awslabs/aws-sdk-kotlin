@@ -1,0 +1,44 @@
+{
+    "name": "aws-sdk-kotlin",
+    "needs_compiler": false,
+    "packages": [],
+    "variables": {
+        "gradlew": "{source_dir}/gradlew -p {source_dir}"
+    },
+    "build_steps": [
+        "{gradlew} -x test -x jvmTest -x allTests build"
+    ],
+    "test_steps": [
+        "{gradlew} publishToMavenLocal",
+        "{gradlew} test allTests",
+        "{gradlew} testAllProtocols"
+    ],
+    "imports": [
+        "JDK8"
+    ],
+    "build_dir": "target/build",
+    "env": {
+        "JAVA_HOME": "{java_home}"
+    },
+    "hosts": {
+        "ubuntu": {
+            "packages": [
+                "openjdk-8-jdk-headless"
+            ]
+        },
+        "debian": {
+            "packages": [
+                "openjdk-8-jdk-headless"
+            ]
+        }
+    },
+    "upstream": [
+        {
+            "name": "smithy-kotlin"
+        },
+        {
+            "name": "aws-crt-kotlin",
+            "revision": "bootstrap-jvm"
+        }
+    ]
+}
