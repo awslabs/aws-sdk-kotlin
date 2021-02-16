@@ -158,7 +158,7 @@ private fun getByPriority(from: List<String>?, priority: List<String>, default: 
         if (candidate != null) return candidate
     }
 
-    return from.first()
+    return default
 }
 
 /**
