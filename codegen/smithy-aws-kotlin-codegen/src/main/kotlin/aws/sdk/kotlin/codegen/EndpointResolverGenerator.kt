@@ -20,12 +20,12 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
 
     fun render(ctx: ProtocolGenerator.GenerationContext) {
         ctx.delegator.useFileWriter("DefaultEndpointResolver.kt", "${ctx.settings.moduleName}.internal") {
-            renderResolver(ctx, it)
+            renderResolver(it)
             renderInternalEndpointsModel(ctx, it)
         }
     }
 
-    private fun renderResolver(ctx: ProtocolGenerator.GenerationContext, writer: KotlinWriter) {
+    private fun renderResolver(writer: KotlinWriter) {
         val endpointResolverSymbol = buildSymbol {
             name = "EndpointResolver"
             namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
@@ -51,8 +51,8 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
     private fun renderInternalEndpointsModel(ctx: ProtocolGenerator.GenerationContext, writer: KotlinWriter) {
         val partitionsData = endpointData.expectArrayMember("partitions").getElementsAs(Node::expectObjectNode)
 
-        val comparePartitions = object : Comparator<Partition> {
-            override fun compare(x: Partition, y: Partition): Int {
+        val comparePartitions = object : Comparator<PartitionNode> {
+            override fun compare(x: PartitionNode, y: PartitionNode): Int {
                 // always sort standard aws partition first
                 if (x.id == "aws") return -1
                 return x.id.compareTo(y.id)
@@ -60,7 +60,7 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
         }
 
         val partitions = partitionsData.map {
-            Partition(ctx.service.endpointPrefix, it)
+            PartitionNode(ctx.service.endpointPrefix, it)
         }.sortedWith(comparePartitions)
 
         writer.addImport("${AwsKotlinDependency.AWS_CLIENT_RT_CORE.namespace}.endpoint.internal", "*")
@@ -70,17 +70,17 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
         }
     }
 
-    private fun renderPartition(writer: KotlinWriter, partition: Partition) {
+    private fun renderPartition(writer: KotlinWriter, partitionNode: PartitionNode) {
         writer.openBlock("Partition(", "),") {
-            writer.write("id = \$S,", partition.id)
-                .write("regionRegex = Regex(\$S),", partition.config.expectStringMember("regionRegex").value)
-                .write("partitionEndpoint = \$S,", partition.partitionEndpoint ?: "")
-                .write("isRegionalized = \$L,", partition.partitionEndpoint == null)
+            writer.write("id = \$S,", partitionNode.id)
+                .write("regionRegex = Regex(\$S),", partitionNode.config.expectStringMember("regionRegex").value)
+                .write("partitionEndpoint = \$S,", partitionNode.partitionEndpoint ?: "")
+                .write("isRegionalized = \$L,", partitionNode.partitionEndpoint == null)
                 .openBlock("defaults = EndpointDefinition(", "),") {
-                    renderEndpointDefinition(writer, partition.defaults)
+                    renderEndpointDefinition(writer, partitionNode.defaults)
                 }
                 .openBlock("endpoints = mapOf(", ")") {
-                    partition.endpoints.members.forEach {
+                    partitionNode.endpoints.members.forEach {
                         val definitionNode = it.value.expectObjectNode()
                         if (definitionNode.members.isEmpty()) {
                             writer.write("\$S to EndpointDefinition(),", it.key.value)
@@ -126,7 +126,7 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
     /**
      * Represents a partition from endpoints.json
      */
-    private class Partition(endpointPrefix: String, val config: ObjectNode) {
+    private class PartitionNode(endpointPrefix: String, val config: ObjectNode) {
         // the partition id/name (e.g. "aws")
         val id = config.expectStringMember("partition").value
 
