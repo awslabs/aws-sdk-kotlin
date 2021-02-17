@@ -33,7 +33,7 @@ public fun HttpRequestBuilder.toSignableCrtRequest(): HttpRequestCrt {
     // HttpBody.Streaming are not signable without consuming the stream.
     // We will have to reconcile this with event-streams which have signed chunks...
     val bodyStream = (body as? HttpBody.Bytes)?.let { HttpRequestBodyStream.fromByteArray(it.bytes()) }
-    return HttpRequestCrt(method.name, url.build().encodedPath(), HttpHeadersCrt(headers), bodyStream)
+    return HttpRequestCrt(method.name, url.encodedPath, HttpHeadersCrt(headers), bodyStream)
 }
 
 // proxy the smithy-client-rt version of Headers to CRT (which is based on our client-rt version in the first place)
