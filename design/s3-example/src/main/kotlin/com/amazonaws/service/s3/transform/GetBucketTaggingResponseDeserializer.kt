@@ -7,8 +7,7 @@ package com.amazonaws.service.s3.transform
 
 import com.amazonaws.service.s3.model.GetBucketTaggingResponse
 import com.amazonaws.service.s3.model.Tag
-import software.aws.clientrt.http.feature.DeserializationProvider
-import software.aws.clientrt.http.feature.HttpDeserialize
+import software.aws.clientrt.http.operation.HttpDeserialize
 import software.aws.clientrt.http.readAll
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.serde.*

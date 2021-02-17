@@ -9,8 +9,11 @@ import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
-import software.aws.clientrt.http.feature.HttpSerialize
-import software.aws.clientrt.http.feature.IdentityDeserializer
+import software.aws.clientrt.http.operation.HttpSerialize
+import software.aws.clientrt.http.operation.IdentityDeserializer
+import software.aws.clientrt.http.operation.SdkHttpOperation
+import software.aws.clientrt.http.operation.context
+import software.aws.clientrt.http.operation.roundTrip
 import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
@@ -46,13 +49,10 @@ class AwsSigv4SignerTest {
             context {
                 operationName = "testSigningOperation"
                 service = "TestService"
+                set(AuthAttributes.SigningRegion, "us-east-1")
+                set(AuthAttributes.SigningDate, Instant.fromIso8601("2020-10-16T19:56:00Z"))
+                set(AuthAttributes.SigningService, "demo")
             }
-        }
-
-        op.context.apply {
-            set(AuthAttributes.SigningRegion, "us-east-1")
-            set(AuthAttributes.SigningDate, Instant.fromIso8601("2020-10-16T19:56:00Z"))
-            set(AuthAttributes.SigningService, "demo")
         }
 
         return op

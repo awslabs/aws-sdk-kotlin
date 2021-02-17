@@ -1,9 +1,6 @@
 package com.amazonaws.service.lambda.transform
 
 import com.amazonaws.service.lambda.model.*
-import software.aws.clientrt.http.feature.HttpSerialize
-import software.aws.clientrt.http.feature.SerializationProvider
-import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.serde.*
 
 /**

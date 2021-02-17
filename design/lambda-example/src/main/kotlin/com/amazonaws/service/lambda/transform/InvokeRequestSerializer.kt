@@ -17,9 +17,8 @@ package com.amazonaws.service.lambda.transform
 import com.amazonaws.service.lambda.model.InvokeRequest
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
-import software.aws.clientrt.http.feature.HttpSerialize
+import software.aws.clientrt.http.operation.HttpSerialize
 import software.aws.clientrt.http.feature.SerializationContext
-import software.aws.clientrt.http.feature.SerializationProvider
 import software.aws.clientrt.http.request.*
 
 class InvokeRequestSerializer(val input: InvokeRequest): HttpSerialize {

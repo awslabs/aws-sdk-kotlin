@@ -11,8 +11,11 @@ import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.engine.HttpClientEngine
-import software.aws.clientrt.http.feature.IdentityDeserializer
-import software.aws.clientrt.http.feature.UnitSerializer
+import software.aws.clientrt.http.operation.IdentityDeserializer
+import software.aws.clientrt.http.operation.UnitSerializer
+import software.aws.clientrt.http.operation.SdkHttpOperation
+import software.aws.clientrt.http.operation.context
+import software.aws.clientrt.http.operation.roundTrip
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
 import kotlin.test.Test

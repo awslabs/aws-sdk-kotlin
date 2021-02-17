@@ -12,7 +12,9 @@ import aws.sdk.kotlin.runtime.http.ExceptionRegistry
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
 import aws.sdk.kotlin.runtime.http.withPayload
 import software.aws.clientrt.http.*
-import software.aws.clientrt.http.feature.HttpDeserialize
+import software.aws.clientrt.http.operation.HttpDeserialize
+import software.aws.clientrt.http.operation.HttpOperationContext
+import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.util.InternalAPI
 

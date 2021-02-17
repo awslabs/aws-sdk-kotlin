@@ -25,6 +25,7 @@ import software.aws.clientrt.http.engine.HttpClientEngineConfig
 import software.aws.clientrt.http.engine.ktor.KtorEngine
 import software.aws.clientrt.http.feature.DefaultRequest
 import software.aws.clientrt.http.feature.HttpSerde
+import software.aws.clientrt.http.operation.HttpOperationContext
 import software.aws.clientrt.serde.xml.XmlSerdeProvider
 import kotlin.text.decodeToString
 

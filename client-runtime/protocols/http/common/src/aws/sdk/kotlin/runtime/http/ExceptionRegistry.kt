@@ -5,7 +5,7 @@
 package aws.sdk.kotlin.runtime.http
 
 import software.aws.clientrt.http.HttpStatusCode
-import software.aws.clientrt.http.feature.HttpDeserialize
+import software.aws.clientrt.http.operation.HttpDeserialize
 
 /**
  * Metadata container about a modeled service exception

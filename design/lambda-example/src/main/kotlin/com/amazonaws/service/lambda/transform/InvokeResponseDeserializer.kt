@@ -16,7 +16,7 @@ package com.amazonaws.service.lambda.transform
 
 import com.amazonaws.service.lambda.model.InvokeResponse
 import software.aws.clientrt.http.feature.DeserializationProvider
-import software.aws.clientrt.http.feature.HttpDeserialize
+import software.aws.clientrt.http.operation.HttpDeserialize
 import software.aws.clientrt.http.readAll
 import software.aws.clientrt.http.response.HttpResponse
 

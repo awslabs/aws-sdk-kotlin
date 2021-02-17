@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.http
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import software.aws.clientrt.http.*
+import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.util.get
 
 /**

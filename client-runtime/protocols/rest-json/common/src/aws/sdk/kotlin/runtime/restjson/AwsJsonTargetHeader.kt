@@ -6,6 +6,7 @@ package aws.sdk.kotlin.runtime.restjson
 
 import software.aws.clientrt.client.SdkClientOption
 import software.aws.clientrt.http.*
+import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.util.InternalAPI
 import software.aws.clientrt.util.get
 

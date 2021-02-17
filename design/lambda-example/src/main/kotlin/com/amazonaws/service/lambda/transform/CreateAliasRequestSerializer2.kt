@@ -17,16 +17,14 @@ package com.amazonaws.service.lambda.transform
 import com.amazonaws.service.lambda.model.CreateAliasRequest2
 import software.aws.clientrt.http.HttpMethod
 import software.aws.clientrt.http.content.ByteArrayContent
-import software.aws.clientrt.http.feature.HttpSerialize
+import software.aws.clientrt.http.operation.HttpSerialize
 import software.aws.clientrt.http.feature.SerializationContext
-import software.aws.clientrt.http.feature.SerializationProvider
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.request.headers
 import software.aws.clientrt.http.request.url
 import software.aws.clientrt.serde.SdkFieldDescriptor
 import software.aws.clientrt.serde.SdkObjectDescriptor
 import software.aws.clientrt.serde.SerialKind
-import software.aws.clientrt.serde.serializeStruct
 
 /**
  * This is a hypothetical type that is not modeled in the Lambda service.  Rather,
