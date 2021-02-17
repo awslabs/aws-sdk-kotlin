@@ -9,13 +9,13 @@ import software.aws.clientrt.serde.*
 import software.aws.clientrt.serde.json.JsonDeserializer
 
 // header identifying the error code
-const val X_AMZN_ERROR_TYPE_HEADER_NAME = "X-Amzn-Errortype"
+public const val X_AMZN_ERROR_TYPE_HEADER_NAME: String = "X-Amzn-Errortype"
 
 // returned by RESTFUL services that do no send a payload (like in a HEAD request)
-const val X_AMZN_ERROR_MESSAGE_HEADER_NAME = "x-amzn-error-message"
+public const val X_AMZN_ERROR_MESSAGE_HEADER_NAME: String = "x-amzn-error-message"
 
 // error message header returned by event stream errors
-const val X_AMZN_EVENT_ERROR_MESSAGE_HEADER_NAME = ":error-message"
+public const val X_AMZN_EVENT_ERROR_MESSAGE_HEADER_NAME: String = ":error-message"
 
 internal data class RestJsonErrorDetails(val code: String? = null, val message: String? = null)
 

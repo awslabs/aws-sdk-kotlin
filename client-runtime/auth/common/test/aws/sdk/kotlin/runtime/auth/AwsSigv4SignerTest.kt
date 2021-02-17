@@ -6,14 +6,14 @@
 package aws.sdk.kotlin.runtime.auth
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import software.aws.clientrt.client.ExecutionContext
-import software.aws.clientrt.http.HttpMethod
+import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
+import software.aws.clientrt.http.feature.HttpSerialize
+import software.aws.clientrt.http.feature.IdentityDeserializer
+import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.request.HttpRequestBuilder
-import software.aws.clientrt.http.request.HttpRequestContext
 import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.http.sdkHttpClient
 import software.aws.clientrt.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -25,64 +25,80 @@ class AwsSigv4SignerTest {
         override suspend fun getCredentials(): Credentials = testCredentials
     }
 
-    private fun buildBaseRequest(): Pair<HttpRequestBuilder, ExecutionContext> {
-        val builder = HttpRequestBuilder().apply {
-            method = HttpMethod.POST
-            url.host = "http://demo.us-east-1.amazonaws.com"
-            url.path = "/"
-            headers.append("Host", "demo.us-east-1.amazonaws.com")
-            headers.appendAll("x-amz-archive-description", listOf("test", "test"))
-            val requestBody = "{\"TableName\": \"foo\"}"
-            body = ByteArrayContent(requestBody.encodeToByteArray())
-            headers.append("Content-Length", body.contentLength?.toString() ?: "0")
+    private fun buildOperation(): SdkHttpOperation<Unit, HttpResponse> {
+        val op = SdkHttpOperation.build<Unit, HttpResponse> {
+            serializer = object : HttpSerialize<Unit> {
+                override suspend fun serialize(builder: HttpRequestBuilder, input: Unit) {
+                    builder.apply {
+                        method = HttpMethod.POST
+                        url.host = "http://demo.us-east-1.amazonaws.com"
+                        url.path = "/"
+                        headers.append("Host", "demo.us-east-1.amazonaws.com")
+                        headers.appendAll("x-amz-archive-description", listOf("test", "test"))
+                        val requestBody = "{\"TableName\": \"foo\"}"
+                        body = ByteArrayContent(requestBody.encodeToByteArray())
+                        headers.append("Content-Length", body.contentLength?.toString() ?: "0")
+                    }
+                }
+            }
+            deserializer = IdentityDeserializer
+
+            context {
+                operationName = "testSigningOperation"
+                service = "TestService"
+            }
         }
 
-        val ctx = ExecutionContext().apply {
+        op.context.apply {
             set(AuthAttributes.SigningRegion, "us-east-1")
             set(AuthAttributes.SigningDate, Instant.fromIso8601("2020-10-16T19:56:00Z"))
             set(AuthAttributes.SigningService, "demo")
         }
 
-        return Pair(builder, ctx)
+        return op
     }
 
-    private suspend fun getSignedRequest(builder: HttpRequestBuilder, ctx: ExecutionContext): HttpRequestBuilder {
+    private suspend fun getSignedRequest(operation: SdkHttpOperation<Unit, HttpResponse>): HttpRequest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { throw NotImplementedError() }
-        }
-        val client = sdkHttpClient(mockEngine) {
-            install(AwsSigv4Signer) {
-                credentialsProvider = TestCredentialsProvider
-                signingService = "demo"
+            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
+                return HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty, requestBuilder.build())
             }
         }
-        return client.requestPipeline.execute(HttpRequestContext(ctx), builder)
+        val client = sdkHttpClient(mockEngine)
+
+        operation.install(AwsSigv4Signer) {
+            credentialsProvider = TestCredentialsProvider
+            signingService = "demo"
+        }
+
+        val response = operation.roundTrip(client, Unit)
+        return response.request
     }
 
     @Test
     fun testSignRequest() = runSuspendTest {
-        val (builder, ctx) = buildBaseRequest()
+        val op = buildOperation()
         val expectedDate = "20201016T195600Z"
         val expectedSig = "AWS4-HMAC-SHA256 Credential=AKID/20201016/us-east-1/demo/aws4_request, " +
             "SignedHeaders=content-length;host;x-amz-archive-description;x-amz-date;x-amz-security-token, " +
             "Signature=e60a4adad4ae15e05c96a0d8ac2482fbcbd66c88647c4457db74e4dad1648608"
 
-        val signed = getSignedRequest(builder, ctx)
+        val signed = getSignedRequest(op)
         assertEquals(expectedDate, signed.headers["X-Amz-Date"])
         assertEquals(expectedSig, signed.headers["Authorization"])
     }
 
     @Test
     fun testUnsignedRequest() = runSuspendTest {
-        val (builder, ctx) = buildBaseRequest()
+        val op = buildOperation()
         val expectedDate = "20201016T195600Z"
         val expectedSig = "AWS4-HMAC-SHA256 Credential=AKID/20201016/us-east-1/demo/aws4_request, " +
             "SignedHeaders=content-length;host;x-amz-archive-description;x-amz-date;x-amz-security-token, " +
             "Signature=6c0cc11630692e2c98f28003c8a0349b56011361e0bab6545f1acee01d1d211e"
 
-        ctx[AuthAttributes.UnsignedPayload] = true
+        op.context[AuthAttributes.UnsignedPayload] = true
 
-        val signed = getSignedRequest(builder, ctx)
+        val signed = getSignedRequest(op)
         assertEquals(expectedDate, signed.headers["X-Amz-Date"])
         assertEquals(expectedSig, signed.headers["Authorization"])
     }

@@ -14,24 +14,24 @@ import software.aws.clientrt.http.feature.HttpDeserialize
  * @property deserializer The deserializer responsible for providing a [Throwable] instance of the actual exception
  * @property httpStatusCode The HTTP status code the error is returned with
  */
-data class ExceptionMetadata(val errorCode: String, val deserializer: HttpDeserialize, val httpStatusCode: HttpStatusCode? = null)
+public data class ExceptionMetadata(val errorCode: String, val deserializer: HttpDeserialize<*>, val httpStatusCode: HttpStatusCode? = null)
 
 /**
  * Container for modeled exceptions
  */
-class ExceptionRegistry {
+public class ExceptionRegistry {
     // ErrorCode -> Meta
     private val errorsByCodeName = mutableMapOf<String, ExceptionMetadata>()
 
     /**
      * Register a modeled exception's metadata
      */
-    fun register(metadata: ExceptionMetadata) {
+    public fun register(metadata: ExceptionMetadata) {
         errorsByCodeName[metadata.errorCode] = metadata
     }
 
     /**
      * Get the exception metadata associated with the given [code] name
      */
-    operator fun get(code: String?): ExceptionMetadata? = errorsByCodeName[code]
+    public operator fun get(code: String?): ExceptionMetadata? = errorsByCodeName[code]
 }

@@ -8,7 +8,6 @@ package aws.sdk.kotlin.runtime.http
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import software.aws.clientrt.http.*
-import software.aws.clientrt.http.request.HttpRequestPipeline
 import software.aws.clientrt.util.get
 
 /**
@@ -42,13 +41,16 @@ public class ServiceEndpointResolver(
         }
     }
 
-    override fun install(client: SdkHttpClient) {
-        client.requestPipeline.intercept(HttpRequestPipeline.Initialize) {
-            val region = context.executionContext[AwsClientOption.Region]
+    override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
+        operation.execution.state.intercept { req, next ->
+
+            val region = req.context[AwsClientOption.Region]
             val endpoint = resolver.resolve(serviceId, region)
-            subject.url.scheme = Protocol.parse(endpoint.protocol)
-            subject.url.host = endpoint.hostname
-            subject.headers["Host"] = endpoint.hostname
+            req.request.url.scheme = Protocol.parse(endpoint.protocol)
+            req.request.url.host = endpoint.hostname
+            req.request.headers["Host"] = endpoint.hostname
+
+            next.call(req)
         }
     }
 }
