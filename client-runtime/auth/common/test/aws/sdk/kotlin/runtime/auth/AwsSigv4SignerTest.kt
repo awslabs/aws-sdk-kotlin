@@ -29,7 +29,7 @@ class AwsSigv4SignerTest {
     }
 
     private fun buildOperation(): SdkHttpOperation<Unit, HttpResponse> {
-        val op = SdkHttpOperation.build<Unit, HttpResponse> {
+        return SdkHttpOperation.build {
             serializer = object : HttpSerialize<Unit> {
                 override suspend fun serialize(builder: HttpRequestBuilder, input: Unit) {
                     builder.apply {
@@ -54,8 +54,6 @@ class AwsSigv4SignerTest {
                 set(AuthAttributes.SigningService, "demo")
             }
         }
-
-        return op
     }
 
     private suspend fun getSignedRequest(operation: SdkHttpOperation<Unit, HttpResponse>): HttpRequest {
