@@ -47,9 +47,11 @@ public class ServiceEndpointResolver(
 
             val region = req.context[AwsClientOption.Region]
             val endpoint = resolver.resolve(serviceId, region)
+            val hostPrefix = context.executionContext.getOrNull(SdkHttpOperation.HostPrefix) ?: ""
+            val hostname = "${hostPrefix}${endpoint.hostname}"
             req.builder.url.scheme = Protocol.parse(endpoint.protocol)
-            req.builder.url.host = endpoint.hostname
-            req.builder.headers["Host"] = endpoint.hostname
+            req.builder.url.host = hostname
+            req.builder.headers["Host"] = hostname
 
             next.call(req)
         }
