@@ -12,9 +12,9 @@ import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.operation.HttpDeserialize
+import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.http.operation.UnitDeserializer
 import software.aws.clientrt.http.operation.UnitSerializer
-import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.http.operation.context
 import software.aws.clientrt.http.operation.roundTrip
 import software.aws.clientrt.http.request.HttpRequestBuilder

@@ -54,7 +54,7 @@ public class AwsSigv4Signer internal constructor(config: Config) : Feature {
 
             // FIXME - this is an area where not having to sign a CRT HTTP request might be useful if we could just wrap our own type
             // otherwise to sign a request we need to convert: builder -> crt kotlin HttpRequest (which underneath converts to aws-c-http message) and back
-            val signableRequest = req.request.toSignableCrtRequest()
+            val signableRequest = req.builder.toSignableCrtRequest()
 
             val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
                 region = req.context[AuthAttributes.SigningRegion]
@@ -70,7 +70,7 @@ public class AwsSigv4Signer internal constructor(config: Config) : Feature {
                 // TODO - expose additional signing config as needed as context attributes?
             }
             val signedRequest = AwsSigner.signRequest(signableRequest, signingConfig)
-            req.request.update(signedRequest)
+            req.builder.update(signedRequest)
 
             next.call(req)
         }
