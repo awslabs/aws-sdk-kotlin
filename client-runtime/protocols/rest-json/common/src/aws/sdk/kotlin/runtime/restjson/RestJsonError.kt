@@ -27,7 +27,7 @@ import software.aws.clientrt.util.InternalAPI
 @InternalAPI
 public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
     public class Config {
-        internal val registry = ExceptionRegistry()
+        public var registry = ExceptionRegistry()
 
         /**
          * Register a modeled service exception for the given [code]. The deserializer registered MUST provide

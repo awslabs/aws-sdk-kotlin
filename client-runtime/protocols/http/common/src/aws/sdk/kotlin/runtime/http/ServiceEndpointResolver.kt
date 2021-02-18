@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.http
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import software.aws.clientrt.http.*
+import software.aws.clientrt.http.operation.HttpOperationContext
 import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.util.get
 
@@ -47,7 +48,7 @@ public class ServiceEndpointResolver(
 
             val region = req.context[AwsClientOption.Region]
             val endpoint = resolver.resolve(serviceId, region)
-            val hostPrefix = context.executionContext.getOrNull(SdkHttpOperation.HostPrefix) ?: ""
+            val hostPrefix = req.context.getOrNull(HttpOperationContext.HostPrefix) ?: ""
             val hostname = "${hostPrefix}${endpoint.hostname}"
             req.builder.url.scheme = Protocol.parse(endpoint.protocol)
             req.builder.url.host = hostname

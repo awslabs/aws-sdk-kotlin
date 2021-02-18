@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.runtime.http
 
+import aws.sdk.kotlin.runtime.AwsServiceException
 import software.aws.clientrt.http.HttpStatusCode
 import software.aws.clientrt.http.operation.HttpDeserialize
 
@@ -28,6 +29,14 @@ public class ExceptionRegistry {
      */
     public fun register(metadata: ExceptionMetadata) {
         errorsByCodeName[metadata.errorCode] = metadata
+    }
+
+    /**
+     * Register a modeled service exception for the given [code]. The deserializer registered MUST provide
+     * an [AwsServiceException] when invoked.
+     */
+    public fun register(code: String, deserializer: HttpDeserialize<*>, httpStatusCode: Int? = null) {
+        register(ExceptionMetadata(code, deserializer, httpStatusCode?.let { HttpStatusCode.fromValue(it) }))
     }
 
     /**

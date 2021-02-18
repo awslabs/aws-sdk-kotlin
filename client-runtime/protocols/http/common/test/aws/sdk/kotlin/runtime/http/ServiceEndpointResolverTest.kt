@@ -11,11 +11,7 @@ import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.engine.HttpClientEngine
-import software.aws.clientrt.http.operation.IdentityDeserializer
-import software.aws.clientrt.http.operation.SdkHttpOperation
-import software.aws.clientrt.http.operation.UnitSerializer
-import software.aws.clientrt.http.operation.context
-import software.aws.clientrt.http.operation.roundTrip
+import software.aws.clientrt.http.operation.*
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
 import kotlin.test.Test
@@ -64,8 +60,6 @@ class ServiceEndpointResolverTest {
 
     @Test
     fun `it prepends hostPrefix when present`(): Unit = runSuspendTest {
-        val requestBuilder = HttpRequestBuilder()
-
         val expectedHost = "prefix.test.com"
         val mockEngine = object : HttpClientEngine {
             override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
@@ -74,21 +68,28 @@ class ServiceEndpointResolverTest {
             }
         }
 
-        val client = sdkHttpClient(mockEngine) {
-            install(ServiceEndpointResolver) {
-                serviceId = "TestService"
-                resolver = object : EndpointResolver {
-                    override suspend fun resolve(service: String, region: String): Endpoint {
-                        return Endpoint("test.com", "https")
-                    }
+        val client = sdkHttpClient(mockEngine)
+
+        val op = SdkHttpOperation.build<Unit, HttpResponse> {
+            serializer = UnitSerializer
+            deserializer = IdentityDeserializer
+            context {
+                service = "TestService"
+                operationName = "testOperation"
+                set(AwsClientOption.Region, "us-east-1")
+                set(HttpOperationContext.HostPrefix, "prefix.")
+            }
+        }
+        op.install(ServiceEndpointResolver) {
+            serviceId = "TestService"
+            resolver = object : EndpointResolver {
+                override suspend fun resolve(service: String, region: String): Endpoint {
+                    return Endpoint("test.com", "https")
                 }
             }
         }
 
-        val ctx = ExecutionContext()
-        ctx[AwsClientOption.Region] = "us-east-1"
-        ctx[SdkHttpOperation.HostPrefix] = "prefix."
-        val response = client.roundTrip<HttpResponse>(ctx, requestBuilder)
+        val response = op.roundTrip(client, Unit)
         assertNotNull(response)
     }
 }
