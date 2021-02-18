@@ -33,7 +33,7 @@ class AwsJsonModeledExceptionsFeatureTest {
         """.asSmithyModel()
 
         val expected = """
-            register(code = "GetFooError", deserializer = GetFooErrorDeserializer())
+            register(code = "GetFooError", deserializer = GetFooErrorDeserializer(serde::deserializer))
         """.trimIndent()
 
         val ctx = testModel.generateTestContext("smithy.example", "Example")
@@ -41,7 +41,7 @@ class AwsJsonModeledExceptionsFeatureTest {
         val bindingResolver = AwsJsonHttpBindingResolver(ctx, "application/json")
         val unit = AwsJsonModeledExceptionsFeature(ctx, bindingResolver)
 
-        val actual = generateCode(unit::renderConfigure)
+        val actual = generateCode(unit::renderRegisterErrors)
 
         actual.shouldContainOnlyOnce(expected)
     }
@@ -66,7 +66,7 @@ class AwsJsonModeledExceptionsFeatureTest {
         val bindingResolver = AwsJsonHttpBindingResolver(ctx, "application/json")
         val unit = AwsJsonModeledExceptionsFeature(ctx, bindingResolver)
 
-        val actual = generateCode(unit::renderConfigure)
+        val actual = generateCode(unit::renderRegisterErrors)
 
         Assertions.assertTrue(actual.isEmpty())
     }
