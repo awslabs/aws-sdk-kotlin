@@ -40,7 +40,7 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
 
         writer.openBlock("internal class DefaultEndpointResolver : EndpointResolver {", "}") {
             writer.openBlock("override suspend fun resolve(service: String, region: String): Endpoint {", "}") {
-                writer.write("return resolveEndpoint(servicePartitions, region) ?: throw ClientException(\$S)", "unable to resolve endpoint for region: \$region")
+                writer.write("return resolveEndpoint(servicePartitions, region) ?: throw ClientException(#S)", "unable to resolve endpoint for region: \$region")
             }
         }
     }
@@ -72,10 +72,10 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
 
     private fun renderPartition(writer: KotlinWriter, partitionNode: PartitionNode) {
         writer.openBlock("Partition(", "),") {
-            writer.write("id = \$S,", partitionNode.id)
-                .write("regionRegex = Regex(\$S),", partitionNode.config.expectStringMember("regionRegex").value)
-                .write("partitionEndpoint = \$S,", partitionNode.partitionEndpoint ?: "")
-                .write("isRegionalized = \$L,", partitionNode.partitionEndpoint == null)
+            writer.write("id = #S,", partitionNode.id)
+                .write("regionRegex = Regex(#S),", partitionNode.config.expectStringMember("regionRegex").value)
+                .write("partitionEndpoint = #S,", partitionNode.partitionEndpoint ?: "")
+                .write("isRegionalized = #L,", partitionNode.partitionEndpoint == null)
                 .openBlock("defaults = EndpointDefinition(", "),") {
                     renderEndpointDefinition(writer, partitionNode.defaults)
                 }
@@ -83,9 +83,9 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
                     partitionNode.endpoints.members.forEach {
                         val definitionNode = it.value.expectObjectNode()
                         if (definitionNode.members.isEmpty()) {
-                            writer.write("\$S to EndpointDefinition(),", it.key.value)
+                            writer.write("#S to EndpointDefinition(),", it.key.value)
                         } else {
-                            writer.openBlock("\$S to EndpointDefinition(", "),", it.key.value) {
+                            writer.openBlock("#S to EndpointDefinition(", "),", it.key.value) {
                                 renderEndpointDefinition(writer, it.value.expectObjectNode())
                             }
                         }
@@ -96,29 +96,29 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
 
     private fun renderEndpointDefinition(writer: KotlinWriter, endpointNode: ObjectNode) {
         endpointNode.getStringMember("hostname").ifPresent {
-            writer.write("hostname = \$S,", it)
+            writer.write("hostname = #S,", it)
         }
 
         endpointNode.getArrayMember("protocols").ifPresent {
             writer.writeInline("protocols = listOf(")
-            it.forEach { writer.writeInline("\$S, ", it.expectStringNode().value) }
+            it.forEach { writer.writeInline("#S, ", it.expectStringNode().value) }
             writer.write("),")
         }
 
         endpointNode.getObjectMember("credentialScope").ifPresent {
             writer.writeInline("credentialScope = CredentialScope(")
             it.getStringMember("region").ifPresent {
-                writer.writeInline("region = \$S,", it.value)
+                writer.writeInline("region = #S,", it.value)
             }
             it.getStringMember("service").ifPresent {
-                writer.writeInline("service= \$S", it.value)
+                writer.writeInline("service= #S", it.value)
             }
             writer.write("),")
         }
 
         endpointNode.getArrayMember("signatureVersions").ifPresent {
             writer.writeInline("signatureVersions = listOf(")
-            it.forEach { writer.writeInline("\$S, ", it.expectStringNode().value) }
+            it.forEach { writer.writeInline("#S, ", it.expectStringNode().value) }
             writer.write("),")
         }
     }

@@ -21,7 +21,7 @@ class RestJsonErrorFeature(
             val deserializerName = "${symbol.name}Deserializer"
             val httpStatusCode: Int? = errShape.getTrait(HttpErrorTrait::class.java).map { it.code }.orElse(null)
             if (httpStatusCode != null) {
-                writer.write("register(code = \$S, deserializer = $deserializerName(), httpStatusCode = $httpStatusCode)", code)
+                writer.write("register(code = #S, deserializer = $deserializerName(), httpStatusCode = $httpStatusCode)", code)
             }
         }
     }

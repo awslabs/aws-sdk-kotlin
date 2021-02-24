@@ -34,11 +34,12 @@ class GradleGenerator : KotlinIntegration {
             trimBlankLines()
             trimTrailingSpaces()
             setIndentText("    ")
+            expressionStart = '#'
         }
 
         writer.write("")
         if (ctx.settings.moduleDescription.isNotEmpty()) {
-            writer.write("description = \$S", ctx.settings.moduleDescription)
+            writer.write("description = #S", ctx.settings.moduleDescription)
         }
 
         val dependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
