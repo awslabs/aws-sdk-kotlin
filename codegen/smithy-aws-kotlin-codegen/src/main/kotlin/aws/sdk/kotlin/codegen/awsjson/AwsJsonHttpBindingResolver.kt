@@ -52,7 +52,7 @@ class AwsJsonHttpBindingResolver(
 
         val inputs = generationContext.model.expectShape(operationShape.input.get())
 
-        return inputs.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT, "") }.toList()
+        return inputs.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT) }.toList()
     }
 
     /**
@@ -65,7 +65,7 @@ class AwsJsonHttpBindingResolver(
 
                 val outputs = generationContext.model.expectShape(shape.output.get())
 
-                outputs.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT, "") }.toList()
+                outputs.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT) }.toList()
             }
             is StructureShape -> shape.members().map { member -> member.toHttpBindingDescriptor() }.toList()
             else -> {
