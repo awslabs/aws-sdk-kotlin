@@ -22,10 +22,9 @@ fun String.asSmithyModel(sourceLocation: String? = null): Model {
 
 class TestProtooclClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
-    rootNamespace: String,
     features: List<HttpFeature>,
     httpBindingResolver: HttpBindingResolver
-) : HttpProtocolClientGenerator(ctx, rootNamespace, features, httpBindingResolver) {
+) : HttpProtocolClientGenerator(ctx, features, httpBindingResolver) {
     override val serdeProviderSymbol: Symbol = buildSymbol {
         name = "JsonSerdeProvider"
         namespace(KotlinDependency.CLIENT_RT_SERDE_JSON)
@@ -42,7 +41,7 @@ class MockHttpProtocolGenerator : HttpBindingProtocolGenerator() {
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {}
     override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator =
-        TestProtooclClientGenerator(ctx, ctx.settings.moduleName, getHttpFeatures(ctx), getProtocolHttpBindingResolver(ctx))
+        TestProtooclClientGenerator(ctx, getHttpFeatures(ctx), getProtocolHttpBindingResolver(ctx))
 }
 
 // Produce a GenerationContext given a model, it's expected namespace and service name.
