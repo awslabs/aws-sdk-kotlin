@@ -26,8 +26,8 @@ class AwsHttpProtocolClientGenerator(
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
-        writer.write("const val ServiceId: String = \$S", ctx.service.sdkId)
-        writer.write("const val ServiceApiVersion: String = \$S", ctx.service.version)
+        writer.write("const val ServiceId: String = #S", ctx.service.sdkId)
+        writer.write("const val ServiceApiVersion: String = #S", ctx.service.version)
         writer.write("\n\n")
         super.render(writer)
 

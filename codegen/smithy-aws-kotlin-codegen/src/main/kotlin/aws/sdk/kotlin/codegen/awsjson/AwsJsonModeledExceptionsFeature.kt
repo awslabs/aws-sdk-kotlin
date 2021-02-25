@@ -19,7 +19,7 @@ class AwsJsonModeledExceptionsFeature(
             val symbol = ctx.symbolProvider.toSymbol(errShape)
             val deserializerName = "${symbol.name}Deserializer"
 
-            writer.write("register(code = \$S, deserializer = $deserializerName())", code)
+            writer.write("register(code = #S, deserializer = $deserializerName())", code)
         }
     }
 }

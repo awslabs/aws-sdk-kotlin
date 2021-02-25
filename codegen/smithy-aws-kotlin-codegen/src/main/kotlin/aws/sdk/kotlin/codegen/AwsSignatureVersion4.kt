@@ -34,7 +34,7 @@ class AwsSignatureVersion4(private val signingServiceName: String) : HttpFeature
 
     override fun renderConfigure(writer: KotlinWriter) {
         writer.write("credentialsProvider = config.credentialsProvider ?: DefaultChainCredentialsProvider()")
-        writer.write("signingService = \$S", signingServiceName)
+        writer.write("signingService = #S", signingServiceName)
     }
 
     companion object {
