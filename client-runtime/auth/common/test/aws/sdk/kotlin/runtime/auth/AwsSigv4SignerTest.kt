@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.auth
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
@@ -31,8 +32,8 @@ class AwsSigv4SignerTest {
     private fun buildOperation(): SdkHttpOperation<Unit, HttpResponse> {
         return SdkHttpOperation.build {
             serializer = object : HttpSerialize<Unit> {
-                override suspend fun serialize(builder: HttpRequestBuilder, input: Unit) {
-                    builder.apply {
+                override suspend fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder {
+                    return HttpRequestBuilder().apply {
                         method = HttpMethod.POST
                         url.host = "http://demo.us-east-1.amazonaws.com"
                         url.path = "/"

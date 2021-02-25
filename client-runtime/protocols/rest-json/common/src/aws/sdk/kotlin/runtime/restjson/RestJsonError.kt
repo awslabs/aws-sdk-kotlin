@@ -75,7 +75,7 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
             // we already consumed the response body, wrap it to allow the modeled exception to deserialize
             // any members that may be bound to the document
             val deserializer = registry[error.code]?.deserializer
-            val modeledException = deserializer?.deserialize(wrappedResponse) ?: UnknownServiceErrorException()
+            val modeledException = deserializer?.deserialize(req.context, wrappedResponse) ?: UnknownServiceErrorException()
             setAseFields(modeledException, wrappedResponse, error)
 
             // this should never happen...

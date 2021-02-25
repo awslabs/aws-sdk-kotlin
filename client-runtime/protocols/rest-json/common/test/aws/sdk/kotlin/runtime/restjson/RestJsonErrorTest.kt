@@ -8,6 +8,7 @@ import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.UnknownServiceErrorException
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
@@ -63,7 +64,7 @@ class RestJsonErrorTest {
             }
         }
 
-        override suspend fun deserialize(response: HttpResponse): FooError {
+        override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): FooError {
             val builder = FooError.dslBuilder()
             builder.headerInt = response.headers["X-Test-Header"]?.toInt()
 
