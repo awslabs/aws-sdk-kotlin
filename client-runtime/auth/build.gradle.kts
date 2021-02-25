@@ -5,7 +5,7 @@
 
 description = "AWS Service Authentication"
 extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Auth"
-extra["moduleName"] = "software.aws.kotlinsdk.auth"
+extra["moduleName"] = "aws.sdk.kotlin.runtime.auth"
 
 val smithyKotlinClientRtVersion: String by project
 
@@ -17,7 +17,7 @@ kotlin {
                 api(project(":client-runtime:aws-client-rt"))
                 api("software.aws.smithy.kotlin:http:$smithyKotlinClientRtVersion")
                 implementation(project(":client-runtime:crt-util"))
-                implementation("software.amazon.awssdk.crt:aws-crt-kotlin:$crtKotlinVersion")
+                implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
             }
         }
         commonTest {

@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-description = "AWS client runtime support for generated service clients"
+description = "AWS client runtime core"
 extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Client Runtime"
-extra["moduleName"] = "software.aws.kotlinsdk"
+extra["moduleName"] = "aws.sdk.kotlin.runtime"
 
 
 val smithyKotlinClientRtVersion: String by project

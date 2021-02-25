@@ -24,9 +24,9 @@ import software.aws.clientrt.config.IdempotencyTokenProvider
 import software.aws.clientrt.http.config.HttpClientConfig
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.engine.HttpClientEngineConfig
-import software.aws.kotlinsdk.auth.AuthConfig
-import software.aws.kotlinsdk.auth.CredentialsProvider
-import software.aws.kotlinsdk.regions.RegionConfig
+import aws.sdk.kotlin.runtime.auth.AuthConfig
+import aws.sdk.kotlin.runtime.auth.CredentialsProvider
+import aws.sdk.kotlin.runtime.regions.RegionConfig
 
 
 interface LambdaClient: SdkClient {

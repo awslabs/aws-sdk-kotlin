@@ -11,6 +11,7 @@ import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.addImport
 import software.amazon.smithy.kotlin.codegen.integration.*
 import software.amazon.smithy.model.knowledge.OperationIndex
+import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.OperationShape
 
 /**
@@ -25,8 +26,8 @@ class AwsHttpProtocolClientGenerator(
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
-        writer.write("const val ServiceId: String = \$S", ctx.service.sdkId)
-        writer.write("const val ServiceApiVersion: String = \$S", ctx.service.version)
+        writer.write("const val ServiceId: String = #S", ctx.service.sdkId)
+        writer.write("const val ServiceApiVersion: String = #S", ctx.service.version)
         writer.write("\n\n")
         super.render(writer)
 
@@ -74,6 +75,9 @@ class AwsHttpProtocolClientGenerator(
     }
 
     private fun renderInternals() {
-        EndpointResolverGenerator().render(ctx)
+        val endpointData = Node.parse(
+            EndpointResolverGenerator::class.java.getResource("endpoints.json").readText()
+        ).expectObjectNode()
+        EndpointResolverGenerator(endpointData).render(ctx)
     }
 }

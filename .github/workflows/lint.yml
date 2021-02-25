@@ -1,0 +1,20 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!main'
+
+env:
+  PACKAGE_NAME: aws-sdk-kotlin
+
+jobs:
+  ktlint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v2
+    - name: Lint ${{ env.PACKAGE_NAME }}
+      run: |
+        ./gradlew ktlint

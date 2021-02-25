@@ -5,6 +5,12 @@
 
 package com.amazonaws.service.lambda
 
+import aws.sdk.kotlin.runtime.auth.AuthAttributes
+import aws.sdk.kotlin.runtime.auth.AwsSigv4Signer
+import aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider
+import aws.sdk.kotlin.runtime.client.AwsClientOption
+import aws.sdk.kotlin.runtime.regions.resolveRegionForOperation
+import aws.sdk.kotlin.runtime.restjson.RestJsonError
 import com.amazonaws.service.lambda.model.*
 import com.amazonaws.service.lambda.transform.*
 import kotlinx.coroutines.runBlocking
@@ -21,12 +27,7 @@ import software.aws.clientrt.http.feature.HttpSerde
 import software.aws.clientrt.serde.json.JsonSerdeProvider
 import software.aws.clientrt.util.InternalAPI
 import software.aws.clientrt.util.putIfAbsent
-import software.aws.kotlinsdk.auth.AuthAttributes
-import software.aws.kotlinsdk.auth.AwsSigv4Signer
-import software.aws.kotlinsdk.auth.DefaultChainCredentialsProvider
-import software.aws.kotlinsdk.client.AwsClientOption
-import software.aws.kotlinsdk.regions.resolveRegionForOperation
-import software.aws.kotlinsdk.restjson.RestJsonError
+
 
 
 @OptIn(InternalAPI::class)
