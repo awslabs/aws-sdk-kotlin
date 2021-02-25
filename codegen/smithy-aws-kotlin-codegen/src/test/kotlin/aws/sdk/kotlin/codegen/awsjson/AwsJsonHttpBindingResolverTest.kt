@@ -80,7 +80,7 @@ class AwsJsonHttpBindingResolverTest {
         Assertions.assertEquals(binding.member.id.toString(), "smithy.example#GetFooInput\$bigInt")
         Assertions.assertEquals(binding.location, HttpBinding.Location.DOCUMENT)
         // Location name is unused by awsJson
-        Assertions.assertEquals(binding.locationName, "")
+        Assertions.assertEquals(binding.locationName, null)
     }
 
     @Test
@@ -108,7 +108,7 @@ class AwsJsonHttpBindingResolverTest {
         Assertions.assertEquals(binding.member.id.toString(), "smithy.example#GetFooOutput\$bigInt")
         Assertions.assertEquals(binding.location, HttpBinding.Location.DOCUMENT)
         // Location name is unused by awsJson
-        Assertions.assertEquals(binding.locationName, "")
+        Assertions.assertEquals(binding.locationName, null)
     }
 
     @Test
@@ -136,6 +136,6 @@ class AwsJsonHttpBindingResolverTest {
         Assertions.assertEquals(binding.member.id.toString(), "smithy.example#GetFooOutput\$bigInt")
         Assertions.assertEquals(binding.location, HttpBinding.Location.DOCUMENT)
         // Location name is unused by awsJson
-        Assertions.assertEquals(binding.locationName, "")
+        Assertions.assertEquals(binding.locationName, null)
     }
 }
