@@ -60,6 +60,6 @@ class AwsJsonTargetHeaderFeature(val protocolVersion: String) : HttpFeature {
     }
 
     override fun renderConfigure(writer: KotlinWriter) {
-        writer.write("version = \$S", protocolVersion)
+        writer.write("version = #S", protocolVersion)
     }
 }

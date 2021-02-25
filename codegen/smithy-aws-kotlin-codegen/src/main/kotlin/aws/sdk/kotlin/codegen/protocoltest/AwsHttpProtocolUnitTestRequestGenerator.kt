@@ -52,7 +52,7 @@ internal fun <T : HttpMessageTestCase> HttpProtocolUnitTestGenerator<T>.renderCo
         }
         writer.addImport(staticProviderSymbol)
         writer.addImport(credentialsSymbol)
-        writer.write("val credentials = Credentials(\$S, \$S)", "AKID", "SECRET")
+        writer.write("val credentials = Credentials(#S, #S)", "AKID", "SECRET")
         writer.write("credentialsProvider = StaticCredentialsProvider(credentials)")
     }
 
