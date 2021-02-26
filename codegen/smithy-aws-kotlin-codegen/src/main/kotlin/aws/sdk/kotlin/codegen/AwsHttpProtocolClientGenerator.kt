@@ -86,7 +86,11 @@ class AwsHttpProtocolClientGenerator(
             writer.write("ctx.putIfAbsent(AwsClientOption.Region, region)")
             writer.write("ctx.putIfAbsent(AuthAttributes.SigningRegion, config.signingRegion ?: region)")
             writer.write("ctx.putIfAbsent(SdkClientOption.ServiceName, serviceName)")
-            writer.write("config.idempotencyTokenProvider?.let { ctx[SdkClientOption.IdempotencyTokenProvider] = it }")
+
+            if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
+                writer.addImport(RuntimeTypes.Core.IdempotencyTokenProviderExt)
+                writer.write("config.idempotencyTokenProvider?.let { ctx[SdkClientOption.IdempotencyTokenProvider] = it }")
+            }
         }
     }
 
