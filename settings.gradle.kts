@@ -33,10 +33,6 @@ include(":client-runtime:protocols:http")
 include(":client-runtime:protocols:rest-json")
 include(":client-runtime:crt-util")
 
-// service client examples/playground for exploring design space
-include(":design:lambda-example")
-include(":design:s3-example")
-
 // generated services
 fun File.isServiceDir(): Boolean {
     if (isDirectory)  {

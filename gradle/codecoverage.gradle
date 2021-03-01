@@ -82,8 +82,8 @@ task testCoverage(type: JacocoReport) {
 
     def classes = files(subprojects.collect {
         files(
-            fileTree(dir: "${it.buildDir}/classes/kotlin/jvm/main").filter({file -> !file.absolutePath.contains('design')}),
-            fileTree(dir: "${it.buildDir}/classes/kotlin/main").filter({file -> !file.absolutePath.contains('design')})
+            fileTree(dir: "${it.buildDir}/classes/kotlin/jvm/main"),
+            fileTree(dir: "${it.buildDir}/classes/kotlin/main")
         )
     })
 
