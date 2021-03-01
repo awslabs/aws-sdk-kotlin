@@ -33,7 +33,7 @@ class AwsJsonModeledExceptionsFeatureTest {
         """.asSmithyModel()
 
         val expected = """
-            register(code = "GetFooError", deserializer = GetFooErrorDeserializer(serde::deserializer))
+            register(code = "GetFooError", deserializer = GetFooErrorDeserializer())
         """.trimIndent()
 
         val ctx = testModel.generateTestContext("smithy.example", "Example")
