@@ -19,7 +19,7 @@ import java.util.*
 class EndpointResolverGenerator(private val endpointData: ObjectNode) {
 
     fun render(ctx: ProtocolGenerator.GenerationContext) {
-        ctx.delegator.useFileWriter("DefaultEndpointResolver.kt", "${ctx.settings.moduleName}.internal") {
+        ctx.delegator.useFileWriter("DefaultEndpointResolver.kt", "${ctx.settings.pkg.name}.internal") {
             renderResolver(it)
             renderInternalEndpointsModel(ctx, it)
         }

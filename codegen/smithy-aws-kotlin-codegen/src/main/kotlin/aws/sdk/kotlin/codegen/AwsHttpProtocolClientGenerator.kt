@@ -19,10 +19,9 @@ import software.amazon.smithy.model.shapes.OperationShape
  */
 class AwsHttpProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
-    rootNamespace: String,
     features: List<HttpFeature>,
     httpBindingResolver: HttpBindingResolver
-) : HttpProtocolClientGenerator(ctx, rootNamespace, features, httpBindingResolver) {
+) : HttpProtocolClientGenerator(ctx, features, httpBindingResolver) {
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")

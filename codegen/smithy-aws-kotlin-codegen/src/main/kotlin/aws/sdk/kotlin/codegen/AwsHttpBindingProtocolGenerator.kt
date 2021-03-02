@@ -25,9 +25,8 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         .build()
 
     override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator {
-        val rootNamespace = ctx.settings.moduleName
         val features = getHttpFeatures(ctx)
-        return AwsHttpProtocolClientGenerator(ctx, rootNamespace, features, getProtocolHttpBindingResolver(ctx))
+        return AwsHttpProtocolClientGenerator(ctx, features, getProtocolHttpBindingResolver(ctx))
     }
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
