@@ -35,11 +35,13 @@ class MockHttpProtocolGenerator : HttpBindingProtocolGenerator() {
 
 // Produce a GenerationContext given a model, it's expected namespace and service name.
 fun Model.generateTestContext(namespace: String, serviceName: String): ProtocolGenerator.GenerationContext {
+    val packageNode = Node.objectNode().withMember("name", Node.from("test"))
+        .withMember("version", Node.from("1.0.0"))
+
     val settings = KotlinSettings.from(
         this,
         Node.objectNodeBuilder()
-            .withMember("module", Node.from("test"))
-            .withMember("moduleVersion", Node.from("1.0.0"))
+            .withMember("package", packageNode)
             .build()
     )
     val provider: SymbolProvider = KotlinCodegenPlugin.createSymbolProvider(this, namespace, serviceName)

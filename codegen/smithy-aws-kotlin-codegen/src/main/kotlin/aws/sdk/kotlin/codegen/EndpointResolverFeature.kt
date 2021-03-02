@@ -25,7 +25,7 @@ class EndpointResolverFeature(private val ctx: ProtocolGenerator.GenerationConte
         // generated symbol
         val defaultResolverSymbol = buildSymbol {
             name = "DefaultEndpointResolver"
-            namespace = "${ctx.settings.moduleName}.internal"
+            namespace = "${ctx.settings.pkg.name}.internal"
         }
 
         writer.addImport(resolverFeatureSymbol)
