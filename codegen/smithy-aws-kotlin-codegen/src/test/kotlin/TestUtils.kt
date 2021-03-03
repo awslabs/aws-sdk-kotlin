@@ -20,7 +20,7 @@ fun String.asSmithyModel(sourceLocation: String? = null): Model {
     return Model.assembler().discoverModels().addUnparsedModel(sourceLocation ?: "test.smithy", processed).assemble().unwrap()
 }
 
-class TestProtooclClientGenerator(
+class TestProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
     features: List<HttpFeature>,
     httpBindingResolver: HttpBindingResolver
@@ -41,7 +41,7 @@ class MockHttpProtocolGenerator : HttpBindingProtocolGenerator() {
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {}
     override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator =
-        TestProtooclClientGenerator(ctx, getHttpFeatures(ctx), getProtocolHttpBindingResolver(ctx))
+        TestProtocolClientGenerator(ctx, getHttpFeatures(ctx), getProtocolHttpBindingResolver(ctx))
 }
 
 // Produce a GenerationContext given a model, it's expected namespace and service name.
