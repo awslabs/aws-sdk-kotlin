@@ -33,7 +33,7 @@ public class AwsJsonTargetHeader(config: Config) : Feature {
     }
 
     override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
-        operation.execution.state.intercept { req, next ->
+        operation.execution.mutate.intercept { req, next ->
             val context = req.context
             // required context elements
             val serviceName = context[SdkClientOption.ServiceName]

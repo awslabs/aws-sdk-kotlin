@@ -44,7 +44,7 @@ public class ServiceEndpointResolver(
     }
 
     override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
-        operation.execution.state.intercept { req, next ->
+        operation.execution.mutate.intercept { req, next ->
 
             val region = req.context[AwsClientOption.Region]
             val endpoint = resolver.resolve(serviceId, region)
