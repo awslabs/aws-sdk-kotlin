@@ -2,12 +2,10 @@ package aws.sdk.kotlin.codegen.awsjson
 
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
 import software.amazon.smithy.build.MockManifest
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.*
-import software.amazon.smithy.kotlin.codegen.integration.HttpBindingProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
-import software.amazon.smithy.kotlin.codegen.integration.HttpTraitResolver
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.integration.*
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -22,6 +20,17 @@ fun String.asSmithyModel(sourceLocation: String? = null): Model {
     return Model.assembler().discoverModels().addUnparsedModel(sourceLocation ?: "test.smithy", processed).assemble().unwrap()
 }
 
+class TestProtocolClientGenerator(
+    ctx: ProtocolGenerator.GenerationContext,
+    features: List<HttpFeature>,
+    httpBindingResolver: HttpBindingResolver
+) : HttpProtocolClientGenerator(ctx, features, httpBindingResolver) {
+    override val serdeProviderSymbol: Symbol = buildSymbol {
+        name = "JsonSerdeProvider"
+        namespace(KotlinDependency.CLIENT_RT_SERDE_JSON)
+    }
+}
+
 // A ProtocolGenerator for tests.
 class MockHttpProtocolGenerator : HttpBindingProtocolGenerator() {
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
@@ -31,6 +40,8 @@ class MockHttpProtocolGenerator : HttpBindingProtocolGenerator() {
     override val protocol: ShapeId = RestJson1Trait.ID
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {}
+    override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator =
+        TestProtocolClientGenerator(ctx, getHttpFeatures(ctx), getProtocolHttpBindingResolver(ctx))
 }
 
 // Produce a GenerationContext given a model, it's expected namespace and service name.

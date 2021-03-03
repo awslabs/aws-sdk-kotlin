@@ -6,9 +6,12 @@
 package aws.sdk.kotlin.codegen
 
 import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
-import software.amazon.smithy.kotlin.codegen.KotlinDependency
-import software.amazon.smithy.kotlin.codegen.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.addImport
+import software.amazon.smithy.aws.traits.protocols.AwsJson1_0Trait
+import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
+import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
+import software.amazon.smithy.codegen.core.CodegenException
+import software.amazon.smithy.codegen.core.Symbol
+import software.amazon.smithy.kotlin.codegen.*
 import software.amazon.smithy.kotlin.codegen.integration.*
 import software.amazon.smithy.model.knowledge.OperationIndex
 import software.amazon.smithy.model.node.Node
@@ -22,6 +25,19 @@ class AwsHttpProtocolClientGenerator(
     features: List<HttpFeature>,
     httpBindingResolver: HttpBindingResolver
 ) : HttpProtocolClientGenerator(ctx, features, httpBindingResolver) {
+
+    override val serdeProviderSymbol: Symbol
+        get() {
+            return when (ctx.protocol) {
+                AwsJson1_1Trait.ID,
+                AwsJson1_0Trait.ID,
+                RestJson1Trait.ID -> buildSymbol {
+                    name = "JsonSerdeProvider"
+                    namespace(KotlinDependency.CLIENT_RT_SERDE_JSON)
+                }
+                else -> throw CodegenException("no serialization provider implemented for: ${ctx.protocol}")
+            }
+        }
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
@@ -40,10 +56,10 @@ class AwsHttpProtocolClientGenerator(
         // add in additional context and defaults
         if (op.hasTrait(UnsignedPayloadTrait::class.java)) {
             writer.addImport("AuthAttributes", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
-            writer.write("execCtx[AuthAttributes.UnsignedPayload] = true")
+            writer.write("op.context[AuthAttributes.UnsignedPayload] = true")
         }
 
-        writer.write("mergeServiceDefaults(execCtx)")
+        writer.write("mergeServiceDefaults(op.context)")
     }
 
     override fun renderAdditionalMethods(writer: KotlinWriter) {
@@ -70,6 +86,11 @@ class AwsHttpProtocolClientGenerator(
             writer.write("ctx.putIfAbsent(AwsClientOption.Region, region)")
             writer.write("ctx.putIfAbsent(AuthAttributes.SigningRegion, config.signingRegion ?: region)")
             writer.write("ctx.putIfAbsent(SdkClientOption.ServiceName, serviceName)")
+
+            if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
+                writer.addImport(RuntimeTypes.Core.IdempotencyTokenProviderExt)
+                writer.write("config.idempotencyTokenProvider?.let { ctx[SdkClientOption.IdempotencyTokenProvider] = it }")
+            }
         }
     }
 

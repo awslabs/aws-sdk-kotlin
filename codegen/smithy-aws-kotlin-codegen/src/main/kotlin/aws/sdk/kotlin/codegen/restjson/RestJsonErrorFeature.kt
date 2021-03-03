@@ -1,7 +1,9 @@
 package aws.sdk.kotlin.codegen.restjson
 
+import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.ModeledExceptionsFeature
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.addImport
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
 import software.amazon.smithy.model.traits.HttpErrorTrait
@@ -12,7 +14,12 @@ class RestJsonErrorFeature(
 ) : ModeledExceptionsFeature(ctx, httpBindingResolver) {
     override val name: String = "RestJsonError"
 
-    override fun renderConfigure(writer: KotlinWriter) {
+    override fun addImportsAndDependencies(writer: KotlinWriter) {
+        super.addImportsAndDependencies(writer)
+        writer.addImport("RestJsonError", AwsKotlinDependency.REST_JSON_FEAT)
+    }
+
+    override fun renderRegisterErrors(writer: KotlinWriter) {
         val errors = getModeledErrors()
 
         errors.forEach { errShape ->

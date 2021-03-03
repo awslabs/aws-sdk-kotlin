@@ -6,9 +6,7 @@
 package aws.sdk.kotlin.codegen.awsjson
 
 import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
-import aws.sdk.kotlin.codegen.JsonSerdeFeature
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
-import software.amazon.smithy.kotlin.codegen.hasIdempotentTokenMember
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
@@ -28,7 +26,6 @@ class AwsJson1_1 : AwsHttpBindingProtocolGenerator() {
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val parentFeatures = super.getHttpFeatures(ctx)
         val awsJsonFeatures = listOf(
-            JsonSerdeFeature(ctx.service.hasIdempotentTokenMember(ctx.model)),
             AwsJsonTargetHeaderFeature("1.1"),
             AwsJsonModeledExceptionsFeature(ctx, getProtocolHttpBindingResolver(ctx))
         )

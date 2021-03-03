@@ -13,11 +13,8 @@ import aws.sdk.kotlin.crt.toSignableCrtRequest
 import aws.sdk.kotlin.crt.update
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import software.aws.clientrt.client.ExecutionContext
-import software.aws.clientrt.http.Feature
-import software.aws.clientrt.http.FeatureKey
-import software.aws.clientrt.http.HttpClientFeatureFactory
-import software.aws.clientrt.http.SdkHttpClient
-import software.aws.clientrt.http.request.HttpRequestPipeline
+import software.aws.clientrt.http.*
+import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.time.epochMilliseconds
 import software.aws.clientrt.util.get
 
@@ -50,29 +47,32 @@ public class AwsSigv4Signer internal constructor(config: Config) : Feature {
         }
     }
 
-    override fun install(client: SdkHttpClient) {
-        client.requestPipeline.intercept(HttpRequestPipeline.Finalize) {
+    override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
+        operation.execution.finalize.intercept { req, next ->
+
             val resolvedCredentials = credentialsProvider.getCredentials()
 
             // FIXME - this is an area where not having to sign a CRT HTTP request might be useful if we could just wrap our own type
             // otherwise to sign a request we need to convert: builder -> crt kotlin HttpRequest (which underneath converts to aws-c-http message) and back
-            val signableRequest = subject.toSignableCrtRequest()
+            val signableRequest = req.builder.toSignableCrtRequest()
 
             val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
-                region = context.executionContext[AuthAttributes.SigningRegion]
-                service = context.executionContext.getOrNull(AuthAttributes.SigningService) ?: signingService
+                region = req.context[AuthAttributes.SigningRegion]
+                service = req.context.getOrNull(AuthAttributes.SigningService) ?: signingService
                 credentials = resolvedCredentials.toCrt()
                 algorithm = AwsSigningAlgorithm.SIGV4
-                date = context.executionContext.getOrNull(AuthAttributes.SigningDate)?.epochMilliseconds
+                date = req.context.getOrNull(AuthAttributes.SigningDate)?.epochMilliseconds
 
-                if (context.executionContext.isUnsignedRequest()) {
+                if (req.context.isUnsignedRequest()) {
                     this.signedBodyValue = AwsSignedBodyValue.UNSIGNED_PAYLOAD
                 }
 
                 // TODO - expose additional signing config as needed as context attributes?
             }
             val signedRequest = AwsSigner.signRequest(signableRequest, signingConfig)
-            subject.update(signedRequest)
+            req.builder.update(signedRequest)
+
+            next.call(req)
         }
     }
 }

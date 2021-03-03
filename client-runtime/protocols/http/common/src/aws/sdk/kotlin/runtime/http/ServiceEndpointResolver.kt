@@ -8,7 +8,8 @@ package aws.sdk.kotlin.runtime.http
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import software.aws.clientrt.http.*
-import software.aws.clientrt.http.request.HttpRequestPipeline
+import software.aws.clientrt.http.operation.HttpOperationContext
+import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.util.get
 
 /**
@@ -42,15 +43,18 @@ public class ServiceEndpointResolver(
         }
     }
 
-    override fun install(client: SdkHttpClient) {
-        client.requestPipeline.intercept(HttpRequestPipeline.Initialize) {
-            val region = context.executionContext[AwsClientOption.Region]
+    override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
+        operation.execution.mutate.intercept { req, next ->
+
+            val region = req.context[AwsClientOption.Region]
             val endpoint = resolver.resolve(serviceId, region)
-            val hostPrefix = context.executionContext.getOrNull(SdkHttpOperation.HostPrefix) ?: ""
+            val hostPrefix = req.context.getOrNull(HttpOperationContext.HostPrefix) ?: ""
             val hostname = "${hostPrefix}${endpoint.hostname}"
-            subject.url.scheme = Protocol.parse(endpoint.protocol)
-            subject.url.host = hostname
-            subject.headers["Host"] = hostname
+            req.builder.url.scheme = Protocol.parse(endpoint.protocol)
+            req.builder.url.host = hostname
+            req.builder.headers["Host"] = hostname
+
+            next.call(req)
         }
     }
 }

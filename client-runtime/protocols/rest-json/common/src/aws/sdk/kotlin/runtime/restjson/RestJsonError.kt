@@ -12,10 +12,10 @@ import aws.sdk.kotlin.runtime.http.ExceptionRegistry
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
 import aws.sdk.kotlin.runtime.http.withPayload
 import software.aws.clientrt.http.*
-import software.aws.clientrt.http.feature.HttpDeserialize
+import software.aws.clientrt.http.operation.HttpDeserialize
+import software.aws.clientrt.http.operation.HttpOperationContext
+import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.http.response.HttpResponsePipeline
-import software.aws.clientrt.serde.json.JsonSerdeProvider
 import software.aws.clientrt.util.InternalAPI
 
 /**
@@ -27,13 +27,13 @@ import software.aws.clientrt.util.InternalAPI
 @InternalAPI
 public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
     public class Config {
-        internal val registry = ExceptionRegistry()
+        public var registry: ExceptionRegistry = ExceptionRegistry()
 
         /**
          * Register a modeled service exception for the given [code]. The deserializer registered MUST provide
          * an [AwsServiceException] when invoked.
          */
-        public fun register(code: String, deserializer: HttpDeserialize, httpStatusCode: Int? = null) {
+        public fun register(code: String, deserializer: HttpDeserialize<*>, httpStatusCode: Int? = null) {
             registry.register(ExceptionMetadata(code, deserializer, httpStatusCode?.let { HttpStatusCode.fromValue(it) }))
         }
     }
@@ -46,21 +46,23 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
         }
     }
 
-    override fun install(client: SdkHttpClient) {
+    override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
         // intercept at first chance we get
-        client.responsePipeline.intercept(HttpResponsePipeline.Receive) {
-            val expectedStatus = context.executionContext.getOrNull(SdkHttpOperation.ExpectedHttpStatus)?.let { HttpStatusCode.fromValue(it) }
-            val status = context.response.status
-            if (status.matches(expectedStatus)) return@intercept
+        operation.execution.receive.intercept { req, next ->
+            val httpResponse = next.call(req)
 
-            val payload = context.response.body.readAll()
-            val wrappedResponse = context.response.withPayload(payload)
+            val context = req.context
+            val expectedStatus = context.getOrNull(HttpOperationContext.ExpectedHttpStatus)?.let { HttpStatusCode.fromValue(it) }
+            if (httpResponse.status.matches(expectedStatus)) return@intercept httpResponse
+
+            val payload = httpResponse.body.readAll()
+            val wrappedResponse = httpResponse.withPayload(payload)
 
             // attempt to match the AWS error code
             val error: RestJsonErrorDetails
 
             try {
-                error = RestJsonErrorDeserializer.deserialize(context.response, payload)
+                error = RestJsonErrorDeserializer.deserialize(httpResponse, payload)
             } catch (ex: Exception) {
                 throw UnknownServiceErrorException(
                     "failed to parse response as restJson protocol error",
@@ -70,12 +72,10 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
                 }
             }
 
-            val provider = JsonSerdeProvider()
-
             // we already consumed the response body, wrap it to allow the modeled exception to deserialize
             // any members that may be bound to the document
             val deserializer = registry[error.code]?.deserializer
-            val modeledException = deserializer?.deserialize(wrappedResponse, provider::deserializer) ?: UnknownServiceErrorException()
+            val modeledException = deserializer?.deserialize(req.context, wrappedResponse) ?: UnknownServiceErrorException()
             setAseFields(modeledException, wrappedResponse, error)
 
             // this should never happen...
