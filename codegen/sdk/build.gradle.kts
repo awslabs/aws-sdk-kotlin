@@ -56,12 +56,12 @@ fun getProperty(name: String): String? {
 // Represents information needed to generate a smithy projection JSON stanza
 data class AwsService(
     val name: String,
-    val moduleName: String,
-    val moduleVersion: String = "1.0",
+    val packageName: String,
+    val packageVersion: String = "1.0",
     val modelFile: File,
     val projectionName: String,
     val sdkId: String,
-    val description: String = ""
+    val description: String? = null
 )
 
 // Generates a smithy-build.json file by creating a new projection.
@@ -78,9 +78,11 @@ fun generateSmithyBuild(services: List<AwsService>): String {
                 "plugins": {
                     "kotlin-codegen": {
                       "service": "${service.name}",
-                      "module": "${service.moduleName}",
-                      "moduleVersion": "${service.moduleVersion}",
-                      "moduleDescription": "${service.description}",
+                      "package" : {
+                          "name": "${service.packageName}",
+                          "version": "${service.packageVersion}",
+                          "description": "${service.description}"                      
+                      },
                       "sdkId": "${service.sdkId}",
                       "build": {
                           "generateDefaultBuildFiles": false
@@ -101,6 +103,8 @@ fun generateSmithyBuild(services: List<AwsService>): String {
 }
 
 val discoveredServices: List<AwsService> by lazy { discoverServices() }
+// The root namespace prefix for SDKs
+val sdkPackageNamePrefix = "aws.sdk.kotlin."
 
 // Returns an AwsService model for every JSON file found in in directory defined by property `modelsDirProp`
 fun discoverServices(): List<AwsService> {
@@ -124,13 +128,14 @@ fun discoverServices(): List<AwsService> {
                 ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
             val (name, version, _) = file.name.split(".")
 
-            val description = service.getTrait(software.amazon.smithy.model.traits.TitleTrait::class.java).map { it.value }.orElse("")
+            val packageName = name.kotlinNamespace()
+            val description = service.getTrait(software.amazon.smithy.model.traits.TitleTrait::class.java).map { it.value }.orNull()
 
             logger.info("discovered service: ${serviceApi.sdkId}")
 
             AwsService(
                 name = service.id.toString(),
-                moduleName = "aws.sdk.kotlin.$name",
+                packageName = "$sdkPackageNamePrefix$packageName",
                 modelFile = file,
                 projectionName = name + "." + version.toLowerCase(),
                 sdkId = serviceApi.sdkId,
@@ -140,6 +145,12 @@ fun discoverServices(): List<AwsService> {
 }
 
 fun <T> java.util.Optional<T>.orNull(): T? = this.orElse(null)
+
+/**
+ * Remove characters invalid for Kotlin package namespace identifier
+ */
+fun String.kotlinNamespace(): String = split(".")
+    .joinToString(separator = ".") { segment -> segment.filter { it.isLetterOrDigit() } }
 
 // Generate smithy-build.json as first step in build task
 task("generateSmithyBuild") {
