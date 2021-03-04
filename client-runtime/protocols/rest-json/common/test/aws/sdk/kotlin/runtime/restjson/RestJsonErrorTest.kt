@@ -12,15 +12,18 @@ import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
-import software.aws.clientrt.http.feature.DeserializationProvider
-import software.aws.clientrt.http.feature.HttpDeserialize
+import software.aws.clientrt.http.operation.HttpDeserialize
+import software.aws.clientrt.http.operation.SdkHttpOperation
+import software.aws.clientrt.http.operation.UnitDeserializer
+import software.aws.clientrt.http.operation.UnitSerializer
+import software.aws.clientrt.http.operation.context
+import software.aws.clientrt.http.operation.roundTrip
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.http.response.HttpResponseContext
-import software.aws.clientrt.http.response.TypeInfo
 import software.aws.clientrt.http.response.header
 import software.aws.clientrt.serde.*
 import software.aws.clientrt.serde.json.JsonSerialName
+import software.aws.clientrt.serde.json.JsonSerdeProvider
 import kotlin.test.*
 
 @OptIn(ExperimentalStdlibApi::class)
@@ -54,7 +57,7 @@ class RestJsonErrorTest {
         override val errorType = ErrorType.Server
     }
 
-    class FooErrorDeserializer : HttpDeserialize {
+    class FooErrorDeserializer(val provider: DeserializationProvider) : HttpDeserialize<FooError> {
         companion object {
             val PAYLOAD_STRING_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("string"))
             val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
@@ -62,7 +65,7 @@ class RestJsonErrorTest {
             }
         }
 
-        override suspend fun deserialize(response: HttpResponse, provider: DeserializationProvider): FooError {
+        override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): FooError {
             val builder = FooError.dslBuilder()
             builder.headerInt = response.headers["X-Test-Header"]?.toInt()
 
@@ -87,15 +90,6 @@ class RestJsonErrorTest {
     @Test
     fun `it throws matching errors`() = runSuspendTest {
 
-        val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { throw NotImplementedError() }
-        }
-        val client = sdkHttpClient(mockEngine) {
-            install(RestJsonError) {
-                register("FooError", FooErrorDeserializer(), 502)
-            }
-        }
-
         val req = HttpRequestBuilder().build()
         val headers = Headers {
             append("X-Test-Header", "12")
@@ -105,10 +99,28 @@ class RestJsonErrorTest {
         val payload = """{"baz":"quux","string":"hello world","message":"server do better next time"}"""
         val body = ByteArrayContent(payload.encodeToByteArray())
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
-        val context = HttpResponseContext(httpResp, TypeInfo(Int::class), ExecutionContext())
 
+        val mockEngine = object : HttpClientEngine {
+            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { return httpResp }
+        }
+
+        val client = sdkHttpClient(mockEngine)
+
+        val op = SdkHttpOperation.build<Unit, Unit> {
+            serializer = UnitSerializer
+            deserializer = UnitDeserializer
+            context {
+                service = "TestService"
+                operationName = "testOperation"
+            }
+        }
+
+        val provider = JsonSerdeProvider()
+        op.install(RestJsonError) {
+            register("FooError", FooErrorDeserializer(provider::deserializer), 502)
+        }
         val ex = assertFailsWith(FooError::class) {
-            client.responsePipeline.execute(context, httpResp.body)
+            op.roundTrip(client, Unit)
         }
 
         // verify it pulls out the error details/meta
@@ -126,14 +138,6 @@ class RestJsonErrorTest {
 
     @Test
     fun `it throws unknown`() = runSuspendTest {
-        val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { throw NotImplementedError() }
-        }
-        val client = sdkHttpClient(mockEngine) {
-            install(RestJsonError) {
-                register("FooError", FooErrorDeserializer(), 502)
-            }
-        }
 
         val req = HttpRequestBuilder().build()
         val headers = Headers {
@@ -144,10 +148,29 @@ class RestJsonErrorTest {
         val payload = """{"baz":"quux","string":"hello world","message":"server do better next time"}"""
         val body = ByteArrayContent(payload.encodeToByteArray())
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
-        val context = HttpResponseContext(httpResp, TypeInfo(Int::class), ExecutionContext())
+
+        val mockEngine = object : HttpClientEngine {
+            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { return httpResp }
+        }
+
+        val client = sdkHttpClient(mockEngine)
+
+        val op = SdkHttpOperation.build<Unit, Unit> {
+            serializer = UnitSerializer
+            deserializer = UnitDeserializer
+            context {
+                service = "TestService"
+                operationName = "testOperation"
+            }
+        }
+
+        val provider = JsonSerdeProvider()
+        op.install(RestJsonError) {
+            register("FooError", FooErrorDeserializer(provider::deserializer), 502)
+        }
 
         val ex = assertFailsWith(UnknownServiceErrorException::class) {
-            client.responsePipeline.execute(context, httpResp.body)
+            op.roundTrip(client, Unit)
         }
 
         // verify it pulls out the error details/meta
@@ -171,15 +194,6 @@ class RestJsonErrorTest {
     @Test
     fun `it handles non-json payloads`() = runSuspendTest {
         // the service itself may talk rest-json but errors (like signature mismatch) may return unknown payloads
-        val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { throw NotImplementedError() }
-        }
-        val client = sdkHttpClient(mockEngine) {
-            install(RestJsonError) {
-                register("FooError", FooErrorDeserializer(), 502)
-            }
-        }
-
         val req = HttpRequestBuilder().build()
         val headers = Headers {
             append("X-Test-Header", "12")
@@ -194,10 +208,29 @@ class RestJsonErrorTest {
 
         val body = ByteArrayContent(payload.encodeToByteArray())
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
-        val context = HttpResponseContext(httpResp, TypeInfo(Int::class), ExecutionContext())
+
+        val mockEngine = object : HttpClientEngine {
+            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { return httpResp }
+        }
+
+        val client = sdkHttpClient(mockEngine)
+
+        val op = SdkHttpOperation.build<Unit, Unit> {
+            serializer = UnitSerializer
+            deserializer = UnitDeserializer
+            context {
+                service = "TestService"
+                operationName = "testOperation"
+            }
+        }
+
+        val provider = JsonSerdeProvider()
+        op.install(RestJsonError) {
+            register("FooError", FooErrorDeserializer(provider::deserializer), 502)
+        }
 
         val ex = assertFailsWith(UnknownServiceErrorException::class) {
-            client.responsePipeline.execute(context, httpResp.body)
+            op.roundTrip(client, Unit)
         }
 
         // verify it pulls out the error details/meta

@@ -38,8 +38,8 @@ class GradleGenerator : KotlinIntegration {
         }
 
         writer.write("")
-        if (ctx.settings.moduleDescription.isNotEmpty()) {
-            writer.write("description = #S", ctx.settings.moduleDescription)
+        if (!ctx.settings.pkg.description.isNullOrEmpty()) {
+            writer.write("description = #S", ctx.settings.pkg.description)
         }
 
         val dependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()

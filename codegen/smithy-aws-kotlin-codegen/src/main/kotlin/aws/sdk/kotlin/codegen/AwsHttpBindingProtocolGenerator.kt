@@ -8,7 +8,6 @@ import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestErrorGenerator
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestRequestGenerator
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestResponseGenerator
 import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.*
 import software.amazon.smithy.kotlin.codegen.integration.*
 
 /**
@@ -23,9 +22,8 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         .build()
 
     override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator {
-        val rootNamespace = ctx.settings.moduleName
         val features = getHttpFeatures(ctx)
-        return AwsHttpProtocolClientGenerator(ctx, rootNamespace, features, getProtocolHttpBindingResolver(ctx))
+        return AwsHttpProtocolClientGenerator(ctx, features, getProtocolHttpBindingResolver(ctx))
     }
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
@@ -70,16 +68,5 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             errorTestBuilder,
             ignoredTests
         ).generateProtocolTests()
-    }
-}
-
-class JsonSerdeFeature(generateIdempotencyTokenConfig: Boolean) : HttpSerde("JsonSerdeProvider", generateIdempotencyTokenConfig) {
-    override fun addImportsAndDependencies(writer: KotlinWriter) {
-        super.addImportsAndDependencies(writer)
-        val jsonSerdeSymbol = buildSymbol {
-            name = "JsonSerdeProvider"
-            namespace(KotlinDependency.CLIENT_RT_SERDE_JSON)
-        }
-        writer.addImport(jsonSerdeSymbol)
     }
 }

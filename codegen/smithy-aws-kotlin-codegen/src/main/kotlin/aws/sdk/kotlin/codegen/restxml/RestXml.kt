@@ -23,12 +23,12 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val features = super.getHttpFeatures(ctx)
 
-        val restXmlFeatures = listOf(
-            XmlSerdeFeature(ctx.service.hasIdempotentTokenMember(ctx.model)),
-            // TODO - RestXmlError
-        )
-
-        return features + restXmlFeatures
+//        val restXmlFeatures = listOf(
+//            // TODO - RestXmlError
+//        )
+//
+//        return features + restXmlFeatures
+        return features
     }
 
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.DATE_TIME
@@ -39,13 +39,3 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = RestXmlTrait.ID
 }
 
-class XmlSerdeFeature(generateIdempotencyTokenConfig: Boolean) : HttpSerde("XmlSerdeProvider", generateIdempotencyTokenConfig) {
-    override fun addImportsAndDependencies(writer: KotlinWriter) {
-        super.addImportsAndDependencies(writer)
-        val xmlSerdeSymbol = buildSymbol {
-            name = "XmlSerdeProvider"
-            namespace(KotlinDependency.CLIENT_RT_SERDE_XML)
-        }
-        writer.addImport(xmlSerdeSymbol)
-    }
-}

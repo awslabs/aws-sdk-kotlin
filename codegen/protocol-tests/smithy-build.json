@@ -13,8 +13,10 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.restjson#RestJson",
-          "module": "aws.sdk.kotlin.protocoltest.awsrestjson",
-          "moduleVersion": "1.0",
+          "package" : {
+            "name": "aws.sdk.kotlin.protocoltest.awsrestjson",
+            "version": "1.0"
+          },
           "build":  {
               "rootProject": true,
               "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
@@ -34,8 +36,10 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.json10#JsonRpc10",
-          "module": "aws.sdk.kotlin.protocoltest.awsjson10",
-          "moduleVersion": "1.0",
+          "package" : {
+            "name": "aws.sdk.kotlin.protocoltest.awsjson10",
+            "version": "1.0"
+          },
           "build":  {
             "rootProject": true,
             "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
@@ -55,8 +59,10 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.json#JsonProtocol",
-          "module": "aws.sdk.kotlin.protocoltest.awsjson11",
-          "moduleVersion": "1.0",
+          "package" : {
+            "name": "aws.sdk.kotlin.protocoltest.awsjson11",
+            "version": "1.0"
+          },
           "build":  {
             "rootProject": true,
             "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
@@ -76,8 +82,10 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.restxml#RestXml",
-          "module": "aws.sdk.kotlin.protocoltest.restxml",
-          "moduleVersion": "1.0",
+          "package" : {
+            "name": "aws.sdk.kotlin.protocoltest.restxml",
+            "version": "1.0"
+          },
           "build":  {
             "rootProject": true,
             "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
@@ -97,8 +105,10 @@
       "plugins": {
         "kotlin-codegen": {
           "service": "aws.protocoltests.restxml.xmlns#RestXmlWithNamespace",
-          "module": "aws.sdk.kotlin.protocoltest.restxmlns",
-          "moduleVersion": "1.0",
+          "package" : {
+            "name": "aws.sdk.kotlin.protocoltest.restxmlns",
+            "version": "1.0"
+          },
           "build":  {
             "rootProject": true,
             "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
