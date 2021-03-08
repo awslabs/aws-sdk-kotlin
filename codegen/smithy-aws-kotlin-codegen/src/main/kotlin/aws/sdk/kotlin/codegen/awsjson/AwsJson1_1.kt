@@ -26,7 +26,7 @@ class AwsJson1_1 : AwsHttpBindingProtocolGenerator() {
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val parentFeatures = super.getHttpFeatures(ctx)
         val awsJsonFeatures = listOf(
-            AwsJsonTargetHeaderFeature("1.1"),
+            AwsJsonProtocolFeature("1.1"),
             AwsJsonModeledExceptionsFeature(ctx, getProtocolHttpBindingResolver(ctx))
         )
 

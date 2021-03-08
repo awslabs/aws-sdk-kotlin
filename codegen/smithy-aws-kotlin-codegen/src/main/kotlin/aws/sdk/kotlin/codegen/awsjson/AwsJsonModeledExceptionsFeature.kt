@@ -15,7 +15,7 @@ class AwsJsonModeledExceptionsFeature(
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         super.addImportsAndDependencies(writer)
-        writer.addImport("RestJsonError", AwsKotlinDependency.REST_JSON_FEAT)
+        writer.addImport("RestJsonError", AwsKotlinDependency.AWS_CLIENT_RT_JSON_PROTOCOLS)
     }
 
     override fun renderRegisterErrors(writer: KotlinWriter) {
