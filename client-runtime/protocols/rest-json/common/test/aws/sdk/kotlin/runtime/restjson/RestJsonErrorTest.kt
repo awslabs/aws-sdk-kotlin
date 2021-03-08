@@ -22,8 +22,8 @@ import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.header
 import software.aws.clientrt.serde.*
-import software.aws.clientrt.serde.json.JsonSerialName
 import software.aws.clientrt.serde.json.JsonSerdeProvider
+import software.aws.clientrt.serde.json.JsonSerialName
 import kotlin.test.*
 
 @OptIn(ExperimentalStdlibApi::class)

@@ -1,7 +1,6 @@
 package aws.sdk.kotlin.codegen.awsjson
 
-import software.amazon.smithy.kotlin.codegen.expectTrait
-import software.amazon.smithy.kotlin.codegen.hasTrait
+import software.amazon.smithy.kotlin.codegen.*
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingDescriptor
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
@@ -74,7 +73,7 @@ class AwsJsonHttpBindingResolver(
         }
     }
 
-    // TODO ~ link to future awsJson spec which describes this content type
+    // See https://awslabs.github.io/smithy/1.0/spec/aws/aws-json-1_0-protocol.html#protocol-behaviors
     override fun determineRequestContentType(operationShape: OperationShape): String = defaultContentType
 
     override fun determineTimestampFormat(
