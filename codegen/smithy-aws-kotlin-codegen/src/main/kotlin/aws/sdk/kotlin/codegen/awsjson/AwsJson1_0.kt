@@ -27,7 +27,7 @@ class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val parentFeatures = super.getHttpFeatures(ctx)
         val awsJsonFeatures = listOf(
-            AwsJsonTargetHeaderFeature("1.0"),
+            AwsJsonProtocolFeature("1.0"),
             AwsJsonModeledExceptionsFeature(ctx, getProtocolHttpBindingResolver(ctx))
         )
 
@@ -43,20 +43,20 @@ class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
 }
 
 /**
- * Configure the AwsJsonTargetHeader feature
+ * Configure the AwsJsonProtocol feature
  * @param protocolVersion The AWS JSON protocol version (e.g. "1.0", "1.1", etc)
  */
-class AwsJsonTargetHeaderFeature(val protocolVersion: String) : HttpFeature {
-    override val name: String = "AwsJsonTargetHeader"
+class AwsJsonProtocolFeature(val protocolVersion: String) : HttpFeature {
+    override val name: String = "AwsJsonProtocol"
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         super.addImportsAndDependencies(writer)
-        val awsJsonTargetHeaderSymbol = buildSymbol {
-            name = "AwsJsonTargetHeader"
-            namespace(AwsKotlinDependency.REST_JSON_FEAT)
+        val awsJsonProtocolSymbol = buildSymbol {
+            name = "AwsJsonProtocol"
+            namespace(AwsKotlinDependency.AWS_CLIENT_RT_JSON_PROTOCOLS)
         }
 
-        writer.addImport(awsJsonTargetHeaderSymbol)
+        writer.addImport(awsJsonProtocolSymbol)
     }
 
     override fun renderConfigure(writer: KotlinWriter) {

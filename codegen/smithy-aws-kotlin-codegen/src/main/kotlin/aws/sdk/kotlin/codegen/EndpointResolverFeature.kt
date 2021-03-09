@@ -34,6 +34,6 @@ class EndpointResolverFeature(private val ctx: ProtocolGenerator.GenerationConte
 
     override fun renderConfigure(writer: KotlinWriter) {
         writer.write("serviceId = ServiceId")
-        writer.write("resolver = DefaultEndpointResolver()")
+        writer.write("resolver = config.endpointResolver ?: DefaultEndpointResolver()")
     }
 }

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 plugins {
-    kotlin("jvm") version "1.4.21" apply false
+    kotlin("jvm") version "1.4.31" apply false
 }
 
 allprojects {

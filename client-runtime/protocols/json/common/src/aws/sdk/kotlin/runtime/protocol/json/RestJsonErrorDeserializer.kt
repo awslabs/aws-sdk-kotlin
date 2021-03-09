@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package aws.sdk.kotlin.runtime.restjson
+package aws.sdk.kotlin.runtime.protocol.json
 
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.serde.*

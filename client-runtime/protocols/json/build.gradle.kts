@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-description = "JSON protocol support for AWS service clients"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: RestJSON"
-extra["moduleName"] = "aws.sdk.kotlin.runtime.restjson"
+description = "Support for the JSON suite of AWS protocols"
+extra["displayName"] = "Software :: AWS :: Kotlin SDK :: JSON"
+extra["moduleName"] = "aws.sdk.kotlin.runtime.protocol.json"
 
 val smithyKotlinClientRtVersion: String by project
 
