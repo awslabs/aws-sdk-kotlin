@@ -14,7 +14,7 @@ const val AWS_CLIENT_RT_REGIONS_NS = "aws.sdk.kotlin.runtime.regions"
 
 // publishing info
 const val AWS_CLIENT_RT_GROUP = "aws.sdk.kotlin"
-const val AWS_CLIENT_RT_VERSION = "0.0.1"
+const val AWS_CLIENT_RT_VERSION = "0.1.0-SNAPSHOT"
 
 /**
  * Container object for AWS specific dependencies
