@@ -57,7 +57,7 @@ public data class ApiMetadata(val serviceId: String, val version: String) {
 }
 
 public data class OsMetadata(val family: OsFamily, val version: String? = null) {
-    override fun toString(): String = if (version != null) "os/$family/$version" else "os/$family"
+    override fun toString(): String = if (version != null) "os/$family/${version.encodeUaValue()}" else "os/$family"
 }
 
 public data class LanguageMetadata(
@@ -68,7 +68,7 @@ public data class LanguageMetadata(
     override fun toString(): String = buildString {
         append("lang/kotlin/$version")
         extras.entries.forEach { (key, value) ->
-            append(" md/$key/$value")
+            append(" md/$key/${value.encodeUaValue()}")
         }
     }
 }
@@ -84,6 +84,28 @@ private fun detectExecEnv(): ExecutionEnvMetadata? {
     // see https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
     return Platform.getenv("AWS_LAMBDA_FUNCTION_NAME")?.let {
         ExecutionEnvMetadata("lambda")
+    }
+}
+// ua-value = token
+// token = 1*tchar
+// tchar = "!" / "#" / "$" / "%" / "&" / "'" / "*" / "+" / "-" / "." /
+//         "^" / "_" / "`" / "|" / "~" / DIGIT / ALPHA
+private val VALID_TCHAR = setOf(
+    '!', '#', '$', '%', '&',
+    '\'', '*', '+', '-', '.',
+    '^', '_', '`', '|', '~'
+)
+
+private fun String.encodeUaValue(): String {
+    val str = this
+    return buildString(str.length) {
+        for (chr in str) {
+            when (chr) {
+                ' ' -> append("_")
+                in 'a'..'z', in 'A'..'Z', in '0'..'9', in VALID_TCHAR -> append(chr)
+                else -> continue
+            }
+        }
     }
 }
 

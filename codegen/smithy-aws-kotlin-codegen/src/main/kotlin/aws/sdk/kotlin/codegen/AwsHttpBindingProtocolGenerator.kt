@@ -35,6 +35,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             features.add(AwsSignatureVersion4(signingName))
         }
 
+        features.add(UserAgentFeature())
         return features
     }
 

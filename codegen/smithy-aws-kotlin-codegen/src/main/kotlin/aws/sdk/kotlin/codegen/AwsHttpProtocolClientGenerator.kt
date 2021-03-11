@@ -43,6 +43,7 @@ class AwsHttpProtocolClientGenerator(
         writer.write("\n\n")
         writer.write("const val ServiceId: String = #S", ctx.service.sdkId)
         writer.write("const val ServiceApiVersion: String = #S", ctx.service.version)
+        writer.write("const val SdkVersion: String = #S", ctx.settings.pkg.version)
         writer.write("\n\n")
         super.render(writer)
 
