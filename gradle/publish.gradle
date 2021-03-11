@@ -10,6 +10,14 @@ apply plugin: 'maven-publish'
 publishing {
     repositories {
         maven { name = "testLocal"; url = "$rootProject.buildDir/m2" }
+        maven {
+            name = "awsCodeArtifact"
+            url = project.findProperty("codeartifact.url")
+            credentials {
+                username = "aws"
+                password = project.findProperty("codeartifact.token") ?: System.getenv("CODEARTIFACT_TOKEN")
+            }
+        }
     }
 
     publications.all {
@@ -35,4 +43,9 @@ publishing {
             }
         }
     }
+}
+
+tasks.register('publishToAwsCodeArtifact') {
+    dependsOn 'publishAllPublicationsToAwsCodeArtifactRepository'
+    group 'publishing'
 }

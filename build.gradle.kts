@@ -43,3 +43,10 @@ tasks.register<JavaExec>("ktlintFormat") {
 
 // configure coverage for the entire project
 apply(from = rootProject.file("gradle/codecoverage.gradle"))
+
+tasks.register("showRepos") {
+    doLast {
+        println("All repos:")
+        println(repositories.map { it.name })
+    }
+}

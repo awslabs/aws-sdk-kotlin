@@ -30,7 +30,7 @@ include(":client-runtime:testing")
 include(":client-runtime:regions")
 include(":client-runtime:auth")
 include(":client-runtime:protocols:http")
-include(":client-runtime:protocols:json")
+include(":client-runtime:protocols:aws-json-protocols")
 include(":client-runtime:crt-util")
 
 // generated services
