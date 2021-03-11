@@ -37,6 +37,12 @@ subprojects {
         }
     }
 
+    val sourcesJar by tasks.creating(Jar::class) {
+        group = "publishing"
+        description = "Assembles Kotlin sources jar"
+        classifier = "sources"
+        from(sourceSets.getByName("main").allSource)
+    }
 
     // FIXME - kotlin multiplatform configures publications for you so when we switch we can remove this
     // and just apply "publish.gradle" from the set of root gradle scripts (just like we do for the runtime)
@@ -45,11 +51,11 @@ subprojects {
     publishing {
         publications {
             create<MavenPublication>("sdk"){
-                println("components: $components")
                 from(components["java"])
+                artifact(sourcesJar)
             }
         }
     }
-    apply(from = rootProject.file("gradle/publish.gradle"))
 
+    apply(from = rootProject.file("gradle/publish.gradle"))
 }
