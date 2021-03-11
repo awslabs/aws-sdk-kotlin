@@ -104,7 +104,7 @@ fun generateSmithyBuild(services: List<AwsService>): String {
 
 val discoveredServices: List<AwsService> by lazy { discoverServices() }
 // The root namespace prefix for SDKs
-val sdkPackageNamePrefix = "aws.sdk.kotlin."
+val sdkPackageNamePrefix = "aws.sdk.kotlin.services."
 
 // Returns an AwsService model for every JSON file found in in directory defined by property `modelsDirProp`
 fun discoverServices(): List<AwsService> {
