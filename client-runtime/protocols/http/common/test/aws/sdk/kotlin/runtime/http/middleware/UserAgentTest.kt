@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.http
+package aws.sdk.kotlin.runtime.http.middleware
 
+import aws.sdk.kotlin.runtime.http.ApiMetadata
+import aws.sdk.kotlin.runtime.http.AwsUserAgentMetadata
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.http.Headers
 import software.aws.clientrt.http.HttpBody

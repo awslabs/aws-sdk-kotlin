@@ -1,7 +1,7 @@
 package aws.sdk.kotlin.codegen.awsjson
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import aws.sdk.kotlin.codegen.ModeledExceptionsFeature
+import aws.sdk.kotlin.codegen.middleware.ModeledExceptionsFeature
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.addImport
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
