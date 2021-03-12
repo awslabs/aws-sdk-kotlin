@@ -14,9 +14,7 @@ import software.aws.clientrt.http.operation.*
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.sdkHttpClient
-import software.aws.clientrt.util.OsFamily
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class UserAgentTest {
@@ -47,22 +45,5 @@ class UserAgentTest {
         val response = op.roundTrip(client, Unit)
         assertTrue(response.request.headers.contains(USER_AGENT))
         assertTrue(response.request.headers.contains(X_AMZ_USER_AGENT))
-    }
-
-    @Test
-    fun testUserAgent() {
-        val ua = AwsUserAgentMetadata.fromEnvironment(ApiMetadata("Test Service", "1.2.3"))
-        assertEquals("aws-sdk-kotlin/1.2.3", ua.userAgent)
-    }
-
-    @Test
-    fun testXAmzUserAgent() {
-        val apiMeta = ApiMetadata("Test Service", "1.2.3")
-        val sdkMeta = SdkMetadata("kotlin", apiMeta.version)
-        val osMetadata = OsMetadata(OsFamily.Linux, "ubuntu-20.04")
-        val langMeta = LanguageMetadata("1.4.31", mapOf("jvmVersion" to "1.11"))
-        val ua = AwsUserAgentMetadata(sdkMeta, apiMeta, osMetadata, langMeta)
-        val expected = "aws-sdk-kotlin/1.2.3 api/test-service/1.2.3 os/linux/ubuntu-20.04 lang/kotlin/1.4.31 md/jvmVersion/1.11"
-        assertEquals(expected, ua.xAmzUserAgent)
     }
 }

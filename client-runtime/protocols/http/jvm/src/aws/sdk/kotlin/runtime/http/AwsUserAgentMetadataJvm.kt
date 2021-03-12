@@ -1,0 +1,28 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
+package aws.sdk.kotlin.runtime.http
+
+import software.aws.clientrt.util.Platform
+
+internal actual fun platformLanguageMetadata(): LanguageMetadata {
+    val jvmMetadata = mutableMapOf<String, String>(
+        "javaVersion" to System.getProperty("java.version"),
+        "jvmName" to System.getProperty("java.vm.name"),
+        "jvmVersion" to System.getProperty("java.vm.version")
+    )
+
+    if (Platform.isAndroid) {
+        // https://developer.android.com/reference/android/os/Build.VERSION
+        val buildVersionCls = Class.forName("android.os.Build\$VERSION")
+        val sdkIntField = buildVersionCls.getDeclaredField("SDK_INT")
+        val sdkReleaseField = buildVersionCls.getDeclaredField("RELEASE")
+
+        jvmMetadata["androidApiVersion"] = sdkIntField.getInt(null).toString()
+        jvmMetadata["androidRelease"] = sdkReleaseField.get(null) as String
+    }
+
+    return LanguageMetadata(extras = jvmMetadata)
+}
