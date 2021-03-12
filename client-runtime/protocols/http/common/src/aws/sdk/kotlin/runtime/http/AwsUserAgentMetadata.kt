@@ -93,7 +93,14 @@ public data class ApiMetadata(val serviceId: String, val version: String) {
  * Operating system metadata
  */
 public data class OsMetadata(val family: OsFamily, val version: String? = null) {
-    override fun toString(): String = if (version != null) "os/$family/${version.encodeUaToken()}" else "os/$family"
+    override fun toString(): String {
+        // os-family = windows / linux / macos / android / ios / other
+        val familyStr = when (family) {
+            OsFamily.Unknown -> "other"
+            else -> family.toString()
+        }
+        return if (version != null) "os/$familyStr/${version.encodeUaToken()}" else "os/$familyStr"
+    }
 }
 
 /**

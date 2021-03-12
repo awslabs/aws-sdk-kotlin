@@ -9,9 +9,9 @@ import software.aws.clientrt.util.Platform
 
 internal actual fun platformLanguageMetadata(): LanguageMetadata {
     val jvmMetadata = mutableMapOf<String, String>(
-        "javaVersion" to System.getProperty("java.version"),
-        "jvmName" to System.getProperty("java.vm.name"),
-        "jvmVersion" to System.getProperty("java.vm.version")
+        "javaVersion" to getSystemProperty("java.version"),
+        "jvmName" to getSystemProperty("java.vm.name"),
+        "jvmVersion" to getSystemProperty("java.vm.version")
     )
 
     if (Platform.isAndroid) {
@@ -25,4 +25,8 @@ internal actual fun platformLanguageMetadata(): LanguageMetadata {
     }
 
     return LanguageMetadata(extras = jvmMetadata)
+}
+
+private fun getSystemProperty(name: String, defaultValue: String = "unknown"): String {
+    return runCatching { System.getProperty(name) }.getOrDefault(defaultValue)
 }
