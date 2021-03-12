@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.codegen.protocoltest
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import aws.sdk.kotlin.codegen.AwsSignatureVersion4
+import aws.sdk.kotlin.codegen.middleware.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.buildSymbol
 import software.amazon.smithy.kotlin.codegen.integration.HttpProtocolUnitTestGenerator

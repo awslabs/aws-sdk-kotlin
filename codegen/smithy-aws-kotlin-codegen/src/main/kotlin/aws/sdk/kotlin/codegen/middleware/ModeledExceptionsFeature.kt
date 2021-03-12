@@ -2,8 +2,9 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package aws.sdk.kotlin.codegen
+package aws.sdk.kotlin.codegen.middleware
 
+import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.addImport
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver

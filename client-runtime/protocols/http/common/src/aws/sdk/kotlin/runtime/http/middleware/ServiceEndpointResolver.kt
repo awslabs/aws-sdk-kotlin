@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.http
+package aws.sdk.kotlin.runtime.http.middleware
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import software.aws.clientrt.http.*
@@ -15,6 +16,7 @@ import software.aws.clientrt.util.get
 /**
  *  Http feature for resolving the service endpoint.
  */
+@InternalSdkApi
 public class ServiceEndpointResolver(
     config: Config
 ) : Feature {

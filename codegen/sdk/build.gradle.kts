@@ -57,7 +57,7 @@ fun getProperty(name: String): String? {
 data class AwsService(
     val name: String,
     val packageName: String,
-    val packageVersion: String = "1.0",
+    val packageVersion: String,
     val modelFile: File,
     val projectionName: String,
     val sdkId: String,
@@ -133,9 +133,11 @@ fun discoverServices(): List<AwsService> {
 
             logger.info("discovered service: ${serviceApi.sdkId}")
 
+            val sdkVersion: String by project
             AwsService(
                 name = service.id.toString(),
                 packageName = "$sdkPackageNamePrefix$packageName",
+                packageVersion = sdkVersion,
                 modelFile = file,
                 projectionName = name + "." + version.toLowerCase(),
                 sdkId = serviceApi.sdkId,
