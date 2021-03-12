@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.http
 import software.aws.clientrt.util.Platform
 
 internal actual fun platformLanguageMetadata(): LanguageMetadata {
-    val jvmMetadata = mutableMapOf<String, String>(
+    val jvmMetadata = mutableMapOf(
         "javaVersion" to getSystemProperty("java.version"),
         "jvmName" to getSystemProperty("java.vm.name"),
         "jvmVersion" to getSystemProperty("java.vm.version")
