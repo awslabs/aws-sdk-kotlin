@@ -27,6 +27,10 @@ subprojects {
     // have generated sdk's opt-in to internal runtime features
     kotlin.sourceSets.all {
         experimentalAnnotations.forEach { languageSettings.useExperimentalAnnotation(it) }
+
+        if (name == "main") {
+            kotlin.srcDir("generated-src/main/kotlin")
+        }
     }
 
     tasks.test {

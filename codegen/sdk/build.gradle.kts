@@ -195,8 +195,12 @@ task("stageSdks") {
         discoveredServices.forEach {
             logger.info("copying ${it.outputDir} to ${it.destinationDir}")
             copy {
-                from(it.outputDir)
-                into(it.destinationDir)
+                from("${it.outputDir}/src")
+                into("${it.destinationDir}/generated-src")
+            }
+            copy {
+                from("${it.outputDir}/build.gradle.kts")
+                into("${it.destinationDir}")
             }
         }
     }

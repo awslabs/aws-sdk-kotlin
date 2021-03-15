@@ -11,3 +11,6 @@ build/
 *.iml
 .idea/
 local.properties
+# ignore generated files
+services/*/generated-src
+services/*/build.gradle.kts
