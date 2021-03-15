@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth
 
+import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*

@@ -12,6 +12,7 @@ import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
 import aws.sdk.kotlin.crt.toSignableCrtRequest
 import aws.sdk.kotlin.crt.update
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.operation.SdkHttpOperation
