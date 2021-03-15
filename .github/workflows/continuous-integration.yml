@@ -31,6 +31,7 @@ jobs:
         docker pull $DOCKER_IMAGE
         docker run --mount type=bind,source=$(pwd),target=/root/${{ env.PACKAGE_NAME }} \
           --env GITHUB_REF \
+          --env GITHUB_HEAD_REF \
           --env CI_USER \
           --env CI_ACCESS_TOKEN \
           --env GIT_ASKPASS=/root/${{ env.PACKAGE_NAME }}/.github/scripts/git-ci-askpass.sh \
