@@ -35,6 +35,7 @@ jobs:
         CI_USER: ${{ secrets.CI_USER}}
         CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
       run: |
+        apt install -y ca-certificates
         python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
         chmod a+x builder.pyz
         GIT_ASKPASS="$(pwd)/.github/scripts/git-ci-askpass.sh" ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
