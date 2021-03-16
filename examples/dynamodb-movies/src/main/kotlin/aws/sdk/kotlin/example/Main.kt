@@ -4,15 +4,14 @@
  */
 package aws.sdk.kotlin.example
 
+import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.services.dynamodb.DynamodbClient
 import aws.sdk.kotlin.services.dynamodb.model.*
-import aws.sdk.kotlin.runtime.AwsServiceException
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import java.lang.IllegalStateException
-
 
 /**
  * Partial implementation of: https://docs.amazonaws.cn/en_us/amazondynamodb/latest/developerguide/GettingStarted.Java.html
@@ -38,8 +37,7 @@ fun main() = runBlocking {
         val titles = films2013.items?.mapNotNull { (it["title"] as? AttributeValue.S)?.value }
         println("2013 film titles:")
         println(titles)
-
-    }catch(ex: AwsServiceException) {
+    } catch (ex: AwsServiceException) {
         println(ex)
     }
 
@@ -47,10 +45,10 @@ fun main() = runBlocking {
 }
 
 suspend fun createMoviesTable(client: DynamodbClient, name: String) {
-    val tableExists = client.listTables(ListTablesRequest{}).tableNames?.contains(name) ?: false
+    val tableExists = client.listTables(ListTablesRequest {}).tableNames?.contains(name) ?: false
     if (tableExists) return
 
-    val req = CreateTableRequest{
+    val req = CreateTableRequest {
         tableName = name
         keySchema = listOf(
             KeySchemaElement {
@@ -85,14 +83,14 @@ suspend fun createMoviesTable(client: DynamodbClient, name: String) {
 
 // no waiters support (yet)
 suspend fun DynamodbClient.waitForTableReady(name: String) {
-    while(true) {
+    while (true) {
         try {
             val req = DescribeTableRequest { tableName = name }
             if (describeTable(req).table?.tableStatus != TableStatus.Creating) {
                 println("table ready")
                 return
             }
-        }catch(ex: AwsServiceException) {
+        } catch (ex: AwsServiceException) {
             if (!ex.isRetryable) throw ex
         }
         println("waiting for table to be ready...")
@@ -135,7 +133,6 @@ suspend fun DynamodbClient.moviesInYear(name: String, year: Int): QueryResponse 
 fun getResourceAsText(path: String): String =
     object {}.javaClass.getResource(path).readText()
 
-
 // map json to attribute values
 fun jsonElementToAttributeValue(element: JsonElement): AttributeValue = when {
     element.isJsonNull -> AttributeValue.NULL(true)
@@ -145,16 +142,18 @@ fun jsonElementToAttributeValue(element: JsonElement): AttributeValue = when {
             primitive.isBoolean -> AttributeValue.BOOL(primitive.asBoolean)
             primitive.isString -> AttributeValue.S(primitive.asString)
             else -> {
-                check(primitive.isNumber){"expected number"}
+                check(primitive.isNumber) { "expected number" }
                 AttributeValue.N(primitive.asString)
             }
         }
     }
     element.isJsonArray -> AttributeValue.L(element.asJsonArray.map(::jsonElementToAttributeValue))
     element.isJsonObject -> {
-        AttributeValue.M(element.asJsonObject.entrySet().associate{
-            it.key to jsonElementToAttributeValue(it.value)
-        })
+        AttributeValue.M(
+            element.asJsonObject.entrySet().associate {
+                it.key to jsonElementToAttributeValue(it.value)
+            }
+        )
     }
     else -> throw IllegalStateException("unknown json element type: $element")
 }

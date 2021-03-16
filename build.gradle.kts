@@ -21,7 +21,8 @@ dependencies {
 
 val lintPaths = listOf(
     "codegen/smithy-aws-kotlin-codegen/**/*.kt",
-    "client-runtime/**/*.kt"
+    "client-runtime/**/*.kt",
+    "examples/**/*.kt"
 )
 
 tasks.register<JavaExec>("ktlint") {
