@@ -22,6 +22,7 @@ buildscript {
     val smithyVersion: String by project
     dependencies {
         classpath("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
+        classpath("software.amazon.smithy:smithy-cli:$smithyVersion")
     }
 }
 
