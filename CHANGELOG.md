@@ -24,7 +24,7 @@ See the [Getting Started Guide](docs/GettingStarted.md) for how to work with bet
 * Lambda
 
 NOTES:
-* We currently can (theoretically) support any JSON based AWS protocol, if one is not on this list that you would like to see supported please reach out to us, and we can try to accommodate.
+* We currently can (theoretically) support any JSON based AWS protocol. If there is a service you would like to see added in a future release (before developer preview) please reach out and let us know.
 * No customizations are currently implemented, some SDK's may not behave 100% correctly without such support.
 * Retries, waiters, paginators, and other features are not yet implemented
 
@@ -32,4 +32,4 @@ NOTES:
 * Coroutine API
 * DSL Builders  
 * Default (environment or config) or static credential providers only. Additional providers will be added in later releases.
-* JVM only support (multiplatform support is on the roadmap but likely to come after an initial developer preview)
+* JVM only support (multiplatform support is on the roadmap)

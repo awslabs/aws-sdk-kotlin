@@ -69,4 +69,5 @@ dependencies {
 
 ## Giving Feedback
 
-* Submit [issues](https://github.com/awslabs/aws-sdk-kotlin/issues) - this is the preferred channel to interact with our team
+* Slack - Join #aws-sdk-kotlin-interest to share feedback and get updates on SDK development
+* Submit [issues](https://github.com/awslabs/aws-sdk-kotlin/issues)
