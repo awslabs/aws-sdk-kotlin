@@ -13,7 +13,7 @@ import software.aws.clientrt.http.HttpBody
 import software.aws.clientrt.http.HttpStatusCode
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.operation.*
-import software.aws.clientrt.http.request.HttpRequestBuilder
+import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.sdkHttpClient
 import kotlin.test.Test
@@ -24,8 +24,8 @@ class UserAgentTest {
     @Test
     fun `it sets ua headers`() = runSuspendTest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                return HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpResponse {
+                return HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty, request)
             }
         }
 

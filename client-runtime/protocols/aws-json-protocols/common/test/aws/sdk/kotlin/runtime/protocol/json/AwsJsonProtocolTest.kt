@@ -11,6 +11,7 @@ import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.operation.*
+import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
 import kotlin.test.Test
@@ -21,8 +22,8 @@ class AwsJsonProtocolTest {
     @Test
     fun testSetJsonProtocolHeaders() = runSuspendTest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                return HttpResponse(HttpStatusCode.OK, Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpResponse {
+                return HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty, request)
             }
         }
 
@@ -48,8 +49,8 @@ class AwsJsonProtocolTest {
     @Test
     fun testEmptyBody() = runSuspendTest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                return HttpResponse(HttpStatusCode.OK, Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpResponse {
+                return HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty, request)
             }
         }
 
@@ -75,8 +76,8 @@ class AwsJsonProtocolTest {
     @Test
     fun testDoesNotOverride() = runSuspendTest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                return HttpResponse(HttpStatusCode.OK, Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpResponse {
+                return HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty, request)
             }
         }
 

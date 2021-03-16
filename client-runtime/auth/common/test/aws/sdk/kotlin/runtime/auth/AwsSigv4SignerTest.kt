@@ -59,8 +59,8 @@ class AwsSigv4SignerTest {
 
     private suspend fun getSignedRequest(operation: SdkHttpOperation<Unit, HttpResponse>): HttpRequest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                return HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpResponse {
+                return HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty, request)
             }
         }
         val client = sdkHttpClient(mockEngine)

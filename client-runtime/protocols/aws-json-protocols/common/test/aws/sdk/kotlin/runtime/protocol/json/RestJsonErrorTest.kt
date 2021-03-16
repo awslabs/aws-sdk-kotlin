@@ -18,6 +18,7 @@ import software.aws.clientrt.http.operation.UnitDeserializer
 import software.aws.clientrt.http.operation.UnitSerializer
 import software.aws.clientrt.http.operation.context
 import software.aws.clientrt.http.operation.roundTrip
+import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.header
@@ -100,7 +101,7 @@ class RestJsonErrorTest {
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
 
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { return httpResp }
+            override suspend fun roundTrip(request: HttpRequest): HttpResponse { return httpResp }
         }
 
         val client = sdkHttpClient(mockEngine)
@@ -149,7 +150,7 @@ class RestJsonErrorTest {
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
 
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { return httpResp }
+            override suspend fun roundTrip(request: HttpRequest): HttpResponse { return httpResp }
         }
 
         val client = sdkHttpClient(mockEngine)
@@ -209,7 +210,7 @@ class RestJsonErrorTest {
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
 
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { return httpResp }
+            override suspend fun roundTrip(request: HttpRequest): HttpResponse { return httpResp }
         }
 
         val client = sdkHttpClient(mockEngine)
