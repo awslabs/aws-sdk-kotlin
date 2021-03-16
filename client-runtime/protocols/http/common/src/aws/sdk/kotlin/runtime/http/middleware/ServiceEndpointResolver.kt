@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.http.middleware
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
+import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.operation.HttpOperationContext
 import software.aws.clientrt.http.operation.SdkHttpOperation
@@ -55,6 +56,13 @@ public class ServiceEndpointResolver(
             req.builder.url.scheme = Protocol.parse(endpoint.protocol)
             req.builder.url.host = hostname
             req.builder.headers["Host"] = hostname
+
+            endpoint.signingName?.let {
+                if (it.isNotBlank()) req.context[AuthAttributes.SigningService] = it
+            }
+            endpoint.signingRegion?.let {
+                if (it.isNotBlank()) req.context[AuthAttributes.SigningRegion] = it
+            }
 
             next.call(req)
         }
