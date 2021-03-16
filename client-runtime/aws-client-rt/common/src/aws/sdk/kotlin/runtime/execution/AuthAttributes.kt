@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.auth
+package aws.sdk.kotlin.runtime.execution
 
 import software.aws.clientrt.client.ClientOption
 import software.aws.clientrt.time.Instant
