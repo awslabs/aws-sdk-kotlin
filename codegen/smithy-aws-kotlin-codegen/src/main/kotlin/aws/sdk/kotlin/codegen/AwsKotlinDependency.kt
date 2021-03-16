@@ -16,7 +16,7 @@ const val AWS_CLIENT_RT_REGIONS_NS = "aws.sdk.kotlin.runtime.regions"
 const val AWS_CLIENT_RT_GROUP: String = "aws.sdk.kotlin"
 // note: this version doesn't really matter since we substitute it for project dependency notation
 // when generating client build files
-const val AWS_CLIENT_RT_VERSION: String = "0.1.0-SNAPSHOT"
+const val AWS_CLIENT_RT_VERSION: String = "0.1.0"
 
 /**
  * Container object for AWS specific dependencies
