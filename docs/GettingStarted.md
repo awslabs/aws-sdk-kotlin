@@ -64,7 +64,7 @@ dependencies {
 ```
 
 
-4. Checkout examples
+4. Checkout the `examples` directory
 
 
 ## Giving Feedback
