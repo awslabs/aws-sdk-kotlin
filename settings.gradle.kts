@@ -4,6 +4,14 @@
  */
 
 pluginManagement {
+    // FIXME: temporary workaround bintray fiasco, see: https://github.com/Kotlin/dokka/issues/1779
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "org.jetbrains.dokka") {
+                useModule("org.jetbrains.dokka:dokka-gradle-plugin:${requested.version}")
+            }
+        }
+    }
     repositories {
         mavenCentral()
         gradlePluginPortal()
