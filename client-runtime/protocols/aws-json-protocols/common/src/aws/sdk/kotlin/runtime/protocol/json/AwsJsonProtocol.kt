@@ -4,11 +4,11 @@
  */
 package aws.sdk.kotlin.runtime.protocol.json
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import software.aws.clientrt.client.SdkClientOption
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.operation.SdkHttpOperation
-import software.aws.clientrt.util.InternalAPI
 import software.aws.clientrt.util.get
 
 /**
@@ -20,7 +20,7 @@ import software.aws.clientrt.util.get
  *   - setting the `Content-Type` and `X-Amz-Target` headers
  *   - providing an empty json {} body when no body is serialized
  */
-@InternalAPI
+@InternalSdkApi
 public class AwsJsonProtocol(config: Config) : Feature {
     private val version: String = requireNotNull(config.version) { "AWS JSON Protocol version must be specified" }
 
@@ -48,14 +48,14 @@ public class AwsJsonProtocol(config: Config) : Feature {
             val operationName = context[SdkClientOption.OperationName]
 
             // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-json-1_0-protocol.html#protocol-behaviors
-            req.builder.headers.append("X-Amz-Target", "$serviceName.$operationName")
-            req.builder.headers.setMissing("Content-Type", "application/x-amz-json-$version")
+            req.subject.headers.append("X-Amz-Target", "$serviceName.$operationName")
+            req.subject.headers.setMissing("Content-Type", "application/x-amz-json-$version")
 
-            if (req.builder.body is HttpBody.Empty) {
+            if (req.subject.body is HttpBody.Empty) {
                 // Empty body is required by AWS JSON 1.x protocols
                 // https://awslabs.github.io/smithy/1.0/spec/aws/aws-json-1_0-protocol.html#empty-body-serialization
                 // https://awslabs.github.io/smithy/1.0/spec/aws/aws-json-1_1-protocol.html#empty-body-serialization
-                req.builder.body = ByteArrayContent("{}".encodeToByteArray())
+                req.subject.body = ByteArrayContent("{}".encodeToByteArray())
             }
 
             next.call(req)

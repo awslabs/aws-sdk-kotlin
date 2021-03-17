@@ -18,11 +18,13 @@ import software.aws.clientrt.http.operation.UnitDeserializer
 import software.aws.clientrt.http.operation.UnitSerializer
 import software.aws.clientrt.http.operation.context
 import software.aws.clientrt.http.operation.roundTrip
-import software.aws.clientrt.http.request.HttpRequestBuilder
+import software.aws.clientrt.http.request.HttpRequest
+import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.header
 import software.aws.clientrt.serde.*
 import software.aws.clientrt.serde.json.JsonSerdeProvider
+import software.aws.clientrt.time.Instant
 import kotlin.test.*
 
 @OptIn(ExperimentalStdlibApi::class)
@@ -89,7 +91,6 @@ class RestJsonErrorTest {
     @Test
     fun `it throws matching errors`() = runSuspendTest {
 
-        val req = HttpRequestBuilder().build()
         val headers = Headers {
             append("X-Test-Header", "12")
             append(X_AMZN_REQUEST_ID_HEADER, "guid")
@@ -97,10 +98,13 @@ class RestJsonErrorTest {
         }
         val payload = """{"baz":"quux","string":"hello world","message":"server do better next time"}"""
         val body = ByteArrayContent(payload.encodeToByteArray())
-        val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
+        val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body)
 
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { return httpResp }
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                val now = Instant.now()
+                return HttpCall(request, httpResp, now, now)
+            }
         }
 
         val client = sdkHttpClient(mockEngine)
@@ -137,8 +141,6 @@ class RestJsonErrorTest {
 
     @Test
     fun `it throws unknown`() = runSuspendTest {
-
-        val req = HttpRequestBuilder().build()
         val headers = Headers {
             append("X-Test-Header", "12")
             append(X_AMZN_REQUEST_ID_HEADER, "guid")
@@ -146,10 +148,13 @@ class RestJsonErrorTest {
         }
         val payload = """{"baz":"quux","string":"hello world","message":"server do better next time"}"""
         val body = ByteArrayContent(payload.encodeToByteArray())
-        val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
+        val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body)
 
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { return httpResp }
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                val now = Instant.now()
+                return HttpCall(request, httpResp, now, now)
+            }
         }
 
         val client = sdkHttpClient(mockEngine)
@@ -193,7 +198,6 @@ class RestJsonErrorTest {
     @Test
     fun `it handles non-json payloads`() = runSuspendTest {
         // the service itself may talk rest-json but errors (like signature mismatch) may return unknown payloads
-        val req = HttpRequestBuilder().build()
         val headers = Headers {
             append("X-Test-Header", "12")
             append(X_AMZN_REQUEST_ID_HEADER, "guid")
@@ -206,10 +210,13 @@ class RestJsonErrorTest {
         """.trimIndent()
 
         val body = ByteArrayContent(payload.encodeToByteArray())
-        val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body, req)
+        val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body)
 
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse { return httpResp }
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                val now = Instant.now()
+                return HttpCall(request, httpResp, now, now)
+            }
         }
 
         val client = sdkHttpClient(mockEngine)

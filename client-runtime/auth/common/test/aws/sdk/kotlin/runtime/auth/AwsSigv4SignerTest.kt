@@ -11,15 +11,13 @@ import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
-import software.aws.clientrt.http.operation.HttpSerialize
-import software.aws.clientrt.http.operation.IdentityDeserializer
-import software.aws.clientrt.http.operation.SdkHttpOperation
-import software.aws.clientrt.http.operation.context
-import software.aws.clientrt.http.operation.roundTrip
+import software.aws.clientrt.http.operation.*
 import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.request.HttpRequestBuilder
+import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.time.Instant
+import software.aws.clientrt.util.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -60,8 +58,10 @@ class AwsSigv4SignerTest {
 
     private suspend fun getSignedRequest(operation: SdkHttpOperation<Unit, HttpResponse>): HttpRequest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                return HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                val now = Instant.now()
+                val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
+                return HttpCall(request, resp, now, now)
             }
         }
         val client = sdkHttpClient(mockEngine)
@@ -71,8 +71,8 @@ class AwsSigv4SignerTest {
             signingService = "demo"
         }
 
-        val response = operation.roundTrip(client, Unit)
-        return response.request
+        operation.roundTrip(client, Unit)
+        return operation.context[HttpOperationContext.HttpCallList].last().request
     }
 
     @Test

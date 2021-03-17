@@ -13,8 +13,10 @@ import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.operation.*
-import software.aws.clientrt.http.request.HttpRequestBuilder
+import software.aws.clientrt.http.request.HttpRequest
+import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.http.response.HttpResponse
+import software.aws.clientrt.time.Instant
 import software.aws.clientrt.util.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -27,11 +29,13 @@ class ServiceEndpointResolverTest {
     fun `it sets the host to the expected endpoint`(): Unit = runSuspendTest {
         val expectedHost = "test.com"
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                assertEquals(expectedHost, requestBuilder.url.host)
-                assertEquals(expectedHost, requestBuilder.headers["Host"])
-                assertEquals("https", requestBuilder.url.scheme.protocolName)
-                return HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                assertEquals(expectedHost, request.url.host)
+                assertEquals(expectedHost, request.headers["Host"])
+                assertEquals("https", request.url.scheme.protocolName)
+                val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
+                val now = Instant.now()
+                return HttpCall(request, resp, now, now)
             }
         }
 
@@ -64,9 +68,11 @@ class ServiceEndpointResolverTest {
     fun `it prepends hostPrefix when present`(): Unit = runSuspendTest {
         val expectedHost = "prefix.test.com"
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                assertEquals(expectedHost, requestBuilder.url.host)
-                return HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                assertEquals(expectedHost, request.url.host)
+                val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
+                val now = Instant.now()
+                return HttpCall(request, resp, now, now)
             }
         }
 
@@ -100,11 +106,13 @@ class ServiceEndpointResolverTest {
         // if an endpoint specifies credential scopes we should override the context
         val expectedHost = "test.com"
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                assertEquals(expectedHost, requestBuilder.url.host)
-                assertEquals(expectedHost, requestBuilder.headers["Host"])
-                assertEquals("https", requestBuilder.url.scheme.protocolName)
-                return HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                assertEquals(expectedHost, request.url.host)
+                assertEquals(expectedHost, request.headers["Host"])
+                assertEquals("https", request.url.scheme.protocolName)
+                val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty)
+                val now = Instant.now()
+                return HttpCall(request, resp, now, now)
             }
         }
 

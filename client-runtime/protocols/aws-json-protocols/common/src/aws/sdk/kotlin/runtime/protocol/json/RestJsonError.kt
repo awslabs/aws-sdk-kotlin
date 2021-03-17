@@ -6,6 +6,7 @@ package aws.sdk.kotlin.runtime.protocol.json
 
 import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.ClientException
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.UnknownServiceErrorException
 import aws.sdk.kotlin.runtime.http.ExceptionMetadata
 import aws.sdk.kotlin.runtime.http.ExceptionRegistry
@@ -16,7 +17,6 @@ import software.aws.clientrt.http.operation.HttpDeserialize
 import software.aws.clientrt.http.operation.HttpOperationContext
 import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.util.InternalAPI
 
 /**
  * Http feature that inspects responses and throws the appropriate modeled service error that matches
@@ -24,7 +24,7 @@ import software.aws.clientrt.util.InternalAPI
  * @property registry Modeled exceptions registered with the feature. All responses will be inspected to
  * see if one of the registered errors matches
  */
-@InternalAPI
+@InternalSdkApi
 public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
     public class Config {
         public var registry: ExceptionRegistry = ExceptionRegistry()
@@ -49,11 +49,12 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
     override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
         // intercept at first chance we get
         operation.execution.receive.intercept { req, next ->
-            val httpResponse = next.call(req)
+            val call = next.call(req)
+            val httpResponse = call.response
 
             val context = req.context
             val expectedStatus = context.getOrNull(HttpOperationContext.ExpectedHttpStatus)?.let { HttpStatusCode.fromValue(it) }
-            if (httpResponse.status.matches(expectedStatus)) return@intercept httpResponse
+            if (httpResponse.status.matches(expectedStatus)) return@intercept call
 
             val payload = httpResponse.body.readAll()
             val wrappedResponse = httpResponse.withPayload(payload)

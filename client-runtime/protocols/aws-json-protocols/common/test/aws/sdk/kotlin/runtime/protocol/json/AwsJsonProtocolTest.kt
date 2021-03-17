@@ -11,8 +11,12 @@ import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.operation.*
+import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.request.HttpRequestBuilder
+import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.http.response.HttpResponse
+import software.aws.clientrt.time.Instant
+import software.aws.clientrt.util.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -21,8 +25,10 @@ class AwsJsonProtocolTest {
     @Test
     fun testSetJsonProtocolHeaders() = runSuspendTest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                return HttpResponse(HttpStatusCode.OK, Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
+                val now = Instant.now()
+                return HttpCall(request, resp, now, now)
             }
         }
 
@@ -39,17 +45,20 @@ class AwsJsonProtocolTest {
             version = "1.1"
         }
 
-        val response = op.roundTrip(client, Unit)
+        op.roundTrip(client, Unit)
+        val request = op.context[HttpOperationContext.HttpCallList].last().request
 
-        assertEquals("application/x-amz-json-1.1", response.request.headers["Content-Type"])
-        assertEquals("FooService.Bar", response.request.headers["X-Amz-Target"])
+        assertEquals("application/x-amz-json-1.1", request.headers["Content-Type"])
+        assertEquals("FooService.Bar", request.headers["X-Amz-Target"])
     }
 
     @Test
     fun testEmptyBody() = runSuspendTest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                return HttpResponse(HttpStatusCode.OK, Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
+                val now = Instant.now()
+                return HttpCall(request, resp, now, now)
             }
         }
 
@@ -66,8 +75,9 @@ class AwsJsonProtocolTest {
             version = "1.1"
         }
 
-        val response = op.roundTrip(client, Unit)
-        val actual = response.request.body.readAll()?.decodeToString()
+        op.roundTrip(client, Unit)
+        val request = op.context[HttpOperationContext.HttpCallList].last().request
+        val actual = request.body.readAll()?.decodeToString()
 
         assertEquals("{}", actual)
     }
@@ -75,8 +85,10 @@ class AwsJsonProtocolTest {
     @Test
     fun testDoesNotOverride() = runSuspendTest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                return HttpResponse(HttpStatusCode.OK, Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
+                val now = Instant.now()
+                return HttpCall(request, resp, now, now)
             }
         }
 
@@ -100,9 +112,10 @@ class AwsJsonProtocolTest {
             version = "1.1"
         }
 
-        val response = op.roundTrip(client, Unit)
-        val actual = response.request.body.readAll()?.decodeToString()
-        assertEquals("application/xml", response.request.headers["Content-Type"])
+        op.roundTrip(client, Unit)
+        val request = op.context[HttpOperationContext.HttpCallList].last().request
+        val actual = request.body.readAll()?.decodeToString()
+        assertEquals("application/xml", request.headers["Content-Type"])
         assertEquals("foo", actual)
     }
 }

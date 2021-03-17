@@ -53,9 +53,9 @@ public class ServiceEndpointResolver(
             val endpoint = resolver.resolve(serviceId, region)
             val hostPrefix = req.context.getOrNull(HttpOperationContext.HostPrefix) ?: ""
             val hostname = "${hostPrefix}${endpoint.hostname}"
-            req.builder.url.scheme = Protocol.parse(endpoint.protocol)
-            req.builder.url.host = hostname
-            req.builder.headers["Host"] = hostname
+            req.subject.url.scheme = Protocol.parse(endpoint.protocol)
+            req.subject.url.host = hostname
+            req.subject.headers["Host"] = hostname
 
             endpoint.signingName?.let {
                 if (it.isNotBlank()) req.context[AuthAttributes.SigningService] = it
