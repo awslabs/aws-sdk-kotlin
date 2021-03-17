@@ -100,11 +100,11 @@ class ServiceEndpointResolverTest {
         // if an endpoint specifies credential scopes we should override the context
         val expectedHost = "test.com"
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(requestBuilder: HttpRequestBuilder): HttpResponse {
-                assertEquals(expectedHost, requestBuilder.url.host)
-                assertEquals(expectedHost, requestBuilder.headers["Host"])
-                assertEquals("https", requestBuilder.url.scheme.protocolName)
-                return HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty, requestBuilder.build())
+            override suspend fun roundTrip(request: HttpRequest): HttpResponse {
+                assertEquals(expectedHost, request.url.host)
+                assertEquals(expectedHost, request.headers["Host"])
+                assertEquals("https", request.url.scheme.protocolName)
+                return HttpResponse(HttpStatusCode.fromValue(200), Headers {}, HttpBody.Empty, request)
             }
         }
 

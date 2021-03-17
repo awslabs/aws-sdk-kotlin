@@ -38,8 +38,8 @@ public class UserAgent(private val awsUserAgentMetadata: AwsUserAgentMetadata) :
 
     override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
         operation.execution.mutate.intercept { req, next ->
-            req.builder.headers[USER_AGENT] = awsUserAgentMetadata.userAgent
-            req.builder.headers[X_AMZ_USER_AGENT] = awsUserAgentMetadata.xAmzUserAgent
+            req.subject.headers[USER_AGENT] = awsUserAgentMetadata.userAgent
+            req.subject.headers[X_AMZ_USER_AGENT] = awsUserAgentMetadata.xAmzUserAgent
             next.call(req)
         }
     }
