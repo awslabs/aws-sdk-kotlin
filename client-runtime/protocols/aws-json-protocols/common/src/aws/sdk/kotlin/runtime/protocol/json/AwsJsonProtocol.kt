@@ -4,11 +4,11 @@
  */
 package aws.sdk.kotlin.runtime.protocol.json
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import software.aws.clientrt.client.SdkClientOption
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
 import software.aws.clientrt.http.operation.SdkHttpOperation
-import software.aws.clientrt.util.InternalApi
 import software.aws.clientrt.util.get
 
 /**
@@ -20,7 +20,7 @@ import software.aws.clientrt.util.get
  *   - setting the `Content-Type` and `X-Amz-Target` headers
  *   - providing an empty json {} body when no body is serialized
  */
-@InternalApi
+@InternalSdkApi
 public class AwsJsonProtocol(config: Config) : Feature {
     private val version: String = requireNotNull(config.version) { "AWS JSON Protocol version must be specified" }
 
