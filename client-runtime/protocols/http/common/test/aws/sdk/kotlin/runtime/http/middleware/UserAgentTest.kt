@@ -50,7 +50,7 @@ class UserAgentTest {
         }
 
         op.roundTrip(client, Unit)
-        val request = op.context[HttpOperationContext.HttpCalls].last().request
+        val request = op.context[HttpOperationContext.HttpCallList].last().request
         assertTrue(request.headers.contains(USER_AGENT))
         assertTrue(request.headers.contains(X_AMZ_USER_AGENT))
     }

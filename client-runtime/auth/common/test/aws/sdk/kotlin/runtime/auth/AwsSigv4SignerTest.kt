@@ -72,7 +72,7 @@ class AwsSigv4SignerTest {
         }
 
         operation.roundTrip(client, Unit)
-        return operation.context[HttpOperationContext.HttpCalls].last().request
+        return operation.context[HttpOperationContext.HttpCallList].last().request
     }
 
     @Test

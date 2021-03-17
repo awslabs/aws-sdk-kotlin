@@ -46,7 +46,7 @@ class AwsJsonProtocolTest {
         }
 
         op.roundTrip(client, Unit)
-        val request = op.context[HttpOperationContext.HttpCalls].last().request
+        val request = op.context[HttpOperationContext.HttpCallList].last().request
 
         assertEquals("application/x-amz-json-1.1", request.headers["Content-Type"])
         assertEquals("FooService.Bar", request.headers["X-Amz-Target"])
@@ -76,7 +76,7 @@ class AwsJsonProtocolTest {
         }
 
         op.roundTrip(client, Unit)
-        val request = op.context[HttpOperationContext.HttpCalls].last().request
+        val request = op.context[HttpOperationContext.HttpCallList].last().request
         val actual = request.body.readAll()?.decodeToString()
 
         assertEquals("{}", actual)
@@ -113,7 +113,7 @@ class AwsJsonProtocolTest {
         }
 
         op.roundTrip(client, Unit)
-        val request = op.context[HttpOperationContext.HttpCalls].last().request
+        val request = op.context[HttpOperationContext.HttpCallList].last().request
         val actual = request.body.readAll()?.decodeToString()
         assertEquals("application/xml", request.headers["Content-Type"])
         assertEquals("foo", actual)
