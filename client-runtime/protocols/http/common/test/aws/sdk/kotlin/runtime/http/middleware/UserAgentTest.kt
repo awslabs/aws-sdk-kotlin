@@ -14,8 +14,11 @@ import software.aws.clientrt.http.HttpStatusCode
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.operation.*
 import software.aws.clientrt.http.request.HttpRequest
+import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.sdkHttpClient
+import software.aws.clientrt.time.Instant
+import software.aws.clientrt.util.get
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -24,8 +27,10 @@ class UserAgentTest {
     @Test
     fun `it sets ua headers`() = runSuspendTest {
         val mockEngine = object : HttpClientEngine {
-            override suspend fun roundTrip(request: HttpRequest): HttpResponse {
-                return HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty, request)
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
+                val now = Instant.now()
+                return HttpCall(request, resp, now, now)
             }
         }
 
@@ -44,8 +49,9 @@ class UserAgentTest {
             metadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata("Test Service", "1.2.3"))
         }
 
-        val response = op.roundTrip(client, Unit)
-        assertTrue(response.request.headers.contains(USER_AGENT))
-        assertTrue(response.request.headers.contains(X_AMZ_USER_AGENT))
+        op.roundTrip(client, Unit)
+        val request = op.context[HttpOperationContext.HttpCalls].last().request
+        assertTrue(request.headers.contains(USER_AGENT))
+        assertTrue(request.headers.contains(X_AMZ_USER_AGENT))
     }
 }

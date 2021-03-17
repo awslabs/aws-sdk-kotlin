@@ -9,7 +9,6 @@ import software.aws.clientrt.http.Headers
 import software.aws.clientrt.http.HttpBody
 import software.aws.clientrt.http.HttpStatusCode
 import software.aws.clientrt.http.content.ByteArrayContent
-import software.aws.clientrt.http.request.HttpRequestBuilder
 import software.aws.clientrt.http.response.HttpResponse
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -34,7 +33,7 @@ class RestJsonErrorDeserializerTest {
                 append(X_AMZN_ERROR_TYPE_HEADER_NAME, value)
             }
 
-            val resp = HttpResponse(HttpStatusCode.BadRequest, headers, HttpBody.Empty, HttpRequestBuilder().build())
+            val resp = HttpResponse(HttpStatusCode.BadRequest, headers, HttpBody.Empty)
             val actual = RestJsonErrorDeserializer.deserialize(resp, null)
             assertEquals(expected, actual.code)
         }
@@ -50,7 +49,7 @@ class RestJsonErrorDeserializerTest {
                 }
             """.trimIndent().encodeToByteArray()
             val body = ByteArrayContent(contents)
-            val resp = HttpResponse(HttpStatusCode.BadRequest, headers, body, HttpRequestBuilder().build())
+            val resp = HttpResponse(HttpStatusCode.BadRequest, headers, body)
             val actual = RestJsonErrorDeserializer.deserialize(resp, contents)
             assertEquals(expected, actual.code)
         }
@@ -66,7 +65,7 @@ class RestJsonErrorDeserializerTest {
                 }
             """.trimIndent().encodeToByteArray()
             val body = ByteArrayContent(contents)
-            val resp = HttpResponse(HttpStatusCode.BadRequest, headers, body, HttpRequestBuilder().build())
+            val resp = HttpResponse(HttpStatusCode.BadRequest, headers, body)
             val actual = RestJsonErrorDeserializer.deserialize(resp, contents)
             assertEquals(expected, actual.code)
         }
@@ -84,7 +83,7 @@ class RestJsonErrorDeserializerTest {
                 append(name, expected)
             }
 
-            val resp = HttpResponse(HttpStatusCode.BadRequest, headers, HttpBody.Empty, HttpRequestBuilder().build())
+            val resp = HttpResponse(HttpStatusCode.BadRequest, headers, HttpBody.Empty)
             val actual = RestJsonErrorDeserializer.deserialize(resp, null)
             assertEquals(expected, actual.message)
         }
@@ -101,7 +100,7 @@ class RestJsonErrorDeserializerTest {
                 }
             """.trimIndent().encodeToByteArray()
             val body = ByteArrayContent(contents)
-            val resp = HttpResponse(HttpStatusCode.BadRequest, headers, body, HttpRequestBuilder().build())
+            val resp = HttpResponse(HttpStatusCode.BadRequest, headers, body)
             val actual = RestJsonErrorDeserializer.deserialize(resp, contents)
             assertEquals(expected, actual.message)
         }

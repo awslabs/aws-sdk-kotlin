@@ -49,11 +49,12 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
     override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
         // intercept at first chance we get
         operation.execution.receive.intercept { req, next ->
-            val httpResponse = next.call(req)
+            val call = next.call(req)
+            val httpResponse = call.response
 
             val context = req.context
             val expectedStatus = context.getOrNull(HttpOperationContext.ExpectedHttpStatus)?.let { HttpStatusCode.fromValue(it) }
-            if (httpResponse.status.matches(expectedStatus)) return@intercept httpResponse
+            if (httpResponse.status.matches(expectedStatus)) return@intercept call
 
             val payload = httpResponse.body.readAll()
             val wrappedResponse = httpResponse.withPayload(payload)

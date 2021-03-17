@@ -25,5 +25,5 @@ public fun HttpResponse.withPayload(payload: ByteArray?): HttpResponse {
         HttpBody.Empty
     }
 
-    return HttpResponse(status, headers, newBody, request)
+    return HttpResponse(status, headers, newBody)
 }
