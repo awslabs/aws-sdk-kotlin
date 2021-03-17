@@ -19,7 +19,7 @@
           },
           "build":  {
               "rootProject": true,
-              "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
+              "optInAnnotations": ["software.aws.clientrt.util.InternalApi", "aws.sdk.kotlin.runtime.InternalSdkApi"]
           }
         }
       }
@@ -42,7 +42,7 @@
           },
           "build":  {
             "rootProject": true,
-            "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
+            "optInAnnotations": ["software.aws.clientrt.util.InternalApi", "aws.sdk.kotlin.runtime.InternalSdkApi"]
           }
         }
       }
@@ -65,7 +65,7 @@
           },
           "build":  {
             "rootProject": true,
-            "optInAnnotations": ["software.aws.clientrt.util.InternalAPI", "aws.sdk.kotlin.runtime.InternalSdkApi"]
+            "optInAnnotations": ["software.aws.clientrt.util.InternalApi", "aws.sdk.kotlin.runtime.InternalSdkApi"]
           }
         }
       }

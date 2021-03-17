@@ -12,7 +12,7 @@ plugins {
 val sdkVersion: String by project
 
 val experimentalAnnotations = listOf(
-    "software.aws.clientrt.util.InternalAPI",
+    "software.aws.clientrt.util.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi"
 )
 

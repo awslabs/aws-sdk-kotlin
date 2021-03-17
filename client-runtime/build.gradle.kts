@@ -17,7 +17,7 @@ val platforms = listOf("common", "jvm")
 // See: https://kotlinlang.org/docs/reference/opt-in-requirements.html#opting-in-to-using-api
 val experimentalAnnotations = listOf(
     "kotlin.RequiresOptIn",
-    "software.aws.clientrt.util.InternalAPI",
+    "software.aws.clientrt.util.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi"
 )
 

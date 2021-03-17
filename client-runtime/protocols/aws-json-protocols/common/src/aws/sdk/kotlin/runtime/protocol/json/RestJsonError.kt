@@ -16,7 +16,7 @@ import software.aws.clientrt.http.operation.HttpDeserialize
 import software.aws.clientrt.http.operation.HttpOperationContext
 import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.util.InternalAPI
+import software.aws.clientrt.util.InternalApi
 
 /**
  * Http feature that inspects responses and throws the appropriate modeled service error that matches
@@ -24,7 +24,7 @@ import software.aws.clientrt.util.InternalAPI
  * @property registry Modeled exceptions registered with the feature. All responses will be inspected to
  * see if one of the registered errors matches
  */
-@InternalAPI
+@InternalApi
 public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
     public class Config {
         public var registry: ExceptionRegistry = ExceptionRegistry()
