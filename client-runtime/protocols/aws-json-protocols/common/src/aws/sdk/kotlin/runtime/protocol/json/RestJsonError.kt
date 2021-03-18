@@ -66,7 +66,7 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
                 error = RestJsonErrorDeserializer.deserialize(httpResponse, payload)
             } catch (ex: Exception) {
                 throw UnknownServiceErrorException(
-                    "failed to parse response as restJson protocol error",
+                    "failed to parse response as Json protocol error",
                     ex
                 ).also {
                     setAseFields(it, wrappedResponse, null)
@@ -76,7 +76,7 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
             // we already consumed the response body, wrap it to allow the modeled exception to deserialize
             // any members that may be bound to the document
             val deserializer = registry[error.code]?.deserializer
-            val modeledException = deserializer?.deserialize(req.context, wrappedResponse) ?: UnknownServiceErrorException()
+            val modeledException = deserializer?.deserialize(req.context, wrappedResponse) ?: UnknownServiceErrorException(error.message).also { setAseFields(it, wrappedResponse, error) }
             setAseFields(modeledException, wrappedResponse, error)
 
             // this should never happen...
