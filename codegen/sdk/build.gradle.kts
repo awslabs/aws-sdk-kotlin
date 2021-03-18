@@ -165,9 +165,9 @@ task("generateSmithyBuild") {
 
 tasks.create<SmithyBuild>("generateSdk") {
     // ensure the generated clients use the same version of the runtime as the aws client-runtime
-    val smithyKotlinClientRtVersion: String by project
+    val smithyKotlinVersion: String by project
     doFirst {
-        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinClientRtVersion)
+        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinVersion)
     }
 
     addRuntimeClasspath = true

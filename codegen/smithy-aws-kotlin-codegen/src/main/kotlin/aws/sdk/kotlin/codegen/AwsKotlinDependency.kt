@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.codegen
 
+import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.kotlin.codegen.GradleConfiguration
 import software.amazon.smithy.kotlin.codegen.KotlinDependency
 
@@ -12,11 +13,20 @@ const val AWS_CLIENT_RT_ROOT_NS = "aws.sdk.kotlin.runtime"
 const val AWS_CLIENT_RT_AUTH_NS = "aws.sdk.kotlin.runtime.auth"
 const val AWS_CLIENT_RT_REGIONS_NS = "aws.sdk.kotlin.runtime.regions"
 
+private fun getDefaultRuntimeVersion(): String {
+    // generated as part of the build, see smithy-aws-kotlin-codegen/build.gradle.kts
+    try {
+        return object {}.javaClass.getResource("sdk-version.txt").readText()
+    } catch (ex: Exception) {
+        throw CodegenException("failed to load sdk-version.txt which sets the default aws-client-runtime version", ex)
+    }
+}
+
 // publishing info
 const val AWS_CLIENT_RT_GROUP: String = "aws.sdk.kotlin"
 // note: this version doesn't really matter since we substitute it for project dependency notation
-// when generating client build files
-const val AWS_CLIENT_RT_VERSION: String = "0.1.0"
+// when generating client build files (it is used by protocol tests though)
+val AWS_CLIENT_RT_VERSION: String = getDefaultRuntimeVersion()
 
 /**
  * Container object for AWS specific dependencies
