@@ -43,13 +43,16 @@ object AwsKotlinDependency {
 }
 
 // remap aws-sdk-kotlin dependencies to project notation
-private val sameProjectDeps = mapOf(
-    AwsKotlinDependency.AWS_CLIENT_RT_CORE to """project(":client-runtime:aws-client-rt")""",
-    AwsKotlinDependency.AWS_CLIENT_RT_HTTP to """project(":client-runtime:protocols:http")""",
-    AwsKotlinDependency.AWS_CLIENT_RT_AUTH to """project(":client-runtime:auth")""",
-    AwsKotlinDependency.AWS_CLIENT_RT_REGIONS to """project(":client-runtime:regions")""",
-    AwsKotlinDependency.AWS_CLIENT_RT_JSON_PROTOCOLS to """project(":client-runtime:protocols:aws-json-protocols")"""
-)
+// NOTE: the lazy wrapper is required here, see: https://github.com/awslabs/aws-sdk-kotlin/issues/95
+private val sameProjectDeps: Map<KotlinDependency, String> by lazy {
+    mapOf(
+        AwsKotlinDependency.AWS_CLIENT_RT_CORE to """project(":client-runtime:aws-client-rt")""",
+        AwsKotlinDependency.AWS_CLIENT_RT_HTTP to """project(":client-runtime:protocols:http")""",
+        AwsKotlinDependency.AWS_CLIENT_RT_AUTH to """project(":client-runtime:auth")""",
+        AwsKotlinDependency.AWS_CLIENT_RT_REGIONS to """project(":client-runtime:regions")""",
+        AwsKotlinDependency.AWS_CLIENT_RT_JSON_PROTOCOLS to """project(":client-runtime:protocols:aws-json-protocols")"""
+    )
+}
 
 internal fun KotlinDependency.dependencyNotation(allowProjectNotation: Boolean = true): String {
     val dep = this
