@@ -27,13 +27,12 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
 }
 
-val generateVersion by tasks.registering {
+val generateSdkRuntimeVersion by tasks.registering {
     // generate the version of the runtime to use as a resource.
     // this keeps us from having to manually change version numbers in multiple places
     val resourcesDir = "$buildDir/resources/main/aws/sdk/kotlin/codegen"
     val versionFile = file("$resourcesDir/sdk-version.txt")
     outputs.file(versionFile)
-    // register the build folder
     sourceSets.main.get().output.dir(resourcesDir)
     doLast {
         versionFile.writeText("$version")
@@ -42,7 +41,7 @@ val generateVersion by tasks.registering {
 
 tasks.compileKotlin {
     kotlinOptions.jvmTarget = kotlinJVMTargetVersion
-    dependsOn(generateVersion)
+    dependsOn(generateSdkRuntimeVersion)
 }
 
 tasks.compileTestKotlin {
