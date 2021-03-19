@@ -49,7 +49,7 @@ repositories {
 
 4. Add services to your project
 
-Services available for testing: cognitoidentityprovider, kms, lambda, polly, secretsmanager, translate
+Services available for testing: cognitoidentityprovider, dynamodb, kms, lambda, polly, secretsmanager, translate
 
 ```kt
 
@@ -62,8 +62,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
     
     // The following line adds a dependency on the dynamodb client.
-    // Additional services available in the M0 release:
-    // cognitoidentityprovider, kms, lambda, polly, secretsmanager, translate
+    // Services available in the M0 release:
+    // cognitoidentityprovider, dynamodb, kms, lambda, polly, secretsmanager, translate
     implementation("aws.sdk.kotlin:dynamodb:$awsKotlinSdkVersion")
 }
 ```
