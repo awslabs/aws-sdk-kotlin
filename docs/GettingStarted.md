@@ -38,7 +38,7 @@ repositories {
     <repository>
         <id>kotlinSdkLocal</id>
         <name>Beta AWS Kotlin SDK Repo</name>
-        <url>/path/to/aws-sdk-kotlin-repo/m2</url>
+        <url>/local/path/to/aws-sdk-kotlin-repo/m2</url>
     </repository>
 </repositories>
 ...
@@ -48,6 +48,8 @@ repositories {
 
 
 4. Add services to your project
+
+Services available for testing: cognitoidentityprovider, kms, lambda, polly, secretsmanager, translate
 
 ```kt
 
@@ -59,12 +61,22 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
     
+    // The following line adds a dependency on the dynamodb client.
+    // Additional services available in the M0 release:
+    // cognitoidentityprovider, kms, lambda, polly, secretsmanager, translate
     implementation("aws.sdk.kotlin:dynamodb:$awsKotlinSdkVersion")
 }
 ```
 
 
-4. Checkout the `examples` directory
+5. Checkout [the `examples` directory](../examples)
+   
+  Or you can simply begin working with the SDK by creating a service client in your own Kotlin code.  Example for `DynamoDB`:
+
+```kotlin
+val client = DynamodbClient { region = "us-east-2" }
+...
+```
 
 
 ## Giving Feedback
