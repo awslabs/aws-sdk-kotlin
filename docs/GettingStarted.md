@@ -65,6 +65,10 @@ dependencies {
     // Services available in the M0 release:
     // cognitoidentityprovider, dynamodb, kms, lambda, polly, secretsmanager, translate
     implementation("aws.sdk.kotlin:dynamodb:$awsKotlinSdkVersion")
+    
+    // The following will cause SDK logs to emit to the console:
+    implementation("org.slf4j:slf4j-api:1.7.30")
+    implementation("org.slf4j:slf4j-simple:1.7.30")
 }
 ```
 
