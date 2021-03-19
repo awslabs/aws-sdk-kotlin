@@ -57,7 +57,7 @@ val awsKotlinSdkVersion = "0.1.0-M0"
 // OR put it in gradle.properties
 // val awsKotlinSdkVersion by project
 
-dependencies {
+dependencies {    
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
     
@@ -65,6 +65,10 @@ dependencies {
     // Services available in the M0 release:
     // cognitoidentityprovider, dynamodb, kms, lambda, polly, secretsmanager, translate
     implementation("aws.sdk.kotlin:dynamodb:$awsKotlinSdkVersion")
+    
+    // The following will cause SDK logs to emit to the console:
+    testImplementation("org.slf4j:slf4j-api:1.7.30")
+    testImplementation("org.slf4j:slf4j-simple:1.7.30")
 }
 ```
 
