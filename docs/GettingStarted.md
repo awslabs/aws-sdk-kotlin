@@ -49,7 +49,7 @@ repositories {
 
 4. Add services to your project
 
-Services available for testing: cognitoidentityprovider, dynamodb, kms, lambda, polly, secretsmanager, translate
+Services available for testing: `cognitoidentityprovider`, `dynamodb`, `kms`, `lambda`, `polly`, `secretsmanager`, `translate`
 
 ```kt
 
@@ -81,5 +81,5 @@ val client = DynamodbClient { region = "us-east-2" }
 
 ## Giving Feedback
 
-* Slack - Join `[#aws-sdk-kotlin-interest](https://amzn-aws.slack.com/archives/C0182UWTQJJ)` to get help, share feedback, and get updates on SDK development.
+* Slack - Join [#aws-sdk-kotlin-interest](https://amzn-aws.slack.com/archives/C0182UWTQJJ) to get help, share feedback, and get updates on SDK development.
 * Submit [issues](https://github.com/awslabs/aws-sdk-kotlin/issues)
