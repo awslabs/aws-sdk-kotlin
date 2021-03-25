@@ -24,11 +24,8 @@ import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.header
 import software.aws.clientrt.serde.*
 import software.aws.clientrt.serde.json.JsonSerdeProvider
-<<<<<<< HEAD:client-runtime/protocols/rest-json/common/test/aws/sdk/kotlin/runtime/restjson/RestJsonErrorTest.kt
 import software.aws.clientrt.serde.json.JsonSerialName
-=======
 import software.aws.clientrt.time.Instant
->>>>>>> feat-restxml:client-runtime/protocols/aws-json-protocols/common/test/aws/sdk/kotlin/runtime/protocol/json/RestJsonErrorTest.kt
 import kotlin.test.*
 
 @OptIn(ExperimentalStdlibApi::class)
