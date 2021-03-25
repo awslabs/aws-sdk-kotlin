@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.codegen.protocoltest
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import aws.sdk.kotlin.codegen.AwsSignatureVersion4
+import aws.sdk.kotlin.codegen.middleware.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.buildSymbol
 import software.amazon.smithy.kotlin.codegen.integration.HttpProtocolUnitTestGenerator
@@ -26,6 +26,23 @@ class AwsHttpProtocolUnitTestRequestGenerator(builder: Builder) :
     override fun renderConfigureServiceClient(test: HttpRequestTestCase) {
         super.renderConfigureServiceClient(test)
         renderConfigureAwsServiceClient(writer, model, serviceShape, operation)
+        test.host.ifPresent { expectedHost ->
+            // add an endpoint resolver
+            val staticProviderSymbol = buildSymbol {
+                name = "StaticEndpointResolver"
+                namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint")
+            }
+            val endpointSymbol = buildSymbol {
+                name = "Endpoint"
+                namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint")
+            }
+            writer.addImport(staticProviderSymbol)
+            writer.addImport(endpointSymbol)
+            writer.write(
+                "endpointResolver = #T(#T(hostname=#S, protocol=#S))",
+                staticProviderSymbol, endpointSymbol, expectedHost, "https"
+            )
+        }
     }
 
     open class Builder : HttpProtocolUnitTestRequestGenerator.Builder() {

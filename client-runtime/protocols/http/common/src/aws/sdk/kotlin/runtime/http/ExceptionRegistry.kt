@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.runtime.http
 
 import aws.sdk.kotlin.runtime.AwsServiceException
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import software.aws.clientrt.http.HttpStatusCode
 import software.aws.clientrt.http.operation.HttpDeserialize
 
@@ -15,11 +16,17 @@ import software.aws.clientrt.http.operation.HttpDeserialize
  * @property deserializer The deserializer responsible for providing a [Throwable] instance of the actual exception
  * @property httpStatusCode The HTTP status code the error is returned with
  */
-public data class ExceptionMetadata(val errorCode: String, val deserializer: HttpDeserialize<*>, val httpStatusCode: HttpStatusCode? = null)
+@InternalSdkApi
+public data class ExceptionMetadata(
+    val errorCode: String,
+    val deserializer: HttpDeserialize<*>,
+    val httpStatusCode: HttpStatusCode? = null
+)
 
 /**
  * Container for modeled exceptions
  */
+@InternalSdkApi
 public class ExceptionRegistry {
     // ErrorCode -> Meta
     private val errorsByCodeName = mutableMapOf<String, ExceptionMetadata>()

@@ -22,6 +22,7 @@ buildscript {
     val smithyVersion: String by project
     dependencies {
         classpath("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
+        classpath("software.amazon.smithy:smithy-cli:$smithyVersion")
     }
 }
 
@@ -57,7 +58,7 @@ fun getProperty(name: String): String? {
 data class AwsService(
     val name: String,
     val packageName: String,
-    val packageVersion: String = "1.0",
+    val packageVersion: String,
     val modelFile: File,
     val projectionName: String,
     val sdkId: String,
@@ -104,7 +105,7 @@ fun generateSmithyBuild(services: List<AwsService>): String {
 
 val discoveredServices: List<AwsService> by lazy { discoverServices() }
 // The root namespace prefix for SDKs
-val sdkPackageNamePrefix = "aws.sdk.kotlin."
+val sdkPackageNamePrefix = "aws.sdk.kotlin.services."
 
 // Returns an AwsService model for every JSON file found in in directory defined by property `modelsDirProp`
 fun discoverServices(): List<AwsService> {
@@ -133,9 +134,11 @@ fun discoverServices(): List<AwsService> {
 
             logger.info("discovered service: ${serviceApi.sdkId}")
 
+            val sdkVersion: String by project
             AwsService(
                 name = service.id.toString(),
                 packageName = "$sdkPackageNamePrefix$packageName",
+                packageVersion = sdkVersion,
                 modelFile = file,
                 projectionName = name + "." + version.toLowerCase(),
                 sdkId = serviceApi.sdkId,
@@ -161,6 +164,12 @@ task("generateSmithyBuild") {
 }
 
 tasks.create<SmithyBuild>("generateSdk") {
+    // ensure the generated clients use the same version of the runtime as the aws client-runtime
+    val smithyKotlinVersion: String by project
+    doFirst {
+        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinVersion)
+    }
+
     addRuntimeClasspath = true
     dependsOn(tasks["generateSmithyBuild"])
     inputs.file(projectDir.resolve("smithy-build.json"))
@@ -187,8 +196,12 @@ task("stageSdks") {
         discoveredServices.forEach {
             logger.info("copying ${it.outputDir} to ${it.destinationDir}")
             copy {
-                from(it.outputDir)
-                into(it.destinationDir)
+                from("${it.outputDir}/src")
+                into("${it.destinationDir}/generated-src")
+            }
+            copy {
+                from("${it.outputDir}/build.gradle.kts")
+                into("${it.destinationDir}")
             }
         }
     }

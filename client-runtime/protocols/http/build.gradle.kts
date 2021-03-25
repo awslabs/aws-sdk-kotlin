@@ -7,7 +7,7 @@ description = "HTTP core for AWS service clients"
 extra["displayName"] = "Software :: AWS :: Kotlin SDK :: HTTP"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.http"
 
-val smithyKotlinClientRtVersion: String by project
+val smithyKotlinVersion: String by project
 
 kotlin {
     sourceSets {
@@ -15,7 +15,7 @@ kotlin {
             dependencies {
                 api(project(":client-runtime:aws-client-rt"))
                 api(project(":client-runtime:regions"))
-                api("software.aws.smithy.kotlin:http:$smithyKotlinClientRtVersion")
+                api("software.aws.smithy.kotlin:http:$smithyKotlinVersion")
             }
         }
 

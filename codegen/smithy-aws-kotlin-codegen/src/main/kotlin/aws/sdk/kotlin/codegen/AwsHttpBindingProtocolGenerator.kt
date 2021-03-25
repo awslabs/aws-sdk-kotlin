@@ -4,6 +4,9 @@
  */
 package aws.sdk.kotlin.codegen
 
+import aws.sdk.kotlin.codegen.middleware.AwsSignatureVersion4
+import aws.sdk.kotlin.codegen.middleware.EndpointResolverFeature
+import aws.sdk.kotlin.codegen.middleware.UserAgentFeature
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestErrorGenerator
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestRequestGenerator
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestResponseGenerator
@@ -35,6 +38,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             features.add(AwsSignatureVersion4(signingName))
         }
 
+        features.add(UserAgentFeature())
         return features
     }
 

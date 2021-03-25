@@ -7,9 +7,10 @@ plugins {
     jacoco
 }
 
+val sdkVersion: String by project
 description = "Codegen support for AWS protocols"
 group = "software.amazon.smithy"
-version = "0.1.0"
+version = sdkVersion
 
 val smithyVersion: String by project
 val kotestVersion: String by project
@@ -33,8 +34,21 @@ dependencies {
     testImplementation("org.slf4j:slf4j-simple:1.7.30")
 }
 
+val generateSdkRuntimeVersion by tasks.registering {
+    // generate the version of the runtime to use as a resource.
+    // this keeps us from having to manually change version numbers in multiple places
+    val resourcesDir = "$buildDir/resources/main/aws/sdk/kotlin/codegen"
+    val versionFile = file("$resourcesDir/sdk-version.txt")
+    outputs.file(versionFile)
+    sourceSets.main.get().output.dir(resourcesDir)
+    doLast {
+        versionFile.writeText("$version")
+    }
+}
+
 tasks.compileKotlin {
     kotlinOptions.jvmTarget = kotlinJVMTargetVersion
+    dependsOn(generateSdkRuntimeVersion)
 }
 
 tasks.compileTestKotlin {

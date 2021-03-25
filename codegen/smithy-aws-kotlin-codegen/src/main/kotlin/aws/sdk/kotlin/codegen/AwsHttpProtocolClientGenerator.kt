@@ -48,6 +48,7 @@ class AwsHttpProtocolClientGenerator(
         writer.write("\n\n")
         writer.write("const val ServiceId: String = #S", ctx.service.sdkId)
         writer.write("const val ServiceApiVersion: String = #S", ctx.service.version)
+        writer.write("const val SdkVersion: String = #S", ctx.settings.pkg.version)
         writer.write("\n\n")
         super.render(writer)
 
@@ -75,14 +76,11 @@ class AwsHttpProtocolClientGenerator(
      * render a utility function to populate an operation's ExecutionContext with defaults from service config, environment, etc
      */
     private fun renderMergeServiceDefaults(writer: KotlinWriter) {
-        writer.addImport("ExecutionContext", KotlinDependency.CLIENT_RT_CORE, "${KotlinDependency.CLIENT_RT_CORE.namespace}.client")
+        writer.addImport(RuntimeTypes.Core.ExecutionContext)
         writer.addImport("SdkClientOption", KotlinDependency.CLIENT_RT_CORE, "${KotlinDependency.CLIENT_RT_CORE.namespace}.client")
         writer.addImport("resolveRegionForOperation", AwsKotlinDependency.AWS_CLIENT_RT_REGIONS)
-        writer.addImport("AuthAttributes", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
-        writer.addImport(
-            "AwsClientOption",
-            AwsKotlinDependency.AWS_CLIENT_RT_CORE, "${AwsKotlinDependency.AWS_CLIENT_RT_CORE.namespace}.client"
-        )
+        writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
+        writer.addImport(AwsRuntimeTypes.Core.AwsClientOption)
         writer.addImport("putIfAbsent", KotlinDependency.CLIENT_RT_UTILS)
 
         writer.dokka("merge the defaults configured for the service into the execution context before firing off a request")
