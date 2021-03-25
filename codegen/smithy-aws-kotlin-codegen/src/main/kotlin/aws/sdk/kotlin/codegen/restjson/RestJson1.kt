@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.codegen.restjson
 
 import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
+import aws.sdk.kotlin.codegen.awsjson.JsonSerdeFieldGenerator
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
 import software.amazon.smithy.kotlin.codegen.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
@@ -52,26 +53,13 @@ class RestJson1 : AwsHttpBindingProtocolGenerator() {
         writer: KotlinWriter,
         memberTargetShape: Shape?,
         namePostfix: String
-    ) {
-        val serialName = memberShape.getTrait<JsonNameTrait>()?.value ?: memberShape.memberName
-        val serialNameTrait = """JsonSerialName("$serialName$namePostfix")"""
-        val shapeForSerialKind = memberTargetShape ?: ctx.model.expectShape(memberShape.target)
-        val serialKind = shapeForSerialKind.serialKind()
-        val descriptorName = memberShape.descriptorName(namePostfix)
-
-        writer.write("private val #L = SdkFieldDescriptor(#L, #L)", descriptorName, serialKind, serialNameTrait)
-    }
+    ) = JsonSerdeFieldGenerator.generateSdkFieldDescriptor(ctx, memberShape, writer, memberTargetShape, namePostfix)
 
     override fun generateSdkObjectDescriptorTraits(
         ctx: ProtocolGenerator.GenerationContext,
         objectShape: Shape,
         writer: KotlinWriter
-    ) {
-        writer.addImport(KotlinDependency.CLIENT_RT_SERDE.namespace, "*")
-        writer.addImport(KotlinDependency.CLIENT_RT_SERDE_JSON.namespace, "JsonSerialName")
-        writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE.dependencies)
-        writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE_JSON.dependencies)
-    }
+    ) = JsonSerdeFieldGenerator.generateSdkObjectDescriptorTraits(ctx, objectShape, writer)
 
     override val protocol: ShapeId = RestJson1Trait.ID
 }

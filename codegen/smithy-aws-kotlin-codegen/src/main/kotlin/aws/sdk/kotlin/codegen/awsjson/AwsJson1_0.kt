@@ -42,26 +42,13 @@ class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
         writer: KotlinWriter,
         memberTargetShape: Shape?,
         namePostfix: String
-    ) {
-        val serialName = memberShape.getTrait<JsonNameTrait>()?.value ?: memberShape.memberName
-        val serialNameTrait = """JsonSerialName("$serialName$namePostfix")"""
-        val shapeForSerialKind = memberTargetShape ?: ctx.model.expectShape(memberShape.target)
-        val serialKind = shapeForSerialKind.serialKind()
-        val descriptorName = memberShape.descriptorName(namePostfix)
-
-        writer.write("private val #L = SdkFieldDescriptor(#L, #L)", descriptorName, serialKind, serialNameTrait)
-    }
+    ) = JsonSerdeFieldGenerator.generateSdkFieldDescriptor(ctx, memberShape, writer, memberTargetShape, namePostfix)
 
     override fun generateSdkObjectDescriptorTraits(
         ctx: ProtocolGenerator.GenerationContext,
         objectShape: Shape,
         writer: KotlinWriter
-    ) {
-        writer.addImport(KotlinDependency.CLIENT_RT_SERDE.namespace, "*")
-        writer.addImport(KotlinDependency.CLIENT_RT_SERDE_JSON.namespace, "JsonSerialName")
-        writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE.dependencies)
-        writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE_JSON.dependencies)
-    }
+    ) = JsonSerdeFieldGenerator.generateSdkObjectDescriptorTraits(ctx, objectShape, writer)
 
     override val protocol: ShapeId = AwsJson1_0Trait.ID
 }
@@ -85,5 +72,40 @@ class AwsJsonProtocolFeature(val protocolVersion: String) : HttpFeature {
 
     override fun renderConfigure(writer: KotlinWriter) {
         writer.write("version = #S", protocolVersion)
+    }
+}
+
+/**
+ * Provides common functionality for SDK serde field generation for JSON-based AWS protocols.
+ *
+ * TODO ~ move as part of https://github.com/awslabs/smithy-kotlin/issues/260
+ */
+object JsonSerdeFieldGenerator {
+
+    fun generateSdkFieldDescriptor(
+        ctx: ProtocolGenerator.GenerationContext,
+        memberShape: MemberShape,
+        writer: KotlinWriter,
+        memberTargetShape: Shape?,
+        namePostfix: String
+    ) {
+        val serialName = memberShape.getTrait<JsonNameTrait>()?.value ?: memberShape.memberName
+        val serialNameTrait = """JsonSerialName("$serialName$namePostfix")"""
+        val shapeForSerialKind = memberTargetShape ?: ctx.model.expectShape(memberShape.target)
+        val serialKind = shapeForSerialKind.serialKind()
+        val descriptorName = memberShape.descriptorName(namePostfix)
+
+        writer.write("private val #L = SdkFieldDescriptor(#L, #L)", descriptorName, serialKind, serialNameTrait)
+    }
+
+    fun generateSdkObjectDescriptorTraits(
+        ctx: ProtocolGenerator.GenerationContext,
+        objectShape: Shape,
+        writer: KotlinWriter
+    ) {
+        writer.addImport(KotlinDependency.CLIENT_RT_SERDE.namespace, "*")
+        writer.addImport(KotlinDependency.CLIENT_RT_SERDE_JSON.namespace, "JsonSerialName")
+        writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE.dependencies)
+        writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE_JSON.dependencies)
     }
 }

@@ -278,8 +278,8 @@ class RestXmlFieldObjectDescriptorTest {
         }
 
         val expectedDescriptors = """
-            private val INTVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, XmlSerialName("baz:notIntVal"), XmlAttribute("baz:notIntVal"))
-            private val STRVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("strVal"), XmlAttribute("strVal"))
+            private val INTVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, XmlSerialName("baz:notIntVal"), XmlAttribute)
+            private val STRVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("strVal"), XmlAttribute)
             private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
                 trait(XmlSerialName("FooRequest"))
                 trait(XmlNamespace("http://foo.com", "baz"))
