@@ -55,7 +55,7 @@ Services available for testing: `cognitoidentityprovider`, `dynamodb`, `kms`, `l
 
 val awsKotlinSdkVersion = "0.1.0-M0"
 // OR put it in gradle.properties
-// val awsKotlinSdkVersion by project
+// val awsKotlinSdkVersion: String by project
 
 dependencies {
     implementation(kotlin("stdlib"))
