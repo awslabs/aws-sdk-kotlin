@@ -10,8 +10,15 @@ plugins {
 
 description = "Smithy protocol test suite"
 
-val smithyVersion: String by project
+buildscript {
+    val smithyVersion: String by project
+    dependencies {
+        classpath("software.amazon.smithy:smithy-cli:$smithyVersion")
+    }
+}
 
+
+val smithyVersion: String by project
 dependencies {
     implementation("software.amazon.smithy:smithy-aws-protocol-tests:$smithyVersion")
     implementation(project(":codegen:smithy-aws-kotlin-codegen"))
@@ -25,6 +32,11 @@ tasks["jar"].enabled = false
 tasks["smithyBuildJar"].enabled = false
 
 tasks.create<SmithyBuild>("buildSdk") {
+    // ensure the generated clients use the same version of the runtime as the aws client-runtime
+    val smithyKotlinVersion: String by project
+    doFirst {
+        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinVersion)
+    }
     addRuntimeClasspath = true
 }
 

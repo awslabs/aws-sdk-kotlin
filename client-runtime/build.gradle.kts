@@ -17,7 +17,7 @@ val platforms = listOf("common", "jvm")
 // See: https://kotlinlang.org/docs/reference/opt-in-requirements.html#opting-in-to-using-api
 val experimentalAnnotations = listOf(
     "kotlin.RequiresOptIn",
-    "software.aws.clientrt.util.InternalAPI",
+    "software.aws.clientrt.util.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi"
 )
 
@@ -84,7 +84,7 @@ subprojects {
     apply(from = rootProject.file("gradle/publish.gradle"))
 }
 
-// resolves build deadlock with aws-client-rt when using composite builds
+// FIXME - resolves build deadlock with aws-client-rt when using composite builds
 subprojects.filter { it.name != "aws-client-rt" }.forEach { proj ->
     proj.tasks.findByName("generatePomFileForJvmPublication")?.dependsOn(":client-runtime:aws-client-rt:generatePomFileForJvmPublication")
 }

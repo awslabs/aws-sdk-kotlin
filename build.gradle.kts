@@ -3,14 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 plugins {
-    kotlin("jvm") version "1.4.21" apply false
+    kotlin("jvm") version "1.4.31" apply false
 }
 
 allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
     }
 }
 
@@ -22,7 +21,8 @@ dependencies {
 
 val lintPaths = listOf(
     "codegen/smithy-aws-kotlin-codegen/**/*.kt",
-    "client-runtime/**/*.kt"
+    "client-runtime/**/*.kt",
+    "examples/**/*.kt"
 )
 
 tasks.register<JavaExec>("ktlint") {
@@ -43,3 +43,10 @@ tasks.register<JavaExec>("ktlintFormat") {
 
 // configure coverage for the entire project
 apply(from = rootProject.file("gradle/codecoverage.gradle"))
+
+tasks.register("showRepos") {
+    doLast {
+        println("All repos:")
+        println(repositories.map { it.name })
+    }
+}
