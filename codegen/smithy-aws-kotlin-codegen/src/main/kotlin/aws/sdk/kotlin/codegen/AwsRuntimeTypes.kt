@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.codegen
 
+import software.amazon.smithy.kotlin.codegen.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.buildSymbol
 import software.amazon.smithy.kotlin.codegen.namespace
 
@@ -24,6 +25,28 @@ object AwsRuntimeTypes {
         val AuthAttributes = buildSymbol {
             name = "AuthAttributes"
             namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "execution")
+        }
+    }
+
+    object SerdeXml {
+        val XmlSerialName = buildSymbol {
+            name = "XmlSerialName"
+            namespace(KotlinDependency.CLIENT_RT_SERDE_XML)
+        }
+
+        val XmlNamespace = buildSymbol {
+            name = "XmlNamespace"
+            namespace(KotlinDependency.CLIENT_RT_SERDE_XML)
+        }
+
+        val Flattened = buildSymbol {
+            name = "Flattened"
+            namespace(KotlinDependency.CLIENT_RT_SERDE_XML)
+        }
+
+        val XmlAttribute = buildSymbol {
+            name = "XmlAttribute"
+            namespace(KotlinDependency.CLIENT_RT_SERDE_XML)
         }
     }
 }

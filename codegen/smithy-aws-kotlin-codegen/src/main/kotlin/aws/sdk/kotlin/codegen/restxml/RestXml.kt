@@ -6,7 +6,9 @@
 package aws.sdk.kotlin.codegen.restxml
 
 import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.*
 import software.amazon.smithy.kotlin.codegen.integration.*
 import software.amazon.smithy.model.Model
@@ -24,11 +26,11 @@ import software.amazon.smithy.model.traits.*
  */
 class RestXml : AwsHttpBindingProtocolGenerator() {
 
-    private val typeReferencableTraitIndex: Map<ShapeId, String> = mapOf(
-        XmlNameTrait.ID to "XmlSerialName",
-        XmlNamespaceTrait.ID to "XmlNamespace",
-        XmlFlattenedTrait.ID to "Flattened",
-        XmlAttributeTrait.ID to "XmlAttribute"
+    private val typeReferencableTraitIndex: Map<ShapeId, Symbol> = mapOf(
+        XmlNameTrait.ID to AwsRuntimeTypes.SerdeXml.XmlSerialName,
+        XmlNamespaceTrait.ID to AwsRuntimeTypes.SerdeXml.XmlNamespace,
+        XmlFlattenedTrait.ID to AwsRuntimeTypes.SerdeXml.Flattened,
+        XmlAttributeTrait.ID to AwsRuntimeTypes.SerdeXml.XmlAttribute
     )
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
@@ -66,7 +68,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         traitRefs
             .filter { trait -> typeReferencableTraitIndex.containsKey(trait.toShapeId()) }
             .forEach { trait ->
-                writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, typeReferencableTraitIndex[trait.toShapeId()]!!)
+                writer.addImport(typeReferencableTraitIndex[trait.toShapeId()] ?: error("Unable to find symbol for $trait"))
             }
     }
 
