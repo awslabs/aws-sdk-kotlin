@@ -82,37 +82,32 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         if (memberShape.hasTrait<XmlAttributeTrait>()) traitList.add("""XmlAttribute""")
 
         val targetShape = model.expectShape(memberShape.target)
-
-        if (targetShape.type == ShapeType.LIST) {
-            val listMember = targetShape.asListShape().get().member
-            if (listMember.hasTrait<XmlNameTrait>()) {
-                val listMemberName = listMember.expectTrait<XmlNameTrait>().value
-                traitList.add("""XmlCollectionName("$listMemberName")""")
-                writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlCollectionName")
+        when (targetShape.type) {
+            ShapeType.LIST, ShapeType.SET -> {
+                val listOrSetMember = if (targetShape.type == ShapeType.LIST) targetShape.asListShape().get().member else targetShape.asSetShape().get().member
+                if (listOrSetMember.hasTrait<XmlNameTrait>()) {
+                    val memberName = listOrSetMember.expectTrait<XmlNameTrait>().value
+                    traitList.add("""XmlCollectionName("$memberName")""")
+                    writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlCollectionName")
+                }
             }
-        } else if (targetShape.type == ShapeType.SET) {
-            val listMember = targetShape.asSetShape().get().member
-            if (listMember.hasTrait<XmlNameTrait>()) {
-                val listMemberName = listMember.expectTrait<XmlNameTrait>().value
-                traitList.add("""XmlCollectionName("$listMemberName")""")
-                writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlCollectionName")
-            }
-        } else if (targetShape.type == ShapeType.MAP) {
-            val mapMember = targetShape.asMapShape().get()
+            ShapeType.MAP -> {
+                val mapMember = targetShape.asMapShape().get()
 
-            val customKeyName = mapMember.key.getTrait<XmlNameTrait>()?.value
-            val customValueName = mapMember.value.getTrait<XmlNameTrait>()?.value
+                val customKeyName = mapMember.key.getTrait<XmlNameTrait>()?.value
+                val customValueName = mapMember.value.getTrait<XmlNameTrait>()?.value
 
-            val mapTraitExpr = when {
-                customKeyName != null && customKeyName != null -> """XmlMapName(key = "$customKeyName", value = "$customValueName")"""
-                customKeyName != null -> """XmlMapName(key = "$customKeyName")"""
-                customValueName != null -> """XmlMapName(value = "$customValueName")"""
-                else -> null
-            }
+                val mapTraitExpr = when {
+                    customKeyName != null && customKeyName != null -> """XmlMapName(key = "$customKeyName", value = "$customValueName")"""
+                    customKeyName != null -> """XmlMapName(key = "$customKeyName")"""
+                    customValueName != null -> """XmlMapName(value = "$customValueName")"""
+                    else -> null
+                }
 
-            mapTraitExpr?.let {
-                traitList.add(it)
-                writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlMapName")
+                mapTraitExpr?.let {
+                    traitList.add(it)
+                    writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlMapName")
+                }
             }
         }
 
