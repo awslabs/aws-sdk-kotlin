@@ -11,6 +11,7 @@ import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.*
 import software.amazon.smithy.kotlin.codegen.integration.*
+import software.amazon.smithy.kotlin.codegen.traits.SyntheticClone
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.MemberShape
 import software.amazon.smithy.model.shapes.Shape
@@ -124,7 +125,10 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE.dependencies)
         writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE_XML.dependencies)
 
-        val serialName = objectShape.getTrait<XmlNameTrait>()?.value ?: objectShape.defaultName()
+        val serialName = objectShape.getTrait<XmlNameTrait>()?.value
+            ?: objectShape.getTrait<SyntheticClone>()?.archetype?.name
+            ?: objectShape.defaultName()
+
         writer.write("""trait(XmlSerialName("$serialName"))""")
 
         if (objectShape.hasTrait<XmlNamespaceTrait>()) {
