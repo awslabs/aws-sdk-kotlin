@@ -23,8 +23,8 @@ import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.header
 import software.aws.clientrt.serde.*
-import software.aws.clientrt.serde.json.JsonSerialName
 import software.aws.clientrt.serde.json.JsonSerdeProvider
+import software.aws.clientrt.serde.json.JsonSerialName
 import software.aws.clientrt.time.Instant
 import kotlin.test.*
 
