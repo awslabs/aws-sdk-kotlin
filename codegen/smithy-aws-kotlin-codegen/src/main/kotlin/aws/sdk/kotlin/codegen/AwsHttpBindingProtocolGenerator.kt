@@ -53,7 +53,10 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "InlineDocumentAsPayloadInputOutput",
 
                 // awsJson1.1
-                "PutAndGetInlineDocumentsInput"
+                "PutAndGetInlineDocumentsInput",
+
+                // restXml
+                "IgnoreQueryParamsInResponse" // See https://github.com/awslabs/smithy/issues/756
             ),
             TestContainmentMode.EXCLUDE_TESTS
         )
