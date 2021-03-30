@@ -7,14 +7,11 @@ package aws.sdk.kotlin.codegen.restjson
 import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.awsjson.JsonSerdeFieldGenerator
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
-import software.amazon.smithy.kotlin.codegen.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.getTrait
 import software.amazon.smithy.kotlin.codegen.integration.*
 import software.amazon.smithy.model.shapes.MemberShape
 import software.amazon.smithy.model.shapes.Shape
 import software.amazon.smithy.model.shapes.ShapeId
-import software.amazon.smithy.model.traits.JsonNameTrait
 import software.amazon.smithy.model.traits.TimestampFormatTrait
 
 // The default Http Binding resolver is used for both white-label smithy-kotlin tests
