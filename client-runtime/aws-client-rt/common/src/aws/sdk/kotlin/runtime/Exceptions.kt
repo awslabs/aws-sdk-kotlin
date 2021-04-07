@@ -5,10 +5,39 @@
 package aws.sdk.kotlin.runtime
 
 import software.aws.clientrt.ClientException
+import software.aws.clientrt.ServiceErrorMetadata
 import software.aws.clientrt.ServiceException
+import software.aws.clientrt.util.AttributeKey
+
+public open class AwsErrorMetadata : ServiceErrorMetadata() {
+    public companion object {
+        public val ErrorCode: AttributeKey<String> = AttributeKey("AwsErrorCode")
+        public val ErrorMessage: AttributeKey<String> = AttributeKey("AwsErrorMessage")
+        public val RequestId: AttributeKey<String> = AttributeKey("AwsRequestId")
+    }
+
+    /**
+     * Returns the error code associated with the response
+     */
+    public val errorCode: String
+        get() = attributes.getOrNull(ErrorCode) ?: ""
+
+    /**
+     * Returns the human readable error message. For errors with a `message` field as part of the model
+     * this will match the `message` property of the exception.
+     */
+    public val errorMessage: String?
+        get() = attributes.getOrNull(ErrorMessage)
+
+    /**
+     * The request ID that was returned by the called service
+     */
+    public val requestId: String
+        get() = attributes.getOrNull(RequestId) ?: ""
+}
 
 /**
- * Base class for all modeled service exceptions
+ * Base class for all AWS modeled service exceptions
  */
 public open class AwsServiceException : ServiceException {
 
@@ -18,15 +47,7 @@ public open class AwsServiceException : ServiceException {
 
     public constructor(message: String?, cause: Throwable?) : super(message, cause)
 
-    /**
-     * The request ID that was returned by the called service
-     */
-    public open var requestId: String = ""
-
-    /**
-     * Returns the error code associated with the response
-     */
-    public open var errorCode: String = ""
+    override val sdkErrorMetadata: AwsErrorMetadata = AwsErrorMetadata()
 }
 
 /**
