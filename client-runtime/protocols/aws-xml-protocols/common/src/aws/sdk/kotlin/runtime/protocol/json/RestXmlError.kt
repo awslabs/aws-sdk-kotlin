@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package aws.sdk.kotlin.runtime.protocol.xml
+package aws.sdk.kotlin.runtime.protocol.json
 
 import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.ClientException
@@ -17,7 +17,6 @@ import software.aws.clientrt.http.operation.HttpDeserialize
 import software.aws.clientrt.http.operation.HttpOperationContext
 import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.serde.deserializer
 
 /**
  * Http feature that inspects responses and throws the appropriate modeled service error that matches
@@ -88,17 +87,18 @@ public class RestXmlError(private val registry: ExceptionRegistry) : Feature {
 }
 
 // Provides the policy of what constitutes a status code match in service response
+@InternalSdkApi
 internal fun HttpStatusCode.matches(expected: HttpStatusCode?): Boolean =
     expected == this || (expected == null && this.isSuccess()) || expected?.category() == this.category()
 
 /**
  * pull the ase specific details from the response / error
  */
-private fun setAseFields(exception: Any, response: HttpResponse, error: NormalizedRestXmlError?) {
+private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: RestXmlErrorDetails?) {
     if (exception is AwsServiceException) {
-        exception.requestId = error?.normalizedRequestId ?: response.headers[X_AMZN_REQUEST_ID_HEADER] ?: ""
-        exception.errorCode = error?.normalizedErrorCode ?: ""
-        exception.errorMessage = error?.normalizedErrorMessage ?: ""
+        exception.requestId = errorDetails?.normalizedRequestId ?: response.headers[X_AMZN_REQUEST_ID_HEADER] ?: ""
+        exception.errorCode = errorDetails?.normalizedErrorCode ?: ""
+        exception.errorMessage = errorDetails?.normalizedErrorMessage ?: ""
         exception.protocolResponse = response
     }
 }

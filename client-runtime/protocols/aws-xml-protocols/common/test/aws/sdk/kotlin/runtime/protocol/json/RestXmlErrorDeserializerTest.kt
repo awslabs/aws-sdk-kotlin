@@ -2,13 +2,12 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package aws.sdk.kotlin.runtime.protocol.xml
+package aws.sdk.kotlin.runtime.protocol.json
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.serde.DeserializationException
 import software.aws.clientrt.serde.SerdeAttributes
-import software.aws.clientrt.serde.SerdeProvider
 import software.aws.clientrt.serde.xml.XmlSerdeProvider
 import kotlin.test.*
 
