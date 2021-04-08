@@ -42,9 +42,9 @@ class RestXmlErrorDeserializerTest {
 
         for (payload in tests) {
             val actual = executionContext.parseErrorResponse(payload)
-            assertEquals("InvalidGreeting", actual.normalizedErrorCode)
-            assertEquals("Hi", actual.normalizedErrorMessage)
-            assertEquals("foo-id", actual.normalizedRequestId)
+            assertEquals("InvalidGreeting", actual.code)
+            assertEquals("Hi", actual.message)
+            assertEquals("foo-id", actual.requestId)
         }
     }
 
@@ -102,9 +102,9 @@ class RestXmlErrorDeserializerTest {
 
         for (payload in tests) {
             val error = executionContext.parseErrorResponse(payload)
-            assertEquals("foo-id", error.normalizedRequestId)
-            assertNull(error.normalizedErrorCode)
-            assertNull(error.normalizedErrorMessage)
+            assertEquals("foo-id", error.requestId)
+            assertNull(error.code)
+            assertNull(error.message)
         }
     }
 }

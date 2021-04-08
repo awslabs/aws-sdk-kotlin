@@ -73,7 +73,7 @@ internal object ErrorResponseDeserializer {
                 }
             }
 
-            XmlErrorResponse(xmlError, requestId ?: xmlError?.requestId )
+            XmlErrorResponse(xmlError, requestId ?: xmlError?.requestId)
         } catch (e: DeserializerStateException) {
             null // return so an appropriate exception type can be instantiated above here.
         }
