@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package aws.sdk.kotlin.runtime.protocol.json
+package aws.sdk.kotlin.runtime.protocol.xml
 
 import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.ClientException
@@ -25,7 +25,9 @@ import software.aws.clientrt.http.response.HttpResponse
  * see if one of the registered errors matches
  */
 @InternalSdkApi
-public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
+public class RestXmlError(private val registry: ExceptionRegistry) : Feature {
+    private val emptyByteArray: ByteArray = ByteArray(0)
+
     public class Config {
         public var registry: ExceptionRegistry = ExceptionRegistry()
 
@@ -38,11 +40,11 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
         }
     }
 
-    public companion object Feature : HttpClientFeatureFactory<Config, RestJsonError> {
-        override val key: FeatureKey<RestJsonError> = FeatureKey("RestJsonError")
-        override fun create(block: Config.() -> Unit): RestJsonError {
+    public companion object Feature : HttpClientFeatureFactory<Config, RestXmlError> {
+        override val key: FeatureKey<RestXmlError> = FeatureKey("RestXmlError")
+        override fun create(block: Config.() -> Unit): RestXmlError {
             val config = Config().apply(block)
-            return RestJsonError(config.registry)
+            return RestXmlError(config.registry)
         }
     }
 
@@ -60,13 +62,11 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
             val wrappedResponse = httpResponse.withPayload(payload)
 
             // attempt to match the AWS error code
-            val error: RestJsonErrorDetails
-
-            try {
-                error = RestJsonErrorDeserializer.deserialize(httpResponse, payload)
+            val errorResponse = try {
+                context.parseErrorResponse(payload ?: emptyByteArray)
             } catch (ex: Exception) {
                 throw UnknownServiceErrorException(
-                    "failed to parse response as Json protocol error",
+                    "failed to parse response as Xml protocol error",
                     ex
                 ).also {
                     setAseFields(it, wrappedResponse, null)
@@ -75,9 +75,9 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
 
             // we already consumed the response body, wrap it to allow the modeled exception to deserialize
             // any members that may be bound to the document
-            val deserializer = registry[error.code]?.deserializer
-            val modeledException = deserializer?.deserialize(req.context, wrappedResponse) ?: UnknownServiceErrorException(error.message).also { setAseFields(it, wrappedResponse, error) }
-            setAseFields(modeledException, wrappedResponse, error)
+            val modeledExceptionDeserializer = registry[errorResponse.normalizedErrorCode]?.deserializer
+            val modeledException = modeledExceptionDeserializer?.deserialize(req.context, wrappedResponse) ?: UnknownServiceErrorException(errorResponse.normalizedErrorMessage)
+            setAseFields(modeledException, wrappedResponse, errorResponse)
 
             // this should never happen...
             val ex = modeledException as? Throwable ?: throw ClientException("registered deserializer for modeled error did not produce an instance of Throwable")
@@ -87,17 +87,18 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
 }
 
 // Provides the policy of what constitutes a status code match in service response
+@InternalSdkApi
 internal fun HttpStatusCode.matches(expected: HttpStatusCode?): Boolean =
     expected == this || (expected == null && this.isSuccess()) || expected?.category() == this.category()
 
 /**
  * pull the ase specific details from the response / error
  */
-private fun setAseFields(exception: Any, response: HttpResponse, error: RestJsonErrorDetails?) {
+private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: RestXmlErrorDetails?) {
     if (exception is AwsServiceException) {
-        exception.requestId = response.headers[X_AMZN_REQUEST_ID_HEADER] ?: ""
-        exception.errorCode = error?.code ?: ""
-        exception.errorMessage = error?.message ?: ""
+        exception.requestId = errorDetails?.normalizedRequestId ?: response.headers[X_AMZN_REQUEST_ID_HEADER] ?: ""
+        exception.errorCode = errorDetails?.normalizedErrorCode ?: ""
+        exception.errorMessage = errorDetails?.normalizedErrorMessage ?: ""
         exception.protocolResponse = response
     }
 }
