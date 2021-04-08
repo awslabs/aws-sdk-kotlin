@@ -8,34 +8,31 @@ import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.serde.*
 import software.aws.clientrt.serde.xml.XmlSerialName
 
-// Models "ErrorResponse" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-internal data class XmlErrorResponse(
-    val requestId: String?,
-    val error: XmlError?,
-    override val normalizedRequestId: String? = requestId ?: error?.requestId,
-    override val normalizedErrorCode: String? = error?.code,
-    override val normalizedErrorMessage: String? = error?.message
-) : RestXmlErrorDetails
-
-// Models "Error" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-internal data class XmlError(
-    val requestId: String?,
-    val code: String?,
-    val message: String?,
-    val type: String?,
-    override val normalizedRequestId: String? = requestId,
-    override val normalizedErrorCode: String? = code,
-    override val normalizedErrorMessage: String? = message
-) : RestXmlErrorDetails
-
 /**
  * Provides access to specific values regardless of message form
  */
-interface RestXmlErrorDetails {
-    val normalizedRequestId: String?
-    val normalizedErrorCode: String?
-    val normalizedErrorMessage: String?
+internal interface RestXmlErrorDetails {
+    val requestId: String?
+    val code: String?
+    val message: String?
 }
+
+// Models "ErrorResponse" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
+internal data class XmlErrorResponse(
+    val error: XmlError?,
+    override val requestId: String? = error?.requestId,
+) : RestXmlErrorDetails {
+    override val code: String? = error?.code
+    override val message: String? = error?.message
+}
+
+// Models "Error" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
+internal data class XmlError(
+    override val requestId: String?,
+    override val code: String?,
+    override val message: String?,
+    val type: String?,
+) : RestXmlErrorDetails
 
 // Returns parsed data in normalized form or throws IllegalArgumentException if unparsable.
 internal suspend fun ExecutionContext.parseErrorResponse(payload: ByteArray): RestXmlErrorDetails {
@@ -77,7 +74,7 @@ internal object ErrorResponseDeserializer {
                 }
             }
 
-            XmlErrorResponse(requestId, xmlError)
+            XmlErrorResponse(xmlError, requestId)
         } catch (e: DeserializerStateException) {
             null // return so an appropriate exception type can be instantiated above here.
         }

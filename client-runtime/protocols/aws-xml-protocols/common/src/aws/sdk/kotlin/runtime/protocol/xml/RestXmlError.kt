@@ -75,8 +75,8 @@ public class RestXmlError(private val registry: ExceptionRegistry) : Feature {
 
             // we already consumed the response body, wrap it to allow the modeled exception to deserialize
             // any members that may be bound to the document
-            val modeledExceptionDeserializer = registry[errorResponse.normalizedErrorCode]?.deserializer
-            val modeledException = modeledExceptionDeserializer?.deserialize(req.context, wrappedResponse) ?: UnknownServiceErrorException(errorResponse.normalizedErrorMessage)
+            val modeledExceptionDeserializer = registry[errorResponse.code]?.deserializer
+            val modeledException = modeledExceptionDeserializer?.deserialize(req.context, wrappedResponse) ?: UnknownServiceErrorException(errorResponse.message)
             setAseFields(modeledException, wrappedResponse, errorResponse)
 
             // this should never happen...
@@ -96,9 +96,9 @@ internal fun HttpStatusCode.matches(expected: HttpStatusCode?): Boolean =
  */
 private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: RestXmlErrorDetails?) {
     if (exception is AwsServiceException) {
-        exception.requestId = errorDetails?.normalizedRequestId ?: response.headers[X_AMZN_REQUEST_ID_HEADER] ?: ""
-        exception.errorCode = errorDetails?.normalizedErrorCode ?: ""
-        exception.errorMessage = errorDetails?.normalizedErrorMessage ?: ""
+        exception.requestId = errorDetails?.requestId ?: response.headers[X_AMZN_REQUEST_ID_HEADER] ?: ""
+        exception.errorCode = errorDetails?.code ?: ""
+        exception.errorMessage = errorDetails?.message ?: ""
         exception.protocolResponse = response
     }
 }
