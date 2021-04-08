@@ -27,5 +27,3 @@ val ServiceShape.arnNamespace: String
  */
 val ServiceShape.endpointPrefix: String
     get() = expectTrait(ServiceTrait::class.java).endpointPrefix
-
-// KGWH - move trait access of flattened error here
