@@ -47,6 +47,8 @@ public open class AwsServiceException : ServiceException {
 
     public constructor(message: String?, cause: Throwable?) : super(message, cause)
 
+    public constructor(cause: Throwable?) : super(cause)
+
     override val sdkErrorMetadata: AwsErrorMetadata = AwsErrorMetadata()
 }
 
@@ -60,6 +62,8 @@ public open class ClientException : ClientException {
     public constructor(message: String?) : super(message)
 
     public constructor(message: String?, cause: Throwable?) : super(message, cause)
+
+    public constructor(cause: Throwable?) : super(cause)
 }
 
 /**
@@ -73,4 +77,6 @@ public class UnknownServiceErrorException : AwsServiceException {
     public constructor(message: String?) : super(message)
 
     public constructor(message: String?, cause: Throwable?) : super(message, cause)
+
+    public constructor(cause: Throwable?) : super(cause)
 }
