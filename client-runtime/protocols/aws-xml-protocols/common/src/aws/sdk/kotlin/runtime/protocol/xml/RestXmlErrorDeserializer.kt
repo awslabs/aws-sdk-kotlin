@@ -30,8 +30,7 @@ internal data class XmlErrorResponse(
 internal data class XmlError(
     override val requestId: String?,
     override val code: String?,
-    override val message: String?,
-    val type: String?,
+    override val message: String?
 ) : RestXmlErrorDetails
 
 // Returns parsed data in normalized form or throws IllegalArgumentException if unparsable.
@@ -74,7 +73,7 @@ internal object ErrorResponseDeserializer {
                 }
             }
 
-            XmlErrorResponse(xmlError, requestId)
+            XmlErrorResponse(xmlError, requestId ?: xmlError?.requestId )
         } catch (e: DeserializerStateException) {
             null // return so an appropriate exception type can be instantiated above here.
         }
@@ -88,20 +87,17 @@ internal object ErrorResponseDeserializer {
 internal object XmlErrorDeserializer {
     private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
     private val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Code"))
-    private val TYPE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Type"))
     private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
     private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
         trait(XmlSerialName("Error"))
         field(MESSAGE_DESCRIPTOR)
         field(CODE_DESCRIPTOR)
-        field(TYPE_DESCRIPTOR)
         field(REQUESTID_DESCRIPTOR)
     }
 
     suspend fun deserialize(deserializer: Deserializer): XmlError? {
         var message: String? = null
         var code: String? = null
-        var type: String? = null
         var requestId: String? = null
 
         return try {
@@ -110,7 +106,6 @@ internal object XmlErrorDeserializer {
                     when (findNextFieldIndex()) {
                         MESSAGE_DESCRIPTOR.index -> message = deserializeString()
                         CODE_DESCRIPTOR.index -> code = deserializeString()
-                        TYPE_DESCRIPTOR.index -> type = deserializeString()
                         REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
                         null -> break@loop
                         else -> skipValue()
@@ -118,7 +113,7 @@ internal object XmlErrorDeserializer {
                 }
             }
 
-            XmlError(requestId, code, message, type)
+            XmlError(requestId, code, message)
         } catch (e: DeserializerStateException) {
             null // return so an appropriate exception type can be instantiated above here.
         }
