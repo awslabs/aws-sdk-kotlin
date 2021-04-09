@@ -37,12 +37,11 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
         val features = super.getHttpFeatures(ctx)
 
-//        val restXmlFeatures = listOf(
-//            // TODO - RestXmlError
-//        )
-//
-//        return features + restXmlFeatures
-        return features
+        val restXmlFeatures = listOf(
+            RestXmlErrorFeature(ctx, getProtocolHttpBindingResolver(ctx))
+        )
+
+        return features + restXmlFeatures
     }
 
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.DATE_TIME
@@ -79,8 +78,9 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         val serialName = memberShape.getTrait<XmlNameTrait>()?.value ?: memberShape.memberName
         traitList.add("""XmlSerialName("$serialName$namePostfix")""")
 
-        if (memberShape.hasTrait<XmlFlattenedTrait>()) traitList.add("""Flattened""")
-        if (memberShape.hasTrait<XmlAttributeTrait>()) traitList.add("""XmlAttribute""")
+        memberShape.getTrait<XmlFlattenedTrait>()?.let { traitList.add(it.toSerdeFieldTraitSpec()) }
+        memberShape.getTrait<XmlAttributeTrait>()?.let { traitList.add(it.toSerdeFieldTraitSpec()) }
+        memberShape.getTrait<XmlNamespaceTrait>()?.let { traitList.add(it.toSerdeFieldTraitSpec()) }
 
         val targetShape = model.expectShape(memberShape.target)
         when (targetShape.type) {
@@ -125,11 +125,19 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE.dependencies)
         writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE_XML.dependencies)
 
-        val serialName = objectShape.getTrait<XmlNameTrait>()?.value
-            ?: objectShape.getTrait<SyntheticClone>()?.archetype?.name
-            ?: objectShape.defaultName()
+        val serialName = when {
+            objectShape.hasTrait<HttpErrorTrait>() -> "Error"
+            objectShape.hasTrait<XmlNameTrait>() -> objectShape.getTrait<XmlNameTrait>()!!.value
+            objectShape.hasTrait<SyntheticClone>() -> objectShape.getTrait<SyntheticClone>()!!.archetype!!.name
+            else -> objectShape.defaultName()
+        }
 
         writer.write("""trait(XmlSerialName("$serialName"))""")
+
+        if (objectShape.hasTrait<HttpErrorTrait>()) {
+            writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlError")
+            writer.write("""trait(XmlError)""")
+        }
 
         if (objectShape.hasTrait<XmlNamespaceTrait>()) {
             writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlNamespace")
@@ -144,3 +152,12 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
 
     override val protocol: ShapeId = RestXmlTrait.ID
 }
+
+private fun XmlNamespaceTrait.toSerdeFieldTraitSpec() =
+    if (prefix.isPresent) {
+        """XmlNamespace("${this.uri}", "${this.prefix.get()}")"""
+    } else {
+        """XmlNamespace("${this.uri}")"""
+    }
+private fun XmlAttributeTrait.toSerdeFieldTraitSpec() = "XmlAttribute"
+private fun XmlFlattenedTrait.toSerdeFieldTraitSpec() = "Flattened"
