@@ -4,19 +4,19 @@
  */
 package aws.sdk.kotlin.runtime.protocol.json
 
-import aws.sdk.kotlin.runtime.AwsServiceException
-import aws.sdk.kotlin.runtime.ClientException
-import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.UnknownServiceErrorException
+import aws.sdk.kotlin.runtime.*
 import aws.sdk.kotlin.runtime.http.ExceptionMetadata
 import aws.sdk.kotlin.runtime.http.ExceptionRegistry
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
 import aws.sdk.kotlin.runtime.http.withPayload
+import software.aws.clientrt.ServiceErrorMetadata
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.operation.HttpDeserialize
 import software.aws.clientrt.http.operation.HttpOperationContext
 import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.http.response.HttpResponse
+import software.aws.clientrt.util.AttributeKey
+import software.aws.clientrt.util.Attributes
 
 /**
  * Http feature that inspects responses and throws the appropriate modeled service error that matches
@@ -95,9 +95,13 @@ internal fun HttpStatusCode.matches(expected: HttpStatusCode?): Boolean =
  */
 private fun setAseFields(exception: Any, response: HttpResponse, error: RestJsonErrorDetails?) {
     if (exception is AwsServiceException) {
-        exception.requestId = response.headers[X_AMZN_REQUEST_ID_HEADER] ?: ""
-        exception.errorCode = error?.code ?: ""
-        exception.errorMessage = error?.message ?: ""
-        exception.protocolResponse = response
+        exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorCode, error?.code)
+        exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, error?.message)
+        exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
+        exception.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
     }
+}
+
+private fun <T : Any> Attributes.setIfNotNull(key: AttributeKey<T>, value: T?) {
+    if (value != null) set(key, value)
 }
