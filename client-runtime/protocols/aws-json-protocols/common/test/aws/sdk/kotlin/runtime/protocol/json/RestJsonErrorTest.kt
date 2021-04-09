@@ -129,14 +129,14 @@ class RestJsonErrorTest {
         }
 
         // verify it pulls out the error details/meta
-        assertEquals(ex.sdkErrorMetadata.errorCode, "FooError")
-        assertEquals(ex.sdkErrorMetadata.requestId, "guid")
+        assertEquals("FooError", ex.sdkErrorMetadata.errorCode)
+        assertEquals("guid", ex.sdkErrorMetadata.requestId)
         // the exception has no modeled "message" field, ensure we can still get at it through the metadata
-        assertEquals(ex.sdkErrorMetadata.errorMessage, "server do better next time")
+        assertEquals("server do better next time", ex.sdkErrorMetadata.errorMessage)
 
         // check it actually deserialized the shape
-        assertEquals(ex.headerInt, 12)
-        assertEquals(ex.payloadString, "hello world")
+        assertEquals(12, ex.headerInt)
+        assertEquals("hello world", ex.payloadString)
 
         // verify the ProtocolResponse instance was stashed and we can pull out raw protocol details if needed
         assertEquals("12", ex.sdkErrorMetadata.protocolResponse.header("X-Test-Header"))
@@ -181,9 +181,9 @@ class RestJsonErrorTest {
         }
 
         // verify it pulls out the error details/meta
-        assertEquals(ex.sdkErrorMetadata.errorCode, "BarError")
-        assertEquals(ex.sdkErrorMetadata.requestId, "guid")
-        assertEquals(ex.message, "server do better next time")
+        assertEquals("BarError", ex.sdkErrorMetadata.errorCode)
+        assertEquals("guid", ex.sdkErrorMetadata.requestId)
+        assertEquals("server do better next time", ex.message)
     }
 
     @Test
@@ -243,8 +243,8 @@ class RestJsonErrorTest {
         }
 
         // verify it pulls out the error details/meta
-        assertEquals(ex.sdkErrorMetadata.errorCode, "")
-        assertEquals(ex.sdkErrorMetadata.requestId, "guid")
-        assertEquals(ex.message, "failed to parse response as Json protocol error")
+        assertNull(ex.sdkErrorMetadata.errorCode)
+        assertEquals("guid", ex.sdkErrorMetadata.requestId)
+        assertEquals("failed to parse response as Json protocol error", ex.message)
     }
 }

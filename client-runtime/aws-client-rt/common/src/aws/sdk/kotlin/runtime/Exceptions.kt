@@ -19,8 +19,8 @@ public open class AwsErrorMetadata : ServiceErrorMetadata() {
     /**
      * Returns the error code associated with the response
      */
-    public val errorCode: String
-        get() = attributes.getOrNull(ErrorCode) ?: ""
+    public val errorCode: String?
+        get() = attributes.getOrNull(ErrorCode)
 
     /**
      * Returns the human readable error message. For errors with a `message` field as part of the model
@@ -32,8 +32,8 @@ public open class AwsErrorMetadata : ServiceErrorMetadata() {
     /**
      * The request ID that was returned by the called service
      */
-    public val requestId: String
-        get() = attributes.getOrNull(RequestId) ?: ""
+    public val requestId: String?
+        get() = attributes.getOrNull(RequestId)
 }
 
 /**
