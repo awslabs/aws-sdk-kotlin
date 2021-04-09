@@ -8,6 +8,7 @@ import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.UnknownServiceErrorException
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import software.aws.clientrt.ServiceErrorMetadata
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
@@ -34,6 +35,9 @@ class RestJsonErrorTest {
     class FooError private constructor(builder: BuilderImpl) : AwsServiceException() {
         val headerInt: Int? = builder.headerInt
         val payloadString: String? = builder.payloadString
+        init {
+            sdkErrorMetadata.attributes[ServiceErrorMetadata.ErrorType] = ErrorType.Server
+        }
 
         companion object {
             fun dslBuilder(): DslBuilder = BuilderImpl()
@@ -55,8 +59,6 @@ class RestJsonErrorTest {
             override var payloadString: String? = null
             override fun build(): FooError = FooError(this)
         }
-
-        override val errorType = ErrorType.Server
     }
 
     class FooErrorDeserializer(val provider: DeserializationProvider) : HttpDeserialize<FooError> {
@@ -128,16 +130,17 @@ class RestJsonErrorTest {
         }
 
         // verify it pulls out the error details/meta
-        assertEquals(ex.errorCode, "FooError")
-        assertEquals(ex.requestId, "guid")
-        assertEquals(ex.errorMessage, "server do better next time")
+        assertEquals("FooError", ex.sdkErrorMetadata.errorCode)
+        assertEquals("guid", ex.sdkErrorMetadata.requestId)
+        // the exception has no modeled "message" field, ensure we can still get at it through the metadata
+        assertEquals("server do better next time", ex.sdkErrorMetadata.errorMessage)
 
         // check it actually deserialized the shape
-        assertEquals(ex.headerInt, 12)
-        assertEquals(ex.payloadString, "hello world")
+        assertEquals(12, ex.headerInt)
+        assertEquals("hello world", ex.payloadString)
 
         // verify the ProtocolResponse instance was stashed and we can pull out raw protocol details if needed
-        assertEquals("12", ex.protocolResponse?.header("X-Test-Header"))
+        assertEquals("12", ex.sdkErrorMetadata.protocolResponse.header("X-Test-Header"))
     }
 
     @Test
@@ -179,9 +182,9 @@ class RestJsonErrorTest {
         }
 
         // verify it pulls out the error details/meta
-        assertEquals(ex.errorCode, "BarError")
-        assertEquals(ex.requestId, "guid")
-        assertEquals(ex.errorMessage, "server do better next time")
+        assertEquals("BarError", ex.sdkErrorMetadata.errorCode)
+        assertEquals("guid", ex.sdkErrorMetadata.requestId)
+        assertEquals("server do better next time", ex.message)
     }
 
     @Test
@@ -241,8 +244,8 @@ class RestJsonErrorTest {
         }
 
         // verify it pulls out the error details/meta
-        assertEquals(ex.errorCode, "")
-        assertEquals(ex.requestId, "guid")
-        assertEquals(ex.message, "failed to parse response as Json protocol error")
+        assertNull(ex.sdkErrorMetadata.errorCode)
+        assertEquals("guid", ex.sdkErrorMetadata.requestId)
+        assertEquals("failed to parse response as Json protocol error", ex.message)
     }
 }
