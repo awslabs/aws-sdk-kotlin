@@ -73,7 +73,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
     private fun traitsForMember(model: Model, memberShape: MemberShape, namePostfix: String, writer: KotlinWriter): String {
         val traitList = mutableListOf<String>()
 
-        val serialName = when(namePostfix.isEmpty()) {
+        val serialName = when (namePostfix.isEmpty()) {
             true -> memberShape.getTrait<XmlNameTrait>()?.value ?: memberShape.memberName
             false -> if (memberShape.hasTrait<XmlNameTrait>()) memberShape.expectTrait<XmlNameTrait>().value else "member"
         }
