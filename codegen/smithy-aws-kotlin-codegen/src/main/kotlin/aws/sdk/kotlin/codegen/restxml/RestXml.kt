@@ -11,12 +11,10 @@ import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.*
 import software.amazon.smithy.kotlin.codegen.integration.*
+import software.amazon.smithy.kotlin.codegen.knowledge.ReferencedShape
 import software.amazon.smithy.kotlin.codegen.traits.SyntheticClone
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.MemberShape
-import software.amazon.smithy.model.shapes.Shape
-import software.amazon.smithy.model.shapes.ShapeId
-import software.amazon.smithy.model.shapes.ShapeType
+import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*
 
 /**
@@ -75,8 +73,11 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
     private fun traitsForMember(model: Model, memberShape: MemberShape, namePostfix: String, writer: KotlinWriter): String {
         val traitList = mutableListOf<String>()
 
-        val serialName = memberShape.getTrait<XmlNameTrait>()?.value ?: memberShape.memberName
-        traitList.add("""XmlSerialName("$serialName$namePostfix")""")
+        val serialName = when(namePostfix.isEmpty()) {
+            true -> memberShape.getTrait<XmlNameTrait>()?.value ?: memberShape.memberName
+            false -> if (memberShape.hasTrait<XmlNameTrait>()) memberShape.expectTrait<XmlNameTrait>().value else "member"
+        }
+        traitList.add("""XmlSerialName("$serialName")""")
 
         memberShape.getTrait<XmlFlattenedTrait>()?.let { traitList.add(it.toSerdeFieldTraitSpec()) }
         memberShape.getTrait<XmlAttributeTrait>()?.let { traitList.add(it.toSerdeFieldTraitSpec()) }
@@ -91,6 +92,15 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
                     traitList.add("""XmlCollectionName("$memberName")""")
                     writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlCollectionName")
                 }
+
+                listOrSetMember.getTrait<XmlNamespaceTrait>()?.let { namespace ->
+                    if (namespace.prefix.isPresent) {
+                        traitList.add("""XmlCollectionNamespace("${namespace.uri}, "${namespace.prefix.get()}")""")
+                    } else {
+                        traitList.add("""XmlCollectionNamespace("${namespace.uri}")""")
+                    }
+                    writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlCollectionNamespace")
+                }
             }
             ShapeType.MAP -> {
                 val mapMember = targetShape.asMapShape().get()
@@ -99,10 +109,19 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
                 val customValueName = mapMember.value.getTrait<XmlNameTrait>()?.value
 
                 val mapTraitExpr = when {
-                    customKeyName != null && customKeyName != null -> """XmlMapName(key = "$customKeyName", value = "$customValueName")"""
+                    customKeyName != null && customValueName != null -> """XmlMapName(key = "$customKeyName", value = "$customValueName")"""
                     customKeyName != null -> """XmlMapName(key = "$customKeyName")"""
                     customValueName != null -> """XmlMapName(value = "$customValueName")"""
                     else -> null
+                }
+
+                mapMember.getTrait<XmlNamespaceTrait>()?.let { namespace ->
+                    if (namespace.prefix.isPresent) {
+                        traitList.add("""XmlCollectionNamespace("${namespace.uri}, "${namespace.prefix.get()}")""")
+                    } else {
+                        traitList.add("""XmlCollectionNamespace("${namespace.uri}")""")
+                    }
+                    writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlCollectionNamespace")
                 }
 
                 mapTraitExpr?.let {
@@ -117,7 +136,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
 
     override fun generateSdkObjectDescriptorTraits(
         ctx: ProtocolGenerator.GenerationContext,
-        objectShape: Shape,
+        referencedShape: ReferencedShape,
         writer: KotlinWriter
     ) {
         writer.addImport(KotlinDependency.CLIENT_RT_SERDE.namespace, "*")
@@ -125,23 +144,31 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE.dependencies)
         writer.dependencies.addAll(KotlinDependency.CLIENT_RT_SERDE_XML.dependencies)
 
-        val serialName = when {
-            objectShape.hasTrait<HttpErrorTrait>() -> "Error"
-            objectShape.hasTrait<XmlNameTrait>() -> objectShape.getTrait<XmlNameTrait>()!!.value
-            objectShape.hasTrait<SyntheticClone>() -> objectShape.getTrait<SyntheticClone>()!!.archetype!!.name
-            else -> objectShape.defaultName()
-        }
+        val objectShape = referencedShape.shape
 
-        writer.write("""trait(XmlSerialName("$serialName"))""")
+        if (referencedShape.referringMember !is MapShape && referencedShape.referringMember !is CollectionShape) {
+            val serialName = when {
+                objectShape.hasTrait<HttpErrorTrait>() -> "Error"
+                objectShape.hasTrait<XmlNameTrait>() -> objectShape.getTrait<XmlNameTrait>()!!.value
+                objectShape.hasTrait<SyntheticClone>() -> objectShape.getTrait<SyntheticClone>()!!.archetype!!.name
+                referencedShape.referringMember?.hasTrait<XmlNameTrait>() == true -> referencedShape.referringMember!!.expectTrait<XmlNameTrait>().value
+                referencedShape.referringMember is MemberShape && !referencedShape.referringMember!!.hasTrait<HttpPayloadTrait>() -> (referencedShape.referringMember!! as MemberShape).memberName
+                else -> objectShape.defaultName()
+            }
+
+            writer.write("""trait(XmlSerialName("$serialName"))""")
+        }
 
         if (objectShape.hasTrait<HttpErrorTrait>()) {
             writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlError")
             writer.write("""trait(XmlError)""")
         }
 
-        if (objectShape.hasTrait<XmlNamespaceTrait>()) {
+        // Namespace declaration may be on service or struct
+        val namespaceTrait = objectShape.getTrait<XmlNamespaceTrait>() ?: referencedShape.referringMember?.getTrait<XmlNamespaceTrait>() ?: ctx.service.getTrait<XmlNamespaceTrait>()
+
+        if (namespaceTrait != null) {
             writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlNamespace")
-            val namespaceTrait = objectShape.expectTrait<XmlNamespaceTrait>()
 
             when (val prefix = namespaceTrait.prefix.getOrNull()) {
                 null -> writer.write("""trait(XmlNamespace("${namespaceTrait.uri}"))""")

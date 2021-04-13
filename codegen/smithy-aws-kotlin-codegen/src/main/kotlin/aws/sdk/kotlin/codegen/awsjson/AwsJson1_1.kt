@@ -9,6 +9,7 @@ import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.*
+import software.amazon.smithy.kotlin.codegen.knowledge.ReferencedShape
 import software.amazon.smithy.model.shapes.MemberShape
 import software.amazon.smithy.model.shapes.Shape
 import software.amazon.smithy.model.shapes.ShapeId
@@ -47,7 +48,7 @@ class AwsJson1_1 : AwsHttpBindingProtocolGenerator() {
 
     override fun generateSdkObjectDescriptorTraits(
         ctx: ProtocolGenerator.GenerationContext,
-        objectShape: Shape,
+        referencedShape: ReferencedShape,
         writer: KotlinWriter
-    ) = JsonSerdeFieldGenerator.generateSdkObjectDescriptorTraits(ctx, objectShape, writer)
+    ) = JsonSerdeFieldGenerator.generateSdkObjectDescriptorTraits(ctx, referencedShape.shape, writer)
 }

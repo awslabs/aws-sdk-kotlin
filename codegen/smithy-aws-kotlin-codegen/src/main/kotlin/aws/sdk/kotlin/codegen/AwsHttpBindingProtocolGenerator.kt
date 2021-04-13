@@ -56,7 +56,8 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "PutAndGetInlineDocumentsInput",
 
                 // restXml
-                "IgnoreQueryParamsInResponse" // See https://github.com/awslabs/smithy/issues/756, Remove after upgrading past Smithy 1.6.1
+                "IgnoreQueryParamsInResponse", // See https://github.com/awslabs/smithy/issues/756, Remove after upgrading past Smithy 1.6.1
+                "RecursiveShapes" // TBD
             ),
             TestContainmentMode.EXCLUDE_TESTS
         )
