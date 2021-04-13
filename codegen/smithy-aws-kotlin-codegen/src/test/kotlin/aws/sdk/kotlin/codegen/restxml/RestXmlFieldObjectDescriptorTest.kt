@@ -79,14 +79,16 @@ class RestXmlFieldObjectDescriptorTest {
 
         val expectedOperationDescriptors = """
             private val PAYLOAD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("payload"))
-            private val PAYLOAD_C0_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("payload_C0"))
+            private val PAYLOAD_C0_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("member"))
             private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
                 trait(XmlSerialName("FooRequest"))
                 field(PAYLOAD_DESCRIPTOR)
             }
         """.formatForTest("        ")
 
-        val expectedDocumentDescriptors = """
+        // FIXME ~ that the serializer and deserializers produce different descriptor traits may indicate an issue in deserialization
+        //  that currently isn't captured in codegen protocol tests.  This is just a hunch.
+        val expectedDocumentDeserializerDescriptors = """
             private val SOMEVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("someVal"))
             private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
                 trait(XmlSerialName("Bar"))
@@ -94,12 +96,20 @@ class RestXmlFieldObjectDescriptorTest {
             }
         """.formatForTest("        ")
 
+        val expectedDocumentSerializerDescriptors = """
+            private val SOMEVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("someVal"))
+            private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+                trait(XmlSerialName("member"))
+                field(SOMEVAL_DESCRIPTOR)
+            }
+        """.formatForTest("        ")
+
         val actual = testHarness.generateDeSerializers()
 
         actual["FooOperationSerializer.kt"].shouldContainOnlyOnceWithDiff(expectedOperationDescriptors)
-        actual["BarDocumentSerializer.kt"].shouldContainOnlyOnceWithDiff(expectedDocumentDescriptors)
+        actual["BarDocumentSerializer.kt"].shouldContainOnlyOnceWithDiff(expectedDocumentSerializerDescriptors)
         actual["FooOperationDeserializer.kt"].shouldContainOnlyOnceWithDiff(expectedOperationDescriptors)
-        actual["BarDocumentDeserializer.kt"].shouldContainOnlyOnceWithDiff(expectedDocumentDescriptors)
+        actual["BarDocumentDeserializer.kt"].shouldContainOnlyOnceWithDiff(expectedDocumentDeserializerDescriptors)
     }
 
     @ParameterizedTest
