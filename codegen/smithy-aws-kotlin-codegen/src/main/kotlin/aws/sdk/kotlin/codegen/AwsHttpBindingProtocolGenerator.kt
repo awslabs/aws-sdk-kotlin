@@ -4,13 +4,13 @@
  */
 package aws.sdk.kotlin.codegen
 
+import aws.sdk.kotlin.codegen.middleware.AwsSignatureVersion4
+import aws.sdk.kotlin.codegen.middleware.EndpointResolverFeature
+import aws.sdk.kotlin.codegen.middleware.UserAgentFeature
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestErrorGenerator
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestRequestGenerator
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestResponseGenerator
 import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.KotlinDependency
-import software.amazon.smithy.kotlin.codegen.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.addImport
 import software.amazon.smithy.kotlin.codegen.integration.*
 
 /**
@@ -25,9 +25,8 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         .build()
 
     override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator {
-        val rootNamespace = ctx.settings.moduleName
         val features = getHttpFeatures(ctx)
-        return AwsHttpProtocolClientGenerator(ctx, rootNamespace, features, getProtocolHttpBindingResolver(ctx))
+        return AwsHttpProtocolClientGenerator(ctx, features, getProtocolHttpBindingResolver(ctx))
     }
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
@@ -39,6 +38,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             features.add(AwsSignatureVersion4(signingName))
         }
 
+        features.add(UserAgentFeature())
         return features
     }
 
@@ -72,17 +72,5 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             errorTestBuilder,
             ignoredTests
         ).generateProtocolTests()
-    }
-}
-
-class JsonSerdeFeature(generateIdempotencyTokenConfig: Boolean) : HttpSerde("JsonSerdeProvider", generateIdempotencyTokenConfig) {
-    override fun addImportsAndDependencies(writer: KotlinWriter) {
-        super.addImportsAndDependencies(writer)
-        val jsonSerdeSymbol = Symbol.builder()
-            .name("JsonSerdeProvider")
-            .namespace(KotlinDependency.CLIENT_RT_SERDE_JSON.namespace, ".")
-            .addDependency(KotlinDependency.CLIENT_RT_SERDE_JSON)
-            .build()
-        writer.addImport(jsonSerdeSymbol, "")
     }
 }

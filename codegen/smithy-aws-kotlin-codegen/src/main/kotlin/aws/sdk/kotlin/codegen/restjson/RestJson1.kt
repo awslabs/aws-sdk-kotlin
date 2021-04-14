@@ -5,9 +5,7 @@
 package aws.sdk.kotlin.codegen.restjson
 
 import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
-import aws.sdk.kotlin.codegen.JsonSerdeFeature
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
-import software.amazon.smithy.kotlin.codegen.hasIdempotentTokenMember
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
 import software.amazon.smithy.kotlin.codegen.integration.HttpTraitResolver
@@ -34,7 +32,6 @@ class RestJson1 : AwsHttpBindingProtocolGenerator() {
         val features = super.getHttpFeatures(ctx)
 
         val restJsonFeatures = listOf(
-            JsonSerdeFeature(ctx.service.hasIdempotentTokenMember(ctx.model)),
             RestJsonErrorFeature(ctx, getProtocolHttpBindingResolver(ctx))
         )
 
@@ -43,8 +40,8 @@ class RestJson1 : AwsHttpBindingProtocolGenerator() {
 
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 
-    override fun getProtocolHttpBindingResolver(generationContext: ProtocolGenerator.GenerationContext): HttpBindingResolver =
-        RestJsonHttpBindingResolver(generationContext, "application/json")
+    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
+        RestJsonHttpBindingResolver(ctx, "application/json")
 
     override val protocol: ShapeId = RestJson1Trait.ID
 }

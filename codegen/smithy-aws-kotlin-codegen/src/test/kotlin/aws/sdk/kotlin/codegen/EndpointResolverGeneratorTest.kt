@@ -15,7 +15,7 @@ import software.amazon.smithy.model.node.Node
 
 class EndpointResolverGeneratorTest {
 
-    private fun getGeneratedResolverContents(model: String, modelName: String = "Example"): String {
+    private fun getGeneratedResolverContents(model: String): String {
         val ctx = model.asSmithyModel().generateTestContext("test", "Example")
         val endpointData = Node.parse(endpointsJson).expectObjectNode()
         EndpointResolverGenerator(endpointData).render(ctx)
