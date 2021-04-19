@@ -146,8 +146,8 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
 
         val serialName = when {
             objectShape.hasTrait<HttpErrorTrait>() -> "Error"
-            objectShape.hasTrait<XmlNameTrait>() -> objectShape.getTrait<XmlNameTrait>()!!.value
-            objectShape.hasTrait<SyntheticClone>() -> objectShape.getTrait<SyntheticClone>()!!.archetype!!.name
+            objectShape.hasTrait<XmlNameTrait>() -> objectShape.expectTrait<XmlNameTrait>().value
+            objectShape.hasTrait<SyntheticClone>() -> objectShape.expectTrait<SyntheticClone>().archetype.name
             else -> objectShape.defaultName()
         }
 
@@ -158,27 +158,24 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
             writer.write("""trait(XmlError)""")
         }
 
-        if (objectShape.hasTrait<XmlNamespaceTrait>()) {
-            writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlNamespace")
-            val namespaceTrait = objectShape.expectTrait<XmlNamespaceTrait>()
-
-            when (val prefix = namespaceTrait.prefix.getOrNull()) {
-                null -> writer.write("""trait(XmlNamespace("${namespaceTrait.uri}"))""")
-                else -> writer.write("""trait(XmlNamespace("${namespaceTrait.uri}", "$prefix"))""")
-            }
+        // namespace trait if present comes from the struct or falls back to the service
+        val namespaceTrait: XmlNamespaceTrait? = objectShape.getTrait() ?: ctx.service.getTrait()
+        if (namespaceTrait != null) {
+            writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlNamespace)
+            writer.write("""trait(${namespaceTrait.toSerdeFieldTraitSpec()})""")
         }
     }
 
     override val protocol: ShapeId = RestXmlTrait.ID
 }
 
-private fun XmlNamespaceTrait.toSerdeFieldTraitSpec(namespaceTrait: String = "XmlNamespace") =
+private fun XmlNamespaceTrait.toSerdeFieldTraitSpec(namespaceTrait: String = "XmlNamespace"): String =
     if (prefix.isPresent) {
         """$namespaceTrait("${this.uri}", "${this.prefix.get()}")"""
     } else {
         """$namespaceTrait("${this.uri}")"""
     }
 
-private fun XmlAttributeTrait.toSerdeFieldTraitSpec() = "XmlAttribute"
+private fun XmlAttributeTrait.toSerdeFieldTraitSpec(): String = "XmlAttribute"
 
-private fun XmlFlattenedTrait.toSerdeFieldTraitSpec() = "Flattened"
+private fun XmlFlattenedTrait.toSerdeFieldTraitSpec(): String = "Flattened"
