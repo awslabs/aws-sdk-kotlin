@@ -6,17 +6,13 @@
 package aws.sdk.kotlin.codegen.restxml
 
 import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.*
 import software.amazon.smithy.kotlin.codegen.integration.*
 import software.amazon.smithy.kotlin.codegen.traits.SyntheticClone
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.MemberShape
-import software.amazon.smithy.model.shapes.Shape
-import software.amazon.smithy.model.shapes.ShapeId
-import software.amazon.smithy.model.shapes.ShapeType
+import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*
 
 /**
@@ -28,10 +24,10 @@ import software.amazon.smithy.model.traits.*
 class RestXml : AwsHttpBindingProtocolGenerator() {
 
     private val typeReferencableTraitIndex: Map<ShapeId, Symbol> = mapOf(
-        XmlNameTrait.ID to AwsRuntimeTypes.SerdeXml.XmlSerialName,
-        XmlNamespaceTrait.ID to AwsRuntimeTypes.SerdeXml.XmlNamespace,
-        XmlFlattenedTrait.ID to AwsRuntimeTypes.SerdeXml.Flattened,
-        XmlAttributeTrait.ID to AwsRuntimeTypes.SerdeXml.XmlAttribute
+        XmlNameTrait.ID to RuntimeTypes.Serde.SerdeXml.XmlSerialName,
+        XmlNamespaceTrait.ID to RuntimeTypes.Serde.SerdeXml.XmlNamespace,
+        XmlFlattenedTrait.ID to RuntimeTypes.Serde.SerdeXml.Flattened,
+        XmlAttributeTrait.ID to RuntimeTypes.Serde.SerdeXml.XmlAttribute
     )
 
     override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
@@ -85,21 +81,28 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         val targetShape = model.expectShape(memberShape.target)
         when (targetShape.type) {
             ShapeType.LIST, ShapeType.SET -> {
-                val listOrSetMember = if (targetShape.type == ShapeType.LIST) targetShape.asListShape().get().member else targetShape.asSetShape().get().member
-                if (listOrSetMember.hasTrait<XmlNameTrait>()) {
-                    val memberName = listOrSetMember.expectTrait<XmlNameTrait>().value
+                val collectionMember = (targetShape as CollectionShape).member
+                if (collectionMember.hasTrait<XmlNameTrait>()) {
+                    val memberName = collectionMember.expectTrait<XmlNameTrait>().value
                     traitList.add("""XmlCollectionName("$memberName")""")
-                    writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlCollectionName")
+                    writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlCollectionName)
+                }
+
+                if (collectionMember.hasTrait<XmlNamespaceTrait>()) {
+                    val ns = collectionMember.expectTrait<XmlNamespaceTrait>()
+                    val nsTrait = ns.toSerdeFieldTraitSpec("XmlCollectionValueNamespace")
+                    traitList.add(nsTrait)
+                    writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlCollectionValueNamespace)
                 }
             }
             ShapeType.MAP -> {
-                val mapMember = targetShape.asMapShape().get()
+                val mapMember = targetShape as MapShape
 
                 val customKeyName = mapMember.key.getTrait<XmlNameTrait>()?.value
                 val customValueName = mapMember.value.getTrait<XmlNameTrait>()?.value
 
                 val mapTraitExpr = when {
-                    customKeyName != null && customKeyName != null -> """XmlMapName(key = "$customKeyName", value = "$customValueName")"""
+                    customKeyName != null && customValueName != null -> """XmlMapName(key = "$customKeyName", value = "$customValueName")"""
                     customKeyName != null -> """XmlMapName(key = "$customKeyName")"""
                     customValueName != null -> """XmlMapName(value = "$customValueName")"""
                     else -> null
@@ -107,8 +110,24 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
 
                 mapTraitExpr?.let {
                     traitList.add(it)
-                    writer.addImport(KotlinDependency.CLIENT_RT_SERDE_XML.namespace, "XmlMapName")
+                    writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlMapName)
                 }
+
+                mapMember.key
+                    .getTrait<XmlNamespaceTrait>()
+                    ?.toSerdeFieldTraitSpec("XmlMapKeyNamespace")
+                    ?.let {
+                        traitList.add(it)
+                        writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlMapKeyNamespace)
+                    }
+
+                mapMember.value
+                    .getTrait<XmlNamespaceTrait>()
+                    ?.toSerdeFieldTraitSpec("XmlCollectionValueNamespace")
+                    ?.let {
+                        traitList.add(it)
+                        writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlCollectionValueNamespace)
+                    }
             }
         }
 
@@ -153,11 +172,13 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = RestXmlTrait.ID
 }
 
-private fun XmlNamespaceTrait.toSerdeFieldTraitSpec() =
+private fun XmlNamespaceTrait.toSerdeFieldTraitSpec(namespaceTrait: String = "XmlNamespace") =
     if (prefix.isPresent) {
-        """XmlNamespace("${this.uri}", "${this.prefix.get()}")"""
+        """$namespaceTrait("${this.uri}", "${this.prefix.get()}")"""
     } else {
-        """XmlNamespace("${this.uri}")"""
+        """$namespaceTrait("${this.uri}")"""
     }
+
 private fun XmlAttributeTrait.toSerdeFieldTraitSpec() = "XmlAttribute"
+
 private fun XmlFlattenedTrait.toSerdeFieldTraitSpec() = "Flattened"
