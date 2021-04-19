@@ -46,6 +46,18 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
     override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
         HttpTraitResolver(ctx, "application/xml")
 
+    override fun sortMembersForSerialization(
+        ctx: ProtocolGenerator.GenerationContext,
+        members: List<MemberShape>
+    ): List<MemberShape> {
+        val attributes = members.filter { it.hasTrait<XmlAttributeTrait>() }.sortedBy { it.memberName }
+        val elements = members.filterNot { it.hasTrait<XmlAttributeTrait>() }.sortedBy { it.memberName }
+
+        // XML attributes MUST be serialized immediately following calls to `startTag` before
+        // any nested content is serialized
+        return attributes + elements
+    }
+
     override fun generateSdkFieldDescriptor(
         ctx: ProtocolGenerator.GenerationContext,
         memberShape: MemberShape,
