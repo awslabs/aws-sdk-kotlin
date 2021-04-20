@@ -177,7 +177,8 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         val namespaceTrait: XmlNamespaceTrait? = objectShape.getTrait() ?: ctx.service.getTrait()
         if (namespaceTrait != null) {
             writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlNamespace)
-            writer.write("""trait(${namespaceTrait.toSerdeFieldTraitSpec()})""")
+            val serdeTrait = namespaceTrait.toSerdeFieldTraitSpec()
+            writer.write("""trait($serdeTrait)""")
         }
     }
 
