@@ -79,7 +79,7 @@ class RestXmlFieldObjectDescriptorTest {
 
         val expectedOperationDescriptors = """
             private val PAYLOAD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("payload"))
-            private val PAYLOAD_C0_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("payload_C0"))
+            private val PAYLOAD_C0_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("member"))
             private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
                 trait(XmlSerialName("FooRequest"))
                 field(PAYLOAD_DESCRIPTOR)
