@@ -14,6 +14,7 @@ version = sdkVersion
 
 val smithyVersion: String by project
 val kotestVersion: String by project
+val kotlinVersion: String by project
 val junitVersion: String by project
 val smithyKotlinVersion: String by project
 val kotlinJVMTargetVersion: String by project
@@ -24,7 +25,13 @@ dependencies {
     api("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
     api("software.amazon.smithy:smithy-protocol-test-traits:$smithyVersion")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")
+
+    testImplementation("org.slf4j:slf4j-api:1.7.30")
+    testImplementation("org.slf4j:slf4j-simple:1.7.30")
 }
 
 val generateSdkRuntimeVersion by tasks.registering {

@@ -9,6 +9,7 @@ import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_0Trait
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
+import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.*
@@ -34,6 +35,10 @@ class AwsHttpProtocolClientGenerator(
                 RestJson1Trait.ID -> buildSymbol {
                     name = "JsonSerdeProvider"
                     namespace(KotlinDependency.CLIENT_RT_SERDE_JSON)
+                }
+                RestXmlTrait.ID -> buildSymbol {
+                    name = "XmlSerdeProvider"
+                    namespace(KotlinDependency.CLIENT_RT_SERDE_XML)
                 }
                 else -> throw CodegenException("no serialization provider implemented for: ${ctx.protocol}")
             }

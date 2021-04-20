@@ -85,8 +85,9 @@ subprojects {
 }
 
 // FIXME - resolves build deadlock with aws-client-rt when using composite builds
-subprojects.filter { it.name != "aws-client-rt" }.forEach { proj ->
-    proj.tasks.findByName("generatePomFileForJvmPublication")?.dependsOn(":client-runtime:aws-client-rt:generatePomFileForJvmPublication")
+val topLevelModule = "crt-util"
+subprojects.filter { it.name != topLevelModule }.forEach { proj ->
+    proj.tasks.findByName("generatePomFileForJvmPublication")?.dependsOn(":client-runtime:$topLevelModule:generatePomFileForJvmPublication")
 }
 
 task<org.jetbrains.kotlin.gradle.testing.internal.KotlinTestReport>("rootAllTest"){
