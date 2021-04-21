@@ -9,6 +9,10 @@ import aws.sdk.kotlin.codegen.restjson.RestJson1
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.test.codegenTestHarnessForModelSnippet
+import software.amazon.smithy.kotlin.codegen.test.formatForTest
+import software.amazon.smithy.kotlin.codegen.test.generateDeSerializers
+import software.amazon.smithy.kotlin.codegen.test.shouldContainOnlyOnceWithDiff
 
 /**
  * This class exercises serde field and object descriptor generation for awsJson and restJson protocols.

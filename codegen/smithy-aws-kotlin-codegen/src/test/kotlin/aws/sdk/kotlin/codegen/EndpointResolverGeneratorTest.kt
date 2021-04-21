@@ -6,11 +6,12 @@
 package aws.sdk.kotlin.codegen.awsjson.aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.EndpointResolverGenerator
-import aws.sdk.kotlin.codegen.awsjson.asSmithyModel
-import aws.sdk.kotlin.codegen.awsjson.generateTestContext
+
 import io.kotest.matchers.string.shouldContainOnlyOnce
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.build.MockManifest
+import software.amazon.smithy.kotlin.codegen.test.asSmithyModel
+import software.amazon.smithy.kotlin.codegen.test.generateTestContext
 import software.amazon.smithy.model.node.Node
 
 class EndpointResolverGeneratorTest {
