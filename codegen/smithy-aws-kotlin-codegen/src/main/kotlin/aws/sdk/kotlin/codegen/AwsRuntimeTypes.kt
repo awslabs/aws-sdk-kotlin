@@ -26,4 +26,16 @@ object AwsRuntimeTypes {
             namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "execution")
         }
     }
+
+    object Auth {
+        val AwsSigV4SigningMiddleware = buildSymbol {
+            name = "AwsSigV4SigningMiddleware"
+            namespace(AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+        }
+
+        val AwsSignedBodyHeaderType = buildSymbol {
+            name = "AwsSignedBodyHeaderType"
+            namespace(AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+        }
+    }
 }

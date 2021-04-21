@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.codegen.middleware
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.addImport
@@ -23,15 +24,15 @@ import software.amazon.smithy.model.traits.OptionalAuthTrait
  * @param signingServiceName The credential scope service name to sign for
  * See the `name` property of: https://awslabs.github.io/smithy/1.0/spec/aws/aws-auth.html#aws-auth-sigv4-trait
  */
-class AwsSignatureVersion4(private val signingServiceName: String) : ProtocolMiddleware {
-    override val name: String = "AwsSigv4Signer"
+open class AwsSignatureVersion4(val signingServiceName: String) : ProtocolMiddleware {
+    override val name: String = AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware.name
 
     init {
         require(signingServiceName.isNotEmpty()) { "signingServiceName must be specified" }
     }
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
-        writer.addImport("AwsSigv4Signer", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+        writer.addImport(AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware)
         writer.addImport("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
     }
 
