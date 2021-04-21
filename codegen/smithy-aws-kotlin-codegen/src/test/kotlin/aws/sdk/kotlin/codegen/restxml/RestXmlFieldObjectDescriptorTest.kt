@@ -21,7 +21,7 @@ class RestXmlFieldObjectDescriptorTest {
     fun `it generates field descriptors for simple structures`(subject: Class<ProtocolGenerator>) {
         val generator = subject.getDeclaredConstructor().newInstance()
 
-        val testHarness = codegenTestHarnessForModelSnippet(generator) {
+        val testHarness = codegenTestHarnessForModelSnippet(generator, operations = listOf("Foo")) {
             """
             @http(method: "POST", uri: "/foo")
             operation Foo {
@@ -56,7 +56,7 @@ class RestXmlFieldObjectDescriptorTest {
     fun `it generates nested field descriptors`(subject: Class<ProtocolGenerator>) {
         val generator = subject.getDeclaredConstructor().newInstance()
 
-        val testHarness = codegenTestHarnessForModelSnippet(generator) {
+        val testHarness = codegenTestHarnessForModelSnippet(generator, operations = listOf("Foo")) {
             """            
             @http(method: "POST", uri: "/foo")
             operation Foo {
@@ -111,7 +111,7 @@ class RestXmlFieldObjectDescriptorTest {
     fun `it generates field descriptors for nested unions`(subject: Class<ProtocolGenerator>) {
         val generator = subject.getDeclaredConstructor().newInstance()
 
-        val testHarness = codegenTestHarnessForModelSnippet(generator) {
+        val testHarness = codegenTestHarnessForModelSnippet(generator, operations = listOf("Foo")) {
             """
             @http(method: "POST", uri: "/foo")
             operation Foo {
@@ -176,7 +176,7 @@ class RestXmlFieldObjectDescriptorTest {
     fun `it generates expected import declarations`(subject: Class<ProtocolGenerator>) {
         val generator = subject.getDeclaredConstructor().newInstance()
 
-        val testHarness = codegenTestHarnessForModelSnippet(generator) {
+        val testHarness = codegenTestHarnessForModelSnippet(generator, operations = listOf("Foo")) {
             """
             @http(method: "POST", uri: "/foo")
             operation Foo {
@@ -215,7 +215,7 @@ class RestXmlFieldObjectDescriptorTest {
     fun `it generates field descriptors for flattened xml trait and object descriptor for XmlName trait`(subject: Class<ProtocolGenerator>) {
         val generator = subject.getDeclaredConstructor().newInstance()
 
-        val testHarness = codegenTestHarnessForModelSnippet(generator) {
+        val testHarness = codegenTestHarnessForModelSnippet(generator, operations = listOf("Foo")) {
             """
             @http(method: "POST", uri: "/foo")
             operation Foo {
@@ -262,7 +262,7 @@ class RestXmlFieldObjectDescriptorTest {
     fun `it generates field descriptors for xml attributes and namespace`(subject: Class<ProtocolGenerator>) {
         val generator = subject.getDeclaredConstructor().newInstance()
 
-        val testHarness = codegenTestHarnessForModelSnippet(generator) {
+        val testHarness = codegenTestHarnessForModelSnippet(generator, operations = listOf("Foo")) {
             """
             @http(method: "POST", uri: "/foo")
             operation Foo {
