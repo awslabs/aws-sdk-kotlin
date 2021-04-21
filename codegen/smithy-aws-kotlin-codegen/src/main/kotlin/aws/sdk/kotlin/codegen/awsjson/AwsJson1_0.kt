@@ -21,8 +21,8 @@ import software.amazon.smithy.model.traits.TimestampFormatTrait
  */
 class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
 
-    override fun getHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<HttpMiddleware> {
-        val parentMiddleware = super.getHttpMiddleware(ctx)
+    override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
+        val parentMiddleware = super.getDefaultHttpMiddleware(ctx)
         val awsJsonMiddleware = listOf(
             AwsJsonProtocolMiddleware("1.0"),
             AwsJsonModeledExceptionsMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
@@ -57,7 +57,7 @@ class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
  * Configure the AwsJsonProtocol middleware
  * @param protocolVersion The AWS JSON protocol version (e.g. "1.0", "1.1", etc)
  */
-class AwsJsonProtocolMiddleware(private val protocolVersion: String) : HttpMiddleware {
+class AwsJsonProtocolMiddleware(private val protocolVersion: String) : ProtocolMiddleware {
     override val name: String = "AwsJsonProtocol"
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {

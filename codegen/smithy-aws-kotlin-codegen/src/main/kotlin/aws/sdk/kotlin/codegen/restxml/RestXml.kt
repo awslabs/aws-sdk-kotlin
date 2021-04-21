@@ -30,8 +30,8 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         XmlAttributeTrait.ID to RuntimeTypes.Serde.SerdeXml.XmlAttribute
     )
 
-    override fun getHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<HttpMiddleware> {
-        val middleware = super.getHttpMiddleware(ctx)
+    override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
+        val middleware = super.getDefaultHttpMiddleware(ctx)
 
         val restXmlMiddleware = listOf(
             RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))

@@ -29,8 +29,8 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         return AwsHttpProtocolClientGenerator(ctx, middleware, getProtocolHttpBindingResolver(ctx))
     }
 
-    override fun getHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<HttpMiddleware> {
-        val middleware = super.getHttpMiddleware(ctx).toMutableList()
+    override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
+        val middleware = super.getDefaultHttpMiddleware(ctx).toMutableList()
 
         middleware.add(EndpointResolverMiddleware(ctx))
         if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {

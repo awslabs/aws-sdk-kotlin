@@ -23,7 +23,7 @@ import software.amazon.smithy.model.shapes.OperationShape
  */
 class AwsHttpProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
-    middlewares: List<HttpMiddleware>,
+    middlewares: List<ProtocolMiddleware>,
     httpBindingResolver: HttpBindingResolver
 ) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
 

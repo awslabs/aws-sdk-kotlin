@@ -25,7 +25,7 @@ fun String.asSmithyModel(sourceLocation: String? = null): Model {
 
 class TestProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
-    middlewares: List<HttpMiddleware>,
+    middlewares: List<ProtocolMiddleware>,
     httpBindingResolver: HttpBindingResolver
 ) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
     override val serdeProviderSymbol: Symbol = buildSymbol {

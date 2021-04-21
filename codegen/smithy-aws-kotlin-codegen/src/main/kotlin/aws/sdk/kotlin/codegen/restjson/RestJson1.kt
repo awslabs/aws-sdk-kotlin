@@ -29,8 +29,8 @@ typealias RestJsonHttpBindingResolver = HttpTraitResolver
  */
 class RestJson1 : AwsHttpBindingProtocolGenerator() {
 
-    override fun getHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<HttpMiddleware> {
-        val middleware = super.getHttpMiddleware(ctx)
+    override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
+        val middleware = super.getDefaultHttpMiddleware(ctx)
 
         val restJsonMiddleware = listOf(
             RestJsonErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
