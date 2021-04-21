@@ -9,7 +9,7 @@ import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.addImport
-import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
+import software.amazon.smithy.kotlin.codegen.integration.HttpMiddleware
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.knowledge.ServiceIndex
 import software.amazon.smithy.model.shapes.OperationShape
@@ -21,7 +21,7 @@ import software.amazon.smithy.model.traits.OptionalAuthTrait
  * @param signingServiceName The credential scope service name to sign for
  * See the `name` property of: https://awslabs.github.io/smithy/1.0/spec/aws/aws-auth.html#aws-auth-sigv4-trait
  */
-class AwsSignatureVersion4(private val signingServiceName: String) : HttpFeature {
+class AwsSignatureVersion4(private val signingServiceName: String) : HttpMiddleware {
     override val name: String = "AwsSigv4Signer"
 
     init {

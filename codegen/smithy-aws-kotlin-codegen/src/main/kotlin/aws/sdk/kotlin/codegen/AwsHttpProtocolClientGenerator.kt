@@ -23,9 +23,9 @@ import software.amazon.smithy.model.shapes.OperationShape
  */
 class AwsHttpProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
-    features: List<HttpFeature>,
+    middlewares: List<HttpMiddleware>,
     httpBindingResolver: HttpBindingResolver
-) : HttpProtocolClientGenerator(ctx, features, httpBindingResolver) {
+) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
 
     override val serdeProviderSymbol: Symbol
         get() {

@@ -25,9 +25,9 @@ fun String.asSmithyModel(sourceLocation: String? = null): Model {
 
 class TestProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
-    features: List<HttpFeature>,
+    middlewares: List<HttpMiddleware>,
     httpBindingResolver: HttpBindingResolver
-) : HttpProtocolClientGenerator(ctx, features, httpBindingResolver) {
+) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
     override val serdeProviderSymbol: Symbol = buildSymbol {
         name = "JsonSerdeProvider"
         namespace(KotlinDependency.CLIENT_RT_SERDE_JSON)
@@ -44,7 +44,7 @@ class MockHttpProtocolGenerator : HttpBindingProtocolGenerator() {
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {}
     override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator =
-        TestProtocolClientGenerator(ctx, getHttpFeatures(ctx), getProtocolHttpBindingResolver(ctx))
+        TestProtocolClientGenerator(ctx, getHttpMiddleware(ctx), getProtocolHttpBindingResolver(ctx))
 
     override fun generateSdkFieldDescriptor(
         ctx: ProtocolGenerator.GenerationContext,

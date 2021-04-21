@@ -1,22 +1,23 @@
-package aws.sdk.kotlin.codegen.restjson
+package aws.sdk.kotlin.codegen.restxml
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import aws.sdk.kotlin.codegen.middleware.ModeledExceptionsFeature
+import aws.sdk.kotlin.codegen.middleware.ModeledExceptionsMiddleware
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.addImport
+import software.amazon.smithy.kotlin.codegen.getTrait
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
 import software.amazon.smithy.model.traits.HttpErrorTrait
 
-class RestJsonErrorFeature(
+class RestXmlErrorMiddleware(
     ctx: ProtocolGenerator.GenerationContext,
     httpBindingResolver: HttpBindingResolver
-) : ModeledExceptionsFeature(ctx, httpBindingResolver) {
-    override val name: String = "RestJsonError"
+) : ModeledExceptionsMiddleware(ctx, httpBindingResolver) {
+    override val name: String = "RestXmlError"
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         super.addImportsAndDependencies(writer)
-        writer.addImport("RestJsonError", AwsKotlinDependency.AWS_CLIENT_RT_JSON_PROTOCOLS)
+        writer.addImport("RestXmlError", AwsKotlinDependency.AWS_CLIENT_RT_XML_PROTOCOLS)
     }
 
     override fun renderRegisterErrors(writer: KotlinWriter) {
@@ -26,8 +27,7 @@ class RestJsonErrorFeature(
             val code = errShape.id.name
             val symbol = ctx.symbolProvider.toSymbol(errShape)
             val deserializerName = "${symbol.name}Deserializer"
-            val httpStatusCode: Int? = errShape.getTrait(HttpErrorTrait::class.java).map { it.code }.orElse(null)
-            if (httpStatusCode != null) {
+            errShape.getTrait<HttpErrorTrait>()?.code?.let { httpStatusCode ->
                 writer.write("register(code = #S, deserializer = $deserializerName(), httpStatusCode = $httpStatusCode)", code)
             }
         }
