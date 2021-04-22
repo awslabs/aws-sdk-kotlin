@@ -8,7 +8,7 @@ package aws.sdk.kotlin.codegen.awsjson
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.expectShape
-import software.amazon.smithy.kotlin.codegen.test.asSmithyModel
+import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.kotlin.codegen.test.generateTestContext
 import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.shapes.OperationShape
@@ -43,7 +43,7 @@ class AwsJsonHttpBindingResolverTest {
 
             @error("client")
             structure GetFooError {}
-        """.asSmithyModel(applyDefaultTransforms = false)
+        """.toSmithyModel(applyDefaultTransforms = false)
 
     @Test
     fun `it resolves all operations associated with a service`() {
