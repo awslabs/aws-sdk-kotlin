@@ -8,9 +8,9 @@ package aws.sdk.kotlin.codegen.awsjson
 import io.kotest.matchers.string.shouldContainOnlyOnce
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.kotlin.codegen.test.generateCode
 import software.amazon.smithy.kotlin.codegen.test.generateTestContext
+import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 
 class AwsJsonModeledExceptionsFeatureTest {
 
