@@ -25,6 +25,7 @@ import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.header
 import software.aws.clientrt.serde.*
 import software.aws.clientrt.serde.json.JsonSerdeProvider
+import software.aws.clientrt.serde.json.JsonSerialName
 import software.aws.clientrt.time.Instant
 import kotlin.test.*
 
@@ -62,7 +63,7 @@ class RestJsonErrorTest {
 
     class FooErrorDeserializer(val provider: DeserializationProvider) : HttpDeserialize<FooError> {
         companion object {
-            val PAYLOAD_STRING_DESCRIPTOR = SdkFieldDescriptor("string", SerialKind.String)
+            val PAYLOAD_STRING_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("string"))
             val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
                 field(PAYLOAD_STRING_DESCRIPTOR)
             }
