@@ -164,7 +164,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
             objectShape.hasTrait<HttpErrorTrait>() -> "Error"
             objectShape.hasTrait<XmlNameTrait>() -> objectShape.expectTrait<XmlNameTrait>().value
             objectShape.hasTrait<SyntheticClone>() -> objectShape.expectTrait<SyntheticClone>().archetype.name
-            else -> objectShape.defaultName()
+            else -> objectShape.defaultName(ctx.service)
         }
 
         writer.write("""trait(XmlSerialName("$serialName"))""")
