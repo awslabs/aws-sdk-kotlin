@@ -8,14 +8,14 @@ package aws.sdk.kotlin.codegen.middleware
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.buildSymbol
-import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.integration.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.namespace
 
 /**
  * HTTP client interceptor that resolves service endpoints for a single service
  */
-class EndpointResolverFeature(private val ctx: ProtocolGenerator.GenerationContext) : HttpFeature {
+class EndpointResolverMiddleware(private val ctx: ProtocolGenerator.GenerationContext) : ProtocolMiddleware {
     override val name: String = "ServiceEndpointResolver"
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         val resolverFeatureSymbol = buildSymbol {

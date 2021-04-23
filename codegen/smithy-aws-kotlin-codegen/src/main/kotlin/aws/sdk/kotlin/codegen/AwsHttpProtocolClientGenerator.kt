@@ -23,9 +23,9 @@ import software.amazon.smithy.model.shapes.OperationShape
  */
 class AwsHttpProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
-    features: List<HttpFeature>,
+    middlewares: List<ProtocolMiddleware>,
     httpBindingResolver: HttpBindingResolver
-) : HttpProtocolClientGenerator(ctx, features, httpBindingResolver) {
+) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
 
     override val serdeProviderSymbol: Symbol
         get() {
@@ -76,6 +76,8 @@ class AwsHttpProtocolClientGenerator(
      * render a utility function to populate an operation's ExecutionContext with defaults from service config, environment, etc
      */
     private fun renderMergeServiceDefaults(writer: KotlinWriter) {
+        // FIXME - we likely need a way to let customizations modify/override this
+        // FIXME - we also need a way to tie in config properties added via integrations that need to influence the context
         writer.addImport(RuntimeTypes.Core.ExecutionContext)
         writer.addImport("SdkClientOption", KotlinDependency.CLIENT_RT_CORE, "${KotlinDependency.CLIENT_RT_CORE.namespace}.client")
         writer.addImport("resolveRegionForOperation", AwsKotlinDependency.AWS_CLIENT_RT_REGIONS)

@@ -29,14 +29,14 @@ typealias RestJsonHttpBindingResolver = HttpTraitResolver
  */
 class RestJson1 : AwsHttpBindingProtocolGenerator() {
 
-    override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
-        val features = super.getHttpFeatures(ctx)
+    override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
+        val middleware = super.getDefaultHttpMiddleware(ctx)
 
-        val restJsonFeatures = listOf(
-            RestJsonErrorFeature(ctx, getProtocolHttpBindingResolver(ctx))
+        val restJsonMiddleware = listOf(
+            RestJsonErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
         )
 
-        return features + restJsonFeatures
+        return middleware + restJsonMiddleware
     }
 
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
