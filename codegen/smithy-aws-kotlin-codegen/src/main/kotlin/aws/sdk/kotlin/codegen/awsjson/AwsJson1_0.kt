@@ -22,13 +22,13 @@ import software.amazon.smithy.model.traits.TimestampFormatTrait
 class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
 
     override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
-        val parentMiddleware = super.getDefaultHttpMiddleware(ctx)
+        val httpMiddleware = super.getDefaultHttpMiddleware(ctx)
         val awsJsonMiddleware = listOf(
             AwsJsonProtocolMiddleware("1.0"),
             AwsJsonModeledExceptionsMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
         )
 
-        return parentMiddleware + awsJsonMiddleware
+        return httpMiddleware + awsJsonMiddleware
     }
 
     override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =

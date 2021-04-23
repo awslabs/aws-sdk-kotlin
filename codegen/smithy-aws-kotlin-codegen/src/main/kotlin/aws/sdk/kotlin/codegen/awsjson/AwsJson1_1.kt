@@ -25,13 +25,13 @@ class AwsJson1_1 : AwsHttpBindingProtocolGenerator() {
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 
     override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
-        val parentFeatures = super.getDefaultHttpMiddleware(ctx)
+        val httpMiddleware = super.getDefaultHttpMiddleware(ctx)
         val awsJsonFeatures = listOf(
             AwsJsonProtocolMiddleware("1.1"),
             AwsJsonModeledExceptionsMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
         )
 
-        return parentFeatures + awsJsonFeatures
+        return httpMiddleware + awsJsonFeatures
     }
 
     override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =

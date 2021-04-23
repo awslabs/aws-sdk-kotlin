@@ -130,9 +130,7 @@ public class AwsSigningConfig private constructor(builder: Builder) {
 }
 
 internal suspend fun AwsSigningConfig.getCredentials(): Credentials {
-    if (credentials != null) return credentials
-    val provider = checkNotNull(credentialsProvider) // validated in ctor
-    return provider.getCredentials()
+    return credentials ?: checkNotNull(credentialsProvider).getCredentials()
 }
 
 /**
