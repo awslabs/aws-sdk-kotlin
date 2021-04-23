@@ -89,7 +89,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         }
         traitList.add("""XmlSerialName("$serialName")""")
 
-        memberShape.getTrait<XmlFlattenedTrait>()?.let { traitList.add(it.toSerdeFieldTraitSpec()) }
+        val flattened = memberShape.getTrait<XmlFlattenedTrait>()?.also { traitList.add(it.toSerdeFieldTraitSpec()) } != null
         memberShape.getTrait<XmlAttributeTrait>()?.let { traitList.add(it.toSerdeFieldTraitSpec()) }
         memberShape.getTrait<XmlNamespaceTrait>()?.let { traitList.add(it.toSerdeFieldTraitSpec()) }
 
@@ -97,7 +97,8 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         when (targetShape.type) {
             ShapeType.LIST, ShapeType.SET -> {
                 val collectionMember = (targetShape as CollectionShape).member
-                if (collectionMember.hasTrait<XmlNameTrait>()) {
+                if (!flattened && collectionMember.hasTrait<XmlNameTrait>()) {
+                    // flattened collections should only need the XmlSerialName trait since there is no <member> element
                     val memberName = collectionMember.expectTrait<XmlNameTrait>().value
                     traitList.add("""XmlCollectionName("$memberName")""")
                     writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlCollectionName)
