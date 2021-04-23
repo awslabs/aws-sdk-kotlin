@@ -51,7 +51,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "InlineDocumentAsPayloadInput",
                 "InlineDocumentOutput",
                 "InlineDocumentAsPayloadInputOutput", // See https://github.com/awslabs/smithy-kotlin/issues/123
-                // new in Smithy 1.7
+                // new in Smithy 1.7.0
                 "RestJsonQueryPrecedence",
                 "RestJsonQueryParamsStringListMap",
                 "RestJsonAllQueryStringTypes", // See https://github.com/awslabs/smithy-kotlin/issues/285
@@ -61,7 +61,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
 
                 // restXml
                 "IgnoreQueryParamsInResponse", // See https://github.com/awslabs/smithy/issues/756, Remove after upgrading past Smithy 1.7.0
-                // new in Smithy 1.7
+                // new in Smithy 1.7.0
                 "RestXmlQueryPrecedence", // See https://github.com/awslabs/smithy-kotlin/issues/285
                 "RestXmlQueryParamsStringListMap",
                 "AllQueryStringTypes"
