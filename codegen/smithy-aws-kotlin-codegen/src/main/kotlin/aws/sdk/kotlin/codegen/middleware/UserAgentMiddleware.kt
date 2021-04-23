@@ -8,13 +8,13 @@ package aws.sdk.kotlin.codegen.middleware
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.buildSymbol
-import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
+import software.amazon.smithy.kotlin.codegen.integration.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.namespace
 
 /**
- * Middleware feature that sets the User-Agent and x-amz-user-agent headers
+ * Middleware that sets the User-Agent and x-amz-user-agent headers
  */
-class UserAgentFeature : HttpFeature {
+class UserAgentMiddleware : ProtocolMiddleware {
     override val name: String = "UserAgent"
 
     private val uaSymbol = buildSymbol {

@@ -5,8 +5,8 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.middleware.AwsSignatureVersion4
-import aws.sdk.kotlin.codegen.middleware.EndpointResolverFeature
-import aws.sdk.kotlin.codegen.middleware.UserAgentFeature
+import aws.sdk.kotlin.codegen.middleware.EndpointResolverMiddleware
+import aws.sdk.kotlin.codegen.middleware.UserAgentMiddleware
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestErrorGenerator
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestRequestGenerator
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestResponseGenerator
@@ -25,21 +25,21 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         .build()
 
     override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator {
-        val features = getHttpFeatures(ctx)
-        return AwsHttpProtocolClientGenerator(ctx, features, getProtocolHttpBindingResolver(ctx))
+        val middleware = getHttpMiddleware(ctx)
+        return AwsHttpProtocolClientGenerator(ctx, middleware, getProtocolHttpBindingResolver(ctx))
     }
 
-    override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
-        val features = super.getHttpFeatures(ctx).toMutableList()
+    override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
+        val middleware = super.getDefaultHttpMiddleware(ctx).toMutableList()
 
-        features.add(EndpointResolverFeature(ctx))
+        middleware.add(EndpointResolverMiddleware(ctx))
         if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
             val signingName = AwsSignatureVersion4.signingServiceName(ctx.model, ctx.service)
-            features.add(AwsSignatureVersion4(signingName))
+            middleware.add(AwsSignatureVersion4(signingName))
         }
 
-        features.add(UserAgentFeature())
-        return features
+        middleware.add(UserAgentMiddleware())
+        return middleware
     }
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {

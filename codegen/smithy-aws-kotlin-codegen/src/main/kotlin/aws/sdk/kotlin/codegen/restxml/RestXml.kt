@@ -30,14 +30,14 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         XmlAttributeTrait.ID to RuntimeTypes.Serde.SerdeXml.XmlAttribute
     )
 
-    override fun getHttpFeatures(ctx: ProtocolGenerator.GenerationContext): List<HttpFeature> {
-        val features = super.getHttpFeatures(ctx)
+    override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
+        val middleware = super.getDefaultHttpMiddleware(ctx)
 
-        val restXmlFeatures = listOf(
-            RestXmlErrorFeature(ctx, getProtocolHttpBindingResolver(ctx))
+        val restXmlMiddleware = listOf(
+            RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
         )
 
-        return features + restXmlFeatures
+        return middleware + restXmlMiddleware
     }
 
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.DATE_TIME

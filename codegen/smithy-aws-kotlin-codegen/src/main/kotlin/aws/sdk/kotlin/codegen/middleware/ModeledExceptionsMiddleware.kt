@@ -8,17 +8,17 @@ import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.addImport
 import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
-import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
 import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.integration.ProtocolMiddleware
 import software.amazon.smithy.model.shapes.Shape
 
 /**
  * Base class for registering modeled exceptions for HTTP protocols
  */
-abstract class ModeledExceptionsFeature(
+abstract class ModeledExceptionsMiddleware(
     protected val ctx: ProtocolGenerator.GenerationContext,
     protected val httpBindingResolver: HttpBindingResolver
-) : HttpFeature {
+) : ProtocolMiddleware {
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         super.addImportsAndDependencies(writer)
