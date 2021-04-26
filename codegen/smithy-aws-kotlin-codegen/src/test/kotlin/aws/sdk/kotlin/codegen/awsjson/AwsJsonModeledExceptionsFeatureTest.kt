@@ -8,6 +8,9 @@ package aws.sdk.kotlin.codegen.awsjson
 import io.kotest.matchers.string.shouldContainOnlyOnce
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import software.amazon.smithy.kotlin.codegen.test.generateCode
+import software.amazon.smithy.kotlin.codegen.test.generateTestContext
+import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 
 class AwsJsonModeledExceptionsFeatureTest {
 
@@ -30,7 +33,7 @@ class AwsJsonModeledExceptionsFeatureTest {
 
             @error("client")
             structure GetFooError {}
-        """.asSmithyModel()
+        """.toSmithyModel()
 
         val expected = """
             register(code = "GetFooError", deserializer = GetFooErrorDeserializer())
@@ -39,7 +42,7 @@ class AwsJsonModeledExceptionsFeatureTest {
         val ctx = testModel.generateTestContext("smithy.example", "Example")
 
         val bindingResolver = AwsJsonHttpBindingResolver(ctx, "application/json")
-        val unit = AwsJsonModeledExceptionsFeature(ctx, bindingResolver)
+        val unit = AwsJsonModeledExceptionsMiddleware(ctx, bindingResolver)
 
         val actual = generateCode(unit::renderRegisterErrors)
 
@@ -60,11 +63,11 @@ class AwsJsonModeledExceptionsFeatureTest {
             }
 
             operation GetFoo { }
-        """.asSmithyModel()
+        """.toSmithyModel()
 
         val ctx = testModel.generateTestContext("smithy.example", "Example")
         val bindingResolver = AwsJsonHttpBindingResolver(ctx, "application/json")
-        val unit = AwsJsonModeledExceptionsFeature(ctx, bindingResolver)
+        val unit = AwsJsonModeledExceptionsMiddleware(ctx, bindingResolver)
 
         val actual = generateCode(unit::renderRegisterErrors)
 

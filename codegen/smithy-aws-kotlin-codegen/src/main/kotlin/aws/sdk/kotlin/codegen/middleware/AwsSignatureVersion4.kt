@@ -6,10 +6,13 @@
 package aws.sdk.kotlin.codegen.middleware
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.addImport
-import software.amazon.smithy.kotlin.codegen.integration.HttpFeature
+import software.amazon.smithy.kotlin.codegen.expectTrait
+import software.amazon.smithy.kotlin.codegen.hasTrait
+import software.amazon.smithy.kotlin.codegen.integration.ProtocolMiddleware
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.knowledge.ServiceIndex
 import software.amazon.smithy.model.shapes.OperationShape
@@ -21,15 +24,15 @@ import software.amazon.smithy.model.traits.OptionalAuthTrait
  * @param signingServiceName The credential scope service name to sign for
  * See the `name` property of: https://awslabs.github.io/smithy/1.0/spec/aws/aws-auth.html#aws-auth-sigv4-trait
  */
-class AwsSignatureVersion4(private val signingServiceName: String) : HttpFeature {
-    override val name: String = "AwsSigv4Signer"
+open class AwsSignatureVersion4(val signingServiceName: String) : ProtocolMiddleware {
+    override val name: String = AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware.name
 
     init {
         require(signingServiceName.isNotEmpty()) { "signingServiceName must be specified" }
     }
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
-        writer.addImport("AwsSigv4Signer", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+        writer.addImport(AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware)
         writer.addImport("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
     }
 
@@ -59,7 +62,7 @@ class AwsSignatureVersion4(private val signingServiceName: String) : HttpFeature
          * @return the service name to use in the credential scope to sign for
          */
         fun signingServiceName(model: Model, serviceShape: ServiceShape): String {
-            val sigv4Trait = serviceShape.expectTrait(SigV4Trait::class.java)
+            val sigv4Trait = serviceShape.expectTrait<SigV4Trait>()
             return sigv4Trait.name
         }
 
@@ -73,7 +76,7 @@ class AwsSignatureVersion4(private val signingServiceName: String) : HttpFeature
          */
         fun hasSigV4AuthScheme(model: Model, service: ServiceShape, operation: OperationShape): Boolean {
             val auth = ServiceIndex.of(model).getEffectiveAuthSchemes(service.id, operation.id)
-            return auth.containsKey(SigV4Trait.ID) && !operation.hasTrait(OptionalAuthTrait::class.java)
+            return auth.containsKey(SigV4Trait.ID) && !operation.hasTrait<OptionalAuthTrait>()
         }
     }
 }

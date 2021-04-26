@@ -21,7 +21,7 @@ import software.aws.clientrt.util.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class AwsSigv4SignerTest {
+class AwsSigv4SigningMiddlewareTest {
 
     private object TestCredentialsProvider : CredentialsProvider {
         val testCredentials = Credentials("AKID", "SECRET", "SESSION")
@@ -66,7 +66,7 @@ class AwsSigv4SignerTest {
         }
         val client = sdkHttpClient(mockEngine)
 
-        operation.install(AwsSigv4Signer) {
+        operation.install(AwsSigV4SigningMiddleware) {
             credentialsProvider = TestCredentialsProvider
             signingService = "demo"
         }
