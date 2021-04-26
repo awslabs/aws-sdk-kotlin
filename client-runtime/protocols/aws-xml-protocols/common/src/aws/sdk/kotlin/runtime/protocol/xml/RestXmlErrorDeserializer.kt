@@ -4,8 +4,8 @@
  */
 package aws.sdk.kotlin.runtime.protocol.xml
 
-import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.serde.*
+import software.aws.clientrt.serde.xml.XmlDeserializer
 import software.aws.clientrt.serde.xml.XmlSerialName
 
 /**
@@ -34,8 +34,12 @@ internal data class XmlError(
 ) : RestXmlErrorDetails
 
 // Returns parsed data in normalized form or throws IllegalArgumentException if unparsable.
-internal suspend fun ExecutionContext.parseErrorResponse(payload: ByteArray): RestXmlErrorDetails {
-    return ErrorResponseDeserializer.deserialize(deserializer(payload)) ?: XmlErrorDeserializer.deserialize(deserializer(payload)) ?: throw DeserializationException("Unable to deserialize error.")
+internal suspend fun parseErrorResponse(payload: ByteArray): RestXmlErrorDetails {
+    // NOTE: we use an explicit XML deserializer here because we rely on validating the root element name
+    // for dealing with the alternate error response forms
+    return ErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
+        ?: XmlErrorDeserializer.deserialize(XmlDeserializer(payload, true))
+        ?: throw DeserializationException("Unable to deserialize RestXml error.")
 }
 
 /*

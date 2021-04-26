@@ -5,10 +5,7 @@
 package aws.sdk.kotlin.runtime.protocol.xml
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.serde.DeserializationException
-import software.aws.clientrt.serde.SerdeAttributes
-import software.aws.clientrt.serde.xml.XmlSerdeProvider
 import kotlin.test.*
 
 class RestXmlErrorDeserializerTest {
@@ -38,10 +35,8 @@ class RestXmlErrorDeserializerTest {
             """.trimIndent().encodeToByteArray()
         )
 
-        val executionContext = ExecutionContext.build { attributes[SerdeAttributes.SerdeProvider] = XmlSerdeProvider() }
-
         for (payload in tests) {
-            val actual = executionContext.parseErrorResponse(payload)
+            val actual = parseErrorResponse(payload)
             assertEquals("InvalidGreeting", actual.code)
             assertEquals("Hi", actual.message)
             assertEquals("foo-id", actual.requestId)
@@ -73,11 +68,9 @@ class RestXmlErrorDeserializerTest {
             """.trimIndent().encodeToByteArray()
         )
 
-        val executionContext = ExecutionContext.build { attributes[SerdeAttributes.SerdeProvider] = XmlSerdeProvider() }
-
         for (payload in tests) {
             assertFailsWith<DeserializationException>() {
-                executionContext.parseErrorResponse(payload)
+                parseErrorResponse(payload)
             }
         }
     }
@@ -98,10 +91,8 @@ class RestXmlErrorDeserializerTest {
             """.trimIndent().encodeToByteArray()
         )
 
-        val executionContext = ExecutionContext.build { attributes[SerdeAttributes.SerdeProvider] = XmlSerdeProvider() }
-
         for (payload in tests) {
-            val error = executionContext.parseErrorResponse(payload)
+            val error = parseErrorResponse(payload)
             assertEquals("foo-id", error.requestId)
             assertNull(error.code)
             assertNull(error.message)

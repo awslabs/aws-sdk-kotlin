@@ -63,7 +63,7 @@ public class RestXmlError(private val registry: ExceptionRegistry) : Feature {
 
             // attempt to match the AWS error code
             val errorResponse = try {
-                context.parseErrorResponse(payload ?: emptyByteArray)
+                parseErrorResponse(payload ?: emptyByteArray)
             } catch (ex: Exception) {
                 throw UnknownServiceErrorException(
                     "failed to parse response as Xml protocol error",
