@@ -7,7 +7,7 @@ package aws.sdk.kotlin.codegen.awsjson
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import software.amazon.smithy.kotlin.codegen.expectShape
+import software.amazon.smithy.kotlin.codegen.model.ext.expectShape
 import software.amazon.smithy.kotlin.codegen.test.generateTestContext
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.knowledge.HttpBinding

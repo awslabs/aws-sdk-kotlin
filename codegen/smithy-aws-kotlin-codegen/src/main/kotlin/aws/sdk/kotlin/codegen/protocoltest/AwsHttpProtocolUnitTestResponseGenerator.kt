@@ -5,9 +5,9 @@
 
 package aws.sdk.kotlin.codegen.protocoltest
 
-import software.amazon.smithy.kotlin.codegen.integration.HttpProtocolUnitTestErrorGenerator
-import software.amazon.smithy.kotlin.codegen.integration.HttpProtocolUnitTestGenerator
-import software.amazon.smithy.kotlin.codegen.integration.HttpProtocolUnitTestResponseGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestErrorGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestResponseGenerator
 import software.amazon.smithy.protocoltests.traits.HttpResponseTestCase
 
 /**

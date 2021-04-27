@@ -1,10 +1,10 @@
 package aws.sdk.kotlin.codegen.awsjson
 
-import software.amazon.smithy.kotlin.codegen.expectTrait
-import software.amazon.smithy.kotlin.codegen.hasTrait
-import software.amazon.smithy.kotlin.codegen.integration.HttpBindingDescriptor
-import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.model.ext.expectTrait
+import software.amazon.smithy.kotlin.codegen.model.ext.hasTrait
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingDescriptor
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.knowledge.TopDownIndex
 import software.amazon.smithy.model.pattern.UriPattern

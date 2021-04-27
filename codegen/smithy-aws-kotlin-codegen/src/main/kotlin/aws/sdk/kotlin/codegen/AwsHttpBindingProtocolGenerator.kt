@@ -12,6 +12,7 @@ import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestRequestGenerat
 import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestResponseGenerator
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.integration.*
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 
 /**
  * Base class for all AWS HTTP protocol generators
