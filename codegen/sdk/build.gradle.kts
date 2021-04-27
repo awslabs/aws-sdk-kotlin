@@ -157,6 +157,7 @@ fun String.kotlinNamespace(): String = split(".")
 
 // Generate smithy-build.json as first step in build task
 task("generateSmithyBuild") {
+    group = "codegen"
     description = "generate smithy-build.json"
     doFirst {
         projectDir.resolve("smithy-build.json").writeText(generateSmithyBuild(discoveredServices))
@@ -164,6 +165,7 @@ task("generateSmithyBuild") {
 }
 
 tasks.create<SmithyBuild>("generateSdk") {
+    group = "codegen"
     // ensure the generated clients use the same version of the runtime as the aws client-runtime
     val smithyKotlinVersion: String by project
     doFirst {
@@ -190,6 +192,7 @@ val AwsService.destinationDir: String
     }
 
 task("stageSdks") {
+    group = "codegen"
     description = "relocate generated SDK(s) from build directory to services/ dir"
     dependsOn("generateSdk")
     doLast {
@@ -208,6 +211,7 @@ task("stageSdks") {
 }
 
 tasks.create("bootstrap") {
+    group = "codegen"
     description = "Generate AWS SDK's and register them with the build"
 
     dependsOn(tasks["generateSdk"])
