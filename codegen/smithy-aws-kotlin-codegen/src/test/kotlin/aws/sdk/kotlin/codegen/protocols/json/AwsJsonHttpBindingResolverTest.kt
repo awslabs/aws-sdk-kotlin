@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.awsjson
+package aws.sdk.kotlin.codegen.protocols.json
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

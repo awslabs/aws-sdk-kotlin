@@ -4,10 +4,7 @@
  */
 package aws.sdk.kotlin.codegen
 
-import aws.sdk.kotlin.codegen.awsjson.AwsJson1_0
-import aws.sdk.kotlin.codegen.awsjson.AwsJson1_1
-import aws.sdk.kotlin.codegen.restjson.RestJson1
-import aws.sdk.kotlin.codegen.restxml.RestXml
+import aws.sdk.kotlin.codegen.protocols.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 

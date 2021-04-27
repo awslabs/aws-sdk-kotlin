@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen
+package aws.sdk.kotlin.codegen.protocols.core
 
+import aws.sdk.kotlin.codegen.AwsKotlinDependency
+import aws.sdk.kotlin.codegen.endpointPrefix
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace

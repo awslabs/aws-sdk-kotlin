@@ -3,8 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen
+package aws.sdk.kotlin.codegen.protocols.core
 
+import aws.sdk.kotlin.codegen.AwsKotlinDependency
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_0Trait
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
@@ -109,9 +112,8 @@ class AwsHttpProtocolClientGenerator(
     }
 
     private fun renderInternals() {
-        val endpointData = Node.parse(
-            EndpointResolverGenerator::class.java.getResource("endpoints.json").readText()
-        ).expectObjectNode()
+        val endpointsData = javaClass.classLoader.getResource("aws/sdk/kotlin/codegen/endpoints.json")?.readText() ?: throw CodegenException("could not load endpoints.json resource")
+        val endpointData = Node.parse(endpointsData).expectObjectNode()
         EndpointResolverGenerator(endpointData).render(ctx)
     }
 }

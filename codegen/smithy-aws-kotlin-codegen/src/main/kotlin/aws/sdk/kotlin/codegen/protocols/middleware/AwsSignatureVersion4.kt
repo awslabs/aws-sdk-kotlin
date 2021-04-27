@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.middleware
+package aws.sdk.kotlin.codegen.protocols.middleware
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes

@@ -3,8 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.restxml
+package aws.sdk.kotlin.codegen.protocols.json
 
+import aws.sdk.kotlin.codegen.protocols.AwsJson1_0
+import aws.sdk.kotlin.codegen.protocols.AwsJson1_1
+import aws.sdk.kotlin.codegen.protocols.RestJson1
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
@@ -13,10 +16,13 @@ import software.amazon.smithy.kotlin.codegen.test.formatForTest
 import software.amazon.smithy.kotlin.codegen.test.generateDeSerializers
 import software.amazon.smithy.kotlin.codegen.test.shouldContainOnlyOnceWithDiff
 
-class RestXmlFieldObjectDescriptorTest {
+/**
+ * This class exercises serde field and object descriptor generation for awsJson and restJson protocols.
+ */
+class AwsJsonFieldObjectDescriptorTest {
 
     @ParameterizedTest
-    @ValueSource(classes = [RestXml::class])
+    @ValueSource(classes = [AwsJson1_0::class, AwsJson1_1::class, RestJson1::class])
     fun `it generates field descriptors for simple structures`(subject: Class<ProtocolGenerator>) {
         val generator = subject.getDeclaredConstructor().newInstance()
 
@@ -36,10 +42,9 @@ class RestXmlFieldObjectDescriptorTest {
         }
 
         val expectedDescriptors = """
-            private val INTVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, XmlSerialName("intVal"))
-            private val STRVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("strVal"))
+            private val INTVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, JsonSerialName("intVal"))
+            private val STRVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("strVal"))
             private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-                trait(XmlSerialName("FooRequest"))
                 field(INTVAL_DESCRIPTOR)
                 field(STRVAL_DESCRIPTOR)
             }
@@ -51,7 +56,7 @@ class RestXmlFieldObjectDescriptorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(classes = [RestXml::class])
+    @ValueSource(classes = [AwsJson1_0::class, AwsJson1_1::class, RestJson1::class])
     fun `it generates nested field descriptors`(subject: Class<ProtocolGenerator>) {
         val generator = subject.getDeclaredConstructor().newInstance()
 
@@ -81,18 +86,16 @@ class RestXmlFieldObjectDescriptorTest {
         }
 
         val expectedOperationDescriptors = """
-            private val PAYLOAD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("payload"))
-            private val PAYLOAD_C0_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("member"))
+            private val PAYLOAD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, JsonSerialName("payload"))
+            private val PAYLOAD_C0_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, JsonSerialName("payload_C0"))
             private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-                trait(XmlSerialName("FooRequest"))
                 field(PAYLOAD_DESCRIPTOR)
             }
         """.formatForTest("        ")
 
         val expectedDocumentDescriptors = """
-            private val SOMEVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("someVal"))
+            private val SOMEVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("someVal"))
             private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-                trait(XmlSerialName("Bar"))
                 field(SOMEVAL_DESCRIPTOR)
             }
         """.formatForTest("        ")
@@ -106,7 +109,7 @@ class RestXmlFieldObjectDescriptorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(classes = [RestXml::class])
+    @ValueSource(classes = [AwsJson1_0::class, AwsJson1_1::class, RestJson1::class])
     fun `it generates field descriptors for nested unions`(subject: Class<ProtocolGenerator>) {
         val generator = subject.getDeclaredConstructor().newInstance()
 
@@ -137,25 +140,22 @@ class RestXmlFieldObjectDescriptorTest {
         }
 
         val expectedDocumentDescriptors = """
-            private val STRUCTLIST_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("structList"))
+            private val STRUCTLIST_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, JsonSerialName("structList"))
             private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-                trait(XmlSerialName("FooUnion"))
                 field(STRUCTLIST_DESCRIPTOR)
             }
         """.formatForTest("        ")
 
         val expectedOperationDescriptors = """
-            private val PAYLOAD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName("payload"))
+            private val PAYLOAD_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, JsonSerialName("payload"))
             private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-                trait(XmlSerialName("FooRequest"))
                 field(PAYLOAD_DESCRIPTOR)
             }
         """.formatForTest("        ")
 
         val expectedBarStructDescriptors = """
-            private val SOMEVALUE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName("someValue"))
+            private val SOMEVALUE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, JsonSerialName("someValue"))
             private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-                trait(XmlSerialName("BarStruct"))
                 field(SOMEVALUE_DESCRIPTOR)
             }
         """.formatForTest("        ")
@@ -171,7 +171,7 @@ class RestXmlFieldObjectDescriptorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(classes = [RestXml::class])
+    @ValueSource(classes = [AwsJson1_0::class, AwsJson1_1::class, RestJson1::class])
     fun `it generates expected import declarations`(subject: Class<ProtocolGenerator>) {
         val generator = subject.getDeclaredConstructor().newInstance()
 
@@ -183,116 +183,19 @@ class RestXmlFieldObjectDescriptorTest {
                 output: FooRequest
             }   
                  
-            @xmlName("CustomFooRequest")
-            structure FooRequest {
-                @xmlAttribute
-                payload: String,
-                @xmlFlattened
-                listVal: ListOfString
-            }
-                        
-            list ListOfString {
-                member: String
-            }
+            structure FooRequest { 
+                payload: String
+            }            
         """
         }
 
         val expected = """
             import software.aws.clientrt.serde.*
-            import software.aws.clientrt.serde.xml.Flattened
-            import software.aws.clientrt.serde.xml.XmlAttribute
-            import software.aws.clientrt.serde.xml.XmlSerialName
+            import software.aws.clientrt.serde.json.JsonSerialName
         """.formatForTest("")
 
         testHarness.generateDeSerializers().values.forEach { codegenFile ->
             codegenFile.shouldContainOnlyOnceWithDiff(expected)
         }
-    }
-
-    @ParameterizedTest
-    @ValueSource(classes = [RestXml::class])
-    fun `it generates field descriptors for flattened xml trait and object descriptor for XmlName trait`(subject: Class<ProtocolGenerator>) {
-        val generator = subject.getDeclaredConstructor().newInstance()
-
-        val testHarness = codegenTestHarnessForModelSnippet(generator, operations = listOf("Foo")) {
-            """
-            @http(method: "POST", uri: "/foo")
-            operation Foo {
-                input: FooRequest,
-                output: FooRequest
-            }  
-            
-            @xmlName("CustomFooRequest")
-            structure FooRequest {
-                @xmlFlattened
-                listVal: ListOfString,
-                @xmlFlattened
-                mapVal: MapOfInteger
-            }
-            
-            list ListOfString {
-                member: String
-            }
-            
-            map MapOfInteger {
-                key: String,
-                value: String
-            }
-        """
-        }
-
-        val expectedDescriptors = """
-            private val LISTVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("listVal"), Flattened)
-            private val MAPVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Map, XmlSerialName("mapVal"), Flattened)
-            private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-                trait(XmlSerialName("CustomFooRequest"))
-                field(LISTVAL_DESCRIPTOR)
-                field(MAPVAL_DESCRIPTOR)
-            }
-        """.formatForTest("        ")
-        val actual = testHarness.generateDeSerializers()
-
-        actual["FooOperationSerializer.kt"].shouldContainOnlyOnceWithDiff(expectedDescriptors)
-        actual["FooOperationDeserializer.kt"].shouldContainOnlyOnceWithDiff(expectedDescriptors)
-    }
-
-    @ParameterizedTest
-    @ValueSource(classes = [RestXml::class])
-    fun `it generates field descriptors for xml attributes and namespace`(subject: Class<ProtocolGenerator>) {
-        val generator = subject.getDeclaredConstructor().newInstance()
-
-        val testHarness = codegenTestHarnessForModelSnippet(generator, operations = listOf("Foo")) {
-            """
-            @http(method: "POST", uri: "/foo")
-            operation Foo {
-                input: FooRequest,
-                output: FooRequest
-            }  
-            
-            @xmlNamespace(uri: "http://foo.com", prefix: "baz")
-            structure FooRequest {
-                @xmlAttribute
-                strVal: String,
-                @xmlAttribute
-                @xmlName("baz:notIntVal")
-                intVal: Integer
-            }
-        """
-        }
-
-        val expectedDescriptors = """
-            private val INTVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, XmlSerialName("baz:notIntVal"), XmlAttribute)
-            private val STRVAL_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("strVal"), XmlAttribute)
-            private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-                trait(XmlSerialName("FooRequest"))
-                trait(XmlNamespace("http://foo.com", "baz"))
-                field(INTVAL_DESCRIPTOR)
-                field(STRVAL_DESCRIPTOR)
-            }
-        """.formatForTest("        ")
-        val actual = testHarness.generateDeSerializers()
-
-        actual["FooOperationSerializer.kt"].shouldContainOnlyOnceWithDiff(expectedDescriptors)
-        actual["FooOperationDeserializer.kt"].shouldContainOnlyOnceWithDiff(expectedDescriptors)
     }
 }

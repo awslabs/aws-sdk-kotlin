@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.awsjson.aws.sdk.kotlin.codegen
+package aws.sdk.kotlin.codegen.protocols.core
 
-import aws.sdk.kotlin.codegen.EndpointResolverGenerator
 import io.kotest.matchers.string.shouldContainOnlyOnce
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.build.MockManifest

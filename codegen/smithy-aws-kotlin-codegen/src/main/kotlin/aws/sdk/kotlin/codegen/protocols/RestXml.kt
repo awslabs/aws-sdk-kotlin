@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.restxml
+package aws.sdk.kotlin.codegen.protocols
 
-import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
+import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
+import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*

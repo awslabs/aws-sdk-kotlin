@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.middleware.AwsSignatureVersion4
+import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator

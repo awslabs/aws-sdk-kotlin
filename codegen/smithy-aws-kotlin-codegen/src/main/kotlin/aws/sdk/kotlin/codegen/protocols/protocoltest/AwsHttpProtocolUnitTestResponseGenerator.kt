@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.protocoltest
+package aws.sdk.kotlin.codegen.protocols.protocoltest
 
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestErrorGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestGenerator
