@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.codegen.protocols.json
 
-import software.amazon.smithy.kotlin.codegen.model.ext.expectTrait
-import software.amazon.smithy.kotlin.codegen.model.ext.hasTrait
+import software.amazon.smithy.kotlin.codegen.model.expectTrait
+import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingDescriptor
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator

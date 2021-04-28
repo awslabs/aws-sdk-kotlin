@@ -7,7 +7,7 @@ package aws.sdk.kotlin.codegen.protocols.json
 
 import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.model.ext.getTrait
+import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.serde.descriptorName
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serialKind
