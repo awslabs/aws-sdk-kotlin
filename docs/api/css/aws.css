@@ -1,0 +1,15 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
+#logo {
+    background-image: url('https://a0.awsstatic.com/libra-css/images/logos/aws_smile-header-desktop-en-white_59x35.png');
+    background-color: #232f3e;
+    color: #333;
+    background-size: 59px 35px;
+}
+
+body {
+    background-color: #f2f3f3;
+}

@@ -7,7 +7,7 @@ description = "AWS client runtime support for generated service clients"
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.dokka") version "1.4.20"
+    id("org.jetbrains.dokka")
     jacoco
 }
 

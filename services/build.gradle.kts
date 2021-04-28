@@ -7,6 +7,7 @@ plugins {
     kotlin("jvm")
     `maven`
     `maven-publish`
+    id("org.jetbrains.dokka")
 }
 
 val sdkVersion: String by project
@@ -22,6 +23,7 @@ subprojects {
 
     apply {
         plugin("org.jetbrains.kotlin.jvm")
+        plugin("org.jetbrains.dokka")
     }
 
     // have generated sdk's opt-in to internal runtime features
