@@ -3,12 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.awsjson
+package aws.sdk.kotlin.codegen.protocols
 
-import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
+import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
+import aws.sdk.kotlin.codegen.protocols.json.AwsJsonHttpBindingResolver
+import aws.sdk.kotlin.codegen.protocols.json.AwsJsonModeledExceptionsMiddleware
+import aws.sdk.kotlin.codegen.protocols.json.AwsJsonProtocolMiddleware
+import aws.sdk.kotlin.codegen.protocols.json.JsonSerdeFieldGenerator
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
-import software.amazon.smithy.kotlin.codegen.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.integration.*
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.model.shapes.MemberShape
 import software.amazon.smithy.model.shapes.Shape
 import software.amazon.smithy.model.shapes.ShapeId

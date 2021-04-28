@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.middleware
+package aws.sdk.kotlin.codegen.protocols.middleware
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import software.amazon.smithy.kotlin.codegen.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.buildSymbol
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolMiddleware
-import software.amazon.smithy.kotlin.codegen.namespace
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.model.buildSymbol
+import software.amazon.smithy.kotlin.codegen.model.namespace
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 
 /**
  * HTTP client interceptor that resolves service endpoints for a single service

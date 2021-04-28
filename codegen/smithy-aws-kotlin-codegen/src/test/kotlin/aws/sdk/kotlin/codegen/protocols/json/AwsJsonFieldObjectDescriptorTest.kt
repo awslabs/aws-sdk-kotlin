@@ -3,12 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.awsjson
+package aws.sdk.kotlin.codegen.protocols.json
 
-import aws.sdk.kotlin.codegen.restjson.RestJson1
+import aws.sdk.kotlin.codegen.protocols.AwsJson1_0
+import aws.sdk.kotlin.codegen.protocols.AwsJson1_1
+import aws.sdk.kotlin.codegen.protocols.RestJson1
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.test.codegenTestHarnessForModelSnippet
 import software.amazon.smithy.kotlin.codegen.test.formatForTest
 import software.amazon.smithy.kotlin.codegen.test.generateDeSerializers

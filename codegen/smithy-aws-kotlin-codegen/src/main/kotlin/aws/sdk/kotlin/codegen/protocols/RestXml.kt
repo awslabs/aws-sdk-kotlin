@@ -3,14 +3,21 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.restxml
+package aws.sdk.kotlin.codegen.protocols
 
-import aws.sdk.kotlin.codegen.AwsHttpBindingProtocolGenerator
+import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
+import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.*
-import software.amazon.smithy.kotlin.codegen.integration.*
-import software.amazon.smithy.kotlin.codegen.traits.SyntheticClone
+import software.amazon.smithy.kotlin.codegen.core.*
+import software.amazon.smithy.kotlin.codegen.model.*
+import software.amazon.smithy.kotlin.codegen.model.traits.SyntheticClone
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.serde.descriptorName
+import software.amazon.smithy.kotlin.codegen.rendering.serde.serialKind
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*

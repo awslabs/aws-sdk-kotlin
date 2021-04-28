@@ -2,16 +2,17 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package aws.sdk.kotlin.codegen
+package aws.sdk.kotlin.codegen.protocols.core
 
-import aws.sdk.kotlin.codegen.middleware.AwsSignatureVersion4
-import aws.sdk.kotlin.codegen.middleware.EndpointResolverMiddleware
-import aws.sdk.kotlin.codegen.middleware.UserAgentMiddleware
-import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestErrorGenerator
-import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestRequestGenerator
-import aws.sdk.kotlin.codegen.protocoltest.AwsHttpProtocolUnitTestResponseGenerator
+import aws.sdk.kotlin.codegen.AwsKotlinDependency
+import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
+import aws.sdk.kotlin.codegen.protocols.middleware.EndpointResolverMiddleware
+import aws.sdk.kotlin.codegen.protocols.middleware.UserAgentMiddleware
+import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestErrorGenerator
+import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestRequestGenerator
+import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestResponseGenerator
 import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.integration.*
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 
 /**
  * Base class for all AWS HTTP protocol generators

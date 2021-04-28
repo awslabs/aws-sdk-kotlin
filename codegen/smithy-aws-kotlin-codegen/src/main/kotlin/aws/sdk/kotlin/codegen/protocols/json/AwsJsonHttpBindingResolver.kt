@@ -1,10 +1,15 @@
-package aws.sdk.kotlin.codegen.awsjson
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
 
-import software.amazon.smithy.kotlin.codegen.expectTrait
-import software.amazon.smithy.kotlin.codegen.hasTrait
-import software.amazon.smithy.kotlin.codegen.integration.HttpBindingDescriptor
-import software.amazon.smithy.kotlin.codegen.integration.HttpBindingResolver
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
+package aws.sdk.kotlin.codegen.protocols.json
+
+import software.amazon.smithy.kotlin.codegen.model.expectTrait
+import software.amazon.smithy.kotlin.codegen.model.hasTrait
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingDescriptor
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.knowledge.TopDownIndex
 import software.amazon.smithy.model.pattern.UriPattern
@@ -12,7 +17,7 @@ import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*
 
 /**
- * An HTTP binding resolver for the awsJson protocol.
+ * An HTTP binding resolver for the awsJson protocol(s).
  */
 class AwsJsonHttpBindingResolver(
     private val generationContext: ProtocolGenerator.GenerationContext,
