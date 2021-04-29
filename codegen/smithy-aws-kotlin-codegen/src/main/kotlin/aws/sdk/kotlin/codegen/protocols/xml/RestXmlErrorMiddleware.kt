@@ -12,6 +12,7 @@ import software.amazon.smithy.kotlin.codegen.core.addImport
 import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.model.traits.ErrorTrait
 import software.amazon.smithy.model.traits.HttpErrorTrait
 
 class RestXmlErrorMiddleware(
@@ -34,7 +35,8 @@ class RestXmlErrorMiddleware(
             val deserializerName = "${symbol.name}Deserializer"
             // If model specifies error code use it otherwise default to 400.
             // See https://awslabs.github.io/smithy/1.0/spec/core/http-traits.html#httperror-trait
-            val httpStatusCode = errShape.getTrait<HttpErrorTrait>()?.code ?: 400
+            val defaultCode = if (errShape.getTrait<ErrorTrait>()?.isClientError ?: error("Expected Error trait on shape $errShape")) 400 else 500
+            val httpStatusCode = errShape.getTrait<HttpErrorTrait>()?.code ?: defaultCode
             writer.write("register(code = #S, deserializer = $deserializerName(), httpStatusCode = $httpStatusCode)", code)
         }
     }

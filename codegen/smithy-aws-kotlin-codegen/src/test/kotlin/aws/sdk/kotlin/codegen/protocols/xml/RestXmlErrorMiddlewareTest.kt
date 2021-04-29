@@ -7,7 +7,7 @@ import software.amazon.smithy.kotlin.codegen.test.*
 class RestXmlErrorMiddlewareTest {
 
     @Test
-    fun `it registers error deserializers for error shapes`() {
+    fun `it registers error deserializers for client error shapes`() {
         val model = """
             @http(method: "PUT", uri: "/test", code: 200)
             operation TestOperation {
@@ -36,6 +36,38 @@ class RestXmlErrorMiddlewareTest {
         }
 
         actual.shouldContainOnlyOnceWithDiff("register(code = \"TestError\", deserializer = TestErrorDeserializer(), httpStatusCode = 400)")
+    }
+
+    @Test
+    fun `it registers error deserializers for server error shapes`() {
+        val model = """
+            @http(method: "PUT", uri: "/test", code: 200)
+            operation TestOperation {
+                output: TestResponse,
+                errors: [TestError]
+            }
+            
+            structure TestResponse {
+                someVal: Integer
+            }
+            
+            @error("server")
+            structure TestError {
+                someCode: Integer,
+                someMessage: String
+            }
+        """.prependNamespaceAndService(operations = listOf("TestOperation"))
+            .toSmithyModel()
+
+        val (ctx, _, _) = model.newTestContext()
+
+        val unit = RestXmlErrorMiddleware(ctx, HttpTraitResolver(ctx, "application/xml"))
+
+        val actual = generateCode { writer ->
+            unit.renderRegisterErrors(writer)
+        }
+
+        actual.shouldContainOnlyOnceWithDiff("register(code = \"TestError\", deserializer = TestErrorDeserializer(), httpStatusCode = 500)")
     }
 
     @Test
