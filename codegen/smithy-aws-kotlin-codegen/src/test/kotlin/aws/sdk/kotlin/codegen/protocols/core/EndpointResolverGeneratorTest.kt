@@ -8,14 +8,14 @@ package aws.sdk.kotlin.codegen.protocols.core
 import io.kotest.matchers.string.shouldContainOnlyOnce
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.build.MockManifest
-import software.amazon.smithy.kotlin.codegen.test.generateTestContext
+import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.node.Node
 
 class EndpointResolverGeneratorTest {
 
     private fun getGeneratedResolverContents(model: String): String {
-        val ctx = model.toSmithyModel().generateTestContext("test", "Example")
+        val (ctx, _, _) = model.toSmithyModel().newTestContext("Example", "test")
         val endpointData = Node.parse(endpointsJson).expectObjectNode()
         EndpointResolverGenerator(endpointData).render(ctx)
         ctx.delegator.flushWriters()

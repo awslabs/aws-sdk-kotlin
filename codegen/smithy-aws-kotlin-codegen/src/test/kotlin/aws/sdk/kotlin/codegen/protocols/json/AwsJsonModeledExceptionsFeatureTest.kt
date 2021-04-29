@@ -9,7 +9,7 @@ import io.kotest.matchers.string.shouldContainOnlyOnce
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.test.generateCode
-import software.amazon.smithy.kotlin.codegen.test.generateTestContext
+import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 
 class AwsJsonModeledExceptionsFeatureTest {
@@ -39,7 +39,7 @@ class AwsJsonModeledExceptionsFeatureTest {
             register(code = "GetFooError", deserializer = GetFooErrorDeserializer())
         """.trimIndent()
 
-        val ctx = testModel.generateTestContext("smithy.example", "Example")
+        val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
 
         val bindingResolver = AwsJsonHttpBindingResolver(ctx, "application/json")
         val unit = AwsJsonModeledExceptionsMiddleware(ctx, bindingResolver)
@@ -65,7 +65,7 @@ class AwsJsonModeledExceptionsFeatureTest {
             operation GetFoo { }
         """.toSmithyModel()
 
-        val ctx = testModel.generateTestContext("smithy.example", "Example")
+        val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val bindingResolver = AwsJsonHttpBindingResolver(ctx, "application/json")
         val unit = AwsJsonModeledExceptionsMiddleware(ctx, bindingResolver)
 
