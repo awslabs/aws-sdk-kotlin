@@ -109,6 +109,7 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
             //     2.1.2 is handled below
             //
 
+            // FIXME - see: https://github.com/awslabs/smithy-kotlin/issues/296
             // if we know we have a (streaming) body and toSignableRequest() fails to convert it to a CRT equivalent
             // then we must decide how to compute the payload hash ourselves (defaults to unsigned payload)
             val isUnboundedStream = signableRequest.body == null && req.subject.body is HttpBody.Streaming

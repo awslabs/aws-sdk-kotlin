@@ -22,6 +22,7 @@ public fun HttpRequestBuilder.toSignableCrtRequest(): HttpRequestCrt {
     // only. We need to special case file streams as being signable. Custom dynamic streams that implement
     // HttpBody.Streaming are not signable without consuming the stream and would need to go through
     // chunked signing or unsigned payload
+    // see: https://github.com/awslabs/smithy-kotlin/issues/297
     val bodyStream = (body as? HttpBody.Bytes)?.let { HttpRequestBodyStream.fromByteArray(it.bytes()) }
     return HttpRequestCrt(method.name, url.encodedPath, HttpHeadersCrt(headers), bodyStream)
 }
