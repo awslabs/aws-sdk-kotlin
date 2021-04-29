@@ -1,7 +1,6 @@
 package aws.sdk.kotlin.codegen.protocols.xml
 
 import org.junit.jupiter.api.Test
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
 import software.amazon.smithy.kotlin.codegen.test.*
 
