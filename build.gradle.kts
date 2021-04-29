@@ -7,6 +7,11 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
+dependencies {
+    dokkaHtmlPlugin(project(":dokka-aws"))
+    dokkaHtmlMultiModulePlugin(project(":dokka-aws"))
+    dokkaPlugin(project(":dokka-aws"))
+}
 
 allprojects {
     repositories {
@@ -73,7 +78,8 @@ dependencies {
 val lintPaths = listOf(
     "codegen/smithy-aws-kotlin-codegen/**/*.kt",
     "client-runtime/**/*.kt",
-    "examples/**/*.kt"
+    "examples/**/*.kt",
+    "dokka-aws/**/*.kt"
 )
 
 tasks.register<JavaExec>("ktlint") {

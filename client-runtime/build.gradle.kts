@@ -82,6 +82,10 @@ subprojects {
     }
 
     apply(from = rootProject.file("gradle/publish.gradle"))
+
+    dependencies {
+        dokkaPlugin(project(":dokka-aws"))
+    }
 }
 
 // FIXME - resolves build deadlock with aws-client-rt when using composite builds
