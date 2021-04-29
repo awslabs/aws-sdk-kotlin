@@ -2,13 +2,6 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-
-buildscript {
-    dependencies {
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.4.32")
-    }
-}
-
 plugins {
     kotlin("jvm") version "1.4.31" apply false
     id("org.jetbrains.dokka")
@@ -27,34 +20,48 @@ allprojects {
         }
     }
 
-    tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
-        outputDirectory.set(buildDir.resolve("dokka"))
+    tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
+        if (project.file("Module.md").exists()) {
+            println("module.md exists for ${project.name}")
+            dokkaSourceSets.configureEach {
+                includes.from(project.file("Module.md"))
+            }
+        }
     }
-    tasks.withType<org.jetbrains.dokka.gradle.DokkaMultiModuleTask>().configureEach {
-        outputDirectory.set(buildDir.resolve("dokkaMultiModule"))
-    }
+
     tasks.withType<org.jetbrains.dokka.gradle.AbstractDokkaTask>().configureEach {
         val sdkVersion: String by project
         moduleVersion.set(sdkVersion)
 
         val year = java.time.LocalDate.now().year
-        pluginsMapConfiguration.put("org.jetbrains.dokka.base.DokkaBase", """
-            {
-                "customStyleSheets": ["${rootProject.file("docs/api/css/aws.css")}"],
-                "customAssets": [
-                    "${rootProject.file("docs/api/assets/logo-icon.svg")}"
-                ],
-                "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved."
-            }
-        """)
-
+        val pluginConfigMap = mapOf(
+            "org.jetbrains.dokka.base.DokkaBase" to """
+                {
+                    "customStyleSheets": ["${rootProject.file("docs/api/css/logo-styles.css")}"],
+                    "customAssets": [
+                        "${rootProject.file("docs/api/assets/logo-icon.svg")}"
+                    ],
+                    "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved."
+                }
+            """
+        )
+        pluginsMapConfiguration.set(pluginConfigMap)
     }
 }
 
 // configure the root multimodule docs
 tasks.dokkaHtmlMultiModule {
-    includes.from(rootProject.file("docs/GettingStarted.md"))
     moduleName.set("AWS Kotlin SDK")
+
+    includes.from(
+        rootProject.file("docs/GettingStarted.md")
+    )
+
+    val excludeFromDocumentation = listOf(
+        project(":client-runtime:testing"),
+        project(":client-runtime:crt-util")
+    )
+    removeChildTasks(excludeFromDocumentation)
 }
 
 val ktlint: Configuration by configurations.creating
