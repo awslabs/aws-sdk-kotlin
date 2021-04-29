@@ -11,12 +11,12 @@ import aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm
 import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
 import aws.sdk.kotlin.crt.toSignableCrtRequest
 import aws.sdk.kotlin.crt.update
-import aws.sdk.kotlin.runtime.ClientException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.operation.SdkHttpOperation
+import software.aws.clientrt.http.operation.logger
 import software.aws.clientrt.time.epochMilliseconds
 import software.aws.clientrt.util.get
 
@@ -92,24 +92,25 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
             // otherwise to sign a request we need to convert: builder -> crt kotlin HttpRequest (which underneath converts to aws-c-http message) and back
             val signableRequest = req.subject.toSignableCrtRequest()
 
-            // SDKs are supposed to default to signed payload always (when `unsignedPayload` trait isn't present).
+            // SDKs are supposed to default to signed payload _always_ when possible (and when `unsignedPayload` trait isn't present).
             //
             // There are a few escape hatches/special cases:
             //     1. Customer explicitly disables signed payload (via AuthAttributes.UnsignedPayload)
             //     2. Customer provides a (potentially) unbounded stream (via HttpBody.Streaming)
             //
             // When an unbounded stream (2) is given we proceed as follows:
-            //     2.a. is it a file -> sign the payload (bounded stream/special case)
-            //     2.b. does it have a known length?
-            //           yes -> unsigned payload
-            //           no -> error
+            //     2.1. is it a file?
+            //          (2.1.1) yes -> sign the payload (bounded stream/special case)
+            //          (2.1.2) no -> unsigned payload
             //
-            // Anything else results in an error. Chunked signing is not enabled through this middleware.
-            //
+            // NOTE: Chunked signing is NOT enabled through this middleware.
             // NOTE:
-            // 2.a is handled by toSignableRequest() by special casing file inputs
-            // 2.b is handled below
+            //     2.1.1 is handled by toSignableRequest() by special casing file inputs
+            //     2.1.2 is handled below
             //
+
+            // if we know we have a (streaming) body and toSignableRequest() fails to convert it to a CRT equivalent
+            // then we must decide how to compute the payload hash ourselves (defaults to unsigned payload)
             val isUnboundedStream = signableRequest.body == null && req.subject.body is HttpBody.Streaming
 
             val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
@@ -129,9 +130,7 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
                     req.context.isUnsignedRequest() -> AwsSignedBodyValue.UNSIGNED_PAYLOAD
                     req.subject.body is HttpBody.Empty -> AwsSignedBodyValue.EMPTY_SHA256
                     isUnboundedStream -> {
-                        if (req.subject.body.contentLength == null) {
-                            throw ClientException("unable to compute payload hash for unbounded stream with unknown length")
-                        }
+                        req.context.logger.warn { "unable to compute hash for unbounded stream; defaulting to unsigned payload" }
                         AwsSignedBodyValue.UNSIGNED_PAYLOAD
                     }
                     // use the payload to compute the hash
