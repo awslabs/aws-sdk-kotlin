@@ -8,7 +8,7 @@ package aws.sdk.kotlin.codegen.protocols.json
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.test.generateTestContext
+import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.shapes.OperationShape
@@ -47,7 +47,7 @@ class AwsJsonHttpBindingResolverTest {
 
     @Test
     fun `it resolves all operations associated with a service`() {
-        val ctx = testModel.generateTestContext("smithy.example", "Example")
+        val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
 
         val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
 
@@ -59,7 +59,7 @@ class AwsJsonHttpBindingResolverTest {
 
     @Test
     fun `it returns no request bindings for operations without inputs`() {
-        val ctx = testModel.generateTestContext("smithy.example", "Example")
+        val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetEmptyFoo")
         val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
 
@@ -70,7 +70,7 @@ class AwsJsonHttpBindingResolverTest {
 
     @Test
     fun `it returns request bindings for operations with inputs`() {
-        val ctx = testModel.generateTestContext("smithy.example", "Example")
+        val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetFoo")
         val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
 
@@ -87,7 +87,7 @@ class AwsJsonHttpBindingResolverTest {
 
     @Test
     fun `it returns no response bindings for operations without inputs`() {
-        val ctx = testModel.generateTestContext("smithy.example", "Example")
+        val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetEmptyFoo")
         val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
 
@@ -98,7 +98,7 @@ class AwsJsonHttpBindingResolverTest {
 
     @Test
     fun `it returns response bindings for operations with inputs`() {
-        val ctx = testModel.generateTestContext("smithy.example", "Example")
+        val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetFoo")
         val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
 
@@ -115,7 +115,7 @@ class AwsJsonHttpBindingResolverTest {
 
     @Test
     fun `it returns no response bindings for structures without members`() {
-        val ctx = testModel.generateTestContext("smithy.example", "Example")
+        val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val structure = testModel.expectShape<StructureShape>("smithy.example#GetFooError")
         val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
 
@@ -126,7 +126,7 @@ class AwsJsonHttpBindingResolverTest {
 
     @Test
     fun `it returns response bindings for structures with members`() {
-        val ctx = testModel.generateTestContext("smithy.example", "Example")
+        val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val structure = testModel.expectShape<StructureShape>("smithy.example#GetFooOutput")
         val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
 
