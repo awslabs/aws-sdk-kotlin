@@ -13,3 +13,13 @@
 body {
     background-color: #f2f3f3;
 }
+
+/*
+ * override markdown samples which appear to have broken and/or minimal style
+ */
+.sample-container {
+    padding: 16px;
+    border-radius: 6px;
+    background-color: rgb(280, 280, 280);
+    margin: 12px 0 12px 0;
+}
