@@ -8,8 +8,6 @@ plugins {
 }
 
 dependencies {
-    dokkaHtmlPlugin(project(":dokka-aws"))
-    dokkaHtmlMultiModulePlugin(project(":dokka-aws"))
     dokkaPlugin(project(":dokka-aws"))
 }
 
@@ -44,7 +42,8 @@ allprojects {
                 {
                     "customStyleSheets": ["${rootProject.file("docs/api/css/logo-styles.css")}"],
                     "customAssets": [
-                        "${rootProject.file("docs/api/assets/logo-icon.svg")}"
+                        "${rootProject.file("docs/api/assets/logo-icon.svg")}",
+                        "${rootProject.file("docs/api/assets/aws_logo_white_59x35.png")}"
                     ],
                     "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved."
                 }
