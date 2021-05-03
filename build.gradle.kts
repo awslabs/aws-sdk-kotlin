@@ -24,10 +24,11 @@ allprojects {
     }
 
     tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
-        if (project.file("Module.md").exists()) {
-            println("module.md exists for ${project.name}")
+        // each module can include their own top-level module documentation
+        // see https://kotlinlang.org/docs/kotlin-doc.html#module-and-package-documentation
+        if (project.file("API.md").exists()) {
             dokkaSourceSets.configureEach {
-                includes.from(project.file("Module.md"))
+                includes.from(project.file("API.md"))
             }
         }
     }
@@ -58,6 +59,8 @@ tasks.dokkaHtmlMultiModule {
     moduleName.set("AWS Kotlin SDK")
 
     includes.from(
+        // NOTE: these get concatenated
+        rootProject.file("docs/api/README.md"),
         rootProject.file("docs/GettingStarted.md")
     )
 
