@@ -73,7 +73,7 @@ class AwsHttpProtocolClientGenerator(
 
         // add in additional context and defaults
         if (op.hasTrait(UnsignedPayloadTrait::class.java)) {
-            writer.addImport("AuthAttributes", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+            writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
             writer.write("op.context[AuthAttributes.UnsignedPayload] = true")
         }
 
