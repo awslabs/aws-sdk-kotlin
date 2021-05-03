@@ -17,7 +17,7 @@ See the [Getting Started Guide](docs/GettingStarted.md)
 Generated sources are not checked into the repository, you first have to generate the clients before you can build them.
 
 
-```
+```sh
 ./gradlew :codegen:sdk:bootstrap
 ```
 
@@ -28,7 +28,7 @@ NOTE: To re-run codegen for the same set of services multiple times add the `--r
 After generating the services you care about they are available to build:
 
 e.g.
-```
+```sh
 ./gradlew :services:lambda:build
 ```
 
@@ -36,6 +36,32 @@ e.g.
 Where the task follows the pattern: `:services:SERVICE:build`
 
 To see list of all projects run `./gradlew projects`
+
+##### Generating a single service
+See the local.properties definition above to specify this in a config file.
+
+```
+./gradlew -Paws.services=lambda  :codegen:sdk:bootstrap
+```
+
+##### Testing Locally
+Testing generated services generally requires publishing artifacts (e.g. client-runtime) of `smithy-kotlin`, `aws-crt-kotlin`, and `aws-sdk-kotin` to maven local.
+
+#### Generating API Documentation
+
+API documentation is generated using [Dokka](http://kotlin.github.io/dokka) which is the official documentation tool maintained by JetBrains for documenting Kotlin code.
+
+Unlike Java, Kotlin uses it's own [KDoc](https://kotlinlang.org/docs/kotlin-doc.html) format.
+
+
+To generate API reference documentation for the AWS Kotlin SDK:
+
+
+```sh
+./gradlew --no-daemon --no-parallel dokkaHtmlMultiModule
+```
+
+This will output HTML formatted documentation to `build/dokka/htmlMultiModule`
 
 
 ### Build properties
@@ -55,12 +81,3 @@ aws.services=lambda
 ```
 
 
-##### Generating a single service
-See the local.properties definition above to specify this in a config file.
-
-```
-./gradlew -Paws.services=lambda  :codegen:sdk:bootstrap
-```
-
-##### Testing Locally
-Testing generated services generally requires publishing artifacts (e.g. client-runtime) of `smithy-kotlin`, `aws-crt-kotlin`, and `aws-sdk-kotin` to maven local.
