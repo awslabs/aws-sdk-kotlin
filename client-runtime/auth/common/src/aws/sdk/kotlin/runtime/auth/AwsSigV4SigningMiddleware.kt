@@ -16,6 +16,7 @@ import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.operation.SdkHttpOperation
+import software.aws.clientrt.http.operation.logger
 import software.aws.clientrt.time.epochMilliseconds
 import software.aws.clientrt.util.get
 
@@ -91,6 +92,28 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
             // otherwise to sign a request we need to convert: builder -> crt kotlin HttpRequest (which underneath converts to aws-c-http message) and back
             val signableRequest = req.subject.toSignableCrtRequest()
 
+            // SDKs are supposed to default to signed payload _always_ when possible (and when `unsignedPayload` trait isn't present).
+            //
+            // There are a few escape hatches/special cases:
+            //     1. Customer explicitly disables signed payload (via AuthAttributes.UnsignedPayload)
+            //     2. Customer provides a (potentially) unbounded stream (via HttpBody.Streaming)
+            //
+            // When an unbounded stream (2) is given we proceed as follows:
+            //     2.1. is it a file?
+            //          (2.1.1) yes -> sign the payload (bounded stream/special case)
+            //          (2.1.2) no -> unsigned payload
+            //
+            // NOTE: Chunked signing is NOT enabled through this middleware.
+            // NOTE:
+            //     2.1.1 is handled by toSignableRequest() by special casing file inputs
+            //     2.1.2 is handled below
+            //
+
+            // FIXME - see: https://github.com/awslabs/smithy-kotlin/issues/296
+            // if we know we have a (streaming) body and toSignableRequest() fails to convert it to a CRT equivalent
+            // then we must decide how to compute the payload hash ourselves (defaults to unsigned payload)
+            val isUnboundedStream = signableRequest.body == null && req.subject.body is HttpBody.Streaming
+
             val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
                 region = req.context[AuthAttributes.SigningRegion]
                 service = req.context.getOrNull(AuthAttributes.SigningService) ?: checkNotNull(config.signingService)
@@ -107,6 +130,10 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
                 signedBodyValue = when {
                     req.context.isUnsignedRequest() -> AwsSignedBodyValue.UNSIGNED_PAYLOAD
                     req.subject.body is HttpBody.Empty -> AwsSignedBodyValue.EMPTY_SHA256
+                    isUnboundedStream -> {
+                        req.context.logger.warn { "unable to compute hash for unbounded stream; defaulting to unsigned payload" }
+                        AwsSignedBodyValue.UNSIGNED_PAYLOAD
+                    }
                     // use the payload to compute the hash
                     else -> null
                 }
