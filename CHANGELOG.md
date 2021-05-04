@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+## [0.2.0-M1] - 05/07/2021
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Services new in this release
+
+* S3
+    * NOTE: S3 is a complicated service, this initial release **DOES NOT** have complete support for all S3 features.
+
+## Changes
+
+* (feat): add conversions to/from `java.time.Instant` and SDK `Instant` (https://github.com/awslabs/smithy-kotlin/issues/271)
+* (fix): generate per/service base exception types (https://github.com/awslabs/smithy-kotlin/issues/233)
+
+
 ## [0.1.0-M0] - 03/19/2021
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**

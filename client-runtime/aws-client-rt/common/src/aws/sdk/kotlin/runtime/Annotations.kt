@@ -12,7 +12,7 @@ package aws.sdk.kotlin.runtime
  * any strange effects.
  *
  * We strongly recommend to not use such API.
- *
+ * @suppress
  */
 @Suppress("DEPRECATION")
 @RequiresOptIn(

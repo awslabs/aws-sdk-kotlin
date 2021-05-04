@@ -4,13 +4,71 @@
  */
 plugins {
     kotlin("jvm") version "1.4.31" apply false
+    id("org.jetbrains.dokka")
+}
+
+dependencies {
+    dokkaPlugin(project(":dokka-aws"))
 }
 
 allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        // for dokka
+        maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven") {
+            content {
+                includeGroup("org.jetbrains.kotlinx")
+            }
+        }
     }
+
+    tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
+        // each module can include their own top-level module documentation
+        // see https://kotlinlang.org/docs/kotlin-doc.html#module-and-package-documentation
+        if (project.file("API.md").exists()) {
+            dokkaSourceSets.configureEach {
+                includes.from(project.file("API.md"))
+            }
+        }
+    }
+
+    tasks.withType<org.jetbrains.dokka.gradle.AbstractDokkaTask>().configureEach {
+        val sdkVersion: String by project
+        moduleVersion.set(sdkVersion)
+
+        val year = java.time.LocalDate.now().year
+        val pluginConfigMap = mapOf(
+            "org.jetbrains.dokka.base.DokkaBase" to """
+                {
+                    "customStyleSheets": ["${rootProject.file("docs/api/css/logo-styles.css")}"],
+                    "customAssets": [
+                        "${rootProject.file("docs/api/assets/logo-icon.svg")}",
+                        "${rootProject.file("docs/api/assets/aws_logo_white_59x35.png")}"
+                    ],
+                    "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved."
+                }
+            """
+        )
+        pluginsMapConfiguration.set(pluginConfigMap)
+    }
+}
+
+// configure the root multimodule docs
+tasks.dokkaHtmlMultiModule {
+    moduleName.set("AWS Kotlin SDK")
+
+    includes.from(
+        // NOTE: these get concatenated
+        rootProject.file("docs/api/README.md"),
+        rootProject.file("docs/GettingStarted.md")
+    )
+
+    val excludeFromDocumentation = listOf(
+        project(":client-runtime:testing"),
+        project(":client-runtime:crt-util")
+    )
+    removeChildTasks(excludeFromDocumentation)
 }
 
 val ktlint: Configuration by configurations.creating
@@ -22,7 +80,8 @@ dependencies {
 val lintPaths = listOf(
     "codegen/smithy-aws-kotlin-codegen/**/*.kt",
     "client-runtime/**/*.kt",
-    "examples/**/*.kt"
+    "examples/**/*.kt",
+    "dokka-aws/**/*.kt"
 )
 
 tasks.register<JavaExec>("ktlint") {

@@ -1,14 +1,14 @@
-# Beta Release Quickstart
+## Beta Release Quickstart
 
 Beta releases of the AWS Kotlin SDK are published as a complete maven local repository with all associated dependencies.
 
 
-1. Download the [latest release](https://github.com/awslabs/aws-sdk-kotlin/releases) from Github
+1. Download the [latest release](https://github.com/awslabs/aws-sdk-kotlin/releases) from GitHub
 
 2. Unzip the repository somewhere on your local machine
 
 ```sh
-> unzip aws-sdk-kotlin-0.1.0-M0.zip
+> unzip aws-sdk-kotlin-0.2.0-M1.zip
 ```
 
 There should be a folder named `aws-sdk-kotlin-repo`
@@ -49,11 +49,9 @@ repositories {
 
 4. Add services to your project
 
-Services available for testing: `cognitoidentityprovider`, `dynamodb`, `kms`, `lambda`, `polly`, `secretsmanager`, `translate`
-
 ```kt
 
-val awsKotlinSdkVersion = "0.1.0-M0"
+val awsKotlinSdkVersion = "0.2.0-M1"
 // OR put it in gradle.properties
 // val awsKotlinSdkVersion: String by project
 
@@ -62,8 +60,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
     
     // The following line adds a dependency on the dynamodb client.
-    // Services available in the M0 release:
-    // cognitoidentityprovider, dynamodb, kms, lambda, polly, secretsmanager, translate
     implementation("aws.sdk.kotlin:dynamodb:$awsKotlinSdkVersion")
     
     // The following will cause SDK logs to emit to the console:

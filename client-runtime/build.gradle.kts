@@ -7,7 +7,7 @@ description = "AWS client runtime support for generated service clients"
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.dokka") version "1.4.20"
+    id("org.jetbrains.dokka")
     jacoco
 }
 
@@ -82,6 +82,10 @@ subprojects {
     }
 
     apply(from = rootProject.file("gradle/publish.gradle"))
+
+    dependencies {
+        dokkaPlugin(project(":dokka-aws"))
+    }
 }
 
 // FIXME - resolves build deadlock with aws-client-rt when using composite builds
