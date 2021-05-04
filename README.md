@@ -63,6 +63,7 @@ To generate API reference documentation for the AWS Kotlin SDK:
 
 This will output HTML formatted documentation to `build/dokka/htmlMultiModule`
 
+NOTE: You currently need an HTTP server to view the documentation in browser locally. You can either use the builtin server in Intellij or use your favorite local server (e.g. `python3 -m http.server`). See [Kotlin/dokka#1795](https://github.com/Kotlin/dokka/issues/1795)
 
 ### Build properties
 
