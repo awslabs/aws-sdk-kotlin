@@ -40,7 +40,7 @@ To see list of all projects run `./gradlew projects`
 ##### Generating a single service
 See the local.properties definition above to specify this in a config file.
 
-```
+```sh
 ./gradlew -Paws.services=lambda  :codegen:sdk:bootstrap
 ```
 
