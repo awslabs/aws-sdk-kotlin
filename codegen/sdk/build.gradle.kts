@@ -162,6 +162,7 @@ fun discoverServices(): List<AwsService> {
         }
 }
 
+// Returns the trait name of the protocol of the service
 fun ServiceShape.protocol(): String =
     listOf(
         "aws.protocols#awsJson1_0",
@@ -173,6 +174,7 @@ fun ServiceShape.protocol(): String =
         "aws.protocols#restXml"
     ).first { protocol -> findTrait(protocol).isPresent }.split("#")[1]
 
+// Class and functions for service and protocol membership for SDK generation
 data class Membership(val inclusions: Set<String> = emptySet(), val exclusions: Set<String> = emptySet())
 fun Membership.isMember(member: String): Boolean = when {
     exclusions.contains(member) -> false
@@ -195,7 +197,7 @@ fun parseMembership(rawList: String?): Membership {
     }
 
     val conflictingMembers = inclusions.intersect(exclusions)
-    check(conflictingMembers.isEmpty()) { "Invalid configuration, $conflictingMembers specified both for inclusion and exclusion" }
+    require(conflictingMembers.isEmpty()) { "$conflictingMembers specified both for inclusion and exclusion in $rawList" }
 
     return Membership(inclusions, exclusions)
 }
