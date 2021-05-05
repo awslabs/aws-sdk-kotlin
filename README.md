@@ -69,6 +69,12 @@ NOTE: You currently need an HTTP server to view the documentation in browser loc
 
 You can define a `local.properties` config file at the root of the project to modify build behavior. 
 
+|Property|Description|
+|---|---|
+|`compositeProjects`|Specify paths to repos the SDK depends upon such as `smithy-kotlin`|
+|`aws.services`|Specify inclusions (+ prefix) and exclusions (- prefix) of service names to generate|
+|`aws.protocols`|Specify inclusions (+ prefix) and exclusions (- prefix) of AWS protocols to generate|
+
 #### Composite Projects
 
 Dependencies of the SDK can be added as composite build such that multiple repos may appear as one
@@ -89,17 +95,21 @@ with the `aws.protocols` property.
 Included services require a '+' character prefix and excluded services require a '-' character. 
 If any items are specified for inclusion, only specified included members will be generated.  If no items
 are specified for inclusion, all members not excluded will be generated.
-When unspecified all services provided by models are generated.
+When unspecified all services found in the directory specified by the `modelsDir` property are generated.
 Service names match the filenames in the models directory `service.VERSION.json`.
 
 Some example entries for `local.properties`:
 ```ini
-# Example ~ Generate only AWS Lambda:
+# Generate only AWS Lambda:
 aws.services=+lambda
+```
 
-# Example ~ Generate all services but AWS location and AWS DynamoDB:
+```ini
+# Generate all services but AWS location and AWS DynamoDB:
 aws.services=-location,-dynamodb
+```
 
-# Example ~ Generate all services except those using the restJson1 protocol:
+```ini
+# Generate all services except those using the restJson1 protocol:
 aws.protocols=-restJson1
 ```
