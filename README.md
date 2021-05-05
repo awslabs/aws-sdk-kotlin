@@ -41,7 +41,7 @@ To see list of all projects run `./gradlew projects`
 See the local.properties definition above to specify this in a config file.
 
 ```sh
-./gradlew -Paws.services=lambda  :codegen:sdk:bootstrap
+./gradlew -Paws.services=+lambda  :codegen:sdk:bootstrap
 ```
 
 ##### Testing Locally
@@ -65,20 +65,41 @@ This will output HTML formatted documentation to `build/dokka/htmlMultiModule`
 
 NOTE: You currently need an HTTP server to view the documentation in browser locally. You can either use the builtin server in Intellij or use your favorite local server (e.g. `python3 -m http.server`). See [Kotlin/dokka#1795](https://github.com/Kotlin/dokka/issues/1795)
 
-### Build properties
+### Build Properties
 
 You can define a `local.properties` config file at the root of the project to modify build behavior. 
 
-An example config with the various properties is below:
+#### Composite Projects
 
-```
+Dependencies of the SDK can be added as composite build such that multiple repos may appear as one
+holistic source project in the IDE.
+
+```ini
 # comma separated list of paths to `includeBuild()`
 # This is useful for local development of smithy-kotlin in particular 
 compositeProjects=../smithy-kotlin
-
-# comma separated list of services to generate from codegen/sdk/aws-models. When not specified all services are generated
-# service names match the filenames in the models directory `service.VERSION.json`
-aws.services=lambda
 ```
 
+#### Generating Specific Services Based on Name or Protocol
 
+A comma separated list of services to include or exclude for generation from codegen/sdk/aws-models may
+be specified with the `aws.services` property. A list of protocols of services to generate may be specified
+with the `aws.protocols` property.
+
+Included services require a '+' character prefix and excluded services require a '-' character. 
+If any items are specified for inclusion, only specified included members will be generated.  If no items
+are specified for inclusion, all members not excluded will be generated.
+When unspecified all services provided by models are generated.
+Service names match the filenames in the models directory `service.VERSION.json`.
+
+Some example entries for `local.properties`:
+```ini
+# Example ~ Generate only AWS Lambda:
+aws.services=+lambda
+
+# Example ~ Generate all services but AWS location and AWS DynamoDB:
+aws.services=-location,-dynamodb
+
+# Example ~ Generate all services except those using the restJson1 protocol:
+aws.protocols=-restJson1
+```
