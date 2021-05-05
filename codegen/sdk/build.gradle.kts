@@ -110,21 +110,36 @@ val sdkPackageNamePrefix = "aws.sdk.kotlin.services."
 // Returns an AwsService model for every JSON file found in in directory defined by property `modelsDirProp`
 fun discoverServices(): List<AwsService> {
     val modelsDir: String by project
-    val serviceIncludeList = getProperty("aws.services")?.split(",")?.map { it.trim() }
+    val serviceMembership = parseMembership(getProperty("aws.services"))
+    val protocolMembership = parseMembership(getProperty("aws.protocols"))
 
     return fileTree(project.file(modelsDir))
-        .filter {
-            val includeModel = serviceIncludeList?.contains(it.name.split(".").first()) ?: true
-            if (!includeModel) {
-                logger.info("skipping ${it.absolutePath}, name not included in aws.services")
+        .filter { file ->
+            val svcName = file.name.split(".").first()
+            val include = serviceMembership.isMember(svcName)
+
+            if (!include) {
+                logger.info("skipping ${file.absolutePath}, $svcName not a member of $serviceMembership")
             }
-            includeModel
+            include
         }
         .map { file ->
             val model = Model.assembler().addImport(file.absolutePath).assemble().result.get()
             val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
             require(services.size == 1) { "Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}" }
             val service = services.first()
+            file to service
+        }
+        .filter { (file, service) ->
+            val protocol = service.protocol()
+            val include = protocolMembership.isMember(protocol)
+
+            if (!include) {
+                logger.info("skipping ${file.absolutePath}, $protocol not a member of $protocolMembership")
+            }
+            include
+        }
+        .map { (file, service) ->
             val serviceApi = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
                 ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
             val (name, version, _) = file.name.split(".")
@@ -145,6 +160,44 @@ fun discoverServices(): List<AwsService> {
                 description = description
             )
         }
+}
+
+fun ServiceShape.protocol(): String =
+    listOf(
+        "aws.protocols#awsJson1_0",
+        "aws.protocols#awsJson1_1",
+        "aws.protocols#awsQuery",
+        "aws.protocols#ec2Query",
+        "aws.protocols#ec2QueryName",
+        "aws.protocols#restJson1",
+        "aws.protocols#restXml"
+    ).first { protocol -> findTrait(protocol).isPresent }.split("#")[1]
+
+data class Membership(val inclusions: Set<String> = emptySet(), val exclusions: Set<String> = emptySet())
+fun Membership.isMember(member: String): Boolean = when {
+    exclusions.contains(member) -> false
+    inclusions.contains(member) -> true
+    inclusions.isEmpty() -> true
+    else -> false
+}
+fun parseMembership(rawList: String?): Membership {
+    if (rawList == null) return Membership()
+
+    val inclusions = mutableSetOf<String>()
+    val exclusions = mutableSetOf<String>()
+
+    rawList.split(",").map { it.trim() }.forEach { item ->
+        when {
+            item.startsWith('-') -> exclusions.add(item.substring(1))
+            item.startsWith('+') -> inclusions.add(item.substring(1))
+            else -> error("Must specify inclusion (+) or exclusion (-) prefix character to $item.")
+        }
+    }
+
+    val conflictingMembers = inclusions.intersect(exclusions)
+    check(conflictingMembers.isEmpty()) { "Invalid configuration, $conflictingMembers specified both for inclusion and exclusion" }
+
+    return Membership(inclusions, exclusions)
 }
 
 fun <T> java.util.Optional<T>.orNull(): T? = this.orElse(null)
