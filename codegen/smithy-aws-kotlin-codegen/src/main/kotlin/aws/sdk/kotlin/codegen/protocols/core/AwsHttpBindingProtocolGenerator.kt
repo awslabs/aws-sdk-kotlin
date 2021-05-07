@@ -12,6 +12,8 @@ import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestErro
 import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestRequestGenerator
 import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestResponseGenerator
 import software.amazon.smithy.codegen.core.Symbol
+import software.amazon.smithy.kotlin.codegen.model.buildSymbol
+import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 
 /**
@@ -19,11 +21,10 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
  */
 abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() {
 
-    override val exceptionBaseClassSymbol: Symbol = Symbol.builder()
-        .name("AwsServiceException")
-        .namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE.namespace, ".")
-        .addDependency(AwsKotlinDependency.AWS_CLIENT_RT_CORE)
-        .build()
+    override val exceptionBaseClassSymbol: Symbol = buildSymbol {
+        name = "AwsServiceException"
+        namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE)
+    }
 
     override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator {
         val middleware = getHttpMiddleware(ctx)

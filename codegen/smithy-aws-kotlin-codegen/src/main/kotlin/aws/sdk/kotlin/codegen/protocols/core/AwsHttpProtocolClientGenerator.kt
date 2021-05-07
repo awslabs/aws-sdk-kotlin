@@ -52,6 +52,7 @@ class AwsHttpProtocolClientGenerator(
                     name = "XmlSerdeProvider"
                     namespace(KotlinDependency.CLIENT_RT_SERDE_XML)
                 }
+                // FIXME - add AwsQueryProvider
                 else -> throw CodegenException("no serialization provider implemented for: ${ctx.protocol}")
             }
         }
