@@ -78,7 +78,7 @@ internal object ErrorResponseDeserializer {
             }
 
             XmlErrorResponse(xmlError, requestId ?: xmlError?.requestId)
-        } catch (e: DeserializerStateException) {
+        } catch (e: DeserializationException) {
             null // return so an appropriate exception type can be instantiated above here.
         }
     }
@@ -118,7 +118,7 @@ internal object XmlErrorDeserializer {
             }
 
             XmlError(requestId, code, message)
-        } catch (e: DeserializerStateException) {
+        } catch (e: DeserializationException) {
             null // return so an appropriate exception type can be instantiated above here.
         }
     }
