@@ -13,10 +13,11 @@ import java.io.File
 import java.nio.file.Files
 
 /**
- * This program reads media files from a specified directory and uploads media files to S3
+ * This program reads media files from a specified directory and uploads media files to S3.
+ * After uploading it will then download uploaded files back into a local directory.
  *
- * This is purely an example.  Any file with the extension `.avi` will be processed.  To test
- * create a text file and name it such that it matches the [filenameMetadataRegex] regex, ex:
+ * Any file with the extension `.avi` will be processed.  To test create a text file and
+ * name it such that it matches the [filenameMetadataRegex] regex, ex:
  * `title_2000.avi`.
  *
  * When running the sample adjust the following path constants as needed for your local environment.
@@ -25,7 +26,7 @@ const val bucketName = "s3-media-ingestion-example2"
 const val ingestionDirPath = "/tmp/media-in"
 const val completedDirPath = "/tmp/media-processed"
 const val failedDirPath = "/tmp/media-failed"
-const val downloadDirPath = "/tmp/media-failed"
+const val downloadDirPath = "/tmp/media-down"
 
 // media metadata is extracted from filename: <title>_<year>.avi
 val filenameMetadataRegex = "([\\w\\s]+)_([\\d]+).avi".toRegex()
@@ -59,7 +60,9 @@ fun main(): Unit = runBlocking {
         // Download files to verify
         client.listObjects(ListObjectsRequest { bucket = bucketName }).contents?.forEach { obj ->
             client.getObject(GetObjectRequest { key = obj.key; bucket = bucketName }) { response ->
-                response.body?.writeToFile(File(downloadDirPath, obj.key!!))
+                val outputFile = File(downloadDirPath, obj.key!!)
+                response.body?.writeToFile(outputFile)
+                println("Downloaded $outputFile from S3")
             }
         }
     } finally {
