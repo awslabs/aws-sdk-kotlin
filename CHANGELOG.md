@@ -53,7 +53,6 @@
 * codestarconnections
 * codestarnotifications
 * cognitoidentity
-* cognitoidentityprovider
 * cognitosync
 * comprehend
 * comprehendmedical
@@ -77,7 +76,6 @@
 * directconnect
 * directoryservice
 * dlm
-* dynamodb
 * dynamodbstreams
 * ebs
 * ec2instanceconnect
@@ -120,9 +118,7 @@
 * kinesisvideoarchivedmedia
 * kinesisvideomedia
 * kinesisvideosignaling
-* kms
 * lakeformation
-* lambda
 * lexmodelbuildingservice
 * lexmodelsv2
 * lexruntimeservice
@@ -163,7 +159,6 @@
 * pi
 * pinpointemail
 * pinpointsmsvoice
-* polly
 * pricing
 * qldb
 * qldbsession
@@ -190,7 +185,6 @@
 * sagemakerruntime
 * savingsplans
 * schemas
-* secretsmanager
 * serverlessapplicationrepository
 * servicecatalog
 * servicecatalogappregistry
@@ -214,7 +208,6 @@
 * timestreamwrite
 * transcribe
 * transfer
-* translate
 * waf
 * wafregional
 * wafv2
