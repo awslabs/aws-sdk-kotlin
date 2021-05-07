@@ -42,6 +42,7 @@ class AwsJsonProtocolTest {
         }
         val client = sdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol) {
+            serviceShapeName = "FooService_blah"
             version = "1.1"
         }
 
@@ -49,7 +50,9 @@ class AwsJsonProtocolTest {
         val request = op.context[HttpOperationContext.HttpCallList].last().request
 
         assertEquals("application/x-amz-json-1.1", request.headers["Content-Type"])
-        assertEquals("FooService.Bar", request.headers["X-Amz-Target"])
+        // ensure we use the original shape id name, NOT the one from the context
+        // see: https://github.com/awslabs/smithy-kotlin/issues/316
+        assertEquals("FooService_blah.Bar", request.headers["X-Amz-Target"])
     }
 
     @Test
@@ -72,6 +75,7 @@ class AwsJsonProtocolTest {
         }
         val client = sdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol) {
+            serviceShapeName = "FooService"
             version = "1.1"
         }
 
@@ -109,6 +113,7 @@ class AwsJsonProtocolTest {
         }
         val client = sdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol) {
+            serviceShapeName = "FooService"
             version = "1.1"
         }
 
