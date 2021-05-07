@@ -22,7 +22,7 @@ import java.nio.file.Files
  *
  * When running the sample adjust the following path constants as needed for your local environment.
  */
-const val bucketName = "s3-media-ingestion-example2"
+const val bucketName = "s3-media-ingestion-example"
 const val ingestionDirPath = "/tmp/media-in"
 const val completedDirPath = "/tmp/media-processed"
 const val failedDirPath = "/tmp/media-failed"
@@ -61,8 +61,8 @@ fun main(): Unit = runBlocking {
         client.listObjects(ListObjectsRequest { bucket = bucketName }).contents?.forEach { obj ->
             client.getObject(GetObjectRequest { key = obj.key; bucket = bucketName }) { response ->
                 val outputFile = File(downloadDirPath, obj.key!!)
-                response.body?.writeToFile(outputFile).also {
-                    println("Downloaded $outputFile from S3")
+                response.body?.writeToFile(outputFile).also { size ->
+                    println("Downloaded $outputFile ($size bytes) from S3")
                 }
             }
         }
