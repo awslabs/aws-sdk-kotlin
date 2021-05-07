@@ -61,8 +61,9 @@ fun main(): Unit = runBlocking {
         client.listObjects(ListObjectsRequest { bucket = bucketName }).contents?.forEach { obj ->
             client.getObject(GetObjectRequest { key = obj.key; bucket = bucketName }) { response ->
                 val outputFile = File(downloadDirPath, obj.key!!)
-                response.body?.writeToFile(outputFile)
-                println("Downloaded $outputFile from S3")
+                response.body?.writeToFile(outputFile).also {
+                    println("Downloaded $outputFile from S3")
+                }
             }
         }
     } finally {
