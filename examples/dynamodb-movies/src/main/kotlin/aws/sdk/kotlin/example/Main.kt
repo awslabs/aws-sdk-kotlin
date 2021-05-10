@@ -5,7 +5,7 @@
 package aws.sdk.kotlin.example
 
 import aws.sdk.kotlin.runtime.AwsServiceException
-import aws.sdk.kotlin.services.dynamodb.DynamodbClient
+import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.model.*
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
@@ -17,7 +17,7 @@ import java.lang.IllegalStateException
  * Partial implementation of: https://docs.amazonaws.cn/en_us/amazondynamodb/latest/developerguide/GettingStarted.Java.html
  */
 fun main() = runBlocking {
-    val client = DynamodbClient { region = "us-east-2" }
+    val client = DynamoDbClient { region = "us-east-2" }
 
     val tableName = "dynamo-movies-example"
 
@@ -44,7 +44,7 @@ fun main() = runBlocking {
     client.close()
 }
 
-suspend fun createMoviesTable(client: DynamodbClient, name: String) {
+suspend fun createMoviesTable(client: DynamoDbClient, name: String) {
     val tableExists = client.listTables(ListTablesRequest {}).tableNames?.contains(name) ?: false
     if (tableExists) return
 
@@ -82,7 +82,7 @@ suspend fun createMoviesTable(client: DynamodbClient, name: String) {
 }
 
 // no waiters support (yet)
-suspend fun DynamodbClient.waitForTableReady(name: String) {
+suspend fun DynamoDbClient.waitForTableReady(name: String) {
     while (true) {
         try {
             val req = DescribeTableRequest { tableName = name }
@@ -91,14 +91,14 @@ suspend fun DynamodbClient.waitForTableReady(name: String) {
                 return
             }
         } catch (ex: AwsServiceException) {
-            if (!ex.isRetryable) throw ex
+            if (!ex.sdkErrorMetadata.isRetryable) throw ex
         }
         println("waiting for table to be ready...")
         delay(1000)
     }
 }
 
-suspend fun loadMoviesTable(client: DynamodbClient, name: String) {
+suspend fun loadMoviesTable(client: DynamoDbClient, name: String) {
     // load items into table
     val data = getResourceAsText("data.json")
     val elements = JsonParser.parseString(data).asJsonArray
@@ -114,7 +114,7 @@ suspend fun loadMoviesTable(client: DynamodbClient, name: String) {
     }
 }
 
-suspend fun DynamodbClient.moviesInYear(name: String, year: Int): QueryResponse {
+suspend fun DynamoDbClient.moviesInYear(name: String, year: Int): QueryResponse {
     val req = QueryRequest {
         tableName = name
         keyConditionExpression = "#yr = :yyyy"
@@ -139,7 +139,7 @@ fun jsonElementToAttributeValue(element: JsonElement): AttributeValue = when {
     element.isJsonPrimitive -> {
         val primitive = element.asJsonPrimitive
         when {
-            primitive.isBoolean -> AttributeValue.BOOL(primitive.asBoolean)
+            primitive.isBoolean -> AttributeValue.Bool(primitive.asBoolean)
             primitive.isString -> AttributeValue.S(primitive.asString)
             else -> {
                 check(primitive.isNumber) { "expected number" }
