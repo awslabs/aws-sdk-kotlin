@@ -51,7 +51,7 @@ repositories {
 
 ```kt
 
-val awsKotlinSdkVersion = "0.2.0-M1"
+val awsKotlinSdkVersion = "0.2.0"
 // OR put it in gradle.properties
 // val awsKotlinSdkVersion: String by project
 
