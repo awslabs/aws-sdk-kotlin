@@ -22,9 +22,15 @@ import software.aws.clientrt.util.get
  */
 @InternalSdkApi
 public class AwsJsonProtocol(config: Config) : Feature {
-    private val version: String = requireNotNull(config.version) { "AWS JSON Protocol version must be specified" }
+    private val serviceShapeName: String = requireNotNull(config.serviceShapeName) { "AWS JSON protocol service name must be specified" }
+    private val version: String = requireNotNull(config.version) { "AWS JSON protocol version must be specified" }
 
     public class Config {
+        /**
+         * The original service (shape) name
+         */
+        public var serviceShapeName: String? = null
+
         /**
          * The protocol version e.g. "1.0"
          */
@@ -44,11 +50,10 @@ public class AwsJsonProtocol(config: Config) : Feature {
         operation.execution.mutate.intercept { req, next ->
             val context = req.context
             // required context elements
-            val serviceName = context[SdkClientOption.ServiceName]
             val operationName = context[SdkClientOption.OperationName]
 
             // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-json-1_0-protocol.html#protocol-behaviors
-            req.subject.headers.append("X-Amz-Target", "$serviceName.$operationName")
+            req.subject.headers.append("X-Amz-Target", "$serviceShapeName.$operationName")
             req.subject.headers.setMissing("Content-Type", "application/x-amz-json-$version")
 
             if (req.subject.body is HttpBody.Empty) {

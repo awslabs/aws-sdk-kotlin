@@ -28,7 +28,7 @@ class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
     override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
         val httpMiddleware = super.getDefaultHttpMiddleware(ctx)
         val awsJsonMiddleware = listOf(
-            AwsJsonProtocolMiddleware("1.0"),
+            AwsJsonProtocolMiddleware(ctx.settings.service, "1.0"),
             AwsJsonModeledExceptionsMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
         )
 
