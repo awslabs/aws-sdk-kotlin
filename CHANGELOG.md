@@ -227,6 +227,7 @@
 
 ### New Features
 
+* `restXml` protocol support
 * add conversions to/from `java.time.Instant` and SDK `Instant` (https://github.com/awslabs/smithy-kotlin/issues/271)
 * implement missing IO runtime primitives (https://github.com/awslabs/smithy-kotlin/issues/264)
 * API documentation (https://github.com/awslabs/aws-sdk-kotlin/issues/119)
