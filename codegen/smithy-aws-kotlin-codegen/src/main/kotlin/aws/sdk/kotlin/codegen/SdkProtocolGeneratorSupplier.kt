@@ -26,5 +26,6 @@ class SdkProtocolGeneratorSupplier : KotlinIntegration {
             AwsJson1_1(),
             RestJson1(),
             RestXml(),
+            AwsQuery(),
         )
 }

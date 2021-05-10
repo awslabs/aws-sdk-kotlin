@@ -86,7 +86,14 @@ open class ProtocolTestTask : DefaultTask() {
 
 // The following section exposes Smithy protocol test suites as gradle test targets
 // for the configured protocols in [enabledProtocols].
-val enabledProtocols = listOf("aws-json-10", "aws-json-11", "aws-restjson", "aws-restxml", "aws-restxml-xmlns")
+val enabledProtocols = listOf(
+    "aws-json-10",
+    "aws-json-11",
+    "aws-restjson",
+    "aws-restxml",
+    "aws-restxml-xmlns",
+    "aws-query"
+)
 
 enabledProtocols.forEach {
     tasks.register<ProtocolTestTask>("testProtocol-${it}") {
