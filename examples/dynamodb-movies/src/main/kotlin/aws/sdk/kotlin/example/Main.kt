@@ -135,7 +135,7 @@ fun getResourceAsText(path: String): String =
 
 // map json to attribute values
 fun jsonElementToAttributeValue(element: JsonElement): AttributeValue = when {
-    element.isJsonNull -> AttributeValue.NULL(true)
+    element.isJsonNull -> AttributeValue.Null(true)
     element.isJsonPrimitive -> {
         val primitive = element.asJsonPrimitive
         when {
