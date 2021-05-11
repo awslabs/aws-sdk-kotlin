@@ -4,18 +4,15 @@ plugins {
 
 allprojects {
     group = "aws.sdk.kotlin.example"
-    version = "2.0-SNAPSHOT"
+    version = "0.3.0-SNAPSHOT"
 
     repositories {
         maven {
             name = "kotlinSdkLocal"
-            url = uri(TODO("set your local repository path"))
+            url = uri(uri("file:///tmp/aws-sdk-kotlin_0.3.0-M2/m2"))
             // e.g.
             //url = uri("file:///tmp/aws-sdk-kotlin-repo/m2")
         }
         mavenCentral()
     }
 }
-
-
-

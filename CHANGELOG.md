@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.3.0-M2] - 06/18/2021
+
 ## [0.2.0-M1] - 05/10/2021
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
