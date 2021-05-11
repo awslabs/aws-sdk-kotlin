@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     group = "aws.sdk.kotlin.example"
-    version = "2.0-SNAPSHOT"
+    version = "0.3.0-SNAPSHOT"
 
     repositories {
         maven {
@@ -16,6 +16,3 @@ allprojects {
         mavenCentral()
     }
 }
-
-
-
