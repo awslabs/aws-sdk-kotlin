@@ -14,14 +14,15 @@ import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RenderingContext
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
+import software.amazon.smithy.kotlin.codegen.model.hasTrait
+import software.amazon.smithy.kotlin.codegen.model.traits.OperationOutput
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
-import software.amazon.smithy.kotlin.codegen.rendering.serde.FormUrlSerdeDescriptorGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.serde.SerdeDescriptorGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.serde.SerdeTargetUse
-import software.amazon.smithy.kotlin.codegen.rendering.serde.XmlSerdeDescriptorGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.serde.*
+import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.model.pattern.UriPattern
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*
@@ -71,7 +72,7 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         return if (targetUse.isSerializer) {
             FormUrlSerdeDescriptorGenerator(renderingCtx, members)
         } else {
-            XmlSerdeDescriptorGenerator(renderingCtx, members)
+            AwsQuerySerdeXmlDescriptorGenerator(renderingCtx, members)
         }
     }
 
@@ -94,6 +95,43 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         } else {
             super.renderSerializeOperationBody(ctx, op, writer)
         }
+    }
+
+    override fun renderDeserializerBody(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        members: List<MemberShape>,
+        targetUse: SerdeTargetUse,
+        writer: KotlinWriter
+    ) {
+        if (targetUse == SerdeTargetUse.OperationDeserializer) {
+            val opName = shape.id.name.removeSuffix("Response")
+            unwrapOperationResponseBody(ctx, opName, writer)
+        }
+        super.renderDeserializerBody(ctx, shape, members, targetUse, writer)
+    }
+
+    private fun unwrapOperationResponseBody(
+        ctx: ProtocolGenerator.GenerationContext,
+        operationName: String,
+        writer: KotlinWriter
+    ) {
+        // we need to unwrap the response document to get the deserializer into the correct state
+        // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#response-serialization
+
+        writer.write("")
+            .write("val resultDescriptor = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName(#S))", "${operationName}Result")
+            .openBlock("val wrapperDescriptor = SdkObjectDescriptor.build {", "}") {
+                writer.write("trait(XmlSerialName(#S))", "${operationName}Response")
+                writer.write("field(resultDescriptor)")
+            }
+            .write("")
+            // abandon the iterator, this only occurs at the top level operational output
+            .write("val wrapper = deserializer.deserializeStruct(wrapperDescriptor)")
+            .openBlock("if (wrapper.findNextFieldIndex() != resultDescriptor.index) {", "}") {
+                writer.write("throw DeserializationException(#S)", "failed to unwrap $operationName response")
+            }
+        writer.write("")
     }
 }
 
@@ -130,5 +168,24 @@ private class AwsQueryProtocolClientGenerator(
         ctx.delegator.useShapeWriter(serdeProviderSymbol) {
             QuerySerdeProviderGenerator(serdeProviderSymbol).render(it)
         }
+    }
+}
+
+private class AwsQuerySerdeXmlDescriptorGenerator(
+    ctx: RenderingContext<Shape>,
+    memberShapes: List<MemberShape>? = null
+) : XmlSerdeDescriptorGenerator(ctx, memberShapes) {
+
+    override fun getObjectDescriptorTraits(): List<SdkFieldDescriptorTrait> {
+        val traits = super.getObjectDescriptorTraits().toMutableList()
+
+        if (objectShape.hasTrait<OperationOutput>()) {
+            traits.removeIf { it.symbol == RuntimeTypes.Serde.SerdeXml.XmlSerialName }
+            val opName = objectShape.id.name.removeSuffix("Response")
+            val serialName = "${opName}Result"
+            traits.add(RuntimeTypes.Serde.SerdeXml.XmlSerialName, serialName.dq())
+        }
+
+        return traits
     }
 }
