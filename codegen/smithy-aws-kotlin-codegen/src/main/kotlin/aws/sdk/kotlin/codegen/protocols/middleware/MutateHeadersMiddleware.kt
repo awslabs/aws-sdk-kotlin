@@ -16,7 +16,7 @@ class MutateHeadersMiddleware(
     val extraHeaders: Map<String, String> = emptyMap(),
     val overrideHeaders: Map<String, String> = emptyMap(),
     val addMissingHeaders: Map<String, String> = emptyMap(),
-): ProtocolMiddleware {
+) : ProtocolMiddleware {
     override val name: String = "MutateHeaders"
     override fun renderConfigure(writer: KotlinWriter) {
         writer.addImport(RuntimeTypes.Http.MutateHeadersMiddleware)

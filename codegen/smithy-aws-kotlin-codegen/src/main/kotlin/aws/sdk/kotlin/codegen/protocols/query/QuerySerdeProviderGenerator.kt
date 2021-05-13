@@ -22,7 +22,7 @@ class QuerySerdeProviderGenerator(private val serdeProviderSymbol: Symbol) {
             RuntimeTypes.Serde.Deserializer,
             RuntimeTypes.Serde.SerdeFormUrl.FormUrlSerializer,
             RuntimeTypes.Serde.SerdeXml.XmlDeserializer,
-        ).forEach { symbol ->  writer.addImport(symbol) }
+        ).forEach { symbol -> writer.addImport(symbol) }
 
         writer.withBlock("internal class #T : SerdeProvider {", "}", serdeProviderSymbol) {
             writer.write("override fun serializer(): Serializer = #T()", RuntimeTypes.Serde.SerdeFormUrl.FormUrlSerializer)

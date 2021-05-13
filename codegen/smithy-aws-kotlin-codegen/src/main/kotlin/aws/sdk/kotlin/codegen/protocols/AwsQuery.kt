@@ -14,7 +14,9 @@ import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
+import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.kotlin.codegen.rendering.serde.FormUrlSerdeDescriptorGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.serde.SerdeDescriptorGenerator
@@ -68,8 +70,29 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         val renderingCtx = ctx.toRenderingContext(this, objectShape, writer)
         return if (targetUse.isSerializer) {
             FormUrlSerdeDescriptorGenerator(renderingCtx, members)
-        }else {
+        } else {
             XmlSerdeDescriptorGenerator(renderingCtx, members)
+        }
+    }
+
+    override fun renderSerializeOperationBody(
+        ctx: ProtocolGenerator.GenerationContext,
+        op: OperationShape,
+        writer: KotlinWriter
+    ) {
+        val input = ctx.model.expectShape<StructureShape>(op.input.get())
+        if (input.members().isEmpty()) {
+            // if there is no payload serialized we still need to add the literals that define the operation being
+            // invoked
+            // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#request-serialization
+            writer.addImport(RuntimeTypes.Http.ByteArrayContent)
+            val action = op.id.name
+            val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
+            val version = service.version
+            writer.write("""val content = "Action=$action&Version=$version"""")
+            writer.write("builder.body = ByteArrayContent(content.encodeToByteArray())")
+        } else {
+            super.renderSerializeOperationBody(ctx, op, writer)
         }
     }
 }
@@ -87,7 +110,6 @@ private class AwsQueryBindingResolver(
     }
 }
 
-
 private class AwsQueryProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
     middlewares: List<ProtocolMiddleware>,
@@ -98,7 +120,7 @@ private class AwsQueryProtocolClientGenerator(
         get() = buildSymbol {
             name = "AwsQuerySerdeProvider"
             namespace = "${ctx.settings.pkg.name}.internal"
-            definitionFile = "${name}.kt"
+            definitionFile = "$name.kt"
         }
 
     override fun render(writer: KotlinWriter) {
