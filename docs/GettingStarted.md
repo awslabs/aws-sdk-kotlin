@@ -8,7 +8,7 @@ Beta releases of the AWS Kotlin SDK are published as a complete maven local repo
 2. Unzip the repository somewhere on your local machine
 
 ```sh
-> unzip aws-sdk-kotlin-0.2.0-M1.zip
+> unzip aws-sdk-kotlin-0.3.0-M2.zip
 ```
 
 There should be a folder named `aws-sdk-kotlin-repo`
@@ -51,7 +51,7 @@ repositories {
 
 ```kt
 
-val awsKotlinSdkVersion = "0.2.0-M1"
+val awsKotlinSdkVersion = "0.3.0"
 // OR put it in gradle.properties
 // val awsKotlinSdkVersion: String by project
 
