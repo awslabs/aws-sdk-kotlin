@@ -1,0 +1,25 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
+#logo {
+    background-image: url('../images/aws_logo_white_59x35.png');
+    background-color: #232f3e;
+    color: #333;
+    background-size: 59px 35px;
+}
+
+body {
+    background-color: #f2f3f3;
+}
+
+/*
+ * override markdown samples which appear to have broken and/or minimal style
+ */
+.sample-container {
+    padding: 16px;
+    border-radius: 6px;
+    background-color: rgb(280, 280, 280);
+    margin: 12px 0 12px 0;
+}

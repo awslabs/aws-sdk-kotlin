@@ -5,8 +5,9 @@
  */
 plugins {
     kotlin("jvm")
-    `maven`
+    maven
     `maven-publish`
+    id("org.jetbrains.dokka")
 }
 
 val sdkVersion: String by project
@@ -22,6 +23,7 @@ subprojects {
 
     apply {
         plugin("org.jetbrains.kotlin.jvm")
+        plugin("org.jetbrains.dokka")
     }
 
     // have generated sdk's opt-in to internal runtime features
@@ -40,6 +42,18 @@ subprojects {
             showStandardStreams = true
         }
     }
+
+
+    // this is the default but it's better to be explicit (e.g. it may change in Kotlin 1.5)
+    tasks.compileKotlin {
+        kotlinOptions.jvmTarget = "1.6"
+    }
+    tasks.compileTestKotlin {
+        kotlinOptions.jvmTarget = "1.6"
+    }
+
+    // FIXME - we can remove this when we implement generated services as multiplatform.
+    setOutgoingVariantMetadata()
 
     val sourcesJar by tasks.creating(Jar::class) {
         group = "publishing"
@@ -62,4 +76,14 @@ subprojects {
     }
 
     apply(from = rootProject.file("gradle/publish.gradle"))
+}
+
+
+// fixes outgoing variant metadata: https://github.com/awslabs/smithy-kotlin/issues/258
+fun Project.setOutgoingVariantMetadata() {
+    tasks.withType<JavaCompile>() {
+        val javaVersion = JavaVersion.VERSION_1_8.toString()
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+    }
 }

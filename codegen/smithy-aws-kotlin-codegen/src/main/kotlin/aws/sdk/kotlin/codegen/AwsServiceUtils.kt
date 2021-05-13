@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.codegen
 
 import software.amazon.smithy.aws.traits.ServiceTrait
-import software.amazon.smithy.kotlin.codegen.expectTrait
+import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**

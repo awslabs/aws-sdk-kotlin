@@ -6,11 +6,11 @@
 package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.middleware.AwsSignatureVersion4
-import software.amazon.smithy.kotlin.codegen.KotlinWriter
+import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.integration.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 
 /**
  * Overrides the SigV4 signing middleware config for S3.
