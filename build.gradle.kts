@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 plugins {
-    kotlin("jvm") version "1.4.31" apply false
-    id("org.jetbrains.dokka")
+    kotlin("jvm") version "1.5.0" apply false
+    id("org.jetbrains.dokka") version("1.4.32")
 }
 
 dependencies {

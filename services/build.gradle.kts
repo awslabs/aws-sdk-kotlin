@@ -46,10 +46,10 @@ subprojects {
 
     // this is the default but it's better to be explicit (e.g. it may change in Kotlin 1.5)
     tasks.compileKotlin {
-        kotlinOptions.jvmTarget = "1.6"
+        kotlinOptions.jvmTarget = "1.8"
     }
     tasks.compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.6"
+        kotlinOptions.jvmTarget = "1.8"
     }
 
     // FIXME - we can remove this when we implement generated services as multiplatform.

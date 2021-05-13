@@ -12,7 +12,7 @@ pluginManagement {
     // configure the smithy-gradle plugin version
     plugins {
         id("software.amazon.smithy") version "0.5.2"
-        id("org.jetbrains.dokka") version "1.4.32"
+        id("org.jetbrains.dokka") version "1.5.0"
     }
 }
 
