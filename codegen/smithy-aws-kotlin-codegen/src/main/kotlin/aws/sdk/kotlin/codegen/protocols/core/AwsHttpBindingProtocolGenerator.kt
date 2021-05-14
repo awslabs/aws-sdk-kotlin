@@ -46,15 +46,18 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
         val ignoredTests = TestMemberDelta(
             setOf(
-                // FIXME - document type not fully supported yet
+                // FIXME - document type not fully supported yet, see https://github.com/awslabs/smithy-kotlin/issues/123
                 // restJson
                 "InlineDocumentInput",
                 "InlineDocumentAsPayloadInput",
                 "InlineDocumentOutput",
-                "InlineDocumentAsPayloadInputOutput", // See https://github.com/awslabs/smithy-kotlin/issues/123
+                "InlineDocumentAsPayloadInputOutput",
 
                 // awsJson1.1
                 "PutAndGetInlineDocumentsInput",
+
+                // restXml
+                "HttpPayloadWithMemberXmlName"
             ),
             TestContainmentMode.EXCLUDE_TESTS
         )
