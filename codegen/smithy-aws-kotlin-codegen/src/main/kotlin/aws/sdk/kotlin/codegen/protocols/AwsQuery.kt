@@ -65,11 +65,11 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         ctx: ProtocolGenerator.GenerationContext,
         objectShape: Shape,
         members: List<MemberShape>,
-        targetUse: SerdeTargetUse,
+        subject: SerdeSubject,
         writer: KotlinWriter
     ): SerdeDescriptorGenerator {
         val renderingCtx = ctx.toRenderingContext(this, objectShape, writer)
-        return if (targetUse.isSerializer) {
+        return if (subject.isSerializer) {
             FormUrlSerdeDescriptorGenerator(renderingCtx, members)
         } else {
             AwsQuerySerdeXmlDescriptorGenerator(renderingCtx, members)
@@ -101,14 +101,14 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: List<MemberShape>,
-        targetUse: SerdeTargetUse,
+        subject: SerdeSubject,
         writer: KotlinWriter
     ) {
-        if (targetUse == SerdeTargetUse.OperationDeserializer) {
+        if (subject == SerdeSubject.OperationDeserializer) {
             val opName = shape.id.name.removeSuffix("Response")
             unwrapOperationResponseBody(ctx, opName, writer)
         }
-        super.renderDeserializerBody(ctx, shape, members, targetUse, writer)
+        super.renderDeserializerBody(ctx, shape, members, subject, writer)
     }
 
     private fun unwrapOperationResponseBody(

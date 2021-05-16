@@ -56,7 +56,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         ctx: ProtocolGenerator.GenerationContext,
         objectShape: Shape,
         members: List<MemberShape>,
-        targetUse: SerdeTargetUse,
+        subject: SerdeSubject,
         writer: KotlinWriter
     ): SerdeDescriptorGenerator = XmlSerdeDescriptorGenerator(ctx.toRenderingContext(this, objectShape, writer), members)
 }

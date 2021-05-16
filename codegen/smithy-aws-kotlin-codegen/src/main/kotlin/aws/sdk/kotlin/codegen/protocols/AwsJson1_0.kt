@@ -16,7 +16,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddlewa
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.toRenderingContext
 import software.amazon.smithy.kotlin.codegen.rendering.serde.JsonSerdeDescriptorGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.serde.SerdeDescriptorGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.serde.SerdeTargetUse
+import software.amazon.smithy.kotlin.codegen.rendering.serde.SerdeSubject
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.TimestampFormatTrait
 
@@ -48,7 +48,7 @@ class AwsJson1_0 : AwsHttpBindingProtocolGenerator() {
         ctx: ProtocolGenerator.GenerationContext,
         objectShape: Shape,
         members: List<MemberShape>,
-        targetUse: SerdeTargetUse,
+        subject: SerdeSubject,
         writer: KotlinWriter
     ): SerdeDescriptorGenerator = JsonSerdeDescriptorGenerator(ctx.toRenderingContext(this, objectShape, writer), members)
 }
