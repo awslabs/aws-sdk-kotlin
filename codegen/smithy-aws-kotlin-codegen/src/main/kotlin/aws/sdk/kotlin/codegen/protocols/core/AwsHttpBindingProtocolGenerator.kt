@@ -57,7 +57,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "PutAndGetInlineDocumentsInput",
 
                 // restXml
-                "HttpPayloadWithMemberXmlName"
+                "HttpPayloadWithMemberXmlName" // FIXME - https://github.com/awslabs/smithy-kotlin/issues/353
             ),
             TestContainmentMode.EXCLUDE_TESTS
         )
