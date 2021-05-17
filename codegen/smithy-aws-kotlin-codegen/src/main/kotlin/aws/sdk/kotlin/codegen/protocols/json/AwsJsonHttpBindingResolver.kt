@@ -102,5 +102,5 @@ private fun MemberShape.toHttpBindingDescriptor(): HttpBindingDescriptor =
         // By default, all structure members that are not bound as part of the HTTP message are
         // serialized in a protocol-specific document sent in the body of the message
         else -> HttpBindingDescriptor(this, HttpBinding.Location.DOCUMENT)
-        // NOTE: Unsure of where (if anywhere) HttpBinding.Location.UNBOUND should be modeled
+        // NOTE: HttpBinding.Location.UNBOUND is not a valid value to model, is ignored.
     }
