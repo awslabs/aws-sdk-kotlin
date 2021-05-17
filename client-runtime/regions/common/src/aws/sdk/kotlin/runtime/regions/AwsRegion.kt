@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.ClientException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.client.AwsAdvancedClientOption
 import aws.sdk.kotlin.runtime.client.AwsClientOption
+import aws.sdk.kotlin.runtime.regions.providers.DefaultAwsRegionProviderChain
 import software.aws.clientrt.client.ExecutionContext
 
 /**
@@ -20,7 +21,7 @@ import software.aws.clientrt.client.ExecutionContext
  *   3. Using default region detection (only if-enabled)
  */
 @InternalSdkApi
-public fun resolveRegionForOperation(ctx: ExecutionContext, config: RegionConfig): String {
+public suspend fun resolveRegionForOperation(ctx: ExecutionContext, config: RegionConfig): String {
     // favor the context if it's already set
     val regionFromCtx = ctx.getOrNull(AwsClientOption.Region)
     if (regionFromCtx != null) return regionFromCtx
@@ -34,5 +35,6 @@ public fun resolveRegionForOperation(ctx: ExecutionContext, config: RegionConfig
         throw ClientException("No region was configured and region detection has been disabled")
     }
 
-    TODO("default region detection has not been implemented yet")
+    // TODO - propagate any relevant ctx/config to the default chain
+    return DefaultAwsRegionProviderChain().getRegion() ?: throw ClientException("unable to auto detect AWS region")
 }
