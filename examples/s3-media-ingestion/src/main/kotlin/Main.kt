@@ -58,7 +58,7 @@ fun main(): Unit = runBlocking {
         }
 
         // Download files to verify
-        client.listObjects(ListObjectsRequest { bucket = bucketName }).contents?.forEach { obj ->
+        client.listObjects { bucket = bucketName }.contents?.forEach { obj ->
             client.getObject(GetObjectRequest { key = obj.key; bucket = bucketName }) { response ->
                 val outputFile = File(downloadDirPath, obj.key!!)
                 response.body?.writeToFile(outputFile).also { size ->
@@ -74,14 +74,12 @@ fun main(): Unit = runBlocking {
 /** Check for valid S3 configuration based on account */
 suspend fun S3Client.ensureBucketExists(bucketName: String) {
     if (!bucketExists(bucketName)) {
-        createBucket(
-            CreateBucketRequest {
-                bucket = bucketName
-                createBucketConfiguration {
-                    locationConstraint = BucketLocationConstraint.UsEast2
-                }
+        createBucket {
+            bucket = bucketName
+            createBucketConfiguration {
+                locationConstraint = BucketLocationConstraint.UsEast2
             }
-        )
+        }
     }
 }
 
@@ -91,14 +89,12 @@ suspend fun S3Client.uploadToS3(mediaMetadata: MediaMetadata): UploadResult {
         return FileExistsError("${mediaMetadata.s3KeyName} already uploaded.", mediaMetadata)
 
     return try {
-        putObject(
-            PutObjectRequest {
-                bucket = bucketName
-                key = mediaMetadata.s3KeyName
-                body = ByteStream.fromFile(mediaMetadata.file)
-                metadata = mediaMetadata.toMap()
-            }
-        )
+        putObject {
+            bucket = bucketName
+            key = mediaMetadata.s3KeyName
+            body = ByteStream.fromFile(mediaMetadata.file)
+            metadata = mediaMetadata.toMap()
+        }
         Success("$bucketName/${mediaMetadata.s3KeyName}", mediaMetadata)
     } catch (e: Exception) { // Checking Service Exception coming in future release
         UploadError(e, mediaMetadata)
@@ -108,12 +104,10 @@ suspend fun S3Client.uploadToS3(mediaMetadata: MediaMetadata): UploadResult {
 /** Determine if a object exists in a bucket */
 suspend fun S3Client.keyExists(s3bucket: String, s3key: String) =
     try {
-        headObject(
-            HeadObjectRequest {
-                bucket = s3bucket
-                key = s3key
-            }
-        )
+        headObject {
+            bucket = s3bucket
+            key = s3key
+        }
         true
     } catch (e: Exception) { // Checking Service Exception coming in future release
         false
@@ -122,7 +116,7 @@ suspend fun S3Client.keyExists(s3bucket: String, s3key: String) =
 /** Determine if a object exists in a bucket */
 suspend fun S3Client.bucketExists(s3bucket: String) =
     try {
-        headBucket(HeadBucketRequest { bucket = s3bucket })
+        headBucket { bucket = s3bucket }
         true
     } catch (e: Exception) { // Checking Service Exception coming in future release
         false
