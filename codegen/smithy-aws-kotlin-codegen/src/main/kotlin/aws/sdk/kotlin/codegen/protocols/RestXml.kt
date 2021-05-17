@@ -72,12 +72,16 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         memberTargetShape: Shape?,
         namePostfix: String
     ) {
-        val traits = traitsForMember(ctx.model, memberShape, namePostfix, writer)
+        val traits = traitsForMember(ctx.model, memberShape, memberTargetShape, namePostfix, writer)
         val shapeForSerialKind = memberTargetShape ?: ctx.model.expectShape(memberShape.target)
         val serialKind = shapeForSerialKind.serialKind()
         val descriptorName = memberShape.descriptorName(namePostfix)
 
-        writer.write("private val #L = SdkFieldDescriptor(#L, #L)", descriptorName, serialKind, traits)
+        if (traits.isEmpty()) {
+            writer.write("private val #L = SdkFieldDescriptor(#L)", descriptorName, serialKind)
+        } else {
+            writer.write("private val #L = SdkFieldDescriptor(#L, #L)", descriptorName, serialKind, traits)
+        }
 
         val traitRefs = (memberShape.allTraits.values + (memberTargetShape?.allTraits?.values ?: emptyList<Trait>())).toSet()
         traitRefs
@@ -87,7 +91,13 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
             }
     }
 
-    private fun traitsForMember(model: Model, memberShape: MemberShape, namePostfix: String, writer: KotlinWriter): String {
+    private fun traitsForMember(
+        model: Model,
+        memberShape: MemberShape,
+        memberTargetShape: Shape?,
+        namePostfix: String,
+        writer: KotlinWriter
+    ): String {
         val traitList = mutableListOf<String>()
 
         val serialName = when (namePostfix.isEmpty()) {
@@ -96,7 +106,14 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         }
         traitList.add("""XmlSerialName("$serialName")""")
 
-        val flattened = memberShape.getTrait<XmlFlattenedTrait>()?.also { traitList.add(it.toSerdeFieldTraitSpec()) } != null
+        val memberTarget = model.expectShape(memberShape.target)
+        val isNestedMap = memberTarget.isMapShape && (memberTargetShape?.isMapShape ?: false)
+        val flattened = memberShape.getTrait<XmlFlattenedTrait>()?.also {
+            if (!isNestedMap) {
+                traitList.add(it.toSerdeFieldTraitSpec())
+            }
+        } != null
+
         memberShape.getTrait<XmlAttributeTrait>()?.let { traitList.add(it.toSerdeFieldTraitSpec()) }
         memberShape.getTrait<XmlNamespaceTrait>()?.let { traitList.add(it.toSerdeFieldTraitSpec()) }
 
