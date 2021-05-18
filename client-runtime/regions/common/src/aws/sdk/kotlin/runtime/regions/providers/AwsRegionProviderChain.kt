@@ -18,6 +18,14 @@ public open class AwsRegionProviderChain(
 ) : AwsRegionProvider {
     private val logger = Logger.getLogger<AwsRegionProviderChain>()
 
+    override fun toString(): String = buildString {
+        append("AwsRegionProviderChain")
+        providers.fold(this) { sb, provider ->
+            sb.append(" -> ")
+            sb.append(provider::class.simpleName)
+        }
+    }
+
     override suspend fun getRegion(): String? {
         // FIXME - 1.5 had firstNotNullOfOrNull()
 
