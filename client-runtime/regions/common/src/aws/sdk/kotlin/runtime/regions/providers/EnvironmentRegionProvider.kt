@@ -8,7 +8,6 @@ package aws.sdk.kotlin.runtime.regions.providers
 import software.aws.clientrt.util.Platform
 
 private const val AWS_ENVIRON_REGION = "AWS_REGION"
-private const val AWS_ENVIRON_DEFAULT_REGION = "AWS_DEFAULT_REGION"
 
 /**
  * Provide a mapping from key to value
@@ -24,12 +23,7 @@ public fun interface Environment {
 public class EnvironmentRegionProvider(
     private val environ: Environment
 ) : AwsRegionProvider {
-    public constructor() : this(SystemEnvironment)
+    public constructor() : this(Platform::getenv)
 
-    override suspend fun getRegion(): String? =
-        environ.get(AWS_ENVIRON_REGION) ?: environ.get(AWS_ENVIRON_DEFAULT_REGION)
-}
-
-private object SystemEnvironment : Environment {
-    override fun get(key: String): String? = Platform.getenv(key)
+    override suspend fun getRegion(): String? = environ.get(AWS_ENVIRON_REGION)
 }

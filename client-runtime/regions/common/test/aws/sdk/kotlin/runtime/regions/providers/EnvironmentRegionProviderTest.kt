@@ -20,25 +20,13 @@ class EnvironmentRegionProviderTest {
     }
 
     @Test
-    fun prioritizesAwsRegion() = runSuspendTest {
+    fun providesRegion() = runSuspendTest {
         val environ = mapOf(
-            "AWS_REGION" to "us-east-1",
-            "AWS_DEFAULT_REGION" to "us-east-2"
+            "AWS_REGION" to "us-east-1"
         )
 
         val provider = EnvironmentRegionProvider { environ[it] }
 
         assertEquals("us-east-1", provider.getRegion())
-    }
-
-    @Test
-    fun fallbackToDefaultRegion() = runSuspendTest {
-        val environ = mapOf(
-            "AWS_DEFAULT_REGION" to "us-east-2"
-        )
-
-        val provider = EnvironmentRegionProvider { environ[it] }
-
-        assertEquals("us-east-2", provider.getRegion())
     }
 }
