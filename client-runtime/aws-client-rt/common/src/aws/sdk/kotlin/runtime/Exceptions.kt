@@ -4,10 +4,10 @@
  */
 package aws.sdk.kotlin.runtime
 
-import software.aws.clientrt.ClientException
 import software.aws.clientrt.ServiceErrorMetadata
-import software.aws.clientrt.ServiceException
 import software.aws.clientrt.util.AttributeKey
+import software.aws.clientrt.ClientException as SmithyClientException
+import software.aws.clientrt.ServiceException as SmithyServiceException
 
 public open class AwsErrorMetadata : ServiceErrorMetadata() {
     public companion object {
@@ -39,7 +39,7 @@ public open class AwsErrorMetadata : ServiceErrorMetadata() {
 /**
  * Base class for all AWS modeled service exceptions
  */
-public open class AwsServiceException : ServiceException {
+public open class AwsServiceException : SmithyServiceException {
 
     public constructor() : super()
 
@@ -55,7 +55,21 @@ public open class AwsServiceException : ServiceException {
 /**
  * Base class for all exceptions originating from the AWS runtime
  */
-public open class ClientException : ClientException {
+public open class ClientException : SmithyClientException {
+
+    public constructor() : super()
+
+    public constructor(message: String?) : super(message)
+
+    public constructor(message: String?, cause: Throwable?) : super(message, cause)
+
+    public constructor(cause: Throwable?) : super(cause)
+}
+
+/**
+ * Indicates an error with client-side configuration.
+ */
+public open class ConfigurationException : ClientException {
 
     public constructor() : super()
 
