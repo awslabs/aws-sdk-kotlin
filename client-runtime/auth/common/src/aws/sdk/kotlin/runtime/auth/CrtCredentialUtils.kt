@@ -12,10 +12,7 @@ import aws.sdk.kotlin.crt.auth.credentials.CredentialsProvider as CredentialsPro
  * Proxy an instance of the Kotlin SDK version of [CredentialsProvider] as a CRT provider
  */
 internal class CrtCredentialsProvider(private val provider: CredentialsProvider) : CredentialsProviderCrt {
-    override suspend fun getCredentials(): CredentialsCrt {
-        return provider.getCredentials().toCrt()
-    }
-
+    override suspend fun getCredentials(): CredentialsCrt = provider.getCredentials().toCrt()
     override fun close() {}
     override suspend fun waitForShutdown() {}
 }

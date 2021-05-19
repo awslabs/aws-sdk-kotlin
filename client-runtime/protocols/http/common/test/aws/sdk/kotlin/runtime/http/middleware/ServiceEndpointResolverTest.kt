@@ -53,9 +53,8 @@ class ServiceEndpointResolverTest {
         op.install(ServiceEndpointResolver) {
             serviceId = "TestService"
             resolver = object : EndpointResolver {
-                override suspend fun resolve(service: String, region: String): Endpoint {
-                    return Endpoint("test.com", "https")
-                }
+                override suspend fun resolve(service: String, region: String): Endpoint =
+                    Endpoint("test.com", "https")
             }
         }
 
@@ -91,9 +90,8 @@ class ServiceEndpointResolverTest {
         op.install(ServiceEndpointResolver) {
             serviceId = "TestService"
             resolver = object : EndpointResolver {
-                override suspend fun resolve(service: String, region: String): Endpoint {
-                    return Endpoint("test.com", "https")
-                }
+                override suspend fun resolve(service: String, region: String): Endpoint =
+                    Endpoint("test.com", "https")
             }
         }
 
@@ -130,9 +128,8 @@ class ServiceEndpointResolverTest {
         op.install(ServiceEndpointResolver) {
             serviceId = "TestService"
             resolver = object : EndpointResolver {
-                override suspend fun resolve(service: String, region: String): Endpoint {
-                    return Endpoint("test.com", "https", signingName = "foo", signingRegion = "us-west-2")
-                }
+                override suspend fun resolve(service: String, region: String): Endpoint =
+                    Endpoint("test.com", "https", signingName = "foo", signingRegion = "us-west-2")
             }
         }
 
