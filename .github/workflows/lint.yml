@@ -13,8 +13,16 @@ jobs:
   ktlint:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout sources
+    - name: Checkout ${{ env.PACKAGE_NAME }} sources
       uses: actions/checkout@v2
+      with:
+        - path: aws-sdk-kotlin
+    - name: Checkout smithy-kotlin sources
+      uses: actions/checkout@v2
+      with:
+        repository: awslabs/smithy-kotlin
+        path: smithy-kotlin
     - name: Lint ${{ env.PACKAGE_NAME }}
+      working-directory: aws-sdk-kotlin
       run: |
         ./gradlew ktlint
