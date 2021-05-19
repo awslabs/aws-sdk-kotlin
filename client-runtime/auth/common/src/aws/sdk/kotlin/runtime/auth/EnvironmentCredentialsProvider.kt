@@ -5,27 +5,28 @@
 
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.runtime.auth.exceptions.AuthenticationException
+import aws.sdk.kotlin.runtime.ConfigurationException
 import software.aws.clientrt.util.Platform
 
 /**
  * A [CredentialsProvider] which reads from `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN`.
  */
-public class EnvironmentCredentialsProvider(private val getEnv: (String) -> String?) : CredentialsProvider {
-    companion object {
-        internal const val accessKeyId: String = "AWS_ACCESS_KEY_ID"
-        internal const val secretAccessKey: String = "AWS_SECRET_ACCESS_KEY"
-        internal const val sessionToken: String = "AWS_SESSION_TOKEN"
+public class EnvironmentCredentialsProvider
+public constructor(private val getEnv: (String) -> String?) : CredentialsProvider {
+    public companion object {
+        internal const val ACCESS_KEY_ID: String = "AWS_ACCESS_KEY_ID"
+        internal const val SECRET_ACCESS_KEY: String = "AWS_SECRET_ACCESS_KEY"
+        internal const val SESSION_TOKEN: String = "AWS_SESSION_TOKEN"
     }
 
     public constructor() : this(Platform::getenv)
 
-    private fun requireEnv(name: String, variable: String): String =
-        getEnv(variable) ?: throw AuthenticationException("Unable to get $name from environment variable $variable")
+    private fun requireEnv(variable: String): String =
+        getEnv(variable) ?: throw ConfigurationException("Unable to get value from environment variable $variable")
 
     override suspend fun getCredentials(): Credentials = Credentials(
-        accessKeyId = requireEnv("access key ID", accessKeyId),
-        secretAccessKey = requireEnv("secret access key", secretAccessKey),
-        sessionToken = getEnv(sessionToken),
+        accessKeyId = requireEnv(ACCESS_KEY_ID),
+        secretAccessKey = requireEnv(SECRET_ACCESS_KEY),
+        sessionToken = getEnv(SESSION_TOKEN),
     )
 }

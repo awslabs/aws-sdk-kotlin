@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.runtime.auth.exceptions.AuthenticationException
+import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -17,9 +17,9 @@ class EnvironmentCredentialsProviderTest {
     @Test
     fun `it should read from environment variables (incl session token)`() = runSuspendTest {
         val provider = provider(
-            EnvironmentCredentialsProvider.accessKeyId to "abc",
-            EnvironmentCredentialsProvider.secretAccessKey to "def",
-            EnvironmentCredentialsProvider.sessionToken to "ghi",
+            EnvironmentCredentialsProvider.ACCESS_KEY_ID to "abc",
+            EnvironmentCredentialsProvider.SECRET_ACCESS_KEY to "def",
+            EnvironmentCredentialsProvider.SESSION_TOKEN to "ghi",
         )
         assertEquals(provider.getCredentials(), Credentials("abc", "def", "ghi"))
     }
@@ -27,23 +27,23 @@ class EnvironmentCredentialsProviderTest {
     @Test
     fun `it should read from environment variables (excl session token)`() = runSuspendTest {
         val provider = provider(
-            EnvironmentCredentialsProvider.accessKeyId to "abc",
-            EnvironmentCredentialsProvider.secretAccessKey to "def",
+            EnvironmentCredentialsProvider.ACCESS_KEY_ID to "abc",
+            EnvironmentCredentialsProvider.SECRET_ACCESS_KEY to "def",
         )
         assertEquals(provider.getCredentials(), Credentials("abc", "def", null))
     }
 
     @Test
     fun `it should throw an exception on missing access key`() = runSuspendTest {
-        assertFailsWith<AuthenticationException> {
-            provider(EnvironmentCredentialsProvider.secretAccessKey to "def").getCredentials()
+        assertFailsWith<ConfigurationException> {
+            provider(EnvironmentCredentialsProvider.SECRET_ACCESS_KEY to "def").getCredentials()
         }
     }
 
     @Test
     fun `it should throw an exception on missing secret key`() = runSuspendTest {
-        assertFailsWith<AuthenticationException> {
-            provider(EnvironmentCredentialsProvider.accessKeyId to "abc").getCredentials()
+        assertFailsWith<ConfigurationException> {
+            provider(EnvironmentCredentialsProvider.ACCESS_KEY_ID to "abc").getCredentials()
         }
     }
 }
