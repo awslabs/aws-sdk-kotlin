@@ -75,7 +75,6 @@ val ktlint: Configuration by configurations.creating
 val ktlintVersion: String by project
 dependencies {
     ktlint("com.pinterest:ktlint:$ktlintVersion")
-    ktlint(module("smithy-kotlin:ktlint-rules"))
 }
 
 val lintPaths = listOf(
