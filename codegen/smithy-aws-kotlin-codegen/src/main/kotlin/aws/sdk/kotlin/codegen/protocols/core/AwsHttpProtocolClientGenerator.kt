@@ -9,10 +9,7 @@ import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
-import software.amazon.smithy.aws.traits.protocols.AwsJson1_0Trait
-import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
-import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
-import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
+import software.amazon.smithy.aws.traits.protocols.*
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
@@ -33,7 +30,7 @@ import software.amazon.smithy.model.shapes.OperationShape
 /**
  * Override for generating concrete (AWS) HTTP service clients
  */
-class AwsHttpProtocolClientGenerator(
+open class AwsHttpProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
     middlewares: List<ProtocolMiddleware>,
     httpBindingResolver: HttpBindingResolver

@@ -20,5 +20,12 @@ class SdkProtocolGeneratorSupplier : KotlinIntegration {
      */
     override val order: Byte = -10
 
-    override val protocolGenerators: List<ProtocolGenerator> = listOf(AwsJson1_0(), AwsJson1_1(), RestJson1(), RestXml())
+    override val protocolGenerators: List<ProtocolGenerator> =
+        listOf(
+            AwsJson1_0(),
+            AwsJson1_1(),
+            RestJson1(),
+            RestXml(),
+            AwsQuery(),
+        )
 }

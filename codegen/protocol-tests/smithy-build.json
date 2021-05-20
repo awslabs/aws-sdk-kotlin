@@ -115,6 +115,29 @@
           }
         }
       }
+    },
+    "aws-query": {
+      "transforms": [
+        {
+          "name": "includeServices",
+          "args": {
+            "services": ["aws.protocoltests.query#AwsQuery"]
+          }
+        }
+      ],
+      "plugins": {
+        "kotlin-codegen": {
+          "service": "aws.protocoltests.query#AwsQuery",
+          "package" : {
+            "name": "aws.sdk.kotlin.protocoltest.awsquery",
+            "version": "1.0"
+          },
+          "build":  {
+            "rootProject": true,
+            "optInAnnotations": ["software.aws.clientrt.util.InternalApi", "aws.sdk.kotlin.runtime.InternalSdkApi"]
+          }
+        }
+      }
     }
   }
 }
