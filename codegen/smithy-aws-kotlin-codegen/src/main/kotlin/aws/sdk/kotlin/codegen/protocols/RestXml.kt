@@ -67,23 +67,46 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         val resolver = getProtocolHttpBindingResolver(ctx)
         val requestBindings = resolver.requestBindings(op)
         val documentMembers = requestBindings.filterDocumentBoundMembers()
-
         val shape = ctx.model.expectShape(op.input.get())
 
-        // import and instantiate a serializer
         writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlSerializer)
         writer.write("val serializer = #T()", RuntimeTypes.Serde.SerdeXml.XmlSerializer)
 
         val httpPayload = requestBindings.firstOrNull { it.location == HttpBinding.Location.PAYLOAD }
         if (httpPayload != null) {
-            // explicitly bound member, delegate to the document serializer
-            val memberSymbol = ctx.symbolProvider.toSymbol(httpPayload.member)
-            writer.write("input.${httpPayload.member.defaultName()}?.let { #L(serializer, it) }", memberSymbol.documentSerializerName())
+            // explicitly bound member
+            val member = httpPayload.member
+            if (member.hasTrait<XmlNameTrait>()) {
+                // can't delegate since the member has it's own trait(s), have to generate one inline
+                renderSerializeExplicitBoundStructure(ctx, member, writer)
+            } else {
+                // re-use the document serializer
+                val memberSymbol = ctx.symbolProvider.toSymbol(member)
+                writer.write("input.${httpPayload.member.defaultName()}?.let { #L(serializer, it) }", memberSymbol.documentSerializerName())
+            }
         } else {
             renderSerializerBody(ctx, shape, documentMembers, writer)
         }
 
         writer.write("return serializer.toByteArray()")
+    }
+
+    private fun renderSerializeExplicitBoundStructure(
+        ctx: ProtocolGenerator.GenerationContext,
+        boundMember: MemberShape,
+        writer: KotlinWriter
+    ) {
+        val targetShape = ctx.model.expectShape<StructureShape>(boundMember.target)
+        val copyWithMemberTraits = targetShape
+            .toBuilder()
+            .removeTrait(XmlNameTrait.ID)
+            .addTrait(boundMember.expectTrait<XmlNameTrait>())
+            .build()
+
+        // re-bind and shadow local variable input such that the generate serializer body is referencing
+        // the correct type (the operation `input` being shadowed isn't used)
+        writer.write("val input = requireNotNull(input.${boundMember.defaultName()})")
+        renderSerializerBody(ctx, copyWithMemberTraits, targetShape.members().toList(), writer)
     }
 
     private fun renderDeserializerBody(
@@ -124,12 +147,48 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
 
         val httpPayload = responseBindings.firstOrNull { it.location == HttpBinding.Location.PAYLOAD }
         if (httpPayload != null) {
-            // explicitly bound member, delegate to the document deserializer
-            val memberSymbol = ctx.symbolProvider.toSymbol(httpPayload.member)
-            writer.write("builder.${httpPayload.member.defaultName()} = #L(deserializer)", memberSymbol.documentDeserializerName())
+            // explicitly bound member
+            val member = httpPayload.member
+            if (member.hasTrait<XmlNameTrait>()) {
+                // can't delegate, have to generate a dedicated deserializer inline
+                renderDeserializeExplicitBoundStructure(ctx, member, writer)
+            } else {
+                // we can re-use the document deserializer
+                val memberSymbol = ctx.symbolProvider.toSymbol(member)
+                writer.write("builder.${member.defaultName()} = #L(deserializer)", memberSymbol.documentDeserializerName())
+            }
         } else {
             renderDeserializerBody(ctx, shape, documentMembers, writer)
         }
+    }
+
+    private fun renderDeserializeExplicitBoundStructure(
+        ctx: ProtocolGenerator.GenerationContext,
+        boundMember: MemberShape,
+        writer: KotlinWriter
+    ) {
+        val memberSymbol = ctx.symbolProvider.toSymbol(boundMember)
+        writer.addImport(memberSymbol)
+
+        val targetShape = ctx.model.expectShape<StructureShape>(boundMember.target)
+
+        val copyWithMemberTraits = targetShape.toBuilder()
+            .removeTrait(XmlNameTrait.ID)
+            .addTrait(boundMember.expectTrait<XmlNameTrait>())
+            .build()
+
+        // cheat and generate a local lambda variable whose body matches that of a document serializer for the member
+        // type BUT with the traits of the member. This allows the `builder` variable to have the correct scope
+        // in two different contexts
+        val deserializeLambdaIdent = "deserialize${boundMember.defaultName().capitalize()}"
+        writer.withBlock("val $deserializeLambdaIdent = suspend {", "}") {
+            write("val builder = #T.builder()", memberSymbol)
+            renderDeserializerBody(ctx, copyWithMemberTraits, targetShape.members().toList(), writer)
+            write("builder.build()")
+        }
+
+        // invoke the inline lambda
+        writer.write("builder.${boundMember.defaultName()} = $deserializeLambdaIdent()")
     }
 
     override fun renderDeserializeDocumentBody(
