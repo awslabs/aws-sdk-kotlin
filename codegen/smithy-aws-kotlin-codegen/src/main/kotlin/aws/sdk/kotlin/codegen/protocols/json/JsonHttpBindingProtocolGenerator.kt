@@ -3,43 +3,28 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.codegen.protocols
+package aws.sdk.kotlin.codegen.protocols.json
 
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
-import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
-import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
-import software.amazon.smithy.kotlin.codegen.core.*
-import software.amazon.smithy.kotlin.codegen.model.*
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.defaultName
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.filterDocumentBoundMembers
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.toRenderingContext
 import software.amazon.smithy.kotlin.codegen.rendering.serde.*
 import software.amazon.smithy.model.knowledge.HttpBinding
-import software.amazon.smithy.model.shapes.*
-import software.amazon.smithy.model.traits.*
+import software.amazon.smithy.model.shapes.MemberShape
+import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.model.shapes.Shape
+import software.amazon.smithy.model.traits.TimestampFormatTrait
 
 /**
- * Handles generating the aws.protocols#restJson1 protocol for services.
- *
- * @inheritDoc
- * @see AwsHttpBindingProtocolGenerator
+ * Abstract base class that all protocols using JSON as a document format can inherit from
  */
-class RestXml : AwsHttpBindingProtocolGenerator() {
+abstract class JsonHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerator() {
 
-    override val protocol: ShapeId = RestXmlTrait.ID
-    override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.DATE_TIME
-
-    override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
-        val middleware = super.getDefaultHttpMiddleware(ctx)
-
-        val restXmlMiddleware = listOf(
-            RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
-        )
-
-        return middleware + restXmlMiddleware
-    }
-
-    // See https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#content-type
-    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
-        HttpTraitResolver(ctx, "application/xml")
+    override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 
     private fun renderSerializerBody(
         ctx: ProtocolGenerator.GenerationContext,
@@ -47,15 +32,12 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         members: List<MemberShape>,
         writer: KotlinWriter,
     ) {
-        // order is important due to attributes
-        val sortedMembers = sortMembersForSerialization(members)
-
         // render the serde descriptors
-        XmlSerdeDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), sortedMembers).render()
+        JsonSerdeDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members).render()
         if (shape.isUnionShape) {
-            SerializeUnionGenerator(ctx, sortedMembers, writer, defaultTimestampFormat).render()
+            SerializeUnionGenerator(ctx, members, writer, defaultTimestampFormat).render()
         } else {
-            SerializeStructGenerator(ctx, sortedMembers, writer, defaultTimestampFormat).render()
+            SerializeStructGenerator(ctx, members, writer, defaultTimestampFormat).render()
         }
     }
 
@@ -71,9 +53,10 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         val shape = ctx.model.expectShape(op.input.get())
 
         // import and instantiate a serializer
-        writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlSerializer)
-        writer.write("val serializer = #T()", RuntimeTypes.Serde.SerdeXml.XmlSerializer)
+        writer.addImport(RuntimeTypes.Serde.SerdeJson.JsonSerializer)
+        writer.write("val serializer = #T()", RuntimeTypes.Serde.SerdeJson.JsonSerializer)
 
+        // restJson protocol supports the httpPayload trait
         val httpPayload = requestBindings.firstOrNull { it.location == HttpBinding.Location.PAYLOAD }
         if (httpPayload != null) {
             // explicitly bound member, delegate to the document serializer
@@ -92,7 +75,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         members: List<MemberShape>,
         writer: KotlinWriter,
     ) {
-        XmlSerdeDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members).render()
+        JsonSerdeDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members).render()
         if (shape.isUnionShape) {
             val name = ctx.symbolProvider.toSymbol(shape).name
             DeserializeUnionGenerator(ctx, name, members, writer, defaultTimestampFormat).render()
@@ -114,8 +97,8 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         op: OperationShape,
         writer: KotlinWriter
     ) {
-        writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
-        writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+        writer.addImport(RuntimeTypes.Serde.SerdeJson.JsonDeserializer)
+        writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeJson.JsonDeserializer)
         val resolver = getProtocolHttpBindingResolver(ctx)
         val responseBindings = resolver.responseBindings(op)
         val documentMembers = responseBindings.filterDocumentBoundMembers()
@@ -148,19 +131,8 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         val resolver = getProtocolHttpBindingResolver(ctx)
         val responseBindings = resolver.responseBindings(shape)
         val documentMembers = responseBindings.filterDocumentBoundMembers()
-        writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
-        writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+        writer.addImport(RuntimeTypes.Serde.SerdeJson.JsonDeserializer)
+        writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeJson.JsonDeserializer)
         renderDeserializerBody(ctx, shape, documentMembers, writer)
-    }
-
-    private fun sortMembersForSerialization(
-        members: List<MemberShape>
-    ): List<MemberShape> {
-        val attributes = members.filter { it.hasTrait<XmlAttributeTrait>() }.sortedBy { it.memberName }
-        val elements = members.filterNot { it.hasTrait<XmlAttributeTrait>() }.sortedBy { it.memberName }
-
-        // XML attributes MUST be serialized immediately following calls to `startTag` before
-        // any nested content is serialized
-        return attributes + elements
     }
 }
