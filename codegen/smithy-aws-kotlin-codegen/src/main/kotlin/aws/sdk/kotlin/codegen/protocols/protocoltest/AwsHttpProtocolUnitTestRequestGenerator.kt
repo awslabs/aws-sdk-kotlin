@@ -46,9 +46,8 @@ class AwsHttpProtocolUnitTestRequestGenerator(builder: Builder) :
     }
 
     open class Builder : HttpProtocolUnitTestRequestGenerator.Builder() {
-        override fun build(): HttpProtocolUnitTestGenerator<HttpRequestTestCase> {
-            return AwsHttpProtocolUnitTestRequestGenerator(this)
-        }
+        override fun build(): HttpProtocolUnitTestGenerator<HttpRequestTestCase> =
+            AwsHttpProtocolUnitTestRequestGenerator(this)
     }
 }
 

@@ -129,9 +129,8 @@ public class AwsSigningConfig private constructor(builder: Builder) {
     }
 }
 
-internal suspend fun AwsSigningConfig.getCredentials(): Credentials {
-    return credentials ?: checkNotNull(credentialsProvider).getCredentials()
-}
+internal suspend fun AwsSigningConfig.getCredentials(): Credentials =
+    credentials ?: checkNotNull(credentialsProvider).getCredentials()
 
 /**
  * Defines the AWS signature version to use

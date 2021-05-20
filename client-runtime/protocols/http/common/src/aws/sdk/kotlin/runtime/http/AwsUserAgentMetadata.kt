@@ -132,12 +132,10 @@ public data class ExecutionEnvMetadata(val name: String) {
     override fun toString(): String = "exec-env/${name.encodeUaToken()}"
 }
 
-private fun detectExecEnv(): ExecutionEnvMetadata? {
-    // see https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
-    return Platform.getenv("AWS_LAMBDA_FUNCTION_NAME")?.let {
+private fun detectExecEnv(): ExecutionEnvMetadata? =
+    Platform.getenv("AWS_LAMBDA_FUNCTION_NAME")?.let {
         ExecutionEnvMetadata("lambda")
     }
-}
 
 // ua-value = token
 // token = 1*tchar

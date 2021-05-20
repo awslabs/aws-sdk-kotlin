@@ -98,12 +98,11 @@ class AwsJsonProtocolTest {
 
         val op = SdkHttpOperation.build<Unit, HttpResponse> {
             serializer = object : HttpSerialize<Unit> {
-                override suspend fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder {
-                    return HttpRequestBuilder().apply {
+                override suspend fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder =
+                    HttpRequestBuilder().apply {
                         headers["Content-Type"] = "application/xml"
                         body = ByteArrayContent("foo".encodeToByteArray())
                     }
-                }
             }
             deserializer = IdentityDeserializer
             context {

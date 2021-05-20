@@ -20,9 +20,8 @@ open class AwsHttpProtocolUnitTestResponseGenerator(builder: Builder) : HttpProt
     }
 
     open class Builder : HttpProtocolUnitTestResponseGenerator.Builder() {
-        override fun build(): HttpProtocolUnitTestGenerator<HttpResponseTestCase> {
-            return AwsHttpProtocolUnitTestResponseGenerator(this)
-        }
+        override fun build(): HttpProtocolUnitTestGenerator<HttpResponseTestCase> =
+            AwsHttpProtocolUnitTestResponseGenerator(this)
     }
 }
 
@@ -37,8 +36,7 @@ class AwsHttpProtocolUnitTestErrorGenerator(builder: Builder) : HttpProtocolUnit
     }
 
     class Builder : HttpProtocolUnitTestErrorGenerator.Builder() {
-        override fun build(): HttpProtocolUnitTestGenerator<HttpResponseTestCase> {
-            return AwsHttpProtocolUnitTestErrorGenerator(this)
-        }
+        override fun build(): HttpProtocolUnitTestGenerator<HttpResponseTestCase> =
+            AwsHttpProtocolUnitTestErrorGenerator(this)
     }
 }
