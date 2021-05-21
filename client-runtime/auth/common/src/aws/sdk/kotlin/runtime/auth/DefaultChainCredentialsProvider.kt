@@ -30,7 +30,5 @@ public class DefaultChainCredentialsProvider : CredentialsProvider {
         }
     }
 
-    override suspend fun getCredentials(): Credentials {
-        return crtProvider.getCredentials().toSdk()
-    }
+    override suspend fun getCredentials(): Credentials = crtProvider.getCredentials().toSdk()
 }

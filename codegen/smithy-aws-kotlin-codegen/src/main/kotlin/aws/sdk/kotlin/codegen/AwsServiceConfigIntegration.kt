@@ -74,7 +74,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         }
     }
 
-    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> {
-        return listOf(RegionProp, SigningRegionProp, CredentialsProviderProp, EndpointResolverProp)
-    }
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> =
+        listOf(RegionProp, SigningRegionProp, CredentialsProviderProp, EndpointResolverProp)
 }

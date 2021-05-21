@@ -93,9 +93,8 @@ public data class Partition(
 )
 
 // test if this partition is able to resolve an endpoint for the given region
-internal fun Partition.canResolveEndpoint(region: String): Boolean {
-    return endpoints.containsKey(region) || regionRegex.matches(region)
-}
+internal fun Partition.canResolveEndpoint(region: String): Boolean =
+    endpoints.containsKey(region) || regionRegex.matches(region)
 
 internal fun Partition.resolveEndpoint(region: String): Endpoint? {
     val resolvedRegion = if (region.isEmpty() && partitionEndpoint.isNotEmpty()) {

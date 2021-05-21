@@ -85,8 +85,9 @@ suspend fun S3Client.ensureBucketExists(bucketName: String) {
 
 /** Upload to S3 if file not already uploaded */
 suspend fun S3Client.uploadToS3(mediaMetadata: MediaMetadata): UploadResult {
-    if (keyExists(bucketName, mediaMetadata.s3KeyName))
+    if (keyExists(bucketName, mediaMetadata.s3KeyName)) {
         return FileExistsError("${mediaMetadata.s3KeyName} already uploaded.", mediaMetadata)
+    }
 
     return try {
         putObject {
