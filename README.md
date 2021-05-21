@@ -47,6 +47,22 @@ See the local.properties definition above to specify this in a config file.
 ##### Testing Locally
 Testing generated services generally requires publishing artifacts (e.g. client-runtime) of `smithy-kotlin`, `aws-crt-kotlin`, and `aws-sdk-kotin` to maven local.
 
+##### Logging
+
+To enable log output from the SDK in programs add the following dependency to the executing program:
+
+```gradle
+implementation("org.slf4j:slf4j-simple:1.7.30")
+```
+
+To view low-level request and response log output and the time of the log entry, specify this as JVM parameters to the executing program:
+
+```
+-Dorg.slf4j.simpleLogger.defaultLogLevel=TRACE -Dorg.slf4j.simpleLogger.showDateTime=true
+```
+
+The log level can be adjusted up as needed to DEBUG, INFO, WARN, or ERROR.  [See here](http://www.slf4j.org/api/org/slf4j/impl/SimpleLogger.html) for all properties for the simple logger.
+
 #### Generating API Documentation
 
 API documentation is generated using [Dokka](http://kotlin.github.io/dokka) which is the official documentation tool maintained by JetBrains for documenting Kotlin code.
