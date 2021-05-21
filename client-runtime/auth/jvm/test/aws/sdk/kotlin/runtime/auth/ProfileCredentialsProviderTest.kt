@@ -29,10 +29,7 @@ class ProfileCredentialsProviderTest {
         )
 
         try {
-            val provider = ProfileCredentialsProvider.Builder().run {
-                credentialsFileNameOverride = credsPath.toString()
-                build()
-            }
+            val provider = ProfileCredentialsProvider(credentialsFileNameOverride = credsPath.toString())
             val actual = provider.getCredentials()
             assertEquals(EXPECTED_CREDS, actual)
         } finally {

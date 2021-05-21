@@ -5,9 +5,7 @@
 
 package aws.sdk.kotlin.crt
 
-import aws.sdk.kotlin.crt.io.ClientBootstrap
-import aws.sdk.kotlin.crt.io.EventLoopGroup
-import aws.sdk.kotlin.crt.io.HostResolver
+import aws.sdk.kotlin.crt.io.*
 import aws.sdk.kotlin.runtime.InternalSdkApi
 
 private const val DEFAULT_EVENT_LOOP_THREAD_COUNT: Int = 1
@@ -37,5 +35,12 @@ public object SdkDefaultIO {
      */
     public val ClientBootstrap: ClientBootstrap by lazy {
         ClientBootstrap(EventLoop, HostResolver)
+    }
+
+    /**
+     * The default TLS context
+     */
+    public val TlsContext: TlsContext by lazy {
+        TlsContext(TlsContextOptions.defaultClient())
     }
 }
