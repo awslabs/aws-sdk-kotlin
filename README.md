@@ -51,7 +51,7 @@ Testing generated services generally requires publishing artifacts (e.g. client-
 
 To enable log output from the SDK in programs add the following dependency to the executing program:
 
-```gradle
+```
 implementation("org.slf4j:slf4j-simple:1.7.30")
 ```
 
