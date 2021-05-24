@@ -235,6 +235,10 @@ tasks.create<SmithyBuild>("generateSdk") {
 // Remove generated model file for clean
 tasks["clean"].doFirst {
     delete("smithy-build.json")
+    discoveredServices.forEach {
+        delete("${it.destinationDir}/generated-src")
+        delete("${it.destinationDir}/build.gradle.kts")
+    }
 }
 
 val AwsService.outputDir: String
