@@ -228,7 +228,7 @@ tasks.create<SmithyBuild>("generateSdk") {
     }
 
     addRuntimeClasspath = true
-    dependsOn(tasks["generateSmithyBuild"])
+    dependsOn(tasks["generateSmithyBuild"], ":codegen:smithy-aws-kotlin-codegen:assemble")
     inputs.file(projectDir.resolve("smithy-build.json"))
 }
 
