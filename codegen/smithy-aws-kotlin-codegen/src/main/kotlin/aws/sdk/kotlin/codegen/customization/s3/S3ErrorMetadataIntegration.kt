@@ -7,7 +7,7 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 class S3ErrorMetadataIntegration : KotlinIntegration {
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
-        val writer = KotlinWriter(ctx.settings.pkg.name)
+        val writer = KotlinWriter("${ctx.settings.pkg.name}.model")
 
         writer.addImport("AwsErrorMetadata", AwsKotlinDependency.AWS_CLIENT_RT_CORE)
         writer.addImport("AttributeKey", KotlinDependency.CLIENT_RT_UTILS)
