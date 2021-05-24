@@ -84,7 +84,7 @@ public data class SdkMetadata(val name: String, val version: String) {
  */
 public data class ApiMetadata(val serviceId: String, val version: String) {
     override fun toString(): String {
-        val formattedServiceId = serviceId.replace(" ", "-").toLowerCase()
+        val formattedServiceId = serviceId.replace(" ", "-").lowercase()
         return "api/$formattedServiceId/${version.encodeUaToken()}"
     }
 }
