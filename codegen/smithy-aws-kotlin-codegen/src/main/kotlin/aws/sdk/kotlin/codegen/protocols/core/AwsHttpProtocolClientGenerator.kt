@@ -95,7 +95,7 @@ open class AwsHttpProtocolClientGenerator(
         writer.addImport("putIfAbsent", KotlinDependency.CLIENT_RT_UTILS)
 
         writer.dokka("merge the defaults configured for the service into the execution context before firing off a request")
-        writer.openBlock("private fun mergeServiceDefaults(ctx: ExecutionContext) {", "}") {
+        writer.openBlock("private suspend fun mergeServiceDefaults(ctx: ExecutionContext) {", "}") {
             writer.write("val region = resolveRegionForOperation(ctx, config)")
             writer.write("ctx.putIfAbsent(AwsClientOption.Region, region)")
             writer.write("ctx.putIfAbsent(AuthAttributes.SigningRegion, config.signingRegion ?: region)")
