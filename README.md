@@ -47,22 +47,6 @@ See the local.properties definition above to specify this in a config file.
 ##### Testing Locally
 Testing generated services generally requires publishing artifacts (e.g. client-runtime) of `smithy-kotlin`, `aws-crt-kotlin`, and `aws-sdk-kotin` to maven local.
 
-##### Logging
-
-To enable log output from the SDK in programs add the following dependency to the executing program:
-
-```
-implementation("org.slf4j:slf4j-simple:1.7.30")
-```
-
-To view low-level request and response log output and the time of the log entry, specify this as JVM parameters to the executing program:
-
-```
--Dorg.slf4j.simpleLogger.defaultLogLevel=TRACE -Dorg.slf4j.simpleLogger.showDateTime=true
-```
-
-The log level can be adjusted up as needed to DEBUG, INFO, WARN, or ERROR.  [See here](http://www.slf4j.org/api/org/slf4j/impl/SimpleLogger.html) for all properties for the simple logger.
-
 #### Generating API Documentation
 
 API documentation is generated using [Dokka](http://kotlin.github.io/dokka) which is the official documentation tool maintained by JetBrains for documenting Kotlin code.
@@ -129,3 +113,25 @@ aws.services=-location,-dynamodb
 # Generate all services except those using the restJson1 protocol:
 aws.protocols=-restJson1
 ```
+### Debugging
+
+#### Logging
+
+##### JVM
+
+For JVM targets, the Kotlin SDK uses the `slf4j` logger.  The build configuration can be updated to enable log output.
+
+While any `slf4j`-compatible log library may be used, here is an example to enable log output from the SDK in JVM 
+programs:
+
+```
+implementation("org.slf4j:slf4j-simple:1.7.30")
+```
+
+To view low-level request and response log output and the time of the log entry, specify this as JVM parameters to the executing program:
+
+```
+-Dorg.slf4j.simpleLogger.defaultLogLevel=TRACE -Dorg.slf4j.simpleLogger.showDateTime=true
+```
+
+The log level can be adjusted up as needed to DEBUG, INFO, WARN, or ERROR.  [See here](http://www.slf4j.org/api/org/slf4j/impl/SimpleLogger.html) for all properties for the simple logger.
