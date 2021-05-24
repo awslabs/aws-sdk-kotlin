@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.regions
 
 import aws.sdk.kotlin.runtime.client.AwsClientOption
+import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.client.ExecutionContext
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,7 +14,7 @@ import kotlin.test.assertEquals
 class AwsRegionTest {
 
     @Test
-    fun `it resolves region for operation`() {
+    fun `it resolves region for operation`() = runSuspendTest {
         // from context
         val config = object : RegionConfig {
             override val region: String = "us-west-2"
@@ -25,7 +26,5 @@ class AwsRegionTest {
         // from config
         val actual2 = resolveRegionForOperation(ExecutionContext(), config)
         assertEquals("us-west-2", actual2)
-
-        // TODO - from default region discovery
     }
 }
