@@ -32,6 +32,7 @@ subprojects {
 
         if (name == "main") {
             kotlin.srcDir("generated-src/main/kotlin")
+            kotlin.srcDir("common/src")
         }
     }
 

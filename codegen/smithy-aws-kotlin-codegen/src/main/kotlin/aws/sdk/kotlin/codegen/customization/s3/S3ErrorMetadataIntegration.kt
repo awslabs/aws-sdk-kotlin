@@ -23,6 +23,12 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
             writer.dedent()
         }
 
+        writer.write("\n// Add property to S3Exception type")
+        writer.write("val S3Exception.sdkErrorMetadata: S3ErrorMetadata")
+        writer.indent()
+        writer.write("get() = S3ErrorMetadata()")
+        writer.dedent()
+
         val contents = writer.toString()
 
         val packagePath = ctx.settings.pkg.name.replace('.', '/')
