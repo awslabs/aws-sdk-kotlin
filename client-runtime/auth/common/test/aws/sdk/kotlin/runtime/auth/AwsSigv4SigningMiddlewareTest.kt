@@ -28,31 +28,28 @@ class AwsSigv4SigningMiddlewareTest {
         override suspend fun getCredentials(): Credentials = testCredentials
     }
 
-    private fun buildOperation(): SdkHttpOperation<Unit, HttpResponse> {
-        return SdkHttpOperation.build {
-            serializer = object : HttpSerialize<Unit> {
-                override suspend fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder {
-                    return HttpRequestBuilder().apply {
-                        method = HttpMethod.POST
-                        url.host = "http://demo.us-east-1.amazonaws.com"
-                        url.path = "/"
-                        headers.append("Host", "demo.us-east-1.amazonaws.com")
-                        headers.appendAll("x-amz-archive-description", listOf("test", "test"))
-                        val requestBody = "{\"TableName\": \"foo\"}"
-                        body = ByteArrayContent(requestBody.encodeToByteArray())
-                        headers.append("Content-Length", body.contentLength?.toString() ?: "0")
-                    }
+    private fun buildOperation(): SdkHttpOperation<Unit, HttpResponse> = SdkHttpOperation.build {
+        serializer = object : HttpSerialize<Unit> {
+            override suspend fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder =
+                HttpRequestBuilder().apply {
+                    method = HttpMethod.POST
+                    url.host = "http://demo.us-east-1.amazonaws.com"
+                    url.path = "/"
+                    headers.append("Host", "demo.us-east-1.amazonaws.com")
+                    headers.appendAll("x-amz-archive-description", listOf("test", "test"))
+                    val requestBody = "{\"TableName\": \"foo\"}"
+                    body = ByteArrayContent(requestBody.encodeToByteArray())
+                    headers.append("Content-Length", body.contentLength?.toString() ?: "0")
                 }
-            }
-            deserializer = IdentityDeserializer
+        }
+        deserializer = IdentityDeserializer
 
-            context {
-                operationName = "testSigningOperation"
-                service = "TestService"
-                set(AuthAttributes.SigningRegion, "us-east-1")
-                set(AuthAttributes.SigningDate, Instant.fromIso8601("2020-10-16T19:56:00Z"))
-                set(AuthAttributes.SigningService, "demo")
-            }
+        context {
+            operationName = "testSigningOperation"
+            service = "TestService"
+            set(AuthAttributes.SigningRegion, "us-east-1")
+            set(AuthAttributes.SigningDate, Instant.fromIso8601("2020-10-16T19:56:00Z"))
+            set(AuthAttributes.SigningService, "demo")
         }
     }
 

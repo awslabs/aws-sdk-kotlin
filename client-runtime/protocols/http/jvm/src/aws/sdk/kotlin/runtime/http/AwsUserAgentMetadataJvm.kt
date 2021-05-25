@@ -27,6 +27,5 @@ internal actual fun platformLanguageMetadata(): LanguageMetadata {
     return LanguageMetadata(extras = jvmMetadata)
 }
 
-private fun getSystemProperty(name: String, defaultValue: String = "unknown"): String {
-    return runCatching { System.getProperty(name) }.getOrDefault(defaultValue)
-}
+private fun getSystemProperty(name: String, defaultValue: String = "unknown"): String =
+    runCatching { System.getProperty(name) }.getOrDefault(defaultValue)

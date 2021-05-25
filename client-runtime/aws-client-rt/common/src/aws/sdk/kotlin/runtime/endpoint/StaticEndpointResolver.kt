@@ -9,7 +9,5 @@ package aws.sdk.kotlin.runtime.endpoint
  * An [EndpointResolver] that returns a static endpoint
  */
 public class StaticEndpointResolver(private val endpoint: Endpoint) : EndpointResolver {
-    override suspend fun resolve(service: String, region: String): Endpoint {
-        return endpoint
-    }
+    override suspend fun resolve(service: String, region: String): Endpoint = endpoint
 }

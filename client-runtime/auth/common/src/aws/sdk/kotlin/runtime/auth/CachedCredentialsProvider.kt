@@ -32,9 +32,7 @@ public class CachedCredentialsProvider private constructor(builder: Builder) : C
         source = builder.source?.let { CrtCredentialsProvider(it) }
     }
 
-    override suspend fun getCredentials(): Credentials {
-        return crtProvider.getCredentials().toSdk()
-    }
+    override suspend fun getCredentials(): Credentials = crtProvider.getCredentials().toSdk()
 
     public companion object {
         /**
