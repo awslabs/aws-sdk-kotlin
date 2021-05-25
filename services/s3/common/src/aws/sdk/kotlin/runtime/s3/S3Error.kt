@@ -9,7 +9,8 @@ import aws.sdk.kotlin.runtime.http.ExceptionMetadata
 import aws.sdk.kotlin.runtime.http.ExceptionRegistry
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
 import aws.sdk.kotlin.runtime.http.withPayload
-import aws.sdk.kotlin.runtime.protocol.xml.*
+import aws.sdk.kotlin.services.s3.model.S3Exception
+import aws.sdk.kotlin.services.s3.model.sdkErrorMetadata2
 import software.aws.clientrt.ServiceErrorMetadata
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.operation.HttpDeserialize
@@ -142,11 +143,11 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
         }
     }
 
-    public companion object Feature : HttpClientFeatureFactory<Config, RestXmlError> {
-        override val key: FeatureKey<RestXmlError> = FeatureKey("RestXmlError")
-        override fun create(block: Config.() -> Unit): RestXmlError {
+    public companion object Feature : HttpClientFeatureFactory<Config, S3Error> {
+        override val key: FeatureKey<S3Error> = FeatureKey("RestXmlError")
+        override fun create(block: Config.() -> Unit): S3Error {
             val config = Config().apply(block)
-            return RestXmlError(config.registry)
+            return S3Error(config.registry)
         }
     }
 
@@ -202,10 +203,11 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
      * pull the ase specific details from the response / error
      */
     private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: RestXmlErrorDetails?) {
-        if (exception is AwsServiceException) {
+        if (exception is S3Exception) {
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
+            exception.sdkErrorMetadata2.
             exception.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
         }
     }
