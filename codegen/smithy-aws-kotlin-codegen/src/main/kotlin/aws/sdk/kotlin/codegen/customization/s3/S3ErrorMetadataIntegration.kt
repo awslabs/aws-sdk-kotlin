@@ -9,10 +9,11 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProto
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.model.shapes.ServiceShape
 
 class S3ErrorMetadataIntegration : KotlinIntegration {
 
-    override fun apply(ctx: ProtocolGenerator.GenerationContext) = ctx.service.isS3
+    override fun apply(service: ServiceShape) = service.isS3
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val writer = KotlinWriter("${ctx.settings.pkg.name}.model")

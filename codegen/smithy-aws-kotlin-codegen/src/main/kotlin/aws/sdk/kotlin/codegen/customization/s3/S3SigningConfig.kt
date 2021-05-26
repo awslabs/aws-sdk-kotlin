@@ -12,6 +12,7 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
  * Overrides the SigV4 signing middleware config for S3.
@@ -21,7 +22,7 @@ class S3SigningConfig : KotlinIntegration {
     override val order: Byte
         get() = 127
 
-    override fun apply(ctx: ProtocolGenerator.GenerationContext) = ctx.service.isS3
+    override fun apply(service: ServiceShape) = service.isS3
 
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
