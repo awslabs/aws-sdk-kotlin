@@ -1,10 +1,18 @@
 package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
+import aws.sdk.kotlin.codegen.protocols.RestXml
+import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 
 class S3ErrorMetadataIntegration : KotlinIntegration {
+
+    override fun apply(ctx: ProtocolGenerator.GenerationContext) = ctx.service.isS3
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val writer = KotlinWriter("${ctx.settings.pkg.name}.model")
@@ -23,15 +31,22 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
             writer.dedent()
         }
 
-        writer.write("\n// Add property to S3Exception type")
-        writer.write("val S3Exception.sdkErrorMetadata: S3ErrorMetadata")
-        writer.indent()
-        writer.write("get() = S3ErrorMetadata()")
-        writer.dedent()
-
         val contents = writer.toString()
 
         val packagePath = ctx.settings.pkg.name.replace('.', '/')
         delegator.fileManifest.writeFile("src/main/kotlin/$packagePath/model/S3ErrorMetadata.kt", contents)
+    }
+
+    override fun customizeMiddleware(
+        ctx: ProtocolGenerator.GenerationContext,
+        generator: HttpBindingProtocolGenerator,
+        resolved: List<ProtocolMiddleware>
+    ): List<ProtocolMiddleware> =
+        resolved.replace(newValue = S3ErrorMiddleware(ctx, generator.getProtocolHttpBindingResolver(ctx))) {
+            it is RestXmlErrorMiddleware
+        }
+
+    override fun augmentBaseErrorType(writer: KotlinWriter) {
+        writer.write("override val sdkErrorMetadata: S3ErrorMetadata = S3ErrorMetadata()")
     }
 }

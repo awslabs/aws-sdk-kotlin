@@ -30,11 +30,9 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
     override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
         val middleware = super.getDefaultHttpMiddleware(ctx)
 
-        // here we can predicate on service and insert an S3ErrorMiddleware
-        val restXmlMiddleware = when {
-            ctx.settings.sdkId == "S3" -> listOf(S3ErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx)))
-            else -> listOf(RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx)))
-        }
+        val restXmlMiddleware = listOf(
+            RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
+        )
 
         return middleware + restXmlMiddleware
     }

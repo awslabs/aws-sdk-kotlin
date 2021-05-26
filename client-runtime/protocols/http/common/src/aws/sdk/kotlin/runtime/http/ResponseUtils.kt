@@ -13,6 +13,7 @@ import software.aws.clientrt.http.response.HttpResponse
  * Default header name identifying the unique requestId
  */
 public const val X_AMZN_REQUEST_ID_HEADER: String = "X-Amzn-RequestId"
+public const val X_AMZN_REQUEST_ID2_HEADER: String = "x-amz-id-2"
 
 /**
  * Return a copy of the response with a new payload set

@@ -5,12 +5,9 @@
 package aws.sdk.kotlin.runtime.s3
 
 import aws.sdk.kotlin.runtime.*
-import aws.sdk.kotlin.runtime.http.ExceptionMetadata
-import aws.sdk.kotlin.runtime.http.ExceptionRegistry
-import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
-import aws.sdk.kotlin.runtime.http.withPayload
+import aws.sdk.kotlin.runtime.http.*
+import aws.sdk.kotlin.services.s3.model.S3ErrorMetadata
 import aws.sdk.kotlin.services.s3.model.S3Exception
-import aws.sdk.kotlin.services.s3.model.sdkErrorMetadata2
 import software.aws.clientrt.ServiceErrorMetadata
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.operation.HttpDeserialize
@@ -35,6 +32,7 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
 
     internal interface RestXmlErrorDetails {
         val requestId: String?
+        val requestId2: String?
         val code: String?
         val message: String?
     }
@@ -43,6 +41,7 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
     internal data class XmlErrorResponse(
         val error: XmlError?,
         override val requestId: String? = error?.requestId,
+        override val requestId2: String? = error?.requestId2
     ) : RestXmlErrorDetails {
         override val code: String? = error?.code
         override val message: String? = error?.message
@@ -51,6 +50,7 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
     // Models "Error" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
     internal data class XmlError(
         override val requestId: String?,
+        override val requestId2: String?,
         override val code: String?,
         override val message: String?
     ) : RestXmlErrorDetails
@@ -74,6 +74,7 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
     internal object ErrorResponseDeserializer {
         private val ERROR_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName("Error"))
         private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
+        private val HOSTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("HostId"))
         private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
             trait(XmlSerialName("ErrorResponse"))
             field(ERROR_DESCRIPTOR)
@@ -82,6 +83,7 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
 
         suspend fun deserialize(deserializer: Deserializer): XmlErrorResponse? {
             var requestId: String? = null
+            var requestId2: String? = null
             var xmlError: XmlError? = null
 
             return try {
@@ -90,13 +92,14 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
                         when (findNextFieldIndex()) {
                             ERROR_DESCRIPTOR.index -> xmlError = XmlErrorDeserializer.deserialize(deserializer)
                             REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
+                            HOSTID_DESCRIPTOR.index -> requestId2 = deserializeString()
                             null -> break@loop
                             else -> skipValue()
                         }
                     }
                 }
 
-                XmlErrorResponse(xmlError, requestId ?: xmlError?.requestId)
+                XmlErrorResponse(xmlError, requestId ?: xmlError?.requestId, requestId2 ?: xmlError?.requestId2)
             } catch (e: DeserializationException) {
                 null // return so an appropriate exception type can be instantiated above here.
             }
@@ -111,6 +114,7 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
         private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
         private val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Code"))
         private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
+        private val HOSTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("HostId"))
         private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
             trait(XmlSerialName("Error"))
             field(MESSAGE_DESCRIPTOR)
@@ -122,6 +126,7 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
             var message: String? = null
             var code: String? = null
             var requestId: String? = null
+            var requestId2: String? = null
 
             return try {
                 deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
@@ -130,13 +135,14 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
                             MESSAGE_DESCRIPTOR.index -> message = deserializeString()
                             CODE_DESCRIPTOR.index -> code = deserializeString()
                             REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
+                            HOSTID_DESCRIPTOR.index -> requestId2 = deserializeString()
                             null -> break@loop
                             else -> skipValue()
                         }
                     }
                 }
 
-                XmlError(requestId, code, message)
+                XmlError(requestId, requestId2, code, message)
             } catch (e: DeserializationException) {
                 null // return so an appropriate exception type can be instantiated above here.
             }
@@ -207,7 +213,10 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
-            exception.sdkErrorMetadata2.
+            // KGHW add the following line to a fix PR on main
+            exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, errorDetails?.requestId)
+            exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, response.headers[X_AMZN_REQUEST_ID2_HEADER])
+            exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, errorDetails?.requestId2)
             exception.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
         }
     }

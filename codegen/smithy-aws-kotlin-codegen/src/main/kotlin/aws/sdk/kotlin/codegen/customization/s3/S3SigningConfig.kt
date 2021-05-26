@@ -9,6 +9,7 @@ import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 
@@ -20,20 +21,18 @@ class S3SigningConfig : KotlinIntegration {
     override val order: Byte
         get() = 127
 
+    override fun apply(ctx: ProtocolGenerator.GenerationContext) = ctx.service.isS3
+
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
+        generator: HttpBindingProtocolGenerator,
         resolved: List<ProtocolMiddleware>
     ): List<ProtocolMiddleware> {
-        if (!ctx.service.isS3) return resolved
-
-        val middleware = resolved.filterNot {
-            it.name == AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware.name
-        }.toMutableList()
-
         val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.model, ctx.service)
-        middleware.add(S3SigningMiddleware(signingServiceName))
 
-        return middleware
+        return resolved.replace(newValue = S3SigningMiddleware(signingServiceName)) { middleware ->
+            middleware.name == AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware.name
+        }
     }
 }
 
