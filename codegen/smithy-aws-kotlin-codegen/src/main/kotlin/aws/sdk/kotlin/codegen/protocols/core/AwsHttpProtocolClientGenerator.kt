@@ -11,12 +11,10 @@ import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.aws.traits.protocols.*
 import software.amazon.smithy.codegen.core.CodegenException
-import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.addImport
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
@@ -35,23 +33,6 @@ open class AwsHttpProtocolClientGenerator(
     middlewares: List<ProtocolMiddleware>,
     httpBindingResolver: HttpBindingResolver
 ) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
-
-    override val serdeProviderSymbol: Symbol
-        get() {
-            return when (ctx.protocol) {
-                AwsJson1_1Trait.ID,
-                AwsJson1_0Trait.ID,
-                RestJson1Trait.ID -> buildSymbol {
-                    name = "JsonSerdeProvider"
-                    namespace(KotlinDependency.CLIENT_RT_SERDE_JSON)
-                }
-                RestXmlTrait.ID -> buildSymbol {
-                    name = "XmlSerdeProvider"
-                    namespace(KotlinDependency.CLIENT_RT_SERDE_XML)
-                }
-                else -> throw CodegenException("no serialization provider implemented for: ${ctx.protocol}")
-            }
-        }
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
