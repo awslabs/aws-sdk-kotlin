@@ -45,6 +45,12 @@ kotlin {
                 implementation(project(":client-runtime:testing"))
             }
         }
+
+        jvmTest {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+            }
+        }
     }
 }
 

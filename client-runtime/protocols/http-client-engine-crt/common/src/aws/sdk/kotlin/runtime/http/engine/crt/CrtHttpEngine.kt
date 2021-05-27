@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.sdk.kotlin.crt.http.*
-import aws.sdk.kotlin.crt.http.HttpRequest as HttpRequestCrt
 import aws.sdk.kotlin.crt.io.*
 import software.aws.clientrt.http.HttpBody
 import software.aws.clientrt.http.engine.HttpClientEngine
@@ -15,7 +14,7 @@ import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.logging.Logger
 import software.aws.clientrt.time.Instant
 import kotlin.coroutines.*
-
+import aws.sdk.kotlin.crt.http.HttpRequest as HttpRequestCrt
 
 /**
  * [HttpClientEngine] based on the AWS Common Runtime HTTP client
@@ -37,10 +36,6 @@ public class CrtHttpEngine : HttpClientEngine {
     // connection managers are per host
     private val connManagers = mutableMapOf<String, HttpClientConnectionManager>()
 
-    // public companion object {
-    //     public val Default: CrtHttpEngine = TODO()
-    // }
-
     override suspend fun roundTrip(request: HttpRequest): HttpCall {
 
         val manager = getManagerForUri(request.uri)
@@ -50,15 +45,17 @@ public class CrtHttpEngine : HttpClientEngine {
             val reqTime = Instant.now()
             val engineRequest = request.toCrtRequest(coroutineContext)
 
-            val respHandler = SdkStreamResponseHandler()
-            conn.makeRequest(engineRequest, respHandler)
+            // LIFETIME: connection will be released back to the pool/manager when
+            // the response completes
+            val respHandler = SdkStreamResponseHandler(conn)
+
+            val stream = conn.makeRequest(engineRequest, respHandler)
+            stream.activate()
 
             val resp = respHandler.waitForResponse()
 
-            // FIXME - need to tie lifetime of conn to the response body and release back to manager when closed/read completely
             return HttpCall(request, resp, reqTime, Instant.now())
-
-        }catch(ex: Exception) {
+        } catch (ex: Exception) {
             manager.releaseConnection(conn)
             throw ex
         }
@@ -79,7 +76,6 @@ public class CrtHttpEngine : HttpClientEngine {
         }
 }
 
-
 internal val HttpRequest.uri: Uri
     get() {
         val sdkUrl = this.url
@@ -92,10 +88,9 @@ internal val HttpRequest.uri: Uri
         }
     }
 
-
 internal fun HttpRequest.toCrtRequest(callContext: CoroutineContext): HttpRequestCrt {
     val body = this.body
-    val bodyStream = when(body) {
+    val bodyStream = when (body) {
         is HttpBody.Streaming -> ReadChannelBodyStream(body.readFrom(), callContext)
         is HttpBody.Bytes -> HttpRequestBodyStream.fromByteArray(body.bytes())
         else -> null
@@ -107,9 +102,7 @@ internal fun HttpRequest.toCrtRequest(callContext: CoroutineContext): HttpReques
 internal class HttpHeadersCrt(private val sdkHeaders: software.aws.clientrt.http.Headers) : Headers {
     override fun contains(name: String): Boolean = sdkHeaders.contains(name)
     override fun entries(): Set<Map.Entry<String, List<String>>> = sdkHeaders.entries()
-    override fun getAll(name: String): List<String>?  = sdkHeaders.getAll(name)
-    override fun isEmpty(): Boolean  = sdkHeaders.isEmpty()
-    override fun names(): Set<String>  = sdkHeaders.names()
+    override fun getAll(name: String): List<String>? = sdkHeaders.getAll(name)
+    override fun isEmpty(): Boolean = sdkHeaders.isEmpty()
+    override fun names(): Set<String> = sdkHeaders.names()
 }
-
-

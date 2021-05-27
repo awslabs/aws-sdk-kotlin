@@ -16,18 +16,18 @@ import kotlin.coroutines.CoroutineContext
 private const val DEFAULT_BUFFER_SIZE = 4096
 
 /**
- * Proxy an SDK request body channel, [SdkByteReadChannel], as a CRT [HttpRequestBodyStream]
+ * Implement's [HttpRequestBodyStream] which proxies an SDK request body channel [SdkByteReadChannel]
  */
 internal class ReadChannelBodyStream(
     // the request body channel
     private val bodyChan: SdkByteReadChannel,
     callContext: CoroutineContext
-): HttpRequestBodyStream, CoroutineScope {
+) : HttpRequestBodyStream, CoroutineScope {
 
     private val producerJob = Job(callContext.job)
     override val coroutineContext: CoroutineContext = callContext + producerJob
 
-    private var currBuffer = atomic<ReadBuffer?>(null)
+    private val currBuffer = atomic<ReadBuffer?>(null)
     private val bufferChan = Channel<ReadBuffer>(1)
 
     init {
@@ -40,7 +40,6 @@ internal class ReadChannelBodyStream(
     }
 
     // FIXME - we don't close this on error/incomplete read ? need to propagate back to the caller
-
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun sendRequestBody(buffer: MutableBuffer): Boolean {
@@ -76,7 +75,7 @@ internal class ReadChannelBodyStream(
             bufferChan.close(cause)
             if (cause != null) {
                 producerJob.completeExceptionally(cause)
-            }else {
+            } else {
                 producerJob.complete()
             }
         }
@@ -106,5 +105,3 @@ internal class ReadBuffer(
         readHead += written
     }
 }
-
-
