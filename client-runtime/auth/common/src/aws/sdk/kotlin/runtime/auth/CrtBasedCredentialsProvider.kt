@@ -7,8 +7,8 @@ package aws.sdk.kotlin.runtime.auth
 
 import aws.sdk.kotlin.crt.auth.credentials.CredentialsProvider as CredentialsProviderCrt
 
-internal interface CrtBasedCredentialsProvider : CredentialsProvider {
-    abstract val crtProvider: CredentialsProviderCrt
+internal interface CrtCredentialsProvider : CredentialsProvider {
+    val crtProvider: CredentialsProviderCrt
 
     override suspend fun getCredentials(): Credentials = crtProvider.getCredentials().toSdk()
 }

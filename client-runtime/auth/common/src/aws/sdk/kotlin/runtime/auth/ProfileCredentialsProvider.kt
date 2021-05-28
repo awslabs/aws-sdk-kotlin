@@ -12,21 +12,21 @@ import aws.sdk.kotlin.crt.auth.credentials.ProfileCredentialsProvider as Profile
 /**
  * A provider that gets credentials from a profile.
  * @param profileName The name of the profile to use (or `"default"` if none is specified).
- * @param configFileNameOverride The name of the config file to use. If none is specified, the default is
- * `".aws/config"` on Linux/Mac and`"%USERPROFILE%\.aws\config"` on Windows.
- * @param credentialsFileNameOverride The name of the credentials file to use. If none is specified, the default is
+ * @param configFileName The name of the config file to use. If none is specified, the default is `".aws/config"` on
+ * Linux/Mac and`"%USERPROFILE%\.aws\config"` on Windows.
+ * @param credentialsFileName The name of the credentials file to use. If none is specified, the default is
  * `".aws/credentials"` on Linux/Mac and `"%USERPROFILE%\.aws\credentials"` on Windows.
  */
 public class ProfileCredentialsProvider public constructor(
     profileName: String? = null,
-    configFileNameOverride: String? = null,
-    credentialsFileNameOverride: String? = null,
-) : CrtBasedCredentialsProvider {
+    configFileName: String? = null,
+    credentialsFileName: String? = null,
+) : CrtCredentialsProvider {
     override val crtProvider = ProfileCredentialsProviderCrt.build {
         clientBootstrap = SdkDefaultIO.ClientBootstrap
         tlsContext = SdkDefaultIO.TlsContext
         this.profileName = profileName
-        this.configFileNameOverride = configFileNameOverride
-        this.credentialsFileNameOverride = credentialsFileNameOverride
+        this.configFileName = configFileName
+        this.credentialsFileName = credentialsFileName
     }
 }

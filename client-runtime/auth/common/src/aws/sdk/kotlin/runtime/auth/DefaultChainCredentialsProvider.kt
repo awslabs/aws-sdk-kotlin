@@ -23,7 +23,7 @@ import aws.sdk.kotlin.crt.auth.credentials.DefaultChainCredentialsProvider as De
  *
  * @return the newly-constructed credentials provider
  */
-public class DefaultChainCredentialsProvider : CrtBasedCredentialsProvider {
+public class DefaultChainCredentialsProvider : CrtCredentialsProvider {
     override val crtProvider by lazy {
         DefaultChainCredentialsProviderCrt.build {
             clientBootstrap = SdkDefaultIO.ClientBootstrap
