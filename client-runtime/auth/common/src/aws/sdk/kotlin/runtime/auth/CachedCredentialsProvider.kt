@@ -26,7 +26,7 @@ public class CachedCredentialsProvider private constructor(builder: Builder) : C
 
     @OptIn(ExperimentalTime::class)
     override val crtProvider = CachedCredentialsProviderCrt.build {
-        refreshTimeInMilliseconds = builder.refreshTime.toLongMilliseconds()
+        refreshTimeInMilliseconds = builder.refreshTime.inWholeMilliseconds
 
         // FIXME - note this won't work until https://github.com/awslabs/aws-crt-java/issues/252 is resolved
         source = builder.source?.let { CrtCredentialsProvider(it) }

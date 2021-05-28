@@ -6,17 +6,13 @@
 package aws.sdk.kotlin.codegen.protocols
 
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
-import aws.sdk.kotlin.codegen.protocols.core.AwsHttpProtocolClientGenerator
 import aws.sdk.kotlin.codegen.protocols.core.StaticHttpBindingResolver
 import aws.sdk.kotlin.codegen.protocols.middleware.MutateHeadersMiddleware
-import aws.sdk.kotlin.codegen.protocols.query.QuerySerdeProviderGenerator
 import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
-import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RenderingContext
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.traits.OperationOutput
@@ -43,11 +39,6 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
     override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
         AwsQueryBindingResolver(ctx)
 
-    override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator {
-        val middleware = getHttpMiddleware(ctx)
-        return AwsQueryProtocolClientGenerator(ctx, middleware, getProtocolHttpBindingResolver(ctx))
-    }
-
     override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
         val middleware = super.getDefaultHttpMiddleware(ctx)
 
@@ -61,22 +52,7 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         return middleware + awsQueryMiddleware
     }
 
-    override fun getSerdeDescriptorGenerator(
-        ctx: ProtocolGenerator.GenerationContext,
-        objectShape: Shape,
-        members: List<MemberShape>,
-        subject: SerdeSubject,
-        writer: KotlinWriter
-    ): SerdeDescriptorGenerator {
-        val renderingCtx = ctx.toRenderingContext(this, objectShape, writer)
-        return if (subject.isSerializer) {
-            FormUrlSerdeDescriptorGenerator(renderingCtx, members)
-        } else {
-            AwsQuerySerdeXmlDescriptorGenerator(renderingCtx, members)
-        }
-    }
-
-    override fun renderSerializeOperationBody(
+    override fun renderSerializeHttpBody(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
         writer: KotlinWriter
@@ -93,26 +69,84 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
             writer.write("""val content = "Action=$action&Version=$version"""")
             writer.write("builder.body = ByteArrayContent(content.encodeToByteArray())")
         } else {
-            super.renderSerializeOperationBody(ctx, op, writer)
+            super.renderSerializeHttpBody(ctx, op, writer)
         }
     }
 
-    override fun renderDeserializerBody(
+    private fun renderSerializerBody(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: List<MemberShape>,
-        subject: SerdeSubject,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
-        if (subject == SerdeSubject.OperationDeserializer) {
-            val opName = shape.id.name.removeSuffix("Response")
-            unwrapOperationResponseBody(ctx, opName, writer)
+        // render the serde descriptors
+        FormUrlSerdeDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members).render()
+        if (shape.isUnionShape) {
+            SerializeUnionGenerator(ctx, members, writer, defaultTimestampFormat).render()
+        } else {
+            SerializeStructGenerator(ctx, members, writer, defaultTimestampFormat).render()
         }
-        super.renderDeserializerBody(ctx, shape, members, subject, writer)
     }
 
-    private fun unwrapOperationResponseBody(
+    override fun renderSerializeOperationBody(
         ctx: ProtocolGenerator.GenerationContext,
+        op: OperationShape,
+        writer: KotlinWriter
+    ) {
+        val resolver = getProtocolHttpBindingResolver(ctx)
+        val requestBindings = resolver.requestBindings(op)
+        val documentMembers = requestBindings.filterDocumentBoundMembers()
+
+        val shape = ctx.model.expectShape(op.input.get())
+
+        // import and instantiate a serializer
+        writer.addImport(RuntimeTypes.Serde.SerdeFormUrl.FormUrlSerializer)
+        writer.write("val serializer = #T()", RuntimeTypes.Serde.SerdeFormUrl.FormUrlSerializer)
+        renderSerializerBody(ctx, shape, documentMembers, writer)
+        writer.write("return serializer.toByteArray()")
+    }
+
+    private fun renderDeserializerBody(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        members: List<MemberShape>,
+        writer: KotlinWriter,
+    ) {
+        AwsQuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members).render()
+        if (shape.isUnionShape) {
+            val name = ctx.symbolProvider.toSymbol(shape).name
+            DeserializeUnionGenerator(ctx, name, members, writer, defaultTimestampFormat).render()
+        } else {
+            DeserializeStructGenerator(ctx, members, writer, defaultTimestampFormat).render()
+        }
+    }
+
+    override fun renderSerializeDocumentBody(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        writer: KotlinWriter
+    ) {
+        renderSerializerBody(ctx, shape, shape.members().toList(), writer)
+    }
+
+    override fun renderDeserializeOperationBody(
+        ctx: ProtocolGenerator.GenerationContext,
+        op: OperationShape,
+        writer: KotlinWriter
+    ) {
+        writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+        writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+
+        val resolver = getProtocolHttpBindingResolver(ctx)
+        val responseBindings = resolver.responseBindings(op)
+        val documentMembers = responseBindings.filterDocumentBoundMembers()
+
+        val shape = ctx.model.expectShape(op.output.get())
+
+        unwrapOperationResponseBody(op.id.name, writer)
+        renderDeserializerBody(ctx, shape, documentMembers, writer)
+    }
+    private fun unwrapOperationResponseBody(
         operationName: String,
         writer: KotlinWriter
     ) {
@@ -133,9 +167,33 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
             }
         writer.write("")
     }
+
+    override fun renderDeserializeDocumentBody(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        writer: KotlinWriter
+    ) {
+        renderDeserializerBody(ctx, shape, shape.members().toList(), writer)
+    }
+
+    override fun renderDeserializeException(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        writer: KotlinWriter
+    ) {
+        val resolver = getProtocolHttpBindingResolver(ctx)
+        val responseBindings = resolver.responseBindings(shape)
+        val documentMembers = responseBindings.filterDocumentBoundMembers()
+        writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+        writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+        renderDeserializerBody(ctx, shape, documentMembers, writer)
+    }
 }
 
-private class AwsQueryBindingResolver(
+/**
+ * An HTTP binding resolver for the awsQuery protocol
+ */
+class AwsQueryBindingResolver(
     context: ProtocolGenerator.GenerationContext,
 ) : StaticHttpBindingResolver(context, AwsQueryHttpTrait, AwsQueryContentType, TimestampFormatTrait.Format.DATE_TIME) {
     companion object {
@@ -145,29 +203,6 @@ private class AwsQueryBindingResolver(
             .method("POST")
             .uri(UriPattern.parse("/"))
             .build()
-    }
-}
-
-private class AwsQueryProtocolClientGenerator(
-    ctx: ProtocolGenerator.GenerationContext,
-    middlewares: List<ProtocolMiddleware>,
-    httpBindingResolver: HttpBindingResolver
-) : AwsHttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
-
-    override val serdeProviderSymbol: Symbol
-        get() = buildSymbol {
-            name = "AwsQuerySerdeProvider"
-            namespace = "${ctx.settings.pkg.name}.internal"
-            definitionFile = "$name.kt"
-        }
-
-    override fun render(writer: KotlinWriter) {
-        super.render(writer)
-
-        // render the serde provider symbol to internals package
-        ctx.delegator.useShapeWriter(serdeProviderSymbol) {
-            QuerySerdeProviderGenerator(serdeProviderSymbol).render(it)
-        }
     }
 }
 

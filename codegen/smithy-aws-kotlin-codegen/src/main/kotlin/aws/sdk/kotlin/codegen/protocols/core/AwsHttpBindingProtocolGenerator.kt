@@ -58,7 +58,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "PutAndGetInlineDocumentsInput",
 
                 // restXml
-                "HttpPayloadWithMemberXmlName", // FIXME - https://github.com/awslabs/smithy-kotlin/issues/353
 
                 // awsQuery
                 // FIXME - invalid tests, re-enable after updating past smithy 1.7.2 - fixed in https://github.com/awslabs/smithy/pull/799
