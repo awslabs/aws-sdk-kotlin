@@ -95,28 +95,38 @@ internal abstract class AbstractBufferedReadChannel(
         onBytesRead(size)
     }
 
+    // FIXME - probably switch to UInt now that unsigned types are stable in 1.5
     override suspend fun readRemaining(limit: Int): ByteArray {
-        val buffer = SdkBuffer(maxOf(availableForRead, SEGMENT_SIZE))
+        val buffer = SdkBuffer(minOf(availableForRead, limit))
 
-        var consumed = 0
-
-        // drain any partial reads
-        currSegment.getAndSet(null)?.let { segment ->
-            consumed += segment.copyTo(buffer, limit)
-            markBytesConsumed(consumed)
-
-            if (segment.availableForRead > 0) {
-                // this should only ever happen if limit < segment.size, in which case we wouldn't pull
-                // anything off the segment channel anyway
-                currSegment.update { segment }
-            }
-        }
+        val consumed = readAsMuchAsPossible(buffer, limit)
 
         return if (consumed >= limit) {
             buffer.bytes()
         } else {
             readRemainingSuspend(buffer, limit - consumed)
         }
+    }
+
+    private fun readAsMuchAsPossible(dest: SdkBuffer, limit: Int): Int {
+        var consumed = 0
+        var remaining = limit
+
+        while (availableForRead > 0 && remaining > 0) {
+            val segment = currSegment.getAndSet(null) ?: segments.tryReceive().getOrNull() ?: break
+
+            val rc = segment.copyTo(dest, remaining)
+            consumed += rc
+            remaining = limit - consumed
+
+            markBytesConsumed(rc)
+
+            if (segment.availableForRead > 0) {
+                currSegment.update { segment }
+            }
+        }
+
+        return consumed
     }
 
     private suspend fun readRemainingSuspend(buffer: SdkBuffer, limit: Int): ByteArray {
@@ -210,7 +220,7 @@ internal abstract class AbstractBufferedReadChannel(
         val wc = data.copyTo(bytesIn)
         check(wc == bytesIn.size) { "short read: copied $wc; expected: ${bytesIn.size} " }
 
-        // FIXME - only emit full segments or partial when closed
+        // FIXME - only emit full segments or partial when closed?
         // val buffer = SdkBuffer(minOf(bytes.size, SEGMENT_SIZE))
 
         val result = segments.trySend(Segment(bytesIn))
@@ -225,7 +235,7 @@ internal abstract class AbstractBufferedReadChannel(
     override fun cancel(cause: Throwable?): Boolean {
         if (closed.value != null) return false
 
-        closed.update { ClosedSentinel(null) }
+        closed.update { ClosedSentinel(cause) }
 
         segments.close()
 
