@@ -6,42 +6,25 @@
 package aws.sdk.kotlin.runtime.http.engine.crt
 
 import software.aws.clientrt.io.SdkBuffer
-import software.aws.clientrt.io.writeFully
+import software.aws.clientrt.io.readFully
 
-// FIXME - let's just get rid of this and ReadableBuffer in favor of making SdkBuffer
-// or SdkBuffer / MutableSdkBuffer -> SdkBufferImpl
-// this would allow SdkBuffer.of(byteArray)
+internal typealias Segment = SdkBuffer
 
 /**
- * Convenience wrapper around a byte array instance that stores current read state
+ * Create a segment from the given src [ByteArray] and mark the entire contents readable
  */
-internal data class Segment(
-    private val buffer: ByteArray,
-    private var readHead: Int = 0,
-) {
-    val availableForRead: Int
-        get() = buffer.size - readHead
+internal fun newReadableSegment(src: ByteArray): Segment = Segment.of(src).apply { commitWritten(src.size) }
 
-    /**
-     * Attempt to copy up to [length] bytes into [dest] starting at [offset]
-     * Returns the number of bytes actually copied which may be less than requested
-     */
-    fun copyTo(dest: ByteArray, offset: Int = 0, length: Int = dest.size - offset): Int {
-        check(availableForRead > 0) { "nothing left to read from segment" }
+internal fun Segment.copyTo(dest: SdkBuffer, limit: Int = Int.MAX_VALUE): Int {
+    check(readRemaining > 0) { "nothing left to read from segment" }
+    val wc = minOf(readRemaining, limit)
+    readFully(dest, wc)
+    return wc
+}
 
-        val rc = minOf(length, availableForRead)
-
-        val endIdxExclusive = readHead + rc
-        buffer.copyInto(dest, offset, readHead, endIdxExclusive)
-        readHead += rc
-        return rc
-    }
-
-    fun copyTo(dest: SdkBuffer, limit: Int = Int.MAX_VALUE): Int {
-        check(availableForRead > 0) { "nothing left to read from segment" }
-        val wc = minOf(buffer.size - readHead, limit)
-        dest.writeFully(buffer, offset = readHead, length = wc)
-        readHead += wc
-        return wc
-    }
+internal fun Segment.copyTo(dest: ByteArray, offset: Int = 0, length: Int = dest.size - offset): Int {
+    check(readRemaining > 0) { "nothing left to read from segment" }
+    val wc = minOf(length, readRemaining)
+    readFully(dest, offset, wc)
+    return wc
 }

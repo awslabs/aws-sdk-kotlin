@@ -19,8 +19,6 @@ import kotlin.coroutines.resumeWithException
 
 private data class ClosedSentinel(val cause: Throwable?)
 
-private const val SEGMENT_SIZE = 4096
-
 /**
  * Abstract base class that platform implementations should inherit from
  */
@@ -68,7 +66,6 @@ internal abstract class AbstractBufferedReadChannel(
             return availableForRead >= requested
         }
 
-        // FIXME - this needs to be a loop?
         return suspendCancellableCoroutine { cont ->
             setReadContinuation(cont)
         }
@@ -121,7 +118,7 @@ internal abstract class AbstractBufferedReadChannel(
 
             markBytesConsumed(rc)
 
-            if (segment.availableForRead > 0) {
+            if (segment.readRemaining > 0) {
                 currSegment.update { segment }
             }
         }
@@ -142,7 +139,7 @@ internal abstract class AbstractBufferedReadChannel(
             markBytesConsumed(rc)
 
             if (remaining <= 0) {
-                if (segment.availableForRead > 0) {
+                if (segment.readRemaining > 0) {
                     currSegment.update { segment }
                 }
                 break
@@ -167,7 +164,7 @@ internal abstract class AbstractBufferedReadChannel(
 
             markBytesConsumed(rc)
 
-            if (segment.availableForRead > 0) {
+            if (segment.readRemaining > 0) {
                 currSegment.update { segment }
             }
         }
@@ -223,7 +220,8 @@ internal abstract class AbstractBufferedReadChannel(
         // FIXME - only emit full segments or partial when closed?
         // val buffer = SdkBuffer(minOf(bytes.size, SEGMENT_SIZE))
 
-        val result = segments.trySend(Segment(bytesIn))
+        val segment = newReadableSegment(bytesIn)
+        val result = segments.trySend(segment)
         check(result.isSuccess) { "failed to queue segment" }
 
         // advertise bytes available
