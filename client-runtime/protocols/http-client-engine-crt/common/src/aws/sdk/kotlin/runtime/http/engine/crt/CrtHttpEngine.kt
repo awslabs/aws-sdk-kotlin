@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http.engine.crt
 
+import aws.sdk.kotlin.crt.SdkDefaultIO
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.*
 import software.aws.clientrt.http.HttpBody
@@ -20,17 +21,17 @@ import aws.sdk.kotlin.crt.http.HttpRequest as HttpRequestCrt
  * [HttpClientEngine] based on the AWS Common Runtime HTTP client
  */
 public class CrtHttpEngine : HttpClientEngine {
-    private val elg = EventLoopGroup()
-    private val hr = HostResolver(elg)
+    // FIXME - use the default TLS context when profile cred provider branch is merged
     private val tlsCtx = TlsContext(TlsContextOptions.defaultClient())
     private val logger = Logger.getLogger<CrtHttpEngine>()
 
     private val options = HttpClientConnectionManagerOptionsBuilder().apply {
-        clientBootstrap = ClientBootstrap(elg, hr)
+        clientBootstrap = SdkDefaultIO.ClientBootstrap
         tlsContext = tlsCtx
         manualWindowManagement = true
         socketOptions = SocketOptions()
-        // TODO max connections / initial window size ?
+        initialWindowSize = 16 * 1024
+        // TODO - max connections/timeouts/etc
     }
 
     // connection managers are per host
@@ -65,14 +66,11 @@ public class CrtHttpEngine : HttpClientEngine {
         // close all resources
         connManagers.forEach { entry -> entry.value.close() }
         tlsCtx.close()
-        hr.close()
-        elg.close()
     }
 
     private fun getManagerForUri(uri: Uri): HttpClientConnectionManager =
         connManagers.getOrPut(uri.host) {
-            // HttpClientConnectionManager(options.apply { this.uri = uri }.build())
-            TODO("requires updates to CRT kotlin")
+            HttpClientConnectionManager(options.apply { this.uri = uri }.build())
         }
 }
 

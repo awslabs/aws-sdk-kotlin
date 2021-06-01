@@ -10,10 +10,19 @@ import aws.sdk.kotlin.crt.io.MutableBuffer
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import software.aws.clientrt.io.SdkBuffer
 import software.aws.clientrt.io.SdkByteReadChannel
+import software.aws.clientrt.io.readAvailable
 import kotlin.coroutines.CoroutineContext
 
-private const val DEFAULT_BUFFER_SIZE = 4096
+/**
+ * write as much of [outgoing] to [dest] as possible
+ */
+internal expect fun transferRequestBody(outgoing: SdkBuffer, dest: MutableBuffer)
+
+// TODO - we really only need these for tests
+internal expect fun MutableBuffer.reset()
+internal expect val MutableBuffer.len: Int
 
 /**
  * Implement's [HttpRequestBodyStream] which proxies an SDK request body channel [SdkByteReadChannel]
@@ -27,8 +36,8 @@ internal class ReadChannelBodyStream(
     private val producerJob = Job(callContext.job)
     override val coroutineContext: CoroutineContext = callContext + producerJob
 
-    private val currBuffer = atomic<ReadBuffer?>(null)
-    private val bufferChan = Channel<ReadBuffer>(1)
+    private val currBuffer = atomic<SdkBuffer?>(null)
+    private val bufferChan = Channel<SdkBuffer>(1)
 
     init {
         producerJob.invokeOnCompletion { cause ->
@@ -43,31 +52,34 @@ internal class ReadChannelBodyStream(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun sendRequestBody(buffer: MutableBuffer): Boolean {
-        var outgoing = currBuffer.getAndSet(null) ?: bufferChan.poll()
+        var outgoing = currBuffer.getAndSet(null) ?: bufferChan.tryReceive().getOrNull()
 
         if (outgoing == null) {
             if (bufferChan.isClosedForReceive) {
                 return true
             }
-            outgoing = bufferChan.poll() ?: return false
+            outgoing = bufferChan.tryReceive().getOrNull() ?: return false
         }
 
-        outgoing.writeTo(buffer)
+        transferRequestBody(outgoing, buffer)
 
         if (outgoing.readRemaining > 0) {
             currBuffer.value = outgoing
         }
 
-        return bufferChan.isClosedForReceive
+        return bufferChan.isClosedForReceive && currBuffer.value == null
     }
 
     private fun proxyRequestBody() {
         val job = launch {
             while (!bodyChan.isClosedForRead) {
+                bodyChan.awaitContent()
+                if (bodyChan.isClosedForRead) return@launch
+
                 // TODO - we could pool these
-                val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                val rc = bodyChan.readAvailable(buffer)
-                bufferChan.send(ReadBuffer(buffer, limit = rc))
+                val buffer = SdkBuffer(bodyChan.availableForRead)
+                bodyChan.readAvailable(buffer)
+                bufferChan.send(buffer)
             }
         }
 
@@ -79,29 +91,5 @@ internal class ReadChannelBodyStream(
                 producerJob.complete()
             }
         }
-    }
-}
-
-internal class ReadBuffer(
-    private val buf: ByteArray,
-    offset: Int = 0,
-    limit: Int = buf.size
-) {
-    var readHead: Int = offset
-
-    /**
-     * The total size of the buffer
-     */
-    val size: Int = limit
-
-    /**
-     * Number of bytes available for reading
-     */
-    val readRemaining: Int
-        get() = size - readHead
-
-    fun writeTo(buffer: MutableBuffer) {
-        val written = buffer.write(buf, readHead, size)
-        readHead += written
     }
 }

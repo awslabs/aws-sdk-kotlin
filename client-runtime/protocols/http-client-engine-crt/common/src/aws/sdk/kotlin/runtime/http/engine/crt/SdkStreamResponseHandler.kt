@@ -14,14 +14,14 @@ import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import software.aws.clientrt.http.*
 import software.aws.clientrt.http.HeadersBuilder
-import software.aws.clientrt.http.HttpBody
-import software.aws.clientrt.http.HttpStatusCode
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.io.SdkByteReadChannel
 
 /**
  * Implements the CRT stream response interface which proxies the response from the CRT to the SDK
+ * @param conn The HTTP connection used to make the request. Will be closed when the response handler completes
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class SdkStreamResponseHandler(
@@ -31,7 +31,6 @@ internal class SdkStreamResponseHandler(
 
     private val responseReady = Channel<HttpResponse>(1)
     private val headers = HeadersBuilder()
-    private var status: Int? = null
 
     private var sdkBody: BufferedReadChannel? = null
     private val crtStream: AtomicRef<HttpStream?> = atomic(null)
@@ -59,29 +58,45 @@ internal class SdkStreamResponseHandler(
         crtStream.update { stream }
         if (!blockType.isMainHeadersBlock) return
 
-        status = responseStatusCode
         nextHeaders?.forEach {
             headers.append(it.name, it.value)
         }
     }
 
-    // signal response ready and engine can proceed (all that is required is headers, body is consumed asynchronously)
-    private fun signalResponse() {
-        // already signalled
-        if (responseReady.isClosedForSend) return
+    private fun getBodyStream() {
+    }
 
-        val body = object : HttpBody.Streaming() {
+    private fun createHttpResponseBody(contentLength: Long): HttpBody {
+        sdkBody = bufferedReadChannel(::onDataConsumed)
+        return object : HttpBody.Streaming() {
+            override val contentLength: Long = contentLength
             override fun readFrom(): SdkByteReadChannel {
-                if (sdkBody == null) {
-                    sdkBody = bufferedReadChannel(::onDataConsumed)
-                }
-
                 return sdkBody!!
             }
         }
+    }
+
+    // signal response ready and engine can proceed (all that is required is headers, body is consumed asynchronously)
+    private fun signalResponse(stream: HttpStream) {
+        // already signalled
+        if (responseReady.isClosedForSend) return
+
+        val transferEncoding = headers["Transfer-Encoding"]?.lowercase()
+        val chunked = transferEncoding == "chunked"
+        val contentLength = headers["Content-Length"]?.toLong() ?: 0
+        val status = HttpStatusCode.fromValue(stream.responseStatusCode)
+
+        val hasBody = (contentLength > 0 || chunked) &&
+            (status !in listOf(HttpStatusCode.NotModified, HttpStatusCode.NoContent)) &&
+            !status.isInformational()
+
+        val body = when (hasBody) {
+            false -> HttpBody.Empty
+            true -> createHttpResponseBody(contentLength)
+        }
 
         val resp = HttpResponse(
-            requireNotNull(status).let { HttpStatusCode.fromValue(it) },
+            status,
             headers.build(),
             body
         )
@@ -93,12 +108,15 @@ internal class SdkStreamResponseHandler(
 
     override fun onResponseHeadersDone(stream: HttpStream, blockType: Int) {
         if (!blockType.isMainHeadersBlock) return
-        signalResponse()
+        signalResponse(stream)
     }
 
     override fun onResponseBody(stream: HttpStream, bodyBytesIn: Buffer): Int {
         crtStream.update { stream }
-        sdkBody?.write(bodyBytesIn)
+
+        // we should have created a response channel if we expected a body
+        val sdkRespChan = checkNotNull(sdkBody) { "unexpected response body" }
+        sdkRespChan.write(bodyBytesIn)
 
         // explicit window management is done in BufferedReadChannel which calls `onDataConsumed`
         // as data is read from the channel
@@ -124,7 +142,7 @@ internal class SdkStreamResponseHandler(
             // closing the channel to indicate no more data will be sent
             sdkBody?.close()
             // ensure a response was signalled (will close the channel on it's own if it wasn't already sent)
-            signalResponse()
+            signalResponse(stream)
         }
     }
 

@@ -29,9 +29,7 @@ internal abstract class AbstractBufferedReadChannel(
 ) : BufferedReadChannel {
 
     // NOTE: the channel is configured as unlimited but will always be constrained by the window size such
-    // that there are only ever (WINDOW_SIZE / SEGMENT_SIZE) buffers in-flight at any one time
-    // FIXME - this comment is erroneous (for now until we implement emitting full segments), we actually have as many buffers in flight as
-    // get written but these will add up to WINDOW_SIZE
+    // that there are only ever WINDOW_SIZE _bytes_ in-flight at any given time
     private val segments = Channel<Segment>(Channel.UNLIMITED)
 
     private val currSegment: AtomicRef<Segment?> = atomic(null)
@@ -78,9 +76,7 @@ internal abstract class AbstractBufferedReadChannel(
     }
 
     private fun resumeRead() {
-        readOp.getAndSet(null)?.let { cont ->
-            cont.resume(true)
-        }
+        readOp.getAndSet(null)?.resume(true)
     }
 
     /**
@@ -228,6 +224,10 @@ internal abstract class AbstractBufferedReadChannel(
         _availableForRead.getAndAdd(bytesIn.size)
 
         resumeRead()
+    }
+
+    override suspend fun awaitContent() {
+        readSuspend(1)
     }
 
     override fun cancel(cause: Throwable?): Boolean {
