@@ -20,10 +20,6 @@ import kotlin.coroutines.CoroutineContext
  */
 internal expect fun transferRequestBody(outgoing: SdkBuffer, dest: MutableBuffer)
 
-// TODO - we really only need these for tests
-internal expect fun MutableBuffer.reset()
-internal expect val MutableBuffer.len: Int
-
 /**
  * Implement's [HttpRequestBodyStream] which proxies an SDK request body channel [SdkByteReadChannel]
  */
@@ -47,8 +43,6 @@ internal class ReadChannelBodyStream(
         // launch a coroutine to fill the buffer channel
         proxyRequestBody()
     }
-
-    // FIXME - we don't close this on error/incomplete read ? need to propagate back to the caller
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun sendRequestBody(buffer: MutableBuffer): Boolean {

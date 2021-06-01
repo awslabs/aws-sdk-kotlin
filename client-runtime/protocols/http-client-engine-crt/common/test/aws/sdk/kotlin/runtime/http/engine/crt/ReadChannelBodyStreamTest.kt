@@ -99,12 +99,12 @@ class ReadChannelBodyStreamTest {
         val stream = ReadChannelBodyStream(chan, coroutineContext)
         yield()
 
-        val (sendBuffer, _) = mutableBuffer(16)
         var totalBytesRead = 0
+        val sendSize = 16
         do {
+            val (sendBuffer, _) = mutableBuffer(sendSize)
             val streamDone = stream.sendRequestBody(sendBuffer)
-            totalBytesRead += sendBuffer.len
-            sendBuffer.reset()
+            totalBytesRead += sendSize - sendBuffer.writeRemaining
             yield()
         } while (!streamDone)
 

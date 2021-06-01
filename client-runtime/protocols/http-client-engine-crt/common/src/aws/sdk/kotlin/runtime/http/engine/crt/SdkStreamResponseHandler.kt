@@ -27,7 +27,9 @@ import software.aws.clientrt.io.SdkByteReadChannel
 internal class SdkStreamResponseHandler(
     private val conn: HttpClientConnection
 ) : HttpStreamResponseHandler {
-    // FIXME - need to cancel the stream when the body is closed from the caller side early
+    // TODO - need to cancel the stream when the body is closed from the caller side early.
+    // There is no great way to do that currently without either (1) closing the connection or (2) throwing an
+    // exception from a callback such that AWS_OP_ERROR is returned. Wait for HttpStream to have explicit cancellation
 
     private val responseReady = Channel<HttpResponse>(1)
     private val headers = HeadersBuilder()

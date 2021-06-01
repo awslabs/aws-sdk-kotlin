@@ -12,10 +12,3 @@ import software.aws.clientrt.io.readAvailable
 internal actual fun transferRequestBody(outgoing: SdkBuffer, dest: MutableBuffer) {
     outgoing.readAvailable(dest.buffer)
 }
-
-internal actual fun MutableBuffer.reset() {
-    buffer.clear()
-}
-
-internal actual val MutableBuffer.len: Int
-    get() = buffer.position()
