@@ -37,8 +37,7 @@
             "name": "smithy-kotlin"
         },
         {
-            "name": "aws-crt-kotlin",
-            "revision": "bootstrap-jvm"
+            "name": "aws-crt-kotlin"
         }
     ]
 }
