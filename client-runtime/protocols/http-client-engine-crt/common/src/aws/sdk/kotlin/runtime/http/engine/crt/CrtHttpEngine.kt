@@ -8,14 +8,12 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 import aws.sdk.kotlin.crt.SdkDefaultIO
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.*
-import software.aws.clientrt.http.HttpBody
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.logging.Logger
 import software.aws.clientrt.time.Instant
 import kotlin.coroutines.*
-import aws.sdk.kotlin.crt.http.HttpRequest as HttpRequestCrt
 
 /**
  * [HttpClientEngine] based on the AWS Common Runtime HTTP client
@@ -72,35 +70,4 @@ public class CrtHttpEngine : HttpClientEngine {
         connManagers.getOrPut(uri.host) {
             HttpClientConnectionManager(options.apply { this.uri = uri }.build())
         }
-}
-
-internal val HttpRequest.uri: Uri
-    get() {
-        val sdkUrl = this.url
-        return Uri.build {
-            scheme = Protocol.createOrDefault(sdkUrl.scheme.protocolName)
-            host = sdkUrl.host
-            port = sdkUrl.port
-            userInfo = sdkUrl.userInfo?.let { UserInfo(it.username, it.password) }
-            // the rest is part of each individual request, manager only needs the host info
-        }
-    }
-
-internal fun HttpRequest.toCrtRequest(callContext: CoroutineContext): HttpRequestCrt {
-    val body = this.body
-    val bodyStream = when (body) {
-        is HttpBody.Streaming -> ReadChannelBodyStream(body.readFrom(), callContext)
-        is HttpBody.Bytes -> HttpRequestBodyStream.fromByteArray(body.bytes())
-        else -> null
-    }
-
-    return HttpRequestCrt(method.name, url.encodedPath, HttpHeadersCrt(headers), bodyStream)
-}
-
-internal class HttpHeadersCrt(private val sdkHeaders: software.aws.clientrt.http.Headers) : Headers {
-    override fun contains(name: String): Boolean = sdkHeaders.contains(name)
-    override fun entries(): Set<Map.Entry<String, List<String>>> = sdkHeaders.entries()
-    override fun getAll(name: String): List<String>? = sdkHeaders.getAll(name)
-    override fun isEmpty(): Boolean = sdkHeaders.isEmpty()
-    override fun names(): Set<String> = sdkHeaders.names()
 }
