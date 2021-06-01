@@ -14,6 +14,14 @@ import software.aws.clientrt.io.readByte
 import java.lang.RuntimeException
 import kotlin.test.*
 
+internal fun BufferedReadChannel.write(bytes: ByteArray) {
+    write(byteArrayBuffer(bytes))
+}
+
+internal fun BufferedReadChannel.write(str: String) {
+    write(str.encodeToByteArray())
+}
+
 // FIXME - move all these tests to common when coroutines-test is available in KMP
 // see https://github.com/Kotlin/kotlinx.coroutines/issues/1996
 

@@ -14,6 +14,33 @@ import kotlin.test.assertNotEquals
 // modeled after https://github.com/ktorio/ktor/blob/78e36790cdbb30313dfbd23b174bffe805d26dca/ktor-io/common/test/io/ktor/utils/io/ByteChannelTestBase.kt
 // but implemented using [kotlinx-coroutines-test](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test)
 // rather than rolling our own dummy coroutines dispatcher
+/**
+ * Test suspend functions with precise control over coordination. This allows testing that suspension happens at the
+ * expected point in time using the provided [expect] function, e.g.:
+ *
+ * ```
+ * class TestFoo : ManualDispatchTestBase() {
+ *     @Test
+ *     fun testFoo() = runTest {
+ *         expect(1)
+ *         launch {
+ *             expect(3)
+ *             someFunctionThatShouldSuspend()
+ *             expect(5)
+ *         }
+ *
+ *         expect(2)
+ *         yield()
+ *         expect(4)
+ *         unblockSuspendedFunction()
+ *         yield()
+ *         finish(6)
+ *     }
+ * }
+ * ```
+ *
+ * Explicitly yielding or hitting a natural suspension point will run the next continuation queued
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 public abstract class ManualDispatchTestBase {
     private var current = 0

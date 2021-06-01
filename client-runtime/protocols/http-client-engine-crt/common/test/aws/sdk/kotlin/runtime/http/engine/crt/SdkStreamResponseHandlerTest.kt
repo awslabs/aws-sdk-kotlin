@@ -25,7 +25,7 @@ class SdkStreamResponseHandlerTest {
     private class MockHttpClientConnection : HttpClientConnection {
         var isClosed: Boolean = false
         override fun close() { isClosed = true }
-        override fun makeRequest(httpReq: HttpRequest, handler: HttpStreamResponseHandler): HttpStream { TODO("Not yet implemented") }
+        override fun makeRequest(httpReq: HttpRequest, handler: HttpStreamResponseHandler): HttpStream { throw UnsupportedOperationException("not implemented for test") }
     }
 
     private val mockConn = MockHttpClientConnection()

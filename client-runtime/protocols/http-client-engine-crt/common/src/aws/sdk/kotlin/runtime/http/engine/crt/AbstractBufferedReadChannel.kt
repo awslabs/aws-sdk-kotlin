@@ -17,7 +17,7 @@ import software.aws.clientrt.io.bytes
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-private data class ClosedSentinel(val cause: Throwable?)
+internal data class ClosedSentinel(val cause: Throwable?)
 
 /**
  * Abstract base class that platform implementations should inherit from
@@ -36,14 +36,17 @@ internal abstract class AbstractBufferedReadChannel(
 
     private val readOp: AtomicRef<CancellableContinuation<Boolean>?> = atomic(null)
 
-    private val closed: AtomicRef<ClosedSentinel?> = atomic(null)
+    private val _closed: AtomicRef<ClosedSentinel?> = atomic(null)
+    protected val closed: ClosedSentinel?
+        get() = _closed.value
+
     private val _availableForRead = atomic(0)
 
     override val isClosedForWrite: Boolean
         get() = segments.isClosedForSend
 
     override val isClosedForRead: Boolean
-        get() = closed.value != null && segments.isClosedForReceive
+        get() = closed != null && segments.isClosedForReceive
 
     override val availableForRead: Int
         get() = _availableForRead.value
@@ -52,11 +55,11 @@ internal abstract class AbstractBufferedReadChannel(
      * Suspend reading until at least [requested] bytes are available to read or the channel is closed.
      * If the requested amount can be fulfilled immediately this function will return without suspension.
      */
-    private suspend fun readSuspend(requested: Int): Boolean {
+    protected suspend fun readSuspend(requested: Int): Boolean {
         // can fulfill immediately without suspension
         if (availableForRead >= requested) return true
 
-        closed.value?.let { closed ->
+        closed?.let { closed ->
             // if already closed - rethrow
             closed.cause?.let { rethrowClosed(it) }
 
@@ -88,7 +91,6 @@ internal abstract class AbstractBufferedReadChannel(
         onBytesRead(size)
     }
 
-    // FIXME - probably switch to UInt now that unsigned types are stable in 1.5
     override suspend fun readRemaining(limit: Int): ByteArray {
         val buffer = SdkBuffer(minOf(availableForRead, limit))
 
@@ -101,7 +103,7 @@ internal abstract class AbstractBufferedReadChannel(
         }
     }
 
-    private fun readAsMuchAsPossible(dest: SdkBuffer, limit: Int): Int {
+    protected fun readAsMuchAsPossible(dest: SdkBuffer, limit: Int): Int {
         var consumed = 0
         var remaining = limit
 
@@ -194,7 +196,7 @@ internal abstract class AbstractBufferedReadChannel(
     override suspend fun readAvailable(sink: ByteArray, offset: Int, length: Int): Int {
         val consumed = readAsMuchAsPossible(sink, offset, length)
         return when {
-            consumed == 0 && closed.value != null -> -1
+            consumed == 0 && closed != null -> -1
             consumed > 0 || length == 0 -> consumed
             else -> readAvailableSuspend(sink, offset, length)
         }
@@ -208,13 +210,12 @@ internal abstract class AbstractBufferedReadChannel(
     }
 
     override fun write(data: Buffer) {
-        // FIXME - we could pool these allocations
+        // TODO - we could pool these allocations
         val bytesIn = ByteArray(data.len)
         val wc = data.copyTo(bytesIn)
         check(wc == bytesIn.size) { "short read: copied $wc; expected: ${bytesIn.size} " }
 
-        // FIXME - only emit full segments or partial when closed?
-        // val buffer = SdkBuffer(minOf(bytes.size, SEGMENT_SIZE))
+        // TODO - only emit full segments or partial when closed?
 
         val segment = newReadableSegment(bytesIn)
         val result = segments.trySend(segment)
@@ -231,9 +232,9 @@ internal abstract class AbstractBufferedReadChannel(
     }
 
     override fun cancel(cause: Throwable?): Boolean {
-        if (closed.value != null) return false
+        if (closed != null) return false
 
-        closed.update { ClosedSentinel(cause) }
+        _closed.update { ClosedSentinel(cause) }
 
         segments.close()
 

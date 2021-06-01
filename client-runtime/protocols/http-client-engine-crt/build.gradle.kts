@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 buildscript {
-    // FIXME - move to gradle.properties
-    // val atomicFuVersion: String by project
     val atomicFuVersion: String by project
     repositories {
         mavenCentral()
