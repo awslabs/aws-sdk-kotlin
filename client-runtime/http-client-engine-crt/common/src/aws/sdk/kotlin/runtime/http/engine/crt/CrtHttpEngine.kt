@@ -9,6 +9,7 @@ import aws.sdk.kotlin.crt.SdkDefaultIO
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.*
 import software.aws.clientrt.http.engine.HttpClientEngine
+import software.aws.clientrt.http.engine.HttpClientEngineConfig
 import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.time.Instant
@@ -17,7 +18,7 @@ import kotlin.coroutines.*
 /**
  * [HttpClientEngine] based on the AWS Common Runtime HTTP client
  */
-public class CrtHttpEngine : HttpClientEngine {
+public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClientEngine {
     // FIXME - use the default TLS context when profile cred provider branch is merged
     private val tlsCtx = TlsContext(TlsContextOptions.defaultClient())
 
