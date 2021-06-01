@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.sdk.kotlin.crt.io.byteArrayBuffer
+import aws.sdk.kotlin.runtime.testing.ManualDispatchTestBase
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException

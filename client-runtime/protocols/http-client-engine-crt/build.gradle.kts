@@ -5,7 +5,7 @@
 buildscript {
     // FIXME - move to gradle.properties
     // val atomicFuVersion: String by project
-    val atomicFuVersion = "0.16.1"
+    val atomicFuVersion: String by project
     repositories {
         mavenCentral()
     }
@@ -23,8 +23,7 @@ extra["moduleName"] = "aws.sdk.kotlin.runtime.http.engine.crt"
 
 val smithyKotlinVersion: String by project
 val coroutinesVersion: String by project
-
-val atomicFuVersion = "0.16.1"
+val atomicFuVersion: String by project
 
 kotlin {
     sourceSets {
@@ -43,12 +42,6 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(project(":client-runtime:testing"))
-            }
-        }
-
-        jvmTest {
-            dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
             }
         }
     }

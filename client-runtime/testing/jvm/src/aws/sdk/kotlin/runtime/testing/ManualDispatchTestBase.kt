@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.http.engine.crt
+package aws.sdk.kotlin.runtime.testing
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -15,7 +15,7 @@ import kotlin.test.assertNotEquals
 // but implemented using [kotlinx-coroutines-test](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test)
 // rather than rolling our own dummy coroutines dispatcher
 @OptIn(ExperimentalCoroutinesApi::class)
-abstract class ManualDispatchTestBase {
+public abstract class ManualDispatchTestBase {
     private var current = 0
 
     /**

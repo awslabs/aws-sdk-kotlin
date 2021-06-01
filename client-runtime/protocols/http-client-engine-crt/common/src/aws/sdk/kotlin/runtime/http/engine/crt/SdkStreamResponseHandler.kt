@@ -63,9 +63,6 @@ internal class SdkStreamResponseHandler(
         }
     }
 
-    private fun getBodyStream() {
-    }
-
     private fun createHttpResponseBody(contentLength: Long): HttpBody {
         sdkBody = bufferedReadChannel(::onDataConsumed)
         return object : HttpBody.Streaming() {
