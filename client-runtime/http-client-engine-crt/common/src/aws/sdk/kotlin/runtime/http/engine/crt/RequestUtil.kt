@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http.engine.crt
 
-import aws.sdk.kotlin.crt.http.Headers
+import aws.sdk.kotlin.crt.http.HeadersBuilder
 import aws.sdk.kotlin.crt.http.HttpRequestBodyStream
 import aws.sdk.kotlin.crt.io.Protocol
 import aws.sdk.kotlin.crt.io.Uri
@@ -13,6 +13,8 @@ import aws.sdk.kotlin.crt.io.UserInfo
 import software.aws.clientrt.http.HttpBody
 import software.aws.clientrt.http.request.HttpRequest
 import kotlin.coroutines.CoroutineContext
+
+private const val CONTENT_LENGTH_HEADER: String = "Content-Length"
 
 internal val HttpRequest.uri: Uri
     get() {
@@ -34,13 +36,13 @@ internal fun HttpRequest.toCrtRequest(callContext: CoroutineContext): aws.sdk.ko
         else -> null
     }
 
-    return aws.sdk.kotlin.crt.http.HttpRequest(method.name, url.encodedPath, HttpHeadersCrt(headers), bodyStream)
-}
+    val crtHeaders = HeadersBuilder()
+    with(crtHeaders) {
+        headers.forEach { key, values -> appendAll(key, values) }
+    }
 
-internal class HttpHeadersCrt(private val sdkHeaders: software.aws.clientrt.http.Headers) : Headers {
-    override fun contains(name: String): Boolean = sdkHeaders.contains(name)
-    override fun entries(): Set<Map.Entry<String, List<String>>> = sdkHeaders.entries()
-    override fun getAll(name: String): List<String>? = sdkHeaders.getAll(name)
-    override fun isEmpty(): Boolean = sdkHeaders.isEmpty()
-    override fun names(): Set<String> = sdkHeaders.names()
+    val contentLength = body.contentLength?.toString() ?: headers[CONTENT_LENGTH_HEADER]
+    contentLength?.let { crtHeaders.append(CONTENT_LENGTH_HEADER, it) }
+
+    return aws.sdk.kotlin.crt.http.HttpRequest(method.name, url.encodedPath, crtHeaders.build(), bodyStream)
 }
