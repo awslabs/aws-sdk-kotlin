@@ -14,6 +14,9 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.replace
 import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
 import software.amazon.smithy.model.shapes.ServiceShape
 
+/**
+ * Generates an S3-specific subclass of AwsErrorMetadata.
+ */
 class S3ErrorMetadataIntegration : KotlinIntegration {
 
     override val sectionWriters: List<SectionWriterBinding>

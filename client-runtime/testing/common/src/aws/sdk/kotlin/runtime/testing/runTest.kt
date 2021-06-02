@@ -11,4 +11,4 @@ import kotlin.coroutines.EmptyCoroutineContext
 /**
  * MPP compatible runBlocking to run suspend tests in common modules
  */
-expect fun <T> runSuspendTest(context: CoroutineContext = EmptyCoroutineContext, block: suspend CoroutineScope.() -> T): T
+public expect fun <T> runSuspendTest(context: CoroutineContext = EmptyCoroutineContext, block: suspend CoroutineScope.() -> T): T

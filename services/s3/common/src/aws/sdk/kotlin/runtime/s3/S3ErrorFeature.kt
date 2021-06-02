@@ -21,16 +21,16 @@ import software.aws.clientrt.util.AttributeKey
 import software.aws.clientrt.util.Attributes
 
 /**
- * Http feature that inspects responses and throws the appropriate modeled service error that matches
+ * Http feature that inspects S3 responses and throws the appropriate modeled service error that matches
  *
  * @property registry Modeled exceptions registered with the feature. All responses will be inspected to
  * see if one of the registered errors matches
  */
 @InternalSdkApi
-public class S3Error(private val registry: ExceptionRegistry) : Feature {
+public class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature {
     private val emptyByteArray: ByteArray = ByteArray(0)
 
-    internal interface RestXmlErrorDetails {
+    internal interface S3ErrorDetails {
         val requestId: String?
         val requestId2: String?
         val code: String?
@@ -38,22 +38,22 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
     }
 
     // Models "ErrorResponse" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-    internal data class XmlErrorResponse(
-        val error: XmlError?,
+    internal data class S3ErrorResponse(
+        val error: S3Error?,
         override val requestId: String? = error?.requestId,
         override val requestId2: String? = error?.requestId2
-    ) : RestXmlErrorDetails {
+    ) : S3ErrorDetails {
         override val code: String? = error?.code
         override val message: String? = error?.message
     }
 
     // Models "Error" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-    internal data class XmlError(
+    internal data class S3Error(
         override val requestId: String?,
         override val requestId2: String?,
         override val code: String?,
         override val message: String?
-    ) : RestXmlErrorDetails
+    ) : S3ErrorDetails
 
     public class Config {
         public var registry: ExceptionRegistry = ExceptionRegistry()
@@ -81,10 +81,10 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
             field(REQUESTID_DESCRIPTOR)
         }
 
-        suspend fun deserialize(deserializer: Deserializer): XmlErrorResponse? {
+        suspend fun deserialize(deserializer: Deserializer): S3ErrorResponse? {
             var requestId: String? = null
             var requestId2: String? = null
-            var xmlError: XmlError? = null
+            var xmlError: S3Error? = null
 
             return try {
                 deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
@@ -99,7 +99,7 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
                     }
                 }
 
-                XmlErrorResponse(xmlError, requestId ?: xmlError?.requestId, requestId2 ?: xmlError?.requestId2)
+                S3ErrorResponse(xmlError, requestId ?: xmlError?.requestId, requestId2 ?: xmlError?.requestId2)
             } catch (e: DeserializationException) {
                 null // return so an appropriate exception type can be instantiated above here.
             }
@@ -122,7 +122,7 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
             field(REQUESTID_DESCRIPTOR)
         }
 
-        suspend fun deserialize(deserializer: Deserializer): XmlError? {
+        suspend fun deserialize(deserializer: Deserializer): S3Error? {
             var message: String? = null
             var code: String? = null
             var requestId: String? = null
@@ -142,22 +142,22 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
                     }
                 }
 
-                XmlError(requestId, requestId2, code, message)
+                S3Error(requestId, requestId2, code, message)
             } catch (e: DeserializationException) {
                 null // return so an appropriate exception type can be instantiated above here.
             }
         }
     }
 
-    public companion object Feature : HttpClientFeatureFactory<Config, S3Error> {
-        override val key: FeatureKey<S3Error> = FeatureKey("RestXmlError")
-        override fun create(block: Config.() -> Unit): S3Error {
+    public companion object Feature : HttpClientFeatureFactory<Config, S3ErrorFeature> {
+        override val key: FeatureKey<S3ErrorFeature> = FeatureKey("RestXmlError")
+        override fun create(block: Config.() -> Unit): S3ErrorFeature {
             val config = Config().apply(block)
-            return S3Error(config.registry)
+            return S3ErrorFeature(config.registry)
         }
     }
 
-    internal suspend fun parseErrorResponse(payload: ByteArray): RestXmlErrorDetails =
+    internal suspend fun parseErrorResponse(payload: ByteArray): S3ErrorDetails =
         ErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
             ?: XmlErrorDeserializer.deserialize(XmlDeserializer(payload, true))
             ?: throw DeserializationException("Unable to deserialize RestXml error.")
@@ -200,20 +200,14 @@ public class S3Error(private val registry: ExceptionRegistry) : Feature {
         }
     }
 
-    // Provides the policy of what constitutes a status code match in service response
-    @InternalSdkApi
-    internal fun HttpStatusCode.matches(expected: HttpStatusCode?): Boolean =
-        expected == this || (expected == null && this.isSuccess()) || expected?.category() == this.category()
-
     /**
      * pull the ase specific details from the response / error
      */
-    private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: RestXmlErrorDetails?) {
+    private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: S3ErrorDetails?) {
         if (exception is S3Exception) {
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
-            // KGHW add the following line to a fix PR on main
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, errorDetails?.requestId)
             exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, response.headers[X_AMZN_REQUEST_ID2_HEADER])
             exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, errorDetails?.requestId2)

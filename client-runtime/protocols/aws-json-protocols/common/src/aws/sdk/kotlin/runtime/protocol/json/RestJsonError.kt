@@ -5,10 +5,7 @@
 package aws.sdk.kotlin.runtime.protocol.json
 
 import aws.sdk.kotlin.runtime.*
-import aws.sdk.kotlin.runtime.http.ExceptionMetadata
-import aws.sdk.kotlin.runtime.http.ExceptionRegistry
-import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
-import aws.sdk.kotlin.runtime.http.withPayload
+import aws.sdk.kotlin.runtime.http.*
 import software.aws.clientrt.ServiceErrorMetadata
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.operation.HttpDeserialize
@@ -85,10 +82,6 @@ public class RestJsonError(private val registry: ExceptionRegistry) : Feature {
         }
     }
 }
-
-// Provides the policy of what constitutes a status code match in service response
-internal fun HttpStatusCode.matches(expected: HttpStatusCode?): Boolean =
-    expected == this || (expected == null && this.isSuccess()) || expected?.category() == this.category()
 
 /**
  * pull the ase specific details from the response / error

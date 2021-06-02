@@ -7,36 +7,20 @@ package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.protocols.middleware.ModeledExceptionsMiddleware
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.model.expectTrait
-import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
-import software.amazon.smithy.model.traits.ErrorTrait
-import software.amazon.smithy.model.traits.HttpErrorTrait
 
+/**
+ * Middleware to handle custom S3 error messages
+ */
 class S3ErrorMiddleware(
     ctx: ProtocolGenerator.GenerationContext,
     httpBindingResolver: HttpBindingResolver
 ) : ModeledExceptionsMiddleware(ctx, httpBindingResolver) {
-    override val name: String = "S3Error"
+    override val name: String = "S3ErrorFeature"
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         super.addImportsAndDependencies(writer)
-        writer.addImport("aws.sdk.kotlin.runtime.s3", "S3Error")
-    }
-
-    override fun renderRegisterErrors(writer: KotlinWriter) {
-        val errors = getModeledErrors()
-
-        errors.forEach { errShape ->
-            val code = errShape.id.name
-            val symbol = ctx.symbolProvider.toSymbol(errShape)
-            val deserializerName = "${symbol.name}Deserializer"
-            // If model specifies error code use it otherwise default to 400 (client) or 500 (server)
-            // See https://awslabs.github.io/smithy/1.0/spec/core/http-traits.html#httperror-trait
-            val defaultCode = if (errShape.expectTrait<ErrorTrait>().isClientError) 400 else 500
-            val httpStatusCode = errShape.getTrait<HttpErrorTrait>()?.code ?: defaultCode
-            writer.write("register(code = #S, deserializer = $deserializerName(), httpStatusCode = $httpStatusCode)", code)
-        }
+        writer.addImport("aws.sdk.kotlin.runtime.s3", "S3ErrorFeature")
     }
 }

@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.protocol.json
 import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.UnknownServiceErrorException
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
+import aws.sdk.kotlin.runtime.http.matches
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.ServiceErrorMetadata
 import software.aws.clientrt.client.ExecutionContext
@@ -24,7 +25,7 @@ import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.http.response.header
 import software.aws.clientrt.serde.*
-import software.aws.clientrt.serde.json.JsonSerdeProvider
+import software.aws.clientrt.serde.json.JsonDeserializer
 import software.aws.clientrt.serde.json.JsonSerialName
 import software.aws.clientrt.time.Instant
 import kotlin.test.*
@@ -61,7 +62,7 @@ class RestJsonErrorTest {
         }
     }
 
-    class FooErrorDeserializer(val provider: DeserializationProvider) : HttpDeserialize<FooError> {
+    class FooErrorDeserializer : HttpDeserialize<FooError> {
         companion object {
             val PAYLOAD_STRING_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("string"))
             val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
@@ -75,7 +76,7 @@ class RestJsonErrorTest {
 
             val payload = response.body.readAll()
             if (payload != null) {
-                val deserializer = provider(payload)
+                val deserializer = JsonDeserializer(payload)
                 deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
                     loop@while (true) {
                         when (findNextFieldIndex()) {
@@ -121,9 +122,8 @@ class RestJsonErrorTest {
             }
         }
 
-        val provider = JsonSerdeProvider()
         op.install(RestJsonError) {
-            register("FooError", FooErrorDeserializer(provider::deserializer), 502)
+            register("FooError", FooErrorDeserializer(), 502)
         }
         val ex = assertFailsWith(FooError::class) {
             op.roundTrip(client, Unit)
@@ -172,9 +172,8 @@ class RestJsonErrorTest {
             }
         }
 
-        val provider = JsonSerdeProvider()
         op.install(RestJsonError) {
-            register("FooError", FooErrorDeserializer(provider::deserializer), 502)
+            register("FooError", FooErrorDeserializer(), 502)
         }
 
         val ex = assertFailsWith(UnknownServiceErrorException::class) {
@@ -234,9 +233,8 @@ class RestJsonErrorTest {
             }
         }
 
-        val provider = JsonSerdeProvider()
         op.install(RestJsonError) {
-            register("FooError", FooErrorDeserializer(provider::deserializer), 502)
+            register("FooError", FooErrorDeserializer(), 502)
         }
 
         val ex = assertFailsWith(UnknownServiceErrorException::class) {

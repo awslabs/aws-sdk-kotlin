@@ -6,13 +6,17 @@ package aws.sdk.kotlin.runtime.http
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import software.aws.clientrt.http.HttpBody
+import software.aws.clientrt.http.HttpStatusCode
+import software.aws.clientrt.http.category
 import software.aws.clientrt.http.content.ByteArrayContent
+import software.aws.clientrt.http.isSuccess
 import software.aws.clientrt.http.response.HttpResponse
 
 /**
  * Default header name identifying the unique requestId
+ * See https://aws.amazon.com/premiumsupport/knowledge-center/s3-request-id-values
  */
-public const val X_AMZN_REQUEST_ID_HEADER: String = "X-Amzn-RequestId"
+public const val X_AMZN_REQUEST_ID_HEADER: String = "x-amz-request-id"
 public const val X_AMZN_REQUEST_ID2_HEADER: String = "x-amz-id-2"
 
 /**
@@ -28,3 +32,8 @@ public fun HttpResponse.withPayload(payload: ByteArray?): HttpResponse {
 
     return HttpResponse(status, headers, newBody)
 }
+
+// Provides the policy of what constitutes a status code match in service response
+@InternalSdkApi
+public fun HttpStatusCode.matches(expected: HttpStatusCode?): Boolean =
+    expected == this || (expected == null && this.isSuccess()) || expected?.category() == this.category()
