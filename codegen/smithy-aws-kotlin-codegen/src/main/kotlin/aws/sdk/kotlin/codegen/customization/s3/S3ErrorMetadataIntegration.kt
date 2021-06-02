@@ -1,19 +1,27 @@
 package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import aws.sdk.kotlin.codegen.protocols.RestXml
 import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
+import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.replace
+import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
 import software.amazon.smithy.model.shapes.ServiceShape
 
 class S3ErrorMetadataIntegration : KotlinIntegration {
 
-    override fun apply(service: ServiceShape) = service.isS3
+    override val sectionWriters: List<SectionWriterBinding>
+        get() = listOf(
+            SectionWriterBinding(ExceptionBaseClassGenerator.ExceptionBaseClassSection, addSdkErrorMetadataWriter)
+        )
+
+    override fun enabledForService(service: ServiceShape) = service.isS3
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val writer = KotlinWriter("${ctx.settings.pkg.name}.model")
@@ -34,7 +42,7 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
 
         val contents = writer.toString()
 
-        val packagePath = ctx.settings.pkg.name.replace('.', '/')
+        val packagePath = ctx.settings.pkg.name.namespaceToPath()
         delegator.fileManifest.writeFile("src/main/kotlin/$packagePath/model/S3ErrorMetadata.kt", contents)
     }
 
@@ -47,7 +55,8 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
             it is RestXmlErrorMiddleware
         }
 
-    override fun augmentBaseErrorType(writer: KotlinWriter) {
+    // SectionWriter to override the default sdkErrorMetadata for S3's version
+    private val addSdkErrorMetadataWriter = SectionWriter { writer, _ ->
         writer.write("override val sdkErrorMetadata: S3ErrorMetadata = S3ErrorMetadata()")
     }
 }
