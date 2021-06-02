@@ -10,12 +10,6 @@ import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
- * Get the [sdkId](https://awslabs.github.io/smithy/1.0/spec/aws/aws-core.html#sdkid) from the (AWS) service shape
- */
-val ServiceShape.sdkId: String
-    get() = expectTrait<ServiceTrait>().sdkId
-
-/**
  * Get the [arnNamespace](https://awslabs.github.io/smithy/1.0/spec/aws/aws-core.html#service-arn-namespace)
  * from the (AWS) service shape
  */

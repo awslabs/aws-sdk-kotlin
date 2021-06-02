@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.sdkId
+import software.amazon.smithy.kotlin.codegen.model.sdkId
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
