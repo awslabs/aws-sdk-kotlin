@@ -214,7 +214,6 @@ fun String.kotlinNamespace(): String = split(".")
 task("generateSmithyBuild") {
     group = "codegen"
     description = "generate smithy-build.json"
-    dependsOn(":codegen:smithy-aws-kotlin-codegen:assemble")
     doFirst {
         projectDir.resolve("smithy-build.json").writeText(generateSmithyBuild(discoveredServices))
     }
