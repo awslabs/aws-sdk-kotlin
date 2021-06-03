@@ -115,8 +115,6 @@ interface EndpointResolver {
 
 The default behavior for resolving endpoints will be to use service specific resolvers that are generated using the metadata available in `endpoints.json`. 
 
-NOTE: the schema of `endpoints.json` is described [here](https://code.amazon.com/packages/AWSRegionsAndEndpoints/trees/mainline).
-
 Each service will get a `DefaultResolver` generated as part of their package. When a resolver is not configured on the service client the default will be used.
 
 The default resolver works off of the partition definitions in `endpoints.json`. During codegen the partitions and endpoints that apply to the service being generated will look like:
@@ -168,9 +166,9 @@ The types used in generation that map to the schema of `endpoints.json` will liv
 
 This follows closely to what the V2 Go SDK does.
 
-    * example generated partitions: https://github.com/aws/aws-sdk-go-v2/blob/main/service/s3/internal/endpoints/endpoints.go
-    * partition definition: https://github.com/aws/aws-sdk-go-v2/blob/main/internal/endpoints/endpoints.go
-    * Endpoint definition: https://github.com/aws/aws-sdk-go-v2/blob/main/aws/endpoints.go#L13
+* [example generated partitions](https://github.com/aws/aws-sdk-go-v2/blob/main/service/s3/internal/endpoints/endpoints.go)
+* [partition definition](https://github.com/aws/aws-sdk-go-v2/blob/main/internal/endpoints/endpoints.go)
+* [Endpoint definition](https://github.com/aws/aws-sdk-go-v2/blob/main/aws/endpoints.go#L13)
 
 ### Per/operation overrides
 
@@ -334,7 +332,7 @@ fun resolveEndpoint(partitions: List<Partition>, region: String) Endpoint? {
 }
 ```
 
-NOTE: the algorithm for resolving an endpoint is described [here](https://code.amazon.com/packages/AWSRegionsAndEndpoints/trees/mainline#resolving-endpoints-in-sdks-and-tools)
+NOTE: the algorithm for resolving an endpoint is described in AWSRegionsAndEndpoints
 
 
 # Revision history
