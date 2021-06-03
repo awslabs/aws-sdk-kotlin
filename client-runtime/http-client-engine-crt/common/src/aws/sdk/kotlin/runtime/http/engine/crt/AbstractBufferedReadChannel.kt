@@ -232,9 +232,8 @@ internal abstract class AbstractBufferedReadChannel(
     }
 
     override fun cancel(cause: Throwable?): Boolean {
-        if (closed != null) return false
-
-        _closed.update { ClosedSentinel(cause) }
+        val success = _closed.compareAndSet(null, ClosedSentinel(cause))
+        if (!success) return false
 
         segments.close()
 
