@@ -54,7 +54,11 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
 
             return HttpCall(request, resp, reqTime, Instant.now())
         } catch (ex: Exception) {
-            manager.releaseConnection(conn)
+            try {
+                manager.releaseConnection(conn)
+            } catch (ex2: Exception) {
+                ex.addSuppressed(ex2)
+            }
             throw ex
         }
     }
