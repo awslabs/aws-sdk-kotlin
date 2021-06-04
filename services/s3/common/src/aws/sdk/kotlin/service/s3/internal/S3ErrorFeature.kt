@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package aws.sdk.kotlin.runtime.s3
+package aws.sdk.kotlin.service.s3.internal
 
 import aws.sdk.kotlin.runtime.*
 import aws.sdk.kotlin.runtime.http.*
@@ -26,8 +26,7 @@ import software.aws.clientrt.util.Attributes
  * @property registry Modeled exceptions registered with the feature. All responses will be inspected to
  * see if one of the registered errors matches
  */
-@InternalSdkApi
-public class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature {
+internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature {
     private val emptyByteArray: ByteArray = ByteArray(0)
 
     internal interface S3ErrorDetails {
@@ -156,13 +155,6 @@ public class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature {
             return S3ErrorFeature(config.registry)
         }
     }
-
-    internal suspend fun parseErrorResponse(payload: ByteArray): S3ErrorDetails =
-        ErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
-            ?: XmlErrorDeserializer.deserialize(XmlDeserializer(payload, true))
-            ?: throw DeserializationException("Unable to deserialize RestXml error.")
-
-
     override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
         // intercept at first chance we get
         operation.execution.receive.intercept { req, next ->
@@ -209,7 +201,7 @@ public class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature {
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, errorDetails?.requestId)
-            exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, response.headers[X_AMZN_REQUEST_ID2_HEADER])
+            exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, response.headers["x-amz-id-2"])
             exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, errorDetails?.requestId2)
             exception.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
         }
@@ -219,3 +211,8 @@ public class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature {
         if (value != null) set(key, value)
     }
 }
+
+internal suspend fun parseErrorResponse(payload: ByteArray): S3ErrorFeature.S3ErrorDetails =
+    S3ErrorFeature.ErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
+        ?: S3ErrorFeature.XmlErrorDeserializer.deserialize(XmlDeserializer(payload, true))
+        ?: throw DeserializationException("Unable to deserialize RestXml error.")
