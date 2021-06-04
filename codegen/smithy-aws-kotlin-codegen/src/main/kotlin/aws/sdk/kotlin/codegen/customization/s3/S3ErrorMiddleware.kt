@@ -21,6 +21,6 @@ class S3ErrorMiddleware(
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         super.addImportsAndDependencies(writer)
-        writer.addImport("aws.sdk.kotlin.runtime.s3", "S3ErrorFeature")
+        writer.addImport("aws.sdk.kotlin.service.s3.internal", "S3ErrorFeature")
     }
 }

@@ -7,12 +7,15 @@ package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
+import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.replace
+import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
@@ -23,11 +26,11 @@ class S3SigningConfig : KotlinIntegration {
     override val order: Byte
         get() = 127
 
-    override fun enabledForService(service: ServiceShape) = service.isS3
+    override fun enabledForService(model: Model, settings: KotlinSettings) =
+        model.expectShape<ServiceShape>(settings.service).isS3
 
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
-        generator: HttpBindingProtocolGenerator,
         resolved: List<ProtocolMiddleware>
     ): List<ProtocolMiddleware> {
         val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.model, ctx.service)

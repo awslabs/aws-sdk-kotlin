@@ -17,7 +17,6 @@ import software.aws.clientrt.http.response.HttpResponse
  * See https://aws.amazon.com/premiumsupport/knowledge-center/s3-request-id-values
  */
 public const val X_AMZN_REQUEST_ID_HEADER: String = "x-amz-request-id"
-public const val X_AMZN_REQUEST_ID2_HEADER: String = "x-amz-id-2"
 
 /**
  * Return a copy of the response with a new payload set

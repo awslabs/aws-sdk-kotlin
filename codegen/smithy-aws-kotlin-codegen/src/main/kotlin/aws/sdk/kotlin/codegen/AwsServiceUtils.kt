@@ -22,3 +22,9 @@ val ServiceShape.arnNamespace: String
  */
 val ServiceShape.endpointPrefix: String
     get() = expectTrait<ServiceTrait>().endpointPrefix
+
+/**
+ * Get the [sdkId](https://awslabs.github.io/smithy/1.0/spec/aws/aws-core.html#sdkid) from the (AWS) service shape
+ */
+val ServiceShape.sdkId: String
+    get() = expectTrait<ServiceTrait>().sdkId
