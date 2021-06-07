@@ -49,7 +49,7 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
         val contents = writer.toString()
 
         val packagePath = ctx.settings.pkg.name.namespaceToPath()
-        delegator.fileManifest.writeFile("src/main/kotlin/$packagePath/model/S3ErrorMetadata.kt", contents)
+        delegator.fileManifest.writeFile("$DEFAULT_SOURCE_SET_ROOT$packagePath/model/S3ErrorMetadata.kt", contents)
 
         val kotlinTestDependency = KotlinDependency(
             GradleConfiguration.TestImplementation,
