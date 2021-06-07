@@ -55,6 +55,7 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
             return S3ErrorFeature(config.registry)
         }
     }
+
     override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
         operation.execution.receive.intercept { req, next ->
             val call = next.call(req)
