@@ -9,9 +9,8 @@ import aws.sdk.kotlin.crt.CRT
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.Buffer
 import aws.sdk.kotlin.runtime.ClientException
-import kotlinx.atomicfu.AtomicRef
-import kotlinx.atomicfu.atomic
-import kotlinx.atomicfu.update
+import kotlinx.atomicfu.locks.reentrantLock
+import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import software.aws.clientrt.http.*
@@ -35,7 +34,9 @@ internal class SdkStreamResponseHandler(
     private val headers = HeadersBuilder()
 
     private var sdkBody: BufferedReadChannel? = null
-    private val crtStream: AtomicRef<HttpStream?> = atomic(null)
+
+    private val lock = reentrantLock()
+    private var crtStream: HttpStream? = null
 
     private val Int.isMainHeadersBlock: Boolean
         get() = when (this) {
@@ -48,7 +49,9 @@ internal class SdkStreamResponseHandler(
      * @param size the number of bytes consumed
      */
     private fun onDataConsumed(size: Int) {
-        crtStream.value?.incrementWindow(size)
+        lock.withLock {
+            crtStream?.incrementWindow(size)
+        }
     }
 
     override fun onResponseHeaders(
@@ -57,7 +60,6 @@ internal class SdkStreamResponseHandler(
         blockType: Int,
         nextHeaders: List<HttpHeader>?
     ) {
-        crtStream.update { stream }
         if (!blockType.isMainHeadersBlock) return
 
         nextHeaders?.forEach {
@@ -111,7 +113,7 @@ internal class SdkStreamResponseHandler(
     }
 
     override fun onResponseBody(stream: HttpStream, bodyBytesIn: Buffer): Int {
-        crtStream.update { stream }
+        lock.withLock { crtStream = stream }
 
         // we should have created a response channel if we expected a body
         val sdkRespChan = checkNotNull(sdkBody) { "unexpected response body" }
@@ -125,7 +127,9 @@ internal class SdkStreamResponseHandler(
     override fun onResponseComplete(stream: HttpStream, errorCode: Int) {
         // stream is only valid until the end of this callback, ensure any further data being read downstream
         // doesn't call incrementWindow on a resource that has been free'd
-        crtStream.update { null }
+        lock.withLock {
+            crtStream = null
+        }
 
         // release it back to the pool, this is safe to do now since the body (and any other response data)
         // has been copied to buffers we own by now
