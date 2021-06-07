@@ -11,22 +11,22 @@ This document covers the design of how endpoints are resolved in the Kotlin SDK
 
 ## Requirements
 
-Smithy models do not specify an endpoint to make operational requests to. This information must be specified externally by other means or configuration. AWS services have additional requirements that increase this complexity.
+Smithy models do not specify an endpoint to make operational requests to. This information must be specified externally
+by other means or configuration. AWS services have additional requirements that increase this complexity.
 
 
-1. Endpoints must support manual configuration by end users.
+1. Endpoints must support manual configuration by end users. 
+   This allows overriding default endpoint resolution and discovery and enables integrations with things such as 
+   [DynamoDB Local](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.UsageNotes.html).
 
-This allows overriding default endpoint resolution and discovery and enables integrations with things such as [DynamoDB Local](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.UsageNotes.html).
-
-
-1. Endpoints must support being customized on a per-operation basis by the [endpoint trait](https://awslabs.github.io/smithy/1.0/spec/core/endpoint-traits.html#endpoint-trait).
+2. Endpoints must support being customized on a per-operation basis by the [endpoint trait](https://awslabs.github.io/smithy/1.0/spec/core/endpoint-traits.html#endpoint-trait).
     
-2. Endpoints must support being customized by [endpoint discovery](https://awslabs.github.io/smithy/1.0/spec/aws/aws-core.html#client-endpoint-discovery). A request, customized by a predefined set of fields from the input operation is dispatched to a specific URI. That operation returns the endpoint that should be used. Endpoints must be cached by a cache key containing:
-
-```
-(access_key_id, operation, [endpoint identifiers])
-```
-
+3. Endpoints must support being customized by [endpoint discovery](https://awslabs.github.io/smithy/1.0/spec/aws/aws-core.html#client-endpoint-discovery). 
+   A request, customized by a predefined set of fields from the input operation is dispatched to a specific URI. 
+   That operation returns the endpoint that should be used. Endpoints must be cached by a cache key containing:
+   ```
+   (access_key_id, operation, [endpoint identifiers])
+   ```
 
 See [caching](https://awslabs.github.io/smithy/1.0/spec/aws/aws-core.html#caching)
 
@@ -113,11 +113,14 @@ interface EndpointResolver {
 
 ### Default behavior
 
-The default behavior for resolving endpoints will be to use service specific resolvers that are generated using the metadata available in `endpoints.json`. 
+The default behavior for resolving endpoints will be to use service specific resolvers that are generated using the
+metadata available in `endpoints.json`. 
 
-Each service will get a `DefaultResolver` generated as part of their package. When a resolver is not configured on the service client the default will be used.
+Each service will get a `DefaultResolver` generated as part of their package. When a resolver is not configured on
+the service client the default will be used.
 
-The default resolver works off of the partition definitions in `endpoints.json`. During codegen the partitions and endpoints that apply to the service being generated will look like:
+The default resolver works off of the partition definitions in `endpoints.json`. During codegen the partitions and 
+endpoints that apply to the service being generated will look like:
 
 
 ```kt
@@ -161,18 +164,20 @@ private val servicePartitions = listOf(
 ```
 
 
-The types used in generation that map to the schema of `endpoints.json` will live as part of the runtime such that resolving an endpoint from partitions is mostly boilerplate from codegen. See the Appendix.
+The types used in generation that map to the schema of `endpoints.json` will live as part of the runtime such that
+resolving an endpoint from partitions is mostly boilerplate from codegen. See the Appendix.
 
 
 This follows closely to what the V2 Go SDK does.
 
-* [example generated partitions](https://github.com/aws/aws-sdk-go-v2/blob/main/service/s3/internal/endpoints/endpoints.go)
-* [partition definition](https://github.com/aws/aws-sdk-go-v2/blob/main/internal/endpoints/endpoints.go)
+* [Example generated partitions](https://github.com/aws/aws-sdk-go-v2/blob/main/service/s3/internal/endpoints/endpoints.go)
+* [Partition definition](https://github.com/aws/aws-sdk-go-v2/blob/main/internal/endpoints/endpoints.go)
 * [Endpoint definition](https://github.com/aws/aws-sdk-go-v2/blob/main/aws/endpoints.go#L13)
 
 ### Per/operation overrides
 
-Operations are generated and executed with an `ExecutionContext` which is a typesafe property bag of metadata for round tripping a request.
+Operations are generated and executed with an `ExecutionContext` which is a typesafe property bag of metadata for 
+round tripping a request.
 
 
 ```kt
@@ -190,9 +195,11 @@ suspend fun operation(input: OperationInput): OperationOutput {
 ```
 
 
-This allows various middleware interceptors to pull out metadata they need to execute a request (e.g. serialization, deserialization, signing, etc).
+This allows various middleware interceptors to pull out metadata they need to execute a request 
+(e.g. serialization, deserialization, signing, etc).
 
-This execution context provides a place to insert per/operation metadata that endpoint resolution middleware can make use of.
+This execution context provides a place to insert per/operation metadata that endpoint resolution middleware 
+can make use of.
 
 e.g.
 
@@ -202,12 +209,14 @@ execCtx[SdkClientOption.HostPrefix] = "${input.foo}.bar-"
 ```
 
 
-Each operation generated will look for the `endpoint trait` and add to the operations execution context a host prefix if required.
+Each operation generated will look for the `endpoint trait` and add to the operations execution context a host
+prefix if required.
 
 
 ### Manual configuration
 
-Services will be generated with a configuration option to specify a resolver type responsible for producing the endpoint a request should be made to:
+Services will be generated with a configuration option to specify a resolver type responsible for producing the 
+endpoint a request should be made to:
 
 This allows users to supply their own endpoint resolution strategy which satisfies requirement (1).
 
@@ -225,11 +234,13 @@ val client = Dynamodb {
 
 ## Appendix
 
-### Internal types that map to entries in `endpoint`s`.json`
+### Internal types that map to entries in `endpoints.json`
 
-(Draft) definitions of types that codegen can make use of to generate the partition information from `endpoints.json` for default endpoint resolution is given below.
+(Draft) definitions of types that codegen can make use of to generate the partition information from `endpoints.json` 
+for default endpoint resolution is given below.
 
-These types would all be considered internal to the SDK and marked with the appropriate annotation such that customers can’t accidentally use them.
+These types would all be considered internal to the SDK and marked with the appropriate annotation such that customers 
+can’t accidentally use them.
 
 ```kt
 package aws.sdk.kotlin.runtime.endpoint.internal
@@ -321,7 +332,8 @@ data class Partition(
 ```
 
 
-Re-usable functions/types will be implemented that codegen delegates to. The generated `DefaultResolver` will be mostly boilerplate over the internal functions allowing for the runtime to be re-used and unit tested.
+Re-usable functions/types will be implemented that codegen delegates to. The generated `DefaultResolver` will be mostly
+boilerplate over the internal functions allowing for the runtime to be re-used and unit tested.
 
 
 ```kt
