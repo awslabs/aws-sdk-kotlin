@@ -29,30 +29,12 @@ import software.aws.clientrt.util.Attributes
 internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature {
     private val emptyByteArray: ByteArray = ByteArray(0)
 
-    internal interface S3ErrorDetails {
-        val requestId: String?
-        val requestId2: String?
-        val code: String?
-        val message: String?
-    }
-
-    // Models "ErrorResponse" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-    internal data class S3ErrorResponse(
-        val error: S3Error?,
-        override val requestId: String? = error?.requestId,
-        override val requestId2: String? = error?.requestId2
-    ) : S3ErrorDetails {
-        override val code: String? = error?.code
-        override val message: String? = error?.message
-    }
-
-    // Models "Error" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
     internal data class S3Error(
-        override val requestId: String?,
-        override val requestId2: String?,
-        override val code: String?,
-        override val message: String?
-    ) : S3ErrorDetails
+        val requestId: String?,
+        val requestId2: String?,
+        val code: String?,
+        val message: String?
+    )
 
     public class Config {
         public var registry: ExceptionRegistry = ExceptionRegistry()
@@ -66,88 +48,6 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
         }
     }
 
-    /**
-     * Deserializes rest Xml protocol errors as specified by:
-     * - Smithy spec: https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-     */
-    internal object ErrorResponseDeserializer {
-        private val ERROR_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName("Error"))
-        private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
-        private val HOSTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("HostId"))
-        private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-            trait(XmlSerialName("ErrorResponse"))
-            field(ERROR_DESCRIPTOR)
-            field(REQUESTID_DESCRIPTOR)
-        }
-
-        suspend fun deserialize(deserializer: Deserializer): S3ErrorResponse? {
-            var requestId: String? = null
-            var requestId2: String? = null
-            var xmlError: S3Error? = null
-
-            return try {
-                deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
-                    loop@ while (true) {
-                        when (findNextFieldIndex()) {
-                            ERROR_DESCRIPTOR.index -> xmlError = XmlErrorDeserializer.deserialize(deserializer)
-                            REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
-                            HOSTID_DESCRIPTOR.index -> requestId2 = deserializeString()
-                            null -> break@loop
-                            else -> skipValue()
-                        }
-                    }
-                }
-
-                S3ErrorResponse(xmlError, requestId ?: xmlError?.requestId, requestId2 ?: xmlError?.requestId2)
-            } catch (e: DeserializationException) {
-                null // return so an appropriate exception type can be instantiated above here.
-            }
-        }
-    }
-
-    /**
-     * This deserializer is used for both the nested Error node from ErrorResponse as well as the top-level
-     * Error node as described in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-     */
-    internal object XmlErrorDeserializer {
-        private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
-        private val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Code"))
-        private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
-        private val HOSTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("HostId"))
-        private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-            trait(XmlSerialName("Error"))
-            field(MESSAGE_DESCRIPTOR)
-            field(CODE_DESCRIPTOR)
-            field(REQUESTID_DESCRIPTOR)
-        }
-
-        suspend fun deserialize(deserializer: Deserializer): S3Error? {
-            var message: String? = null
-            var code: String? = null
-            var requestId: String? = null
-            var requestId2: String? = null
-
-            return try {
-                deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
-                    loop@ while (true) {
-                        when (findNextFieldIndex()) {
-                            MESSAGE_DESCRIPTOR.index -> message = deserializeString()
-                            CODE_DESCRIPTOR.index -> code = deserializeString()
-                            REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
-                            HOSTID_DESCRIPTOR.index -> requestId2 = deserializeString()
-                            null -> break@loop
-                            else -> skipValue()
-                        }
-                    }
-                }
-
-                S3Error(requestId, requestId2, code, message)
-            } catch (e: DeserializationException) {
-                null // return so an appropriate exception type can be instantiated above here.
-            }
-        }
-    }
-
     public companion object Feature : HttpClientFeatureFactory<Config, S3ErrorFeature> {
         override val key: FeatureKey<S3ErrorFeature> = FeatureKey("RestXmlError")
         override fun create(block: Config.() -> Unit): S3ErrorFeature {
@@ -156,13 +56,13 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
         }
     }
     override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
-        // intercept at first chance we get
         operation.execution.receive.intercept { req, next ->
             val call = next.call(req)
             val httpResponse = call.response
 
             val context = req.context
             val expectedStatus = context.getOrNull(HttpOperationContext.ExpectedHttpStatus)?.let { HttpStatusCode.fromValue(it) }
+            // NOTE: Consider implementing detecting 200-but-error scenarios here.
             if (httpResponse.status.matches(expectedStatus)) return@intercept call
 
             val payload = httpResponse.body.readAll()
@@ -182,8 +82,8 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
 
             // we already consumed the response body, wrap it to allow the modeled exception to deserialize
             // any members that may be bound to the document
-            val modeledExceptionDeserializer = registry[errorResponse.code]?.deserializer
-            val modeledException = modeledExceptionDeserializer?.deserialize(req.context, wrappedResponse) ?: UnknownServiceErrorException(errorResponse.message)
+            val modeledExceptionDeserializer = registry[errorResponse?.code]?.deserializer
+            val modeledException = modeledExceptionDeserializer?.deserialize(req.context, wrappedResponse) ?: UnknownServiceErrorException(errorResponse?.message)
             setAseFields(modeledException, wrappedResponse, errorResponse)
 
             // this should never happen...
@@ -195,7 +95,7 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
     /**
      * pull the ase specific details from the response / error
      */
-    private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: S3ErrorDetails?) {
+    private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: S3Error?) {
         if (exception is S3Exception) {
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)
@@ -212,7 +112,41 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
     }
 }
 
-internal suspend fun parseErrorResponse(payload: ByteArray): S3ErrorFeature.S3ErrorDetails =
-    S3ErrorFeature.ErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
-        ?: S3ErrorFeature.XmlErrorDeserializer.deserialize(XmlDeserializer(payload, true))
-        ?: throw DeserializationException("Unable to deserialize RestXml error.")
+internal suspend fun parseErrorResponse(payload: ByteArray): S3ErrorFeature.S3Error? {
+    val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
+    val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Code"))
+    val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
+    val HOSTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("HostId"))
+    val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+        trait(XmlSerialName("Error"))
+        field(MESSAGE_DESCRIPTOR)
+        field(CODE_DESCRIPTOR)
+        field(REQUESTID_DESCRIPTOR)
+        field(HOSTID_DESCRIPTOR)
+    }
+
+    var message: String? = null
+    var code: String? = null
+    var requestId: String? = null
+    var requestId2: String? = null
+
+    return try {
+        val deserializer = XmlDeserializer(payload, true)
+        deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
+            loop@ while (true) {
+                when (findNextFieldIndex()) {
+                    MESSAGE_DESCRIPTOR.index -> message = deserializeString()
+                    CODE_DESCRIPTOR.index -> code = deserializeString()
+                    REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
+                    HOSTID_DESCRIPTOR.index -> requestId2 = deserializeString()
+                    null -> break@loop
+                    else -> skipValue()
+                }
+            }
+        }
+
+        S3ErrorFeature.S3Error(requestId, requestId2, code, message)
+    } catch (e: DeserializationException) {
+        null // return so an appropriate exception type can be instantiated above here.
+    }
+}

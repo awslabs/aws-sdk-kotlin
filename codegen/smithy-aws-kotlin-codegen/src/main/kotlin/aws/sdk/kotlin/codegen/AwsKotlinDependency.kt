@@ -38,6 +38,7 @@ object AwsKotlinDependency {
     val AWS_CLIENT_RT_CORE = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-client-rt", AWS_CLIENT_RT_VERSION)
     val AWS_CLIENT_RT_HTTP = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.http", AWS_CLIENT_RT_GROUP, "http", AWS_CLIENT_RT_VERSION)
     val AWS_CLIENT_RT_AUTH = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_AUTH_NS, AWS_CLIENT_RT_GROUP, "auth", AWS_CLIENT_RT_VERSION)
+    val AWS_CLIENT_RT_TESTING = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "testing", AWS_CLIENT_RT_VERSION)
     val AWS_CLIENT_RT_REGIONS = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_REGIONS_NS, AWS_CLIENT_RT_GROUP, "regions", AWS_CLIENT_RT_VERSION)
     val AWS_CLIENT_RT_JSON_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.json", AWS_CLIENT_RT_GROUP, "aws-json-protocols", AWS_CLIENT_RT_VERSION)
     val AWS_CLIENT_RT_XML_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.xml", AWS_CLIENT_RT_GROUP, "aws-xml-protocols", AWS_CLIENT_RT_VERSION)
@@ -52,7 +53,8 @@ private val sameProjectDeps: Map<KotlinDependency, String> by lazy {
         AwsKotlinDependency.AWS_CLIENT_RT_AUTH to """project(":client-runtime:auth")""",
         AwsKotlinDependency.AWS_CLIENT_RT_REGIONS to """project(":client-runtime:regions")""",
         AwsKotlinDependency.AWS_CLIENT_RT_JSON_PROTOCOLS to """project(":client-runtime:protocols:aws-json-protocols")""",
-        AwsKotlinDependency.AWS_CLIENT_RT_XML_PROTOCOLS to """project(":client-runtime:protocols:aws-xml-protocols")"""
+        AwsKotlinDependency.AWS_CLIENT_RT_XML_PROTOCOLS to """project(":client-runtime:protocols:aws-xml-protocols")""",
+        AwsKotlinDependency.AWS_CLIENT_RT_TESTING to """project(":client-runtime:testing")"""
     )
 }
 

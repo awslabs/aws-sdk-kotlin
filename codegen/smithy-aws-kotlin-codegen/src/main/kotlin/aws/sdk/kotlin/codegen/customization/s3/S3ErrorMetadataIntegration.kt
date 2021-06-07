@@ -50,6 +50,17 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
 
         val packagePath = ctx.settings.pkg.name.namespaceToPath()
         delegator.fileManifest.writeFile("src/main/kotlin/$packagePath/model/S3ErrorMetadata.kt", contents)
+
+        val kotlinTestDependency = KotlinDependency(
+            GradleConfiguration.TestImplementation,
+            "org.jetbrains.kotlin",
+            "org.jetbrains.kotlin",
+            "kotlin-test",
+            "\$kotlinVersion"
+        )
+
+        delegator.runtimeDependencies.addAll(kotlinTestDependency.dependencies)
+        delegator.runtimeDependencies.addAll(AwsKotlinDependency.AWS_CLIENT_RT_TESTING.dependencies)
     }
 
     override fun customizeMiddleware(
