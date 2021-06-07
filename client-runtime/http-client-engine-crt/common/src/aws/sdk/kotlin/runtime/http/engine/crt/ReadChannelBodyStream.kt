@@ -65,6 +65,8 @@ internal class ReadChannelBodyStream(
     }
 
     private fun proxyRequestBody() {
+        // TODO - we could get rid of this extra copy + coroutine if readAvailable() had a non-suspend version
+        // see: https://youtrack.jetbrains.com/issue/KTOR-2772
         val job = launch {
             while (!bodyChan.isClosedForRead) {
                 bodyChan.awaitContent()
