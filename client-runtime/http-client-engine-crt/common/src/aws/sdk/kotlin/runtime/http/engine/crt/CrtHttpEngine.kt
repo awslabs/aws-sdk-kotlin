@@ -8,6 +8,8 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 import aws.sdk.kotlin.crt.SdkDefaultIO
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import software.aws.clientrt.http.engine.HttpClientEngine
 import software.aws.clientrt.http.engine.HttpClientEngineConfig
 import software.aws.clientrt.http.request.HttpRequest
@@ -33,9 +35,9 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
 
     // connection managers are per host
     private val connManagers = mutableMapOf<String, HttpClientConnectionManager>()
+    private val mutex = Mutex()
 
     override suspend fun roundTrip(request: HttpRequest): HttpCall {
-
         val manager = getManagerForUri(request.uri)
         val conn = manager.acquireConnection()
 
@@ -65,12 +67,26 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
 
     override fun close() {
         // close all resources
-        connManagers.forEach { entry -> entry.value.close() }
+
+        // FIXME - this can go away after we enforce a lifecycle to engines that guarantees when close/shutdown is called
+        mutex.withLockNoSuspend {
+            connManagers.forEach { entry -> entry.value.close() }
+        }
         tlsCtx.close()
     }
 
-    private fun getManagerForUri(uri: Uri): HttpClientConnectionManager =
+    private suspend fun getManagerForUri(uri: Uri): HttpClientConnectionManager = mutex.withLock {
         connManagers.getOrPut(uri.host) {
             HttpClientConnectionManager(options.apply { this.uri = uri }.build())
         }
+    }
+
+    private fun <T> Mutex.withLockNoSuspend(block: () -> T): T {
+        while (!tryLock()) { } // spin
+        try {
+            return block()
+        } finally {
+            unlock()
+        }
+    }
 }
