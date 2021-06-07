@@ -46,7 +46,7 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
             val engineRequest = request.toCrtRequest(coroutineContext)
 
             // LIFETIME: connection will be released back to the pool/manager when
-            // the response completes
+            // the response completes OR on exception
             val respHandler = SdkStreamResponseHandler(conn)
 
             val stream = conn.makeRequest(engineRequest, respHandler)
