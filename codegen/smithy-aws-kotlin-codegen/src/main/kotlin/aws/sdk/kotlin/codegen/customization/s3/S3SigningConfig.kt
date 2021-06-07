@@ -11,7 +11,6 @@ import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.replace

@@ -5,11 +5,7 @@
 
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.protocols.middleware.ModeledExceptionsMiddleware
-import software.amazon.smithy.codegen.core.SymbolDependency
-import software.amazon.smithy.kotlin.codegen.core.GradleConfiguration
-import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.addImport
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
