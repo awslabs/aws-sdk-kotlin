@@ -73,9 +73,8 @@ internal abstract class AbstractBufferedReadChannel(
     }
 
     private fun setReadContinuation(cont: CancellableContinuation<Boolean>) {
-        val current = readOp.value
-        check(current == null) { "Read operation already in progress" }
-        readOp.update { cont }
+        val success = readOp.compareAndSet(null, cont)
+        check(success) { "Read operation already in progress" }
     }
 
     private fun resumeRead() {
@@ -87,6 +86,7 @@ internal abstract class AbstractBufferedReadChannel(
      */
     @Suppress("NOTHING_TO_INLINE")
     private inline fun markBytesConsumed(size: Int) {
+        // NOTE: +/- operators ARE atomic
         _availableForRead -= size
         onBytesRead(size)
     }
