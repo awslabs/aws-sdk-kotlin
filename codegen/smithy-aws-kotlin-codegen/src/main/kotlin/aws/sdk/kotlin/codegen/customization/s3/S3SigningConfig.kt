@@ -7,10 +7,15 @@ package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
+import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.replace
+import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
  * Overrides the SigV4 signing middleware config for S3.
@@ -20,20 +25,18 @@ class S3SigningConfig : KotlinIntegration {
     override val order: Byte
         get() = 127
 
+    override fun enabledForService(model: Model, settings: KotlinSettings) =
+        model.expectShape<ServiceShape>(settings.service).isS3
+
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
         resolved: List<ProtocolMiddleware>
     ): List<ProtocolMiddleware> {
-        if (!ctx.service.isS3) return resolved
-
-        val middleware = resolved.filterNot {
-            it.name == AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware.name
-        }.toMutableList()
-
         val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.model, ctx.service)
-        middleware.add(S3SigningMiddleware(signingServiceName))
 
-        return middleware
+        return resolved.replace(newValue = S3SigningMiddleware(signingServiceName)) { middleware ->
+            middleware.name == AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware.name
+        }
     }
 }
 
