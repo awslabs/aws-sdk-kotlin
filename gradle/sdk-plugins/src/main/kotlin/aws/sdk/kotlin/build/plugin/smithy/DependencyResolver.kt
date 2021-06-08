@@ -25,14 +25,20 @@ fun Project.resolveSdkDependencies() {
         is AwsJson1_1Trait,
         is RestJson1Trait -> registerJsonDependencies()
         is RestXmlTrait -> registerXmlDependencies()
+        // is AwsQueryTrait -> {
+        //     registerXmlDependencies()
+        //     registerQueryDependencies()
+        // }
     }
 }
 
 private object Versions {
+    // FIXME - load from gradle.properties
     // smithy-kotlin client runtime
-    const val ClientRuntime = "0.0.1"
+    const val ClientRuntime = "0.3.0-SNAPSHOT"
 }
 
+// FIXME - define configurations to extend instead
 private fun Project.registerHttpDependencies() {
     dependencies {
         add("api", "software.aws.smithy.kotlin:client-rt-core:${Versions.ClientRuntime}")
@@ -45,7 +51,7 @@ private fun Project.registerHttpDependencies() {
 
 private fun Project.registerJsonDependencies() {
     dependencies {
-        add("implementation", project(":client-runtime:protocols:rest-json"))
+        add("implementation", project(":client-runtime:protocols:aws-json-protocols"))
         add("implementation", "software.aws.smithy.kotlin:serde:${Versions.ClientRuntime}")
         add("implementation", "software.aws.smithy.kotlin:serde-json:${Versions.ClientRuntime}")
     }
@@ -53,8 +59,15 @@ private fun Project.registerJsonDependencies() {
 
 private fun Project.registerXmlDependencies() {
     dependencies {
+        add("implementation", project(":client-runtime:protocols:aws-xml-protocols"))
         add("implementation", "software.aws.smithy.kotlin:serde:${Versions.ClientRuntime}")
         add("implementation", "software.aws.smithy.kotlin:serde-xml:${Versions.ClientRuntime}")
+    }
+}
+private fun Project.registerQueryDependencies() {
+    dependencies {
+        add("implementation", "software.aws.smithy.kotlin:serde:${Versions.ClientRuntime}")
+        add("implementation", "software.aws.smithy.kotlin:serde-form-url:${Versions.ClientRuntime}")
     }
 }
 
@@ -64,5 +77,6 @@ private fun Project.registerAwsDependencies() {
         add("api", project(":client-runtime:aws-client-rt"))
         add("api", project(":client-runtime:protocols:http"))
         add("api", project(":client-runtime:regions"))
+        add("implementation", project(":client-runtime:crt-util"))
     }
 }

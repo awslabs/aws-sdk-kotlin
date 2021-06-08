@@ -46,7 +46,7 @@ class AwsSdkPlugin : Plugin<Project> {
     }
 
     private fun Project.configurePlugins() {
-        // TODO - work with smithy team to make configuring this not require the Java plugin
+        // TODO - work with smithy team to make configuring this not require the Java plugin?
         plugins.apply("software.amazon.smithy")
         tasks.getByName("smithyBuildJar").enabled = false
     }

@@ -12,7 +12,7 @@ buildscript {
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-    kotlin("jvm") version "1.4.20"
+    kotlin("jvm") version "1.5.0"
 }
 
 repositories {
@@ -22,11 +22,12 @@ repositories {
 }
 
 // FIXME - load from root project gradle.properties
-val kotlinVersion: String = "1.4.20"
-val smithyVersion: String = "1.5.1"
+val kotlinVersion: String = "1.5.0"
+val smithyVersion: String = "1.7.2"
+val smithyGradleVersion: String = "0.5.3"
 
 dependencies {
-    implementation("software.amazon.smithy:smithy-gradle-plugin:0.5.2")
+    implementation("software.amazon.smithy:smithy-gradle-plugin:$smithyGradleVersion")
     implementation("software.amazon.smithy:smithy-model:$smithyVersion")
     implementation("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
 }

@@ -15,11 +15,13 @@ repositories {
     maven("https://kotlin.bintray.com/kotlinx")
 }
 
+val kotlinxCliVersion: String by project
+val smithyVersion: String by project
+
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-cli:$kotlinxCliVersion")
 
-    val smithyVersion: String by project
     implementation("software.amazon.smithy:smithy-codegen-core:$smithyVersion")
     implementation("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
 }

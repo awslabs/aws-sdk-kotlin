@@ -20,17 +20,20 @@ fun Project.registerCodegenTasks() {
     // generate the projection file for smithy to consume
     val generateSmithyBuild = tasks.create("generateSmithyBuild") {
         description = "generate smithy-build.json"
+        group = "codegen"
+        outputs.file(smithyBuildConfig)
         doFirst {
             buildDir.mkdir()
             smithyBuildConfig.writeText(generateSmithyBuild())
         }
     }
 
-    val generatedSdkDir = projectDir.resolve("generated-sdk")
+    val generatedSdkDir = projectDir.resolve("generated-src")
 
     // re-use the tasks defined by the smithy-gradle plugin
     val generateSdk = tasks.create("generateSdk", SmithyBuild::class.java) {
         description = "generate AWS service client from the model"
+        group = "codegen"
         addCompileClasspath = true
         smithyBuildConfigs = files(smithyBuildConfig)
         inputs.file(smithyBuildConfig)
@@ -45,12 +48,6 @@ fun Project.registerCodegenTasks() {
     }
 
     generateSdk.doLast {
-        // TODO - add a flag to kotlin codegen plugin to just turn off the generation of build.gradle.kts
-        val generatedBuildFile = projectionRootDir.resolve("build.gradle.kts")
-        if (generatedBuildFile.exists()) {
-            generatedBuildFile.delete()
-        }
-
         cleanGeneratedSdkDir()
         generatedSdkDir.mkdir()
 //        val ideaActive = System.getProperty("idea.active")?.toBoolean() ?: false
@@ -59,7 +56,7 @@ fun Project.registerCodegenTasks() {
 //            val idea = plugins.getPlugin(org.gradle.plugins.ide.idea.IdeaPlugin::class.java)
 //            idea.model.module.generatedSourceDirs = setOf(generatedSdkDir)
 //        }
-        Files.move(projectionRootDir.resolve("src").toPath(), generatedSdkDir.resolve("src").toPath())
+        Files.move(projectionRootDir.resolve("src/main").toPath(), generatedSdkDir.resolve("main").toPath())
     }
 
     generateSdk.dependsOn(generateSmithyBuild)
@@ -93,6 +90,7 @@ val Project.projectionRootDir: File
 data class SdkMetadata(
     val name: String,
     val moduleName: String,
+    // FIXME - this comes from the project settings
     val moduleVersion: String = "1.0",
     val modelFile: File,
     val projectionName: String,
@@ -119,17 +117,21 @@ fun Project.generatedSdkMetadata(): SdkMetadata {
 private fun Project.generateSmithyBuild(): String {
     val sdkMeta = generatedSdkMetadata()
 
+    // FIXME - reconcile with latest sdk build.gradle.kts settings (also process version and description)
     val projections = """
             "${sdkMeta.projectionName}": {
                 "imports": ["${sdkMeta.modelFile.absolutePath}"],
                 "plugins": {
                     "kotlin-codegen": {
                       "service": "${sdkMeta.name}",
-                      "module": "${sdkMeta.moduleName}",
-                      "moduleVersion": "${sdkMeta.moduleVersion}",
+                      "package": {
+                          "name": "${sdkMeta.moduleName}",
+                          "version": "${sdkMeta.moduleVersion}"
+                      },
                       "sdkId": "${sdkMeta.sdkId}",
                       "build": {
-                        "rootProject": false
+                        "rootProject": false,
+                        "generateDefaultBuildFiles": false
                       }
                     }
                 }
