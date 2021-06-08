@@ -63,7 +63,7 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
 
             val context = req.context
             val expectedStatus = context.getOrNull(HttpOperationContext.ExpectedHttpStatus)?.let { HttpStatusCode.fromValue(it) }
-            // NOTE: Consider implementing detecting 200-but-error scenarios here.
+            // TODO: Consider implementing detecting 200-but-error scenarios here.
             if (httpResponse.status.matches(expectedStatus)) return@intercept call
 
             val payload = httpResponse.body.readAll()
@@ -97,14 +97,16 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
      * pull the ase specific details from the response / error
      */
     private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: S3Error?) {
-        if (exception is S3Exception) {
+        if (exception is AwsServiceException) {
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
             exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, errorDetails?.requestId)
+            exception.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
+        }
+        if (exception is S3Exception) {
             exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, response.headers["x-amz-id-2"])
             exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, errorDetails?.requestId2)
-            exception.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
         }
     }
 
