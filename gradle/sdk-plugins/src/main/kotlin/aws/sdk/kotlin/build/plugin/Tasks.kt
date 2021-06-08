@@ -6,9 +6,12 @@
 package aws.sdk.kotlin.build.plugin
 
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.provideDelegate
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 import java.io.File
 import java.nio.file.Files
+
+private const val AWS_SDK_PACKAGE_NAME_PREFIX: String = "aws.sdk.kotlin.services"
 
 /**
  * register the `generateSdk` task that `build` depends on
@@ -88,28 +91,37 @@ val Project.projectionRootDir: File
  * Metadata about a generated service including info required for smithy-build.json
  */
 data class SdkMetadata(
-    val name: String,
-    val moduleName: String,
-    // FIXME - this comes from the project settings
-    val moduleVersion: String = "1.0",
+    val serviceShapeId: String,
+    val packageName: String,
+    val packageVersion: String,
     val modelFile: File,
     val projectionName: String,
-    val sdkId: String
+    val sdkId: String,
+    val description: String? = null
 )
 
+
 fun Project.generatedSdkMetadata(): SdkMetadata {
-    val sdkIdLower = awsServiceTrait.sdkId.split(" ").joinToString(separator = "") {
-        it.toLowerCase()
-    }
+    val packageName = awsServiceTrait.sdkId.toLowerCase().kotlinNamespace()
+    val description = serviceShape.getTrait(software.amazon.smithy.model.traits.TitleTrait::class.java).map { it.value }.orNull()
+    val sdkVersion: String by this
 
     return SdkMetadata(
-        name = serviceShape.id.toString(),
-        moduleName = "aws.sdk.kotlin.$sdkIdLower",
+        serviceShapeId = serviceShape.id.toString(),
+        packageName = "${AWS_SDK_PACKAGE_NAME_PREFIX}.$packageName",
+        packageVersion = sdkVersion,
         modelFile = awsModelFile,
-        projectionName = sdkIdLower,
-        sdkId = awsServiceTrait.sdkId
+        projectionName = name,
+        sdkId = awsServiceTrait.sdkId,
+        description = description
     )
 }
+
+/**
+ * Remove characters invalid for Kotlin package namespace identifier
+ */
+internal fun String.kotlinNamespace(): String = split(".")
+    .joinToString(separator = ".") { segment -> segment.filter { it.isLetterOrDigit() } }
 
 // Generates a smithy-build.json file by creating a new projection.
 // The generated smithy-build.json file is not committed since
@@ -123,10 +135,11 @@ private fun Project.generateSmithyBuild(): String {
                 "imports": ["${sdkMeta.modelFile.absolutePath}"],
                 "plugins": {
                     "kotlin-codegen": {
-                      "service": "${sdkMeta.name}",
+                      "service": "${sdkMeta.serviceShapeId}",
                       "package": {
-                          "name": "${sdkMeta.moduleName}",
-                          "version": "${sdkMeta.moduleVersion}"
+                          "name": "${sdkMeta.packageName}",
+                          "version": "${sdkMeta.packageVersion}",
+                          "description": "${sdkMeta.description}"                      
                       },
                       "sdkId": "${sdkMeta.sdkId}",
                       "build": {

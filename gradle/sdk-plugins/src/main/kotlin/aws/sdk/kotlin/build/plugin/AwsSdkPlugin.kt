@@ -24,18 +24,12 @@ import org.gradle.kotlin.dsl.provideDelegate
  * model named `service.json`.
  */
 class AwsSdkPlugin : Plugin<Project> {
-    private val AWS_SDK_EXTENSION_NAME = "awsSdk"
     override fun apply(target: Project) = target.run {
         validateModel()
         configurePlugins()
         configureDependencies()
         registerCodegenTasks()
-
-        val extension = installExtension()
-    }
-
-    private fun Project.installExtension(): AwsSdkExtension {
-        return extensions.create(AWS_SDK_EXTENSION_NAME, AwsSdkExtension::class.java, project)
+        setBuildMeta()
     }
 
     private fun Project.validateModel() {
@@ -64,6 +58,10 @@ class AwsSdkPlugin : Plugin<Project> {
         dependencies.add("compileClasspath", "software.amazon.smithy:smithy-aws-traits:$smithyVersion")
 
         resolveSdkDependencies()
+    }
+
+    private fun Project.setBuildMeta() {
+        description = serviceShape.getTrait(software.amazon.smithy.model.traits.TitleTrait::class.java).map { it.value }.orNull()
     }
 }
 

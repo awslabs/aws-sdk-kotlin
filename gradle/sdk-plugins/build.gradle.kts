@@ -2,6 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
+import java.util.Properties
 buildscript {
     repositories {
         mavenCentral()
@@ -12,7 +13,7 @@ buildscript {
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-    kotlin("jvm") version "1.5.0"
+    kotlin("jvm") version "1.4.20"
 }
 
 repositories {
@@ -21,15 +22,28 @@ repositories {
     gradlePluginPortal()
 }
 
-// FIXME - load from root project gradle.properties
-val kotlinVersion: String = "1.5.0"
-val smithyVersion: String = "1.7.2"
-val smithyGradleVersion: String = "0.5.3"
+fun loadVersions() {
+    val gradleProperties = Properties()
+    val propertiesFile: File = file("../../gradle.properties")
+    if (propertiesFile.exists()) {
+        propertiesFile.inputStream().use { gradleProperties.load(it) }
+    }
+    gradleProperties.forEach {
+        project.ext.set(it.key.toString(), it.value)
+    }
+}
+// use the versions from aws-sdk-kotlin/gradle.properties
+loadVersions()
+
+val kotlinVersion: String by project
+val smithyVersion: String by project
+val smithyGradleVersion: String by project
 
 dependencies {
     implementation("software.amazon.smithy:smithy-gradle-plugin:$smithyGradleVersion")
     implementation("software.amazon.smithy:smithy-model:$smithyVersion")
     implementation("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
+    implementation(gradleApi())
 }
 
 gradlePlugin {

@@ -15,7 +15,7 @@ import kotlin.streams.toList
 description = "AWS SDK codegen tasks"
 
 plugins {
-    id("software.amazon.smithy") version "0.5.2"
+    id("software.amazon.smithy") version "0.5.3"
 }
 
 buildscript {

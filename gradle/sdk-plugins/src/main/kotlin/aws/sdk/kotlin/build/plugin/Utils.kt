@@ -7,7 +7,6 @@ package aws.sdk.kotlin.build.plugin
 
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
-import org.gradle.kotlin.dsl.extra
 import software.amazon.smithy.aws.traits.ServiceTrait
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -26,7 +25,6 @@ fun <T> Project.tryGetClass(className: String): Class<T>? {
 fun <T> java.util.Optional<T>.orNull(): T? = this.orElse(null)
 
 fun Logger.aws(message: String) {
-//    info("aws: $message")
     warn("aws: $message")
 }
 
@@ -50,6 +48,7 @@ internal fun Project.loadModel(): Model {
  */
 internal val Project.serviceShape: ServiceShape
     get() {
+        val extra = extensions.extraProperties
         // cache this so we don't have to load the model every time it's needed
         if (extra.has(SERVICE_SHAPE_KEY)) {
             return extra.get(SERVICE_SHAPE_KEY) as ServiceShape
