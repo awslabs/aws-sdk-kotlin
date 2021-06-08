@@ -38,7 +38,7 @@ public class UserAgent(private val awsUserAgentMetadata: AwsUserAgentMetadata) :
 
     override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
         operation.execution.mutate.intercept { req, next ->
-            //NOTE: Due to legacy issues with processing the user agent, the original content for
+            // NOTE: Due to legacy issues with processing the user agent, the original content for
             // x-amz-user-agent and User-Agent need to be swapped.  See top note in the
             // sdk-user-agent-header SEP for further details.
             req.subject.headers[USER_AGENT] = awsUserAgentMetadata.xAmzUserAgent
