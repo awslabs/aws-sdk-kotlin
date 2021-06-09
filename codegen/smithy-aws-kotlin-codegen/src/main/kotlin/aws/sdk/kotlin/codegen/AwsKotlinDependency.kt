@@ -42,6 +42,7 @@ object AwsKotlinDependency {
     val AWS_CLIENT_RT_REGIONS = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_REGIONS_NS, AWS_CLIENT_RT_GROUP, "regions", AWS_CLIENT_RT_VERSION)
     val AWS_CLIENT_RT_JSON_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.json", AWS_CLIENT_RT_GROUP, "aws-json-protocols", AWS_CLIENT_RT_VERSION)
     val AWS_CLIENT_RT_XML_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.xml", AWS_CLIENT_RT_GROUP, "aws-xml-protocols", AWS_CLIENT_RT_VERSION)
+    val AWS_CLIENT_RT_CRT_HTTP_ENGINE = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http.engine.crt", AWS_CLIENT_RT_GROUP, "http-client-engine-crt", AWS_CLIENT_RT_VERSION)
 }
 
 // remap aws-sdk-kotlin dependencies to project notation
@@ -54,7 +55,8 @@ private val sameProjectDeps: Map<KotlinDependency, String> by lazy {
         AwsKotlinDependency.AWS_CLIENT_RT_REGIONS to """project(":client-runtime:regions")""",
         AwsKotlinDependency.AWS_CLIENT_RT_JSON_PROTOCOLS to """project(":client-runtime:protocols:aws-json-protocols")""",
         AwsKotlinDependency.AWS_CLIENT_RT_XML_PROTOCOLS to """project(":client-runtime:protocols:aws-xml-protocols")""",
-        AwsKotlinDependency.AWS_CLIENT_RT_TESTING to """project(":client-runtime:testing")"""
+        AwsKotlinDependency.AWS_CLIENT_RT_TESTING to """project(":client-runtime:testing")""",
+        AwsKotlinDependency.AWS_CLIENT_RT_CRT_HTTP_ENGINE to """project(":client-runtime:http-client-engine-crt")""",
     )
 }
 

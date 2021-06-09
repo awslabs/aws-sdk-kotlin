@@ -10,11 +10,14 @@ import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.codegen.core.CodegenException
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.addImport
+import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
+import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
@@ -31,6 +34,12 @@ open class AwsHttpProtocolClientGenerator(
     middlewares: List<ProtocolMiddleware>,
     httpBindingResolver: HttpBindingResolver
 ) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
+
+    override val defaultHttpClientEngineSymbol: Symbol
+        get() = buildSymbol {
+            name = "CrtHttpEngine"
+            namespace(AwsKotlinDependency.AWS_CLIENT_RT_CRT_HTTP_ENGINE)
+        }
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
