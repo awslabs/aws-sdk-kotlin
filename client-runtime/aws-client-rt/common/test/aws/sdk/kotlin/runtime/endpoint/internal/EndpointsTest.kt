@@ -48,6 +48,10 @@ val testPartitions = listOf(
             "partition" to EndpointDefinition(
                 hostname = "some-global-thing.amazonaws.cn",
                 credentialScope = CredentialScope(region = "cn-east-1")
+            ),
+            "fips-partition" to EndpointDefinition(
+                hostname = "some-global-thing-fips.amazonaws.cn",
+                credentialScope = CredentialScope(region = "cn-east-1")
             )
         )
     ),
@@ -109,7 +113,27 @@ class EndpointsTest {
                 signingRegion = "eu-west-1",
                 signingName = "foo"
             )
-        )
+        ),
+        ResolveTest(
+            description = "specified partition endpoint",
+            region = "partition",
+            Endpoint(
+                hostname = "some-global-thing.amazonaws.cn",
+                protocol = "https",
+                signingRegion = "cn-east-1",
+                signingName = "foo"
+            )
+        ),
+        ResolveTest(
+            description = "fips partition endpoint",
+            region = "fips-partition",
+            Endpoint(
+                hostname = "some-global-thing-fips.amazonaws.cn",
+                protocol = "https",
+                signingRegion = "cn-east-1",
+                signingName = "foo"
+            )
+        ),
     )
 
     @Test
