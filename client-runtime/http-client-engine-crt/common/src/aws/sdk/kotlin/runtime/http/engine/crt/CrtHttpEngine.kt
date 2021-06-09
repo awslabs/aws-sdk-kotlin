@@ -11,16 +11,17 @@ import aws.sdk.kotlin.crt.io.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import software.aws.clientrt.http.engine.HttpClientEngine
+import software.aws.clientrt.http.engine.HttpClientEngineBase
 import software.aws.clientrt.http.engine.HttpClientEngineConfig
+import software.aws.clientrt.http.engine.callContext
 import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.response.HttpCall
 import software.aws.clientrt.time.Instant
-import kotlin.coroutines.*
 
 /**
  * [HttpClientEngine] based on the AWS Common Runtime HTTP client
  */
-public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClientEngine {
+public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClientEngineBase("crt") {
     // FIXME - use the default TLS context when profile cred provider branch is merged
     private val tlsCtx = TlsContext(TlsContextOptions.defaultClient())
 
@@ -38,12 +39,13 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
     private val mutex = Mutex()
 
     override suspend fun roundTrip(request: HttpRequest): HttpCall {
+        val callContext = callContext()
         val manager = getManagerForUri(request.uri)
         val conn = manager.acquireConnection()
 
         try {
             val reqTime = Instant.now()
-            val engineRequest = request.toCrtRequest(coroutineContext)
+            val engineRequest = request.toCrtRequest(callContext)
 
             // LIFETIME: connection will be released back to the pool/manager when
             // the response completes OR on exception
@@ -54,7 +56,7 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
 
             val resp = respHandler.waitForResponse()
 
-            return HttpCall(request, resp, reqTime, Instant.now())
+            return HttpCall(request, resp, reqTime, Instant.now(), callContext)
         } catch (ex: Exception) {
             try {
                 manager.releaseConnection(conn)
@@ -65,10 +67,8 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
         }
     }
 
-    override fun close() {
+    override fun shutdown() {
         // close all resources
-
-        // FIXME - this can go away after we enforce a lifecycle to engines that guarantees when close/shutdown is called
         mutex.withLockNoSuspend {
             connManagers.forEach { entry -> entry.value.close() }
         }
