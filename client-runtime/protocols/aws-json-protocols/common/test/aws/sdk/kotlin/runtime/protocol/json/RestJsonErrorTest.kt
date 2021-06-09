@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.protocol.json
 import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.UnknownServiceErrorException
 import aws.sdk.kotlin.runtime.http.X_AMZN_REQUEST_ID_HEADER
+import aws.sdk.kotlin.runtime.http.matches
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.ServiceErrorMetadata
 import software.aws.clientrt.client.ExecutionContext

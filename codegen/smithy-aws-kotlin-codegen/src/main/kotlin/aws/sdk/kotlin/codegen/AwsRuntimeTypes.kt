@@ -25,6 +25,11 @@ object AwsRuntimeTypes {
             name = "AuthAttributes"
             namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "execution")
         }
+
+        val AwsErrorMetadata = buildSymbol {
+            name = "AwsErrorMetadata"
+            namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE)
+        }
     }
 
     object Auth {
