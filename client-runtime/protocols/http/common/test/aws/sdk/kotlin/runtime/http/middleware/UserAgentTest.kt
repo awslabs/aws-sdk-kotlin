@@ -11,7 +11,7 @@ import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.http.Headers
 import software.aws.clientrt.http.HttpBody
 import software.aws.clientrt.http.HttpStatusCode
-import software.aws.clientrt.http.engine.HttpClientEngine
+import software.aws.clientrt.http.engine.HttpClientEngineBase
 import software.aws.clientrt.http.operation.*
 import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.response.HttpCall
@@ -27,7 +27,7 @@ class UserAgentTest {
 
     @Test
     fun `it sets ua headers`() = runSuspendTest {
-        val mockEngine = object : HttpClientEngine {
+        val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
                 val now = Instant.now()

@@ -9,7 +9,7 @@ import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
-import software.aws.clientrt.http.engine.HttpClientEngine
+import software.aws.clientrt.http.engine.HttpClientEngineBase
 import software.aws.clientrt.http.operation.*
 import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.request.HttpRequestBuilder
@@ -24,7 +24,7 @@ class AwsJsonProtocolTest {
 
     @Test
     fun testSetJsonProtocolHeaders() = runSuspendTest {
-        val mockEngine = object : HttpClientEngine {
+        val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
                 val now = Instant.now()
@@ -57,7 +57,7 @@ class AwsJsonProtocolTest {
 
     @Test
     fun testEmptyBody() = runSuspendTest {
-        val mockEngine = object : HttpClientEngine {
+        val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
                 val now = Instant.now()
@@ -88,7 +88,7 @@ class AwsJsonProtocolTest {
 
     @Test
     fun testDoesNotOverride() = runSuspendTest {
-        val mockEngine = object : HttpClientEngine {
+        val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
                 val now = Instant.now()

@@ -10,6 +10,7 @@ import aws.sdk.kotlin.crt.io.EventLoopGroup
 import aws.sdk.kotlin.crt.io.HostResolver
 import aws.sdk.kotlin.runtime.InternalSdkApi
 
+// FIXME - this should default to number of processors
 private const val DEFAULT_EVENT_LOOP_THREAD_COUNT: Int = 1
 
 /**

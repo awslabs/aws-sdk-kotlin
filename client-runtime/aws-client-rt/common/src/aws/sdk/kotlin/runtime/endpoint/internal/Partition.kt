@@ -108,10 +108,10 @@ internal fun Partition.resolveEndpoint(region: String): Endpoint? {
 }
 
 private fun Partition.endpointDefinitionForRegion(region: String): EndpointDefinition {
-    val match = if (!isRegionalized) {
-        endpoints[partitionEndpoint]
-    } else {
-        endpoints[region]
+    val match = when {
+        endpoints.containsKey(region) -> endpoints[region]
+        !isRegionalized -> endpoints[partitionEndpoint]
+        else -> null
     }
 
     // return a matching definition or create an empty one that will be used for
