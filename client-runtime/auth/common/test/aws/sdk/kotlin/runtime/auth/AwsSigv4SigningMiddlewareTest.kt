@@ -10,7 +10,7 @@ import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
-import software.aws.clientrt.http.engine.HttpClientEngine
+import software.aws.clientrt.http.engine.HttpClientEngineBase
 import software.aws.clientrt.http.operation.*
 import software.aws.clientrt.http.request.HttpRequest
 import software.aws.clientrt.http.request.HttpRequestBuilder
@@ -54,7 +54,7 @@ class AwsSigv4SigningMiddlewareTest {
     }
 
     private suspend fun getSignedRequest(operation: SdkHttpOperation<Unit, HttpResponse>): HttpRequest {
-        val mockEngine = object : HttpClientEngine {
+        val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val now = Instant.now()
                 val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)

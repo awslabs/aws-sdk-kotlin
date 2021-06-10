@@ -13,7 +13,7 @@ import software.aws.clientrt.ServiceErrorMetadata
 import software.aws.clientrt.client.ExecutionContext
 import software.aws.clientrt.http.*
 import software.aws.clientrt.http.content.ByteArrayContent
-import software.aws.clientrt.http.engine.HttpClientEngine
+import software.aws.clientrt.http.engine.HttpClientEngineBase
 import software.aws.clientrt.http.operation.HttpDeserialize
 import software.aws.clientrt.http.operation.SdkHttpOperation
 import software.aws.clientrt.http.operation.UnitDeserializer
@@ -104,7 +104,7 @@ class RestJsonErrorTest {
         val body = ByteArrayContent(payload.encodeToByteArray())
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body)
 
-        val mockEngine = object : HttpClientEngine {
+        val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val now = Instant.now()
                 return HttpCall(request, httpResp, now, now)
@@ -154,7 +154,7 @@ class RestJsonErrorTest {
         val body = ByteArrayContent(payload.encodeToByteArray())
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body)
 
-        val mockEngine = object : HttpClientEngine {
+        val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val now = Instant.now()
                 return HttpCall(request, httpResp, now, now)
@@ -215,7 +215,7 @@ class RestJsonErrorTest {
         val body = ByteArrayContent(payload.encodeToByteArray())
         val httpResp = HttpResponse(HttpStatusCode.fromValue(502), headers, body)
 
-        val mockEngine = object : HttpClientEngine {
+        val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val now = Instant.now()
                 return HttpCall(request, httpResp, now, now)
