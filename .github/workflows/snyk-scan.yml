@@ -1,0 +1,34 @@
+name: Snyk
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # 17:30 UTC (9:30am/10:30am Pacific) every Tuesday
+    - cron:  '30 17 * * 2'
+
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download and configure Snyk CLI
+        run: |
+          curl -Lo ./snyk https://github.com/snyk/snyk/releases/latest/download/snyk-linux
+          chmod 755 snyk
+      - name: Execute scan
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          ./snyk test                      \
+            --severity-threshold=medium    \
+            --all-projects                 \
+            --policy-path=.                \
+            --sarif-file-output=snyk.sarif
+      - name: Upload scan
+        if: ${{ failure() && github.event_name == 'schedule' }}
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: snyk.sarif
