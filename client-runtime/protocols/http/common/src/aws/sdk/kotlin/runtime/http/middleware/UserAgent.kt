@@ -40,7 +40,8 @@ public class UserAgent(private val awsUserAgentMetadata: AwsUserAgentMetadata) :
         operation.execution.mutate.intercept { req, next ->
             // NOTE: Due to legacy issues with processing the user agent, the original content for
             // x-amz-user-agent and User-Agent is swapped here.  See top note in the
-            // sdk-user-agent-header SEP for further details.
+            // sdk-user-agent-header SEP and https://github.com/awslabs/smithy-kotlin/issues/373
+            // for further details.
             req.subject.headers[USER_AGENT] = awsUserAgentMetadata.xAmzUserAgent
             req.subject.headers[X_AMZ_USER_AGENT] = awsUserAgentMetadata.userAgent
             next.call(req)
