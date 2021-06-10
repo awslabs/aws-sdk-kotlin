@@ -69,24 +69,14 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
 
     override fun shutdown() {
         // close all resources
-        mutex.withLockNoSuspend {
-            connManagers.forEach { entry -> entry.value.close() }
-        }
+        // SAFETY: shutdown is only invoked once AND only after all requests have completed and no more are coming
+        connManagers.forEach { entry -> entry.value.close() }
         tlsCtx.close()
     }
 
     private suspend fun getManagerForUri(uri: Uri): HttpClientConnectionManager = mutex.withLock {
         connManagers.getOrPut(uri.host) {
             HttpClientConnectionManager(options.apply { this.uri = uri }.build())
-        }
-    }
-
-    private fun <T> Mutex.withLockNoSuspend(block: () -> T): T {
-        while (!tryLock()) { } // spin
-        try {
-            return block()
-        } finally {
-            unlock()
         }
     }
 }
