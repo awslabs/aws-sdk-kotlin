@@ -30,6 +30,37 @@ object AwsRuntimeTypes {
             name = "AwsErrorMetadata"
             namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE)
         }
+
+        object Endpoint {
+            val EndpointResolver = buildSymbol {
+                name = "EndpointResolver"
+                namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
+            }
+            val Endpoint = buildSymbol {
+                name = "Endpoint"
+                namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
+            }
+
+            object Internal {
+                val CredentialScope = buildSymbol {
+                    name = "CredentialScope"
+                    namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint.internal")
+                }
+                val EndpointDefinition = buildSymbol {
+                    name = "EndpointDefinition"
+                    namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint.internal")
+                }
+                val Partition = buildSymbol {
+                    name = "Partition"
+                    namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint.internal")
+                }
+                val resolveEndpoint = buildSymbol {
+                    name = "resolveEndpoint"
+                    namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint.internal")
+                }
+                val allSymbols = setOf(CredentialScope, EndpointDefinition, Partition, resolveEndpoint)
+            }
+        }
     }
 
     object Auth {
