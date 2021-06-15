@@ -27,8 +27,8 @@ class RestXmlSerdeDescriptorGenerator(
         member: MemberShape,
         targetShape: Shape,
         nameSuffix: String
-    ): MutableList<SdkFieldDescriptorTrait> {
-        val traitList = super.getFieldDescriptorTraits(member, targetShape, nameSuffix)
+    ): List<SdkFieldDescriptorTrait> {
+        val traitList = super.getFieldDescriptorTraits(member, targetShape, nameSuffix).toMutableList()
 
         if (ctx.shape?.isError == true) {
             val serialName = getSerialName(member, nameSuffix)
