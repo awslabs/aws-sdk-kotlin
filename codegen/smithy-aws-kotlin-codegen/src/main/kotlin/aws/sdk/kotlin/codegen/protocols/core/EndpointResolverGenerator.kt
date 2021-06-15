@@ -21,6 +21,13 @@ import java.util.*
  * @param endpointData Parsed endpoints.json [ObjectNode]
  */
 class EndpointResolverGenerator(private val endpointData: ObjectNode) {
+    // Symbols which should be imported
+    private val endpointResolverSymbols = setOf(
+        AwsRuntimeTypes.Core.Endpoint.Internal.CredentialScope,
+        AwsRuntimeTypes.Core.Endpoint.Internal.EndpointDefinition,
+        AwsRuntimeTypes.Core.Endpoint.Internal.Partition,
+        AwsRuntimeTypes.Core.Endpoint.Internal.resolveEndpoint
+    )
 
     fun render(ctx: ProtocolGenerator.GenerationContext) {
         ctx.delegator.useFileWriter("DefaultEndpointResolver.kt", "${ctx.settings.pkg.name}.internal") {
@@ -60,7 +67,7 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
             PartitionNode(ctx.service.endpointPrefix, it)
         }.sortedWith(comparePartitions)
 
-        writer.addImport(AwsRuntimeTypes.Core.Endpoint.Internal.allSymbols)
+        writer.addImport(endpointResolverSymbols)
         writer.write("")
         writer.openBlock("private val servicePartitions = listOf(", ")") {
             partitions.forEach { renderPartition(writer, it) }

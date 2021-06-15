@@ -5,6 +5,8 @@
 
 package aws.sdk.kotlin.codegen
 
+import software.amazon.smithy.codegen.core.Symbol
+import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace
 
@@ -16,62 +18,30 @@ import software.amazon.smithy.kotlin.codegen.model.namespace
  */
 object AwsRuntimeTypes {
     object Core {
-        val AwsClientOption = buildSymbol {
-            name = "AwsClientOption"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "client")
-        }
-
-        val AuthAttributes = buildSymbol {
-            name = "AuthAttributes"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "execution")
-        }
-
-        val AwsErrorMetadata = buildSymbol {
-            name = "AwsErrorMetadata"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE)
-        }
+        val AwsClientOption = runtimeSymbol("AwsClientOption", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "client")
+        val AuthAttributes = runtimeSymbol("AuthAttributes", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "execution")
+        val AwsErrorMetadata = runtimeSymbol("AwsErrorMetadata", AwsKotlinDependency.AWS_CLIENT_RT_CORE)
 
         object Endpoint {
-            val EndpointResolver = buildSymbol {
-                name = "EndpointResolver"
-                namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
-            }
-            val Endpoint = buildSymbol {
-                name = "Endpoint"
-                namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
-            }
+            val EndpointResolver = runtimeSymbol("EndpointResolver", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
+            val Endpoint = runtimeSymbol("Endpoint", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
 
             object Internal {
-                val CredentialScope = buildSymbol {
-                    name = "CredentialScope"
-                    namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint.internal")
-                }
-                val EndpointDefinition = buildSymbol {
-                    name = "EndpointDefinition"
-                    namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint.internal")
-                }
-                val Partition = buildSymbol {
-                    name = "Partition"
-                    namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint.internal")
-                }
-                val resolveEndpoint = buildSymbol {
-                    name = "resolveEndpoint"
-                    namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint.internal")
-                }
-                val allSymbols = setOf(CredentialScope, EndpointDefinition, Partition, resolveEndpoint)
+                val CredentialScope = runtimeSymbol("CredentialScope", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint.internal")
+                val EndpointDefinition = runtimeSymbol("EndpointDefinition", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint.internal")
+                val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint.internal")
+                val resolveEndpoint = runtimeSymbol("resolveEndpoint", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint.internal")
             }
         }
     }
 
     object Auth {
-        val AwsSigV4SigningMiddleware = buildSymbol {
-            name = "AwsSigV4SigningMiddleware"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
-        }
-
-        val AwsSignedBodyHeaderType = buildSymbol {
-            name = "AwsSignedBodyHeaderType"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
-        }
+        val AwsSigV4SigningMiddleware = runtimeSymbol("AwsSigV4SigningMiddleware", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+        val AwsSignedBodyHeaderType = runtimeSymbol("AwsSignedBodyHeaderType", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
     }
+}
+
+private fun runtimeSymbol(name: String, dependency: KotlinDependency, subpackage: String = ""): Symbol = buildSymbol {
+    this.name = name
+    namespace(dependency, subpackage)
 }
