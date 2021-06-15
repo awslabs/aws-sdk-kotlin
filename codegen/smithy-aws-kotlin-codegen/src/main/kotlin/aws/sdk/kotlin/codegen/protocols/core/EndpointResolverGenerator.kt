@@ -60,7 +60,7 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
             PartitionNode(ctx.service.endpointPrefix, it)
         }.sortedWith(comparePartitions)
 
-        writer.addImports(AwsRuntimeTypes.Core.Endpoint.Internal.allSymbols)
+        writer.addImport(AwsRuntimeTypes.Core.Endpoint.Internal.allSymbols)
         writer.write("")
         writer.openBlock("private val servicePartitions = listOf(", ")") {
             partitions.forEach { renderPartition(writer, it) }
