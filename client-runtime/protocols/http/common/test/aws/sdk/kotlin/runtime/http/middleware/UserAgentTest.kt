@@ -20,6 +20,7 @@ import software.aws.clientrt.http.sdkHttpClient
 import software.aws.clientrt.time.Instant
 import software.aws.clientrt.util.get
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class UserAgentTest {
@@ -53,5 +54,7 @@ class UserAgentTest {
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         assertTrue(request.headers.contains(USER_AGENT))
         assertTrue(request.headers.contains(X_AMZ_USER_AGENT))
+        assertEquals("aws-sdk-kotlin/1.2.3", request.headers[X_AMZ_USER_AGENT])
+        assertTrue(request.headers[USER_AGENT]!!.startsWith("aws-sdk-kotlin/1.2.3 api/test-service/1.2.3"))
     }
 }
