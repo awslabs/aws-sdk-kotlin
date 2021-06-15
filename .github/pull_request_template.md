@@ -1,6 +1,6 @@
 <!--- Provide a general summary of your changes in the Title above -->
 
-## Issue #
+## Issue \#
 <!--- If it fixes an open issue, please link to the issue here -->
 
 ## Description of changes

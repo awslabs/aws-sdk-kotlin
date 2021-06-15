@@ -1,4 +1,4 @@
-# Debugging SDK Requests
+# Debugging 
 
 ## Logging
 
@@ -40,9 +40,7 @@ The raw protocol response is usually available on exceptions if you need access 
 
 
 ```kotlin
-
 try {
-
     ...
 } catch(ex: AwsServiceException) {
     val httpResp = ex.sdkErrorMetadata.protocolResponse as? HttpResponse
@@ -51,5 +49,4 @@ try {
         println(httpResp.body.readAll()?.decodeToString())
     }
 }
-
 ```
