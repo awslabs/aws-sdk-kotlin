@@ -7,6 +7,7 @@ package aws.sdk.kotlin.codegen.protocols
 
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
+import aws.sdk.kotlin.codegen.protocols.xml.RestXmlSerdeDescriptorGenerator
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.*
@@ -51,7 +52,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         val sortedMembers = sortMembersForSerialization(members)
 
         // render the serde descriptors
-        XmlSerdeDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), sortedMembers).render()
+        RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), sortedMembers).render()
         if (shape.isUnionShape) {
             SerializeUnionGenerator(ctx, sortedMembers, writer, defaultTimestampFormat).render()
         } else {
@@ -115,7 +116,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         members: List<MemberShape>,
         writer: KotlinWriter,
     ) {
-        XmlSerdeDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members).render()
+        RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members).render()
         if (shape.isUnionShape) {
             val name = ctx.symbolProvider.toSymbol(shape).name
             DeserializeUnionGenerator(ctx, name, members, writer, defaultTimestampFormat).render()
