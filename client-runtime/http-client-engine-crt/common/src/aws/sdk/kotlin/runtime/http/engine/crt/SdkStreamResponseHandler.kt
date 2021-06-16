@@ -9,14 +9,14 @@ import aws.sdk.kotlin.crt.CRT
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.Buffer
 import aws.sdk.kotlin.runtime.ClientException
-import kotlinx.atomicfu.locks.reentrantLock
-import kotlinx.atomicfu.locks.withLock
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.HeadersBuilder
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
+import kotlinx.atomicfu.locks.reentrantLock
+import kotlinx.atomicfu.locks.withLock
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 
 /**
  * Implements the CRT stream response interface which proxies the response from the CRT to the SDK

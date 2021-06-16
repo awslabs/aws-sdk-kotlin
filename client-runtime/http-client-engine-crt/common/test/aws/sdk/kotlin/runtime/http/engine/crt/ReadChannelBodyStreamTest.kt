@@ -7,8 +7,8 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.sdk.kotlin.crt.io.MutableBuffer
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import kotlinx.coroutines.*
 import aws.smithy.kotlin.runtime.io.*
+import kotlinx.coroutines.*
 import kotlin.test.*
 
 class ReadChannelBodyStreamTest {

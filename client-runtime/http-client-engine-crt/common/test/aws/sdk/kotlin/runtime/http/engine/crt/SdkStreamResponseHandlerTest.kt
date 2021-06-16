@@ -8,9 +8,9 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.byteArrayBuffer
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import kotlinx.coroutines.launch
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import kotlinx.coroutines.launch
 import kotlin.test.*
 
 class SdkStreamResponseHandlerTest {

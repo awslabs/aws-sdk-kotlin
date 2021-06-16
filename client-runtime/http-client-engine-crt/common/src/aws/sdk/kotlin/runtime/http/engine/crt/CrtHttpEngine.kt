@@ -8,8 +8,6 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 import aws.sdk.kotlin.crt.SdkDefaultIO
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.*
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
@@ -17,6 +15,8 @@ import aws.smithy.kotlin.runtime.http.engine.callContext
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.time.Instant
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 /**
  * [HttpClientEngine] based on the AWS Common Runtime HTTP client

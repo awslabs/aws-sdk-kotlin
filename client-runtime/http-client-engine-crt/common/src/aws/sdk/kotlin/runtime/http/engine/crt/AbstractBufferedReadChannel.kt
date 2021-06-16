@@ -6,14 +6,14 @@
 package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.sdk.kotlin.crt.io.Buffer
+import aws.smithy.kotlin.runtime.io.SdkBuffer
+import aws.smithy.kotlin.runtime.io.bytes
 import kotlinx.atomicfu.AtomicRef
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import aws.smithy.kotlin.runtime.io.SdkBuffer
-import aws.smithy.kotlin.runtime.io.bytes
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 

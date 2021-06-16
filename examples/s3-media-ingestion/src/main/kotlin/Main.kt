@@ -4,11 +4,11 @@
  */
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.*
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.runBlocking
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.fromFile
 import aws.smithy.kotlin.runtime.content.writeToFile
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.nio.file.Files
 

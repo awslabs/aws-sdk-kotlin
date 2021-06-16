@@ -7,12 +7,12 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.sdk.kotlin.crt.http.HttpRequestBodyStream
 import aws.sdk.kotlin.crt.io.MutableBuffer
-import kotlinx.atomicfu.atomic
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
 import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import aws.smithy.kotlin.runtime.io.readAvailable
+import kotlinx.atomicfu.atomic
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import kotlin.coroutines.CoroutineContext
 
 /**
