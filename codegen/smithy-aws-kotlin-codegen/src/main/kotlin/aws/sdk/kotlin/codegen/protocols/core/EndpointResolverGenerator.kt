@@ -6,10 +6,9 @@
 package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.endpointPrefix
 import software.amazon.smithy.kotlin.codegen.core.*
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.node.Node
@@ -22,6 +21,13 @@ import java.util.*
  * @param endpointData Parsed endpoints.json [ObjectNode]
  */
 class EndpointResolverGenerator(private val endpointData: ObjectNode) {
+    // Symbols which should be imported
+    private val endpointResolverSymbols = setOf(
+        AwsRuntimeTypes.Core.Endpoint.Internal.CredentialScope,
+        AwsRuntimeTypes.Core.Endpoint.Internal.EndpointDefinition,
+        AwsRuntimeTypes.Core.Endpoint.Internal.Partition,
+        AwsRuntimeTypes.Core.Endpoint.Internal.resolveEndpoint
+    )
 
     fun render(ctx: ProtocolGenerator.GenerationContext) {
         ctx.delegator.useFileWriter("DefaultEndpointResolver.kt", "${ctx.settings.pkg.name}.internal") {
@@ -31,16 +37,9 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
     }
 
     private fun renderResolver(writer: KotlinWriter) {
-        val endpointResolverSymbol = buildSymbol {
-            name = "EndpointResolver"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
-        }
-        writer.addImport(endpointResolverSymbol)
-        val endpointSymbol = buildSymbol {
-            name = "Endpoint"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
-        }
-        writer.addImport(endpointSymbol)
+        writer.addImport(AwsRuntimeTypes.Core.Endpoint.EndpointResolver)
+        writer.addImport(AwsRuntimeTypes.Core.Endpoint.Endpoint)
+        writer.addImport(AwsRuntimeTypes.Core.Endpoint.Internal.resolveEndpoint)
         writer.addImport("ClientException", AwsKotlinDependency.AWS_CLIENT_RT_CORE)
 
         writer.openBlock("internal class DefaultEndpointResolver : EndpointResolver {", "}") {
@@ -68,7 +67,7 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
             PartitionNode(ctx.service.endpointPrefix, it)
         }.sortedWith(comparePartitions)
 
-        writer.addImport("${AwsKotlinDependency.AWS_CLIENT_RT_CORE.namespace}.endpoint.internal", "*")
+        writer.addImport(endpointResolverSymbols)
         writer.write("")
         writer.openBlock("private val servicePartitions = listOf(", ")") {
             partitions.forEach { renderPartition(writer, it) }
