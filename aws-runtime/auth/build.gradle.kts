@@ -14,16 +14,16 @@ kotlin {
         commonMain {
             dependencies {
                 val crtKotlinVersion: String by project
-                api(project(":client-runtime:aws-client-rt"))
+                api(project(":aws-runtime:aws-core"))
                 api("aws.smithy.kotlin:http:$smithyKotlinVersion")
-                implementation(project(":client-runtime:crt-util"))
+                implementation(project(":aws-runtime:crt-util"))
                 implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
             }
         }
         commonTest {
             dependencies {
-                implementation(project(":client-runtime:testing"))
+                implementation(project(":aws-runtime:testing"))
             }
         }
     }

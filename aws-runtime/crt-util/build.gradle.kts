@@ -14,7 +14,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(project(":client-runtime:aws-client-rt"))
+                api(project(":aws-runtime:aws-core"))
                 api("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
                 api("aws.smithy.kotlin:http:$smithyKotlinVersion")
             }

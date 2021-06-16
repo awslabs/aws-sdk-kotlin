@@ -13,13 +13,13 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(project(":client-runtime:aws-client-rt"))
+                api(project(":aws-runtime:aws-core"))
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
             }
         }
         commonTest {
             dependencies {
-                implementation(project(":client-runtime:testing"))
+                implementation(project(":aws-runtime:testing"))
             }
         }
     }

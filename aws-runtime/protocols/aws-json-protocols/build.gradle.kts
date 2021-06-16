@@ -14,8 +14,8 @@ kotlin {
         commonMain {
             dependencies {
                 api("aws.smithy.kotlin:http:$smithyKotlinVersion")
-                api(project(":client-runtime:aws-client-rt"))
-                implementation(project(":client-runtime:protocols:http"))
+                api(project(":aws-runtime:aws-core"))
+                implementation(project(":aws-runtime:protocols:http"))
                 implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
@@ -24,7 +24,7 @@ kotlin {
 
         commonTest {
             dependencies {
-                implementation(project(":client-runtime:testing"))
+                implementation(project(":aws-runtime:testing"))
             }
         }
     }

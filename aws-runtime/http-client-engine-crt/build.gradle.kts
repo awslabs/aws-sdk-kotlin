@@ -27,10 +27,10 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(project(":client-runtime:aws-client-rt"))
+                api(project(":aws-runtime:aws-core"))
                 api("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
-                implementation(project(":client-runtime:crt-util"))
+                implementation(project(":aws-runtime:crt-util"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 
                 implementation("org.jetbrains.kotlinx:atomicfu:$atomicFuVersion")
@@ -39,7 +39,7 @@ kotlin {
 
         commonTest {
             dependencies {
-                implementation(project(":client-runtime:testing"))
+                implementation(project(":aws-runtime:testing"))
             }
         }
     }
