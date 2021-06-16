@@ -1,8 +1,65 @@
 # Changelog
 
-## [Unreleased]
-
 ## [0.3.0-M2] - 06/18/2021
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Services new in this release
+
+* applicationcostprofiler
+* apprunner
+* autoscaling
+* cloudformation
+* cloudsearch
+* cloudwatch
+* docdb
+* elasticache
+* elasticloadbalancing
+* elasticloadbalancingv2
+* finspace
+* finspacedata
+* iam
+* neptune
+* nimble
+* rds
+* redshift
+* ses
+* sns
+* sqs
+* ssmcontacts
+* ssmincidents
+* sts
+
+## Changes
+
+### New Features
+
+* `awsQuery` protocol support (https://github.com/awslabs/smithy-kotlin/issues/127)
+* detect region from environment variables (https://github.com/awslabs/smithy-kotlin/issues/356)
+* custom S3 error metadata support (https://github.com/awslabs/smithy-kotlin/issues/323)
+* environment credentials provider (https://github.com/awslabs/smithy-kotlin/issues/301)
+* bind default HTTP client engine to CRT (https://github.com/awslabs/smithy-kotlin/issues/199)
+* operation DSL overloads (https://github.com/awslabs/smithy-kotlin/issues/184)
+* Kinesis read timeouts (https://github.com/awslabs/smithy-kotlin/issues/162)
+* XML EOL encoding support (https://github.com/awslabs/smithy-kotlin/issues/142)
+
+### Fixes
+
+* path literal not escaped correctly (https://github.com/awslabs/smithy-kotlin/issues/395)
+* idempotency tokens are not detected on resources (https://github.com/awslabs/smithy-kotlin/issues/376)
+* httpPayload bound members need dedicated serde (https://github.com/awslabs/smithy-kotlin/issues/353)
+* Route53 error messages (and maybe other restXml messages) are not deserialized and present in stacktrace
+  (https://github.com/awslabs/smithy-kotlin/issues/352)
+* fix url-encoding behavior of httpLabel and httpQuery members (https://github.com/awslabs/smithy-kotlin/issues/328)
+* runtime error when using Kotlin 1.5.0 (https://github.com/awslabs/smithy-kotlin/issues/319)
+* SES fails to build due to invalid docs (https://github.com/awslabs/aws-sdk-kotlin/issues/153)
+* exception is thrown for SQS delete message (https://github.com/awslabs/aws-sdk-kotlin/issues/147)
+* SNS getTopicAttributes throws an exception (https://github.com/awslabs/aws-sdk-kotlin/issues/142)
+
+### Other
+
+* Kotlin 1.5.0 support
+* design docs added to [docs/design](docs/design) directory
 
 ## [0.2.0-M1] - 05/10/2021
 
