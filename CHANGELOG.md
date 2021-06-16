@@ -14,6 +14,7 @@
 * cloudwatch
 * docdb
 * elasticache
+* elasticbeanstalk
 * elasticloadbalancing
 * elasticloadbalancingv2
 * finspace
@@ -55,6 +56,7 @@
 * SES fails to build due to invalid docs (https://github.com/awslabs/aws-sdk-kotlin/issues/153)
 * exception is thrown for SQS delete message (https://github.com/awslabs/aws-sdk-kotlin/issues/147)
 * SNS getTopicAttributes throws an exception (https://github.com/awslabs/aws-sdk-kotlin/issues/142)
+* elasticbeanstalk model generates invalid enum (https://github.com/awslabs/smithy-kotlin/issues/403)
 
 ### Other
 
