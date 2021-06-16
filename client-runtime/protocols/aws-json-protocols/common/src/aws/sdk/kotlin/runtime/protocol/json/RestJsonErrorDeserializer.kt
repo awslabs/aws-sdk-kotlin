@@ -4,10 +4,10 @@
  */
 package aws.sdk.kotlin.runtime.protocol.json
 
-import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.serde.*
-import software.aws.clientrt.serde.json.JsonDeserializer
-import software.aws.clientrt.serde.json.JsonSerialName
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.serde.*
+import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
+import aws.smithy.kotlin.runtime.serde.json.JsonSerialName
 
 // header identifying the error code
 public const val X_AMZN_ERROR_TYPE_HEADER_NAME: String = "X-Amzn-Errortype"

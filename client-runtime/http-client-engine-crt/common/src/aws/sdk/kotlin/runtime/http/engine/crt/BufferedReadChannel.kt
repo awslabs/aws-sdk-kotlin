@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.sdk.kotlin.crt.io.Buffer
-import software.aws.clientrt.io.SdkByteReadChannel
+import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 
 /**
  * Create a new [BufferedReadChannel] that invokes [onBytesRead] as data is consumed

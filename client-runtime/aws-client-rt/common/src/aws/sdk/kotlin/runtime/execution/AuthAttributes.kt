@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.runtime.execution
 
-import software.aws.clientrt.client.ClientOption
-import software.aws.clientrt.time.Instant
+import aws.smithy.kotlin.runtime.client.ClientOption
+import aws.smithy.kotlin.runtime.time.Instant
 
 /**
  * Operation (execution) options related to authorization

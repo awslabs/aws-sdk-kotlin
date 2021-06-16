@@ -28,8 +28,8 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":client-runtime:aws-client-rt"))
-                api("software.aws.smithy.kotlin:http:$smithyKotlinVersion")
-                implementation("software.aws.smithy.kotlin:logging:$smithyKotlinVersion")
+                api("aws.smithy.kotlin:http:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
                 implementation(project(":client-runtime:crt-util"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 

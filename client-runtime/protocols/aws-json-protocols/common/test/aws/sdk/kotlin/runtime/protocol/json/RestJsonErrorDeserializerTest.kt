@@ -5,11 +5,11 @@
 package aws.sdk.kotlin.runtime.protocol.json
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import software.aws.clientrt.http.Headers
-import software.aws.clientrt.http.HttpBody
-import software.aws.clientrt.http.HttpStatusCode
-import software.aws.clientrt.http.content.ByteArrayContent
-import software.aws.clientrt.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.http.Headers
+import aws.smithy.kotlin.runtime.http.HttpBody
+import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

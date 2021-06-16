@@ -15,7 +15,7 @@ kotlin {
             dependencies {
                 api(project(":client-runtime:aws-client-rt"))
                 api(project(":client-runtime:regions"))
-                api("software.aws.smithy.kotlin:http:$smithyKotlinVersion")
+                api("aws.smithy.kotlin:http:$smithyKotlinVersion")
             }
         }
 

@@ -4,9 +4,9 @@
  */
 package aws.sdk.kotlin.runtime.protocol.xml
 
-import software.aws.clientrt.serde.*
-import software.aws.clientrt.serde.xml.XmlDeserializer
-import software.aws.clientrt.serde.xml.XmlSerialName
+import aws.smithy.kotlin.runtime.serde.*
+import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
+import aws.smithy.kotlin.runtime.serde.xml.XmlSerialName
 
 /**
  * Provides access to specific values regardless of message form

@@ -9,10 +9,10 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
-import software.aws.clientrt.http.*
-import software.aws.clientrt.http.operation.HttpOperationContext
-import software.aws.clientrt.http.operation.SdkHttpOperation
-import software.aws.clientrt.util.get
+import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.operation.HttpOperationContext
+import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
+import aws.smithy.kotlin.runtime.util.get
 
 /**
  *  Http feature for resolving the service endpoint.

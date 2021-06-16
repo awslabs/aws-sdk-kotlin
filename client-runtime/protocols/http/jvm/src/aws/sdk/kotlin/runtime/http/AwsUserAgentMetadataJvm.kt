@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http
 
-import software.aws.clientrt.util.Platform
+import aws.smithy.kotlin.runtime.util.Platform
 
 internal actual fun platformLanguageMetadata(): LanguageMetadata {
     val jvmMetadata = mutableMapOf(

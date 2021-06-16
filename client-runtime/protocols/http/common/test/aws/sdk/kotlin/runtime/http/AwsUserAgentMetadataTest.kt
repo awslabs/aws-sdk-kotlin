@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http
 
-import software.aws.clientrt.util.OsFamily
+import aws.smithy.kotlin.runtime.util.OsFamily
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

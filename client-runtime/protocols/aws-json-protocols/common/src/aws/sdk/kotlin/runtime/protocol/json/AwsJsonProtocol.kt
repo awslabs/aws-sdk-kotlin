@@ -5,11 +5,11 @@
 package aws.sdk.kotlin.runtime.protocol.json
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import software.aws.clientrt.client.SdkClientOption
-import software.aws.clientrt.http.*
-import software.aws.clientrt.http.content.ByteArrayContent
-import software.aws.clientrt.http.operation.SdkHttpOperation
-import software.aws.clientrt.util.get
+import aws.smithy.kotlin.runtime.client.SdkClientOption
+import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
+import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
+import aws.smithy.kotlin.runtime.util.get
 
 /**
  * Http feature that handles AWS JSON protocol behaviors, see:

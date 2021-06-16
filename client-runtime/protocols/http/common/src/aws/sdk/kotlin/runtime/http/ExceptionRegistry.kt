@@ -6,8 +6,8 @@ package aws.sdk.kotlin.runtime.http
 
 import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import software.aws.clientrt.http.HttpStatusCode
-import software.aws.clientrt.http.operation.HttpDeserialize
+import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import aws.smithy.kotlin.runtime.http.operation.HttpDeserialize
 
 /**
  * Metadata container about a modeled service exception

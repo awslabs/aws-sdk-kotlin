@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.runtime.http.engine.crt
 
-import software.aws.clientrt.io.SdkBuffer
-import software.aws.clientrt.io.of
+import aws.smithy.kotlin.runtime.io.SdkBuffer
+import aws.smithy.kotlin.runtime.io.of
 import java.nio.ByteBuffer
 
 internal actual fun bufferedReadChannel(onBytesRead: (n: Int) -> Unit): BufferedReadChannel =

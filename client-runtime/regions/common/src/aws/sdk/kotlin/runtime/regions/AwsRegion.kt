@@ -10,7 +10,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.client.AwsAdvancedClientOption
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.regions.providers.DefaultAwsRegionProviderChain
-import software.aws.clientrt.client.ExecutionContext
+import aws.smithy.kotlin.runtime.client.ExecutionContext
 
 /**
  * Attempt to resolve the region to make requests to.

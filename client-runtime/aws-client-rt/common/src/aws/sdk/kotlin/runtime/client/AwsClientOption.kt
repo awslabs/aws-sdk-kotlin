@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.client
 
-import software.aws.clientrt.client.ClientOption
+import aws.smithy.kotlin.runtime.client.ClientOption
 
 /**
  * A collection of AWS service client options. NOTE: most options are configured by default through the service

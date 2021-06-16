@@ -15,10 +15,10 @@ kotlin {
             dependencies {
                 val crtKotlinVersion: String by project
                 api(project(":client-runtime:aws-client-rt"))
-                api("software.aws.smithy.kotlin:http:$smithyKotlinVersion")
+                api("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation(project(":client-runtime:crt-util"))
                 implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
-                implementation("software.aws.smithy.kotlin:logging:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
             }
         }
         commonTest {

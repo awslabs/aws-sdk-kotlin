@@ -13,12 +13,12 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api("software.aws.smithy.kotlin:http:$smithyKotlinVersion")
+                api("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 api(project(":client-runtime:aws-client-rt"))
                 implementation(project(":client-runtime:protocols:http"))
-                implementation("software.aws.smithy.kotlin:serde:$smithyKotlinVersion")
-                implementation("software.aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
-                implementation("software.aws.smithy.kotlin:utils:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
             }
         }
 

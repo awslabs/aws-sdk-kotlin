@@ -6,17 +6,17 @@
 package aws.sdk.kotlin.runtime.protocol.json
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import software.aws.clientrt.client.ExecutionContext
-import software.aws.clientrt.http.*
-import software.aws.clientrt.http.content.ByteArrayContent
-import software.aws.clientrt.http.engine.HttpClientEngineBase
-import software.aws.clientrt.http.operation.*
-import software.aws.clientrt.http.request.HttpRequest
-import software.aws.clientrt.http.request.HttpRequestBuilder
-import software.aws.clientrt.http.response.HttpCall
-import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.time.Instant
-import software.aws.clientrt.util.get
+import aws.smithy.kotlin.runtime.client.ExecutionContext
+import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
+import aws.smithy.kotlin.runtime.http.operation.*
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
+import aws.smithy.kotlin.runtime.http.response.HttpCall
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.util.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

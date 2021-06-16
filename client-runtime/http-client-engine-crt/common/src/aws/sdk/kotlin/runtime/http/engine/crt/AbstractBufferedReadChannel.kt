@@ -12,8 +12,8 @@ import kotlinx.atomicfu.update
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import software.aws.clientrt.io.SdkBuffer
-import software.aws.clientrt.io.bytes
+import aws.smithy.kotlin.runtime.io.SdkBuffer
+import aws.smithy.kotlin.runtime.io.bytes
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 

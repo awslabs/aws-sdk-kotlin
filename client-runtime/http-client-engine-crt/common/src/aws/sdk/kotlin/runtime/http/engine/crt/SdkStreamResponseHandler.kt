@@ -13,10 +13,10 @@ import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import software.aws.clientrt.http.*
-import software.aws.clientrt.http.HeadersBuilder
-import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.io.SdkByteReadChannel
+import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.HeadersBuilder
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 
 /**
  * Implements the CRT stream response interface which proxies the response from the CRT to the SDK

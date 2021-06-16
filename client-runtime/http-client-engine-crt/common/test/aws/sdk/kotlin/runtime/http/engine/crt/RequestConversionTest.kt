@@ -7,11 +7,11 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import software.aws.clientrt.content.ByteStream
-import software.aws.clientrt.http.*
-import software.aws.clientrt.http.content.ByteArrayContent
-import software.aws.clientrt.http.request.HttpRequest
-import software.aws.clientrt.io.SdkByteReadChannel
+import aws.smithy.kotlin.runtime.content.ByteStream
+import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.test.Test
 import kotlin.test.assertEquals

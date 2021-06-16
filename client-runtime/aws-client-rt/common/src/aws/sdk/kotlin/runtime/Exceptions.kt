@@ -4,10 +4,10 @@
  */
 package aws.sdk.kotlin.runtime
 
-import software.aws.clientrt.ServiceErrorMetadata
-import software.aws.clientrt.util.AttributeKey
-import software.aws.clientrt.ClientException as SmithyClientException
-import software.aws.clientrt.ServiceException as SmithyServiceException
+import aws.smithy.kotlin.runtime.ServiceErrorMetadata
+import aws.smithy.kotlin.runtime.util.AttributeKey
+import aws.smithy.kotlin.runtime.ClientException as SmithyClientException
+import aws.smithy.kotlin.runtime.ServiceException as SmithyServiceException
 
 public open class AwsErrorMetadata : ServiceErrorMetadata() {
     public companion object {

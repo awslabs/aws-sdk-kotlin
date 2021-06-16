@@ -5,12 +5,12 @@
 
 package aws.sdk.kotlin.crt
 
-import software.aws.clientrt.http.HttpMethod
-import software.aws.clientrt.http.Protocol
-import software.aws.clientrt.http.parameters
-import software.aws.clientrt.http.request.HttpRequestBuilder
-import software.aws.clientrt.http.request.headers
-import software.aws.clientrt.http.request.url
+import aws.smithy.kotlin.runtime.http.HttpMethod
+import aws.smithy.kotlin.runtime.http.Protocol
+import aws.smithy.kotlin.runtime.http.parameters
+import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
+import aws.smithy.kotlin.runtime.http.request.headers
+import aws.smithy.kotlin.runtime.http.request.url
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

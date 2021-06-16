@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.runtime.http.engine.crt
 
-import software.aws.clientrt.io.SdkBuffer
-import software.aws.clientrt.io.decodeToString
+import aws.smithy.kotlin.runtime.io.SdkBuffer
+import aws.smithy.kotlin.runtime.io.decodeToString
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

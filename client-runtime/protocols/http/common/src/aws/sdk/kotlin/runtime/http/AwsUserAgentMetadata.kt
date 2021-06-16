@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.runtime.http
 
-import software.aws.clientrt.util.OsFamily
-import software.aws.clientrt.util.Platform
+import aws.smithy.kotlin.runtime.util.OsFamily
+import aws.smithy.kotlin.runtime.util.Platform
 
 /**
  * Metadata used to populate the `User-Agent` and `x-amz-user-agent` headers

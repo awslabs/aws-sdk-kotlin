@@ -13,12 +13,12 @@ import aws.sdk.kotlin.crt.toSignableCrtRequest
 import aws.sdk.kotlin.crt.update
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
-import software.aws.clientrt.client.ExecutionContext
-import software.aws.clientrt.http.*
-import software.aws.clientrt.http.operation.SdkHttpOperation
-import software.aws.clientrt.http.operation.logger
-import software.aws.clientrt.time.epochMilliseconds
-import software.aws.clientrt.util.get
+import aws.smithy.kotlin.runtime.client.ExecutionContext
+import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
+import aws.smithy.kotlin.runtime.http.operation.logger
+import aws.smithy.kotlin.runtime.time.epochMilliseconds
+import aws.smithy.kotlin.runtime.util.get
 
 /**
  * HTTP request pipeline middleware that signs outgoing requests

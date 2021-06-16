@@ -14,7 +14,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api("software.aws.smithy.kotlin:client-rt-core:$smithyKotlinVersion")
+                api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
             }
         }
     }

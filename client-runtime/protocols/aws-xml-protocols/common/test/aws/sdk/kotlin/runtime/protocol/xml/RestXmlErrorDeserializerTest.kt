@@ -5,7 +5,7 @@
 package aws.sdk.kotlin.runtime.protocol.xml
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import software.aws.clientrt.serde.DeserializationException
+import aws.smithy.kotlin.runtime.serde.DeserializationException
 import kotlin.test.*
 
 class RestXmlErrorDeserializerTest {

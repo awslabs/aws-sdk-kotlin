@@ -10,7 +10,7 @@ import aws.sdk.kotlin.runtime.testing.ManualDispatchTestBase
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import software.aws.clientrt.io.readByte
+import aws.smithy.kotlin.runtime.io.readByte
 import java.lang.RuntimeException
 import kotlin.test.*
 

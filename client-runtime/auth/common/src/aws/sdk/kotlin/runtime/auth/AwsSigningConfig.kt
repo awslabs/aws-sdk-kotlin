@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.auth
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import software.aws.clientrt.time.Instant
+import aws.smithy.kotlin.runtime.time.Instant
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 

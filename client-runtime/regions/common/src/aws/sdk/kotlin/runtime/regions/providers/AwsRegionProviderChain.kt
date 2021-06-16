@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.regions.providers
 
-import software.aws.clientrt.logging.Logger
+import aws.smithy.kotlin.runtime.logging.Logger
 
 /**
  * Composite [AwsRegionProvider] that delegates to a chain of providers.

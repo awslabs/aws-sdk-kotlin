@@ -7,10 +7,10 @@ package aws.sdk.kotlin.runtime.http.middleware
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.http.AwsUserAgentMetadata
-import software.aws.clientrt.http.Feature
-import software.aws.clientrt.http.FeatureKey
-import software.aws.clientrt.http.HttpClientFeatureFactory
-import software.aws.clientrt.http.operation.SdkHttpOperation
+import aws.smithy.kotlin.runtime.http.Feature
+import aws.smithy.kotlin.runtime.http.FeatureKey
+import aws.smithy.kotlin.runtime.http.HttpClientFeatureFactory
+import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 
 internal const val X_AMZ_USER_AGENT: String = "x-amz-user-agent"
 internal const val USER_AGENT: String = "User-Agent"

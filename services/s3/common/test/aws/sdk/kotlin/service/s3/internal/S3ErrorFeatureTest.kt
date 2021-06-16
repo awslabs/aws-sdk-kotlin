@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.service.s3.internal
 
-import software.aws.clientrt.serde.DeserializationException
+import aws.smithy.kotlin.runtime.serde.DeserializationException
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import kotlin.test.*
 

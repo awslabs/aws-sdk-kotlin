@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.regions
 
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import software.aws.clientrt.client.ExecutionContext
+import aws.smithy.kotlin.runtime.client.ExecutionContext
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

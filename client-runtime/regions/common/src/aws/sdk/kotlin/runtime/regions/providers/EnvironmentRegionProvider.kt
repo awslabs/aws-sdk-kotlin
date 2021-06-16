@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.regions.providers
 
-import software.aws.clientrt.util.Platform
+import aws.smithy.kotlin.runtime.util.Platform
 
 private const val AWS_ENVIRON_REGION = "AWS_REGION"
 

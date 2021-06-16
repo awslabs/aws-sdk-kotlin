@@ -7,9 +7,9 @@ package aws.sdk.kotlin.crt
 
 import aws.sdk.kotlin.crt.http.HttpRequestBodyStream
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import software.aws.clientrt.http.*
-import software.aws.clientrt.http.request.HttpRequestBuilder
-import software.aws.clientrt.http.util.splitAsQueryParameters
+import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
+import aws.smithy.kotlin.runtime.http.util.splitAsQueryParameters
 import aws.sdk.kotlin.crt.http.Headers as HeadersCrt
 import aws.sdk.kotlin.crt.http.HttpRequest as HttpRequestCrt
 

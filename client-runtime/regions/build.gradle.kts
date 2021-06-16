@@ -14,7 +14,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":client-runtime:aws-client-rt"))
-                implementation("software.aws.smithy.kotlin:logging:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
             }
         }
         commonTest {
