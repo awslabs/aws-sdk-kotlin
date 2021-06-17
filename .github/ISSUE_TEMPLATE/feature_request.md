@@ -21,7 +21,7 @@ labels: enhancement, needs-triage
 <!--- A clear and concise description of the feature you are proposing -->
 
 ## Is your Feature Request related to a problem?
-<!--- A description of the issue, e.g. I'm always frustrated when... -->
+<!--- A description of the issue, e.g. It would be great if... -->
 
 ## Proposed Solution
 <!--- Not required, but suggest how to implement the addition or change -->
@@ -30,7 +30,7 @@ labels: enhancement, needs-triage
 <!--- Any alternative solutions or features you've considered -->
 
 ## Additional Context
-<!--- How has this issue affected you? What are you trying to accomplish? -->
+<!--- How has the lack of this feaure affected you? What are you trying to accomplish? -->
 <!--- Providing context helps us come up with a solution that is most useful in the real world -->
 
 

@@ -15,10 +15,10 @@ labels: bug, needs-triage
 
 <!--- Include full errors, uncaught exceptions, stack traces, and relevant logs -->
 <!--- To turn on SDK logging, follow instructions here: http://github.com/aws-sdk-kotlin/tree/main/docs/debugging.md -->
-<!--- If service responses are relevant, please include wirelogs -->
+<!--- If service responses are relevant, please include wirelogs (after removing any sensitive content!) -->
 
 ## Steps to Reproduce
-<!--- Provide a self-contained, concise snippet of code that can be used to reproduce the issue -->
+<!--- If possible, provide a self-contained, concise snippet of code that can be used to reproduce the issue -->
 <!--- For more complex issues provide a repo with the smallest sample that reproduces the bug -->
 <!--- Avoid including business logic or unrelated code, it makes diagnosis more difficult -->
 
