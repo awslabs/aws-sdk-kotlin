@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("aws.sdk.kotlin.example.MainKt")
 }
 
 val awsSdkKotlinVersion: String by project
