@@ -1,5 +1,10 @@
 plugins {
     kotlin("jvm")
+    application
+}
+
+application {
+    mainClass.set("MainKt")
 }
 
 val awsSdkKotlinVersion: String by project
