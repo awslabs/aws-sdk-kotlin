@@ -73,9 +73,11 @@ fun generateSmithyBuild(services: List<AwsService>): String {
     val projections = services.joinToString(",") { service ->
         // escape windows paths for valid json
         val absModelPath = service.modelFile.absolutePath.replace("\\", "\\\\")
+        val imports = listOf(absModelPath, service.modelExtrasDir).joinToString { "\"$it\"" }
+
         """
             "${service.projectionName}": {
-                "imports": ["$absModelPath"],
+                "imports": [$imports],
                 "plugins": {
                     "kotlin-codegen": {
                       "service": "${service.name}",
@@ -169,7 +171,6 @@ fun ServiceShape.protocol(): String =
         "aws.protocols#awsJson1_1",
         "aws.protocols#awsQuery",
         "aws.protocols#ec2Query",
-        "aws.protocols#ec2QueryName",
         "aws.protocols#restJson1",
         "aws.protocols#restXml"
     ).first { protocol -> findTrait(protocol).isPresent }.split("#")[1]
@@ -237,14 +238,26 @@ tasks["clean"].doFirst {
     delete("smithy-build.json")
 }
 
-val AwsService.outputDir: String
+/**
+ * The directory code is generated to
+ */
+val AwsService.projectionOutputDir: String
     get() = project.file("${project.buildDir}/smithyprojections/${project.name}/${projectionName}/kotlin-codegen").absolutePath
 
+/**
+ * The project directory under `aws-sdk-kotlin/services`
+ */
 val AwsService.destinationDir: String
     get(){
         val sanitizedName = projectionName.split(".")[0]
         return rootProject.file("services/${sanitizedName}").absolutePath
     }
+
+/**
+ * Service specific model extras
+ */
+val AwsService.modelExtrasDir: String
+    get() = rootProject.file("${destinationDir}/model").absolutePath
 
 task("stageSdks") {
     group = "codegen"
@@ -252,13 +265,13 @@ task("stageSdks") {
     dependsOn("generateSdk")
     doLast {
         discoveredServices.forEach {
-            logger.info("copying ${it.outputDir} to ${it.destinationDir}")
+            logger.info("copying ${it.projectionOutputDir} to ${it.destinationDir}")
             copy {
-                from("${it.outputDir}/src")
+                from("${it.projectionOutputDir}/src")
                 into("${it.destinationDir}/generated-src")
             }
             copy {
-                from("${it.outputDir}/build.gradle.kts")
+                from("${it.projectionOutputDir}/build.gradle.kts")
                 into("${it.destinationDir}")
             }
         }

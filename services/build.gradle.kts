@@ -38,6 +38,7 @@ subprojects {
         }
         sourceSets.getByName("test") {
             kotlin.srcDir("common/test")
+            kotlin.srcDir("generated-src/test")
         }
     }
 
