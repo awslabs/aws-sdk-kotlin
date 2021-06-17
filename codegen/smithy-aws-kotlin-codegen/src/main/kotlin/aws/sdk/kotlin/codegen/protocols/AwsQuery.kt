@@ -10,7 +10,6 @@ import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.core.StaticHttpBindingResolver
 import aws.sdk.kotlin.codegen.protocols.middleware.ModeledExceptionsMiddleware
 import aws.sdk.kotlin.codegen.protocols.middleware.MutateHeadersMiddleware
-import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.aws.traits.protocols.AwsQueryErrorTrait
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
@@ -49,7 +48,7 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         val middleware = super.getDefaultHttpMiddleware(ctx)
 
         val awsQueryMiddleware = listOf(
-            RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx)),
+            AwsQueryErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx)),
             // ensure content-type gets set
             // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#protocol-behavior
             MutateHeadersMiddleware(addMissingHeaders = mapOf("Content-Type" to AwsQueryContentType))
