@@ -50,6 +50,11 @@ fun main(): Unit = runBlocking {
             .map { mediaMetadata -> client.uploadToS3(mediaMetadata) }
             .toList()
 
+        if (uploadResults.isEmpty()) {
+            println("Put non-empty files matching ${filenameMetadataRegex.toString()} (ex: 'lassie_1943.avi') in $ingestionDir and run example again.")
+            return@runBlocking
+        }
+
         moveFiles(uploadResults)
 
         // Print results of operation
