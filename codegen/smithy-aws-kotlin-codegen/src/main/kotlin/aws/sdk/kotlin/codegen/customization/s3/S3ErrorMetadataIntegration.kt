@@ -13,6 +13,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerat
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
@@ -22,7 +23,8 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
 
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(
-            SectionWriterBinding(ExceptionBaseClassGenerator.ExceptionBaseClassSection, addSdkErrorMetadataWriter)
+            SectionWriterBinding(ExceptionBaseClassGenerator.ExceptionBaseClassSection, addSdkErrorMetadataWriter),
+            SectionWriterBinding(HttpProtocolClientGenerator.OperationDeserializerMappingSection, overrideGetBucketLocationDeserializerWriter)
         )
 
     override fun enabledForService(model: Model, settings: KotlinSettings) =
@@ -74,5 +76,15 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
     // SectionWriter to override the default sdkErrorMetadata for S3's version
     private val addSdkErrorMetadataWriter = SectionWriter { writer, _ ->
         writer.write("override val sdkErrorMetadata: S3ErrorMetadata = S3ErrorMetadata()")
+    }
+
+    private val overrideGetBucketLocationDeserializerWriter = SectionWriter { writer, default ->
+        val op: OperationShape = checkNotNull(writer.getContext("Operation") as OperationShape?) { "Expected 'Operation' in context." }
+
+        if (op.id.name == "GetBucketLocation") {
+            writer.write("deserializer = aws.sdk.kotlin.service.s3.internal.GetBucketLocationOperationDeserializer()")
+        } else {
+            writer.write(default)
+        }
     }
 }
