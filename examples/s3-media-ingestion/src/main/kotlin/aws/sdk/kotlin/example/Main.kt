@@ -51,7 +51,7 @@ fun main(): Unit = runBlocking {
             .toList()
 
         if (uploadResults.isEmpty()) {
-            println("Put non-empty files matching ${filenameMetadataRegex} (ex: 'lassie_1943.avi') in $ingestionDir and run example again.")
+            println("Put non-empty files matching $filenameMetadataRegex (ex: 'lassie_1943.avi') in $ingestionDir and run example again.")
             return@runBlocking
         }
 
