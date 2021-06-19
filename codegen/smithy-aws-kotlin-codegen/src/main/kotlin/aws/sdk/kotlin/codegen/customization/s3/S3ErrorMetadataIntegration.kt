@@ -13,7 +13,6 @@ import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerat
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
