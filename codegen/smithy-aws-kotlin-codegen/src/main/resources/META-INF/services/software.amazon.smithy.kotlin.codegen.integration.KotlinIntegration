@@ -3,3 +3,4 @@ aws.sdk.kotlin.codegen.GradleGenerator
 aws.sdk.kotlin.codegen.AwsServiceConfigIntegration
 aws.sdk.kotlin.codegen.customization.s3.S3SigningConfig
 aws.sdk.kotlin.codegen.customization.s3.S3ErrorMetadataIntegration
+aws.sdk.kotlin.codegen.customization.s3.GetBucketLocationDeserializerIntegration

@@ -8,7 +8,12 @@ import software.aws.clientrt.http.readAll
 import software.aws.clientrt.http.response.HttpResponse
 import software.aws.clientrt.serde.xml.dom.parseDom
 
-
+/**
+ * Custom deserializer for the GetBucketLocation operation.  This operation does not conform to the model.
+ * In the model, there is a nested tag of the same name as the top-level tag, however in practice
+ * this child tag is not passed from the service.  In this implementation the model is not used for
+ * deserialization.
+ */
 internal class GetBucketLocationOperationDeserializer: HttpDeserialize<GetBucketLocationResponse> {
 
     override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): GetBucketLocationResponse {
