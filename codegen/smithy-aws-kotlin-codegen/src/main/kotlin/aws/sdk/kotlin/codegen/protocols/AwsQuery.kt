@@ -13,6 +13,7 @@ import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RenderingContext
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.addImport
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.traits.OperationOutput
@@ -153,17 +154,28 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         // we need to unwrap the response document to get the deserializer into the correct state
         // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#response-serialization
 
-        writer.write("")
-            .write("val resultDescriptor = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName(#S))", "${operationName}Result")
-            .openBlock("val wrapperDescriptor = SdkObjectDescriptor.build {", "}") {
-                writer.write("trait(XmlSerialName(#S))", "${operationName}Response")
-                writer.write("field(resultDescriptor)")
+        writer
+            .addImport(
+                RuntimeTypes.Serde.SdkFieldDescriptor,
+                RuntimeTypes.Serde.SerdeXml.XmlSerialName,
+                RuntimeTypes.Serde.SdkObjectDescriptor,
+                RuntimeTypes.Serde.deserializeStruct
+            )
+            .write("")
+            .write("val resultDescriptor = #T(SerialKind.Struct, #T(#S))", RuntimeTypes.Serde.SdkFieldDescriptor, RuntimeTypes.Serde.SerdeXml.XmlSerialName, "${operationName}Result")
+            .openBlock("val wrapperDescriptor = #T.build {", "}", RuntimeTypes.Serde.SdkObjectDescriptor) {
+                writer
+                    .addImport(RuntimeTypes.Serde.field)
+                    .write("trait(#T(#S))", RuntimeTypes.Serde.SerdeXml.XmlSerialName, "${operationName}Response")
+                    .write("#T(resultDescriptor)", RuntimeTypes.Serde.field)
             }
             .write("")
             // abandon the iterator, this only occurs at the top level operational output
-            .write("val wrapper = deserializer.deserializeStruct(wrapperDescriptor)")
+            .write("val wrapper = deserializer.#T(wrapperDescriptor)", RuntimeTypes.Serde.deserializeStruct)
             .openBlock("if (wrapper.findNextFieldIndex() != resultDescriptor.index) {", "}") {
-                writer.write("throw DeserializationException(#S)", "failed to unwrap $operationName response")
+                writer
+                    .addImport(RuntimeTypes.Serde.DeserializationException)
+                    .write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "failed to unwrap $operationName response")
             }
         writer.write("")
     }

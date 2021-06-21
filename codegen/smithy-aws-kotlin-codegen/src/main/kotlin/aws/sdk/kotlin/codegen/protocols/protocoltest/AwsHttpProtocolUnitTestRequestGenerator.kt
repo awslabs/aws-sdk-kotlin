@@ -30,11 +30,11 @@ class AwsHttpProtocolUnitTestRequestGenerator(builder: Builder) :
             // add an endpoint resolver
             val staticProviderSymbol = buildSymbol {
                 name = "StaticEndpointResolver"
-                namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint")
+                namespace(AwsKotlinDependency.AWS_CORE, subpackage = "endpoint")
             }
             val endpointSymbol = buildSymbol {
                 name = "Endpoint"
-                namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint")
+                namespace(AwsKotlinDependency.AWS_CORE, subpackage = "endpoint")
             }
             writer.addImport(staticProviderSymbol)
             writer.addImport(endpointSymbol)
@@ -60,11 +60,11 @@ internal fun <T : HttpMessageTestCase> HttpProtocolUnitTestGenerator<T>.renderCo
     if (AwsSignatureVersion4.hasSigV4AuthScheme(model, serviceShape, operation)) {
         val staticProviderSymbol = buildSymbol {
             name = "StaticCredentialsProvider"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+            namespace(AwsKotlinDependency.AWS_AUTH)
         }
         val credentialsSymbol = buildSymbol {
             name = "Credentials"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+            namespace(AwsKotlinDependency.AWS_AUTH)
         }
         writer.addImport(staticProviderSymbol)
         writer.addImport(credentialsSymbol)

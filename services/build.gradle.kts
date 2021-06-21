@@ -13,7 +13,7 @@ plugins {
 val sdkVersion: String by project
 
 val experimentalAnnotations = listOf(
-    "software.aws.clientrt.util.InternalApi",
+    "aws.smithy.kotlin.runtime.util.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi"
 )
 
@@ -29,9 +29,15 @@ subprojects {
     // have generated sdk's opt-in to internal runtime features
     kotlin.sourceSets.all {
         experimentalAnnotations.forEach { languageSettings.useExperimentalAnnotation(it) }
+    }
 
-        if (name == "main") {
+    kotlin {
+        sourceSets.getByName("main") {
+            kotlin.srcDir("common/src")
             kotlin.srcDir("generated-src/main/kotlin")
+        }
+        sourceSets.getByName("test") {
+            kotlin.srcDir("common/test")
         }
     }
 

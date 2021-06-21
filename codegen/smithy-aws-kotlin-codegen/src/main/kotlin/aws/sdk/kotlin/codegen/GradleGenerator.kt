@@ -15,6 +15,11 @@ import software.amazon.smithy.utils.CodeWriter
  * Integration that generates custom gradle build files
  */
 class GradleGenerator : KotlinIntegration {
+
+    // Specify to run last, to ensure all other integrations have had a chance to register dependencies.
+    override val order: Byte
+        get() = 127
+
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) = generateGradleBuild(ctx, delegator)
 
     /**
@@ -41,6 +46,8 @@ class GradleGenerator : KotlinIntegration {
         if (!ctx.settings.pkg.description.isNullOrEmpty()) {
             writer.write("description = #S", ctx.settings.pkg.description)
         }
+
+        writer.write("val kotlinVersion: String by project")
 
         val dependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
 

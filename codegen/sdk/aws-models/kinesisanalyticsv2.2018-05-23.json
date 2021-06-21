@@ -74,8 +74,7 @@
                 "CurrentApplicationVersionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The version ID of the Kinesis Data Analytics application. You can retrieve the application version ID using \n      <a>DescribeApplication</a>.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The version ID of the Kinesis Data Analytics application. You must provide the\n        <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>.You can\n      retrieve the application version ID using <a>DescribeApplication</a>. For better\n      concurrency support, use the <code>ConditionalToken</code> parameter instead of\n        <code>CurrentApplicationVersionId</code>.</p>"
                     }
                 },
                 "CloudWatchLoggingOption": {
@@ -83,6 +82,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Provides the Amazon CloudWatch log stream Amazon Resource Name (ARN). </p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "ConditionalToken": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ConditionalToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A value you use to implement strong concurrency for application updates. You must\n      provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You\n      get the application's current <code>ConditionalToken</code> using <a>DescribeApplication</a>. For better concurrency support, use the\n        <code>ConditionalToken</code> parameter instead of\n      <code>CurrentApplicationVersionId</code>.</p>"
                     }
                 }
             }
@@ -216,7 +221,7 @@
                 "ApplicationVersionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>Provides the current application version.</p>"
+                        "smithy.api#documentation": "<p>Provides the current application version. </p>"
                     }
                 },
                 "InputId": {
@@ -246,7 +251,7 @@
                 "CurrentApplicationVersionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The current version of your application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p>",
+                        "smithy.api#documentation": "<p>The current version of your application. \n        You must provide the <code>ApplicationVersionID</code> or the <code>ConditionalToken</code>.You can use the <a>DescribeApplication</a> operation to find the current application version.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -349,7 +354,7 @@
                 "ApplicationVersionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The updated application version ID. Kinesis Data Analytics increments this ID when the\n      application is updated.</p>"
+                        "smithy.api#documentation": "<p>The updated application version ID. Kinesis Data Analytics increments this ID when the application is\n      updated.</p>"
                     }
                 },
                 "OutputDescriptions": {
@@ -402,7 +407,7 @@
                 "CurrentApplicationVersionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The version of the application for which you are adding the reference data source. You can\n      use the <a>DescribeApplication</a> operation to get the current application\n      version. If the version specified is not the current version, the\n        <code>ConcurrentModificationException</code> is returned.</p>",
+                        "smithy.api#documentation": "<p>The version of the application for which you are adding the reference data source. \n        You can\n      use the <a>DescribeApplication</a> operation to get the current application\n      version. If the version specified is not the current version, the\n        <code>ConcurrentModificationException</code> is returned.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -480,8 +485,7 @@
                 "CurrentApplicationVersionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The version of the application to which you want to add the VPC\n      configuration. You can use the <a>DescribeApplication</a> operation to get the\n      current application version. If the version specified is not the current version, the\n        <code>ConcurrentModificationException</code> is returned.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The version of the application to which you want to add the VPC configuration. You must\n      provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You\n      can use the <a>DescribeApplication</a> operation to get the current application\n      version. If the version specified is not the current version, the\n        <code>ConcurrentModificationException</code> is returned. For better concurrency support,\n      use the <code>ConditionalToken</code> parameter instead of\n        <code>CurrentApplicationVersionId</code>.</p>"
                     }
                 },
                 "VpcConfiguration": {
@@ -489,6 +493,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Description of the VPC to add to the application.</p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "ConditionalToken": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ConditionalToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A value you use to implement strong concurrency for application updates. You must\n      provide the <code>ApplicationVersionID</code> or the <code>ConditionalToken</code>. You get\n      the application's current <code>ConditionalToken</code> using <a>DescribeApplication</a>. For better concurrency support, use the\n        <code>ConditionalToken</code> parameter instead of\n      <code>CurrentApplicationVersionId</code>.</p>"
                     }
                 }
             }
@@ -505,7 +515,7 @@
                 "ApplicationVersionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>Provides the current application version. Kinesis Data Analytics updates the ApplicationVersionId each time you update the application. </p>"
+                        "smithy.api#documentation": "<p>Provides the current application version. Kinesis Data Analytics updates the ApplicationVersionId each\n      time you update the application.</p>"
                     }
                 },
                 "VpcConfigurationDescription": {
@@ -534,7 +544,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes code configuration for a Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes code configuration for an application.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#ApplicationCodeConfigurationDescription": {
@@ -555,7 +565,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes code configuration for a Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes code configuration for an application.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#ApplicationCodeConfigurationUpdate": {
@@ -575,7 +585,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes code configuration updates to a Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes code configuration updates for an application. This is supported for a Flink-based Kinesis Data Analytics application or a SQL-based Kinesis Data Analytics application.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#ApplicationConfiguration": {
@@ -602,8 +612,7 @@
                 "ApplicationCodeConfiguration": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationCodeConfiguration",
                     "traits": {
-                        "smithy.api#documentation": "<p>The code location and type parameters for a Flink-based Kinesis Data Analytics application.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The code location and type parameters for a Flink-based Kinesis Data Analytics application.</p>"
                     }
                 },
                 "ApplicationSnapshotConfiguration": {
@@ -616,6 +625,12 @@
                     "target": "com.amazonaws.kinesisanalyticsv2#VpcConfigurations",
                     "traits": {
                         "smithy.api#documentation": "<p>The array of descriptions of VPC configurations available to the application.</p>"
+                    }
+                },
+                "ZeppelinApplicationConfiguration": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ZeppelinApplicationConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration parameters for a Kinesis Data Analytics Studio notebook.</p>"
                     }
                 }
             },
@@ -667,6 +682,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The array of descriptions of VPC configurations available to the application.</p>"
                     }
+                },
+                "ZeppelinApplicationConfigurationDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ZeppelinApplicationConfigurationDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration parameters for a Kinesis Data Analytics Studio notebook.</p>"
+                    }
                 }
             },
             "traits": {
@@ -685,7 +706,7 @@
                 "ApplicationCodeConfigurationUpdate": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationCodeConfigurationUpdate",
                     "traits": {
-                        "smithy.api#documentation": "<p>Describes updates to a Flink-based Kinesis Data Analytics application's code\n      configuration.</p>"
+                        "smithy.api#documentation": "<p>Describes updates to an application's code\n      configuration.</p>"
                     }
                 },
                 "FlinkApplicationConfigurationUpdate": {
@@ -710,6 +731,12 @@
                     "target": "com.amazonaws.kinesisanalyticsv2#VpcConfigurationUpdates",
                     "traits": {
                         "smithy.api#documentation": "<p>Updates to the array of descriptions of VPC configurations available to the application.</p>"
+                    }
+                },
+                "ZeppelinApplicationConfigurationUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ZeppelinApplicationConfigurationUpdate",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Updates to the configuration of a Kinesis Data Analytics Studio notebook.</p>"
                     }
                 }
             },
@@ -752,7 +779,7 @@
                 "RuntimeEnvironment": {
                     "target": "com.amazonaws.kinesisanalyticsv2#RuntimeEnvironment",
                     "traits": {
-                        "smithy.api#documentation": "<p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>",
+                        "smithy.api#documentation": "<p>The runtime environment for the application (<code>SQL-1_0</code>, <code>FLINK-1_6</code>, <code>FLINK-1_8</code>, or <code>FLINK-1_11</code>).</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -791,7 +818,7 @@
                 "ApplicationConfigurationDescription": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationConfigurationDescription",
                     "traits": {
-                        "smithy.api#documentation": "<p>Provides details about the application's Java, SQL, or Scala code and starting parameters.</p>"
+                        "smithy.api#documentation": "<p>Describes details about the application code and starting parameters for a Kinesis Data Analytics application.</p>"
                     }
                 },
                 "CloudWatchLoggingOptionDescriptions": {
@@ -799,10 +826,118 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Describes the application Amazon CloudWatch logging options.</p>"
                     }
+                },
+                "ApplicationMaintenanceConfigurationDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationMaintenanceConfigurationDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The details of the maintenance configuration for the application.</p>"
+                    }
+                },
+                "ApplicationVersionUpdatedFrom": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The previous application version before the latest application update. <a>RollbackApplication</a>\n        reverts the application to this version.</p>"
+                    }
+                },
+                "ApplicationVersionRolledBackFrom": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If you reverted the application using <a>RollbackApplication</a>,\n        the application version when <code>RollbackApplication</code> was called.</p>"
+                    }
+                },
+                "ConditionalToken": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ConditionalToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A value you use to implement strong concurrency for application updates.</p>"
+                    }
+                },
+                "ApplicationVersionRolledBackTo": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The version to which you want to roll back the application.</p>"
+                    }
+                },
+                "ApplicationMode": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationMode",
+                    "traits": {
+                        "smithy.api#documentation": "<p>To create a Kinesis Data Analytics Studio notebook, you must set the mode to <code>INTERACTIVE</code>. However, for a Kinesis Data Analytics for Apache Flink application, the mode is optional.</p>"
+                    }
                 }
             },
             "traits": {
                 "smithy.api#documentation": "<p>Describes the application, including the application Amazon Resource Name (ARN), status,\n      latest version, and input and output configurations.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ApplicationMaintenanceConfigurationDescription": {
+            "type": "structure",
+            "members": {
+                "ApplicationMaintenanceWindowStartTime": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationMaintenanceWindowStartTime",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The start time for the maintenance window.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ApplicationMaintenanceWindowEndTime": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationMaintenanceWindowEndTime",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The end time for the maintenance window.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The details of the maintenance configuration for the application.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ApplicationMaintenanceConfigurationUpdate": {
+            "type": "structure",
+            "members": {
+                "ApplicationMaintenanceWindowStartTimeUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationMaintenanceWindowStartTime",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The updated start time for the maintenance window.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Describes the updated maintenance configuration for the application.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ApplicationMaintenanceWindowEndTime": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 5,
+                    "max": 5
+                },
+                "smithy.api#pattern": "([01][0-9]|2[0-3]):[0-5][0-9]"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ApplicationMaintenanceWindowStartTime": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 5,
+                    "max": 5
+                },
+                "smithy.api#pattern": "([01][0-9]|2[0-3]):[0-5][0-9]"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ApplicationMode": {
+            "type": "string",
+            "traits": {
+                "smithy.api#enum": [
+                    {
+                        "value": "STREAMING",
+                        "name": "STREAMING"
+                    },
+                    {
+                        "value": "INTERACTIVE",
+                        "name": "INTERACTIVE"
+                    }
+                ]
             }
         },
         "com.amazonaws.kinesisanalyticsv2#ApplicationName": {
@@ -891,7 +1026,7 @@
                 "SnapshotsEnabledUpdate": {
                     "target": "com.amazonaws.kinesisanalyticsv2#BooleanObject",
                     "traits": {
-                        "smithy.api#documentation": "<p>Describes updates to whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>",
+                        "smithy.api#documentation": "<p>Describes updates to whether snapshots are enabled for an application.</p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -935,6 +1070,18 @@
                     {
                         "value": "FORCE_STOPPING",
                         "name": "FORCE_STOPPING"
+                    },
+                    {
+                        "value": "MAINTENANCE",
+                        "name": "MAINTENANCE"
+                    },
+                    {
+                        "value": "ROLLING_BACK",
+                        "name": "ROLLING_BACK"
+                    },
+                    {
+                        "value": "ROLLED_BACK",
+                        "name": "ROLLED_BACK"
                     }
                 ]
             }
@@ -979,8 +1126,14 @@
                 "RuntimeEnvironment": {
                     "target": "com.amazonaws.kinesisanalyticsv2#RuntimeEnvironment",
                     "traits": {
-                        "smithy.api#documentation": "<p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>",
+                        "smithy.api#documentation": "<p>The runtime environment for the application.</p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "ApplicationMode": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationMode",
+                    "traits": {
+                        "smithy.api#documentation": "<p>For a Kinesis Data Analytics for Apache Flink application, the mode is <code>STREAMING</code>. For a Kinesis Data Analytics Studio notebook, it is <code>INTERACTIVE</code>.</p>"
                     }
                 }
             },
@@ -998,6 +1151,49 @@
                 }
             }
         },
+        "com.amazonaws.kinesisanalyticsv2#ApplicationVersionSummaries": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionSummary"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ApplicationVersionSummary": {
+            "type": "structure",
+            "members": {
+                "ApplicationVersionId": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ID of the application version. Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update the application.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ApplicationStatus": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The status of the application.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The summary of the application version.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ArtifactType": {
+            "type": "string",
+            "traits": {
+                "smithy.api#enum": [
+                    {
+                        "value": "UDF",
+                        "name": "UDF"
+                    },
+                    {
+                        "value": "DEPENDENCY_JAR",
+                        "name": "DEPENDENCY_JAR"
+                    }
+                ]
+            }
+        },
         "com.amazonaws.kinesisanalyticsv2#AuthorizedUrl": {
             "type": "string",
             "traits": {
@@ -1005,6 +1201,16 @@
                     "min": 1,
                     "max": 2048
                 }
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#BasePath": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 1024
+                },
+                "smithy.api#pattern": "[a-zA-Z0-9/!-_.*'()]+"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#BooleanObject": {
@@ -1045,6 +1251,51 @@
                 "smithy.api#documentation": "<p>For a SQL-based Kinesis Data Analytics application, provides additional mapping information when the record\n      format uses delimiters, such as CSV. For example, the following sample records use CSV format,\n      where the records use the <i>'\\n'</i> as the row delimiter and a comma (\",\") as\n      the column delimiter: </p>\n      \n         <p>\n            <code>\"name1\", \"address1\"</code>\n         </p>\n         <p>\n            <code>\"name2\", \"address2\"</code>\n         </p>"
             }
         },
+        "com.amazonaws.kinesisanalyticsv2#CatalogConfiguration": {
+            "type": "structure",
+            "members": {
+                "GlueDataCatalogConfiguration": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#GlueDataCatalogConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration parameters for the default AWS Glue database. You use this database for Apache Flink SQL queries and table API transforms that you write in a Kinesis Data Analytics Studio notebook.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration parameters for the default AWS Glue database. You use this database for SQL queries that you write in a Kinesis Data Analytics Studio notebook.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#CatalogConfigurationDescription": {
+            "type": "structure",
+            "members": {
+                "GlueDataCatalogConfigurationDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#GlueDataCatalogConfigurationDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration parameters for the default AWS Glue database. You use this database for SQL queries that you write in a Kinesis Data Analytics Studio notebook.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration parameters for the default AWS Glue database. You use this database for Apache Flink SQL queries and table API transforms that you write in a Kinesis Data Analytics Studio notebook.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#CatalogConfigurationUpdate": {
+            "type": "structure",
+            "members": {
+                "GlueDataCatalogConfigurationUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#GlueDataCatalogConfigurationUpdate",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Updates to the configuration parameters for the default AWS Glue database. You use this database for SQL queries that you write in a Kinesis Data Analytics Studio notebook.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Updates to </p>"
+            }
+        },
         "com.amazonaws.kinesisanalyticsv2#CheckpointConfiguration": {
             "type": "structure",
             "members": {
@@ -1064,7 +1315,7 @@
                 "CheckpointInterval": {
                     "target": "com.amazonaws.kinesisanalyticsv2#CheckpointInterval",
                     "traits": {
-                        "smithy.api#documentation": "<p>Describes the interval in milliseconds between checkpoint operations. </p>\n         <note>\n            <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>,\n    the application will use a <code>CheckpointInterval</code> vaue of 60000, even if this value is set \n      to another value using this API or in application code.</p>\n         </note>"
+                        "smithy.api#documentation": "<p>Describes the interval in milliseconds between checkpoint operations. </p>\n         <note>\n            <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>,\n    the application will use a <code>CheckpointInterval</code> value of 60000, even if this value is set \n      to another value using this API or in application code.</p>\n         </note>"
                     }
                 },
                 "MinPauseBetweenCheckpoints": {
@@ -1096,7 +1347,7 @@
                 "CheckpointInterval": {
                     "target": "com.amazonaws.kinesisanalyticsv2#CheckpointInterval",
                     "traits": {
-                        "smithy.api#documentation": "<p>Describes the interval in milliseconds between checkpoint operations. </p>\n         <note>\n            <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>,\n    the application will use a <code>CheckpointInterval</code> vaue of 60000, even if this value is set to another value \n      using this API or in application code.</p>\n         </note>"
+                        "smithy.api#documentation": "<p>Describes the interval in milliseconds between checkpoint operations. </p>\n         <note>\n            <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>,\n    the application will use a <code>CheckpointInterval</code> value of 60000, even if this value is set to another value \n      using this API or in application code.</p>\n         </note>"
                     }
                 },
                 "MinPauseBetweenCheckpoints": {
@@ -1128,7 +1379,7 @@
                 "CheckpointIntervalUpdate": {
                     "target": "com.amazonaws.kinesisanalyticsv2#CheckpointInterval",
                     "traits": {
-                        "smithy.api#documentation": "<p>Describes updates to the interval in milliseconds between checkpoint operations.</p>\n         <note>\n            <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>,\n    the application will use a <code>CheckpointInterval</code> vaue of 60000, even if this value is set to another value \n      using this API or in application code.</p>\n         </note>"
+                        "smithy.api#documentation": "<p>Describes updates to the interval in milliseconds between checkpoint operations.</p>\n         <note>\n            <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>,\n    the application will use a <code>CheckpointInterval</code> value of 60000, even if this value is set to another value \n      using this API or in application code.</p>\n         </note>"
                     }
                 },
                 "MinPauseBetweenCheckpointsUpdate": {
@@ -1250,7 +1501,7 @@
                 "S3ContentLocation": {
                     "target": "com.amazonaws.kinesisanalyticsv2#S3ContentLocation",
                     "traits": {
-                        "smithy.api#documentation": "<p>Information about the Amazon S3 bucket containing the application code.</p>"
+                        "smithy.api#documentation": "<p>Information about the Amazon S3 bucket that contains the application code.</p>"
                     }
                 }
             },
@@ -1287,7 +1538,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes details about the application code for a Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes details about the code of a Kinesis Data Analytics application.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#CodeContentType": {
@@ -1328,7 +1579,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes an update to the code of a Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes an update to the code of an application. Not supported for Apache Zeppelin.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#CodeMD5": {
@@ -1373,6 +1624,16 @@
                 "smithy.api#documentation": "<p>Exception thrown as a result of concurrent modifications to an application. This error can\n      be the result of attempting to modify an application without using the current application\n      ID.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 409
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ConditionalToken": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 512
+                },
+                "smithy.api#pattern": "[a-zA-Z0-9-_+/=]+"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#ConfigurationType": {
@@ -1445,7 +1706,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Creates and returns a URL that you can use to connect to \n            an application's extension. Currently, the only\n            available extension is the Apache Flink dashboard.</p>\n        <p>The IAM role or user used to call this API defines the permissions to access the extension.\n            Once the presigned URL is created, no additional permission is required to access this URL. IAM \n            authorization policies for this API are also enforced for every HTTP request that attempts to \n            connect to the extension. \n        </p>\n        <note>\n            <p>The URL that you get from a call to CreateApplicationPresignedUrl must be used within 3 minutes\n            to be valid. \n            If you first try to use the URL after the 3-minute limit expires, the service returns an HTTP 403 Forbidden error.</p>\n         </note>"
+                "smithy.api#documentation": "<p>Creates and returns a URL that you can use to connect to \n            an application's extension. Currently, the only\n            available extension is the Apache Flink dashboard.</p>\n        <p>The IAM role or user used to call this API defines the permissions to access the\n      extension. After the presigned URL is created, no additional permission is required to access\n      this URL. IAM authorization policies for this API are also enforced for every HTTP request\n      that attempts to connect to the extension. </p>\n        <p>You    control the amount of time that the URL will be valid using the <code>SessionExpirationDurationInSeconds</code>\n        parameter. If you do not provide this parameter, the returned URL is valid for twelve hours.</p>\n        <note>\n            <p>The URL that you get from a call to CreateApplicationPresignedUrl must be used within 3 minutes\n            to be valid. \n            If you first try to use the URL after the 3-minute limit expires, the service returns an HTTP 403 Forbidden error.</p>\n         </note>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#CreateApplicationPresignedUrlRequest": {
@@ -1503,7 +1764,7 @@
                 "RuntimeEnvironment": {
                     "target": "com.amazonaws.kinesisanalyticsv2#RuntimeEnvironment",
                     "traits": {
-                        "smithy.api#documentation": "<p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>",
+                        "smithy.api#documentation": "<p>The runtime environment for the application (<code>SQL-1_0</code>, <code>FLINK-1_6</code>, <code>FLINK-1_8</code>, or <code>FLINK-1_11</code>).</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -1530,6 +1791,12 @@
                     "target": "com.amazonaws.kinesisanalyticsv2#Tags",
                     "traits": {
                         "smithy.api#documentation": "<p>A list of one or more tags to assign to the application. A tag is a key-value pair that identifies an \n        application. Note that the maximum number of application tags includes system tags. The maximum number of \n        user-defined application tags is 50.\n        For more information, see \n        <a href=\"https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html\">Using Tagging</a>.</p>"
+                    }
+                },
+                "ApplicationMode": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationMode",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Use the <code>STREAMING</code> mode to create a Kinesis Data Analytics Studio notebook. To create a Kinesis Data Analytics Studio notebook, use the \n    <code>INTERACTIVE</code> mode.</p>"
                     }
                 }
             }
@@ -1603,6 +1870,87 @@
         "com.amazonaws.kinesisanalyticsv2#CreateApplicationSnapshotResponse": {
             "type": "structure",
             "members": {}
+        },
+        "com.amazonaws.kinesisanalyticsv2#CustomArtifactConfiguration": {
+            "type": "structure",
+            "members": {
+                "ArtifactType": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ArtifactType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n            <code>UDF</code> stands for user-defined functions. This type of artifact must be in an S3 bucket. A <code>DEPENDENCY_JAR</code> can be in either Maven or an S3 bucket.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "S3ContentLocation": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#S3ContentLocation"
+                },
+                "MavenReference": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#MavenReference",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The parameters required to fully specify a Maven reference.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Specifies dependency JARs, as well as JAR files that contain user-defined functions (UDF).</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#CustomArtifactConfigurationDescription": {
+            "type": "structure",
+            "members": {
+                "ArtifactType": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ArtifactType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n            <code>UDF</code> stands for user-defined functions. This type of artifact must be in an S3 bucket. A <code>DEPENDENCY_JAR</code> can be in either Maven or an S3 bucket.</p>"
+                    }
+                },
+                "S3ContentLocationDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#S3ContentLocation"
+                },
+                "MavenReferenceDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#MavenReference",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The parameters that are required to specify a Maven dependency.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Specifies a dependency JAR or a JAR of user-defined functions.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#CustomArtifactsConfigurationDescriptionList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.kinesisanalyticsv2#CustomArtifactConfigurationDescription"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 50
+                }
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#CustomArtifactsConfigurationList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.kinesisanalyticsv2#CustomArtifactConfiguration"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 50
+                }
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#DatabaseARN": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 2048
+                },
+                "smithy.api#pattern": "arn:.*"
+            }
         },
         "com.amazonaws.kinesisanalyticsv2#DeleteApplication": {
             "type": "operation",
@@ -1681,15 +2029,20 @@
                 "CurrentApplicationVersionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The version ID of the application. You can retrieve the application version ID using \n    <a>DescribeApplication</a>.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The version ID of the application. You must provide the\n        <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You can\n      retrieve the application version ID using <a>DescribeApplication</a>. For better\n      concurrency support, use the <code>ConditionalToken</code> parameter instead of\n        <code>CurrentApplicationVersionId</code>.</p>"
                     }
                 },
                 "CloudWatchLoggingOptionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#Id",
                     "traits": {
-                        "smithy.api#documentation": "<p>The <code>CloudWatchLoggingOptionId</code> of the Amazon CloudWatch logging option to\n      delete. You can get the <code>CloudWatchLoggingOptionId</code> by using the <a>DescribeApplication</a> operation. </p>",
+                        "smithy.api#documentation": "<p>The <code>CloudWatchLoggingOptionId</code> of the Amazon CloudWatch logging option to\n         delete. You can get the <code>CloudWatchLoggingOptionId</code> by using the <a>DescribeApplication</a> operation. </p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "ConditionalToken": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ConditionalToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A value you use to implement strong concurrency for application updates. You must provide\n      the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You get the\n      application's current <code>ConditionalToken</code> using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of\n        <code>CurrentApplicationVersionId</code>.</p>"
                     }
                 }
             }
@@ -2057,8 +2410,7 @@
                 "CurrentApplicationVersionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The current application version ID. You can retrieve the application version ID using \n        <a>DescribeApplication</a>.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The current application version ID. You must provide the\n        <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You can\n      retrieve the application version ID using <a>DescribeApplication</a>. For better\n      concurrency support, use the <code>ConditionalToken</code> parameter instead of\n        <code>CurrentApplicationVersionId</code>.</p>"
                     }
                 },
                 "VpcConfigurationId": {
@@ -2066,6 +2418,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The ID of the VPC configuration to delete.</p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "ConditionalToken": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ConditionalToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A value you use to implement strong concurrency for application updates. You must provide\n      the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You get the\n      application's current <code>ConditionalToken</code> using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of\n        <code>CurrentApplicationVersionId</code>.</p>"
                     }
                 }
             }
@@ -2085,6 +2443,51 @@
                         "smithy.api#documentation": "<p>The updated version ID of the application.</p>"
                     }
                 }
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#DeployAsApplicationConfiguration": {
+            "type": "structure",
+            "members": {
+                "S3ContentLocation": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#S3ContentBaseLocation",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The description of an Amazon S3 object that contains the Amazon Data Analytics application, including the Amazon Resource Name (ARN) of the S3 bucket, the name of the Amazon S3 object that contains the data, and the version number of the Amazon S3 object that contains the data.    \n    </p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The information required to deploy a Kinesis Data Analytics Studio notebook as an application with durable state..</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#DeployAsApplicationConfigurationDescription": {
+            "type": "structure",
+            "members": {
+                "S3ContentLocationDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#S3ContentBaseLocationDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The location that holds the data required to specify an Amazon Data Analytics application.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration information required to deploy an Amazon Data Analytics Studio notebook as an application with durable state.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#DeployAsApplicationConfigurationUpdate": {
+            "type": "structure",
+            "members": {
+                "S3ContentLocationUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#S3ContentBaseLocationUpdate",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Updates to the location that holds the data required to specify an Amazon Data Analytics application.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Updates to the configuration information required to deploy an Amazon Data Analytics Studio notebook as an application with durable state..</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#DescribeApplication": {
@@ -2191,6 +2594,56 @@
                         "smithy.api#documentation": "<p>An object containing information about the application snapshot.</p>",
                         "smithy.api#required": {}
                     }
+                }
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#DescribeApplicationVersion": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.kinesisanalyticsv2#DescribeApplicationVersionRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.kinesisanalyticsv2#DescribeApplicationVersionResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#InvalidArgumentException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#UnsupportedOperationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Provides a detailed description of a specified version of the application. To see a list of all the versions of an application, invoke the <a>ListApplicationVersions</a> operation.</p>\n         <note>\n            <p>This operation is supported only for Amazon Kinesis Data Analytics for Apache Flink.</p>\n         </note>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#DescribeApplicationVersionRequest": {
+            "type": "structure",
+            "members": {
+                "ApplicationName": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the application for which you want to get the version description.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ApplicationVersionId": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ID of the application version for which you want to get the description.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#DescribeApplicationVersionResponse": {
+            "type": "structure",
+            "members": {
+                "ApplicationVersionDetail": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationDetail"
                 }
             }
         },
@@ -2329,7 +2782,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes the execution properties for a Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes the execution properties for an Apache Flink runtime.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#EnvironmentPropertyUpdates": {
@@ -2344,7 +2797,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes updates to the execution property groups for a Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes updates to the execution property groups for a Flink-based Kinesis Data Analytics application or a Studio notebook.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#ErrorMessage": {
@@ -2382,7 +2835,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes configuration parameters for a Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes configuration parameters for a Flink-based Kinesis Data Analytics application or a Studio notebook.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#FlinkApplicationConfigurationDescription": {
@@ -2455,6 +2908,50 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>Describes the starting parameters for a Flink-based Kinesis Data Analytics application.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#GlueDataCatalogConfiguration": {
+            "type": "structure",
+            "members": {
+                "DatabaseARN": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#DatabaseARN",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the database.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration of the Glue Data Catalog that you use for Apache Flink SQL queries and table API transforms that you write in an application.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#GlueDataCatalogConfigurationDescription": {
+            "type": "structure",
+            "members": {
+                "DatabaseARN": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#DatabaseARN",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the database.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration of the Glue Data Catalog that you use for Apache Flink SQL queries and table API transforms that you write in an application.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#GlueDataCatalogConfigurationUpdate": {
+            "type": "structure",
+            "members": {
+                "DatabaseARNUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#DatabaseARN",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The updated Amazon Resource Name (ARN) of the database.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Updates to the configuration of the Glue Data Catalog that you use for SQL queries that you write in a Kinesis Data Analytics Studio notebook.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#Id": {
@@ -2985,6 +3482,9 @@
                     "target": "com.amazonaws.kinesisanalyticsv2#DescribeApplicationSnapshot"
                 },
                 {
+                    "target": "com.amazonaws.kinesisanalyticsv2#DescribeApplicationVersion"
+                },
+                {
                     "target": "com.amazonaws.kinesisanalyticsv2#DiscoverInputSchema"
                 },
                 {
@@ -2994,7 +3494,13 @@
                     "target": "com.amazonaws.kinesisanalyticsv2#ListApplicationSnapshots"
                 },
                 {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ListApplicationVersions"
+                },
+                {
                     "target": "com.amazonaws.kinesisanalyticsv2#ListTagsForResource"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#RollbackApplication"
                 },
                 {
                     "target": "com.amazonaws.kinesisanalyticsv2#StartApplication"
@@ -3010,6 +3516,9 @@
                 },
                 {
                     "target": "com.amazonaws.kinesisanalyticsv2#UpdateApplication"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#UpdateApplicationMaintenanceConfiguration"
                 }
             ],
             "traits": {
@@ -3359,6 +3868,80 @@
                 }
             }
         },
+        "com.amazonaws.kinesisanalyticsv2#ListApplicationVersions": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.kinesisanalyticsv2#ListApplicationVersionsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.kinesisanalyticsv2#ListApplicationVersionsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#InvalidArgumentException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#UnsupportedOperationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Lists all the versions for the specified application, including versions that were rolled back. The response also includes a summary of the configuration \n      associated with each version.</p>\n    \n         <p>To get the complete description of a specific application version, invoke the <a>DescribeApplicationVersion</a> operation.</p>\n         <note>\n            <p>This operation is supported only for Amazon Kinesis Data Analytics for Apache Flink.</p>\n         </note>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ListApplicationVersionsInputLimit": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#box": {},
+                "smithy.api#range": {
+                    "min": 1,
+                    "max": 50
+                }
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ListApplicationVersionsRequest": {
+            "type": "structure",
+            "members": {
+                "ApplicationName": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the application for which you want to list all versions.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Limit": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ListApplicationVersionsInputLimit",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum number of versions to list in this invocation of the operation.</p>"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#NextToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If a previous invocation of this operation returned a pagination token, pass it into this value to retrieve the next set of results. For more information about pagination, see \n      <a href=\"https://docs.aws.amazon.com/cli/latest/userguide/pagination.html\">Using the AWS Command Line Interface's Pagination Options</a>.</p>"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ListApplicationVersionsResponse": {
+            "type": "structure",
+            "members": {
+                "ApplicationVersionSummaries": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionSummaries",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of the application versions and the associated configuration summaries. The list includes application versions that were rolled back.</p>\n         <p>To get the complete description of a specific application version, invoke the <a>DescribeApplicationVersion</a> operation.</p>"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#NextToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The pagination token for the next set of results, or <code>null</code> if there are no additional results. \n      To retrieve the next set of items, pass this token into a subsequent invocation of this operation. For more information about pagination, see \n      <a href=\"https://docs.aws.amazon.com/cli/latest/userguide/pagination.html\">Using the AWS Command Line Interface's Pagination Options</a>.</p>"
+                    }
+                }
+            }
+        },
         "com.amazonaws.kinesisanalyticsv2#ListApplications": {
             "type": "operation",
             "input": {
@@ -3530,6 +4113,65 @@
                 "smithy.api#documentation": "<p>When you configure a SQL-based Kinesis Data Analytics application's input at the\n      time of creating or updating an application, provides additional mapping information specific\n      to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the\n      streaming source.</p>"
             }
         },
+        "com.amazonaws.kinesisanalyticsv2#MavenArtifactId": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 256
+                },
+                "smithy.api#pattern": "[a-zA-Z0-9_.-]+"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#MavenGroupId": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 256
+                },
+                "smithy.api#pattern": "[a-zA-Z0-9_.-]+"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#MavenReference": {
+            "type": "structure",
+            "members": {
+                "GroupId": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#MavenGroupId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The group ID of the Maven reference.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ArtifactId": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#MavenArtifactId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The artifact ID of the Maven reference.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Version": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#MavenVersion",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The version of the Maven reference.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The information required to specify a Maven reference. You can use Maven references to specify dependency JAR files.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#MavenVersion": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 256
+                },
+                "smithy.api#pattern": "[a-zA-Z0-9_.-]+"
+            }
+        },
         "com.amazonaws.kinesisanalyticsv2#MetricsLevel": {
             "type": "string",
             "traits": {
@@ -3586,7 +4228,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes configuration parameters for Amazon CloudWatch logging for a Flink-based\n      Kinesis Data Analytics application. For more information about CloudWatch logging, see <a href=\"https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html\">Monitoring</a>.</p>"
+                "smithy.api#documentation": "<p>Describes configuration parameters for Amazon CloudWatch logging for an application. For more information about CloudWatch logging, see <a href=\"https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html\">Monitoring</a>.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#MonitoringConfigurationDescription": {
@@ -3612,7 +4254,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes configuration parameters for CloudWatch logging for a Flink-based\n      Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes configuration parameters for CloudWatch logging for an application.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#MonitoringConfigurationUpdate": {
@@ -3638,7 +4280,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes updates to configuration parameters for Amazon CloudWatch logging for a Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes updates to configuration parameters for Amazon CloudWatch logging for an application.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#NextToken": {
@@ -3845,7 +4487,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes parameters for how a Flink-based Kinesis Data Analytics application\n      application executes multiple tasks simultaneously. For more information about parallelism,\n      see <a href=\"https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/parallel.html\">Parallel Execution</a> in the <a href=\"https://ci.apache.org/projects/flink/flink-docs-release-1.8/\">Apache Flink\n        Documentation</a>.</p>"
+                "smithy.api#documentation": "<p>Describes parameters for how a Flink-based Kinesis Data Analytics application\n      executes multiple tasks simultaneously. For more information about parallelism,\n      see <a href=\"https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/parallel.html\">Parallel Execution</a> in the <a href=\"https://ci.apache.org/projects/flink/flink-docs-release-1.8/\">Apache Flink\n        Documentation</a>.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#ParallelismConfigurationDescription": {
@@ -3910,12 +4552,12 @@
                 "AutoScalingEnabledUpdate": {
                     "target": "com.amazonaws.kinesisanalyticsv2#BooleanObject",
                     "traits": {
-                        "smithy.api#documentation": "<p>Describes updates to whether the Kinesis Data Analytics service can increase the parallelism of the application in response to increased throughput.</p>"
+                        "smithy.api#documentation": "<p>Describes updates to whether the Kinesis Data Analytics service can increase the parallelism of a Flink-based Kinesis Data Analytics application in response to increased throughput.</p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes updates to parameters for how a Flink-based Kinesis Data Analytics application executes multiple tasks simultaneously.</p>"
+                "smithy.api#documentation": "<p>Describes updates to parameters for how an application executes multiple tasks simultaneously.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#ParallelismPerKPU": {
@@ -3970,7 +4612,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Property key-value pairs passed into a Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Property key-value pairs passed into an application.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#PropertyGroups": {
@@ -4339,6 +4981,68 @@
                 "smithy.api#pattern": "arn:.*"
             }
         },
+        "com.amazonaws.kinesisanalyticsv2#RollbackApplication": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.kinesisanalyticsv2#RollbackApplicationRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.kinesisanalyticsv2#RollbackApplicationResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ConcurrentModificationException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#InvalidArgumentException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#InvalidRequestException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ResourceInUseException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#UnsupportedOperationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Reverts the application to the previous running version. You can\n            roll back an application if you suspect it is stuck in a transient status. </p>\n        <p>You can roll back an application only if it is in the <code>UPDATING</code> \n            or <code>AUTOSCALING</code> status.</p>\n        <p>When you rollback an application, it loads state data from the last successful snapshot.\n        If the application has no snapshots, Kinesis Data Analytics rejects the rollback request.</p>\n        <p>This action is not supported for Kinesis Data Analytics for SQL applications.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#RollbackApplicationRequest": {
+            "type": "structure",
+            "members": {
+                "ApplicationName": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the application.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "CurrentApplicationVersionId": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The current application version ID. You can retrieve the application version ID using \n            <a>DescribeApplication</a>.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#RollbackApplicationResponse": {
+            "type": "structure",
+            "members": {
+                "ApplicationDetail": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationDetail",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        },
         "com.amazonaws.kinesisanalyticsv2#RunConfiguration": {
             "type": "structure",
             "members": {
@@ -4421,6 +5125,10 @@
                     {
                         "value": "FLINK-1_11",
                         "name": "FLINK_1_11"
+                    },
+                    {
+                        "value": "ZEPPELIN-FLINK-1_0",
+                        "name": "ZEPPELIN_FLINK_1_0"
                     }
                 ]
             }
@@ -4450,7 +5158,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes the location of a Flink-based Kinesis Data Analytics application's code stored in an S3 bucket.</p>"
+                "smithy.api#documentation": "<p>Describes the location of an application's code stored in an S3 bucket.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#S3Configuration": {
@@ -4473,6 +5181,69 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>For a SQL-based Kinesis Data Analytics application, provides a description of an\n      Amazon S3 data source, including the Amazon Resource Name (ARN) of the S3 bucket and the name\n      of the Amazon S3 object that contains the data.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#S3ContentBaseLocation": {
+            "type": "structure",
+            "members": {
+                "BucketARN": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#BucketARN",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the S3 bucket.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "BasePath": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#BasePath",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The base path for the S3 bucket.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The S3 bucket that holds the application information.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#S3ContentBaseLocationDescription": {
+            "type": "structure",
+            "members": {
+                "BucketARN": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#BucketARN",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the S3 bucket.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "BasePath": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#BasePath",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The base path for the S3 bucket.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The description of the S3 base location that holds the application.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#S3ContentBaseLocationUpdate": {
+            "type": "structure",
+            "members": {
+                "BucketARNUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#BucketARN",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The updated Amazon Resource Name (ARN) of the S3 bucket.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "BasePathUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#BasePath",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The updated S3 bucket path.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The information required to update the S3 base location that holds the application.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#S3ContentLocation": {
@@ -4500,7 +5271,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>For a Flink-based Kinesis Data Analytics application, provides a\n      description of an Amazon S3 object, including the Amazon Resource Name (ARN) of the S3 bucket,\n      the name of the Amazon S3 object that contains the data, and the version number of the Amazon\n      S3 object that contains the data. </p>"
+                "smithy.api#documentation": "<p>For a Kinesis Data Analytics application provides a\n      description of an Amazon S3 object, including the Amazon Resource Name (ARN) of the S3 bucket,\n      the name of the Amazon S3 object that contains the data, and the version number of the Amazon\n      S3 object that contains the data. </p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#S3ContentLocationUpdate": {
@@ -4526,7 +5297,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes an update for the Amazon S3 code content location for a \n      Flink-based Kinesis Data Analytics application.</p>"
+                "smithy.api#documentation": "<p>Describes an update for the Amazon S3 code content location for an application.</p>"
             }
         },
         "com.amazonaws.kinesisanalyticsv2#S3ReferenceDataSource": {
@@ -4885,8 +5656,7 @@
                 "RunConfiguration": {
                     "target": "com.amazonaws.kinesisanalyticsv2#RunConfiguration",
                     "traits": {
-                        "smithy.api#documentation": "<p>Identifies the run configuration (start parameters) of a Kinesis Data Analytics application.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>Identifies the run configuration (start parameters) of a Kinesis Data Analytics application.</p>"
                     }
                 }
             }
@@ -5216,6 +5986,9 @@
                     "target": "com.amazonaws.kinesisanalyticsv2#InvalidRequestException"
                 },
                 {
+                    "target": "com.amazonaws.kinesisanalyticsv2#LimitExceededException"
+                },
+                {
                     "target": "com.amazonaws.kinesisanalyticsv2#ResourceInUseException"
                 },
                 {
@@ -5224,6 +5997,71 @@
             ],
             "traits": {
                 "smithy.api#documentation": "<p>Updates an existing Kinesis Data Analytics application. Using this operation, you\n      can update application code, input configuration, and output configuration. </p>\n         <p>Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update\n      your application. </p>\n         <note>\n            <p>You cannot update the <code>RuntimeEnvironment</code> of an existing application. If you\n    need to update an application's <code>RuntimeEnvironment</code>, you must delete the application\n    and create it again.</p>\n         </note>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#UpdateApplicationMaintenanceConfiguration": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.kinesisanalyticsv2#UpdateApplicationMaintenanceConfigurationRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.kinesisanalyticsv2#UpdateApplicationMaintenanceConfigurationResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ConcurrentModificationException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#InvalidArgumentException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ResourceInUseException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.kinesisanalyticsv2#UnsupportedOperationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Updates the maintenance configuration of the Kinesis Data Analytics application. </p>\n         <p>You can invoke this operation on an application that is in one of the two following\n      states: <code>READY</code> or <code>RUNNING</code>. If you invoke it when the application is\n      in a state other than these two states, it throws a <code>ResourceInUseException</code>. The\n      service makes use of the updated configuration the next time it schedules maintenance for the\n      application. If you invoke this operation after the service schedules maintenance, the service\n      will apply the configuration update the next time it schedules maintenance for the\n      application. This means that you might not see the maintenance configuration update applied to\n      the maintenance process that follows a successful invocation of this operation, but to the\n      following maintenance process instead.</p>\n         <p>To see the current maintenance configuration of your application, invoke the\n      <a>DescribeApplication</a> operation.</p>\n         <p>For information about application maintenance, see <a href=\"https://docs.aws.amazon.com/kinesisanalytics/latest/java/maintenance.html\">Kinesis Data Analytics for Apache Flink Maintenance</a>.</p>\n         <note>\n            <p>This operation is supported only for Amazon Kinesis Data Analytics for Apache Flink.</p>\n         </note>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#UpdateApplicationMaintenanceConfigurationRequest": {
+            "type": "structure",
+            "members": {
+                "ApplicationName": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the application for which you want to update the maintenance configuration.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ApplicationMaintenanceConfigurationUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationMaintenanceConfigurationUpdate",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes the application maintenance configuration update.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#UpdateApplicationMaintenanceConfigurationResponse": {
+            "type": "structure",
+            "members": {
+                "ApplicationARN": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ResourceARN",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the application.</p>"
+                    }
+                },
+                "ApplicationMaintenanceConfigurationDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ApplicationMaintenanceConfigurationDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The application maintenance configuration description after the update.</p>"
+                    }
+                }
             }
         },
         "com.amazonaws.kinesisanalyticsv2#UpdateApplicationRequest": {
@@ -5239,8 +6077,7 @@
                 "CurrentApplicationVersionId": {
                     "target": "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The current application version ID. You can retrieve the application version ID using \n      <a>DescribeApplication</a>.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The current application version ID. You must provide the\n        <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>.You can\n      retrieve the application version ID using <a>DescribeApplication</a>. For better\n      concurrency support, use the <code>ConditionalToken</code> parameter instead of\n        <code>CurrentApplicationVersionId</code>.</p>"
                     }
                 },
                 "ApplicationConfigurationUpdate": {
@@ -5266,6 +6103,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Describes application Amazon CloudWatch logging option updates. You can only update\n      existing CloudWatch logging options with this action. To add a new CloudWatch logging option,\n      use <a>AddApplicationCloudWatchLoggingOption</a>.</p>"
                     }
+                },
+                "ConditionalToken": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ConditionalToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A value you use to implement strong concurrency for application updates. You must\n      provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You\n      get the application's current <code>ConditionalToken</code> using <a>DescribeApplication</a>. For better concurrency support, use the\n        <code>ConditionalToken</code> parameter instead of\n      <code>CurrentApplicationVersionId</code>.</p>"
+                    }
                 }
             }
         },
@@ -5288,6 +6131,10 @@
                     {
                         "value": "FLINK_DASHBOARD_URL",
                         "name": "FLINK_DASHBOARD_URL"
+                    },
+                    {
+                        "value": "ZEPPELIN_UI_URL",
+                        "name": "ZEPPELIN_UI_URL"
                     }
                 ]
             }
@@ -5397,6 +6244,144 @@
         },
         "com.amazonaws.kinesisanalyticsv2#VpcId": {
             "type": "string"
+        },
+        "com.amazonaws.kinesisanalyticsv2#ZeppelinApplicationConfiguration": {
+            "type": "structure",
+            "members": {
+                "MonitoringConfiguration": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ZeppelinMonitoringConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The monitoring configuration of a Kinesis Data Analytics Studio notebook.</p>"
+                    }
+                },
+                "CatalogConfiguration": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#CatalogConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The AWS Glue Data Catalog that you use in queries in a Kinesis Data Analytics Studio notebook.</p>"
+                    }
+                },
+                "DeployAsApplicationConfiguration": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#DeployAsApplicationConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The information required to deploy a Kinesis Data Analytics Studio notebook as an application with durable state..</p>"
+                    }
+                },
+                "CustomArtifactsConfiguration": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#CustomArtifactsConfigurationList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Custom artifacts are dependency JARs and user-defined functions (UDF).</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration of a Kinesis Data Analytics Studio notebook.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ZeppelinApplicationConfigurationDescription": {
+            "type": "structure",
+            "members": {
+                "MonitoringConfigurationDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ZeppelinMonitoringConfigurationDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The monitoring configuration of a Kinesis Data Analytics Studio notebook.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "CatalogConfigurationDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#CatalogConfigurationDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The AWS Glue Data Catalog that is associated with the Kinesis Data Analytics Studio notebook.</p>"
+                    }
+                },
+                "DeployAsApplicationConfigurationDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#DeployAsApplicationConfigurationDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The parameters required to deploy a Kinesis Data Analytics Studio notebook as an application with durable state..</p>"
+                    }
+                },
+                "CustomArtifactsConfigurationDescription": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#CustomArtifactsConfigurationDescriptionList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Custom artifacts are dependency JARs and user-defined functions (UDF).</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration of a Kinesis Data Analytics Studio notebook.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ZeppelinApplicationConfigurationUpdate": {
+            "type": "structure",
+            "members": {
+                "MonitoringConfigurationUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#ZeppelinMonitoringConfigurationUpdate",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Updates to the monitoring configuration of a Kinesis Data Analytics Studio notebook.</p>"
+                    }
+                },
+                "CatalogConfigurationUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#CatalogConfigurationUpdate",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Updates to the configuration of the AWS Glue Data Catalog that is associated with the Kinesis Data Analytics Studio notebook.</p>"
+                    }
+                },
+                "DeployAsApplicationConfigurationUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#DeployAsApplicationConfigurationUpdate"
+                },
+                "CustomArtifactsConfigurationUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#CustomArtifactsConfigurationList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Updates to the customer artifacts. Custom artifacts are dependency JAR files and user-defined functions (UDF).</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Updates to the configuration of Kinesis Data Analytics Studio notebook.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ZeppelinMonitoringConfiguration": {
+            "type": "structure",
+            "members": {
+                "LogLevel": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#LogLevel",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The verbosity of the CloudWatch Logs for an application.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Describes configuration parameters for Amazon CloudWatch logging for a Kinesis Data Analytics Studio notebook. For more information about CloudWatch logging, see <a href=\"https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html\">Monitoring</a>.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ZeppelinMonitoringConfigurationDescription": {
+            "type": "structure",
+            "members": {
+                "LogLevel": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#LogLevel",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes the verbosity of the CloudWatch Logs for an application.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The monitoring configuration for Apache Zeppelin within a Kinesis Data Analytics Studio notebook.</p>"
+            }
+        },
+        "com.amazonaws.kinesisanalyticsv2#ZeppelinMonitoringConfigurationUpdate": {
+            "type": "structure",
+            "members": {
+                "LogLevelUpdate": {
+                    "target": "com.amazonaws.kinesisanalyticsv2#LogLevel",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Updates to the logging level for Apache Zeppelin within a Kinesis Data Analytics Studio notebook.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Updates to the monitoring configuration for Apache Zeppelin within a Kinesis Data Analytics Studio notebook.</p>"
+            }
         },
         "com.amazonaws.kinesisanalyticsv2#ZipFileContent": {
             "type": "blob",

@@ -9,12 +9,13 @@ import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
-import software.amazon.smithy.aws.traits.protocols.*
 import software.amazon.smithy.codegen.core.CodegenException
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.addImport
+import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
@@ -33,6 +34,12 @@ open class AwsHttpProtocolClientGenerator(
     middlewares: List<ProtocolMiddleware>,
     httpBindingResolver: HttpBindingResolver
 ) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
+
+    override val defaultHttpClientEngineSymbol: Symbol
+        get() = buildSymbol {
+            name = "CrtHttpEngine"
+            namespace(AwsKotlinDependency.AWS_CRT_HTTP_ENGINE)
+        }
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
@@ -69,11 +76,11 @@ open class AwsHttpProtocolClientGenerator(
         // FIXME - we likely need a way to let customizations modify/override this
         // FIXME - we also need a way to tie in config properties added via integrations that need to influence the context
         writer.addImport(RuntimeTypes.Core.ExecutionContext)
-        writer.addImport("SdkClientOption", KotlinDependency.CLIENT_RT_CORE, "${KotlinDependency.CLIENT_RT_CORE.namespace}.client")
-        writer.addImport("resolveRegionForOperation", AwsKotlinDependency.AWS_CLIENT_RT_REGIONS)
+        writer.addImport("SdkClientOption", KotlinDependency.CORE, "${KotlinDependency.CORE.namespace}.client")
+        writer.addImport("resolveRegionForOperation", AwsKotlinDependency.AWS_REGIONS)
         writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
         writer.addImport(AwsRuntimeTypes.Core.AwsClientOption)
-        writer.addImport("putIfAbsent", KotlinDependency.CLIENT_RT_UTILS)
+        writer.addImport("putIfAbsent", KotlinDependency.UTILS)
 
         writer.dokka("merge the defaults configured for the service into the execution context before firing off a request")
         writer.openBlock("private suspend fun mergeServiceDefaults(ctx: ExecutionContext) {", "}") {
