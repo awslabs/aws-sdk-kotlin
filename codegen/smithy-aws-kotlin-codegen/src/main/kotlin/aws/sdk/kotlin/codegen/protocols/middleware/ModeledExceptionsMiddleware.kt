@@ -26,7 +26,7 @@ abstract class ModeledExceptionsMiddleware(
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         super.addImportsAndDependencies(writer)
-        writer.addImport("ExceptionRegistry", AwsKotlinDependency.AWS_CLIENT_RT_HTTP)
+        writer.addImport("ExceptionRegistry", AwsKotlinDependency.AWS_HTTP)
     }
 
     protected fun getModeledErrors(): Set<Shape> {
