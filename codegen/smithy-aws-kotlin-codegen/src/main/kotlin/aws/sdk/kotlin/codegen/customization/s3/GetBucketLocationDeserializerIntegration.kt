@@ -15,21 +15,25 @@ import software.amazon.smithy.model.shapes.ServiceShape
  * custom deserialization logic.
  */
 class GetBucketLocationDeserializerIntegration : KotlinIntegration {
-    override val sectionWriters: List<SectionWriterBinding>
-        get() = listOf(SectionWriterBinding(HttpProtocolClientGenerator.OperationDeserializer, overrideGetBucketLocationDeserializerWriter))
+    companion object {
+        // For the S3 GetBucketLocation operation, substitute the codegened deserializer for a hand-written variant.
+        // In the future there may be a specific trait to address this specific issue.  See https://github.com/awslabs/smithy/pull/839.
+        private val overrideGetBucketLocationDeserializerWriter = SectionWriter { writer, default ->
+            val op: OperationShape = checkNotNull(writer.getContext(HttpProtocolClientGenerator.OperationDeserializer.Operation) as OperationShape?) {
+                "Expected ${HttpProtocolClientGenerator.OperationDeserializer.Operation} key in context."
+            }
+
+            if (op.id.name == "GetBucketLocation") {
+                writer.write("deserializer = aws.sdk.kotlin.service.s3.internal.GetBucketLocationOperationDeserializer()")
+            } else {
+                writer.write(default)
+            }
+        }
+    }
+
+    override val sectionWriters: List<SectionWriterBinding> =
+        listOf(SectionWriterBinding(HttpProtocolClientGenerator.OperationDeserializer, overrideGetBucketLocationDeserializerWriter))
 
     override fun enabledForService(model: Model, settings: KotlinSettings) =
         model.expectShape<ServiceShape>(settings.service).isS3
-
-    private val overrideGetBucketLocationDeserializerWriter = SectionWriter { writer, default ->
-        val op: OperationShape = checkNotNull(writer.getContext(HttpProtocolClientGenerator.OperationDeserializer.Operation) as OperationShape?) {
-            "Expected ${HttpProtocolClientGenerator.OperationDeserializer.Operation} key in context."
-        }
-
-        if (op.id.name == "GetBucketLocation") {
-            writer.write("deserializer = aws.sdk.kotlin.service.s3.internal.GetBucketLocationOperationDeserializer()")
-        } else {
-            writer.write(default)
-        }
-    }
 }
