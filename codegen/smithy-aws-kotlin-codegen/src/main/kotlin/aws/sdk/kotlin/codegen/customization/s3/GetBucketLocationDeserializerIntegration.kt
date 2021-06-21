@@ -1,10 +1,14 @@
 package aws.sdk.kotlin.codegen.customization.s3
 
+import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
+import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClientGenerator
+import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
  * Registers an integration that replaces the codegened GetBucketLocationDeserializer with
@@ -13,6 +17,9 @@ import software.amazon.smithy.model.shapes.OperationShape
 class GetBucketLocationDeserializerIntegration : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(SectionWriterBinding(HttpProtocolClientGenerator.OperationDeserializer, overrideGetBucketLocationDeserializerWriter))
+
+    override fun enabledForService(model: Model, settings: KotlinSettings) =
+        model.expectShape<ServiceShape>(settings.service).isS3
 
     private val overrideGetBucketLocationDeserializerWriter = SectionWriter { writer, default ->
         val op: OperationShape = checkNotNull(writer.getContext(HttpProtocolClientGenerator.OperationDeserializer.Operation) as OperationShape?) {
