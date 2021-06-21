@@ -26,7 +26,7 @@ class AwsJsonProtocolMiddleware(
         super.addImportsAndDependencies(writer)
         val awsJsonProtocolSymbol = buildSymbol {
             name = "AwsJsonProtocol"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_JSON_PROTOCOLS)
+            namespace(AwsKotlinDependency.AWS_JSON_PROTOCOLS)
         }
 
         writer.addImport(awsJsonProtocolSymbol)

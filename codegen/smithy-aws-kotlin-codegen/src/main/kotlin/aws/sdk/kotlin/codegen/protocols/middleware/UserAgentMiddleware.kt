@@ -19,16 +19,16 @@ class UserAgentMiddleware : ProtocolMiddleware {
 
     private val uaSymbol = buildSymbol {
         name = "AwsUserAgentMetadata"
-        namespace(AwsKotlinDependency.AWS_CLIENT_RT_HTTP)
+        namespace(AwsKotlinDependency.AWS_HTTP)
     }
 
     private val apiMetaSymbol = buildSymbol {
         name = "ApiMetadata"
-        namespace(AwsKotlinDependency.AWS_CLIENT_RT_HTTP)
+        namespace(AwsKotlinDependency.AWS_HTTP)
     }
     private val featSymbol = buildSymbol {
         name = "UserAgent"
-        namespace(AwsKotlinDependency.AWS_CLIENT_RT_HTTP, subpackage = "middleware")
+        namespace(AwsKotlinDependency.AWS_HTTP, subpackage = "middleware")
     }
 
     override fun renderProperties(writer: KotlinWriter) {
