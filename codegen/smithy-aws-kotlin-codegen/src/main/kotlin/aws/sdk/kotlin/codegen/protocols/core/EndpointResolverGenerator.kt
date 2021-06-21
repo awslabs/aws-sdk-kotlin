@@ -40,7 +40,7 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
         writer.addImport(AwsRuntimeTypes.Core.Endpoint.EndpointResolver)
         writer.addImport(AwsRuntimeTypes.Core.Endpoint.Endpoint)
         writer.addImport(AwsRuntimeTypes.Core.Endpoint.Internal.resolveEndpoint)
-        writer.addImport("ClientException", AwsKotlinDependency.AWS_CLIENT_RT_CORE)
+        writer.addImport("ClientException", AwsKotlinDependency.AWS_CORE)
 
         writer.openBlock("internal class DefaultEndpointResolver : EndpointResolver {", "}") {
             writer.openBlock("override suspend fun resolve(service: String, region: String): Endpoint {", "}") {

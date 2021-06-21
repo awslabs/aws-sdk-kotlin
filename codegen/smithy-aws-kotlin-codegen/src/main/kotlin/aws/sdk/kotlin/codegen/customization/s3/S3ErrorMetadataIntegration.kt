@@ -60,7 +60,7 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
         )
 
         delegator.runtimeDependencies.addAll(kotlinTestDependency.dependencies)
-        delegator.runtimeDependencies.addAll(AwsKotlinDependency.AWS_CLIENT_RT_TESTING.dependencies)
+        delegator.runtimeDependencies.addAll(AwsKotlinDependency.AWS_TESTING.dependencies)
     }
 
     override fun customizeMiddleware(

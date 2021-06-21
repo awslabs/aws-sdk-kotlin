@@ -38,7 +38,7 @@ open class AwsHttpProtocolClientGenerator(
     override val defaultHttpClientEngineSymbol: Symbol
         get() = buildSymbol {
             name = "CrtHttpEngine"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_CRT_HTTP_ENGINE)
+            namespace(AwsKotlinDependency.AWS_CRT_HTTP_ENGINE)
         }
 
     override fun render(writer: KotlinWriter) {
@@ -76,11 +76,11 @@ open class AwsHttpProtocolClientGenerator(
         // FIXME - we likely need a way to let customizations modify/override this
         // FIXME - we also need a way to tie in config properties added via integrations that need to influence the context
         writer.addImport(RuntimeTypes.Core.ExecutionContext)
-        writer.addImport("SdkClientOption", KotlinDependency.CLIENT_RT_CORE, "${KotlinDependency.CLIENT_RT_CORE.namespace}.client")
-        writer.addImport("resolveRegionForOperation", AwsKotlinDependency.AWS_CLIENT_RT_REGIONS)
+        writer.addImport("SdkClientOption", KotlinDependency.CORE, "${KotlinDependency.CORE.namespace}.client")
+        writer.addImport("resolveRegionForOperation", AwsKotlinDependency.AWS_REGIONS)
         writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
         writer.addImport(AwsRuntimeTypes.Core.AwsClientOption)
-        writer.addImport("putIfAbsent", KotlinDependency.CLIENT_RT_UTILS)
+        writer.addImport("putIfAbsent", KotlinDependency.UTILS)
 
         writer.dokka("merge the defaults configured for the service into the execution context before firing off a request")
         writer.openBlock("private suspend fun mergeServiceDefaults(ctx: ExecutionContext) {", "}") {

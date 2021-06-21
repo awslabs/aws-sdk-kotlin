@@ -6,11 +6,11 @@ package aws.sdk.kotlin.example
 
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.*
+import aws.smithy.kotlin.runtime.content.ByteStream
+import aws.smithy.kotlin.runtime.content.fromFile
+import aws.smithy.kotlin.runtime.content.writeToFile
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
-import software.aws.clientrt.content.ByteStream
-import software.aws.clientrt.content.fromFile
-import software.aws.clientrt.content.writeToFile
 import java.io.File
 import java.nio.file.Files
 

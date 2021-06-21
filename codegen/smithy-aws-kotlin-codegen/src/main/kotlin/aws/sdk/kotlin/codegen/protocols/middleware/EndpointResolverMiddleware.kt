@@ -20,7 +20,7 @@ class EndpointResolverMiddleware(private val ctx: ProtocolGenerator.GenerationCo
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         val resolverFeatureSymbol = buildSymbol {
             name = "ServiceEndpointResolver"
-            namespace(AwsKotlinDependency.AWS_CLIENT_RT_HTTP, subpackage = "middleware")
+            namespace(AwsKotlinDependency.AWS_HTTP, subpackage = "middleware")
         }
 
         // generated symbol
