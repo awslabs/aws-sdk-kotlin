@@ -35,28 +35,28 @@ val AWS_CLIENT_RT_VERSION: String = getDefaultRuntimeVersion()
  * Container object for AWS specific dependencies
  */
 object AwsKotlinDependency {
-    val AWS_CLIENT_RT_CORE = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-client-rt", AWS_CLIENT_RT_VERSION)
-    val AWS_CLIENT_RT_HTTP = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.http", AWS_CLIENT_RT_GROUP, "http", AWS_CLIENT_RT_VERSION)
-    val AWS_CLIENT_RT_AUTH = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_AUTH_NS, AWS_CLIENT_RT_GROUP, "auth", AWS_CLIENT_RT_VERSION)
-    val AWS_CLIENT_RT_TESTING = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "testing", AWS_CLIENT_RT_VERSION)
-    val AWS_CLIENT_RT_REGIONS = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_REGIONS_NS, AWS_CLIENT_RT_GROUP, "regions", AWS_CLIENT_RT_VERSION)
-    val AWS_CLIENT_RT_JSON_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.json", AWS_CLIENT_RT_GROUP, "aws-json-protocols", AWS_CLIENT_RT_VERSION)
-    val AWS_CLIENT_RT_XML_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.xml", AWS_CLIENT_RT_GROUP, "aws-xml-protocols", AWS_CLIENT_RT_VERSION)
-    val AWS_CLIENT_RT_CRT_HTTP_ENGINE = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http.engine.crt", AWS_CLIENT_RT_GROUP, "http-client-engine-crt", AWS_CLIENT_RT_VERSION)
+    val AWS_CORE = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-core", AWS_CLIENT_RT_VERSION)
+    val AWS_HTTP = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.http", AWS_CLIENT_RT_GROUP, "http", AWS_CLIENT_RT_VERSION)
+    val AWS_AUTH = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_AUTH_NS, AWS_CLIENT_RT_GROUP, "auth", AWS_CLIENT_RT_VERSION)
+    val AWS_TESTING = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "testing", AWS_CLIENT_RT_VERSION)
+    val AWS_REGIONS = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_REGIONS_NS, AWS_CLIENT_RT_GROUP, "regions", AWS_CLIENT_RT_VERSION)
+    val AWS_JSON_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.json", AWS_CLIENT_RT_GROUP, "aws-json-protocols", AWS_CLIENT_RT_VERSION)
+    val AWS_XML_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.xml", AWS_CLIENT_RT_GROUP, "aws-xml-protocols", AWS_CLIENT_RT_VERSION)
+    val AWS_CRT_HTTP_ENGINE = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http.engine.crt", AWS_CLIENT_RT_GROUP, "http-client-engine-crt", AWS_CLIENT_RT_VERSION)
 }
 
 // remap aws-sdk-kotlin dependencies to project notation
 // NOTE: the lazy wrapper is required here, see: https://github.com/awslabs/aws-sdk-kotlin/issues/95
 private val sameProjectDeps: Map<KotlinDependency, String> by lazy {
     mapOf(
-        AwsKotlinDependency.AWS_CLIENT_RT_CORE to """project(":client-runtime:aws-client-rt")""",
-        AwsKotlinDependency.AWS_CLIENT_RT_HTTP to """project(":client-runtime:protocols:http")""",
-        AwsKotlinDependency.AWS_CLIENT_RT_AUTH to """project(":client-runtime:auth")""",
-        AwsKotlinDependency.AWS_CLIENT_RT_REGIONS to """project(":client-runtime:regions")""",
-        AwsKotlinDependency.AWS_CLIENT_RT_JSON_PROTOCOLS to """project(":client-runtime:protocols:aws-json-protocols")""",
-        AwsKotlinDependency.AWS_CLIENT_RT_XML_PROTOCOLS to """project(":client-runtime:protocols:aws-xml-protocols")""",
-        AwsKotlinDependency.AWS_CLIENT_RT_TESTING to """project(":client-runtime:testing")""",
-        AwsKotlinDependency.AWS_CLIENT_RT_CRT_HTTP_ENGINE to """project(":client-runtime:http-client-engine-crt")""",
+        AwsKotlinDependency.AWS_CORE to """project(":aws-runtime:aws-core")""",
+        AwsKotlinDependency.AWS_HTTP to """project(":aws-runtime:protocols:http")""",
+        AwsKotlinDependency.AWS_AUTH to """project(":aws-runtime:auth")""",
+        AwsKotlinDependency.AWS_REGIONS to """project(":aws-runtime:regions")""",
+        AwsKotlinDependency.AWS_JSON_PROTOCOLS to """project(":aws-runtime:protocols:aws-json-protocols")""",
+        AwsKotlinDependency.AWS_XML_PROTOCOLS to """project(":aws-runtime:protocols:aws-xml-protocols")""",
+        AwsKotlinDependency.AWS_TESTING to """project(":aws-runtime:testing")""",
+        AwsKotlinDependency.AWS_CRT_HTTP_ENGINE to """project(":aws-runtime:http-client-engine-crt")""",
     )
 }
 

@@ -222,7 +222,7 @@ task("generateSmithyBuild") {
 
 tasks.create<SmithyBuild>("generateSdk") {
     group = "codegen"
-    // ensure the generated clients use the same version of the runtime as the aws client-runtime
+    // ensure the generated clients use the same version of the runtime as the aws aws-runtime
     val smithyKotlinVersion: String by project
     doFirst {
         System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinVersion)

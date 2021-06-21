@@ -28,14 +28,14 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
             symbol = buildSymbol {
                 name = "EndpointResolver"
-                namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE, subpackage = "endpoint")
+                namespace(AwsKotlinDependency.AWS_CORE, subpackage = "endpoint")
             }
         }
 
         init {
             val regionConfigSymbol = buildSymbol {
                 name = "RegionConfig"
-                namespace(AwsKotlinDependency.AWS_CLIENT_RT_REGIONS)
+                namespace(AwsKotlinDependency.AWS_REGIONS)
             }
 
             RegionProp = ClientConfigProperty.String(
@@ -48,7 +48,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
             val authConfigSymbol = buildSymbol {
                 name = "AuthConfig"
-                namespace(AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+                namespace(AwsKotlinDependency.AWS_AUTH)
             }
 
             SigningRegionProp = ClientConfigProperty.String(
@@ -63,7 +63,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             CredentialsProviderProp = ClientConfigProperty {
                 symbol = buildSymbol {
                     name = "CredentialsProvider"
-                    namespace(AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+                    namespace(AwsKotlinDependency.AWS_AUTH)
                 }
                 baseClass = authConfigSymbol
                 documentation = """
