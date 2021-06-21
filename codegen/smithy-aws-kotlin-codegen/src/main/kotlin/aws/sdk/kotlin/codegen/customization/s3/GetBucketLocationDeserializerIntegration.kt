@@ -19,8 +19,8 @@ class GetBucketLocationDeserializerIntegration : KotlinIntegration {
         // For the S3 GetBucketLocation operation, substitute the codegened deserializer for a hand-written variant.
         // In the future there may be a specific trait to address this specific issue.  See https://github.com/awslabs/smithy/pull/839.
         private val overrideGetBucketLocationDeserializerWriter = SectionWriter { writer, default ->
-            val op: OperationShape = checkNotNull(writer.getContext(HttpProtocolClientGenerator.OperationDeserializer.Operation) as OperationShape?) {
-                "Expected ${HttpProtocolClientGenerator.OperationDeserializer.Operation} key in context."
+            val op: OperationShape = checkNotNull(writer.getContext(HttpProtocolClientGenerator.OperationDeserializerBinding.Operation) as OperationShape?) {
+                "Expected ${HttpProtocolClientGenerator.OperationDeserializerBinding.Operation} key in context."
             }
 
             if (op.id.name == "GetBucketLocation") {
@@ -32,7 +32,7 @@ class GetBucketLocationDeserializerIntegration : KotlinIntegration {
     }
 
     override val sectionWriters: List<SectionWriterBinding> =
-        listOf(SectionWriterBinding(HttpProtocolClientGenerator.OperationDeserializer, overrideGetBucketLocationDeserializerWriter))
+        listOf(SectionWriterBinding(HttpProtocolClientGenerator.OperationDeserializerBinding, overrideGetBucketLocationDeserializerWriter))
 
     override fun enabledForService(model: Model, settings: KotlinSettings) =
         model.expectShape<ServiceShape>(settings.service).isS3

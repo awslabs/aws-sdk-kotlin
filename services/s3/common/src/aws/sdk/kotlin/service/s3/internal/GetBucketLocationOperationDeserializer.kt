@@ -30,7 +30,7 @@ internal class GetBucketLocationOperationDeserializer: HttpDeserialize<GetBucket
 private suspend fun deserializeGetBucketLocationOperationBody(builder: GetBucketLocationResponse.DslBuilder, payload: ByteArray) {
     val dom = parseDom(software.aws.clientrt.serde.xml.xmlStreamReader(payload))
     check(dom.name.local == "LocationConstraint") { "Expected top-level tag of 'LocationConstraint' but found ${dom.name}." }
-    checkNotNull(dom.text) { "Did not receive a value for 'LocationConstraint' in response." }
+    val rawLocationConstraint = checkNotNull(dom.text) { "Did not receive a value for 'LocationConstraint' in response." }
 
-    builder.locationConstraint = BucketLocationConstraint.fromValue(dom.text!!)
+    builder.locationConstraint = BucketLocationConstraint.fromValue(rawLocationConstraint)
 }
