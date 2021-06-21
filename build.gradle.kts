@@ -65,8 +65,8 @@ tasks.dokkaHtmlMultiModule {
     )
 
     val excludeFromDocumentation = listOf(
-        project(":client-runtime:testing"),
-        project(":client-runtime:crt-util")
+        project(":aws-runtime:testing"),
+        project(":aws-runtime:crt-util")
     )
     removeChildTasks(excludeFromDocumentation)
 }
@@ -79,7 +79,7 @@ dependencies {
 
 val lintPaths = listOf(
     "codegen/smithy-aws-kotlin-codegen/**/*.kt",
-    "client-runtime/**/*.kt",
+    "aws-runtime/**/*.kt",
     "examples/**/*.kt",
     "dokka-aws/**/*.kt"
 )

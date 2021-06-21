@@ -24,6 +24,17 @@ dependencies {
     implementation(project(":codegen:smithy-aws-kotlin-codegen"))
 }
 
+// The following section exposes Smithy protocol test suites as gradle test targets
+// for the configured protocols in [enabledProtocols].
+val enabledProtocols = listOf(
+    ProtocolTest("aws-json-10", "aws.protocoltests.json10#JsonRpc10"),
+    ProtocolTest("aws-json-11", "aws.protocoltests.json#JsonProtocol"),
+    ProtocolTest("aws-restjson", "aws.protocoltests.restjson#RestJson"),
+    ProtocolTest("aws-restxml", "aws.protocoltests.restxml#RestXml"),
+    ProtocolTest("aws-restxml-xmlns", "aws.protocoltests.restxml.xmlns#RestXmlWithNamespace"),
+    ProtocolTest("aws-query", "aws.protocoltests.query#AwsQuery")
+)
+
 // This project doesn't produce a JAR.
 tasks["jar"].enabled = false
 
@@ -31,13 +42,30 @@ tasks["jar"].enabled = false
 // from smithy-aws-kotlin-codegen.
 tasks["smithyBuildJar"].enabled = false
 
+task("generateSmithyBuild") {
+    group = "codegen"
+    description = "generate smithy-build.json"
+    val buildFile = projectDir.resolve("smithy-build.json")
+    doFirst {
+        buildFile.writeText(generateSmithyBuild(enabledProtocols))
+    }
+    outputs.file(buildFile)
+}
+
+// Remove generated model file for clean
+tasks["clean"].doFirst {
+    delete("smithy-build.json")
+}
+
 tasks.create<SmithyBuild>("buildSdk") {
-    // ensure the generated clients use the same version of the runtime as the aws client-runtime
+    // ensure the generated clients use the same version of the runtime as the aws aws-runtime
     val smithyKotlinVersion: String by project
     doFirst {
         System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinVersion)
     }
     addRuntimeClasspath = true
+    dependsOn(tasks["generateSmithyBuild"])
+    inputs.file(projectDir.resolve("smithy-build.json"))
 }
 
 // Run the `buildSdk` automatically.
@@ -45,6 +73,58 @@ tasks["build"].finalizedBy(tasks["buildSdk"])
 
 // force rebuild every time while developing
 tasks["buildSdk"].outputs.upToDateWhen { false }
+
+data class ProtocolTest(val projectionName: String, val serviceShapeId: String) {
+    val packageName: String
+        get() = projectionName.toLowerCase().filter { it.isLetterOrDigit() }
+}
+
+
+// Generates a smithy-build.json file by creating a new projection.
+// The generated smithy-build.json file is not committed to git since
+// it's rebuilt each time codegen is performed.
+fun generateSmithyBuild(tests: List<ProtocolTest>): String {
+    val projections = tests.joinToString(",") { test ->
+        """
+        "${test.projectionName}": {
+          "transforms": [
+            {
+              "name": "includeServices",
+              "args": {
+                "services": [
+                  "${test.serviceShapeId}"
+                ]
+              }
+            }
+          ],
+          "plugins": {
+            "kotlin-codegen": {
+              "service": "${test.serviceShapeId}",
+              "package": {
+                "name": "aws.sdk.kotlin.protocoltest.${test.packageName}",
+                "version": "1.0"
+              },
+              "build": {
+                "rootProject": true,
+                "optInAnnotations": [
+                  "aws.smithy.kotlin.runtime.util.InternalApi",
+                  "aws.sdk.kotlin.runtime.InternalSdkApi"
+                ]
+              }
+            }
+          }
+        }
+        """
+    }
+    return """
+    {
+        "version": "1.0",
+        "projections": {
+            $projections
+        }
+    }
+    """.trimIndent()
+}
 
 
 open class ProtocolTestTask : DefaultTask() {
@@ -61,7 +141,7 @@ open class ProtocolTestTask : DefaultTask() {
     var plugin: String = ""
 
     @TaskAction
-    fun runTests(){
+    fun runTests() {
         require(protocol.isNotEmpty()) { "protocol name must be specified" }
         require(plugin.isNotEmpty()) { "plugin name must be specified" }
 
@@ -84,22 +164,13 @@ open class ProtocolTestTask : DefaultTask() {
     }
 }
 
-// The following section exposes Smithy protocol test suites as gradle test targets
-// for the configured protocols in [enabledProtocols].
-val enabledProtocols = listOf(
-    "aws-json-10",
-    "aws-json-11",
-    "aws-restjson",
-    "aws-restxml",
-    "aws-restxml-xmlns",
-    "aws-query"
-)
+
 
 enabledProtocols.forEach {
-    tasks.register<ProtocolTestTask>("testProtocol-${it}") {
+    tasks.register<ProtocolTestTask>("testProtocol-${it.projectionName}") {
         dependsOn(tasks.build)
         group = "Verification"
-        protocol = it
+        protocol = it.projectionName
         plugin = "kotlin-codegen"
     }
 }

@@ -8,17 +8,17 @@ import aws.sdk.kotlin.runtime.*
 import aws.sdk.kotlin.runtime.http.*
 import aws.sdk.kotlin.services.s3.model.S3ErrorMetadata
 import aws.sdk.kotlin.services.s3.model.S3Exception
-import software.aws.clientrt.ServiceErrorMetadata
-import software.aws.clientrt.http.*
-import software.aws.clientrt.http.operation.HttpDeserialize
-import software.aws.clientrt.http.operation.HttpOperationContext
-import software.aws.clientrt.http.operation.SdkHttpOperation
-import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.serde.*
-import software.aws.clientrt.serde.xml.XmlDeserializer
-import software.aws.clientrt.serde.xml.XmlSerialName
-import software.aws.clientrt.util.AttributeKey
-import software.aws.clientrt.util.Attributes
+import aws.smithy.kotlin.runtime.ServiceErrorMetadata
+import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.operation.HttpDeserialize
+import aws.smithy.kotlin.runtime.http.operation.HttpOperationContext
+import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.serde.*
+import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
+import aws.smithy.kotlin.runtime.serde.xml.XmlSerialName
+import aws.smithy.kotlin.runtime.util.AttributeKey
+import aws.smithy.kotlin.runtime.util.Attributes
 
 /**
  * Http feature that inspects S3 responses and throws the appropriate modeled service error that matches

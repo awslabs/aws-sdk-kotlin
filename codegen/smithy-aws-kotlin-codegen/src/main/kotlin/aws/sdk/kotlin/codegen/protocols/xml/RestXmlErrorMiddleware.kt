@@ -20,6 +20,6 @@ class RestXmlErrorMiddleware(
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         super.addImportsAndDependencies(writer)
-        writer.addImport("RestXmlError", AwsKotlinDependency.AWS_CLIENT_RT_XML_PROTOCOLS)
+        writer.addImport("RestXmlError", AwsKotlinDependency.AWS_XML_PROTOCOLS)
     }
 }
