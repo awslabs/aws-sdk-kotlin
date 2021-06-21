@@ -33,7 +33,7 @@ open class AwsSignatureVersion4(val signingServiceName: String) : ProtocolMiddle
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         writer.addImport(AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware)
-        writer.addImport("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+        writer.addImport("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_AUTH)
     }
 
     override fun renderConfigure(writer: KotlinWriter) {

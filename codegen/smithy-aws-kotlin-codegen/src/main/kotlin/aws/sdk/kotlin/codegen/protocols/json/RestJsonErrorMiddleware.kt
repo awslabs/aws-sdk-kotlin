@@ -20,6 +20,6 @@ class RestJsonErrorMiddleware(
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         super.addImportsAndDependencies(writer)
-        writer.addImport("RestJsonError", AwsKotlinDependency.AWS_CLIENT_RT_JSON_PROTOCOLS)
+        writer.addImport("RestJsonError", AwsKotlinDependency.AWS_JSON_PROTOCOLS)
     }
 }

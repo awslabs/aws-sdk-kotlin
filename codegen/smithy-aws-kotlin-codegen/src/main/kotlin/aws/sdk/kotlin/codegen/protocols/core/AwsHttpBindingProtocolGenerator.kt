@@ -23,7 +23,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
 
     override val exceptionBaseClassSymbol: Symbol = buildSymbol {
         name = "AwsServiceException"
-        namespace(AwsKotlinDependency.AWS_CLIENT_RT_CORE)
+        namespace(AwsKotlinDependency.AWS_CORE)
     }
 
     override fun getHttpProtocolClientGenerator(ctx: ProtocolGenerator.GenerationContext): HttpProtocolClientGenerator {

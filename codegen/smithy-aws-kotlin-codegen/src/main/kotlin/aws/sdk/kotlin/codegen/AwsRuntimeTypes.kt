@@ -18,26 +18,26 @@ import software.amazon.smithy.kotlin.codegen.model.namespace
  */
 object AwsRuntimeTypes {
     object Core {
-        val AwsClientOption = runtimeSymbol("AwsClientOption", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "client")
-        val AuthAttributes = runtimeSymbol("AuthAttributes", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "execution")
-        val AwsErrorMetadata = runtimeSymbol("AwsErrorMetadata", AwsKotlinDependency.AWS_CLIENT_RT_CORE)
+        val AwsClientOption = runtimeSymbol("AwsClientOption", AwsKotlinDependency.AWS_CORE, "client")
+        val AuthAttributes = runtimeSymbol("AuthAttributes", AwsKotlinDependency.AWS_CORE, "execution")
+        val AwsErrorMetadata = runtimeSymbol("AwsErrorMetadata", AwsKotlinDependency.AWS_CORE)
 
         object Endpoint {
-            val EndpointResolver = runtimeSymbol("EndpointResolver", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
-            val Endpoint = runtimeSymbol("Endpoint", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint")
+            val EndpointResolver = runtimeSymbol("EndpointResolver", AwsKotlinDependency.AWS_CORE, "endpoint")
+            val Endpoint = runtimeSymbol("Endpoint", AwsKotlinDependency.AWS_CORE, "endpoint")
 
             object Internal {
-                val CredentialScope = runtimeSymbol("CredentialScope", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint.internal")
-                val EndpointDefinition = runtimeSymbol("EndpointDefinition", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint.internal")
-                val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint.internal")
-                val resolveEndpoint = runtimeSymbol("resolveEndpoint", AwsKotlinDependency.AWS_CLIENT_RT_CORE, "endpoint.internal")
+                val CredentialScope = runtimeSymbol("CredentialScope", AwsKotlinDependency.AWS_CORE, "endpoint.internal")
+                val EndpointDefinition = runtimeSymbol("EndpointDefinition", AwsKotlinDependency.AWS_CORE, "endpoint.internal")
+                val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_CORE, "endpoint.internal")
+                val resolveEndpoint = runtimeSymbol("resolveEndpoint", AwsKotlinDependency.AWS_CORE, "endpoint.internal")
             }
         }
     }
 
     object Auth {
-        val AwsSigV4SigningMiddleware = runtimeSymbol("AwsSigV4SigningMiddleware", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
-        val AwsSignedBodyHeaderType = runtimeSymbol("AwsSignedBodyHeaderType", AwsKotlinDependency.AWS_CLIENT_RT_AUTH)
+        val AwsSigV4SigningMiddleware = runtimeSymbol("AwsSigV4SigningMiddleware", AwsKotlinDependency.AWS_AUTH)
+        val AwsSignedBodyHeaderType = runtimeSymbol("AwsSignedBodyHeaderType", AwsKotlinDependency.AWS_AUTH)
     }
 }
 
