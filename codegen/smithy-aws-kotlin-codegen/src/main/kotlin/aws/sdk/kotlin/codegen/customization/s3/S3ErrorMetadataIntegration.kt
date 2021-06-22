@@ -21,9 +21,7 @@ import software.amazon.smithy.model.shapes.ServiceShape
 class S3ErrorMetadataIntegration : KotlinIntegration {
 
     override val sectionWriters: List<SectionWriterBinding>
-        get() = listOf(
-            SectionWriterBinding(ExceptionBaseClassGenerator.ExceptionBaseClassSection, addSdkErrorMetadataWriter)
-        )
+        get() = listOf(SectionWriterBinding(ExceptionBaseClassGenerator.ExceptionBaseClassSection, addSdkErrorMetadataWriter))
 
     override fun enabledForService(model: Model, settings: KotlinSettings) =
         model.expectShape<ServiceShape>(settings.service).isS3
