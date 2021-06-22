@@ -17,7 +17,6 @@ import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlin.jvm.Volatile
 
 /**
  * Implements the CRT stream response interface which proxies the response from the CRT to the SDK
@@ -45,9 +44,7 @@ internal class SdkStreamResponseHandler(
             else -> false
         }
 
-    // flag that controls whether data is sent downstream or discarded
-    @Volatile
-    private var consumerActive = true
+    private var streamCompleted = false
 
     /**
      * Called by the response read channel as data is consumed
@@ -120,19 +117,13 @@ internal class SdkStreamResponseHandler(
     override fun onResponseBody(stream: HttpStream, bodyBytesIn: Buffer): Int {
         lock.withLock { crtStream = stream }
 
-        return when (consumerActive) {
-            true -> {
-                // we should have created a response channel if we expected a body
-                val sdkRespChan = checkNotNull(sdkBody) { "unexpected response body" }
-                sdkRespChan.write(bodyBytesIn)
+        // we should have created a response channel if we expected a body
+        val sdkRespChan = checkNotNull(sdkBody) { "unexpected response body" }
+        sdkRespChan.write(bodyBytesIn)
 
-                // explicit window management is done in BufferedReadChannel which calls `onDataConsumed`
-                // as data is read from the channel
-                0
-            }
-            // downstream consumer is gone, discard and increment the window to keep data flowing until exhausted
-            false -> bodyBytesIn.len
-        }
+        // explicit window management is done in BufferedReadChannel which calls `onDataConsumed`
+        // as data is read from the channel
+        return 0
     }
 
     override fun onResponseComplete(stream: HttpStream, errorCode: Int) {
@@ -140,6 +131,7 @@ internal class SdkStreamResponseHandler(
         // doesn't call incrementWindow on a resource that has been free'd
         lock.withLock {
             crtStream = null
+            streamCompleted = true
         }
 
         // release it back to the pool, this is safe to do now since the body (and any other response data)
@@ -168,19 +160,15 @@ internal class SdkStreamResponseHandler(
      * Invoked only after the consumer is finished with the response and it is safe to cleanup resources
      */
     internal fun complete() {
-        /*
-            We have no way of cancelling the stream, we have to drive it to exhaustion...
+        // We have no way of cancelling the stream, we have to drive it to exhaustion OR close the connection.
+        // At this point we know it's safe to release resources so if the stream hasn't completed yet
+        // we forcefully close the connection. This can happen when the stream's window is full and it's waiting
+        // on the window to be incremented to proceed (i.e. the user didn't consume the stream for whatever reason
+        // and more data is pending arrival).
+        val forceClose = lock.withLock { !streamCompleted }
 
-            At this point we don't know if the consumer read the stream or not. If they did, updating the active
-            flag will have no effect and the stream will be null already anyway.
-
-            If they _didn't_ consume the stream then we must exhaust it for them to release it.
-         */
-        consumerActive = false
-        lock.withLock {
-            // just in case the window is full we need to unblock it. Any data that flows after this point will be
-            // discarded
-            crtStream?.incrementWindow(Int.MAX_VALUE)
+        if (forceClose) {
+            conn.shutdown()
         }
     }
 }
