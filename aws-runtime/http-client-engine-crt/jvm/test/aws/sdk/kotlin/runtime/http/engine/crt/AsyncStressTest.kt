@@ -31,7 +31,8 @@ class AsyncStressTest : TestWithLocalServer() {
     override val server = embeddedServer(CIO, serverPort) {
         routing {
             get("/largeResponse") {
-                val respSize = 1024 * 32
+                // something that fills the stream window...
+                val respSize = DEFAULT_WINDOW_SIZE * 2
                 val text = "testing"
                 call.respondText(text.repeat(respSize / text.length))
             }
@@ -71,6 +72,10 @@ class AsyncStressTest : TestWithLocalServer() {
     @OptIn(ExperimentalTime::class)
     @Test
     fun testStreamNotConsumed() = runSuspendTest {
+        // test that filling the stream window and not consuming the body stream still cleans up resources
+        // appropriately and allows requests to proceed (a stream that isn't consumed will be in a stuck state
+        // if the window is full and never incremented again, this can lead to all connections being consumed
+        // and the engine to no longer make further requests)
         val client = sdkHttpClient(CrtHttpEngine(HttpClientEngineConfig()))
         val request = HttpRequestBuilder().apply {
             url {
@@ -82,7 +87,7 @@ class AsyncStressTest : TestWithLocalServer() {
         }
 
         withTimeout(Duration.seconds(5)) {
-            repeat(100) {
+            repeat(1_000) {
                 async {
                     try {
                         val call = client.call(request)
