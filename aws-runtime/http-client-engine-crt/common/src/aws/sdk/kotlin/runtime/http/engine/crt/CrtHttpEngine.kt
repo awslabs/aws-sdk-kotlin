@@ -15,6 +15,7 @@ import aws.smithy.kotlin.runtime.http.engine.callContext
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.time.Instant
+import kotlinx.coroutines.job
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -50,6 +51,10 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
             // LIFETIME: connection will be released back to the pool/manager when
             // the response completes OR on exception
             val respHandler = SdkStreamResponseHandler(conn)
+            callContext.job.invokeOnCompletion {
+                // ensures the stream is driven to completion regardless of what the downstream consumer does
+                respHandler.complete()
+            }
 
             val stream = conn.makeRequest(engineRequest, respHandler)
             stream.activate()

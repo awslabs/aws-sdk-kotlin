@@ -20,8 +20,11 @@ import io.ktor.routing.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
 import kotlinx.coroutines.async
+import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
 import kotlin.test.Test
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
 class AsyncStressTest : TestWithLocalServer() {
 
@@ -36,7 +39,7 @@ class AsyncStressTest : TestWithLocalServer() {
     }
 
     @Test
-    fun concurrentRequestTest() = runSuspendTest {
+    fun testConcurrentRequests() = runSuspendTest {
         // https://github.com/awslabs/aws-sdk-kotlin/issues/170
         val client = sdkHttpClient(CrtHttpEngine(HttpClientEngineConfig()))
         val request = HttpRequestBuilder().apply {
@@ -54,7 +57,6 @@ class AsyncStressTest : TestWithLocalServer() {
 
                     val call = client.call(request)
                     yield()
-                    // FIXME - this should work WITHOUT having to consume the body
                     call.response.body.readAll()
                     call.complete()
                 } catch (ex: Exception) {
@@ -63,6 +65,36 @@ class AsyncStressTest : TestWithLocalServer() {
                 }
             }
             yield()
+        }
+    }
+
+    @OptIn(ExperimentalTime::class)
+    @Test
+    fun testStreamNotConsumed() = runSuspendTest {
+        val client = sdkHttpClient(CrtHttpEngine(HttpClientEngineConfig()))
+        val request = HttpRequestBuilder().apply {
+            url {
+                scheme = Protocol.HTTP
+                method = HttpMethod.GET
+                host = testHost
+                path = "/largeResponse"
+            }
+        }
+
+        withTimeout(Duration.seconds(5)) {
+            repeat(100) {
+                async {
+                    try {
+                        val call = client.call(request)
+                        yield()
+                        call.complete()
+                    } catch (ex: Exception) {
+                        println("exception on $it: $ex")
+                        throw ex
+                    }
+                }
+                yield()
+            }
         }
     }
 }
