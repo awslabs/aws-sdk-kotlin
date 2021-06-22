@@ -3,11 +3,16 @@ name: Snyk
 on:
   push:
     branches: [ main ]
+    paths:
+      - '**gradle**' # build.gradle.kts, settings.gradle.kts, gradle.properties, etc.
+      - '**snyk**' # .snyk, snyk-scan.yml
   pull_request:
     branches: [ main ]
+    paths:
+      - '**gradle**'
+      - '**snyk**'
   schedule:
-    # 17:30 UTC (9:30am/10:30am Pacific) every Tuesday
-    - cron:  '30 17 * * 2'
+    - cron:  '30 17 * * 2' # 17:30 UTC (9:30am/10:30am Pacific) every Tuesday
 
 jobs:
   snyk:
