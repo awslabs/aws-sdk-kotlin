@@ -21,6 +21,12 @@ import aws.smithy.kotlin.runtime.util.AttributeKey
 import aws.smithy.kotlin.runtime.util.Attributes
 
 /**
+ * Default header name identifying secondary request ID
+ * See https://aws.amazon.com/premiumsupport/knowledge-center/s3-request-id-values
+ */
+private const val X_AMZN_REQUEST_ID_2_HEADER: String = "x-amz-id-2"
+
+/**
  * Http feature that inspects S3 responses and throws the appropriate modeled service error that matches
  *
  * @property registry Modeled exceptions registered with the feature. All responses will be inspected to
@@ -30,10 +36,10 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
     private val emptyByteArray: ByteArray = ByteArray(0)
 
     internal data class S3Error(
-        val requestId: String?,
-        val requestId2: String?,
-        val code: String?,
-        val message: String?
+        val requestId: String? = null,
+        val requestId2: String? = null,
+        val code: String? = null,
+        val message: String? = null
     )
 
     public class Config {
@@ -71,7 +77,11 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
 
             // attempt to match the AWS error code
             val errorResponse = try {
-                parseErrorResponse(payload ?: emptyByteArray)
+                if (payload == null && httpResponse.status == HttpStatusCode.NotFound) {
+                    S3Error(code = "NotFound")
+                } else {
+                    parseErrorResponse(payload ?: emptyByteArray)
+                }
             } catch (ex: Exception) {
                 throw UnknownServiceErrorException(
                     "failed to parse response as Xml protocol error",
@@ -105,8 +115,8 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
             exception.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
         }
         if (exception is S3Exception) {
-            exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, response.headers["x-amz-id-2"])
-            exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, errorDetails?.requestId2)
+            val requestId2 = errorDetails?.requestId2 ?: response.headers[X_AMZN_REQUEST_ID_2_HEADER]
+            exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, requestId2)
         }
     }
 
