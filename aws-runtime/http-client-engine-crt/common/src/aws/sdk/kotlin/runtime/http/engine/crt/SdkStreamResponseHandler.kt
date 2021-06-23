@@ -44,6 +44,8 @@ internal class SdkStreamResponseHandler(
             else -> false
         }
 
+    private var streamCompleted = false
+
     /**
      * Called by the response read channel as data is consumed
      * @param size the number of bytes consumed
@@ -129,6 +131,7 @@ internal class SdkStreamResponseHandler(
         // doesn't call incrementWindow on a resource that has been free'd
         lock.withLock {
             crtStream = null
+            streamCompleted = true
         }
 
         // release it back to the pool, this is safe to do now since the body (and any other response data)
@@ -151,5 +154,21 @@ internal class SdkStreamResponseHandler(
 
     internal suspend fun waitForResponse(): HttpResponse {
         return responseReady.receive()
+    }
+
+    /**
+     * Invoked only after the consumer is finished with the response and it is safe to cleanup resources
+     */
+    internal fun complete() {
+        // We have no way of cancelling the stream, we have to drive it to exhaustion OR close the connection.
+        // At this point we know it's safe to release resources so if the stream hasn't completed yet
+        // we forcefully close the connection. This can happen when the stream's window is full and it's waiting
+        // on the window to be incremented to proceed (i.e. the user didn't consume the stream for whatever reason
+        // and more data is pending arrival).
+        val forceClose = lock.withLock { !streamCompleted }
+
+        if (forceClose) {
+            conn.shutdown()
+        }
     }
 }
