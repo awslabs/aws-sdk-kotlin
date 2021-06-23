@@ -81,7 +81,9 @@ val lintPaths = listOf(
     "codegen/smithy-aws-kotlin-codegen/**/*.kt",
     "aws-runtime/**/*.kt",
     "examples/**/*.kt",
-    "dokka-aws/**/*.kt"
+    "dokka-aws/**/*.kt",
+    "services/**/*.kt",
+    "!services/*/generated-src/**/*.kt"
 )
 
 tasks.register<JavaExec>("ktlint") {

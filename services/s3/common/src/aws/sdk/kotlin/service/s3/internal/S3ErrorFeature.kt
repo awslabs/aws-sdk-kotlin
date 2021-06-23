@@ -36,10 +36,10 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
     private val emptyByteArray: ByteArray = ByteArray(0)
 
     internal data class S3Error(
-        val requestId: String?,
-        val requestId2: String?,
-        val code: String?,
-        val message: String?
+        val requestId: String? = null,
+        val requestId2: String? = null,
+        val code: String? = null,
+        val message: String? = null
     )
 
     public class Config {
@@ -78,7 +78,7 @@ internal class S3ErrorFeature(private val registry: ExceptionRegistry) : Feature
             // attempt to match the AWS error code
             val errorResponse = try {
                 if (payload == null && httpResponse.status == HttpStatusCode.NotFound) {
-                    S3Error(null, null, code = "NotFound", null)
+                    S3Error(code = "NotFound")
                 } else {
                     parseErrorResponse(payload ?: emptyByteArray)
                 }
