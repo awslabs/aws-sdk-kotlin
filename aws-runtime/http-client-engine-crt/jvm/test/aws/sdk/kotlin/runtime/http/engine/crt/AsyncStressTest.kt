@@ -32,7 +32,7 @@ class AsyncStressTest : TestWithLocalServer() {
         routing {
             get("/largeResponse") {
                 // something that fills the stream window...
-                val respSize = DEFAULT_WINDOW_SIZE * 2
+                val respSize = DEFAULT_WINDOW_SIZE_BYTES * 2
                 val text = "testing"
                 call.respondText(text.repeat(respSize / text.length))
             }

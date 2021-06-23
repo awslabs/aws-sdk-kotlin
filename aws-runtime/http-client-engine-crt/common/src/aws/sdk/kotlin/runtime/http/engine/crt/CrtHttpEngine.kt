@@ -19,7 +19,7 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-internal const val DEFAULT_WINDOW_SIZE: Int = 16 * 1024
+internal const val DEFAULT_WINDOW_SIZE_BYTES: Int = 16 * 1024
 
 /**
  * [HttpClientEngine] based on the AWS Common Runtime HTTP client
@@ -33,7 +33,7 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
         tlsContext = tlsCtx
         manualWindowManagement = true
         socketOptions = SocketOptions()
-        initialWindowSize = DEFAULT_WINDOW_SIZE
+        initialWindowSize = DEFAULT_WINDOW_SIZE_BYTES
         // TODO - max connections/timeouts/etc
     }
 
