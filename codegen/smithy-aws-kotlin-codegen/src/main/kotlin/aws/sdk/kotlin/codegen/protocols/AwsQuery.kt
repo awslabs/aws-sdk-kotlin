@@ -257,10 +257,7 @@ internal class AwsQueryErrorMiddleware(
         val errors = getModeledErrors()
 
         errors.forEach { errShape ->
-            val code = when {
-                errShape.hasTrait<AwsQueryErrorTrait>() -> errShape.expectTrait<AwsQueryErrorTrait>().code
-                else -> errShape.id.name
-            }
+            val code = errShape.getTrait<AwsQueryErrorTrait>()?.code ?: errShape.id.name
 
             val symbol = ctx.symbolProvider.toSymbol(errShape)
             val deserializerName = "${symbol.name}Deserializer"
