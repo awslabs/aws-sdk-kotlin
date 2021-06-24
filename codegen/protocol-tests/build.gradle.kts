@@ -32,7 +32,10 @@ val enabledProtocols = listOf(
     ProtocolTest("aws-restjson", "aws.protocoltests.restjson#RestJson"),
     ProtocolTest("aws-restxml", "aws.protocoltests.restxml#RestXml"),
     ProtocolTest("aws-restxml-xmlns", "aws.protocoltests.restxml.xmlns#RestXmlWithNamespace"),
-    ProtocolTest("aws-query", "aws.protocoltests.query#AwsQuery")
+    ProtocolTest("aws-query", "aws.protocoltests.query#AwsQuery"),
+
+    // service specific tests
+    ProtocolTest("apigateway", "com.amazonaws.apigateway#BackplaneControlService")
 )
 
 // This project doesn't produce a JAR.
