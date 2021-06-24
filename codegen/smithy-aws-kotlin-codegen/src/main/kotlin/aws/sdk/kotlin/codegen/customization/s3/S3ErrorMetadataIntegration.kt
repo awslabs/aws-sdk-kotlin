@@ -2,6 +2,7 @@ package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.Kotlin3PDependency
 import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
@@ -49,15 +50,7 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
         val packagePath = ctx.settings.pkg.name.namespaceToPath()
         delegator.fileManifest.writeFile("$DEFAULT_SOURCE_SET_ROOT$packagePath/model/S3ErrorMetadata.kt", contents)
 
-        val kotlinTestDependency = KotlinDependency(
-            GradleConfiguration.TestImplementation,
-            "org.jetbrains.kotlin",
-            "org.jetbrains.kotlin",
-            "kotlin-test",
-            "\$kotlinVersion"
-        )
-
-        delegator.runtimeDependencies.addAll(kotlinTestDependency.dependencies)
+        delegator.runtimeDependencies.addAll(Kotlin3PDependency.KOTLIN_TEST.dependencies)
         delegator.runtimeDependencies.addAll(AwsKotlinDependency.AWS_TESTING.dependencies)
     }
 
