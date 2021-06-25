@@ -4,8 +4,8 @@
  */
 package aws.sdk.kotlin.service.polly.internal
 
-/*import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import kotlin.test.**/
+import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import kotlin.test.*
 
 class PresignTest {
 

@@ -21,7 +21,7 @@ import software.amazon.smithy.model.shapes.ServiceShape
  */
 class PollyPresignerIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings) =
-        model.expectShape<ServiceShape>(settings.service).id.name == "Polly"
+        model.expectShape<ServiceShape>(settings.service).id.toString() == "com.amazonaws.polly#Parrot_v1"
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         delegator.runtimeDependencies.addAll(Kotlin3PDependency.KOTLIN_TEST.dependencies)
