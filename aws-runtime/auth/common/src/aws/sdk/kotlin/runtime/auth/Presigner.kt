@@ -13,16 +13,8 @@ import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.util.InternalApi
 
 public data class PresignedRequestConfig(
-    /**
-     * AWS Region the client was configured with. Note that this is not always the signing region in the case of global
-     * services like IAM.
-     */
     public val region: String,
 
-    /**
-     * Specifies zero or more credential providers that will be called to resolve credentials before making
-     * AWS service calls.  If not provided a default credential provider chain is used.
-     */
     public val credentialsProvider: CredentialsProvider,
 
     public val service: String,
@@ -33,7 +25,9 @@ public data class PresignedRequestConfig(
 
     public val endpoint: Endpoint,
 
-    public val path: String
+    public val path: String,
+
+    public val duration: Long
 )
 
 public data class PresignedRequest(
@@ -56,7 +50,7 @@ public suspend fun presignUrl(presignedClientConfig: PresignedRequestConfig, url
         useDoubleUriEncode = true
         signedBodyHeader = AwsSignedBodyHeaderType.NONE
         shouldSignHeader = { header -> presignedClientConfig.signedHeaderKeys.contains(header) }
-        expirationInSeconds = 2700
+        expirationInSeconds = presignedClientConfig.duration
     }
 
     val request = HttpRequest(

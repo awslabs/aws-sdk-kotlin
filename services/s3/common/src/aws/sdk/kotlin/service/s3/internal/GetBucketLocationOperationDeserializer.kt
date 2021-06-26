@@ -2,11 +2,11 @@ package aws.sdk.kotlin.service.s3.internal
 
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.GetBucketLocationResponse
-import software.aws.clientrt.client.ExecutionContext
-import software.aws.clientrt.http.operation.HttpDeserialize
-import software.aws.clientrt.http.readAll
-import software.aws.clientrt.http.response.HttpResponse
-import software.aws.clientrt.serde.xml.dom.parseDom
+import aws.smithy.kotlin.runtime.client.ExecutionContext
+import aws.smithy.kotlin.runtime.http.operation.HttpDeserialize
+import aws.smithy.kotlin.runtime.http.readAll
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.serde.xml.dom.parseDom
 
 /**
  * Custom deserializer for the GetBucketLocation operation.  This operation does not conform to the model.
@@ -28,7 +28,7 @@ internal class GetBucketLocationOperationDeserializer: HttpDeserialize<GetBucket
 }
 
 private suspend fun deserializeGetBucketLocationOperationBody(builder: GetBucketLocationResponse.DslBuilder, payload: ByteArray) {
-    val dom = parseDom(software.aws.clientrt.serde.xml.xmlStreamReader(payload))
+    val dom = parseDom(aws.smithy.kotlin.runtime.serde.xml.xmlStreamReader(payload))
     check(dom.name.local == "LocationConstraint") { "Expected top-level tag of 'LocationConstraint' but found ${dom.name}." }
     val rawLocationConstraint = checkNotNull(dom.text) { "Did not receive a value for 'LocationConstraint' in response." }
 
