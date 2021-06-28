@@ -42,6 +42,12 @@ kotlin {
                 implementation(project(":aws-runtime:testing"))
             }
         }
+        jvmTest {
+            dependencies {
+                val ktorServerVersion = "1.5.0"
+                implementation("io.ktor:ktor-server-cio:$ktorServerVersion")
+            }
+        }
     }
 }
 

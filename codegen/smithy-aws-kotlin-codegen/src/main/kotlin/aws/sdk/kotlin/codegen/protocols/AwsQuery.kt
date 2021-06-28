@@ -5,16 +5,20 @@
 
 package aws.sdk.kotlin.codegen.protocols
 
+import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.core.StaticHttpBindingResolver
+import aws.sdk.kotlin.codegen.protocols.middleware.ModeledExceptionsMiddleware
 import aws.sdk.kotlin.codegen.protocols.middleware.MutateHeadersMiddleware
-import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
+import software.amazon.smithy.aws.traits.protocols.AwsQueryErrorTrait
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RenderingContext
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.addImport
 import software.amazon.smithy.kotlin.codegen.model.expectShape
+import software.amazon.smithy.kotlin.codegen.model.expectTrait
+import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.traits.OperationOutput
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
@@ -44,7 +48,7 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         val middleware = super.getDefaultHttpMiddleware(ctx)
 
         val awsQueryMiddleware = listOf(
-            RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx)),
+            AwsQueryErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx)),
             // ensure content-type gets set
             // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#protocol-behavior
             MutateHeadersMiddleware(addMissingHeaders = mapOf("Content-Type" to AwsQueryContentType))
@@ -234,5 +238,35 @@ private class AwsQuerySerdeXmlDescriptorGenerator(
         }
 
         return traits
+    }
+}
+
+internal class AwsQueryErrorMiddleware(
+    ctx: ProtocolGenerator.GenerationContext,
+    httpBindingResolver: HttpBindingResolver
+) : ModeledExceptionsMiddleware(ctx, httpBindingResolver) {
+    // the restxml error middleware handles both wrapped and unwrapped responses and thus is re-usable for query errors
+    override val name: String = "RestXmlError"
+
+    override fun addImportsAndDependencies(writer: KotlinWriter) {
+        super.addImportsAndDependencies(writer)
+        writer.addImport("RestXmlError", AwsKotlinDependency.AWS_XML_PROTOCOLS)
+    }
+
+    override fun renderRegisterErrors(writer: KotlinWriter) {
+        val errors = getModeledErrors()
+
+        errors.forEach { errShape ->
+            val code = errShape.getTrait<AwsQueryErrorTrait>()?.code ?: errShape.id.name
+
+            val symbol = ctx.symbolProvider.toSymbol(errShape)
+            val deserializerName = "${symbol.name}Deserializer"
+            val defaultCode = if (errShape.expectTrait<ErrorTrait>().isClientError) 400 else 500
+            val httpStatusCode = when {
+                errShape.hasTrait<AwsQueryErrorTrait>() -> errShape.expectTrait<AwsQueryErrorTrait>().httpResponseCode
+                else -> errShape.getTrait<HttpErrorTrait>()?.code ?: defaultCode
+            }
+            writer.write("register(code = #S, deserializer = $deserializerName(), httpStatusCode = $httpStatusCode)", code)
+        }
     }
 }
