@@ -19,7 +19,7 @@ public data class PresignedRequestConfig(
 
     public val service: String,
 
-    public val signedHeaderKeys: Set<String> = setOf("host"),
+    public val signedHeaderKeys: Set<String>,
 
     public val method: HttpMethod,
 
@@ -41,14 +41,10 @@ public suspend fun presignUrl(presignedClientConfig: PresignedRequestConfig, url
     val crtCredentials = presignedClientConfig.credentialsProvider.getCredentials().toCrt()
     val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
         region = presignedClientConfig.region
-        service = presignedClientConfig.service.toLowerCase()
+        service = presignedClientConfig.service
         credentials = crtCredentials
-        algorithm = AwsSigningAlgorithm.SIGV4
-        signatureType = AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
-        omitSessionToken = true
-        normalizeUriPath = true
-        useDoubleUriEncode = true
-        signedBodyHeader = AwsSignedBodyHeaderType.NONE
+        signatureType = AwsSignatureType.HTTP_REQUEST_VIA_HEADERS
+        signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
         shouldSignHeader = { header -> presignedClientConfig.signedHeaderKeys.contains(header) }
         expirationInSeconds = presignedClientConfig.duration
     }

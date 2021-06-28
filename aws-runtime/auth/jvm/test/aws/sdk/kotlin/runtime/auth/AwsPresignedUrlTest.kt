@@ -23,14 +23,8 @@ class AwsPresignedUrlTest2 {
             region = "us-east-1"
             service = "polly"
             credentials = creds
-            algorithm = AwsSigningAlgorithm.SIGV4
-            signatureType = AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
-            omitSessionToken = true
-            normalizeUriPath = true
-            useDoubleUriEncode = true
-            signedBodyHeader = AwsSignedBodyHeaderType.NONE
-            shouldSignHeader = { header -> header == "host" }
-            expirationInSeconds = 2700
+            signatureType = AwsSignatureType.HTTP_REQUEST_VIA_HEADERS
+            signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
         }
 
         val request = HttpRequest(
@@ -45,8 +39,9 @@ class AwsPresignedUrlTest2 {
 
         var urlConnection: HttpsURLConnection? = null
         try {
-            urlConnection = url.openConnection() as HttpsURLConnection?
-            urlConnection!!.connect()
+            urlConnection = url.openConnection() as HttpsURLConnection? ?: error("failed to open connection")
+            signedRequest.headers.forEach { key, values -> urlConnection.setRequestProperty(key, values.first()) }
+            urlConnection.connect()
             println(urlConnection.responseCode)
             println(urlConnection.getHeaderField("Content-Type"))
         } finally {
@@ -62,14 +57,8 @@ class AwsPresignedUrlTest2 {
             region = "us-east-2"
             service = "s3"
             credentials = creds
-            algorithm = AwsSigningAlgorithm.SIGV4
-            signatureType = AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
-            omitSessionToken = true
-            normalizeUriPath = true
-            useDoubleUriEncode = true
-            signedBodyHeader = AwsSignedBodyHeaderType.NONE
-            shouldSignHeader = { header -> header == "host" }
-            expirationInSeconds = 2700
+            signatureType = AwsSignatureType.HTTP_REQUEST_VIA_HEADERS
+            signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
         }
 
         val request = HttpRequest(
@@ -79,14 +68,19 @@ class AwsPresignedUrlTest2 {
         )
 
         val signedRequest = AwsSigner.signRequest(request, signingConfig)
+        val x = signedRequest.headers
         val url = URL("https://${signedRequest.encodedPath}")
 
         println(signedRequest.encodedPath.toString())
 
         var urlConnection: HttpsURLConnection? = null
         try {
-            urlConnection = url.openConnection() as HttpsURLConnection?
-            urlConnection!!.connect()
+            urlConnection = url.openConnection() as HttpsURLConnection? ?: error("failed to open connection")
+            urlConnection.setRequestProperty("x-amz-content-sha256", signedRequest.headers["x-amz-content-sha256"])
+            urlConnection.setRequestProperty("X-Amz-Date", signedRequest.headers["X-Amz-Date"])
+            urlConnection.setRequestProperty("Authorization", signedRequest.headers["Authorization"])
+
+            urlConnection.connect()
             println(urlConnection.responseCode)
             println(urlConnection.getHeaderField("Content-Type"))
         } finally {
