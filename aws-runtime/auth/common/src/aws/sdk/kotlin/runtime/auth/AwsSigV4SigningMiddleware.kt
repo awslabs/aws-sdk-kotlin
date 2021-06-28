@@ -16,7 +16,8 @@ import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
-import aws.smithy.kotlin.runtime.http.operation.logger
+import aws.smithy.kotlin.runtime.http.operation.withContext
+import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.util.get
 
@@ -70,6 +71,8 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
     }
 
     public companion object Feature : HttpClientFeatureFactory<Config, AwsSigV4SigningMiddleware> {
+        private val logger = Logger.getLogger<AwsSigV4SigningMiddleware>()
+
         override val key: FeatureKey<AwsSigV4SigningMiddleware> = FeatureKey("AwsSigv4SigningMiddleware")
 
         override fun create(block: Config.() -> Unit): AwsSigV4SigningMiddleware {
@@ -87,6 +90,7 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
 
             val credentialsProvider = checkNotNull(config.credentialsProvider)
             val resolvedCredentials = credentialsProvider.getCredentials()
+            val logger: Logger by lazy { logger.withContext(req.context) }
 
             // FIXME - this is an area where not having to sign a CRT HTTP request might be useful if we could just wrap our own type
             // otherwise to sign a request we need to convert: builder -> crt kotlin HttpRequest (which underneath converts to aws-c-http message) and back
@@ -131,7 +135,7 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
                     req.context.isUnsignedRequest() -> AwsSignedBodyValue.UNSIGNED_PAYLOAD
                     req.subject.body is HttpBody.Empty -> AwsSignedBodyValue.EMPTY_SHA256
                     isUnboundedStream -> {
-                        req.context.logger.warn { "unable to compute hash for unbounded stream; defaulting to unsigned payload" }
+                        logger.warn { "unable to compute hash for unbounded stream; defaulting to unsigned payload" }
                         AwsSignedBodyValue.UNSIGNED_PAYLOAD
                     }
                     // use the payload to compute the hash
