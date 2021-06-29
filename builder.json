@@ -6,7 +6,7 @@
         "gradlew": "{source_dir}/gradlew -p {source_dir}"
     },
     "build_steps": [
-        "{gradlew} -x test -x jvmTest -x allTests build"
+        "{gradlew} assemble"
     ],
     "test_steps": [
         "{gradlew} publishToMavenLocal",
@@ -39,5 +39,16 @@
         {
             "name": "aws-crt-kotlin"
         }
-    ]
+    ],
+    "variants": {
+        "build-all-services": {
+            "!build_steps": [
+                "{gradlew} --no-daemon :codegen:sdk:bootstrap -Paws.services=-ec2,-location,-elasticbeanstalk,-marketplacecommerceanalytics",
+                "{gradlew} assemble --parallel"
+            ],
+            "!test_steps": [
+                "{gradlew} test allTests"
+            ]
+        }
+    }
 }
