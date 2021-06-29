@@ -3,7 +3,6 @@ package aws.sdk.kotlin.runtime.auth
 import aws.sdk.kotlin.crt.auth.signing.*
 import aws.sdk.kotlin.crt.auth.signing.AwsSignatureType
 import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyHeaderType
-import aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm
 import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
 import aws.sdk.kotlin.crt.http.HttpRequest
 import aws.sdk.kotlin.runtime.endpoint.Endpoint
@@ -37,22 +36,23 @@ public data class PresignedRequest(
 )
 
 @InternalApi
-public suspend fun presignUrl(presignedClientConfig: PresignedRequestConfig, url: String) : PresignedRequest {
-    val crtCredentials = presignedClientConfig.credentialsProvider.getCredentials().toCrt()
+public suspend fun presignUrl(config: PresignedRequestConfig) : PresignedRequest {
+    val crtCredentials = config.credentialsProvider.getCredentials().toCrt()
     val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
-        region = presignedClientConfig.region
-        service = presignedClientConfig.service
+        region = config.region
+        service = config.service
         credentials = crtCredentials
         signatureType = AwsSignatureType.HTTP_REQUEST_VIA_HEADERS
         signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
-        shouldSignHeader = { header -> presignedClientConfig.signedHeaderKeys.contains(header) }
-        expirationInSeconds = presignedClientConfig.duration
+        signedBodyValue = "UNSIGNED-PAYLOAD"
+        shouldSignHeader = { header -> config.signedHeaderKeys.contains(header) }
+        expirationInSeconds = config.duration
     }
-
+    val url = "${config.endpoint.protocol}://${config.endpoint.hostname}${config.path}"
     val request = HttpRequest(
-        presignedClientConfig.method.name,
+        config.method.name,
         url,
-        aws.sdk.kotlin.crt.http.Headers.build { append("host", presignedClientConfig.endpoint.hostname) }
+        aws.sdk.kotlin.crt.http.Headers.build { append("host", config.endpoint.hostname) }
     )
     val signedRequest = AwsSigner.signRequest(request, signingConfig)
 

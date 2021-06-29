@@ -13,5 +13,5 @@ suspend fun SynthesizeSpeechRequest.presign(config: PresignedRequestConfig): Pre
     sb.append("Text=${text!!.urlEncodeComponent()}&VoiceId=${voiceId!!.toString().urlEncodeComponent()}&OutputFormat=${outputFormat.toString()!!.urlEncodeComponent()}")
     val url = sb.toString()
 
-    return presignUrl(config, url)
+    return presignUrl(config/*, url*/)
 }
