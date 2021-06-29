@@ -26,7 +26,9 @@ public data class PresignedRequestConfig(
 
     public val path: String,
 
-    public val duration: Long
+    public val duration: Long,
+
+    public val hasBody: Boolean = false
 )
 
 public data class PresignedRequest(
@@ -44,7 +46,7 @@ public suspend fun presignUrl(config: PresignedRequestConfig) : PresignedRequest
         credentials = crtCredentials
         signatureType = AwsSignatureType.HTTP_REQUEST_VIA_HEADERS
         signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
-        signedBodyValue = "UNSIGNED-PAYLOAD"
+        signedBodyValue = if (config.hasBody) "UNSIGNED-PAYLOAD" else null
         shouldSignHeader = { header -> config.signedHeaderKeys.contains(header) }
         expirationInSeconds = config.duration
     }
