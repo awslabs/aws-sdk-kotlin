@@ -231,6 +231,8 @@ tasks.create<SmithyBuild>("generateSdk") {
     addRuntimeClasspath = true
     dependsOn(tasks["generateSmithyBuild"])
     inputs.file(projectDir.resolve("smithy-build.json"))
+    // ensure smithy-aws-kotlin-codegen is up to date
+    inputs.files(configurations.compileClasspath)
 }
 
 // Remove generated model file for clean
