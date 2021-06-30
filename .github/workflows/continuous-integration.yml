@@ -28,29 +28,12 @@ jobs:
       env:
         CI_USER: ${{ secrets.CI_USER}}
         CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
-      run: |
-        echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
-        export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-ubuntu-16-x64:${{ env.BUILDER_VERSION }}
-        docker pull $DOCKER_IMAGE
-        docker run --mount type=bind,source=$(pwd),target=/root/${{ env.PACKAGE_NAME }} \
-          --env GITHUB_REF \
-          --env GITHUB_HEAD_REF \
-          --env CI_USER \
-          --env CI_ACCESS_TOKEN \
-          --env GIT_ASKPASS=/root/${{ env.PACKAGE_NAME }}/.github/scripts/git-ci-askpass.sh \
-          $DOCKER_IMAGE build -p ${{ env.PACKAGE_NAME }} --build-dir=/root/${{ env.PACKAGE_NAME }}
-
-  macos-compat:
-    runs-on: macos-latest
-    steps:
-    - name: Checkout sources
-      uses: actions/checkout@v2
     - uses: actions/cache@v2
       with:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
     - name: Build and Test ${{ env.PACKAGE_NAME }}
@@ -61,10 +44,46 @@ jobs:
         python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
         chmod a+x builder.pyz
         GIT_ASKPASS="$(pwd)/.github/scripts/git-ci-askpass.sh" ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
+    - uses: actions/upload-artifact@v2
+      name: Upload Published Maven Artifacts
+      with:
+        name: m2-${{ env.name }}-${{ github.sha }}
+        path: ~/.m2
+        retention-days: 2
+
+#  macos-compat:
+#    runs-on: macos-latest
+#    steps:
+#    - name: Checkout sources
+#      uses: actions/checkout@v2
+#    - uses: actions/cache@v2
+#      with:
+#        path: |
+#          ~/.gradle/caches
+#          ~/.gradle/wrapper
+#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+#        restore-keys: |
+#          ${{ runner.os }}-gradle-
+#    - name: Build and Test ${{ env.PACKAGE_NAME }}
+#      env:
+#        CI_USER: ${{ secrets.CI_USER}}
+#        CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
+#      run: |
+#        python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
+#        chmod a+x builder.pyz
+#        GIT_ASKPASS="$(pwd)/.github/scripts/git-ci-askpass.sh" ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
 
   build-aws-services:
     name: Build all AWS services
     runs-on: ubuntu-latest
+    continue-on-error: false
+    needs: linux-compat
+    env:
+      JOBS: 8
+    strategy:
+      matrix:
+        # run jobs in parallel
+        JOB: [1,2,3,4,5,6,7,8]
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
@@ -73,14 +92,22 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Build and Test ${{ env.PACKAGE_NAME }}
-        env:
-          CI_USER: ${{ secrets.CI_USER}}
-          CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
+      - uses: actions/download-artifact@v2
+        name: Download Maven Artifacts
+        with:
+          name: m2-${{ env.name }}-${{ github.sha }}
+          path: ~/.m2
+      - name: Generate SDKs
         run: |
-          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
-          chmod a+x builder.pyz
-          GIT_ASKPASS="$(pwd)/.github/scripts/git-ci-askpass.sh" ./builder.pyz build -p ${{ env.PACKAGE_NAME }} --variant build-all-services
+          ls -lsa ~/.m2/repository
+          find codegen/sdk/aws-models -name '*.json' | sort | awk "NR % $JOBS == $JOB" > services.txt
+          cat services.txt
+          # TODO - leftoff here
+          includes=$(cat /tmp/services.txt | cut -d"/" -f4 | cut -d"." -f1 | sed 's/^\(.*\)$/+\1/' | paste -sd "," -)
+          ./gradlew --no-daemon :codegen:sdk:bootstrap -Paws.services=$includes
+      - name: Build AWS Services
+        run: |
+          ./gradlew --parallel build
