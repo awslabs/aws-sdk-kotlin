@@ -24,10 +24,6 @@ jobs:
     steps:
     - name: Checkout sources
       uses: actions/checkout@v2
-    - name: Build and Test ${{ env.PACKAGE_NAME }}
-      env:
-        CI_USER: ${{ secrets.CI_USER}}
-        CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
     - uses: actions/cache@v2
       with:
         path: |
@@ -105,7 +101,6 @@ jobs:
           ls -lsa ~/.m2/repository
           find codegen/sdk/aws-models -name '*.json' | sort | awk "NR % $JOBS == $JOB" > services.txt
           cat services.txt
-          # TODO - leftoff here
           includes=$(cat /tmp/services.txt | cut -d"/" -f4 | cut -d"." -f1 | sed 's/^\(.*\)$/+\1/' | paste -sd "," -)
           ./gradlew --no-daemon :codegen:sdk:bootstrap -Paws.services=$includes
       - name: Build AWS Services
