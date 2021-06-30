@@ -49,6 +49,9 @@
             "!test_steps": [
                 "{gradlew} test allTests"
             ]
+        },
+        "no-tests": {
+            "!test_steps": []
         }
     }
 }
