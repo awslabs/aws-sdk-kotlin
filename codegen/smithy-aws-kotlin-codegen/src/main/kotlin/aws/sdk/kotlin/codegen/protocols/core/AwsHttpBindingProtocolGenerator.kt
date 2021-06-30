@@ -62,7 +62,12 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 // awsQuery
                 // FIXME - invalid tests, re-enable after updating past smithy 1.7.2 - fixed in https://github.com/awslabs/smithy/pull/799
                 "QueryIgnoresWrappingXmlName",
-                "QueryXmlNamespaces"
+                "QueryXmlNamespaces",
+
+                // Glacier customizations
+                "GlacierAccountId", // smithy-kotlin#163
+                "GlacierChecksums", // smithy-kotlin#164
+                "GlacierMultipartChecksums", // smithy-kotlin#164
             ),
             TestContainmentMode.EXCLUDE_TESTS
         )
