@@ -11,14 +11,12 @@ pluginManagement {
 
     // configure the smithy-gradle plugin version
     plugins {
-        id("software.amazon.smithy") version "0.5.2"
+        id("software.amazon.smithy") version "0.5.3"
         id("org.jetbrains.dokka") version "1.4.32"
     }
 }
 
 rootProject.name = "aws-sdk-kotlin"
-enableFeaturePreview("GRADLE_METADATA")
-
 
 include(":dokka-aws")
 include(":codegen:sdk")
