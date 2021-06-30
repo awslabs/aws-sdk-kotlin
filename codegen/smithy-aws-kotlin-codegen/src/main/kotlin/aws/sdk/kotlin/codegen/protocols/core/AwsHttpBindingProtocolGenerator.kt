@@ -64,10 +64,10 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "QueryIgnoresWrappingXmlName",
                 "QueryXmlNamespaces",
 
-                // Glacier
-                "GlacierAccountId",
-                "GlacierChecksums",
-                "GlacierMultipartChecksums"
+                // Glacier customizations
+                "GlacierAccountId", // smithy-kotlin#163
+                "GlacierChecksums", // smithy-kotlin#164
+                "GlacierMultipartChecksums", // smithy-kotlin#164
             ),
             TestContainmentMode.EXCLUDE_TESTS
         )
