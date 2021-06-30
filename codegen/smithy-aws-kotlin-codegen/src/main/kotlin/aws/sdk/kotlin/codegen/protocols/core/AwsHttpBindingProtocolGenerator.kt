@@ -47,22 +47,26 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
         val ignoredTests = TestMemberDelta(
             setOf(
-                // FIXME - document type not fully supported yet, see https://github.com/awslabs/smithy-kotlin/issues/123
                 // restJson
-                "InlineDocumentInput",
-                "InlineDocumentAsPayloadInput",
-                "InlineDocumentOutput",
-                "InlineDocumentAsPayloadInputOutput",
+                // FIXME - document type not fully supported yet, see https://github.com/awslabs/smithy-kotlin/issues/123
+                "DocumentTypeInputWithObject",
+                "DocumentTypeAsPayloadInput",
+                "DocumentTypeAsPayloadInputString",
+                "DocumentOutput",
+                "DocumentTypeAsPayloadOutput",
+                "DocumentTypeAsPayloadOutputString",
+                "DocumentInputWithString",
+                "DocumentInputWithNumber",
+                "DocumentInputWithBoolean",
+                "DocumentInputWithList",
+                "DocumentOutputString",
+                "DocumentOutputNumber",
+                "DocumentOutputBoolean",
+                "DocumentOutputArray",
 
                 // awsJson1.1
+                // FIXME - document type not fully supported yet, see https://github.com/awslabs/smithy-kotlin/issues/123
                 "PutAndGetInlineDocumentsInput",
-
-                // restXml
-
-                // awsQuery
-                // FIXME - invalid tests, re-enable after updating past smithy 1.7.2 - fixed in https://github.com/awslabs/smithy/pull/799
-                "QueryIgnoresWrappingXmlName",
-                "QueryXmlNamespaces",
 
                 // Glacier customizations
                 "GlacierAccountId", // smithy-kotlin#163
