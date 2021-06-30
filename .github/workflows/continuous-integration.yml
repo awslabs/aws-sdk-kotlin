@@ -99,7 +99,7 @@ jobs:
       - name: Generate SDKs
         run: |
           ls -lsa ~/.m2/repository
-          find codegen/sdk/aws-models -name '*.json' | sort | awk "NR % $JOBS == $JOB" > services.txt
+          find codegen/sdk/aws-models -name '*.json' | sort | awk "NR % $JOBS == ${{ matrix.JOB }}" > services.txt
           cat services.txt
           includes=$(cat /tmp/services.txt | cut -d"/" -f4 | cut -d"." -f1 | sed 's/^\(.*\)$/+\1/' | paste -sd "," -)
           ./gradlew --no-daemon :codegen:sdk:bootstrap -Paws.services=$includes
