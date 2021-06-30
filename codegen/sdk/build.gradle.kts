@@ -69,6 +69,9 @@ data class AwsService(
 // The generated smithy-build.json file is not committed to git since
 // it's rebuilt each time codegen is performed.
 fun generateSmithyBuild(services: List<AwsService>): String {
+    require(services.isNotEmpty()) {
+        "No services discovered. Verify aws.services and aws.protocols properties in local.build. Aborting."
+    }
 
     val projections = services.joinToString(",") { service ->
         // escape windows paths for valid json
