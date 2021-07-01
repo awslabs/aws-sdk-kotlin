@@ -5,7 +5,6 @@
 package aws.sdk.kotlin.codegen.protocols
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.formurl.GeneralQuerySerdeFormUrlDescriptorGenerator
 import aws.sdk.kotlin.codegen.protocols.middleware.ModeledExceptionsMiddleware
 import software.amazon.smithy.aws.traits.protocols.Ec2QueryNameTrait
