@@ -48,27 +48,27 @@ jobs:
         path: ~/.m2
         retention-days: 2
 
-#  macos-compat:
-#    runs-on: macos-latest
-#    steps:
-#    - name: Checkout sources
-#      uses: actions/checkout@v2
-#    - uses: actions/cache@v2
-#      with:
-#        path: |
-#          ~/.gradle/caches
-#          ~/.gradle/wrapper
-#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-#        restore-keys: |
-#          ${{ runner.os }}-gradle-
-#    - name: Build and Test ${{ env.PACKAGE_NAME }}
-#      env:
-#        CI_USER: ${{ secrets.CI_USER}}
-#        CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
-#      run: |
-#        python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
-#        chmod a+x builder.pyz
-#        GIT_ASKPASS="$(pwd)/.github/scripts/git-ci-askpass.sh" ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
+  macos-compat:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Build and Test ${{ env.PACKAGE_NAME }}
+      env:
+        CI_USER: ${{ secrets.CI_USER}}
+        CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
+      run: |
+        python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
+        chmod a+x builder.pyz
+        GIT_ASKPASS="$(pwd)/.github/scripts/git-ci-askpass.sh" ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
 
   build-aws-services-batch:
     name: Build AWS services parallel
@@ -78,9 +78,9 @@ jobs:
     strategy:
       matrix:
         # run jobs in parallel
-        JOB: [1,2,3,4,5,6,7,8]
+        JOB: [1,2,3,4,5,6,7,8,9,10,11,12]
     env:
-      JOBS: 8
+      JOBS: 12
       JOB: ${{ matrix.JOB }}
     steps:
       - name: Checkout sources
