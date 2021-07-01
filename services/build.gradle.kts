@@ -5,7 +5,6 @@
  */
 plugins {
     kotlin("jvm")
-    maven
     `maven-publish`
     id("org.jetbrains.dokka")
 }
@@ -71,7 +70,6 @@ subprojects {
 
     // FIXME - kotlin multiplatform configures publications for you so when we switch we can remove this
     // and just apply "publish.gradle" from the set of root gradle scripts (just like we do for the runtime)
-    plugins.apply("maven")
     plugins.apply("maven-publish")
     publishing {
         publications {
