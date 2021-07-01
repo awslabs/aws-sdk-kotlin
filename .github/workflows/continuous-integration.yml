@@ -75,12 +75,13 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: false
     needs: linux-compat
-    env:
-      JOBS: 8
     strategy:
       matrix:
         # run jobs in parallel
         JOB: [1,2,3,4,5,6,7,8]
+    env:
+      JOBS: 8
+      JOB: ${{ matrix.JOB }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
@@ -100,7 +101,8 @@ jobs:
       - name: Generate SDKs
         run: |
           ls -lsa ~/.m2/repository
-          find codegen/sdk/aws-models -name '*.json' | sort | awk "NR % $JOBS == ${{ matrix.JOB - 1 }}" > services.txt
+          find codegen/sdk/aws-models -name '*.json' | sort | awk "NR % $JOBS == $JOB - 1" > services.txt
+          echo "Building the following services"
           cat services.txt
           ./gradlew --no-daemon :codegen:sdk:bootstrap -Paws.services=$(cat services.txt | .github/scripts/generate-includes.py)
       - name: Build AWS Services
