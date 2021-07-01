@@ -88,6 +88,7 @@ open class AwsHttpProtocolClientGenerator(
             writer.write("ctx.putIfAbsent(AwsClientOption.Region, region)")
             writer.write("ctx.putIfAbsent(AuthAttributes.SigningRegion, config.signingRegion ?: region)")
             writer.write("ctx.putIfAbsent(SdkClientOption.ServiceName, serviceName)")
+            writer.write("ctx.putIfAbsent(SdkClientOption.LogMode, config.sdkLogMode)")
 
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
                 writer.addImport(RuntimeTypes.Core.IdempotencyTokenProviderExt)
