@@ -41,6 +41,7 @@ jobs:
         chmod a+x builder.pyz
         GIT_ASKPASS="$(pwd)/.github/scripts/git-ci-askpass.sh" ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
     - uses: actions/upload-artifact@v2
+      # uploads local m2 so built runtime artifacts can be re-used
       name: Upload Published Maven Artifacts
       with:
         name: m2-${{ env.name }}-${{ github.sha }}
@@ -69,8 +70,8 @@ jobs:
 #        chmod a+x builder.pyz
 #        GIT_ASKPASS="$(pwd)/.github/scripts/git-ci-askpass.sh" ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
 
-  build-aws-services:
-    name: Build all AWS services
+  build-aws-services-batch:
+    name: Build AWS services parallel
     runs-on: ubuntu-latest
     continue-on-error: false
     needs: linux-compat
@@ -106,3 +107,13 @@ jobs:
       - name: Build AWS Services
         run: |
           ./gradlew --parallel build
+
+  build-aws-services:
+    if: ${{ always() }}
+    name: Build all AWS services
+    runs-on: ubuntu-latest
+    needs: build-aws-services-batch
+    steps:
+      - name: Check batch matrix status
+        if: ${{ needs.build-aws-services-batch.result != 'success' }}
+        run: exit 1
