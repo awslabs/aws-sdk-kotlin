@@ -8,6 +8,7 @@ package aws.sdk.kotlin.codegen.protocols
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.core.StaticHttpBindingResolver
+import aws.sdk.kotlin.codegen.protocols.formurl.GeneralQuerySerdeFormUrlDescriptorGenerator
 import aws.sdk.kotlin.codegen.protocols.middleware.ModeledExceptionsMiddleware
 import aws.sdk.kotlin.codegen.protocols.middleware.MutateHeadersMiddleware
 import software.amazon.smithy.aws.traits.protocols.AwsQueryErrorTrait
@@ -36,7 +37,7 @@ private const val AwsQueryContentType: String = "application/x-www-form-urlencod
  * @inheritDoc
  * @see AwsHttpBindingProtocolGenerator
  */
-class AwsQuery : AwsHttpBindingProtocolGenerator() {
+open class AwsQuery : AwsHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = AwsQueryTrait.ID
 
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.DATE_TIME
@@ -48,7 +49,7 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         val middleware = super.getDefaultHttpMiddleware(ctx)
 
         val awsQueryMiddleware = listOf(
-            AwsQueryErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx)),
+            getErrorMiddleware(ctx),
             // ensure content-type gets set
             // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#protocol-behavior
             MutateHeadersMiddleware(addMissingHeaders = mapOf("Content-Type" to AwsQueryContentType))
@@ -56,6 +57,13 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
 
         return middleware + awsQueryMiddleware
     }
+
+    /**
+     * Get the [ModeledExceptionsMiddleware] for this protocol. The default implementation is [AwsQueryErrorMiddleware]
+     * but can be overridden by subclassing protocols.
+     */
+    open fun getErrorMiddleware(ctx: ProtocolGenerator.GenerationContext): ModeledExceptionsMiddleware =
+        AwsQueryErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
 
     override fun renderSerializeHttpBody(
         ctx: ProtocolGenerator.GenerationContext,
@@ -85,13 +93,25 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         writer: KotlinWriter,
     ) {
         // render the serde descriptors
-        FormUrlSerdeDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members).render()
+        getSerializerDescriptorGenerator(ctx, shape, members, writer).render()
         if (shape.isUnionShape) {
             SerializeUnionGenerator(ctx, members, writer, defaultTimestampFormat).render()
         } else {
             SerializeStructGenerator(ctx, members, writer, defaultTimestampFormat).render()
         }
     }
+
+    /**
+     * Gets the [AbstractSerdeDescriptorGenerator] to use for serializers. By default, this is an
+     * [AwsQuerySerdeFormUrlDescriptorGenerator] but this can be overridden by subclassing protocols.
+     */
+    open fun getSerializerDescriptorGenerator(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        members: List<MemberShape>,
+        writer: KotlinWriter,
+    ): AbstractSerdeDescriptorGenerator =
+        AwsQuerySerdeFormUrlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members)
 
     override fun renderSerializeOperationBody(
         ctx: ProtocolGenerator.GenerationContext,
@@ -117,7 +137,7 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         members: List<MemberShape>,
         writer: KotlinWriter,
     ) {
-        AwsQuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members).render()
+        getDeserializerDescriptorGenerator(ctx, shape, members, writer).render()
         if (shape.isUnionShape) {
             val name = ctx.symbolProvider.toSymbol(shape).name
             DeserializeUnionGenerator(ctx, name, members, writer, defaultTimestampFormat).render()
@@ -125,6 +145,18 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
             DeserializeStructGenerator(ctx, members, writer, defaultTimestampFormat).render()
         }
     }
+
+    /**
+     * Gets the [AbstractSerdeDescriptorGenerator] to use for deserializers. By default, this is an
+     * [AwsQuerySerdeXmlDescriptorGenerator] but this can be overridden by subclassing protocols.
+     */
+    open fun getDeserializerDescriptorGenerator(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        members: List<MemberShape>,
+        writer: KotlinWriter,
+    ): AbstractSerdeDescriptorGenerator =
+        AwsQuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members)
 
     override fun renderSerializeDocumentBody(
         ctx: ProtocolGenerator.GenerationContext,
@@ -151,13 +183,16 @@ class AwsQuery : AwsHttpBindingProtocolGenerator() {
         unwrapOperationResponseBody(op.id.name, writer)
         renderDeserializerBody(ctx, shape, documentMembers, writer)
     }
-    private fun unwrapOperationResponseBody(
+
+    /**
+     * Unwraps the response body as specified by
+     * https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#response-serialization so that the
+     * deserializer is in the correct state.
+     */
+    open fun unwrapOperationResponseBody(
         operationName: String,
         writer: KotlinWriter
     ) {
-        // we need to unwrap the response document to get the deserializer into the correct state
-        // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#response-serialization
-
         writer
             .addImport(
                 RuntimeTypes.Serde.SdkFieldDescriptor,
@@ -222,6 +257,24 @@ class AwsQueryBindingResolver(
     }
 }
 
+private class AwsQuerySerdeFormUrlDescriptorGenerator(
+    ctx: RenderingContext<Shape>,
+    memberShapes: List<MemberShape>? = null,
+) : GeneralQuerySerdeFormUrlDescriptorGenerator(ctx, memberShapes) {
+    /**
+     * The serialized name for a shape. See
+     * [AWS query protocol](https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#query-key-resolution)
+     * for more information.
+     */
+    override val serialName: String
+        get() = objectShape.getTrait<XmlNameTrait>()?.value ?: super.serialName
+
+    override fun getMemberSerialNameOverride(member: MemberShape): String? = member.getTrait<XmlNameTrait>()?.value
+
+    override fun isMemberFlattened(member: MemberShape, targetShape: Shape): Boolean =
+        member.hasTrait<XmlFlattenedTrait>()
+}
+
 private class AwsQuerySerdeXmlDescriptorGenerator(
     ctx: RenderingContext<Shape>,
     memberShapes: List<MemberShape>? = null
@@ -232,8 +285,8 @@ private class AwsQuerySerdeXmlDescriptorGenerator(
 
         if (objectShape.hasTrait<OperationOutput>()) {
             traits.removeIf { it.symbol == RuntimeTypes.Serde.SerdeXml.XmlSerialName }
-            val opName = objectShape.id.name.removeSuffix("Response")
-            val serialName = "${opName}Result"
+            val opName = objectShape.id.name.removeSuffix("Result")
+            val serialName = "${opName}Response"
             traits.add(RuntimeTypes.Serde.SerdeXml.XmlSerialName, serialName.dq())
         }
 
