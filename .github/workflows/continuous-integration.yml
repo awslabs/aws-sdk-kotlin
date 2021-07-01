@@ -100,10 +100,9 @@ jobs:
       - name: Generate SDKs
         run: |
           ls -lsa ~/.m2/repository
-          find codegen/sdk/aws-models -name '*.json' | sort | awk "NR % $JOBS == ${{ matrix.JOB }}" > services.txt
+          find codegen/sdk/aws-models -name '*.json' | sort | awk "NR % $JOBS == ${{ matrix.JOB - 1 }}" > services.txt
           cat services.txt
-          includes=$(cat services.txt | cut -d"/" -f4 | cut -d"." -f1 | sed 's/^\(.*\)$/+\1/' | paste -sd "," -)
-          ./gradlew --no-daemon :codegen:sdk:bootstrap -Paws.services=$includes
+          ./gradlew --no-daemon :codegen:sdk:bootstrap -Paws.services=$(cat services.txt | .github/scripts/generate-includes.py)
       - name: Build AWS Services
         run: |
           ./gradlew --parallel build
