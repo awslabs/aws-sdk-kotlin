@@ -40,7 +40,10 @@ class AwsPresignedUrlTest2 {
         var urlConnection: HttpsURLConnection? = null
         try {
             urlConnection = url.openConnection() as HttpsURLConnection? ?: error("failed to open connection")
-            signedRequest.headers.forEach { key, values -> urlConnection.setRequestProperty(key, values.first()) }
+            signedRequest.headers.forEach { key, values ->
+                println("$key: $values")
+                urlConnection.setRequestProperty(key, values.first())
+            }
             urlConnection.connect()
             println(urlConnection.responseCode)
             println(urlConnection.getHeaderField("Content-Type"))
