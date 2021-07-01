@@ -39,19 +39,5 @@
         {
             "name": "aws-crt-kotlin"
         }
-    ],
-    "variants": {
-        "build-all-services": {
-            "!build_steps": [
-                "{gradlew} --no-daemon :codegen:sdk:bootstrap -Paws.services=-ec2,-location,-elasticbeanstalk,-marketplacecommerceanalytics",
-                "{gradlew} assemble --parallel"
-            ],
-            "!test_steps": [
-                "{gradlew} test allTests"
-            ]
-        },
-        "no-tests": {
-            "!test_steps": []
-        }
-    }
+    ]
 }
