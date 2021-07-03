@@ -68,7 +68,8 @@ class Ec2QueryErrorDeserializerTest {
 
     @Test
     fun `it partially deserializes ec2Query errors`() = runSuspendTest {
-        val tests = listOf("""
+        val tests = listOf(
+            """
                 <Response>
                     <SomeRandomNode>
                         <Error>

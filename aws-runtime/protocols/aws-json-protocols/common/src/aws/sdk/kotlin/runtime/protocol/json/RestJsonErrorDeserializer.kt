@@ -6,7 +6,6 @@ package aws.sdk.kotlin.runtime.protocol.json
 
 import aws.sdk.kotlin.runtime.http.middleware.errors.ErrorDetails
 import aws.smithy.kotlin.runtime.http.Headers
-import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.serde.json.JsonSerialName
