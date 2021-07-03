@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
 package aws.sdk.kotlin.runtime.protocol.xml
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
@@ -64,21 +68,31 @@ class Ec2QueryErrorDeserializerTest {
 
     @Test
     fun `it partially deserializes ec2Query errors`() = runSuspendTest {
-        val payload = """
-            <Response>
-                <SomeRandomNode>
-                    <Error>
-                        <Code>InvalidGreeting</Code>
-                        <Message>Hi</Message>
-                        <AnotherSetting>Foo</AnotherSetting>
-                    </Error>
-                </SomeRandomNode>
+        val tests = listOf("""
+                <Response>
+                    <SomeRandomNode>
+                        <Error>
+                            <Code>InvalidGreeting</Code>
+                            <Message>Hi</Message>
+                            <AnotherSetting>Foo</AnotherSetting>
+                        </Error>
+                    </SomeRandomNode>
+                    <RequestId>foo-request</RequestId>
+                </Response>
+            """,
+            """
+                <Response>
+                <Errors />
                 <RequestId>foo-request</RequestId>
             </Response>
-        """.trimIndent().encodeToByteArray()
-        val actual = parseEc2QueryErrorResponse(payload)
-        assertNull(actual.code)
-        assertNull(actual.message)
-        assertEquals("foo-request", actual.requestId)
+            """,
+        ).map { it.trimIndent().encodeToByteArray() }
+
+        for (payload in tests) {
+            val actual = parseEc2QueryErrorResponse(payload)
+            assertNull(actual.code)
+            assertNull(actual.message)
+            assertEquals("foo-request", actual.requestId)
+        }
     }
 }

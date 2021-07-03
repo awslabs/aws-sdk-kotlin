@@ -6,7 +6,9 @@ package aws.sdk.kotlin.runtime.protocol.xml
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.http.ExceptionRegistry
+import aws.sdk.kotlin.runtime.http.middleware.errors.AbstractErrorHandling
 import aws.smithy.kotlin.runtime.http.FeatureKey
+import aws.smithy.kotlin.runtime.http.Headers
 
 /**
  * Http feature that inspects responses and throws the appropriate modeled service error that matches
@@ -15,11 +17,13 @@ import aws.smithy.kotlin.runtime.http.FeatureKey
  * see if one of the registered errors matches
  */
 @InternalSdkApi
-public class RestXmlError(registry: ExceptionRegistry) : GenericXmlErrorHandling(registry) {
-    public companion object Feature : GenericFeature<RestXmlError>() {
-        override val key: FeatureKey<RestXmlError> = FeatureKey("Ec2QueryErrorHandling")
+public class RestXmlError(registry: ExceptionRegistry) : AbstractErrorHandling(registry) {
+    public companion object Feature : AbstractFeature<RestXmlError>() {
+        override val key: FeatureKey<RestXmlError> = FeatureKey("RestXmlError")
         override fun create(config: Config) = RestXmlError(config.registry)
     }
 
-    override suspend fun parseErrorResponse(payload: ByteArray) = parseRestXmlErrorResponse(payload)
+    protected override val protocolName = "restXml"
+    override suspend fun parseErrorResponse(headers: Headers, payload: ByteArray?) =
+        parseRestXmlErrorResponse(payload ?: emptyByteArray)
 }

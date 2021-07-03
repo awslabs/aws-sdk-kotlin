@@ -2,10 +2,11 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package aws.sdk.kotlin.runtime.protocol.xml
+package aws.sdk.kotlin.runtime.http.middleware.errors
 
 import aws.sdk.kotlin.runtime.*
 import aws.sdk.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.ServiceErrorMetadata
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.operation.HttpDeserialize
@@ -15,7 +16,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.util.AttributeKey
 import aws.smithy.kotlin.runtime.util.Attributes
 
-data class GenericXmlErrorDetails(val code: String?, val message: String?, val requestId: String?)
+data class ErrorDetails(val code: String?, val message: String?, val requestId: String?)
 
 /**
  * Http feature that inspects responses and throws the appropriate modeled service error.
@@ -24,8 +25,9 @@ data class GenericXmlErrorDetails(val code: String?, val message: String?, val r
  * the registered errors matches.
  */
 @InternalSdkApi
-public abstract class GenericXmlErrorHandling(private val registry: ExceptionRegistry) : Feature {
-    private val emptyByteArray: ByteArray = ByteArray(0)
+public abstract class AbstractErrorHandling(private val registry: ExceptionRegistry) : Feature {
+    protected val emptyByteArray: ByteArray = ByteArray(0)
+    protected abstract val protocolName: String
 
     public class Config {
         public var registry: ExceptionRegistry = ExceptionRegistry()
@@ -39,7 +41,7 @@ public abstract class GenericXmlErrorHandling(private val registry: ExceptionReg
         }
     }
 
-    public abstract class GenericFeature<T : Feature> : HttpClientFeatureFactory<Config, T> {
+    public abstract class AbstractFeature<T : Feature> : HttpClientFeatureFactory<Config, T> {
         final override fun create(block: Config.() -> Unit): T = create(Config().apply(block))
         abstract fun create(config: Config): T
     }
@@ -61,10 +63,10 @@ public abstract class GenericXmlErrorHandling(private val registry: ExceptionReg
 
             // attempt to match the AWS error code
             val errorDetails = try {
-                parseErrorResponse(payload ?: emptyByteArray)
+                parseErrorResponse(httpResponse.headers, payload)
             } catch (ex: Exception) {
                 throw UnknownServiceErrorException(
-                    "failed to parse response as Xml protocol error",
+                    "failed to parse response as a $protocolName protocol error",
                     ex
                 ).also {
                     setAseFields(it, wrappedResponse, null)
@@ -85,13 +87,13 @@ public abstract class GenericXmlErrorHandling(private val registry: ExceptionReg
         }
     }
 
-    abstract suspend fun parseErrorResponse(payload: ByteArray): GenericXmlErrorDetails
+    abstract suspend fun parseErrorResponse(headers: Headers, payload: ByteArray?): ErrorDetails
 }
 
 /**
  * pull the ase specific details from the response / error
  */
-private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: GenericXmlErrorDetails?) {
+private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: ErrorDetails?) {
     if (exception is AwsServiceException) {
         exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
         exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)

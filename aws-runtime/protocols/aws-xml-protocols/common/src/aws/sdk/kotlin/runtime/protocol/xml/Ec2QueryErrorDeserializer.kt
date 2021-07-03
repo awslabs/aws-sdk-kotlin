@@ -1,5 +1,10 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
 package aws.sdk.kotlin.runtime.protocol.xml
 
+import aws.sdk.kotlin.runtime.http.middleware.errors.ErrorDetails
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.XmlCollectionName
 import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
@@ -9,10 +14,10 @@ internal data class Ec2QueryErrorResponse(val errors: List<Ec2QueryError>, val r
 
 internal data class Ec2QueryError(val code: String?, val message: String?)
 
-internal suspend fun parseEc2QueryErrorResponse(payload: ByteArray): GenericXmlErrorDetails {
+internal suspend fun parseEc2QueryErrorResponse(payload: ByteArray): ErrorDetails {
     val response = Ec2QueryErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
     val firstError = response.errors.firstOrNull()
-    return GenericXmlErrorDetails(firstError?.code, firstError?.message, response.requestId)
+    return ErrorDetails(firstError?.code, firstError?.message, response.requestId)
 }
 
 /**

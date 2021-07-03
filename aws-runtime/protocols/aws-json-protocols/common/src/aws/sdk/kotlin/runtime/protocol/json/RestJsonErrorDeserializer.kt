@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.runtime.protocol.json
 
+import aws.sdk.kotlin.runtime.http.middleware.errors.ErrorDetails
+import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
@@ -17,8 +19,6 @@ public const val X_AMZN_ERROR_MESSAGE_HEADER_NAME: String = "x-amzn-error-messag
 
 // error message header returned by event stream errors
 public const val X_AMZN_EVENT_ERROR_MESSAGE_HEADER_NAME: String = ":error-message"
-
-internal data class RestJsonErrorDetails(val code: String? = null, val message: String? = null)
 
 /**
  * Deserializes rest JSON protocol errors as specified by:
@@ -44,11 +44,11 @@ internal object RestJsonErrorDeserializer {
         field(MESSAGE_ALT3_DESCRIPTOR)
     }
 
-    suspend fun deserialize(response: HttpResponse, payload: ByteArray?): RestJsonErrorDetails {
-        var code: String? = response.headers[X_AMZN_ERROR_TYPE_HEADER_NAME]
-        var message: String? = response.headers[X_AMZN_ERROR_MESSAGE_HEADER_NAME]
+    suspend fun deserialize(headers: Headers, payload: ByteArray?): ErrorDetails {
+        var code: String? = headers[X_AMZN_ERROR_TYPE_HEADER_NAME]
+        var message: String? = headers[X_AMZN_ERROR_MESSAGE_HEADER_NAME]
         if (message == null) {
-            message = response.headers[X_AMZN_EVENT_ERROR_MESSAGE_HEADER_NAME]
+            message = headers[X_AMZN_EVENT_ERROR_MESSAGE_HEADER_NAME]
         }
 
         if (payload != null) {
@@ -68,7 +68,7 @@ internal object RestJsonErrorDeserializer {
             }
         }
 
-        return RestJsonErrorDetails(sanitize(code), message)
+        return ErrorDetails(sanitize(code), message, requestId = null)
     }
 }
 
@@ -85,8 +85,4 @@ internal object RestJsonErrorDeserializer {
  * aws.protocoltests.restjson#FooError
  * aws.protocoltests.restjson#FooError:http://amazon.com/smithy/com.amazon.smithy.validate/
  */
-private fun sanitize(code: String?): String? {
-    if (code == null) return code
-    return code.substringAfter("#")
-        .substringBefore(":")
-}
+private fun sanitize(code: String?): String? = code?.substringAfter("#")?.substringBefore(":")
