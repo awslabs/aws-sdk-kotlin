@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http.engine.crt
 
+import aws.sdk.kotlin.crt.ReadChannelBodyStream
 import aws.sdk.kotlin.crt.http.HeadersBuilder
 import aws.sdk.kotlin.crt.http.HttpRequestBodyStream
 import aws.sdk.kotlin.crt.io.Protocol

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.http.engine.crt
+package aws.sdk.kotlin.crt
 
 import aws.sdk.kotlin.crt.io.MutableBuffer
 import aws.sdk.kotlin.runtime.testing.runSuspendTest

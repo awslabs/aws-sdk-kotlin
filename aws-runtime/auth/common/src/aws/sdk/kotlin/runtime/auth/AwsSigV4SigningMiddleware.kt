@@ -92,9 +92,8 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
             val resolvedCredentials = credentialsProvider.getCredentials()
             val logger: Logger by lazy { logger.withContext(req.context) }
 
-            // FIXME - this is an area where not having to sign a CRT HTTP request might be useful if we could just wrap our own type
-            // otherwise to sign a request we need to convert: builder -> crt kotlin HttpRequest (which underneath converts to aws-c-http message) and back
-            val signableRequest = req.subject.toSignableCrtRequest()
+            val isUnsignedRequest = req.context.isUnsignedRequest()
+            val signableRequest = req.subject.toSignableCrtRequest(isUnsignedRequest)
 
             // SDKs are supposed to default to signed payload _always_ when possible (and when `unsignedPayload` trait isn't present).
             //
@@ -103,15 +102,12 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
             //     2. Customer provides a (potentially) unbounded stream (via HttpBody.Streaming)
             //
             // When an unbounded stream (2) is given we proceed as follows:
-            //     2.1. is it a file?
-            //          (2.1.1) yes -> sign the payload (bounded stream/special case)
+            //     2.1. is it idempotent?
+            //          (2.1.1) yes -> sign the payload (stream can be consumed more than once)
             //          (2.1.2) no -> unsigned payload
             //
             // NOTE: Chunked signing is NOT enabled through this middleware.
-            // NOTE:
-            //     2.1.1 is handled by toSignableRequest() by special casing file inputs
-            //     2.1.2 is handled below
-            //
+            // NOTE: 2.1.2 is handled below
 
             // FIXME - see: https://github.com/awslabs/smithy-kotlin/issues/296
             // if we know we have a (streaming) body and toSignableRequest() fails to convert it to a CRT equivalent
@@ -132,7 +128,7 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
 
                 signedBodyHeader = config.signedBodyHeaderType.toCrt()
                 signedBodyValue = when {
-                    req.context.isUnsignedRequest() -> AwsSignedBodyValue.UNSIGNED_PAYLOAD
+                    isUnsignedRequest -> AwsSignedBodyValue.UNSIGNED_PAYLOAD
                     req.subject.body is HttpBody.Empty -> AwsSignedBodyValue.EMPTY_SHA256
                     isUnboundedStream -> {
                         logger.warn { "unable to compute hash for unbounded stream; defaulting to unsigned payload" }

@@ -10,6 +10,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.util.splitAsQueryParameters
+import kotlin.coroutines.coroutineContext
 import aws.sdk.kotlin.crt.http.Headers as HeadersCrt
 import aws.sdk.kotlin.crt.http.HttpRequest as HttpRequestCrt
 
@@ -17,13 +18,26 @@ import aws.sdk.kotlin.crt.http.HttpRequest as HttpRequestCrt
  * Convert an [HttpRequestBuilder] into a CRT HttpRequest for the purpose of signing.
  */
 @InternalSdkApi
-public fun HttpRequestBuilder.toSignableCrtRequest(): HttpRequestCrt {
-    // FIXME - this does not account for streaming bodies. The main use case for this conversion is for signing purposes
-    // only. We need to special case file streams as being signable. Custom dynamic streams that implement
-    // HttpBody.Streaming are not signable without consuming the stream and would need to go through
-    // chunked signing or unsigned payload
-    // see: https://github.com/awslabs/smithy-kotlin/issues/297
-    val bodyStream = (body as? HttpBody.Bytes)?.let { HttpRequestBodyStream.fromByteArray(it.bytes()) }
+public suspend fun HttpRequestBuilder.toSignableCrtRequest(unsignedPayload: Boolean = false): HttpRequestCrt {
+    // Streams that implement HttpBody.Streaming and are non-idempotent are not signable without consuming the stream
+    // and would need to go through chunked signing or unsigned payload
+    // see: https://github.com/awslabs/smithy-kotlin/issues/296
+
+    val bodyStream = if (!unsignedPayload) {
+        when (val httpBody = body) {
+            is HttpBody.Bytes -> HttpRequestBodyStream.fromByteArray(httpBody.bytes())
+            is HttpBody.Streaming -> if (httpBody.isIdempotent) {
+                ReadChannelBodyStream(httpBody.readFrom(), coroutineContext)
+            } else {
+                // can only consume the stream once
+                null
+            }
+            else -> null
+        }
+    } else {
+        null
+    }
+
     return HttpRequestCrt(method.name, url.encodedPath, HttpHeadersCrt(headers), bodyStream)
 }
 

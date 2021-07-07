@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http.engine.crt
 
+import aws.sdk.kotlin.crt.ReadChannelBodyStream
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
