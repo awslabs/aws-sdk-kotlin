@@ -9,13 +9,14 @@ import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HeadersBuilder
 import aws.smithy.kotlin.runtime.http.HttpMethod
+import aws.smithy.kotlin.runtime.http.UrlBuilder
 import aws.smithy.kotlin.runtime.util.InternalApi
 
 interface ServicePresignConfig {
     public val region: String
     public val serviceName: String
     public val endpointResolver: EndpointResolver
-    public val credentialsProvider: CredentialsProvider?
+    public val credentialsProvider: CredentialsProvider
 }
 
 public enum class SigningLocation {
@@ -39,7 +40,7 @@ public data class PresignedRequest(
 
 @InternalApi
 public suspend fun presignUrl(serviceConfig: ServicePresignConfig, requestConfig: PresignedRequestConfig) : PresignedRequest {
-    val crtCredentials = serviceConfig.credentialsProvider!!.getCredentials().toCrt()
+    val crtCredentials = serviceConfig.credentialsProvider?.getCredentials()?.toCrt() ?: error("Must specify credentialsProvider.")
     val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
         region = serviceConfig.region
         service = serviceConfig.serviceName.toLowerCase()

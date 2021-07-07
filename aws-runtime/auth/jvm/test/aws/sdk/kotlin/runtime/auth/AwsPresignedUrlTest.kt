@@ -23,7 +23,7 @@ class AwsPresignedUrlTest2 {
             region = "us-east-1"
             service = "polly"
             credentials = creds
-            signatureType = AwsSignatureType.HTTP_REQUEST_VIA_HEADERS
+            signatureType = AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
             signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
         }
 
@@ -41,7 +41,7 @@ class AwsPresignedUrlTest2 {
         try {
             urlConnection = url.openConnection() as HttpsURLConnection? ?: error("failed to open connection")
             signedRequest.headers.forEach { key, values ->
-                println("$key: $values")
+                println("HEADER ~ $key: $values")
                 urlConnection.setRequestProperty(key, values.first())
             }
             urlConnection.connect()

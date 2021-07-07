@@ -2,9 +2,11 @@ package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.sdkId
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import software.amazon.smithy.aws.traits.ServiceTrait
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
-import software.amazon.smithy.codegen.core.SymbolReference
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.core.DEFAULT_SOURCE_SET_ROOT
@@ -25,28 +27,40 @@ import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
-import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.StructureShape
-import software.amazon.smithy.model.traits.HttpTrait
 
+@Serializable
 data class PresignableOperation(
     val serviceName: String,
-    val operation: ShapeId,
+    val operationId: String,
+    val presignedParameterId: String?,
     val signingLocation: String,
     val signedHeaders: Set<String>,
-    val methodOverride: String? = null,
-    val hasBody: Boolean = false,
-    val transformRequestToQueryString: Boolean = false
+    val methodOverride: String?,
+    val hasBody: Boolean,
+    val transformRequestToQueryString: Boolean
 )
+
+fun main() {
+    val servicesWithOperationPresigners = listOf(
+        PresignableOperation("polly", "com.amazonaws.polly#SynthesizeSpeech", null, "QUERY_STRING",  setOf("host"), "GET", hasBody = false, transformRequestToQueryString = true),
+        PresignableOperation("s3", "com.amazonaws.s3#GetObject", null, "HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = false, transformRequestToQueryString = false),
+        PresignableOperation("s3", "com.amazonaws.s3#PutObject", null, "HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = true, transformRequestToQueryString = false)
+    )
+
+    println(servicesWithOperationPresigners)
+
+    println(Json.encodeToString(servicesWithOperationPresigners))
+}
 
 class GeneralPresignerIntegration : KotlinIntegration {
 
     // FIXME ~ this model data may eventually be added to Smithy.  If so this entire integration
     //  should be removed and the logic should move to the AWS SDK.
     private val servicesWithOperationPresigners = listOf(
-        PresignableOperation("polly", ShapeId.from("com.amazonaws.polly#SynthesizeSpeech"), "QUERY_STRING", setOf("host"), "GET", hasBody = false, transformRequestToQueryString = true),
-        PresignableOperation("s3", ShapeId.from("com.amazonaws.s3#GetObject"), "HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization")),
-        PresignableOperation("s3", ShapeId.from("com.amazonaws.s3#PutObject"), "HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, true)
+        PresignableOperation("polly", "com.amazonaws.polly#SynthesizeSpeech", null,"QUERY_STRING", setOf("host"), "GET", hasBody = false, transformRequestToQueryString = true),
+        PresignableOperation("s3", "com.amazonaws.s3#GetObject", null,"HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = false, transformRequestToQueryString = false),
+        PresignableOperation("s3", "com.amazonaws.s3#PutObject", null,"HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = true, transformRequestToQueryString = false)
     )
 
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
@@ -64,11 +78,11 @@ class GeneralPresignerIntegration : KotlinIntegration {
         val presignOperations = servicesWithOperationPresigners.filter { it.serviceName.equals(service.expectTrait<ServiceTrait>().sdkId, ignoreCase = true) }
 
         if (presignOperations.isNotEmpty()) {
-            generatePresignerFile(ctx, delegator, service.expectTrait<SigV4Trait>().name, presignOperations)
+            generatePresigner(ctx, delegator, service.expectTrait<SigV4Trait>().name, presignOperations)
         }
     }
 
-    private fun generatePresignerFile(
+    private fun generatePresigner(
         ctx: CodegenContext,
         delegator: KotlinDelegator,
         sigv4ServiceName: String,
@@ -76,6 +90,9 @@ class GeneralPresignerIntegration : KotlinIntegration {
     ) {
         val writer = KotlinWriter("${ctx.settings.pkg.name}.internal")
         val serviceShape = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
+        val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
+
+        writer.addImport(serviceSymbol)
 
         writer.addImport(RuntimeTypes.Http.HttpMethod)
         writer.addImport(RuntimeTypes.Core.ExecutionContext)
@@ -91,7 +108,7 @@ class GeneralPresignerIntegration : KotlinIntegration {
         writer.addImport(AwsRuntimeTypes.Core.Endpoint.EndpointResolver)
 
         presignOperations.forEach { presignableOp ->
-            val op = ctx.model.expectShape<OperationShape>(presignableOp.operation)
+            val op = ctx.model.expectShape<OperationShape>(presignableOp.operationId)
             val request = ctx.model.expectShape<StructureShape>(op.input.get())
 
             writer.addImport(ctx.symbolProvider.toSymbol(request))
@@ -142,6 +159,85 @@ class GeneralPresignerIntegration : KotlinIntegration {
                     writer.write("${presignableOp.hasBody},")
                     writer.write("SigningLocation.${presignableOp.signingLocation}")
                 }
+            }
+
+            // Generate input presign extension function for service client
+            val serviceClientTypeName = serviceSymbol.name
+            writer.withBlock("suspend fun ${request.defaultName(serviceShape)}.presign(serviceClient: $serviceClientTypeName): PresignedRequest {", "}") {
+                writer.write("""
+                    val serviceClientConfig = object : ServicePresignConfig {
+                        override val region: String
+                            get() = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
+                        override val serviceName: String
+                            get() = serviceClient.serviceName
+                        override val endpointResolver: EndpointResolver
+                            get() = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
+                        override val credentialsProvider: CredentialsProvider
+                            get() = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
+                    }
+                """.trimIndent())
+                writer.write("return presignUrl(serviceClientConfig, $requestConfigFnName(this))")
+            }
+
+            // Generate presign config builder
+            val presignConfigTypeName = "${sigv4ServiceName.capitalize()}PresignConfig"
+            writer.withBlock("class $presignConfigTypeName private constructor(builder: DslBuilder): ServicePresignConfig {", "}") {
+                writer.write("""
+                    override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
+                    override val endpointResolver: EndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
+                    override val region: String = builder.region ?: error("Must specify an AWS region.")
+                    override val serviceName: String = "$sigv4ServiceName"
+                    
+                    companion object {
+                        @JvmStatic
+                        fun fluentBuilder(): FluentBuilder = BuilderImpl()
+                        fun builder(): DslBuilder = BuilderImpl()
+                        operator fun invoke(block: DslBuilder.() -> kotlin.Unit): ServicePresignConfig = BuilderImpl().apply(block).build()
+                    }
+                    
+                    interface FluentBuilder {
+                        fun credentialsProvider(credentialsProvider: CredentialsProvider): FluentBuilder
+                        fun endpointResolver(endpointResolver: EndpointResolver): FluentBuilder
+                        fun region(region: String): FluentBuilder
+                        fun build(): ServicePresignConfig
+                    }
+                    
+                    interface DslBuilder {
+                        /**
+                         * The AWS credentials provider to use for authenticating requests. If not provided a
+                         * [aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider] instance will be used.
+                         */
+                        var credentialsProvider: CredentialsProvider?
+
+                        /**
+                         * Determines the endpoint (hostname) to make requests to. When not provided a default
+                         * resolver is configured automatically. This is an advanced client option.
+                         */
+                        var endpointResolver: EndpointResolver?
+
+                        /**
+                         * AWS region to make requests to
+                         */
+                        var region: String?
+
+                        fun build(): ServicePresignConfig
+                    }
+                    
+                    internal class BuilderImpl() : FluentBuilder, DslBuilder {
+                        override var credentialsProvider: CredentialsProvider? = null
+                        override var endpointResolver: EndpointResolver? = null
+                        override var region: String? = null
+            
+                        override fun build(): ServicePresignConfig = PollyPresignConfig(this)
+                        override fun credentialsProvider(credentialsProvider: CredentialsProvider): FluentBuilder =
+                            apply { this.credentialsProvider = credentialsProvider }
+            
+                        override fun endpointResolver(endpointResolver: EndpointResolver): FluentBuilder =
+                            apply { this.endpointResolver = endpointResolver }
+            
+                        override fun region(region: String): FluentBuilder = apply { this.region = region }
+                    }
+                """.trimIndent())
             }
         }
 
