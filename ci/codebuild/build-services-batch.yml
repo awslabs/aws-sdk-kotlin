@@ -1,0 +1,23 @@
+version: 0.2
+
+env:
+  shell: bash
+  variables:
+     BUILDER_VERSION: "v0.8.19"
+     BUILDER_SOURCE: "releases"
+     # host owned by CRT team to host aws-crt-builder releases. Contact their on-call with any issues
+     BUILDER_HOST: "https://d19elf31gohf1l.cloudfront.net"
+     CI_USER: "aws-sdk-kotlin-ci"
+  secrets-manager:
+    CI_ACCESS_TOKEN: gh-aws-sdk-kotlin-ci:personal-access-token
+phases:
+  install:
+    runtime-versions:
+      java: corretto8
+    commands:
+      - apt update && apt install -y sudo
+  build:
+    commands:
+      - echo "Generate services"
+      - find codegen/sdk/aws-models -name '*.json' | sort | awk "NR % $NUM_JOBS == $JOB" > services.txt
+      - cat services.txt
