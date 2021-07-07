@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-// FIXME - package name is incorrect
-package aws.sdk.kotlin.crt
+package aws.sdk.kotlin.runtime.crt
 
 import aws.sdk.kotlin.crt.http.HttpRequestBodyStream
 import aws.sdk.kotlin.crt.io.MutableBuffer
