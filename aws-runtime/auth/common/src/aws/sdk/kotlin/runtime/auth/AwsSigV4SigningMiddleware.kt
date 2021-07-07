@@ -93,6 +93,9 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
             val logger: Logger by lazy { logger.withContext(req.context) }
 
             val isUnsignedRequest = req.context.isUnsignedRequest()
+            // FIXME - an alternative here would be to just pre-compute the sha256 of the payload ourselves and set
+            //         the signed body value on the signing config. This would prevent needing to launch a coroutine
+            //         for streaming requests since we already have a suspend context.
             val signableRequest = req.subject.toSignableCrtRequest(isUnsignedRequest)
 
             // SDKs are supposed to default to signed payload _always_ when possible (and when `unsignedPayload` trait isn't present).
