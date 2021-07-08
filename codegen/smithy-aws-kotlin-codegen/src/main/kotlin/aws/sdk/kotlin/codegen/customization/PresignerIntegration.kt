@@ -2,9 +2,6 @@ package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.sdkId
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import software.amazon.smithy.aws.traits.ServiceTrait
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
@@ -29,34 +26,34 @@ import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.StructureShape
 
-@Serializable
-data class PresignableOperation(
-    val serviceName: String,
-    val operationId: String,
-    val presignedParameterId: String?,
-    val signingLocation: String,
-    val signedHeaders: Set<String>,
-    val methodOverride: String?,
-    val hasBody: Boolean,
-    val transformRequestToQueryString: Boolean
-)
+/**
+ * This integration applies to any AWS service that provides presign capability on one or more operations.
+ *
+ * At the time of writing, presigned operations are unmodeled, however it may happen that traits are added
+ * to API models in the future to encapsulate this functionality.  As such, this integration is written such
+ * that codegen is driven from a du jour model of presign operations.  If and when this state is available
+ * in the API model, this informal model should be removed and access to the Smithy model should be used
+ * instead to drive codegen.
+ */
+class PresignerIntegration : KotlinIntegration {
 
-fun main() {
-    val servicesWithOperationPresigners = listOf(
-        PresignableOperation("polly", "com.amazonaws.polly#SynthesizeSpeech", null, "QUERY_STRING",  setOf("host"), "GET", hasBody = false, transformRequestToQueryString = true),
-        PresignableOperation("s3", "com.amazonaws.s3#GetObject", null, "HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = false, transformRequestToQueryString = false),
-        PresignableOperation("s3", "com.amazonaws.s3#PutObject", null, "HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = true, transformRequestToQueryString = false)
+    /**
+     * Represents a presignable operation.
+     *
+     * NOTE: This type intentionally uses serializable types to make model integration easier in the future.
+     */
+    data class PresignableOperation(
+        val serviceName: String,
+        val operationId: String,
+        val presignedParameterId: String?,
+        val signingLocation: String,
+        val signedHeaders: Set<String>,
+        val methodOverride: String?,
+        val hasBody: Boolean,
+        val transformRequestToQueryString: Boolean
     )
 
-    println(servicesWithOperationPresigners)
-
-    println(Json.encodeToString(servicesWithOperationPresigners))
-}
-
-class GeneralPresignerIntegration : KotlinIntegration {
-
-    // FIXME ~ this model data may eventually be added to Smithy.  If so this entire integration
-    //  should be removed and the logic should move to the AWS SDK.
+    // This is the dejour model that may be replaced by the API model once presign state is available
     private val servicesWithOperationPresigners = listOf(
         PresignableOperation("polly", "com.amazonaws.polly#SynthesizeSpeech", null,"QUERY_STRING", setOf("host"), "GET", hasBody = false, transformRequestToQueryString = true),
         PresignableOperation("s3", "com.amazonaws.s3#GetObject", null,"HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = false, transformRequestToQueryString = false),
@@ -178,11 +175,12 @@ class GeneralPresignerIntegration : KotlinIntegration {
                 """.trimIndent())
                 writer.write("return presignUrl(serviceClientConfig, $requestConfigFnName(this))")
             }
+        }
 
-            // Generate presign config builder
-            val presignConfigTypeName = "${sigv4ServiceName.capitalize()}PresignConfig"
-            writer.withBlock("class $presignConfigTypeName private constructor(builder: DslBuilder): ServicePresignConfig {", "}") {
-                writer.write("""
+        // Generate presign config builder
+        val presignConfigTypeName = "${sigv4ServiceName.capitalize()}PresignConfig"
+        writer.withBlock("class $presignConfigTypeName private constructor(builder: DslBuilder): ServicePresignConfig {", "}") {
+            writer.write("""
                     override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
                     override val endpointResolver: EndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
                     override val region: String = builder.region ?: error("Must specify an AWS region.")
@@ -228,7 +226,7 @@ class GeneralPresignerIntegration : KotlinIntegration {
                         override var endpointResolver: EndpointResolver? = null
                         override var region: String? = null
             
-                        override fun build(): ServicePresignConfig = PollyPresignConfig(this)
+                        override fun build(): ServicePresignConfig = $presignConfigTypeName(this)
                         override fun credentialsProvider(credentialsProvider: CredentialsProvider): FluentBuilder =
                             apply { this.credentialsProvider = credentialsProvider }
             
@@ -238,8 +236,8 @@ class GeneralPresignerIntegration : KotlinIntegration {
                         override fun region(region: String): FluentBuilder = apply { this.region = region }
                     }
                 """.trimIndent())
-            }
         }
+
 
         val packagePath = ctx.settings.pkg.name.namespaceToPath()
         delegator.fileManifest.writeFile("$DEFAULT_SOURCE_SET_ROOT$packagePath/internal/Presigner.kt", writer.toString())
