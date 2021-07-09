@@ -21,6 +21,10 @@ import java.util.*
  * @param endpointData Parsed endpoints.json [ObjectNode]
  */
 class EndpointResolverGenerator(private val endpointData: ObjectNode) {
+    companion object {
+        const val typeName = "DefaultEndpointResolver"
+    }
+
     // Symbols which should be imported
     private val endpointResolverSymbols = setOf(
         AwsRuntimeTypes.Core.Endpoint.Internal.CredentialScope,
@@ -30,7 +34,7 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
     )
 
     fun render(ctx: ProtocolGenerator.GenerationContext) {
-        ctx.delegator.useFileWriter("DefaultEndpointResolver.kt", "${ctx.settings.pkg.name}.internal") {
+        ctx.delegator.useFileWriter("$typeName.kt", "${ctx.settings.pkg.name}.internal") {
             renderResolver(it)
             renderInternalEndpointsModel(ctx, it)
         }
@@ -42,7 +46,7 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
         writer.addImport(AwsRuntimeTypes.Core.Endpoint.Internal.resolveEndpoint)
         writer.addImport("ClientException", AwsKotlinDependency.AWS_CORE)
 
-        writer.openBlock("internal class DefaultEndpointResolver : EndpointResolver {", "}") {
+        writer.openBlock("internal class $typeName : EndpointResolver {", "}") {
             writer.openBlock("override suspend fun resolve(service: String, region: String): Endpoint {", "}") {
                 writer.write("return resolveEndpoint(servicePartitions, region) ?: throw ClientException(#S)", "unable to resolve endpoint for region: \$region")
             }

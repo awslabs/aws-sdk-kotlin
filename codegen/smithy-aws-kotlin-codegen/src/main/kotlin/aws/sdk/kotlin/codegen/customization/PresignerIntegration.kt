@@ -1,15 +1,18 @@
 package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.aws.traits.ServiceTrait
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.core.DEFAULT_SOURCE_SET_ROOT
 import software.amazon.smithy.kotlin.codegen.core.KotlinDelegator
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.addImport
 import software.amazon.smithy.kotlin.codegen.core.defaultName
 import software.amazon.smithy.kotlin.codegen.core.unionVariantName
 import software.amazon.smithy.kotlin.codegen.core.withBlock
@@ -59,13 +62,27 @@ class PresignerIntegration : KotlinIntegration {
         PresignableOperation("s3", "com.amazonaws.s3#GetObject", null,"HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = false, transformRequestToQueryString = false),
         PresignableOperation("s3", "com.amazonaws.s3#PutObject", null,"HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = true, transformRequestToQueryString = false)
     )
+    private val servicesWithPresigners = servicesWithOperationPresigners.map { it.serviceName }.toSet()
+
+    // Symbols which should be imported
+    private val presignerSymbols = setOf(
+        // smithy-kotlin types
+        RuntimeTypes.Core.ExecutionContext,
+        // AWS types
+        AwsRuntimeTypes.Auth.CredentialsProvider,
+        AwsRuntimeTypes.Auth.DefaultChainCredentialsProvider,
+        AwsRuntimeTypes.Auth.PresignedRequest,
+        AwsRuntimeTypes.Auth.PresignedRequestConfig,
+        AwsRuntimeTypes.Auth.ServicePresignConfig,
+        AwsRuntimeTypes.Auth.SigningLocation,
+        AwsRuntimeTypes.Auth.presignUrl,
+        AwsRuntimeTypes.Core.Endpoint.EndpointResolver
+    )
 
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
         val currentSdk = model.expectShape<ServiceShape>(settings.service).sdkId.toLowerCase()
 
-        val serviceNames = servicesWithOperationPresigners.map { it.serviceName }.toSet()
-
-        return serviceNames.contains(currentSdk)
+        return servicesWithPresigners.contains(currentSdk)
     }
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
@@ -75,112 +92,65 @@ class PresignerIntegration : KotlinIntegration {
         val presignOperations = servicesWithOperationPresigners.filter { it.serviceName.equals(service.expectTrait<ServiceTrait>().sdkId, ignoreCase = true) }
 
         if (presignOperations.isNotEmpty()) {
-            generatePresigner(ctx, delegator, service.expectTrait<SigV4Trait>().name, presignOperations)
+            renderPresigner(ctx, delegator, service.expectTrait<SigV4Trait>().name, presignOperations)
         }
     }
 
-    private fun generatePresigner(
+    private fun renderPresigner(
         ctx: CodegenContext,
         delegator: KotlinDelegator,
         sigv4ServiceName: String,
         presignOperations: List<PresignableOperation>
     ) {
-        val writer = KotlinWriter("${ctx.settings.pkg.name}.internal")
+        val writer = KotlinWriter("${ctx.settings.pkg.name}")
         val serviceShape = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
         val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
+        val defaultEndpointResolverSymbol = buildSymbol {
+            namespace = "${ctx.settings.pkg.name}.internal"
+            name = EndpointResolverGenerator.typeName
+        }
 
+        // import generated SDK types
         writer.addImport(serviceSymbol)
-
-        writer.addImport(RuntimeTypes.Http.HttpMethod)
-        writer.addImport(RuntimeTypes.Core.ExecutionContext)
-        writer.addImport(RuntimeTypes.Utils.urlEncodeComponent)
-
-        writer.addImport(AwsRuntimeTypes.Auth.CredentialsProvider)
-        writer.addImport(AwsRuntimeTypes.Auth.DefaultChainCredentialsProvider)
-        writer.addImport(AwsRuntimeTypes.Auth.PresignedRequest)
-        writer.addImport(AwsRuntimeTypes.Auth.PresignedRequestConfig)
-        writer.addImport(AwsRuntimeTypes.Auth.ServicePresignConfig)
-        writer.addImport(AwsRuntimeTypes.Auth.SigningLocation)
-        writer.addImport(AwsRuntimeTypes.Auth.presignUrl)
-        writer.addImport(AwsRuntimeTypes.Core.Endpoint.EndpointResolver)
+        writer.addImport(defaultEndpointResolverSymbol)
 
         presignOperations.forEach { presignableOp ->
             val op = ctx.model.expectShape<OperationShape>(presignableOp.operationId)
             val request = ctx.model.expectShape<StructureShape>(op.input.get())
-
-            writer.addImport(ctx.symbolProvider.toSymbol(request))
-
-            val requestConfigFnName = "${op.defaultName()}PresignConfig"
-
-            // Generate presign function
-            writer.withBlock("suspend fun ${request.defaultName(serviceShape)}.presign(serviceClientConfig: ServicePresignConfig): PresignedRequest {", "}") {
-                writer.write("return presignUrl(serviceClientConfig, $requestConfigFnName(this))")
-            }
-
             val serializerSymbol = buildSymbol {
                 definitionFile = "${op.serializerName().capitalize()}.kt"
                 name = op.serializerName()
                 namespace = "${ctx.settings.pkg.name}.transform"
             }
+
+            writer.addImport(ctx.symbolProvider.toSymbol(request))
+            writer.addImport(presignerSymbols)
             writer.addImport(serializerSymbol)
 
-            // Generate presign config function
-            writer.withBlock("private suspend fun $requestConfigFnName(request: ${request.defaultName(serviceShape)}) : PresignedRequestConfig {", "}") {
-                writer.write("val execContext = ExecutionContext.build {  }")
-                writer.write("val httpRequestBuilder = #T().serialize(execContext, request)", serializerSymbol)
+            val requestConfigFnName = "${op.defaultName()}PresignConfig"
 
-                if (!presignableOp.transformRequestToQueryString) {
-                    writer.write("val path = httpRequestBuilder.url.path")
-                } else {
-                    writer.write("val queryStringBuilder = StringBuilder()")
-                    writer.write("queryStringBuilder.append(httpRequestBuilder.url.path)")
-                    writer.write("queryStringBuilder.append(\"?\")")
-                    request.allMembers.forEach { (_, shape) ->
-                        writer.withBlock("if (request.${shape.defaultName()} != null) {", "}") {
-                            writer.write("queryStringBuilder.append(\"${shape.unionVariantName()}=\${request.${shape.defaultName()}.toString().urlEncodeComponent()}&\")")
-                        }
-                    }
-                    writer.write("val path = queryStringBuilder.toString()")
-                }
-
-                writer.withBlock("return PresignedRequestConfig(", ")") {
-                    val headerList = presignableOp.signedHeaders.joinToString(separator = ",", ) { it.doubleQuote() }
-                    writer.write("setOf($headerList),")
-                    if (presignableOp.methodOverride != null) {
-                        writer.write("HttpMethod.${presignableOp.methodOverride},")
-                    } else {
-                        writer.write("httpRequestBuilder.method,")
-                    }
-                    writer.write("path,")
-                    writer.write("60,")
-                    writer.write("${presignableOp.hasBody},")
-                    writer.write("SigningLocation.${presignableOp.signingLocation}")
-                }
-            }
+            // Generate config presign function
+            renderPresignFromConfigFn(writer, request.defaultName(serviceShape), requestConfigFnName)
 
             // Generate input presign extension function for service client
-            val serviceClientTypeName = serviceSymbol.name
-            writer.withBlock("suspend fun ${request.defaultName(serviceShape)}.presign(serviceClient: $serviceClientTypeName): PresignedRequest {", "}") {
-                writer.write("""
-                    val serviceClientConfig = object : ServicePresignConfig {
-                        override val region: String
-                            get() = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
-                        override val serviceName: String
-                            get() = serviceClient.serviceName
-                        override val endpointResolver: EndpointResolver
-                            get() = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
-                        override val credentialsProvider: CredentialsProvider
-                            get() = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
-                    }
-                """.trimIndent())
-                writer.write("return presignUrl(serviceClientConfig, $requestConfigFnName(this))")
-            }
+            renderPresignFromClientFn(writer, request.defaultName(serviceShape), requestConfigFnName, serviceSymbol.name)
+
+            // Generate presign config function
+            renderPresignConfigFn(writer, request.defaultName(serviceShape), requestConfigFnName, presignableOp, serializerSymbol, request)
         }
 
         // Generate presign config builder
         val presignConfigTypeName = "${sigv4ServiceName.capitalize()}PresignConfig"
-        writer.withBlock("class $presignConfigTypeName private constructor(builder: DslBuilder): ServicePresignConfig {", "}") {
-            writer.write("""
+        renderPresignConfigBuilder(writer, presignConfigTypeName, sigv4ServiceName)
+
+        // Write file
+        val packagePath = ctx.settings.pkg.name.namespaceToPath()
+        delegator.fileManifest.writeFile("$DEFAULT_SOURCE_SET_ROOT$packagePath/Presigner.kt", writer.toString())
+    }
+
+    private fun renderPresignConfigBuilder(writer: KotlinWriter, presignConfigTypeName: String, sigv4ServiceName: String) {
+        writer.withBlock("class $presignConfigTypeName private constructor(builder: DslBuilder): ServicePresignConfig {", "}\n") {
+            write("""
                     override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
                     override val endpointResolver: EndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
                     override val region: String = builder.region ?: error("Must specify an AWS region.")
@@ -237,9 +207,93 @@ class PresignerIntegration : KotlinIntegration {
                     }
                 """.trimIndent())
         }
+    }
 
+    private fun renderPresignConfigFn(
+        writer: KotlinWriter,
+        requestTypeName: String,
+        requestConfigFnName: String,
+        presignableOp: PresignableOperation,
+        serializerSymbol: Symbol,
+        request: StructureShape
+    ) {
+        writer.withBlock("private suspend fun $requestConfigFnName(request: $requestTypeName, durationSeconds: ULong) : PresignedRequestConfig {", "}\n") {
+            write("require(durationSeconds > 0u) { \"duration must be greater than zero\" }")
+            write("val execContext = ExecutionContext.build {  }")
+            write("val httpRequestBuilder = #T().serialize(execContext, request)", serializerSymbol)
 
-        val packagePath = ctx.settings.pkg.name.namespaceToPath()
-        delegator.fileManifest.writeFile("$DEFAULT_SOURCE_SET_ROOT$packagePath/internal/Presigner.kt", writer.toString())
+            if (!presignableOp.transformRequestToQueryString) {
+                write("val path = httpRequestBuilder.url.path")
+            } else {
+                addImport(RuntimeTypes.Utils.urlEncodeComponent)
+                write("val queryStringBuilder = StringBuilder()")
+                write("queryStringBuilder.append(httpRequestBuilder.url.path)")
+                write("queryStringBuilder.append(\"?\")")
+                request.allMembers.forEach { (_, shape) ->
+                    withBlock("if (request.${shape.defaultName()} != null) {", "}") {
+                        write("queryStringBuilder.append(\"${shape.unionVariantName()}=\${request.${shape.defaultName()}.toString().urlEncodeComponent()}&\")")
+                    }
+                }
+                write("val path = queryStringBuilder.toString()")
+            }
+
+            writer.withBlock("return PresignedRequestConfig(", ")") {
+                val headerList = presignableOp.signedHeaders.joinToString(separator = ",", ) { it.doubleQuote() }
+                write("setOf($headerList),")
+                if (presignableOp.methodOverride != null) {
+                    addImport(RuntimeTypes.Http.HttpMethod)
+                    write("#T.${presignableOp.methodOverride},", RuntimeTypes.Http.HttpMethod)
+                } else {
+                    write("httpRequestBuilder.method,")
+                }
+                write("path,")
+                write("durationSeconds.toLong(),")
+                write("${presignableOp.hasBody},")
+                write("SigningLocation.${presignableOp.signingLocation}")
+            }
+        }
+    }
+
+    private fun renderPresignFromClientFn(
+        writer: KotlinWriter,
+        requestTypeName: String,
+        requestConfigFnName: String,
+        serviceClientTypeName: String
+    ) {
+        writer.write("""
+                /**
+                 * Presign a [$requestTypeName] using a [$serviceClientTypeName].
+                 * @param serviceClient the client providing properties used to generate the presigned request. 
+                 * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
+                 * @return The [PresignedRequest] that can be invoked within the specified time window.
+                 */
+            """.trimIndent())
+        // FIXME ~ Replace or add additional function, swap ULong type for kotlin.time.Duration when type becomes stable
+        writer.withBlock("suspend fun $requestTypeName.presign(serviceClient: $serviceClientTypeName, durationSeconds: ULong): PresignedRequest {", "}\n") {
+            write("""
+                    val serviceClientConfig = object : ServicePresignConfig {
+                        override val region: String = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
+                        override val serviceName: String = serviceClient.serviceName
+                        override val endpointResolver: EndpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
+                        override val credentialsProvider: CredentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
+                    }
+                """.trimIndent())
+            write("return presignUrl(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
+        }
+    }
+
+    private fun renderPresignFromConfigFn(writer: KotlinWriter, requestTypeName: String, requestConfigFnName: String) {
+        writer.write("""
+                /**
+                 * Presign a [$requestTypeName] using a [ServicePresignConfig].
+                 * @param serviceClientConfig the client configuration used to generate the presigned request
+                 * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity. 
+                 * @return The [PresignedRequest] that can be invoked within the specified time window.
+                 */
+            """.trimIndent(), )
+        // FIXME ~ Replace or add additional function, swap ULong type for kotlin.time.Duration when type becomes stable
+        writer.withBlock("suspend fun $requestTypeName.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): PresignedRequest {", "}\n") {
+            write("return presignUrl(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
+        }
     }
 }
