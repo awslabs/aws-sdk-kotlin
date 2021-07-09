@@ -2,7 +2,6 @@ package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator
-import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.aws.traits.ServiceTrait
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.codegen.core.Symbol
@@ -28,6 +27,7 @@ import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.StructureShape
+import java.util.logging.Logger
 
 /**
  * This integration applies to any AWS service that provides presign capability on one or more operations.
@@ -43,29 +43,79 @@ class PresignerIntegration : KotlinIntegration {
     /**
      * Represents a presignable operation.
      *
-     * NOTE: This type intentionally uses serializable types to make model integration easier in the future.
+     * NOTE: This type intentionally uses serializable types to make future model migration easier.
      */
     data class PresignableOperation(
-        val serviceName: String,
+        /**
+         * ID of service presigning applies to
+         */
+        val serviceId: String,
+        /**
+         * Operation capable of presigning
+         */
         val operationId: String,
+        /**
+         * (Optional) parameter in which presigned URL should be passed on behalf of the customer
+         */
         val presignedParameterId: String?,
+        /**
+         * HEADER or QUERY_STRING depending on the service and operation.
+         */
         val signingLocation: String,
+        /**
+         * List of header keys that should be included when generating the request signature
+         */
         val signedHeaders: Set<String>,
+        /**
+         * (Optional) override of operation’s HTTP method
+         */
         val methodOverride: String?,
+        /**
+         * true if operation will pass an unsigned body with the request
+         */
         val hasBody: Boolean,
+        /**
+         * If true, map request parameters onto the query string of the presigned URL
+         */
         val transformRequestToQueryString: Boolean
     )
 
     // This is the dejour model that may be replaced by the API model once presign state is available
     private val servicesWithOperationPresigners = listOf(
-        PresignableOperation("polly", "com.amazonaws.polly#SynthesizeSpeech", null,"QUERY_STRING", setOf("host"), "GET", hasBody = false, transformRequestToQueryString = true),
-        PresignableOperation("s3", "com.amazonaws.s3#GetObject", null,"HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = false, transformRequestToQueryString = false),
-        PresignableOperation("s3", "com.amazonaws.s3#PutObject", null,"HEADER", setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"), null, hasBody = true, transformRequestToQueryString = false)
+        PresignableOperation(
+            "com.amazonaws.polly#Parrot_v1",
+            "com.amazonaws.polly#SynthesizeSpeech",
+            null,"QUERY_STRING",
+            setOf("host"),
+            "GET",
+            hasBody = false,
+            transformRequestToQueryString = true
+        ),
+        PresignableOperation(
+            "com.amazonaws.s3#AmazonS3",
+            "com.amazonaws.s3#GetObject",
+            null,
+            "HEADER",
+            setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"),
+            null,
+            hasBody = false,
+            transformRequestToQueryString = false
+        ),
+        PresignableOperation(
+            "com.amazonaws.s3#AmazonS3",
+            "com.amazonaws.s3#PutObject",
+            null,
+            "HEADER",
+            setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"),
+            null,
+            hasBody = true,
+            transformRequestToQueryString = false
+        )
     )
-    private val servicesWithPresigners = servicesWithOperationPresigners.map { it.serviceName }.toSet()
+    private val presignableServiceIds = servicesWithOperationPresigners.map { it.serviceId }.toSet()
 
     // Symbols which should be imported
-    private val presignerSymbols = setOf(
+    private val presignerRuntimeSymbols = setOf(
         // smithy-kotlin types
         RuntimeTypes.Core.ExecutionContext,
         // AWS types
@@ -79,20 +129,26 @@ class PresignerIntegration : KotlinIntegration {
         AwsRuntimeTypes.Core.Endpoint.EndpointResolver
     )
 
-    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
-        val currentSdk = model.expectShape<ServiceShape>(settings.service).sdkId.toLowerCase()
+    private val logger: Logger = Logger.getLogger(PresignerIntegration::class.java.name)
 
-        return servicesWithPresigners.contains(currentSdk)
+    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
+        val currentServiceId = model.expectShape<ServiceShape>(settings.service).id.toString()
+
+        return presignableServiceIds.contains(currentServiceId)
     }
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
         check(service.hasTrait<SigV4Trait>()) { "Invalid service. Does not specify sigv4 trait: ${service.id}" }
 
-        val presignOperations = servicesWithOperationPresigners.filter { it.serviceName.equals(service.expectTrait<ServiceTrait>().sdkId, ignoreCase = true) }
+        val presignOperations = servicesWithOperationPresigners.filter {
+            it.serviceId == service.id.toString()
+        }
 
         if (presignOperations.isNotEmpty()) {
             renderPresigner(ctx, delegator, service.expectTrait<SigV4Trait>().name, presignOperations)
+        } else {
+            logger.warning("Service ${service.id} is designated as a service but no operations were specified.")
         }
     }
 
@@ -109,11 +165,14 @@ class PresignerIntegration : KotlinIntegration {
             namespace = "${ctx.settings.pkg.name}.internal"
             name = EndpointResolverGenerator.typeName
         }
+        // import RT types
+        writer.addImport(presignerRuntimeSymbols)
 
         // import generated SDK types
         writer.addImport(serviceSymbol)
         writer.addImport(defaultEndpointResolverSymbol)
 
+        // Iterate over each presignable operation and generate presign functions
         presignOperations.forEach { presignableOp ->
             val op = ctx.model.expectShape<OperationShape>(presignableOp.operationId)
             val request = ctx.model.expectShape<StructureShape>(op.input.get())
@@ -123,8 +182,8 @@ class PresignerIntegration : KotlinIntegration {
                 namespace = "${ctx.settings.pkg.name}.transform"
             }
 
+            // import operation symbols
             writer.addImport(ctx.symbolProvider.toSymbol(request))
-            writer.addImport(presignerSymbols)
             writer.addImport(serializerSymbol)
 
             val requestConfigFnName = "${op.defaultName()}PresignConfig"
@@ -149,6 +208,13 @@ class PresignerIntegration : KotlinIntegration {
     }
 
     private fun renderPresignConfigBuilder(writer: KotlinWriter, presignConfigTypeName: String, sigv4ServiceName: String) {
+        writer.write("""
+            /**
+             * Provides a subset of the service client configuration necessary to presign a request.
+             * This type can be used to presign requests in cases where an existing service client
+             * instance is not available.
+             */
+        """.trimIndent())
         writer.withBlock("class $presignConfigTypeName private constructor(builder: DslBuilder): ServicePresignConfig {", "}\n") {
             write("""
                     override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
