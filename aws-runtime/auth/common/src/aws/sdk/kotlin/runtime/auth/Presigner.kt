@@ -9,7 +9,6 @@ import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HeadersBuilder
 import aws.smithy.kotlin.runtime.http.HttpMethod
-import aws.smithy.kotlin.runtime.http.UrlBuilder
 import aws.smithy.kotlin.runtime.util.InternalApi
 
 interface ServicePresignConfig {
@@ -29,7 +28,8 @@ public data class PresignedRequestConfig(
     public val path: String,
     public val duration: Long,
     public val hasBody: Boolean = false,
-    public val signingLocation: SigningLocation
+    public val signingLocation: SigningLocation,
+    public val additionalHeaders: Headers
 )
 
 public data class PresignedRequest(
@@ -53,10 +53,14 @@ public suspend fun presignUrl(serviceConfig: ServicePresignConfig, requestConfig
     }
     val endpoint = serviceConfig.endpointResolver.resolve(serviceConfig.serviceName, serviceConfig.region!!)
     val url = "${endpoint.protocol}://${endpoint.hostname}${requestConfig.path}"
+    val headers = aws.sdk.kotlin.crt.http.Headers.build {
+        append("host", endpoint.hostname)
+        appendAll(requestConfig.additionalHeaders.toCrtHeaders())
+    }
     val request = HttpRequest(
         requestConfig.method.name,
         url,
-        aws.sdk.kotlin.crt.http.Headers.build { append("host", endpoint.hostname) }
+        headers
     )
     val signedRequest = AwsSigner.signRequest(request, signingConfig)
 
@@ -65,6 +69,16 @@ public suspend fun presignUrl(serviceConfig: ServicePresignConfig, requestConfig
 
 private fun aws.sdk.kotlin.crt.http.Headers.toSdkHeaders(): Headers {
     val hdrs =  HeadersBuilder()
+
+    forEach { key, values ->
+        hdrs.appendAll(key, values)
+    }
+
+    return hdrs.build()
+}
+
+private fun Headers.toCrtHeaders(): aws.sdk.kotlin.crt.http.Headers {
+    val hdrs =  aws.sdk.kotlin.crt.http.HeadersBuilder()
 
     forEach { key, values ->
         hdrs.appendAll(key, values)

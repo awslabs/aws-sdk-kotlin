@@ -2,7 +2,6 @@ package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator
-import software.amazon.smithy.aws.traits.ServiceTrait
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
@@ -31,87 +30,8 @@ import java.util.logging.Logger
 
 /**
  * This integration applies to any AWS service that provides presign capability on one or more operations.
- *
- * At the time of writing, presigned operations are unmodeled, however it may happen that traits are added
- * to API models in the future to encapsulate this functionality.  As such, this integration is written such
- * that codegen is driven from a du jour model of presign operations.  If and when this state is available
- * in the API model, this informal model should be removed and access to the Smithy model should be used
- * instead to drive codegen.
  */
 class PresignerIntegration : KotlinIntegration {
-
-    /**
-     * Represents a presignable operation.
-     *
-     * NOTE: This type intentionally uses serializable types to make future model migration easier.
-     */
-    data class PresignableOperation(
-        /**
-         * ID of service presigning applies to
-         */
-        val serviceId: String,
-        /**
-         * Operation capable of presigning
-         */
-        val operationId: String,
-        /**
-         * (Optional) parameter in which presigned URL should be passed on behalf of the customer
-         */
-        val presignedParameterId: String?,
-        /**
-         * HEADER or QUERY_STRING depending on the service and operation.
-         */
-        val signingLocation: String,
-        /**
-         * List of header keys that should be included when generating the request signature
-         */
-        val signedHeaders: Set<String>,
-        /**
-         * (Optional) override of operation’s HTTP method
-         */
-        val methodOverride: String?,
-        /**
-         * true if operation will pass an unsigned body with the request
-         */
-        val hasBody: Boolean,
-        /**
-         * If true, map request parameters onto the query string of the presigned URL
-         */
-        val transformRequestToQueryString: Boolean
-    )
-
-    // This is the dejour model that may be replaced by the API model once presign state is available
-    private val servicesWithOperationPresigners = listOf(
-        PresignableOperation(
-            "com.amazonaws.polly#Parrot_v1",
-            "com.amazonaws.polly#SynthesizeSpeech",
-            null,"QUERY_STRING",
-            setOf("host"),
-            "GET",
-            hasBody = false,
-            transformRequestToQueryString = true
-        ),
-        PresignableOperation(
-            "com.amazonaws.s3#AmazonS3",
-            "com.amazonaws.s3#GetObject",
-            null,
-            "HEADER",
-            setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"),
-            null,
-            hasBody = false,
-            transformRequestToQueryString = false
-        ),
-        PresignableOperation(
-            "com.amazonaws.s3#AmazonS3",
-            "com.amazonaws.s3#PutObject",
-            null,
-            "HEADER",
-            setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"),
-            null,
-            hasBody = true,
-            transformRequestToQueryString = false
-        )
-    )
     private val presignableServiceIds = servicesWithOperationPresigners.map { it.serviceId }.toSet()
 
     // Symbols which should be imported
