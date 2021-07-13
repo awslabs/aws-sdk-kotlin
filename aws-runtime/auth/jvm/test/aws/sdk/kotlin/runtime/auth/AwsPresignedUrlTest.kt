@@ -16,6 +16,56 @@ import kotlin.test.Test
 class AwsPresignedUrlTest2 {
 
     @Test
+    fun testSTSGetCallerIdentity() = runSuspendTest {
+        val creds = DefaultChainCredentialsProvider().crtProvider.getCredentials()
+
+        val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
+            region = "us-east-2"
+            service = "sts"
+            credentials = creds
+            signatureType = AwsSignatureType.HTTP_REQUEST_VIA_HEADERS
+            signedBodyHeader = AwsSignedBodyHeaderType.NONE
+        }
+
+        val request = HttpRequest(
+            "POST",
+            "https://sts.us-east-2.amazonaws.com/",
+            Headers.build { append("host", "sts.us-east-2.amazonaws.com") }
+        )
+        val signedRequest = AwsSigner.signRequest(request, signingConfig)
+
+        val url = URL(signedRequest.encodedPath)
+        val content = "Action=GetCallerIdentity&Version=2011-06-15"
+
+        println(signedRequest.encodedPath.toString())
+
+        val connection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
+        connection.requestMethod = "POST"
+
+
+        signedRequest.headers.forEach { key, values ->
+            println("HEADER: $key -> $values")
+            connection.setRequestProperty(key, values.joinToString(separator = ",") { it })
+        }
+        connection.doOutput = true
+
+        val out = connection.outputStream
+        out.write(content.encodeToByteArray())
+        out.flush()
+        out.close()
+
+        println("HTTP response code: " + connection.getResponseCode())
+        if (connection.responseCode >= 400) {
+            println("Error:")
+            println(connection.errorStream?.bufferedReader()?.readText())
+        } else {
+            println("Response:")
+            println(connection.inputStream?.bufferedReader()?.readText())
+        }
+
+    }
+
+    @Test
     fun testPollyPresignSynthesizeSpeech() = runSuspendTest {
         val creds = DefaultChainCredentialsProvider().crtProvider.getCredentials()
 

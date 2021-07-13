@@ -31,8 +31,8 @@ import java.util.logging.Logger
 /**
  * This integration applies to any AWS service that provides presign capability on one or more operations.
  */
-class PresignerIntegration : KotlinIntegration {
-    private val presignableServiceIds = servicesWithOperationPresigners.map { it.serviceId }.toSet()
+class PresignerIntegration(private val presignOpModel: Set<PresignableOperation> = servicesWithOperationPresigners) : KotlinIntegration {
+    private val presignableServiceIds = presignOpModel.map { it.serviceId }.toSet()
 
     // Symbols which should be imported
     private val presignerRuntimeSymbols = setOf(
@@ -61,7 +61,7 @@ class PresignerIntegration : KotlinIntegration {
         val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
         check(service.hasTrait<SigV4Trait>()) { "Invalid service. Does not specify sigv4 trait: ${service.id}" }
 
-        val presignOperations = servicesWithOperationPresigners.filter {
+        val presignOperations = presignOpModel.filter {
             it.serviceId == service.id.toString()
         }
 

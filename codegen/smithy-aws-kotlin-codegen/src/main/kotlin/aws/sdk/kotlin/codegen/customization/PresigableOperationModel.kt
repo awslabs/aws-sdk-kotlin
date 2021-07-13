@@ -49,7 +49,7 @@ data class PresignableOperation(
 )
 
 // This is the dejour model that may be replaced by the API model once presign state is available
-internal val servicesWithOperationPresigners = listOf(
+internal val servicesWithOperationPresigners = setOf(
     PresignableOperation(
         "com.amazonaws.polly#Parrot_v1",
         "com.amazonaws.polly#SynthesizeSpeech",
