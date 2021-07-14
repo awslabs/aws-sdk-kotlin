@@ -38,7 +38,7 @@ public data class PresignedRequestConfig(
     public val duration: Long,
     public val hasBody: Boolean = false,
     public val signingLocation: SigningLocation,
-    public val additionalHeaders: Headers
+    public val additionalHeaders: Headers = Headers.Empty
 )
 
 /**

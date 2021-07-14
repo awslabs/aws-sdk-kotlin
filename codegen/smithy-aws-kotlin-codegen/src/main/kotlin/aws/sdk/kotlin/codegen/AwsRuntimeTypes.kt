@@ -39,7 +39,7 @@ object AwsRuntimeTypes {
         val AwsSigV4SigningMiddleware = runtimeSymbol("AwsSigV4SigningMiddleware", AwsKotlinDependency.AWS_AUTH)
         val AwsSignedBodyHeaderType = runtimeSymbol("AwsSignedBodyHeaderType", AwsKotlinDependency.AWS_AUTH)
         val CredentialsProvider = runtimeSymbol("CredentialsProvider", AwsKotlinDependency.AWS_AUTH)
-        val presignUrl = runtimeSymbol("presignUrl", AwsKotlinDependency.AWS_AUTH)
+        val createPresignedRequest = runtimeSymbol("createPresignedRequest", AwsKotlinDependency.AWS_AUTH)
         val DefaultChainCredentialsProvider = runtimeSymbol("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_AUTH)
         val PresignedRequest = runtimeSymbol("PresignedRequest", AwsKotlinDependency.AWS_AUTH)
         val PresignedRequestConfig = runtimeSymbol("PresignedRequestConfig", AwsKotlinDependency.AWS_AUTH)

@@ -45,7 +45,7 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
         AwsRuntimeTypes.Auth.PresignedRequestConfig,
         AwsRuntimeTypes.Auth.ServicePresignConfig,
         AwsRuntimeTypes.Auth.SigningLocation,
-        AwsRuntimeTypes.Auth.presignUrl,
+        AwsRuntimeTypes.Auth.createPresignedRequest,
         AwsRuntimeTypes.Core.Endpoint.EndpointResolver
     )
 
@@ -264,7 +264,7 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
                         override val credentialsProvider: CredentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
                     }
                 """.trimIndent())
-            write("return presignUrl(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
+            write("return createPresignedRequest(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
         }
     }
 
@@ -279,7 +279,7 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
             """.trimIndent(), )
         // FIXME ~ Replace or add additional function, swap ULong type for kotlin.time.Duration when type becomes stable
         writer.withBlock("suspend fun $requestTypeName.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): PresignedRequest {", "}\n") {
-            write("return presignUrl(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
+            write("return createPresignedRequest(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
         }
     }
 }
