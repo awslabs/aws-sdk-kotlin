@@ -79,6 +79,16 @@ internal val servicesWithOperationPresigners = setOf(
         null,
         hasBody = true,
         transformRequestToQueryString = false
+    ),
+    PresignableOperation(
+        "com.amazonaws.s3#AmazonS3",
+        "com.amazonaws.s3#UploadPart",
+        null,
+        "HEADER",
+        setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"),
+        null,
+        hasBody = true,
+        transformRequestToQueryString = false
     )/*,
     PresignableOperation(
         "com.amazonaws.sts#AWSSecurityTokenServiceV20110615",

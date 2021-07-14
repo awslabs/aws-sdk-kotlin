@@ -66,7 +66,7 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
         signatureType = if (requestConfig.signingLocation == SigningLocation.HEADER) AwsSignatureType.HTTP_REQUEST_VIA_HEADERS else AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
         signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
         signedBodyValue = if (requestConfig.hasBody) "UNSIGNED-PAYLOAD" else null
-        shouldSignHeader = { header -> requestConfig.signedHeaderKeys.contains(header) }
+        shouldSignHeader = { header -> requestConfig.signedHeaderKeys.any { it.equals(header, ignoreCase = true) } }
         expirationInSeconds = requestConfig.duration
     }
     val endpoint = serviceConfig.endpointResolver.resolve(serviceConfig.serviceName, serviceConfig.region!!)
