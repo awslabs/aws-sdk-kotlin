@@ -78,7 +78,7 @@ fun generateSmithyBuild(services: List<AwsService>): String {
         val absModelPath = service.modelFile.absolutePath.replace("\\", "\\\\")
         val importPaths = mutableListOf(absModelPath)
         if (file(service.modelExtrasDir).exists()) {
-            importPaths.add(service.modelExtrasDir)
+            importPaths.add(service.modelExtrasDir.replace("\\", "\\\\"))
         }
         val imports = importPaths.joinToString { "\"$it\"" }
 
