@@ -1,10 +1,8 @@
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.crt.auth.credentials.Credentials
 import aws.sdk.kotlin.crt.auth.signing.*
 import aws.sdk.kotlin.crt.auth.signing.AwsSignatureType
 import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyHeaderType
-import aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm
 import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
 import aws.sdk.kotlin.crt.http.Headers
 import aws.sdk.kotlin.crt.http.HttpRequest
@@ -45,7 +43,6 @@ class AwsPresignedUrlTest2 {
         val connection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
         connection.requestMethod = "POST"
 
-
         signedRequest.headers.forEach { key, values ->
             println("HEADER: $key -> $values")
             connection.setRequestProperty(key, values.joinToString(separator = ",") { it })
@@ -65,7 +62,6 @@ class AwsPresignedUrlTest2 {
             println("Response:")
             println(connection.inputStream?.bufferedReader()?.readText())
         }
-
     }
 
     @Test

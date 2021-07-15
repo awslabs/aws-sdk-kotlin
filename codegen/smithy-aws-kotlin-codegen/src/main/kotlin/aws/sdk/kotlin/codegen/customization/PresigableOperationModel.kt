@@ -90,7 +90,7 @@ internal val servicesWithOperationPresigners = setOf(
         hasBody = true,
         transformRequestToQueryString = false
     ),
-    //FIXME ~ Following operation signature fails service side.
+    // FIXME ~ Following operation signature fails service side.
     /*PresignableOperation(
         "com.amazonaws.sts#AWSSecurityTokenServiceV20110615",
         "com.amazonaws.sts#GetCallerIdentity",

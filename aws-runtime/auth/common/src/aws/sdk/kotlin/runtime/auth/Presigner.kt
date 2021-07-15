@@ -57,7 +57,7 @@ public data class PresignedRequest(
  * @return a [PresignedRequest] that can be executed by any HTTP client within the specified duration.
  */
 @InternalApi
-public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, requestConfig: PresignedRequestConfig) : PresignedRequest {
+public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, requestConfig: PresignedRequestConfig): PresignedRequest {
     val crtCredentials = serviceConfig.credentialsProvider?.getCredentials()?.toCrt() ?: error("Must specify credentialsProvider.")
     val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
         region = serviceConfig.region
@@ -87,7 +87,7 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
 
 // Convert CRT header type to SDK header type
 private fun aws.sdk.kotlin.crt.http.Headers.toSdkHeaders(): Headers {
-    val hdrs =  HeadersBuilder()
+    val hdrs = HeadersBuilder()
 
     forEach { key, values ->
         hdrs.appendAll(key, values)
@@ -98,7 +98,7 @@ private fun aws.sdk.kotlin.crt.http.Headers.toSdkHeaders(): Headers {
 
 // Convert SDK header type to CRT header type
 private fun Headers.toCrtHeaders(): aws.sdk.kotlin.crt.http.Headers {
-    val hdrs =  aws.sdk.kotlin.crt.http.HeadersBuilder()
+    val hdrs = aws.sdk.kotlin.crt.http.HeadersBuilder()
 
     forEach { key, values ->
         hdrs.appendAll(key, values)

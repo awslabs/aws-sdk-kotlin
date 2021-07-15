@@ -128,15 +128,18 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
     }
 
     private fun renderPresignConfigBuilder(writer: KotlinWriter, presignConfigTypeName: String, sigv4ServiceName: String) {
-        writer.write("""
+        writer.write(
+            """
             /**
              * Provides a subset of the service client configuration necessary to presign a request.
              * This type can be used to presign requests in cases where an existing service client
              * instance is not available.
              */
-        """.trimIndent())
+            """.trimIndent()
+        )
         writer.withBlock("class $presignConfigTypeName private constructor(builder: DslBuilder): ServicePresignConfig {", "}\n") {
-            write("""
+            write(
+                """
                     override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
                     override val endpointResolver: EndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
                     override val region: String = builder.region ?: error("Must specify an AWS region.")
@@ -191,7 +194,8 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
             
                         override fun region(region: String): FluentBuilder = apply { this.region = region }
                     }
-                """.trimIndent())
+                """.trimIndent()
+            )
         }
     }
 
@@ -224,7 +228,7 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
             }
 
             writer.withBlock("return PresignedRequestConfig(", ")") {
-                val headerList = presignableOp.signedHeaders.joinToString(separator = ",", ) { it.doubleQuote() }
+                val headerList = presignableOp.signedHeaders.joinToString(separator = ",",) { it.doubleQuote() }
                 write("setOf($headerList),")
                 if (presignableOp.methodOverride != null) {
                     addImport(RuntimeTypes.Http.HttpMethod)
@@ -246,37 +250,43 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
         requestConfigFnName: String,
         serviceClientTypeName: String
     ) {
-        writer.write("""
+        writer.write(
+            """
                 /**
                  * Presign a [$requestTypeName] using a [$serviceClientTypeName].
                  * @param serviceClient the client providing properties used to generate the presigned request. 
                  * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
                  * @return The [PresignedRequest] that can be invoked within the specified time window.
                  */
-            """.trimIndent())
+            """.trimIndent()
+        )
         // FIXME ~ Replace or add additional function, swap ULong type for kotlin.time.Duration when type becomes stable
         writer.withBlock("suspend fun $requestTypeName.presign(serviceClient: $serviceClientTypeName, durationSeconds: ULong): PresignedRequest {", "}\n") {
-            write("""
+            write(
+                """
                     val serviceClientConfig = object : ServicePresignConfig {
                         override val region: String = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
                         override val serviceName: String = serviceClient.serviceName
                         override val endpointResolver: EndpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
                         override val credentialsProvider: CredentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
                     }
-                """.trimIndent())
+                """.trimIndent()
+            )
             write("return createPresignedRequest(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
         }
     }
 
     private fun renderPresignFromConfigFn(writer: KotlinWriter, requestTypeName: String, requestConfigFnName: String) {
-        writer.write("""
+        writer.write(
+            """
                 /**
                  * Presign a [$requestTypeName] using a [ServicePresignConfig].
                  * @param serviceClientConfig the client configuration used to generate the presigned request
                  * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity. 
                  * @return The [PresignedRequest] that can be invoked within the specified time window.
                  */
-            """.trimIndent(), )
+            """.trimIndent(),
+        )
         // FIXME ~ Replace or add additional function, swap ULong type for kotlin.time.Duration when type becomes stable
         writer.withBlock("suspend fun $requestTypeName.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): PresignedRequest {", "}\n") {
             write("return createPresignedRequest(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
