@@ -115,20 +115,20 @@ class PresignerIntegrationTest {
 
         val expected = """
             package smithy.example
-
+            
             import aws.sdk.kotlin.runtime.auth.CredentialsProvider
             import aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider
             import aws.sdk.kotlin.runtime.auth.PresignedRequest
             import aws.sdk.kotlin.runtime.auth.PresignedRequestConfig
             import aws.sdk.kotlin.runtime.auth.ServicePresignConfig
             import aws.sdk.kotlin.runtime.auth.SigningLocation
-            import aws.sdk.kotlin.runtime.auth.presignUrl
+            import aws.sdk.kotlin.runtime.auth.createPresignedRequest
             import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import smithy.example.internal.DefaultEndpointResolver
             import smithy.example.model.GetFooRequest
             import smithy.example.transform.GetFooOperationSerializer
-
+            
             /**
              * Presign a [GetFooRequest] using a [ServicePresignConfig].
              * @param serviceClientConfig the client configuration used to generate the presigned request
@@ -136,9 +136,9 @@ class PresignerIntegrationTest {
              * @return The [PresignedRequest] that can be invoked within the specified time window.
              */
             suspend fun GetFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): PresignedRequest {
-                return presignUrl(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
+                return createPresignedRequest(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
             }
-
+            
             /**
              * Presign a [GetFooRequest] using a [TestClient].
              * @param serviceClient the client providing properties used to generate the presigned request.
@@ -152,9 +152,9 @@ class PresignerIntegrationTest {
                     override val endpointResolver: EndpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
                     override val credentialsProvider: CredentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
                 }
-                return presignUrl(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
+                return createPresignedRequest(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
             }
-
+            
             private suspend fun getFooPresignConfig(request: GetFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
                 require(durationSeconds > 0u) { "duration must be greater than zero" }
                 val execContext = ExecutionContext.build {  }
@@ -169,7 +169,7 @@ class PresignerIntegrationTest {
                     SigningLocation.HEADER
                 )
             }
-
+            
             /**
              * Provides a subset of the service client configuration necessary to presign a request.
              * This type can be used to presign requests in cases where an existing service client
@@ -180,54 +180,54 @@ class PresignerIntegrationTest {
                 override val endpointResolver: EndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
                 override val region: String = builder.region ?: error("Must specify an AWS region.")
                 override val serviceName: String = "example-signing-name"
-
+            
                 companion object {
                     @JvmStatic
                     fun fluentBuilder(): FluentBuilder = BuilderImpl()
                     fun builder(): DslBuilder = BuilderImpl()
                     operator fun invoke(block: DslBuilder.() -> kotlin.Unit): ServicePresignConfig = BuilderImpl().apply(block).build()
                 }
-
+            
                 interface FluentBuilder {
                     fun credentialsProvider(credentialsProvider: CredentialsProvider): FluentBuilder
                     fun endpointResolver(endpointResolver: EndpointResolver): FluentBuilder
                     fun region(region: String): FluentBuilder
                     fun build(): ServicePresignConfig
                 }
-
+            
                 interface DslBuilder {
                     /**
                      * The AWS credentials provider to use for authenticating requests. If not provided a
                      * [aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider] instance will be used.
                      */
                     var credentialsProvider: CredentialsProvider?
-
+            
                     /**
                      * Determines the endpoint (hostname) to make requests to. When not provided a default
                      * resolver is configured automatically. This is an advanced client option.
                      */
                     var endpointResolver: EndpointResolver?
-
+            
                     /**
                      * AWS region to make requests to
                      */
                     var region: String?
-
+            
                     fun build(): ServicePresignConfig
                 }
-
+            
                 internal class BuilderImpl() : FluentBuilder, DslBuilder {
                     override var credentialsProvider: CredentialsProvider? = null
                     override var endpointResolver: EndpointResolver? = null
                     override var region: String? = null
-
+            
                     override fun build(): ServicePresignConfig = Example-signing-namePresignConfig(this)
                     override fun credentialsProvider(credentialsProvider: CredentialsProvider): FluentBuilder =
                         apply { this.credentialsProvider = credentialsProvider }
-
+            
                     override fun endpointResolver(endpointResolver: EndpointResolver): FluentBuilder =
                         apply { this.endpointResolver = endpointResolver }
-
+            
                     override fun region(region: String): FluentBuilder = apply { this.region = region }
                 }
             }
