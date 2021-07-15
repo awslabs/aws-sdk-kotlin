@@ -89,13 +89,14 @@ internal val servicesWithOperationPresigners = setOf(
         null,
         hasBody = true,
         transformRequestToQueryString = false
-    )/*,
-    PresignableOperation(
+    ),
+    //FIXME ~ Following operation signature fails service side.
+    /*PresignableOperation(
         "com.amazonaws.sts#AWSSecurityTokenServiceV20110615",
         "com.amazonaws.sts#GetCallerIdentity",
         presignedParameterId = null,
         signingLocation = "HEADER",
-        setOf("host", "X-Amz-Date", "content-type"),
+        setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"),
         methodOverride = null,
         hasBody = true,
         transformRequestToQueryString = false

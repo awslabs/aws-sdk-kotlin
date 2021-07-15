@@ -13,6 +13,7 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 import kotlin.test.Test
 
+// FIXME ~ Remove this before merging to main
 class AwsPresignedUrlTest2 {
 
     @Test
@@ -30,7 +31,9 @@ class AwsPresignedUrlTest2 {
         val request = HttpRequest(
             "POST",
             "https://sts.us-east-2.amazonaws.com/",
-            Headers.build { append("host", "sts.us-east-2.amazonaws.com") }
+            Headers.build {
+                append("host", "sts.us-east-2.amazonaws.com")
+            }
         )
         val signedRequest = AwsSigner.signRequest(request, signingConfig)
 
@@ -121,7 +124,6 @@ class AwsPresignedUrlTest2 {
         )
 
         val signedRequest = AwsSigner.signRequest(request, signingConfig)
-        val x = signedRequest.headers
         val url = URL("https://${signedRequest.encodedPath}")
 
         println(signedRequest.encodedPath.toString())
