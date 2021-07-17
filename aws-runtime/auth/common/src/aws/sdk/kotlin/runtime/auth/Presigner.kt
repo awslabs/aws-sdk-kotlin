@@ -14,7 +14,7 @@ import aws.smithy.kotlin.runtime.util.InternalApi
 /**
  * The service configuration details for a presigned request
  */
-interface ServicePresignConfig {
+public interface ServicePresignConfig {
     public val region: String
     public val serviceName: String
     public val endpointResolver: EndpointResolver
@@ -32,7 +32,6 @@ public enum class SigningLocation {
  * Configuration of a presigned request
  */
 public data class PresignedRequestConfig(
-    public val signedHeaderKeys: Set<String>,
     public val method: HttpMethod,
     public val path: String,
     public val duration: Long,
@@ -58,18 +57,17 @@ public data class PresignedRequest(
  */
 @InternalApi
 public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, requestConfig: PresignedRequestConfig): PresignedRequest {
-    val crtCredentials = serviceConfig.credentialsProvider?.getCredentials()?.toCrt() ?: error("Must specify credentialsProvider.")
+    val crtCredentials = serviceConfig.credentialsProvider.getCredentials().toCrt()
     val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
         region = serviceConfig.region
-        service = serviceConfig.serviceName.toLowerCase()
+        service = serviceConfig.serviceName.lowercase()
         credentials = crtCredentials
         signatureType = if (requestConfig.signingLocation == SigningLocation.HEADER) AwsSignatureType.HTTP_REQUEST_VIA_HEADERS else AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
         signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
         signedBodyValue = if (requestConfig.hasBody) "UNSIGNED-PAYLOAD" else null
-        shouldSignHeader = { header -> requestConfig.signedHeaderKeys.any { it.equals(header, ignoreCase = true) } }
         expirationInSeconds = requestConfig.duration
     }
-    val endpoint = serviceConfig.endpointResolver.resolve(serviceConfig.serviceName, serviceConfig.region!!)
+    val endpoint = serviceConfig.endpointResolver.resolve(serviceConfig.serviceName, serviceConfig.region)
     val url = "${endpoint.protocol}://${endpoint.hostname}${requestConfig.path}"
     val headers = aws.sdk.kotlin.crt.http.Headers.build {
         append("Host", endpoint.hostname)
@@ -87,22 +85,22 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
 
 // Convert CRT header type to SDK header type
 private fun aws.sdk.kotlin.crt.http.Headers.toSdkHeaders(): Headers {
-    val hdrs = HeadersBuilder()
+    val headersBuilder = HeadersBuilder()
 
     forEach { key, values ->
-        hdrs.appendAll(key, values)
+        headersBuilder.appendAll(key, values)
     }
 
-    return hdrs.build()
+    return headersBuilder.build()
 }
 
 // Convert SDK header type to CRT header type
 private fun Headers.toCrtHeaders(): aws.sdk.kotlin.crt.http.Headers {
-    val hdrs = aws.sdk.kotlin.crt.http.HeadersBuilder()
+    val headersBuilder = aws.sdk.kotlin.crt.http.HeadersBuilder()
 
     forEach { key, values ->
-        hdrs.appendAll(key, values)
+        headersBuilder.appendAll(key, values)
     }
 
-    return hdrs.build()
+    return headersBuilder.build()
 }

@@ -31,10 +31,6 @@ data class PresignableOperation(
      */
     val signingLocation: String,
     /**
-     * List of header keys that should be included when generating the request signature
-     */
-    val signedHeaders: Set<String>,
-    /**
      * (Optional) override of operation’s HTTP method
      */
     val methodOverride: String?,
@@ -55,7 +51,6 @@ internal val servicesWithOperationPresigners = setOf(
         "com.amazonaws.polly#SynthesizeSpeech",
         null,
         "QUERY_STRING",
-        setOf("host"),
         "GET",
         hasBody = false,
         transformRequestToQueryString = true
@@ -65,7 +60,6 @@ internal val servicesWithOperationPresigners = setOf(
         "com.amazonaws.s3#GetObject",
         null,
         "HEADER",
-        setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"),
         null,
         hasBody = false,
         transformRequestToQueryString = false
@@ -75,7 +69,6 @@ internal val servicesWithOperationPresigners = setOf(
         "com.amazonaws.s3#PutObject",
         null,
         "HEADER",
-        setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"),
         null,
         hasBody = true,
         transformRequestToQueryString = false
@@ -85,7 +78,6 @@ internal val servicesWithOperationPresigners = setOf(
         "com.amazonaws.s3#UploadPart",
         null,
         "HEADER",
-        setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"),
         null,
         hasBody = true,
         transformRequestToQueryString = false
@@ -96,7 +88,6 @@ internal val servicesWithOperationPresigners = setOf(
         "com.amazonaws.sts#GetCallerIdentity",
         presignedParameterId = null,
         signingLocation = "HEADER",
-        setOf("host", "x-amz-content-sha256", "X-Amz-Date", "Authorization"),
         methodOverride = null,
         hasBody = true,
         transformRequestToQueryString = false

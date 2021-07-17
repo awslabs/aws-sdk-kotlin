@@ -17,7 +17,7 @@ import kotlin.test.assertTrue
 
 class PresignerIntegrationTest {
 
-    val testModel = """
+    private val testModel = """
             namespace smithy.example
 
             use aws.protocols#awsJson1_0
@@ -58,10 +58,9 @@ class PresignerIntegrationTest {
                 "smithy.example#GetFoo",
                 null,
                 "HEADER",
-                setOf(),
                 null,
-                false,
-                false
+                hasBody = false,
+                transformRequestToQueryString = false
             )
         )
 
@@ -79,10 +78,9 @@ class PresignerIntegrationTest {
                 "smithy.example#GetFoo",
                 null,
                 "HEADER",
-                setOf(),
                 null,
-                false,
-                false
+                hasBody = false,
+                transformRequestToQueryString = false
             )
         )
 
@@ -100,10 +98,9 @@ class PresignerIntegrationTest {
                 "smithy.example#GetFoo",
                 null,
                 "HEADER",
-                setOf(),
                 null,
-                false,
-                false
+                hasBody = false,
+                transformRequestToQueryString = false
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -161,7 +158,6 @@ class PresignerIntegrationTest {
                 val httpRequestBuilder = GetFooOperationSerializer().serialize(execContext, request)
                 val path = httpRequestBuilder.url.path
                 return PresignedRequestConfig(
-                    setOf(),
                     httpRequestBuilder.method,
                     path,
                     durationSeconds.toLong(),
@@ -244,10 +240,9 @@ class PresignerIntegrationTest {
                 "smithy.example#GetFoo",
                 null,
                 "QUERY_STRING",
-                setOf(),
                 null,
-                false,
-                false
+                hasBody = false,
+                transformRequestToQueryString = false
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -259,7 +254,6 @@ class PresignerIntegrationTest {
 
         val expected = """
             return PresignedRequestConfig(
-                setOf(),
                 httpRequestBuilder.method,
                 path,
                 durationSeconds.toLong(),
@@ -279,10 +273,9 @@ class PresignerIntegrationTest {
                 "smithy.example#GetFoo",
                 null,
                 "HEADER",
-                setOf("Header-A", "Header-B"),
                 null,
-                false,
-                false
+                hasBody = false,
+                transformRequestToQueryString = false
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -294,7 +287,6 @@ class PresignerIntegrationTest {
 
         val expected = """
             return PresignedRequestConfig(
-                setOf("Header-A","Header-B"),
                 httpRequestBuilder.method,
                 path,
                 durationSeconds.toLong(),
@@ -314,10 +306,9 @@ class PresignerIntegrationTest {
                 "smithy.example#GetFoo",
                 null,
                 "HEADER",
-                setOf(),
                 "PUT",
-                false,
-                false
+                hasBody = false,
+                transformRequestToQueryString = false
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -329,7 +320,6 @@ class PresignerIntegrationTest {
 
         val expected = """
                 return PresignedRequestConfig(
-                    setOf(),
                     HttpMethod.PUT,
                     path,
                     durationSeconds.toLong(),
@@ -349,10 +339,9 @@ class PresignerIntegrationTest {
                 "smithy.example#GetFoo",
                 null,
                 "HEADER",
-                setOf(),
                 null,
-                true,
-                false
+                hasBody = true,
+                transformRequestToQueryString = false
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -364,7 +353,6 @@ class PresignerIntegrationTest {
 
         val expected = """
             return PresignedRequestConfig(
-                setOf(),
                 httpRequestBuilder.method,
                 path,
                 durationSeconds.toLong(),
@@ -384,10 +372,9 @@ class PresignerIntegrationTest {
                 "smithy.example#GetFoo",
                 null,
                 "HEADER",
-                setOf(),
                 null,
-                false,
-                true
+                hasBody = false,
+                transformRequestToQueryString = true
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -411,7 +398,6 @@ class PresignerIntegrationTest {
                 }
                 val path = queryStringBuilder.toString()
                 return PresignedRequestConfig(
-                    setOf(),
                     httpRequestBuilder.method,
                     path,
                     durationSeconds.toLong(),

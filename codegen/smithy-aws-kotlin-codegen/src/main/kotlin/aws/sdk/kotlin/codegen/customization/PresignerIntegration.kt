@@ -20,7 +20,6 @@ import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
-import software.amazon.smithy.kotlin.codegen.utils.doubleQuote
 import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
@@ -228,8 +227,6 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
             }
 
             writer.withBlock("return PresignedRequestConfig(", ")") {
-                val headerList = presignableOp.signedHeaders.joinToString(separator = ",",) { it.doubleQuote() }
-                write("setOf($headerList),")
                 if (presignableOp.methodOverride != null) {
                     addImport(RuntimeTypes.Http.HttpMethod)
                     write("#T.${presignableOp.methodOverride},", RuntimeTypes.Http.HttpMethod)
