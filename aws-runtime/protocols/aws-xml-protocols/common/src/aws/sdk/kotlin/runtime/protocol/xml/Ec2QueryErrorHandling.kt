@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.protocol.xml
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.http.ExceptionRegistry
 import aws.sdk.kotlin.runtime.http.middleware.errors.AbstractErrorHandling
+import aws.sdk.kotlin.runtime.http.middleware.errors.ErrorDetails
 import aws.smithy.kotlin.runtime.http.FeatureKey
 import aws.smithy.kotlin.runtime.http.Headers
 
@@ -20,10 +21,10 @@ import aws.smithy.kotlin.runtime.http.Headers
 public class Ec2QueryErrorHandling(registry: ExceptionRegistry) : AbstractErrorHandling(registry) {
     public companion object Feature : AbstractFeature<Ec2QueryErrorHandling>() {
         override val key: FeatureKey<Ec2QueryErrorHandling> = FeatureKey("Ec2QueryErrorHandling")
-        override fun create(config: Config) = Ec2QueryErrorHandling(config.registry)
+        override fun create(config: Config): Ec2QueryErrorHandling = Ec2QueryErrorHandling(config.registry)
     }
 
-    protected override val protocolName = "EC2 query"
-    override suspend fun parseErrorResponse(headers: Headers, payload: ByteArray?) =
+    protected override val protocolName: String = "EC2 query"
+    override suspend fun parseErrorResponse(headers: Headers, payload: ByteArray?): ErrorDetails =
         parseEc2QueryErrorResponse(payload ?: emptyByteArray)
 }

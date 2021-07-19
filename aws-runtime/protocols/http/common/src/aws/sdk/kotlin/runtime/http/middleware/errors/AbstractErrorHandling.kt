@@ -16,7 +16,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.util.AttributeKey
 import aws.smithy.kotlin.runtime.util.Attributes
 
-data class ErrorDetails(val code: String?, val message: String?, val requestId: String?)
+public data class ErrorDetails(val code: String?, val message: String?, val requestId: String?)
 
 /**
  * Http feature that inspects responses and throws the appropriate modeled service error.
@@ -43,7 +43,7 @@ public abstract class AbstractErrorHandling(private val registry: ExceptionRegis
 
     public abstract class AbstractFeature<T : Feature> : HttpClientFeatureFactory<Config, T> {
         final override fun create(block: Config.() -> Unit): T = create(Config().apply(block))
-        abstract fun create(config: Config): T
+        protected abstract fun create(config: Config): T
     }
 
     final override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
@@ -87,7 +87,7 @@ public abstract class AbstractErrorHandling(private val registry: ExceptionRegis
         }
     }
 
-    abstract suspend fun parseErrorResponse(headers: Headers, payload: ByteArray?): ErrorDetails
+    protected abstract suspend fun parseErrorResponse(headers: Headers, payload: ByteArray?): ErrorDetails
 }
 
 /**

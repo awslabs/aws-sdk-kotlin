@@ -24,15 +24,13 @@ import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*
 
-private const val AwsQueryContentType: String = "application/x-www-form-urlencoded"
-
 /**
  * Handles generating the aws.protocols#awsQuery protocol for services.
  *
  * @inheritDoc
  * @see AwsHttpBindingProtocolGenerator
  */
-open class AwsQuery : QueryHttpBindingProtocolGenerator() {
+class AwsQuery : QueryHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = AwsQueryTrait.ID
 
     override fun getDeserializerDescriptorGenerator(
@@ -118,7 +116,7 @@ private class AwsQuerySerdeXmlDescriptorGenerator(
 
         if (objectShape.hasTrait<OperationOutput>()) {
             traits.removeIf { it.symbol == RuntimeTypes.Serde.SerdeXml.XmlSerialName }
-            val serialName = objectShape.changeNameSuffix("Result" to "Response")
+            val serialName = objectShape.changeNameSuffix("Response" to "Result")
             traits.add(RuntimeTypes.Serde.SerdeXml.XmlSerialName, serialName.dq())
         }
 

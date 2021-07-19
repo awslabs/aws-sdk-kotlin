@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.protocol.json
 import aws.sdk.kotlin.runtime.*
 import aws.sdk.kotlin.runtime.http.*
 import aws.sdk.kotlin.runtime.http.middleware.errors.AbstractErrorHandling
+import aws.sdk.kotlin.runtime.http.middleware.errors.ErrorDetails
 import aws.smithy.kotlin.runtime.http.*
 
 /**
@@ -19,10 +20,10 @@ import aws.smithy.kotlin.runtime.http.*
 public class RestJsonError(registry: ExceptionRegistry) : AbstractErrorHandling(registry) {
     public companion object Feature : AbstractFeature<RestJsonError>() {
         override val key: FeatureKey<RestJsonError> = FeatureKey("RestJsonError")
-        override fun create(config: Config) = RestJsonError(config.registry)
+        override fun create(config: Config): RestJsonError = RestJsonError(config.registry)
     }
 
-    protected override val protocolName = "restJson"
-    override suspend fun parseErrorResponse(headers: Headers, payload: ByteArray?) =
+    protected override val protocolName: String = "JSON"
+    override suspend fun parseErrorResponse(headers: Headers, payload: ByteArray?): ErrorDetails =
         RestJsonErrorDeserializer.deserialize(headers, payload)
 }

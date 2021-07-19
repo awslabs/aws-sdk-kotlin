@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.protocol.xml
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.http.ExceptionRegistry
 import aws.sdk.kotlin.runtime.http.middleware.errors.AbstractErrorHandling
+import aws.sdk.kotlin.runtime.http.middleware.errors.ErrorDetails
 import aws.smithy.kotlin.runtime.http.FeatureKey
 import aws.smithy.kotlin.runtime.http.Headers
 
@@ -20,10 +21,10 @@ import aws.smithy.kotlin.runtime.http.Headers
 public class RestXmlError(registry: ExceptionRegistry) : AbstractErrorHandling(registry) {
     public companion object Feature : AbstractFeature<RestXmlError>() {
         override val key: FeatureKey<RestXmlError> = FeatureKey("RestXmlError")
-        override fun create(config: Config) = RestXmlError(config.registry)
+        override fun create(config: Config): RestXmlError = RestXmlError(config.registry)
     }
 
-    protected override val protocolName = "restXml"
-    override suspend fun parseErrorResponse(headers: Headers, payload: ByteArray?) =
+    protected override val protocolName: String = "restXml"
+    override suspend fun parseErrorResponse(headers: Headers, payload: ByteArray?): ErrorDetails =
         parseRestXmlErrorResponse(payload ?: emptyByteArray)
 }

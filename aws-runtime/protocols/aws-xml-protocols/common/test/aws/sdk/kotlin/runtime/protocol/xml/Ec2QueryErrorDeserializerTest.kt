@@ -83,9 +83,9 @@ class Ec2QueryErrorDeserializerTest {
             """,
             """
                 <Response>
-                <Errors />
-                <RequestId>foo-request</RequestId>
-            </Response>
+                    <Errors />
+                    <RequestId>foo-request</RequestId>
+                </Response>
             """,
         ).map { it.trimIndent().encodeToByteArray() }
 

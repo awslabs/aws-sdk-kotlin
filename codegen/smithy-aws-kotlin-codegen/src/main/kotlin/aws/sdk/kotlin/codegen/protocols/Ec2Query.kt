@@ -98,8 +98,7 @@ private class Ec2QuerySerdeXmlDescriptorGenerator(
 
         if (objectShape.hasTrait<OperationOutput>()) {
             traits.removeIf { it.symbol == RuntimeTypes.Serde.SerdeXml.XmlSerialName }
-            val opName = objectShape.changeNameSuffix("Response" to "Result")
-            val serialName = "${opName}Result"
+            val serialName = objectShape.changeNameSuffix("Response" to "Result")
             traits.add(RuntimeTypes.Serde.SerdeXml.XmlSerialName, serialName.dq())
         }
 
