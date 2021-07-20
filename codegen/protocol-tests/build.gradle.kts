@@ -27,6 +27,7 @@ dependencies {
 // The following section exposes Smithy protocol test suites as gradle test targets
 // for the configured protocols in [enabledProtocols].
 val enabledProtocols = listOf(
+    ProtocolTest("aws-ec2-query", "aws.protocoltests.ec2#AwsEc2"),
     ProtocolTest("aws-json-10", "aws.protocoltests.json10#JsonRpc10"),
     ProtocolTest("aws-json-11", "aws.protocoltests.json#JsonProtocol"),
     ProtocolTest("aws-restjson", "aws.protocoltests.restjson#RestJson"),
