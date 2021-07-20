@@ -1,10 +1,26 @@
 # Contributing Guidelines
 
-Thank you for your interest in contributing to our project. Whether it's a bug report, new feature, correction, or additional 
+Thank you for your interest in contributing to the AWS SDK for Kotlin. Whether it's a bug report, new feature, correction, or additional 
 documentation, we greatly value feedback and contributions from our community.
 
 Please read through this document before submitting any issues or pull requests to ensure we have all the necessary 
 information to effectively respond to your bug report or contribution.
+
+## The AWS SDK for Kotlin has multiple GitHub repositories
+
+1. This repository ([awslabs/aws-sdk-kotlin](https://github.com/awslabs/aws-sdk-kotlin))
+   
+This repository contains code generation for AWS specific services, and a corresponding runtime to support the generated code.
+
+AWS service clients are generated from [Smithy](https://awslabs.github.io/smithy/) models. Much of the code generation is AWS agnostic though.
+As such the code in `aws-sdk-kotlin` is a layer on top of generic Smithy based code generation tooling.
+
+
+2. Smithy Kotlin Codegen repo ([awslabs/smithy-kotlin](https://github.com/awslabs/smithy-kotlin))
+
+The `smithy-kotlin` repository contains the generic Smithy code generation tools for Kotlin.
+
+If you want to contribute by diving into the codegen machinery and helping develop the SDK please refer to the [contributing guide](https://github.com/awslabs/smithy-kotlin/blob/main/CONTRIBUTING.md) in that repo.
 
 
 ## Reporting Bugs/Feature Requests
@@ -49,6 +65,11 @@ This project has adopted the [Amazon Open Source Code of Conduct](https://aws.gi
 For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq) or contact 
 opensource-codeofconduct@amazon.com with any additional questions or comments.
 
+## Security Issues
+
+If you discover a potential security issue in this project we ask that you **do not** create a public GitHub issue.
+
+Please refer to our [security policy](https://github.com/awslabs/aws-sdk-kotlin/security/policy) for how to notify us.
 
 ## Licensing
 
