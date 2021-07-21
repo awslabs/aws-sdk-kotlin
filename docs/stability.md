@@ -16,7 +16,7 @@ Qualifiers for published artifacts
 * The SDK is not yet feature complete. It may contain bugs and performance issues.
 * Expect migration issues as APIs/types change.
 
-**`-beta`** means "you can use it, we'll do our best to minimize migration issues"
+**`-beta`** indicates:
 
 * The SDK is not meant for production workloads. 
 * The SDK is feature complete. It may still contain bugs and performance issues.

@@ -6,7 +6,7 @@ documentation, we greatly value feedback and contributions from our community.
 Please read through this document before submitting any issues or pull requests to ensure we have all the necessary 
 information to effectively respond to your bug report or contribution.
 
-## The AWS SDK for Kotlin has multiple GitHub repositories
+## The AWS SDK for Kotlin is built from multiple GitHub repositories
 
 1. This repository ([awslabs/aws-sdk-kotlin](https://github.com/awslabs/aws-sdk-kotlin))
    

@@ -1,64 +1,62 @@
-## Alpha Release Quickstart
+# Alpha Release Quickstart
 
-Alpha releases of the AWS Kotlin SDK are published to Maven Central with the `-alpha` qualifier. 
+Alpha releases of the AWS SDK for Kotlin are published to Maven Central with the `-alpha` qualifier. 
 **NOTE: Alpha releases are not meant for production workloads**.
 Consult the [stability guide](stability.md) for more information on SDK stability and maintenance.
 
 1. Add the repository to your Gradle or Maven configuration
 
-#### Gradle Users
+    **Gradle Users**
 
-```kt
-# file: my-project/build.gradle.kts
+    ```kt
+    # file: my-project/build.gradle.kts
 
-repositories {
-    mavenCentral()
-}
-```
+    repositories {
+        mavenCentral()
+    }
+    ```
 
 
 2. Add services to your project
 
-```kt
-# file: my-project/build.gradle.kts
+    ```kt
+    # file: my-project/build.gradle.kts
 
-val awsKotlinSdkVersion = "0.4.0-alpha"
-// OR put it in gradle.properties
-// val awsKotlinSdkVersion: String by project
+    val awsKotlinSdkVersion = "0.4.0-alpha"
+    // OR put it in gradle.properties
+    // val awsKotlinSdkVersion: String by project
 
-dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
-    
-    // The following line adds a dependency on the dynamodb client.
-    implementation("aws.sdk.kotlin:dynamodb:$awsKotlinSdkVersion")
-}
-```
+    dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
+        
+        // The following line adds a dependency on the dynamodb client.
+        implementation("aws.sdk.kotlin:dynamodb:$awsKotlinSdkVersion")
+    }
+    ```
 
 3. Configure a service client
    
-Example for `DynamoDB`:
+    Example for `DynamoDB`:
 
-```kotlin
-import kotlinx.coroutines.runBlocking
-import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
+    ```kotlin
+    import kotlinx.coroutines.runBlocking
+    import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 
-fun main() = runBlocking {
-    val client = DynamoDbClient { region = "us-east-2" }
-    val resp = client.listTables {
-        limit = 10
+    fun main() = runBlocking {
+        val client = DynamoDbClient { region = "us-east-2" }
+        val resp = client.listTables { limit = 10 }
+
+        println("Current DynamoDB tables: ")
+        resp.tableNames?.forEach { println(it) }
+
+        client.close()
     }
-
-    println("Current DynamoDB tables: ")
-    resp.tableNames?.forEach { println(it) }
-
-    client.close()
-}
-```
+    ```
 
 
 
 ## Additional Resources
 
 * [Additional examples](https://github.com/awslabs/aws-sdk-kotlin/tree/main/examples)
-* [Giving feedback and contributing](https://github.com/awslabs/aws-sdk-kotlin#feedback-and-contributing)
+* [Giving feedback and contributing](https://github.com/awslabs/aws-sdk-kotlin#feedback)
 * [Debugging](debugging.md)

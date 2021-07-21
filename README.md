@@ -13,19 +13,15 @@ This repo contains the AWS SDK for Kotlin and its [public roadmap](https://githu
 
 See the [Getting Started Guide](docs/GettingStarted.md)
 
-
-## Feedback and Contributing
-
-### Feedback
+## Feedback
 
 The SDK uses **GitHub Issues** to track feature requests and issues with the SDK. In addition, we use **GitHub Projects**
 to provide a high level overview of our roadmap and the features we are actively working on.
 
-
 You can provide feedback or report a bug by submitting an [issue](https://github.com/awslabs/aws-sdk-kotlin/issues/new/choose).
 This is the preferred mechanism to give feedback so that other users can engage in the conversation, +1 issues, etc.
 
-### Contributing
+## Contributing
 
 If you are interested in contributing to the AWS SDK for Kotlin, please take a look at [CONTRIBUTING](CONTRIBUTING.md)
 
@@ -139,7 +135,3 @@ See [Debugging](docs/debugging.md)
 ## Security
 
 Please refer to our [security policy](https://github.com/awslabs/aws-sdk-kotlin/security/policy).
-
-## License
-
-This library is licensed under the Apache 2.0 License. 
