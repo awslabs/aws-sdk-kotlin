@@ -140,11 +140,10 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
                     // use the payload to compute the hash
                     else -> null
                 }
-
-                // TODO - expose additional signing config as needed as context attributes? Would allow per/operation override of some of these settings potentially
             }
             val signedRequest = AwsSigner.signRequest(signableRequest, signingConfig)
             req.subject.update(signedRequest)
+            req.subject.body.resetStream()
 
             next.call(req)
         }
@@ -155,3 +154,9 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
  * Check if the current operation should be signed or not
  */
 private fun ExecutionContext.isUnsignedRequest(): Boolean = getOrNull(AuthAttributes.UnsignedPayload) ?: false
+
+private fun HttpBody.resetStream() {
+    if (this is HttpBody.Streaming && this.isReplayable) {
+        this.reset()
+    }
+}

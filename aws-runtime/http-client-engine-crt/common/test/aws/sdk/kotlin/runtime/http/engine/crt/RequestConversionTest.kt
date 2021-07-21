@@ -20,7 +20,7 @@ import kotlin.test.assertFalse
 
 class RequestConversionTest {
     private fun byteStreamFromContents(contents: String): ByteStream {
-        return object : ByteStream.Reader() {
+        return object : ByteStream.OneShotStream() {
             override val contentLength: Long = contents.length.toLong()
             override fun readFrom(): SdkByteReadChannel {
                 return SdkByteReadChannel(contents.encodeToByteArray())

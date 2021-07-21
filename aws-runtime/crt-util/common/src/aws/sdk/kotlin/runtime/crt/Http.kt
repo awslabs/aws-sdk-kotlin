@@ -26,7 +26,7 @@ public suspend fun HttpRequestBuilder.toSignableCrtRequest(unsignedPayload: Bool
     val bodyStream = if (!unsignedPayload) {
         when (val httpBody = body) {
             is HttpBody.Bytes -> HttpRequestBodyStream.fromByteArray(httpBody.bytes())
-            is HttpBody.Streaming -> if (httpBody.isIdempotent) {
+            is HttpBody.Streaming -> if (httpBody.isReplayable) {
                 // FIXME: this is not particularly efficient since we have to launch a coroutine to fill it.
                 // see https://github.com/awslabs/smithy-kotlin/issues/436
                 ReadChannelBodyStream(httpBody.readFrom(), coroutineContext)
