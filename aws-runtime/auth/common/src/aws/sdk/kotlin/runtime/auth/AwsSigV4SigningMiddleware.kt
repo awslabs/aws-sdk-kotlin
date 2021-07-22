@@ -105,7 +105,7 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
             //     2. Customer provides a (potentially) unbounded stream (via HttpBody.Streaming)
             //
             // When an unbounded stream (2) is given we proceed as follows:
-            //     2.1. is it idempotent?
+            //     2.1. is it replayable?
             //          (2.1.1) yes -> sign the payload (stream can be consumed more than once)
             //          (2.1.2) no -> unsigned payload
             //

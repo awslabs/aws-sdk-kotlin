@@ -19,7 +19,7 @@ import aws.sdk.kotlin.crt.http.HttpRequest as HttpRequestCrt
  */
 @InternalSdkApi
 public suspend fun HttpRequestBuilder.toSignableCrtRequest(unsignedPayload: Boolean = false): HttpRequestCrt {
-    // Streams that implement HttpBody.Streaming and are non-idempotent are not signable without consuming the stream
+    // Streams that implement HttpBody.Streaming and are not replayable are not signable without consuming the stream
     // and would need to go through chunked signing or unsigned payload
     // see: https://github.com/awslabs/smithy-kotlin/issues/296
 
