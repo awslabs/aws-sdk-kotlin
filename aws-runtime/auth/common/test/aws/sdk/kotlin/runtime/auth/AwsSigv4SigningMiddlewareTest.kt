@@ -16,6 +16,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.get
 import kotlin.test.Test
@@ -28,7 +29,7 @@ class AwsSigv4SigningMiddlewareTest {
         override suspend fun getCredentials(): Credentials = testCredentials
     }
 
-    private fun buildOperation(): SdkHttpOperation<Unit, HttpResponse> = SdkHttpOperation.build {
+    private fun buildOperation(streaming: Boolean = false, replayable: Boolean = true): SdkHttpOperation<Unit, HttpResponse> = SdkHttpOperation.build {
         serializer = object : HttpSerialize<Unit> {
             override suspend fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder =
                 HttpRequestBuilder().apply {
@@ -38,7 +39,15 @@ class AwsSigv4SigningMiddlewareTest {
                     headers.append("Host", "demo.us-east-1.amazonaws.com")
                     headers.appendAll("x-amz-archive-description", listOf("test", "test"))
                     val requestBody = "{\"TableName\": \"foo\"}"
-                    body = ByteArrayContent(requestBody.encodeToByteArray())
+                    body = when (streaming) {
+                        true -> object : HttpBody.Streaming() {
+                            override val contentLength: Long = requestBody.length.toLong()
+                            override fun readFrom(): SdkByteReadChannel = SdkByteReadChannel(requestBody.encodeToByteArray())
+                            override val isReplayable: Boolean = replayable
+                            override fun reset() { }
+                        }
+                        false -> ByteArrayContent(requestBody.encodeToByteArray())
+                    }
                     headers.append("Content-Length", body.contentLength?.toString() ?: "0")
                 }
         }
@@ -94,6 +103,33 @@ class AwsSigv4SigningMiddlewareTest {
             "Signature=6c0cc11630692e2c98f28003c8a0349b56011361e0bab6545f1acee01d1d211e"
 
         op.context[AuthAttributes.UnsignedPayload] = true
+
+        val signed = getSignedRequest(op)
+        assertEquals(expectedDate, signed.headers["X-Amz-Date"])
+        assertEquals(expectedSig, signed.headers["Authorization"])
+    }
+
+    @Test
+    fun testSignReplayableStreamingRequest() = runSuspendTest {
+        val op = buildOperation(streaming = true)
+        val expectedDate = "20201016T195600Z"
+        val expectedSig = "AWS4-HMAC-SHA256 Credential=AKID/20201016/us-east-1/demo/aws4_request, " +
+            "SignedHeaders=content-length;host;x-amz-archive-description;x-amz-date;x-amz-security-token, " +
+            "Signature=e60a4adad4ae15e05c96a0d8ac2482fbcbd66c88647c4457db74e4dad1648608"
+
+        val signed = getSignedRequest(op)
+        assertEquals(expectedDate, signed.headers["X-Amz-Date"])
+        assertEquals(expectedSig, signed.headers["Authorization"])
+    }
+
+    @Test
+    fun testSignOneShotStream() = runSuspendTest {
+        val op = buildOperation(streaming = true, replayable = false)
+        val expectedDate = "20201016T195600Z"
+        // should have same signature as testUnsignedRequest()
+        val expectedSig = "AWS4-HMAC-SHA256 Credential=AKID/20201016/us-east-1/demo/aws4_request, " +
+            "SignedHeaders=content-length;host;x-amz-archive-description;x-amz-date;x-amz-security-token, " +
+            "Signature=6c0cc11630692e2c98f28003c8a0349b56011361e0bab6545f1acee01d1d211e"
 
         val signed = getSignedRequest(op)
         assertEquals(expectedDate, signed.headers["X-Amz-Date"])

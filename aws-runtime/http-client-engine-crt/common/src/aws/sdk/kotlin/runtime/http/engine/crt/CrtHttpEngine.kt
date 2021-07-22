@@ -5,9 +5,9 @@
 
 package aws.sdk.kotlin.runtime.http.engine.crt
 
-import aws.sdk.kotlin.crt.SdkDefaultIO
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.*
+import aws.sdk.kotlin.runtime.crt.SdkDefaultIO
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
