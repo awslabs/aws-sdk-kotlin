@@ -45,10 +45,6 @@ object AwsKotlinDependency {
     val AWS_CRT_HTTP_ENGINE = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http.engine.crt", AWS_CLIENT_RT_GROUP, "http-client-engine-crt", AWS_CLIENT_RT_VERSION)
 }
 
-object Kotlin3PDependency {
-    val KOTLIN_TEST = KotlinDependency(GradleConfiguration.TestImplementation, "org.jetbrains.kotlin", "org.jetbrains.kotlin", "kotlin-test", "\$kotlinVersion")
-}
-
 // remap aws-sdk-kotlin dependencies to project notation
 // NOTE: the lazy wrapper is required here, see: https://github.com/awslabs/aws-sdk-kotlin/issues/95
 private val sameProjectDeps: Map<KotlinDependency, String> by lazy {

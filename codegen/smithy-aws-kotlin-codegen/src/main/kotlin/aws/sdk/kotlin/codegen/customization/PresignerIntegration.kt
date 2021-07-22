@@ -77,7 +77,7 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
         sigv4ServiceName: String,
         presignOperations: List<PresignableOperation>
     ) {
-        val writer = KotlinWriter("${ctx.settings.pkg.name}")
+        val writer = KotlinWriter(ctx.settings.pkg.name)
         val serviceShape = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
         val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
         val defaultEndpointResolverSymbol = buildSymbol {
@@ -96,7 +96,7 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
             val op = ctx.model.expectShape<OperationShape>(presignableOp.operationId)
             val request = ctx.model.expectShape<StructureShape>(op.input.get())
             val serializerSymbol = buildSymbol {
-                definitionFile = "${op.serializerName().capitalize()}.kt"
+                definitionFile = "${op.serializerName()}.kt"
                 name = op.serializerName()
                 namespace = "${ctx.settings.pkg.name}.transform"
             }
@@ -111,7 +111,7 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
             renderPresignFromConfigFn(writer, request.defaultName(serviceShape), requestConfigFnName)
 
             // Generate input presign extension function for service client
-            renderPresignFromClientFn(writer, request.defaultName(serviceShape), requestConfigFnName, serviceSymbol.name)
+            renderPresignFromClientFn(writer, request.defaultName(serviceShape), requestConfigFnName, serviceSymbol.name, sigv4ServiceName)
 
             // Generate presign config function
             renderPresignConfigFn(writer, request.defaultName(serviceShape), requestConfigFnName, presignableOp, serializerSymbol, request)
@@ -245,7 +245,8 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
         writer: KotlinWriter,
         requestTypeName: String,
         requestConfigFnName: String,
-        serviceClientTypeName: String
+        serviceClientTypeName: String,
+        sigv4ServiceName: String,
     ) {
         writer.write(
             """
@@ -263,7 +264,7 @@ class PresignerIntegration(private val presignOpModel: Set<PresignableOperation>
                 """
                     val serviceClientConfig = object : ServicePresignConfig {
                         override val region: String = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
-                        override val serviceName: String = serviceClient.serviceName
+                        override val serviceName: String = "$sigv4ServiceName"
                         override val endpointResolver: EndpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
                         override val credentialsProvider: CredentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
                     }
