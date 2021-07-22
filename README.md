@@ -1,14 +1,29 @@
 # AWS SDK for Kotlin
+[![Apache 2 licensed][apache-badge]][apache-url]
 
-## License
+[apache-badge]: https://img.shields.io/badge/license-APACHE2-blue.svg
+[apache-url]: https://github.com/awslabs/aws-sdk-kotlin/blob/main/LICENSE
 
-This library is licensed under the Apache 2.0 License. 
 
+This repo contains the AWS SDK for Kotlin and its [public roadmap](https://github.com/awslabs/aws-sdk-kotlin/projects/2)
+
+**The AWS SDK for Kotlin is currently in alpha and is intended strictly for feedback purposes only. Do not use this SDK for production workloads. Refer to the SDK [stability](docs/stability.md) guidelines**
 
 ## Getting Started
 
 See the [Getting Started Guide](docs/GettingStarted.md)
 
+## Feedback
+
+The SDK uses **GitHub Issues** to track feature requests and issues with the SDK. In addition, we use **GitHub Projects**
+to provide a high level overview of our roadmap and the features we are actively working on.
+
+You can provide feedback or report a bug by submitting an [issue](https://github.com/awslabs/aws-sdk-kotlin/issues/new/choose).
+This is the preferred mechanism to give feedback so that other users can engage in the conversation, +1 issues, etc.
+
+## Contributing
+
+If you are interested in contributing to the AWS SDK for Kotlin, please take a look at [CONTRIBUTING](CONTRIBUTING.md)
 
 ## Development
 
@@ -38,7 +53,7 @@ Where the task follows the pattern: `:services:SERVICE:build`
 To see list of all projects run `./gradlew projects`
 
 ##### Generating a single service
-See the local.properties definition above to specify this in a config file.
+See the [Build Properties](#build-properties) below to specify this in a config file.
 
 ```sh
 ./gradlew -Paws.services=+lambda  :codegen:sdk:bootstrap
@@ -51,7 +66,7 @@ Testing generated services generally requires publishing artifacts (e.g. client-
 
 API documentation is generated using [Dokka](http://kotlin.github.io/dokka) which is the official documentation tool maintained by JetBrains for documenting Kotlin code.
 
-Unlike Java, Kotlin uses it's own [KDoc](https://kotlinlang.org/docs/kotlin-doc.html) format.
+Unlike Java, Kotlin uses its own [KDoc](https://kotlinlang.org/docs/kotlin-doc.html) format.
 
 
 To generate API reference documentation for the AWS Kotlin SDK:
@@ -116,3 +131,7 @@ aws.protocols=-restJson1
 ### Debugging
 
 See [Debugging](docs/debugging.md)
+
+## Security
+
+Please refer to our [security policy](https://github.com/awslabs/aws-sdk-kotlin/security/policy).
