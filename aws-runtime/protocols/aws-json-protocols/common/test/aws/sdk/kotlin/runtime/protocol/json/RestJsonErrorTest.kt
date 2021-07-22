@@ -244,6 +244,6 @@ class RestJsonErrorTest {
         // verify it pulls out the error details/meta
         assertNull(ex.sdkErrorMetadata.errorCode)
         assertEquals("guid", ex.sdkErrorMetadata.requestId)
-        assertEquals("failed to parse response as Json protocol error", ex.message)
+        assertEquals("failed to parse response as a JSON protocol error", ex.message)
     }
 }

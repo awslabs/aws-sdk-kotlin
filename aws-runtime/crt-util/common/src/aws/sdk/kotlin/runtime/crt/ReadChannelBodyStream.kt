@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.http.engine.crt
+package aws.sdk.kotlin.runtime.crt
 
 import aws.sdk.kotlin.crt.http.HttpRequestBodyStream
 import aws.sdk.kotlin.crt.io.MutableBuffer
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import aws.smithy.kotlin.runtime.io.readAvailable
@@ -23,7 +24,8 @@ internal expect fun transferRequestBody(outgoing: SdkBuffer, dest: MutableBuffer
 /**
  * Implement's [HttpRequestBodyStream] which proxies an SDK request body channel [SdkByteReadChannel]
  */
-internal class ReadChannelBodyStream(
+@InternalSdkApi
+public class ReadChannelBodyStream(
     // the request body channel
     private val bodyChan: SdkByteReadChannel,
     callContext: CoroutineContext
@@ -43,6 +45,12 @@ internal class ReadChannelBodyStream(
         // launch a coroutine to fill the buffer channel
         proxyRequestBody()
     }
+
+    // lie - CRT tries to control this via normal seek operations (e.g. when they calculate a hash for signing
+    // they consume the aws_input_stream and then seek to the beginning). Instead we either support creating
+    // a new read channel or we don't. At this level we don't care, consumers of this type need to understand
+    // and handle these concerns.
+    override fun resetPosition(): Boolean = true
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun sendRequestBody(buffer: MutableBuffer): Boolean {
@@ -67,7 +75,7 @@ internal class ReadChannelBodyStream(
     private fun proxyRequestBody() {
         // TODO - we could get rid of this extra copy + coroutine if readAvailable() had a non-suspend version
         // see: https://youtrack.jetbrains.com/issue/KTOR-2772
-        val job = launch {
+        val job = launch(start = CoroutineStart.UNDISPATCHED) {
             while (!bodyChan.isClosedForRead) {
                 bodyChan.awaitContent()
                 if (bodyChan.isClosedForRead) return@launch
