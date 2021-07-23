@@ -11,94 +11,65 @@ import aws.sdk.kotlin.crt.toSdkHeaders
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpMethod
+import aws.smithy.kotlin.runtime.http.Protocol
+import aws.smithy.kotlin.runtime.http.QueryParameters
+import aws.smithy.kotlin.runtime.http.Url
 import aws.smithy.kotlin.runtime.util.InternalApi
 
 /**
  * The service configuration details for a presigned request
+ *
+ * @property region The AWS region to which the request is going.
+ * @property serviceName The service name used to sign the request.
+ * @property endpointResolver Resolves the endpoint to determine where the request should be sent.
+ * @property credentialsProvider Resolves credentials to sign the request with.
  */
 public interface ServicePresignConfig {
-    /**
-     * The AWS region to which the request is going.
-     */
     public val region: String
-
-    /**
-     * The service name used to sign the request.
-     */
     public val serviceName: String
-
-    /**
-     * Resolves the endpoint to determine where the request should be sent.
-     */
     public val endpointResolver: EndpointResolver
-
-    /**
-     * Resolves credentials to sign the request with.
-     */
     public val credentialsProvider: CredentialsProvider
 }
 
 /**
  * Where the signature is placed in the presigned request
+ * @property HEADER Signing details to be placed in a header.
+ * @property QUERY_STRING Signing details to be added to the query string.
  */
 public enum class SigningLocation {
-    /**
-     * Signing details to be placed in a header.
-     */
     HEADER,
-
-    /**
-     * Signing details to be added to the query string.
-     */
-    QUERY_STRING
+    QUERY_STRING,
 }
 
 /**
  * Configuration of a presigned request
+ * @property method HTTP method of the presigned request
+ * @property path HTTP path of the presigned request
+ * @property queryString the HTTP querystring of the presigned request
+ * @property durationSeconds Number of seconds that the request will be valid for after being signed.
+ * @property hasBody Specifies if the request contains a body
+ * @property signingLocation Specifies where the signing information should be placed in the presigned request
+ * @property additionalHeaders Custom headers that should be signed as part of the request
  */
 public data class PresignedRequestConfig(
-    /**
-     * HTTP method of the presigned request
-     */
     public val method: HttpMethod,
-    /**
-     * HTTP path of the presigned request
-     */
     public val path: String,
-    /**
-     * Number of seconds that the request will be valid for after
-     * being signed.
-     */
+    public val queryString: QueryParameters = QueryParameters.Empty,
     public val durationSeconds: Long,
-    /**
-     * Specifies if the request contains a body
-     */
     public val hasBody: Boolean = false,
-    /**
-     * Specifies where the signing information should be placed in the presigned request
-     */
     public val signingLocation: SigningLocation,
-    /**
-     * Custom headers that should be signed as part of the request
-     */
     public val additionalHeaders: Headers = Headers.Empty
 )
 
 /**
  * Properties of an HTTP request that has been presigned
+ * @property url HTTP url of the presigned request
+ * @property headers Headers that must be sent with the request
+ * @property method HTTP method to use when initiating the request
  */
 public data class PresignedRequest(
-    /**
-     * HTTP url of the presigned request
-     */
     val url: String,
-    /**
-     * Headers that must be sent with the request
-     */
     val headers: Headers,
-    /**
-     * HTTP method to use when initiating the request
-     */
     val method: HttpMethod
 )
 
@@ -123,17 +94,18 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
         expirationInSeconds = requestConfig.durationSeconds
     }
 
-    val url = "${endpoint.protocol}://${endpoint.hostname}${requestConfig.path}"
+    val url = Url(Protocol.HTTPS, endpoint.hostname, path = requestConfig.path, parameters = requestConfig.queryString)
+
     val headers = aws.sdk.kotlin.crt.http.Headers.build {
         append("Host", endpoint.hostname)
         appendAll(requestConfig.additionalHeaders.toCrtHeaders())
     }
     val request = HttpRequest(
         requestConfig.method.name,
-        url,
+        url.encodedPath,
         headers
     )
     val signedRequest = AwsSigner.signRequest(request, signingConfig)
 
-    return PresignedRequest(signedRequest.encodedPath, signedRequest.headers.toSdkHeaders(), HttpMethod.parse(signedRequest.method))
+    return PresignedRequest("${endpoint.protocol}://${endpoint.hostname}${signedRequest.encodedPath}", signedRequest.headers.toSdkHeaders(), requestConfig.method)
 }

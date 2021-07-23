@@ -21,6 +21,7 @@ object AwsRuntimeTypes {
         val AwsClientOption = runtimeSymbol("AwsClientOption", AwsKotlinDependency.AWS_CORE, "client")
         val AuthAttributes = runtimeSymbol("AuthAttributes", AwsKotlinDependency.AWS_CORE, "execution")
         val AwsErrorMetadata = runtimeSymbol("AwsErrorMetadata", AwsKotlinDependency.AWS_CORE)
+        val ClientException = runtimeSymbol("ClientException", AwsKotlinDependency.AWS_CORE)
 
         object Endpoint {
             val EndpointResolver = runtimeSymbol("EndpointResolver", AwsKotlinDependency.AWS_CORE, "endpoint")
@@ -45,6 +46,10 @@ object AwsRuntimeTypes {
         val PresignedRequestConfig = runtimeSymbol("PresignedRequestConfig", AwsKotlinDependency.AWS_AUTH)
         val ServicePresignConfig = runtimeSymbol("ServicePresignConfig", AwsKotlinDependency.AWS_AUTH)
         val SigningLocation = runtimeSymbol("SigningLocation", AwsKotlinDependency.AWS_AUTH)
+    }
+
+    object Regions {
+        val DefaultAwsRegionProviderChain = runtimeSymbol("DefaultAwsRegionProviderChain", AwsKotlinDependency.AWS_REGIONS, "providers")
     }
 }
 

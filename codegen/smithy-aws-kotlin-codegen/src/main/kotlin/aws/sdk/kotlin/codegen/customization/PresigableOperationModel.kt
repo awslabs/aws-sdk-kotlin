@@ -41,7 +41,7 @@ data class PresignableOperation(
     /**
      * If true, map request parameters onto the query string of the presigned URL
      */
-    val transformRequestToQueryString: Boolean
+    val transformRequestBodyToQueryString: Boolean
 )
 
 // This is the dejour model that may be replaced by the API model once presign state is available
@@ -53,7 +53,7 @@ internal val servicesWithOperationPresigners = setOf(
         "QUERY_STRING",
         "GET",
         hasBody = false,
-        transformRequestToQueryString = true
+        transformRequestBodyToQueryString = true
     ),
     PresignableOperation(
         "com.amazonaws.s3#AmazonS3",
@@ -62,7 +62,7 @@ internal val servicesWithOperationPresigners = setOf(
         "HEADER",
         null,
         hasBody = false,
-        transformRequestToQueryString = false
+        transformRequestBodyToQueryString = false
     ),
     PresignableOperation(
         "com.amazonaws.s3#AmazonS3",
@@ -71,7 +71,7 @@ internal val servicesWithOperationPresigners = setOf(
         "HEADER",
         null,
         hasBody = true,
-        transformRequestToQueryString = false
+        transformRequestBodyToQueryString = false
     ),
     PresignableOperation(
         "com.amazonaws.s3#AmazonS3",
@@ -80,16 +80,16 @@ internal val servicesWithOperationPresigners = setOf(
         "HEADER",
         null,
         hasBody = true,
-        transformRequestToQueryString = false
+        transformRequestBodyToQueryString = false
     ),
     // FIXME ~ Following operation signature fails service side.
-    /*PresignableOperation(
+    PresignableOperation(
         "com.amazonaws.sts#AWSSecurityTokenServiceV20110615",
         "com.amazonaws.sts#GetCallerIdentity",
         presignedParameterId = null,
         signingLocation = "HEADER",
         methodOverride = null,
         hasBody = true,
-        transformRequestToQueryString = false
-    )*/
+        transformRequestBodyToQueryString = false
+    )
 )

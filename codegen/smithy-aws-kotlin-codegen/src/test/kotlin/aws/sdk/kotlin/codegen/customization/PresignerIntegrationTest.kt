@@ -60,7 +60,7 @@ class PresignerIntegrationTest {
                 "HEADER",
                 null,
                 hasBody = false,
-                transformRequestToQueryString = false
+                transformRequestBodyToQueryString = false
             )
         )
 
@@ -80,7 +80,7 @@ class PresignerIntegrationTest {
                 "HEADER",
                 null,
                 hasBody = false,
-                transformRequestToQueryString = false
+                transformRequestBodyToQueryString = false
             )
         )
 
@@ -100,7 +100,7 @@ class PresignerIntegrationTest {
                 "HEADER",
                 null,
                 hasBody = false,
-                transformRequestToQueryString = false
+                transformRequestBodyToQueryString = false
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -242,7 +242,7 @@ class PresignerIntegrationTest {
                 "QUERY_STRING",
                 null,
                 hasBody = false,
-                transformRequestToQueryString = false
+                transformRequestBodyToQueryString = false
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -275,7 +275,7 @@ class PresignerIntegrationTest {
                 "HEADER",
                 null,
                 hasBody = false,
-                transformRequestToQueryString = false
+                transformRequestBodyToQueryString = false
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -308,7 +308,7 @@ class PresignerIntegrationTest {
                 "HEADER",
                 "PUT",
                 hasBody = false,
-                transformRequestToQueryString = false
+                transformRequestBodyToQueryString = false
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -341,7 +341,7 @@ class PresignerIntegrationTest {
                 "HEADER",
                 null,
                 hasBody = true,
-                transformRequestToQueryString = false
+                transformRequestBodyToQueryString = false
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
@@ -374,7 +374,7 @@ class PresignerIntegrationTest {
                 "HEADER",
                 null,
                 hasBody = false,
-                transformRequestToQueryString = true
+                transformRequestBodyToQueryString = true
             )
         )
         val unit = PresignerIntegration(testPresignerModel)
