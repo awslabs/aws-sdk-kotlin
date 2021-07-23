@@ -4,7 +4,7 @@
  */
 
 apply plugin: 'maven-publish'
-
+apply plugin: 'signing'
 
 publishing {
     repositories {
@@ -40,6 +40,16 @@ publishing {
                 developerConnection = "scm:git:ssh://github.com/awslabs/aws-sdk-kotlin.git"
                 url = "https://github.com/awslabs/aws-sdk-kotlin"
             }
+        }
+    }
+
+    if (project.hasProperty("signingKey") && project.hasProperty("signingPassword")) {
+        signing {
+            useInMemoryPgpKeys(
+                    (String) project.property("signingKey"),
+                    (String) project.property("signingPassword")
+            )
+            sign(publications)
         }
     }
 }
