@@ -1,6 +1,8 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.customization.PresignableOperation
+import aws.sdk.kotlin.codegen.customization.PresignerIntegration
 import aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.codegen.core.Symbol
@@ -26,6 +28,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
 import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.knowledge.OperationIndex
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.node.NumberNode
 import software.amazon.smithy.model.node.ObjectNode
@@ -42,9 +45,7 @@ import java.util.logging.Logger
 /**
  * This integration applies to any AWS service that provides presign capability on one or more operations.
  */
-class PresignerGenerator(private val presignOpModel: Set<PresignableOperation> = servicesWithOperationPresigners) : KotlinIntegration {
-    private val presignableServiceIds = presignOpModel.map { it.serviceId }.toSet()
-
+class PresignerGenerator : KotlinIntegration {
     // Symbols which should be imported
     private val presignerRuntimeSymbols = setOf(
         // smithy-kotlin types
@@ -62,42 +63,19 @@ class PresignerGenerator(private val presignOpModel: Set<PresignableOperation> =
 
     private val logger: Logger = Logger.getLogger(PresignerGenerator::class.java.name)
 
-    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
-        val currentServiceId = model.expectShape<ServiceShape>(settings.service).id.toString()
-
-        return presignableServiceIds.contains(currentServiceId)
-    }
-
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
         check(service.hasTrait<SigV4Trait>()) { "Invalid service. Does not specify sigv4 trait: ${service.id}" }
 
-        val presignOperations = presignOpModel.filter {
-            it.serviceId == service.id.toString()
-        }
+        val presignOperations = service.allOperations
+            .map { ctx.model.expectShape(it) }
+            .filter { operationShape -> operationShape.hasTrait(PresignerIntegration.PresignTrait.shapeId) }
+            .map { operationShape ->
+                PresignableOperation(service.id.toString(), operationShape.id.toString(), null, true)
+            }
 
         if (presignOperations.isNotEmpty()) {
             renderPresigner(ctx, delegator, service.expectTrait<SigV4Trait>().name, presignOperations)
-        } else {
-            logger.warning("Service ${service.id} is designated as a service but no operations were specified.")
-        }
-    }
-
-    class PresignTrait : Trait {
-        override fun toNode(): Node = ObjectNode(mapOf(), sourceLocation)
-        override fun toShapeId(): ShapeId = ShapeId.from("aws.sdk#Presignable")
-    }
-
-    override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
-        val presignedOperationIds = presignOpModel.map { presignableOperation -> presignableOperation.operationId }
-        val transformer = ModelTransformer.create()
-
-        return transformer.mapShapes(model) { shape ->
-            if (presignedOperationIds.contains(shape.id.toString())) {
-                shape.asOperationShape().get().toBuilder().addTrait(PresignTrait()).build()
-            } else {
-                shape
-            }
         }
     }
 
@@ -213,35 +191,14 @@ class PresignerGenerator(private val presignOpModel: Set<PresignableOperation> =
             write("require(durationSeconds > 0u) { \"duration must be greater than zero\" }")
             write("val httpRequestBuilder = #T().serialize(ExecutionContext.build {  }, request)", serializerSymbol)
 
-            // Special case for Polly: map input members to query string
-            if (presignableOp.transformRequestBodyToQueryString) {
-                addImport(RuntimeTypes.Http.QueryParametersBuilder)
-                write("val queryStringBuilder = QueryParametersBuilder()")
-
-                request.allMembers.forEach { (_, shape) ->
-                    withBlock("if (request.${shape.defaultName()} != null) {", "}") {
-                        write("queryStringBuilder.append(\"${shape.unionVariantName()}\", request.${shape.defaultName()}.toString())")
-                    }
-                }
-            }
-
             writer.withBlock("return PresignedRequestConfig(", ")") {
-                if (presignableOp.methodOverride != null) {
-                    addImport(RuntimeTypes.Http.HttpMethod)
-                    write("#T.${presignableOp.methodOverride},", RuntimeTypes.Http.HttpMethod)
-                } else {
-                    write("httpRequestBuilder.method,")
-                }
+                write("httpRequestBuilder.method,")
                 write("httpRequestBuilder.url.path,")
-                if (presignableOp.transformRequestBodyToQueryString) {
-                    write("queryStringBuilder.build(),")
-                } else {
-                    addImport(RuntimeTypes.Http.QueryParameters)
-                    write("httpRequestBuilder.url.parameters.build(),")
-                }
+                addImport(RuntimeTypes.Http.QueryParameters)
+                write("httpRequestBuilder.url.parameters.build(),")
                 write("durationSeconds.toLong(),")
                 write("${presignableOp.hasBody},")
-                write("SigningLocation.${presignableOp.signingLocation}")
+                write("SigningLocation.HEADER")
             }
         }
     }

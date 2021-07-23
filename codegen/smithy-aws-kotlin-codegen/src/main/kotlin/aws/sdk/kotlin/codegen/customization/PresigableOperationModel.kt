@@ -11,85 +11,44 @@ package aws.sdk.kotlin.codegen.customization
 /**
  * Represents a presignable operation.
  *
- * NOTE: This type intentionally uses serializable types to make future model migration easier.
+ * @property serviceId ID of service presigning applies to
+ * @property operationId Operation capable of presigning
+ * @property presignedParameterId (Optional) parameter in which presigned URL should be passed in the request
+ * @property hasBody true if operation will pass an unsigned body with the request
+ *
  */
 data class PresignableOperation(
-    /**
-     * ID of service presigning applies to
-     */
     val serviceId: String,
-    /**
-     * Operation capable of presigning
-     */
     val operationId: String,
-    /**
-     * (Optional) parameter in which presigned URL should be passed on behalf of the customer
-     */
     val presignedParameterId: String?,
-    /**
-     * HEADER or QUERY_STRING depending on the service and operation.
-     */
-    val signingLocation: String,
-    /**
-     * (Optional) override of operation’s HTTP method
-     */
-    val methodOverride: String?,
-    /**
-     * true if operation will pass an unsigned body with the request
-     */
     val hasBody: Boolean,
-    /**
-     * If true, map request parameters onto the query string of the presigned URL
-     */
-    val transformRequestBodyToQueryString: Boolean
 )
 
 // This is the dejour model that may be replaced by the API model once presign state is available
 internal val servicesWithOperationPresigners = setOf(
     PresignableOperation(
-        "com.amazonaws.polly#Parrot_v1",
-        "com.amazonaws.polly#SynthesizeSpeech",
-        null,
-        "QUERY_STRING",
-        "GET",
-        hasBody = false,
-        transformRequestBodyToQueryString = true
-    ),
-    PresignableOperation(
         "com.amazonaws.s3#AmazonS3",
         "com.amazonaws.s3#GetObject",
         null,
-        "HEADER",
-        null,
         hasBody = false,
-        transformRequestBodyToQueryString = false
     ),
     PresignableOperation(
         "com.amazonaws.s3#AmazonS3",
         "com.amazonaws.s3#PutObject",
         null,
-        "HEADER",
-        null,
         hasBody = true,
-        transformRequestBodyToQueryString = false
     ),
     PresignableOperation(
         "com.amazonaws.s3#AmazonS3",
         "com.amazonaws.s3#UploadPart",
         null,
-        "HEADER",
-        null,
         hasBody = true,
-        transformRequestBodyToQueryString = false
     ),
     // FIXME ~ Following operation signature fails service side.
-    PresignableOperation(
+    /*PresignableOperation(
         "com.amazonaws.sts#AWSSecurityTokenServiceV20110615",
         "com.amazonaws.sts#GetCallerIdentity",
         presignedParameterId = null,
-        signingLocation = "HEADER",
-        methodOverride = null,
         hasBody = true,
-        transformRequestBodyToQueryString = false
-    )
+    )*/
 )
