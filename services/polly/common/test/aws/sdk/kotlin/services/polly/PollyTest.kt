@@ -4,14 +4,9 @@ import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
-import aws.sdk.kotlin.services.polly.transform.SynthesizeSpeechOperationSerializer
-import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.Url
-import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

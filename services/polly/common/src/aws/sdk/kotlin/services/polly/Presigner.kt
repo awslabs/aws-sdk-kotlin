@@ -44,9 +44,9 @@ suspend fun SynthesizeSpeechRequest.presign(serviceClient: PollyClient, duration
     return createPresignedRequest(serviceClientConfig, synthesizeSpeechPresignConfig(this, durationSeconds))
 }
 
-private suspend fun synthesizeSpeechPresignConfig(request: SynthesizeSpeechRequest, durationSeconds: ULong) : PresignedRequestConfig {
+private suspend fun synthesizeSpeechPresignConfig(request: SynthesizeSpeechRequest, durationSeconds: ULong): PresignedRequestConfig {
     require(durationSeconds > 0u) { "duration must be greater than zero" }
-    val httpRequestBuilder = SynthesizeSpeechOperationSerializer().serialize(ExecutionContext.build {  }, request)
+    val httpRequestBuilder = SynthesizeSpeechOperationSerializer().serialize(ExecutionContext.build { }, request)
     val queryStringBuilder = QueryParametersBuilder()
     if (request.engine != null) {
         queryStringBuilder.append("Engine", request.engine.toString())
@@ -90,7 +90,7 @@ private suspend fun synthesizeSpeechPresignConfig(request: SynthesizeSpeechReque
  * This type can be used to presign requests in cases where an existing service client
  * instance is not available.
  */
-class PollyPresignConfig private constructor(builder: BuilderImpl): ServicePresignConfig {
+class PollyPresignConfig private constructor(builder: BuilderImpl) : ServicePresignConfig {
     override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
     override val endpointResolver: EndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
     override val region: String = builder.region ?: throw ClientException("Must specify a region")

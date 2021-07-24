@@ -1,12 +1,9 @@
 package aws.sdk.kotlin.codegen
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.customization.PresignableOperation
-import aws.sdk.kotlin.codegen.customization.PresignerIntegration
+import aws.sdk.kotlin.codegen.customization.PresignTraitIntegration
 import aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.core.DEFAULT_SOURCE_SET_ROOT
 import software.amazon.smithy.kotlin.codegen.core.KotlinDelegator
@@ -15,7 +12,6 @@ import software.amazon.smithy.kotlin.codegen.core.RenderingContext
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.addImport
 import software.amazon.smithy.kotlin.codegen.core.defaultName
-import software.amazon.smithy.kotlin.codegen.core.unionVariantName
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
@@ -27,20 +23,28 @@ import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
 import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
-import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.knowledge.OperationIndex
-import software.amazon.smithy.model.node.Node
-import software.amazon.smithy.model.node.NumberNode
-import software.amazon.smithy.model.node.ObjectNode
-import software.amazon.smithy.model.node.StringNode
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
-import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.StructureShape
-import software.amazon.smithy.model.traits.Trait
-import software.amazon.smithy.model.transform.ModelTransformer
-import software.amazon.smithy.utils.MapUtils
+import software.amazon.smithy.model.traits.HttpTrait
 import java.util.logging.Logger
+
+/**
+ * Represents a presignable operation.
+ *
+ * @property serviceId ID of service presigning applies to
+ * @property operationId Operation capable of presigning
+ * @property presignedParameterId (Optional) parameter in which presigned URL should be passed in the request
+ * @property hasBody true if operation will pass an unsigned body with the request
+ *
+ */
+data class PresignableOperation(
+    val serviceId: String,
+    val operationId: String,
+    // TODO ~ Implementation of embedded presigned URLs is TBD
+    val presignedParameterId: String?,
+    val hasBody: Boolean,
+)
 
 /**
  * This integration applies to any AWS service that provides presign capability on one or more operations.
@@ -65,15 +69,20 @@ class PresignerGenerator : KotlinIntegration {
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
-        check(service.hasTrait<SigV4Trait>()) { "Invalid service. Does not specify sigv4 trait: ${service.id}" }
 
+        // Only services with SigV4 are currently presignable
+        if (!service.hasTrait<SigV4Trait>()) return
+
+        // Scan model for operations decorated with PresignTrait
         val presignOperations = service.allOperations
             .map { ctx.model.expectShape(it) }
-            .filter { operationShape -> operationShape.hasTrait(PresignerIntegration.PresignTrait.shapeId) }
+            .filter { operationShape -> operationShape.hasTrait(PresignTraitIntegration.PresignTrait.shapeId) }
             .map { operationShape ->
-                PresignableOperation(service.id.toString(), operationShape.id.toString(), null, true)
+                val hasBody = operationShape.expectTrait<HttpTrait>().method != "GET"
+                PresignableOperation(service.id.toString(), operationShape.id.toString(), null, hasBody)
             }
 
+        // If presignable operations found for this service, generate a Presigner file
         if (presignOperations.isNotEmpty()) {
             renderPresigner(ctx, delegator, service.expectTrait<SigV4Trait>().name, presignOperations)
         }
@@ -144,36 +153,36 @@ class PresignerGenerator : KotlinIntegration {
         writer.addImport(AwsRuntimeTypes.Core.ClientException)
         writer.putContext("configClass.name", presignConfigTypeName)
         val credentialsProviderProperty = ClientConfigProperty {
-            this.symbol = AwsRuntimeTypes.Auth.CredentialsProvider
-            this.name = "credentialsProvider"
-            this.documentation = "The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider] instance will be used."
-            this.baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
-            this.defaultValue = "DefaultChainCredentialsProvider()"
+            symbol = AwsRuntimeTypes.Auth.CredentialsProvider
+            name = "credentialsProvider"
+            documentation = "The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider] instance will be used."
+            baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
+            defaultValue = "DefaultChainCredentialsProvider()"
         }
         val endpointResolverProperty = ClientConfigProperty {
-            this.symbol = AwsRuntimeTypes.Core.Endpoint.EndpointResolver
-            this.name = "endpointResolver"
-            this.documentation = "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
-            this.baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
-            this.defaultValue = "DefaultEndpointResolver()"
+            symbol = AwsRuntimeTypes.Core.Endpoint.EndpointResolver
+            name = "endpointResolver"
+            documentation = "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
+            baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
+            defaultValue = "DefaultEndpointResolver()"
         }
         val region = ClientConfigProperty {
-            this.symbol = buildSymbol {
+            symbol = buildSymbol {
                 name = "String"
                 namespace = "kotlin"
                 nullable = true
             }
-            this.name = "region"
-            this.documentation = "AWS region to make requests to"
-            this.baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
-            this.defaultValue = """throw ClientException("Must specify a region")"""
+            name = "region"
+            documentation = "AWS region to make requests to"
+            baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
+            defaultValue = """throw ClientException("Must specify a region")"""
         }
         val serviceNameProperty = ClientConfigProperty {
-            this.symbol = KotlinTypes.String
-            this.name = "serviceName"
-            this.documentation = "docs"
-            this.baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
-            this.constantValue = """"$sigv4ServiceName""""
+            symbol = KotlinTypes.String
+            name = "serviceName"
+            documentation = "docs"
+            baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
+            constantValue = """"$sigv4ServiceName""""
         }
         val ccg = ClientConfigGenerator(renderingContext, false, AwsRuntimeTypes.Auth.ServicePresignConfig, credentialsProviderProperty, endpointResolverProperty, region, serviceNameProperty)
         ccg.render()
@@ -215,7 +224,6 @@ class PresignerGenerator : KotlinIntegration {
             write("@param serviceClient the client providing properties used to generate the presigned request.")
             write("@param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.")
             write("@return The [PresignedRequest] that can be invoked within the specified time window.")
-
         }
         // FIXME ~ Replace or add additional function, swap ULong type for kotlin.time.Duration when type becomes stable
         writer.withBlock("suspend fun $requestTypeName.presign(serviceClient: $serviceClientTypeName, durationSeconds: ULong): PresignedRequest {", "}\n") {
