@@ -10,6 +10,7 @@ import aws.sdk.kotlin.crt.http.HttpRequestBodyStream
 import aws.sdk.kotlin.crt.io.Protocol
 import aws.sdk.kotlin.crt.io.Uri
 import aws.sdk.kotlin.crt.io.UserInfo
+import aws.sdk.kotlin.runtime.crt.ReadChannelBodyStream
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import kotlin.coroutines.CoroutineContext
