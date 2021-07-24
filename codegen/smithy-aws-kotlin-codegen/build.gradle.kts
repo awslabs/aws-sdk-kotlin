@@ -4,7 +4,6 @@
  */
 plugins {
     kotlin("jvm")
-    kotlin("plugin.serialization") version "1.5.0"
     jacoco
 }
 
@@ -33,8 +32,6 @@ dependencies {
 
     testImplementation("org.slf4j:slf4j-api:1.7.30")
     testImplementation("org.slf4j:slf4j-simple:1.7.30")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
 }
 
 val generateSdkRuntimeVersion by tasks.registering {
