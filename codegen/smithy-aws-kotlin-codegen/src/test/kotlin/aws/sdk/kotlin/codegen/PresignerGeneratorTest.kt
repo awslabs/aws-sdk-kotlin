@@ -224,9 +224,9 @@ class PresignerGeneratorTest {
              * instance is not available.
              */
             class TestPresignConfig private constructor(builder: BuilderImpl): ServicePresignConfig {
-                override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
-                override val endpointResolver: EndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
-                override val region: String = builder.region ?: throw ClientException("Must specify a region")
+                override val credentialsProvider: CredentialsProvider = builder.credentialsProvider
+                override val endpointResolver: EndpointResolver = builder.endpointResolver
+                override val region: String = builder.region ?: throw ClientException("region must be set")
                 override val serviceName: String = "example-signing-name"
                 companion object {
                     @JvmStatic
@@ -246,12 +246,12 @@ class PresignerGeneratorTest {
                     /**
                      * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider] instance will be used.
                      */
-                    var credentialsProvider: CredentialsProvider?
+                    var credentialsProvider: CredentialsProvider
             
                     /**
                      * Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option.
                      */
-                    var endpointResolver: EndpointResolver?
+                    var endpointResolver: EndpointResolver
             
                     /**
                      * AWS region to make requests to
@@ -262,8 +262,8 @@ class PresignerGeneratorTest {
                 }
             
                 internal class BuilderImpl() : FluentBuilder, DslBuilder {
-                    override var credentialsProvider: CredentialsProvider? = null
-                    override var endpointResolver: EndpointResolver? = null
+                    override var credentialsProvider: CredentialsProvider = DefaultChainCredentialsProvider()
+                    override var endpointResolver: EndpointResolver = DefaultEndpointResolver()
                     override var region: String? = null
             
                     override fun build(): TestPresignConfig = TestPresignConfig(this)

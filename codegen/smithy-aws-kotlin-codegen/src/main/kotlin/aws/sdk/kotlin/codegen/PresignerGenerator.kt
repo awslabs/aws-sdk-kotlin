@@ -19,6 +19,7 @@ import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
+import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
@@ -153,18 +154,26 @@ class PresignerGenerator : KotlinIntegration {
         writer.addImport(AwsRuntimeTypes.Core.ClientException)
         writer.putContext("configClass.name", presignConfigTypeName)
         val credentialsProviderProperty = ClientConfigProperty {
-            symbol = AwsRuntimeTypes.Auth.CredentialsProvider
+            symbol = buildSymbol {
+                name = "CredentialsProvider"
+                defaultValue = "DefaultChainCredentialsProvider()"
+                namespace(AwsKotlinDependency.AWS_AUTH)
+                nullable = false
+            }
             name = "credentialsProvider"
             documentation = "The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider] instance will be used."
             baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
-            defaultValue = "DefaultChainCredentialsProvider()"
         }
         val endpointResolverProperty = ClientConfigProperty {
-            symbol = AwsRuntimeTypes.Core.Endpoint.EndpointResolver
+            symbol = buildSymbol {
+                name = "EndpointResolver"
+                namespace(AwsKotlinDependency.AWS_CORE, "endpoint")
+                defaultValue = "DefaultEndpointResolver()"
+                nullable = false
+            }
             name = "endpointResolver"
             documentation = "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
             baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
-            defaultValue = "DefaultEndpointResolver()"
         }
         val region = ClientConfigProperty {
             symbol = buildSymbol {
@@ -175,7 +184,7 @@ class PresignerGenerator : KotlinIntegration {
             name = "region"
             documentation = "AWS region to make requests to"
             baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
-            defaultValue = """throw ClientException("Must specify a region")"""
+            required = true
         }
         val serviceNameProperty = ClientConfigProperty {
             symbol = KotlinTypes.String
