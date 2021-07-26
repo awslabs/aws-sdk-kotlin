@@ -6,8 +6,8 @@ import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyValue
 import aws.sdk.kotlin.crt.auth.signing.AwsSigner
 import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
 import aws.sdk.kotlin.crt.http.HttpRequest
-import aws.sdk.kotlin.crt.toCrtHeaders
-import aws.sdk.kotlin.crt.toSdkHeaders
+import aws.sdk.kotlin.runtime.crt.toCrtHeaders
+import aws.sdk.kotlin.runtime.crt.toSdkHeaders
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpMethod
