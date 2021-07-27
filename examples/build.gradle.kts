@@ -7,6 +7,12 @@ allprojects {
     version = "0.3.0-SNAPSHOT"
 
     repositories {
+        maven {
+            name = "kotlinSdkLocal"
+            url = uri(TODO("set your local repository path"))
+            // e.g.
+            //url = uri("file:///tmp/aws-sdk-kotlin-repo/m2")
+        }
         mavenCentral()
     }
 }
