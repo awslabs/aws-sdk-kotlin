@@ -2,6 +2,7 @@ $version: "1.0"
 
 namespace com.amazonaws.s3
 use smithy.test#httpResponseTests
+use smithy.test#httpRequestTests
 
 apply NotFound @httpResponseTests([
     {
@@ -18,6 +19,47 @@ apply NotFound @httpResponseTests([
             "content-type": "application/xml",
             "date": "Thu, 03 Jun 2021 04:05:52 GMT",
             "server": "AmazonS3"
+        }
+    }
+])
+
+// FIXME - when we implement virtual host addressing as the default will need to change the host and uri
+//         see: https://github.com/awslabs/aws-sdk-kotlin/issues/220
+apply PutObject @httpRequestTests([
+    {
+        id: "PutObjectDefaultContentType",
+        documentation: "This test case validates default content-type behavior when not specified in the request",
+        protocol: "aws.protocols#restXml",
+        method: "PUT",
+        uri: "/mybucket/mykey",
+        host: "s3.us-west-2.amazonaws.com",
+        body: "foobar",
+        bodyMediaType: "application/octet-stream",
+        headers: {
+            "Content-Type": "application/octet-stream"
+        },
+        params: {
+            Bucket: "mybucket",
+            Key: "mykey",
+            Body: "foobar"
+        }
+    },
+    {
+        id: "PutObjectExplicitContentType",
+        documentation: "This test case validates https://github.com/awslabs/aws-sdk-kotlin/issues/193",
+        protocol: "aws.protocols#restXml",
+        method: "PUT",
+        uri: "/mybucket/mykey",
+        host: "s3.us-west-2.amazonaws.com",
+        body: "{\"foo\":\"bar\"}",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        params: {
+            Bucket: "mybucket",
+            Key: "mykey",
+            ContentType: "application/json",
+            Body: "{\"foo\":\"bar\"}"
         }
     }
 ])
