@@ -1,0 +1,10 @@
+[
+  {
+    "name": "renameShapes",
+    "args": {
+      "renamed": {
+        "com.amazonaws.marketplacecommerceanalytics#MarketplaceCommerceAnalyticsException": "com.amazonaws.marketplacecommerceanalytics#MarketplaceCommerceAnalyticsServiceException"
+      }
+    }
+  }
+]

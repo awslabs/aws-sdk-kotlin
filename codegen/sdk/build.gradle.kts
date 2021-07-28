@@ -81,6 +81,7 @@ fun generateSmithyBuild(services: List<AwsService>): String {
             importPaths.add(service.modelExtrasDir.replace("\\", "\\\\"))
         }
         val imports = importPaths.joinToString { "\"$it\"" }
+        val transforms = transformsForService(service)
 
         """
             "${service.projectionName}": {
@@ -98,10 +99,12 @@ fun generateSmithyBuild(services: List<AwsService>): String {
                           "generateDefaultBuildFiles": false
                       }
                     }
-                }
+                },
+                "transforms": $transforms
             }
         """
     }
+
     return """
     {
         "version": "1.0",
@@ -110,6 +113,15 @@ fun generateSmithyBuild(services: List<AwsService>): String {
         }
     }
     """.trimIndent()
+}
+
+fun transformsForService(service: AwsService): String {
+    val transformsFile = projectDir.resolve("transforms/${service.projectionName}.json")
+
+    return when (transformsFile.exists()) {
+        false -> "[]"
+        true -> transformsFile.readText()
+    }
 }
 
 val discoveredServices: List<AwsService> by lazy { discoverServices() }
@@ -223,7 +235,9 @@ task("generateSmithyBuild") {
     group = "codegen"
     description = "generate smithy-build.json"
     doFirst {
-        projectDir.resolve("smithy-build.json").writeText(generateSmithyBuild(discoveredServices))
+        projectDir
+            .resolve("smithy-build.json")
+            .writeText(generateSmithyBuild(discoveredServices))
     }
 }
 
