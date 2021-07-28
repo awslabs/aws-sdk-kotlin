@@ -65,6 +65,16 @@ data class AwsService(
     val description: String? = null
 )
 
+
+val disabledServices = setOf(
+    // transcribe streaming contains exclusively EventStream operations which are not supported
+    "transcribestreaming",
+    // timestream requires endpoint discovery
+    // https://github.com/awslabs/smithy-kotlin/issues/146
+    "timestreamwrite",
+    "timestreamquery"
+)
+
 // Generates a smithy-build.json file by creating a new projection.
 // The generated smithy-build.json file is not committed to git since
 // it's rebuilt each time codegen is performed.
@@ -130,7 +140,13 @@ fun discoverServices(): List<AwsService> {
             if (!include) {
                 logger.info("skipping ${file.absolutePath}, $svcName not a member of $serviceMembership")
             }
-            include
+
+            val isDisabled = svcName in disabledServices
+            if (include && isDisabled) {
+                logger.warn("skipping $svcName because it is explicitly disabled")
+            }
+
+            include && !isDisabled
         }
         .map { file ->
             val model = Model.assembler().addImport(file.absolutePath).assemble().result.get()
@@ -148,7 +164,7 @@ fun discoverServices(): List<AwsService> {
             }
             include
         }
-        .map { (file, service) ->
+        .map{ (file, service) ->
             val serviceApi = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
                 ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
             val (name, version, _) = file.name.split(".")
