@@ -33,11 +33,10 @@ suspend fun SynthesizeSpeechRequest.presign(serviceClientConfig: ServicePresignC
  * @return The [PresignedRequest] that can be invoked within the specified time window.
  */
 suspend fun SynthesizeSpeechRequest.presign(serviceClient: PollyClient, durationSeconds: ULong): PresignedRequest {
-    val serviceClientConfig = object : ServicePresignConfig {
-        override val region: String = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
-        override val serviceName: String = "polly"
-        override val endpointResolver: EndpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
-        override val credentialsProvider: CredentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
+    val serviceClientConfig = PollyPresignConfig {
+        credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
+        endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
+        region = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
     }
     return createPresignedRequest(serviceClientConfig, synthesizeSpeechPresignConfig(this, durationSeconds))
 }
@@ -88,11 +87,12 @@ private suspend fun synthesizeSpeechPresignConfig(request: SynthesizeSpeechReque
  * This type can be used to presign requests in cases where an existing service client
  * instance is not available.
  */
-class PollyPresignConfig private constructor(builder: BuilderImpl) : ServicePresignConfig {
-    override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
-    override val endpointResolver: EndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
-    override val region: String = builder.region ?: throw ClientException("Must specify a region")
-    override val serviceName: String = "polly"
+class PollyPresignConfig private constructor(builder: BuilderImpl): ServicePresignConfig {
+    override val credentialsProvider: CredentialsProvider = builder.credentialsProvider
+    override val endpointResolver: EndpointResolver = builder.endpointResolver
+    override val region: String = builder.region ?: throw ClientException("region must be set")
+    override val serviceId: String = "polly"
+    override val signingName: String = "polly"
     companion object {
         @JvmStatic
         fun fluentBuilder(): FluentBuilder = BuilderImpl()
@@ -111,15 +111,15 @@ class PollyPresignConfig private constructor(builder: BuilderImpl) : ServicePres
         /**
          * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider] instance will be used.
          */
-        var credentialsProvider: CredentialsProvider?
+        var credentialsProvider: CredentialsProvider
 
         /**
          * Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option.
          */
-        var endpointResolver: EndpointResolver?
+        var endpointResolver: EndpointResolver
 
         /**
-         * AWS region to make requests to
+         * AWS region to make requests for
          */
         var region: String?
 
@@ -127,8 +127,8 @@ class PollyPresignConfig private constructor(builder: BuilderImpl) : ServicePres
     }
 
     internal class BuilderImpl() : FluentBuilder, DslBuilder {
-        override var credentialsProvider: CredentialsProvider? = null
-        override var endpointResolver: EndpointResolver? = null
+        override var credentialsProvider: CredentialsProvider = DefaultChainCredentialsProvider()
+        override var endpointResolver: EndpointResolver = DefaultEndpointResolver()
         override var region: String? = null
 
         override fun build(): PollyPresignConfig = PollyPresignConfig(this)
