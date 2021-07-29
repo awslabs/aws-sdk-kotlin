@@ -85,7 +85,7 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
     val endpoint = serviceConfig.endpointResolver.resolve(serviceConfig.serviceName, serviceConfig.region)
 
     val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
-        region = serviceConfig.region
+        region = endpoint.signingRegion ?: serviceConfig.region
         service = endpoint.signingName ?: serviceConfig.serviceName
         credentials = crtCredentials
         signatureType = if (requestConfig.signingLocation == SigningLocation.HEADER) AwsSignatureType.HTTP_REQUEST_VIA_HEADERS else AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS

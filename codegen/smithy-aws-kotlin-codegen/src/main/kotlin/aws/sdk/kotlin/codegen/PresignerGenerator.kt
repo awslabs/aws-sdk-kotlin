@@ -1,8 +1,13 @@
 package aws.sdk.kotlin.codegen
 
-import aws.sdk.kotlin.codegen.customization.PresignTraitIntegration
+import aws.sdk.kotlin.codegen.model.traits.Presignable
 import aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator
+import aws.sdk.kotlin.codegen.protocols.core.QueryBindingResolver
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
+import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
+import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
+import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
+import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.core.DEFAULT_SOURCE_SET_ROOT
@@ -18,17 +23,19 @@ import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.expectTrait
-import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.hasHttpBody
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
 import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
+import software.amazon.smithy.model.knowledge.ServiceIndex
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
+import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.StructureShape
-import software.amazon.smithy.model.traits.HttpTrait
-import java.util.logging.Logger
 
 /**
  * Represents a presignable operation.
@@ -66,20 +73,21 @@ class PresignerGenerator : KotlinIntegration {
         AwsRuntimeTypes.Core.Endpoint.EndpointResolver
     )
 
-    private val logger: Logger = Logger.getLogger(PresignerGenerator::class.java.name)
-
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
 
         // Only services with SigV4 are currently presignable
-        if (!service.hasTrait<SigV4Trait>()) return
+        val authSchemes = ServiceIndex.of(ctx.model).authIds(service)
+        if (!authSchemes.contains(SigV4Trait.ID)) return
 
         // Scan model for operations decorated with PresignTrait
         val presignOperations = service.allOperations
-            .map { ctx.model.expectShape(it) }
-            .filter { operationShape -> operationShape.hasTrait(PresignTraitIntegration.PresignTrait.shapeId) }
+            .map { ctx.model.expectShape<OperationShape>(it) }
+            .filter { operationShape -> operationShape.hasTrait(Presignable.ID) }
             .map { operationShape ->
-                val hasBody = operationShape.expectTrait<HttpTrait>().method != "GET"
+                check(ServiceIndex.of(ctx.model).authIds(service, operationShape).contains(SigV4Trait.ID)) { "Operation does not have valid auth trait" }
+                val resolver: HttpBindingResolver = getProtocolHttpBindingResolver(ctx, service)
+                val hasBody = resolver.hasHttpBody(operationShape)
                 PresignableOperation(service.id.toString(), operationShape.id.toString(), null, hasBody)
             }
 
@@ -132,7 +140,8 @@ class PresignerGenerator : KotlinIntegration {
             renderPresignFromClientFn(writer, request.defaultName(serviceShape), requestConfigFnName, serviceSymbol.name, sigv4ServiceName)
 
             // Generate presign config function
-            renderPresignConfigFn(writer, request.defaultName(serviceShape), requestConfigFnName, presignableOp, serializerSymbol, request)
+            renderPresignConfigFn(writer, request.defaultName(serviceShape), requestConfigFnName, presignableOp,
+                serializerSymbol, presignConfigFnVisitorFactory(ctx.protocolGenerator!!.protocol, serviceShape, op))
         }
 
         // Generate presign config builder
@@ -197,23 +206,59 @@ class PresignerGenerator : KotlinIntegration {
         ccg.render()
     }
 
+    interface PresignConfigFnVisitor {
+        fun renderHttpMethod(writer: KotlinWriter)
+        fun renderQueryParameters(writer:KotlinWriter)
+    }
+
+    private fun presignConfigFnVisitorFactory(protocol: ShapeId, serviceShape: ServiceShape, operationShape: OperationShape): PresignConfigFnVisitor =
+        when (protocol) {
+            RestXmlTrait.ID -> {
+                object : PresignConfigFnVisitor {
+                    override fun renderHttpMethod(writer: KotlinWriter) {
+                        writer.write("httpRequestBuilder.method,")
+                    }
+
+                    override fun renderQueryParameters(writer: KotlinWriter) {
+                        writer.addImport(RuntimeTypes.Http.QueryParameters)
+                        writer.write("httpRequestBuilder.url.parameters.build(),")
+                    }
+                }
+            }
+            AwsQueryTrait.ID -> {
+                object : PresignConfigFnVisitor {
+                    override fun renderHttpMethod(writer: KotlinWriter) {
+                        writer.addImport(RuntimeTypes.Http.HttpMethod)
+                        writer.write("HttpMethod.GET,")
+                    }
+
+                    override fun renderQueryParameters(writer: KotlinWriter) {
+                        writer.addImport(RuntimeTypes.Http.toQueryParameters)
+                        writer.write("""mapOf("Action" to "${operationShape.id.name}", "Version" to "${serviceShape.version}").toQueryParameters(),""")
+                    }
+
+                }
+            }
+            else -> throw CodegenException("Unhandled protocol $protocol")
+        }
+
+
     private fun renderPresignConfigFn(
         writer: KotlinWriter,
         requestTypeName: String,
         requestConfigFnName: String,
         presignableOp: PresignableOperation,
         serializerSymbol: Symbol,
-        request: StructureShape
+        presignConfigFnVisitor: PresignConfigFnVisitor
     ) {
         writer.withBlock("private suspend fun $requestConfigFnName(request: $requestTypeName, durationSeconds: ULong) : PresignedRequestConfig {", "}\n") {
             write("require(durationSeconds > 0u) { \"duration must be greater than zero\" }")
             write("val httpRequestBuilder = #T().serialize(ExecutionContext.build {  }, request)", serializerSymbol)
 
             writer.withBlock("return PresignedRequestConfig(", ")") {
-                write("httpRequestBuilder.method,")
+                presignConfigFnVisitor.renderHttpMethod(this)
                 write("httpRequestBuilder.url.path,")
-                addImport(RuntimeTypes.Http.QueryParameters)
-                write("httpRequestBuilder.url.parameters.build(),")
+                presignConfigFnVisitor.renderQueryParameters(writer)
                 write("durationSeconds.toLong(),")
                 write("${presignableOp.hasBody},")
                 write("SigningLocation.HEADER")
@@ -262,4 +307,18 @@ class PresignerGenerator : KotlinIntegration {
             write("return createPresignedRequest(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
         }
     }
+
+    private fun getProtocolHttpBindingResolver(ctx: CodegenContext, service: ServiceShape): HttpBindingResolver =
+        when (requireNotNull(ctx.protocolGenerator).protocol) {
+            AwsQueryTrait.ID -> QueryBindingResolver(ctx.model, service)
+            RestJson1Trait.ID -> HttpTraitResolver(ctx.model, service, "application/json")
+            RestXmlTrait.ID -> HttpTraitResolver(ctx.model, service, "application/xml")
+            else -> throw CodegenException("Unable to create HttpBindingResolver for unhandled protocol ${ctx.protocolGenerator?.protocol}")
+        }
 }
+
+private fun ServiceIndex.authIds(serviceShape: ServiceShape): Set<ShapeId> =
+    getEffectiveAuthSchemes(serviceShape).values.map { it.toShapeId() }.toSet()
+
+private fun ServiceIndex.authIds(serviceShape: ServiceShape, operationShape: OperationShape): Set<ShapeId> =
+    getEffectiveAuthSchemes(serviceShape, operationShape).values.map { it.toShapeId() }.toSet()
