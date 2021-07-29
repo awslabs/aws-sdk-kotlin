@@ -13,9 +13,12 @@ import aws.smithy.kotlin.runtime.http.operation.HttpDeserialize
 import aws.smithy.kotlin.runtime.http.operation.HttpOperationContext
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.util.AttributeKey
-import aws.smithy.kotlin.runtime.util.Attributes
+import aws.smithy.kotlin.runtime.util.setIfNotNull
 
+/**
+ * Common error response details
+ */
+@InternalSdkApi
 public data class ErrorDetails(val code: String?, val message: String?, val requestId: String?)
 
 /**
@@ -52,6 +55,7 @@ public abstract class AbstractErrorHandling(private val registry: ExceptionRegis
             val call = next.call(req)
             val httpResponse = call.response
 
+            // FIXME - deal with ExpectedHttpStatus
             val context = req.context
             val expectedStatus = context
                 .getOrNull(HttpOperationContext.ExpectedHttpStatus)
@@ -93,15 +97,12 @@ public abstract class AbstractErrorHandling(private val registry: ExceptionRegis
 /**
  * pull the ase specific details from the response / error
  */
-private fun setAseFields(exception: Any, response: HttpResponse, errorDetails: ErrorDetails?) {
+@InternalSdkApi
+public fun setAseFields(exception: Any, response: HttpResponse, errorDetails: ErrorDetails?) {
     if (exception is AwsServiceException) {
         exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
         exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)
         exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
         exception.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
     }
-}
-
-private fun <T : Any> Attributes.setIfNotNull(key: AttributeKey<T>, value: T?) {
-    if (value != null) set(key, value)
 }
