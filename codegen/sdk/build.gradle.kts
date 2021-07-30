@@ -164,7 +164,7 @@ fun discoverServices(): List<AwsService> {
             }
             include
         }
-        .map{ (file, service) ->
+        .map { (file, service) ->
             val serviceApi = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
                 ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
             val (name, version, _) = file.name.split(".")
