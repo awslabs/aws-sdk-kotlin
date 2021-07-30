@@ -135,3 +135,12 @@ See [Debugging](docs/debugging.md)
 ## Security
 
 Please refer to our [security policy](https://github.com/awslabs/aws-sdk-kotlin/security/policy).
+
+## Supported targets
+
+The SDK supports the following targets:
+
+* JVM
+* Android API level 16+ (Later versions of the Android may contain security
+  fixes so consider reviewing known vulnerabilities for the Android versions
+  you choose to support in your application.)
