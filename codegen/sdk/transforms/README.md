@@ -1,1 +1,0 @@
-This directory stores Smithy transform lists to be merged into generated `smithy-build.json` files.  The filename of the fragement MUST be of the format <service model>.json.  The JSON fragment MUST be a JSON list of transforms as described on this page: https://awslabs.github.io/smithy/1.0/guides/building-models/build-config.html#transforms.
