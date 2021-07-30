@@ -189,7 +189,7 @@ class QueryBindingResolver(
     service: ServiceShape
 ) : StaticHttpBindingResolver(model, service, QueryHttpTrait, QueryContentType, TimestampFormatTrait.Format.DATE_TIME) {
     constructor(ctx: ProtocolGenerator.GenerationContext) : this(ctx.model, ctx.service)
-    
+
     companion object {
         val QueryHttpTrait: HttpTrait = HttpTrait
             .builder()

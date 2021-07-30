@@ -33,7 +33,8 @@ class PollyPresigner : KotlinIntegration {
     private val addPollyPresignConfigFnWriter = SectionWriter { writer, _ ->
         writer.addImport(RuntimeTypes.Http.QueryParametersBuilder)
         writer.addImport(RuntimeTypes.Http.HttpMethod)
-        writer.write("""
+        writer.write(
+            """
                 require(durationSeconds > 0u) { "duration must be greater than zero" }
                 val httpRequestBuilder = SynthesizeSpeechOperationSerializer().serialize(ExecutionContext.build { }, request)
                 val queryStringBuilder = QueryParametersBuilder()
@@ -72,6 +73,7 @@ class PollyPresigner : KotlinIntegration {
                     false,
                     SigningLocation.QUERY_STRING
                 )
-        """.trimIndent())
+            """.trimIndent()
+        )
     }
 }

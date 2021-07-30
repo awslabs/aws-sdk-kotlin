@@ -1,6 +1,5 @@
 package aws.sdk.kotlin.codegen
 
-import aws.sdk.kotlin.codegen.customization.PresignableModelIntegration
 import aws.sdk.kotlin.codegen.model.traits.Presignable
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.build.MockManifest

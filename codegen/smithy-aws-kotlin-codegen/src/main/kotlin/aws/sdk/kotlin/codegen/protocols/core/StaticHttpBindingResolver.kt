@@ -32,7 +32,8 @@ open class StaticHttpBindingResolver(
         context: ProtocolGenerator.GenerationContext,
         httpTrait: HttpTrait,
         defaultContentType: String,
-        defaultTimestampFormat: TimestampFormatTrait.Format) : this(context.model, context.service, httpTrait, defaultContentType, defaultTimestampFormat)
+        defaultTimestampFormat: TimestampFormatTrait.Format
+    ) : this(context.model, context.service, httpTrait, defaultContentType, defaultTimestampFormat)
 
     protected val topDownIndex: TopDownIndex = TopDownIndex.of(model)
 

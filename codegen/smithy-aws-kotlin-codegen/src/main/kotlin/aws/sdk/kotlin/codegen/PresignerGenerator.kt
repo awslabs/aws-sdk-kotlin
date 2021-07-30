@@ -151,8 +151,10 @@ class PresignerGenerator : KotlinIntegration {
             renderPresignFromClientFn(writer, request.defaultName(serviceShape), requestConfigFnName, serviceSymbol.name, presignConfigTypeName)
 
             // Generate presign config function
-            renderPresignConfigFn(writer, request.defaultName(serviceShape), requestConfigFnName, presignableOp,
-                serializerSymbol, presignConfigFnVisitorFactory(ctx.protocolGenerator!!.protocol, serviceShape, op))
+            renderPresignConfigFn(
+                writer, request.defaultName(serviceShape), requestConfigFnName, presignableOp,
+                serializerSymbol, presignConfigFnVisitorFactory(ctx.protocolGenerator!!.protocol, serviceShape, op)
+            )
         }
 
         // Generate presign config builder
@@ -224,13 +226,14 @@ class PresignerGenerator : KotlinIntegration {
             endpointResolverProperty,
             region,
             signingNameProperty,
-            serviceIdProperty)
+            serviceIdProperty
+        )
         ccg.render()
     }
 
     interface PresignConfigFnVisitor {
         fun renderHttpMethod(writer: KotlinWriter)
-        fun renderQueryParameters(writer:KotlinWriter)
+        fun renderQueryParameters(writer: KotlinWriter)
     }
 
     private fun presignConfigFnVisitorFactory(protocol: ShapeId, serviceShape: ServiceShape, operationShape: OperationShape): PresignConfigFnVisitor =
@@ -259,12 +262,10 @@ class PresignerGenerator : KotlinIntegration {
                         writer.addImport(RuntimeTypes.Http.toQueryParameters)
                         writer.write("""mapOf("Action" to "${operationShape.id.name}", "Version" to "${serviceShape.version}").toQueryParameters(),""")
                     }
-
                 }
             }
             else -> throw CodegenException("Unhandled protocol $protocol")
         }
-
 
     private fun renderPresignConfigFn(
         writer: KotlinWriter,
