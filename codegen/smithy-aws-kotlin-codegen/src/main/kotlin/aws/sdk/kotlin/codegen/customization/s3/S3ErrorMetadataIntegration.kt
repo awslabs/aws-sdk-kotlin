@@ -2,7 +2,6 @@ package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
@@ -61,13 +60,13 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
         delegator.runtimeDependencies.addAll(AwsKotlinDependency.AWS_TESTING.dependencies)
     }
 
-    override fun customizeMiddleware(
-        ctx: ProtocolGenerator.GenerationContext,
-        resolved: List<ProtocolMiddleware>
-    ): List<ProtocolMiddleware> =
-        resolved.replace(newValue = S3ErrorMiddleware(ctx, HttpTraitResolver(ctx, "application/xml"))) {
-            it is RestXmlErrorMiddleware
-        }
+//    override fun customizemiddleware(
+//        ctx: protocolgenerator.generationcontext,
+//        resolved: list<protocolmiddleware>
+//    ): list<protocolmiddleware> =
+//        resolved.replace(newvalue = s3errormiddleware(ctx, httptraitresolver(ctx, "application/xml"))) {
+//            it is restxmlerrormiddleware
+//        }restxmlerrormiddleware
 
     // SectionWriter to override the default sdkErrorMetadata for S3's version
     private val addSdkErrorMetadataWriter = SectionWriter { writer, _ ->

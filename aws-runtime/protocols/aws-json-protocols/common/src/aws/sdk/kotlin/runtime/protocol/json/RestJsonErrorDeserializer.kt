@@ -5,7 +5,7 @@
 package aws.sdk.kotlin.runtime.protocol.json
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.http.middleware.errors.ErrorDetails
+import aws.sdk.kotlin.runtime.http.ErrorDetails
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer

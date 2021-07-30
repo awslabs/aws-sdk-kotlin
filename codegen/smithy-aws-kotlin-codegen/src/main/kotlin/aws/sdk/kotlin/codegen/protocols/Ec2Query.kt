@@ -12,7 +12,6 @@ import software.amazon.smithy.aws.traits.protocols.Ec2QueryTrait
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RenderingContext
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.addImport
 import software.amazon.smithy.kotlin.codegen.model.changeNameSuffix
 import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait

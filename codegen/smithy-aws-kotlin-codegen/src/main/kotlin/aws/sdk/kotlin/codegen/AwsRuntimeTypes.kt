@@ -43,7 +43,7 @@ object AwsRuntimeTypes {
 
     object Http {
         val withPayload = runtimeSymbol("withPayload", AwsKotlinDependency.AWS_HTTP)
-        val setAseFields = runtimeSymbol("setAseFields", AwsKotlinDependency.AWS_HTTP, subpackage = "middleware.errors")
+        val setAseErrorMetadata = runtimeSymbol("setAseErrorMetadata", AwsKotlinDependency.AWS_HTTP)
     }
 
     object JsonProtocols {

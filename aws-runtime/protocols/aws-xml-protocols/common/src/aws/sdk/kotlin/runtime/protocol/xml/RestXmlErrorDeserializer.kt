@@ -5,7 +5,7 @@
 package aws.sdk.kotlin.runtime.protocol.xml
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.http.middleware.errors.ErrorDetails
+import aws.sdk.kotlin.runtime.http.ErrorDetails
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
 import aws.smithy.kotlin.runtime.serde.xml.XmlSerialName

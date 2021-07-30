@@ -121,7 +121,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             RuntimeTypes.Http.readAll,
             AwsRuntimeTypes.Core.UnknownServiceErrorException,
             AwsRuntimeTypes.Http.withPayload,
-            AwsRuntimeTypes.Http.setAseFields,
+            AwsRuntimeTypes.Http.setAseErrorMetadata,
         ).forEach(writer::addImport)
 
         writer.write("""val payload = response.body.readAll()""")
@@ -135,7 +135,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             .dedent()
             .withBlock("} catch (ex: Exception) {", "}") {
                 withBlock("""throw #T("failed to parse response as ${ctx.protocol.name} error", ex).also {""", "}", AwsRuntimeTypes.Core.UnknownServiceErrorException) {
-                    write("#T(it, wrappedResponse, null)", AwsRuntimeTypes.Http.setAseFields)
+                    write("#T(it, wrappedResponse, null)", AwsRuntimeTypes.Http.setAseErrorMetadata)
                 }
             }
             .write("")
@@ -157,7 +157,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
 
             writer.write("")
                 .write("val modeledException = modeledExceptionDeserializer.deserialize(context, response)")
-                .write("#T(modeledException, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseFields)
+                .write("#T(modeledException, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
                 .write("throw modeledException")
         }
     }
