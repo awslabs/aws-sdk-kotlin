@@ -22,10 +22,9 @@ internal val DEFAULT_PRESIGNABLE_OPERATIONS: Map<String, Set<String>> = mapOf(
     "com.amazonaws.sts#AWSSecurityTokenServiceV20110615" to setOf(
         "com.amazonaws.sts#GetCallerIdentity"
     ),
-    // TODO ~ enable once integration-based sections are declarable
-    /*"com.amazonaws.polly#Parrot_v1" to setOf(
+    "com.amazonaws.polly#Parrot_v1" to setOf(
         "com.amazonaws.polly#SynthesizeSpeech"
-    )*/
+    )
 )
 
 /**

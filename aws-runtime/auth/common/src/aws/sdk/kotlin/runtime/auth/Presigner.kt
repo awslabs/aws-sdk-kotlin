@@ -20,7 +20,8 @@ import aws.smithy.kotlin.runtime.util.InternalApi
  * The service configuration details for a presigned request
  *
  * @property region The AWS region to which the request is going.
- * @property signingName The service name used to sign the request.
+ * @property signingName The signing name used to sign the request.
+ * @property serviceId the service id used to sign the request.
  * @property endpointResolver Resolves the endpoint to determine where the request should be sent.
  * @property credentialsProvider Resolves credentials to sign the request with.
  */
