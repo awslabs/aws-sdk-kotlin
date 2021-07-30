@@ -15,14 +15,35 @@ import aws.smithy.kotlin.runtime.util.setIfNotNull
 /**
  * Common error response details
  */
+public interface AwsErrorDetails {
+    /**
+     * The error code that identifies the error
+     */
+    public val code: String?
+
+    /**
+     * A description of the error
+     */
+    public val message: String?
+
+    /**
+     * The unique request ID returned by the service
+     */
+    public val requestId: String?
+}
+
 @InternalSdkApi
-public data class ErrorDetails(val code: String?, val message: String?, val requestId: String?)
+public data class ErrorDetails(
+    override val code: String?,
+    override val message: String?,
+    override val requestId: String?
+) : AwsErrorDetails
 
 /**
  * Pull specific details from the response / error and set [AwsServiceException] metadata
  */
 @InternalSdkApi
-public fun setAseErrorMetadata(exception: Any, response: HttpResponse, errorDetails: ErrorDetails?) {
+public fun setAseErrorMetadata(exception: Any, response: HttpResponse, errorDetails: AwsErrorDetails?) {
     if (exception is AwsServiceException) {
         exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
         exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)

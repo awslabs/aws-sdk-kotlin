@@ -23,7 +23,7 @@ import software.amazon.smithy.model.traits.*
  * @inheritDoc
  * @see AwsHttpBindingProtocolGenerator
  */
-class RestXml : AwsHttpBindingProtocolGenerator() {
+open class RestXml : AwsHttpBindingProtocolGenerator() {
 
     override val protocol: ShapeId = RestXmlTrait.ID
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.DATE_TIME

@@ -1,4 +1,4 @@
-package aws.sdk.kotlin.service.s3.internal
+package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.GetBucketLocationResponse
