@@ -65,9 +65,9 @@ public data class PresignedRequestConfig(
 
 /**
  * Properties of an HTTP request that has been presigned
+ * @property method HTTP method to use when initiating the request
  * @property url HTTP url of the presigned request
  * @property headers Headers that must be sent with the request
- * @property method HTTP method to use when initiating the request
  */
 public data class PresignedRequest(
     val method: HttpMethod,
