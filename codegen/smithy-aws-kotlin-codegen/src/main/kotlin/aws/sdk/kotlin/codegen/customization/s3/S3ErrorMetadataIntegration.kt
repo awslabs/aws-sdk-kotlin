@@ -4,13 +4,22 @@ import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.*
+import software.amazon.smithy.kotlin.codegen.core.CodegenContext
+import software.amazon.smithy.kotlin.codegen.core.DEFAULT_SOURCE_SET_ROOT
+import software.amazon.smithy.kotlin.codegen.core.KotlinDelegator
+import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.replace
 import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -49,15 +58,7 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
         val packagePath = ctx.settings.pkg.name.namespaceToPath()
         delegator.fileManifest.writeFile("$DEFAULT_SOURCE_SET_ROOT$packagePath/model/S3ErrorMetadata.kt", contents)
 
-        val kotlinTestDependency = KotlinDependency(
-            GradleConfiguration.TestImplementation,
-            "org.jetbrains.kotlin",
-            "org.jetbrains.kotlin",
-            "kotlin-test",
-            "\$kotlinVersion"
-        )
-
-        delegator.runtimeDependencies.addAll(kotlinTestDependency.dependencies)
+        delegator.runtimeDependencies.addAll(KotlinDependency.KOTLIN_TEST.dependencies)
         delegator.runtimeDependencies.addAll(AwsKotlinDependency.AWS_TESTING.dependencies)
     }
 

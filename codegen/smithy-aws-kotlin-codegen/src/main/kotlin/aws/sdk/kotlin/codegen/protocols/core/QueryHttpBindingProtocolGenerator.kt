@@ -10,6 +10,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerato
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.filterDocumentBoundMembers
 import software.amazon.smithy.kotlin.codegen.rendering.serde.*
+import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.pattern.UriPattern
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.HttpTrait
@@ -184,8 +185,11 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
  * An HTTP binding resolver for the query binding protocols
  */
 class QueryBindingResolver(
-    context: ProtocolGenerator.GenerationContext,
-) : StaticHttpBindingResolver(context, QueryHttpTrait, QueryContentType, TimestampFormatTrait.Format.DATE_TIME) {
+    model: Model,
+    service: ServiceShape
+) : StaticHttpBindingResolver(model, service, QueryHttpTrait, QueryContentType, TimestampFormatTrait.Format.DATE_TIME) {
+    constructor(ctx: ProtocolGenerator.GenerationContext) : this(ctx.model, ctx.service)
+
     companion object {
         val QueryHttpTrait: HttpTrait = HttpTrait
             .builder()

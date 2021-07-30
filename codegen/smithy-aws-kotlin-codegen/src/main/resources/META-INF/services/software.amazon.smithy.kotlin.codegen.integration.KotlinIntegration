@@ -5,5 +5,8 @@ aws.sdk.kotlin.codegen.customization.RemoveEventStreamOperations
 aws.sdk.kotlin.codegen.customization.s3.S3SigningConfig
 aws.sdk.kotlin.codegen.customization.s3.S3ErrorMetadataIntegration
 aws.sdk.kotlin.codegen.customization.s3.GetBucketLocationDeserializerIntegration
+aws.sdk.kotlin.codegen.customization.PresignableModelIntegration
+aws.sdk.kotlin.codegen.PresignerGenerator
 aws.sdk.kotlin.codegen.customization.apigateway.ApiGatewayAddAcceptHeader
 aws.sdk.kotlin.codegen.customization.glacier.GlacierAddVersionHeader
+aws.sdk.kotlin.codegen.customization.polly.PollyPresigner
