@@ -20,13 +20,14 @@ import aws.smithy.kotlin.runtime.util.InternalApi
  * The service configuration details for a presigned request
  *
  * @property region The AWS region to which the request is going.
- * @property serviceName The service name used to sign the request.
+ * @property signingName The service name used to sign the request.
  * @property endpointResolver Resolves the endpoint to determine where the request should be sent.
  * @property credentialsProvider Resolves credentials to sign the request with.
  */
 public interface ServicePresignConfig {
     public val region: String
-    public val serviceName: String
+    public val signingName: String
+    public val serviceId: String
     public val endpointResolver: EndpointResolver
     public val credentialsProvider: CredentialsProvider
 }
@@ -68,9 +69,9 @@ public data class PresignedRequestConfig(
  * @property method HTTP method to use when initiating the request
  */
 public data class PresignedRequest(
+    val method: HttpMethod,
     val url: String,
-    val headers: Headers,
-    val method: HttpMethod
+    val headers: Headers
 )
 
 /**
@@ -82,14 +83,14 @@ public data class PresignedRequest(
 @InternalApi
 public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, requestConfig: PresignedRequestConfig): PresignedRequest {
     val crtCredentials = serviceConfig.credentialsProvider.getCredentials().toCrt()
-    val endpoint = serviceConfig.endpointResolver.resolve(serviceConfig.serviceName, serviceConfig.region)
+    val endpoint = serviceConfig.endpointResolver.resolve(serviceConfig.serviceId, serviceConfig.region)
 
     val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
         region = endpoint.signingRegion ?: serviceConfig.region
-        service = endpoint.signingName ?: serviceConfig.serviceName
+        service = endpoint.signingName ?: serviceConfig.signingName
         credentials = crtCredentials
         signatureType = if (requestConfig.signingLocation == SigningLocation.HEADER) AwsSignatureType.HTTP_REQUEST_VIA_HEADERS else AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
-        signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256 // if (requestConfig.hasBody) AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256 else AwsSignedBodyHeaderType.NONE
+        signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
         signedBodyValue = if (requestConfig.hasBody) AwsSignedBodyValue.UNSIGNED_PAYLOAD else null
         expirationInSeconds = requestConfig.durationSeconds
     }
@@ -107,5 +108,9 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
     )
     val signedRequest = AwsSigner.signRequest(request, signingConfig)
 
-    return PresignedRequest("${endpoint.protocol}://${endpoint.hostname}${signedRequest.encodedPath}", signedRequest.headers.toSdkHeaders(), requestConfig.method)
+    return PresignedRequest(
+        requestConfig.method,
+        "${endpoint.protocol}://${endpoint.hostname}${signedRequest.encodedPath}",
+        signedRequest.headers.toSdkHeaders()
+    )
 }

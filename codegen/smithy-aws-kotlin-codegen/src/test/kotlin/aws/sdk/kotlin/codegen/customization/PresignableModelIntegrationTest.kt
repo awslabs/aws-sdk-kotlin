@@ -1,5 +1,6 @@
 package aws.sdk.kotlin.codegen.customization
 
+import aws.sdk.kotlin.codegen.model.traits.Presignable
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
@@ -8,7 +9,7 @@ import software.amazon.smithy.model.shapes.OperationShape
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class PresignTraitIntegrationTest {
+class PresignableModelIntegrationTest {
     private val testModel = """
             namespace smithy.example
 
@@ -39,7 +40,7 @@ class PresignTraitIntegrationTest {
 
     @Test
     fun testServiceEnablementInclusion() {
-        val unit = PresignTraitIntegration(testPresignerModel)
+        val unit = PresignableModelIntegration(testPresignerModel)
 
         assertTrue(unit.enabledForService(testModel, testContext.generationCtx.settings))
     }
@@ -48,7 +49,7 @@ class PresignTraitIntegrationTest {
     fun testServiceEnablementExclusion() {
         val testPresignerModel = mapOf("smithy.example#NoExample" to setOf("smithy.example#GetFoo"))
 
-        val unit = PresignTraitIntegration(testPresignerModel)
+        val unit = PresignableModelIntegration(testPresignerModel)
 
         assertFalse(unit.enabledForService(testModel, testContext.generationCtx.settings))
     }
@@ -57,11 +58,11 @@ class PresignTraitIntegrationTest {
     fun testModelMutation() {
         val testPresignerModel = mapOf("smithy.example#Example" to setOf("smithy.example#GetFoo"))
 
-        val unit = PresignTraitIntegration(testPresignerModel)
+        val unit = PresignableModelIntegration(testPresignerModel)
 
         val model = unit.preprocessModel(testModel, testContext.generationCtx.settings)
 
-        assertTrue(model.expectShape<OperationShape>("smithy.example#GetFoo").hasTrait(PresignTraitIntegration.PresignTrait.shapeId))
-        assertFalse(model.expectShape<OperationShape>("smithy.example#GetNotFoo").hasTrait(PresignTraitIntegration.PresignTrait.shapeId))
+        assertTrue(model.expectShape<OperationShape>("smithy.example#GetFoo").hasTrait(Presignable.ID))
+        assertFalse(model.expectShape<OperationShape>("smithy.example#GetNotFoo").hasTrait(Presignable.ID))
     }
 }

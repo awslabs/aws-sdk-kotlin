@@ -1,6 +1,7 @@
 package aws.sdk.kotlin.codegen
 
-import aws.sdk.kotlin.codegen.customization.PresignTraitIntegration
+import aws.sdk.kotlin.codegen.customization.PresignableModelIntegration
+import aws.sdk.kotlin.codegen.model.traits.Presignable
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.build.MockManifest
 import software.amazon.smithy.codegen.core.SymbolProvider
@@ -18,16 +19,18 @@ import kotlin.test.assertTrue
 
 class PresignerGeneratorTest {
     private val testModel = """
-            namespace aws.sdk
+            namespace smithy.kotlin.traits
 
             use aws.protocols#awsJson1_0
             use aws.auth#sigv4
+            use aws.api#service
 
             @trait(selector: "*")
             structure presignable { }
             
             @awsJson1_0
             @sigv4(name: "example-signing-name")
+            @service(sdkId: "example")
             service Example {
                 version: "1.0.0",
                 operations: [GetFoo, PostFoo, PutFoo]
@@ -55,34 +58,35 @@ class PresignerGeneratorTest {
                 payload: String
             }            
         """.toSmithyModel()
-    private val testContext = testModel.newTestContext("Example", "aws.sdk")
+    private val testContext = testModel.newTestContext("Example", "smithy.kotlin.traits")
 
     private val codegenContext = object : CodegenContext {
         override val model: Model = testContext.generationCtx.model
         override val symbolProvider: SymbolProvider = testContext.generationCtx.symbolProvider
         override val settings: KotlinSettings = testContext.generationCtx.settings
-        override val protocolGenerator: ProtocolGenerator? = null
+        override val protocolGenerator: ProtocolGenerator? = testContext.generator
         override val integrations: List<KotlinIntegration> = testContext.generationCtx.integrations
     }
 
     @Test
     fun testCustomTraitOnModel() {
-        assertTrue(testModel.expectShape<OperationShape>("aws.sdk#GetFoo").hasTrait(PresignTraitIntegration.PresignTrait.shapeId))
+        assertTrue(testModel.expectShape<OperationShape>("smithy.kotlin.traits#GetFoo").hasTrait(Presignable.ID))
     }
 
+    // TODO ~ exercise both awsQuery and restXml protocols
     @Test
     fun testPresignerCodegenNoBody() {
         val unit = PresignerGenerator()
 
         unit.writeAdditionalFiles(codegenContext, testContext.generationCtx.delegator)
 
+        testContext.generationCtx.delegator.flushWriters()
         val testManifest = testContext.generationCtx.delegator.fileManifest as MockManifest
-        val actual = testManifest.expectFileString("/./src/main/kotlin/aws/sdk/Presigner.kt")
+        val actual = testManifest.expectFileString("src/main/kotlin/smithy/kotlin/traits/Presigner.kt")
 
         val expected = """
-            package aws.sdk
+            package smithy.kotlin.traits
             
-            import aws.sdk.internal.DefaultEndpointResolver
             import aws.sdk.kotlin.runtime.ClientException
             import aws.sdk.kotlin.runtime.auth.CredentialsProvider
             import aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider
@@ -92,14 +96,15 @@ class PresignerGeneratorTest {
             import aws.sdk.kotlin.runtime.auth.SigningLocation
             import aws.sdk.kotlin.runtime.auth.createPresignedRequest
             import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
-            import aws.sdk.model.GetFooRequest
-            import aws.sdk.model.PostFooRequest
-            import aws.sdk.model.PutFooRequest
-            import aws.sdk.transform.GetFooOperationSerializer
-            import aws.sdk.transform.PostFooOperationSerializer
-            import aws.sdk.transform.PutFooOperationSerializer
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
+            import smithy.kotlin.traits.internal.DefaultEndpointResolver
+            import smithy.kotlin.traits.model.GetFooRequest
+            import smithy.kotlin.traits.model.PostFooRequest
+            import smithy.kotlin.traits.model.PutFooRequest
+            import smithy.kotlin.traits.transform.GetFooOperationSerializer
+            import smithy.kotlin.traits.transform.PostFooOperationSerializer
+            import smithy.kotlin.traits.transform.PutFooOperationSerializer
             
             /**
              * Presign a [GetFooRequest] using a [ServicePresignConfig].
@@ -118,11 +123,10 @@ class PresignerGeneratorTest {
              * @return The [PresignedRequest] that can be invoked within the specified time window.
              */
             suspend fun GetFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): PresignedRequest {
-                val serviceClientConfig = object : ServicePresignConfig {
-                    override val region: String = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
-                    override val serviceName: String = "example-signing-name"
-                    override val endpointResolver: EndpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
-                    override val credentialsProvider: CredentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
+                val serviceClientConfig = TestPresignConfig {
+                    credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
+                    endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
+                    region = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
                 }
                 return createPresignedRequest(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
             }
@@ -157,11 +161,10 @@ class PresignerGeneratorTest {
              * @return The [PresignedRequest] that can be invoked within the specified time window.
              */
             suspend fun PostFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): PresignedRequest {
-                val serviceClientConfig = object : ServicePresignConfig {
-                    override val region: String = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
-                    override val serviceName: String = "example-signing-name"
-                    override val endpointResolver: EndpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
-                    override val credentialsProvider: CredentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
+                val serviceClientConfig = TestPresignConfig {
+                    credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
+                    endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
+                    region = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
                 }
                 return createPresignedRequest(serviceClientConfig, postFooPresignConfig(this, durationSeconds))
             }
@@ -196,11 +199,10 @@ class PresignerGeneratorTest {
              * @return The [PresignedRequest] that can be invoked within the specified time window.
              */
             suspend fun PutFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): PresignedRequest {
-                val serviceClientConfig = object : ServicePresignConfig {
-                    override val region: String = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
-                    override val serviceName: String = "example-signing-name"
-                    override val endpointResolver: EndpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
-                    override val credentialsProvider: CredentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
+                val serviceClientConfig = TestPresignConfig {
+                    credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
+                    endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
+                    region = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
                 }
                 return createPresignedRequest(serviceClientConfig, putFooPresignConfig(this, durationSeconds))
             }
@@ -227,7 +229,8 @@ class PresignerGeneratorTest {
                 override val credentialsProvider: CredentialsProvider = builder.credentialsProvider
                 override val endpointResolver: EndpointResolver = builder.endpointResolver
                 override val region: String = builder.region ?: throw ClientException("region must be set")
-                override val serviceName: String = "example-signing-name"
+                override val serviceId: String = "example"
+                override val signingName: String = "example-signing-name"
                 companion object {
                     @JvmStatic
                     fun fluentBuilder(): FluentBuilder = BuilderImpl()
@@ -254,7 +257,7 @@ class PresignerGeneratorTest {
                     var endpointResolver: EndpointResolver
             
                     /**
-                     * AWS region to make requests to
+                     * AWS region to make requests for
                      */
                     var region: String?
             

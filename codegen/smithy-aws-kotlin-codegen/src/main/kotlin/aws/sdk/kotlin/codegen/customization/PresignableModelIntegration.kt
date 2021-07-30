@@ -21,13 +21,17 @@ internal val DEFAULT_PRESIGNABLE_OPERATIONS: Map<String, Set<String>> = mapOf(
     ),
     "com.amazonaws.sts#AWSSecurityTokenServiceV20110615" to setOf(
         "com.amazonaws.sts#GetCallerIdentity"
-    )
+    ),
+    // TODO ~ enable once integration-based sections are declarable
+    /*"com.amazonaws.polly#Parrot_v1" to setOf(
+        "com.amazonaws.polly#SynthesizeSpeech"
+    )*/
 )
 
 /**
  * This integration applies a custom trait to any AWS service that provides presign capability on one or more operations.
  */
-class PresignTraitIntegration(private val presignedOperations: Map<String, Set<String>> = DEFAULT_PRESIGNABLE_OPERATIONS) : KotlinIntegration {
+class PresignableModelIntegration(private val presignedOperations: Map<String, Set<String>> = DEFAULT_PRESIGNABLE_OPERATIONS) : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
         val currentServiceId = model.expectShape<ServiceShape>(settings.service).id.toString()
 
