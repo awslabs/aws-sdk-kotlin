@@ -5,6 +5,7 @@
 plugins {
     kotlin("jvm") version "1.5.20" apply false
     id("org.jetbrains.dokka")
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
 dependencies {
@@ -69,6 +70,20 @@ tasks.dokkaHtmlMultiModule {
         project(":aws-runtime:crt-util")
     )
     removeChildTasks(excludeFromDocumentation)
+}
+
+if (project.hasProperty("sonatypeUsername") && project.hasProperty("sonatypePassword")) {
+    apply(plugin = "io.github.gradle-nexus.publish-plugin")
+    nexusPublishing {
+        repositories {
+            create("awsNexus") {
+                nexusUrl.set(uri("https://aws.oss.sonatype.org/service/local/"))
+                snapshotRepositoryUrl.set(uri("https://aws.oss.sonatype.org/content/repositories/snapshots/"))
+                username.set(project.property("sonatypeUsername") as String)
+                password.set(project.property("sonatypePassword") as String)
+            }
+        }
+    }
 }
 
 val ktlint: Configuration by configurations.creating
