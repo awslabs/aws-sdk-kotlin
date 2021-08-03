@@ -90,7 +90,6 @@ class RestJsonErrorDeserializerTest {
                     "baz": "quux"
                 }
             """.trimIndent().encodeToByteArray()
-            val body = ByteArrayContent(contents)
             val actual = RestJsonErrorDeserializer.deserialize(headers, contents)
             assertEquals(expected, actual.message)
         }

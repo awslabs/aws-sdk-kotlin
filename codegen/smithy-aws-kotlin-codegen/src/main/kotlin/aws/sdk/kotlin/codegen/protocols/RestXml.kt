@@ -181,7 +181,8 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         // cheat and generate a local lambda variable whose body matches that of a document serializer for the member
         // type BUT with the traits of the member. This allows the `builder` variable to have the correct scope
         // in two different contexts
-        val deserializeLambdaIdent = "deserialize${boundMember.defaultName().capitalize()}"
+        val boundMemberName = boundMember.defaultName().replaceFirstChar(Char::uppercaseChar)
+        val deserializeLambdaIdent = "deserialize$boundMemberName"
         writer.withBlock("val $deserializeLambdaIdent = suspend {", "}") {
             write("val builder = #T.builder()", memberSymbol)
             renderDeserializerBody(ctx, copyWithMemberTraits, targetShape.members().toList(), writer)
