@@ -46,5 +46,9 @@ private class S3SigningMiddleware(signingServiceName: String) : AwsSignatureVers
         val sbht = AwsRuntimeTypes.Auth.AwsSignedBodyHeaderType
         writer.addImport(sbht)
         writer.write("signedBodyHeaderType = #T.X_AMZ_CONTENT_SHA256", sbht)
+
+        // https://github.com/awslabs/aws-sdk-kotlin/issues/200
+        writer.write("useDoubleUriEncode = false")
+        writer.write("normalizeUriPath = false")
     }
 }
