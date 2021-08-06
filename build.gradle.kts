@@ -8,6 +8,8 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
+group = "aws.sdk.kotlin"
+
 dependencies {
     dokkaPlugin(project(":dokka-aws"))
 }
@@ -53,6 +55,12 @@ allprojects {
         )
         pluginsMapConfiguration.set(pluginConfigMap)
     }
+
+    // FIXME: Create a real "javadoc" JAR from the Dokka output
+    tasks.create("javadocJar", Jar::class) {
+        archiveClassifier.set("javadoc")
+        from()
+    }
 }
 
 // configure the root multimodule docs
@@ -74,6 +82,7 @@ tasks.dokkaHtmlMultiModule {
 
 if (project.hasProperty("sonatypeUsername") && project.hasProperty("sonatypePassword")) {
     apply(plugin = "io.github.gradle-nexus.publish-plugin")
+
     nexusPublishing {
         repositories {
             create("awsNexus") {

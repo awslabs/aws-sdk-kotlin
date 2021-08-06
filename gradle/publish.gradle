@@ -20,25 +20,31 @@ publishing {
     }
 
     publications.all {
-        pom {
-            url = "https://github.com/awslabs/aws-sdk-kotlin"
-            licenses {
-                license {
-                    name = "The Apache License, Version 2.0"
-                    url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                }
-            }
-            developers {
-                developer {
-                    id = "aws-sdk-kotlin"
-                    name = "AWS SDK Kotlin Team"
-                    // TODO - team email?
-                }
-            }
-            scm {
-                connection = "scm:git:git://github.com/awslabs/aws-sdk-kotlin.git"
-                developerConnection = "scm:git:ssh://github.com/awslabs/aws-sdk-kotlin.git"
+        project.afterEvaluate {
+            pom {
+                name = project.name
+                description = project.description
                 url = "https://github.com/awslabs/aws-sdk-kotlin"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "aws-sdk-kotlin"
+                        name = "AWS SDK Kotlin Team"
+                        // TODO - team email?
+                    }
+                }
+                scm {
+                    connection = "scm:git:git://github.com/awslabs/aws-sdk-kotlin.git"
+                    developerConnection = "scm:git:ssh://github.com/awslabs/aws-sdk-kotlin.git"
+                    url = "https://github.com/awslabs/aws-sdk-kotlin"
+                }
+
+                artifact(tasks["javadocJar"])
             }
         }
     }
