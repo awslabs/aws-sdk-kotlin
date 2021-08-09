@@ -17,6 +17,7 @@ import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RenderingContext
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.addImport
+import software.amazon.smithy.kotlin.codegen.core.clientName
 import software.amazon.smithy.kotlin.codegen.core.declareSection
 import software.amazon.smithy.kotlin.codegen.core.defaultName
 import software.amazon.smithy.kotlin.codegen.core.withBlock
@@ -122,7 +123,8 @@ class PresignerGenerator : KotlinIntegration {
             namespace = "${ctx.settings.pkg.name}.internal"
             name = EndpointResolverGenerator.typeName
         }
-        val presignConfigTypeName = "${ctx.settings.sdkId}PresignConfig"
+        val clientName = clientName(ctx.settings.sdkId)
+        val presignConfigTypeName = "${clientName}PresignConfig"
 
         // import RT types
         writer.addImport(presignerRuntimeSymbols)
