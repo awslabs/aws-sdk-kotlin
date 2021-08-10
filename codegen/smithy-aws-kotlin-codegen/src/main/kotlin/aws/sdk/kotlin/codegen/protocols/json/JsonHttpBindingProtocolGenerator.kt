@@ -46,7 +46,7 @@ abstract class JsonHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerato
         op: OperationShape,
         writer: KotlinWriter
     ) {
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val requestBindings = resolver.requestBindings(op)
         val documentMembers = requestBindings.filterDocumentBoundMembers()
 
@@ -99,7 +99,7 @@ abstract class JsonHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerato
     ) {
         writer.addImport(RuntimeTypes.Serde.SerdeJson.JsonDeserializer)
         writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeJson.JsonDeserializer)
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val responseBindings = resolver.responseBindings(op)
         val documentMembers = responseBindings.filterDocumentBoundMembers()
 
@@ -128,7 +128,7 @@ abstract class JsonHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerato
         shape: Shape,
         writer: KotlinWriter
     ) {
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val responseBindings = resolver.responseBindings(shape)
         val documentMembers = responseBindings.filterDocumentBoundMembers()
         writer.addImport(RuntimeTypes.Serde.SerdeJson.JsonDeserializer)

@@ -14,6 +14,8 @@ import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.ShapeId
 
 /**
@@ -29,12 +31,12 @@ class AwsJson1_1 : JsonHttpBindingProtocolGenerator() {
         val httpMiddleware = super.getDefaultHttpMiddleware(ctx)
         val awsJsonFeatures = listOf(
             AwsJsonProtocolMiddleware(ctx.settings.service, "1.1"),
-            AwsJsonModeledExceptionsMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
+            AwsJsonModeledExceptionsMiddleware(ctx, getProtocolHttpBindingResolver(ctx.model, ctx.service))
         )
 
         return httpMiddleware + awsJsonFeatures
     }
 
-    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
-        AwsJsonHttpBindingResolver(ctx, "application/x-amz-json-1.1")
+    override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
+        AwsJsonHttpBindingResolver(model, serviceShape, "application/x-amz-json-1.1")
 }

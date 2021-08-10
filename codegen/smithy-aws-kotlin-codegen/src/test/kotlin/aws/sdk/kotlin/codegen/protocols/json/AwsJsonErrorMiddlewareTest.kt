@@ -34,7 +34,7 @@ class AwsJsonErrorMiddlewareTest {
 
         val (ctx, _, _) = model.newTestContext()
 
-        val unit = RestJsonErrorMiddleware(ctx, AwsJsonHttpBindingResolver(ctx, "application/x-amz-json-1.0"))
+        val unit = RestJsonErrorMiddleware(ctx, AwsJsonHttpBindingResolver(ctx.model, ctx.service, "application/x-amz-json-1.0"))
 
         val actual = generateCode { writer ->
             unit.renderRegisterErrors(writer)
@@ -66,7 +66,7 @@ class AwsJsonErrorMiddlewareTest {
 
         val (ctx, _, _) = model.newTestContext()
 
-        val unit = RestJsonErrorMiddleware(ctx, AwsJsonHttpBindingResolver(ctx, "application/x-amz-json-1.0"))
+        val unit = RestJsonErrorMiddleware(ctx, AwsJsonHttpBindingResolver(ctx.model, ctx.service, "application/x-amz-json-1.0"))
 
         val actual = generateCode { writer ->
             unit.renderRegisterErrors(writer)

@@ -42,7 +42,7 @@ class AwsQuery : QueryHttpBindingProtocolGenerator() {
         AwsQuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members)
 
     override fun getErrorMiddleware(ctx: ProtocolGenerator.GenerationContext): ModeledExceptionsMiddleware =
-        AwsQueryErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
+        AwsQueryErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx.model, ctx.service))
 
     override fun getSerializerDescriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,

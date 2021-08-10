@@ -47,7 +47,7 @@ class Ec2Query : QueryHttpBindingProtocolGenerator() {
         Ec2QuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members)
 
     override fun getErrorMiddleware(ctx: ProtocolGenerator.GenerationContext): ModeledExceptionsMiddleware =
-        Ec2QueryErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
+        Ec2QueryErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx.model, ctx.service))
 
     override fun getSerializerDescriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,

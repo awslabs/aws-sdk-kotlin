@@ -130,9 +130,9 @@ class PresignerGeneratorTest {
                 return createPresignedRequest(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
             }
             
-            private suspend fun getFooPresignConfig(request: GetFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
+            private suspend fun getFooPresignConfig(input: GetFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
                 require(durationSeconds > 0u) { "duration must be greater than zero" }
-                val httpRequestBuilder = GetFooOperationSerializer().serialize(ExecutionContext.build {  }, request)
+                val httpRequestBuilder = GetFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
                     httpRequestBuilder.method,
                     httpRequestBuilder.url.path,
@@ -168,9 +168,9 @@ class PresignerGeneratorTest {
                 return createPresignedRequest(serviceClientConfig, postFooPresignConfig(this, durationSeconds))
             }
             
-            private suspend fun postFooPresignConfig(request: PostFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
+            private suspend fun postFooPresignConfig(input: PostFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
                 require(durationSeconds > 0u) { "duration must be greater than zero" }
-                val httpRequestBuilder = PostFooOperationSerializer().serialize(ExecutionContext.build {  }, request)
+                val httpRequestBuilder = PostFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
                     httpRequestBuilder.method,
                     httpRequestBuilder.url.path,
@@ -206,9 +206,9 @@ class PresignerGeneratorTest {
                 return createPresignedRequest(serviceClientConfig, putFooPresignConfig(this, durationSeconds))
             }
             
-            private suspend fun putFooPresignConfig(request: PutFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
+            private suspend fun putFooPresignConfig(input: PutFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
                 require(durationSeconds > 0u) { "duration must be greater than zero" }
-                val httpRequestBuilder = PutFooOperationSerializer().serialize(ExecutionContext.build {  }, request)
+                val httpRequestBuilder = PutFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
                     httpRequestBuilder.method,
                     httpRequestBuilder.url.path,

@@ -49,8 +49,8 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
      */
     abstract fun getErrorMiddleware(ctx: ProtocolGenerator.GenerationContext): ModeledExceptionsMiddleware
 
-    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
-        QueryBindingResolver(ctx)
+    override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
+        QueryBindingResolver(model, serviceShape)
 
     /**
      * Gets the [AbstractSerdeDescriptorGenerator] to use for serializers.
@@ -90,7 +90,7 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
         shape: Shape,
         writer: KotlinWriter
     ) {
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val responseBindings = resolver.responseBindings(shape)
         val documentMembers = responseBindings.filterDocumentBoundMembers()
         writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
@@ -106,7 +106,7 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
         writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
         writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
 
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val responseBindings = resolver.responseBindings(op)
         val documentMembers = responseBindings.filterDocumentBoundMembers()
 
@@ -165,7 +165,7 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
         op: OperationShape,
         writer: KotlinWriter
     ) {
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val requestBindings = resolver.requestBindings(op)
         val documentMembers = requestBindings.filterDocumentBoundMembers()
 
