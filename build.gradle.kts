@@ -54,6 +54,14 @@ allprojects {
     }
 }
 
+if (project.properties["kotlinWarningsAsErrors"]?.toString()?.toBoolean() == true) {
+    subprojects {
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+            kotlinOptions.allWarningsAsErrors = true
+        }
+    }
+}
+
 // configure the root multimodule docs
 tasks.dokkaHtmlMultiModule {
     moduleName.set("AWS Kotlin SDK")
