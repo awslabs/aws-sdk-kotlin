@@ -25,7 +25,7 @@ import aws.sdk.kotlin.crt.auth.credentials.CachedCredentialsProvider as CachedCr
 public class CachedCredentialsProvider private constructor(builder: Builder) : CrtCredentialsProvider {
 
     @OptIn(ExperimentalTime::class)
-    override val crtProvider = CachedCredentialsProviderCrt.build {
+    override val crtProvider: CachedCredentialsProviderCrt = CachedCredentialsProviderCrt.build {
         refreshTimeInMilliseconds = builder.refreshTime.inWholeMilliseconds
 
         // FIXME - note this won't work until https://github.com/awslabs/aws-crt-java/issues/252 is resolved
