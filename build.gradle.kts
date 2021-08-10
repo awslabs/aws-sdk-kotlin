@@ -55,12 +55,6 @@ allprojects {
         )
         pluginsMapConfiguration.set(pluginConfigMap)
     }
-
-    // FIXME: Create a real "javadoc" JAR from the Dokka output
-    tasks.create("javadocJar", Jar::class) {
-        archiveClassifier.set("javadoc")
-        from()
-    }
 }
 
 // configure the root multimodule docs

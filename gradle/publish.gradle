@@ -6,6 +6,12 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+// FIXME: Create a real "javadoc" JAR from the Dokka output
+tasks.register("javadocJar", Jar) {
+    archiveClassifier.set("javadoc")
+    from()
+}
+
 publishing {
     repositories {
         maven { name = "testLocal"; url = "$rootProject.buildDir/m2" }
