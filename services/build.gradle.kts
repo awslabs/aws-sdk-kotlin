@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.targets
+
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
@@ -81,6 +83,32 @@ subprojects {
     }
 
     apply(from = rootProject.file("gradle/publish.gradle"))
+
+    if (project.file("e2eTest").exists()) {
+
+        kotlin.target.compilations {
+            val main by getting
+            val e2eTest by creating {
+                defaultSourceSet {
+                    kotlin.srcDir("e2eTest")
+                    dependencies {
+                        implementation(main.compileDependencyFiles + main.output.classesDirs)
+                        implementation(kotlin("test"))
+                        implementation(kotlin("test-junit5"))
+                    }
+                }
+
+                tasks.register<Test>("e2eTest") {
+                    description = "Run e2e service tests"
+                    group = "verification"
+                    //    classpath = kotlin.sourceSets.getByName("e2eTest").kotlin
+                    classpath = compileDependencyFiles + runtimeDependencyFiles
+                    testClassesDirs = output.classesDirs
+                    useJUnitPlatform()
+                }
+            }
+        }
+    }
 }
 
 
