@@ -36,7 +36,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
 
         middleware.add(EndpointResolverMiddleware(ctx))
         if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
-            val signingName = AwsSignatureVersion4.signingServiceName(ctx.model, ctx.service)
+            val signingName = AwsSignatureVersion4.signingServiceName(ctx.service)
             middleware.add(AwsSignatureVersion4(signingName))
         }
 

@@ -59,11 +59,10 @@ open class AwsSignatureVersion4(val signingServiceName: String) : ProtocolMiddle
         /**
          * Get the SigV4Trait auth name to sign request for
          *
-         * @param model        model definition
          * @param serviceShape service shape for the API
          * @return the service name to use in the credential scope to sign for
          */
-        fun signingServiceName(model: Model, serviceShape: ServiceShape): String {
+        fun signingServiceName(serviceShape: ServiceShape): String {
             val sigv4Trait = serviceShape.expectTrait<SigV4Trait>()
             return sigv4Trait.name
         }
