@@ -13,6 +13,7 @@ import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.kotlin.codegen.rendering.serde.*
+import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*
@@ -32,15 +33,15 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         val middleware = super.getDefaultHttpMiddleware(ctx)
 
         val restXmlMiddleware = listOf(
-            RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
+            RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx.model, ctx.service))
         )
 
         return middleware + restXmlMiddleware
     }
 
     // See https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#content-type
-    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
-        HttpTraitResolver(ctx, "application/xml")
+    override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
+        HttpTraitResolver(model, serviceShape, "application/xml")
 
     private fun renderSerializerBody(
         ctx: ProtocolGenerator.GenerationContext,
@@ -65,7 +66,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         op: OperationShape,
         writer: KotlinWriter
     ) {
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val requestBindings = resolver.requestBindings(op)
         val documentMembers = requestBindings.filterDocumentBoundMembers()
         val shape = ctx.model.expectShape(op.input.get())
@@ -140,7 +141,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
     ) {
         writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
         writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val responseBindings = resolver.responseBindings(op)
         val documentMembers = responseBindings.filterDocumentBoundMembers()
 
@@ -206,7 +207,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         shape: Shape,
         writer: KotlinWriter
     ) {
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val responseBindings = resolver.responseBindings(shape)
         val documentMembers = responseBindings.filterDocumentBoundMembers()
         writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)

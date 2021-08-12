@@ -9,6 +9,8 @@ import aws.sdk.kotlin.codegen.protocols.json.JsonHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.json.RestJsonErrorMiddleware
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
+import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.ShapeId
 
 /**
@@ -25,12 +27,12 @@ class RestJson1 : JsonHttpBindingProtocolGenerator() {
         val middleware = super.getDefaultHttpMiddleware(ctx)
 
         val restJsonMiddleware = listOf(
-            RestJsonErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
+            RestJsonErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx.model, ctx.service))
         )
 
         return middleware + restJsonMiddleware
     }
 
-    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
-        HttpTraitResolver(ctx, "application/json")
+    override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
+        HttpTraitResolver(model, serviceShape, "application/json")
 }
