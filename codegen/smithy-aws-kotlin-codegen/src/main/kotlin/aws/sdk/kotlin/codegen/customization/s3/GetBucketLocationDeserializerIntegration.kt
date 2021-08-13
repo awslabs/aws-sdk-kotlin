@@ -24,7 +24,7 @@ class GetBucketLocationDeserializerIntegration : KotlinIntegration {
             }
 
             if (op.id.name == "GetBucketLocation") {
-                writer.write("deserializer = aws.sdk.kotlin.service.s3.internal.GetBucketLocationOperationDeserializer()")
+                writer.write("deserializer = aws.sdk.kotlin.services.s3.internal.GetBucketLocationOperationDeserializer()")
             } else {
                 writer.write(default)
             }

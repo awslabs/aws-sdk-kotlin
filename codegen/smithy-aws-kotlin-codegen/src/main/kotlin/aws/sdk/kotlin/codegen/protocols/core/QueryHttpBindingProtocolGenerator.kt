@@ -1,6 +1,5 @@
 package aws.sdk.kotlin.codegen.protocols.core
 
-import aws.sdk.kotlin.codegen.protocols.middleware.ModeledExceptionsMiddleware
 import aws.sdk.kotlin.codegen.protocols.middleware.MutateHeadersMiddleware
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
@@ -25,7 +24,6 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
         val middleware = super.getDefaultHttpMiddleware(ctx)
 
         val queryMiddleware = listOf(
-            getErrorMiddleware(ctx),
             // ensure content-type gets set
             // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#protocol-behavior
             MutateHeadersMiddleware(addMissingHeaders = mapOf("Content-Type" to QueryContentType))
@@ -43,11 +41,6 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
         members: List<MemberShape>,
         writer: KotlinWriter,
     ): AbstractSerdeDescriptorGenerator
-
-    /**
-     * Get the [ModeledExceptionsMiddleware] for this protocol.
-     */
-    abstract fun getErrorMiddleware(ctx: ProtocolGenerator.GenerationContext): ModeledExceptionsMiddleware
 
     override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
         QueryBindingResolver(model, serviceShape)
