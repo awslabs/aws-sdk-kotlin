@@ -22,7 +22,7 @@ public class ProfileCredentialsProvider public constructor(
     configFileName: String? = null,
     credentialsFileName: String? = null,
 ) : CrtCredentialsProvider {
-    override val crtProvider = ProfileCredentialsProviderCrt.build {
+    override val crtProvider: ProfileCredentialsProviderCrt = ProfileCredentialsProviderCrt.build {
         clientBootstrap = SdkDefaultIO.ClientBootstrap
         tlsContext = SdkDefaultIO.TlsContext
         this.profileName = profileName

@@ -6,7 +6,6 @@ package aws.sdk.kotlin.runtime.protocol.json
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -90,7 +89,6 @@ class RestJsonErrorDeserializerTest {
                     "baz": "quux"
                 }
             """.trimIndent().encodeToByteArray()
-            val body = ByteArrayContent(contents)
             val actual = RestJsonErrorDeserializer.deserialize(headers, contents)
             assertEquals(expected, actual.message)
         }

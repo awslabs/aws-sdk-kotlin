@@ -97,3 +97,27 @@ public fun HttpRequestCrt.path(): String {
     val idx = encodedPath.indexOf("?")
     return if (idx > 0) encodedPath.substring(0, idx) else encodedPath
 }
+
+// Convert CRT header type to SDK header type
+@InternalSdkApi
+public fun aws.sdk.kotlin.crt.http.Headers.toSdkHeaders(): Headers {
+    val headersBuilder = HeadersBuilder()
+
+    forEach { key, values ->
+        headersBuilder.appendAll(key, values)
+    }
+
+    return headersBuilder.build()
+}
+
+// Convert SDK header type to CRT header type
+@InternalSdkApi
+public fun Headers.toCrtHeaders(): aws.sdk.kotlin.crt.http.Headers {
+    val headersBuilder = aws.sdk.kotlin.crt.http.HeadersBuilder()
+
+    forEach { key, values ->
+        headersBuilder.appendAll(key, values)
+    }
+
+    return headersBuilder.build()
+}

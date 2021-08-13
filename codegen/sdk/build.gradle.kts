@@ -65,6 +65,16 @@ data class AwsService(
     val description: String? = null
 )
 
+
+val disabledServices = setOf(
+    // transcribe streaming contains exclusively EventStream operations which are not supported
+    "transcribestreaming",
+    // timestream requires endpoint discovery
+    // https://github.com/awslabs/smithy-kotlin/issues/146
+    "timestreamwrite",
+    "timestreamquery"
+)
+
 // Generates a smithy-build.json file by creating a new projection.
 // The generated smithy-build.json file is not committed to git since
 // it's rebuilt each time codegen is performed.
@@ -81,6 +91,7 @@ fun generateSmithyBuild(services: List<AwsService>): String {
             importPaths.add(service.modelExtrasDir.replace("\\", "\\\\"))
         }
         val imports = importPaths.joinToString { "\"$it\"" }
+        val transforms = transformsForService(service)
 
         """
             "${service.projectionName}": {
@@ -98,10 +109,12 @@ fun generateSmithyBuild(services: List<AwsService>): String {
                           "generateDefaultBuildFiles": false
                       }
                     }
-                }
+                },
+                "transforms": $transforms
             }
         """
     }
+
     return """
     {
         "version": "1.0",
@@ -110,6 +123,23 @@ fun generateSmithyBuild(services: List<AwsService>): String {
         }
     }
     """.trimIndent()
+}
+
+/**
+ * This function retrieves Smithy transforms associated with the target service to be merged into generated
+ * `smithy-build.json` files.  The transform file MUST live in <service dir>/transforms.
+ * The JSON fragment MUST be a JSON object of a transform as described on this page:
+ * https://awslabs.github.io/smithy/1.0/guides/building-models/build-config.html#transforms.
+ *
+ * Transform filenames should follow the convention of:
+ * <transform operation>-<target shape(s)>.json
+ * Example: renameShapes-MarketplaceCommerceAnalyticsException.json
+ */
+fun transformsForService(service: AwsService): String {
+    val transformsDir = File(service.transformsDir)
+    return transformsDir.listFiles()?.map { transformFile ->
+        transformFile.readText()
+    }?.toString() ?: "[]"
 }
 
 val discoveredServices: List<AwsService> by lazy { discoverServices() }
@@ -130,7 +160,13 @@ fun discoverServices(): List<AwsService> {
             if (!include) {
                 logger.info("skipping ${file.absolutePath}, $svcName not a member of $serviceMembership")
             }
-            include
+
+            val isDisabled = svcName in disabledServices
+            if (include && isDisabled) {
+                logger.warn("skipping $svcName because it is explicitly disabled")
+            }
+
+            include && !isDisabled
         }
         .map { file ->
             val model = Model.assembler().addImport(file.absolutePath).assemble().result.get()
@@ -223,7 +259,9 @@ task("generateSmithyBuild") {
     group = "codegen"
     description = "generate smithy-build.json"
     doFirst {
-        projectDir.resolve("smithy-build.json").writeText(generateSmithyBuild(discoveredServices))
+        projectDir
+            .resolve("smithy-build.json")
+            .writeText(generateSmithyBuild(discoveredServices))
     }
 }
 
@@ -265,6 +303,12 @@ val AwsService.destinationDir: String
  */
 val AwsService.modelExtrasDir: String
     get() = rootProject.file("${destinationDir}/model").absolutePath
+
+/**
+ * Defines where service-specific transforms are located
+ */
+val AwsService.transformsDir: String
+    get() = rootProject.file("${destinationDir}/transforms").absolutePath
 
 task("stageSdks") {
     group = "codegen"

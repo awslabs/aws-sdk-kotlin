@@ -10,6 +10,7 @@ import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingDescriptor
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.knowledge.TopDownIndex
 import software.amazon.smithy.model.shapes.*
@@ -21,12 +22,20 @@ import software.amazon.smithy.model.traits.*
  * NOTE: The [HttpTrait] is not attached or otherwise associated with the models (otherwise use [HttpTraitResolver]).
  */
 open class StaticHttpBindingResolver(
-    protected val context: ProtocolGenerator.GenerationContext,
+    protected val model: Model,
+    protected val service: ServiceShape,
     protected val httpTrait: HttpTrait,
     protected val defaultContentType: String,
     protected val defaultTimestampFormat: TimestampFormatTrait.Format
 ) : HttpBindingResolver {
-    protected val topDownIndex: TopDownIndex = TopDownIndex.of(context.model)
+    constructor(
+        context: ProtocolGenerator.GenerationContext,
+        httpTrait: HttpTrait,
+        defaultContentType: String,
+        defaultTimestampFormat: TimestampFormatTrait.Format
+    ) : this(context.model, context.service, httpTrait, defaultContentType, defaultTimestampFormat)
+
+    protected val topDownIndex: TopDownIndex = TopDownIndex.of(model)
 
     override fun determineRequestContentType(operationShape: OperationShape): String = defaultContentType
 
@@ -42,14 +51,14 @@ open class StaticHttpBindingResolver(
      * All operations are binding for the model.
      */
     override fun bindingOperations(): List<OperationShape> =
-        topDownIndex.getContainedOperations(context.service).toList()
+        topDownIndex.getContainedOperations(service).toList()
 
     /**
      * By default returns all inputs as [HttpBinding.Location.DOCUMENT]
      */
     override fun requestBindings(operationShape: OperationShape): List<HttpBindingDescriptor> {
         if (!operationShape.input.isPresent) return emptyList()
-        val input = context.model.expectShape(operationShape.input.get())
+        val input = model.expectShape(operationShape.input.get())
         return input.members().map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT) }.toList()
     }
 
@@ -60,7 +69,7 @@ open class StaticHttpBindingResolver(
         is OperationShape ->
             shape
                 .output
-                .map { context.model.expectShape(it).members() }
+                .map { model.expectShape(it).members() }
                 .orElseGet { emptyList() }
                 .map { member -> HttpBindingDescriptor(member, HttpBinding.Location.DOCUMENT) }
         is StructureShape -> shape.members().map { member -> member.toHttpBindingDescriptor() }.toList()

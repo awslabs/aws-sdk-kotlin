@@ -49,7 +49,7 @@ class AwsJsonHttpBindingResolverTest {
     fun `it resolves all operations associated with a service`() {
         val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
 
-        val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
+        val unit = AwsJsonHttpBindingResolver(ctx.model, ctx.service, "application/json")
 
         val expectedOperations = listOf("GetEmptyFoo", "GetFoo")
         val actualOperations = unit.bindingOperations().map { operationShape -> operationShape.id.name }.sorted()
@@ -61,7 +61,7 @@ class AwsJsonHttpBindingResolverTest {
     fun `it returns no request bindings for operations without inputs`() {
         val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetEmptyFoo")
-        val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
+        val unit = AwsJsonHttpBindingResolver(ctx.model, ctx.service, "application/json")
 
         val actualRequestBindings = unit.requestBindings(operation)
 
@@ -72,7 +72,7 @@ class AwsJsonHttpBindingResolverTest {
     fun `it returns request bindings for operations with inputs`() {
         val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetFoo")
-        val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
+        val unit = AwsJsonHttpBindingResolver(ctx.model, ctx.service, "application/json")
 
         val actualRequestBindings = unit.requestBindings(operation)
 
@@ -89,7 +89,7 @@ class AwsJsonHttpBindingResolverTest {
     fun `it returns no response bindings for operations without inputs`() {
         val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetEmptyFoo")
-        val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
+        val unit = AwsJsonHttpBindingResolver(ctx.model, ctx.service, "application/json")
 
         val actualResponseBindings = unit.responseBindings(operation)
 
@@ -100,7 +100,7 @@ class AwsJsonHttpBindingResolverTest {
     fun `it returns response bindings for operations with inputs`() {
         val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val operation = testModel.expectShape<OperationShape>("smithy.example#GetFoo")
-        val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
+        val unit = AwsJsonHttpBindingResolver(ctx.model, ctx.service, "application/json")
 
         val actualResponseBindings = unit.responseBindings(operation)
 
@@ -117,7 +117,7 @@ class AwsJsonHttpBindingResolverTest {
     fun `it returns no response bindings for structures without members`() {
         val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val structure = testModel.expectShape<StructureShape>("smithy.example#GetFooError")
-        val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
+        val unit = AwsJsonHttpBindingResolver(ctx.model, ctx.service, "application/json")
 
         val actualResponseBindings = unit.responseBindings(structure)
 
@@ -128,7 +128,7 @@ class AwsJsonHttpBindingResolverTest {
     fun `it returns response bindings for structures with members`() {
         val (ctx, _, _) = testModel.newTestContext("Example", "smithy.example")
         val structure = testModel.expectShape<StructureShape>("smithy.example#GetFooOutput")
-        val unit = AwsJsonHttpBindingResolver(ctx, "application/json")
+        val unit = AwsJsonHttpBindingResolver(ctx.model, ctx.service, "application/json")
 
         val actualResponseBindings = unit.responseBindings(structure)
 
