@@ -6,7 +6,6 @@ package aws.sdk.kotlin.codegen.protocols
 
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.json.AwsJsonHttpBindingResolver
-import aws.sdk.kotlin.codegen.protocols.json.AwsJsonModeledExceptionsMiddleware
 import aws.sdk.kotlin.codegen.protocols.json.AwsJsonProtocolMiddleware
 import aws.sdk.kotlin.codegen.protocols.json.JsonHttpBindingProtocolGenerator
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_0Trait
@@ -30,7 +29,6 @@ class AwsJson1_0 : JsonHttpBindingProtocolGenerator() {
         val httpMiddleware = super.getDefaultHttpMiddleware(ctx)
         val awsJsonMiddleware = listOf(
             AwsJsonProtocolMiddleware(ctx.settings.service, "1.0"),
-            AwsJsonModeledExceptionsMiddleware(ctx, getProtocolHttpBindingResolver(ctx.model, ctx.service))
         )
 
         return httpMiddleware + awsJsonMiddleware

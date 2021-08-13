@@ -5,11 +5,10 @@
 
 package aws.sdk.kotlin.codegen.protocols
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.core.QueryHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.formurl.QuerySerdeFormUrlDescriptorGenerator
-import aws.sdk.kotlin.codegen.protocols.middleware.ModeledExceptionsMiddleware
 import software.amazon.smithy.aws.traits.protocols.AwsQueryErrorTrait
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
@@ -40,9 +39,6 @@ class AwsQuery : QueryHttpBindingProtocolGenerator() {
         writer: KotlinWriter,
     ): AbstractSerdeDescriptorGenerator =
         AwsQuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members)
-
-    override fun getErrorMiddleware(ctx: ProtocolGenerator.GenerationContext): ModeledExceptionsMiddleware =
-        AwsQueryErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx.model, ctx.service))
 
     override fun getSerializerDescriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,
@@ -86,6 +82,21 @@ class AwsQuery : QueryHttpBindingProtocolGenerator() {
             }
         writer.write("")
     }
+
+    override fun getErrorCode(ctx: ProtocolGenerator.GenerationContext, errShapeId: ShapeId): String {
+        val errShape = ctx.model.expectShape(errShapeId)
+        return errShape.getTrait<AwsQueryErrorTrait>()?.code ?: errShape.id.name
+    }
+
+    override fun renderDeserializeErrorDetails(
+        ctx: ProtocolGenerator.GenerationContext,
+        op: OperationShape,
+        writer: KotlinWriter
+    ) {
+        writer.addImport(AwsRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
+        writer.write("""checkNotNull(payload){ "unable to parse error from empty response" }""")
+        writer.write("#T(payload)", AwsRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
+    }
 }
 
 private class AwsQuerySerdeFormUrlDescriptorGenerator(
@@ -121,35 +132,5 @@ private class AwsQuerySerdeXmlDescriptorGenerator(
         }
 
         return traits
-    }
-}
-
-internal class AwsQueryErrorMiddleware(
-    ctx: ProtocolGenerator.GenerationContext,
-    httpBindingResolver: HttpBindingResolver
-) : ModeledExceptionsMiddleware(ctx, httpBindingResolver) {
-    // the restxml error middleware handles both wrapped and unwrapped responses and thus is re-usable for query errors
-    override val name: String = "RestXmlError"
-
-    override fun addImportsAndDependencies(writer: KotlinWriter) {
-        super.addImportsAndDependencies(writer)
-        writer.addImport("RestXmlError", AwsKotlinDependency.AWS_XML_PROTOCOLS)
-    }
-
-    override fun renderRegisterErrors(writer: KotlinWriter) {
-        val errors = getModeledErrors()
-
-        errors.forEach { errShape ->
-            val code = errShape.getTrait<AwsQueryErrorTrait>()?.code ?: errShape.id.name
-
-            val symbol = ctx.symbolProvider.toSymbol(errShape)
-            val deserializerName = "${symbol.name}Deserializer"
-            val defaultCode = if (errShape.expectTrait<ErrorTrait>().isClientError) 400 else 500
-            val httpStatusCode = when {
-                errShape.hasTrait<AwsQueryErrorTrait>() -> errShape.expectTrait<AwsQueryErrorTrait>().httpResponseCode
-                else -> errShape.getTrait<HttpErrorTrait>()?.code ?: defaultCode
-            }
-            writer.write("register(code = #S, deserializer = $deserializerName(), httpStatusCode = $httpStatusCode)", code)
-        }
     }
 }

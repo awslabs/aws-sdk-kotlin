@@ -4,7 +4,8 @@
  */
 package aws.sdk.kotlin.runtime.protocol.json
 
-import aws.sdk.kotlin.runtime.http.middleware.errors.ErrorDetails
+import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.http.ErrorDetails
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
@@ -25,7 +26,8 @@ public const val X_AMZN_EVENT_ERROR_MESSAGE_HEADER_NAME: String = ":error-messag
  *     - SDK Unmarshal Service API Errors (SEP)
  *     - x-amzn-ErrorMessage (SEP)
  */
-internal object RestJsonErrorDeserializer {
+@InternalSdkApi
+public object RestJsonErrorDeserializer {
     // alternative field descriptors for error codes embedded in the document
     private val ERR_CODE_ALT1_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, JsonSerialName("code"))
     private val ERR_CODE_ALT2_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Integer, JsonSerialName("__type"))
@@ -43,7 +45,7 @@ internal object RestJsonErrorDeserializer {
         field(MESSAGE_ALT3_DESCRIPTOR)
     }
 
-    suspend fun deserialize(headers: Headers, payload: ByteArray?): ErrorDetails {
+    public suspend fun deserialize(headers: Headers, payload: ByteArray?): ErrorDetails {
         var code: String? = headers[X_AMZN_ERROR_TYPE_HEADER_NAME]
         var message: String? = headers[X_AMZN_ERROR_MESSAGE_HEADER_NAME]
         if (message == null) {

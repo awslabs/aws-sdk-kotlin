@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.codegen.protocols
 
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
-import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import aws.sdk.kotlin.codegen.protocols.xml.RestXmlSerdeDescriptorGenerator
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.kotlin.codegen.core.*
@@ -24,20 +24,10 @@ import software.amazon.smithy.model.traits.*
  * @inheritDoc
  * @see AwsHttpBindingProtocolGenerator
  */
-class RestXml : AwsHttpBindingProtocolGenerator() {
+open class RestXml : AwsHttpBindingProtocolGenerator() {
 
     override val protocol: ShapeId = RestXmlTrait.ID
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.DATE_TIME
-
-    override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
-        val middleware = super.getDefaultHttpMiddleware(ctx)
-
-        val restXmlMiddleware = listOf(
-            RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx.model, ctx.service))
-        )
-
-        return middleware + restXmlMiddleware
-    }
 
     // See https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#content-type
     override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
@@ -224,5 +214,15 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         // XML attributes MUST be serialized immediately following calls to `startTag` before
         // any nested content is serialized
         return attributes + elements
+    }
+
+    override fun renderDeserializeErrorDetails(
+        ctx: ProtocolGenerator.GenerationContext,
+        op: OperationShape,
+        writer: KotlinWriter
+    ) {
+        writer.addImport(AwsRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
+        writer.write("""checkNotNull(payload){ "unable to parse error from empty response" }""")
+        writer.write("#T(payload)", AwsRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
     }
 }

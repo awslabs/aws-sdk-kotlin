@@ -2,25 +2,13 @@ package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.CodegenContext
-import software.amazon.smithy.kotlin.codegen.core.DEFAULT_SOURCE_SET_ROOT
-import software.amazon.smithy.kotlin.codegen.core.KotlinDelegator
-import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.replace
-import software.amazon.smithy.kotlin.codegen.utils.namespaceToPath
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 
@@ -36,39 +24,27 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
         model.expectShape<ServiceShape>(settings.service).isS3
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
-        val writer = KotlinWriter("${ctx.settings.pkg.name}.model")
 
-        writer.addImport(AwsRuntimeTypes.Core.AwsErrorMetadata)
-        writer.addImport(RuntimeTypes.Utils.AttributeKey)
+        delegator.useFileWriter("S3ErrorMetadata", "${ctx.settings.pkg.name}.model") { writer ->
+            writer.addImport(AwsRuntimeTypes.Core.AwsErrorMetadata)
+            writer.addImport(RuntimeTypes.Utils.AttributeKey)
 
-        writer.withBlock("public class S3ErrorMetadata : AwsErrorMetadata() {", "}") {
-            writer.withBlock("public companion object {", "}") {
-                writer.write("""public val RequestId2: AttributeKey<String> = AttributeKey("S3:RequestId2")""")
+            writer.withBlock("public class S3ErrorMetadata : AwsErrorMetadata() {", "}") {
+                writer.withBlock("public companion object {", "}") {
+                    writer.write("""public val RequestId2: AttributeKey<String> = AttributeKey("S3:RequestId2")""")
+                }
+
+                writer
+                    .write("public val requestId2: String?")
+                    .indent()
+                    .write("get() = attributes.getOrNull(RequestId2)")
+                    .dedent()
             }
 
-            writer
-                .write("public val requestId2: String?")
-                .indent()
-                .write("get() = attributes.getOrNull(RequestId2)")
-                .dedent()
+            writer.dependencies.addAll(KotlinDependency.KOTLIN_TEST.dependencies)
+            writer.dependencies.addAll(AwsKotlinDependency.AWS_TESTING.dependencies)
         }
-
-        val contents = writer.toString()
-
-        val packagePath = ctx.settings.pkg.name.namespaceToPath()
-        delegator.fileManifest.writeFile("$DEFAULT_SOURCE_SET_ROOT$packagePath/model/S3ErrorMetadata.kt", contents)
-
-        delegator.runtimeDependencies.addAll(KotlinDependency.KOTLIN_TEST.dependencies)
-        delegator.runtimeDependencies.addAll(AwsKotlinDependency.AWS_TESTING.dependencies)
     }
-
-    override fun customizeMiddleware(
-        ctx: ProtocolGenerator.GenerationContext,
-        resolved: List<ProtocolMiddleware>
-    ): List<ProtocolMiddleware> =
-        resolved.replace(newValue = S3ErrorMiddleware(ctx, HttpTraitResolver(ctx, "application/xml"))) {
-            it is RestXmlErrorMiddleware
-        }
 
     // SectionWriter to override the default sdkErrorMetadata for S3's version
     private val addSdkErrorMetadataWriter = SectionWriter { writer, _ ->

@@ -4,7 +4,8 @@
  */
 package aws.sdk.kotlin.runtime.protocol.xml
 
-import aws.sdk.kotlin.runtime.http.middleware.errors.ErrorDetails
+import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.http.ErrorDetails
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
 import aws.smithy.kotlin.runtime.serde.xml.XmlSerialName
@@ -34,10 +35,16 @@ internal data class XmlError(
     override val message: String?
 ) : RestXmlErrorDetails
 
-// Returns parsed data in normalized form or throws IllegalArgumentException if unparsable.
-// NOTE: we use an explicit XML deserializer here because we rely on validating the root element name
-// for dealing with the alternate error response forms
-internal suspend fun parseRestXmlErrorResponse(payload: ByteArray): ErrorDetails {
+/**
+ * Deserializes rest XML protocol errors as specified by:
+ * https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#error-response-serialization
+ *
+ * Returns parsed data in normalized form or throws IllegalArgumentException if response cannot be parsed.
+ * NOTE: we use an explicit XML deserializer here because we rely on validating the root element name
+ * for dealing with the alternate error response forms
+ */
+@InternalSdkApi
+public suspend fun parseRestXmlErrorResponse(payload: ByteArray): ErrorDetails {
     val details = ErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
         ?: XmlErrorDeserializer.deserialize(XmlDeserializer(payload, true))
         ?: throw DeserializationException("Unable to deserialize RestXml error.")
