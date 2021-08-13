@@ -10,7 +10,7 @@ import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.ServiceErrorMetadata
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.util.setIfNotNull
+import aws.smithy.kotlin.runtime.util.setIfValueNotNull
 
 /**
  * Common error response details
@@ -45,9 +45,9 @@ public data class ErrorDetails(
 @InternalSdkApi
 public fun setAseErrorMetadata(exception: Any, response: HttpResponse, errorDetails: AwsErrorDetails?) {
     if (exception is AwsServiceException) {
-        exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
-        exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)
-        exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
+        exception.sdkErrorMetadata.attributes.setIfValueNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
+        exception.sdkErrorMetadata.attributes.setIfValueNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)
+        exception.sdkErrorMetadata.attributes.setIfValueNotNull(AwsErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
         exception.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
     }
 }

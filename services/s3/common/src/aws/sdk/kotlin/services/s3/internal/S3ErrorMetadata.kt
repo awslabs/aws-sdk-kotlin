@@ -12,7 +12,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
 import aws.smithy.kotlin.runtime.serde.xml.XmlSerialName
-import aws.smithy.kotlin.runtime.util.setIfNotNull
+import aws.smithy.kotlin.runtime.util.setIfValueNotNull
 
 /**
  * Default header name identifying secondary request ID
@@ -33,11 +33,11 @@ internal data class S3ErrorDetails(
 internal fun setS3ErrorMetadata(exception: Any, response: HttpResponse, errorDetails: S3ErrorDetails?) {
     setAseErrorMetadata(exception, response, errorDetails)
     if (exception is AwsServiceException) {
-        exception.sdkErrorMetadata.attributes.setIfNotNull(AwsErrorMetadata.RequestId, errorDetails?.requestId)
+        exception.sdkErrorMetadata.attributes.setIfValueNotNull(AwsErrorMetadata.RequestId, errorDetails?.requestId)
     }
     if (exception is S3Exception) {
         val requestId2 = errorDetails?.requestId2 ?: response.headers[X_AMZN_REQUEST_ID_2_HEADER]
-        exception.sdkErrorMetadata.attributes.setIfNotNull(S3ErrorMetadata.RequestId2, requestId2)
+        exception.sdkErrorMetadata.attributes.setIfValueNotNull(S3ErrorMetadata.RequestId2, requestId2)
     }
 }
 
