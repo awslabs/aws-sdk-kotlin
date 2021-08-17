@@ -33,7 +33,7 @@ Generated sources are not checked into the repository, you first have to generat
 
 
 ```sh
-./gradlew :codegen:sdk:bootstrap
+./gradlew --no-daemon :codegen:sdk:bootstrap
 ```
 
 NOTE: This task will respect the AWS services specified by project properties. See options below.
@@ -56,7 +56,7 @@ To see list of all projects run `./gradlew projects`
 See the [Build Properties](#build-properties) below to specify this in a config file.
 
 ```sh
-./gradlew -Paws.services=+lambda  :codegen:sdk:bootstrap
+./gradlew --no-daemon -Paws.services=+lambda  :codegen:sdk:bootstrap
 ```
 
 ##### Testing Locally
