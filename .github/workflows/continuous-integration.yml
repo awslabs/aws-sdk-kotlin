@@ -5,10 +5,13 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
   workflow_dispatch:
 
 env:
-  BUILDER_VERSION: v0.8.0
+  BUILDER_VERSION: v0.8.22
   BUILDER_SOURCE: releases
   # host owned by CRT team to host aws-crt-builder releases. Contact their on-call with any issues
   BUILDER_HOST: https://d19elf31gohf1l.cloudfront.net
