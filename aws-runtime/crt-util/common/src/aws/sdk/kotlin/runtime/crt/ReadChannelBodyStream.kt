@@ -28,7 +28,7 @@ internal expect fun transferRequestBody(outgoing: SdkBuffer, dest: MutableBuffer
 public class ReadChannelBodyStream(
     // the request body channel
     private val bodyChan: SdkByteReadChannel,
-    callContext: CoroutineContext
+    private val callContext: CoroutineContext
 ) : HttpRequestBodyStream, CoroutineScope {
 
     private val producerJob = Job(callContext.job)
@@ -60,6 +60,8 @@ public class ReadChannelBodyStream(
             if (bufferChan.isClosedForReceive) {
                 return true
             }
+            // ensure the request context hasn't been cancelled
+            callContext.ensureActive()
             outgoing = bufferChan.tryReceive().getOrNull() ?: return false
         }
 

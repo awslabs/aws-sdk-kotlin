@@ -92,16 +92,17 @@ subprojects {
                 defaultSourceSet {
                     kotlin.srcDir("e2eTest")
                     dependencies {
-                        implementation(main.compileDependencyFiles + main.output.classesDirs)
+                        implementation(main.compileDependencyFiles + main.runtimeDependencyFiles + main.output.classesDirs)
+
                         implementation(kotlin("test"))
                         implementation(kotlin("test-junit5"))
+                        implementation(project(":aws-runtime:testing"))
                     }
                 }
 
                 tasks.register<Test>("e2eTest") {
                     description = "Run e2e service tests"
                     group = "verification"
-                    //    classpath = kotlin.sourceSets.getByName("e2eTest").kotlin
                     classpath = compileDependencyFiles + runtimeDependencyFiles
                     testClassesDirs = output.classesDirs
                     useJUnitPlatform()
