@@ -32,59 +32,21 @@ public class RandomTempFile : File {
 
     /**
      * Creates, and fills, a temp file with the specified name and specified
-     * size of random ASCII data.
+     * size of random data.
      *
-     * @param filename
-     * The name for the new temporary file, within the Java temp
+     * @param filename The name for the new temporary file, within the Java temp
      * directory as declared in the JRE's system properties.
-     * @param sizeInBytes
-     * The amount of random ASCII data, in bytes, for the new temp
-     * file.
-     *
-     * @throws IOException
-     * If any problems were encountered creating the new temp file.
-     */
-    public constructor(filename: String, sizeInBytes: Int) : this(filename, sizeInBytes.toLong(), false)
-
-    /**
-     * Creates, and fills, a temp file with the specified name and specified
-     * size of random binary or character data.
-     *
-     * @param filename
-     * The name for the new temporary file, within the Java temp
-     * directory as declared in the JRE's system properties.
-     * @param sizeInBytes
-     * The amount of random ASCII data, in bytes, for the new temp
+     * @param sizeInBytes The amount of random ASCII data, in bytes, for the new temp
      * file.
      * @param binaryData Whether to fill the file with binary or character data.
      *
      * @throws IOException
      * If any problems were encountered creating the new temp file.
      */
-    /**
-     * Creates, and fills, a temp file with the specified name and specified
-     * size of random ASCII data.
-     *
-     * @param filename
-     * The name for the new temporary file, within the Java temp
-     * directory as declared in the JRE's system properties.
-     * @param sizeInBytes
-     * The amount of random ASCII data, in bytes, for the new temp
-     * file.
-     *
-     * @throws IOException
-     * If any problems were encountered creating the new temp file.
-     */
-    @JvmOverloads
     public constructor(filename: String, sizeInBytes: Long, binaryData: Boolean = false) : super(
         TEMP_DIR + separator + System.currentTimeMillis().toString() + "-" + filename
     ) {
         this.binaryData = binaryData
-        createFile(sizeInBytes)
-    }
-
-    public constructor(root: File?, filename: String?, sizeInBytes: Long) : super(root, filename) {
-        binaryData = false
         createFile(sizeInBytes)
     }
 
@@ -94,11 +56,7 @@ public class RandomTempFile : File {
         FileOutputStream(this).use { outputStream ->
             BufferedOutputStream(outputStream).use { bufferedOutputStream ->
                 RandomInputStream(sizeInBytes, binaryData).use { inputStream ->
-                    val buffer = ByteArray(1024)
-                    var bytesRead: Int
-                    while (inputStream.read(buffer).also { bytesRead = it } > -1) {
-                        bufferedOutputStream.write(buffer, 0, bytesRead)
-                    }
+                    inputStream.copyTo(bufferedOutputStream)
                 }
             }
         }
@@ -113,7 +71,5 @@ public class RandomTempFile : File {
 
     public companion object {
         private val TEMP_DIR: String = System.getProperty("java.io.tmpdir")
-        public fun randomUncreatedFile(): File =
-            File(TEMP_DIR, UUID.randomUUID().toString()).also { it.deleteOnExit() }
     }
 }

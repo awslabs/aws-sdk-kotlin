@@ -7,7 +7,11 @@ package aws.sdk.kotlin.e2etest
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeout
 import java.util.*
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.seconds
 
 object S3TestUtils {
 
@@ -15,7 +19,8 @@ object S3TestUtils {
 
     suspend fun getTestBucket(client: S3Client): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX)
 
-    suspend fun getBucketWithPrefix(client: S3Client, prefix: String): String {
+    @OptIn(ExperimentalTime::class)
+    suspend fun getBucketWithPrefix(client: S3Client, prefix: String): String = withTimeout(Duration.seconds(60)) {
         var testBucket = client.listBuckets {}
             .buckets
             ?.mapNotNull { it.name }
@@ -55,7 +60,7 @@ object S3TestUtils {
             }
         }
 
-        return testBucket
+        testBucket
     }
 
     suspend fun deleteBucketAndAllContents(client: S3Client, bucketName: String) {

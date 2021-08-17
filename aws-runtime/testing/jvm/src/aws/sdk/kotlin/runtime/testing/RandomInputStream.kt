@@ -11,11 +11,10 @@ import kotlin.random.Random
 /**
  * Test utility InputStream implementation that generates random ASCII data when
  * read, up to the size specified when constructed.
- * NOTE: Adapted from
  */
-public class RandomInputStream @JvmOverloads constructor(
+public class RandomInputStream constructor(
     /** The requested amount of data contained in this random stream.  */
-    protected val lengthInBytes: Long,
+    private val lengthInBytes: Long,
 
     /** Flag controlling whether binary or character data is used.  */
     private val binaryData: Boolean = false
@@ -39,9 +38,8 @@ public class RandomInputStream @JvmOverloads constructor(
         }
         remainingBytes -= bytesToRead.toLong()
         if (binaryData) {
-            val bytes = ByteArray(bytesToRead)
-            Random.nextBytes(bytes)
-            System.arraycopy(bytes, 0, b, off, bytesToRead)
+            val endExclusive = off + bytesToRead
+            Random.nextBytes(b, off, endExclusive)
         } else {
             for (i in 0 until bytesToRead) {
                 b[off + i] = Random.nextInt(MIN_CHAR_CODE, MAX_CHAR_CODE + 1).toByte()
@@ -58,9 +56,7 @@ public class RandomInputStream @JvmOverloads constructor(
         }
         remainingBytes--
         return if (binaryData) {
-            val bytes = ByteArray(1)
-            Random.nextBytes(bytes)
-            bytes[0].toInt()
+            Random.nextInt()
         } else {
             Random.nextInt(MIN_CHAR_CODE, MAX_CHAR_CODE + 1)
         }

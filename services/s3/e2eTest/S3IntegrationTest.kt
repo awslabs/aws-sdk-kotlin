@@ -49,17 +49,11 @@ class S3BucketOpsIntegrationTest {
     @Test
     fun testPutObjectFromMemory() = runSuspendTest {
         val contents = """
-            Are you suggesting coconuts migrate?
-            Not at all, they could be carried.
-            What -- a swallow carrying a coconut?
-            It could grip it by the husk.
-            It's not a question of where he grips it! It's a simple question of weight ratios! A five ounce bird could not carry a 1 pound coconut.
-            Well, it doesn't matter. Will you go and tell your master that Arthur from the Court of Camelot is here.
-            Listen, in order to maintain air-speed velocity, a swallow needs to beat its wings 43 times times every second, right?
-            ...
-            It could be carried by an African swallow!
-            Oh yeah, an African swallow maybe, but not a European swallow. That's my point.
-            Oh, yeah, I agree with that.
+            A lep is a ball.
+            A tay is a hammer.
+            A korf is a tiger.
+            A flix is a comb.
+            A wogsin is a gift.
         """.trimIndent()
 
         val keyName = "put-obj-from-memory.txt"
