@@ -6,7 +6,7 @@
         "gradlew": "{source_dir}/gradlew -p {source_dir}"
     },
     "build_steps": [
-        "{gradlew} assemble"
+        "{gradlew} assemble --parallel"
     ],
     "test_steps": [
         "{gradlew} publishToMavenLocal",
