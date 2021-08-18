@@ -6,17 +6,19 @@
 package aws.sdk.kotlin.codegen.protocols.json
 
 import aws.sdk.kotlin.codegen.protocols.core.StaticHttpBindingResolver
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.pattern.UriPattern
+import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.traits.*
 
 /**
  * An HTTP binding resolver for the awsJson protocol(s).
  */
 class AwsJsonHttpBindingResolver(
-    context: ProtocolGenerator.GenerationContext,
+    model: Model,
+    serviceShape: ServiceShape,
     defaultContentType: String,
-) : StaticHttpBindingResolver(context, AwsJsonHttpTrait, defaultContentType, TimestampFormatTrait.Format.EPOCH_SECONDS) {
+) : StaticHttpBindingResolver(model, serviceShape, AwsJsonHttpTrait, defaultContentType, TimestampFormatTrait.Format.EPOCH_SECONDS) {
     companion object {
         val AwsJsonHttpTrait: HttpTrait = HttpTrait
             .builder()

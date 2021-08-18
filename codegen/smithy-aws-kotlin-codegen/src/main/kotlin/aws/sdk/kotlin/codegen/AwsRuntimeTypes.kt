@@ -21,6 +21,7 @@ object AwsRuntimeTypes {
         val AwsClientOption = runtimeSymbol("AwsClientOption", AwsKotlinDependency.AWS_CORE, "client")
         val AuthAttributes = runtimeSymbol("AuthAttributes", AwsKotlinDependency.AWS_CORE, "execution")
         val AwsErrorMetadata = runtimeSymbol("AwsErrorMetadata", AwsKotlinDependency.AWS_CORE)
+        val UnknownServiceErrorException = runtimeSymbol("UnknownServiceErrorException", AwsKotlinDependency.AWS_CORE)
         val ClientException = runtimeSymbol("ClientException", AwsKotlinDependency.AWS_CORE)
 
         object Endpoint {
@@ -50,6 +51,20 @@ object AwsRuntimeTypes {
 
     object Regions {
         val DefaultAwsRegionProviderChain = runtimeSymbol("DefaultAwsRegionProviderChain", AwsKotlinDependency.AWS_REGIONS, "providers")
+    }
+
+    object Http {
+        val withPayload = runtimeSymbol("withPayload", AwsKotlinDependency.AWS_HTTP)
+        val setAseErrorMetadata = runtimeSymbol("setAseErrorMetadata", AwsKotlinDependency.AWS_HTTP)
+    }
+
+    object JsonProtocols {
+        val RestJsonErrorDeserializer = runtimeSymbol("RestJsonErrorDeserializer", AwsKotlinDependency.AWS_JSON_PROTOCOLS)
+    }
+
+    object XmlProtocols {
+        val parseRestXmlErrorResponse = runtimeSymbol("parseRestXmlErrorResponse", AwsKotlinDependency.AWS_XML_PROTOCOLS)
+        val parseEc2QueryErrorResponse = runtimeSymbol("parseEc2QueryErrorResponse", AwsKotlinDependency.AWS_XML_PROTOCOLS)
     }
 }
 

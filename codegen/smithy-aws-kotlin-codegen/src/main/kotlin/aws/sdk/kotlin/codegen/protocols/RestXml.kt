@@ -5,14 +5,15 @@
 
 package aws.sdk.kotlin.codegen.protocols
 
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
-import aws.sdk.kotlin.codegen.protocols.xml.RestXmlErrorMiddleware
 import aws.sdk.kotlin.codegen.protocols.xml.RestXmlSerdeDescriptorGenerator
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.kotlin.codegen.rendering.serde.*
+import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*
@@ -23,24 +24,14 @@ import software.amazon.smithy.model.traits.*
  * @inheritDoc
  * @see AwsHttpBindingProtocolGenerator
  */
-class RestXml : AwsHttpBindingProtocolGenerator() {
+open class RestXml : AwsHttpBindingProtocolGenerator() {
 
     override val protocol: ShapeId = RestXmlTrait.ID
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.DATE_TIME
 
-    override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
-        val middleware = super.getDefaultHttpMiddleware(ctx)
-
-        val restXmlMiddleware = listOf(
-            RestXmlErrorMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
-        )
-
-        return middleware + restXmlMiddleware
-    }
-
     // See https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#content-type
-    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
-        HttpTraitResolver(ctx, "application/xml")
+    override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
+        HttpTraitResolver(model, serviceShape, "application/xml")
 
     private fun renderSerializerBody(
         ctx: ProtocolGenerator.GenerationContext,
@@ -65,7 +56,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         op: OperationShape,
         writer: KotlinWriter
     ) {
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val requestBindings = resolver.requestBindings(op)
         val documentMembers = requestBindings.filterDocumentBoundMembers()
         val shape = ctx.model.expectShape(op.input.get())
@@ -140,7 +131,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
     ) {
         writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
         writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val responseBindings = resolver.responseBindings(op)
         val documentMembers = responseBindings.filterDocumentBoundMembers()
 
@@ -206,7 +197,7 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         shape: Shape,
         writer: KotlinWriter
     ) {
-        val resolver = getProtocolHttpBindingResolver(ctx)
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val responseBindings = resolver.responseBindings(shape)
         val documentMembers = responseBindings.filterDocumentBoundMembers()
         writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
@@ -223,5 +214,15 @@ class RestXml : AwsHttpBindingProtocolGenerator() {
         // XML attributes MUST be serialized immediately following calls to `startTag` before
         // any nested content is serialized
         return attributes + elements
+    }
+
+    override fun renderDeserializeErrorDetails(
+        ctx: ProtocolGenerator.GenerationContext,
+        op: OperationShape,
+        writer: KotlinWriter
+    ) {
+        writer.addImport(AwsRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
+        writer.write("""checkNotNull(payload){ "unable to parse error from empty response" }""")
+        writer.write("#T(payload)", AwsRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
     }
 }

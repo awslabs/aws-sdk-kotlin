@@ -10,7 +10,7 @@ plugins {
 
 val sdkVersion: String by project
 description = "Codegen support for AWS protocols"
-group = "software.amazon.smithy"
+group = "software.amazon.smithy.kotlin"
 version = sdkVersion
 
 val smithyVersion: String by project
@@ -22,7 +22,7 @@ val kotlinJVMTargetVersion: String by project
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    api("software.amazon.smithy:smithy-kotlin-codegen:$smithyKotlinVersion")
+    api("software.amazon.smithy.kotlin:smithy-kotlin-codegen:$smithyKotlinVersion")
     api("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
     api("software.amazon.smithy:smithy-protocol-test-traits:$smithyVersion")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
