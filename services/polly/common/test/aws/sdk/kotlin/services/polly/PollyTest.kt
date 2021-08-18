@@ -1,5 +1,6 @@
 package aws.sdk.kotlin.services.polly
 
+import aws.sdk.kotlin.runtime.auth.StaticCredentialsProvider
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
@@ -22,6 +23,10 @@ class PollyPresignerTest {
 
         val clientConfig = PollyPresignConfig {
             region = "us-east-2"
+            credentialsProvider = StaticCredentialsProvider {
+                accessKeyId = "AKID"
+                secretAccessKey = "secret"
+            }
         }
 
         val presignedRequest = request.presign(clientConfig, 10u)
