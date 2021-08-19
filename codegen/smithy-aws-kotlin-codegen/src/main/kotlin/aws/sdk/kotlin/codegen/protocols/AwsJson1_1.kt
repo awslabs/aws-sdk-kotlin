@@ -7,13 +7,14 @@ package aws.sdk.kotlin.codegen.protocols
 
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.json.AwsJsonHttpBindingResolver
-import aws.sdk.kotlin.codegen.protocols.json.AwsJsonModeledExceptionsMiddleware
 import aws.sdk.kotlin.codegen.protocols.json.AwsJsonProtocolMiddleware
 import aws.sdk.kotlin.codegen.protocols.json.JsonHttpBindingProtocolGenerator
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.ShapeId
 
 /**
@@ -27,14 +28,13 @@ class AwsJson1_1 : JsonHttpBindingProtocolGenerator() {
 
     override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
         val httpMiddleware = super.getDefaultHttpMiddleware(ctx)
-        val awsJsonFeatures = listOf(
+        val awsJsonMiddleware = listOf(
             AwsJsonProtocolMiddleware(ctx.settings.service, "1.1"),
-            AwsJsonModeledExceptionsMiddleware(ctx, getProtocolHttpBindingResolver(ctx))
         )
 
-        return httpMiddleware + awsJsonFeatures
+        return httpMiddleware + awsJsonMiddleware
     }
 
-    override fun getProtocolHttpBindingResolver(ctx: ProtocolGenerator.GenerationContext): HttpBindingResolver =
-        AwsJsonHttpBindingResolver(ctx, "application/x-amz-json-1.1")
+    override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
+        AwsJsonHttpBindingResolver(model, serviceShape, "application/x-amz-json-1.1")
 }

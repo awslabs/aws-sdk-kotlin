@@ -10,13 +10,13 @@ import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.core.KotlinDelegator
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RenderingContext
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.addImport
+import software.amazon.smithy.kotlin.codegen.core.clientName
 import software.amazon.smithy.kotlin.codegen.core.declareSection
 import software.amazon.smithy.kotlin.codegen.core.defaultName
 import software.amazon.smithy.kotlin.codegen.core.withBlock
@@ -29,15 +29,16 @@ import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.hasHttpBody
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
-import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.StructureShape
+import software.amazon.smithy.model.traits.TimestampFormatTrait
 
 /**
  * Represents a presignable operation.
@@ -65,9 +66,10 @@ class PresignerGenerator : KotlinIntegration {
      * Identifies the [PresignConfigFn] section for overriding generated implementation.
      */
     object PresignConfigFnSection : SectionId {
-        const val Model = "Model"
+        const val CodegenContext = "CodegenContext"
         const val OperationId = "OperationId"
-        const val SymbolProvider = "SymbolProvider"
+        const val HttpBindingResolver = "HttpBindingResolver"
+        const val DefaultTimestampFormat = "DefaultTimestampFormat"
     }
 
     // Symbols which should be imported
@@ -87,6 +89,9 @@ class PresignerGenerator : KotlinIntegration {
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
+        val protocolGenerator: HttpBindingProtocolGenerator = ctx.protocolGenerator as HttpBindingProtocolGenerator
+        val httpBindingResolver = protocolGenerator.getProtocolHttpBindingResolver(ctx.model, service)
+        val defaultTimestampFormat = protocolGenerator.defaultTimestampFormat
 
         // Only services with SigV4 are currently presignable
         if (!AwsSignatureVersion4.isSupportedAuthentication(ctx.model, service)) return
@@ -105,7 +110,7 @@ class PresignerGenerator : KotlinIntegration {
         // If presignable operations found for this service, generate a Presigner file
         if (presignOperations.isNotEmpty()) {
             delegator.useFileWriter("Presigner.kt", ctx.settings.pkg.name) { writer ->
-                renderPresigner(writer, ctx, service.expectTrait<SigV4Trait>().name, presignOperations)
+                renderPresigner(writer, ctx, httpBindingResolver, service.expectTrait<SigV4Trait>().name, presignOperations, defaultTimestampFormat)
             }
         }
     }
@@ -113,8 +118,10 @@ class PresignerGenerator : KotlinIntegration {
     private fun renderPresigner(
         writer: KotlinWriter,
         ctx: CodegenContext,
+        httpBindingResolver: HttpBindingResolver,
         sigv4ServiceName: String,
-        presignOperations: List<PresignableOperation>
+        presignOperations: List<PresignableOperation>,
+        defaultTimestampFormat: TimestampFormatTrait.Format
     ) {
         val serviceShape = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
         val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
@@ -122,7 +129,8 @@ class PresignerGenerator : KotlinIntegration {
             namespace = "${ctx.settings.pkg.name}.internal"
             name = EndpointResolverGenerator.typeName
         }
-        val presignConfigTypeName = "${ctx.settings.sdkId}PresignConfig"
+        val clientName = clientName(ctx.settings.sdkId)
+        val presignConfigTypeName = "${clientName}PresignConfig"
 
         // import RT types
         writer.addImport(presignerRuntimeSymbols)
@@ -154,10 +162,17 @@ class PresignerGenerator : KotlinIntegration {
             renderPresignFromClientFn(writer, request.defaultName(serviceShape), requestConfigFnName, serviceSymbol.name, presignConfigTypeName)
 
             // Generate presign config function
+            val contextMap = mapOf(
+                PresignConfigFnSection.OperationId to presignableOp.operationId,
+                PresignConfigFnSection.CodegenContext to ctx,
+                PresignConfigFnSection.HttpBindingResolver to httpBindingResolver,
+                PresignConfigFnSection.DefaultTimestampFormat to defaultTimestampFormat
+            )
+
             renderPresignConfigFn(
                 writer, request.defaultName(serviceShape), requestConfigFnName, presignableOp,
                 serializerSymbol, presignConfigFnVisitorFactory(ctx.protocolGenerator!!.protocol),
-                ctx.model, ctx.symbolProvider
+                contextMap
             )
         }
 
@@ -281,18 +296,13 @@ class PresignerGenerator : KotlinIntegration {
         presignableOp: PresignableOperation,
         serializerSymbol: Symbol,
         presignConfigFnVisitor: PresignConfigFnVisitor,
-        model: Model,
-        symbolProvider: SymbolProvider
+        contextMap: Map<String, Any?>
     ) {
-        writer.withBlock("private suspend fun $requestConfigFnName(request: $requestTypeName, durationSeconds: ULong) : PresignedRequestConfig {", "}\n") {
-            val contextMap = mapOf(
-                PresignConfigFnSection.OperationId to presignableOp.operationId,
-                PresignConfigFnSection.Model to model,
-                PresignConfigFnSection.SymbolProvider to symbolProvider
-            )
+        writer.withBlock("private suspend fun $requestConfigFnName(input: $requestTypeName, durationSeconds: ULong) : PresignedRequestConfig {", "}\n") {
+
             writer.declareSection(PresignConfigFnSection, contextMap) {
                 write("require(durationSeconds > 0u) { \"duration must be greater than zero\" }")
-                write("val httpRequestBuilder = #T().serialize(ExecutionContext.build {  }, request)", serializerSymbol)
+                write("val httpRequestBuilder = #T().serialize(ExecutionContext.build {  }, input)", serializerSymbol)
 
                 writer.withBlock("return PresignedRequestConfig(", ")") {
                     presignConfigFnVisitor.renderHttpMethod(this)

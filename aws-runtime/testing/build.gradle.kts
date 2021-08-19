@@ -7,6 +7,7 @@ description = "Internal test utilities"
 
 val kotlinVersion: String by project
 val coroutinesVersion: String by project
+val smithyKotlinVersion: String by project
 
 kotlin {
     sourceSets {
@@ -22,6 +23,11 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
             }
         }
+        metadata {
+            dependencies {
+                commonMainApi(project(":aws-runtime:aws-core"))
+                commonMainApi("aws.smithy.kotlin:utils:$smithyKotlinVersion")
+            }
+        }
     }
 }
-

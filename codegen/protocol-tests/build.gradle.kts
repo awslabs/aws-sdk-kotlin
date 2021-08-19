@@ -62,7 +62,8 @@ tasks["clean"].doFirst {
     delete("smithy-build.json")
 }
 
-tasks.create<SmithyBuild>("buildSdk") {
+tasks.create<SmithyBuild>("generateSdk") {
+    group = "codegen"
     // ensure the generated clients use the same version of the runtime as the aws aws-runtime
     val smithyKotlinVersion: String by project
     doFirst {
@@ -71,13 +72,12 @@ tasks.create<SmithyBuild>("buildSdk") {
     addRuntimeClasspath = true
     dependsOn(tasks["generateSmithyBuild"])
     inputs.file(projectDir.resolve("smithy-build.json"))
+    // ensure smithy-aws-kotlin-codegen is up to date
+    inputs.files(configurations.compileClasspath)
 }
 
-// Run the `buildSdk` automatically.
-tasks["build"].finalizedBy(tasks["buildSdk"])
-
 // force rebuild every time while developing
-tasks["buildSdk"].outputs.upToDateWhen { false }
+tasks["generateSdk"].outputs.upToDateWhen { false }
 
 data class ProtocolTest(val projectionName: String, val serviceShapeId: String) {
     val packageName: String
@@ -173,7 +173,7 @@ open class ProtocolTestTask : DefaultTask() {
 
 enabledProtocols.forEach {
     tasks.register<ProtocolTestTask>("testProtocol-${it.projectionName}") {
-        dependsOn(tasks.build)
+        dependsOn(tasks["generateSdk"])
         group = "Verification"
         protocol = it.projectionName
         plugin = "kotlin-codegen"

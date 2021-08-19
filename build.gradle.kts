@@ -5,7 +5,10 @@
 plugins {
     kotlin("jvm") version "1.5.20" apply false
     id("org.jetbrains.dokka")
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
+
+group = "aws.sdk.kotlin"
 
 dependencies {
     dokkaPlugin(project(":dokka-aws"))
@@ -54,6 +57,14 @@ allprojects {
     }
 }
 
+if (project.properties["kotlinWarningsAsErrors"]?.toString()?.toBoolean() == true) {
+    subprojects {
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+            kotlinOptions.allWarningsAsErrors = true
+        }
+    }
+}
+
 // configure the root multimodule docs
 tasks.dokkaHtmlMultiModule {
     moduleName.set("AWS Kotlin SDK")
@@ -69,6 +80,21 @@ tasks.dokkaHtmlMultiModule {
         project(":aws-runtime:crt-util")
     )
     removeChildTasks(excludeFromDocumentation)
+}
+
+if (project.hasProperty("sonatypeUsername") && project.hasProperty("sonatypePassword")) {
+    apply(plugin = "io.github.gradle-nexus.publish-plugin")
+
+    nexusPublishing {
+        repositories {
+            create("awsNexus") {
+                nexusUrl.set(uri("https://aws.oss.sonatype.org/service/local/"))
+                snapshotRepositoryUrl.set(uri("https://aws.oss.sonatype.org/content/repositories/snapshots/"))
+                username.set(project.property("sonatypeUsername") as String)
+                password.set(project.property("sonatypePassword") as String)
+            }
+        }
+    }
 }
 
 val ktlint: Configuration by configurations.creating

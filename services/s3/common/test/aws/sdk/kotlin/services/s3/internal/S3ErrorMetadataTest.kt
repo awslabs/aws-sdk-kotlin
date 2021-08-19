@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package aws.sdk.kotlin.service.s3.internal
+package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import kotlin.test.*
@@ -22,7 +22,7 @@ class S3ErrorDeserializerTest {
             </Error>
         """.trimIndent().encodeToByteArray()
 
-        val actual = parseErrorResponse(payload)
+        val actual = parseS3ErrorResponse(payload)
         assertNotNull(actual)
         assertEquals("InvalidGreeting", actual.code)
         assertEquals("Hi", actual.message)
@@ -41,7 +41,7 @@ class S3ErrorDeserializerTest {
         )
 
         for (payload in tests) {
-            val error = parseErrorResponse(payload)
+            val error = parseS3ErrorResponse(payload)
             assertNotNull(error)
             assertEquals("foo-id", error.requestId)
             assertNull(error.code)

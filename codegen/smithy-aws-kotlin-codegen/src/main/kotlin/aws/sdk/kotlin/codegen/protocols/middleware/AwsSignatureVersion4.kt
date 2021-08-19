@@ -10,8 +10,10 @@ import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.addImport
+import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.knowledge.ServiceIndex
@@ -24,11 +26,16 @@ import software.amazon.smithy.model.traits.OptionalAuthTrait
  * @param signingServiceName The credential scope service name to sign for
  * See the `name` property of: https://awslabs.github.io/smithy/1.0/spec/aws/aws-auth.html#aws-auth-sigv4-trait
  */
-open class AwsSignatureVersion4(val signingServiceName: String) : ProtocolMiddleware {
+open class AwsSignatureVersion4(private val signingServiceName: String) : ProtocolMiddleware {
     override val name: String = AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware.name
 
     init {
         require(signingServiceName.isNotEmpty()) { "signingServiceName must be specified" }
+    }
+
+    override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean {
+        val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
+        return hasSigV4AuthScheme(ctx.model, service, op)
     }
 
     override fun addImportsAndDependencies(writer: KotlinWriter) {
@@ -59,11 +66,10 @@ open class AwsSignatureVersion4(val signingServiceName: String) : ProtocolMiddle
         /**
          * Get the SigV4Trait auth name to sign request for
          *
-         * @param model        model definition
          * @param serviceShape service shape for the API
          * @return the service name to use in the credential scope to sign for
          */
-        fun signingServiceName(model: Model, serviceShape: ServiceShape): String {
+        fun signingServiceName(serviceShape: ServiceShape): String {
             val sigv4Trait = serviceShape.expectTrait<SigV4Trait>()
             return sigv4Trait.name
         }
