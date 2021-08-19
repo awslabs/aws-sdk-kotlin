@@ -8,6 +8,7 @@ package aws.sdk.kotlin.codegen.customization
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
+import software.amazon.smithy.kotlin.codegen.model.isNumberShape
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.prependNamespaceAndService
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
@@ -20,27 +21,40 @@ class BoxServicesTest {
     @Test
     fun testPrimitiveShapesAreBoxed() {
         val model = """
+            operation Foo {
+                input: Primitives
+            }
+            
             structure Primitives {
                 int: PrimitiveInteger,
                 bool: PrimitiveBoolean,
                 long: PrimitiveLong,
                 double: PrimitiveDouble,
                 boxedAlready: BoxedField,
+                notBoxed: NotBoxedField,
                 other: Other
             }
+            
             @box
             integer BoxedField
+            
             structure Other {}
-        """.prependNamespaceAndService().toSmithyModel()
+            
+            integer NotBoxedField
+        """.prependNamespaceAndService(operations = listOf("Foo")).toSmithyModel()
 
         val ctx = model.newTestContext()
         val transformed = BoxServices().preprocessModel(model, ctx.generationCtx.settings)
 
-        val struct = transformed.expectShape<StructureShape>("com.test#Primitives")
+        // get the synthetic input which is the one that will be transformed
+        val struct = transformed.expectShape<StructureShape>("smithy.kotlin.synthetic.test#FooRequest")
         struct.members().forEach {
-            when (val target = transformed.expectShape(it.target)) {
-                is StructureShape -> assertFalse(target.hasTrait<BoxTrait>())
-                else -> assertTrue(target.hasTrait<BoxTrait>())
+            val target = transformed.expectShape(it.target)
+            if (target.isBooleanShape || target.isNumberShape) {
+                assertTrue(it.hasTrait<BoxTrait>())
+            } else {
+                assertFalse(target.hasTrait<BoxTrait>())
+                assertFalse(it.hasTrait<BoxTrait>())
             }
         }
     }

@@ -8,7 +8,9 @@ package aws.sdk.kotlin.codegen.customization
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.model.isNumberShape
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.neighbor.Walker
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.BoxTrait
 import software.amazon.smithy.model.transform.ModelTransformer
@@ -53,30 +55,48 @@ class BoxServices : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
         serviceIds.any { it == settings.service }
 
-    override fun preprocessModel(model: Model, settings: KotlinSettings): Model =
-        ModelTransformer.create().mapShapes(model, ::boxPrimitives)
+    override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
+        val serviceClosure = Walker(model).walkShapes(model.expectShape(settings.service))
 
-    private fun boxPrimitives(shape: Shape): Shape {
-        return when (shape) {
-            is NumberShape -> {
-                when (shape) {
-                    is ByteShape -> box(shape)
-                    is IntegerShape -> box(shape)
-                    is LongShape -> box(shape)
-                    is ShortShape -> box(shape)
-                    is FloatShape -> box(shape)
-                    is DoubleShape -> box(shape)
-                    is BigDecimalShape -> box(shape)
-                    is BigIntegerShape -> box(shape)
-                    else -> throw CodegenException("unhandled numeric shape: $shape")
-                }
+        return ModelTransformer.create().mapShapes(model) {
+            if (it in serviceClosure && !it.id.namespace.startsWith("smithy.api")) {
+                boxPrimitives(model, it)
+            } else {
+                it
             }
-            is BooleanShape -> box(shape)
+        }
+    }
+
+    private fun boxPrimitives(model: Model, shape: Shape): Shape {
+        val target = when (shape) {
+            is MemberShape -> model.expectShape(shape.target)
+            else -> shape
+        }
+
+        return when {
+            shape is MemberShape && target.isPrimitiveShape -> box(shape)
+            shape is NumberShape -> boxNumber(shape)
+            shape is BooleanShape -> box(shape)
             else -> shape
         }
     }
 
+    private val Shape.isPrimitiveShape: Boolean
+        get() = isBooleanShape || isNumberShape
+
     private fun <T> box(shape: T): Shape where T : Shape, T : ToSmithyBuilder<T> {
         return (shape.toBuilder() as AbstractShapeBuilder<*, T>).addTrait(BoxTrait()).build()
+    }
+
+    private fun boxNumber(shape: NumberShape): Shape = when (shape) {
+        is ByteShape -> box(shape)
+        is IntegerShape -> box(shape)
+        is LongShape -> box(shape)
+        is ShortShape -> box(shape)
+        is FloatShape -> box(shape)
+        is DoubleShape -> box(shape)
+        is BigDecimalShape -> box(shape)
+        is BigIntegerShape -> box(shape)
+        else -> throw CodegenException("unhandled numeric shape: $shape")
     }
 }
