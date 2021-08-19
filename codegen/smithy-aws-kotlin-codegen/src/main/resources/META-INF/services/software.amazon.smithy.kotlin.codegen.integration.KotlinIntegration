@@ -11,3 +11,4 @@ aws.sdk.kotlin.codegen.PresignerGenerator
 aws.sdk.kotlin.codegen.customization.apigateway.ApiGatewayAddAcceptHeader
 aws.sdk.kotlin.codegen.customization.glacier.GlacierAddVersionHeader
 aws.sdk.kotlin.codegen.customization.polly.PollyPresigner
+aws.sdk.kotlin.codegen.customization.BoxServices
