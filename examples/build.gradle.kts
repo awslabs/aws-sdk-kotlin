@@ -7,6 +7,7 @@ allprojects {
     version = "0.4.0-SNAPSHOT"
 
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 }
