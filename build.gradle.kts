@@ -8,8 +8,6 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
-group = "aws.sdk.kotlin"
-
 dependencies {
     dokkaPlugin(project(":dokka-aws"))
 }
@@ -82,8 +80,14 @@ tasks.dokkaHtmlMultiModule {
     removeChildTasks(excludeFromDocumentation)
 }
 
-if (project.hasProperty("sonatypeUsername") && project.hasProperty("sonatypePassword")) {
+if (
+    project.hasProperty("sonatypeUsername") &&
+    project.hasProperty("sonatypePassword") &&
+    project.hasProperty("publishGroupName")
+) {
     apply(plugin = "io.github.gradle-nexus.publish-plugin")
+
+    group = project.property("publishGroupName") as String
 
     nexusPublishing {
         repositories {
