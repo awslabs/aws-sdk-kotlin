@@ -62,23 +62,3 @@ The following steps will create a project that will codegen a client when built.
       ```
 4. Run the `build` Gradle task to generate the service client.
 5. Look in `build/smithyprojections/<project name>/source/kotlin-codegen` for a generated Gradle project of the Kotlin client.
-
-## Appendix
-
-### 1. Sample Project File Tree
-
-The following illustrates the files added or changed as part of this exercise:
-
-```
-.
-├── build.gradle.kts
-├── model
-│   ├── errors.smithy
-│   ├── main.smithy
-│   ├── resources
-│   │   ├── beer.smithy
-│   │   ├── logo.smithy
-│   │   └── review.smithy
-│   └── validation.smithy
-└── smithy-build.json
-```
