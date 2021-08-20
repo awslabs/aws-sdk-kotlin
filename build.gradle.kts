@@ -87,7 +87,8 @@ if (
 ) {
     apply(plugin = "io.github.gradle-nexus.publish-plugin")
 
-    group = project.property("publishGroupName") as String
+    val publishGroupName = project.property("publishGroupName") as String
+    group = publishGroupName
 
     nexusPublishing {
         repositories {
