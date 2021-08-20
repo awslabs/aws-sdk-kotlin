@@ -22,8 +22,12 @@ val kotlinJVMTargetVersion: String by project
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     api("software.amazon.smithy.kotlin:smithy-kotlin-codegen:$smithyKotlinVersion")
+
     api("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
+    api("software.amazon.smithy:smithy-aws-iam-traits:$smithyVersion")
+    api("software.amazon.smithy:smithy-aws-cloudformation-traits:$smithyVersion")
     api("software.amazon.smithy:smithy-protocol-test-traits:$smithyVersion")
+
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
