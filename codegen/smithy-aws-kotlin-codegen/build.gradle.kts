@@ -98,11 +98,16 @@ val sourcesJar by tasks.creating(Jar::class) {
     from(sourceSets.getByName("main").allSource)
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("codegen") {
-            from(components["java"])
-            artifact(sourcesJar)
+if (
+    !project.hasProperty("publishGroupName") ||
+    group.toString().startsWith(project.property("publishGroupName") as String)
+) {
+    publishing {
+        publications {
+            create<MavenPublication>("codegen") {
+                from(components["java"])
+                artifact(sourcesJar)
+            }
         }
     }
 }
