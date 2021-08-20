@@ -1,10 +1,8 @@
 # Supported Targets
 
-
 ## Android
 
 The AWS SDK for Kotlin supports Android API 24+ (`minSdk = 24`).
-
 
 Additional requirements:
 
@@ -14,9 +12,7 @@ Additional requirements:
 Example config fragments:
 
 ```kotlin
-
 // build.gradle.kts
-
 
 android {
     compileOptions {
@@ -37,5 +33,4 @@ configurations.all {
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 }
-
 ```
