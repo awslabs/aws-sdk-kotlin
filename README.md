@@ -144,4 +144,4 @@ The SDK supports the following targets:
 * Android API level 24+ (Later versions of the Android may contain security
   fixes so consider reviewing known vulnerabilities for the Android versions
   you choose to support in your application.)
-    * See [Android support](docs/targets.md#Android) for additional details
+    * See [Android support](docs/targets.md#android) for additional details
