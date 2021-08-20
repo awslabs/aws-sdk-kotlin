@@ -110,6 +110,6 @@ if (
             }
         }
     }
-}
 
-apply(from = rootProject.file("gradle/publish.gradle"))
+    apply(from = rootProject.file("gradle/publish.gradle"))
+}
