@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "plugins": {
+    "kotlin-codegen": {
+      "service": "example.weather#Weather",
+      "package": {
+        "name": "example.weather",
+        "version": "0.1.0",
+        "description": "Weather"
+      },
+      "sdkId": "Weather",
+      "build": {
+        "generateDefaultBuildFiles": true,
+        "optInAnnotations": [
+          "aws.smithy.kotlin.runtime.util.InternalApi",
+          "aws.sdk.kotlin.runtime.InternalSdkApi"
+        ],
+        "rootProject": true
+      }
+    }}
+}

@@ -5,6 +5,7 @@
 plugins {
     kotlin("jvm")
     jacoco
+    `maven-publish`
 }
 
 val sdkVersion: String by project
@@ -93,3 +94,26 @@ tasks.jacocoTestReport {
 
 // Always run the jacoco test report after testing.
 tasks["test"].finalizedBy(tasks["jacocoTestReport"])
+
+val sourcesJar by tasks.creating(Jar::class) {
+    group = "publishing"
+    description = "Assembles Kotlin sources jar"
+    classifier = "sources"
+    from(sourceSets.getByName("main").allSource)
+}
+
+if (
+    !project.hasProperty("publishGroupName") ||
+    group.toString().startsWith(project.property("publishGroupName") as String)
+) {
+    publishing {
+        publications {
+            create<MavenPublication>("codegen") {
+                from(components["java"])
+                artifact(sourcesJar)
+            }
+        }
+    }
+
+    apply(from = rootProject.file("gradle/publish.gradle"))
+}
