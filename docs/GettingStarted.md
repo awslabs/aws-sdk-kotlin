@@ -60,3 +60,4 @@ Consult the [stability guide](stability.md) for more information on SDK stabilit
 * [Additional examples](https://github.com/awslabs/aws-sdk-kotlin/tree/main/examples)
 * [Giving feedback and contributing](https://github.com/awslabs/aws-sdk-kotlin#feedback)
 * [Debugging](debugging.md)
+* [Android support](targets.md#android)
