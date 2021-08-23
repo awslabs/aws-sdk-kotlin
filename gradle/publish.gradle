@@ -3,70 +3,73 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
-
 // FIXME: Create a real "javadoc" JAR from the Dokka output
 tasks.register("javadocJar", Jar) {
     archiveClassifier.set("javadoc")
     from()
 }
 
-publishing {
-    repositories {
-        maven { name = "testLocal"; url = "$rootProject.buildDir/m2" }
-        maven {
-            name = "awsCodeArtifact"
-            url = project.findProperty("codeartifact.url")
-            credentials {
-                username = "aws"
-                password = project.findProperty("codeartifact.token") ?: System.getenv("CODEARTIFACT_TOKEN")
-            }
-        }
-    }
+project.afterEvaluate {
+    String publishGroupName = project.findProperty("publishGroupName")
+    if (publishGroupName == null || project.group.startsWith(publishGroupName)) {
+        apply plugin: 'maven-publish'
+        apply plugin: 'signing'
 
-    publications.all {
-        project.afterEvaluate {
-            pom {
-                name = project.name
-                description = project.description
-                url = "https://github.com/awslabs/aws-sdk-kotlin"
-                licenses {
-                    license {
-                        name = "The Apache License, Version 2.0"
-                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        publishing {
+            repositories {
+                maven { name = "testLocal"; url = "$rootProject.buildDir/m2" }
+                maven {
+                    name = "awsCodeArtifact"
+                    url = project.findProperty("codeartifact.url")
+                    credentials {
+                        username = "aws"
+                        password = project.findProperty("codeartifact.token") ?: System.getenv("CODEARTIFACT_TOKEN")
                     }
                 }
-                developers {
-                    developer {
-                        id = "aws-sdk-kotlin"
-                        name = "AWS SDK Kotlin Team"
-                        // TODO - team email?
-                    }
-                }
-                scm {
-                    connection = "scm:git:git://github.com/awslabs/aws-sdk-kotlin.git"
-                    developerConnection = "scm:git:ssh://github.com/awslabs/aws-sdk-kotlin.git"
+            }
+
+            publications.all {
+                pom {
+                    name = project.name
+                    description = project.description
                     url = "https://github.com/awslabs/aws-sdk-kotlin"
-                }
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "aws-sdk-kotlin"
+                            name = "AWS SDK Kotlin Team"
+                            // TODO - team email?
+                        }
+                    }
+                    scm {
+                        connection = "scm:git:git://github.com/awslabs/aws-sdk-kotlin.git"
+                        developerConnection = "scm:git:ssh://github.com/awslabs/aws-sdk-kotlin.git"
+                        url = "https://github.com/awslabs/aws-sdk-kotlin"
+                    }
 
-                artifact(tasks["javadocJar"])
+                    artifact(tasks["javadocJar"])
+                }
+            }
+
+            if (project.hasProperty("signingKey") && project.hasProperty("signingPassword")) {
+                signing {
+                    useInMemoryPgpKeys(
+                            (String) project.property("signingKey"),
+                            (String) project.property("signingPassword")
+                    )
+                    sign(publications)
+                }
             }
         }
-    }
 
-    if (project.hasProperty("signingKey") && project.hasProperty("signingPassword")) {
-        signing {
-            useInMemoryPgpKeys(
-                    (String) project.property("signingKey"),
-                    (String) project.property("signingPassword")
-            )
-            sign(publications)
+        tasks.register('publishToAwsCodeArtifact') {
+            dependsOn 'publishAllPublicationsToAwsCodeArtifactRepository'
+            group 'publishing'
         }
     }
-}
-
-tasks.register('publishToAwsCodeArtifact') {
-    dependsOn 'publishAllPublicationsToAwsCodeArtifactRepository'
-    group 'publishing'
 }
