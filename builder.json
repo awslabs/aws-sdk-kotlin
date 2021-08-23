@@ -6,7 +6,7 @@
         "gradlew": "{source_dir}/gradlew -p {source_dir}"
     },
     "build_steps": [
-        "{gradlew} assemble"
+        "{gradlew} assemble --parallel"
     ],
     "test_steps": [
         "{gradlew} publishToMavenLocal",
@@ -20,18 +20,6 @@
     "env": {
         "JAVA_HOME": "{java_home}"
     },
-    "hosts": {
-        "ubuntu": {
-            "packages": [
-                "openjdk-8-jdk-headless"
-            ]
-        },
-        "debian": {
-            "packages": [
-                "openjdk-8-jdk-headless"
-            ]
-        }
-    },
     "upstream": [
         {
             "name": "smithy-kotlin"
@@ -39,5 +27,13 @@
         {
             "name": "aws-crt-kotlin"
         }
-    ]
+    ],
+    "variants": {
+        "codebuild-svc-check": {
+            "!imports": [],
+            "!test_steps": [
+                "{gradlew} test allTests"
+            ]
+        }
+    }
 }
