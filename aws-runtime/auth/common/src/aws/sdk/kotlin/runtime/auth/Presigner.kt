@@ -5,7 +5,6 @@ import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyHeaderType
 import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyValue
 import aws.sdk.kotlin.crt.auth.signing.AwsSigner
 import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
-import aws.sdk.kotlin.crt.http.HttpRequest as CrtHttpRequest
 import aws.sdk.kotlin.runtime.crt.toCrtHeaders
 import aws.sdk.kotlin.runtime.crt.toSdkHeaders
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
@@ -18,6 +17,7 @@ import aws.smithy.kotlin.runtime.http.Url
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.util.splitAsQueryParameters
 import aws.smithy.kotlin.runtime.util.InternalApi
+import aws.sdk.kotlin.crt.http.HttpRequest as CrtHttpRequest
 
 /**
  * The service configuration details for a presigned request
@@ -99,10 +99,12 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
     )
     val signedRequest = AwsSigner.signRequest(request, signingConfig)
 
-    // The signer returns the path as an encoded string, we need to partially
-    // decode this to load into the [HttpRequest] type.
+    // The signer returns the path as an encoded string, we need to partially decode this to load into [HttpRequest].
     val path = signedRequest.encodedPath.substringBefore('?')
-    val encodedParams = signedRequest.encodedPath.substring(path.length + 1).splitAsQueryParameters()
+    val encodedParams = signedRequest
+        .encodedPath
+        .substring(path.length + 1)
+        .splitAsQueryParameters()
 
     return HttpRequest(
         method = HttpMethod.parse(signedRequest.method),

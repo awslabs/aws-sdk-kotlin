@@ -6,7 +6,6 @@ import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
 import aws.smithy.kotlin.runtime.http.HttpMethod
-import aws.smithy.kotlin.runtime.http.Url
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -34,9 +33,8 @@ class PollyPresignerTest {
         assertEquals(HttpMethod.GET, presignedRequest.method)
         assertTrue(presignedRequest.headers.entries().size == 1)
         assertEquals("polly.us-east-2.amazonaws.com", presignedRequest.headers["Host"])
-        val parsedUrl = presignedRequest.url
-        assertEquals("/v1/speech", parsedUrl.path)
+        assertEquals("/v1/speech", presignedRequest.url.path)
         val expectedQueryParameters = setOf("OutputFormat", "Text", "VoiceId", "X-Amz-Algorithm", "X-Amz-Credential", "X-Amz-Date", "X-Amz-SignedHeaders", "X-Amz-Expires", "X-Amz-Signature")
-        assertEquals(expectedQueryParameters, parsedUrl.parameters.entries().map { it.key }.toSet())
+        assertEquals(expectedQueryParameters, presignedRequest.url.parameters.entries().map { it.key }.toSet())
     }
 }
