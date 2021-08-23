@@ -140,7 +140,5 @@ Please refer to our [security policy](https://github.com/awslabs/aws-sdk-kotlin/
 
 The SDK supports the following targets:
 
-* JVM
-* Android API level 16+ (Later versions of the Android may contain security
-  fixes so consider reviewing known vulnerabilities for the Android versions
-  you choose to support in your application.)
+* [JVM](docs/targets.md#jvm)
+* [Android](docs/targets.md#android) 
