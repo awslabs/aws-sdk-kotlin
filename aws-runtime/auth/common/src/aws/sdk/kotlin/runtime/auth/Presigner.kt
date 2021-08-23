@@ -10,16 +10,14 @@ import aws.sdk.kotlin.runtime.crt.toCrtHeaders
 import aws.sdk.kotlin.runtime.crt.toSdkHeaders
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.smithy.kotlin.runtime.http.Headers
+import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.Protocol
 import aws.smithy.kotlin.runtime.http.QueryParameters
 import aws.smithy.kotlin.runtime.http.Url
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
-import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.util.splitAsQueryParameters
 import aws.smithy.kotlin.runtime.util.InternalApi
-import aws.smithy.kotlin.runtime.util.text.splitAsQueryString
-import kotlin.math.sign
 
 /**
  * The service configuration details for a presigned request
@@ -101,15 +99,21 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
     )
     val signedRequest = AwsSigner.signRequest(request, signingConfig)
 
+    // The signer returns the path as an encoded string, we need to partially
+    // decode this to load into the [HttpRequest] type.
     val path = signedRequest.encodedPath.substringBefore('?')
-    val params = signedRequest.encodedPath.substring(path.length + 1).splitAsQueryParameters()
+    val encodedParams = signedRequest.encodedPath.substring(path.length + 1).splitAsQueryParameters()
 
-    return HttpRequestBuilder().apply {
-        this.url.host = unsignedUrl.host
-        this.url.path = path
-        this.url.parameters.appendAll(params)
-        this.url.scheme = unsignedUrl.scheme
-        this.headers.appendAll(signedRequest.headers.toSdkHeaders())
-        this.method = HttpMethod.parse(signedRequest.method)
-    }.build()
+    return HttpRequest(
+        method = HttpMethod.parse(signedRequest.method),
+        url = Url(
+            scheme = Protocol.HTTPS,
+            host = endpoint.hostname,
+            path = path,
+            parameters = encodedParams,
+            encodeParameters = false
+        ),
+        headers = signedRequest.headers.toSdkHeaders(),
+        body = HttpBody.Empty
+    )
 }
