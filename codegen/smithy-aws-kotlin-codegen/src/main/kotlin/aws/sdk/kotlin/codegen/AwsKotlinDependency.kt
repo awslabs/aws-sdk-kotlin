@@ -17,7 +17,7 @@ const val AWS_CLIENT_RT_REGIONS_NS = "aws.sdk.kotlin.runtime.regions"
 private fun getDefaultRuntimeVersion(): String {
     // generated as part of the build, see smithy-aws-kotlin-codegen/build.gradle.kts
     try {
-        val version = object {}.javaClass.getResource("sdk-version.txt").readText()
+        val version = object {}.javaClass.getResource("sdk-version.txt")?.readText() ?: throw CodegenException("sdk-version.txt does not exist")
         check(isValidVersion(version)) { "Version parsed from sdk-version.txt '$version' is not a valid version string" }
         return version
     } catch (ex: Exception) {
