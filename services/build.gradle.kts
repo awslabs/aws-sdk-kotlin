@@ -104,6 +104,10 @@ subprojects {
                     classpath = compileDependencyFiles + runtimeDependencyFiles
                     testClassesDirs = output.classesDirs
                     useJUnitPlatform()
+                    testLogging {
+                        events("passed", "skipped", "failed")
+                        showStandardStreams = true
+                    }
                 }
             }
         }
