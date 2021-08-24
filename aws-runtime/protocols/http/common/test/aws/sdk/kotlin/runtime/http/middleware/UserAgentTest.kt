@@ -26,7 +26,7 @@ import kotlin.test.assertTrue
 class UserAgentTest {
 
     @Test
-    fun `it sets ua headers`() = runSuspendTest {
+    fun itSetsUAHeaders() = runSuspendTest {
         val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
