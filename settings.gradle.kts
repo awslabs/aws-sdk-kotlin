@@ -26,6 +26,7 @@ rootProject.name = "aws-sdk-kotlin"
 include(":dokka-aws")
 include(":codegen:sdk")
 include(":codegen:smithy-aws-kotlin-codegen")
+include(":codegen:smithy-whitelabel-kotlin-codegen")
 include(":codegen:protocol-tests")
 include(":aws-runtime")
 include(":aws-runtime:aws-core")
