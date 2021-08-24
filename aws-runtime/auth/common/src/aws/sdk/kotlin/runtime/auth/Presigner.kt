@@ -17,7 +17,6 @@ import aws.smithy.kotlin.runtime.http.Protocol
 import aws.smithy.kotlin.runtime.http.QueryParameters
 import aws.smithy.kotlin.runtime.http.Url
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
-import aws.smithy.kotlin.runtime.http.util.splitAsQueryParameters
 import aws.smithy.kotlin.runtime.util.InternalApi
 import aws.sdk.kotlin.crt.http.HttpRequest as CrtHttpRequest
 
