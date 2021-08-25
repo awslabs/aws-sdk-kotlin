@@ -5,16 +5,20 @@ import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyHeaderType
 import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyValue
 import aws.sdk.kotlin.crt.auth.signing.AwsSigner
 import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
-import aws.sdk.kotlin.crt.http.HttpRequest
+import aws.sdk.kotlin.runtime.crt.path
+import aws.sdk.kotlin.runtime.crt.queryParameters
 import aws.sdk.kotlin.runtime.crt.toCrtHeaders
 import aws.sdk.kotlin.runtime.crt.toSdkHeaders
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.smithy.kotlin.runtime.http.Headers
+import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.Protocol
 import aws.smithy.kotlin.runtime.http.QueryParameters
 import aws.smithy.kotlin.runtime.http.Url
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.util.InternalApi
+import aws.sdk.kotlin.crt.http.HttpRequest as CrtHttpRequest
 
 /**
  * The service configuration details for a presigned request
@@ -64,25 +68,13 @@ public data class PresignedRequestConfig(
 )
 
 /**
- * Properties of an HTTP request that has been presigned
- * @property method HTTP method to use when initiating the request
- * @property url HTTP url of the presigned request
- * @property headers Headers that must be sent with the request
- */
-public data class PresignedRequest(
-    val method: HttpMethod,
-    val url: String,
-    val headers: Headers
-)
-
-/**
  * Generate a presigned request given the service and operation configurations.
  * @param serviceConfig The service configuration to use in signing the request
  * @param requestConfig The presign configuration to use in signing the request
- * @return a [PresignedRequest] that can be executed by any HTTP client within the specified duration.
+ * @return a [HttpRequest] that can be executed by any HTTP client within the specified duration.
  */
 @InternalApi
-public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, requestConfig: PresignedRequestConfig): PresignedRequest {
+public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, requestConfig: PresignedRequestConfig): HttpRequest {
     val crtCredentials = serviceConfig.credentialsProvider.getCredentials().toCrt()
     val endpoint = serviceConfig.endpointResolver.resolve(serviceConfig.serviceId, serviceConfig.region)
 
@@ -96,22 +88,28 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
         expirationInSeconds = requestConfig.durationSeconds
     }
 
-    val url = Url(Protocol.HTTPS, endpoint.hostname, path = requestConfig.path, parameters = requestConfig.queryString)
+    val unsignedUrl = Url(Protocol.HTTPS, endpoint.hostname, path = requestConfig.path, parameters = requestConfig.queryString)
 
-    val headers = aws.sdk.kotlin.crt.http.Headers.build {
-        append("Host", endpoint.hostname)
-        appendAll(requestConfig.additionalHeaders.toCrtHeaders())
-    }
-    val request = HttpRequest(
+    val request = CrtHttpRequest(
         requestConfig.method.name,
-        url.encodedPath,
-        headers
+        unsignedUrl.encodedPath,
+        aws.sdk.kotlin.crt.http.Headers.build {
+            append("Host", endpoint.hostname)
+            appendAll(requestConfig.additionalHeaders.toCrtHeaders())
+        }
     )
     val signedRequest = AwsSigner.signRequest(request, signingConfig)
 
-    return PresignedRequest(
-        requestConfig.method,
-        "${endpoint.protocol}://${endpoint.hostname}${signedRequest.encodedPath}",
-        signedRequest.headers.toSdkHeaders()
+    return HttpRequest(
+        method = HttpMethod.parse(signedRequest.method),
+        url = Url(
+            scheme = Protocol.HTTPS,
+            host = endpoint.hostname,
+            path = signedRequest.path(),
+            parameters = signedRequest.queryParameters() ?: QueryParameters.Empty,
+            encodeParameters = false
+        ),
+        headers = signedRequest.headers.toSdkHeaders(),
+        body = HttpBody.Empty
     )
 }
