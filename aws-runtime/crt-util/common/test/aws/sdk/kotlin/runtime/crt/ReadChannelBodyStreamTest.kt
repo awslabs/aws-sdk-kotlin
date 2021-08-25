@@ -34,17 +34,17 @@ class ReadChannelBodyStreamTest {
     }
 
     @Test
-    fun testCancellation() = runSuspendTest {
+    fun testCancellation(): Unit = runSuspendTest {
         val chan = SdkByteChannel()
         val job = Job()
         val stream = ReadChannelBodyStream(chan, coroutineContext + job)
-        yield()
 
         job.cancel()
-        yield()
 
         val (sendBuffer, _) = mutableBuffer(16)
-        assertTrue(stream.sendRequestBody(sendBuffer))
+        assertFailsWith<CancellationException> {
+            stream.sendRequestBody(sendBuffer)
+        }
     }
 
     @Test
