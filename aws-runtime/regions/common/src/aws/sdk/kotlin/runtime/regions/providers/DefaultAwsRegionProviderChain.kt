@@ -10,7 +10,7 @@ package aws.sdk.kotlin.runtime.regions.providers
 /**
  * [AwsRegionProvider] that looks for region in this order:
  *  1. Check `aws.region` system property (JVM only)
- *  2. Check the `AWS_REGION` and `AWS_DEFAULT_REGION` environment variable(s) (JVM, Node, Native)
+ *  2. Check the `AWS_REGION` environment variable (JVM, Node, Native)
  *  3. Check the AWS config files/profile for region information
  *  4. If running on EC2, check the EC2 metadata service for region
  */
