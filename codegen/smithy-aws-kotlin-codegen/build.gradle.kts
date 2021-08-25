@@ -102,18 +102,13 @@ val sourcesJar by tasks.creating(Jar::class) {
     from(sourceSets.getByName("main").allSource)
 }
 
-if (
-    !project.hasProperty("publishGroupName") ||
-    group.toString().startsWith(project.property("publishGroupName") as String)
-) {
-    publishing {
-        publications {
-            create<MavenPublication>("codegen") {
-                from(components["java"])
-                artifact(sourcesJar)
-            }
+publishing {
+    publications {
+        create<MavenPublication>("codegen") {
+            from(components["java"])
+            artifact(sourcesJar)
         }
     }
-
-    apply(from = rootProject.file("gradle/publish.gradle"))
 }
+
+apply(from = rootProject.file("gradle/publish.gradle"))
