@@ -5,8 +5,6 @@
 
 package aws.sdk.kotlin.runtime.regions.providers
 
-// FIXME - this probably needs to be expect/actual to customize the chain per/target platform (and definitely needs per/platform tests)
-
 /**
  * [AwsRegionProvider] that looks for region in this order:
  *  1. Check `aws.region` system property (JVM only)
@@ -14,6 +12,4 @@ package aws.sdk.kotlin.runtime.regions.providers
  *  3. Check the AWS config files/profile for region information
  *  4. If running on EC2, check the EC2 metadata service for region
  */
-public class DefaultAwsRegionProviderChain : AwsRegionProviderChain {
-    public constructor() : super(EnvironmentRegionProvider())
-}
+public expect class DefaultAwsRegionProviderChain public constructor() : AwsRegionProvider

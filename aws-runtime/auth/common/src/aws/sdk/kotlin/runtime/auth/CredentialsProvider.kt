@@ -15,5 +15,3 @@ public interface CredentialsProvider {
      */
     public suspend fun getCredentials(): Credentials
 }
-
-// TODO - add proxies for all the credentials providers in aws-crt-kotlin
