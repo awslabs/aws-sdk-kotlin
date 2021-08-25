@@ -110,7 +110,7 @@ dependencies {
 
 val lintPaths = listOf(
     "codegen/smithy-aws-kotlin-codegen/**/*.kt",
-    "codegen/smithy-whitelabel-kotlin-codegen/**/*.kt",
+    "codegen/smithy-sdk-kotlin-codegen/**/*.kt",
     "aws-runtime/**/*.kt",
     "examples/**/*.kt",
     "dokka-aws/**/*.kt",
