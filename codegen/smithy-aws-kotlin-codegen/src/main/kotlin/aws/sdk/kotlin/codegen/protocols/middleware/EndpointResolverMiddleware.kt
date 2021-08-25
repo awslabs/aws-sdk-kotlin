@@ -15,7 +15,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddlewa
 /**
  * HTTP client interceptor that resolves service endpoints for a single service
  */
-class EndpointResolverMiddleware(private val ctx: ProtocolGenerator.GenerationContext) : ProtocolMiddleware {
+class  EndpointResolverMiddleware(private val ctx: ProtocolGenerator.GenerationContext) : ProtocolMiddleware {
     override val name: String = "ServiceEndpointResolver"
     override fun addImportsAndDependencies(writer: KotlinWriter) {
         val resolverFeatureSymbol = buildSymbol {

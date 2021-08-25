@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.codegen.protocols.json
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.SdkRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
@@ -142,7 +142,7 @@ abstract class JsonHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerato
         op: OperationShape,
         writer: KotlinWriter
     ) {
-        writer.addImport(AwsRuntimeTypes.JsonProtocols.RestJsonErrorDeserializer)
-        writer.write("#T.deserialize(response.headers, payload)", AwsRuntimeTypes.JsonProtocols.RestJsonErrorDeserializer)
+        writer.addImport(SdkRuntimeTypes.JsonProtocols.RestJsonErrorDeserializer)
+        writer.write("#T.deserialize(response.headers, payload)", SdkRuntimeTypes.JsonProtocols.RestJsonErrorDeserializer)
     }
 }

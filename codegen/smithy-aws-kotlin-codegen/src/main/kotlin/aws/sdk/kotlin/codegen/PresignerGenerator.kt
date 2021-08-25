@@ -187,7 +187,7 @@ class PresignerGenerator : KotlinIntegration {
             write("This type can be used to presign requests in cases where an existing service client")
             write("instance is not available.")
         }
-        writer.addImport(AwsRuntimeTypes.Core.ClientException)
+        writer.addImport(SdkRuntimeTypes.Core.ClientException)
         writer.putContext("configClass.name", presignConfigTypeName)
         val credentialsProviderProperty = ClientConfigProperty {
             symbol = buildSymbol {

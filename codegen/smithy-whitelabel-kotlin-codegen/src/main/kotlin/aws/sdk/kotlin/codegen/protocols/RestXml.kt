@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.codegen.protocols
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.SdkRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.xml.RestXmlSerdeDescriptorGenerator
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
@@ -221,8 +221,8 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
         op: OperationShape,
         writer: KotlinWriter
     ) {
-        writer.addImport(AwsRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
+        writer.addImport(SdkRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
         writer.write("""checkNotNull(payload){ "unable to parse error from empty response" }""")
-        writer.write("#T(payload)", AwsRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
+        writer.write("#T(payload)", SdkRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
     }
 }

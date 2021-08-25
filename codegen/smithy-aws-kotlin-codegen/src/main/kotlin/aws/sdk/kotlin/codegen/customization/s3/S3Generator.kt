@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.SdkRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.RestXml
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
@@ -65,8 +65,8 @@ class S3Generator : RestXml() {
             exceptionBaseSymbol,
             RuntimeTypes.Http.readAll,
             RuntimeTypes.Http.StatusCode,
-            AwsRuntimeTypes.Core.UnknownServiceErrorException,
-            AwsRuntimeTypes.Http.withPayload,
+            SdkRuntimeTypes.Core.UnknownServiceErrorException,
+            SdkRuntimeTypes.Http.withPayload,
             s3ErrorDetails,
             setS3ErrorMetadata,
             parseS3ErrorResponse,
@@ -92,7 +92,7 @@ class S3Generator : RestXml() {
             }
             .dedent()
             .withBlock("} catch (ex: Exception) {", "}") {
-                withBlock("""throw #T("failed to parse response as ${ctx.protocol.name} error", ex).also {""", "}", AwsRuntimeTypes.Core.UnknownServiceErrorException) {
+                withBlock("""throw #T("failed to parse response as ${ctx.protocol.name} error", ex).also {""", "}", SdkRuntimeTypes.Core.UnknownServiceErrorException) {
                     write("#T(it, wrappedResponse, null)", setS3ErrorMetadata)
                 }
             }

@@ -6,9 +6,6 @@
 package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.sdkId
-import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
@@ -43,7 +40,8 @@ open class AwsHttpProtocolClientGenerator(
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
-        writer.write("const val ServiceId: String = #S", ctx.service.sdkId)
+        TODO("KGWH FIXME - abstract AWS stuff to aws codegen package")
+        // writer.write("const val ServiceId: String = #S", ctx.service.sdkId)
         writer.write("const val ServiceApiVersion: String = #S", ctx.service.version)
         writer.write("const val SdkVersion: String = #S", ctx.settings.pkg.version)
         writer.write("\n\n")
@@ -57,10 +55,11 @@ open class AwsHttpProtocolClientGenerator(
         super.renderOperationSetup(writer, opIndex, op)
 
         // add in additional context and defaults
-        if (op.hasTrait(UnsignedPayloadTrait::class.java)) {
+        TODO("KGWH FIXME - abstract AWS stuff to aws codegen package")
+        /*if (op.hasTrait(UnsignedPayloadTrait::class.java)) {
             writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
             writer.write("op.context[AuthAttributes.UnsignedPayload] = true")
-        }
+        }*/
 
         writer.write("mergeServiceDefaults(op.context)")
     }
@@ -78,8 +77,9 @@ open class AwsHttpProtocolClientGenerator(
         writer.addImport(RuntimeTypes.Core.ExecutionContext)
         writer.addImport("SdkClientOption", KotlinDependency.CORE, "${KotlinDependency.CORE.namespace}.client")
         writer.addImport("resolveRegionForOperation", AwsKotlinDependency.AWS_REGIONS)
-        writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
-        writer.addImport(AwsRuntimeTypes.Core.AwsClientOption)
+        TODO("KGWH FIXME - abstract AWS stuff to aws codegen package")
+        /*writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
+        writer.addImport(AwsRuntimeTypes.Core.AwsClientOption)*/
         writer.addImport("putIfAbsent", KotlinDependency.UTILS)
 
         writer.dokka("merge the defaults configured for the service into the execution context before firing off a request")
@@ -100,6 +100,7 @@ open class AwsHttpProtocolClientGenerator(
     private fun renderInternals() {
         val endpointsData = javaClass.classLoader.getResource("aws/sdk/kotlin/codegen/endpoints.json")?.readText() ?: throw CodegenException("could not load endpoints.json resource")
         val endpointData = Node.parse(endpointsData).expectObjectNode()
-        EndpointResolverGenerator(endpointData).render(ctx)
+        TODO("KGWH FIXME - abstract AWS stuff to aws codegen package")
+        // aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator(endpointData).render(ctx)
     }
 }

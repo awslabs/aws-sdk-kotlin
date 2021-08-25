@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.codegen.protocols
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.SdkRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.core.QueryHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.formurl.QuerySerdeFormUrlDescriptorGenerator
 import software.amazon.smithy.aws.traits.protocols.Ec2QueryNameTrait
@@ -57,9 +57,9 @@ class Ec2Query : QueryHttpBindingProtocolGenerator() {
         op: OperationShape,
         writer: KotlinWriter
     ) {
-        writer.addImport(AwsRuntimeTypes.XmlProtocols.parseEc2QueryErrorResponse)
+        writer.addImport(SdkRuntimeTypes.XmlProtocols.parseEc2QueryErrorResponse)
         writer.write("""checkNotNull(payload){ "unable to parse error from empty response" }""")
-        writer.write("#T(payload)", AwsRuntimeTypes.XmlProtocols.parseEc2QueryErrorResponse)
+        writer.write("#T(payload)", SdkRuntimeTypes.XmlProtocols.parseEc2QueryErrorResponse)
     }
 }
 
