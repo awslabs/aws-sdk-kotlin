@@ -23,6 +23,7 @@ val kotlinJVMTargetVersion: String by project
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     api("software.amazon.smithy.kotlin:smithy-kotlin-codegen:$smithyKotlinVersion")
+    implementation(project(":codegen:smithy-whitelabel-kotlin-codegen"))
 
     api("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
     api("software.amazon.smithy:smithy-aws-iam-traits:$smithyVersion")
