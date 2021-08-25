@@ -43,7 +43,6 @@ object AwsRuntimeTypes {
         val CredentialsProvider = runtimeSymbol("CredentialsProvider", AwsKotlinDependency.AWS_AUTH)
         val createPresignedRequest = runtimeSymbol("createPresignedRequest", AwsKotlinDependency.AWS_AUTH)
         val DefaultChainCredentialsProvider = runtimeSymbol("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_AUTH)
-        val PresignedRequest = runtimeSymbol("PresignedRequest", AwsKotlinDependency.AWS_AUTH)
         val PresignedRequestConfig = runtimeSymbol("PresignedRequestConfig", AwsKotlinDependency.AWS_AUTH)
         val ServicePresignConfig = runtimeSymbol("ServicePresignConfig", AwsKotlinDependency.AWS_AUTH)
         val SigningLocation = runtimeSymbol("SigningLocation", AwsKotlinDependency.AWS_AUTH)

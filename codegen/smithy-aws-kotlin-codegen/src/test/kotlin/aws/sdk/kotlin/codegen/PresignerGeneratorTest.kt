@@ -89,7 +89,6 @@ class PresignerGeneratorTest {
             import aws.sdk.kotlin.runtime.ClientException
             import aws.sdk.kotlin.runtime.auth.CredentialsProvider
             import aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider
-            import aws.sdk.kotlin.runtime.auth.PresignedRequest
             import aws.sdk.kotlin.runtime.auth.PresignedRequestConfig
             import aws.sdk.kotlin.runtime.auth.ServicePresignConfig
             import aws.sdk.kotlin.runtime.auth.SigningLocation
@@ -97,6 +96,7 @@ class PresignerGeneratorTest {
             import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
+            import aws.smithy.kotlin.runtime.http.request.HttpRequest
             import smithy.kotlin.traits.internal.DefaultEndpointResolver
             import smithy.kotlin.traits.model.GetFooRequest
             import smithy.kotlin.traits.model.PostFooRequest
@@ -109,9 +109,9 @@ class PresignerGeneratorTest {
              * Presign a [GetFooRequest] using a [ServicePresignConfig].
              * @param serviceClientConfig the client configuration used to generate the presigned request
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [PresignedRequest] that can be invoked within the specified time window.
+             * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun GetFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): PresignedRequest {
+            suspend fun GetFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
                 return createPresignedRequest(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
             }
             
@@ -119,9 +119,9 @@ class PresignerGeneratorTest {
              * Presign a [GetFooRequest] using a [TestClient].
              * @param serviceClient the client providing properties used to generate the presigned request.
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [PresignedRequest] that can be invoked within the specified time window.
+             * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun GetFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): PresignedRequest {
+            suspend fun GetFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): HttpRequest {
                 val serviceClientConfig = TestPresignConfig {
                     credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
                     endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
@@ -147,9 +147,9 @@ class PresignerGeneratorTest {
              * Presign a [PostFooRequest] using a [ServicePresignConfig].
              * @param serviceClientConfig the client configuration used to generate the presigned request
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [PresignedRequest] that can be invoked within the specified time window.
+             * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PostFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): PresignedRequest {
+            suspend fun PostFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
                 return createPresignedRequest(serviceClientConfig, postFooPresignConfig(this, durationSeconds))
             }
             
@@ -157,9 +157,9 @@ class PresignerGeneratorTest {
              * Presign a [PostFooRequest] using a [TestClient].
              * @param serviceClient the client providing properties used to generate the presigned request.
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [PresignedRequest] that can be invoked within the specified time window.
+             * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PostFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): PresignedRequest {
+            suspend fun PostFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): HttpRequest {
                 val serviceClientConfig = TestPresignConfig {
                     credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
                     endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
@@ -185,9 +185,9 @@ class PresignerGeneratorTest {
              * Presign a [PutFooRequest] using a [ServicePresignConfig].
              * @param serviceClientConfig the client configuration used to generate the presigned request
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [PresignedRequest] that can be invoked within the specified time window.
+             * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PutFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): PresignedRequest {
+            suspend fun PutFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
                 return createPresignedRequest(serviceClientConfig, putFooPresignConfig(this, durationSeconds))
             }
             
@@ -195,9 +195,9 @@ class PresignerGeneratorTest {
              * Presign a [PutFooRequest] using a [TestClient].
              * @param serviceClient the client providing properties used to generate the presigned request.
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [PresignedRequest] that can be invoked within the specified time window.
+             * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PutFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): PresignedRequest {
+            suspend fun PutFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): HttpRequest {
                 val serviceClientConfig = TestPresignConfig {
                     credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
                     endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()

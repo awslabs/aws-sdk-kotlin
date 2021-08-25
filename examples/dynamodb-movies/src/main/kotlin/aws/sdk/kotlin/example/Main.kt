@@ -131,7 +131,7 @@ suspend fun DynamoDbClient.moviesInYear(name: String, year: Int): QueryResponse 
 // utility/support functions
 
 fun getResourceAsText(path: String): String =
-    object {}.javaClass.getResource(path).readText()
+    object {}.javaClass.getResource(path)?.readText() ?: error("Unable to load $path")
 
 // map json to attribute values
 fun jsonElementToAttributeValue(element: JsonElement): AttributeValue = when {
