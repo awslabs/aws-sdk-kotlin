@@ -2,7 +2,7 @@
 
 ## [0.4.0-alpha] - 08/26/2021
 
-**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
 
 ### Services new in this release
 
