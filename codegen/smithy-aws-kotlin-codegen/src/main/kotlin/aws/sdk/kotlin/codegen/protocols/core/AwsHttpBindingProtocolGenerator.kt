@@ -76,7 +76,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "PutAndGetInlineDocumentsInput",
 
                 // Glacier customizations
-                "GlacierAccountId", // smithy-kotlin#163
                 "GlacierChecksums", // smithy-kotlin#164
                 "GlacierMultipartChecksums", // smithy-kotlin#164
             ),
