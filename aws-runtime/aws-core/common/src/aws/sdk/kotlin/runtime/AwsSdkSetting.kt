@@ -51,4 +51,10 @@ public sealed class AwsSdkSetting<T> (
      * Configure the default region.
      */
     public object AwsRegion : AwsSdkSetting<String>("AWS_REGION", "aws.region")
+
+    /**
+     * The execution environment of the SDK user. This is automatically set in certain environments by the underlying AWS service.
+     * For example, AWS Lambda will automatically specify a runtime indicating that the SDK is being used within Lambda.
+     */
+    public object AwsExecutionEnv : AwsSdkSetting<String>("AWS_EXECUTION_ENV", "aws.executionEnvironment")
 }
