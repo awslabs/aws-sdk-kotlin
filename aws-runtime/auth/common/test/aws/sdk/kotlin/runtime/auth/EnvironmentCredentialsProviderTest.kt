@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth
 
+import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import kotlin.test.Test
@@ -17,9 +18,9 @@ class EnvironmentCredentialsProviderTest {
     @Test
     fun `it should read from environment variables (incl session token)`() = runSuspendTest {
         val provider = provider(
-            EnvironmentCredentialsProvider.ACCESS_KEY_ID to "abc",
-            EnvironmentCredentialsProvider.SECRET_ACCESS_KEY to "def",
-            EnvironmentCredentialsProvider.SESSION_TOKEN to "ghi",
+            AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc",
+            AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def",
+            AwsSdkSetting.AwsSessionToken.environmentVariable to "ghi",
         )
         assertEquals(provider.getCredentials(), Credentials("abc", "def", "ghi"))
     }
@@ -27,23 +28,23 @@ class EnvironmentCredentialsProviderTest {
     @Test
     fun `it should read from environment variables (excl session token)`() = runSuspendTest {
         val provider = provider(
-            EnvironmentCredentialsProvider.ACCESS_KEY_ID to "abc",
-            EnvironmentCredentialsProvider.SECRET_ACCESS_KEY to "def",
+            AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc",
+            AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def",
         )
         assertEquals(provider.getCredentials(), Credentials("abc", "def", null))
     }
 
     @Test
-    fun `it should throw an exception on missing access key`() = runSuspendTest {
+    fun `it should throw an exception on missing access key`(): Unit = runSuspendTest {
         assertFailsWith<ConfigurationException> {
-            provider(EnvironmentCredentialsProvider.SECRET_ACCESS_KEY to "def").getCredentials()
+            provider(AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def").getCredentials()
         }
     }
 
     @Test
-    fun `it should throw an exception on missing secret key`() = runSuspendTest {
+    fun `it should throw an exception on missing secret key`(): Unit = runSuspendTest {
         assertFailsWith<ConfigurationException> {
-            provider(EnvironmentCredentialsProvider.ACCESS_KEY_ID to "abc").getCredentials()
+            provider(AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc").getCredentials()
         }
     }
 }
