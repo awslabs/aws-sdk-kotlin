@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.4.0-alpha] - 08/26/2021
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Services new in this release
+
+* ec2
+* location
+* marketplacecommerceanalytics
+
+### New features
+
+* Support for presigning requests (smithy-kotlin#435)
+* Detect aws region from system properties (aws-sdk-kotlin#202)
+* EC2 Query Protocol (aws-sdk-kotlin#230)
+* Provide opt-in wire logging (smithy-kotlin#425)
+* Support profile credentials provider (smithy-kotlin#302)
+
+### Fixes
+
+* s3.deleteObjects causes an exception (aws-sdk-kotlin#125)
+* Streaming request BodyStream never read (aws-sdk-kotlin#282)
+* location service references traits not in sdk classpath (aws-sdk-kotlin#286)
+* Ignore unboxed types for subset of services (aws-sdk-kotlin#261)
+* Service operations specifying no auth should not sign requests with sigv4 (aws-sdk-kotlin#263)
+* Create S3 object with Unicode name fails with signature mismatch (aws-sdk-kotlin#200)
+* Codegen errors in marketplacecommerceanalytics (aws-sdk-kotlin#214)
+* Escape model-extra files for Windows (aws-sdk-kotlin#191)
+* Support Glacier APIVersion Header (smithy-kotlin#165)
+* Support APIGateway Accept Header (smithy-kotlin#157)
+* Add support for awsQueryError trait (smithy-kotlin#375)
+* S3 HeadObject errors require customization (aws-sdk-kotlin#152)
+* S3 custom treatment of GetBucketLocation response (aws-sdk-kotlin#194)
+
 ## [0.3.0-M2] - 06/18/2021
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
