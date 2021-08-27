@@ -59,10 +59,13 @@ def _get_dependency_version(env, dep):
     we have set in our gradle.properties. We need to use the version of the dependency
     actually downloaded
     """
-    dep_root = dep.path if dep.resolved() else os.path.join(env.deps_dir, dep.name)
+    dep_root = os.path.join(env.deps_dir, dep.name)
     dep_gradle_props = os.path.join(dep_root, "gradle.properties")
     if not os.path.exists(dep_gradle_props):
-        return None
+        dep_proj = Builder.Project.find_project(dep.name)
+        dep_gradle_props = os.path.join(dep_proj.path, "gradle.properties")
+        if not os.path.exists(dep_gradle_props):
+            return None
 
     with open(dep_gradle_props, "r") as f:
         lines = f.readlines()
