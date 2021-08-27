@@ -12,7 +12,12 @@ class SetUpstreamVersions(Builder.Action):
     """
 
     def run(self, env):
-        deps = env.project.config.get("upstream")
+        if env.project.name != "aws-sdk-kotlin":
+            # not the root project, probably building as a consumer
+            proj = Builder.Project.find_project("aws-sdk-kotlin")
+            deps = proj.config.get("upstream")
+        else:
+            deps = env.project.config.get("upstream")
 
         discovered_versions = {}
         for d in deps:
