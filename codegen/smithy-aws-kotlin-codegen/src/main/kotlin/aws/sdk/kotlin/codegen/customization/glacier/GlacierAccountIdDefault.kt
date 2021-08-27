@@ -7,10 +7,7 @@ package aws.sdk.kotlin.codegen.customization.glacier
 
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.defaultName
-import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
@@ -24,7 +21,6 @@ import software.amazon.smithy.model.shapes.*
  * See: https://github.com/awslabs/aws-sdk-kotlin/issues/246
  */
 class GlacierAccountIdDefault : KotlinIntegration {
-    override val order: Byte = -127
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
         model.expectShape<ServiceShape>(settings.service).sdkId.equals("Glacier", ignoreCase = true)
 
@@ -40,7 +36,7 @@ private class GlacierAccountIdMiddleware : ProtocolMiddleware {
     override val name: String
         get() = "GlacierAccountIdAutoFill"
 
-    override val order: Byte = -127
+    override val order: Byte = -100
 
     override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean {
         val input = op.input.getOrNull()?.let { ctx.model.expectShape<StructureShape>(it) }
@@ -52,16 +48,12 @@ private class GlacierAccountIdMiddleware : ProtocolMiddleware {
         writer.addImport(RuntimeTypes.Http.Operation.OperationRequest)
 
         writer.withBlock("execution.initialize.intercept { req, next -> ", "}") {
-            write("if (req.subject.#L.isNullOrEmpty()) {", accountId.defaultName())
-                .indent()
+            openBlock("if (req.subject.#L.isNullOrEmpty()) {", accountId.defaultName())
                 .write("val updated = req.subject.copy { #L = #S }", accountId.defaultName(), "-")
                 .write("next.call(#T(req.context, updated))", RuntimeTypes.Http.Operation.OperationRequest)
-                .dedent()
-                .write("} else {")
-                .indent()
+                .closeAndOpenBlock("} else {")
                 .write("next.call(req)")
-                .dedent()
-                .write("}")
+                .closeBlock("}")
         }
     }
 }
