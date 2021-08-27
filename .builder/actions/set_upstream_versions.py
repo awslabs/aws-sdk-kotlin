@@ -15,9 +15,10 @@ class SetUpstreamVersions(Builder.Action):
         if env.project.name != "aws-sdk-kotlin":
             # not the root project, probably building as a consumer
             proj = Builder.Project.find_project("aws-sdk-kotlin")
-            deps = proj.config.get("upstream")
         else:
-            deps = env.project.config.get("upstream")
+            proj = env.project
+
+        deps = proj.config.get("upstream")
 
         discovered_versions = {}
         for d in deps:
@@ -27,17 +28,17 @@ class SetUpstreamVersions(Builder.Action):
 
         print("discovered dependency versions: {}".format(discovered_versions))
         if "smithy-kotlin" in discovered_versions:
-            _replace_gradle_property(env, "smithyKotlinVersion", discovered_versions["smithy-kotlin"])
+            _replace_gradle_property(proj, "smithyKotlinVersion", discovered_versions["smithy-kotlin"])
 
         if "aws-crt-kotlin" in discovered_versions:
-            _replace_gradle_property(env, "crtKotlinVersion", discovered_versions["aws-crt-kotlin"])
+            _replace_gradle_property(proj, "crtKotlinVersion", discovered_versions["aws-crt-kotlin"])
 
 
-def _replace_gradle_property(env, prop_name, new_value):
+def _replace_gradle_property(proj, prop_name, new_value):
     """
     Replaces the named property with the value if property name exists in gradle.properties
     """
-    gradle_props = os.path.join(env.project.path, "gradle.properties")
+    gradle_props = os.path.join(proj.path, "gradle.properties")
 
     with open(gradle_props, "r") as f:
         lines = f.readlines()
