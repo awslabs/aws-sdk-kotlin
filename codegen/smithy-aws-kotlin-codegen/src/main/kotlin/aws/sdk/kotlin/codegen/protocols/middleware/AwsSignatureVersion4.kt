@@ -13,8 +13,8 @@ import software.amazon.smithy.kotlin.codegen.core.addImport
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpFeatureMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.knowledge.ServiceIndex
 import software.amazon.smithy.model.shapes.OperationShape
@@ -26,8 +26,9 @@ import software.amazon.smithy.model.traits.OptionalAuthTrait
  * @param signingServiceName The credential scope service name to sign for
  * See the `name` property of: https://awslabs.github.io/smithy/1.0/spec/aws/aws-auth.html#aws-auth-sigv4-trait
  */
-open class AwsSignatureVersion4(private val signingServiceName: String) : ProtocolMiddleware {
+open class AwsSignatureVersion4(private val signingServiceName: String) : HttpFeatureMiddleware() {
     override val name: String = AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware.name
+    override val order: Byte = 127
 
     init {
         require(signingServiceName.isNotEmpty()) { "signingServiceName must be specified" }
@@ -38,12 +39,10 @@ open class AwsSignatureVersion4(private val signingServiceName: String) : Protoc
         return hasSigV4AuthScheme(ctx.model, service, op)
     }
 
-    override fun addImportsAndDependencies(writer: KotlinWriter) {
+    override fun renderConfigure(writer: KotlinWriter) {
         writer.addImport(AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware)
         writer.addImport("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_AUTH)
-    }
 
-    override fun renderConfigure(writer: KotlinWriter) {
         writer.write("credentialsProvider = config.credentialsProvider ?: DefaultChainCredentialsProvider()")
         writer.write("signingService = #S", signingServiceName)
     }
