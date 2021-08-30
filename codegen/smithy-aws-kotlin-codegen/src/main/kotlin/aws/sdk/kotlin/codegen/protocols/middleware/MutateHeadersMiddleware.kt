@@ -7,7 +7,7 @@ package aws.sdk.kotlin.codegen.protocols.middleware
 
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpFeatureMiddleware
 
 /**
  * General purpose middleware that allows mutation of headers
@@ -16,8 +16,9 @@ class MutateHeadersMiddleware(
     val extraHeaders: Map<String, String> = emptyMap(),
     val overrideHeaders: Map<String, String> = emptyMap(),
     val addMissingHeaders: Map<String, String> = emptyMap(),
-) : ProtocolMiddleware {
+) : HttpFeatureMiddleware() {
     override val name: String = "MutateHeaders"
+    override val order: Byte = 10
     override fun renderConfigure(writer: KotlinWriter) {
         writer.addImport(RuntimeTypes.Http.MutateHeadersMiddleware)
         overrideHeaders.forEach {

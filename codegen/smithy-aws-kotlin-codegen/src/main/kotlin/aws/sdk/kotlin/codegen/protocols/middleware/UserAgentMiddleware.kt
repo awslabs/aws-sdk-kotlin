@@ -9,13 +9,14 @@ import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpFeatureMiddleware
 
 /**
  * Middleware that sets the User-Agent and x-amz-user-agent headers
  */
-class UserAgentMiddleware : ProtocolMiddleware {
+class UserAgentMiddleware : HttpFeatureMiddleware() {
     override val name: String = "UserAgent"
+    override val order: Byte = 20
 
     private val uaSymbol = buildSymbol {
         name = "AwsUserAgentMetadata"

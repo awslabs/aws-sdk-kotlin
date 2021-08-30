@@ -5,6 +5,17 @@
     "variables": {
         "gradlew": "{source_dir}/gradlew -p {source_dir}"
     },
+    "build_dir": "target/build",
+    "imports": [
+        "JDK8"
+    ],
+    "env": {
+        "JAVA_HOME": "{java_home}"
+    },
+    "_comment": "prebuild step defined in .builder/actions/set_upstream_versions.py",
+    "pre_build_steps": [
+        "set-upstream-versions"
+    ],
     "build_steps": [
         "{gradlew} assemble --parallel"
     ],
@@ -13,13 +24,6 @@
         "{gradlew} test allTests",
         "{gradlew} testAllProtocols"
     ],
-    "imports": [
-        "JDK8"
-    ],
-    "build_dir": "target/build",
-    "env": {
-        "JAVA_HOME": "{java_home}"
-    },
     "upstream": [
         {
             "name": "smithy-kotlin"
