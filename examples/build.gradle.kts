@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     group = "aws.sdk.kotlin.example"
-    version = "0.4.0-alpha"
+    version = "0.4.1-SNAPSHOT"
 
     repositories {
         mavenLocal()
