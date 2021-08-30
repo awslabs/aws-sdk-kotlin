@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http
 
+import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
 
@@ -133,8 +134,8 @@ public data class ExecutionEnvMetadata(val name: String) {
 }
 
 private fun detectExecEnv(): ExecutionEnvMetadata? =
-    Platform.getenv("AWS_LAMBDA_FUNCTION_NAME")?.let {
-        ExecutionEnvMetadata("lambda")
+    Platform.getenv(AwsSdkSetting.AwsExecutionEnv.environmentVariable)?.let {
+        ExecutionEnvMetadata(it)
     }
 
 // ua-value = token
