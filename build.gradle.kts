@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 plugins {
-    kotlin("jvm") version "1.5.20" apply false
+    kotlin("jvm") version "1.5.30" apply false
     id("org.jetbrains.dokka")
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
