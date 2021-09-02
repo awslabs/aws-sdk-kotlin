@@ -33,6 +33,7 @@ class ServiceEndpointResolverTest {
                 assertEquals(expectedHost, request.url.host)
                 assertEquals(expectedHost, request.headers["Host"])
                 assertEquals("https", request.url.scheme.protocolName)
+                assertEquals(443, request.url.port)
                 val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
                 val now = Instant.now()
                 return HttpCall(request, resp, now, now)
@@ -55,6 +56,48 @@ class ServiceEndpointResolverTest {
             resolver = object : EndpointResolver {
                 override suspend fun resolve(service: String, region: String): Endpoint =
                     Endpoint("test.com", "https")
+            }
+        }
+
+        op.context[AwsClientOption.Region] = "us-east-1"
+        val response = op.roundTrip(client, Unit)
+        assertNotNull(response)
+    }
+
+    @Test
+    fun `it sets the port when present`(): Unit = runSuspendTest {
+        val expectedProtocol = "https"
+        val expectedHost = "test.com"
+        val expectedPort = 8080
+
+        val mockEngine = object : HttpClientEngineBase("test") {
+            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+                assertEquals(expectedHost, request.url.host)
+                assertEquals(expectedHost, request.headers["Host"])
+                assertEquals(expectedProtocol, request.url.scheme.protocolName)
+                assertEquals(expectedPort, request.url.port)
+                val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
+                val now = Instant.now()
+                return HttpCall(request, resp, now, now)
+            }
+        }
+
+        val client = sdkHttpClient(mockEngine)
+
+        val op = SdkHttpOperation.build<Unit, HttpResponse> {
+            serializer = UnitSerializer
+            deserializer = IdentityDeserializer
+            context {
+                service = "TestService"
+                operationName = "testOperation"
+            }
+        }
+
+        op.install(ServiceEndpointResolver) {
+            serviceId = "TestService"
+            resolver = object : EndpointResolver {
+                override suspend fun resolve(service: String, region: String): Endpoint =
+                    Endpoint(expectedHost, expectedProtocol, port = expectedPort)
             }
         }
 
