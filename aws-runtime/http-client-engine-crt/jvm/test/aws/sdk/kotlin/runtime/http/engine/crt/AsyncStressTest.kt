@@ -48,6 +48,7 @@ class AsyncStressTest : TestWithLocalServer() {
                 scheme = Protocol.HTTP
                 method = HttpMethod.GET
                 host = testHost
+                port = serverPort
                 path = "/largeResponse"
             }
         }
@@ -82,6 +83,7 @@ class AsyncStressTest : TestWithLocalServer() {
                 scheme = Protocol.HTTP
                 method = HttpMethod.GET
                 host = testHost
+                port = serverPort
                 path = "/largeResponse"
             }
         }

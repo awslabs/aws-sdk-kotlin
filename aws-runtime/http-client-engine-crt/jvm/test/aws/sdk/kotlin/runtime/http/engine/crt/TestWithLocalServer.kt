@@ -14,8 +14,7 @@ import kotlin.test.BeforeTest
 
 public abstract class TestWithLocalServer {
     protected val serverPort: Int = ServerSocket(0).use { it.localPort }
-    protected val testHost: String = "localhost:$serverPort"
-    protected val testUrl: String = "http://$testHost"
+    protected val testHost: String = "localhost"
 
     public abstract val server: ApplicationEngine
 
@@ -29,7 +28,7 @@ public abstract class TestWithLocalServer {
             attempt++
             try {
                 server.start()
-                logger.info { "test server listening on: $testHost" }
+                logger.info { "test server listening on: $testHost:$serverPort" }
                 break
             } catch (cause: Throwable) {
                 if (attempt >= 10) throw cause

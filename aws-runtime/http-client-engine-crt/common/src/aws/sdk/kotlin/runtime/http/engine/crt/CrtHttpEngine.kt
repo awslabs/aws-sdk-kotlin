@@ -82,7 +82,7 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
     }
 
     private suspend fun getManagerForUri(uri: Uri): HttpClientConnectionManager = mutex.withLock {
-        connManagers.getOrPut(uri.host) {
+        connManagers.getOrPut(uri.authority) {
             HttpClientConnectionManager(options.apply { this.uri = uri }.build())
         }
     }
