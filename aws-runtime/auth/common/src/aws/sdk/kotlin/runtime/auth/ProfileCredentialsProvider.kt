@@ -25,8 +25,16 @@ public class ProfileCredentialsProvider public constructor(
     override val crtProvider: ProfileCredentialsProviderCrt = ProfileCredentialsProviderCrt.build {
         clientBootstrap = SdkDefaultIO.ClientBootstrap
         tlsContext = SdkDefaultIO.TlsContext
-        this.profileName = profileName
+        this.profileName = profileName ?: loadProfileName()
         this.configFileName = configFileName
         this.credentialsFileName = credentialsFileName
     }
 }
+
+/**
+ * Attempts to load profile name using the following priority,
+ * if neither are available, profileName will remain blank.
+ * 1. JVM System Property
+ * 2. Environment Variable
+ */
+internal expect fun loadProfileName(): String?

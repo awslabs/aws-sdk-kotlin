@@ -8,6 +8,7 @@ extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Auth"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.auth"
 
 val smithyKotlinVersion: String by project
+val kotestVersion: String by project
 
 kotlin {
     sourceSets {
@@ -24,6 +25,11 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation("io.kotest:kotest-runner-junit5:$kotestVersion")
             }
         }
     }
