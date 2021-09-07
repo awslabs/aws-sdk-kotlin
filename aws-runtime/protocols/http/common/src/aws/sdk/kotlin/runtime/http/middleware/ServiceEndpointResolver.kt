@@ -55,6 +55,7 @@ public class ServiceEndpointResolver(
             val hostname = "${hostPrefix}${endpoint.hostname}"
             req.subject.url.scheme = Protocol.parse(endpoint.protocol)
             req.subject.url.host = hostname
+            req.subject.url.port = endpoint.port
             req.subject.headers["Host"] = hostname
 
             endpoint.signingName?.let {
