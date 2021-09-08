@@ -23,7 +23,11 @@ kotlin {
         }
         commonTest {
             dependencies {
+                val kotlinxSerializationVersion: String by project
+                val mockkVersion: String by project
                 implementation(project(":aws-runtime:testing"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinxSerializationVersion")
+                implementation("io.mockk:mockk:$mockkVersion")
             }
         }
     }
