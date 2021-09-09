@@ -148,6 +148,18 @@ class AwsProfileParserTest {
         assertEquals(expected, actual)
     }
 
+    /**
+     * Produces a merged AWS configuration based on optional configuration and credential file contents.
+     * @param configurationFn a function that will retrieve a configuration file as a UTF-8 string.
+     * @param credentialsFn a function that will retrieve a configuration file as a UTF-8 string.
+     * @return A map containing all specified profiles defined in configuration and credential files.
+     */
+    private fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): ProfileMap =
+        mergeProfiles(
+            parse(FileType.CONFIGURATION, configurationFn()),
+            parse(FileType.CREDENTIAL, credentialsFn()),
+        )
+
     @org.intellij.lang.annotations.Language("JSON")
     private val testSuiteJson = """
 {

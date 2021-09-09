@@ -4,24 +4,40 @@ import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
 
 /**
- * The properties and name of the active AWS configuration profile.
- * @property profileName active profile
- * @property properties key/value pairs of properties specified by the active profile
- */
-data class AwsConfiguration(val profileName: String, val properties: Map<String, String>)
-
-/**
- * Load the properties of the specified or default AWS configuration profile.
+ * Load the properties of the specified or default AWS configuration profile.  This
+ * function will return the properties of the profile specified by the local environment
+ * or the default profile if none is defined.
+ *
+ * @return an [AwsConfiguration] regardless if local configuration files are available
  */
 internal fun loadAwsConfiguration(): AwsConfiguration {
+    // Determine active profile and location of configuration files
     val source = resolveConfigSource(Platform)
 
-    val allProfiles = loadConfiguration(
-        configurationFn = { (Platform::readFile)(source.configPath) },
-        credentialsFn = { (Platform::readFile)(source.credentialsPath) }
+    // merged AWS configuration based on optional configuration and credential file contents
+    val allProfiles = mergeProfiles(
+        parse(FileType.CONFIGURATION, (Platform::readFile)(source.configPath)),
+        parse(FileType.CREDENTIAL, (Platform::readFile)(source.credentialsPath)),
     )
 
     return AwsConfiguration(source.profile, allProfiles[source.profile] ?: emptyMap())
+}
+
+/**
+ * The properties and name of the active AWS configuration profile.
+ *
+ * @property profileName active profile
+ * @property properties key/value pairs of properties specified by the active profile, accessible via [Map<K, V>]
+ */
+data class AwsConfiguration(val profileName: String, private val properties: Map<String, String>) : Map<String, String> by properties
+
+// Merge contents of profile maps
+internal fun mergeProfiles(vararg maps: ProfileMap) = buildMap<String, Map<String, String>> {
+    maps.forEach { map ->
+        map.entries.forEach { entry ->
+            put(entry.key, (get(entry.key) ?: emptyMap()) + entry.value)
+        }
+    }
 }
 
 // Specifies the active profile and configured (may not actually exist) locations of configuration files.

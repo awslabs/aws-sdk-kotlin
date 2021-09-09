@@ -66,4 +66,4 @@ private fun String.isSubPropertyKeyLine() = trimEnd().endsWith(Literals.PROPERTY
  *
  * TODO: When/if the stdlib version becomes stable this should be removed
  */
-private fun <T> buildList(block: MutableList<T>.() -> Unit): List<T> = mutableListOf<T>().apply(block)
+internal fun <T> buildList(block: MutableList<T>.() -> Unit): List<T> = mutableListOf<T>().apply(block)

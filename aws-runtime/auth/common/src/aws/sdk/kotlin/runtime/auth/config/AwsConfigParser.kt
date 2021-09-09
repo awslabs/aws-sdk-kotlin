@@ -86,18 +86,6 @@ private val configurationFunctions: List<ParseFn> = listOf(::configurationProfil
 private val credentialFunctions: List<ParseFn> = listOf(::credentialProfile, ::property, ::unmatchedLine)
 
 /**
- * Produces a merged AWS configuration based on optional configuration and credential file contents.
- * @param configurationFn a function that will retrieve a configuration file as a UTF-8 string.
- * @param credentialsFn a function that will retrieve a configuration file as a UTF-8 string.
- * @return A map containing all specified profiles defined in configuration and credential files.
- */
-internal fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): ProfileMap =
-    mergeProfiles(
-        parse(FileType.CONFIGURATION, configurationFn()),
-        parse(FileType.CREDENTIAL, credentialsFn()),
-    )
-
-/**
  * Parse an AWS configuration file
  *
  * @param type The type of file to parse
@@ -352,15 +340,6 @@ private fun String.isProfileKeyword(): Boolean =
     startsWith(Literals.PROFILE_KEYWORD) &&
         (getOrNull(Literals.PROFILE_KEYWORD.length)?.isWhitespace() ?: false)
 
-// Merge contents of profile maps
-internal fun mergeProfiles(vararg maps: ProfileMap) = buildMap<String, Map<String, String>> {
-    maps.forEach { map ->
-        map.entries.forEach { entry ->
-            put(entry.key, (get(entry.key) ?: emptyMap()) + entry.value)
-        }
-    }
-}
-
 // If both elements of the pair are non-null, return them concatenated.  Otherwise, return null.
 internal fun Pair<String?, String?>.concatOrNull() = if (first != null && second != null) first + second else null
 
@@ -369,4 +348,4 @@ internal fun Pair<String?, String?>.concatOrNull() = if (first != null && second
  *
  * TODO: When/if the stdlib version becomes stable this should be removed
  */
-private fun <K, V> buildMap(block: MutableMap<K, V>.() -> Unit): Map<K, V> = mutableMapOf<K, V>().apply(block)
+internal fun <K, V> buildMap(block: MutableMap<K, V>.() -> Unit): Map<K, V> = mutableMapOf<K, V>().apply(block)
