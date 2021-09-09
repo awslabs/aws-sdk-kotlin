@@ -1,5 +1,6 @@
 package aws.sdk.kotlin.runtime.auth.config
 
+import aws.smithy.kotlin.runtime.util.InternalApi
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
 
@@ -10,7 +11,8 @@ import aws.smithy.kotlin.runtime.util.Platform
  *
  * @return an [AwsConfiguration] regardless if local configuration files are available
  */
-internal fun loadAwsConfiguration(): AwsConfiguration {
+@InternalApi
+public fun loadAwsConfiguration(): AwsConfiguration {
     // Determine active profile and location of configuration files
     val source = resolveConfigSource(Platform)
 
