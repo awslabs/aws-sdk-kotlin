@@ -18,7 +18,7 @@ class AwsProfileParserTest {
 
         testList
             .map { TestCase.fromJson(it.jsonObject) }
-            .filter { testCase -> testCase.name == "Property definitions must contain an equals sign." }
+            // .filter { testCase -> testCase.name == "Property definitions must contain an equals sign." }
             .forEachIndexed { index, testCase ->
                 println("*** TEST $index: $testCase")
                 when (testCase) {
