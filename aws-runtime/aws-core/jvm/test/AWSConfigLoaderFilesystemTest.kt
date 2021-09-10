@@ -1,8 +1,7 @@
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.runtime.auth.config.loadAwsConfiguration
+import aws.sdk.kotlin.runtime.config.loadAwsConfiguration
 import aws.smithy.kotlin.runtime.util.OperatingSystem
-import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
 import io.kotest.matchers.maps.shouldContainAll
 import io.mockk.every

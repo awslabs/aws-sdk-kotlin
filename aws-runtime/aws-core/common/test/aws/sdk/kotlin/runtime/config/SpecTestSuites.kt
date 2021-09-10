@@ -1,10 +1,9 @@
-package aws.sdk.kotlin.runtime.auth.config
+package aws.sdk.kotlin.runtime.config
 
 /**
  * This test suite exercises the parser and continuation merger.
  */
-@org.intellij.lang.annotations.Language("JSON")
-internal val parserTestSuiteJson = """
+internal const val parserTestSuiteJson = """
 {
   "description": [
     "These are test descriptions that describe how to convert a raw configuration and credentials file into an ",
@@ -729,7 +728,7 @@ internal val parserTestSuiteJson = """
 """
 
 
-internal val loaderTestSuiteJson = """
+internal const val loaderTestSuiteJson = """
 {
   "description": [
     "These are test descriptions that specify which files and profiles should be loaded based on the specified environment ",

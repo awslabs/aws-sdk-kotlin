@@ -1,4 +1,4 @@
-package aws.sdk.kotlin.runtime.auth.config
+package aws.sdk.kotlin.runtime.config
 
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily

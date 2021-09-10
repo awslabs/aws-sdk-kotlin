@@ -1,4 +1,4 @@
-package aws.sdk.kotlin.runtime.auth.config
+package aws.sdk.kotlin.runtime.config
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement

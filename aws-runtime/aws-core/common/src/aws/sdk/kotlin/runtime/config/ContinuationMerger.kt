@@ -1,4 +1,4 @@
-package aws.sdk.kotlin.runtime.auth.config
+package aws.sdk.kotlin.runtime.config
 
 /**
  * Merges property continuation lines
