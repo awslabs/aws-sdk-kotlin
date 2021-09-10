@@ -19,6 +19,7 @@ val kotlinVersion: String by project
 val junitVersion: String by project
 val smithyKotlinVersion: String by project
 val kotlinJVMTargetVersion: String by project
+val slf4jVersion: String by project
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -34,8 +35,8 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")
 
-    testImplementation("org.slf4j:slf4j-api:1.7.30")
-    testImplementation("org.slf4j:slf4j-simple:1.7.30")
+    testImplementation("org.slf4j:slf4j-api:$slf4jVersion")
+    testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
 }
 
 val generateSdkRuntimeVersion by tasks.registering {

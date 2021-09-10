@@ -1,6 +1,8 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.smithy.kotlin.runtime.SdkBaseException
+import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.logging.warn
 import aws.smithy.kotlin.runtime.util.InternalApi
 
 // Literal characters used in parsing AWS SDK configuration files
@@ -121,7 +123,7 @@ internal fun parse(type: FileType, input: String?): ProfileMap {
                     }
                     is Token.Property -> {
                         val outerMap = this
-                        check(lastProfile != null) { "Expected a profile definition preceding $token" }
+                        if (lastProfile != null) throw AwsConfigParseException("Expected a profile definition preceding ${token.key}")
 
                         // Profile definitions in configuration files without the profile prefix are silently dropped.
                         if (lastProfile!!.isValidForm) {
@@ -129,9 +131,14 @@ internal fun parse(type: FileType, input: String?): ProfileMap {
                                 lastProfile!!,
                                 buildMap {
                                     putAll(outerMap[lastProfile]!!)
+                                    if (containsKey(token.key)) {
+                                        logger.warn("${token.key} defined multiple times in profile ${lastProfile?.name}")
+                                    }
                                     put(token.key, token.value)
                                 }
                             )
+                        } else {
+                            logger.warn("Ignoring ${lastProfile?.name} due to invalid prefix. $helpText")
                         }
                     }
                     else -> { /* NOP: Not logging in case info is sensitive */ }
@@ -193,6 +200,8 @@ private fun mergeProfiles(tokenIndexMap: Map<Token.Profile, Map<String, String>>
 private fun tokenOf(type: FileType, input: String): Token =
     type.lineParsers.firstNotNullOf { parseFunction -> parseFunction(input) }
 
+private val logger = Logger.getLogger("AwsConfigParser")
+private var helpText = "See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for file format details."
 /**
  * Format (Configuration Files): [ Whitespace? profile Whitespace Identifier Whitespace? ] Whitespace? CommentLine?
  * Components: A profile line consists of brackets, and a profile name: [profile-name]. A comment line can be appended
@@ -223,7 +232,10 @@ private fun configurationProfile(input: String): Token.Profile? =
                 line.isProfileKeyword() -> line.stripProfilePrefix() to true
                 line == Literals.DEFAULT_PROFILE -> line to false
                 // Return profile with invalid form rather than throw exception because invalid profiles should be ignored.
-                else -> return@let Token.Profile(false, line, false)
+                else -> {
+                    logger.warn("Ignoring invalid profile: '$line'. $helpText")
+                    return@let Token.Profile(false, line, false)
+                }
             }
 
             Token.Profile(profilePrefix, profileName, profileName.isContiguous())
@@ -281,7 +293,12 @@ private fun property(input: String): Token.Property? {
 
     val (key, value) = input.splitProperty()
 
-    return if (key.isContiguous()) Token.Property(key, value) else null
+    return if (key.isContiguous()) {
+        Token.Property(key, value)
+    } else {
+        logger.warn("Invalid property key: '$key'. $helpText")
+        null
+    }
 }
 
 /*

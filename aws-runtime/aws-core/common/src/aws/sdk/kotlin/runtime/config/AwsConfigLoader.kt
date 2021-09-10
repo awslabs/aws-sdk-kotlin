@@ -25,14 +25,6 @@ public fun loadAwsConfiguration(platform: Platform = Platform): AwsConfiguration
     return AwsConfiguration(source.profile, allProfiles[source.profile] ?: emptyMap())
 }
 
-/**
- * The properties and name of the active AWS configuration profile.
- *
- * @property profileName active profile
- * @property properties key/value pairs of properties specified by the active profile, accessible via [Map<K, V>]
- */
-data class AwsConfiguration(val profileName: String, private val properties: Map<String, String>) : Map<String, String> by properties
-
 // Merge contents of profile maps
 internal fun mergeProfiles(vararg maps: ProfileMap) = buildMap<String, Map<String, String>> {
     maps.forEach { map ->
