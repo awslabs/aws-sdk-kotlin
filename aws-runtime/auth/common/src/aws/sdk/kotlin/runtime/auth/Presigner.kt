@@ -88,7 +88,13 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
         expirationInSeconds = requestConfig.durationSeconds
     }
 
-    val unsignedUrl = Url(Protocol.HTTPS, endpoint.hostname, path = requestConfig.path, parameters = requestConfig.queryString)
+    val unsignedUrl = Url(
+        scheme = Protocol.HTTPS,
+        host = endpoint.hostname,
+        port = endpoint.port ?: Protocol.HTTPS.defaultPort,
+        path = requestConfig.path,
+        parameters = requestConfig.queryString,
+    )
 
     val request = CrtHttpRequest(
         requestConfig.method.name,
@@ -105,9 +111,10 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
         url = Url(
             scheme = Protocol.HTTPS,
             host = endpoint.hostname,
+            port = endpoint.port ?: Protocol.HTTPS.defaultPort,
             path = signedRequest.path(),
             parameters = signedRequest.queryParameters() ?: QueryParameters.Empty,
-            encodeParameters = false
+            encodeParameters = false,
         ),
         headers = signedRequest.headers.toSdkHeaders(),
         body = HttpBody.Empty
