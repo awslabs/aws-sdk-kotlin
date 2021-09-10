@@ -18,13 +18,13 @@ class AwsConfigLoaderTest {
 
     @Test
     fun canPassTestSuite() {
-        val testList = Json.parseJson(testSuiteJson).jsonObject["tests"]!!.jsonArray
+        val testCases = Json.parseJson(loaderTestSuiteJson).jsonObject["tests"]!!.jsonArray
 
-        testList
+        testCases
             .map { TestCase.fromJson(it.jsonObject) }
             // .filter { testCase -> testCase.name == "User home is loaded from HOME with highest priority on windows platforms." }
             .forEachIndexed { index, testCase ->
-                val testPlatform = setupPlatformMock(testCase)
+                val testPlatform = mockPlatform(testCase)
 
                 val actual = resolveConfigSource(testPlatform)
 
@@ -41,24 +41,12 @@ class AwsConfigLoaderTest {
 
     @Test
     fun itLoadsAWSConfigurationWithCustomProfile() {
-        val testPlatform = mockk<Platform>()
-        val envKeyParam = slot<String>()
-        val propKeyParam = slot<String>()
-
-        every { testPlatform.filePathSegment } returns "/"
-        every { testPlatform.getenv(capture(envKeyParam)) } answers {
-            when (envKeyParam.captured) {
-                "AWS_PROFILE" -> "bob"
-                "AWS_CONFIG_FILE" -> null
-                "HOME" -> null
-                "AWS_SHARED_CREDENTIALS_FILE" -> null
-                else -> error(envKeyParam.captured)
-            }
-        }
-        every { testPlatform.getProperty(capture(propKeyParam)) } answers {
-            if (propKeyParam.captured == "user.home") "/home/user" else null
-        }
-        every { testPlatform.osInfo() } returns OperatingSystem(OsFamily.Linux, null)
+        val testPlatform = mockPlatform(
+            pathSegment = "/",
+            awsProfileEnv = "bob",
+            homeEnv = "/home/user",
+            os = OperatingSystem(OsFamily.Linux, null)
+        )
 
         val config = loadAwsConfiguration(testPlatform)
 
@@ -66,7 +54,45 @@ class AwsConfigLoaderTest {
         assertTrue(config.isEmpty())
     }
 
-    private fun setupPlatformMock(testCase: TestCase): Platform {
+    @Test
+    fun configurationLoadingDoesNotThrowErrors() {
+        val activeProfile = loadAwsConfiguration()
+
+        assertTrue(activeProfile.profileName.isNotBlank())
+    }
+
+    internal fun mockPlatform(
+        pathSegment: String,
+        awsProfileEnv: String? = null,
+        awsConfigFileEnv: String? = null,
+        homeEnv: String? = null,
+        awsSharedCredentialsFileEnv: String? = null,
+        homeProp: String? = null,
+        os: OperatingSystem
+    ): Platform {
+        val testPlatform = mockk<Platform>()
+        val envKeyParam = slot<String>()
+        val propKeyParam = slot<String>()
+
+        every { testPlatform.filePathSegment } returns pathSegment
+        every { testPlatform.getenv(capture(envKeyParam)) } answers {
+            when (envKeyParam.captured) {
+                "AWS_PROFILE" -> awsProfileEnv
+                "AWS_CONFIG_FILE" -> awsConfigFileEnv
+                "HOME" -> homeEnv
+                "AWS_SHARED_CREDENTIALS_FILE" -> awsSharedCredentialsFileEnv
+                else -> error(envKeyParam.captured)
+            }
+        }
+        every { testPlatform.getProperty(capture(propKeyParam)) } answers {
+            if (propKeyParam.captured == "user.home") homeProp else null
+        }
+        every { testPlatform.osInfo() } returns os
+
+        return testPlatform
+    }
+
+   private fun mockPlatform(testCase: TestCase): Platform {
         val testPlatform = mockk<Platform>()
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
@@ -123,164 +149,4 @@ class AwsConfigLoaderTest {
             }
         }
     }
-
-    @Test
-    fun configurationLoadingDoesNotThrowErrors() {
-        val activeProfile = loadAwsConfiguration()
-
-        assertTrue(activeProfile.profileName.isNotBlank())
-    }
-
-    private val testSuiteJson = """
-        {
-          "description": [
-            "These are test descriptions that specify which files and profiles should be loaded based on the specified environment ",
-            "variables.",
-            "See 'file-location-tests.schema.json' for a description of this file's structure."
-          ],
-        
-          "tests": [
-            {
-              "name": "User home is loaded from HOME with highest priority on non-windows platforms.",
-              "environment": {
-                "HOME": "/home/user",
-                "USERPROFILE": "ignored",
-                "HOMEDRIVE": "ignored",
-                "HOMEPATH": "ignored"
-              },
-              "languageSpecificHome": "ignored",
-              "platform": "linux",
-              "profile": "default",
-              "configLocation": "/home/user/.aws/config",
-              "credentialsLocation": "/home/user/.aws/credentials"
-            },
-        
-            {
-              "name": "User home is loaded using language-specific resolution on non-windows platforms when HOME is not set.",
-              "environment": {
-                "USERPROFILE": "ignored",
-                "HOMEDRIVE": "ignored",
-                "HOMEPATH": "ignored"
-              },
-              "languageSpecificHome": "/home/user",
-              "platform": "linux",
-              "profile": "default",
-              "configLocation": "/home/user/.aws/config",
-              "credentialsLocation": "/home/user/.aws/credentials"
-            },
-        
-            {
-              "name": "User home is loaded from HOME with highest priority on windows platforms.",
-              "environment": {
-                "HOME": "C:\\users\\user",
-                "USERPROFILE": "ignored",
-                "HOMEDRIVE": "ignored",
-                "HOMEPATH": "ignored"
-              },
-              "languageSpecificHome": "ignored",
-              "platform": "windows",
-              "profile": "default",
-              "configLocation": "C:\\users\\user\\.aws\\config",
-              "credentialsLocation": "C:\\users\\user\\.aws\\credentials"
-            },
-        
-            {
-              "name": "User home is loaded from USERPROFILE on windows platforms when HOME is not set.",
-              "environment": {
-                "USERPROFILE": "C:\\users\\user",
-                "HOMEDRIVE": "ignored",
-                "HOMEPATH": "ignored"
-              },
-              "languageSpecificHome": "ignored",
-              "platform": "windows",
-              "profile": "default",
-              "configLocation": "C:\\users\\user\\.aws\\config",
-              "credentialsLocation": "C:\\users\\user\\.aws\\credentials"
-            },
-        
-            {
-              "name": "User home is loaded from HOMEDRIVEHOMEPATH on windows platforms when HOME and USERPROFILE are not set.",
-              "environment": {
-                "HOMEDRIVE": "C:",
-                "HOMEPATH": "\\users\\user"
-              },
-              "languageSpecificHome": "ignored",
-              "platform": "windows",
-              "profile": "default",
-              "configLocation": "C:\\users\\user\\.aws\\config",
-              "credentialsLocation": "C:\\users\\user\\.aws\\credentials"
-            },
-        
-            {
-              "name": "User home is loaded using language-specific resolution on windows platforms when no environment variables are set.",
-              "environment": {
-              },
-              "languageSpecificHome": "C:\\users\\user",
-              "platform": "windows",
-              "profile": "default",
-              "configLocation": "C:\\users\\user\\.aws\\config",
-              "credentialsLocation": "C:\\users\\user\\.aws\\credentials"
-            },
-        
-            {
-              "name": "The default config location can be overridden by the user on non-windows platforms.",
-              "environment": {
-                "AWS_CONFIG_FILE": "/other/path/config",
-                "HOME": "/home/user"
-              },
-              "platform": "linux",
-              "configLocation": "/other/path/config",
-              "credentialsLocation": "/home/user/.aws/credentials"
-            },
-        
-            {
-              "name": "The default credentials location can be overridden by the user on non-windows platforms.",
-              "environment": {
-                "AWS_SHARED_CREDENTIALS_FILE": "/other/path/credentials",
-                "HOME": "/home/user"
-              },
-              "platform": "linux",
-              "profile": "default",
-              "configLocation": "/home/user/.aws/config",
-              "credentialsLocation": "/other/path/credentials"
-            },
-        
-            {
-              "name": "The default credentials location can be overridden by the user on windows platforms.",
-              "environment": {
-                "AWS_CONFIG_FILE": "C:\\other\\path\\config",
-                "HOME": "C:\\users\\user"
-              },
-              "platform": "windows",
-              "profile": "default",
-              "configLocation": "C:\\other\\path\\config",
-              "credentialsLocation": "C:\\users\\user\\.aws\\credentials"
-            },
-        
-            {
-              "name": "The default credentials location can be overridden by the user on windows platforms.",
-              "environment": {
-                "AWS_SHARED_CREDENTIALS_FILE": "C:\\other\\path\\credentials",
-                "HOME": "C:\\users\\user"
-              },
-              "platform": "windows",
-              "profile": "default",
-              "configLocation": "C:\\users\\user\\.aws\\config",
-              "credentialsLocation": "C:\\other\\path\\credentials"
-            },
-        
-            {
-              "name": "The default profile can be overridden via environment variable.",
-              "environment": {
-                "AWS_PROFILE": "other",
-                "HOME": "/home/user"
-              },
-              "platform": "linux",
-              "profile": "other",
-              "configLocation": "/home/user/.aws/config",
-              "credentialsLocation": "/home/user/.aws/credentials"
-            }
-          ]
-        }        
-    """.trimIndent()
 }
