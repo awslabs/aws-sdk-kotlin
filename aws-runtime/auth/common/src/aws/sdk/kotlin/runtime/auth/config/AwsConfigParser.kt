@@ -13,7 +13,7 @@ internal object Literals {
     const val INLINE_COMMENT_1 = " $COMMENT_1"
     const val INLINE_COMMENT_2 = " $COMMENT_2"
     const val PROFILE_PREFIX = '['
-    const val PROFILE_POSTFIX = ']'
+    const val PROFILE_SUFFIX = ']'
     const val PROPERTY_SPLITTER = '='
 }
 
@@ -67,11 +67,12 @@ internal enum class FileType(
     CONFIGURATION(
         listOf("~", ".aws", "config"),
         "AWS_CONFIG_FILE",
-        listOf(::credentialProfile, ::property, ::unmatchedLine)),
+        listOf(::configurationProfile, ::property, ::unmatchedLine)
+    ),
     CREDENTIAL(
         listOf("~", ".aws", "credentials"),
         "AWS_SHARED_CREDENTIALS_FILE",
-        listOf(::configurationProfile, ::property, ::unmatchedLine)
+        listOf(::credentialProfile, ::property, ::unmatchedLine)
     );
 
     // Generate a path using the passed separator
@@ -215,7 +216,7 @@ private fun configurationProfile(input: String): Token.Profile? =
         .stripComment(Literals.COMMENT_2)
         .trim()
         .verifyProfileWrapper()
-        .stripOuterOrNull(Literals.PROFILE_PREFIX to Literals.PROFILE_POSTFIX)
+        .stripOuterOrNull(Literals.PROFILE_PREFIX to Literals.PROFILE_SUFFIX)
         ?.trim()
         ?.let { line ->
             val (profileName, profilePrefix) = when {
@@ -245,7 +246,7 @@ private fun credentialProfile(input: String): Token.Profile? =
         .stripComment(Literals.COMMENT_2)
         .trim()
         .verifyProfileWrapper()
-        .stripOuterOrNull(Literals.PROFILE_PREFIX to Literals.PROFILE_POSTFIX)
+        .stripOuterOrNull(Literals.PROFILE_PREFIX to Literals.PROFILE_SUFFIX)
         ?.trim()
         ?.let { line -> Token.Profile(false, line, line.isContiguous()) }
 
@@ -294,8 +295,8 @@ private fun unmatchedLine(input: String): Token = Token.Unmatched(input)
 // See above regarding Unknown Line Type cases
 private fun String.verifyProfileWrapper(): String {
     // Profile definitions without brackets cause parsing to fail immediately.
-    if (startsWith(Literals.PROFILE_PREFIX) && !endsWith(Literals.PROFILE_POSTFIX))
-        throw AwsConfigParseException("Profile definition must end with '${Literals.PROFILE_POSTFIX}'")
+    if (startsWith(Literals.PROFILE_PREFIX) && !endsWith(Literals.PROFILE_SUFFIX))
+        throw AwsConfigParseException("Profile definition must end with '${Literals.PROFILE_SUFFIX}'")
 
     return this
 }

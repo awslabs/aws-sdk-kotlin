@@ -12,9 +12,9 @@ import aws.smithy.kotlin.runtime.util.Platform
  * @return an [AwsConfiguration] regardless if local configuration files are available
  */
 @InternalApi
-public fun loadAwsConfiguration(): AwsConfiguration {
+public fun loadAwsConfiguration(platform: Platform = Platform): AwsConfiguration {
     // Determine active profile and location of configuration files
-    val source = resolveConfigSource(Platform)
+    val source = resolveConfigSource(platform)
 
     // merged AWS configuration based on optional configuration and credential file contents
     val allProfiles = mergeProfiles(

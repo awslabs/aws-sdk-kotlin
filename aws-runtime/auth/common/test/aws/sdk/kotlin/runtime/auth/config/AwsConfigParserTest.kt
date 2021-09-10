@@ -20,7 +20,6 @@ class AwsProfileParserTest {
             .map { TestCase.fromJson(it.jsonObject) }
             // .filter { testCase -> testCase.name == "Property definitions must contain an equals sign." }
             .forEachIndexed { index, testCase ->
-                println("*** TEST $index: $testCase")
                 when (testCase) {
                     is TestCase.MatchConfigOutputCase -> {
                         val actual = parse(FileType.CONFIGURATION, testCase.configInput).toJsonElement()
@@ -42,11 +41,7 @@ class AwsProfileParserTest {
             }
     }
 
-    interface TestCaseCommon {
-        val name: String
-    }
-
-    private sealed class TestCase : TestCaseCommon {
+    private sealed class TestCase {
         companion object {
             fun fromJson(json: JsonObject): TestCase {
                 val name = (json["name"] as JsonLiteral).content
@@ -73,17 +68,17 @@ class AwsProfileParserTest {
             }
         }
 
-        data class MatchConfigOutputCase(override val name: String, val configInput: String, val expectedOutput: String) :
+        data class MatchConfigOutputCase(val name: String, val configInput: String, val expectedOutput: String) :
             TestCase()
 
-        data class MatchCredentialOutputCase(override val name: String, val credentialInput: String, val expectedOutput: String) :
+        data class MatchCredentialOutputCase(val name: String, val credentialInput: String, val expectedOutput: String) :
             TestCase()
 
-        data class MatchConfigAndCredentialOutputCase(override val name: String, val configInput: String, val credentialInput: String, val expectedOutput: String) :
+        data class MatchConfigAndCredentialOutputCase(val name: String, val configInput: String, val credentialInput: String, val expectedOutput: String) :
             TestCase()
 
         data class MatchErrorCase(
-            override val name: String,
+            val name: String,
             val input: String,
             val expectedErrorMessage: String
         ) : TestCase()

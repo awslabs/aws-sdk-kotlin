@@ -24,8 +24,6 @@ class AwsConfigLoaderTest {
             .map { TestCase.fromJson(it.jsonObject) }
             // .filter { testCase -> testCase.name == "User home is loaded from HOME with highest priority on windows platforms." }
             .forEachIndexed { index, testCase ->
-                println("*** TEST $index: ${testCase.name}")
-
                 val testPlatform = setupPlatformMock(testCase)
 
                 val actual = resolveConfigSource(testPlatform)
@@ -39,6 +37,33 @@ class AwsConfigLoaderTest {
                 assertEquals(testCase.configLocation, actual.configPath)
                 assertEquals(testCase.credentialsLocation, actual.credentialsPath)
             }
+    }
+
+    @Test
+    fun itLoadsAWSConfigurationWithCustomProfile() {
+        val testPlatform = mockk<Platform>()
+        val envKeyParam = slot<String>()
+        val propKeyParam = slot<String>()
+
+        every { testPlatform.filePathSegment } returns "/"
+        every { testPlatform.getenv(capture(envKeyParam)) } answers {
+            when (envKeyParam.captured) {
+                "AWS_PROFILE" -> "bob"
+                "AWS_CONFIG_FILE" -> null
+                "HOME" -> null
+                "AWS_SHARED_CREDENTIALS_FILE" -> null
+                else -> error(envKeyParam.captured)
+            }
+        }
+        every { testPlatform.getProperty(capture(propKeyParam)) } answers {
+            if (propKeyParam.captured == "user.home") "/home/user" else null
+        }
+        every { testPlatform.osInfo() } returns OperatingSystem(OsFamily.Linux, null)
+
+        val config = loadAwsConfiguration(testPlatform)
+
+        assertTrue(config.profileName == "bob")
+        assertTrue(config.isEmpty())
     }
 
     private fun setupPlatformMock(testCase: TestCase): Platform {
@@ -62,14 +87,14 @@ class AwsConfigLoaderTest {
     }
 
     private data class TestCase(
-        override val name: String,
+        val name: String,
         val environment: Map<String, JsonElement>,
         val languageSpecificHome: String?,
         val platform: OsFamily,
         val profile: String?,
         val configLocation: String,
         val credentialsLocation: String
-    ) : AwsProfileParserTest.TestCaseCommon {
+    ) {
         companion object {
             fun fromJson(json: JsonObject): TestCase {
                 val name = (json["name"] as JsonLiteral).content
@@ -86,7 +111,15 @@ class AwsConfigLoaderTest {
                     else -> error("Unexpected platform $platformRaw")
                 }
 
-                return TestCase(name, environment, languageSpecificHome, platform, profile, configLocation, credentialsLocation)
+                return TestCase(
+                    name,
+                    environment,
+                    languageSpecificHome,
+                    platform,
+                    profile,
+                    configLocation,
+                    credentialsLocation
+                )
             }
         }
     }

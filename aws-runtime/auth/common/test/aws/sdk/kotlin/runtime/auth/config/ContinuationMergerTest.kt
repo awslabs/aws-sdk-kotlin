@@ -19,7 +19,6 @@ class ContinuationMergerTest {
         )
 
         positiveTestCases.forEachIndexed { index, testCase ->
-            println("\ntest case $index: ${testCase.first}")
             val actual = mergeContinuations(testCase.first)
             assertEquals(testCase.second, actual.toString())
         }
