@@ -92,7 +92,7 @@ class AwsConfigLoaderTest {
         return testPlatform
     }
 
-   private fun mockPlatform(testCase: TestCase): Platform {
+    private fun mockPlatform(testCase: TestCase): Platform {
         val testPlatform = mockk<Platform>()
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()

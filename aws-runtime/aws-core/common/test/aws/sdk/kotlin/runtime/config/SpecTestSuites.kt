@@ -727,7 +727,6 @@ internal const val parserTestSuiteJson = """
 }
 """
 
-
 internal const val loaderTestSuiteJson = """
 {
   "description": [

@@ -71,10 +71,11 @@ class AWSConfigLoaderFilesystemTest {
 
         assertEquals("default", actual.profileName)
         assertEquals(3, actual.size)
-        actual.shouldContainAll(mapOf(
-            "name" to "value", "name3" to "value3", "secret" to "foo"
-        ))
-
+        actual.shouldContainAll(
+            mapOf(
+                "name" to "value", "name3" to "value3", "secret" to "foo"
+            )
+        )
 
         configFile.deleteIfExists()
         credentialsFile.deleteIfExists()

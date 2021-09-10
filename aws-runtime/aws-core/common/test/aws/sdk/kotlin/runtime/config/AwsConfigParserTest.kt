@@ -154,7 +154,6 @@ class AwsProfileParserTest {
             parse(FileType.CONFIGURATION, configurationFn()),
             parse(FileType.CREDENTIAL, credentialsFn()),
         )
-
 }
 
 // See https://youtrack.jetbrains.com/issue/KTOR-3063
