@@ -1,6 +1,7 @@
 package aws.sdk.kotlin.runtime.auth.config
 
 import aws.smithy.kotlin.runtime.SdkBaseException
+import aws.smithy.kotlin.runtime.util.InternalApi
 
 // Literal characters used in parsing AWS SDK configuration files
 internal object Literals {
@@ -26,7 +27,8 @@ internal typealias ProfileMap = Map<String, Map<String, String>>
  * Tokens representing state declared in AWS configuration files. Other types such as empty lines
  * or comments are filtered out before parsing.
  */
-private sealed class Token {
+@InternalApi
+public sealed class Token {
     /**
      * A profile definition line declares that the attributes that follow (until another profile definition is encountered)
      * are part of a named collection of attributes.
@@ -57,9 +59,20 @@ private sealed class Token {
  * Configuration	~/.aws/config	                AWS_CONFIG_FILE
  * Credentials	    ~/.aws/credentials	            AWS_SHARED_CREDENTIALS_FILE
  */
-internal enum class FileType(val filePathSegments: List<String>, val envVariableName: String) {
-    CONFIGURATION(listOf("~", ".aws", "config"), "AWS_CONFIG_FILE"),
-    CREDENTIAL(listOf("~", ".aws", "credentials"), "AWS_SHARED_CREDENTIALS_FILE");
+internal enum class FileType(
+    val filePathSegments: List<String>,
+    val envVariableName: String,
+    val lineParsers: List<ParseFn>
+) {
+    CONFIGURATION(
+        listOf("~", ".aws", "config"),
+        "AWS_CONFIG_FILE",
+        listOf(::credentialProfile, ::property, ::unmatchedLine)),
+    CREDENTIAL(
+        listOf("~", ".aws", "credentials"),
+        "AWS_SHARED_CREDENTIALS_FILE",
+        listOf(::configurationProfile, ::property, ::unmatchedLine)
+    );
 
     // Generate a path using the passed separator
     private fun filePath(platformPathSegmentSeparator: String) =
@@ -80,10 +93,6 @@ open class AwsConfigParseException(message: String) : SdkBaseException(message)
 
 // Describes a function that attempts to parse a line into a Token or returns null on failure
 private typealias ParseFn = (String) -> Token?
-// A chain of functions to evaluate any given line in a Configuration file
-private val configurationFunctions: List<ParseFn> = listOf(::configurationProfile, ::property, ::unmatchedLine)
-// A chain of functions to evaluate any given line in a Credential file
-private val credentialFunctions: List<ParseFn> = listOf(::credentialProfile, ::property, ::unmatchedLine)
 
 /**
  * Parse an AWS configuration file
@@ -181,10 +190,7 @@ private fun mergeProfiles(tokenIndexMap: Map<Token.Profile, Map<String, String>>
  * A sub-property definition without an =
  */
 private fun tokenOf(type: FileType, input: String): Token =
-    when (type) {
-        FileType.CREDENTIAL -> credentialFunctions
-        FileType.CONFIGURATION -> configurationFunctions
-    }.firstNotNullOf { parseFunction -> parseFunction(input) }
+    type.lineParsers.firstNotNullOf { parseFunction -> parseFunction(input) }
 
 /**
  * Format (Configuration Files): [ Whitespace? profile Whitespace Identifier Whitespace? ] Whitespace? CommentLine?

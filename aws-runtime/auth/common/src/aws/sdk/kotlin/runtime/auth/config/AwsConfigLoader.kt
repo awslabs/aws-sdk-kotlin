@@ -18,8 +18,8 @@ public fun loadAwsConfiguration(): AwsConfiguration {
 
     // merged AWS configuration based on optional configuration and credential file contents
     val allProfiles = mergeProfiles(
-        parse(FileType.CONFIGURATION, (Platform::readFile)(source.configPath)),
-        parse(FileType.CREDENTIAL, (Platform::readFile)(source.credentialsPath)),
+        parse(FileType.CONFIGURATION, Platform.readFile(source.configPath)),
+        parse(FileType.CREDENTIAL, Platform.readFile(source.credentialsPath)),
     )
 
     return AwsConfiguration(source.profile, allProfiles[source.profile] ?: emptyMap())
