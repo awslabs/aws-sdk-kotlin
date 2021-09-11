@@ -49,7 +49,7 @@ public sealed class Token {
      * Represents a line that is not a profile or property definition.
      * @property line string literal of line that could not be parsed.
      */
-    data class Unmatched(val line: String) : Token()
+    data class Unmatched(val line: FileLine) : Token()
 }
 
 /**
@@ -95,7 +95,7 @@ internal enum class FileType(
 open class AwsConfigParseException(message: String) : SdkBaseException(message)
 
 // Describes a function that attempts to parse a line into a Token or returns null on failure
-private typealias ParseFn = (String) -> Token?
+private typealias ParseFn = (FileLine) -> Token?
 
 /**
  * Parse an AWS configuration file
@@ -112,10 +112,10 @@ internal fun parse(type: FileType, input: String?): ProfileMap {
         var lastProfile: Token.Profile? = null
 
         mergeContinuations(input)
-            .filter { it.isNotEmpty() }
-            .map { it.stripInlineComments() }
-            .map { tokenOf(type, it) }
-            .forEach { token ->
+            .filter { it.content.isNotEmpty() }
+            .map { FileLine(it.lineNumber, it.content.stripInlineComments()) }
+            .map { tokenOf(type, it) to it.lineNumber }
+            .forEach { (token, lineNumber) ->
                 when (token) {
                     is Token.Profile -> {
                         lastProfile = token
@@ -123,7 +123,8 @@ internal fun parse(type: FileType, input: String?): ProfileMap {
                     }
                     is Token.Property -> {
                         val outerMap = this
-                        if (lastProfile != null) throw AwsConfigParseException("Expected a profile definition preceding ${token.key}")
+                        if (lastProfile == null)
+                            throw AwsConfigParseException("Expected a profile definition preceding '${token.key}' on line $lineNumber. $helpText")
 
                         // Profile definitions in configuration files without the profile prefix are silently dropped.
                         if (lastProfile!!.isValidForm) {
@@ -132,16 +133,16 @@ internal fun parse(type: FileType, input: String?): ProfileMap {
                                 buildMap {
                                     putAll(outerMap[lastProfile]!!)
                                     if (containsKey(token.key)) {
-                                        logger.warn("${token.key} defined multiple times in profile ${lastProfile?.name}")
+                                        logger.warn("${token.key} defined multiple times in profile '${lastProfile?.name}' on line $lineNumber. $helpText")
                                     }
                                     put(token.key, token.value)
                                 }
                             )
                         } else {
-                            logger.warn("Ignoring ${lastProfile?.name} due to invalid prefix. $helpText")
+                            logger.warn("Ignoring property '${token.key}' on line $lineNumber because '${lastProfile?.name}' is an invalid profile. $helpText")
                         }
                     }
-                    else -> { /* NOP: Not logging in case info is sensitive */ }
+                    is Token.Unmatched -> { logger.warn("Ignoring unknown data on line ${token.line.lineNumber}") }
                 }
             }
     }
@@ -197,7 +198,7 @@ private fun mergeProfiles(tokenIndexMap: Map<Token.Profile, Map<String, String>>
  * A property definition without an =
  * A sub-property definition without an =
  */
-private fun tokenOf(type: FileType, input: String): Token =
+private fun tokenOf(type: FileType, input: FileLine): Token =
     type.lineParsers.firstNotNullOf { parseFunction -> parseFunction(input) }
 
 private val logger = Logger.getLogger("AwsConfigParser")
@@ -219,12 +220,13 @@ private var helpText = "See https://docs.aws.amazon.com/cli/latest/userguide/cli
  * Invalid Profile Name
  * In the event of an invalid profile name, the entire profile and its properties must be ignored.
  */
-private fun configurationProfile(input: String): Token.Profile? =
+private fun configurationProfile(input: FileLine): Token.Profile? =
     input
+        .content
         .stripComment(Literals.COMMENT_1)
         .stripComment(Literals.COMMENT_2)
         .trim()
-        .verifyProfileWrapper()
+        .verifyProfileWrapper(input.lineNumber)
         .stripOuterOrNull(Literals.PROFILE_PREFIX to Literals.PROFILE_SUFFIX)
         ?.trim()
         ?.let { line ->
@@ -233,7 +235,7 @@ private fun configurationProfile(input: String): Token.Profile? =
                 line == Literals.DEFAULT_PROFILE -> line to false
                 // Return profile with invalid form rather than throw exception because invalid profiles should be ignored.
                 else -> {
-                    logger.warn("Ignoring invalid profile: '$line'. $helpText")
+                    logger.warn("Ignoring invalid profile: '$line' on line ${input.lineNumber}. $helpText")
                     return@let Token.Profile(false, line, false)
                 }
             }
@@ -252,12 +254,13 @@ private fun configurationProfile(input: String): Token.Profile? =
  *
  * In credentials files, the profile name must not start with profile. (eg. [profile-name]).
  */
-private fun credentialProfile(input: String): Token.Profile? =
+private fun credentialProfile(input: FileLine): Token.Profile? =
     input
+        .content
         .stripComment(Literals.COMMENT_1)
         .stripComment(Literals.COMMENT_2)
         .trim()
-        .verifyProfileWrapper()
+        .verifyProfileWrapper(input.lineNumber)
         .stripOuterOrNull(Literals.PROFILE_PREFIX to Literals.PROFILE_SUFFIX)
         ?.trim()
         ?.let { line -> Token.Profile(false, line, line.isContiguous()) }
@@ -288,15 +291,15 @@ private fun credentialProfile(input: String): Token.Profile? =
  * For example, s3 = followed by the line max_concurrent_requests = 30 defines the value of the s3 property to be a
  * mapping from max_concurrent_requests to 30.
  */
-private fun property(input: String): Token.Property? {
-    if (input.isContinuationLine() || input.isProfileLine()) return null
+private fun property(input: FileLine): Token.Property? {
+    if (input.content.isContinuationLine() || input.content.isProfileLine()) return null
 
-    val (key, value) = input.splitProperty()
+    val (key, value) = input.content.splitProperty()
 
     return if (key.isContiguous()) {
         Token.Property(key, value)
     } else {
-        logger.warn("Invalid property key: '$key'. $helpText")
+        logger.warn("Invalid property key: '$key' on line ${input.lineNumber}. $helpText")
         null
     }
 }
@@ -307,13 +310,13 @@ private fun property(input: String): Token.Property? {
  due to the expected behavior of the parser, in that in particular cases it should ignore bad
  input and in other cases it should throw exceptions.  See [AwsProfileParserTest] for examples.
  */
-private fun unmatchedLine(input: String): Token = Token.Unmatched(input)
+private fun unmatchedLine(input: FileLine): Token = Token.Unmatched(input)
 
 // See above regarding Unknown Line Type cases
-private fun String.verifyProfileWrapper(): String {
+private fun String.verifyProfileWrapper(lineNumber: Int): String {
     // Profile definitions without brackets cause parsing to fail immediately.
     if (startsWith(Literals.PROFILE_PREFIX) && !endsWith(Literals.PROFILE_SUFFIX))
-        throw AwsConfigParseException("Profile definition must end with '${Literals.PROFILE_SUFFIX}'")
+        throw AwsConfigParseException("Profile definition must end with '${Literals.PROFILE_SUFFIX}' on line $lineNumber")
 
     return this
 }

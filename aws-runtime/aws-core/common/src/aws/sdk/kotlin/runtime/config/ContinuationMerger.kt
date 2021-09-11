@@ -10,42 +10,46 @@ package aws.sdk.kotlin.runtime.config
  * @param input ordered lines of an AWS configuration file
  * @return the passed file with continuations merged into single lines
  */
-internal fun mergeContinuations(input: String): List<String> =
+internal fun mergeContinuations(input: String): List<FileLine> =
     buildList {
         var seenPropertyDefinition = false
         var seenProfileDefinition = false
 
         input
             .split(Literals.NEW_LINE)
-            .filter { it.isNotBlank() && !it.isCommentLine() }
+            .mapIndexed { index, line -> FileLine(index + 1, line) }
+            .filter { it.content.isNotBlank() && !it.content.isCommentLine() }
             .forEach {
                 when {
-                    it.isProfileLine() -> add(it).also { seenProfileDefinition = true; seenPropertyDefinition = false }
-                    it.isPropertyLine() -> add(it).also { seenProfileDefinition = false; seenPropertyDefinition = true }
-                    it.isContinuationLine() && seenPropertyDefinition -> mergeContinuation(it, this)
-                    it.isContinuationLine() && !seenProfileDefinition -> error("Expected a profile definition on: $it")
-                    it.isContinuationLine() && !seenPropertyDefinition -> error("Expected a property definition on: $it")
+                    it.content.isProfileLine() -> add(it).also { seenProfileDefinition = true; seenPropertyDefinition = false }
+                    it.content.isPropertyLine() -> add(it).also { seenProfileDefinition = false; seenPropertyDefinition = true }
+                    it.content.isContinuationLine() && seenPropertyDefinition -> mergeContinuation(it, this)
+                    it.content.isContinuationLine() && !seenProfileDefinition -> error("Expected a profile definition on: $it")
+                    it.content.isContinuationLine() && !seenPropertyDefinition -> error("Expected a property definition on: $it")
                     else -> add(it) // Unknown content. Keep it so that downstream parser will throw the appropriate error
                 }
             }
     }
 
+// The line of a file with its position
+data class FileLine(val lineNumber: Int, val content: String)
+
 /**
  * Merge the [continuation] into the preceding line in [lines].
  */
-private fun mergeContinuation(continuation: String, lines: MutableList<String>) {
+private fun mergeContinuation(continuation: FileLine, lines: MutableList<FileLine>) {
     val lastLine = lines.removeLast()
 
     // If a blank (empty valued) property is followed by a property continuation, the property continuation is considered
     // to be a sub-property of the blank property. In this case, the property continuation line must be parsed in the
     // same manner as a Property Definition, except that comments are also considered part of the sub-property's value
-    if (lastLine.isSubPropertyKeyLine() && !continuation.isSubPropertyLine()) {
+    if (lastLine.content.isSubPropertyKeyLine() && !continuation.content.isSubPropertyLine()) {
         throw AwsConfigParseException("Expected '${Literals.PROPERTY_SPLITTER}' specifying a sub-property")
     }
 
     // A property continuation line is prefixed with \n before it is appended to the property value.
-    val updated = "$lastLine${Literals.NEW_LINE}${continuation.trim()}"
-    lines.add(updated)
+    val updated = "${lastLine.content}${Literals.NEW_LINE}${continuation.content.trim()}"
+    lines.add(FileLine(lastLine.lineNumber, updated))
 }
 
 // true if this is a comment line
