@@ -39,6 +39,21 @@
                 "smithy.api#pattern": "^[0-9]*$"
             }
         },
+        "com.amazonaws.ssmcontacts#AcceptCodeValidation": {
+            "type": "string",
+            "traits": {
+                "smithy.api#enum": [
+                    {
+                        "value": "IGNORE",
+                        "name": "IGNORE"
+                    },
+                    {
+                        "value": "ENFORCE",
+                        "name": "ENFORCE"
+                    }
+                ]
+            }
+        },
         "com.amazonaws.ssmcontacts#AcceptPage": {
             "type": "operation",
             "input": {
@@ -103,6 +118,12 @@
                         "smithy.api#documentation": "<p>The accept code is a 6-digit code used to acknowledge the page.</p>",
                         "smithy.api#required": {}
                     }
+                },
+                "AcceptCodeValidation": {
+                    "target": "com.amazonaws.ssmcontacts#AcceptCodeValidation",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An optional field that Incident Manager uses to <code>ENFORCE</code>\n            <code>AcceptCode</code> validation when acknowledging an page. Acknowledgement can occur by\n         replying to a page, or when entering the AcceptCode in the console. Enforcing AcceptCode\n         validation causes Incident Manager to verify that the code entered by the user matches the\n         code sent by Incident Manager with the page.</p>\n         <p>Incident Manager can also <code>IGNORE</code>\n            <code>AcceptCode</code> validation. Ignoring <code>AcceptCode</code> validation causes\n         Incident Manager to accept any value entered for the <code>AcceptCode</code>.</p>"
+                    }
                 }
             }
         },
@@ -136,7 +157,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>You don't have sufficient access to perform this action.</p>",
+                "smithy.api#documentation": "<p>You don't have sufficient access to perform this operation.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 403
             }
@@ -167,7 +188,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Activates a contact's contact channel. Incident Manager can't engage a contact until\n         the\n         contact channel has been activated.</p>"
+                "smithy.api#documentation": "<p>Activates a contact's contact channel. Incident Manager can't engage a contact until the\n         contact channel has been activated.</p>"
             }
         },
         "com.amazonaws.ssmcontacts#ActivateContactChannelRequest": {
@@ -234,7 +255,7 @@
                     "min": 1,
                     "max": 255
                 },
-                "smithy.api#pattern": "^[a-zA-Z0-9_\\-\\s\\.]*$"
+                "smithy.api#pattern": "^[\\p{L}\\p{Z}\\p{N}_.\\-]*$"
             }
         },
         "com.amazonaws.ssmcontacts#ChannelTargetInfo": {
@@ -425,10 +446,10 @@
             "type": "string",
             "traits": {
                 "smithy.api#length": {
-                    "min": 1,
+                    "min": 0,
                     "max": 255
                 },
-                "smithy.api#pattern": "^[a-zA-Z0-9_\\-\\s\\.]*$"
+                "smithy.api#pattern": "^[\\p{L}\\p{Z}\\p{N}_.\\-]*$"
             }
         },
         "com.amazonaws.ssmcontacts#ContactTargetInfo": {
@@ -556,7 +577,7 @@
                 "ContactId": {
                     "target": "com.amazonaws.ssmcontacts#SsmContactsArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the contact channel.</p>",
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the contact you are adding the contact channel to.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -590,7 +611,7 @@
                 "IdempotencyToken": {
                     "target": "com.amazonaws.ssmcontacts#IdempotencyToken",
                     "traits": {
-                        "smithy.api#documentation": "<p>A token ensuring that the action is called only once with the specified details.</p>",
+                        "smithy.api#documentation": "<p>A token ensuring that the operation is called only once with the specified\n         details.</p>",
                         "smithy.api#idempotencyToken": {}
                     }
                 }
@@ -602,7 +623,7 @@
                 "ContactChannelArn": {
                     "target": "com.amazonaws.ssmcontacts#SsmContactsArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ARN of the contact channel.</p>",
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the contact channel.</p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -647,7 +668,7 @@
                 "IdempotencyToken": {
                     "target": "com.amazonaws.ssmcontacts#IdempotencyToken",
                     "traits": {
-                        "smithy.api#documentation": "<p>A token ensuring that the action is called only once with the specified details.</p>",
+                        "smithy.api#documentation": "<p>A token ensuring that the operation is called only once with the specified\n         details.</p>",
                         "smithy.api#idempotencyToken": {}
                     }
                 }
@@ -676,7 +697,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The action failed to due an encryption key error.</p>",
+                "smithy.api#documentation": "<p>The operation failed to due an encryption key error.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
             }
@@ -1886,6 +1907,9 @@
                 },
                 {
                     "target": "com.amazonaws.ssmcontacts#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.ssmcontacts#ValidationException"
                 }
             ],
             "traits": {
@@ -2023,7 +2047,7 @@
                     "min": 1,
                     "max": 395000
                 },
-                "smithy.api#pattern": ".*\\S.*"
+                "smithy.api#pattern": "\\S"
             }
         },
         "com.amazonaws.ssmcontacts#PublicContent": {
@@ -2203,7 +2227,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Request references a resource that\n         doesn't\n         exist.</p>",
+                "smithy.api#documentation": "<p>Request references a resource that doesn't exist.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 404
             }
@@ -2319,7 +2343,7 @@
                     "name": "ssm-contacts"
                 },
                 "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p></p>",
+                "smithy.api#documentation": "<p>Systems Manager Incident Manager is an incident management console designed to help users\n         mitigate and recover from incidents affecting their Amazon Web Services-hosted applications.\n         An incident is any unplanned interruption or reduction in quality of services. </p>\n         <p>Incident Manager increases incident resolution by notifying responders of impact,\n         highlighting relevant troubleshooting data, and providing collaboration tools to get\n         services back up and running. To achieve the primary goal of reducing the\n         time-to-resolution of critical incidents, Incident Manager automates response plans\n         and enables responder team escalation. </p>",
                 "smithy.api#title": "AWS Systems Manager Incident Manager Contacts"
             }
         },
@@ -2355,7 +2379,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Sends an activation code to a contact channel. The contact can use this code to activate\n         the contact channel in the console or with the <code>ActivateChannel</code> action.\n         Incident Manager can't engage a contact channel until it has been activated.</p>"
+                "smithy.api#documentation": "<p>Sends an activation code to a contact channel. The contact can use this code to activate\n         the contact channel in the console or with the <code>ActivateChannel</code> operation.\n         Incident Manager can't engage a contact channel until it has been activated.</p>"
             }
         },
         "com.amazonaws.ssmcontacts#SendActivationCodeRequest": {
@@ -2442,7 +2466,7 @@
                     "min": 1,
                     "max": 2048
                 },
-                "smithy.api#pattern": "arn:(aws|aws-cn|aws-us-gov):ssm-contacts:[-\\w+=\\/,.@]*:[0-9]+:([\\w+=\\/,.@:-]+)*"
+                "smithy.api#pattern": "^arn:(aws|aws-cn|aws-us-gov):ssm-contacts:[-\\w+=\\/,.@]*:[0-9]+:([\\w+=\\/,.@:-]+)*$"
             }
         },
         "com.amazonaws.ssmcontacts#Stage": {
@@ -2451,7 +2475,7 @@
                 "DurationInMinutes": {
                     "target": "com.amazonaws.ssmcontacts#StageDurationInMins",
                     "traits": {
-                        "smithy.api#documentation": "<p>The time to wait until beginning the next stage.</p>",
+                        "smithy.api#documentation": "<p>The time to wait until beginning the next stage. The duration can only be set to 0 if a\n         target is specified.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -2567,7 +2591,7 @@
                 "IdempotencyToken": {
                     "target": "com.amazonaws.ssmcontacts#IdempotencyToken",
                     "traits": {
-                        "smithy.api#documentation": "<p>A token ensuring that the action is called only once with the specified details.</p>",
+                        "smithy.api#documentation": "<p>A token ensuring that the operation is called only once with the specified\n         details.</p>",
                         "smithy.api#idempotencyToken": {}
                     }
                 }
@@ -2602,6 +2626,9 @@
                 },
                 {
                     "target": "com.amazonaws.ssmcontacts#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.ssmcontacts#ThrottlingException"
                 },
                 {
                     "target": "com.amazonaws.ssmcontacts#ValidationException"
@@ -2681,7 +2708,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 1,
-                    "max": 255
+                    "max": 128
                 },
                 "smithy.api#pattern": "^[\\\\\\/a-zA-Z0-9_+=\\-]*$"
             }
@@ -2694,7 +2721,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 0,
-                    "max": 200
+                    "max": 50
                 }
             }
         },
@@ -2758,7 +2785,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 1,
-                    "max": 255
+                    "max": 256
                 },
                 "smithy.api#pattern": "^[\\p{L}\\p{Z}\\p{N}_.:\\/=+\\-@]*$"
             }
@@ -2792,7 +2819,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The contact or contact channel that is being engaged.</p>"
+                "smithy.api#documentation": "<p>The contact or contact channel that's being engaged.</p>"
             }
         },
         "com.amazonaws.ssmcontacts#TargetsList": {
@@ -2876,6 +2903,9 @@
                 },
                 {
                     "target": "com.amazonaws.ssmcontacts#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.ssmcontacts#ValidationException"
                 }
             ],
             "traits": {
@@ -2988,7 +3018,7 @@
                 "Name": {
                     "target": "com.amazonaws.ssmcontacts#ChannelName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the contact channel</p>"
+                        "smithy.api#documentation": "<p>The name of the contact channel.</p>"
                     }
                 },
                 "DeliveryAddress": {
@@ -3054,7 +3084,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The input fails to satisfy the constraints specified by an\n         AWS\n         service.</p>",
+                "smithy.api#documentation": "<p>The input fails to satisfy the constraints specified by an Amazon Web Services\n         service.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
             }
