@@ -33,7 +33,7 @@ class AWSConfigLoaderFilesystemTest {
         configFile.writeText("[profile foo]\nname = value")
 
         val testPlatform = mockPlatform(
-            pathSegment = Platform.filePathSegment, // Use actual value from Platform in mock
+            pathSegment = Platform.filePathSeparator, // Use actual value from Platform in mock
             awsProfileEnv = "foo",
             homeEnv = "/home/user",
             awsConfigFileEnv = configFile.absolutePathString(),
@@ -60,7 +60,7 @@ class AWSConfigLoaderFilesystemTest {
         credentialsFile.writeText("[default]\nsecret=foo")
 
         val testPlatform = mockPlatform(
-            pathSegment = Platform.filePathSegment, // Use actual value from Platform in mock
+            pathSegment = Platform.filePathSeparator, // Use actual value from Platform in mock
             homeEnv = "/home/user",
             awsConfigFileEnv = configFile.absolutePathString(),
             awsSharedCredentialsFileEnv = credentialsFile.absolutePathString(),
@@ -94,7 +94,7 @@ class AWSConfigLoaderFilesystemTest {
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
 
-        every { testPlatform.filePathSegment } returns pathSegment
+        every { testPlatform.filePathSeparator } returns pathSegment
         every { testPlatform.getenv(capture(envKeyParam)) } answers {
             when (envKeyParam.captured) {
                 "AWS_PROFILE" -> awsProfileEnv

@@ -74,7 +74,7 @@ class AwsConfigLoaderTest {
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
 
-        every { testPlatform.filePathSegment } returns pathSegment
+        every { testPlatform.filePathSeparator } returns pathSegment
         every { testPlatform.getenv(capture(envKeyParam)) } answers {
             when (envKeyParam.captured) {
                 "AWS_PROFILE" -> awsProfileEnv
@@ -97,7 +97,7 @@ class AwsConfigLoaderTest {
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
 
-        every { testPlatform.filePathSegment } returns when (testCase.platform) {
+        every { testPlatform.filePathSeparator } returns when (testCase.platform) {
             OsFamily.Windows -> "\\"
             else -> "/"
         }

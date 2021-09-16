@@ -43,8 +43,8 @@ internal data class AwsConfigurationSource(val profile: String, val configPath: 
 internal fun resolveConfigSource(platform: Platform) =
     AwsConfigurationSource(
         envProfileResolver(platform::getenv),
-        normalizePath(FileType.CONFIGURATION.resolveFileLocation(platform::getenv, platform.filePathSegment), platform),
-        normalizePath(FileType.CREDENTIAL.resolveFileLocation(platform::getenv, platform.filePathSegment), platform)
+        normalizePath(FileType.CONFIGURATION.resolveFileLocation(platform::getenv, platform.filePathSeparator), platform),
+        normalizePath(FileType.CREDENTIAL.resolveFileLocation(platform::getenv, platform.filePathSeparator), platform)
     )
 
 // If the user does not specify the profile to be used, the default profile must be used by the SDK.
