@@ -9,6 +9,8 @@ import aws.smithy.kotlin.runtime.util.Platform
  * function will return the properties of the profile specified by the local environment
  * or the default profile if none is defined.
  *
+ * This function performs no caching. File I/O will be performed with each call.
+ *
  * @return an [AwsConfiguration] regardless if local configuration files are available
  */
 @InternalApi

@@ -27,15 +27,15 @@ class AwsProfileParserTest {
                     is TestCase.MatchConfigOutputCase -> {
                         val actual = parse(FileType.CONFIGURATION, testCase.configInput).toJsonElement()
                         val expectedJson = Json.parseJson(testCase.expectedOutput)
-                        assertEquals(expectedJson, actual)
+                        assertEquals(expectedJson, actual, message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchCredentialOutputCase -> {
                         val actual = parse(FileType.CREDENTIAL, testCase.credentialInput).toJsonElement()
-                        assertEquals(testCase.expectedOutput, actual.toString())
+                        assertEquals(testCase.expectedOutput, actual.toString(), message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchConfigAndCredentialOutputCase -> {
                         val actual = loadConfiguration({ testCase.configInput }, { testCase.credentialInput }).toJsonElement()
-                        assertEquals(testCase.expectedOutput, actual.toString())
+                        assertEquals(testCase.expectedOutput, actual.toString(), message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchErrorCase -> {
                         assertFails { parse(FileType.CONFIGURATION, testCase.input) }

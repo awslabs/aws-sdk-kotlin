@@ -3,6 +3,7 @@ package aws.sdk.kotlin.runtime.config
 /**
  * This test suite exercises the parser and continuation merger.
  */
+// language=JSON
 internal const val parserTestSuiteJson = """
 {
   "description": [
@@ -727,6 +728,7 @@ internal const val parserTestSuiteJson = """
 }
 """
 
+// language=JSON
 internal const val loaderTestSuiteJson = """
 {
   "description": [
