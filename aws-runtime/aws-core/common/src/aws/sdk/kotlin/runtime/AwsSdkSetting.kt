@@ -57,4 +57,9 @@ public sealed class AwsSdkSetting<T> (
      * For example, AWS Lambda will automatically specify a runtime indicating that the SDK is being used within Lambda.
      */
     public object AwsExecutionEnv : AwsSdkSetting<String>("AWS_EXECUTION_ENV", "aws.executionEnvironment")
+
+    /**
+     *  The name of the default profile that should be loaded from config
+     */
+    public object AwsProfile : AwsSdkSetting<String>("AWS_PROFILE", "aws.profile", "default")
 }
