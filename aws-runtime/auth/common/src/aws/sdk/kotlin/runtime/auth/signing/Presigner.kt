@@ -1,10 +1,17 @@
-package aws.sdk.kotlin.runtime.auth
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
+package aws.sdk.kotlin.runtime.auth.signing
 
 import aws.sdk.kotlin.crt.auth.signing.AwsSignatureType
 import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyHeaderType
 import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyValue
 import aws.sdk.kotlin.crt.auth.signing.AwsSigner
 import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
+import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
+import aws.sdk.kotlin.runtime.auth.credentials.toCrt
 import aws.sdk.kotlin.runtime.crt.path
 import aws.sdk.kotlin.runtime.crt.queryParameters
 import aws.sdk.kotlin.runtime.crt.toCrtHeaders

@@ -5,6 +5,8 @@
 
 package aws.sdk.kotlin.runtime.auth
 
+import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
+
 /**
  * A common interface that all AWS service clients implement as part of their configuration state.
  */

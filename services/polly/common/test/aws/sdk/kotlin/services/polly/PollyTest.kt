@@ -1,6 +1,6 @@
 package aws.sdk.kotlin.services.polly
 
-import aws.sdk.kotlin.runtime.auth.StaticCredentialsProvider
+import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
