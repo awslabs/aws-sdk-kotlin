@@ -69,7 +69,7 @@ class AwsSigv4SigningMiddlewareTest {
 
         operation.install(AwsSigV4SigningMiddleware) {
             credentialsProvider = TestCredentialsProvider
-            signingService = "demo"
+            service = "demo"
         }
 
         operation.roundTrip(client, Unit)

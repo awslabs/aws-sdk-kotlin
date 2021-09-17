@@ -43,8 +43,8 @@ open class AwsSignatureVersion4(private val signingServiceName: String) : HttpFe
         writer.addImport(AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware)
         writer.addImport("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_AUTH)
 
-        writer.write("credentialsProvider = config.credentialsProvider ?: DefaultChainCredentialsProvider()")
-        writer.write("signingService = #S", signingServiceName)
+        writer.write("this.credentialsProvider = config.credentialsProvider ?: DefaultChainCredentialsProvider()")
+        writer.write("this.service = #S", signingServiceName)
     }
 
     companion object {

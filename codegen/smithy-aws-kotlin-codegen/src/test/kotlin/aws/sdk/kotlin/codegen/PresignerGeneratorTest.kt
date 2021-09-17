@@ -86,6 +86,7 @@ class PresignerGeneratorTest {
         val expected = """
             package smithy.kotlin.traits
             
+            import aws.sdk.kotlin.runtime.ClientException
             import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
             import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
             import aws.sdk.kotlin.runtime.auth.signing.PresignedRequestConfig
