@@ -246,7 +246,7 @@ class PresignerGeneratorTest {
             
                 interface DslBuilder {
                     /**
-                     * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider] instance will be used.
+                     * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.
                      */
                     var credentialsProvider: CredentialsProvider
             
