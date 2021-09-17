@@ -5,18 +5,23 @@
 
 package aws.sdk.kotlin.runtime.auth.signing
 
-import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.Credentials
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
+import aws.sdk.kotlin.runtime.auth.credentials.toCrt
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
+
+/**
+ * Predicate function used to determine if a specific header should be signed or not
+ */
+public typealias ShouldSignHeaderFn = (String) -> Boolean
 
 /**
  * Configuration that tells the underlying AWS signer how to sign requests
  */
 @OptIn(ExperimentalTime::class)
-@InternalSdkApi
 public class AwsSigningConfig private constructor(builder: Builder) {
     public companion object {
         public operator fun invoke(block: Builder.() -> Unit): AwsSigningConfig = Builder().apply(block).build()
@@ -80,6 +85,11 @@ public class AwsSigningConfig private constructor(builder: Builder) {
      */
     public val signedBodyHeaderType: AwsSignedBodyHeaderType = builder.signedBodyHeader
 
+    /**
+     * Predicate function used to determine if a specific header should be signed or not
+     */
+    public val shouldSignHeader: ShouldSignHeaderFn? = builder.shouldSignHeader
+
     /*
      * Signing key control:
      *
@@ -117,6 +127,7 @@ public class AwsSigningConfig private constructor(builder: Builder) {
         public var service: String? = null
         public var date: Instant? = null
         public var algorithm: AwsSigningAlgorithm = AwsSigningAlgorithm.SIGV4
+        public var shouldSignHeader: ShouldSignHeaderFn? = null
         public var signatureType: AwsSignatureType = AwsSignatureType.HTTP_REQUEST_VIA_HEADERS
         public var useDoubleUriEncode: Boolean = true
         public var normalizeUriPath: Boolean = true
@@ -142,7 +153,12 @@ public enum class AwsSigningAlgorithm {
      * AWS Signature Version 4
      * see: https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html
      */
-    SIGV4;
+    SIGV4,
+
+    /**
+     * AWS Signature Version 4 Asymmetric
+     */
+    SIGV4_ASYMMETRIC;
 }
 
 /**
@@ -185,6 +201,18 @@ public enum class AwsSignedBodyHeaderType {
     X_AMZ_CONTENT_SHA256;
 }
 
+/**
+ * A set of string constants for various canonical request payload values. If signedBodyValue is not null
+ * then the value will also be reflected in X-Amz-Content-Sha256
+ */
+public object AwsSignedBodyValue {
+    public const val EMPTY_SHA256: String = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    public const val UNSIGNED_PAYLOAD: String = "UNSIGNED-PAYLOAD"
+    public const val STREAMING_AWS4_HMAC_SHA256_PAYLOAD: String = "STREAMING-AWS4-HMAC-SHA256-PAYLOAD"
+    public const val STREAMING_AWS4_ECDSA_P256_SHA256_PAYLOAD: String = "STREAMING-AWS4-ECDSA-P256-SHA256-PAYLOAD"
+    public const val STREAMING_AWS4_HMAC_SHA256_EVENTS: String = "STREAMING-AWS4-HMAC-SHA256-EVENTS"
+}
+
 internal fun AwsSignedBodyHeaderType.toCrt(): aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyHeaderType = when (this) {
     AwsSignedBodyHeaderType.NONE -> aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyHeaderType.NONE
     AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256 -> aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
@@ -199,4 +227,36 @@ internal fun AwsSignatureType.toCrt(): aws.sdk.kotlin.crt.auth.signing.AwsSignat
 
 internal fun AwsSigningAlgorithm.toCrt(): aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm = when (this) {
     AwsSigningAlgorithm.SIGV4 -> aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm.SIGV4
+    AwsSigningAlgorithm.SIGV4_ASYMMETRIC -> aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm.SIGV4_ASYMMETRIC
+}
+
+@OptIn(ExperimentalTime::class)
+internal suspend fun AwsSigningConfig.toCrt(): aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig {
+    val config = this
+    // NOTE: we cannot pass a credentialsProvider due to https://github.com/awslabs/aws-crt-kotlin/issues/15
+    // the underlying implementation will hang/fail to sign
+    val resolvedCredentials = config.credentials ?: config.credentialsProvider?.getCredentials()
+
+    return aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig.build {
+        algorithm = config.algorithm.toCrt()
+        credentials = resolvedCredentials?.toCrt()
+
+        date = config.date?.epochMilliseconds
+
+        config.expiresAfter?.let {
+            expirationInSeconds = it.inWholeSeconds
+        }
+
+        normalizeUriPath = config.normalizeUriPath
+        omitSessionToken = config.omitSessionToken
+
+        region = config.region
+        service = config.service
+
+        shouldSignHeader = config.shouldSignHeader
+        signatureType = config.signatureType.toCrt()
+        signedBodyHeader = config.signedBodyHeaderType.toCrt()
+        signedBodyValue = config.signedBodyValue
+        useDoubleUriEncode = config.useDoubleUriEncode
+    }
 }

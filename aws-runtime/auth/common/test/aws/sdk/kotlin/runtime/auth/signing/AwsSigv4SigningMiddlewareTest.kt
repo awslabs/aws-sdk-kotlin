@@ -5,8 +5,6 @@
 
 package aws.sdk.kotlin.runtime.auth.signing
 
-import aws.sdk.kotlin.runtime.auth.credentials.Credentials
-import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.client.ExecutionContext
@@ -25,11 +23,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class AwsSigv4SigningMiddlewareTest {
-
-    private object TestCredentialsProvider : CredentialsProvider {
-        val testCredentials = Credentials("AKID", "SECRET", "SESSION")
-        override suspend fun getCredentials(): Credentials = testCredentials
-    }
 
     private fun buildOperation(streaming: Boolean = false, replayable: Boolean = true): SdkHttpOperation<Unit, HttpResponse> = SdkHttpOperation.build {
         serializer = object : HttpSerialize<Unit> {

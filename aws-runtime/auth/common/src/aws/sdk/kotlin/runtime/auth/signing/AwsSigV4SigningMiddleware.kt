@@ -7,11 +7,8 @@ package aws.sdk.kotlin.runtime.auth.signing
 
 import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyValue
 import aws.sdk.kotlin.crt.auth.signing.AwsSigner
-import aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm
-import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
-import aws.sdk.kotlin.runtime.auth.credentials.toCrt
 import aws.sdk.kotlin.runtime.crt.toSignableCrtRequest
 import aws.sdk.kotlin.runtime.crt.update
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
@@ -20,7 +17,6 @@ import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.withContext
 import aws.smithy.kotlin.runtime.logging.Logger
-import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.util.get
 
 /**
@@ -119,19 +115,19 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
             // then we must decide how to compute the payload hash ourselves (defaults to unsigned payload)
             val isUnboundedStream = signableRequest.body == null && req.subject.body is HttpBody.Streaming
 
-            val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
+            val signingConfig = AwsSigningConfig {
                 region = req.context[AuthAttributes.SigningRegion]
                 service = req.context.getOrNull(AuthAttributes.SigningService) ?: checkNotNull(config.signingService)
-                credentials = resolvedCredentials.toCrt()
+                credentials = resolvedCredentials
                 algorithm = AwsSigningAlgorithm.SIGV4
-                date = req.context.getOrNull(AuthAttributes.SigningDate)?.epochMilliseconds
+                date = req.context.getOrNull(AuthAttributes.SigningDate)
 
-                signatureType = config.signatureType.toCrt()
+                signatureType = config.signatureType
                 omitSessionToken = config.omitSessionToken
                 normalizeUriPath = config.normalizeUriPath
                 useDoubleUriEncode = config.useDoubleUriEncode
 
-                signedBodyHeader = config.signedBodyHeaderType.toCrt()
+                signedBodyHeader = config.signedBodyHeaderType
                 signedBodyValue = when {
                     isUnsignedRequest -> AwsSignedBodyValue.UNSIGNED_PAYLOAD
                     req.subject.body is HttpBody.Empty -> AwsSignedBodyValue.EMPTY_SHA256
@@ -143,7 +139,8 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
                     else -> null
                 }
             }
-            val signedRequest = AwsSigner.signRequest(signableRequest, signingConfig)
+
+            val signedRequest = AwsSigner.signRequest(signableRequest, signingConfig.toCrt())
             req.subject.update(signedRequest)
             req.subject.body.resetStream()
 
