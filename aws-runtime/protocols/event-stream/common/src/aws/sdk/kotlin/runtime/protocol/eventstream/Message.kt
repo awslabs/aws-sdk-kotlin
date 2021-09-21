@@ -1,0 +1,178 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
+package aws.sdk.kotlin.runtime.protocol.eventstream
+
+import aws.smithy.kotlin.runtime.io.*
+import aws.smithy.kotlin.runtime.util.crc32
+
+private const val PRELUDE_BYTE_LEN = 8
+private const val PRELUDE_BYTE_LEN_WITH_CRC = PRELUDE_BYTE_LEN + 4
+private const val MESSAGE_CRC_BYTE_LEN = 4
+
+// max message size is 16 MB
+private const val MAX_MESSAGE_SIZE = 16 * 1024 * 1024
+
+// max header size is 128 KB
+private const val MAX_HEADER_SIZE = 128 * 1024
+
+/*
+    Message Wire Format
+    See also: https://docs.aws.amazon.com/transcribe/latest/dg/event-stream.html
+
+    +--------------------------------------------------------------------+
+    |                            Total Len (32)                          |
+    +--------------------------------------------------------------------+
+    |                          Headers Len (32)                          |
+    +--------------------------------------------------------------------+
+    |                          Prelude CRC (32)                          |
+    +--------------------------------------------------------------------+
+    |                            Headers (*)                         ... |
+    +--------------------------------------------------------------------+
+    |                            Payload (*)                         ... |
+    +--------------------------------------------------------------------+
+    |                          Message CRC (32)                          |
+    +--------------------------------------------------------------------+
+*/
+
+public data class Prelude(val totalLen: Int, val headersLength: Int) {
+    public fun encode(dest: SdkBuffer) {
+        val bytes = ByteArray(PRELUDE_BYTE_LEN)
+        val preludeBuf = SdkBuffer.of(bytes)
+
+        preludeBuf.writeInt(totalLen)
+        preludeBuf.writeInt(headersLength)
+
+        dest.writeFully(preludeBuf)
+        dest.writeInt(bytes.crc32().toInt())
+    }
+
+    public companion object {
+        /**
+         * Read the prelude from [buffer] and validate the prelude CRC
+         */
+        public fun decode(buffer: SdkBuffer): Prelude {
+            val crcBuffer = ByteArray(PRELUDE_BYTE_LEN)
+            buffer.readFully(crcBuffer)
+            val computedCrc = crcBuffer.crc32()
+            buffer.rewind(PRELUDE_BYTE_LEN)
+
+            val totalLen = buffer.readInt()
+            val headerLen = buffer.readInt()
+            val expectedCrc = buffer.readUInt()
+
+            check(expectedCrc == computedCrc) {
+                "Prelude checksum mismatch; expected=0x${expectedCrc.toString(16)}; calculated=0x${computedCrc.toString(16)}"
+            }
+            return Prelude(totalLen, headerLen)
+        }
+    }
+}
+
+/**
+ * An event stream message
+ */
+public data class Message(val headers: List<Header>, val payload: ByteArray) {
+
+    public companion object {
+        /**
+         * Read a message from [buffer]
+         */
+        public fun decode(buffer: SdkBuffer): Message {
+            val totalLen = buffer.readInt()
+            check(totalLen <= MAX_MESSAGE_SIZE) { "Invalid Message size: $totalLen" }
+            buffer.rewind(4)
+
+            // read into new ByteArray so we can validate the CRC
+            val messageBytes = ByteArray(totalLen - MESSAGE_CRC_BYTE_LEN)
+            buffer.readFully(messageBytes)
+            val messageBuffer = SdkBuffer.of(messageBytes).apply { commitWritten(messageBytes.size) }
+
+            check(messageBuffer.readRemaining >= PRELUDE_BYTE_LEN_WITH_CRC) { "Invalid message prelude" }
+            val prelude = Prelude.decode(messageBuffer)
+            check(prelude.headersLength <= MAX_HEADER_SIZE) { "Invalid Header size: ${prelude.headersLength}" }
+
+            val remaining = prelude.totalLen - PRELUDE_BYTE_LEN_WITH_CRC - MESSAGE_CRC_BYTE_LEN
+            check(messageBuffer.readRemaining >= remaining) { "Invalid buffer, not enough remaining; have: ${messageBuffer.readRemaining}; expected $remaining" }
+
+            val message = MessageBuilder()
+
+            // read headers
+            var headerBytesConsumed = 0
+            while (headerBytesConsumed < prelude.headersLength) {
+                val start = messageBuffer.readPosition
+                val header = Header.decode(messageBuffer)
+                headerBytesConsumed += messageBuffer.readPosition - start
+                message.addHeader(header)
+            }
+
+            val payloadLen = totalLen - PRELUDE_BYTE_LEN_WITH_CRC - prelude.headersLength - MESSAGE_CRC_BYTE_LEN
+            val payload = ByteArray(payloadLen)
+            messageBuffer.readFully(payload)
+            message.payload = payload
+
+            val expectedCrc = buffer.readUInt()
+            val computedCrc = messageBytes.crc32()
+            check(computedCrc == expectedCrc) {
+                "Message checksum mismatch; expected=0x${expectedCrc.toString(16)}; calculated=0x${computedCrc.toString(16)}"
+            }
+            return message.build()
+        }
+    }
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as Message
+
+        if (headers != other.headers) return false
+        if (!payload.contentEquals(other.payload)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = headers.hashCode()
+        result = 31 * result + payload.contentHashCode()
+        return result
+    }
+
+    public fun encode(dest: SdkBuffer) {
+        val encodedHeaders = SdkBuffer(16)
+        headers.forEach { it.encode(encodedHeaders) }
+        val headersLen = encodedHeaders.readRemaining
+        val payloadLen = payload.size
+
+        val messageLen = PRELUDE_BYTE_LEN_WITH_CRC + headersLen + payloadLen + MESSAGE_CRC_BYTE_LEN
+        check(headersLen < MAX_HEADER_SIZE) { "Invalid Headers length: $headersLen" }
+        check(messageLen < MAX_MESSAGE_SIZE) { "Invalid Message length: $messageLen" }
+
+        val prelude = Prelude(messageLen, headersLen)
+
+        val encodedMessage = ByteArray(messageLen - MESSAGE_CRC_BYTE_LEN)
+        val messageBuf = SdkBuffer.of(encodedMessage)
+
+        prelude.encode(messageBuf)
+        messageBuf.writeFully(encodedHeaders)
+        messageBuf.writeFully(payload)
+
+        dest.writeFully(encodedMessage)
+        dest.writeInt(encodedMessage.crc32().toInt())
+    }
+}
+
+private fun emptyByteArray(): ByteArray = ByteArray(0)
+
+public class MessageBuilder {
+    public val headers: MutableList<Header> = mutableListOf()
+    public var payload: ByteArray? = null
+
+    public fun addHeader(header: Header) { headers.add(header) }
+    public fun addHeader(name: String, value: HeaderValue) { headers.add(Header(name, value)) }
+
+    public fun build(): Message = Message(headers, payload ?: emptyByteArray())
+}
+
+public fun buildMessage(block: MessageBuilder.() -> Unit): Message = MessageBuilder().apply(block).build()
