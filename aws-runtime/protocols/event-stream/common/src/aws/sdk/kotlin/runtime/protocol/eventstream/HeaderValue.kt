@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.io.*
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
@@ -45,12 +46,10 @@ internal enum class HeaderType(val value: Byte) {
     }
 }
 
-@Suppress("NOTHING_TO_INLINE")
-private inline fun SdkBuffer.writeHeader(headerType: HeaderType) = writeByte(headerType.value)
-
 /**
  * Event stream frame typed header value
  */
+@InternalSdkApi
 public sealed class HeaderValue {
     public data class Bool(val value: Boolean) : HeaderValue()
     public data class Byte(val value: UByte) : HeaderValue()
@@ -163,3 +162,6 @@ public sealed class HeaderValue {
         }
     }
 }
+
+@Suppress("NOTHING_TO_INLINE")
+private inline fun SdkBuffer.writeHeader(headerType: HeaderType) = writeByte(headerType.value)

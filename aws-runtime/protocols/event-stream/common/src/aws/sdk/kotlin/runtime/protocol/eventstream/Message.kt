@@ -5,30 +5,29 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.io.*
 import aws.smithy.kotlin.runtime.util.crc32
 
-private const val PRELUDE_BYTE_LEN = 8
-private const val PRELUDE_BYTE_LEN_WITH_CRC = PRELUDE_BYTE_LEN + 4
-private const val MESSAGE_CRC_BYTE_LEN = 4
+internal const val MESSAGE_CRC_BYTE_LEN = 4
 
 // max message size is 16 MB
-private const val MAX_MESSAGE_SIZE = 16 * 1024 * 1024
+internal const val MAX_MESSAGE_SIZE = 16 * 1024 * 1024
 
 // max header size is 128 KB
-private const val MAX_HEADER_SIZE = 128 * 1024
+internal const val MAX_HEADER_SIZE = 128 * 1024
 
 /*
     Message Wire Format
     See also: https://docs.aws.amazon.com/transcribe/latest/dg/event-stream.html
 
-    +--------------------------------------------------------------------+
-    |                            Total Len (32)                          |
-    +--------------------------------------------------------------------+
-    |                          Headers Len (32)                          |
-    +--------------------------------------------------------------------+
-    |                          Prelude CRC (32)                          |
-    +--------------------------------------------------------------------+
+    +--------------------------------------------------------------------+   --
+    |                            Total Len (32)                          |     |
+    +--------------------------------------------------------------------+     | Prelude
+    |                          Headers Len (32)                          |     |
+    +--------------------------------------------------------------------+     |
+    |                          Prelude CRC (32)                          |     |
+    +--------------------------------------------------------------------+   --
     |                            Headers (*)                         ... |
     +--------------------------------------------------------------------+
     |                            Payload (*)                         ... |
@@ -37,43 +36,10 @@ private const val MAX_HEADER_SIZE = 128 * 1024
     +--------------------------------------------------------------------+
 */
 
-public data class Prelude(val totalLen: Int, val headersLength: Int) {
-    public fun encode(dest: SdkBuffer) {
-        val bytes = ByteArray(PRELUDE_BYTE_LEN)
-        val preludeBuf = SdkBuffer.of(bytes)
-
-        preludeBuf.writeInt(totalLen)
-        preludeBuf.writeInt(headersLength)
-
-        dest.writeFully(preludeBuf)
-        dest.writeInt(bytes.crc32().toInt())
-    }
-
-    public companion object {
-        /**
-         * Read the prelude from [buffer] and validate the prelude CRC
-         */
-        public fun decode(buffer: SdkBuffer): Prelude {
-            val crcBuffer = ByteArray(PRELUDE_BYTE_LEN)
-            buffer.readFully(crcBuffer)
-            val computedCrc = crcBuffer.crc32()
-            buffer.rewind(PRELUDE_BYTE_LEN)
-
-            val totalLen = buffer.readInt()
-            val headerLen = buffer.readInt()
-            val expectedCrc = buffer.readUInt()
-
-            check(expectedCrc == computedCrc) {
-                "Prelude checksum mismatch; expected=0x${expectedCrc.toString(16)}; calculated=0x${computedCrc.toString(16)}"
-            }
-            return Prelude(totalLen, headerLen)
-        }
-    }
-}
-
 /**
  * An event stream message
  */
+@InternalSdkApi
 public data class Message(val headers: List<Header>, val payload: ByteArray) {
 
     public companion object {
@@ -90,9 +56,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
             buffer.readFully(messageBytes)
             val messageBuffer = SdkBuffer.of(messageBytes).apply { commitWritten(messageBytes.size) }
 
-            check(messageBuffer.readRemaining >= PRELUDE_BYTE_LEN_WITH_CRC) { "Invalid message prelude" }
             val prelude = Prelude.decode(messageBuffer)
-            check(prelude.headersLength <= MAX_HEADER_SIZE) { "Invalid Header size: ${prelude.headersLength}" }
 
             val remaining = prelude.totalLen - PRELUDE_BYTE_LEN_WITH_CRC - MESSAGE_CRC_BYTE_LEN
             check(messageBuffer.readRemaining >= remaining) { "Invalid buffer, not enough remaining; have: ${messageBuffer.readRemaining}; expected $remaining" }
@@ -108,8 +72,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
                 message.addHeader(header)
             }
 
-            val payloadLen = totalLen - PRELUDE_BYTE_LEN_WITH_CRC - prelude.headersLength - MESSAGE_CRC_BYTE_LEN
-            val payload = ByteArray(payloadLen)
+            val payload = ByteArray(prelude.payloadLen)
             messageBuffer.readFully(payload)
             message.payload = payload
 
@@ -139,6 +102,9 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
         return result
     }
 
+    /**
+     * Encode a message to the [dest] buffer
+     */
     public fun encode(dest: SdkBuffer) {
         val encodedHeaders = SdkBuffer(16)
         headers.forEach { it.encode(encodedHeaders) }
@@ -165,6 +131,10 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
 
 private fun emptyByteArray(): ByteArray = ByteArray(0)
 
+/**
+ * Used to constructing a single event stream [Message]
+ */
+@InternalSdkApi
 public class MessageBuilder {
     public val headers: MutableList<Header> = mutableListOf()
     public var payload: ByteArray? = null
@@ -175,4 +145,9 @@ public class MessageBuilder {
     public fun build(): Message = Message(headers, payload ?: emptyByteArray())
 }
 
+/**
+ * Builds a new [Message] by populating a [MessageBuilder] using the given [block]
+ * @return the constructed messsage
+ */
+@InternalSdkApi
 public fun buildMessage(block: MessageBuilder.() -> Unit): Message = MessageBuilder().apply(block).build()

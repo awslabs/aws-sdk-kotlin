@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.io.*
 
 private const val MIN_HEADER_LEN = 2
@@ -27,6 +28,7 @@ private const val MAX_HEADER_NAME_LEN = 255
 /**
  * An event stream frame header
  */
+@InternalSdkApi
 public data class Header(val name: String, val value: HeaderValue) {
     public companion object {
         /**
