@@ -253,4 +253,7 @@ class MessageTest {
             Message.decode(buffer)
         }.message.shouldContain("Not enough bytes to read a ByteArray of size 102")
     }
+
+
+    // TODO - left off at needing to define a decoder and tests for multiple messages
 }
