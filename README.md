@@ -1,9 +1,12 @@
 # AWS SDK for Kotlin
-[![Apache 2 licensed][apache-badge]][apache-url]
+[![Apache 2 licensed][apache-badge]][apache-url] [![Maven][maven-badge]][maven-url]
 
 [apache-badge]: https://img.shields.io/badge/license-APACHE2-blue.svg
 [apache-url]: https://github.com/awslabs/aws-sdk-kotlin/blob/main/LICENSE
 
+
+[maven-badge]: https://img.shields.io/maven-central/v/aws.sdk.kotlin/s3.svg?label=Maven
+[maven-url]: https://search.maven.org/search?q=g:aws.sdk.kotlin
 
 This repo contains the AWS SDK for Kotlin and its [public roadmap](https://github.com/awslabs/aws-sdk-kotlin/projects/2)
 
