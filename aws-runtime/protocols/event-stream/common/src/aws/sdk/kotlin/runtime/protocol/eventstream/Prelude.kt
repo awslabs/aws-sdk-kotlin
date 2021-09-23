@@ -50,15 +50,16 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
             val computedCrc = crcBuffer.crc32()
             buffer.rewind(PRELUDE_BYTE_LEN)
 
-            val totalLen = buffer.readInt()
-            val headerLen = buffer.readInt()
+            val totalLen = buffer.readUInt()
+            val headerLen = buffer.readUInt()
             val expectedCrc = buffer.readUInt()
 
-            check(headerLen <= MAX_HEADER_SIZE) { "Invalid Header size: $headerLen" }
+            check(totalLen <= MAX_MESSAGE_SIZE.toUInt()) { "Invalid Message size: $totalLen" }
+            check(headerLen <= MAX_HEADER_SIZE.toUInt()) { "Invalid Header size: $headerLen" }
             check(expectedCrc == computedCrc) {
                 "Prelude checksum mismatch; expected=0x${expectedCrc.toString(16)}; calculated=0x${computedCrc.toString(16)}"
             }
-            return Prelude(totalLen, headerLen)
+            return Prelude(totalLen.toInt(), headerLen.toInt())
         }
     }
 }
