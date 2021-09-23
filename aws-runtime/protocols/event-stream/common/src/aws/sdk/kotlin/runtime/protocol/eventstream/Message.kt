@@ -54,7 +54,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
             // read into new ByteArray so we can validate the CRC
             val messageBytes = ByteArray(totalLen.toInt() - MESSAGE_CRC_BYTE_LEN)
             buffer.readFully(messageBytes)
-            val messageBuffer = SdkBuffer.of(messageBytes).apply { commitWritten(messageBytes.size) }
+            val messageBuffer = SdkBuffer.of(messageBytes, markBytesReadable = true)
 
             val prelude = Prelude.decode(messageBuffer)
 
