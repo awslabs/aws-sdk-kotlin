@@ -6,7 +6,8 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.io.SdkBuffer
+import aws.smithy.kotlin.runtime.io.Buffer
+import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.readFully
 
 /**
@@ -34,10 +35,10 @@ public class FrameDecoder {
      */
     public fun reset() { prelude = null }
 
-    private fun isFrameAvailable(buffer: SdkBuffer): Boolean {
+    private fun isFrameAvailable(buffer: Buffer): Boolean {
         val totalLen = prelude?.totalLen ?: return false
         val remaining = totalLen - PRELUDE_BYTE_LEN_WITH_CRC
-        return buffer.readRemaining >= remaining
+        return buffer.readRemaining >= remaining.toULong()
     }
 
     /**
@@ -47,15 +48,15 @@ public class FrameDecoder {
      * The decoder will consume the prelude when enough data is available. When it is invoked with enough
      * data it will consume the remaining message bytes.
      */
-    public fun decodeFrame(buffer: SdkBuffer): DecodedFrame {
-        if (prelude == null && buffer.readRemaining >= PRELUDE_BYTE_LEN_WITH_CRC) {
+    public fun decodeFrame(buffer: Buffer): DecodedFrame {
+        if (prelude == null && buffer.readRemaining >= PRELUDE_BYTE_LEN_WITH_CRC.toULong()) {
             prelude = Prelude.decode(buffer)
         }
 
         return when (isFrameAvailable(buffer)) {
             true -> {
                 val currPrelude = checkNotNull(prelude)
-                val messageBuf = SdkBuffer(currPrelude.totalLen)
+                val messageBuf = SdkByteBuffer(currPrelude.totalLen.toULong())
                 currPrelude.encode(messageBuf)
                 buffer.readFully(messageBuf)
                 reset()

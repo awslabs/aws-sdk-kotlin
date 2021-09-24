@@ -28,9 +28,9 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
     /**
      * Encode the prelude + CRC to [dest] buffer
      */
-    public fun encode(dest: SdkBuffer) {
+    public fun encode(dest: MutableBuffer) {
         val bytes = ByteArray(PRELUDE_BYTE_LEN)
-        val preludeBuf = SdkBuffer.of(bytes)
+        val preludeBuf = SdkByteBuffer.of(bytes)
 
         preludeBuf.writeInt(totalLen)
         preludeBuf.writeInt(headersLength)
@@ -43,16 +43,16 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
         /**
          * Read the prelude from [buffer] and validate the prelude CRC
          */
-        public fun decode(buffer: SdkBuffer): Prelude {
-            check(buffer.readRemaining >= PRELUDE_BYTE_LEN_WITH_CRC) { "Invalid message prelude" }
+        public fun decode(buffer: Buffer): Prelude {
+            check(buffer.readRemaining >= PRELUDE_BYTE_LEN_WITH_CRC.toULong()) { "Invalid message prelude" }
             val crcBuffer = ByteArray(PRELUDE_BYTE_LEN)
             buffer.readFully(crcBuffer)
-            val computedCrc = crcBuffer.crc32()
-            buffer.rewind(PRELUDE_BYTE_LEN)
-
-            val totalLen = buffer.readUInt()
-            val headerLen = buffer.readUInt()
             val expectedCrc = buffer.readUInt()
+            val computedCrc = crcBuffer.crc32()
+
+            val preludeBuffer = SdkByteBuffer.of(crcBuffer).apply { advance(PRELUDE_BYTE_LEN.toULong()) }
+            val totalLen = preludeBuffer.readUInt()
+            val headerLen = preludeBuffer.readUInt()
 
             check(totalLen <= MAX_MESSAGE_SIZE.toUInt()) { "Invalid Message size: $totalLen" }
             check(headerLen <= MAX_HEADER_SIZE.toUInt()) { "Invalid Header size: $headerLen" }

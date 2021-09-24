@@ -81,7 +81,7 @@ public sealed class HeaderValue {
     /**
      * Encode a header value to [dest]
      */
-    public fun encode(dest: SdkBuffer): Unit = when (this) {
+    public fun encode(dest: MutableBuffer): Unit = when (this) {
         is Bool -> {
             val type = if (value) HeaderType.TRUE else HeaderType.FALSE
             dest.writeHeader(type)
@@ -127,7 +127,7 @@ public sealed class HeaderValue {
     }
 
     public companion object {
-        public fun decode(buffer: SdkBuffer): HeaderValue {
+        public fun decode(buffer: Buffer): HeaderValue {
             val type = buffer.readByte().let { HeaderType.fromTypeId(it) }
             return when (type) {
                 HeaderType.TRUE -> HeaderValue.Bool(true)
@@ -138,7 +138,7 @@ public sealed class HeaderValue {
                 HeaderType.INT64 -> HeaderValue.Int64(buffer.readLong())
                 HeaderType.BYTE_ARRAY, HeaderType.STRING -> {
                     val len = buffer.readShort()
-                    if (buffer.readRemaining < len || len < 0) {
+                    if (len < 0 || buffer.readRemaining < len.toULong()) {
                         throw IllegalStateException("Invalid HeaderValue; type=$type, len=$len")
                     }
                     val bytes = ByteArray(len.toInt())
@@ -164,4 +164,4 @@ public sealed class HeaderValue {
 }
 
 @Suppress("NOTHING_TO_INLINE")
-private inline fun SdkBuffer.writeHeader(headerType: HeaderType) = writeByte(headerType.value)
+private inline fun MutableBuffer.writeHeader(headerType: HeaderType) = writeByte(headerType.value)

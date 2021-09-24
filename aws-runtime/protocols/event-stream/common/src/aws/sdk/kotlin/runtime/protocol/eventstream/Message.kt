@@ -46,26 +46,26 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
         /**
          * Read a message from [buffer]
          */
-        public fun decode(buffer: SdkBuffer): Message {
+        public fun decode(buffer: SdkByteBuffer): Message {
             val totalLen = buffer.readUInt()
             check(totalLen <= MAX_MESSAGE_SIZE.toUInt()) { "Invalid Message size: $totalLen" }
-            buffer.rewind(4)
+            buffer.rewind(4u)
 
             // read into new ByteArray so we can validate the CRC
             val messageBytes = ByteArray(totalLen.toInt() - MESSAGE_CRC_BYTE_LEN)
             buffer.readFully(messageBytes)
-            val messageBuffer = SdkBuffer.of(messageBytes, markBytesReadable = true)
+            val messageBuffer = SdkByteBuffer.of(messageBytes).apply { advance(messageBytes.size.toULong()) }
 
             val prelude = Prelude.decode(messageBuffer)
 
             val remaining = prelude.totalLen - PRELUDE_BYTE_LEN_WITH_CRC - MESSAGE_CRC_BYTE_LEN
-            check(messageBuffer.readRemaining >= remaining) { "Invalid buffer, not enough remaining; have: ${messageBuffer.readRemaining}; expected $remaining" }
+            check(messageBuffer.readRemaining >= remaining.toULong()) { "Invalid buffer, not enough remaining; have: ${messageBuffer.readRemaining}; expected $remaining" }
 
             val message = MessageBuilder()
 
             // read headers
-            var headerBytesConsumed = 0
-            while (headerBytesConsumed < prelude.headersLength) {
+            var headerBytesConsumed = 0UL
+            while (headerBytesConsumed < prelude.headersLength.toULong()) {
                 val start = messageBuffer.readPosition
                 val header = Header.decode(messageBuffer)
                 headerBytesConsumed += messageBuffer.readPosition - start
@@ -105,10 +105,10 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
     /**
      * Encode a message to the [dest] buffer
      */
-    public fun encode(dest: SdkBuffer) {
-        val encodedHeaders = SdkBuffer(16)
+    public fun encode(dest: MutableBuffer) {
+        val encodedHeaders = SdkByteBuffer(16u)
         headers.forEach { it.encode(encodedHeaders) }
-        val headersLen = encodedHeaders.readRemaining
+        val headersLen = encodedHeaders.readRemaining.toInt()
         val payloadLen = payload.size
 
         val messageLen = PRELUDE_BYTE_LEN_WITH_CRC + headersLen + payloadLen + MESSAGE_CRC_BYTE_LEN
@@ -118,7 +118,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
         val prelude = Prelude(messageLen, headersLen)
 
         val encodedMessage = ByteArray(messageLen - MESSAGE_CRC_BYTE_LEN)
-        val messageBuf = SdkBuffer.of(encodedMessage)
+        val messageBuf = SdkByteBuffer.of(encodedMessage)
 
         prelude.encode(messageBuf)
         messageBuf.writeFully(encodedHeaders)

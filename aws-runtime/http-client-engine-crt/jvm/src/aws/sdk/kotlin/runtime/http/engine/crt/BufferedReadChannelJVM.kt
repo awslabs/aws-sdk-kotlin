@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http.engine.crt
 
-import aws.smithy.kotlin.runtime.io.SdkBuffer
+import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.of
 import java.nio.ByteBuffer
 
@@ -18,7 +18,7 @@ internal class BufferedReadChannelImpl(
 
     override suspend fun readAvailable(sink: ByteBuffer): Int {
         if (sink.remaining() == 0) return 0
-        val sdkSink = SdkBuffer.of(sink)
+        val sdkSink = SdkByteBuffer.of(sink)
         val consumed = readAsMuchAsPossible(sdkSink, sink.remaining())
         return when {
             consumed == 0 && closed != null -> -1

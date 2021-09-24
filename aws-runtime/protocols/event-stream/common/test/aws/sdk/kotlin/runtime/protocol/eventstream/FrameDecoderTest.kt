@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
-import aws.smithy.kotlin.runtime.io.SdkBuffer
+import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.writeByte
 import aws.smithy.kotlin.runtime.io.writeFully
 import kotlin.math.min
@@ -19,7 +19,7 @@ class FrameDecoderTest {
         val encoded = validMessageWithAllHeaders()
 
         val decoder = FrameDecoder()
-        val buf = SdkBuffer(256)
+        val buf = SdkByteBuffer(256u)
         for (i in 0 until encoded.size - 1) {
             buf.writeByte(encoded[i])
             assertEquals(DecodedFrame.Incomplete, decoder.decodeFrame(buf), "incomplete frame shouldn't result in a message")
@@ -30,7 +30,7 @@ class FrameDecoderTest {
         when (val frame = decoder.decodeFrame(buf)) {
             is DecodedFrame.Incomplete -> fail("frame should be complete now")
             is DecodedFrame.Complete -> {
-                val expected = Message.decode(SdkBuffer.of(encoded, markBytesReadable = true))
+                val expected = Message.decode(SdkByteBuffer.wrapAsReadBuffer(encoded))
                 assertEquals(expected, frame.message)
             }
         }
@@ -38,7 +38,7 @@ class FrameDecoderTest {
 
     @Test
     fun testMultipleStreamingMessagesChunked() {
-        val encoded = SdkBuffer(256).apply {
+        val encoded = SdkByteBuffer(256u).apply {
             writeFully(validMessageWithAllHeaders())
             writeFully(validMessageEmptyPayload())
             writeFully(validMessageNoHeaders())
@@ -47,20 +47,20 @@ class FrameDecoderTest {
         val decoder = FrameDecoder()
         val chunkSize = 8
 
-        val totalChunks = encoded.readRemaining / chunkSize
-        val buffer = SdkBuffer(256)
+        val totalChunks = encoded.readRemaining / chunkSize.toULong()
+        val buffer = SdkByteBuffer(256u)
         val decoded = mutableListOf<Message>()
-        for (i in 0..totalChunks) {
-            buffer.writeFully(encoded, min(chunkSize, encoded.readRemaining))
+        for (i in 0..totalChunks.toInt()) {
+            buffer.writeFully(encoded, min(chunkSize.toULong(), encoded.readRemaining))
             when (val frame = decoder.decodeFrame(buffer)) {
                 is DecodedFrame.Incomplete -> {}
                 is DecodedFrame.Complete -> decoded.add(frame.message)
             }
         }
 
-        val expected1 = Message.decode(SdkBuffer.of(validMessageWithAllHeaders(), markBytesReadable = true))
-        val expected2 = Message.decode(SdkBuffer.of(validMessageEmptyPayload(), markBytesReadable = true))
-        val expected3 = Message.decode(SdkBuffer.of(validMessageNoHeaders(), markBytesReadable = true))
+        val expected1 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageWithAllHeaders()))
+        val expected2 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageEmptyPayload()))
+        val expected3 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageNoHeaders()))
         assertEquals(3, decoded.size)
         assertEquals(expected1, decoded[0])
         assertEquals(expected2, decoded[1])
