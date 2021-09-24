@@ -1,6 +1,7 @@
 package aws.sdk.kotlin.runtime.auth
 
 import aws.sdk.kotlin.runtime.config.loadAwsConfiguration
+import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.Platform
 import io.kotest.matchers.maps.shouldContainAll
@@ -26,7 +27,7 @@ class AWSConfigLoaderFilesystemTest {
     val tempDir: Path? = null
 
     @Test
-    fun itLoadsConfigFileFromFilesystem() {
+    fun itLoadsConfigFileFromFilesystem() = runSuspendTest {
         val configFile = tempDir!!.resolve("config")
         val credentialsFile = tempDir!!.resolve("credentials")
 
@@ -52,7 +53,7 @@ class AWSConfigLoaderFilesystemTest {
     }
 
     @Test
-    fun itLoadsConfigAndCredsFileFromFilesystem() {
+    fun itLoadsConfigAndCredsFileFromFilesystem() = runSuspendTest {
         val configFile = tempDir!!.resolve("config")
         val credentialsFile = tempDir!!.resolve("credentials")
 

@@ -27,6 +27,8 @@ resource Forecast {
 @pattern("^[A-Za-z0-9 ]+$")
 string CityId
 
+string CountryCode
+
 @readonly
 operation GetCurrentTime {
     output: GetCurrentTimeOutput
@@ -61,6 +63,9 @@ operation GetCity {
 }
 
 structure GetCityInput {
+  @required @httpLabel
+  countryCode: CountryCode,
+
   @required cityId: CityId
 }
 

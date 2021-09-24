@@ -32,7 +32,7 @@ internal fun mergeContinuations(input: String): List<FileLine> =
     }
 
 // The line of a file with its position
-data class FileLine(val lineNumber: Int, val content: String)
+internal data class FileLine(val lineNumber: Int, val content: String)
 
 /**
  * Merge the [continuation] into the preceding line in [lines].

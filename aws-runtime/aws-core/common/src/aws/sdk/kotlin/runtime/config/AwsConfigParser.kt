@@ -1,9 +1,9 @@
 package aws.sdk.kotlin.runtime.config
 
-import aws.smithy.kotlin.runtime.SdkBaseException
+import aws.sdk.kotlin.runtime.ConfigurationException
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.logging.warn
-import aws.smithy.kotlin.runtime.util.InternalApi
 
 // Literal characters used in parsing AWS SDK configuration files
 internal object Literals {
@@ -29,8 +29,8 @@ internal typealias ProfileMap = Map<String, Map<String, String>>
  * Tokens representing state declared in AWS configuration files. Other types such as empty lines
  * or comments are filtered out before parsing.
  */
-@InternalApi
-public sealed class Token {
+@InternalSdkApi
+private sealed class Token {
     /**
      * A profile definition line declares that the attributes that follow (until another profile definition is encountered)
      * are part of a named collection of attributes.
@@ -92,7 +92,7 @@ internal enum class FileType(
 }
 
 // Base exception for AWS config file parser errors.
-open class AwsConfigParseException(message: String) : SdkBaseException(message)
+public open class AwsConfigParseException(message: String) : ConfigurationException(message)
 
 // Describes a function that attempts to parse a line into a Token or returns null on failure
 private typealias ParseFn = (FileLine) -> Token?
@@ -202,7 +202,7 @@ private fun tokenOf(type: FileType, input: FileLine): Token =
     type.lineParsers.firstNotNullOf { parseFunction -> parseFunction(input) }
 
 private val logger = Logger.getLogger("AwsConfigParser")
-private var helpText = "See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for file format details."
+private const val helpText = "See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for file format details."
 /**
  * Format (Configuration Files): [ Whitespace? profile Whitespace Identifier Whitespace? ] Whitespace? CommentLine?
  * Components: A profile line consists of brackets, and a profile name: [profile-name]. A comment line can be appended

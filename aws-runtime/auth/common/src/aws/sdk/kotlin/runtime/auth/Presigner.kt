@@ -5,6 +5,9 @@ import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyHeaderType
 import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyValue
 import aws.sdk.kotlin.crt.auth.signing.AwsSigner
 import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
+import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.auth.SigningLocation.HEADER
+import aws.sdk.kotlin.runtime.auth.SigningLocation.QUERY_STRING
 import aws.sdk.kotlin.runtime.crt.path
 import aws.sdk.kotlin.runtime.crt.queryParameters
 import aws.sdk.kotlin.runtime.crt.toCrtHeaders
@@ -17,7 +20,6 @@ import aws.smithy.kotlin.runtime.http.Protocol
 import aws.smithy.kotlin.runtime.http.QueryParameters
 import aws.smithy.kotlin.runtime.http.Url
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
-import aws.smithy.kotlin.runtime.util.InternalApi
 import aws.sdk.kotlin.crt.http.HttpRequest as CrtHttpRequest
 
 /**
@@ -73,7 +75,7 @@ public data class PresignedRequestConfig(
  * @param requestConfig The presign configuration to use in signing the request
  * @return a [HttpRequest] that can be executed by any HTTP client within the specified duration.
  */
-@InternalApi
+@InternalSdkApi
 public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, requestConfig: PresignedRequestConfig): HttpRequest {
     val crtCredentials = serviceConfig.credentialsProvider.getCredentials().toCrt()
     val endpoint = serviceConfig.endpointResolver.resolve(serviceConfig.serviceId, serviceConfig.region)

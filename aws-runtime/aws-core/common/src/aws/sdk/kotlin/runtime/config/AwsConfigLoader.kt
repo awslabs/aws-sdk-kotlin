@@ -1,6 +1,7 @@
 package aws.sdk.kotlin.runtime.config
 
-import aws.smithy.kotlin.runtime.util.InternalApi
+import aws.sdk.kotlin.runtime.AwsSdkSetting
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
 
@@ -13,15 +14,15 @@ import aws.smithy.kotlin.runtime.util.Platform
  *
  * @return an [AwsConfiguration] regardless if local configuration files are available
  */
-@InternalApi
-public fun loadAwsConfiguration(platform: Platform = Platform): AwsConfiguration {
+@InternalSdkApi
+public suspend fun loadAwsConfiguration(platform: Platform = Platform): AwsConfiguration {
     // Determine active profile and location of configuration files
     val source = resolveConfigSource(platform)
 
     // merged AWS configuration based on optional configuration and credential file contents
     val allProfiles = mergeProfiles(
-        parse(FileType.CONFIGURATION, Platform.readFile(source.configPath)),
-        parse(FileType.CREDENTIAL, Platform.readFile(source.credentialsPath)),
+        parse(FileType.CONFIGURATION, Platform.readFileOrNull(source.configPath)?.decodeToString()),
+        parse(FileType.CREDENTIAL, Platform.readFileOrNull(source.credentialsPath)?.decodeToString()),
     )
 
     return AwsConfiguration(source.profile, allProfiles[source.profile] ?: emptyMap())
@@ -51,7 +52,8 @@ internal fun resolveConfigSource(platform: Platform) =
 
 // If the user does not specify the profile to be used, the default profile must be used by the SDK.
 // The default profile must be overridable using the AWS_PROFILE environment variable.
-internal fun envProfileResolver(getEnv: (String) -> String?): String = getEnv("AWS_PROFILE") ?: Literals.DEFAULT_PROFILE
+internal fun envProfileResolver(getEnv: (String) -> String?): String =
+    getEnv(AwsSdkSetting.AwsProfile.environmentVariable) ?: Literals.DEFAULT_PROFILE
 
 /**
  * Expands paths prefixed with '~' to the home directory under which the SDK is running.

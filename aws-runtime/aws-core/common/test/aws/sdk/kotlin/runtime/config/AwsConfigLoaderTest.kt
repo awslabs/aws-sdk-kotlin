@@ -1,5 +1,6 @@
 package aws.sdk.kotlin.runtime.config
 
+import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
@@ -40,7 +41,7 @@ class AwsConfigLoaderTest {
     }
 
     @Test
-    fun itLoadsAWSConfigurationWithCustomProfile() {
+    fun itLoadsAWSConfigurationWithCustomProfile() = runSuspendTest {
         val testPlatform = mockPlatform(
             pathSegment = "/",
             awsProfileEnv = "bob",
@@ -55,7 +56,7 @@ class AwsConfigLoaderTest {
     }
 
     @Test
-    fun configurationLoadingDoesNotThrowErrors() {
+    fun configurationLoadingDoesNotThrowErrors() = runSuspendTest {
         val activeProfile = loadAwsConfiguration()
 
         assertTrue(activeProfile.profileName.isNotBlank())

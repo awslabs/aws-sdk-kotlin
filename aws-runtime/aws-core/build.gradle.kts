@@ -25,7 +25,7 @@ kotlin {
                 val mockkVersion: String by project
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinxSerializationVersion")
                 implementation("io.mockk:mockk:$mockkVersion")
-                implementation("org.slf4j:slf4j-simple:$slf4jVersion")
+                implementation(project(":aws-runtime:testing"))
             }
         }
     }

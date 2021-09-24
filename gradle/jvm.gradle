@@ -20,6 +20,7 @@ kotlin {
             implementation "org.junit.jupiter:junit-jupiter:$junitVersion"
             implementation "org.jetbrains.kotlinx:kotlinx-coroutines-debug:$coroutinesVersion"
             implementation "io.kotest:kotest-assertions-core-jvm:$kotestVersion"
+            implementation "org.slf4j:slf4j-simple:$slf4jVersion"
         }
     }
 }
