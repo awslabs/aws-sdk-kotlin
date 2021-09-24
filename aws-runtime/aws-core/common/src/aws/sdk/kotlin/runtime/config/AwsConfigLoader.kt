@@ -2,6 +2,7 @@ package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.read
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
 
@@ -12,6 +13,8 @@ import aws.smithy.kotlin.runtime.util.Platform
  *
  * This function performs no caching. File I/O will be performed with each call.
  *
+ * @param platform used for unit testing
+ *
  * @return an [AwsConfiguration] regardless if local configuration files are available
  */
 @InternalSdkApi
@@ -19,13 +22,28 @@ public suspend fun loadAwsConfiguration(platform: Platform = Platform): AwsConfi
     // Determine active profile and location of configuration files
     val source = resolveConfigSource(platform)
 
-    // merged AWS configuration based on optional configuration and credential file contents
-    val allProfiles = mergeProfiles(
-        parse(FileType.CONFIGURATION, Platform.readFileOrNull(source.configPath)?.decodeToString()),
-        parse(FileType.CREDENTIAL, Platform.readFileOrNull(source.credentialsPath)?.decodeToString()),
-    )
+    // Read all profiles from local system
+    val allProfiles = loadAllProfiles(platform, source)
 
+    // Return the active profile
     return AwsConfiguration(source.profile, allProfiles[source.profile] ?: emptyMap())
+}
+
+/**
+ * Load all profiles specified in local configuration files.
+ *
+ * @param platform Platform from which to resolve configuration data
+ * @param source Specifies the location of the configuration files
+ *
+ * @return A map of all profiles, which each are a map of key/value pairs.
+ */
+private suspend fun loadAllProfiles(platform: Platform, source: AwsConfigurationSource): Map<String, Map<String, String>> {
+
+    // merged AWS configuration based on optional configuration and credential file contents
+    return mergeProfiles(
+        parse(FileType.CONFIGURATION, platform.readFileOrNull(source.configPath)?.decodeToString()),
+        parse(FileType.CREDENTIAL, platform.readFileOrNull(source.credentialsPath)?.decodeToString()),
+    )
 }
 
 // Merge contents of profile maps
@@ -45,15 +63,12 @@ internal data class AwsConfigurationSource(val profile: String, val configPath: 
  */
 internal fun resolveConfigSource(platform: Platform) =
     AwsConfigurationSource(
-        envProfileResolver(platform::getenv),
-        normalizePath(FileType.CONFIGURATION.resolveFileLocation(platform::getenv, platform.filePathSeparator), platform),
-        normalizePath(FileType.CREDENTIAL.resolveFileLocation(platform::getenv, platform.filePathSeparator), platform)
+        // If the user does not specify the profile to be used, the default profile must be used by the SDK.
+        // The default profile must be overridable using the AWS_PROFILE environment variable.
+        AwsSdkSetting.AwsProfile.read(platform) ?: Literals.DEFAULT_PROFILE,
+        normalizePath(FileType.CONFIGURATION.path(platform), platform),
+        normalizePath(FileType.CREDENTIAL.path(platform), platform)
     )
-
-// If the user does not specify the profile to be used, the default profile must be used by the SDK.
-// The default profile must be overridable using the AWS_PROFILE environment variable.
-internal fun envProfileResolver(getEnv: (String) -> String?): String =
-    getEnv(AwsSdkSetting.AwsProfile.environmentVariable) ?: Literals.DEFAULT_PROFILE
 
 /**
  * Expands paths prefixed with '~' to the home directory under which the SDK is running.

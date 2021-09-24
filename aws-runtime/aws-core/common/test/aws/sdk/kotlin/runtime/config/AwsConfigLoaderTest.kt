@@ -4,6 +4,7 @@ import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -23,7 +24,7 @@ class AwsConfigLoaderTest {
 
         testCases
             .map { TestCase.fromJson(it.jsonObject) }
-            // .filter { testCase -> testCase.name == "User home is loaded from HOME with highest priority on windows platforms." }
+            // .filter { testCase -> testCase.name == "The default config location can be overridden by the user on non-windows platforms." }
             .forEachIndexed { index, testCase ->
                 val testPlatform = mockPlatform(testCase)
 
@@ -51,7 +52,7 @@ class AwsConfigLoaderTest {
 
         val config = loadAwsConfiguration(testPlatform)
 
-        assertTrue(config.profileName == "bob")
+        assertEquals("bob", config.profileName)
         assertTrue(config.isEmpty())
     }
 
@@ -62,7 +63,7 @@ class AwsConfigLoaderTest {
         assertTrue(activeProfile.profileName.isNotBlank())
     }
 
-    internal fun mockPlatform(
+    private fun mockPlatform(
         pathSegment: String,
         awsProfileEnv: String? = null,
         awsConfigFileEnv: String? = null,
@@ -74,6 +75,7 @@ class AwsConfigLoaderTest {
         val testPlatform = mockk<Platform>()
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
+        val readFileParam = slot<String>()
 
         every { testPlatform.filePathSeparator } returns pathSegment
         every { testPlatform.getenv(capture(envKeyParam)) } answers {
@@ -89,6 +91,8 @@ class AwsConfigLoaderTest {
             if (propKeyParam.captured == "user.home") homeProp else null
         }
         every { testPlatform.osInfo() } returns os
+
+        coEvery { testPlatform.readFileOrNull(capture(readFileParam)) } answers { null }
 
         return testPlatform
     }

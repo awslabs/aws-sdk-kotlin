@@ -1,9 +1,12 @@
 package aws.sdk.kotlin.runtime.config
 
+import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.read
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.logging.warn
+import aws.smithy.kotlin.runtime.util.Platform
 
 // Literal characters used in parsing AWS SDK configuration files
 internal object Literals {
@@ -30,7 +33,7 @@ internal typealias ProfileMap = Map<String, Map<String, String>>
  * or comments are filtered out before parsing.
  */
 @InternalSdkApi
-private sealed class Token {
+internal sealed class Token {
     /**
      * A profile definition line declares that the attributes that follow (until another profile definition is encountered)
      * are part of a named collection of attributes.
@@ -53,6 +56,11 @@ private sealed class Token {
 }
 
 /**
+ * This type specifies the behavior of each configuration file type.
+ *
+ * @property setting The [AwsSdkSetting] from which the file location can be determined.
+ * @property lineParsers A list of line parsers associated with the configuration file type.
+ *
  * Two files are used for SDK configuration: a configuration file and a credentials file. Both files are UTF-8 encoded
  * and support all SDK configuration parameters, but have slight format differences.
  *
@@ -62,33 +70,55 @@ private sealed class Token {
  * Credentials	    ~/.aws/credentials	            AWS_SHARED_CREDENTIALS_FILE
  */
 internal enum class FileType(
-    val filePathSegments: List<String>,
-    val envVariableName: String,
-    val lineParsers: List<ParseFn>
+    private val setting: AwsSdkSetting<String>,
+    private val lineParsers: List<ParseFn>,
+    private val pathSegments: List<String>
 ) {
     CONFIGURATION(
-        listOf("~", ".aws", "config"),
-        "AWS_CONFIG_FILE",
-        listOf(::configurationProfile, ::property, ::unmatchedLine)
+        AwsSdkSetting.AwsConfigFile,
+        listOf(::configurationProfile, ::property, ::unmatchedLine),
+        listOf("~", ".aws", "config")
     ),
     CREDENTIAL(
-        listOf("~", ".aws", "credentials"),
-        "AWS_SHARED_CREDENTIALS_FILE",
-        listOf(::credentialProfile, ::property, ::unmatchedLine)
+        AwsSdkSetting.AwsCredentialProfilesFile,
+        listOf(::credentialProfile, ::property, ::unmatchedLine),
+        listOf("~", ".aws", "credentials")
     );
-
-    // Generate a path using the passed separator
-    private fun filePath(platformPathSegmentSeparator: String) =
-        filePathSegments.joinToString(separator = platformPathSegmentSeparator)
 
     /**
      * Determine the absolute path of the configuration file based on environment and policy
-     * @param getEnv a function that returns the value of an environment variable key
-     * @param platformPathSegmentSeparator string that separates one segment from another in a fs path
      * @return the absolute path of the configuration file. This does not imply the file exists or is otherwise valid
      */
-    fun resolveFileLocation(getEnv: (String) -> String?, platformPathSegmentSeparator: String): String =
-        getEnv(envVariableName)?.trim() ?: filePath(platformPathSegmentSeparator)
+    fun path(platform: Platform): String =
+        setting.read(platform)?.trim() ?: pathSegments.joinToString(separator = platform.filePathSeparator)
+
+    /**
+     * Parse a line into a token.  A file may contain the following line types:
+     *
+     * Term	                    Definition	                                                Examples
+     * Profile Definition	    A line that applies a name to a set of properties	        [default], [profile my-profile]
+     * Property Definition	    A piece of configuration applied to a profile	            aws_access_key_id = ACCESS_KEY_0
+     * Property Continuation	The continuation of a value started in property definition	max_concurrent_requests = 20
+     * Comment Line	            A human-readable line of text, ignored by implementation	# My Profile
+     * Blank Line	            A whitespace-only line, ignored by the implementation
+     *
+     * Only Profile and Property Definition lines are modeled as tokens.  Property continuations are collapsed
+     * into Property Definition lines via the [mergeContinuations] function and comment and blank lines are discarded.
+     *
+     * This function works on a parse function list heuristic, which is a list of functions that
+     * return an [Token] instance on successful parse or null if failed.  Each file type has a particular parse chain.
+     *
+     * Unknown Line Type
+     * In the event that a line cannot be determined to be one of the types documented above, parsing of the profile must fail immediately.
+     *
+     * The following examples constitute unknown line types:
+     *
+     * A profile definition without a closing ]
+     * A property definition without an =
+     * A sub-property definition without an =
+     */
+    fun tokenOf(input: FileLine): Token =
+        lineParsers.firstNotNullOf { parseFunction -> parseFunction(input) }
 }
 
 // Base exception for AWS config file parser errors.
@@ -114,7 +144,7 @@ internal fun parse(type: FileType, input: String?): ProfileMap {
         mergeContinuations(input)
             .filter { it.content.isNotEmpty() }
             .map { FileLine(it.lineNumber, it.content.stripInlineComments()) }
-            .map { tokenOf(type, it) to it.lineNumber }
+            .map { type.tokenOf(it) to it.lineNumber }
             .forEach { (token, lineNumber) ->
                 when (token) {
                     is Token.Profile -> {
@@ -172,34 +202,6 @@ private fun mergeProfiles(tokenIndexMap: Map<Token.Profile, Map<String, String>>
             }
         }
         .mapKeys { entry -> entry.key.name }
-
-/**
- * Parse a line into a token.  A file may contain the following line types:
- *
- * Term	                    Definition	                                                Examples
- * Profile Definition	    A line that applies a name to a set of properties	        [default], [profile my-profile]
- * Property Definition	    A piece of configuration applied to a profile	            aws_access_key_id = ACCESS_KEY_0
- * Property Continuation	The continuation of a value started in property definition	max_concurrent_requests = 20
- * Comment Line	            A human-readable line of text, ignored by implementation	# My Profile
- * Blank Line	            A whitespace-only line, ignored by the implementation
- *
- * Only Profile and Property Definition lines are modeled as tokens.  Property continuations are collapsed
- * into Property Definition lines via the [mergeContinuations] function and comment and blank lines are discarded.
- *
- * This function works on a parse function list heuristic, which is a list of functions that
- * return an [Token] instance on successful parse or null if failed.  Each file type has a particular parse chain.
- *
- * Unknown Line Type
- * In the event that a line cannot be determined to be one of the types documented above, parsing of the profile must fail immediately.
- *
- * The following examples constitute unknown line types:
- *
- * A profile definition without a closing ]
- * A property definition without an =
- * A sub-property definition without an =
- */
-private fun tokenOf(type: FileType, input: FileLine): Token =
-    type.lineParsers.firstNotNullOf { parseFunction -> parseFunction(input) }
 
 private val logger = Logger.getLogger("AwsConfigParser")
 private const val helpText = "See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for file format details."
