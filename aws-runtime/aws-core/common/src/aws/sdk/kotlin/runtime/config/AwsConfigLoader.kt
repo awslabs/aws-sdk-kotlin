@@ -18,7 +18,7 @@ import aws.smithy.kotlin.runtime.util.Platform
  * @return an [AwsConfiguration] regardless if local configuration files are available
  */
 @InternalSdkApi
-public suspend fun loadAwsConfiguration(platform: Platform = Platform): AwsConfiguration {
+public suspend fun loadAwsConfiguration(platform: Platform): AwsConfiguration {
     // Determine active profile and location of configuration files
     val source = resolveConfigSource(platform)
 

@@ -16,7 +16,7 @@ package aws.sdk.kotlin.runtime
 @Suppress("DEPRECATION")
 @RequiresOptIn(
     level = RequiresOptIn.Level.ERROR,
-    message = "This API is internal to aws-runtime and generated SDK's and should not be used. It could be removed or changed without notice."
+    message = "This API is internal to aws-runtime and generated SDKs and should not be used. It could be removed or changed without notice."
 )
 @Experimental(level = Experimental.Level.ERROR)
 @Target(

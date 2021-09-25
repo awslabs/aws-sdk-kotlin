@@ -1,5 +1,13 @@
 package aws.sdk.kotlin.runtime.config
 
+import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import aws.smithy.kotlin.runtime.util.OperatingSystem
+import aws.smithy.kotlin.runtime.util.OsFamily
+import aws.smithy.kotlin.runtime.util.Platform
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonLiteral
@@ -44,47 +52,31 @@ class AwsProfileParserTest {
             }
     }
 
-    private sealed class TestCase {
-        companion object {
-            fun fromJson(json: JsonObject): TestCase {
-                val name = (json["name"] as JsonLiteral).content
-                val configIn = (json["input"]!!.jsonObject["configFile"] as JsonLiteral?)?.content
-                val credentialIn = (json["input"]!!.jsonObject["credentialsFile"] as JsonLiteral?)?.content
-                val expected = json["output"]!!.jsonObject["profiles"]?.toString()
-                val errorContaining = (json["output"]!!.jsonObject["errorContaining"] as JsonLiteral?)?.content
+    @Test
+    fun itCanBeUsedInTests() = runSuspendTest {
+        // NOTE: This is the minimal mock of the Platform type needed to support aws configuration loading of a specific kvp.
+        val testPlatform = mockk<Platform>()
+        val propKeyParam = slot<String>()
+        val filePath = slot<String>()
 
-                check(expected != null || errorContaining != null) { "Unexpected output: $json" }
-                check(configIn != null || credentialIn != null) { "Unexpected output: $json" }
-
-                val isErrorCase = expected == null && errorContaining != null
-
-                return if (!isErrorCase) {
-                    when {
-                        configIn != null && credentialIn != null -> MatchConfigAndCredentialOutputCase(name, configIn!!, credentialIn!!, expected!!)
-                        configIn != null -> MatchConfigOutputCase(name, configIn!!, expected!!)
-                        credentialIn != null -> MatchCredentialOutputCase(name, credentialIn!!, expected!!)
-                        else -> error("Unexpected branch from $json")
-                    }
-                } else {
-                    MatchErrorCase(name, configIn!!, errorContaining!!)
-                }
-            }
+        every { testPlatform.getenv(any()) } answers { null }
+        every { testPlatform.getProperty(capture(propKeyParam)) } answers { if (propKeyParam.captured == "user.home") "/home" else null }
+        every { testPlatform.filePathSeparator } returns "/"
+        every { testPlatform.osInfo() } returns OperatingSystem(OsFamily.Linux, null)
+        coEvery { testPlatform.readFileOrNull(capture(filePath)) } answers {
+            if (filePath.captured == "/home/.aws/config") "[profile default]\nboo = hoo".encodeToByteArray() else null
         }
 
-        data class MatchConfigOutputCase(val name: String, val configInput: String, val expectedOutput: String) :
-            TestCase()
+        assertEquals("hoo", fnThatLoadsConfiguration(testPlatform))
+    }
 
-        data class MatchCredentialOutputCase(val name: String, val credentialInput: String, val expectedOutput: String) :
-            TestCase()
+    /**
+     * Example function that reads the active provide and returns true if a key "boo" exists.
+     */
+    private suspend fun fnThatLoadsConfiguration(platform: Platform): String? {
+        val profile = loadAwsConfiguration(platform)
 
-        data class MatchConfigAndCredentialOutputCase(val name: String, val configInput: String, val credentialInput: String, val expectedOutput: String) :
-            TestCase()
-
-        data class MatchErrorCase(
-            val name: String,
-            val input: String,
-            val expectedErrorMessage: String
-        ) : TestCase()
+        return profile["boo"]
     }
 
     @Test
@@ -144,6 +136,49 @@ class AwsProfileParserTest {
         val actual = mergeProfiles(m1, m2)
 
         assertEquals(expected, actual)
+    }
+
+    private sealed class TestCase {
+        companion object {
+            fun fromJson(json: JsonObject): TestCase {
+                val name = (json["name"] as JsonLiteral).content
+                val configIn = (json["input"]!!.jsonObject["configFile"] as JsonLiteral?)?.content
+                val credentialIn = (json["input"]!!.jsonObject["credentialsFile"] as JsonLiteral?)?.content
+                val expected = json["output"]!!.jsonObject["profiles"]?.toString()
+                val errorContaining = (json["output"]!!.jsonObject["errorContaining"] as JsonLiteral?)?.content
+
+                check(expected != null || errorContaining != null) { "Unexpected output: $json" }
+                check(configIn != null || credentialIn != null) { "Unexpected output: $json" }
+
+                val isErrorCase = expected == null && errorContaining != null
+
+                return if (!isErrorCase) {
+                    when {
+                        configIn != null && credentialIn != null -> MatchConfigAndCredentialOutputCase(name, configIn!!, credentialIn!!, expected!!)
+                        configIn != null -> MatchConfigOutputCase(name, configIn!!, expected!!)
+                        credentialIn != null -> MatchCredentialOutputCase(name, credentialIn!!, expected!!)
+                        else -> error("Unexpected branch from $json")
+                    }
+                } else {
+                    MatchErrorCase(name, configIn!!, errorContaining!!)
+                }
+            }
+        }
+
+        data class MatchConfigOutputCase(val name: String, val configInput: String, val expectedOutput: String) :
+            TestCase()
+
+        data class MatchCredentialOutputCase(val name: String, val credentialInput: String, val expectedOutput: String) :
+            TestCase()
+
+        data class MatchConfigAndCredentialOutputCase(val name: String, val configInput: String, val credentialInput: String, val expectedOutput: String) :
+            TestCase()
+
+        data class MatchErrorCase(
+            val name: String,
+            val input: String,
+            val expectedErrorMessage: String
+        ) : TestCase()
     }
 
     /**

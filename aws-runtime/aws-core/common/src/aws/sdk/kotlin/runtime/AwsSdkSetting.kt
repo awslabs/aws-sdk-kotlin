@@ -86,5 +86,5 @@ public sealed class AwsSdkSetting<T>(
  * @return the value of the [AwsSdkSetting] or null if undefined.
  */
 @InternalSdkApi
-public inline fun <reified T> AwsSdkSetting<T>.read(platform: Platform = Platform): T? =
+public inline fun <reified T> AwsSdkSetting<T>.read(platform: Platform): T? =
     (platform.getProperty(jvmProperty) ?: platform.getenv(environmentVariable) ?: defaultValue) as T?

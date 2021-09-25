@@ -58,7 +58,7 @@ class AwsConfigLoaderTest {
 
     @Test
     fun configurationLoadingDoesNotThrowErrors() = runSuspendTest {
-        val activeProfile = loadAwsConfiguration()
+        val activeProfile = loadAwsConfiguration(Platform)
 
         assertTrue(activeProfile.profileName.isNotBlank())
     }

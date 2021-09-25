@@ -9,7 +9,6 @@ extra["moduleName"] = "aws.sdk.kotlin.runtime"
 
 
 val smithyKotlinVersion: String by project
-val slf4jVersion: String by project
 
 kotlin {
     sourceSets {

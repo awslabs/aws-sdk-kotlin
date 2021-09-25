@@ -153,8 +153,7 @@ internal fun parse(type: FileType, input: String?): ProfileMap {
                     }
                     is Token.Property -> {
                         val outerMap = this
-                        if (lastProfile == null)
-                            throw AwsConfigParseException("Expected a profile definition preceding '${token.key}' on line $lineNumber. $helpText")
+                        if (lastProfile == null) throwParseException("Expected a profile definition preceding '${token.key}'", lineNumber)
 
                         // Profile definitions in configuration files without the profile prefix are silently dropped.
                         if (lastProfile!!.isValidForm) {
@@ -163,16 +162,16 @@ internal fun parse(type: FileType, input: String?): ProfileMap {
                                 buildMap {
                                     putAll(outerMap[lastProfile]!!)
                                     if (containsKey(token.key)) {
-                                        logger.warn("${token.key} defined multiple times in profile '${lastProfile?.name}' on line $lineNumber. $helpText")
+                                        warn("'${token.key}' defined multiple times in profile '${lastProfile?.name}'", lineNumber)
                                     }
                                     put(token.key, token.value)
                                 }
                             )
                         } else {
-                            logger.warn("Ignoring property '${token.key}' on line $lineNumber because '${lastProfile?.name}' is an invalid profile. $helpText")
+                            warn("Ignoring property '${token.key}' because '${lastProfile?.name}' is an invalid profile", lineNumber)
                         }
                     }
-                    is Token.Unmatched -> { logger.warn("Ignoring unknown data on line ${token.line.lineNumber}") }
+                    is Token.Unmatched -> { warn("Ignoring unknown data", lineNumber) }
                 }
             }
     }
@@ -296,7 +295,7 @@ private fun credentialProfile(input: FileLine): Token.Profile? =
 private fun property(input: FileLine): Token.Property? {
     if (input.content.isContinuationLine() || input.content.isProfileLine()) return null
 
-    val (key, value) = input.content.splitProperty()
+    val (key, value) = input.content.splitProperty(input.lineNumber)
 
     return if (key.isContiguous()) {
         Token.Property(key, value)
@@ -318,7 +317,7 @@ private fun unmatchedLine(input: FileLine): Token = Token.Unmatched(input)
 private fun String.verifyProfileWrapper(lineNumber: Int): String {
     // Profile definitions without brackets cause parsing to fail immediately.
     if (startsWith(Literals.PROFILE_PREFIX) && !endsWith(Literals.PROFILE_SUFFIX))
-        throw AwsConfigParseException("Profile definition must end with '${Literals.PROFILE_SUFFIX}' on line $lineNumber")
+        throwParseException("Profile definition must end with '${Literals.PROFILE_SUFFIX}'", lineNumber)
 
     return this
 }
@@ -344,10 +343,10 @@ private fun String.stripComment(comment: String) =
     if (contains(Literals.NEW_LINE)) this else split(comment, limit = 2)[0]
 
 // Parse a property definition line into a key and value pair.
-private fun String.splitProperty(): Pair<String, String> {
+private fun String.splitProperty(lineNumber: Int): Pair<String, String> {
     val kv = split(Literals.PROPERTY_SPLITTER, limit = 2)
-    if (kv.size != 2) throw AwsConfigParseException("Expected an ${Literals.PROPERTY_SPLITTER} sign defining a property.")
-    if (kv[0].isBlank()) throw AwsConfigParseException("Property did not have a name.")
+    if (kv.size != 2) throwParseException("Expected an ${Literals.PROPERTY_SPLITTER} sign defining a property", lineNumber)
+    if (kv[0].isBlank()) throwParseException("Property did not have a name", lineNumber)
 
     val key = kv[0].trim()
     val value = if (kv[1].isPropertyContinuation()) kv[1] else kv[1].trim() // if property continuation, do not remove whitespace
@@ -378,3 +377,14 @@ internal fun Pair<String?, String?>.concatOrNull() = if (first != null && second
  * TODO: When/if the stdlib version becomes stable this should be removed
  */
 internal fun <K, V> buildMap(block: MutableMap<K, V>.() -> Unit): Map<K, V> = mutableMapOf<K, V>().apply(block)
+
+private fun contextMessage(message: String, lineNumber: Int): String =
+    "$message on line $lineNumber. $helpText"
+
+private fun warn(message: String, lineNumber: Int) {
+    logger.warn(contextMessage(message, lineNumber))
+}
+
+private fun throwParseException(message: String, lineNumber: Int): Nothing {
+    throw AwsConfigParseException(contextMessage(message, lineNumber))
+}
