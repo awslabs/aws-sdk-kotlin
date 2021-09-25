@@ -63,9 +63,6 @@ operation GetCity {
 }
 
 structure GetCityInput {
-  @required @httpLabel
-  countryCode: CountryCode,
-
   @required cityId: CityId
 }
 
