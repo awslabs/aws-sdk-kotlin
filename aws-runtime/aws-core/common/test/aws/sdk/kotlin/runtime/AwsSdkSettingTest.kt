@@ -14,7 +14,7 @@ class AwsSdkSettingTest {
     fun itLoadsJVMSettingFirst() {
         val testPlatform = mockPlatform(mapOf("AWS_PROFILE" to "env"), mapOf("aws.profile" to "jvm"))
 
-        val actual = AwsSdkSetting.AwsProfile.read(testPlatform)
+        val actual = AwsSdkSetting.AwsProfile.resolve(testPlatform)
 
         assertEquals("jvm", actual)
     }
@@ -23,7 +23,7 @@ class AwsSdkSettingTest {
     fun itLoadsEnvSettingSecond() {
         val testPlatform = mockPlatform(mapOf("AWS_PROFILE" to "env"), mapOf())
 
-        val actual = AwsSdkSetting.AwsProfile.read(testPlatform)
+        val actual = AwsSdkSetting.AwsProfile.resolve(testPlatform)
 
         assertEquals("env", actual)
     }
@@ -32,7 +32,7 @@ class AwsSdkSettingTest {
     fun itLoadsDefaultSettingThird() {
         val testPlatform = mockPlatform(mapOf(), mapOf())
 
-        val actual = AwsSdkSetting.AwsProfile.read(testPlatform)
+        val actual = AwsSdkSetting.AwsProfile.resolve(testPlatform)
 
         assertEquals("default", actual)
     }
@@ -41,7 +41,7 @@ class AwsSdkSettingTest {
     fun itReturnsNullWithNoValue() {
         val testPlatform = mockPlatform(mapOf(), mapOf())
 
-        val actual = AwsSdkSetting.AwsAccessKeyId.read(testPlatform)
+        val actual = AwsSdkSetting.AwsAccessKeyId.resolve(testPlatform)
 
         assertNull(actual)
     }

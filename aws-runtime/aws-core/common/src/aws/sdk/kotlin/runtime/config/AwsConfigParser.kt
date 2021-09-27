@@ -3,7 +3,7 @@ package aws.sdk.kotlin.runtime.config
 import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.read
+import aws.sdk.kotlin.runtime.resolve
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.logging.warn
 import aws.smithy.kotlin.runtime.util.Platform
@@ -90,7 +90,7 @@ internal enum class FileType(
      * @return the absolute path of the configuration file. This does not imply the file exists or is otherwise valid
      */
     fun path(platform: Platform): String =
-        setting.read(platform)?.trim() ?: pathSegments.joinToString(separator = platform.filePathSeparator)
+        setting.resolve(platform)?.trim() ?: pathSegments.joinToString(separator = platform.filePathSeparator)
 
     /**
      * Parse a line into a token.  A file may contain the following line types:

@@ -2,7 +2,7 @@ package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.read
+import aws.sdk.kotlin.runtime.resolve
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
 
@@ -65,7 +65,7 @@ internal fun resolveConfigSource(platform: Platform) =
     AwsConfigurationSource(
         // If the user does not specify the profile to be used, the default profile must be used by the SDK.
         // The default profile must be overridable using the AWS_PROFILE environment variable.
-        AwsSdkSetting.AwsProfile.read(platform) ?: Literals.DEFAULT_PROFILE,
+        AwsSdkSetting.AwsProfile.resolve(platform) ?: Literals.DEFAULT_PROFILE,
         normalizePath(FileType.CONFIGURATION.path(platform), platform),
         normalizePath(FileType.CREDENTIAL.path(platform), platform)
     )
