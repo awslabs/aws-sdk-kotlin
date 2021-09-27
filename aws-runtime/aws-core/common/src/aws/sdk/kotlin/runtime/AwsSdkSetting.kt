@@ -63,7 +63,7 @@ public sealed class AwsSdkSetting<T>(
     /**
      * Configure the default path to the shared credentials profile file.
      */
-    public object AwsCredentialProfilesFile :
+    public object AwsSharedCredentialsFile :
         AwsSdkSetting<String>("AWS_SHARED_CREDENTIALS_FILE", "aws.sharedCredentialsFile")
 
     /**
@@ -86,5 +86,5 @@ public sealed class AwsSdkSetting<T>(
  * @return the value of the [AwsSdkSetting] or null if undefined.
  */
 @InternalSdkApi
-public inline fun <reified T> AwsSdkSetting<T>.read(platform: Platform): T? =
+public inline fun <reified T> AwsSdkSetting<T>.resolve(platform: Platform): T? =
     (platform.getProperty(jvmProperty) ?: platform.getenv(environmentVariable) ?: defaultValue) as T?

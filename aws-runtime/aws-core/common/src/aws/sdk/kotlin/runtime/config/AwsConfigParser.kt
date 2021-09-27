@@ -80,7 +80,7 @@ internal enum class FileType(
         listOf("~", ".aws", "config")
     ),
     CREDENTIAL(
-        AwsSdkSetting.AwsCredentialProfilesFile,
+        AwsSdkSetting.AwsSharedCredentialsFile,
         listOf(::credentialProfile, ::property, ::unmatchedLine),
         listOf("~", ".aws", "credentials")
     );
