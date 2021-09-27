@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.regions.providers
 
 import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
