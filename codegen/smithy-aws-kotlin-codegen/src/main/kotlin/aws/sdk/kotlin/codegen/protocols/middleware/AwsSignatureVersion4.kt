@@ -43,7 +43,7 @@ open class AwsSignatureVersion4(private val signingServiceName: String) : HttpFe
         writer.addImport(AwsRuntimeTypes.Auth.DefaultChainCredentialsProvider)
 
         writer.write("this.credentialsProvider = config.credentialsProvider ?: DefaultChainCredentialsProvider()")
-        writer.write("this.service = #S", signingServiceName)
+        writer.write("this.signingService = #S", signingServiceName)
     }
 
     companion object {
