@@ -15,18 +15,18 @@ import aws.smithy.kotlin.runtime.util.Platform
  *
  * @param platform used for unit testing
  *
- * @return an [AwsConfiguration] regardless if local configuration files are available
+ * @return an [AwsProfile] regardless if local configuration files are available
  */
 @InternalSdkApi
-public suspend fun loadAwsConfiguration(platform: Platform): AwsConfiguration {
+public suspend fun loadActiveAwsProfile(platform: Platform): AwsProfile {
     // Determine active profile and location of configuration files
     val source = resolveConfigSource(platform)
 
     // Read all profiles from local system
-    val allProfiles = loadAllProfiles(platform, source)
+    val allProfiles = loadAwsProfiles(platform, source)
 
     // Return the active profile
-    return AwsConfiguration(source.profile, allProfiles[source.profile] ?: emptyMap())
+    return AwsProfile(source.profile, allProfiles[source.profile] ?: emptyMap())
 }
 
 /**
@@ -37,7 +37,7 @@ public suspend fun loadAwsConfiguration(platform: Platform): AwsConfiguration {
  *
  * @return A map of all profiles, which each are a map of key/value pairs.
  */
-private suspend fun loadAllProfiles(platform: Platform, source: AwsConfigurationSource): Map<String, Map<String, String>> {
+private suspend fun loadAwsProfiles(platform: Platform, source: AwsConfigurationSource): Map<String, Map<String, String>> {
 
     // merged AWS configuration based on optional configuration and credential file contents
     return mergeProfiles(

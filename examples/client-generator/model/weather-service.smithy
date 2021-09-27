@@ -27,8 +27,6 @@ resource Forecast {
 @pattern("^[A-Za-z0-9 ]+$")
 string CityId
 
-string CountryCode
-
 @readonly
 operation GetCurrentTime {
     output: GetCurrentTimeOutput

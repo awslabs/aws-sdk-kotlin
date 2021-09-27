@@ -50,17 +50,17 @@ class AwsConfigLoaderTest {
             os = OperatingSystem(OsFamily.Linux, null)
         )
 
-        val config = loadAwsConfiguration(testPlatform)
+        val config = loadActiveAwsProfile(testPlatform)
 
-        assertEquals("bob", config.profileName)
+        assertEquals("bob", config.name)
         assertTrue(config.isEmpty())
     }
 
     @Test
     fun configurationLoadingDoesNotThrowErrors() = runSuspendTest {
-        val activeProfile = loadAwsConfiguration(Platform)
+        val activeProfile = loadActiveAwsProfile(Platform)
 
-        assertTrue(activeProfile.profileName.isNotBlank())
+        assertTrue(activeProfile.name.isNotBlank())
     }
 
     private fun mockPlatform(

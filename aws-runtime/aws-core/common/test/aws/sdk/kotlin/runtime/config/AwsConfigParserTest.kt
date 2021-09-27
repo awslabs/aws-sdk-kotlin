@@ -74,7 +74,7 @@ class AwsProfileParserTest {
      * Example function that reads the active provide and returns true if a key "boo" exists.
      */
     private suspend fun fnThatLoadsConfiguration(platform: Platform): String? {
-        val profile = loadAwsConfiguration(platform)
+        val profile = loadActiveAwsProfile(platform)
 
         return profile["boo"]
     }

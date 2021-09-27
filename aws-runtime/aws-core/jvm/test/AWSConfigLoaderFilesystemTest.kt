@@ -1,6 +1,6 @@
 package aws.sdk.kotlin.runtime.auth
 
-import aws.sdk.kotlin.runtime.config.loadAwsConfiguration
+import aws.sdk.kotlin.runtime.config.loadActiveAwsProfile
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.Platform
@@ -42,9 +42,9 @@ class AWSConfigLoaderFilesystemTest {
             os = Platform.osInfo() // Actual value
         )
 
-        val actual = loadAwsConfiguration(testPlatform)
+        val actual = loadActiveAwsProfile(testPlatform)
 
-        assertEquals("foo", actual.profileName)
+        assertEquals("foo", actual.name)
         assertTrue(actual.containsKey("name"))
         assertEquals("value", actual["name"])
 
@@ -68,9 +68,9 @@ class AWSConfigLoaderFilesystemTest {
             os = Platform.osInfo() // Actual value
         )
 
-        val actual = loadAwsConfiguration(testPlatform)
+        val actual = loadActiveAwsProfile(testPlatform)
 
-        assertEquals("default", actual.profileName)
+        assertEquals("default", actual.name)
         assertEquals(3, actual.size)
         actual.shouldContainAll(
             mapOf(
