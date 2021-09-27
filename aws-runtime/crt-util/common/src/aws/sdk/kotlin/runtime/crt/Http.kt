@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.crt
 import aws.sdk.kotlin.crt.http.HttpRequestBodyStream
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.util.splitAsQueryParameters
 import kotlin.coroutines.coroutineContext
@@ -24,24 +25,38 @@ public suspend fun HttpRequestBuilder.toSignableCrtRequest(unsignedPayload: Bool
     // see: https://github.com/awslabs/smithy-kotlin/issues/296
 
     val bodyStream = if (!unsignedPayload) {
-        when (val httpBody = body) {
-            is HttpBody.Bytes -> HttpRequestBodyStream.fromByteArray(httpBody.bytes())
-            is HttpBody.Streaming -> if (httpBody.isReplayable) {
-                // FIXME: this is not particularly efficient since we have to launch a coroutine to fill it.
-                // see https://github.com/awslabs/smithy-kotlin/issues/436
-                ReadChannelBodyStream(httpBody.readFrom(), coroutineContext)
-            } else {
-                // can only consume the stream once
-                null
-            }
-            else -> null
-        }
+        signableBodyStream(body)
     } else {
         null
     }
 
     return HttpRequestCrt(method.name, url.encodedPath, HttpHeadersCrt(headers), bodyStream)
 }
+
+private suspend fun signableBodyStream(body: HttpBody): HttpRequestBodyStream? = when (body) {
+    is HttpBody.Bytes -> HttpRequestBodyStream.fromByteArray(body.bytes())
+    is HttpBody.Streaming -> if (body.isReplayable) {
+        // FIXME: this is not particularly efficient since we have to launch a coroutine to fill it.
+        // see https://github.com/awslabs/smithy-kotlin/issues/436
+        ReadChannelBodyStream(body.readFrom(), coroutineContext)
+    } else {
+        // can only consume the stream once
+        null
+    }
+    else -> null
+}
+
+/**
+ * Convert an [HttpRequest] into a CRT HttpRequest for the purposes of signing
+ */
+@InternalSdkApi
+public suspend fun HttpRequest.toSignableCrtRequest(): HttpRequestCrt =
+    HttpRequestCrt(
+        method = method.name,
+        encodedPath = url.encodedPath,
+        headers = headers.toCrtHeaders(),
+        body = signableBodyStream(body)
+    )
 
 // proxy the smithy-client-rt version of Headers to CRT (which is based on our client-rt version in the first place)
 private class HttpHeadersCrt(val headers: HeadersBuilder) : HeadersCrt {

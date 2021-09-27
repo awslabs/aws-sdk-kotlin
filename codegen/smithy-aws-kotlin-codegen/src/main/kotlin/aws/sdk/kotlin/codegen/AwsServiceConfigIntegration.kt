@@ -61,10 +61,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             )
 
             CredentialsProviderProp = ClientConfigProperty {
-                symbol = buildSymbol {
-                    name = "CredentialsProvider"
-                    namespace(AwsKotlinDependency.AWS_AUTH)
-                }
+                symbol = AwsRuntimeTypes.Auth.CredentialsProvider
                 baseClass = authConfigSymbol
                 documentation = """
                     The AWS credentials provider to use for authenticating requests. If not provided a
