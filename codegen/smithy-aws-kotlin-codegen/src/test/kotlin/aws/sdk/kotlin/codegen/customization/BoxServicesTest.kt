@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.codegen.customization
 
-import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.isNumberShape
@@ -14,6 +13,7 @@ import software.amazon.smithy.kotlin.codegen.test.prependNamespaceAndService
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.traits.BoxTrait
+import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 

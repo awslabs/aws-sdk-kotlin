@@ -9,9 +9,9 @@ import aws.sdk.kotlin.runtime.testing.ManualDispatchTestBase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
-import org.junit.jupiter.api.Test
 import java.nio.ByteBuffer
 import kotlin.test.AfterTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class BufferedReadChannelByteBufferTest : ManualDispatchTestBase() {
