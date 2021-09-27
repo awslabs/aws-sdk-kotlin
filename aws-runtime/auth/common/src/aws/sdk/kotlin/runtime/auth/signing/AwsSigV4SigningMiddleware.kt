@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.auth
+package aws.sdk.kotlin.runtime.auth.signing
 
 import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyValue
 import aws.sdk.kotlin.crt.auth.signing.AwsSigner
-import aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm
-import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.sdk.kotlin.runtime.crt.toSignableCrtRequest
 import aws.sdk.kotlin.runtime.crt.update
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
@@ -18,7 +17,6 @@ import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.withContext
 import aws.smithy.kotlin.runtime.logging.Logger
-import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.util.get
 
 /**
@@ -43,6 +41,11 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
          * Sets what signature should be computed
          */
         public var signatureType: AwsSignatureType = AwsSignatureType.HTTP_REQUEST_VIA_HEADERS
+
+        /**
+         * The algorithm to sign with
+         */
+        public var algorithm: AwsSigningAlgorithm = AwsSigningAlgorithm.SIGV4
 
         /**
          * The uri is assumed to be encoded once in preparation for transmission.  Certain services
@@ -78,8 +81,8 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
         override fun create(block: Config.() -> Unit): AwsSigV4SigningMiddleware {
             val config = Config().apply(block)
 
-            requireNotNull(config.credentialsProvider) { "AwsSigv4Signer requires a credentialsProvider" }
-            requireNotNull(config.signingService) { "AwsSigv4Signer requires a signing service" }
+            requireNotNull(config.credentialsProvider) { "AwsSigv4SigningMiddleware requires a credentialsProvider" }
+            requireNotNull(config.signingService) { "AwsSigv4SigningMiddleware requires a signing service" }
 
             return AwsSigV4SigningMiddleware(config)
         }
@@ -117,19 +120,20 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
             // then we must decide how to compute the payload hash ourselves (defaults to unsigned payload)
             val isUnboundedStream = signableRequest.body == null && req.subject.body is HttpBody.Streaming
 
-            val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
+            // operation signing config is baseConfig + operation specific config/overrides
+            val opSigningConfig = AwsSigningConfig {
                 region = req.context[AuthAttributes.SigningRegion]
                 service = req.context.getOrNull(AuthAttributes.SigningService) ?: checkNotNull(config.signingService)
-                credentials = resolvedCredentials.toCrt()
-                algorithm = AwsSigningAlgorithm.SIGV4
-                date = req.context.getOrNull(AuthAttributes.SigningDate)?.epochMilliseconds
+                credentials = resolvedCredentials
+                algorithm = config.algorithm
+                date = req.context.getOrNull(AuthAttributes.SigningDate)
 
-                signatureType = config.signatureType.toCrt()
+                signatureType = config.signatureType
                 omitSessionToken = config.omitSessionToken
                 normalizeUriPath = config.normalizeUriPath
                 useDoubleUriEncode = config.useDoubleUriEncode
 
-                signedBodyHeader = config.signedBodyHeaderType.toCrt()
+                signedBodyHeader = config.signedBodyHeaderType
                 signedBodyValue = when {
                     isUnsignedRequest -> AwsSignedBodyValue.UNSIGNED_PAYLOAD
                     req.subject.body is HttpBody.Empty -> AwsSignedBodyValue.EMPTY_SHA256
@@ -141,7 +145,8 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
                     else -> null
                 }
             }
-            val signedRequest = AwsSigner.signRequest(signableRequest, signingConfig)
+
+            val signedRequest = AwsSigner.signRequest(signableRequest, opSigningConfig.toCrt())
             req.subject.update(signedRequest)
             req.subject.body.resetStream()
 

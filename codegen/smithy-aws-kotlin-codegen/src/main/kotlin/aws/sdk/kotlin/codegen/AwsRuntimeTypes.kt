@@ -38,14 +38,16 @@ object AwsRuntimeTypes {
     }
 
     object Auth {
-        val AwsSigV4SigningMiddleware = runtimeSymbol("AwsSigV4SigningMiddleware", AwsKotlinDependency.AWS_AUTH)
-        val AwsSignedBodyHeaderType = runtimeSymbol("AwsSignedBodyHeaderType", AwsKotlinDependency.AWS_AUTH)
-        val CredentialsProvider = runtimeSymbol("CredentialsProvider", AwsKotlinDependency.AWS_AUTH)
-        val createPresignedRequest = runtimeSymbol("createPresignedRequest", AwsKotlinDependency.AWS_AUTH)
-        val DefaultChainCredentialsProvider = runtimeSymbol("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_AUTH)
-        val PresignedRequestConfig = runtimeSymbol("PresignedRequestConfig", AwsKotlinDependency.AWS_AUTH)
-        val ServicePresignConfig = runtimeSymbol("ServicePresignConfig", AwsKotlinDependency.AWS_AUTH)
-        val SigningLocation = runtimeSymbol("SigningLocation", AwsKotlinDependency.AWS_AUTH)
+        val AwsSigV4SigningMiddleware = runtimeSymbol("AwsSigV4SigningMiddleware", AwsKotlinDependency.AWS_AUTH, "signing")
+        val AwsSignedBodyHeaderType = runtimeSymbol("AwsSignedBodyHeaderType", AwsKotlinDependency.AWS_AUTH, "signing")
+        val CredentialsProvider = runtimeSymbol("CredentialsProvider", AwsKotlinDependency.AWS_AUTH, "credentials")
+        val Credentials = runtimeSymbol("Credentials", AwsKotlinDependency.AWS_AUTH, "credentials")
+        val StaticCredentialsProvider = runtimeSymbol("StaticCredentialsProvider", AwsKotlinDependency.AWS_AUTH, "credentials")
+        val createPresignedRequest = runtimeSymbol("createPresignedRequest", AwsKotlinDependency.AWS_AUTH, "signing")
+        val DefaultChainCredentialsProvider = runtimeSymbol("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_AUTH, "credentials")
+        val PresignedRequestConfig = runtimeSymbol("PresignedRequestConfig", AwsKotlinDependency.AWS_AUTH, "signing")
+        val ServicePresignConfig = runtimeSymbol("ServicePresignConfig", AwsKotlinDependency.AWS_AUTH, "signing")
+        val SigningLocation = runtimeSymbol("SigningLocation", AwsKotlinDependency.AWS_AUTH, "signing")
     }
 
     object Regions {
