@@ -1,7 +1,6 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
-import org.junit.jupiter.api.Test
 import software.amazon.smithy.build.MockManifest
 import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
@@ -14,6 +13,7 @@ import software.amazon.smithy.kotlin.codegen.test.shouldContainOnlyOnceWithDiff
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
+import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class PresignerGeneratorTest {

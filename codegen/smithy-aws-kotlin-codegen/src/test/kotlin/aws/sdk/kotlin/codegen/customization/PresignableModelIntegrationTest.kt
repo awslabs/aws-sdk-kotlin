@@ -1,11 +1,11 @@
 package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
-import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.shapes.OperationShape
+import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
