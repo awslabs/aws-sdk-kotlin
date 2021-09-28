@@ -34,7 +34,7 @@ import kotlin.time.ExperimentalTime
 internal const val DEFAULT_TOKEN_TTL_SECONDS: Int = 21_600
 internal const val DEFAULT_MAX_RETRIES: UInt = 3u
 
-private const val SERVICE = "IMDS"
+private const val SERVICE = "imds"
 
 /**
  * IMDSv2 Client
@@ -85,7 +85,7 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
             resolver = ImdsEndpointResolver(endpointModeOverride, endpointOverride)
         },
         UserAgent.create {
-            metadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, ""))
+            metadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
         },
         TokenMiddleware.create {
             httpClient = this@EC2Metadata.httpClient
