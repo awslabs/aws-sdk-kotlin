@@ -2,7 +2,7 @@ package aws.sdk.kotlin.runtime
 
 import aws.smithy.kotlin.runtime.util.Platform
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.slot
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -12,51 +12,50 @@ class AwsSdkSettingTest {
 
     @Test
     fun itLoadsJVMSettingFirst() {
-        val testPlatform = mockPlatform(mapOf("AWS_PROFILE" to "env"), mapOf("aws.profile" to "jvm"))
+        mockPlatform(mapOf("AWS_PROFILE" to "env"), mapOf("aws.profile" to "jvm"))
 
-        val actual = AwsSdkSetting.AwsProfile.resolve(testPlatform)
+        val actual = AwsSdkSetting.AwsProfile.resolve()
 
         assertEquals("jvm", actual)
     }
 
     @Test
     fun itLoadsEnvSettingSecond() {
-        val testPlatform = mockPlatform(mapOf("AWS_PROFILE" to "env"), mapOf())
+        mockPlatform(mapOf("AWS_PROFILE" to "env"), mapOf())
 
-        val actual = AwsSdkSetting.AwsProfile.resolve(testPlatform)
+        val actual = AwsSdkSetting.AwsProfile.resolve()
 
         assertEquals("env", actual)
     }
 
     @Test
     fun itLoadsDefaultSettingThird() {
-        val testPlatform = mockPlatform(mapOf(), mapOf())
+        mockPlatform(mapOf(), mapOf())
 
-        val actual = AwsSdkSetting.AwsProfile.resolve(testPlatform)
+        val actual = AwsSdkSetting.AwsProfile.resolve()
 
         assertEquals("default", actual)
     }
 
     @Test
     fun itReturnsNullWithNoValue() {
-        val testPlatform = mockPlatform(mapOf(), mapOf())
+        mockPlatform(mapOf(), mapOf())
 
-        val actual = AwsSdkSetting.AwsAccessKeyId.resolve(testPlatform)
+        val actual = AwsSdkSetting.AwsAccessKeyId.resolve()
 
         assertNull(actual)
     }
 
-    private fun mockPlatform(env: Map<String, String>, jvmProps: Map<String, String>): Platform {
-        val testPlatform = mockk<Platform>()
+    private fun mockPlatform(env: Map<String, String>, jvmProps: Map<String, String>) {
+        mockkObject(Platform)
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
 
-        every { testPlatform.getenv(capture(envKeyParam)) } answers {
+        every { Platform.getenv(capture(envKeyParam)) } answers {
             env[envKeyParam.captured]
         }
-        every { testPlatform.getProperty(capture(propKeyParam)) } answers {
+        every { Platform.getProperty(capture(propKeyParam)) } answers {
             jvmProps[propKeyParam.captured]
         }
-        return testPlatform
     }
 }

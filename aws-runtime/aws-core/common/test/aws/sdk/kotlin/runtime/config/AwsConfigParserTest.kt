@@ -6,8 +6,9 @@ import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.slot
+import io.mockk.unmockkObject
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonLiteral
@@ -55,26 +56,28 @@ class AwsProfileParserTest {
     @Test
     fun itCanBeUsedInTests() = runSuspendTest {
         // NOTE: This is the minimal mock of the Platform type needed to support aws configuration loading of a specific kvp.
-        val testPlatform = mockk<Platform>()
+        mockkObject(Platform)
         val propKeyParam = slot<String>()
         val filePath = slot<String>()
 
-        every { testPlatform.getenv(any()) } answers { null }
-        every { testPlatform.getProperty(capture(propKeyParam)) } answers { if (propKeyParam.captured == "user.home") "/home" else null }
-        every { testPlatform.filePathSeparator } returns "/"
-        every { testPlatform.osInfo() } returns OperatingSystem(OsFamily.Linux, null)
-        coEvery { testPlatform.readFileOrNull(capture(filePath)) } answers {
+        every { Platform.getenv(any()) } answers { null }
+        every { Platform.getProperty(capture(propKeyParam)) } answers { if (propKeyParam.captured == "user.home") "/home" else null }
+        every { Platform.filePathSeparator } returns "/"
+        every { Platform.osInfo() } returns OperatingSystem(OsFamily.Linux, null)
+        coEvery { Platform.readFileOrNull(capture(filePath)) } answers {
             if (filePath.captured == "/home/.aws/config") "[profile default]\nboo = hoo".encodeToByteArray() else null
         }
 
-        assertEquals("hoo", fnThatLoadsConfiguration(testPlatform))
+        assertEquals("hoo", fnThatLoadsConfiguration(Platform))
+
+        unmockkObject(Platform)
     }
 
     /**
      * Example function that reads the active provide and returns true if a key "boo" exists.
      */
     private suspend fun fnThatLoadsConfiguration(platform: Platform): String? {
-        val profile = loadActiveAwsProfile(platform)
+        val profile = loadActiveAwsProfile()
 
         return profile["boo"]
     }
@@ -187,7 +190,7 @@ class AwsProfileParserTest {
      * @param credentialsFn a function that will retrieve a configuration file as a UTF-8 string.
      * @return A map containing all specified profiles defined in configuration and credential files.
      */
-    private fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): ProfileMap =
+    private fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): AwsConfiguration =
         mergeProfiles(
             parse(FileType.CONFIGURATION, configurationFn()),
             parse(FileType.CREDENTIAL, credentialsFn()),

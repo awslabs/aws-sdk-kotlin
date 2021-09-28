@@ -6,8 +6,9 @@ import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.slot
+import io.mockk.unmockkObject
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonLiteral
@@ -24,11 +25,11 @@ class AwsConfigLoaderTest {
 
         testCases
             .map { TestCase.fromJson(it.jsonObject) }
-            // .filter { testCase -> testCase.name == "The default config location can be overridden by the user on non-windows platforms." }
+            // .filter { testCase -> testCase.name == "User home is loaded from HOME with highest priority on windows platforms." }
             .forEachIndexed { index, testCase ->
-                val testPlatform = mockPlatform(testCase)
+                mockPlatform(testCase)
 
-                val actual = resolveConfigSource(testPlatform)
+                val actual = resolveConfigSource()
 
                 if (testCase.profile != null) {
                     assertEquals(testCase.profile, actual.profile)
@@ -38,27 +39,31 @@ class AwsConfigLoaderTest {
                 assertEquals(testCase.profile, if (testCase.profile != null) actual.profile else null)
                 assertEquals(testCase.configLocation, actual.configPath)
                 assertEquals(testCase.credentialsLocation, actual.credentialsPath)
+
+                unmockkObject(Platform)
             }
     }
 
     @Test
     fun itLoadsAWSConfigurationWithCustomProfile() = runSuspendTest {
-        val testPlatform = mockPlatform(
+        mockPlatform(
             pathSegment = "/",
             awsProfileEnv = "bob",
             homeEnv = "/home/user",
             os = OperatingSystem(OsFamily.Linux, null)
         )
 
-        val config = loadActiveAwsProfile(testPlatform)
+        val config = loadActiveAwsProfile()
 
         assertEquals("bob", config.name)
         assertTrue(config.isEmpty())
+
+        unmockkObject(Platform)
     }
 
     @Test
     fun configurationLoadingDoesNotThrowErrors() = runSuspendTest {
-        val activeProfile = loadActiveAwsProfile(Platform)
+        val activeProfile = loadActiveAwsProfile()
 
         assertTrue(activeProfile.name.isNotBlank())
     }
@@ -71,14 +76,14 @@ class AwsConfigLoaderTest {
         awsSharedCredentialsFileEnv: String? = null,
         homeProp: String? = null,
         os: OperatingSystem
-    ): Platform {
-        val testPlatform = mockk<Platform>()
+    ) {
+        mockkObject(Platform)
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
         val readFileParam = slot<String>()
 
-        every { testPlatform.filePathSeparator } returns pathSegment
-        every { testPlatform.getenv(capture(envKeyParam)) } answers {
+        every { Platform.filePathSeparator } returns pathSegment
+        every { Platform.getenv(capture(envKeyParam)) } answers {
             when (envKeyParam.captured) {
                 "AWS_PROFILE" -> awsProfileEnv
                 "AWS_CONFIG_FILE" -> awsConfigFileEnv
@@ -87,34 +92,30 @@ class AwsConfigLoaderTest {
                 else -> error(envKeyParam.captured)
             }
         }
-        every { testPlatform.getProperty(capture(propKeyParam)) } answers {
+        every { Platform.getProperty(capture(propKeyParam)) } answers {
             if (propKeyParam.captured == "user.home") homeProp else null
         }
-        every { testPlatform.osInfo() } returns os
+        every { Platform.osInfo() } returns os
 
-        coEvery { testPlatform.readFileOrNull(capture(readFileParam)) } answers { null }
-
-        return testPlatform
+        coEvery { Platform.readFileOrNull(capture(readFileParam)) } answers { null }
     }
 
-    private fun mockPlatform(testCase: TestCase): Platform {
-        val testPlatform = mockk<Platform>()
+    private fun mockPlatform(testCase: TestCase) {
+        mockkObject(Platform)
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
 
-        every { testPlatform.filePathSeparator } returns when (testCase.platform) {
+        every { Platform.filePathSeparator } returns when (testCase.platform) {
             OsFamily.Windows -> "\\"
             else -> "/"
         }
-        every { testPlatform.getenv(capture(envKeyParam)) } answers {
+        every { Platform.getenv(capture(envKeyParam)) } answers {
             (testCase.environment[envKeyParam.captured] as JsonLiteral?)?.content
         }
-        every { testPlatform.getProperty(capture(propKeyParam)) } answers {
+        every { Platform.getProperty(capture(propKeyParam)) } answers {
             if (propKeyParam.captured == "user.home") testCase.languageSpecificHome else null
         }
-        every { testPlatform.osInfo() } returns OperatingSystem(testCase.platform, null)
-
-        return testPlatform
+        every { Platform.osInfo() } returns OperatingSystem(testCase.platform, null)
     }
 
     private data class TestCase(

@@ -13,17 +13,15 @@ import aws.smithy.kotlin.runtime.util.Platform
  *
  * This function performs no caching. File I/O will be performed with each call.
  *
- * @param platform used for unit testing
- *
  * @return an [AwsProfile] regardless if local configuration files are available
  */
 @InternalSdkApi
-public suspend fun loadActiveAwsProfile(platform: Platform): AwsProfile {
+public suspend fun loadActiveAwsProfile(): AwsProfile {
     // Determine active profile and location of configuration files
-    val source = resolveConfigSource(platform)
+    val source = resolveConfigSource()
 
     // Read all profiles from local system
-    val allProfiles = loadAwsProfiles(platform, source)
+    val allProfiles = loadAwsProfiles(source)
 
     // Return the active profile
     return AwsProfile(source.profile, allProfiles[source.profile] ?: emptyMap())
@@ -31,23 +29,21 @@ public suspend fun loadActiveAwsProfile(platform: Platform): AwsProfile {
 
 /**
  * Load all profiles specified in local configuration files.
- *
- * @param platform Platform from which to resolve configuration data
  * @param source Specifies the location of the configuration files
  *
  * @return A map of all profiles, which each are a map of key/value pairs.
  */
-private suspend fun loadAwsProfiles(platform: Platform, source: AwsConfigurationSource): Map<String, Map<String, String>> {
+private suspend fun loadAwsProfiles(source: AwsConfigurationSource): AwsConfiguration {
 
     // merged AWS configuration based on optional configuration and credential file contents
     return mergeProfiles(
-        parse(FileType.CONFIGURATION, platform.readFileOrNull(source.configPath)?.decodeToString()),
-        parse(FileType.CREDENTIAL, platform.readFileOrNull(source.credentialsPath)?.decodeToString()),
+        parse(FileType.CONFIGURATION, Platform.readFileOrNull(source.configPath)?.decodeToString()),
+        parse(FileType.CREDENTIAL, Platform.readFileOrNull(source.credentialsPath)?.decodeToString()),
     )
 }
 
 // Merge contents of profile maps
-internal fun mergeProfiles(vararg maps: ProfileMap) = buildMap<String, Map<String, String>> {
+internal fun mergeProfiles(vararg maps: AwsConfiguration) = buildMap<String, Map<String, String>> {
     maps.forEach { map ->
         map.entries.forEach { entry ->
             put(entry.key, (get(entry.key) ?: emptyMap()) + entry.value)
@@ -61,13 +57,13 @@ internal data class AwsConfigurationSource(val profile: String, val configPath: 
 /**
  * Determine the source of AWS configuration
  */
-internal fun resolveConfigSource(platform: Platform) =
+internal fun resolveConfigSource() =
     AwsConfigurationSource(
         // If the user does not specify the profile to be used, the default profile must be used by the SDK.
         // The default profile must be overridable using the AWS_PROFILE environment variable.
-        AwsSdkSetting.AwsProfile.resolve(platform) ?: Literals.DEFAULT_PROFILE,
-        normalizePath(FileType.CONFIGURATION.path(platform), platform),
-        normalizePath(FileType.CREDENTIAL.path(platform), platform)
+        AwsSdkSetting.AwsProfile.resolve() ?: Literals.DEFAULT_PROFILE,
+        normalizePath(FileType.CONFIGURATION.path()),
+        normalizePath(FileType.CREDENTIAL.path())
     )
 
 /**
@@ -81,10 +77,10 @@ internal fun resolveConfigSource(platform: Platform) =
  * 3. (Windows Platforms) The HOMEDRIVE environment variable prepended to the HOMEPATH environment variable (ie. $HOMEDRIVE$HOMEPATH).
  * 4. (Optional) A language-specific home path resolution function or variable.
  */
-internal fun normalizePath(path: String, platform: Platform): String {
+internal fun normalizePath(path: String): String {
     if (!path.trim().startsWith('~')) return path
 
-    val home = resolveHomeDir(platform) ?: error("Unable to determine user home directory")
+    val home = resolveHomeDir() ?: error("Unable to determine user home directory")
 
     return home + path.substring(1)
 }
@@ -96,11 +92,10 @@ internal fun normalizePath(path: String, platform: Platform): String {
  * variables must be checked for all platforms. If the implementation can determine the customer's platform, the
  * USERPROFILE and HOMEDRIVE + HOMEPATH environment variables must not be checked on non-windows platforms.
  *
- * @param
  * @return the absolute path of the home directory from which the SDK is running, or null if unspecified by environment.
  */
-private fun resolveHomeDir(platform: Platform): String? =
-    with(platform) {
+private fun resolveHomeDir(): String? =
+    with(Platform) {
         when (osInfo().family) {
             OsFamily.Unknown,
             OsFamily.Windows ->

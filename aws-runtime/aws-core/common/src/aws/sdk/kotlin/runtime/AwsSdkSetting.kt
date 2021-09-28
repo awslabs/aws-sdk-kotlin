@@ -82,9 +82,8 @@ public sealed class AwsSdkSetting<T>(
  * Read the [AwsSdkSetting] by first checking JVM property, environment variable, and default value.
  * Property sources not available on a given platform will be ignored.
  *
- * @param platform A singleton that provides platform-specific settings.  Exposed as a parameter for testing.
  * @return the value of the [AwsSdkSetting] or null if undefined.
  */
 @InternalSdkApi
-public inline fun <reified T> AwsSdkSetting<T>.resolve(platform: Platform): T? =
-    (platform.getProperty(jvmProperty) ?: platform.getenv(environmentVariable) ?: defaultValue) as T?
+public inline fun <reified T> AwsSdkSetting<T>.resolve(): T? =
+    (Platform.getProperty(jvmProperty) ?: Platform.getenv(environmentVariable) ?: defaultValue) as T?

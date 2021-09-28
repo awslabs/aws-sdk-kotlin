@@ -6,7 +6,7 @@ import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.Platform
 import io.kotest.matchers.maps.shouldContainAll
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.slot
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -33,7 +33,7 @@ class AWSConfigLoaderFilesystemTest {
 
         configFile.writeText("[profile foo]\nname = value")
 
-        val testPlatform = mockPlatform(
+        mockPlatform(
             pathSegment = Platform.filePathSeparator, // Use actual value from Platform in mock
             awsProfileEnv = "foo",
             homeEnv = "/home/user",
@@ -42,7 +42,7 @@ class AWSConfigLoaderFilesystemTest {
             os = Platform.osInfo() // Actual value
         )
 
-        val actual = loadActiveAwsProfile(testPlatform)
+        val actual = loadActiveAwsProfile()
 
         assertEquals("foo", actual.name)
         assertTrue(actual.containsKey("name"))
@@ -68,7 +68,7 @@ class AWSConfigLoaderFilesystemTest {
             os = Platform.osInfo() // Actual value
         )
 
-        val actual = loadActiveAwsProfile(testPlatform)
+        val actual = loadActiveAwsProfile()
 
         assertEquals("default", actual.name)
         assertEquals(3, actual.size)
@@ -90,13 +90,13 @@ class AWSConfigLoaderFilesystemTest {
         awsSharedCredentialsFileEnv: String? = null,
         homeProp: String? = null,
         os: OperatingSystem
-    ): Platform {
-        val testPlatform = mockk<Platform>()
+    ) {
+        mockkObject(Platform)
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
 
-        every { testPlatform.filePathSeparator } returns pathSegment
-        every { testPlatform.getenv(capture(envKeyParam)) } answers {
+        every { Platform.filePathSeparator } returns pathSegment
+        every { Platform.getenv(capture(envKeyParam)) } answers {
             when (envKeyParam.captured) {
                 "AWS_PROFILE" -> awsProfileEnv
                 "AWS_CONFIG_FILE" -> awsConfigFileEnv
@@ -105,11 +105,9 @@ class AWSConfigLoaderFilesystemTest {
                 else -> error(envKeyParam.captured)
             }
         }
-        every { testPlatform.getProperty(capture(propKeyParam)) } answers {
+        every { Platform.getProperty(capture(propKeyParam)) } answers {
             if (propKeyParam.captured == "user.home") homeProp else null
         }
-        every { testPlatform.osInfo() } returns os
-
-        return testPlatform
+        every { Platform.osInfo() } returns os
     }
 }

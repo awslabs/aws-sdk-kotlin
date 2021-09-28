@@ -26,7 +26,7 @@ internal object Literals {
  * Profiles are represented as a map of maps.  Each top-level key is a profile.  It's associated
  * entries are the property key-value pairs for that profile.
  */
-internal typealias ProfileMap = Map<String, Map<String, String>>
+internal typealias AwsConfiguration = Map<String, Map<String, String>>
 
 /**
  * Tokens representing state declared in AWS configuration files. Other types such as empty lines
@@ -89,8 +89,8 @@ internal enum class FileType(
      * Determine the absolute path of the configuration file based on environment and policy
      * @return the absolute path of the configuration file. This does not imply the file exists or is otherwise valid
      */
-    fun path(platform: Platform): String =
-        setting.resolve(platform)?.trim() ?: pathSegments.joinToString(separator = platform.filePathSeparator)
+    fun path(): String =
+        setting.resolve()?.trim() ?: pathSegments.joinToString(separator = Platform.filePathSeparator)
 
     /**
      * Parse a line into a token.  A file may contain the following line types:
@@ -133,7 +133,7 @@ private typealias ParseFn = (FileLine) -> Token?
  * @param type The type of file to parse
  * @param input The payload to parse
  */
-internal fun parse(type: FileType, input: String?): ProfileMap {
+internal fun parse(type: FileType, input: String?): AwsConfiguration {
     // Inaccessible File: If a file is not found or cannot be opened in the configured location, the implementation must
     // treat it as an empty file, and must not attempt to fall back to any other location.
     if (input.isNullOrBlank()) return emptyMap()
@@ -189,7 +189,7 @@ internal fun parse(type: FileType, input: String?): ProfileMap {
  * If both [profile foo] and [foo] are specified in the configuration file, [profile foo]'s properties are used.
  * Properties duplicated within the same file and profile use the later property in the file.
  */
-private fun mergeProfiles(tokenIndexMap: Map<Token.Profile, Map<String, String>>): ProfileMap =
+private fun mergeProfiles(tokenIndexMap: Map<Token.Profile, Map<String, String>>): AwsConfiguration =
     tokenIndexMap
         .filter { entry ->
             when (entry.key.profilePrefix) {
