@@ -76,6 +76,24 @@ public sealed class AwsSdkSetting<T>(
      *  The name of the default profile that should be loaded from config
      */
     public object AwsProfile : AwsSdkSetting<String>("AWS_PROFILE", "aws.profile", "default")
+
+    /**
+     * Whether to load information such as credentials, regions from EC2 Metadata instance service.
+     */
+    public object AwsEc2MetadataDisabled : AwsSdkSetting<Boolean>("AWS_EC2_METADATA_DISABLED", "aws.disableEc2Metadata", false)
+
+    /**
+     * The EC2 instance metadata service endpoint.
+     *
+     * This allows a service running in EC2 to automatically load its credentials and region without needing to configure them
+     * directly.
+     */
+    public object AwsEc2MetadataServiceEndpoint : AwsSdkSetting<String>("AWS_EC2_METADATA_SERVICE_ENDPOINT", "aws.ec2MetadataServiceEndpoint")
+
+    /**
+     * The endpoint mode to use when connecting to the EC2 metadata service endpoint
+     */
+    public object AwsEc2MetadataServiceEndpointMode : AwsSdkSetting<String>("AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE", "aws.ec2MetadataServiceEndpointMode")
 }
 
 /**
