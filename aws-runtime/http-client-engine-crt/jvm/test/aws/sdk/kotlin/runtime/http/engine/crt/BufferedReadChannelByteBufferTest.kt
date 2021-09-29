@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http.engine.crt
 
-import aws.sdk.kotlin.runtime.testing.ManualDispatchTestBase
+import aws.smithy.kotlin.runtime.testing.ManualDispatchTestBase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield

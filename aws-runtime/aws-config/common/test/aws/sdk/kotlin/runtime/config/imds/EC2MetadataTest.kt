@@ -7,7 +7,6 @@ package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.endpoint.Endpoint
-import aws.sdk.kotlin.runtime.testing.ManualClock
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
@@ -18,6 +17,7 @@ import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.time.ManualClock
 import kotlin.test.*
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
