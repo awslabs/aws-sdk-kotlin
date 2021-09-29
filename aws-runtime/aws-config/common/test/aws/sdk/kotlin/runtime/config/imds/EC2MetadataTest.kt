@@ -10,13 +10,11 @@ import aws.sdk.kotlin.runtime.endpoint.Endpoint
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
-import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
-import aws.smithy.kotlin.runtime.http.engine.callContext
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.request.url
-import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.httptest.TestConnection
+import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.ManualClock
 import kotlin.test.*
 import kotlin.time.Duration
@@ -24,45 +22,6 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 class EC2MetadataTest {
-
-    // TODO - move to shared test utils
-    data class ExpectedHttpRequest(val request: HttpRequest, val response: HttpResponse? = null)
-    data class ValidateRequest(val expected: HttpRequest, val actual: HttpRequest) {
-        fun assertRequest() = runSuspendTest {
-            assertEquals(expected.url.toString(), actual.url.toString(), "URL mismatch")
-            expected.headers.forEach { name, values ->
-                values.forEach {
-                    assertTrue(actual.headers.contains(name, it), "Header $name missing value $it")
-                }
-            }
-
-            val expectedBody = expected.body.readAll()?.decodeToString()
-            val actualBody = actual.body.readAll()?.decodeToString()
-            assertEquals(expectedBody, actualBody, "ValidateRequest HttpBody mismatch")
-        }
-    }
-
-    class TestConnection(expected: List<ExpectedHttpRequest> = emptyList()) : HttpClientEngineBase("TestConnection") {
-        private val expected = expected.toMutableList()
-        // expected is mutated in-flight, store original size
-        private val expectedCount = expected.size
-        private var captured = mutableListOf<ValidateRequest>()
-
-        override suspend fun roundTrip(request: HttpRequest): HttpCall {
-            val next = expected.removeFirstOrNull() ?: error("TestConnection has no remaining expected requests")
-            captured.add(ValidateRequest(next.request, request))
-
-            val response = next.response ?: HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
-            val now = Instant.now()
-            return HttpCall(request, response, now, now, callContext())
-        }
-
-        fun requests(): List<ValidateRequest> = captured
-        fun assertRequests() {
-            assertEquals(expectedCount, captured.size)
-            captured.forEach(ValidateRequest::assertRequest)
-        }
-    }
 
     private fun tokenRequest(host: String, ttl: Int): HttpRequest = HttpRequest {
         val parsed = Url.parse(host)
@@ -104,22 +63,20 @@ class EC2MetadataTest {
 
     @Test
     fun testTokensAreCached() = runSuspendTest {
-        val connection = TestConnection(
-            listOf(
-                ExpectedHttpRequest(
-                    tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
-                    tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
-                ),
-                ExpectedHttpRequest(
-                    imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
-                    imdsResponse("output 1")
-                ),
-                ExpectedHttpRequest(
-                    imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
-                    imdsResponse("output 2")
-                )
+        val connection = buildTestConnection {
+            expect(
+                tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
+                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
             )
-        )
+            expect(
+                imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
+                imdsResponse("output 1")
+            )
+            expect(
+                imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
+                imdsResponse("output 2")
+            )
+        }
 
         val client = EC2Metadata { engine = connection }
         val r1 = client.get("/latest/metadata")
@@ -132,26 +89,24 @@ class EC2MetadataTest {
 
     @Test
     fun testTokensCanExpire() = runSuspendTest {
-        val connection = TestConnection(
-            listOf(
-                ExpectedHttpRequest(
-                    tokenRequest("http://[fd00:ec2::254]", 600),
-                    tokenResponse(600, "TOKEN_A")
-                ),
-                ExpectedHttpRequest(
-                    imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_A"),
-                    imdsResponse("output 1")
-                ),
-                ExpectedHttpRequest(
-                    tokenRequest("http://[fd00:ec2::254]", 600),
-                    tokenResponse(600, "TOKEN_B")
-                ),
-                ExpectedHttpRequest(
-                    imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_B"),
-                    imdsResponse("output 2")
-                )
+        val connection = buildTestConnection {
+            expect(
+                tokenRequest("http://[fd00:ec2::254]", 600),
+                tokenResponse(600, "TOKEN_A")
             )
-        )
+            expect(
+                imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_A"),
+                imdsResponse("output 1")
+            )
+            expect(
+                tokenRequest("http://[fd00:ec2::254]", 600),
+                tokenResponse(600, "TOKEN_B")
+            )
+            expect(
+                imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_B"),
+                imdsResponse("output 2")
+            )
+        }
 
         val testClock = ManualClock()
 
@@ -174,33 +129,31 @@ class EC2MetadataTest {
     @Test
     fun testTokenRefreshBuffer() = runSuspendTest {
         // tokens are refreshed up to 120 seconds early to avoid using an expired token
-        val connection = TestConnection(
-            listOf(
-                ExpectedHttpRequest(
-                    tokenRequest("http://[fd00:ec2::254]", 600),
-                    tokenResponse(600, "TOKEN_A")
-                ),
-                // t = 0
-                ExpectedHttpRequest(
-                    imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_A"),
-                    imdsResponse("output 1")
-                ),
-                // t = 400 (no refresh)
-                ExpectedHttpRequest(
-                    imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_A"),
-                    imdsResponse("output 2")
-                ),
-                // t = 550 (within buffer)
-                ExpectedHttpRequest(
-                    tokenRequest("http://[fd00:ec2::254]", 600),
-                    tokenResponse(600, "TOKEN_B")
-                ),
-                ExpectedHttpRequest(
-                    imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_B"),
-                    imdsResponse("output 3")
-                )
+        val connection = buildTestConnection {
+            expect(
+                tokenRequest("http://[fd00:ec2::254]", 600),
+                tokenResponse(600, "TOKEN_A")
             )
-        )
+            // t = 0
+            expect(
+                imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_A"),
+                imdsResponse("output 1")
+            )
+            // t = 400 (no refresh)
+            expect(
+                imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_A"),
+                imdsResponse("output 2")
+            )
+            // t = 550 (within buffer)
+            expect(
+                tokenRequest("http://[fd00:ec2::254]", 600),
+                tokenResponse(600, "TOKEN_B")
+            )
+            expect(
+                imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_B"),
+                imdsResponse("output 3")
+            )
+        }
 
         val testClock = ManualClock()
 

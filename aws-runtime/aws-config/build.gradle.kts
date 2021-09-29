@@ -22,6 +22,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
+                implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
             }
         }
     }
