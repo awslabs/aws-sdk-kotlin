@@ -1,12 +1,12 @@
 package aws.sdk.kotlin.runtime.config
 
 /**
- * The properties and name of the active AWS configuration profile.
+ * The properties and name of an AWS configuration profile.
  *
  * @property name name of profile
  * @property properties key/value pairs of properties specified by the active profile, accessible via [Map<K, V>]
  */
-data class AwsProfile(
+public data class AwsProfile(
     val name: String,
     private val properties: Map<String, String>
 ) : Map<String, String> by properties

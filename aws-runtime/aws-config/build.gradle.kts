@@ -23,6 +23,10 @@ kotlin {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
                 implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
+                val kotlinxSerializationVersion: String by project
+                val mockkVersion: String by project
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinxSerializationVersion")
+                implementation("io.mockk:mockk:$mockkVersion")
             }
         }
     }
