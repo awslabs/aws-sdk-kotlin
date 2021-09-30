@@ -1,6 +1,10 @@
-package aws.sdk.kotlin.runtime.auth
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
 
-import aws.sdk.kotlin.runtime.config.loadActiveAwsProfile
+package aws.sdk.kotlin.runtime.config
+
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.Platform
