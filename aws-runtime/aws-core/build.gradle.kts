@@ -21,8 +21,6 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
-                val mockkVersion: String by project
-                implementation("io.mockk:mockk:$mockkVersion")
             }
         }
     }

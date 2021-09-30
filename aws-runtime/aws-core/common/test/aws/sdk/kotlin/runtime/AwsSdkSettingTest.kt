@@ -1,9 +1,6 @@
 package aws.sdk.kotlin.runtime
 
-import aws.smithy.kotlin.runtime.util.Platform
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.slot
+import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -54,17 +51,10 @@ class AwsSdkSettingTest {
         assertEquals(true, actual)
     }
 
-    private fun mockPlatform(env: Map<String, String>, jvmProps: Map<String, String>): Platform {
-        val testPlatform = mockk<Platform>()
-        val envKeyParam = slot<String>()
-        val propKeyParam = slot<String>()
-
-        every { testPlatform.getenv(capture(envKeyParam)) } answers {
-            env[envKeyParam.captured]
+    private fun mockPlatform(env: Map<String, String>, jvmProps: Map<String, String>): PlatformEnvironProvider {
+        return object : PlatformEnvironProvider {
+            override fun getenv(key: String): String? = env[key]
+            override fun getProperty(key: String): String? = jvmProps[key]
         }
-        every { testPlatform.getProperty(capture(propKeyParam)) } answers {
-            jvmProps[propKeyParam.captured]
-        }
-        return testPlatform
     }
 }
