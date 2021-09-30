@@ -8,10 +8,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonLiteral
-import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -20,7 +17,7 @@ class AwsConfigLoaderTest {
 
     @Test
     fun canPassTestSuite() {
-        val testCases = Json.parseJson(loaderTestSuiteJson).jsonObject["tests"]!!.jsonArray
+        val testCases = Json.parseToJsonElement(loaderTestSuiteJson).jsonObject["tests"]!!.jsonArray
 
         testCases
             .map { TestCase.fromJson(it.jsonObject) }
@@ -107,7 +104,7 @@ class AwsConfigLoaderTest {
             else -> "/"
         }
         every { testPlatform.getenv(capture(envKeyParam)) } answers {
-            (testCase.environment[envKeyParam.captured] as JsonLiteral?)?.content
+            (testCase.environment[envKeyParam.captured] as JsonPrimitive?)?.content
         }
         every { testPlatform.getProperty(capture(propKeyParam)) } answers {
             if (propKeyParam.captured == "user.home") testCase.languageSpecificHome else null
@@ -128,13 +125,13 @@ class AwsConfigLoaderTest {
     ) {
         companion object {
             fun fromJson(json: JsonObject): TestCase {
-                val name = (json["name"] as JsonLiteral).content
+                val name = (json["name"] as JsonPrimitive).content
                 val environment: Map<String, JsonElement> = json["environment"] as JsonObject
-                val languageSpecificHome = (json["languageSpecificHome"] as JsonLiteral?)?.content
-                val platformRaw = (json["platform"] as JsonLiteral).content
-                val profile = (json["profile"] as JsonLiteral?)?.content
-                val configLocation = (json["configLocation"] as JsonLiteral).content
-                val credentialsLocation = (json["credentialsLocation"] as JsonLiteral).content
+                val languageSpecificHome = (json["languageSpecificHome"] as JsonPrimitive?)?.content
+                val platformRaw = (json["platform"] as JsonPrimitive).content
+                val profile = (json["profile"] as JsonPrimitive?)?.content
+                val configLocation = (json["configLocation"] as JsonPrimitive).content
+                val credentialsLocation = (json["credentialsLocation"] as JsonPrimitive).content
 
                 val platform = when (platformRaw) {
                     "windows" -> OsFamily.Windows

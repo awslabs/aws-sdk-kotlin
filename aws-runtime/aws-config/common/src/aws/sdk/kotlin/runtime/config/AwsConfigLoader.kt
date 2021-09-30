@@ -4,7 +4,7 @@ import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.resolve
 import aws.smithy.kotlin.runtime.util.OsFamily
-import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
  * Load the properties of the specified or default AWS configuration profile.  This
@@ -18,7 +18,7 @@ import aws.smithy.kotlin.runtime.util.Platform
  * @return an [AwsProfile] regardless if local configuration files are available
  */
 @InternalSdkApi
-public suspend fun loadActiveAwsProfile(platform: Platform): AwsProfile {
+public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile {
     // Determine active profile and location of configuration files
     val source = resolveConfigSource(platform)
 
@@ -37,7 +37,7 @@ public suspend fun loadActiveAwsProfile(platform: Platform): AwsProfile {
  *
  * @return A map of all profiles, which each are a map of key/value pairs.
  */
-private suspend fun loadAwsProfiles(platform: Platform, source: AwsConfigurationSource): Map<String, Map<String, String>> {
+private suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): Map<String, Map<String, String>> {
 
     // merged AWS configuration based on optional configuration and credential file contents
     return mergeProfiles(
@@ -61,7 +61,7 @@ internal data class AwsConfigurationSource(val profile: String, val configPath: 
 /**
  * Determine the source of AWS configuration
  */
-internal fun resolveConfigSource(platform: Platform) =
+internal fun resolveConfigSource(platform: PlatformProvider) =
     AwsConfigurationSource(
         // If the user does not specify the profile to be used, the default profile must be used by the SDK.
         // The default profile must be overridable using the AWS_PROFILE environment variable.
@@ -81,7 +81,7 @@ internal fun resolveConfigSource(platform: Platform) =
  * 3. (Windows Platforms) The HOMEDRIVE environment variable prepended to the HOMEPATH environment variable (ie. $HOMEDRIVE$HOMEPATH).
  * 4. (Optional) A language-specific home path resolution function or variable.
  */
-internal fun normalizePath(path: String, platform: Platform): String {
+internal fun normalizePath(path: String, platform: PlatformProvider): String {
     if (!path.trim().startsWith('~')) return path
 
     val home = resolveHomeDir(platform) ?: error("Unable to determine user home directory")
@@ -99,7 +99,7 @@ internal fun normalizePath(path: String, platform: Platform): String {
  * @param
  * @return the absolute path of the home directory from which the SDK is running, or null if unspecified by environment.
  */
-private fun resolveHomeDir(platform: Platform): String? =
+private fun resolveHomeDir(platform: PlatformProvider): String? =
     with(platform) {
         when (osInfo().family) {
             OsFamily.Unknown,

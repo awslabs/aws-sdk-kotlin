@@ -25,7 +25,7 @@ kotlin {
                 implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
                 val kotlinxSerializationVersion: String by project
                 val mockkVersion: String by project
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinxSerializationVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
                 implementation("io.mockk:mockk:$mockkVersion")
             }
         }

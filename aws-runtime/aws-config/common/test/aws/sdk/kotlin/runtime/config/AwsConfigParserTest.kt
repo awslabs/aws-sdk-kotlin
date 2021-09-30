@@ -8,12 +8,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonLiteral
-import kotlinx.serialization.json.JsonNull
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -22,7 +17,7 @@ class AwsProfileParserTest {
 
     @Test
     fun canPassTestSuite() {
-        val testList = Json.parseJson(parserTestSuiteJson).jsonObject["tests"]!!.jsonArray
+        val testList = Json.parseToJsonElement(parserTestSuiteJson).jsonObject["tests"]!!.jsonArray
 
         testList
             .map { TestCase.fromJson(it.jsonObject) }
@@ -34,7 +29,7 @@ class AwsProfileParserTest {
                 when (testCase) {
                     is TestCase.MatchConfigOutputCase -> {
                         val actual = parse(FileType.CONFIGURATION, testCase.configInput).toJsonElement()
-                        val expectedJson = Json.parseJson(testCase.expectedOutput)
+                        val expectedJson = Json.parseToJsonElement(testCase.expectedOutput)
                         assertEquals(expectedJson, actual, message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchCredentialOutputCase -> {
@@ -141,11 +136,11 @@ class AwsProfileParserTest {
     private sealed class TestCase {
         companion object {
             fun fromJson(json: JsonObject): TestCase {
-                val name = (json["name"] as JsonLiteral).content
-                val configIn = (json["input"]!!.jsonObject["configFile"] as JsonLiteral?)?.content
-                val credentialIn = (json["input"]!!.jsonObject["credentialsFile"] as JsonLiteral?)?.content
+                val name = (json["name"] as JsonPrimitive).content
+                val configIn = (json["input"]!!.jsonObject["configFile"] as JsonPrimitive?)?.content
+                val credentialIn = (json["input"]!!.jsonObject["credentialsFile"] as JsonPrimitive?)?.content
                 val expected = json["output"]!!.jsonObject["profiles"]?.toString()
-                val errorContaining = (json["output"]!!.jsonObject["errorContaining"] as JsonLiteral?)?.content
+                val errorContaining = (json["output"]!!.jsonObject["errorContaining"] as JsonPrimitive?)?.content
 
                 check(expected != null || errorContaining != null) { "Unexpected output: $json" }
                 check(configIn != null || credentialIn != null) { "Unexpected output: $json" }

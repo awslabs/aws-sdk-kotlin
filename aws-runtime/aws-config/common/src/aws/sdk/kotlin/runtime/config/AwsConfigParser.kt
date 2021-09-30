@@ -6,7 +6,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.resolve
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.logging.warn
-import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 // Literal characters used in parsing AWS SDK configuration files
 internal object Literals {
@@ -89,7 +89,7 @@ internal enum class FileType(
      * Determine the absolute path of the configuration file based on environment and policy
      * @return the absolute path of the configuration file. This does not imply the file exists or is otherwise valid
      */
-    fun path(platform: Platform): String =
+    fun path(platform: PlatformProvider): String =
         setting.resolve(platform)?.trim() ?: pathSegments.joinToString(separator = platform.filePathSeparator)
 
     /**
