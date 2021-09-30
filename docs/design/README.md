@@ -9,3 +9,4 @@ These designs extend or augment the [Smithy Kotlin Designs](https://github.com/a
 ## Detailed sub-designs
 
 * [Endpoint resolution](endpoint-resolution.md)
+* [SDK-specific Retries](retries.md)
