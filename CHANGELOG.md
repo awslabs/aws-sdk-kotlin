@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.5.0-alpha] - 09/30/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Breaking changes
+
+* split auth and signing packages (#318)
+    * Import paths changed to `aws.sdk.kotlin.runtime.auth.credentials` and `aws.sdk.kotlin.runtime.auth.signing`
+
+### New features
+
+* autofill Glacier accountId (#246)
+* support JVM system property and environment variables for profiles (#297)
+* expose method to sign standalone requests (#318)
+* AWS configuration loader and parser (#216)
+
+### Fixes
+
+* utilize custom endpoint ports (#310)
+* Replace junit imports with kotlin.test imports where possible (#321)
+* update readme to include latest version (#319)
+* sync models and endpoints (#317)
+* Favor kotlin-test-juint5 over kotlin-test to resolve intermittent build failures (#316)
+* kotlin 1.5.30, coroutine, kotest version bumps (#307)
+
+
 ## [0.4.0-alpha] - 08/26/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
