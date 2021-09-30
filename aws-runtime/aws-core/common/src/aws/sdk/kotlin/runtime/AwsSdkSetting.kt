@@ -104,5 +104,17 @@ public sealed class AwsSdkSetting<T>(
  * @return the value of the [AwsSdkSetting] or null if undefined.
  */
 @InternalSdkApi
-public inline fun <reified T> AwsSdkSetting<T>.resolve(platform: Platform): T? =
-    (platform.getProperty(jvmProperty) ?: platform.getenv(environmentVariable) ?: defaultValue) as T?
+public inline fun <reified T> AwsSdkSetting<T>.resolve(platform: Platform): T? {
+    val strValue = platform.getProperty(jvmProperty) ?: platform.getenv(environmentVariable)
+    if (strValue != null) {
+        val typed: Any = when (T::class) {
+            String::class -> strValue
+            Int::class -> strValue.toInt()
+            Long::class -> strValue.toLong()
+            Boolean::class -> strValue.toBoolean()
+            else -> error("conversion to ${T::class} not implemented for AwsSdkSetting")
+        }
+        return typed as? T
+    }
+    return defaultValue
+}
