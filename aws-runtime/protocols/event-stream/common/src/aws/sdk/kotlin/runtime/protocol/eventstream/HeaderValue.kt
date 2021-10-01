@@ -28,21 +28,8 @@ internal enum class HeaderType(val value: Byte) {
         /**
          * Construct [HeaderType] from raw value
          */
-        fun fromTypeId(value: Byte): HeaderType {
-            return when (value.toInt()) {
-                0 -> TRUE
-                1 -> FALSE
-                2 -> BYTE
-                3 -> INT16
-                4 -> INT32
-                5 -> INT64
-                6 -> BYTE_ARRAY
-                7 -> STRING
-                8 -> TIMESTAMP
-                9 -> UUID
-                else -> throw IllegalArgumentException("Unknown HeaderType: $value")
-            }
-        }
+        fun fromTypeId(value: Byte): HeaderType =
+            requireNotNull(values().find { it.value == value }) { "Unknown HeaderType: $value" }
     }
 }
 
@@ -104,15 +91,15 @@ public sealed class HeaderValue {
         }
         is ByteArray -> {
             dest.writeHeader(HeaderType.BYTE_ARRAY)
-            check(value.size in Short.MIN_VALUE..Short.MAX_VALUE) { "HeaderValue ByteArray too long" }
-            dest.writeShort(value.size.toShort())
+            check(value.size in 0..UShort.MAX_VALUE.toInt()) { "HeaderValue ByteArray too long" }
+            dest.writeUShort(value.size.toUShort())
             dest.writeFully(value)
         }
         is String -> {
-            dest.writeHeader(HeaderType.STRING)
             val bytes = value.encodeToByteArray()
-            check(bytes.size in Short.MIN_VALUE..Short.MAX_VALUE) { "HeaderValue String too long" }
-            dest.writeShort(bytes.size.toShort())
+            check(bytes.size in 0..UShort.MAX_VALUE.toInt()) { "HeaderValue String too long" }
+            dest.writeHeader(HeaderType.STRING)
+            dest.writeUShort(bytes.size.toUShort())
             dest.writeFully(bytes)
         }
         is Timestamp -> {
@@ -137,9 +124,9 @@ public sealed class HeaderValue {
                 HeaderType.INT32 -> HeaderValue.Int32(buffer.readInt())
                 HeaderType.INT64 -> HeaderValue.Int64(buffer.readLong())
                 HeaderType.BYTE_ARRAY, HeaderType.STRING -> {
-                    val len = buffer.readShort()
-                    if (len < 0 || buffer.readRemaining < len.toULong()) {
-                        throw IllegalStateException("Invalid HeaderValue; type=$type, len=$len")
+                    val len = buffer.readUShort()
+                    if (buffer.readRemaining < len.toULong()) {
+                        throw IllegalStateException("Invalid HeaderValue; type=$type, len=$len; readRemaining: ${buffer.readRemaining}")
                     }
                     val bytes = ByteArray(len.toInt())
                     buffer.readFully(bytes)
@@ -163,5 +150,4 @@ public sealed class HeaderValue {
     }
 }
 
-@Suppress("NOTHING_TO_INLINE")
-private inline fun MutableBuffer.writeHeader(headerType: HeaderType) = writeByte(headerType.value)
+private fun MutableBuffer.writeHeader(headerType: HeaderType) = writeByte(headerType.value)

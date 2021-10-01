@@ -71,6 +71,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
                 headerBytesConsumed += messageBuffer.readPosition - start
                 message.addHeader(header)
             }
+            check(headerBytesConsumed == prelude.headersLength.toULong()) { "Invalid Message: expected ${prelude.headersLength} header bytes; consumed $headerBytesConsumed" }
 
             val payload = ByteArray(prelude.payloadLen)
             messageBuffer.readFully(payload)

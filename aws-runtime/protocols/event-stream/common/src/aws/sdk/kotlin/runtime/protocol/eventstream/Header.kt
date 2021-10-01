@@ -35,7 +35,7 @@ public data class Header(val name: String, val value: HeaderValue) {
          * Read an encoded header from the [buffer]
          */
         public fun decode(buffer: Buffer): Header {
-            check(buffer.readRemaining >= MIN_HEADER_LEN.toULong()) { "Invalid frame header; require at least 2 bytes" }
+            check(buffer.readRemaining >= MIN_HEADER_LEN.toULong()) { "Invalid frame header; require at least $MIN_HEADER_LEN bytes" }
             val nameLen = buffer.readByte().toInt()
             check(nameLen > 0) { "Invalid header name length: $nameLen" }
             val nameBytes = ByteArray(nameLen)

@@ -4,7 +4,7 @@
  */
 
 description = "Support for the vnd.amazon.event-stream content type"
-extra["displayName"] = "AWS :: SDK :: Kotlin :: Event Stream"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: Protocols :: Event Stream"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.protocol.eventstream"
 
 kotlin {

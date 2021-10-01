@@ -118,6 +118,7 @@ class MessageTest {
 
     @Test
     fun testInvalidHeaderStringValueLength() {
+        // header length = -1
         val encoded = byteArrayFrom(
             0x00, 0x00, 0x00, 0x96, 0x00, 0x00, 0x00, 0x7a, 0x8b, 0xb4, 0x95, 0xfb, 0x04, 0x74, 0x72, 0x75,
             0x65, 0x00, 0x05, 0x66, 0x61, 0x6c, 0x73, 0x65, 0x01, 0x04, 0x62, 0x79, 0x74, 0x65, 0x02, 0x32,
@@ -133,7 +134,7 @@ class MessageTest {
         val buffer = SdkByteBuffer.wrapAsReadBuffer(encoded)
         assertFailsWith<IllegalStateException> {
             Message.decode(buffer)
-        }.message.shouldContain("Invalid HeaderValue; type=STRING, len=-1")
+        }.message.shouldContain("Invalid HeaderValue; type=STRING, len=65535")
     }
 
     @Test
