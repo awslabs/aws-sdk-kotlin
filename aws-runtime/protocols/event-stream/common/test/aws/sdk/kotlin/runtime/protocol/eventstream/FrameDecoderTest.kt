@@ -22,16 +22,16 @@ class FrameDecoderTest {
         val buf = SdkByteBuffer(256u)
         for (i in 0 until encoded.size - 1) {
             buf.writeByte(encoded[i])
-            assertEquals(DecodedFrame.Incomplete, decoder.decodeFrame(buf), "incomplete frame shouldn't result in a message")
+            assertEquals(null, decoder.decodeFrame(buf), "incomplete frame shouldn't result in a message")
         }
 
         buf.writeByte(encoded.last())
 
         when (val frame = decoder.decodeFrame(buf)) {
-            is DecodedFrame.Incomplete -> fail("frame should be complete now")
-            is DecodedFrame.Complete -> {
+            null -> fail("frame should be complete now")
+            else -> {
                 val expected = Message.decode(SdkByteBuffer.wrapAsReadBuffer(encoded))
-                assertEquals(expected, frame.message)
+                assertEquals(expected, frame)
             }
         }
     }
@@ -53,8 +53,8 @@ class FrameDecoderTest {
         for (i in 0..totalChunks.toInt()) {
             buffer.writeFully(encoded, min(chunkSize.toULong(), encoded.readRemaining))
             when (val frame = decoder.decodeFrame(buffer)) {
-                is DecodedFrame.Incomplete -> {}
-                is DecodedFrame.Complete -> decoded.add(frame.message)
+                null -> {}
+                else -> decoded.add(frame)
             }
         }
 
