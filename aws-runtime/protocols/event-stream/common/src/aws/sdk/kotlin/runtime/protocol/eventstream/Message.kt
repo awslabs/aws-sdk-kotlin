@@ -46,15 +46,16 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
         /**
          * Read a message from [buffer]
          */
-        public fun decode(buffer: SdkByteBuffer): Message {
+        public fun decode(buffer: Buffer): Message {
             val totalLen = buffer.readUInt()
             check(totalLen <= MAX_MESSAGE_SIZE.toUInt()) { "Invalid Message size: $totalLen" }
-            buffer.rewind(4u)
 
             // read into new ByteArray so we can validate the CRC
             val messageBytes = ByteArray(totalLen.toInt() - MESSAGE_CRC_BYTE_LEN)
-            buffer.readFully(messageBytes)
-            val messageBuffer = SdkByteBuffer.of(messageBytes).apply { advance(messageBytes.size.toULong()) }
+            val messageBuffer = SdkByteBuffer.of(messageBytes)
+            // add back in the totalLen so we can read the prelude
+            messageBuffer.writeUInt(totalLen)
+            buffer.readFully(messageBuffer)
 
             val prelude = Prelude.decode(messageBuffer)
 
