@@ -1,7 +1,6 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
-import org.junit.jupiter.api.Test
 import software.amazon.smithy.build.MockManifest
 import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
@@ -14,6 +13,7 @@ import software.amazon.smithy.kotlin.codegen.test.shouldContainOnlyOnceWithDiff
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
+import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class PresignerGeneratorTest {
@@ -87,12 +87,12 @@ class PresignerGeneratorTest {
             package smithy.kotlin.traits
             
             import aws.sdk.kotlin.runtime.ClientException
-            import aws.sdk.kotlin.runtime.auth.CredentialsProvider
-            import aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider
-            import aws.sdk.kotlin.runtime.auth.PresignedRequestConfig
-            import aws.sdk.kotlin.runtime.auth.ServicePresignConfig
-            import aws.sdk.kotlin.runtime.auth.SigningLocation
-            import aws.sdk.kotlin.runtime.auth.createPresignedRequest
+            import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
+            import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
+            import aws.sdk.kotlin.runtime.auth.signing.PresignedRequestConfig
+            import aws.sdk.kotlin.runtime.auth.signing.ServicePresignConfig
+            import aws.sdk.kotlin.runtime.auth.signing.SigningLocation
+            import aws.sdk.kotlin.runtime.auth.signing.createPresignedRequest
             import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
@@ -246,7 +246,7 @@ class PresignerGeneratorTest {
             
                 interface DslBuilder {
                     /**
-                     * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.DefaultChainCredentialsProvider] instance will be used.
+                     * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.
                      */
                     var credentialsProvider: CredentialsProvider
             

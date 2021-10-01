@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.codegen.protocols.protocoltest
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
@@ -58,16 +59,8 @@ internal fun <T : HttpMessageTestCase> HttpProtocolUnitTestGenerator<T>.renderCo
     operation: OperationShape
 ) {
     if (AwsSignatureVersion4.hasSigV4AuthScheme(model, serviceShape, operation)) {
-        val staticProviderSymbol = buildSymbol {
-            name = "StaticCredentialsProvider"
-            namespace(AwsKotlinDependency.AWS_AUTH)
-        }
-        val credentialsSymbol = buildSymbol {
-            name = "Credentials"
-            namespace(AwsKotlinDependency.AWS_AUTH)
-        }
-        writer.addImport(staticProviderSymbol)
-        writer.addImport(credentialsSymbol)
+        writer.addImport(AwsRuntimeTypes.Auth.StaticCredentialsProvider)
+        writer.addImport(AwsRuntimeTypes.Auth.Credentials)
         writer.write("val credentials = Credentials(#S, #S)", "AKID", "SECRET")
         writer.write("credentialsProvider = StaticCredentialsProvider(credentials)")
     }

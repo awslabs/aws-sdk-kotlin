@@ -6,11 +6,11 @@
 package aws.sdk.kotlin.codegen.customization
 
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.prependNamespaceAndService
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.shapes.ShapeId
+import kotlin.test.Test
 
 class RemoveEventStreamOperationsTest {
     @Test

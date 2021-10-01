@@ -5,14 +5,15 @@
 
 package aws.sdk.kotlin.codegen.protocols.json
 
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.StructureShape
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class AwsJsonHttpBindingResolverTest {
     private val testModel = """
@@ -54,7 +55,7 @@ class AwsJsonHttpBindingResolverTest {
         val expectedOperations = listOf("GetEmptyFoo", "GetFoo")
         val actualOperations = unit.bindingOperations().map { operationShape -> operationShape.id.name }.sorted()
 
-        Assertions.assertEquals(expectedOperations, actualOperations)
+        assertEquals(expectedOperations, actualOperations)
     }
 
     @Test
@@ -65,7 +66,7 @@ class AwsJsonHttpBindingResolverTest {
 
         val actualRequestBindings = unit.requestBindings(operation)
 
-        Assertions.assertTrue(actualRequestBindings.isEmpty())
+        assertTrue(actualRequestBindings.isEmpty())
     }
 
     @Test
@@ -76,13 +77,13 @@ class AwsJsonHttpBindingResolverTest {
 
         val actualRequestBindings = unit.requestBindings(operation)
 
-        Assertions.assertTrue(actualRequestBindings.size == 1)
+        assertTrue(actualRequestBindings.size == 1)
         val binding = actualRequestBindings.first()
 
-        Assertions.assertEquals(binding.member.id.toString(), "smithy.example#GetFooInput\$bigInt")
-        Assertions.assertEquals(binding.location, HttpBinding.Location.DOCUMENT)
+        assertEquals(binding.member.id.toString(), "smithy.example#GetFooInput\$bigInt")
+        assertEquals(binding.location, HttpBinding.Location.DOCUMENT)
         // Location name is unused by awsJson
-        Assertions.assertEquals(binding.locationName, null)
+        assertEquals(binding.locationName, null)
     }
 
     @Test
@@ -93,7 +94,7 @@ class AwsJsonHttpBindingResolverTest {
 
         val actualResponseBindings = unit.responseBindings(operation)
 
-        Assertions.assertTrue(actualResponseBindings.isEmpty())
+        assertTrue(actualResponseBindings.isEmpty())
     }
 
     @Test
@@ -104,13 +105,13 @@ class AwsJsonHttpBindingResolverTest {
 
         val actualResponseBindings = unit.responseBindings(operation)
 
-        Assertions.assertTrue(actualResponseBindings.size == 1)
+        assertTrue(actualResponseBindings.size == 1)
         val binding = actualResponseBindings.first()
 
-        Assertions.assertEquals(binding.member.id.toString(), "smithy.example#GetFooOutput\$bigInt")
-        Assertions.assertEquals(binding.location, HttpBinding.Location.DOCUMENT)
+        assertEquals(binding.member.id.toString(), "smithy.example#GetFooOutput\$bigInt")
+        assertEquals(binding.location, HttpBinding.Location.DOCUMENT)
         // Location name is unused by awsJson
-        Assertions.assertEquals(binding.locationName, null)
+        assertEquals(binding.locationName, null)
     }
 
     @Test
@@ -121,7 +122,7 @@ class AwsJsonHttpBindingResolverTest {
 
         val actualResponseBindings = unit.responseBindings(structure)
 
-        Assertions.assertTrue(actualResponseBindings.isEmpty())
+        assertTrue(actualResponseBindings.isEmpty())
     }
 
     @Test
@@ -132,12 +133,12 @@ class AwsJsonHttpBindingResolverTest {
 
         val actualResponseBindings = unit.responseBindings(structure)
 
-        Assertions.assertTrue(actualResponseBindings.size == 1)
+        assertTrue(actualResponseBindings.size == 1)
         val binding = actualResponseBindings.first()
 
-        Assertions.assertEquals(binding.member.id.toString(), "smithy.example#GetFooOutput\$bigInt")
-        Assertions.assertEquals(binding.location, HttpBinding.Location.DOCUMENT)
+        assertEquals(binding.member.id.toString(), "smithy.example#GetFooOutput\$bigInt")
+        assertEquals(binding.location, HttpBinding.Location.DOCUMENT)
         // Location name is unused by awsJson
-        Assertions.assertEquals(binding.locationName, null)
+        assertEquals(binding.locationName, null)
     }
 }

@@ -6,11 +6,11 @@
 package aws.sdk.kotlin.codegen.protocols.core
 
 import io.kotest.matchers.string.shouldContainOnlyOnce
-import org.junit.jupiter.api.Test
 import software.amazon.smithy.build.MockManifest
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.node.Node
+import kotlin.test.Test
 
 class EndpointResolverGeneratorTest {
 

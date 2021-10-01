@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.codegen.protocols.middleware
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
@@ -41,10 +40,10 @@ open class AwsSignatureVersion4(private val signingServiceName: String) : HttpFe
 
     override fun renderConfigure(writer: KotlinWriter) {
         writer.addImport(AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware)
-        writer.addImport("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_AUTH)
+        writer.addImport(AwsRuntimeTypes.Auth.DefaultChainCredentialsProvider)
 
-        writer.write("credentialsProvider = config.credentialsProvider ?: DefaultChainCredentialsProvider()")
-        writer.write("signingService = #S", signingServiceName)
+        writer.write("this.credentialsProvider = config.credentialsProvider ?: DefaultChainCredentialsProvider()")
+        writer.write("this.signingService = #S", signingServiceName)
     }
 
     companion object {

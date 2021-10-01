@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.auth
+package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import kotlin.test.Test
