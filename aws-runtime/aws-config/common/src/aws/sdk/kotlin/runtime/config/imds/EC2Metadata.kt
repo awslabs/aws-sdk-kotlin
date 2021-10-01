@@ -25,6 +25,8 @@ import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.middleware.Phase
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.Clock
+import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
@@ -56,6 +58,7 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
     private val endpointModeOverride: EndpointMode? = builder.endpointMode
     private val tokenTTL: Duration = builder.tokenTTL
     private val clock: Clock = builder.clock
+    private val platformProvider: PlatformProvider = builder.platformProvider
 
     init {
         if (endpointOverride != null && endpointModeOverride != null) {
@@ -82,7 +85,7 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
     private val middleware: List<Feature> = listOf(
         ServiceEndpointResolver.create {
             serviceId = SERVICE
-            resolver = ImdsEndpointResolver(endpointModeOverride, endpointOverride)
+            resolver = ImdsEndpointResolver(platformProvider, endpointModeOverride, endpointOverride)
         },
         UserAgent.create {
             metadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
@@ -174,9 +177,14 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
         internal var engine: HttpClientEngine? = null
 
         /**
-         * The source of time for token refreshes
+         * The source of time for token refreshes. This is here to facilitate testing and can otherwise be ignored
          */
         internal var clock: Clock = Clock.System
+
+        /**
+         * The platform provider. This is here to facilitate testing and can otherwise be ignored
+         */
+        internal var platformProvider: PlatformProvider = Platform
     }
 }
 
@@ -197,7 +205,7 @@ public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
         public fun fromValue(value: String): EndpointMode = when (value.lowercase()) {
             "ipv4" -> IPv4
             "ipv6" -> IPv6
-            else -> throw IllegalArgumentException("invalid EndpointMode: $value")
+            else -> throw IllegalArgumentException("invalid EndpointMode: `$value`")
         }
     }
 }
@@ -208,7 +216,7 @@ public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
  * @param statusCode The raw HTTP status code of the response
  * @param message The error message
  */
-public class EC2MetadataError(statusCode: Int, message: String) : AwsServiceException(message)
+public class EC2MetadataError(public val statusCode: Int, message: String) : AwsServiceException(message)
 
 private fun Endpoint.toUrl(): Url {
     val endpoint = this

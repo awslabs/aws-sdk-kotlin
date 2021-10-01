@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.endpoint.Endpoint
+import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
@@ -16,6 +17,9 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.ManualClock
+import io.kotest.matchers.string.contain
+import io.kotest.matchers.string.shouldContain
+import kotlinx.serialization.json.*
 import kotlin.test.*
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
@@ -196,8 +200,78 @@ class EC2MetadataTest {
     }
 
     @Test
-    fun testConfig() {
-        // need to mock various config scenarios
+    fun testHttpConnectTimeouts() {
+        // Need a 1 sec connect timeout + other timeouts in imds spec
         fail("not implemented yet")
+    }
+
+    data class ImdsConfigTest(
+        val name: String,
+        val env: Map<String, String>,
+        val fs: Map<String, String>,
+        val endpointOverride: String?,
+        val modeOverride: String?,
+        val result: Result<String>,
+    ) {
+        companion object {
+            fun fromJson(element: JsonObject): ImdsConfigTest {
+                val resultObj = element["result"]!!.jsonObject
+                // map to success or generic error with the expected message substring of _some_ error that should be thrown
+                val result = resultObj["Ok"]?.jsonPrimitive?.content?.let { Result.success(it) }
+                    ?: resultObj["Err"]!!.jsonPrimitive.content.let { Result.failure(RuntimeException(it)) }
+
+                return ImdsConfigTest(
+                    element["name"]!!.jsonPrimitive.content,
+                    element["env"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content },
+                    element["fs"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content },
+                    element["endpointOverride"]?.jsonPrimitive?.content,
+                    element["modeOverride"]?.jsonPrimitive?.content,
+                    result
+                )
+            }
+        }
+    }
+
+    @Test
+    fun testConfig(): Unit = runSuspendTest {
+        val tests = Json.parseToJsonElement(imdsTestSuite).jsonObject["tests"]!!.jsonArray.map { ImdsConfigTest.fromJson(it.jsonObject) }
+        tests.forEach { test ->
+            val result = runCatching { check(test) }
+            when {
+                test.result.isSuccess && result.isSuccess -> {}
+                test.result.isSuccess && result.isFailure -> fail("expected success but failed; test=${test.name}; result=$result")
+                test.result.isFailure && result.isSuccess -> fail("expected failure but succeeded; test=${test.name}; result=$result")
+                test.result.isFailure && result.isFailure -> {
+                    result.exceptionOrNull()!!.message.shouldContain(test.result.exceptionOrNull()!!.message!!)
+                }
+            }
+        }
+    }
+
+    private suspend fun check(test: ImdsConfigTest) {
+        val connection = buildTestConnection {
+            if (test.result.isSuccess) {
+                val endpoint = test.result.getOrThrow()
+                expect(
+                    tokenRequest(endpoint, DEFAULT_TOKEN_TTL_SECONDS),
+                    tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
+                )
+                expect(imdsResponse("output 1"))
+            }
+        }
+
+        val client = EC2Metadata {
+            engine = connection
+            test.endpointOverride?.let { endpointOverride ->
+                endpoint = Url.parse(endpointOverride).let { Endpoint(it.host, it.scheme.protocolName) }
+            }
+            test.modeOverride?.let {
+                endpointMode = EndpointMode.fromValue(it)
+            }
+            platformProvider = TestPlatformProvider(test.env, fs = test.fs)
+        }
+
+        client.get("/hello")
+        connection.assertRequests()
     }
 }

@@ -12,6 +12,7 @@ kotlin {
         commonMain {
             dependencies {
                 api("aws.smithy.kotlin:testing:$smithyKotlinVersion")
+                api("aws.smithy.kotlin:utils:$smithyKotlinVersion")
             }
         }
     }
