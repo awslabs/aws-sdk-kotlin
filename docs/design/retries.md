@@ -20,7 +20,7 @@ The generalized `StandardRetryPolicy` is subclassed to provide support for infor
 exception types:
 
 ```kotlin
-object SdkRetryPolicy : StandardRetryPolicy() {
+object AwsDefaultRetryPolicy : StandardRetryPolicy() {
   internal val knownErrorTypes = mapOf(
     "BandwidthLimitExceeded" to Throttling,
     "RequestTimeoutException" to Timeout,

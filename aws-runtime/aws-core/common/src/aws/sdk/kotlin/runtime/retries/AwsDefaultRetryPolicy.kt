@@ -10,10 +10,11 @@ import aws.smithy.kotlin.runtime.retries.RetryDirective
 import aws.smithy.kotlin.runtime.retries.RetryErrorType.*
 import aws.smithy.kotlin.runtime.retries.impl.StandardRetryPolicy
 
-object SdkRetryPolicy : StandardRetryPolicy() {
+public object AwsDefaultRetryPolicy : StandardRetryPolicy() {
     internal val knownErrorTypes = mapOf(
         "BandwidthLimitExceeded" to Throttling,
         "EC2ThrottledException" to Throttling,
+        "IDPCommunicationError" to Timeout,
         "LimitExceededException" to Throttling,
         "PriorRequestNotComplete" to Throttling,
         "ProvisionedThroughputExceededException" to Throttling,
