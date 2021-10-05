@@ -34,10 +34,10 @@ public object AwsDefaultRetryPolicy : StandardRetryPolicy() {
     )
 
     internal val knownStatusCodes = mapOf(
-        500 to Throttling,
-        502 to Throttling,
-        503 to Throttling,
-        504 to Throttling,
+        500 to Timeout,
+        502 to Timeout,
+        503 to Timeout,
+        504 to Timeout,
     )
 
     override fun evaluateOtherExceptions(ex: Throwable): RetryDirective? = when (ex) {
