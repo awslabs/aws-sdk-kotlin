@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.5.0-alpha] - 09/30/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Breaking changes
+
+* split auth and signing packages [#318](https://github.com/awslabs/aws-sdk-kotlin/issues/318)
+    * Import paths changed to `aws.sdk.kotlin.runtime.auth.credentials` and `aws.sdk.kotlin.runtime.auth.signing`
+
+### New features
+
+* autofill Glacier accountId [#246](https://github.com/awslabs/aws-sdk-kotlin/issues/246)
+* support JVM system property and environment variables for profiles [#297](https://github.com/awslabs/aws-sdk-kotlin/issues/297)
+* expose method to sign standalone requests [#318](https://github.com/awslabs/aws-sdk-kotlin/issues/318)
+* AWS configuration loader and parser [#216](https://github.com/awslabs/aws-sdk-kotlin/issues/216)
+
+### Fixes
+
+* utilize custom endpoint ports [#310](https://github.com/awslabs/aws-sdk-kotlin/issues/310)
+* Replace junit imports with kotlin.test imports where possible [#321](https://github.com/awslabs/aws-sdk-kotlin/issues/321)
+* update readme to include latest version [#319](https://github.com/awslabs/aws-sdk-kotlin/issues/319)
+* sync models and endpoints [#317](https://github.com/awslabs/aws-sdk-kotlin/issues/317)
+* Favor kotlin-test-juint5 over kotlin-test to resolve intermittent build failures [#316](https://github.com/awslabs/aws-sdk-kotlin/issues/316)
+* kotlin 1.5.30, coroutine, kotest version bumps [#307](https://github.com/awslabs/aws-sdk-kotlin/issues/307)
+
+
 ## [0.4.0-alpha] - 08/26/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
@@ -12,27 +38,27 @@
 
 ### New features
 
-* Support for presigning requests (smithy-kotlin#435)
-* Detect aws region from system properties (aws-sdk-kotlin#202)
-* EC2 Query Protocol (aws-sdk-kotlin#230)
-* Provide opt-in wire logging (smithy-kotlin#425)
-* Support profile credentials provider (smithy-kotlin#302)
+* Support for presigning requests [#435](https://github.com/awslabs/smithy-kotlin/issues/435)
+* Detect aws region from system properties [#202](https://github.com/awslabs/aws-sdk-kotlin/issues/202)
+* EC2 Query Protocol [#230](https://github.com/awslabs/aws-sdk-kotlin/issues/230)
+* Provide opt-in wire logging [#425](https://github.com/awslabs/smithy-kotlin/issues/425)
+* Support profile credentials provider [#302](https://github.com/awslabs/smithy-kotlin/issues/302)
 
 ### Fixes
 
-* s3.deleteObjects causes an exception (aws-sdk-kotlin#125)
-* Streaming request BodyStream never read (aws-sdk-kotlin#282)
-* location service references traits not in sdk classpath (aws-sdk-kotlin#286)
-* Ignore unboxed types for subset of services (aws-sdk-kotlin#261)
-* Service operations specifying no auth should not sign requests with sigv4 (aws-sdk-kotlin#263)
-* Create S3 object with Unicode name fails with signature mismatch (aws-sdk-kotlin#200)
-* Codegen errors in marketplacecommerceanalytics (aws-sdk-kotlin#214)
-* Escape model-extra files for Windows (aws-sdk-kotlin#191)
-* Support Glacier APIVersion Header (smithy-kotlin#165)
-* Support APIGateway Accept Header (smithy-kotlin#157)
-* Add support for awsQueryError trait (smithy-kotlin#375)
-* S3 HeadObject errors require customization (aws-sdk-kotlin#152)
-* S3 custom treatment of GetBucketLocation response (aws-sdk-kotlin#194)
+* s3.deleteObjects causes an exception [#125](https://github.com/awslabs/aws-sdk-kotlin/issues/125)
+* Streaming request BodyStream never read [#282](https://github.com/awslabs/aws-sdk-kotlin/issues/282)
+* location service references traits not in sdk classpath [#286](https://github.com/awslabs/aws-sdk-kotlin/issues/286)
+* Ignore unboxed types for subset of services [#261](https://github.com/awslabs/aws-sdk-kotlin/issues/261)
+* Service operations specifying no auth should not sign requests with sigv4 [#263](https://github.com/awslabs/aws-sdk-kotlin/issues/263)
+* Create S3 object with Unicode name fails with signature mismatch [#200](https://github.com/awslabs/aws-sdk-kotlin/issues/200)
+* Codegen errors in marketplacecommerceanalytics [#214](https://github.com/awslabs/aws-sdk-kotlin/issues/214)
+* Escape model-extra files for Windows [#191](https://github.com/awslabs/aws-sdk-kotlin/issues/191)
+* Support Glacier APIVersion Header [#165](https://github.com/awslabs/smithy-kotlin/issues/165)
+* Support APIGateway Accept Header [#157](https://github.com/awslabs/smithy-kotlin/issues/157)
+* Add support for awsQueryError trait [#375](https://github.com/awslabs/smithy-kotlin/issues/375)
+* S3 HeadObject errors require customization [#152](https://github.com/awslabs/aws-sdk-kotlin/issues/152)
+* S3 custom treatment of GetBucketLocation response [#194](https://github.com/awslabs/aws-sdk-kotlin/issues/194)
 
 ## [0.3.0-M2] - 06/18/2021
 

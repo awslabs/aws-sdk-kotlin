@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.crt
 import aws.sdk.kotlin.crt.http.HttpRequestBodyStream
 import aws.sdk.kotlin.crt.io.MutableBuffer
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.io.SdkBuffer
+import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import aws.smithy.kotlin.runtime.io.readAvailable
 import kotlinx.atomicfu.atomic
@@ -19,7 +19,7 @@ import kotlin.coroutines.CoroutineContext
 /**
  * write as much of [outgoing] to [dest] as possible
  */
-internal expect fun transferRequestBody(outgoing: SdkBuffer, dest: MutableBuffer)
+internal expect fun transferRequestBody(outgoing: SdkByteBuffer, dest: MutableBuffer)
 
 /**
  * Implement's [HttpRequestBodyStream] which proxies an SDK request body channel [SdkByteReadChannel]
@@ -34,8 +34,8 @@ public class ReadChannelBodyStream(
     private val producerJob = Job(callContext.job)
     override val coroutineContext: CoroutineContext = callContext + producerJob
 
-    private val currBuffer = atomic<SdkBuffer?>(null)
-    private val bufferChan = Channel<SdkBuffer>(Channel.UNLIMITED)
+    private val currBuffer = atomic<SdkByteBuffer?>(null)
+    private val bufferChan = Channel<SdkByteBuffer>(Channel.UNLIMITED)
 
     init {
         producerJob.invokeOnCompletion { cause ->
@@ -74,7 +74,7 @@ public class ReadChannelBodyStream(
             // immediately in the current thread. The coroutine will fill the buffer but won't suspend because
             // we know data is available.
             launch(start = CoroutineStart.UNDISPATCHED) {
-                val sdkBuffer = SdkBuffer(bodyChan.availableForRead)
+                val sdkBuffer = SdkByteBuffer(bodyChan.availableForRead.toULong())
                 bodyChan.readAvailable(sdkBuffer)
                 bufferChan.send(sdkBuffer)
             }.invokeOnCompletion { cause ->
@@ -99,7 +99,7 @@ public class ReadChannelBodyStream(
 
         transferRequestBody(outgoing, buffer)
 
-        if (outgoing.readRemaining > 0) {
+        if (outgoing.readRemaining > 0u) {
             currBuffer.value = outgoing
         }
 

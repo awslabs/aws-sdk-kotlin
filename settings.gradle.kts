@@ -36,6 +36,7 @@ include(":aws-runtime:protocols:http")
 include(":aws-runtime:http-client-engine-crt")
 include(":aws-runtime:protocols:aws-json-protocols")
 include(":aws-runtime:protocols:aws-xml-protocols")
+include(":aws-runtime:protocols:event-stream")
 include(":aws-runtime:crt-util")
 
 // generated services
