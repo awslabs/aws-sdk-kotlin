@@ -6,8 +6,8 @@
 package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.AwsSdkSetting
-import aws.sdk.kotlin.runtime.config.AwsProfile
-import aws.sdk.kotlin.runtime.config.loadActiveAwsProfile
+import aws.sdk.kotlin.runtime.config.profile.AwsProfile
+import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
 import aws.sdk.kotlin.runtime.endpoint.Endpoint
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.sdk.kotlin.runtime.resolve

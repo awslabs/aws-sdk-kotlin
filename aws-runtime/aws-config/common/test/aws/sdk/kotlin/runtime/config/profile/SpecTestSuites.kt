@@ -1,4 +1,4 @@
-package aws.sdk.kotlin.runtime.config
+package aws.sdk.kotlin.runtime.config.profile
 
 /**
  * This test suite exercises the parser and continuation merger.

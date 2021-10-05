@@ -17,7 +17,6 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.ManualClock
-import io.kotest.matchers.string.contain
 import io.kotest.matchers.string.shouldContain
 import kotlinx.serialization.json.*
 import kotlin.test.*
