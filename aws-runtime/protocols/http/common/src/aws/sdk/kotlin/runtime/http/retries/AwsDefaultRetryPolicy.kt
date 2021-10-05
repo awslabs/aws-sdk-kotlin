@@ -3,9 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.retries
+package aws.sdk.kotlin.runtime.http.retries
 
+import aws.sdk.kotlin.runtime.AwsErrorMetadata
 import aws.sdk.kotlin.runtime.AwsServiceException
+import aws.smithy.kotlin.runtime.ServiceErrorMetadata
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.retries.RetryDirective
 import aws.smithy.kotlin.runtime.retries.RetryErrorType.*
 import aws.smithy.kotlin.runtime.retries.impl.StandardRetryPolicy
@@ -31,12 +34,23 @@ public object AwsDefaultRetryPolicy : StandardRetryPolicy() {
         "TransactionInProgressException" to Throttling,
     )
 
+    internal val knownStatusCodes = mapOf(
+        500 to Throttling,
+        502 to Throttling,
+        503 to Throttling,
+        504 to Throttling,
+    )
+
     override fun evaluateOtherExceptions(ex: Throwable): RetryDirective? = when (ex) {
         is AwsServiceException -> evaluateAwsServiceException(ex)
         else -> null
     }
 
     private fun evaluateAwsServiceException(ex: AwsServiceException): RetryDirective? = with(ex.sdkErrorMetadata) {
-        knownErrorTypes[errorCode]?.let { RetryDirective.RetryError(it) }
+        (knownErrorTypes[errorCode] ?: knownStatusCodes[statusCode])
+            ?.let { RetryDirective.RetryError(it) }
     }
+
+    private val ServiceErrorMetadata.statusCode: Int?
+        get() = (protocolResponse as? HttpResponse)?.status?.value
 }
