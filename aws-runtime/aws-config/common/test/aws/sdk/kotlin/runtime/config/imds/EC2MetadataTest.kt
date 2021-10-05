@@ -181,23 +181,27 @@ class EC2MetadataTest {
         connection.assertRequests()
     }
 
+    @Ignore
     @Test
     fun testRetryHttp500() {
         fail("not implemented yet")
     }
 
+    @Ignore
     @Test
     fun testRetryTokenFailure() {
         // 500 during token acquisition should be retried
         fail("not implemented yet")
     }
 
+    @Ignore
     @Test
     fun testNoRetryHttp403() {
         // 403 responses from IMDS during token acquisition MUST not be retried
         fail("not implemented yet")
     }
 
+    @Ignore
     @Test
     fun testHttpConnectTimeouts() {
         // Need a 1 sec connect timeout + other timeouts in imds spec
