@@ -18,7 +18,7 @@ internal fun newReadableSegment(src: ByteArray): Segment = Segment.of(src).apply
 internal fun Segment.copyTo(dest: SdkByteBuffer, limit: Int = Int.MAX_VALUE): Int {
     check(readRemaining > 0u) { "nothing left to read from segment" }
     val wc = minOf(readRemaining, limit.toULong())
-    readFully(dest, wc.toLong())
+    readFully(dest, wc)
     return wc.toInt()
 }
 
