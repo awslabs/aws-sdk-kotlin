@@ -14,7 +14,6 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
-                api(project(":aws-runtime:regions"))
                 api("aws.smithy.kotlin:http:$smithyKotlinVersion")
             }
         }
