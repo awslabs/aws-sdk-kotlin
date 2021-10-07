@@ -24,7 +24,7 @@ import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
-class EC2MetadataTest {
+class ImdsClientTest {
 
     private fun tokenRequest(host: String, ttl: Int): HttpRequest = HttpRequest {
         val parsed = Url.parse(host)
@@ -57,7 +57,7 @@ class EC2MetadataTest {
     fun testInvalidEndpointOverrideFailsCreation() {
         val connection = TestConnection()
         assertFailsWith<ConfigurationException> {
-            EC2Metadata {
+            ImdsClient {
                 engine = connection
                 endpointConfiguration = EndpointConfiguration.Custom(
                     Endpoint("[foo::254]", protocol = "http")
@@ -83,7 +83,7 @@ class EC2MetadataTest {
             )
         }
 
-        val client = EC2Metadata { engine = connection }
+        val client = ImdsClient { engine = connection }
         val r1 = client.get("/latest/metadata")
         assertEquals("output 1", r1)
 
@@ -115,7 +115,7 @@ class EC2MetadataTest {
 
         val testClock = ManualClock()
 
-        val client = EC2Metadata {
+        val client = ImdsClient {
             engine = connection
             endpointConfiguration = EndpointConfiguration.ModeOverride(EndpointMode.IPv6)
             clock = testClock
@@ -162,7 +162,7 @@ class EC2MetadataTest {
 
         val testClock = ManualClock()
 
-        val client = EC2Metadata {
+        val client = ImdsClient {
             engine = connection
             endpointConfiguration = EndpointConfiguration.ModeOverride(EndpointMode.IPv6)
             clock = testClock
@@ -265,7 +265,7 @@ class EC2MetadataTest {
             }
         }
 
-        val client = EC2Metadata {
+        val client = ImdsClient {
             engine = connection
             test.endpointOverride?.let { endpointOverride ->
                 val endpoint = Url.parse(endpointOverride).let { Endpoint(it.host, it.scheme.protocolName) }

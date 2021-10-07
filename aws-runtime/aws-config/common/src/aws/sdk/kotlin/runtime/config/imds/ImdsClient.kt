@@ -47,10 +47,10 @@ private const val SERVICE = "imds"
  * for more information.
  */
 @OptIn(ExperimentalTime::class)
-public class EC2Metadata private constructor(builder: Builder) : Closeable {
+public class ImdsClient private constructor(builder: Builder) : Closeable {
     public constructor() : this(Builder())
 
-    private val logger = Logger.getLogger<EC2Metadata>()
+    private val logger = Logger.getLogger<ImdsClient>()
 
     private val maxRetries: UInt = builder.maxRetries
     private val endpointConfiguration: EndpointConfiguration = builder.endpointConfiguration
@@ -83,14 +83,14 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
             metadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
         },
         TokenMiddleware.create {
-            httpClient = this@EC2Metadata.httpClient
+            httpClient = this@ImdsClient.httpClient
             ttl = tokenTtl
-            clock = this@EC2Metadata.clock
+            clock = this@ImdsClient.clock
         }
     )
 
     public companion object {
-        public operator fun invoke(block: Builder.() -> Unit): EC2Metadata = EC2Metadata(Builder().apply(block))
+        public operator fun invoke(block: Builder.() -> Unit): ImdsClient = ImdsClient(Builder().apply(block))
     }
 
     /**
