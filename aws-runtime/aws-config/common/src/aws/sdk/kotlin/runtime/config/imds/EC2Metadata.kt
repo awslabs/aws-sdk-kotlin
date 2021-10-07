@@ -15,7 +15,6 @@ import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import aws.sdk.kotlin.runtime.http.middleware.ServiceEndpointResolver
 import aws.sdk.kotlin.runtime.http.middleware.UserAgent
 import aws.smithy.kotlin.runtime.client.ExecutionContext
-import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
@@ -56,7 +55,7 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
     private val maxRetries: UInt = builder.maxRetries
     private val endpointOverride: Endpoint? = builder.endpoint
     private val endpointModeOverride: EndpointMode? = builder.endpointMode
-    private val tokenTTL: Duration = builder.tokenTTL
+    private val tokenTtl: Duration = builder.tokenTTL
     private val clock: Clock = builder.clock
     private val platformProvider: PlatformProvider = builder.platformProvider
 
@@ -92,7 +91,8 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
         },
         TokenMiddleware.create {
             httpClient = this@EC2Metadata.httpClient
-            ttl = tokenTTL
+            ttl = tokenTtl
+            clock = this@EC2Metadata.clock
         }
     )
 
@@ -131,7 +131,6 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
             context {
                 operationName = path
                 service = SERVICE
-                set(SdkClientOption.Clock, clock)
                 // artifact of re-using ServiceEndpointResolver middleware
                 set(AwsClientOption.Region, "not-used")
             }

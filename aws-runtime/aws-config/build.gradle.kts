@@ -15,6 +15,7 @@ kotlin {
                 api(project(":aws-runtime:aws-core"))
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:http-client-engine-crt"))
                 implementation(project(":aws-runtime:protocols:http"))
             }
