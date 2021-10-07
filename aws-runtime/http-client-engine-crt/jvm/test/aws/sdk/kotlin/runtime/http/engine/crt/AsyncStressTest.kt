@@ -14,6 +14,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
+import aws.smithy.kotlin.runtime.httptest.TestWithLocalServer
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*

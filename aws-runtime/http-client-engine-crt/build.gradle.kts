@@ -40,12 +40,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
-            }
-        }
-        jvmTest {
-            dependencies {
-                val ktorServerVersion = "1.5.0"
-                implementation("io.ktor:ktor-server-cio:$ktorServerVersion")
+                implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
             }
         }
     }
