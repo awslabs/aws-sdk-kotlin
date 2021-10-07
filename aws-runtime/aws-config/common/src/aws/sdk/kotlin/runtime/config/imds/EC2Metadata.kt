@@ -53,26 +53,19 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
     private val logger = Logger.getLogger<EC2Metadata>()
 
     private val maxRetries: UInt = builder.maxRetries
-    private val endpointOverride: Endpoint? = builder.endpoint
-    private val endpointModeOverride: EndpointMode? = builder.endpointMode
+    private val endpointConfiguration: EndpointConfiguration = builder.endpointConfiguration
     private val tokenTtl: Duration = builder.tokenTTL
     private val clock: Clock = builder.clock
     private val platformProvider: PlatformProvider = builder.platformProvider
 
     init {
-        if (endpointOverride != null && endpointModeOverride != null) {
-            logger.warn {
-                "EndpointMode was set in combination with an explicit endpoint. " +
-                    "The mode override will be ignored: endpointMode=$endpointModeOverride, endpoint=$endpointOverride"
-            }
-        }
-
         // validate the override at construction time
-        if (endpointOverride != null) {
+        if (endpointConfiguration is EndpointConfiguration.Custom) {
+            val url = endpointConfiguration.endpoint.toUrl()
             try {
-                Url.parse(endpointOverride.toUrl().toString())
+                Url.parse(url.toString())
             } catch (ex: Exception) {
-                throw ConfigurationException("endpointOverride `$endpointOverride` is not a valid URI", ex)
+                throw ConfigurationException("Invalid endpoint configuration: `$url` is not a valid URI", ex)
             }
         }
     }
@@ -84,7 +77,7 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
     private val middleware: List<Feature> = listOf(
         ServiceEndpointResolver.create {
             serviceId = SERVICE
-            resolver = ImdsEndpointResolver(platformProvider, endpointModeOverride, endpointOverride)
+            resolver = ImdsEndpointResolver(platformProvider, endpointConfiguration)
         },
         UserAgent.create {
             metadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
@@ -156,14 +149,9 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
         public var maxRetries: UInt = DEFAULT_MAX_RETRIES
 
         /**
-         * The endpoint to make requests to. By default this is determined by the execution environment
+         * The endpoint configuration to use when making requests
          */
-        public var endpoint: Endpoint? = null
-
-        /**
-         * The [EndpointMode] to use when connecting to [endpoint]
-         */
-        public var endpointMode: EndpointMode? = null
+        public var endpointConfiguration: EndpointConfiguration = EndpointConfiguration.Default
 
         /**
          * Override the time-to-live for the session token
@@ -185,6 +173,23 @@ public class EC2Metadata private constructor(builder: Builder) : Closeable {
          */
         internal var platformProvider: PlatformProvider = Platform
     }
+}
+
+public sealed class EndpointConfiguration {
+    /**
+     * Detected from the execution environment
+     */
+    public object Default : EndpointConfiguration()
+
+    /**
+     * Override the endpoint to make requests to
+     */
+    public data class Custom(val endpoint: Endpoint) : EndpointConfiguration()
+
+    /**
+     * Override the [EndpointMode] to use
+     */
+    public data class ModeOverride(val mode: EndpointMode) : EndpointConfiguration()
 }
 
 public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {

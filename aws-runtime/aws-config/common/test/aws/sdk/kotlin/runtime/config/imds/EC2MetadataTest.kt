@@ -59,7 +59,9 @@ class EC2MetadataTest {
         assertFailsWith<ConfigurationException> {
             EC2Metadata {
                 engine = connection
-                endpoint = Endpoint("[foo::254]", protocol = "http")
+                endpointConfiguration = EndpointConfiguration.Custom(
+                    Endpoint("[foo::254]", protocol = "http")
+                )
             }
         }
     }
@@ -115,7 +117,7 @@ class EC2MetadataTest {
 
         val client = EC2Metadata {
             engine = connection
-            endpointMode = EndpointMode.IPv6
+            endpointConfiguration = EndpointConfiguration.ModeOverride(EndpointMode.IPv6)
             clock = testClock
             tokenTTL = Duration.seconds(600)
         }
@@ -162,7 +164,7 @@ class EC2MetadataTest {
 
         val client = EC2Metadata {
             engine = connection
-            endpointMode = EndpointMode.IPv6
+            endpointConfiguration = EndpointConfiguration.ModeOverride(EndpointMode.IPv6)
             clock = testClock
             tokenTTL = Duration.seconds(600)
         }
@@ -266,10 +268,12 @@ class EC2MetadataTest {
         val client = EC2Metadata {
             engine = connection
             test.endpointOverride?.let { endpointOverride ->
-                endpoint = Url.parse(endpointOverride).let { Endpoint(it.host, it.scheme.protocolName) }
+                val endpoint = Url.parse(endpointOverride).let { Endpoint(it.host, it.scheme.protocolName) }
+
+                endpointConfiguration = EndpointConfiguration.Custom(endpoint)
             }
             test.modeOverride?.let {
-                endpointMode = EndpointMode.fromValue(it)
+                endpointConfiguration = EndpointConfiguration.ModeOverride(EndpointMode.fromValue(it))
             }
             platformProvider = TestPlatformProvider(test.env, fs = test.fs)
         }

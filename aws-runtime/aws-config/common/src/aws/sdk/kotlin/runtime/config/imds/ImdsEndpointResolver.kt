@@ -19,8 +19,7 @@ internal const val EC2_METADATA_SERVICE_ENDPOINT_MODE_PROFILE_KEY = "ec2_metadat
 
 internal class ImdsEndpointResolver(
     private val platformProvider: PlatformProvider,
-    private val endpointModeOverride: EndpointMode? = null,
-    private val endpointOverride: Endpoint? = null,
+    private val endpointConfiguration: EndpointConfiguration
 ) : EndpointResolver {
     // cached endpoint and profile
     private val resolvedEndpoint = asyncLazy(::doResolveEndpoint)
@@ -28,7 +27,10 @@ internal class ImdsEndpointResolver(
 
     override suspend fun resolve(service: String, region: String): Endpoint = resolvedEndpoint.get()
 
-    private suspend fun doResolveEndpoint(): Endpoint = endpointOverride ?: resolveEndpointFromConfig()
+    private suspend fun doResolveEndpoint(): Endpoint = when (endpointConfiguration) {
+        is EndpointConfiguration.Custom -> endpointConfiguration.endpoint
+        else -> resolveEndpointFromConfig()
+    }
 
     private suspend fun resolveEndpointFromConfig(): Endpoint {
         // explicit endpoint configured
@@ -36,8 +38,11 @@ internal class ImdsEndpointResolver(
         if (endpoint != null) return endpoint
 
         // endpoint default from mode
-        val endpointMode = endpointModeOverride ?: loadEndpointModeFromEnv() ?: loadEndpointModeFromProfile() ?: EndpointMode.IPv4
-        return endpointMode.defaultEndpoint
+        val mode = when (endpointConfiguration) {
+            is EndpointConfiguration.ModeOverride -> endpointConfiguration.mode
+            else -> loadEndpointModeFromEnv() ?: loadEndpointModeFromProfile() ?: EndpointMode.IPv4
+        }
+        return mode.defaultEndpoint
     }
 
     private fun loadEndpointFromEnv(): Endpoint? =
