@@ -9,6 +9,7 @@
 * implement basic retry support in runtime [#328](https://github.com/awslabs/aws-sdk-kotlin/pull/328)
 * event stream framing support [#320](https://github.com/awslabs/aws-sdk-kotlin/pull/320)
 * replace GSON based JSON serde with KMP compatible impl [#477](https://github.com/awslabs/smithy-kotlin/pull/477)
+* Add IMDSv2 client in runtime [#330](https://github.com/awslabs/aws-sdk-kotlin/pull/330)
 
 
 ## [0.5.0-alpha] - 09/30/2021
