@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.6.0-alpha] - 10/07/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+## Breaking changes
+
+## New features
+
+* implement basic retry support in runtime [#328](https://github.com/awslabs/aws-sdk-kotlin/pull/328)
+* event stream framing support [#320](https://github.com/awslabs/aws-sdk-kotlin/pull/320)
+* replace GSON based JSON serde with KMP compatible impl [#477](https://github.com/awslabs/smithy-kotlin/pull/477)
+
+## Fixes
+
+
 ## [0.5.0-alpha] - 09/30/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
