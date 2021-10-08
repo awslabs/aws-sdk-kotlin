@@ -36,7 +36,7 @@ public class CrtHttpEngine(public val config: CrtHttpEngineConfig) : HttpClientE
     private val customTlsContext: TlsContext? = if (config.alpn.isNotEmpty() && config.tlsContext == null) {
         val options = TlsContextOptionsBuilder().apply {
             verifyPeer = true
-            alpn = config.alpn.joinToString(separator = ";")
+            alpn = config.alpn.joinToString(separator = ";") { it.protocolId }
         }.build()
         TlsContext(options)
     } else {
