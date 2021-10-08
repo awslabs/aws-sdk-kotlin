@@ -22,7 +22,7 @@ Consult the [stability guide](stability.md) for more information on SDK stabilit
     ```kt
     # file: my-project/build.gradle.kts
 
-    val awsKotlinSdkVersion = "0.4.0-alpha"
+    val awsKotlinSdkVersion = "0.6.0-alpha"
     // OR put it in gradle.properties
     // val awsKotlinSdkVersion: String by project
 
