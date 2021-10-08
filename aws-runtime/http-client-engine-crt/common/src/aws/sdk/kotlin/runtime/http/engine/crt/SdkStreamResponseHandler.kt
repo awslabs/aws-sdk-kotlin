@@ -73,6 +73,7 @@ internal class SdkStreamResponseHandler(
         sdkBody = bufferedReadChannel(::onDataConsumed)
         return object : HttpBody.Streaming() {
             override val contentLength: Long = contentLength
+            override fun deepCopy(): HttpBody = throwSingleConsumptionException()
             override fun readFrom(): SdkByteReadChannel {
                 return sdkBody!!
             }

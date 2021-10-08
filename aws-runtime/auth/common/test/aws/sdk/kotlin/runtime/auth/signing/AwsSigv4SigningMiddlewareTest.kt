@@ -37,6 +37,7 @@ class AwsSigv4SigningMiddlewareTest {
                     body = when (streaming) {
                         true -> object : HttpBody.Streaming() {
                             override val contentLength: Long = requestBody.length.toLong()
+                            override fun deepCopy(): HttpBody = this
                             override fun readFrom(): SdkByteReadChannel = SdkByteReadChannel(requestBody.encodeToByteArray())
                             override val isReplayable: Boolean = replayable
                             override fun reset() { }
