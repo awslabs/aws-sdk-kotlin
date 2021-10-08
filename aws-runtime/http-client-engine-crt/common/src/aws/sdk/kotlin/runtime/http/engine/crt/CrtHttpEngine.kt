@@ -14,6 +14,7 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.engine.callContext
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
+import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.job
 import kotlinx.coroutines.sync.Mutex
@@ -26,12 +27,14 @@ internal const val DEFAULT_WINDOW_SIZE_BYTES: Int = 16 * 1024
 /**
  * [HttpClientEngine] based on the AWS Common Runtime HTTP client
  */
+@OptIn(ExperimentalTime::class)
 public class CrtHttpEngine(public val config: CrtHttpEngineConfig) : HttpClientEngineBase("crt") {
     public constructor() : this(CrtHttpEngineConfig.Default)
 
     public companion object {
         public operator fun invoke(block: CrtHttpEngineConfig.Builder.() -> Unit): CrtHttpEngine = CrtHttpEngine(CrtHttpEngineConfig.Builder().apply(block).build())
     }
+    private val logger = Logger.getLogger<CrtHttpEngine>()
 
     private val customTlsContext: TlsContext? = if (config.alpn.isNotEmpty() && config.tlsContext == null) {
         val options = TlsContextOptionsBuilder().apply {
@@ -41,6 +44,11 @@ public class CrtHttpEngine(public val config: CrtHttpEngineConfig) : HttpClientE
         TlsContext(options)
     } else {
         null
+    }
+
+    init {
+        logger.warn { "CrtHttpEngine does not support HttpClientEngineConfig.socketReadTimeout(${config.socketReadTimeout}; ignoring" }
+        logger.warn { "CrtHttpEngine does not support HttpClientEngineConfig.socketWriteTimeout(${config.socketWriteTimeout}; ignoring" }
     }
 
     @OptIn(ExperimentalTime::class)
