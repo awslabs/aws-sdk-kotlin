@@ -13,6 +13,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
+                api(project(":aws-runtime:aws-types"))
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
