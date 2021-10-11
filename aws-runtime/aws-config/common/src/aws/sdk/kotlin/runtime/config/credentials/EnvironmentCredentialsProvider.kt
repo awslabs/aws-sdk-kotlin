@@ -5,10 +5,10 @@
 
 package aws.sdk.kotlin.runtime.config.credentials
 
-import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.auth.credentials.Credentials
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
+import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.util.Platform
 
 /**

@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.runtime.config.credentials
 
-import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.sdk.kotlin.runtime.auth.credentials.Credentials
+import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import io.kotest.extensions.system.withEnvironment
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll

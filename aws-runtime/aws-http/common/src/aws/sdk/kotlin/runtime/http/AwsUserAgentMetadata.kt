@@ -5,9 +5,10 @@
 
 package aws.sdk.kotlin.runtime.http
 
-import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
+
+private const val AWS_EXECUTION_ENV: String = "AWS_EXECUTION_ENV"
 
 /**
  * Metadata used to populate the `User-Agent` and `x-amz-user-agent` headers
@@ -134,7 +135,7 @@ public data class ExecutionEnvMetadata(val name: String) {
 }
 
 private fun detectExecEnv(): ExecutionEnvMetadata? =
-    Platform.getenv(AwsSdkSetting.AwsExecutionEnv.environmentVariable)?.let {
+    Platform.getenv(AWS_EXECUTION_ENV)?.let {
         ExecutionEnvMetadata(it)
     }
 

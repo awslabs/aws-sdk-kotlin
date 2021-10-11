@@ -1,4 +1,4 @@
-package aws.sdk.kotlin.runtime
+package aws.sdk.kotlin.runtime.config
 
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import kotlin.test.Test

@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime
+package aws.sdk.kotlin.runtime.config
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 
 // NOTE: The JVM property names MUST match the ones defined in the Java SDK for any setting added.

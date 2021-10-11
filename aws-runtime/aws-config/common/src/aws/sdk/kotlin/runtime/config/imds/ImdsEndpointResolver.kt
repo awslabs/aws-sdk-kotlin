@@ -5,11 +5,11 @@
 
 package aws.sdk.kotlin.runtime.config.imds
 
-import aws.sdk.kotlin.runtime.AwsSdkSetting
+import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
+import aws.sdk.kotlin.runtime.config.resolve
 import aws.sdk.kotlin.runtime.endpoint.Endpoint
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
-import aws.sdk.kotlin.runtime.resolve
 import aws.smithy.kotlin.runtime.http.Url
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy

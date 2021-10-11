@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.config.region
 
-import aws.sdk.kotlin.runtime.AwsSdkSetting
+import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.region.RegionProvider
 
 /**
