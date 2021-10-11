@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-description = "AWS Service Authentication"
+description = "AWS Signing Support"
 extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Auth"
-extra["moduleName"] = "aws.sdk.kotlin.runtime.auth"
+extra["moduleName"] = "aws.sdk.kotlin.runtime.auth.signing"
 
 val smithyKotlinVersion: String by project
 val kotestVersion: String by project
