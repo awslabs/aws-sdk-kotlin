@@ -28,10 +28,5 @@ kotlin {
                 implementation(project(":aws-runtime:testing"))
             }
         }
-        jvmTest {
-            dependencies {
-                implementation("io.kotest:kotest-runner-junit5:$kotestVersion")
-            }
-        }
     }
 }

@@ -7,7 +7,6 @@ package aws.sdk.kotlin.runtime.auth.signing
 
 import aws.sdk.kotlin.runtime.auth.credentials.Credentials
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
-import aws.sdk.kotlin.runtime.auth.credentials.toCrt
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import kotlin.time.Duration
@@ -229,6 +228,9 @@ internal fun AwsSigningAlgorithm.toCrt(): aws.sdk.kotlin.crt.auth.signing.AwsSig
     AwsSigningAlgorithm.SIGV4 -> aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm.SIGV4
     AwsSigningAlgorithm.SIGV4_ASYMMETRIC -> aws.sdk.kotlin.crt.auth.signing.AwsSigningAlgorithm.SIGV4_ASYMMETRIC
 }
+
+internal fun Credentials.toCrt(): aws.sdk.kotlin.crt.auth.credentials.Credentials =
+    aws.sdk.kotlin.crt.auth.credentials.Credentials(accessKeyId, secretAccessKey, sessionToken)
 
 @OptIn(ExperimentalTime::class)
 internal suspend fun AwsSigningConfig.toCrt(): aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig {

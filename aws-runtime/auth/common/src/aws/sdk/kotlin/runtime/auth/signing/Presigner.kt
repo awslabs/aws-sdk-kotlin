@@ -12,7 +12,6 @@ import aws.sdk.kotlin.crt.auth.signing.AwsSigner
 import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
-import aws.sdk.kotlin.runtime.auth.credentials.toCrt
 import aws.sdk.kotlin.runtime.crt.path
 import aws.sdk.kotlin.runtime.crt.queryParameters
 import aws.sdk.kotlin.runtime.crt.toCrtHeaders

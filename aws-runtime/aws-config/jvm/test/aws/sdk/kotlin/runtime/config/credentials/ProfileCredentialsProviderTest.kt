@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.auth.credentials
+package aws.sdk.kotlin.runtime.config.credentials
 
 import aws.sdk.kotlin.runtime.AwsSdkSetting
+import aws.sdk.kotlin.runtime.auth.credentials.Credentials
 import io.kotest.extensions.system.withEnvironment
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll

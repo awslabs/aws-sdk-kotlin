@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.auth.credentials
+package aws.sdk.kotlin.runtime.config.credentials
 
+import aws.sdk.kotlin.runtime.auth.credentials.Credentials
+import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.sdk.kotlin.crt.auth.credentials.CredentialsProvider as CredentialsProviderCrt
 
 internal interface CrtCredentialsProvider : CredentialsProvider {
