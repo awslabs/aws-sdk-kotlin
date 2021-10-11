@@ -17,7 +17,6 @@ import aws.sdk.kotlin.runtime.http.middleware.UserAgent
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
@@ -57,8 +56,16 @@ public class ImdsClient private constructor(builder: Builder) : Closeable {
     private val tokenTtl: Duration = builder.tokenTTL
     private val clock: Clock = builder.clock
     private val platformProvider: PlatformProvider = builder.platformProvider
+    private val httpClient: SdkHttpClient
 
     init {
+        val engine = builder.engine ?: CrtHttpEngine {
+            connectTimeout = Duration.seconds(1)
+            socketReadTimeout = Duration.seconds(1)
+        }
+
+        httpClient = sdkHttpClient(engine)
+
         // validate the override at construction time
         if (endpointConfiguration is EndpointConfiguration.Custom) {
             val url = endpointConfiguration.endpoint.toUrl()
@@ -69,9 +76,6 @@ public class ImdsClient private constructor(builder: Builder) : Closeable {
             }
         }
     }
-
-    // TODO connect/socket timeouts
-    private val httpClient = sdkHttpClient(builder.engine ?: CrtHttpEngine(HttpClientEngineConfig()))
 
     // cached middleware instances
     private val middleware: List<Feature> = listOf(

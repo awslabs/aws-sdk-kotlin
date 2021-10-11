@@ -8,7 +8,6 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.Protocol
-import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
 import aws.smithy.kotlin.runtime.http.readAll
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.url
@@ -43,7 +42,7 @@ class AsyncStressTest : TestWithLocalServer() {
     @Test
     fun testConcurrentRequests() = runSuspendTest {
         // https://github.com/awslabs/aws-sdk-kotlin/issues/170
-        val client = sdkHttpClient(CrtHttpEngine(HttpClientEngineConfig()))
+        val client = sdkHttpClient(CrtHttpEngine())
         val request = HttpRequestBuilder().apply {
             url {
                 scheme = Protocol.HTTP
@@ -78,7 +77,7 @@ class AsyncStressTest : TestWithLocalServer() {
         // appropriately and allows requests to proceed (a stream that isn't consumed will be in a stuck state
         // if the window is full and never incremented again, this can lead to all connections being consumed
         // and the engine to no longer make further requests)
-        val client = sdkHttpClient(CrtHttpEngine(HttpClientEngineConfig()))
+        val client = sdkHttpClient(CrtHttpEngine())
         val request = HttpRequestBuilder().apply {
             url {
                 scheme = Protocol.HTTP
