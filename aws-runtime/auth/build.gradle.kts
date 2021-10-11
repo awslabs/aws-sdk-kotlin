@@ -16,6 +16,7 @@ kotlin {
             dependencies {
                 val crtKotlinVersion: String by project
                 api(project(":aws-runtime:aws-core"))
+                api(project(":aws-runtime:aws-types"))
                 api("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:crt-util"))
                 implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
