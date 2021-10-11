@@ -17,6 +17,8 @@ kotlin {
                 val crtKotlinVersion: String by project
                 api(project(":aws-runtime:aws-core"))
                 api(project(":aws-runtime:aws-types"))
+                // presigner config exposes endpoint resolver
+                api(project(":aws-runtime:aws-endpoint"))
                 api("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:crt-util"))
                 implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
