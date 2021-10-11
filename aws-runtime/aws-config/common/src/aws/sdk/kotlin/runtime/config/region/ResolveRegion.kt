@@ -36,6 +36,6 @@ public suspend fun resolveRegionForOperation(ctx: ExecutionContext, config: Regi
     }
 
     // TODO - propagate any relevant ctx/config to the default chain
-    val providerChain = DefaultAwsRegionProviderChain()
+    val providerChain = DefaultRegionProviderChain()
     return providerChain.getRegion() ?: throw ClientException("unable to auto detect AWS region, tried: $providerChain")
 }

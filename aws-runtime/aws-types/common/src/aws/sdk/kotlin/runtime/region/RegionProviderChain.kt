@@ -8,15 +8,15 @@ package aws.sdk.kotlin.runtime.region
 import aws.smithy.kotlin.runtime.logging.Logger
 
 /**
- * Composite [AwsRegionProvider] that delegates to a chain of providers.
+ * Composite [RegionProvider] that delegates to a chain of providers.
  * [providers] are consulted in the order given and the first region found is returned
  *
  * @param providers the list of providers to delegate to
  */
-public open class AwsRegionProviderChain(
-    private vararg val providers: AwsRegionProvider
-) : AwsRegionProvider {
-    private val logger = Logger.getLogger<AwsRegionProviderChain>()
+public open class RegionProviderChain(
+    private vararg val providers: RegionProvider
+) : RegionProvider {
+    private val logger = Logger.getLogger<RegionProviderChain>()
 
     init {
         require(providers.isNotEmpty()) { "at least one provider must be in the chain" }

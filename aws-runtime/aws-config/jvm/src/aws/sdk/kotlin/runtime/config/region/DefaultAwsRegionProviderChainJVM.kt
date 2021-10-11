@@ -5,12 +5,12 @@
 
 package aws.sdk.kotlin.runtime.config.region
 
-import aws.sdk.kotlin.runtime.region.AwsRegionProvider
-import aws.sdk.kotlin.runtime.region.AwsRegionProviderChain
+import aws.sdk.kotlin.runtime.region.RegionProvider
+import aws.sdk.kotlin.runtime.region.RegionProviderChain
 
-public actual class DefaultAwsRegionProviderChain public actual constructor() :
-    AwsRegionProvider,
-    AwsRegionProviderChain(
+public actual class DefaultRegionProviderChain public actual constructor() :
+    RegionProvider,
+    RegionProviderChain(
         JvmSystemPropRegionProvider(),
         EnvironmentRegionProvider()
     )

@@ -6,11 +6,11 @@
 package aws.sdk.kotlin.runtime.config.region
 
 import aws.sdk.kotlin.runtime.AwsSdkSetting
-import aws.sdk.kotlin.runtime.region.AwsRegionProvider
+import aws.sdk.kotlin.runtime.region.RegionProvider
 
 /**
- * [AwsRegionProvider] that checks `aws.region` system property
+ * [RegionProvider] that checks `aws.region` system property
  */
-internal class JvmSystemPropRegionProvider : AwsRegionProvider {
+internal class JvmSystemPropRegionProvider : RegionProvider {
     override suspend fun getRegion(): String? = System.getProperty(AwsSdkSetting.AwsRegion.jvmProperty, null)
 }

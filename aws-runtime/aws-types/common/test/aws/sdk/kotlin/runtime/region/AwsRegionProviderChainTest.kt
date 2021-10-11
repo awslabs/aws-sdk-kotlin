@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.config.region
+package aws.sdk.kotlin.runtime.region
 
-import aws.sdk.kotlin.runtime.region.AwsRegionProvider
-import aws.sdk.kotlin.runtime.region.AwsRegionProviderChain
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,16 +14,16 @@ class AwsRegionProviderChainTest {
     @Test
     fun testNoProviders() {
         assertFails("at least one provider") {
-            AwsRegionProviderChain()
+            RegionProviderChain()
         }
     }
-    data class TestProvider(val region: String? = null) : AwsRegionProvider {
+    data class TestProvider(val region: String? = null) : RegionProvider {
         override suspend fun getRegion(): String? = region
     }
 
     @Test
     fun testChain() = runSuspendTest {
-        val chain = AwsRegionProviderChain(
+        val chain = RegionProviderChain(
             TestProvider(null),
             TestProvider("us-east-1"),
             TestProvider("us-east-2")

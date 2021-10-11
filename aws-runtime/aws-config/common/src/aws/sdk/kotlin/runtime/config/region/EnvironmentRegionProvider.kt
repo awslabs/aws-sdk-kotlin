@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.config.region
 
 import aws.sdk.kotlin.runtime.AwsSdkSetting
-import aws.sdk.kotlin.runtime.region.AwsRegionProvider
+import aws.sdk.kotlin.runtime.region.RegionProvider
 import aws.smithy.kotlin.runtime.util.Platform
 
 /**
@@ -17,12 +17,12 @@ public fun interface Environment {
 }
 
 /**
- * [AwsRegionProvider] that checks `AWS_REGION` region environment variable
+ * [RegionProvider] that checks `AWS_REGION` region environment variable
  * @param environ the environment mapping to lookup keys in (defaults to the system environment)
  */
 public class EnvironmentRegionProvider(
     private val environ: Environment
-) : AwsRegionProvider {
+) : RegionProvider {
     public constructor() : this(Platform::getenv)
 
     override suspend fun getRegion(): String? = environ.get(AwsSdkSetting.AwsRegion.environmentVariable)
