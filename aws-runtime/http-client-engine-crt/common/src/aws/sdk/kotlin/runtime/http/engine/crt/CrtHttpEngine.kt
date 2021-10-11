@@ -47,8 +47,8 @@ public class CrtHttpEngine(public val config: CrtHttpEngineConfig) : HttpClientE
     }
 
     init {
-        logger.warn { "CrtHttpEngine does not support HttpClientEngineConfig.socketReadTimeout(${config.socketReadTimeout}; ignoring" }
-        logger.warn { "CrtHttpEngine does not support HttpClientEngineConfig.socketWriteTimeout(${config.socketWriteTimeout}; ignoring" }
+        logger.warn { "CrtHttpEngine does not support HttpClientEngineConfig.socketReadTimeout(${config.socketReadTimeout}); ignoring" }
+        logger.warn { "CrtHttpEngine does not support HttpClientEngineConfig.socketWriteTimeout(${config.socketWriteTimeout}); ignoring" }
     }
 
     @OptIn(ExperimentalTime::class)
