@@ -7,44 +7,74 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.*
+import aws.sdk.kotlin.runtime.ClientException
 import aws.sdk.kotlin.runtime.crt.SdkDefaultIO
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
-import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
 import aws.smithy.kotlin.runtime.http.engine.callContext
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
+import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.job
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.ExperimentalTime
 
 internal const val DEFAULT_WINDOW_SIZE_BYTES: Int = 16 * 1024
 
 /**
  * [HttpClientEngine] based on the AWS Common Runtime HTTP client
  */
-public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClientEngineBase("crt") {
-    // FIXME - use the default TLS context when profile cred provider branch is merged
-    private val tlsCtx = TlsContext(TlsContextOptions.defaultClient())
+@OptIn(ExperimentalTime::class)
+public class CrtHttpEngine(public val config: CrtHttpEngineConfig) : HttpClientEngineBase("crt") {
+    public constructor() : this(CrtHttpEngineConfig.Default)
 
+    public companion object {
+        public operator fun invoke(block: CrtHttpEngineConfig.Builder.() -> Unit): CrtHttpEngine = CrtHttpEngine(CrtHttpEngineConfig.Builder().apply(block).build())
+    }
+    private val logger = Logger.getLogger<CrtHttpEngine>()
+
+    private val customTlsContext: TlsContext? = if (config.alpn.isNotEmpty() && config.tlsContext == null) {
+        val options = TlsContextOptionsBuilder().apply {
+            verifyPeer = true
+            alpn = config.alpn.joinToString(separator = ";") { it.protocolId }
+        }.build()
+        TlsContext(options)
+    } else {
+        null
+    }
+
+    init {
+        logger.warn { "CrtHttpEngine does not support HttpClientEngineConfig.socketReadTimeout(${config.socketReadTimeout}); ignoring" }
+        logger.warn { "CrtHttpEngine does not support HttpClientEngineConfig.socketWriteTimeout(${config.socketWriteTimeout}); ignoring" }
+    }
+
+    @OptIn(ExperimentalTime::class)
     private val options = HttpClientConnectionManagerOptionsBuilder().apply {
-        clientBootstrap = SdkDefaultIO.ClientBootstrap
-        tlsContext = tlsCtx
+        clientBootstrap = config.clientBootstrap ?: SdkDefaultIO.ClientBootstrap
+        tlsContext = customTlsContext ?: config.tlsContext ?: SdkDefaultIO.TlsContext
         manualWindowManagement = true
-        socketOptions = SocketOptions()
-        initialWindowSize = DEFAULT_WINDOW_SIZE_BYTES
-        // TODO - max connections/timeouts/etc
+        socketOptions = SocketOptions(
+            connectTimeoutMs = config.connectTimeout.inWholeMilliseconds.toInt()
+        )
+        initialWindowSize = config.initialWindowSizeBytes
+        maxConnections = config.maxConnections.toInt()
+        maxConnectionIdleMs = config.connectionIdleTimeout.inWholeMilliseconds
     }
 
     // connection managers are per host
     private val connManagers = mutableMapOf<String, HttpClientConnectionManager>()
     private val mutex = Mutex()
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun roundTrip(request: HttpRequest): HttpCall {
         val callContext = callContext()
         val manager = getManagerForUri(request.uri)
-        val conn = manager.acquireConnection()
+        val conn = withTimeoutOrNull(config.connectionAcquireTimeout) {
+            manager.acquireConnection()
+        } ?: throw ClientException("timed out waiting for an HTTP connection to be acquired from the pool")
 
         try {
             val reqTime = Instant.now()
@@ -78,7 +108,7 @@ public class CrtHttpEngine(public val config: HttpClientEngineConfig) : HttpClie
         // close all resources
         // SAFETY: shutdown is only invoked once AND only after all requests have completed and no more are coming
         connManagers.forEach { entry -> entry.value.close() }
-        tlsCtx.close()
+        customTlsContext?.close()
     }
 
     private suspend fun getManagerForUri(uri: Uri): HttpClientConnectionManager = mutex.withLock {
