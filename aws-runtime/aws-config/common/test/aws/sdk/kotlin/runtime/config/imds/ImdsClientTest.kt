@@ -18,6 +18,7 @@ import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
+import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.*
@@ -219,9 +220,9 @@ class ImdsClientTest {
                 client.get("/latest/metadata")
             }
         }.message.shouldContain("timed out")
-        val elapsed = Instant.now().epochSeconds - start.epochSeconds
-        assertTrue(elapsed >= 1)
-        assertTrue(elapsed < 2)
+        val elapsed = Instant.now().epochMilliseconds - start.epochMilliseconds
+        assertTrue(elapsed >= 1000)
+        assertTrue(elapsed < 2000)
     }
 
     data class ImdsConfigTest(
