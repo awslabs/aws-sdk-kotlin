@@ -78,13 +78,13 @@ class PresignerGenerator : KotlinIntegration {
         RuntimeTypes.Http.Request.HttpRequest,
         RuntimeTypes.Core.ExecutionContext,
         // AWS types
-        AwsRuntimeTypes.Auth.CredentialsProvider,
-        AwsRuntimeTypes.Auth.DefaultChainCredentialsProvider,
+        AwsRuntimeTypes.Types.CredentialsProvider,
+        AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
         AwsRuntimeTypes.Auth.PresignedRequestConfig,
         AwsRuntimeTypes.Auth.ServicePresignConfig,
         AwsRuntimeTypes.Auth.SigningLocation,
         AwsRuntimeTypes.Auth.createPresignedRequest,
-        AwsRuntimeTypes.Core.Endpoint.EndpointResolver
+        AwsRuntimeTypes.Endpoint.EndpointResolver
     )
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
@@ -193,7 +193,7 @@ class PresignerGenerator : KotlinIntegration {
             symbol = buildSymbol {
                 name = "CredentialsProvider"
                 defaultValue = "DefaultChainCredentialsProvider()"
-                namespace(AwsKotlinDependency.AWS_AUTH)
+                namespace(AwsKotlinDependency.AWS_SIGNING)
                 nullable = false
             }
             name = "credentialsProvider"

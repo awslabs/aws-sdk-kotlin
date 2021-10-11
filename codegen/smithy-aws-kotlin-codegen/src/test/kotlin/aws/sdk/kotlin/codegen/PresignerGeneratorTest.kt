@@ -88,11 +88,11 @@ class PresignerGeneratorTest {
             
             import aws.sdk.kotlin.runtime.ClientException
             import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
-            import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
             import aws.sdk.kotlin.runtime.auth.signing.PresignedRequestConfig
             import aws.sdk.kotlin.runtime.auth.signing.ServicePresignConfig
             import aws.sdk.kotlin.runtime.auth.signing.SigningLocation
             import aws.sdk.kotlin.runtime.auth.signing.createPresignedRequest
+            import aws.sdk.kotlin.runtime.config.credentials.DefaultChainCredentialsProvider
             import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters

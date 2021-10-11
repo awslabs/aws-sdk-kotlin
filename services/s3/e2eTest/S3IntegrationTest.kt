@@ -4,13 +4,13 @@
  */
 package aws.sdk.kotlin.e2etest
 
-import aws.sdk.kotlin.runtime.testing.RandomTempFile
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.*
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.content.fromFile
+import aws.smithy.kotlin.runtime.testing.RandomTempFile
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.jupiter.api.AfterAll
