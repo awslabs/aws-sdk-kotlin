@@ -21,7 +21,7 @@ kotlin {
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:http-client-engine-crt"))
-                implementation(project(":aws-runtime:protocols:http"))
+                implementation(project(":aws-runtime:aws-http"))
 
 
                 // credential providers

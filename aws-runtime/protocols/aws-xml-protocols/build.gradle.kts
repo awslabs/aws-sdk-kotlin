@@ -15,7 +15,7 @@ kotlin {
             dependencies {
                 api("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 api(project(":aws-runtime:aws-core"))
-                implementation(project(":aws-runtime:protocols:http"))
+                implementation(project(":aws-runtime:aws-http"))
                 implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
