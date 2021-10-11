@@ -30,7 +30,7 @@ labels: enhancement, needs-triage
 <!--- Any alternative solutions or features you've considered -->
 
 ## Additional Context
-<!--- How has the lack of this feaure affected you? What are you trying to accomplish? -->
+<!--- How has the lack of this feature affected you? What are you trying to accomplish? -->
 <!--- Providing context helps us come up with a solution that is most useful in the real world -->
 
 
