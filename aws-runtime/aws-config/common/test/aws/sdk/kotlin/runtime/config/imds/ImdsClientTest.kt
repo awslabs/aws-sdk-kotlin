@@ -16,8 +16,10 @@ import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.*
 import kotlin.test.*
 import kotlin.time.Duration
@@ -203,11 +205,23 @@ class ImdsClientTest {
         fail("not implemented yet")
     }
 
-    @Ignore
     @Test
-    fun testHttpConnectTimeouts() {
-        // Need a 1 sec connect timeout + other timeouts in imds spec
-        fail("not implemented yet")
+    fun testHttpConnectTimeouts(): Unit = runSuspendTest {
+        // end-to-end real client times out after 1-second
+        val client = ImdsClient {
+            // will never resolve
+            endpointConfiguration = EndpointConfiguration.Custom("http://240.0.0.0".toEndpoint())
+        }
+
+        val start = Instant.now()
+        assertFails {
+            withTimeout(3000) {
+                client.get("/latest/metadata")
+            }
+        }.message.shouldContain("timed out")
+        val elapsed = Instant.now().epochSeconds - start.epochSeconds
+        assertTrue(elapsed >= 1)
+        assertTrue(elapsed < 2)
     }
 
     data class ImdsConfigTest(

@@ -61,6 +61,7 @@ public class ImdsClient private constructor(builder: Builder) : Closeable {
     init {
         val engine = builder.engine ?: CrtHttpEngine {
             connectTimeout = Duration.seconds(1)
+            socketReadTimeout = Duration.seconds(1)
         }
 
         httpClient = sdkHttpClient(engine)
