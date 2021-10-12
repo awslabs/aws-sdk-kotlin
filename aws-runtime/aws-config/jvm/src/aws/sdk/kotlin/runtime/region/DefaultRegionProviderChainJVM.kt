@@ -9,5 +9,7 @@ public actual class DefaultRegionProviderChain public actual constructor() :
     RegionProvider,
     RegionProviderChain(
         JvmSystemPropRegionProvider(),
-        EnvironmentRegionProvider()
+        EnvironmentRegionProvider(),
+        // TODO - profile
+        ImdsRegionProvider()
     )
