@@ -80,10 +80,10 @@ class PresignerGenerator : KotlinIntegration {
         // AWS types
         AwsRuntimeTypes.Types.CredentialsProvider,
         AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
-        AwsRuntimeTypes.Auth.PresignedRequestConfig,
-        AwsRuntimeTypes.Auth.ServicePresignConfig,
-        AwsRuntimeTypes.Auth.SigningLocation,
-        AwsRuntimeTypes.Auth.createPresignedRequest,
+        AwsRuntimeTypes.Signing.PresignedRequestConfig,
+        AwsRuntimeTypes.Signing.ServicePresignConfig,
+        AwsRuntimeTypes.Signing.SigningLocation,
+        AwsRuntimeTypes.Signing.createPresignedRequest,
         AwsRuntimeTypes.Endpoint.EndpointResolver
     )
 
@@ -198,7 +198,7 @@ class PresignerGenerator : KotlinIntegration {
             }
             name = "credentialsProvider"
             documentation = "The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used."
-            baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
+            baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
         }
         val endpointResolverProperty = ClientConfigProperty {
             symbol = buildSymbol {
@@ -209,7 +209,7 @@ class PresignerGenerator : KotlinIntegration {
             }
             name = "endpointResolver"
             documentation = "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
-            baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
+            baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
         }
         val region = ClientConfigProperty {
             symbol = buildSymbol {
@@ -219,28 +219,28 @@ class PresignerGenerator : KotlinIntegration {
             }
             name = "region"
             documentation = "AWS region to make requests for"
-            baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
+            baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
             required = true
         }
         val signingNameProperty = ClientConfigProperty {
             symbol = KotlinTypes.String
             name = "signingName"
             documentation = "Service identifier used to sign requests"
-            baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
+            baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
             constantValue = """"$sigv4ServiceName""""
         }
         val serviceIdProperty = ClientConfigProperty {
             symbol = KotlinTypes.String
             name = "serviceId"
             documentation = "Service identifier used to resolve endpoints"
-            baseClass = AwsRuntimeTypes.Auth.ServicePresignConfig
+            baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
             constantValue = """"$serviceId""""
         }
 
         val ccg = ClientConfigGenerator(
             renderingContext,
             false,
-            AwsRuntimeTypes.Auth.ServicePresignConfig,
+            AwsRuntimeTypes.Signing.ServicePresignConfig,
             credentialsProviderProperty,
             endpointResolverProperty,
             region,

@@ -53,7 +53,7 @@ object AwsRuntimeTypes {
         }
     }
 
-    object Auth {
+    object Signing {
         val AwsSigV4SigningMiddleware = runtimeSymbol("AwsSigV4SigningMiddleware", AwsKotlinDependency.AWS_SIGNING)
         val AwsSignedBodyHeaderType = runtimeSymbol("AwsSignedBodyHeaderType", AwsKotlinDependency.AWS_SIGNING)
         val createPresignedRequest = runtimeSymbol("createPresignedRequest", AwsKotlinDependency.AWS_SIGNING)
