@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.config.region
-
-import aws.sdk.kotlin.runtime.region.RegionProvider
-import aws.sdk.kotlin.runtime.region.RegionProviderChain
+package aws.sdk.kotlin.runtime.region
 
 public actual class DefaultRegionProviderChain public actual constructor() :
     RegionProvider,

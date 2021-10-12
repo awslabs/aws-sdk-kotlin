@@ -34,7 +34,7 @@ val AWS_CLIENT_RT_VERSION: String = getDefaultRuntimeVersion()
  */
 object AwsKotlinDependency {
     val AWS_CORE = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-core", AWS_CLIENT_RT_VERSION)
-    val AWS_CONFIG = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.config", AWS_CLIENT_RT_GROUP, "aws-config", AWS_CLIENT_RT_VERSION)
+    val AWS_CONFIG = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-config", AWS_CLIENT_RT_VERSION)
     val AWS_ENDPOINT = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.endpoint", AWS_CLIENT_RT_GROUP, "aws-endpoint", AWS_CLIENT_RT_VERSION)
     val AWS_HTTP = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http", AWS_CLIENT_RT_GROUP, "aws-http", AWS_CLIENT_RT_VERSION)
     val AWS_SIGNING = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.auth.signing", AWS_CLIENT_RT_GROUP, "aws-signing", AWS_CLIENT_RT_VERSION)

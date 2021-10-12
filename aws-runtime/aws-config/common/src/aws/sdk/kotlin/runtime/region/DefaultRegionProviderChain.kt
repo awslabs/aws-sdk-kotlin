@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.config.region
-
-import aws.sdk.kotlin.runtime.region.RegionProvider
+package aws.sdk.kotlin.runtime.region
 
 /**
  * [RegionProvider] that looks for region in this order:

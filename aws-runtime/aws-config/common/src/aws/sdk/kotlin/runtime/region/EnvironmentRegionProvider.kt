@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.config.region
+package aws.sdk.kotlin.runtime.region
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.region.RegionProvider
 import aws.smithy.kotlin.runtime.util.EnvironmentProvider
 import aws.smithy.kotlin.runtime.util.Platform
 
