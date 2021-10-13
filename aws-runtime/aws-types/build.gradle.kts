@@ -12,6 +12,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                // exposes Instant
+                api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
+
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
             }
         }

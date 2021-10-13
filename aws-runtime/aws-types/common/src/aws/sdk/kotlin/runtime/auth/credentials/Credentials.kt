@@ -5,6 +5,8 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.smithy.kotlin.runtime.time.Instant
+
 /**
  * Represents a set of AWS credentials
  *
@@ -13,5 +15,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 public data class Credentials(
     val accessKeyId: String,
     val secretAccessKey: String,
-    val sessionToken: String? = null
+    val sessionToken: String? = null,
+    val expiration: Instant? = null,
 )
