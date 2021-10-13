@@ -5,10 +5,10 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
-import aws.sdk.kotlin.runtime.AwsSdkSetting
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.resolve
+import aws.sdk.kotlin.runtime.config.AwsSdkSetting
+import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.logging.warn
 import aws.smithy.kotlin.runtime.util.PlatformProvider

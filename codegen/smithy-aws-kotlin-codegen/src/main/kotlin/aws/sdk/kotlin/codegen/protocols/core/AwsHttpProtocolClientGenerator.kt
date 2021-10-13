@@ -77,14 +77,14 @@ open class AwsHttpProtocolClientGenerator(
         // FIXME - we also need a way to tie in config properties added via integrations that need to influence the context
         writer.addImport(RuntimeTypes.Core.ExecutionContext)
         writer.addImport("SdkClientOption", KotlinDependency.CORE, "${KotlinDependency.CORE.namespace}.client")
-        writer.addImport("resolveRegionForOperation", AwsKotlinDependency.AWS_REGIONS)
+        writer.addImport(AwsRuntimeTypes.Config.Region.resolveRegionForOperation)
         writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
         writer.addImport(AwsRuntimeTypes.Core.AwsClientOption)
         writer.addImport("putIfAbsent", KotlinDependency.UTILS)
 
         writer.dokka("merge the defaults configured for the service into the execution context before firing off a request")
         writer.openBlock("private suspend fun mergeServiceDefaults(ctx: ExecutionContext) {", "}") {
-            writer.write("val region = resolveRegionForOperation(ctx, config)")
+            writer.write("val region = #T(ctx, config)", AwsRuntimeTypes.Config.Region.resolveRegionForOperation)
             writer.write("ctx.putIfAbsent(AwsClientOption.Region, region)")
             writer.write("ctx.putIfAbsent(AuthAttributes.SigningRegion, config.signingRegion ?: region)")
             writer.write("ctx.putIfAbsent(SdkClientOption.ServiceName, serviceName)")

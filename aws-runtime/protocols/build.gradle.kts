@@ -4,7 +4,7 @@
  */
 
 description = "Support for AWS protocols"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Protocols"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: Protocols"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.protocol"
 
 kotlin {

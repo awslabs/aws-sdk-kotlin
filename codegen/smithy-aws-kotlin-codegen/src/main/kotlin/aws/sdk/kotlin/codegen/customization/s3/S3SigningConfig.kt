@@ -35,7 +35,7 @@ class S3SigningConfig : KotlinIntegration {
         val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.service)
 
         return resolved.replace(newValue = S3SigningMiddleware(signingServiceName)) { middleware ->
-            middleware.name == AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware.name
+            middleware.name == AwsRuntimeTypes.Signing.AwsSigV4SigningMiddleware.name
         }
     }
 }
@@ -43,7 +43,7 @@ class S3SigningConfig : KotlinIntegration {
 private class S3SigningMiddleware(signingServiceName: String) : AwsSignatureVersion4(signingServiceName) {
     override fun renderConfigure(writer: KotlinWriter) {
         super.renderConfigure(writer)
-        val sbht = AwsRuntimeTypes.Auth.AwsSignedBodyHeaderType
+        val sbht = AwsRuntimeTypes.Signing.AwsSignedBodyHeaderType
         writer.addImport(sbht)
         writer.write("signedBodyHeaderType = #T.X_AMZ_CONTENT_SHA256", sbht)
 
