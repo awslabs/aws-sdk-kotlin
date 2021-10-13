@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.smithy.kotlin.runtime.testing.ManualDispatchTestBase
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import java.nio.ByteBuffer
@@ -27,6 +28,7 @@ class BufferedReadChannelByteBufferTest : ManualDispatchTestBase() {
         ch.cancel(CancellationException("Test finished"))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun testReadBeforeAvailable() = runTest {
         // test readAvailable() suspends when no data is available
@@ -57,6 +59,7 @@ class BufferedReadChannelByteBufferTest : ManualDispatchTestBase() {
         finish(6)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun testReadAfterAvailable() = runTest {
         // test readAvailable() does NOT suspend when data is available

@@ -20,5 +20,10 @@ kotlin {
                 implementation(project(":aws-runtime:testing"))
             }
         }
+        jvmMain {
+            dependencies {
+                api(project(":aws-runtime:aws-core"))
+            }
+        }
     }
 }

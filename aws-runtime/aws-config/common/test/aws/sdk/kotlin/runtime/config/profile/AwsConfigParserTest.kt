@@ -154,9 +154,9 @@ class AwsProfileParserTest {
 
                 return if (!isErrorCase) {
                     when {
-                        configIn != null && credentialIn != null -> MatchConfigAndCredentialOutputCase(name, configIn!!, credentialIn!!, expected!!)
-                        configIn != null -> MatchConfigOutputCase(name, configIn!!, expected!!)
-                        credentialIn != null -> MatchCredentialOutputCase(name, credentialIn!!, expected!!)
+                        configIn != null && credentialIn != null -> MatchConfigAndCredentialOutputCase(name, configIn, credentialIn, expected!!)
+                        configIn != null -> MatchConfigOutputCase(name, configIn, expected!!)
+                        credentialIn != null -> MatchCredentialOutputCase(name, credentialIn, expected!!)
                         else -> error("Unexpected branch from $json")
                     }
                 } else {
