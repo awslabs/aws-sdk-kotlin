@@ -4,7 +4,7 @@
  */
 
 description = "Support for the JSON suite of AWS protocols"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: JSON"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: JSON"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.protocol.json"
 
 val smithyKotlinVersion: String by project

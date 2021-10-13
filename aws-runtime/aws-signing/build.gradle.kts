@@ -4,7 +4,7 @@
  */
 
 description = "AWS Signing Support"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Auth"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: Signing"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.auth.signing"
 
 val smithyKotlinVersion: String by project

@@ -4,7 +4,7 @@
  */
 
 description = "AWS client runtime core"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Client Runtime"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: Client Runtime"
 extra["moduleName"] = "aws.sdk.kotlin.runtime"
 
 

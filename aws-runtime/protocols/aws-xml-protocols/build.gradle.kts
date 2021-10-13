@@ -4,7 +4,7 @@
  */
 
 description = "Support for the XML suite of AWS protocols"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: XML"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: XML"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.protocol.xml"
 
 val smithyKotlinVersion: String by project

@@ -4,7 +4,7 @@
  */
 
 description = "Common AWS Types"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Regions"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: Types"
 extra["moduleName"] = "aws.sdk.kotlin.runtime"
 val smithyKotlinVersion: String by project
 

@@ -4,7 +4,7 @@
  */
 
 description = "AWS Endpoint Support"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: Auth"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: Endpoint"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.endpoint"
 
 val smithyKotlinVersion: String by project

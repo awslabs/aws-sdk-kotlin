@@ -16,7 +16,7 @@ buildscript {
 apply(plugin = "kotlinx-atomicfu")
 
 description = "HTTP client engine backed by CRT"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: HTTP"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: HTTP"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.http.engine.crt"
 
 val smithyKotlinVersion: String by project
