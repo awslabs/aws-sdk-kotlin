@@ -57,6 +57,10 @@ object AwsRuntimeTypes {
     object Http {
         val withPayload = runtimeSymbol("withPayload", AwsKotlinDependency.AWS_HTTP)
         val setAseErrorMetadata = runtimeSymbol("setAseErrorMetadata", AwsKotlinDependency.AWS_HTTP)
+
+        object Retries {
+            val AwsDefaultRetryPolicy = runtimeSymbol("AwsDefaultRetryPolicy", AwsKotlinDependency.AWS_HTTP, "retries")
+        }
     }
 
     object JsonProtocols {
