@@ -20,7 +20,7 @@ class MutateHeadersMiddleware(
     override val name: String = "MutateHeaders"
     override val order: Byte = 10
     override fun renderConfigure(writer: KotlinWriter) {
-        writer.addImport(RuntimeTypes.Http.MutateHeadersMiddleware)
+        writer.addImport(RuntimeTypes.Http.Middlware.MutateHeadersMiddleware)
         overrideHeaders.forEach {
             writer.write("set(#S, #S)", it.key, it.value)
         }
