@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.config.imds
 
 import aws.smithy.kotlin.runtime.http.Headers
+import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.Url
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
@@ -16,6 +17,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 fun tokenRequest(host: String, ttl: Int): HttpRequest = HttpRequest {
     val parsed = Url.parse(host)
     url(parsed)
+    method = HttpMethod.PUT
     url.path = "/latest/api/token"
     headers.append(X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS, ttl.toString())
 }
