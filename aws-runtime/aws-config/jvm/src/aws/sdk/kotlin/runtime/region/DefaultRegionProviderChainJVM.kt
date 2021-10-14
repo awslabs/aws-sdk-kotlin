@@ -5,10 +5,12 @@
 
 package aws.sdk.kotlin.runtime.region
 
-public actual class DefaultRegionProviderChain public actual constructor() :
+import aws.smithy.kotlin.runtime.util.PlatformProvider
+
+public actual class DefaultRegionProviderChain public actual constructor(platformProvider: PlatformProvider) :
     RegionProvider,
     RegionProviderChain(
-        JvmSystemPropRegionProvider(),
-        EnvironmentRegionProvider(),
-        ProfileRegionProvider()
+        JvmSystemPropRegionProvider(platformProvider),
+        EnvironmentRegionProvider(platformProvider),
+        ProfileRegionProvider(platformProvider)
     )

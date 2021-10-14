@@ -14,16 +14,17 @@ import kotlin.test.assertEquals
 class ResolveRegionTest {
 
     @Test
-    fun `it resolves region for operation`() = runSuspendTest {
+    fun testResolutionOrder() = runSuspendTest {
         // from context
         val config = object : RegionConfig {
             override val region: String = "us-west-2"
         }
 
+        // context has highest priority
         val actual = resolveRegionForOperation(ctx = ExecutionContext().apply { set(AwsClientOption.Region, "us-east-1") }, config)
         assertEquals("us-east-1", actual)
 
-        // from config
+        // from config is next
         val actual2 = resolveRegionForOperation(ExecutionContext(), config)
         assertEquals("us-west-2", actual2)
     }
