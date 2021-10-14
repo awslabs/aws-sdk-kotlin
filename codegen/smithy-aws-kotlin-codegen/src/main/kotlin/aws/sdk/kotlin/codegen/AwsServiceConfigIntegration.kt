@@ -35,7 +35,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         init {
             val regionConfigSymbol = buildSymbol {
                 name = "RegionConfig"
-                namespace(AwsKotlinDependency.AWS_REGIONS)
+                namespace(AwsKotlinDependency.AWS_TYPES, subpackage = "region")
             }
 
             RegionProp = ClientConfigProperty.String(
@@ -48,7 +48,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
             val authConfigSymbol = buildSymbol {
                 name = "AuthConfig"
-                namespace(AwsKotlinDependency.AWS_AUTH)
+                namespace(AwsKotlinDependency.AWS_TYPES, subpackage = "auth")
             }
 
             SigningRegionProp = ClientConfigProperty.String(
@@ -61,7 +61,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             )
 
             CredentialsProviderProp = ClientConfigProperty {
-                symbol = AwsRuntimeTypes.Auth.CredentialsProvider
+                symbol = AwsRuntimeTypes.Types.CredentialsProvider
                 baseClass = authConfigSymbol
                 documentation = """
                     The AWS credentials provider to use for authenticating requests. If not provided a

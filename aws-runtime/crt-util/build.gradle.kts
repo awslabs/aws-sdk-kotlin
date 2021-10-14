@@ -17,7 +17,7 @@ buildscript {
 apply(plugin = "kotlinx-atomicfu")
 
 description = "Utilities for working with AWS CRT Kotlin"
-extra["displayName"] = "Software :: AWS :: Kotlin SDK :: CRT :: Util"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: CRT :: Util"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.crt"
 
 val smithyKotlinVersion: String by project
