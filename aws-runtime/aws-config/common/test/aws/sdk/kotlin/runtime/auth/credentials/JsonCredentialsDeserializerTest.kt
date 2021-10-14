@@ -6,13 +6,13 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import aws.smithy.kotlin.runtime.serde.DeserializationException
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.Instant
 import io.kotest.matchers.string.shouldContain
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 
 class JsonCredentialsDeserializerTest {
     @Test
@@ -45,9 +45,11 @@ class JsonCredentialsDeserializerTest {
         val payload = "404: not found"
         val deserializer = JsonDeserializer(payload.encodeToByteArray())
 
-        assertFailsWith<DeserializationException> {
+        val ex = assertFailsWith<InvalidJsonCredentialsException> {
             deserializeJsonCredentials(deserializer)
         }
+        assertIs<CredentialsError.Unknown>(ex.error)
+        ex.message.shouldContain("invalid JSON credentials response")
     }
 
     @Test

@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.*
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
@@ -13,6 +12,7 @@ import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
@@ -21,22 +21,23 @@ import io.kotest.matchers.string.shouldContain
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 
 class ImdsCredentialsProviderTest {
 
     @Test
-    fun testImdsDisabled() = runSuspendTest {
+    fun testImdsDisabled(): Unit = runSuspendTest {
         val platform = TestPlatformProvider(
             env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true")
         )
         val provider = ImdsCredentialsProvider(platformProvider = platform)
-        assertFailsWith<ConfigurationException> {
+        assertFailsWith<CredentialsException> {
             provider.getCredentials()
         }.message.shouldContain("AWS EC2 metadata is explicitly disabled; credentials not loaded")
     }
 
     @Test
-    fun testSuccess() = runSuspendTest {
+    fun testSuccess(): Unit = runSuspendTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
@@ -83,7 +84,7 @@ class ImdsCredentialsProviderTest {
     }
 
     @Test
-    fun testSuccessProfileOverride() = runSuspendTest {
+    fun testSuccessProfileOverride(): Unit = runSuspendTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
@@ -144,8 +145,55 @@ class ImdsCredentialsProviderTest {
 
         val provider = ImdsCredentialsProvider(client = lazyOf(client))
 
-        assertFailsWith<EC2MetadataError> {
+        val ex = assertFailsWith<CredentialsException> {
             provider.getCredentials()
-        }.message.shouldContain("Request forbidden")
+        }
+        ex.message.shouldContain("failed to load instance profile")
+        assertIs<EC2MetadataError>(ex.cause)
+        ex.cause!!.message.shouldContain("Request forbidden")
+    }
+
+    @Test
+    fun testNoInstanceProfileConfigured(): Unit = runSuspendTest {
+
+        val connection = buildTestConnection {
+            expect(
+                tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
+                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
+            )
+            expect(
+                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials", "TOKEN_A"),
+                HttpResponse(
+                    HttpStatusCode.NotFound,
+                    Headers.Empty,
+                    ByteArrayContent(
+                        """<?xml version="1.0" encoding="iso-8859-1"?>
+                        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+                         <head>
+                          <title>404 - Not Found</title>
+                         </head>
+                         <body>
+                          <h1>404 - Not Found</h1>
+                         </body>
+                        </html>
+                        """.trimIndent().encodeToByteArray()
+                    )
+                )
+            )
+        }
+
+        val testClock = ManualClock()
+        val client = ImdsClient {
+            engine = connection
+            clock = testClock
+        }
+
+        val provider = ImdsCredentialsProvider(client = lazyOf(client))
+
+        assertFailsWith<CredentialsException> {
+            provider.getCredentials()
+        }.message.shouldContain("failed to load instance profile")
     }
 }

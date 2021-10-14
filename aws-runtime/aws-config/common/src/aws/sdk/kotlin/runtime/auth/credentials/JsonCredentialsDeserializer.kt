@@ -5,15 +5,14 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.json.JsonSerialName
 import aws.smithy.kotlin.runtime.time.Instant
 
 /**
- * Exception thrown when credentials from response do not contain valid credentials
+ * Exception thrown when credentials from response do not contain valid credentials or malformed JSON
  */
-public class InvalidJsonCredentialsException(message: String) : ClientException(message)
+public class InvalidJsonCredentialsException(message: String, cause: Throwable? = null) : CredentialsException(CredentialsError.Unknown(message), cause)
 
 /**
  * Common response elements for multiple HTTP credential providers (e.g. IMDS and ECS)
@@ -95,21 +94,25 @@ internal suspend fun deserializeJsonCredentials(deserializer: Deserializer): Jso
     var expiration: Instant? = null
     var message: String? = null
 
-    deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
-        loop@while (true) {
-            when (findNextFieldIndex()) {
-                CODE_DESCRIPTOR.index -> code = deserializeString()
-                ACCESS_KEY_ID_DESCRIPTOR.index -> accessKeyId = deserializeString()
-                SECRET_ACCESS_KEY_ID_DESCRIPTOR.index -> secretAccessKey = deserializeString()
-                SESSION_TOKEN_DESCRIPTOR.index -> sessionToken = deserializeString()
-                EXPIRATION_DESCRIPTOR.index -> expiration = Instant.fromIso8601(deserializeString())
+    try {
+        deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
+            loop@while (true) {
+                when (findNextFieldIndex()) {
+                    CODE_DESCRIPTOR.index -> code = deserializeString()
+                    ACCESS_KEY_ID_DESCRIPTOR.index -> accessKeyId = deserializeString()
+                    SECRET_ACCESS_KEY_ID_DESCRIPTOR.index -> secretAccessKey = deserializeString()
+                    SESSION_TOKEN_DESCRIPTOR.index -> sessionToken = deserializeString()
+                    EXPIRATION_DESCRIPTOR.index -> expiration = Instant.fromIso8601(deserializeString())
 
-                // error responses
-                MESSAGE_DESCRIPTOR.index -> message = deserializeString()
-                null -> break@loop
-                else -> skipValue()
+                    // error responses
+                    MESSAGE_DESCRIPTOR.index -> message = deserializeString()
+                    null -> break@loop
+                    else -> skipValue()
+                }
             }
         }
+    } catch (ex: DeserializationException) {
+        throw InvalidJsonCredentialsException("invalid JSON credentials response", ex)
     }
 
     return when (code) {

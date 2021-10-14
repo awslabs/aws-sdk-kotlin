@@ -5,8 +5,6 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.ClientException
-import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.EC2MetadataError
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
@@ -49,11 +47,14 @@ public class ImdsCredentialsProvider(
 
     override suspend fun getCredentials(): Credentials {
         if (AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true) {
-            throw ConfigurationException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
+            throwCredentialsError(CredentialsError.CredentialsNotLoaded("AWS EC2 metadata is explicitly disabled; credentials not loaded"))
         }
 
-        // may fail
-        val profileName = profile.get()
+        val profileName = runCatching {
+            profile.get()
+        }.mapException { cause ->
+            CredentialsException(CredentialsError.ProviderError("failed to load instance profile"), cause)
+        }.getOrThrow()
 
         val payload = client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
         val deserializer = JsonDeserializer(payload.encodeToByteArray())
@@ -65,9 +66,12 @@ public class ImdsCredentialsProvider(
                 resp.sessionToken,
                 resp.expiration
             )
-            is JsonCredentialsResponse.Error -> when (resp.code) {
-                CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS -> throw ConfigurationException("Incorrect IMDS/IAM configuration: [${resp.code}] ${resp.message}. Hint: Does this role have a trust relationship with EC2?")
-                else -> throw ClientException("Error retrieving credentials from IMDS: code=${resp.code}; ${resp.message}")
+            is JsonCredentialsResponse.Error -> {
+                val err = when (resp.code) {
+                    CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS -> CredentialsError.InvalidConfiguration("Incorrect IMDS/IAM configuration: [${resp.code}] ${resp.message}. Hint: Does this role have a trust relationship with EC2?")
+                    else -> CredentialsError.ProviderError("Error retrieving credentials from IMDS: code=${resp.code}; ${resp.message}")
+                }
+                throwCredentialsError(err)
             }
         }
     }
@@ -88,4 +92,14 @@ public class ImdsCredentialsProvider(
             throw ex
         }
     }
+}
+
+/**
+ * Returns the encapsulated result of the given [transform] function applied to the encapsulated value
+ * if this instance represents [failure][Result.isFailure] or the
+ * original encapsulated value if it is [success][Result.isSuccess].
+ */
+private inline fun <T> Result<T>.mapException(transform: (Throwable) -> Throwable): Result<T> = when {
+    isSuccess -> this
+    else -> Result.failure(transform(exceptionOrNull()!!))
 }
