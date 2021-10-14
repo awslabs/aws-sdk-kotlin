@@ -14,7 +14,7 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
 /**
  * [RegionProvider] that sources region information from the active profile
  */
-public class ProfileRegionProvider(
+internal class ProfileRegionProvider(
     private val platformProvider: PlatformProvider = Platform
 ) : RegionProvider {
     private val profile = asyncLazy { loadActiveAwsProfile(platformProvider) }
