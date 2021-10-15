@@ -53,7 +53,7 @@ public class ImdsClient private constructor(builder: Builder) : Closeable {
 
     private val maxRetries: UInt = builder.maxRetries
     private val endpointConfiguration: EndpointConfiguration = builder.endpointConfiguration
-    private val tokenTtl: Duration = builder.tokenTTL
+    private val tokenTtl: Duration = builder.tokenTtl
     private val clock: Clock = builder.clock
     private val platformProvider: PlatformProvider = builder.platformProvider
     private val httpClient: SdkHttpClient
@@ -160,7 +160,7 @@ public class ImdsClient private constructor(builder: Builder) : Closeable {
         /**
          * Override the time-to-live for the session token
          */
-        public var tokenTTL: Duration = Duration.seconds(DEFAULT_TOKEN_TTL_SECONDS)
+        public var tokenTtl: Duration = Duration.seconds(DEFAULT_TOKEN_TTL_SECONDS)
 
         /**
          * The HTTP engine to use to make requests with. This is here to facilitate testing and can otherwise be ignored
