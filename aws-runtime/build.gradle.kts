@@ -15,10 +15,8 @@ val platforms = listOf("common", "jvm")
 
 // Allow subprojects to use internal API's
 // See: https://kotlinlang.org/docs/reference/opt-in-requirements.html#opting-in-to-using-api
-val experimentalAnnotations = listOf(
+val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
-    "aws.smithy.kotlin.runtime.util.InternalApi",
-    "aws.sdk.kotlin.runtime.InternalSdkApi"
 )
 
 fun projectNeedsPlatform(project: Project, platform: String ): Boolean {
@@ -76,7 +74,7 @@ subprojects {
                 kotlin.srcDir("$platform/$srcDir")
                 resources.srcDir("$platform/${resourcesPrefix}resources")
                 languageSettings.progressiveMode = true
-                experimentalAnnotations.forEach { languageSettings.useExperimentalAnnotation(it) }
+                optinAnnotations.forEach { languageSettings.optIn(it) }
             }
         }
     }
@@ -115,4 +113,3 @@ task<org.jetbrains.kotlin.gradle.testing.internal.KotlinTestReport>("rootAllTest
         }
     }
 }
-

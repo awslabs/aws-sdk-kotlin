@@ -11,7 +11,7 @@ plugins {
 
 val sdkVersion: String by project
 
-val experimentalAnnotations = listOf(
+val optinAnnotations = listOf(
     "aws.smithy.kotlin.runtime.util.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi"
 )
@@ -27,7 +27,7 @@ subprojects {
 
     // have generated sdk's opt-in to internal runtime features
     kotlin.sourceSets.all {
-        experimentalAnnotations.forEach { languageSettings.useExperimentalAnnotation(it) }
+        optinAnnotations.forEach { languageSettings.optIn(it) }
     }
 
     kotlin {

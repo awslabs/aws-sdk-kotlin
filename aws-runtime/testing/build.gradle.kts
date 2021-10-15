@@ -15,10 +15,5 @@ kotlin {
                 api("aws.smithy.kotlin:utils:$smithyKotlinVersion")
             }
         }
-        jvmMain {
-            dependencies {
-                api(project(":aws-runtime:aws-core"))
-            }
-        }
     }
 }

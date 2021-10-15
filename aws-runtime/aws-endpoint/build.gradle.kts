@@ -17,5 +17,9 @@ kotlin {
                 implementation(project(":aws-runtime:aws-core"))
             }
         }
+
+        all {
+            languageSettings.optIn("aws.sdk.kotlin.runtime.InternalSdkApi")
+        }
     }
 }
