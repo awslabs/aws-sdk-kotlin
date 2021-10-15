@@ -8,7 +8,6 @@ package aws.sdk.kotlin.codegen.protocols.middleware
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.addImport
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
@@ -26,7 +25,7 @@ import software.amazon.smithy.model.traits.OptionalAuthTrait
  * See the `name` property of: https://awslabs.github.io/smithy/1.0/spec/aws/aws-auth.html#aws-auth-sigv4-trait
  */
 open class AwsSignatureVersion4(private val signingServiceName: String) : HttpFeatureMiddleware() {
-    override val name: String = AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware.name
+    override val name: String = AwsRuntimeTypes.Signing.AwsSigV4SigningMiddleware.name
     override val order: Byte = 127
 
     init {
@@ -39,8 +38,8 @@ open class AwsSignatureVersion4(private val signingServiceName: String) : HttpFe
     }
 
     override fun renderConfigure(writer: KotlinWriter) {
-        writer.addImport(AwsRuntimeTypes.Auth.AwsSigV4SigningMiddleware)
-        writer.addImport(AwsRuntimeTypes.Auth.DefaultChainCredentialsProvider)
+        writer.addImport(AwsRuntimeTypes.Signing.AwsSigV4SigningMiddleware)
+        writer.addImport(AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider)
 
         writer.write("this.credentialsProvider = config.credentialsProvider ?: DefaultChainCredentialsProvider()")
         writer.write("this.signingService = #S", signingServiceName)

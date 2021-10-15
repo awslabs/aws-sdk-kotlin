@@ -10,10 +10,6 @@ import aws.sdk.kotlin.runtime.endpoint.Endpoint
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.*
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
-import aws.smithy.kotlin.runtime.http.request.HttpRequest
-import aws.smithy.kotlin.runtime.http.request.url
-import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
@@ -28,33 +24,6 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 class ImdsClientTest {
-
-    private fun tokenRequest(host: String, ttl: Int): HttpRequest = HttpRequest {
-        val parsed = Url.parse(host)
-        url(parsed)
-        url.path = "/latest/api/token"
-        headers.append(X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS, ttl.toString())
-    }
-
-    private fun tokenResponse(ttl: Int, token: String): HttpResponse = HttpResponse(
-        HttpStatusCode.OK,
-        Headers {
-            append(X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS, ttl.toString())
-        },
-        ByteArrayContent(token.encodeToByteArray())
-    )
-
-    private fun imdsRequest(url: String, token: String): HttpRequest = HttpRequest {
-        val parsed = Url.parse(url)
-        url(parsed)
-        headers.append(X_AWS_EC2_METADATA_TOKEN, token)
-    }
-
-    private fun imdsResponse(body: String): HttpResponse = HttpResponse(
-        HttpStatusCode.OK,
-        Headers.Empty,
-        ByteArrayContent(body.encodeToByteArray())
-    )
 
     @Test
     fun testInvalidEndpointOverrideFailsCreation() {
@@ -122,7 +91,7 @@ class ImdsClientTest {
             engine = connection
             endpointConfiguration = EndpointConfiguration.ModeOverride(EndpointMode.IPv6)
             clock = testClock
-            tokenTTL = Duration.seconds(600)
+            tokenTtl = Duration.seconds(600)
         }
 
         val r1 = client.get("/latest/metadata")
@@ -169,7 +138,7 @@ class ImdsClientTest {
             engine = connection
             endpointConfiguration = EndpointConfiguration.ModeOverride(EndpointMode.IPv6)
             clock = testClock
-            tokenTTL = Duration.seconds(600)
+            tokenTtl = Duration.seconds(600)
         }
 
         val r1 = client.get("/latest/metadata")

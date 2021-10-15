@@ -23,6 +23,9 @@ public class TestPlatformProvider(
     private val fs: Map<String, String> = emptyMap(),
     private val os: OperatingSystem = OperatingSystem(OsFamily.Linux, "test")
 ) : PlatformProvider, Filesystem by Filesystem.fromMap(fs.mapValues { it.value.encodeToByteArray() }) {
+
+    public companion object;
+
     // ensure HOME directory is set for path normalization. this is mostly for AWS config loader behavior
     private val env = if (env.containsKey("HOME")) env else env.toMutableMap().apply { put("HOME", "/users/test") }
     override val filePathSeparator: String

@@ -59,8 +59,8 @@ internal fun <T : HttpMessageTestCase> HttpProtocolUnitTestGenerator<T>.renderCo
     operation: OperationShape
 ) {
     if (AwsSignatureVersion4.hasSigV4AuthScheme(model, serviceShape, operation)) {
-        writer.addImport(AwsRuntimeTypes.Auth.StaticCredentialsProvider)
-        writer.addImport(AwsRuntimeTypes.Auth.Credentials)
+        writer.addImport(AwsRuntimeTypes.Config.Credentials.StaticCredentialsProvider)
+        writer.addImport(AwsRuntimeTypes.Types.Credentials)
         writer.write("val credentials = Credentials(#S, #S)", "AKID", "SECRET")
         writer.write("credentialsProvider = StaticCredentialsProvider(credentials)")
     }

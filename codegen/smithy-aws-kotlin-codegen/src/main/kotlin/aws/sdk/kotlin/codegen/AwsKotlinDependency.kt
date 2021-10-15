@@ -11,8 +11,6 @@ import software.amazon.smithy.kotlin.codegen.core.isValidVersion
 
 // root namespace for the AWS client-runtime
 const val AWS_CLIENT_RT_ROOT_NS = "aws.sdk.kotlin.runtime"
-const val AWS_CLIENT_RT_AUTH_NS = "aws.sdk.kotlin.runtime.auth"
-const val AWS_CLIENT_RT_REGIONS_NS = "aws.sdk.kotlin.runtime.regions"
 
 private fun getDefaultRuntimeVersion(): String {
     // generated as part of the build, see smithy-aws-kotlin-codegen/build.gradle.kts
@@ -36,10 +34,12 @@ val AWS_CLIENT_RT_VERSION: String = getDefaultRuntimeVersion()
  */
 object AwsKotlinDependency {
     val AWS_CORE = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-core", AWS_CLIENT_RT_VERSION)
-    val AWS_HTTP = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.http", AWS_CLIENT_RT_GROUP, "http", AWS_CLIENT_RT_VERSION)
-    val AWS_AUTH = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_AUTH_NS, AWS_CLIENT_RT_GROUP, "auth", AWS_CLIENT_RT_VERSION)
-    val AWS_TESTING = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "testing", AWS_CLIENT_RT_VERSION)
-    val AWS_REGIONS = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_REGIONS_NS, AWS_CLIENT_RT_GROUP, "regions", AWS_CLIENT_RT_VERSION)
+    val AWS_CONFIG = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-config", AWS_CLIENT_RT_VERSION)
+    val AWS_ENDPOINT = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.endpoint", AWS_CLIENT_RT_GROUP, "aws-endpoint", AWS_CLIENT_RT_VERSION)
+    val AWS_HTTP = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http", AWS_CLIENT_RT_GROUP, "aws-http", AWS_CLIENT_RT_VERSION)
+    val AWS_SIGNING = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.auth.signing", AWS_CLIENT_RT_GROUP, "aws-signing", AWS_CLIENT_RT_VERSION)
+    val AWS_TESTING = KotlinDependency(GradleConfiguration.TestImplementation, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "testing", AWS_CLIENT_RT_VERSION)
+    val AWS_TYPES = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-types", AWS_CLIENT_RT_VERSION)
     val AWS_JSON_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.json", AWS_CLIENT_RT_GROUP, "aws-json-protocols", AWS_CLIENT_RT_VERSION)
     val AWS_XML_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.xml", AWS_CLIENT_RT_GROUP, "aws-xml-protocols", AWS_CLIENT_RT_VERSION)
     val AWS_CRT_HTTP_ENGINE = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http.engine.crt", AWS_CLIENT_RT_GROUP, "http-client-engine-crt", AWS_CLIENT_RT_VERSION)
@@ -50,12 +50,14 @@ object AwsKotlinDependency {
 private val sameProjectDeps: Map<KotlinDependency, String> by lazy {
     mapOf(
         AwsKotlinDependency.AWS_CORE to """project(":aws-runtime:aws-core")""",
-        AwsKotlinDependency.AWS_HTTP to """project(":aws-runtime:protocols:http")""",
-        AwsKotlinDependency.AWS_AUTH to """project(":aws-runtime:auth")""",
-        AwsKotlinDependency.AWS_REGIONS to """project(":aws-runtime:regions")""",
+        AwsKotlinDependency.AWS_CONFIG to """project(":aws-runtime:aws-config")""",
+        AwsKotlinDependency.AWS_ENDPOINT to """project(":aws-runtime:aws-endpoint")""",
+        AwsKotlinDependency.AWS_HTTP to """project(":aws-runtime:aws-http")""",
+        AwsKotlinDependency.AWS_SIGNING to """project(":aws-runtime:aws-signing")""",
+        AwsKotlinDependency.AWS_TESTING to """project(":aws-runtime:testing")""",
+        AwsKotlinDependency.AWS_TYPES to """project(":aws-runtime:aws-types")""",
         AwsKotlinDependency.AWS_JSON_PROTOCOLS to """project(":aws-runtime:protocols:aws-json-protocols")""",
         AwsKotlinDependency.AWS_XML_PROTOCOLS to """project(":aws-runtime:protocols:aws-xml-protocols")""",
-        AwsKotlinDependency.AWS_TESTING to """project(":aws-runtime:testing")""",
         AwsKotlinDependency.AWS_CRT_HTTP_ENGINE to """project(":aws-runtime:http-client-engine-crt")""",
     )
 }
