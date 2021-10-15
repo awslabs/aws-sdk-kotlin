@@ -5,6 +5,8 @@
 
 package aws.sdk.kotlin.runtime.region
 
+import aws.smithy.kotlin.runtime.io.Closeable
+
 /**
  * [RegionProvider] that looks for region in this order:
  *  1. Check `aws.region` system property (JVM only)
@@ -12,4 +14,4 @@ package aws.sdk.kotlin.runtime.region
  *  3. Check the AWS config files/profile for region information
  *  4. If running on EC2, check the EC2 metadata service for region
  */
-public expect class DefaultRegionProviderChain public constructor() : RegionProvider
+public expect class DefaultRegionProviderChain public constructor() : RegionProvider, Closeable
