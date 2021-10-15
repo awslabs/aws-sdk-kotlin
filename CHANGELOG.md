@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.7.0-alpha] - 10/14/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+## New features
+
+* http engine config [#336](https://github.com/awslabs/aws-sdk-kotlin/pull/336)
+* add codegen wrappers for retries [#331](https://github.com/awslabs/aws-sdk-kotlin/pull/331)
+
 ## [0.6.0-alpha] - 10/07/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**

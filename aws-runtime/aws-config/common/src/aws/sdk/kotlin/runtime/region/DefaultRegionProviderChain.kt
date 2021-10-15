@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.region
 
+import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
@@ -17,4 +18,4 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  */
 public expect class DefaultRegionProviderChain public constructor(
     platformProvider: PlatformProvider = Platform
-) : RegionProvider
+) : RegionProvider, Closeable

@@ -14,7 +14,7 @@ import aws.smithy.kotlin.runtime.logging.Logger
  * @param providers the list of providers to delegate to
  */
 public open class RegionProviderChain(
-    private vararg val providers: RegionProvider
+    protected vararg val providers: RegionProvider
 ) : RegionProvider {
     private val logger = Logger.getLogger<RegionProviderChain>()
 

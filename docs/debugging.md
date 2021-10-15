@@ -21,6 +21,17 @@ To view low-level request and response log output and the time of the log entry,
 
 The log level can be adjusted up as needed to DEBUG, INFO, WARN, or ERROR.  [See here](http://www.slf4j.org/api/org/slf4j/impl/SimpleLogger.html) for all properties for the simple logger.
 
+#### Unit Tests
+
+To enable logging in JVM unit tests, the JVM properties can be passed via the Gradle `test` task.  Here is an example snippet from a `build.gradle.kts` file:
+
+```
+tasks.test {
+    options {
+        jvmArgs = listOf("-Dorg.slf4j.simpleLogger.defaultLogLevel=TRACE", "-Dorg.slf4j.simpleLogger.showDateTime=true")
+    }
+}
+```
 
 #### CRT Logs
 
