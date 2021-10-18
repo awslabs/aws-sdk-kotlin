@@ -11,7 +11,7 @@ plugins {
 
 val sdkVersion: String by project
 
-val experimentalAnnotations = listOf(
+val optinAnnotations = listOf(
     "aws.smithy.kotlin.runtime.util.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi"
 )
@@ -27,7 +27,7 @@ subprojects {
 
     // have generated sdk's opt-in to internal runtime features
     kotlin.sourceSets.all {
-        experimentalAnnotations.forEach { languageSettings.useExperimentalAnnotation(it) }
+        optinAnnotations.forEach { languageSettings.optIn(it) }
     }
 
     kotlin {
@@ -50,12 +50,17 @@ subprojects {
     }
 
 
-    // this is the default but it's better to be explicit (e.g. it may change in Kotlin 1.5)
     tasks.compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions {
+            jvmTarget = "1.8" // this is the default but it's better to be explicit (e.g. it may change in Kotlin 1.5)
+            allWarningsAsErrors = false // FIXME Tons of errors occur in generated code
+        }
     }
     tasks.compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions {
+            jvmTarget = "1.8" // this is the default but it's better to be explicit (e.g. it may change in Kotlin 1.5)
+            allWarningsAsErrors = false // FIXME Tons of errors occur in generated code
+        }
     }
 
     // FIXME - we can remove this when we implement generated services as multiplatform.

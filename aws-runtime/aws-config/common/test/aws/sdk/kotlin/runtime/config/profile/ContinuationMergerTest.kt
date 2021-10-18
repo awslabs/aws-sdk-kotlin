@@ -23,7 +23,7 @@ class ContinuationMergerTest {
             "[profile foo]\ns3 =\n name = value" to "[[profile foo], s3 =\nname = value]",
         )
 
-        positiveTestCases.forEachIndexed { index, testCase ->
+        positiveTestCases.forEach { testCase ->
             val actual = mergeContinuations(testCase.first).map { it.content }
             assertEquals(testCase.second, actual.toString())
         }

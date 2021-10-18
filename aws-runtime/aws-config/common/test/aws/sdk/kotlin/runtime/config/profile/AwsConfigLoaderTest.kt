@@ -27,7 +27,7 @@ class AwsConfigLoaderTest {
         testCases
             .map { TestCase.fromJson(it.jsonObject) }
             // .filter { testCase -> testCase.name == "The default config location can be overridden by the user on non-windows platforms." }
-            .forEachIndexed { index, testCase ->
+            .forEach { testCase ->
                 val testPlatform = mockPlatform(testCase)
 
                 val actual = resolveConfigSource(testPlatform)
