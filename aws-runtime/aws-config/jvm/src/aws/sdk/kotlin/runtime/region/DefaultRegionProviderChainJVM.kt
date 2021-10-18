@@ -5,9 +5,23 @@
 
 package aws.sdk.kotlin.runtime.region
 
-public actual class DefaultRegionProviderChain public actual constructor() :
-    RegionProvider,
+import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.util.PlatformProvider
+
+public actual class DefaultRegionProviderChain public actual constructor(
+    platformProvider: PlatformProvider
+) : RegionProvider,
+    Closeable,
     RegionProviderChain(
-        JvmSystemPropRegionProvider(),
-        EnvironmentRegionProvider()
-    )
+        JvmSystemPropRegionProvider(platformProvider),
+        EnvironmentRegionProvider(platformProvider),
+        ProfileRegionProvider(platformProvider),
+        ImdsRegionProvider(platformProvider = platformProvider)
+    ) {
+
+    override fun close() {
+        providers.forEach { provider ->
+            if (provider is Closeable) provider.close()
+        }
+    }
+}
