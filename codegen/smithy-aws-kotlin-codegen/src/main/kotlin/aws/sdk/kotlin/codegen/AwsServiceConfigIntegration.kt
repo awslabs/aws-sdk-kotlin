@@ -17,7 +17,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         // AuthConfig properties
         val CredentialsProviderProp: ClientConfigProperty
-        val SigningRegionProp: ClientConfigProperty
 
         val EndpointResolverProp: ClientConfigProperty = ClientConfigProperty {
             name = "endpointResolver"
@@ -33,9 +32,9 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         }
 
         init {
-            val regionConfigSymbol = buildSymbol {
-                name = "RegionConfig"
-                namespace(AwsKotlinDependency.AWS_TYPES, subpackage = "region")
+            val awsClientConfigSymbol = buildSymbol {
+                name = "AwsClientConfig"
+                namespace(AwsKotlinDependency.AWS_TYPES)
             }
 
             RegionProp = ClientConfigProperty.String(
@@ -43,26 +42,12 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 documentation = """
                     AWS region to make requests to
                 """.trimIndent(),
-                baseClass = regionConfigSymbol
-            )
-
-            val authConfigSymbol = buildSymbol {
-                name = "AuthConfig"
-                namespace(AwsKotlinDependency.AWS_TYPES, subpackage = "auth")
-            }
-
-            SigningRegionProp = ClientConfigProperty.String(
-                "signingRegion",
-                documentation = """
-                    AWS region to be used for signing the request. This is not necessarily the same as `region`
-                    in the case of global services like IAM
-                """.trimIndent(),
-                baseClass = authConfigSymbol
+                baseClass = awsClientConfigSymbol
             )
 
             CredentialsProviderProp = ClientConfigProperty {
                 symbol = AwsRuntimeTypes.Types.CredentialsProvider
-                baseClass = authConfigSymbol
+                baseClass = awsClientConfigSymbol
                 documentation = """
                     The AWS credentials provider to use for authenticating requests. If not provided a
                     [${symbol?.namespace}.DefaultChainCredentialsProvider] instance will be used.
@@ -71,6 +56,8 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         }
     }
 
+    // FIXME - credentials and endpoint resolver need defaulted but ONLY in the constructor not the builder. We have no way (yet) of
+    // expressing this
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> =
-        listOf(RegionProp, SigningRegionProp, CredentialsProviderProp, EndpointResolverProp)
+        listOf(RegionProp, CredentialsProviderProp, EndpointResolverProp)
 }
