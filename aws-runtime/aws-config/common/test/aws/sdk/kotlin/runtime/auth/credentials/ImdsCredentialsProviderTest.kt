@@ -31,7 +31,7 @@ class ImdsCredentialsProviderTest {
             env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true")
         )
         val provider = ImdsCredentialsProvider(platformProvider = platform)
-        assertFailsWith<CredentialsException> {
+        assertFailsWith<CredentialsNotLoadedException> {
             provider.getCredentials()
         }.message.shouldContain("AWS EC2 metadata is explicitly disabled; credentials not loaded")
     }
@@ -145,7 +145,7 @@ class ImdsCredentialsProviderTest {
 
         val provider = ImdsCredentialsProvider(client = lazyOf(client))
 
-        val ex = assertFailsWith<CredentialsException> {
+        val ex = assertFailsWith<CredentialsProviderException> {
             provider.getCredentials()
         }
         ex.message.shouldContain("failed to load instance profile")
@@ -192,7 +192,7 @@ class ImdsCredentialsProviderTest {
 
         val provider = ImdsCredentialsProvider(client = lazyOf(client))
 
-        assertFailsWith<CredentialsException> {
+        assertFailsWith<CredentialsProviderException> {
             provider.getCredentials()
         }.message.shouldContain("failed to load instance profile")
     }

@@ -16,7 +16,7 @@ public constructor(private val getEnv: (String) -> String?) : CredentialsProvide
     public constructor() : this(Platform::getenv)
 
     private fun requireEnv(variable: String): String =
-        getEnv(variable) ?: throwCredentialsError(CredentialsError.InvalidConfiguration("Missing value for environment variable `$variable`"))
+        getEnv(variable) ?: throw ProviderConfigurationException("Missing value for environment variable `$variable`")
 
     override suspend fun getCredentials(): Credentials = Credentials(
         accessKeyId = requireEnv(AwsSdkSetting.AwsAccessKeyId.environmentVariable),

@@ -12,7 +12,6 @@ import io.kotest.matchers.string.shouldContain
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertIs
 
 class JsonCredentialsDeserializerTest {
     @Test
@@ -48,7 +47,6 @@ class JsonCredentialsDeserializerTest {
         val ex = assertFailsWith<InvalidJsonCredentialsException> {
             deserializeJsonCredentials(deserializer)
         }
-        assertIs<CredentialsError.Unknown>(ex.error)
         ex.message.shouldContain("invalid JSON credentials response")
     }
 

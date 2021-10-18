@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.json.JsonSerialName
 import aws.smithy.kotlin.runtime.time.Instant
@@ -12,7 +13,7 @@ import aws.smithy.kotlin.runtime.time.Instant
 /**
  * Exception thrown when credentials from response do not contain valid credentials or malformed JSON
  */
-public class InvalidJsonCredentialsException(message: String, cause: Throwable? = null) : CredentialsException(CredentialsError.Unknown(message), cause)
+public class InvalidJsonCredentialsException(message: String, cause: Throwable? = null) : ClientException(message, cause)
 
 /**
  * Common response elements for multiple HTTP credential providers (e.g. IMDS and ECS)

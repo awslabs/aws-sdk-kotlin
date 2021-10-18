@@ -36,14 +36,14 @@ class EnvironmentCredentialsProviderTest {
 
     @Test
     fun `it should throw an exception on missing access key`(): Unit = runSuspendTest {
-        assertFailsWith<CredentialsException> {
+        assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def").getCredentials()
         }.message.shouldContain("Missing value for environment variable `AWS_ACCESS_KEY_ID`")
     }
 
     @Test
     fun `it should throw an exception on missing secret key`(): Unit = runSuspendTest {
-        assertFailsWith<CredentialsException> {
+        assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc").getCredentials()
         }.message.shouldContain("Missing value for environment variable `AWS_SECRET_ACCESS_KEY`")
     }
