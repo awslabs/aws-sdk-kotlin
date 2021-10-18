@@ -20,5 +20,9 @@ kotlin {
                 implementation(project(":aws-runtime:testing"))
             }
         }
+
+        all {
+            languageSettings.optIn("aws.smithy.kotlin.runtime.util.InternalApi")
+        }
     }
 }

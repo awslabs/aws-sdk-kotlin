@@ -32,8 +32,9 @@ class AWSConfigLoaderFilesystemTest {
 
     @Test
     fun itLoadsConfigFileFromFilesystem() = runSuspendTest {
-        val configFile = tempDir!!.resolve("config")
-        val credentialsFile = tempDir!!.resolve("credentials")
+        requireNotNull(tempDir)
+        val configFile = tempDir.resolve("config")
+        val credentialsFile = tempDir.resolve("credentials")
 
         configFile.writeText("[profile foo]\nname = value")
 
@@ -58,8 +59,9 @@ class AWSConfigLoaderFilesystemTest {
 
     @Test
     fun itLoadsConfigAndCredsFileFromFilesystem() = runSuspendTest {
-        val configFile = tempDir!!.resolve("config")
-        val credentialsFile = tempDir!!.resolve("credentials")
+        requireNotNull(tempDir)
+        val configFile = tempDir.resolve("config")
+        val credentialsFile = tempDir.resolve("credentials")
 
         configFile.writeText("[profile default]\nname = value\n[default]\nname2 = value2\n[profile default]\nname3 = value3")
         credentialsFile.writeText("[default]\nsecret=foo")
