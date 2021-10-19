@@ -77,6 +77,9 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                     write("return Default${serviceSymbol.name}(config)")
                 }
 
+                write("")
+                write("operator fun invoke(config: Config): ${serviceSymbol.name} = Default${serviceSymbol.name}(config)")
+
                 // generate a convenience init to resolve a client from the current environment
                 listOf(
                     AwsRuntimeTypes.Types.AwsClientConfig,
