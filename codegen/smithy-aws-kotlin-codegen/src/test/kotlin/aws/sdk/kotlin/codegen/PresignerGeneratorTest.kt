@@ -227,13 +227,13 @@ class PresignerGeneratorTest {
             class TestPresignConfig private constructor(builder: BuilderImpl): ServicePresignConfig {
                 override val credentialsProvider: CredentialsProvider = builder.credentialsProvider
                 override val endpointResolver: EndpointResolver = builder.endpointResolver
-                override val region: String = builder.region ?: throw ClientException("region must be set")
+                override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
                 override val serviceId: String = "example"
                 override val signingName: String = "example-signing-name"
                 companion object {
                     @JvmStatic
                     fun fluentBuilder(): FluentBuilder = BuilderImpl()
-                    fun builder(): DslBuilder = BuilderImpl()
+
                     operator fun invoke(block: DslBuilder.() -> kotlin.Unit): ServicePresignConfig = BuilderImpl().apply(block).build()
                 }
             

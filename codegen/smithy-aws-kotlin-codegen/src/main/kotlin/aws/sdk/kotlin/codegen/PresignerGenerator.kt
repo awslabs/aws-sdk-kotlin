@@ -29,6 +29,7 @@ import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
@@ -220,21 +221,21 @@ class PresignerGenerator : KotlinIntegration {
             name = "region"
             documentation = "AWS region to make requests for"
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            required = true
+            propertyType = ClientConfigPropertyType.Required()
         }
         val signingNameProperty = ClientConfigProperty {
             symbol = KotlinTypes.String
             name = "signingName"
             documentation = "Service identifier used to sign requests"
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            constantValue = """"$sigv4ServiceName""""
+            propertyType = ClientConfigPropertyType.ConstantValue(""""$sigv4ServiceName"""")
         }
         val serviceIdProperty = ClientConfigProperty {
             symbol = KotlinTypes.String
             name = "serviceId"
             documentation = "Service identifier used to resolve endpoints"
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            constantValue = """"$serviceId""""
+            propertyType = ClientConfigPropertyType.ConstantValue(""""$serviceId"""")
         }
 
         val ccg = ClientConfigGenerator(

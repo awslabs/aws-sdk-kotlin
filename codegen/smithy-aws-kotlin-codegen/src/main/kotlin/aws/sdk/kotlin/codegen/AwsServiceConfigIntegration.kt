@@ -4,11 +4,14 @@
  */
 package aws.sdk.kotlin.codegen
 
+import aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigPropertyType
 
 class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
@@ -29,6 +32,8 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 name = "EndpointResolver"
                 namespace(AwsKotlinDependency.AWS_CORE, subpackage = "endpoint")
             }
+
+            propertyType = ClientConfigPropertyType.RequiredWithDefault("${EndpointResolverGenerator.typeName}()")
         }
 
         init {
@@ -37,27 +42,32 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 namespace(AwsKotlinDependency.AWS_TYPES)
             }
 
-            RegionProp = ClientConfigProperty.String(
-                "region",
+            RegionProp = ClientConfigProperty {
+                name = "region"
+                symbol = KotlinTypes.String
+                baseClass = awsClientConfigSymbol
                 documentation = """
                     AWS region to make requests to
-                """.trimIndent(),
-                baseClass = awsClientConfigSymbol
-            )
+                """.trimIndent()
+                propertyType = ClientConfigPropertyType.Required()
+            }
 
             CredentialsProviderProp = ClientConfigProperty {
-                symbol = AwsRuntimeTypes.Types.CredentialsProvider
+                val defaultProvider = AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider
+                symbol = AwsRuntimeTypes.Types.CredentialsProvider.toBuilder()
+                    .addReference(defaultProvider)
+                    .build()
                 baseClass = awsClientConfigSymbol
                 documentation = """
                     The AWS credentials provider to use for authenticating requests. If not provided a
                     [${symbol?.namespace}.DefaultChainCredentialsProvider] instance will be used.
                 """.trimIndent()
+
+                propertyType = ClientConfigPropertyType.RequiredWithDefault("${defaultProvider.name}()")
             }
         }
     }
 
-    // FIXME - credentials and endpoint resolver need defaulted but ONLY in the constructor not the builder. We have no way (yet) of
-    // expressing this
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> =
         listOf(RegionProp, CredentialsProviderProp, EndpointResolverProp)
 }
