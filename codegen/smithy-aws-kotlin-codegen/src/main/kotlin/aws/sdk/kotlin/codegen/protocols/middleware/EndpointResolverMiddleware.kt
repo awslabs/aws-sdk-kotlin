@@ -22,17 +22,9 @@ class EndpointResolverMiddleware(private val ctx: ProtocolGenerator.GenerationCo
             name = "ServiceEndpointResolver"
             namespace(AwsKotlinDependency.AWS_HTTP, subpackage = "middleware")
         }
-
-        // generated symbol
-        val defaultResolverSymbol = buildSymbol {
-            name = "DefaultEndpointResolver"
-            namespace = "${ctx.settings.pkg.name}.internal"
-        }
-
         writer.addImport(resolverFeatureSymbol)
-        writer.addImport(defaultResolverSymbol)
 
         writer.write("serviceId = ServiceId")
-        writer.write("resolver = config.endpointResolver ?: DefaultEndpointResolver()")
+        writer.write("resolver = config.endpointResolver")
     }
 }

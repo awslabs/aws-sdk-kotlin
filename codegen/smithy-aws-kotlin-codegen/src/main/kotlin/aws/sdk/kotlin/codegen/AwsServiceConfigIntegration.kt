@@ -8,6 +8,7 @@ import aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
+import software.amazon.smithy.kotlin.codegen.model.boxed
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
@@ -21,30 +22,15 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         // AuthConfig properties
         val CredentialsProviderProp: ClientConfigProperty
 
-        val EndpointResolverProp: ClientConfigProperty = ClientConfigProperty {
-            name = "endpointResolver"
-            documentation = """
-                Determines the endpoint (hostname) to make requests to. When not provided a default
-                resolver is configured automatically. This is an advanced client option.
-            """.trimIndent()
-
-            symbol = buildSymbol {
-                name = "EndpointResolver"
-                namespace(AwsKotlinDependency.AWS_CORE, subpackage = "endpoint")
-            }
-
-            propertyType = ClientConfigPropertyType.RequiredWithDefault("${EndpointResolverGenerator.typeName}()")
-        }
-
         init {
             val awsClientConfigSymbol = buildSymbol {
                 name = "AwsClientConfig"
-                namespace(AwsKotlinDependency.AWS_TYPES)
+                namespace(AwsKotlinDependency.AWS_TYPES, subpackage = "client")
             }
 
             RegionProp = ClientConfigProperty {
                 name = "region"
-                symbol = KotlinTypes.String
+                symbol = KotlinTypes.String.toBuilder().boxed().build()
                 baseClass = awsClientConfigSymbol
                 documentation = """
                     AWS region to make requests to
@@ -68,6 +54,29 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         }
     }
 
-    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> =
-        listOf(RegionProp, CredentialsProviderProp, EndpointResolverProp)
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> {
+        // we can't construct this without the actual package name due to the generated DefaultEndpointResolver symbol
+        val endpointResolverProperty = ClientConfigProperty {
+            name = "endpointResolver"
+            documentation = """
+                Determines the endpoint (hostname) to make requests to. When not provided a default
+                resolver is configured automatically. This is an advanced client option.
+            """.trimIndent()
+
+            val defaultResolver = buildSymbol {
+                name = EndpointResolverGenerator.typeName
+                namespace = "${ctx.settings.pkg.name}.internal"
+            }
+
+            symbol = buildSymbol {
+                name = "EndpointResolver"
+                namespace(AwsKotlinDependency.AWS_CORE, subpackage = "endpoint")
+                reference(defaultResolver)
+            }
+
+            propertyType = ClientConfigPropertyType.RequiredWithDefault("${defaultResolver.name}()")
+        }
+
+        return listOf(RegionProp, CredentialsProviderProp, endpointResolverProperty)
+    }
 }

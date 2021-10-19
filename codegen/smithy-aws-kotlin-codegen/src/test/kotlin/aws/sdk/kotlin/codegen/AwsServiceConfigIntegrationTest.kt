@@ -48,5 +48,12 @@ class AwsServiceConfigIntegrationTest {
     override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
 """
         contents.shouldContainOnlyOnceWithDiff(expectedProps)
+
+        val expectedImpl = """
+        override var credentialsProvider: CredentialsProvider? = null
+        override var endpointResolver: EndpointResolver? = null
+        override var region: String? = null
+"""
+        contents.shouldContainOnlyOnceWithDiff(expectedImpl)
     }
 }
