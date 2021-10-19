@@ -260,7 +260,6 @@ class PresignerGeneratorTest {
                      */
                     var region: String?
             
-                    fun build(): TestPresignConfig
                 }
             
                 internal class BuilderImpl() : FluentBuilder, DslBuilder {

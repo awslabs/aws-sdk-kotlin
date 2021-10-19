@@ -5,14 +5,18 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.boxed
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigPropertyType
+import software.amazon.smithy.kotlin.codegen.rendering.ServiceGenerator
 
 class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
@@ -52,7 +56,59 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 propertyType = ClientConfigPropertyType.RequiredWithDefault("${defaultProvider.name}()")
             }
         }
+
+        private val overrideServiceCompanionObjectWriter = SectionWriter { writer, _ ->
+            // override the service client companion object for how a client is constructed
+            val serviceSymbol: Symbol = writer.getContextValue(ServiceGenerator.ServiceInterfaceCompanionObject.ServiceSymbol)
+            writer.withBlock("companion object {", "}") {
+                withBlock(
+                    "operator fun invoke(sharedConfig: #T? = null, block: Config.DslBuilder.() -> Unit = {}): #L {",
+                    "}",
+                    AwsRuntimeTypes.Types.AwsClientConfig,
+                    serviceSymbol.name
+                ) {
+                    withBlock(
+                        "val config = Config.BuilderImpl().apply { ",
+                        "}.apply(block).build()"
+                    ) {
+                        write("region = sharedConfig?.region")
+                        write("credentialsProvider = sharedConfig?.credentialsProvider")
+                    }
+                    write("return Default${serviceSymbol.name}(config)")
+                }
+
+                // generate a convenience init to resolve a client from the current environment
+                listOf(
+                    AwsRuntimeTypes.Types.AwsClientConfig,
+                    AwsRuntimeTypes.Config.AwsClientConfigLoadOptions,
+                    AwsRuntimeTypes.Config.loadFromEnvironment
+                ).forEach(writer::addImport)
+
+                write("")
+                dokka {
+                    write("Construct a [${serviceSymbol.name}] by resolving the configuration from the current environment.")
+                    write("NOTE: If you are constructing multiple clients it is more efficient to construct an")
+                    write("[#Q] and share the configuration across clients.", AwsRuntimeTypes.Types.AwsClientConfig)
+                }
+                writer.withBlock(
+                    "suspend fun loadFromEnvironment(block: #1T.() -> Unit = {}): #2T {",
+                    "}",
+                    AwsRuntimeTypes.Config.AwsClientConfigLoadOptions,
+                    serviceSymbol
+                ) {
+                    write(
+                        "val sharedConfig = #T.#T(block)",
+                        AwsRuntimeTypes.Types.AwsClientConfig,
+                        AwsRuntimeTypes.Config.loadFromEnvironment
+                    )
+                    write("return #T(sharedConfig)", serviceSymbol)
+                }
+            }
+        }
     }
+
+    override val sectionWriters: List<SectionWriterBinding> =
+        listOf(SectionWriterBinding(ServiceGenerator.ServiceInterfaceCompanionObject, overrideServiceCompanionObjectWriter))
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> {
         // we can't construct this without the actual package name due to the generated DefaultEndpointResolver symbol
