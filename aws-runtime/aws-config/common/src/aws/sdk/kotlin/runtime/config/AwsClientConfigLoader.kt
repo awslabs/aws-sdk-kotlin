@@ -30,6 +30,8 @@ public class AwsClientConfigLoadOptions {
      * The [CredentialsProvider] to use when sourcing [aws.sdk.kotlin.runtime.auth.credentials.Credentials].
      */
     public var credentialsProvider: CredentialsProvider? = null
+
+    // FIXME - expose profile name override and thread through region/cred provider chains
 }
 
 /**
