@@ -116,9 +116,9 @@ internal suspend fun deserializeJsonCredentials(deserializer: Deserializer): Jso
         throw InvalidJsonCredentialsException("invalid JSON credentials response", ex)
     }
 
-    return when (code) {
+    return when (code?.lowercase()) {
         // IMDS does not appear to reply with `Code` missing but documentation indicates it may be possible
-        "Success", null -> {
+        "success", null -> {
             if (accessKeyId == null) throw InvalidJsonCredentialsException("missing field `AccessKeyId`")
             if (secretAccessKey == null) throw InvalidJsonCredentialsException("missing field `SecretAccessKey`")
             if (sessionToken == null) throw InvalidJsonCredentialsException("missing field `Token`")
