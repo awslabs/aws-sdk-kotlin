@@ -15,6 +15,8 @@ import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import aws.sdk.kotlin.runtime.http.middleware.ServiceEndpointResolver
 import aws.sdk.kotlin.runtime.http.middleware.UserAgent
 import aws.smithy.kotlin.runtime.client.ExecutionContext
+import aws.smithy.kotlin.runtime.client.SdkClientOption
+import aws.smithy.kotlin.runtime.client.SdkLogMode
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.*
@@ -56,6 +58,7 @@ public class ImdsClient private constructor(builder: Builder) : Closeable {
     private val tokenTtl: Duration = builder.tokenTtl
     private val clock: Clock = builder.clock
     private val platformProvider: PlatformProvider = builder.platformProvider
+    private val sdkLogMode: SdkLogMode = builder.sdkLogMode
     private val httpClient: SdkHttpClient
 
     init {
@@ -130,6 +133,7 @@ public class ImdsClient private constructor(builder: Builder) : Closeable {
                 service = SERVICE
                 // artifact of re-using ServiceEndpointResolver middleware
                 set(AwsClientOption.Region, "not-used")
+                set(SdkClientOption.LogMode, sdkLogMode)
             }
         }
         middleware.forEach { it.install(op) }
@@ -161,6 +165,11 @@ public class ImdsClient private constructor(builder: Builder) : Closeable {
          * Override the time-to-live for the session token
          */
         public var tokenTtl: Duration = Duration.seconds(DEFAULT_TOKEN_TTL_SECONDS)
+
+        /**
+         * Configure the [SdkLogMode] used by the client
+         */
+        public var sdkLogMode: SdkLogMode = SdkLogMode.Default
 
         /**
          * The HTTP engine to use to make requests with. This is here to facilitate testing and can otherwise be ignored

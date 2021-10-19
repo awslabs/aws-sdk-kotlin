@@ -5,9 +5,9 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import io.kotest.matchers.string.shouldContain
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -36,15 +36,15 @@ class EnvironmentCredentialsProviderTest {
 
     @Test
     fun `it should throw an exception on missing access key`(): Unit = runSuspendTest {
-        assertFailsWith<ConfigurationException> {
+        assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def").getCredentials()
-        }
+        }.message.shouldContain("Missing value for environment variable `AWS_ACCESS_KEY_ID`")
     }
 
     @Test
     fun `it should throw an exception on missing secret key`(): Unit = runSuspendTest {
-        assertFailsWith<ConfigurationException> {
+        assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc").getCredentials()
-        }
+        }.message.shouldContain("Missing value for environment variable `AWS_SECRET_ACCESS_KEY`")
     }
 }

@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.util.Platform
 
@@ -17,7 +16,7 @@ public constructor(private val getEnv: (String) -> String?) : CredentialsProvide
     public constructor() : this(Platform::getenv)
 
     private fun requireEnv(variable: String): String =
-        getEnv(variable) ?: throw ConfigurationException("Unable to get value from environment variable $variable")
+        getEnv(variable) ?: throw ProviderConfigurationException("Missing value for environment variable `$variable`")
 
     override suspend fun getCredentials(): Credentials = Credentials(
         accessKeyId = requireEnv(AwsSdkSetting.AwsAccessKeyId.environmentVariable),

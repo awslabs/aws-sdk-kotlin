@@ -86,7 +86,13 @@ internal class TokenMiddleware(config: Config) : Feature {
                     val expires = clock.now() + Duration.seconds(ttl)
                     Token(token, expires)
                 }
-                else -> throw EC2MetadataError(call.response.status.value, "Failed to retrieve IMDS token")
+                else -> {
+                    val message = when (call.response.status) {
+                        HttpStatusCode.Forbidden -> "Request forbidden: IMDS is disabled or the caller has insufficient permissions."
+                        else -> "Failed to retrieve IMDS token"
+                    }
+                    throw EC2MetadataError(call.response.status.value, message)
+                }
             }
         } finally {
             call.complete()
