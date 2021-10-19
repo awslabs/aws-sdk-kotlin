@@ -11,6 +11,10 @@ import aws.sdk.kotlin.crt.auth.credentials.EcsCredentialsProvider as EcsCredenti
 
 /**
  * A provider that gets credentials from an ECS environment
+ *
+ * @param host The host component of the URL to query credentials from
+ * @param pathAndQuery The path and query components of the URI, concatenated, to query credentials from
+ * @param authToken The token to pass to ECS credential service
  */
 public class EcsCredentialsProvider public constructor(
     host: String? = null,
