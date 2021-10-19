@@ -32,9 +32,8 @@ Consult the [stability guide](stability.md) for more information on SDK stabilit
         // The following line adds a dependency on the dynamodb client.
         implementation("aws.sdk.kotlin:dynamodb:$awsKotlinSdkVersion")
     }
-    ```
 
-3. Configure a service client
+3. Make a request
    
     Example for `DynamoDB`:
 
@@ -44,16 +43,36 @@ Consult the [stability guide](stability.md) for more information on SDK stabilit
 
     fun main() = runBlocking {
         val client = DynamoDbClient { region = "us-east-2" }
-        val resp = client.listTables { limit = 10 }
+        val response = client.listTables { limit = 10 }
 
         println("Current DynamoDB tables: ")
-        resp.tableNames?.forEach { println(it) }
+        response.tableNames?.forEach { println(it) }
 
         client.close()
     }
     ```
 
+    Operations that return streaming responses are slightly different. The response must be handled entirely within a
+    block passed to the API call. Example for `S3`:
+   
+    ```kotlin
+    import kotlinx.coroutines.runBlocking
+    import aws.sdk.kotlin.services.dynamodb.S3Client
 
+    fun main() = runBlocking {
+        val client = S3Client { region = "us-east-2" }
+        val request = GetObjectRequest { key = obj.key; bucket = bucketName }
+   
+        client.getObject(request) { response ->
+            val outputFile = File("/path/to/the/file")
+            response.body?.writeToFile(outputFile).also { size ->
+                println("Downloaded $outputFile ($size bytes) from S3")
+            }
+        }
+   
+        client.close()
+    }
+    ```
 
 ## Additional Resources
 
