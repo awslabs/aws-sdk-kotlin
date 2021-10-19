@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.region
 
-import aws.sdk.kotlin.runtime.ClientException
+import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
@@ -14,5 +14,5 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  */
 internal suspend fun resolveRegion(platformProvider: PlatformProvider): String =
     DefaultRegionProviderChain(platformProvider).use { providerChain ->
-        providerChain.getRegion() ?: throw ClientException("unable to auto detect AWS region, tried: $providerChain")
+        providerChain.getRegion() ?: throw ConfigurationException("unable to auto detect AWS region, tried: $providerChain")
     }
