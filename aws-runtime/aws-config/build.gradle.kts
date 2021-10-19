@@ -23,6 +23,9 @@ kotlin {
                 implementation(project(":aws-runtime:http-client-engine-crt"))
                 implementation(project(":aws-runtime:aws-http"))
 
+                // parsing common JSON credentials responses
+                implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
+
 
                 // credential providers
                 implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
