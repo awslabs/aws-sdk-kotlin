@@ -16,6 +16,6 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  *  3. Check the AWS config files/profile for region information
  *  4. If running on EC2, check the EC2 metadata service for region
  */
-public expect class DefaultRegionProviderChain public constructor(
+internal expect class DefaultRegionProviderChain constructor(
     platformProvider: PlatformProvider = Platform
 ) : RegionProvider, Closeable
