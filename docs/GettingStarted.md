@@ -61,7 +61,7 @@ Consult the [stability guide](stability.md) for more information on SDK stabilit
 
     fun main() = runBlocking {
         val client = S3Client { region = "us-east-2" }
-        val request = GetObjectRequest { key = obj.key; bucket = bucketName }
+        val request = GetObjectRequest { key = "path/to/object"; bucket = "the-bucket" }
    
         client.getObject(request) { response ->
             val outputFile = File("/path/to/the/file")
