@@ -155,7 +155,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             }
 
             writer.write("")
-                .write("val modeledException = modeledExceptionDeserializer.deserialize(context, response)")
+                .write("val modeledException = modeledExceptionDeserializer.deserialize(context, wrappedResponse)")
                 .write("#T(modeledException, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
                 .write("throw modeledException")
         }
