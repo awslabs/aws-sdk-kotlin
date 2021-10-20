@@ -52,27 +52,8 @@ Consult the [stability guide](stability.md) for more information on SDK stabilit
     }
     ```
 
-    Operations that return streaming responses are slightly different. The response must be handled entirely within a
-    block passed to the API call. Example for `S3`:
-   
-    ```kotlin
-    import kotlinx.coroutines.runBlocking
-    import aws.sdk.kotlin.services.dynamodb.S3Client
-
-    fun main() = runBlocking {
-        val client = S3Client { region = "us-east-2" }
-        val request = GetObjectRequest { key = "path/to/object"; bucket = "the-bucket" }
-   
-        client.getObject(request) { response ->
-            val outputFile = File("/path/to/the/file")
-            response.body?.writeToFile(outputFile).also { size ->
-                println("Downloaded $outputFile ($size bytes) from S3")
-            }
-        }
-   
-        client.close()
-    }
-    ```
+    **Note**: Operations that return streaming responses are slightly different. The response must be handled entirely
+    within a block passed to the API call. See the [S3 guide](../services/s3/API.md) for an example.
 
 ## Additional Resources
 
