@@ -18,7 +18,7 @@ class StsAssumeRoleCredentialsProviderTest {
             }
         }
 
-        val crtCP = adapt(sdkCP)
+        val crtCP = sdkCP.toCrtCredentialsProvider()
         val cpCredentials = crtCP.getCredentials()
 
         assertEquals(ACCESS_KEY, cpCredentials.accessKeyId)
