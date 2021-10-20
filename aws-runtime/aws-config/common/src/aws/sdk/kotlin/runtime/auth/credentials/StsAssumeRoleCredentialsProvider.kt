@@ -26,7 +26,7 @@ public class StsAssumeRoleCredentialsProvider public constructor(
     override val crtProvider: StsAssumeRoleCredentialsProviderCrt = StsAssumeRoleCredentialsProviderCrt.build {
         clientBootstrap = SdkDefaultIO.ClientBootstrap
         tlsContext = SdkDefaultIO.TlsContext
-        this.credentialsProvider = CredentialsProviderCrtProxy(credentialsProvider)
+        this.credentialsProvider = asCrt(credentialsProvider)
         this.roleArn = roleArn
         this.sessionName = sessionName
         this.durationSeconds = durationSeconds
