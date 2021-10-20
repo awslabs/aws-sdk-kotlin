@@ -111,7 +111,7 @@ class PresignerGeneratorTest {
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun GetFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
+            suspend fun GetFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: Long): HttpRequest {
                 return createPresignedRequest(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
             }
             
@@ -121,7 +121,7 @@ class PresignerGeneratorTest {
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun GetFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): HttpRequest {
+            suspend fun GetFooRequest.presign(serviceClient: TestClient, durationSeconds: Long): HttpRequest {
                 val serviceClientConfig = TestPresignConfig {
                     credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
                     endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
@@ -130,7 +130,7 @@ class PresignerGeneratorTest {
                 return createPresignedRequest(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
             }
             
-            private suspend fun getFooPresignConfig(input: GetFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
+            private suspend fun getFooPresignConfig(input: GetFooRequest, durationSeconds: Long) : PresignedRequestConfig {
                 require(durationSeconds > 0u) { "duration must be greater than zero" }
                 val httpRequestBuilder = GetFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
@@ -149,7 +149,7 @@ class PresignerGeneratorTest {
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PostFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
+            suspend fun PostFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: Long): HttpRequest {
                 return createPresignedRequest(serviceClientConfig, postFooPresignConfig(this, durationSeconds))
             }
             
@@ -159,7 +159,7 @@ class PresignerGeneratorTest {
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PostFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): HttpRequest {
+            suspend fun PostFooRequest.presign(serviceClient: TestClient, durationSeconds: Long): HttpRequest {
                 val serviceClientConfig = TestPresignConfig {
                     credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
                     endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
@@ -168,7 +168,7 @@ class PresignerGeneratorTest {
                 return createPresignedRequest(serviceClientConfig, postFooPresignConfig(this, durationSeconds))
             }
             
-            private suspend fun postFooPresignConfig(input: PostFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
+            private suspend fun postFooPresignConfig(input: PostFooRequest, durationSeconds: Long) : PresignedRequestConfig {
                 require(durationSeconds > 0u) { "duration must be greater than zero" }
                 val httpRequestBuilder = PostFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
@@ -187,7 +187,7 @@ class PresignerGeneratorTest {
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PutFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
+            suspend fun PutFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: Long): HttpRequest {
                 return createPresignedRequest(serviceClientConfig, putFooPresignConfig(this, durationSeconds))
             }
             
@@ -197,7 +197,7 @@ class PresignerGeneratorTest {
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PutFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): HttpRequest {
+            suspend fun PutFooRequest.presign(serviceClient: TestClient, durationSeconds: Long): HttpRequest {
                 val serviceClientConfig = TestPresignConfig {
                     credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
                     endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
@@ -206,7 +206,7 @@ class PresignerGeneratorTest {
                 return createPresignedRequest(serviceClientConfig, putFooPresignConfig(this, durationSeconds))
             }
             
-            private suspend fun putFooPresignConfig(input: PutFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
+            private suspend fun putFooPresignConfig(input: PutFooRequest, durationSeconds: Long) : PresignedRequestConfig {
                 require(durationSeconds > 0u) { "duration must be greater than zero" }
                 val httpRequestBuilder = PutFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
