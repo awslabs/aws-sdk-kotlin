@@ -21,14 +21,14 @@ import aws.sdk.kotlin.crt.auth.credentials.StsAssumeRoleCredentialsProvider as S
  */
 public class StsAssumeRoleCredentialsProvider public constructor(
     credentialsProvider: CredentialsProvider,
-    roleArn: String? = null,
-    sessionName: String? = null,
+    roleArn: String,
+    sessionName: String,
     durationSeconds: Int? = null,
 ) : CrtCredentialsProvider {
     override val crtProvider: StsAssumeRoleCredentialsProviderCrt = StsAssumeRoleCredentialsProviderCrt.build {
         clientBootstrap = SdkDefaultIO.ClientBootstrap
         tlsContext = SdkDefaultIO.TlsContext
-        this.credentialsProvider = adapt(credentialsProvider)
+        this.credentialsProvider = credentialsProvider.toCrtCredentialsProvider()
         this.roleArn = roleArn
         this.sessionName = sessionName
         this.durationSeconds = durationSeconds
@@ -36,12 +36,12 @@ public class StsAssumeRoleCredentialsProvider public constructor(
 }
 
 // Adapt SDK credential provider to CRT version
-internal fun adapt(credentialsProvider: CredentialsProvider): CredentialsProviderCrt =
+internal fun CredentialsProvider.toCrtCredentialsProvider(): CredentialsProviderCrt =
     object : CredentialsProviderCrt {
         override fun close() { }
 
         override suspend fun getCredentials(): Credentials {
-            val credentials = credentialsProvider.getCredentials()
+            val credentials = this@toCrtCredentialsProvider.getCredentials()
             return Credentials(credentials.accessKeyId, credentials.secretAccessKey, credentials.sessionToken)
         }
 
