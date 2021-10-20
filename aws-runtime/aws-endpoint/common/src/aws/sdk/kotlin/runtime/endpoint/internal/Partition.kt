@@ -6,21 +6,16 @@
 package aws.sdk.kotlin.runtime.endpoint.internal
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.endpoint.Endpoint
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
+import aws.sdk.kotlin.runtime.endpoint.CredentialScope
+import aws.smithy.kotlin.runtime.http.Protocol
+import aws.smithy.kotlin.runtime.http.Url
+import aws.smithy.kotlin.runtime.http.operation.Endpoint
 
 private const val defaultProtocol = "https"
 private const val defaultSigner = "v4"
 private val protocolPriority = listOf("https", "http")
 private val signerPriority = listOf("v4")
-
-/**
- * A custom signing constraint for an endpoint
- *
- * @property region A custom sigv4 signing name
- * @property service A custom sigv4 service name to use when signing a request
- */
-@InternalSdkApi
-public data class CredentialScope(val region: String? = null, val service: String? = null)
 
 /**
  * A description of a single service endpoint
@@ -96,7 +91,7 @@ public data class Partition(
 internal fun Partition.canResolveEndpoint(region: String): Boolean =
     endpoints.containsKey(region) || regionRegex.matches(region)
 
-internal fun Partition.resolveEndpoint(region: String): Endpoint? {
+internal fun Partition.resolveEndpoint(region: String): AwsEndpoint? {
     val resolvedRegion = if (region.isEmpty() && partitionEndpoint.isNotEmpty()) {
         partitionEndpoint
     } else {
@@ -119,7 +114,7 @@ private fun Partition.endpointDefinitionForRegion(region: String): EndpointDefin
     return match ?: EndpointDefinition()
 }
 
-internal fun EndpointDefinition.resolve(region: String, defaults: EndpointDefinition): Endpoint {
+internal fun EndpointDefinition.resolve(region: String, defaults: EndpointDefinition): AwsEndpoint {
     val merged = mergeDefinitions(this, defaults)
 
     // hostname must have been set either by default or on this endpoint
@@ -130,7 +125,13 @@ internal fun EndpointDefinition.resolve(region: String, defaults: EndpointDefini
     val signingName = merged.credentialScope?.service
     val signingRegion = merged.credentialScope?.region ?: region
 
-    return Endpoint(hostname, protocol, signingName = signingName, signingRegion = signingRegion)
+    val uri = Url(Protocol.parse(protocol), hostname)
+    val scope = if (signingName != null || signingRegion != null) {
+        CredentialScope(signingRegion, signingName)
+    } else {
+        null
+    }
+    return AwsEndpoint(Endpoint(uri), scope)
 }
 
 /**
@@ -164,7 +165,7 @@ private fun getByPriority(from: List<String>, priority: List<String>, default: S
  * Resolve an endpoint for a given region using the given partitions
  */
 @InternalSdkApi
-public fun resolveEndpoint(partitions: List<Partition>, region: String): Endpoint? {
+public fun resolveEndpoint(partitions: List<Partition>, region: String): AwsEndpoint? {
     if (partitions.isEmpty()) return null
 
     // fallback to first partition if no candidate found

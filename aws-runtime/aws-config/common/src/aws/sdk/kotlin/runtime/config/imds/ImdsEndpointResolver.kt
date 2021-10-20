@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.config.imds
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
 import aws.sdk.kotlin.runtime.config.resolve
-import aws.sdk.kotlin.runtime.endpoint.Endpoint
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.smithy.kotlin.runtime.http.Url
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -25,14 +25,14 @@ internal class ImdsEndpointResolver(
     private val resolvedEndpoint = asyncLazy(::doResolveEndpoint)
     private val activeProfile = asyncLazy { loadActiveAwsProfile(platformProvider) }
 
-    override suspend fun resolve(service: String, region: String): Endpoint = resolvedEndpoint.get()
+    override suspend fun resolve(service: String, region: String): AwsEndpoint = resolvedEndpoint.get()
 
-    private suspend fun doResolveEndpoint(): Endpoint = when (endpointConfiguration) {
+    private suspend fun doResolveEndpoint(): AwsEndpoint = when (endpointConfiguration) {
         is EndpointConfiguration.Custom -> endpointConfiguration.endpoint
         else -> resolveEndpointFromConfig()
     }
 
-    private suspend fun resolveEndpointFromConfig(): Endpoint {
+    private suspend fun resolveEndpointFromConfig(): AwsEndpoint {
         // explicit endpoint configured
         val endpoint = loadEndpointFromEnv() ?: loadEndpointFromProfile()
         if (endpoint != null) return endpoint
@@ -45,10 +45,10 @@ internal class ImdsEndpointResolver(
         return mode.defaultEndpoint
     }
 
-    private fun loadEndpointFromEnv(): Endpoint? =
+    private fun loadEndpointFromEnv(): AwsEndpoint? =
         AwsSdkSetting.AwsEc2MetadataServiceEndpoint.resolve(platformProvider)?.toEndpoint()
 
-    private suspend fun loadEndpointFromProfile(): Endpoint? {
+    private suspend fun loadEndpointFromProfile(): AwsEndpoint? {
         val profile = activeProfile.get()
         return profile[EC2_METADATA_SERVICE_ENDPOINT_PROFILE_KEY]?.toEndpoint()
     }
@@ -63,7 +63,7 @@ internal class ImdsEndpointResolver(
 }
 
 // Parse a string as a URL and convert to an endpoint
-internal fun String.toEndpoint(): Endpoint {
+internal fun String.toEndpoint(): AwsEndpoint {
     val url = Url.parse(this)
-    return Endpoint(url.host, url.scheme.protocolName, url.port)
+    return AwsEndpoint(url.host, url.scheme.protocolName, url.port)
 }

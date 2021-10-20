@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.ConfigurationException
-import aws.sdk.kotlin.runtime.endpoint.Endpoint
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.*
@@ -32,7 +32,7 @@ class ImdsClientTest {
             ImdsClient {
                 engine = connection
                 endpointConfiguration = EndpointConfiguration.Custom(
-                    Endpoint("[foo::254]", protocol = "http")
+                    AwsEndpoint("[foo::254]", protocol = "http")
                 )
             }
         }
@@ -252,7 +252,7 @@ class ImdsClientTest {
         val client = ImdsClient {
             engine = connection
             test.endpointOverride?.let { endpointOverride ->
-                val endpoint = Url.parse(endpointOverride).let { Endpoint(it.host, it.scheme.protocolName) }
+                val endpoint = Url.parse(endpointOverride).let { AwsEndpoint(it.host, it.scheme.protocolName) }
 
                 endpointConfiguration = EndpointConfiguration.Custom(endpoint)
             }

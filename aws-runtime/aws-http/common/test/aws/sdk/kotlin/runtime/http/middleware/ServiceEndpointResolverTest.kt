@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.http.middleware
 
 import aws.sdk.kotlin.runtime.client.AwsClientOption
-import aws.sdk.kotlin.runtime.endpoint.Endpoint
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
 import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
@@ -54,8 +54,8 @@ class ServiceEndpointResolverTest {
         op.install(ServiceEndpointResolver) {
             serviceId = "TestService"
             resolver = object : EndpointResolver {
-                override suspend fun resolve(service: String, region: String): Endpoint =
-                    Endpoint("test.com", "https")
+                override suspend fun resolve(service: String, region: String): AwsEndpoint =
+                    AwsEndpoint("test.com", "https")
             }
         }
 
@@ -96,8 +96,8 @@ class ServiceEndpointResolverTest {
         op.install(ServiceEndpointResolver) {
             serviceId = "TestService"
             resolver = object : EndpointResolver {
-                override suspend fun resolve(service: String, region: String): Endpoint =
-                    Endpoint(expectedHost, expectedProtocol, port = expectedPort)
+                override suspend fun resolve(service: String, region: String): AwsEndpoint =
+                    AwsEndpoint(expectedHost, expectedProtocol, port = expectedPort)
             }
         }
 
@@ -133,8 +133,8 @@ class ServiceEndpointResolverTest {
         op.install(ServiceEndpointResolver) {
             serviceId = "TestService"
             resolver = object : EndpointResolver {
-                override suspend fun resolve(service: String, region: String): Endpoint =
-                    Endpoint("test.com", "https")
+                override suspend fun resolve(service: String, region: String): AwsEndpoint =
+                    AwsEndpoint("test.com", "https")
             }
         }
 
@@ -171,8 +171,8 @@ class ServiceEndpointResolverTest {
         op.install(ServiceEndpointResolver) {
             serviceId = "TestService"
             resolver = object : EndpointResolver {
-                override suspend fun resolve(service: String, region: String): Endpoint =
-                    Endpoint("test.com", "https", signingName = "foo", signingRegion = "us-west-2")
+                override suspend fun resolve(service: String, region: String): AwsEndpoint =
+                    AwsEndpoint("test.com", "https", signingName = "foo", signingRegion = "us-west-2")
             }
         }
 

@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.config.imds
 import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.client.AwsClientOption
-import aws.sdk.kotlin.runtime.endpoint.Endpoint
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
 import aws.sdk.kotlin.runtime.http.ApiMetadata
 import aws.sdk.kotlin.runtime.http.AwsUserAgentMetadata
 import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
@@ -197,7 +197,7 @@ public sealed class EndpointConfiguration {
     /**
      * Override the endpoint to make requests to
      */
-    public data class Custom(val endpoint: Endpoint) : EndpointConfiguration()
+    public data class Custom(val endpoint: AwsEndpoint) : EndpointConfiguration()
 
     /**
      * Override the [EndpointMode] to use
@@ -205,18 +205,18 @@ public sealed class EndpointConfiguration {
     public data class ModeOverride(val mode: EndpointMode) : EndpointConfiguration()
 }
 
-public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
+public enum class EndpointMode(internal val defaultEndpoint: AwsEndpoint) {
     /**
      * IPv4 mode. This is the default unless otherwise specified
      * e.g. `http://169.254.169.254'
      */
-    IPv4(Endpoint("169.254.169.254", "http")),
+    IPv4(AwsEndpoint("169.254.169.254", "http")),
 
     /**
      * IPv6 mode
      * e.g. `http://[fd00:ec2::254]`
      */
-    IPv6(Endpoint("[fd00:ec2::254]", "http"));
+    IPv6(AwsEndpoint("[fd00:ec2::254]", "http"));
 
     public companion object {
         public fun fromValue(value: String): EndpointMode = when (value.lowercase()) {
@@ -235,7 +235,7 @@ public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
  */
 public class EC2MetadataError(public val statusCode: Int, message: String) : AwsServiceException(message)
 
-private fun Endpoint.toUrl(): Url {
+private fun AwsEndpoint.toUrl(): Url {
     val endpoint = this
     val protocol = Protocol.parse(endpoint.protocol)
     return Url(

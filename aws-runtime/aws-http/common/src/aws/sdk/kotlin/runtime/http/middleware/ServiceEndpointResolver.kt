@@ -14,6 +14,10 @@ import aws.smithy.kotlin.runtime.http.operation.HttpOperationContext
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.util.get
 
+// TODO - fix this middleware
+// TODO - fix partition generation
+// TODO - override client config properties + middleware
+
 /**
  *  Http feature for resolving the service endpoint.
  */
