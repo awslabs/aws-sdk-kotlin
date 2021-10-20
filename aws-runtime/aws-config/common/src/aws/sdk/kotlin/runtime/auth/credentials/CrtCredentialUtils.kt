@@ -26,3 +26,11 @@ internal fun Credentials.toCrt(): CredentialsCrt = CredentialsCrt(accessKeyId, s
  * Convert CRT credentials into SDK equivalent
  */
 internal fun CredentialsCrt.toSdk(): Credentials = Credentials(accessKeyId, secretAccessKey, sessionToken)
+
+/**
+ * Adapt or convert a SDK credentials provider into CRT equivalent
+ */
+internal fun asCrt(sdkProvider: CredentialsProvider): CredentialsProviderCrt = when (sdkProvider) {
+    is CrtCredentialsProvider -> sdkProvider.crtProvider
+    else -> CredentialsProviderCrtProxy(sdkProvider)
+}
