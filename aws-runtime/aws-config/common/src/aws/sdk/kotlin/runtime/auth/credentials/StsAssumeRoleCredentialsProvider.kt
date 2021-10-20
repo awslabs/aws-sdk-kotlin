@@ -5,10 +5,8 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.crt.auth.credentials.Credentials
 import aws.sdk.kotlin.crt.auth.credentials.build
 import aws.sdk.kotlin.runtime.crt.SdkDefaultIO
-import aws.sdk.kotlin.crt.auth.credentials.CredentialsProvider as CredentialsProviderCrt
 import aws.sdk.kotlin.crt.auth.credentials.StsAssumeRoleCredentialsProvider as StsAssumeRoleCredentialsProviderCrt
 
 /**
@@ -28,22 +26,9 @@ public class StsAssumeRoleCredentialsProvider public constructor(
     override val crtProvider: StsAssumeRoleCredentialsProviderCrt = StsAssumeRoleCredentialsProviderCrt.build {
         clientBootstrap = SdkDefaultIO.ClientBootstrap
         tlsContext = SdkDefaultIO.TlsContext
-        this.credentialsProvider = credentialsProvider.toCrtCredentialsProvider()
+        this.credentialsProvider = CredentialsProviderCrtProxy(credentialsProvider)
         this.roleArn = roleArn
         this.sessionName = sessionName
         this.durationSeconds = durationSeconds
     }
 }
-
-// Adapt SDK credential provider to CRT version
-internal fun CredentialsProvider.toCrtCredentialsProvider(): CredentialsProviderCrt =
-    object : CredentialsProviderCrt {
-        override fun close() { }
-
-        override suspend fun getCredentials(): Credentials {
-            val credentials = this@toCrtCredentialsProvider.getCredentials()
-            return Credentials(credentials.accessKeyId, credentials.secretAccessKey, credentials.sessionToken)
-        }
-
-        override suspend fun waitForShutdown() { }
-    }
