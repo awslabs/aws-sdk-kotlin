@@ -93,7 +93,7 @@ class PresignerGeneratorTest {
             import aws.sdk.kotlin.runtime.auth.signing.ServicePresignConfig
             import aws.sdk.kotlin.runtime.auth.signing.SigningLocation
             import aws.sdk.kotlin.runtime.auth.signing.createPresignedRequest
-            import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
+            import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
             import aws.smithy.kotlin.runtime.http.request.HttpRequest
@@ -226,7 +226,7 @@ class PresignerGeneratorTest {
              */
             class TestPresignConfig private constructor(builder: BuilderImpl): ServicePresignConfig {
                 override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
-                override val endpointResolver: EndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
+                override val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
                 override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
                 override val serviceId: String = "example"
                 override val signingName: String = "example-signing-name"
@@ -239,7 +239,7 @@ class PresignerGeneratorTest {
             
                 interface FluentBuilder {
                     fun credentialsProvider(credentialsProvider: CredentialsProvider): FluentBuilder
-                    fun endpointResolver(endpointResolver: EndpointResolver): FluentBuilder
+                    fun endpointResolver(endpointResolver: AwsEndpointResolver): FluentBuilder
                     fun region(region: String): FluentBuilder
                     fun build(): TestPresignConfig
                 }
@@ -253,7 +253,7 @@ class PresignerGeneratorTest {
                     /**
                      * Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option.
                      */
-                    var endpointResolver: EndpointResolver?
+                    var endpointResolver: AwsEndpointResolver?
             
                     /**
                      * AWS region to make requests for
@@ -264,12 +264,12 @@ class PresignerGeneratorTest {
             
                 internal class BuilderImpl() : FluentBuilder, DslBuilder {
                     override var credentialsProvider: CredentialsProvider? = null
-                    override var endpointResolver: EndpointResolver? = null
+                    override var endpointResolver: AwsEndpointResolver? = null
                     override var region: String? = null
             
                     override fun build(): TestPresignConfig = TestPresignConfig(this)
                     override fun credentialsProvider(credentialsProvider: CredentialsProvider): FluentBuilder = apply { this.credentialsProvider = credentialsProvider }
-                    override fun endpointResolver(endpointResolver: EndpointResolver): FluentBuilder = apply { this.endpointResolver = endpointResolver }
+                    override fun endpointResolver(endpointResolver: AwsEndpointResolver): FluentBuilder = apply { this.endpointResolver = endpointResolver }
                     override fun region(region: String): FluentBuilder = apply { this.region = region }
                 }
             }

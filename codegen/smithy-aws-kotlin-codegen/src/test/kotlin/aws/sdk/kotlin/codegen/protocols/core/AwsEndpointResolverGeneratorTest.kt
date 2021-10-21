@@ -163,8 +163,8 @@ private val servicePartitions = listOf(
         val contents = getGeneratedResolverContents(model)
 
         val expected = """
-internal class DefaultEndpointResolver : EndpointResolver {
-    override suspend fun resolve(service: String, region: String): Endpoint {
+internal class DefaultEndpointResolver : AwsEndpointResolver {
+    override suspend fun resolve(service: String, region: String): AwsEndpoint {
         return resolveEndpoint(servicePartitions, region) ?: throw ClientException("unable to resolve endpoint for region: ${'$'}region")
     }
 }"""
