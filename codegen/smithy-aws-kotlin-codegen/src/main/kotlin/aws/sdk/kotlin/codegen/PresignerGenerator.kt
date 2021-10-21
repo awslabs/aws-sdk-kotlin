@@ -26,14 +26,15 @@ import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.expectTrait
-import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.hasHttpBody
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
+import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.ShapeId
@@ -190,26 +191,18 @@ class PresignerGenerator : KotlinIntegration {
         writer.addImport(AwsRuntimeTypes.Core.ClientException)
         writer.putContext("configClass.name", presignConfigTypeName)
         val credentialsProviderProperty = ClientConfigProperty {
-            symbol = buildSymbol {
-                name = "CredentialsProvider"
-                defaultValue = "DefaultChainCredentialsProvider()"
-                namespace(AwsKotlinDependency.AWS_SIGNING)
-                nullable = false
-            }
+            symbol = AwsRuntimeTypes.Types.CredentialsProvider
             name = "credentialsProvider"
             documentation = "The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used."
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+            propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultChainCredentialsProvider()")
         }
         val endpointResolverProperty = ClientConfigProperty {
-            symbol = buildSymbol {
-                name = "EndpointResolver"
-                namespace(AwsKotlinDependency.AWS_CORE, "endpoint")
-                defaultValue = "DefaultEndpointResolver()"
-                nullable = false
-            }
+            symbol = AwsRuntimeTypes.Endpoint.EndpointResolver
             name = "endpointResolver"
             documentation = "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+            propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultEndpointResolver()")
         }
         val region = ClientConfigProperty {
             symbol = buildSymbol {
@@ -220,21 +213,21 @@ class PresignerGenerator : KotlinIntegration {
             name = "region"
             documentation = "AWS region to make requests for"
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            required = true
+            propertyType = ClientConfigPropertyType.Required()
         }
         val signingNameProperty = ClientConfigProperty {
             symbol = KotlinTypes.String
             name = "signingName"
             documentation = "Service identifier used to sign requests"
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            constantValue = """"$sigv4ServiceName""""
+            propertyType = ClientConfigPropertyType.ConstantValue(sigv4ServiceName.dq())
         }
         val serviceIdProperty = ClientConfigProperty {
             symbol = KotlinTypes.String
             name = "serviceId"
             documentation = "Service identifier used to resolve endpoints"
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            constantValue = """"$serviceId""""
+            propertyType = ClientConfigPropertyType.ConstantValue(serviceId.dq())
         }
 
         val ccg = ClientConfigGenerator(
@@ -325,31 +318,31 @@ class PresignerGenerator : KotlinIntegration {
     ) {
         writer.dokka {
             write("Presign a [$requestTypeName] using a [$serviceClientTypeName].")
-            write("@param serviceClient the client providing properties used to generate the presigned request.")
+            write("@param config the client configuration used to generate the presigned request.")
             write("@param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.")
             write("@return The [HttpRequest] that can be invoked within the specified time window.")
         }
         // FIXME ~ Replace or add additional function, swap ULong type for kotlin.time.Duration when type becomes stable
-        writer.withBlock("suspend fun $requestTypeName.presign(serviceClient: $serviceClientTypeName, durationSeconds: ULong): HttpRequest {", "}\n") {
-            withBlock("val serviceClientConfig = $presignConfigTypeName {", "}") {
-                write("credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()")
-                write("endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()")
-                write("region = requireNotNull(serviceClient.config.region) { \"Service client must set a region.\" }")
+        writer.withBlock("suspend fun $requestTypeName.presign(config: $serviceClientTypeName.Config, durationSeconds: ULong): HttpRequest {", "}\n") {
+            withBlock("val presignConfig = $presignConfigTypeName {", "}") {
+                write("credentialsProvider = config.credentialsProvider")
+                write("endpointResolver = config.endpointResolver")
+                write("region = config.region")
             }
-            write("return createPresignedRequest(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
+            write("return createPresignedRequest(presignConfig, $requestConfigFnName(this, durationSeconds))")
         }
     }
 
     private fun renderPresignFromConfigFn(writer: KotlinWriter, requestTypeName: String, requestConfigFnName: String) {
         writer.dokka {
             write("Presign a [$requestTypeName] using a [ServicePresignConfig].")
-            write("@param serviceClientConfig the client configuration used to generate the presigned request")
+            write("@param presignConfig the configuration used to generate the presigned request")
             write("@param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.")
             write("@return The [HttpRequest] that can be invoked within the specified time window.")
         }
         // FIXME ~ Replace or add additional function, swap ULong type for kotlin.time.Duration when type becomes stable
-        writer.withBlock("suspend fun $requestTypeName.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {", "}\n") {
-            write("return createPresignedRequest(serviceClientConfig, $requestConfigFnName(this, durationSeconds))")
+        writer.withBlock("suspend fun $requestTypeName.presign(presignConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {", "}\n") {
+            write("return createPresignedRequest(presignConfig, $requestConfigFnName(this, durationSeconds))")
         }
     }
 

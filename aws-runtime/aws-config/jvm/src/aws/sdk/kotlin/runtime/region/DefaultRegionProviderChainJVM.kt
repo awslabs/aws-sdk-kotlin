@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.region
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
-public actual class DefaultRegionProviderChain public actual constructor(
+internal actual class DefaultRegionProviderChain actual constructor(
     platformProvider: PlatformProvider
 ) : RegionProvider,
     Closeable,

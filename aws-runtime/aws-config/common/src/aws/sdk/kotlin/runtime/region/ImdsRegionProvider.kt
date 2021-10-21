@@ -21,7 +21,7 @@ private const val REGION_PATH: String = "/latest/meta-data/placement/region"
  * @param client the IMDS client to use to resolve region information with
  * @param platformProvider the [PlatformEnvironProvider] instance
  */
-public class ImdsRegionProvider(
+internal class ImdsRegionProvider(
     private val client: Lazy<ImdsClient> = lazy { ImdsClient() },
     private val platformProvider: PlatformEnvironProvider = Platform,
 ) : RegionProvider, Closeable {
