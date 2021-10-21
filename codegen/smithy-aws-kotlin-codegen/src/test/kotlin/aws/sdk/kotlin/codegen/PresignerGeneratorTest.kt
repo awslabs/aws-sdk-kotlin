@@ -131,7 +131,7 @@ class PresignerGeneratorTest {
             }
             
             private suspend fun getFooPresignConfig(input: GetFooRequest, durationSeconds: Long) : PresignedRequestConfig {
-                require(durationSeconds > 0u) { "duration must be greater than zero" }
+                require(durationSeconds > 0) { "duration must be greater than zero" }
                 val httpRequestBuilder = GetFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
                     httpRequestBuilder.method,
@@ -169,7 +169,7 @@ class PresignerGeneratorTest {
             }
             
             private suspend fun postFooPresignConfig(input: PostFooRequest, durationSeconds: Long) : PresignedRequestConfig {
-                require(durationSeconds > 0u) { "duration must be greater than zero" }
+                require(durationSeconds > 0) { "duration must be greater than zero" }
                 val httpRequestBuilder = PostFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
                     httpRequestBuilder.method,
@@ -207,7 +207,7 @@ class PresignerGeneratorTest {
             }
             
             private suspend fun putFooPresignConfig(input: PutFooRequest, durationSeconds: Long) : PresignedRequestConfig {
-                require(durationSeconds > 0u) { "duration must be greater than zero" }
+                require(durationSeconds > 0) { "duration must be greater than zero" }
                 val httpRequestBuilder = PutFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
                     httpRequestBuilder.method,

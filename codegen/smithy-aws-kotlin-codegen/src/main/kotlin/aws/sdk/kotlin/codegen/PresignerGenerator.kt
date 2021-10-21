@@ -301,7 +301,7 @@ class PresignerGenerator : KotlinIntegration {
         writer.withBlock("private suspend fun $requestConfigFnName(input: $requestTypeName, durationSeconds: Long) : PresignedRequestConfig {", "}\n") {
 
             writer.declareSection(PresignConfigFnSection, contextMap) {
-                write("require(durationSeconds > 0u) { \"duration must be greater than zero\" }")
+                write("require(durationSeconds > 0) { \"duration must be greater than zero\" }")
                 write("val httpRequestBuilder = #T().serialize(ExecutionContext.build {  }, input)", serializerSymbol)
 
                 writer.withBlock("return PresignedRequestConfig(", ")") {
