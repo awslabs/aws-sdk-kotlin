@@ -5,12 +5,9 @@
 
 package aws.sdk.kotlin.codegen.protocols.protocoltest
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestRequestGenerator
 import software.amazon.smithy.model.Model
@@ -29,19 +26,13 @@ class AwsHttpProtocolUnitTestRequestGenerator(builder: Builder) :
         renderConfigureAwsServiceClient(writer, model, serviceShape, operation)
         test.host.ifPresent { expectedHost ->
             // add an endpoint resolver
-            val staticProviderSymbol = buildSymbol {
-                name = "StaticEndpointResolver"
-                namespace(AwsKotlinDependency.AWS_CORE, subpackage = "endpoint")
-            }
-            val endpointSymbol = buildSymbol {
-                name = "Endpoint"
-                namespace(AwsKotlinDependency.AWS_CORE, subpackage = "endpoint")
-            }
-            writer.addImport(staticProviderSymbol)
-            writer.addImport(endpointSymbol)
+            writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpoint)
+            writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpointResolver)
             writer.write(
-                "endpointResolver = #T(#T(hostname=#S, protocol=#S))",
-                staticProviderSymbol, endpointSymbol, expectedHost, "https"
+                "endpointResolver = #T { _, _ -> #T(#S) }",
+                AwsRuntimeTypes.Endpoint.AwsEndpointResolver,
+                AwsRuntimeTypes.Endpoint.AwsEndpoint,
+                "https://$expectedHost"
             )
         }
     }
