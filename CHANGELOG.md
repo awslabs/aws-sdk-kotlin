@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.7.0-alpha] - 10/21/2021
+## [0.8.0-alpha] - 10/21/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
 
