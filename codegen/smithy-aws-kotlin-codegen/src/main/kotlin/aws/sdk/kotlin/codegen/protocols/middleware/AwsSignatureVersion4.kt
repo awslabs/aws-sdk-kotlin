@@ -39,9 +39,8 @@ open class AwsSignatureVersion4(private val signingServiceName: String) : HttpFe
 
     override fun renderConfigure(writer: KotlinWriter) {
         writer.addImport(AwsRuntimeTypes.Signing.AwsSigV4SigningMiddleware)
-        writer.addImport(AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider)
 
-        writer.write("this.credentialsProvider = config.credentialsProvider ?: DefaultChainCredentialsProvider()")
+        writer.write("this.credentialsProvider = config.credentialsProvider")
         writer.write("this.signingService = #S", signingServiceName)
     }
 
