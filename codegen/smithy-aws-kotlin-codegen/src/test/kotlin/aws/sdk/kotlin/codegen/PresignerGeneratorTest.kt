@@ -107,27 +107,27 @@ class PresignerGeneratorTest {
             
             /**
              * Presign a [GetFooRequest] using a [ServicePresignConfig].
-             * @param serviceClientConfig the client configuration used to generate the presigned request
+             * @param presignConfig the configuration used to generate the presigned request
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun GetFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
-                return createPresignedRequest(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
+            suspend fun GetFooRequest.presign(presignConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
+                return createPresignedRequest(presignConfig, getFooPresignConfig(this, durationSeconds))
             }
             
             /**
              * Presign a [GetFooRequest] using a [TestClient].
-             * @param serviceClient the client providing properties used to generate the presigned request.
+             * @param config the client configuration used to generate the presigned request.
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun GetFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): HttpRequest {
-                val serviceClientConfig = TestPresignConfig {
-                    credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
-                    endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
-                    region = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
+            suspend fun GetFooRequest.presign(config: TestClient.Config, durationSeconds: ULong): HttpRequest {
+                val presignConfig = TestPresignConfig {
+                    credentialsProvider = config.credentialsProvider
+                    endpointResolver = config.endpointResolver
+                    region = config.region
                 }
-                return createPresignedRequest(serviceClientConfig, getFooPresignConfig(this, durationSeconds))
+                return createPresignedRequest(presignConfig, getFooPresignConfig(this, durationSeconds))
             }
             
             private suspend fun getFooPresignConfig(input: GetFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
@@ -145,27 +145,27 @@ class PresignerGeneratorTest {
             
             /**
              * Presign a [PostFooRequest] using a [ServicePresignConfig].
-             * @param serviceClientConfig the client configuration used to generate the presigned request
+             * @param presignConfig the configuration used to generate the presigned request
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PostFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
-                return createPresignedRequest(serviceClientConfig, postFooPresignConfig(this, durationSeconds))
+            suspend fun PostFooRequest.presign(presignConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
+                return createPresignedRequest(presignConfig, postFooPresignConfig(this, durationSeconds))
             }
             
             /**
              * Presign a [PostFooRequest] using a [TestClient].
-             * @param serviceClient the client providing properties used to generate the presigned request.
+             * @param config the client configuration used to generate the presigned request.
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PostFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): HttpRequest {
-                val serviceClientConfig = TestPresignConfig {
-                    credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
-                    endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
-                    region = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
+            suspend fun PostFooRequest.presign(config: TestClient.Config, durationSeconds: ULong): HttpRequest {
+                val presignConfig = TestPresignConfig {
+                    credentialsProvider = config.credentialsProvider
+                    endpointResolver = config.endpointResolver
+                    region = config.region
                 }
-                return createPresignedRequest(serviceClientConfig, postFooPresignConfig(this, durationSeconds))
+                return createPresignedRequest(presignConfig, postFooPresignConfig(this, durationSeconds))
             }
             
             private suspend fun postFooPresignConfig(input: PostFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
@@ -183,27 +183,27 @@ class PresignerGeneratorTest {
             
             /**
              * Presign a [PutFooRequest] using a [ServicePresignConfig].
-             * @param serviceClientConfig the client configuration used to generate the presigned request
+             * @param presignConfig the configuration used to generate the presigned request
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PutFooRequest.presign(serviceClientConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
-                return createPresignedRequest(serviceClientConfig, putFooPresignConfig(this, durationSeconds))
+            suspend fun PutFooRequest.presign(presignConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {
+                return createPresignedRequest(presignConfig, putFooPresignConfig(this, durationSeconds))
             }
             
             /**
              * Presign a [PutFooRequest] using a [TestClient].
-             * @param serviceClient the client providing properties used to generate the presigned request.
+             * @param config the client configuration used to generate the presigned request.
              * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PutFooRequest.presign(serviceClient: TestClient, durationSeconds: ULong): HttpRequest {
-                val serviceClientConfig = TestPresignConfig {
-                    credentialsProvider = serviceClient.config.credentialsProvider ?: DefaultChainCredentialsProvider()
-                    endpointResolver = serviceClient.config.endpointResolver ?: DefaultEndpointResolver()
-                    region = requireNotNull(serviceClient.config.region) { "Service client must set a region." }
+            suspend fun PutFooRequest.presign(config: TestClient.Config, durationSeconds: ULong): HttpRequest {
+                val presignConfig = TestPresignConfig {
+                    credentialsProvider = config.credentialsProvider
+                    endpointResolver = config.endpointResolver
+                    region = config.region
                 }
-                return createPresignedRequest(serviceClientConfig, putFooPresignConfig(this, durationSeconds))
+                return createPresignedRequest(presignConfig, putFooPresignConfig(this, durationSeconds))
             }
             
             private suspend fun putFooPresignConfig(input: PutFooRequest, durationSeconds: ULong) : PresignedRequestConfig {
@@ -225,15 +225,15 @@ class PresignerGeneratorTest {
              * instance is not available.
              */
             class TestPresignConfig private constructor(builder: BuilderImpl): ServicePresignConfig {
-                override val credentialsProvider: CredentialsProvider = builder.credentialsProvider
-                override val endpointResolver: EndpointResolver = builder.endpointResolver
-                override val region: String = builder.region ?: throw ClientException("region must be set")
+                override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
+                override val endpointResolver: EndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
+                override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
                 override val serviceId: String = "example"
                 override val signingName: String = "example-signing-name"
                 companion object {
                     @JvmStatic
                     fun fluentBuilder(): FluentBuilder = BuilderImpl()
-                    fun builder(): DslBuilder = BuilderImpl()
+
                     operator fun invoke(block: DslBuilder.() -> kotlin.Unit): ServicePresignConfig = BuilderImpl().apply(block).build()
                 }
             
@@ -248,24 +248,23 @@ class PresignerGeneratorTest {
                     /**
                      * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.
                      */
-                    var credentialsProvider: CredentialsProvider
+                    var credentialsProvider: CredentialsProvider?
             
                     /**
                      * Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option.
                      */
-                    var endpointResolver: EndpointResolver
+                    var endpointResolver: EndpointResolver?
             
                     /**
                      * AWS region to make requests for
                      */
                     var region: String?
             
-                    fun build(): TestPresignConfig
                 }
             
                 internal class BuilderImpl() : FluentBuilder, DslBuilder {
-                    override var credentialsProvider: CredentialsProvider = DefaultChainCredentialsProvider()
-                    override var endpointResolver: EndpointResolver = DefaultEndpointResolver()
+                    override var credentialsProvider: CredentialsProvider? = null
+                    override var endpointResolver: EndpointResolver? = null
                     override var region: String? = null
             
                     override fun build(): TestPresignConfig = TestPresignConfig(this)
