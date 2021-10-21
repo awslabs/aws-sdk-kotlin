@@ -1,7 +1,7 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
-import aws.sdk.kotlin.codegen.protocols.core.EndpointResolverGenerator
+import aws.sdk.kotlin.codegen.protocols.core.AwsEndpointResolverGenerator
 import aws.sdk.kotlin.codegen.protocols.core.QueryBindingResolver
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
@@ -85,7 +85,7 @@ class PresignerGenerator : KotlinIntegration {
         AwsRuntimeTypes.Signing.ServicePresignConfig,
         AwsRuntimeTypes.Signing.SigningLocation,
         AwsRuntimeTypes.Signing.createPresignedRequest,
-        AwsRuntimeTypes.Endpoint.EndpointResolver
+        AwsRuntimeTypes.Endpoint.AwsEndpointResolver
     )
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
@@ -128,7 +128,7 @@ class PresignerGenerator : KotlinIntegration {
         val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
         val defaultEndpointResolverSymbol = buildSymbol {
             namespace = "${ctx.settings.pkg.name}.internal"
-            name = EndpointResolverGenerator.typeName
+            name = AwsEndpointResolverGenerator.typeName
         }
         val clientName = clientName(ctx.settings.sdkId)
         val presignConfigTypeName = "${clientName}PresignConfig"
@@ -198,7 +198,7 @@ class PresignerGenerator : KotlinIntegration {
             propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultChainCredentialsProvider()")
         }
         val endpointResolverProperty = ClientConfigProperty {
-            symbol = AwsRuntimeTypes.Endpoint.EndpointResolver
+            symbol = AwsRuntimeTypes.Endpoint.AwsEndpointResolver
             name = "endpointResolver"
             documentation = "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig

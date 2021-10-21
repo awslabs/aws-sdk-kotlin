@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.endpoint
 /**
  * Resolves endpoints for a given service and region
  */
-public interface EndpointResolver {
+public fun interface AwsEndpointResolver {
 
     /**
      * Resolve the [AwsEndpoint] for the given service and region

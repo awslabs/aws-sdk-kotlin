@@ -91,7 +91,7 @@ public data class Partition(
 internal fun Partition.canResolveEndpoint(region: String): Boolean =
     endpoints.containsKey(region) || regionRegex.matches(region)
 
-internal fun Partition.resolveEndpoint(region: String): AwsEndpoint? {
+internal fun Partition.resolveEndpoint(region: String): AwsEndpoint {
     val resolvedRegion = if (region.isEmpty() && partitionEndpoint.isNotEmpty()) {
         partitionEndpoint
     } else {
@@ -126,11 +126,7 @@ internal fun EndpointDefinition.resolve(region: String, defaults: EndpointDefini
     val signingRegion = merged.credentialScope?.region ?: region
 
     val uri = Url(Protocol.parse(protocol), hostname)
-    val scope = if (signingName != null || signingRegion != null) {
-        CredentialScope(signingRegion, signingName)
-    } else {
-        null
-    }
+    val scope = CredentialScope(signingRegion, signingName)
     return AwsEndpoint(Endpoint(uri), scope)
 }
 
