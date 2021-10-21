@@ -28,7 +28,7 @@ class PollyPresignerTest {
             }
         }
 
-        val presignedRequest = request.presign(clientConfig, 10u)
+        val presignedRequest = request.presign(clientConfig, 10)
 
         assertEquals(HttpMethod.GET, presignedRequest.method)
         assertTrue(presignedRequest.headers.entries().size == 1)
