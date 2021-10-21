@@ -114,7 +114,7 @@ class S3Generator : RestXml() {
             }
 
             writer.write("")
-                .write("val modeledException = modeledExceptionDeserializer.deserialize(context, response)")
+                .write("val modeledException = modeledExceptionDeserializer.deserialize(context, wrappedResponse)")
                 .write("#T(modeledException, wrappedResponse, errorDetails)", setS3ErrorMetadata)
                 .write("throw modeledException")
         }
