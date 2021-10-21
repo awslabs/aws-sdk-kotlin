@@ -37,7 +37,7 @@ public class AwsClientConfigLoadOptions {
 /**
  * Load the AWS client configuration from the environment.
  */
-public suspend fun AwsClientConfig.Companion.loadFromEnvironment(
+public suspend fun AwsClientConfig.Companion.fromEnvironment(
     block: AwsClientConfigLoadOptions.() -> Unit = {}
 ): AwsClientConfig = loadAwsClientConfig(Platform, block)
 

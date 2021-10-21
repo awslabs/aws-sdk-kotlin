@@ -13,7 +13,6 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.boxed
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceGenerator
@@ -27,15 +26,10 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         val CredentialsProviderProp: ClientConfigProperty
 
         init {
-            val awsClientConfigSymbol = buildSymbol {
-                name = "AwsClientConfig"
-                namespace(AwsKotlinDependency.AWS_TYPES, subpackage = "client")
-            }
-
             RegionProp = ClientConfigProperty {
                 name = "region"
                 symbol = KotlinTypes.String.toBuilder().boxed().build()
-                baseClass = awsClientConfigSymbol
+                baseClass = AwsRuntimeTypes.Types.AwsClientConfig
                 documentation = """
                     AWS region to make requests to
                 """.trimIndent()
@@ -43,17 +37,16 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             }
 
             CredentialsProviderProp = ClientConfigProperty {
-                val defaultProvider = AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider
-                symbol = AwsRuntimeTypes.Types.CredentialsProvider.toBuilder()
-                    .addReference(defaultProvider)
-                    .build()
-                baseClass = awsClientConfigSymbol
+                symbol = AwsRuntimeTypes.Types.CredentialsProvider
+                baseClass = AwsRuntimeTypes.Types.AwsClientConfig
                 documentation = """
                     The AWS credentials provider to use for authenticating requests. If not provided a
                     [${symbol?.namespace}.DefaultChainCredentialsProvider] instance will be used.
                 """.trimIndent()
 
+                val defaultProvider = AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider
                 propertyType = ClientConfigPropertyType.RequiredWithDefault("${defaultProvider.name}()")
+                additionalImports = listOf(defaultProvider)
             }
         }
 
@@ -84,17 +77,17 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 listOf(
                     AwsRuntimeTypes.Types.AwsClientConfig,
                     AwsRuntimeTypes.Config.AwsClientConfigLoadOptions,
-                    AwsRuntimeTypes.Config.loadFromEnvironment
+                    AwsRuntimeTypes.Config.fromEnvironment
                 ).forEach(writer::addImport)
 
                 write("")
                 dokka {
                     write("Construct a [${serviceSymbol.name}] by resolving the configuration from the current environment.")
-                    write("NOTE: If you are constructing multiple clients it is more efficient to construct an")
-                    write("[#Q] and share the configuration across clients.", AwsRuntimeTypes.Types.AwsClientConfig)
+                    write("NOTE: If you are using multiple AWS service clients you may wish to share the configuration among them")
+                    write("by constructing a [#Q] and passing it to each client at construction.", AwsRuntimeTypes.Types.AwsClientConfig)
                 }
                 writer.withBlock(
-                    "suspend fun loadFromEnvironment(block: #1T.() -> Unit = {}): #2T {",
+                    "suspend fun fromEnvironment(block: #1T.() -> Unit = {}): #2T {",
                     "}",
                     AwsRuntimeTypes.Config.AwsClientConfigLoadOptions,
                     serviceSymbol
@@ -102,7 +95,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                     write(
                         "val sharedConfig = #T.#T(block)",
                         AwsRuntimeTypes.Types.AwsClientConfig,
-                        AwsRuntimeTypes.Config.loadFromEnvironment
+                        AwsRuntimeTypes.Config.fromEnvironment
                     )
                     write("return #T(sharedConfig)", serviceSymbol)
                 }
@@ -126,14 +119,9 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 name = EndpointResolverGenerator.typeName
                 namespace = "${ctx.settings.pkg.name}.internal"
             }
-
-            symbol = buildSymbol {
-                name = "EndpointResolver"
-                namespace(AwsKotlinDependency.AWS_CORE, subpackage = "endpoint")
-                reference(defaultResolver)
-            }
-
+            symbol = AwsRuntimeTypes.Endpoint.EndpointResolver
             propertyType = ClientConfigPropertyType.RequiredWithDefault("${defaultResolver.name}()")
+            additionalImports = listOf(defaultResolver)
         }
 
         return listOf(RegionProp, CredentialsProviderProp, endpointResolverProperty)

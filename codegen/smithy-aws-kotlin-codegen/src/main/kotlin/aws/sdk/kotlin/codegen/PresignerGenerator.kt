@@ -34,6 +34,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResol
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.hasHttpBody
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
+import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.ShapeId
@@ -219,14 +220,14 @@ class PresignerGenerator : KotlinIntegration {
             name = "signingName"
             documentation = "Service identifier used to sign requests"
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            propertyType = ClientConfigPropertyType.ConstantValue(""""$sigv4ServiceName"""")
+            propertyType = ClientConfigPropertyType.ConstantValue(sigv4ServiceName.dq())
         }
         val serviceIdProperty = ClientConfigProperty {
             symbol = KotlinTypes.String
             name = "serviceId"
             documentation = "Service identifier used to resolve endpoints"
             baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            propertyType = ClientConfigPropertyType.ConstantValue(""""$serviceId"""")
+            propertyType = ClientConfigPropertyType.ConstantValue(serviceId.dq())
         }
 
         val ccg = ClientConfigGenerator(

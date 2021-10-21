@@ -54,7 +54,7 @@ object AwsRuntimeTypes {
         }
 
         val AwsClientConfigLoadOptions = runtimeSymbol("AwsClientConfigLoadOptions", AwsKotlinDependency.AWS_CONFIG, "config")
-        val loadFromEnvironment = runtimeSymbol("loadFromEnvironment", AwsKotlinDependency.AWS_CONFIG, "config")
+        val fromEnvironment = runtimeSymbol("fromEnvironment", AwsKotlinDependency.AWS_CONFIG, "config")
     }
 
     object Signing {
