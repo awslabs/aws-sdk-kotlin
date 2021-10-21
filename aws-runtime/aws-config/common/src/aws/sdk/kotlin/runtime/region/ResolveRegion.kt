@@ -5,36 +5,14 @@
 
 package aws.sdk.kotlin.runtime.region
 
-import aws.sdk.kotlin.runtime.ClientException
-import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.client.AwsAdvancedClientOption
-import aws.sdk.kotlin.runtime.client.AwsClientOption
-import aws.smithy.kotlin.runtime.client.ExecutionContext
+import aws.sdk.kotlin.runtime.ConfigurationException
+import aws.smithy.kotlin.runtime.io.use
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
  * Attempt to resolve the region to make requests to.
- *
- * Regions are resolved in the following order:
- *   1. From the existing [ctx]
- *   2. From the region [config]
- *   3. Using default region detection (only if-enabled)
  */
-@InternalSdkApi
-public suspend fun resolveRegionForOperation(ctx: ExecutionContext, config: RegionConfig): String {
-    // favor the context if it's already set
-    val regionFromCtx = ctx.getOrNull(AwsClientOption.Region)
-    if (regionFromCtx != null) return regionFromCtx
-
-    // use the default from the service config if configured
-    if (config.region != null) return config.region!!
-
-    // attempt to detect
-    val allowDefaultRegionDetect = ctx.getOrNull(AwsAdvancedClientOption.EnableDefaultRegionDetection) ?: true
-    if (!allowDefaultRegionDetect) {
-        throw ClientException("No region was configured and region detection has been disabled")
+internal suspend fun resolveRegion(platformProvider: PlatformProvider): String =
+    DefaultRegionProviderChain(platformProvider).use { providerChain ->
+        providerChain.getRegion() ?: throw ConfigurationException("unable to auto detect AWS region, tried: $providerChain")
     }
-
-    // TODO - propagate any relevant ctx/config to the default chain
-    val providerChain = DefaultRegionProviderChain()
-    return providerChain.getRegion() ?: throw ClientException("unable to auto detect AWS region, tried: $providerChain")
-}
