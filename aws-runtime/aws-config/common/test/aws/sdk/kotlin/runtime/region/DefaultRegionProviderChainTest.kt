@@ -5,9 +5,9 @@
 
 package aws.sdk.kotlin.runtime.region
 
-import aws.sdk.kotlin.runtime.util.TestInstanceMetadataProvider
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import aws.sdk.kotlin.runtime.util.TestInstanceMetadataProvider
 import kotlinx.serialization.json.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
