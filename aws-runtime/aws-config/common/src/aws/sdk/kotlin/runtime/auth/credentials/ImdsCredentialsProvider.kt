@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.EC2MetadataError
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
+import aws.sdk.kotlin.runtime.config.imds.InstanceMetadataProvider
 import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.io.Closeable
@@ -36,7 +37,7 @@ private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnau
  */
 public class ImdsCredentialsProvider(
     private val profileOverride: String? = null,
-    private val client: Lazy<ImdsClient> = lazy { ImdsClient() },
+    private val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
     private val platformProvider: PlatformEnvironProvider = Platform
 ) : CredentialsProvider, Closeable {
     private val logger = Logger.getLogger<ImdsCredentialsProvider>()
