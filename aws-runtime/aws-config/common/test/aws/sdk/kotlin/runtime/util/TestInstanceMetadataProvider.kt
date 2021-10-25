@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.testing
+package aws.sdk.kotlin.runtime.util
 
 import aws.sdk.kotlin.runtime.config.imds.InstanceMetadataProvider
 

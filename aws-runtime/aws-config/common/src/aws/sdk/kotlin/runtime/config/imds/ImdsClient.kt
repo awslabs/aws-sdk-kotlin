@@ -43,7 +43,7 @@ private const val SERVICE = "imds"
  */
 public interface InstanceMetadataProvider : Closeable {
     /**
-     * Gets the specified instance metadata value by the given key.
+     * Gets the specified instance metadata value by the given path.
      */
     public suspend fun get(path: String): String
 }
