@@ -41,71 +41,39 @@ The AWS SDK Kotlin runtime will contain definitions of a generic endpoint type t
 ```kt
 package aws.sdk.kotlin.runtime.endpoint
 
+import aws.smithy.kotlin.runtime.http.operation.Endpoint
+
 /**
  * Represents the endpoint a service client should make API operation calls to.
  *
  * The SDK will automatically resolve endpoints per API client using an internal resolver.
  */
-data class Endpoint(
-    /**
-     * The base URL endpoint clients will use to make API calls to e.g. "{service-id}.{region}.amazonaws.com"
-     */
-    val hostname: String,
+data class AwsEndpoint(
 
-    /**
-     * The protocol to use when making a connection e.g. "HTTPS"
-     */
-    val protocol: String,
-
-    /**
-     * The port to connect to when making requests to this endpoint. When not specified the default port dictated
-     * by the protocol will be used.
-     */
-    val port: Int? = null,
-
-    /**
-     * Flag indicating that the hostname can be modified by the SDK client.
-     *
-     * If the hostname is mutable the SDK clients may modify any part of the hostname based
-     * on the requirements of the API (e.g. adding or removing content in the hostname).
-     *
-     * As an example Amazon S3 Client prefixing "bucketname" to the hostname or changing th hostname
-     * service name component from "s3" to "s3-accespoint.dualstack." requires mutable hostnames.
-     *
-     * Care should be taken when setting this flag and providing a custom endpoint. If the hostname
-     * is expected to be mutable and the client cannot modify the endpoint correctly, the operation
-     * will likely fail.
-     */
-    val isHostnameImmutable: Boolean = false,
-
-    /**
-     * The service name that should be used for signing requests to this endpoint. This overrides the default
-     * signing name used by an SDK client.
-     */
-    val signingName: String? = null,
-
-    /**
-     * The region that should be used for signing requests to this endpoint. This overrides the default
-     * signing region used by an SDK client.
-     */
-    val signingRegion: String? = null,
+  /** The endpoint clients will use to make API calls
+   * to e.g. "{service-id}.{region}.amazonaws.com"
+   */
+   val endpoint: Endpoint,
+   
+   /**
+    * Custom signing constraints
+    */
+   val credentialScope: CredentialScope? = null
 )
 
 ```
-
-
 
 
 ```kt
 /**
  * Resolves endpoints for a given service and region
  */
-interface EndpointResolver {
+fun interface AwsEndpointResolver {
 
     /**
-     * Resolve the [Endpoint] for the given service and region
+     * Resolve the [AwsEndpoint] for the given service and region
      */
-    suspend fun resolve(service: String, region: String): Endpoint
+    suspend fun resolve(service: String, region: String): AwsEndpoint
 }
 ```
 
@@ -129,8 +97,8 @@ endpoints that apply to the service being generated will look like:
 
 import aws.sdk.kotlin.runtime.endpoint.internal.*
 
-internal class DefaultEndpointResolver : EndpointResolver {
-    override suspend fun resolve(service: String, region: String): Endpoint {
+internal class DefaultEndpointResolver : AwsEndpointResolver {
+    override suspend fun resolve(service: String, region: String): AwsEndpoint {
         return resolveEndpoint(servicePartitions, region) ?: throw AwsClientException("cannot resolve endpoint for ${service} in the ${region} region")
     }
 }
@@ -339,7 +307,7 @@ boilerplate over the internal functions allowing for the runtime to be re-used a
 ```kt
 
 // internal functions to be used by services to construct their generated resolver
-fun resolveEndpoint(partitions: List<Partition>, region: String) Endpoint? {
+fun resolveEndpoint(partitions: List<Partition>, region: String) AwsEndpoint? {
     TODO("use partitions to resolve the endpoint")
 }
 ```
@@ -349,5 +317,6 @@ NOTE: the algorithm for resolving an endpoint is described in AWSRegionsAndEndpo
 
 # Revision history
 
+* 10/26/2021 - Refactor endpoint type to re-use smithy-kotlin runtime type
 * 6/3/2021 - Initial upload
 * 2/3/2021 - Created
