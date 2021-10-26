@@ -291,10 +291,10 @@ class PresignerGenerator : KotlinIntegration {
         presignConfigFnVisitor: PresignConfigFnVisitor,
         contextMap: Map<String, Any?>
     ) {
-        writer.withBlock("private suspend fun $requestConfigFnName(input: $requestTypeName, durationSeconds: ULong) : PresignedRequestConfig {", "}\n") {
+        writer.withBlock("private suspend fun $requestConfigFnName(input: $requestTypeName, durationSeconds: Long) : PresignedRequestConfig {", "}\n") {
 
             writer.declareSection(PresignConfigFnSection, contextMap) {
-                write("require(durationSeconds > 0u) { \"duration must be greater than zero\" }")
+                write("require(durationSeconds > 0) { \"duration must be greater than zero\" }")
                 write("val httpRequestBuilder = #T().serialize(ExecutionContext.build {  }, input)", serializerSymbol)
 
                 writer.withBlock("return PresignedRequestConfig(", ")") {
@@ -322,8 +322,8 @@ class PresignerGenerator : KotlinIntegration {
             write("@param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.")
             write("@return The [HttpRequest] that can be invoked within the specified time window.")
         }
-        // FIXME ~ Replace or add additional function, swap ULong type for kotlin.time.Duration when type becomes stable
-        writer.withBlock("suspend fun $requestTypeName.presign(config: $serviceClientTypeName.Config, durationSeconds: ULong): HttpRequest {", "}\n") {
+        // FIXME ~ Replace or add additional function, swap Long type for kotlin.time.Duration when type becomes stable
+        writer.withBlock("suspend fun $requestTypeName.presign(config: $serviceClientTypeName.Config, durationSeconds: Long): HttpRequest {", "}\n") {
             withBlock("val presignConfig = $presignConfigTypeName {", "}") {
                 write("credentialsProvider = config.credentialsProvider")
                 write("endpointResolver = config.endpointResolver")
@@ -340,8 +340,8 @@ class PresignerGenerator : KotlinIntegration {
             write("@param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.")
             write("@return The [HttpRequest] that can be invoked within the specified time window.")
         }
-        // FIXME ~ Replace or add additional function, swap ULong type for kotlin.time.Duration when type becomes stable
-        writer.withBlock("suspend fun $requestTypeName.presign(presignConfig: ServicePresignConfig, durationSeconds: ULong): HttpRequest {", "}\n") {
+        // FIXME ~ Replace or add additional function, swap Long type for kotlin.time.Duration when type becomes stable
+        writer.withBlock("suspend fun $requestTypeName.presign(presignConfig: ServicePresignConfig, durationSeconds: Long): HttpRequest {", "}\n") {
             write("return createPresignedRequest(presignConfig, $requestConfigFnName(this, durationSeconds))")
         }
     }

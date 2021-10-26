@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.8.0-alpha] - 10/21/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Breaking changes
+* require a resolved configuration [#351](https://github.com/awslabs/aws-sdk-kotlin/pull/351)
+
+### New features
+* detect region from active AWS profile [#344](https://github.com/awslabs/aws-sdk-kotlin/pull/344)
+* ec2 imds region provider [#341](https://github.com/awslabs/aws-sdk-kotlin/pull/341)
+* Add STS assume role and web identity credential providers [#352](https://github.com/awslabs/aws-sdk-kotlin/pull/352)
+* ECS credential provider [#353](https://github.com/awslabs/aws-sdk-kotlin/pull/353)
+* ec2 credentials provider [#348](https://github.com/awslabs/aws-sdk-kotlin/pull/348)
+
+### Fixes
+* use wrapped response when deserializing modeled exceptions [#358](https://github.com/awslabs/aws-sdk-kotlin/pull/358)
+* switch from ULong to Long in public presigner API for better java interop [#359](https://github.com/awslabs/aws-sdk-kotlin/pull/359)
+
+### Misc
+* Bump Kotlin and Dokka versions to latest release [#360](https://github.com/awslabs/aws-sdk-kotlin/pull/360)
+* update aws models [#347](https://github.com/awslabs/aws-sdk-kotlin/pull/347)
+* add docs for enabling logging in unit tests [#339](https://github.com/awslabs/aws-sdk-kotlin/pull/339)
+
+
 ## [0.7.0-alpha] - 10/14/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
