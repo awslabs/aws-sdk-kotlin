@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.http
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.util.*
+import kotlin.jvm.JvmInline
 
 internal const val AWS_EXECUTION_ENV = "AWS_EXECUTION_ENV"
 internal const val AWS_APP_ID_ENV = "AWS_SDK_UA_APP_ID"
@@ -112,9 +113,8 @@ internal fun loadAwsUserAgentMetadataFromEnvironment(platform: PlatformProvider,
     )
 }
 
-// FIXME - ktlint doesn't like value classes...need to update to 0.42
-// @JvmInline
-internal class AdditionalMetadata(private val extras: Map<String, String>) {
+@JvmInline
+internal value class AdditionalMetadata(private val extras: Map<String, String>) {
     override fun toString(): String = extras.entries.joinToString(separator = " ") { entry ->
         when (entry.value.lowercase()) {
             "true" -> "md/${entry.key}"
