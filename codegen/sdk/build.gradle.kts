@@ -485,7 +485,7 @@ tasks.create("syncModels") {
 
         // generate warnings at the end so they are more visible
         if (orphaned.isNotEmpty() || newSources.isNotEmpty()) {
-            println("Warnings:\n\n")
+            println("\nWarnings:")
         }
 
         // models with no upstream source in aws-models
