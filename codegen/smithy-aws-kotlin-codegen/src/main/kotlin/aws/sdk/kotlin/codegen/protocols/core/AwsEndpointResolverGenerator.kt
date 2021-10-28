@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.codegen.protocols.core
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.endpointPrefix
 import software.amazon.smithy.kotlin.codegen.core.*
@@ -20,14 +19,14 @@ import java.util.*
  * Generates a per/service endpoint resolver (internal to the generated SDK) using endpoints.json
  * @param endpointData Parsed endpoints.json [ObjectNode]
  */
-class EndpointResolverGenerator(private val endpointData: ObjectNode) {
+class AwsEndpointResolverGenerator(private val endpointData: ObjectNode) {
     companion object {
         const val typeName = "DefaultEndpointResolver"
     }
 
     // Symbols which should be imported
     private val endpointResolverSymbols = setOf(
-        AwsRuntimeTypes.Endpoint.Internal.CredentialScope,
+        AwsRuntimeTypes.Endpoint.CredentialScope,
         AwsRuntimeTypes.Endpoint.Internal.EndpointDefinition,
         AwsRuntimeTypes.Endpoint.Internal.Partition,
         AwsRuntimeTypes.Endpoint.Internal.resolveEndpoint
@@ -41,13 +40,13 @@ class EndpointResolverGenerator(private val endpointData: ObjectNode) {
     }
 
     private fun renderResolver(writer: KotlinWriter) {
-        writer.addImport(AwsRuntimeTypes.Endpoint.EndpointResolver)
-        writer.addImport(AwsRuntimeTypes.Endpoint.Endpoint)
+        writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpointResolver)
+        writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpoint)
         writer.addImport(AwsRuntimeTypes.Endpoint.Internal.resolveEndpoint)
-        writer.addImport("ClientException", AwsKotlinDependency.AWS_CORE)
+        writer.addImport(AwsRuntimeTypes.Core.ClientException)
 
-        writer.openBlock("internal class $typeName : EndpointResolver {", "}") {
-            writer.openBlock("override suspend fun resolve(service: String, region: String): Endpoint {", "}") {
+        writer.openBlock("internal class $typeName : AwsEndpointResolver {", "}") {
+            writer.openBlock("override suspend fun resolve(service: String, region: String): AwsEndpoint {", "}") {
                 writer.write("return resolveEndpoint(servicePartitions, region) ?: throw ClientException(#S)", "unable to resolve endpoint for region: \$region")
             }
         }

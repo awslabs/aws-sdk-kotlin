@@ -8,9 +8,8 @@ package aws.sdk.kotlin.runtime.config.imds
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
 import aws.sdk.kotlin.runtime.config.resolve
-import aws.sdk.kotlin.runtime.endpoint.Endpoint
-import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
-import aws.smithy.kotlin.runtime.http.Url
+import aws.smithy.kotlin.runtime.http.operation.Endpoint
+import aws.smithy.kotlin.runtime.http.operation.EndpointResolver
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
 
@@ -25,7 +24,7 @@ internal class ImdsEndpointResolver(
     private val resolvedEndpoint = asyncLazy(::doResolveEndpoint)
     private val activeProfile = asyncLazy { loadActiveAwsProfile(platformProvider) }
 
-    override suspend fun resolve(service: String, region: String): Endpoint = resolvedEndpoint.get()
+    override suspend fun resolve(): Endpoint = resolvedEndpoint.get()
 
     private suspend fun doResolveEndpoint(): Endpoint = when (endpointConfiguration) {
         is EndpointConfiguration.Custom -> endpointConfiguration.endpoint
@@ -63,7 +62,4 @@ internal class ImdsEndpointResolver(
 }
 
 // Parse a string as a URL and convert to an endpoint
-internal fun String.toEndpoint(): Endpoint {
-    val url = Url.parse(this)
-    return Endpoint(url.host, url.scheme.protocolName, url.port)
-}
+internal fun String.toEndpoint(): Endpoint = Endpoint(this)

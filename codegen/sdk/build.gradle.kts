@@ -10,6 +10,7 @@ import software.amazon.smithy.gradle.tasks.SmithyBuild
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.util.*
+import java.nio.file.Paths
 import kotlin.streams.toList
 
 description = "AWS SDK codegen tasks"
@@ -56,13 +57,45 @@ fun getProperty(name: String): String? {
 
 // Represents information needed to generate a smithy projection JSON stanza
 data class AwsService(
+    /**
+     * The service shape ID name
+     */
     val name: String,
+    /**
+     * The package name to use for the service when generating smithy-build.json
+     */
     val packageName: String,
+
+    /**
+     * The package version (this should match the sdk version of the project)
+     */
     val packageVersion: String,
+
+    /**
+     * The path to the model file in aws-sdk-kotlin
+     */
     val modelFile: File,
+
+    /**
+     * The name of the projection to generate
+     */
     val projectionName: String,
+
+    /**
+     * The sdkId value from the service trait
+     */
     val sdkId: String,
-    val description: String? = null
+
+    /**
+     * The model version from the service shape
+     */
+    val version: String,
+
+    /**
+     * A description of the service (taken from the title trait)
+     */
+    val description: String? = null,
+
 )
 
 
@@ -146,14 +179,19 @@ val discoveredServices: List<AwsService> by lazy { discoverServices() }
 // The root namespace prefix for SDKs
 val sdkPackageNamePrefix = "aws.sdk.kotlin.services."
 
-// Returns an AwsService model for every JSON file found in in directory defined by property `modelsDirProp`
-fun discoverServices(): List<AwsService> {
+/**
+ * Returns an AwsService model for every JSON file found in directory defined by property `modelsDirProp`
+ * @param applyFilters Flag indicating if models should be filtered to respect the `aws.services` and `aws.protocol`
+ * membership tests
+ */
+fun discoverServices(applyFilters: Boolean = true): List<AwsService> {
     val modelsDir: String by project
     val serviceMembership = parseMembership(getProperty("aws.services"))
     val protocolMembership = parseMembership(getProperty("aws.protocols"))
 
     return fileTree(project.file(modelsDir))
         .filter { file ->
+            if (!applyFilters) return@filter true
             val svcName = file.name.split(".").first()
             val include = serviceMembership.isMember(svcName)
 
@@ -176,6 +214,7 @@ fun discoverServices(): List<AwsService> {
             file to service
         }
         .filter { (file, service) ->
+            if (!applyFilters) return@filter true
             val protocol = service.protocol()
             val include = protocolMembership.isMember(protocol)
 
@@ -202,6 +241,7 @@ fun discoverServices(): List<AwsService> {
                 modelFile = file,
                 projectionName = name + "." + version.toLowerCase(),
                 sdkId = serviceApi.sdkId,
+                version = service.version,
                 description = description
             )
         }
@@ -337,4 +377,138 @@ tasks.create("bootstrap") {
 
     dependsOn(tasks["generateSdk"])
     finalizedBy(tasks["stageSdks"])
+}
+
+
+/**
+ * Represents a type for a model that is sourced from aws-models
+ */
+data class SourceModel(
+    /**
+     * The path in aws-models to the model file
+     */
+    val path: String,
+    /**
+     * The sdkId trait value from the model
+     */
+    val sdkId: String,
+    /**
+     * The service version from the model
+     */
+    val version: String
+) {
+    /**
+     * The model filename in aws-sdk-kotlin
+     */
+    val destFilename: String
+        get() {
+            val name = sdkId.replace(" ", "").replace("-", "").toLowerCase()
+            return "${name}.${version}.json"
+        }
+}
+
+fun discoverSourceModels(repoPath: String): List<SourceModel> {
+    val root = File(repoPath)
+    val models = root.listFiles()
+        ?.map { Paths.get(it.absolutePath, "smithy", "model.json").toFile() }
+        ?.filter { it.exists() } ?: error("no models found in $root")
+
+
+    return models.map { file ->
+        val model = Model.assembler().addImport(file.absolutePath).assemble().result.get()
+        val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
+        require(services.size == 1) { "Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}" }
+        val service = services.first()
+        val serviceApi = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
+            ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
+
+        SourceModel(file.absolutePath, serviceApi.sdkId, service.version)
+    }
+}
+
+
+fun discoverAwsModelsRepoPath(): String? {
+    val discovered = rootProject.file("../aws-models")
+    if (discovered.exists()) return discovered.absolutePath
+
+    return getProperty("awsModelsDir")?.let { File(it) }?.absolutePath
+}
+
+/**
+ * Synchronize upstream changes from aws-models repository.
+ *
+ * Steps to synchronize:
+ * 1. Clone aws-models if not already cloned
+ * 2. `cd <path/to/aws-models>`
+ * 3. `git pull` to pull down the latest changes
+ * 4. `cd <path/to/aws-sdk-kotlin>`
+ * 5. Run `./gradlew syncAwsModels`
+ * 6. Check in any new models as needed (view warnings generated at end of output)
+ */
+tasks.register("syncAwsModels") {
+    group = "codegen"
+    description = "Sync upstream changes from aws-models repo"
+
+    doLast {
+        println("syncing AWS models")
+        val repoPath = discoverAwsModelsRepoPath() ?: error("Failed to discover path to aws-models. Explicitly set -PawsModelsDir=<path-to-local-repo>")
+        val sourceModelsBySdkId = discoverSourceModels(repoPath).associateBy { it.sdkId }
+
+        val existingModelsBySdkId = discoverServices(applyFilters = false).associateBy { it.sdkId }
+
+        val existingSdkIdSet = existingModelsBySdkId.values.map { it.sdkId }.toSet()
+        val sourceSdkIdSet = sourceModelsBySdkId.values.map { it.sdkId }.toSet()
+
+        // sync known existing models
+        val pairs = existingModelsBySdkId.values.mapNotNull { existing ->
+            sourceModelsBySdkId[existing.sdkId]?.let { source ->  Pair(source, existing)}
+        }
+
+        val modelsDir = project.file("aws-models")
+
+        pairs.forEach { (source, existing) ->
+            // ensure we don't accidentally take a new API version
+            if (source.version != existing.version) error("upstream version of ${source.path} does not match destination of existing model version ${existing.modelFile.name}")
+
+            println("syncing ${existing.modelFile.name} from ${source.path}")
+            copy {
+                from(source.path)
+                into(modelsDir)
+                rename { existing.modelFile.name }
+            }
+        }
+
+        val orphaned = existingSdkIdSet - sourceSdkIdSet
+        val newSources = sourceSdkIdSet - existingSdkIdSet
+
+        // sync new models
+        newSources.forEach { sdkId ->
+            val source = sourceModelsBySdkId[sdkId]!!
+            val dest = Paths.get(modelsDir.absolutePath, source.destFilename).toFile()
+            println("syncing new model ${source.sdkId} to $dest")
+            copy {
+                from(source.path)
+                into(modelsDir)
+                rename { source.destFilename }
+            }
+        }
+
+
+        // generate warnings at the end so they are more visible
+        if (orphaned.isNotEmpty() || newSources.isNotEmpty()) {
+            println("\nWarnings:")
+        }
+
+        // models with no upstream source in aws-models
+        orphaned.forEach { sdkId ->
+            val existing = existingModelsBySdkId[sdkId]!!
+            logger.warn("Cannot find a model file for ${existing.modelFile.name} (sdkId=${existing.sdkId}) but it exists in aws-sdk-kotlin!")
+        }
+
+        // new since last sync
+        newSources.forEach { sdkId ->
+            val source = sourceModelsBySdkId[sdkId]!!
+            logger.warn("${source.path} (sdkId=$sdkId) is new to aws-models since the last sync!")
+        }
+    }
 }
