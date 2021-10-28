@@ -70,6 +70,10 @@ object AwsRuntimeTypes {
         val withPayload = runtimeSymbol("withPayload", AwsKotlinDependency.AWS_HTTP)
         val setAseErrorMetadata = runtimeSymbol("setAseErrorMetadata", AwsKotlinDependency.AWS_HTTP)
 
+        object Middleware {
+            val GlacierBodyChecksum = runtimeSymbol("GlacierBodyChecksum", AwsKotlinDependency.AWS_HTTP, "middleware")
+        }
+
         object Retries {
             val AwsDefaultRetryPolicy = runtimeSymbol("AwsDefaultRetryPolicy", AwsKotlinDependency.AWS_HTTP, "retries")
         }
