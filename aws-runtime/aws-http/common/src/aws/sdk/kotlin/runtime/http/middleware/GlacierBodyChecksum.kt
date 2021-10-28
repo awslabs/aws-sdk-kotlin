@@ -36,7 +36,6 @@ public class GlacierBodyChecksum(config: Config) : Feature {
                 set("X-Amz-Sha256-Tree-Hash", hashes.sha256Tree.encodeToHex())
             }
 
-
             next.call(req)
         }
     }

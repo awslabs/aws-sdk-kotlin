@@ -9,8 +9,6 @@ import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.addImport
-import software.amazon.smithy.kotlin.codegen.core.defaultName
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.isStreaming
