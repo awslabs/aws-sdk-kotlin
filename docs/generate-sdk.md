@@ -6,7 +6,7 @@ learning how AWS SDKs work internally, or just experimentation.
 ### NOTE
 
 This process is not necessary to use an AWS SDK, as one can simply depend on the artifacts available in 
-[Maven Central](https://search.maven.org/search?q=aws.sdk.kotlin).  See the [usage doc](use-aws-sdk.md) for details.
+[Maven Central](https://search.maven.org/search?q=aws.sdk.kotlin).  See the [usage doc](sdk-usage.md) for details.
 
 ## Prerequisites
 * Git
