@@ -37,6 +37,16 @@ internal const val DEFAULT_MAX_RETRIES: UInt = 3u
 private const val SERVICE = "imds"
 
 /**
+ * Represents a generic client that can fetch instance metadata.
+ */
+public interface InstanceMetadataProvider : Closeable {
+    /**
+     * Gets the specified instance metadata value by the given path.
+     */
+    public suspend fun get(path: String): String
+}
+
+/**
  * IMDSv2 Client
  *
  * This client supports fetching tokens, retrying failures, and token caching according to the specified TTL.
@@ -46,7 +56,7 @@ private const val SERVICE = "imds"
  * for more information.
  */
 @OptIn(ExperimentalTime::class)
-public class ImdsClient private constructor(builder: Builder) : Closeable {
+public class ImdsClient private constructor(builder: Builder) : InstanceMetadataProvider {
     public constructor() : this(Builder())
 
     private val logger = Logger.getLogger<ImdsClient>()
@@ -74,7 +84,7 @@ public class ImdsClient private constructor(builder: Builder) : Closeable {
             resolver = ImdsEndpointResolver(platformProvider, endpointConfiguration)
         },
         UserAgent.create {
-            metadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
+            staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
         },
         TokenMiddleware.create {
             httpClient = this@ImdsClient.httpClient
@@ -102,7 +112,7 @@ public class ImdsClient private constructor(builder: Builder) : Closeable {
      * val amiId = client.get("/latest/meta-data/ami-id")
      * ```
      */
-    public suspend fun get(path: String): String {
+    public override suspend fun get(path: String): String {
         val op = SdkHttpOperation.build<Unit, String> {
             serializer = UnitSerializer
             deserializer = object : HttpDeserialize<String> {
