@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http
 
+import aws.sdk.kotlin.runtime.http.operation.CustomUserAgentMetadata
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.smithy.kotlin.runtime.util.OsFamily
 import io.kotest.matchers.string.shouldContain
@@ -26,8 +27,11 @@ class AwsUserAgentMetadataTest {
         val sdkMeta = SdkMetadata("kotlin", apiMeta.version)
         val osMetadata = OsMetadata(OsFamily.Linux, "ubuntu-20.04")
         val langMeta = LanguageMetadata("1.4.31", mapOf("jvmVersion" to "1.11"))
-        val ua = AwsUserAgentMetadata(sdkMeta, apiMeta, osMetadata, langMeta)
-        val expected = "aws-sdk-kotlin/1.2.3 api/test-service/1.2.3 os/linux/ubuntu-20.04 lang/kotlin/1.4.31 md/jvmVersion/1.11"
+        val custom = CustomUserAgentMetadata().apply {
+            add("foo", "bar")
+        }
+        val ua = AwsUserAgentMetadata(sdkMeta, apiMeta, osMetadata, langMeta, customMetadata = custom)
+        val expected = "aws-sdk-kotlin/1.2.3 api/test-service/1.2.3 os/linux/ubuntu-20.04 lang/kotlin/1.4.31 md/jvmVersion/1.11 md/foo/bar"
         assertEquals(expected, ua.xAmzUserAgent)
     }
 
@@ -79,36 +83,6 @@ class AwsUserAgentMetadataTest {
         testEnvironments.forEach { test ->
             val actual = loadAwsUserAgentMetadataFromEnvironment(test.provider, ApiMetadata("Test Service", "1.2.3"))
             actual.xAmzUserAgent.shouldContain(test.expected)
-        }
-    }
-
-    @Test
-    fun testCustomMetadata() {
-        val provider = TestPlatformProvider()
-        val metadata = loadAwsUserAgentMetadataFromEnvironment(provider, ApiMetadata("Test Service", "1.2.3"))
-        val customMetadata = CustomUserAgentMetadata()
-
-        customMetadata.add("foo", "bar")
-        customMetadata.add("truthy", "true")
-        customMetadata.add("falsey", "false")
-
-        val configMetadata = ConfigMetadata("retry-mode", "standard")
-        customMetadata.add(configMetadata)
-
-        customMetadata.add(FeatureMetadata("s3-transfer", "1.2.3"))
-        customMetadata.add(FeatureMetadata("waiter"))
-
-        val actual = metadata.copy(customMetadata = customMetadata).xAmzUserAgent
-
-        listOf(
-            "md/foo/bar",
-            "md/truthy",
-            "md/falsey/false",
-            "cfg/retry-mode/standard",
-            "ft/s3-transfer/1.2.3",
-            "ft/waiter"
-        ).forEach { partial ->
-            actual.shouldContain(partial)
         }
     }
 }

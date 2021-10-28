@@ -6,7 +6,9 @@
 package aws.sdk.kotlin.runtime.http
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.client.ExecutionContext
+import aws.sdk.kotlin.runtime.http.operation.ConfigMetadata
+import aws.sdk.kotlin.runtime.http.operation.CustomUserAgentMetadata
+import aws.sdk.kotlin.runtime.http.operation.FeatureMetadata
 import aws.smithy.kotlin.runtime.util.*
 import kotlin.jvm.JvmInline
 
@@ -45,7 +47,7 @@ public data class AwsUserAgentMetadata(
      * New-style user agent header value for `x-amz-user-agent`
      */
     val xAmzUserAgent: String
-        get() = buildString {
+        get() {
             /*
                ABNF for the user agent:
                ua-string =
@@ -60,32 +62,35 @@ public data class AwsUserAgentMetadata(
                    *(framework-metadata RWS)
                    [appId]
              */
+            val ua = mutableListOf<String>()
 
             val isInternal = customMetadata?.extras?.remove("internal")
             if (isInternal != null) {
-                append("md/internal ")
+                ua.add("md/internal")
             }
 
-            append("$sdkMetadata ")
-            append("$apiMetadata ")
-            append("$osMetadata ")
-            append("$languageMetadata")
-            execEnvMetadata?.let { append(" $it") }
+            ua.add("$sdkMetadata")
+            ua.add("$apiMetadata")
+            ua.add("$osMetadata")
+            ua.add("$languageMetadata")
+            execEnvMetadata?.let { ua.add("$it") }
 
             val features = customMetadata?.typedExtras?.filterIsInstance<FeatureMetadata>()
-            features?.forEach { append(" $it") }
+            features?.forEach { ua.add("$it") }
 
             val config = customMetadata?.typedExtras?.filterIsInstance<ConfigMetadata>()
-            config?.forEach { append(" $it") }
+            config?.forEach { ua.add("$it") }
 
-            frameworkMetadata?.let { append(" $it") }
-            appId?.let { append(" app/$it") }
+            frameworkMetadata?.let { ua.add("$it") }
+            appId?.let { ua.add("app/$it") }
 
             customMetadata?.extras?.let {
                 val wrapper = AdditionalMetadata(it)
-                append("$wrapper")
+                ua.add("$wrapper")
             }
-        }.trimEnd()
+
+            return ua.joinToString(separator = " ")
+        }
 
     /**
      * Legacy user agent header value for `UserAgent`
@@ -113,12 +118,15 @@ internal fun loadAwsUserAgentMetadataFromEnvironment(platform: PlatformProvider,
     )
 }
 
+/**
+ * Wrapper around additional metadata kv-pairs that handles formatting
+ */
 @JvmInline
 internal value class AdditionalMetadata(private val extras: Map<String, String>) {
     override fun toString(): String = extras.entries.joinToString(separator = " ") { entry ->
         when (entry.value.lowercase()) {
             "true" -> "md/${entry.key}"
-            else -> "md/${entry.key}/${entry.value.encodeUaToken()}"
+            else -> "md/${entry.key.encodeUaToken()}/${entry.value.encodeUaToken()}"
         }
     }
 }
@@ -128,6 +136,7 @@ internal value class AdditionalMetadata(private val extras: Map<String, String>)
  * @property name The SDK (language) name
  * @property version The SDK version
  */
+@InternalSdkApi
 public data class SdkMetadata(val name: String, val version: String) {
     override fun toString(): String = "aws-sdk-$name/$version"
 }
@@ -138,6 +147,7 @@ public data class SdkMetadata(val name: String, val version: String) {
  * @property version The version of the client (note this may be the same as [SdkMetadata.version] for SDK's
  * that don't independently version clients from one another.
  */
+@InternalSdkApi
 public data class ApiMetadata(val serviceId: String, val version: String) {
     override fun toString(): String {
         val formattedServiceId = serviceId.replace(" ", "-").lowercase()
@@ -148,6 +158,7 @@ public data class ApiMetadata(val serviceId: String, val version: String) {
 /**
  * Operating system metadata
  */
+@InternalSdkApi
 public data class OsMetadata(val family: OsFamily, val version: String? = null) {
     override fun toString(): String {
         // os-family = windows / linux / macos / android / ios / other
@@ -164,6 +175,7 @@ public data class OsMetadata(val family: OsFamily, val version: String? = null) 
  * @property version The kotlin version in use
  * @property extras Additional key value pairs appropriate for the language/runtime (e.g.`jvmVm=OpenJdk`, etc)
  */
+@InternalSdkApi
 public data class LanguageMetadata(
     val version: String = KotlinVersion.CURRENT.toString(),
     // additional metadata key/value pairs
@@ -185,37 +197,9 @@ internal expect fun platformLanguageMetadata(): LanguageMetadata
  * Execution environment metadata
  * @property name The execution environment name (e.g. "lambda")
  */
+@InternalSdkApi
 public data class ExecutionEnvMetadata(val name: String) {
     override fun toString(): String = "exec-env/${name.encodeUaToken()}"
-}
-
-/**
- * Marker interface for addition of classified metadata types (e.g. [ConfigMetadata] or [FeatureMetadata]).
- */
-@InternalSdkApi
-public sealed interface TypedUserAgentMetadata
-
-/**
- * Feature metadata
- * @property name The name of the feature
- * @property version Optional version of the feature (if independently versioned)
- */
-@InternalSdkApi
-public data class FeatureMetadata(val name: String, val version: String? = null) : TypedUserAgentMetadata {
-    override fun toString(): String = if (version != null) "ft/$name/$version" else "ft/$name"
-}
-
-/**
- * Configuration metadata
- * @property name The configuration property name (e.g. "retry-mode"
- * @property value The property value (e.g. "standard")
- */
-@InternalSdkApi
-public data class ConfigMetadata(val name: String, val value: String) : TypedUserAgentMetadata {
-    override fun toString(): String = when (value.lowercase()) {
-        "true" -> "cfg/$name"
-        else -> "cfg/$name/$value"
-    }
 }
 
 /**
@@ -231,12 +215,10 @@ public data class FrameworkMetadata(
     internal companion object {
         internal fun fromEnvironment(provider: PlatformEnvironProvider): FrameworkMetadata? {
             val kvPair = provider.getProperty(FRAMEWORK_METADATA_PROP) ?: provider.getenv(FRAMEWORK_METADATA_ENV)
-            return if (kvPair != null) {
+            return kvPair?.let {
                 val kv = kvPair.split(':', limit = 2)
                 check(kv.size == 2) { "Invalid value for FRAMEWORK_METADATA: $kvPair; must be of the form `name:version`" }
                 FrameworkMetadata(kv[0], kv[1])
-            } else {
-                null
             }
         }
     }
@@ -271,35 +253,3 @@ private fun String.encodeUaToken(): String {
         }
     }
 }
-
-/**
- * Operation context element for adding additional metadata to the `User-Agent` header string.
- *
- * Access via extension property [ExecutionContext.customUserAgentMetadata]
- */
-public class CustomUserAgentMetadata {
-    internal val extras: MutableMap<String, String> = mutableMapOf()
-    internal val typedExtras: MutableList<TypedUserAgentMetadata> = mutableListOf()
-
-    internal companion object {
-        public val ContextKey: AttributeKey<CustomUserAgentMetadata> = AttributeKey("CustomUserAgentMetadata")
-    }
-
-    /**
-     * Add additional key-value pairs of metadata to the request. These will show up as `md/key/value` when sent.
-     */
-    public fun add(key: String, value: String) {
-        extras[key] = value
-    }
-
-    @InternalSdkApi
-    public fun add(metadata: TypedUserAgentMetadata) {
-        typedExtras.add(metadata)
-    }
-}
-
-/**
- * Get the [CustomUserAgentMetadata] instance to append additional context to the generated `User-Agent` string.
- */
-public val ExecutionContext.customUserAgentMetadata: CustomUserAgentMetadata
-    get() = computeIfAbsent(CustomUserAgentMetadata.ContextKey) { CustomUserAgentMetadata() }

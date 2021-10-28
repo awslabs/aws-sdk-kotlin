@@ -6,8 +6,8 @@
 package aws.sdk.kotlin.runtime.http.middleware
 
 import aws.sdk.kotlin.runtime.http.ApiMetadata
-import aws.sdk.kotlin.runtime.http.customUserAgentMetadata
 import aws.sdk.kotlin.runtime.http.loadAwsUserAgentMetadataFromEnvironment
+import aws.sdk.kotlin.runtime.http.operation.customUserAgentMetadata
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers

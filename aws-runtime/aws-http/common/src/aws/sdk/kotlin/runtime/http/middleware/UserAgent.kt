@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.http.middleware
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.http.AwsUserAgentMetadata
-import aws.sdk.kotlin.runtime.http.CustomUserAgentMetadata
+import aws.sdk.kotlin.runtime.http.operation.CustomUserAgentMetadata
 import aws.smithy.kotlin.runtime.http.Feature
 import aws.smithy.kotlin.runtime.http.FeatureKey
 import aws.smithy.kotlin.runtime.http.HttpClientFeatureFactory
@@ -38,7 +38,7 @@ public class UserAgent(
 
         override fun create(block: Config.() -> Unit): UserAgent {
             val config = Config().apply(block)
-            val metadata = requireNotNull(config.staticMetadata) { "metadata is required" }
+            val metadata = requireNotNull(config.staticMetadata) { "staticMetadata is required" }
             return UserAgent(metadata)
         }
     }
