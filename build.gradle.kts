@@ -122,7 +122,11 @@ if (
     }
 }
 
-val ktlint: Configuration by configurations.creating
+val ktlint: Configuration by configurations.creating {
+    attributes {
+        attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+    }
+}
 val ktlintVersion: String by project
 dependencies {
     ktlint("com.pinterest:ktlint:$ktlintVersion")

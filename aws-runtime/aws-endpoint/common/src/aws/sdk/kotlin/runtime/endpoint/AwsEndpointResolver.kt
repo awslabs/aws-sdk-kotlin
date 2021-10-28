@@ -8,13 +8,13 @@ package aws.sdk.kotlin.runtime.endpoint
 /**
  * Resolves endpoints for a given service and region
  */
-public interface EndpointResolver {
+public fun interface AwsEndpointResolver {
 
     /**
-     * Resolve the [Endpoint] for the given service and region
+     * Resolve the [AwsEndpoint] for the given service and region
      * @param service the service id associated with the desired endpoint
      * @param region the region associated with the desired endpoint
-     * @return an [Endpoint] that can be used to connect to the service
+     * @return an [AwsEndpoint] that can be used to connect to the service
      */
-    public suspend fun resolve(service: String, region: String): Endpoint
+    public suspend fun resolve(service: String, region: String): AwsEndpoint
 }
