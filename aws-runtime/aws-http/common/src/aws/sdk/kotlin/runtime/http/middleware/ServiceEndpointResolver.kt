@@ -51,12 +51,14 @@ public class ServiceEndpointResolver(
 
             val region = req.context[AwsClientOption.Region]
             val endpoint = resolver.resolve(serviceId, region)
-            val hostPrefix = req.context.getOrNull(HttpOperationContext.HostPrefix) ?: ""
-            val hostname = "${hostPrefix}${endpoint.hostname}"
             req.subject.url.scheme = Protocol.parse(endpoint.protocol)
-            req.subject.url.host = hostname
-            req.subject.url.port = endpoint.port
-            req.subject.headers["Host"] = hostname
+            if (req.subject.url.host == "") {
+                val hostPrefix = req.context.getOrNull(HttpOperationContext.HostPrefix) ?: ""
+                val hostname = "${hostPrefix}${endpoint.hostname}"
+                req.subject.url.host = hostname
+                req.subject.url.port = endpoint.port
+                req.subject.headers["Host"] = hostname
+            }
 
             endpoint.signingName?.let {
                 if (it.isNotBlank()) req.context[AuthAttributes.SigningService] = it
