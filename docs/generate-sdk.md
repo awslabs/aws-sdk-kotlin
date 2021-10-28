@@ -39,7 +39,7 @@ would be `cloudformation`.  The date and json extension are removed.
 
 ### Compile and test the generated SDK
 ```
-./gradlew test jar
+./gradlew :services:dynamodb:build
 ```
 Once this completes a compiled SDK for the AWS DynamoDB service has been generated.
 
