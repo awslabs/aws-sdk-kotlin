@@ -13,7 +13,7 @@ import kotlin.math.min
 
 @Suppress("UNUSED_PARAMETER")
 public class GlacierBodyChecksum(config: Config) : Feature {
-    public class Config { }
+    public class Config
 
     public companion object Feature : HttpClientFeatureFactory<Config, GlacierBodyChecksum> {
         override val key: FeatureKey<GlacierBodyChecksum> = FeatureKey("GlacierBodyChecksum")
