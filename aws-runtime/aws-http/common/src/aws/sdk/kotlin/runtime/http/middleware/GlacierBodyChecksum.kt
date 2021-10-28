@@ -34,11 +34,6 @@ public class GlacierBodyChecksum(config: Config) : Feature {
             req.subject.headers.apply {
                 set("X-Amz-Content-Sha256", hashes.sha256Full.encodeToHex())
                 set("X-Amz-Sha256-Tree-Hash", hashes.sha256Tree.encodeToHex())
-
-                println("********** ********** During checksum feature!! ********** **********")
-                println("Headers = {")
-                entries().map { (k, v) -> "  $k -> $v" }.forEach(::println)
-                println("}")
             }
 
 

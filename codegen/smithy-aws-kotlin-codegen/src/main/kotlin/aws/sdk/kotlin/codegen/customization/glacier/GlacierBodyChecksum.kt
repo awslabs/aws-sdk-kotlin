@@ -38,9 +38,7 @@ public class GlacierBodyChecksum : KotlinIntegration {
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean {
             val input = op.input.getOrNull()?.let { ctx.model.expectShape<StructureShape>(it) }
-            return (input?.members()?.any { it.isStreaming || ctx.model.expectShape(it.target).isStreaming } == true).also {
-                println("GlacierBodyChecksum enabled for ${op.defaultName()}? $it")
-            }
+            return input?.members()?.any { it.isStreaming || ctx.model.expectShape(it.target).isStreaming } == true
         }
 
         override fun renderConfigure(writer: KotlinWriter) {
