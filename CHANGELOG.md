@@ -416,7 +416,7 @@
 This is the initial beta release of AWS SDK Kotlin. It represents an early look at the overall API surface.
 
 
-See the [Getting Started Guide](docs/GettingStarted.md) for how to work with beta releases and examples.
+See the [Getting Started Guide](docs/sdk-usage.md) for how to work with beta releases and examples.
 
 
 ### Services in this release

@@ -90,7 +90,7 @@ tasks.dokkaHtmlMultiModule {
     includes.from(
         // NOTE: these get concatenated
         rootProject.file("docs/api/README.md"),
-        rootProject.file("docs/GettingStarted.md")
+        rootProject.file("docs/sdk-usage.md")
     )
 
     val excludeFromDocumentation = listOf(
