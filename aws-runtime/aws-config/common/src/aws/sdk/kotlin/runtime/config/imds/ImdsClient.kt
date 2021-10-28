@@ -97,7 +97,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             resolver = ImdsEndpointResolver(platformProvider, endpointConfiguration)
         },
         UserAgent.create {
-            metadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
+            staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
         },
         TokenMiddleware.create {
             httpClient = this@ImdsClient.httpClient
