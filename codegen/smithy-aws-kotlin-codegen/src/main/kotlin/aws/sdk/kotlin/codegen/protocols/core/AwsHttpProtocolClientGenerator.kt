@@ -98,6 +98,6 @@ open class AwsHttpProtocolClientGenerator(
     private fun renderInternals() {
         val endpointsData = javaClass.classLoader.getResource("aws/sdk/kotlin/codegen/endpoints.json")?.readText() ?: throw CodegenException("could not load endpoints.json resource")
         val endpointData = Node.parse(endpointsData).expectObjectNode()
-        EndpointResolverGenerator(endpointData).render(ctx)
+        AwsEndpointResolverGenerator(endpointData).render(ctx)
     }
 }

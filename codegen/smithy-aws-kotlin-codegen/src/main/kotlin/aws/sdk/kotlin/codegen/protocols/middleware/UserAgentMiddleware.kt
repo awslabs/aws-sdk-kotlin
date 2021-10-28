@@ -33,7 +33,7 @@ class UserAgentMiddleware : HttpFeatureMiddleware() {
     }
 
     override fun renderProperties(writer: KotlinWriter) {
-        // user agent metadata (in general) shouldn't be changing per/request
+        // static metadata that doesn't change per/request
         writer.addImport(uaSymbol)
         writer.addImport(apiMetaSymbol)
         writer.addImport(featSymbol)
@@ -41,6 +41,6 @@ class UserAgentMiddleware : HttpFeatureMiddleware() {
     }
 
     override fun renderConfigure(writer: KotlinWriter) {
-        writer.write("metadata = awsUserAgentMetadata")
+        writer.write("staticMetadata = awsUserAgentMetadata")
     }
 }
