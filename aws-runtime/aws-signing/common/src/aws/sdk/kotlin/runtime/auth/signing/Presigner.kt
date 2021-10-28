@@ -16,7 +16,7 @@ import aws.sdk.kotlin.runtime.crt.path
 import aws.sdk.kotlin.runtime.crt.queryParameters
 import aws.sdk.kotlin.runtime.crt.toCrtHeaders
 import aws.sdk.kotlin.runtime.crt.toSdkHeaders
-import aws.sdk.kotlin.runtime.endpoint.EndpointResolver
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpMethod
@@ -39,7 +39,7 @@ public interface ServicePresignConfig {
     public val region: String
     public val signingName: String
     public val serviceId: String
-    public val endpointResolver: EndpointResolver
+    public val endpointResolver: AwsEndpointResolver
     public val credentialsProvider: CredentialsProvider
 }
 
@@ -85,8 +85,8 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
     val endpoint = serviceConfig.endpointResolver.resolve(serviceConfig.serviceId, serviceConfig.region)
 
     val signingConfig: AwsSigningConfig = AwsSigningConfig.build {
-        region = endpoint.signingRegion ?: serviceConfig.region
-        service = endpoint.signingName ?: serviceConfig.signingName
+        region = endpoint.credentialScope?.region ?: serviceConfig.region
+        service = endpoint.credentialScope?.service ?: serviceConfig.signingName
         credentials = crtCredentials
         signatureType = if (requestConfig.signingLocation == SigningLocation.HEADER) AwsSignatureType.HTTP_REQUEST_VIA_HEADERS else AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
         signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
@@ -96,8 +96,8 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
 
     val unsignedUrl = Url(
         scheme = Protocol.HTTPS,
-        host = endpoint.hostname,
-        port = endpoint.port ?: Protocol.HTTPS.defaultPort,
+        host = endpoint.endpoint.uri.host,
+        port = endpoint.endpoint.uri.port,
         path = requestConfig.path,
         parameters = requestConfig.queryString,
     )
@@ -106,7 +106,7 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
         requestConfig.method.name,
         unsignedUrl.encodedPath,
         aws.sdk.kotlin.crt.http.Headers.build {
-            append("Host", endpoint.hostname)
+            append("Host", endpoint.endpoint.uri.host)
             appendAll(requestConfig.additionalHeaders.toCrtHeaders())
         }
     )
@@ -116,8 +116,8 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
         method = HttpMethod.parse(signedRequest.method),
         url = Url(
             scheme = Protocol.HTTPS,
-            host = endpoint.hostname,
-            port = endpoint.port ?: Protocol.HTTPS.defaultPort,
+            host = endpoint.endpoint.uri.host,
+            port = endpoint.endpoint.uri.port,
             path = signedRequest.path(),
             parameters = signedRequest.queryParameters() ?: QueryParameters.Empty,
             encodeParameters = false,

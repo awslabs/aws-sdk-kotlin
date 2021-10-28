@@ -6,19 +6,17 @@
 package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.AwsServiceException
-import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.client.AwsClientOption
-import aws.sdk.kotlin.runtime.endpoint.Endpoint
 import aws.sdk.kotlin.runtime.http.ApiMetadata
 import aws.sdk.kotlin.runtime.http.AwsUserAgentMetadata
 import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
-import aws.sdk.kotlin.runtime.http.middleware.ServiceEndpointResolver
 import aws.sdk.kotlin.runtime.http.middleware.UserAgent
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.client.SdkLogMode
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
+import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
@@ -78,22 +76,11 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         }
 
         httpClient = sdkHttpClient(engine)
-
-        // validate the override at construction time
-        if (endpointConfiguration is EndpointConfiguration.Custom) {
-            val url = endpointConfiguration.endpoint.toUrl()
-            try {
-                Url.parse(url.toString())
-            } catch (ex: Exception) {
-                throw ConfigurationException("Invalid endpoint configuration: `$url` is not a valid URI", ex)
-            }
-        }
     }
 
     // cached middleware instances
     private val middleware: List<Feature> = listOf(
-        ServiceEndpointResolver.create {
-            serviceId = SERVICE
+        ResolveEndpoint.create {
             resolver = ImdsEndpointResolver(platformProvider, endpointConfiguration)
         },
         UserAgent.create {
@@ -220,13 +207,13 @@ public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
      * IPv4 mode. This is the default unless otherwise specified
      * e.g. `http://169.254.169.254'
      */
-    IPv4(Endpoint("169.254.169.254", "http")),
+    IPv4(Endpoint("http://169.254.169.254")),
 
     /**
      * IPv6 mode
      * e.g. `http://[fd00:ec2::254]`
      */
-    IPv6(Endpoint("[fd00:ec2::254]", "http"));
+    IPv6(Endpoint("http://[fd00:ec2::254]"));
 
     public companion object {
         public fun fromValue(value: String): EndpointMode = when (value.lowercase()) {
@@ -244,13 +231,3 @@ public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
  * @param message The error message
  */
 public class EC2MetadataError(public val statusCode: Int, message: String) : AwsServiceException(message)
-
-private fun Endpoint.toUrl(): Url {
-    val endpoint = this
-    val protocol = Protocol.parse(endpoint.protocol)
-    return Url(
-        scheme = protocol,
-        host = endpoint.hostname,
-        port = endpoint.port ?: protocol.defaultPort,
-    )
-}

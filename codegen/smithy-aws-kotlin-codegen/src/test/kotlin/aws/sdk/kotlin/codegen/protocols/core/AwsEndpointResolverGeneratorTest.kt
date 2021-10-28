@@ -12,12 +12,12 @@ import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.node.Node
 import kotlin.test.Test
 
-class EndpointResolverGeneratorTest {
+class AwsEndpointResolverGeneratorTest {
 
     private fun getGeneratedResolverContents(model: String): String {
         val (ctx, _, _) = model.toSmithyModel().newTestContext("Example", "test")
         val endpointData = Node.parse(endpointsJson).expectObjectNode()
-        EndpointResolverGenerator(endpointData).render(ctx)
+        AwsEndpointResolverGenerator(endpointData).render(ctx)
         ctx.delegator.flushWriters()
         val manifest = ctx.delegator.fileManifest as MockManifest
         return manifest.expectFileString("src/main/kotlin/test/internal/DefaultEndpointResolver.kt")
@@ -163,8 +163,8 @@ private val servicePartitions = listOf(
         val contents = getGeneratedResolverContents(model)
 
         val expected = """
-internal class DefaultEndpointResolver : EndpointResolver {
-    override suspend fun resolve(service: String, region: String): Endpoint {
+internal class DefaultEndpointResolver : AwsEndpointResolver {
+    override suspend fun resolve(service: String, region: String): AwsEndpoint {
         return resolveEndpoint(servicePartitions, region) ?: throw ClientException("unable to resolve endpoint for region: ${'$'}region")
     }
 }"""
