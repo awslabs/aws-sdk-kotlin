@@ -40,6 +40,6 @@ class RemoveEventStreamOperationsTest {
         val ctx = model.newTestContext()
         val transformed = RemoveEventStreamOperations().preprocessModel(model, ctx.generationCtx.settings)
         transformed.expectShape(ShapeId.from("com.test#BlobStream"))
-        transformed.getShape(ShapeId.from("comm.test#EventStream")).shouldBe(java.util.Optional.empty())
+        transformed.getShape(ShapeId.from("com.test#EventStream")).shouldBe(java.util.Optional.empty())
     }
 }
