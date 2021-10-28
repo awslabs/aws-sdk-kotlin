@@ -434,9 +434,20 @@ fun discoverAwsModelsRepoPath(): String? {
     return getProperty("awsModelsDir")?.let { File(it) }?.absolutePath
 }
 
-tasks.create("syncModels") {
+/**
+ * Synchronize upstream changes from aws-models repository.
+ *
+ * Steps to synchronize:
+ * 1. Clone aws-models if not already cloned
+ * 2. `cd <path/to/aws-models>`
+ * 3. `git pull` to pull down the latest changes
+ * 4. `cd <path/to/aws-sdk-kotlin>`
+ * 5. Run `./gradlew syncAwsModels`
+ * 6. Check in any new models as needed (view warnings generated at end of output)
+ */
+tasks.register("syncAwsModels") {
     group = "codegen"
-    description = "Sync aws-models"
+    description = "Sync upstream changes from aws-models repo"
 
     doLast {
         println("syncing AWS models")
