@@ -14,7 +14,7 @@ This repo contains the AWS SDK for Kotlin and its [public roadmap](https://githu
 
 ## Getting Started
 
-See the [Getting Started Guide](docs/sdk-usage.md)
+See the [Getting Started Guide](docs/sdk-usage.md) to learn how to use AWS SDKs in your program.
 
 ## Feedback
 
@@ -33,7 +33,8 @@ If you are interested in contributing to the AWS SDK for Kotlin, please take a l
 ### Generate SDK(s)
 
 Generated sources are not checked into the repository, you first have to generate the clients before you can build them.
-
+A [step-by-step guide](docs/generate-sdk.md) is available that demonstrates building the AWS DynamoDB service, or if 
+you have a good working knowledge of Gradle, see below:
 
 ```sh
 ./gradlew --no-daemon :codegen:sdk:bootstrap
