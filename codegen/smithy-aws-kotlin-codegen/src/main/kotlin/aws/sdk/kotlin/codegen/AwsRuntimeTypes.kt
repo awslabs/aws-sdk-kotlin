@@ -77,6 +77,10 @@ object AwsRuntimeTypes {
         object Retries {
             val AwsDefaultRetryPolicy = runtimeSymbol("AwsDefaultRetryPolicy", AwsKotlinDependency.AWS_HTTP, "retries")
         }
+
+        object Util {
+            val TreeHasherImpl = runtimeSymbol("TreeHasherImpl", AwsKotlinDependency.AWS_HTTP, "util")
+        }
     }
 
     object JsonProtocols {
