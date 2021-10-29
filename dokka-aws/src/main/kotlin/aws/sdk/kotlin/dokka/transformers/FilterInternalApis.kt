@@ -26,7 +26,9 @@ class FilterInternalApis(context: DokkaContext) : SuppressedByConditionDocumenta
             is DTypeParameter -> d.isInternalSdk()
             else -> false
         }
-        if (isInternal) println("suppressing ${d.dri}")
+
+        if (isInternal) context.logger.warn("Suppressing internal element '${d.name}'")
+
         return isInternal
     }
 }
