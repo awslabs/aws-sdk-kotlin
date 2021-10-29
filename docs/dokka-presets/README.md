@@ -1,1 +1,1 @@
-# Kotlin Smithy SDK API Reference
+# AWS SDK for Kotlin API Reference
