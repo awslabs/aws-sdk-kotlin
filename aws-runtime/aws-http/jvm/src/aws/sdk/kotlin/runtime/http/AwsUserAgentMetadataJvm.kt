@@ -7,8 +7,9 @@ package aws.sdk.kotlin.runtime.http
 
 import aws.smithy.kotlin.runtime.util.Platform
 
-internal actual fun platformLanguageMetadata(): LanguageMetadata {
-    val jvmMetadata = mutableMapOf(
+// JVM language metadata extras, load these once
+private val jvmMetadataExtras = lazy {
+    val metadata = mutableMapOf(
         "javaVersion" to getSystemProperty("java.version"),
         "jvmName" to getSystemProperty("java.vm.name"),
         "jvmVersion" to getSystemProperty("java.vm.version")
@@ -20,12 +21,15 @@ internal actual fun platformLanguageMetadata(): LanguageMetadata {
         val sdkIntField = buildVersionCls.getDeclaredField("SDK_INT")
         val sdkReleaseField = buildVersionCls.getDeclaredField("RELEASE")
 
-        jvmMetadata["androidApiVersion"] = sdkIntField.getInt(null).toString()
-        jvmMetadata["androidRelease"] = sdkReleaseField.get(null) as String
+        metadata["androidApiVersion"] = sdkIntField.getInt(null).toString()
+        metadata["androidRelease"] = sdkReleaseField.get(null) as String
     }
 
-    return LanguageMetadata(extras = jvmMetadata)
+    metadata
 }
+
+internal actual fun platformLanguageMetadata() =
+    LanguageMetadata(extras = jvmMetadataExtras.value)
 
 private fun getSystemProperty(name: String, defaultValue: String = "unknown"): String =
     runCatching { System.getProperty(name) }.getOrDefault(defaultValue)

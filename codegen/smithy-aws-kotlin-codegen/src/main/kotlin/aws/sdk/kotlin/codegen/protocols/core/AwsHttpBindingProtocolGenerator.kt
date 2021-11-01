@@ -7,7 +7,7 @@ package aws.sdk.kotlin.codegen.protocols.core
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
-import aws.sdk.kotlin.codegen.protocols.middleware.EndpointResolverMiddleware
+import aws.sdk.kotlin.codegen.protocols.middleware.ResolveAwsEndpointMiddleware
 import aws.sdk.kotlin.codegen.protocols.middleware.UserAgentMiddleware
 import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestErrorGenerator
 import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestRequestGenerator
@@ -39,9 +39,12 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     }
 
     override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
-        val middleware = super.getDefaultHttpMiddleware(ctx).toMutableList()
+        val middleware = super.getDefaultHttpMiddleware(ctx)
+            // endpoint resolver is customized for AWS services - need to replace the default one from smithy-kotlin
+            .replace(ResolveAwsEndpointMiddleware(ctx)) {
+                it is ResolveEndpointMiddleware
+            }.toMutableList()
 
-        middleware.add(EndpointResolverMiddleware(ctx))
         if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
             val signingName = AwsSignatureVersion4.signingServiceName(ctx.service)
             middleware.add(AwsSignatureVersion4(signingName))

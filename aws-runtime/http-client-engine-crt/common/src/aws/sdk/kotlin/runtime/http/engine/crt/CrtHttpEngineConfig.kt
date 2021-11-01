@@ -7,10 +7,10 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.sdk.kotlin.crt.io.ClientBootstrap
 import aws.sdk.kotlin.crt.io.TlsContext
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
-import aws.smithy.kotlin.runtime.util.InternalApi
 
-@InternalApi
+@InternalSdkApi
 public class CrtHttpEngineConfig private constructor(builder: Builder) : HttpClientEngineConfig(builder) {
     public companion object {
         /**
