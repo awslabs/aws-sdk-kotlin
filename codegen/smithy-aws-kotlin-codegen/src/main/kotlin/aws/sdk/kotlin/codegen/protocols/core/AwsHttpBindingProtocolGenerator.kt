@@ -82,17 +82,16 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "GlacierChecksums", // smithy-kotlin#164
                 "GlacierMultipartChecksums", // smithy-kotlin#164
 
-                // custom endpoints with path prefix
-                // See: https://github.com/awslabs/smithy-kotlin/issues/503
-                "RestJsonHostWithPath",
-                "AwsJson10HostWithPath",
-                "AwsJson11HostWithPath",
-                "QueryHostWithPath",
-                "Ec2QueryHostWithPath",
+                // aws-sdk-kotlin#390
+                "RestJsonHttpWithHeaderMemberNoModeledBody",
+                "RestJsonHttpWithNoModeledBody",
+                "RestJsonHttpWithEmptyBlobPayload",
+                "RestJsonHttpWithEmptyStructurePayload",
+                "RestJsonHttpWithHeadersButNoPayload",
 
-                // FIXME - remove on next release (1.13) before merging. This was accidentally broken in 1.12 and fixed
-                // in this commit: https://github.com/awslabs/smithy/commit/45727afc06f6de98651c69a0c0c98815dfdd1ad6
-                "RestJsonNoInputAndOutput"
+                // smithy-kotlin#519
+                "SimpleScalarPropertiesWithWhiteSpace",
+                "SimpleScalarPropertiesPureWhiteSpace",
             ),
             TestContainmentMode.EXCLUDE_TESTS
         )
