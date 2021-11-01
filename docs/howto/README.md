@@ -4,6 +4,5 @@ This documentation supplements the official [AWS SDK for Kotlin Developer Guide]
 
 
 ## Configuration
-------------------
 
-* [Endpoints](./configuring/endpoints.md)
+* [Endpoints](./configuring/endpoints.md) - How to configure a custom endpoint resolver
