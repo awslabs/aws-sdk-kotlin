@@ -6,7 +6,8 @@ a custom endpoint though such as working with a pre-release version of a service
 features not yet modeled in the SDK (e.g. S3 has dual-stack and FIPS endpoints).
 
 
-An [Endpoint Resolver](TODO) can be configured to provide custom endpoint resolution logic for service clients. Every
+An [Endpoint Resolver](https://github.com/awslabs/aws-sdk-kotlin/blob/main/aws-runtime/aws-endpoint/common/src/aws/sdk/kotlin/runtime/endpoint/AwsEndpointResolver.kt#L11)
+can be configured to provide custom endpoint resolution logic for service clients. Every
 service client config is generated with an endpoint resolver that can be overridden. The endpoint resolver is given the
 service and region as a string, allowing for the resolver to dynamically drive its behavior. Each service client 
 package has an exported `ServiceId` constant that can be used to determine which service is invoking your endpoint 
