@@ -106,7 +106,7 @@ fun generateSmithyBuild(tests: List<ProtocolTest>): String {
             "kotlin-codegen": {
               "service": "${test.serviceShapeId}",
               "package": {
-                "name": "aws.sdk.kotlin.protocoltest.${test.packageName}",
+                "name": "aws.sdk.kotlin.services.${test.packageName}",
                 "version": "1.0"
               },
               "build": {
@@ -145,12 +145,18 @@ open class ProtocolTestTask : DefaultTask() {
     @get:Input
     var plugin: String = ""
 
+    /**
+     * The build directory for the task
+     */
+    val generatedBuildDir: File
+        @OutputDirectory
+        get() = project.buildDir.resolve("smithyprojections/${project.name}/$protocol/$plugin")
+
     @TaskAction
     fun runTests() {
         require(protocol.isNotEmpty()) { "protocol name must be specified" }
         require(plugin.isNotEmpty()) { "plugin name must be specified" }
 
-        val generatedBuildDir = project.file("${project.buildDir}/smithyprojections/${project.name}/$protocol/$plugin")
         println("[$protocol] buildDir: $generatedBuildDir")
         if (!generatedBuildDir.exists()) {
             throw GradleException("$generatedBuildDir does not exist")
@@ -169,14 +175,22 @@ open class ProtocolTestTask : DefaultTask() {
     }
 }
 
-
-
 enabledProtocols.forEach {
-    tasks.register<ProtocolTestTask>("testProtocol-${it.projectionName}") {
+    val protocolName = it.projectionName
+
+    val protocolTestTask = tasks.register<ProtocolTestTask>("testProtocol-$protocolName") {
         dependsOn(tasks["generateSdk"])
         group = "Verification"
-        protocol = it.projectionName
+        protocol = protocolName
         plugin = "kotlin-codegen"
+    }.get()
+
+    // FIXME This is a hack to work around how protocol tests aren't in the actual service model and thus codegen
+    // separately from service customizations.
+    tasks.create<Copy>("copyStaticFiles-$protocolName") {
+        from(rootProject.projectDir.resolve("services/$protocolName/common/src"))
+        into(protocolTestTask.generatedBuildDir.resolve("src/main/kotlin/"))
+        tasks["generateSdk"].finalizedBy(this)
     }
 }
 
