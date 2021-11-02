@@ -5,43 +5,38 @@
 
 package aws.sdk.kotlin.services.glacier.internal
 
-import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.util.HashFunction
 import kotlinx.coroutines.flow.*
 import kotlin.math.min
 
-@InternalSdkApi
-public typealias HashSupplier = () -> HashFunction
+internal typealias HashSupplier = () -> HashFunction
 
 /**
  * The result of a [TreeHasher] calculation.
  * @param fullHash A full hash of the entire byte array (taken at once)
  * @param treeHash A composite hash of the byte array, taken in chunks.
  */
-@InternalSdkApi
-public class Hashes(public val fullHash: ByteArray, public val treeHash: ByteArray)
+internal class Hashes(public val fullHash: ByteArray, public val treeHash: ByteArray)
 
 /**
  * A hash calculator that returns [Hashes] derived using a tree. See
  * [Computing Checksums](https://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html) in the Glacier
  * service guide for more details.
  */
-@InternalSdkApi
-public interface TreeHasher {
+internal interface TreeHasher {
     /**
      * Perform the hash calculation.
      * @param body The [HttpBody] over which to calculate hashes.
      * @return A [Hashes] containing the results of the calculation.
      */
-    public suspend fun calculateHashes(body: HttpBody): Hashes
+    suspend fun calculateHashes(body: HttpBody): Hashes
 }
 
 /**
  * The default implementation of a [TreeHasher].
  */
-@InternalSdkApi
-public class TreeHasherImpl(private val chunkSizeBytes: Int, private val hashSupplier: HashSupplier) : TreeHasher {
+internal class TreeHasherImpl(private val chunkSizeBytes: Int, private val hashSupplier: HashSupplier) : TreeHasher {
     override suspend fun calculateHashes(body: HttpBody): Hashes {
         val full = hashSupplier()
         val hashTree = ArrayDeque<ByteArray>()
