@@ -27,7 +27,7 @@ allprojects {
                 {
                     "customStyleSheets": ["${rootProject.file("docs/dokka-presets/css/logo-styles.css")}"],
                     "customAssets": [
-                        "${rootProject.file("docs/dokka-presets/assets/logo-icon.svg")}",
+                        "${rootProject.file("docs/dokka-presets/assets/favicon.ico")}",
                         "${rootProject.file("docs/dokka-presets/assets/aws_logo_white_59x35.png")}"
                     ],
                     "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved.",
