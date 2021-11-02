@@ -5,12 +5,12 @@
 
 package aws.sdk.kotlin.codegen.customization.glacier
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.isStreaming
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpFeatureMiddleware
@@ -42,11 +42,16 @@ public class GlacierBodyChecksum : KotlinIntegration {
 
         override fun renderConfigure(writer: KotlinWriter) {
             writer.addImport(RuntimeTypes.Utils.Sha256)
-            writer.addImport(AwsRuntimeTypes.Http.Middleware.GlacierBodyChecksum)
-            writer.addImport(AwsRuntimeTypes.Http.Util.TreeHasherImpl)
+            writer.addImport(glacierSymbol("GlacierBodyChecksum"))
+            writer.addImport(glacierSymbol("TreeHasherImpl"))
 
             writer.write("val chunkSizeBytes = 1024 * 1024 // 1MB")
             writer.write("treeHasher = TreeHasherImpl(chunkSizeBytes) { Sha256() }")
+        }
+
+        private fun glacierSymbol(name: String) = buildSymbol {
+            this.name = name
+            namespace = "aws.sdk.kotlin.services.glacier.internal"
         }
     }
 }

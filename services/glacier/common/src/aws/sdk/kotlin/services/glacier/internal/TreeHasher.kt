@@ -1,4 +1,9 @@
-package aws.sdk.kotlin.runtime.http.util
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0.
+ */
+
+package aws.sdk.kotlin.services.glacier.internal
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.HttpBody
