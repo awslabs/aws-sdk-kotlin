@@ -106,7 +106,7 @@ fun generateSmithyBuild(tests: List<ProtocolTest>): String {
             "kotlin-codegen": {
               "service": "${test.serviceShapeId}",
               "package": {
-                "name": "aws.sdk.kotlin.protocoltest.${test.packageName}",
+                "name": "aws.sdk.kotlin.services.${test.packageName}",
                 "version": "1.0"
               },
               "build": {
@@ -172,11 +172,18 @@ open class ProtocolTestTask : DefaultTask() {
 
 
 enabledProtocols.forEach {
-    tasks.register<ProtocolTestTask>("testProtocol-${it.projectionName}") {
+    val protocolName = it.projectionName
+    tasks.register<ProtocolTestTask>("testProtocol-$protocolName") {
         dependsOn(tasks["generateSdk"])
         group = "Verification"
-        protocol = it.projectionName
+        protocol = protocolName
         plugin = "kotlin-codegen"
+    }
+
+    tasks.create<Copy>("copyStaticFiles-$protocolName") {
+        from(projectDir.resolve("../../services/$protocolName/common/src"))
+        into(buildDir.resolve("smithyprojections/${project.name}/$protocolName/kotlin-codegen/src/main/kotlin/"))
+        tasks["generateSdk"].finalizedBy(this)
     }
 }
 
