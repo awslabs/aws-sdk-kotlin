@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.9.0-alpha] - 10/28/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Breaking changes
+
+* overhaul endpoint resolver types [#361](https://github.com/awslabs/aws-sdk-kotlin/pull/361)
+
+### New features
+
+* extend user agent metadata with framework, feature, and config [#372](https://github.com/awslabs/aws-sdk-kotlin/pull/372)
+
+### Misc
+
+* add sync models task and sync latest models [#374](https://github.com/awslabs/aws-sdk-kotlin/pull/374)
+
 ## [0.8.0-alpha] - 10/21/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**

@@ -26,11 +26,11 @@ object AwsRuntimeTypes {
     }
 
     object Endpoint {
-        val EndpointResolver = runtimeSymbol("EndpointResolver", AwsKotlinDependency.AWS_ENDPOINT)
-        val Endpoint = runtimeSymbol("Endpoint", AwsKotlinDependency.AWS_ENDPOINT)
+        val AwsEndpointResolver = runtimeSymbol("AwsEndpointResolver", AwsKotlinDependency.AWS_ENDPOINT)
+        val AwsEndpoint = runtimeSymbol("AwsEndpoint", AwsKotlinDependency.AWS_ENDPOINT)
+        val CredentialScope = runtimeSymbol("CredentialScope", AwsKotlinDependency.AWS_ENDPOINT)
 
         object Internal {
-            val CredentialScope = runtimeSymbol("CredentialScope", AwsKotlinDependency.AWS_ENDPOINT, "internal")
             val EndpointDefinition = runtimeSymbol("EndpointDefinition", AwsKotlinDependency.AWS_ENDPOINT, "internal")
             val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_ENDPOINT, "internal")
             val resolveEndpoint = runtimeSymbol("resolveEndpoint", AwsKotlinDependency.AWS_ENDPOINT, "internal")
@@ -44,10 +44,6 @@ object AwsRuntimeTypes {
     }
 
     object Config {
-        object Region {
-            val resolveRegionForOperation = runtimeSymbol("resolveRegionForOperation", AwsKotlinDependency.AWS_CONFIG, "region")
-        }
-
         object Credentials {
             val DefaultChainCredentialsProvider = runtimeSymbol("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_CONFIG, "auth.credentials")
             val StaticCredentialsProvider = runtimeSymbol("StaticCredentialsProvider", AwsKotlinDependency.AWS_CONFIG, "auth.credentials")
