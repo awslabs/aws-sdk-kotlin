@@ -5,7 +5,8 @@
 
 package aws.sdk.kotlin.runtime.endpoint.internal
 
-import aws.sdk.kotlin.runtime.endpoint.Endpoint
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
+import aws.sdk.kotlin.runtime.endpoint.CredentialScope
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -72,66 +73,55 @@ val testPartitions = listOf(
 )
 
 class EndpointsTest {
-    private data class ResolveTest(val description: String, val region: String, val expected: Endpoint)
+    private data class ResolveTest(val description: String, val region: String, val expected: AwsEndpoint)
 
     private val endpointResolveTestCases = listOf(
         ResolveTest(
             description = "modeled region with no endpoint overrides",
             region = "us-west-1",
-            Endpoint(
-                hostname = "service.us-west-1.amazonaws.com",
-                protocol = "https",
-                signingRegion = "us-west-1",
+            AwsEndpoint(
+                "https://service.us-west-1.amazonaws.com",
+                CredentialScope(region = "us-west-1")
             )
         ),
         ResolveTest(
             description = "modeled region with endpoint overrides",
             region = "us-west-1-alt",
-            Endpoint(
-                hostname = "service-alt.us-west-1.amazonaws.com",
-                protocol = "http",
-                signingRegion = "us-west-1",
-                signingName = "foo"
+            AwsEndpoint(
+                "http://service-alt.us-west-1.amazonaws.com",
+                CredentialScope(region = "us-west-1", service = "foo")
             )
         ),
         ResolveTest(
             description = "partition endpoint",
             region = "cn-central-1",
-            Endpoint(
-                hostname = "some-global-thing.amazonaws.cn",
-                protocol = "https",
-                signingRegion = "cn-east-1",
-                signingName = "foo"
+            AwsEndpoint(
+                "https://some-global-thing.amazonaws.cn",
+                CredentialScope(region = "cn-east-1", service = "foo")
             )
         ),
         ResolveTest(
             description = "region with un-modeled endpoints (resolved through regex)",
             region = "eu-west-1",
-            Endpoint(
-                hostname = "service.eu-west-1.amazonaws.com",
-                protocol = "https",
-                signingRegion = "eu-west-1",
-                signingName = "foo"
+            AwsEndpoint(
+                "https://service.eu-west-1.amazonaws.com",
+                CredentialScope(region = "eu-west-1", service = "foo")
             )
         ),
         ResolveTest(
             description = "specified partition endpoint",
             region = "partition",
-            Endpoint(
-                hostname = "some-global-thing.amazonaws.cn",
-                protocol = "https",
-                signingRegion = "cn-east-1",
-                signingName = "foo"
+            AwsEndpoint(
+                "https://some-global-thing.amazonaws.cn",
+                CredentialScope(region = "cn-east-1", service = "foo")
             )
         ),
         ResolveTest(
             description = "fips partition endpoint",
             region = "fips-partition",
-            Endpoint(
-                hostname = "some-global-thing-fips.amazonaws.cn",
-                protocol = "https",
-                signingRegion = "cn-east-1",
-                signingName = "foo"
+            AwsEndpoint(
+                "https://some-global-thing-fips.amazonaws.cn",
+                CredentialScope(region = "cn-east-1", service = "foo")
             )
         ),
     )

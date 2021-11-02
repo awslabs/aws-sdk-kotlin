@@ -15,11 +15,11 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerato
 /**
  * HTTP client interceptor that resolves service endpoints for a single service
  */
-class EndpointResolverMiddleware(private val ctx: ProtocolGenerator.GenerationContext) : HttpFeatureMiddleware() {
-    override val name: String = "ServiceEndpointResolver"
+class ResolveAwsEndpointMiddleware(private val ctx: ProtocolGenerator.GenerationContext) : HttpFeatureMiddleware() {
+    override val name: String = "ResolveAwsEndpoint"
     override fun renderConfigure(writer: KotlinWriter) {
         val resolverFeatureSymbol = buildSymbol {
-            name = "ServiceEndpointResolver"
+            name = "ResolveAwsEndpoint"
             namespace(AwsKotlinDependency.AWS_HTTP, subpackage = "middleware")
         }
         writer.addImport(resolverFeatureSymbol)

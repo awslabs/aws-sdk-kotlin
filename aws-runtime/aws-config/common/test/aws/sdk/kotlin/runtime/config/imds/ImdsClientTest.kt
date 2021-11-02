@@ -5,12 +5,9 @@
 
 package aws.sdk.kotlin.runtime.config.imds
 
-import aws.sdk.kotlin.runtime.ConfigurationException
-import aws.sdk.kotlin.runtime.endpoint.Endpoint
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import aws.smithy.kotlin.runtime.http.*
-import aws.smithy.kotlin.runtime.httptest.TestConnection
+import aws.smithy.kotlin.runtime.http.operation.Endpoint
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
@@ -24,19 +21,6 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 class ImdsClientTest {
-
-    @Test
-    fun testInvalidEndpointOverrideFailsCreation() {
-        val connection = TestConnection()
-        assertFailsWith<ConfigurationException> {
-            ImdsClient {
-                engine = connection
-                endpointConfiguration = EndpointConfiguration.Custom(
-                    Endpoint("[foo::254]", protocol = "http")
-                )
-            }
-        }
-    }
 
     @Test
     fun testTokensAreCached() = runSuspendTest {
@@ -252,8 +236,7 @@ class ImdsClientTest {
         val client = ImdsClient {
             engine = connection
             test.endpointOverride?.let { endpointOverride ->
-                val endpoint = Url.parse(endpointOverride).let { Endpoint(it.host, it.scheme.protocolName) }
-
+                val endpoint = Endpoint(endpointOverride)
                 endpointConfiguration = EndpointConfiguration.Custom(endpoint)
             }
             test.modeOverride?.let {
