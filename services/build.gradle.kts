@@ -38,6 +38,11 @@ subprojects {
         sourceSets.getByName("test") {
             kotlin.srcDir("common/test")
             kotlin.srcDir("generated-src/test")
+
+            dependencies {
+                implementation(kotlin("test-junit5"))
+                implementation(project(":aws-runtime:testing"))
+            }
         }
     }
 
