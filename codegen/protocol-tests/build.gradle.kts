@@ -37,7 +37,8 @@ val enabledProtocols = listOf(
 
     // service specific tests
     ProtocolTest("apigateway", "com.amazonaws.apigateway#BackplaneControlService"),
-    ProtocolTest("glacier", "com.amazonaws.glacier#Glacier")
+    ProtocolTest("glacier", "com.amazonaws.glacier#Glacier"),
+    ProtocolTest("machinelearning", "com.amazonaws.machinelearning#AmazonML_20141212", sdkId = "Machine Learning"),
 )
 
 // This project doesn't produce a JAR.
@@ -79,7 +80,7 @@ tasks.create<SmithyBuild>("generateSdk") {
 // force rebuild every time while developing
 tasks["generateSdk"].outputs.upToDateWhen { false }
 
-data class ProtocolTest(val projectionName: String, val serviceShapeId: String) {
+data class ProtocolTest(val projectionName: String, val serviceShapeId: String, val sdkId: String? = null) {
     val packageName: String
         get() = projectionName.toLowerCase().filter { it.isLetterOrDigit() }
 }
@@ -90,6 +91,7 @@ data class ProtocolTest(val projectionName: String, val serviceShapeId: String) 
 // it's rebuilt each time codegen is performed.
 fun generateSmithyBuild(tests: List<ProtocolTest>): String {
     val projections = tests.joinToString(",") { test ->
+        val sdkIdEntry = test.sdkId?.let { """"sdkId": "$it",""" } ?: ""
         """
         "${test.projectionName}": {
           "transforms": [
@@ -109,6 +111,7 @@ fun generateSmithyBuild(tests: List<ProtocolTest>): String {
                 "name": "aws.sdk.kotlin.services.${test.packageName}",
                 "version": "1.0"
               },
+              $sdkIdEntry
               "build": {
                 "rootProject": true,
                 "optInAnnotations": [
@@ -130,7 +133,6 @@ fun generateSmithyBuild(tests: List<ProtocolTest>): String {
     }
     """.trimIndent()
 }
-
 
 open class ProtocolTestTask : DefaultTask() {
     /**
@@ -193,7 +195,6 @@ enabledProtocols.forEach {
         tasks["generateSdk"].finalizedBy(this)
     }
 }
-
 
 tasks.register("testAllProtocols") {
     group = "Verification"
