@@ -14,7 +14,7 @@ import org.jetbrains.dokka.plugability.DokkaPlugin
  */
 class AwsDokkaPlugin : DokkaPlugin() {
     init {
-        println("AwsDokkaPlugin loaded!")
+        println("${this.javaClass.canonicalName} loaded!")
     }
 
     val dokkaBase by lazy { plugin<DokkaBase>() }
