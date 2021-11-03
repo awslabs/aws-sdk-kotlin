@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 import java.util.Properties
+import java.net.URL
 
 plugins {
     kotlin("jvm") version "1.5.31" apply false
@@ -10,30 +11,10 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
-dependencies {
-    dokkaPlugin(project(":dokka-aws"))
-}
-
 allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        // for dokka
-        maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven") {
-            content {
-                includeGroup("org.jetbrains.kotlinx")
-            }
-        }
-    }
-
-    tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
-        // each module can include their own top-level module documentation
-        // see https://kotlinlang.org/docs/kotlin-doc.html#module-and-package-documentation
-        if (project.file("API.md").exists()) {
-            dokkaSourceSets.configureEach {
-                includes.from(project.file("API.md"))
-            }
-        }
     }
 
     tasks.withType<org.jetbrains.dokka.gradle.AbstractDokkaTask>().configureEach {
@@ -44,16 +25,37 @@ allprojects {
         val pluginConfigMap = mapOf(
             "org.jetbrains.dokka.base.DokkaBase" to """
                 {
-                    "customStyleSheets": ["${rootProject.file("docs/api/css/logo-styles.css")}"],
+                    "customStyleSheets": ["${rootProject.file("docs/dokka-presets/css/logo-styles.css")}"],
                     "customAssets": [
-                        "${rootProject.file("docs/api/assets/logo-icon.svg")}",
-                        "${rootProject.file("docs/api/assets/aws_logo_white_59x35.png")}"
+                        "${rootProject.file("docs/dokka-presets/assets/logo-icon.svg")}",
+                        "${rootProject.file("docs/dokka-presets/assets/aws_logo_white_59x35.png")}"
                     ],
-                    "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved."
+                    "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved.",
+                    "separateInheritedMembers" : true
                 }
             """
         )
         pluginsMapConfiguration.set(pluginConfigMap)
+    }
+}
+
+subprojects {
+    tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
+        // each module can include their own top-level module documentation
+        // see https://kotlinlang.org/docs/kotlin-doc.html#module-and-package-documentation
+        if (project.file("API.md").exists()) {
+            dokkaSourceSets.configureEach {
+                includes.from(project.file("API.md"))
+            }
+        }
+
+        // Configure Dokka to link to smithy-kotlin types
+        dokkaSourceSets.configureEach {
+            externalDocumentationLink {
+                packageListUrl.set(URL("https://raw.githubusercontent.com/awslabs/smithy-kotlin/api-docs/package-list"))
+                url.set(URL("https://awslabs.github.io/smithy-kotlin/runtime/"))
+            }
+        }
     }
 }
 
@@ -84,20 +86,29 @@ if (project.prop("kotlinWarningsAsErrors")?.toString()?.toBoolean() == true) {
 }
 
 // configure the root multimodule docs
-tasks.dokkaHtmlMultiModule {
+tasks.dokkaHtmlMultiModule.configure {
     moduleName.set("AWS Kotlin SDK")
 
     includes.from(
         // NOTE: these get concatenated
-        rootProject.file("docs/api/README.md"),
-        rootProject.file("docs/GettingStarted.md")
+        rootProject.file("docs/dokka-presets/README.md"),
+        rootProject.file("docs/GettingStarted.md"),
     )
 
     val excludeFromDocumentation = listOf(
         project(":aws-runtime:testing"),
-        project(":aws-runtime:crt-util")
+        project(":aws-runtime:crt-util"),
     )
     removeChildTasks(excludeFromDocumentation)
+
+    // This allows docs generation to be overridden on the command line.
+    // Used to generate each AWS service individually.
+    if (project.hasProperty("dokkaOutSubDir")) {
+        val subDir = project.prop("dokkaOutSubDir");
+        val targetDir = buildDir.resolve("dokka/$subDir")
+        println("Generating docs in $targetDir")
+        outputDirectory.set(targetDir)
+    }
 }
 
 if (
