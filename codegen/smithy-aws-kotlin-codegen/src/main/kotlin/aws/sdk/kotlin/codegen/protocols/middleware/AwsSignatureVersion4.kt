@@ -26,7 +26,7 @@ import software.amazon.smithy.model.traits.OptionalAuthTrait
  */
 open class AwsSignatureVersion4(private val signingServiceName: String) : HttpFeatureMiddleware() {
     override val name: String = AwsRuntimeTypes.Signing.AwsSigV4SigningMiddleware.name
-    override val order: Byte = 127
+    override val order: Byte = 126 // Must come before GlacierBodyChecksum
 
     init {
         require(signingServiceName.isNotEmpty()) { "signingServiceName must be specified" }

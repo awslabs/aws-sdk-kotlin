@@ -14,3 +14,4 @@ aws.sdk.kotlin.codegen.customization.glacier.GlacierAddVersionHeader
 aws.sdk.kotlin.codegen.customization.glacier.GlacierAccountIdDefault
 aws.sdk.kotlin.codegen.customization.polly.PollyPresigner
 aws.sdk.kotlin.codegen.customization.BoxServices
+aws.sdk.kotlin.codegen.customization.glacier.GlacierBodyChecksum
