@@ -7,7 +7,11 @@ package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import aws.smithy.kotlin.runtime.http.Headers
+import aws.smithy.kotlin.runtime.http.HttpBody
+import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.operation.Endpoint
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
@@ -139,24 +143,70 @@ class ImdsClientTest {
         connection.assertRequests()
     }
 
-    @Ignore
     @Test
-    fun testRetryHttp500() {
-        fail("not implemented yet")
+    fun testRetryHttp500(): Unit = runSuspendTest {
+        val connection = buildTestConnection {
+            expect(
+                tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
+                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
+            )
+            expect(
+                imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
+                HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty)
+            )
+            expect(
+                imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
+                imdsResponse("output 2")
+            )
+        }
+
+        val client = ImdsClient { engine = connection }
+        val r1 = client.get("/latest/metadata")
+        assertEquals("output 2", r1)
+        connection.assertRequests()
     }
 
-    @Ignore
     @Test
-    fun testRetryTokenFailure() {
+    fun testRetryTokenFailure(): Unit = runSuspendTest {
         // 500 during token acquisition should be retried
-        fail("not implemented yet")
+        val connection = buildTestConnection {
+            expect(
+                tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
+                HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty)
+            )
+            expect(
+                tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
+                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
+            )
+            expect(
+                imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
+                imdsResponse("output 2")
+            )
+        }
+
+        val client = ImdsClient { engine = connection }
+        val r1 = client.get("/latest/metadata")
+        assertEquals("output 2", r1)
+        connection.assertRequests()
     }
 
-    @Ignore
     @Test
-    fun testNoRetryHttp403() {
+    fun testNoRetryHttp403(): Unit = runSuspendTest {
         // 403 responses from IMDS during token acquisition MUST not be retried
-        fail("not implemented yet")
+        val connection = buildTestConnection {
+            expect(
+                tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
+                HttpResponse(HttpStatusCode.Forbidden, Headers.Empty, HttpBody.Empty)
+            )
+        }
+
+        val client = ImdsClient { engine = connection }
+        val ex = assertFailsWith<EC2MetadataError> {
+            client.get("/latest/metadata")
+        }
+
+        assertEquals(HttpStatusCode.Forbidden.value, ex.statusCode)
+        connection.assertRequests()
     }
 
     @Test
