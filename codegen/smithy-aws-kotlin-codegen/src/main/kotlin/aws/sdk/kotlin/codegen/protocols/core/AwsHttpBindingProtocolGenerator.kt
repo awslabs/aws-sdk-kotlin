@@ -78,9 +78,16 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 // FIXME - document type not fully supported yet, see https://github.com/awslabs/smithy-kotlin/issues/123
                 "PutAndGetInlineDocumentsInput",
 
-                // Glacier customizations
-                "GlacierChecksums", // smithy-kotlin#164
-                "GlacierMultipartChecksums", // smithy-kotlin#164
+                // aws-sdk-kotlin#390
+                "RestJsonHttpWithHeaderMemberNoModeledBody",
+                "RestJsonHttpWithNoModeledBody",
+                "RestJsonHttpWithEmptyBlobPayload",
+                "RestJsonHttpWithEmptyStructurePayload",
+                "RestJsonHttpWithHeadersButNoPayload",
+
+                // smithy-kotlin#519
+                "SimpleScalarPropertiesWithWhiteSpace",
+                "SimpleScalarPropertiesPureWhiteSpace",
             ),
             TestContainmentMode.EXCLUDE_TESTS
         )

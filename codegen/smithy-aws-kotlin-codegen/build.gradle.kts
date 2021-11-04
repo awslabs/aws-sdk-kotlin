@@ -44,6 +44,8 @@ val generateSdkRuntimeVersion by tasks.registering {
     // this keeps us from having to manually change version numbers in multiple places
     val resourcesDir = "$buildDir/resources/main/aws/sdk/kotlin/codegen"
     val versionFile = file("$resourcesDir/sdk-version.txt")
+    val gradlePropertiesFile = rootProject.file("gradle.properties")
+    inputs.file(gradlePropertiesFile)
     outputs.file(versionFile)
     sourceSets.main.get().output.dir(resourcesDir)
     doLast {
