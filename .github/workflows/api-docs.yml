@@ -1,0 +1,165 @@
+name: API Docs
+
+on: # TODO: determine best event hook (release, etc)
+  workflow_dispatch:
+
+env:
+  DOC_BRANCH_NAME: api-docs # the branch from which github pages content is sourced
+
+jobs:
+  api-doc-gen-parallel:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service-prefix: [ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z ] # TODO: flatter svc distribution
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - name: Generate API Docs
+        id: gen-docs
+        run: |
+          # Do not generate SDKs for the following unsupported SDKs
+          excluded_services=("transcribestreaming" "timestreamwrite" "timestreamquery")
+
+          # Resource mgmt optimization for Dokka
+          echo "org.gradle.daemon=false" >> gradle.properties
+
+          # do not execute following loop if no files w prefix
+          shopt -s nullglob
+
+          # Iterate over service models, extract the name and codegen each SDK discretely
+          for aws_model_file in codegen/sdk/aws-models/${{ matrix.service-prefix }}*.json
+          do
+            # delete src for any previously generated SDK
+            git clean -dfx services
+
+            MODEL_FILENAME=${aws_model_file##*/}    # Extract the filename from the path
+            SERVICE_NAME=$(echo "$MODEL_FILENAME" | cut -d. -f1 ) # Extract the service name from the filename
+            excluded=$(echo "${excluded_services[@]}" | grep -ow "$SERVICE_NAME" | wc -w)
+            if [[ $excluded == 0 ]]; then
+              echo "Building docs for $SERVICE_NAME"
+
+              ./gradlew -Paws.services=+$SERVICE_NAME :codegen:sdk:bootstrap  # generate SDK
+
+              # Retry due to transient network failures during doc generation
+              # https://unix.stackexchange.com/a/82602
+              n=0
+              until [ "$n" -ge 5 ]
+              do
+                 ./gradlew --no-parallel -PdokkaOutSubDir=$SERVICE_NAME dokkaHtmlMultiModule && break
+                 n=$((n+1))
+                 sleep 15
+              done
+
+              echo ::set-output name=docs-generated::"true"
+            else # SDK was excluded
+              echo "Ignoring excluded service $SERVICE_NAME"
+              echo ::set-output name=docs-generated::"false"
+            fi
+          done
+      - name: Compress Docs
+        if: steps.gen-docs.outputs.docs-generated == 'true'
+        run: |
+          tar cJvf api-docs-${{ matrix.service-prefix }}.tar.xz build/dokka/*
+      - name: Upload Artifact
+        if: steps.gen-docs.outputs.docs-generated == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: api-docs-${{ matrix.service-prefix }}
+          path: api-docs-${{ matrix.service-prefix }}.tar.xz
+
+  # Download all artifacts from previous job, extract them to common dir, add top-level index and push to ghpages branch
+  combine-docs:
+    needs: api-doc-gen-parallel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v2
+      - name: Consolidate Service Docs
+        run: |
+          mkdir target
+
+          for suffix in {a..z}
+          do
+            ARCHIVE="api-docs-$suffix/api-docs-$suffix.tar.xz"
+
+            if [ -f "$ARCHIVE" ]; then
+              tar xf "$ARCHIVE"
+              mv build/dokka/* target/
+              rm -Rf build
+            else
+              echo "Did not find archive for $ARCHIVE"
+            fi
+          done
+      - name: Generate Top Level Index
+        run: |
+          INDEX_FILE=target/index.html
+
+          # Generate page header
+          echo "<!DOCTYPE html>" >> $INDEX_FILE
+          echo "<html>" >> $INDEX_FILE
+          echo "" >> $INDEX_FILE
+          echo "<head>" >> $INDEX_FILE
+          echo "    <meta name='viewport' content='width=device-width, initial-scale=1' charset='UTF-8'>" >> $INDEX_FILE
+          echo "    <title>AWS Services</title>" >> $INDEX_FILE
+          echo "    <link href='images/logo-icon.svg' rel='icon' type='image/svg'>" >> $INDEX_FILE
+          echo "    <link href='styles/style.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "    <link href='styles/logo-styles.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "    <link href='styles/jetbrains-mono.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "    <link href='styles/main.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "    <link href='images/logo-icon.svg'>" >> $INDEX_FILE
+          echo "    <link href='images/aws_logo_white_59x35.png'>" >> $INDEX_FILE
+          echo "    <link href='styles/logo-styles.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "    <link href='styles/multimodule.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "</head>" >> $INDEX_FILE
+          echo "" >> $INDEX_FILE
+          echo "<body>" >> $INDEX_FILE
+          echo "    <div id='container'>" >> $INDEX_FILE
+          echo "        <div id='leftColumn'>" >> $INDEX_FILE
+          echo "            <div id='logo'></div>" >> $INDEX_FILE
+          echo "        </div>" >> $INDEX_FILE
+          echo "        <div id='main' class='main-content'>" >> $INDEX_FILE
+          echo "            <h2>AWS SDK for Kotlin API Docs</h2>" >> $INDEX_FILE
+          echo "            <div class='table'>" >> $INDEX_FILE
+
+          # Generate list of services
+          for aws_service_dir in target/*
+          do
+            if [ "$aws_service_dir" !=  "target/index.html" ]; then # no self reference
+              SERVICE_NAME=${aws_service_dir##*/}    # Extract the filename from the path
+
+              echo "    <div class='table-row'>" >> $INDEX_FILE
+              echo "        <div class='main-subrow '>" >> $INDEX_FILE
+              echo "            <div class='w-100'>" >> $INDEX_FILE
+              echo "                <span class='inline-flex'>" >> $INDEX_FILE
+              echo "                    <a href='$SERVICE_NAME/index.html'>$SERVICE_NAME</a>" >> $INDEX_FILE
+              echo "                </span>" >> $INDEX_FILE
+              echo "            </div>" >> $INDEX_FILE
+              echo "        </div>" >> $INDEX_FILE
+              echo "    </div>" >> $INDEX_FILE
+
+            fi
+          done
+
+          # Generate page footer
+          echo "          </div>" >> $INDEX_FILE
+          echo "        </div>" >> $INDEX_FILE
+          echo "</body>" >> $INDEX_FILE
+          echo "</html>" >> $INDEX_FILE
+      - name: Copy Styles to root # Take the styles and images from a service into the root for consistent styling
+        run: |
+          set -x
+          FIRST_SERVICE=$(find target/ -maxdepth 1 -mindepth 1 -type d | head -n 1)
+          cp -r $FIRST_SERVICE/styles $FIRST_SERVICE/images target/
+      - name: Stage in branch
+        uses: peaceiris/actions-gh-pages@v3.7.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: ${{ env.DOC_BRANCH_NAME }}
+          publish_dir: target
+          destination_dir: .
+          allow_empty_commit: false # optional, default is false
+          user_name: AWS CI
+          user_email: nobody@amazonaws.com
+          commit_message: Update docs
+          disable_nojekyll: true

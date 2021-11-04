@@ -49,11 +49,12 @@ subprojects {
             }
         }
 
+        val smithKotlinGhRepoOwner = "kggilmer"
         // Configure Dokka to link to smithy-kotlin types
         dokkaSourceSets.configureEach {
             externalDocumentationLink {
-                packageListUrl.set(URL("https://raw.githubusercontent.com/awslabs/smithy-kotlin/api-docs/package-list"))
-                url.set(URL("https://awslabs.github.io/smithy-kotlin/runtime/"))
+                packageListUrl.set(URL("https://raw.githubusercontent.com/$smithKotlinGhRepoOwner/smithy-kotlin/api-docs/package-list"))
+                url.set(URL("https://$smithKotlinGhRepoOwner.github.io/smithy-kotlin/runtime/"))
             }
         }
     }
