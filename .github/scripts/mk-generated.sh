@@ -9,14 +9,6 @@
 # This script creates a new branch `__generated-$current_branch` that contains the results of the smoke-test codegen
 # This script outputs the name of the new branch to stdout
 #
-# Below is the set of services that are generated for codegen preview
-# These are carefully selected to exercise every Smithy protocol.
-#  - @awsJson1_0: dynamodb
-#  - @awsJson1_1: config
-#  - @awsQuery: sts
-#  - @ec2Query: ec2
-#  - @restJson1: polly
-#  - @restXml: s3
 
 set -e
 
@@ -35,7 +27,7 @@ set -e
   echo "Current branch resolved to: $current_branch"
   gen_branch="__generated-$current_branch"
   repo_root=$(git rev-parse --show-toplevel)
-  cd "$repo_root" && ./gradlew :codegen:sdk:bootstrap -Paws.services=+dynamodb,+config,+sts,+ec2,+polly,+s3
+  cd "$repo_root" && ./gradlew :codegen:sdk:bootstrap
   target="$(mktemp -d)"
   mv "$repo_root"/services "$target"
   # checkout and reset $gen_branch to be based on the __generated__ history

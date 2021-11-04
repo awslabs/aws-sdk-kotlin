@@ -20,6 +20,15 @@ env:
   BUILDER_HOST: https://d19elf31gohf1l.cloudfront.net
   PACKAGE_NAME: aws-sdk-kotlin
   RUN: ${{ github.run_id }}-${{ github.run_number }}
+  # Below is the set of services that are generated for codegen preview
+  # These are carefully selected to exercise every Smithy protocol.
+  #  - @awsJson1_0: dynamodb
+  #  - @awsJson1_1: config
+  #  - @awsQuery: sts
+  #  - @ec2Query: ec2
+  #  - @restJson1: polly
+  #  - @restXml: s3
+  PREVIEW_SERVICES: +dynamodb,+config,+sts,+ec2,+polly,+s3
 
 jobs:
   cleanup-branch:
@@ -71,7 +80,9 @@ jobs:
           chmod a+x builder.pyz
           ./builder.pyz build -p ${{ env.PACKAGE_NAME }} --variant codegen-preview
       - name: mk-generated
-        run: .github/scripts/mk-generated.sh
+        run: |
+          echo "aws.services=${{ env.PREVIEW_SERVICES }}" >> local.properties
+          .github/scripts/mk-generated.sh
       - name: push generated branch
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
