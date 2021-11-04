@@ -1,0 +1,105 @@
+name: codegen diff preview
+# This job will generate a branch containing exclusively codegen output and push it to GitHub
+# once the branch is deployed, it will comment on GitHub with a link where you can see the generated diff.
+on:
+  push:
+    branches:
+      # this is a load-bearing branch filter: if this isn't here, you may
+      # end up generating diffs for __generated-* branches which would lead to infinite recursion...
+      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - closed
+      - synchronize
+env:
+  JAVA_VERSION: 11
+  BUILDER_VERSION: v0.8.22
+  BUILDER_SOURCE: releases
+  BUILDER_HOST: https://d19elf31gohf1l.cloudfront.net
+  PACKAGE_NAME: aws-sdk-kotlin
+  RUN: ${{ github.run_id }}-${{ github.run_number }}
+  # Below is the set of services that are generated for codegen preview
+  # These are carefully selected to exercise every Smithy protocol.
+  #  - @awsJson1_0: dynamodb
+  #  - @awsJson1_1: config
+  #  - @awsQuery: sts
+  #  - @ec2Query: ec2
+  #  - @restJson1: polly
+  #  - @restXml: s3
+  PREVIEW_SERVICES: +dynamodb,+config,+sts,+ec2,+polly,+s3
+
+jobs:
+  cleanup-branch:
+    if: ${{ github.event.action == 'closed' }}
+    runs-on: ubuntu-latest
+    name: cleanup generated code branch
+    steps:
+      - name: gen branch output
+        run: echo "::set-output name=branchname::${GITHUB_HEAD_REF##*/}"
+        id: branch_output
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            console.log("deleting the generated code branch");
+            await github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "heads/__generated-${{ steps.branch_output.outputs.branchname }}"
+            })
+
+  push-generated-code:
+    runs-on: ubuntu-latest
+    name: Push generated code to a branch
+    if: ${{ github.event.action != 'closed' }}
+    steps:
+      # this is not technically necessary because of the branch filter above, but better to check
+      # twice than have an infinitely recursing PR job
+      - name: Assert we aren't already on a generated branch
+        run: |
+          [[ ${GITHUB_HEAD_REF:-$GITHUB_REF} != "*__generated*" ]]
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        name: Gradle Cache
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+      - name: download-deps
+        # abuse crt builder to download and build upstream dependencies like smithy-kotlin
+        run: |
+          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
+          chmod a+x builder.pyz
+          ./builder.pyz build -p ${{ env.PACKAGE_NAME }} --variant codegen-preview
+      - name: mk-generated
+        run: |
+          echo "aws.services=${{ env.PREVIEW_SERVICES }}" >> local.properties
+          .github/scripts/mk-generated.sh
+      - name: push generated branch
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push -f origin "$(git rev-parse --abbrev-ref HEAD)"
+      - name: finalize
+        run: echo "generated output pushed to $(git rev-parse --abbrev-ref HEAD)"
+      - name: gen branch output
+        run: echo "::set-output name=branchname::$(git rev-parse --abbrev-ref HEAD)"
+        id: branch_output
+      - uses: actions/github-script@v5
+        # NOTE: if comments on each commit become bothersome, add a check that github.event.pull_request.action == "opened"
+        if: ${{ github.head_ref != null }}
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `A new generated diff is ready to view: https://github.com/${context.repo.owner}/${context.repo.repo}/compare/__generated-main...${{ steps.branch_output.outputs.branchname }}`
+            })
