@@ -14,7 +14,12 @@ on:
       - closed
       - synchronize
 env:
-  java_version: 11
+  JAVA_VERSION: 11
+  BUILDER_VERSION: v0.8.22
+  BUILDER_SOURCE: releases
+  BUILDER_HOST: https://d19elf31gohf1l.cloudfront.net
+  PACKAGE_NAME: aws-sdk-kotlin
+  RUN: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
   cleanup-branch:
@@ -58,7 +63,13 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: ${{ env.java_version }}
+          java-version: ${{ env.JAVA_VERSION }}
+      - name: download-deps
+        # abuse crt builder to download and build upstream dependencies like smithy-kotlin
+        run: |
+          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
+          chmod a+x builder.pyz
+          ./builder.pyz build -p ${{ env.PACKAGE_NAME }} --variant codegen-preview
       - name: mk-generated
         run: .github/scripts/mk-generated.sh
       - name: push generated branch
