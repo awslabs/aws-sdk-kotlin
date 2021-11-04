@@ -51,7 +51,7 @@ internal class TokenMiddleware(config: Config) : Feature {
     }
 
     override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
-        operation.execution.mutate.intercept { req, next ->
+        operation.execution.finalize.intercept { req, next ->
             val token = cachedToken.getOrLoad { getToken(clock, req).let { ExpiringValue(it, it.expires) } }
             req.subject.headers.append(X_AWS_EC2_METADATA_TOKEN, token.value.decodeToString())
             next.call(req)

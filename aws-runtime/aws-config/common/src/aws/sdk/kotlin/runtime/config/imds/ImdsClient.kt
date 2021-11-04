@@ -17,11 +17,13 @@ import aws.smithy.kotlin.runtime.client.SdkLogMode
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
+import aws.smithy.kotlin.runtime.http.middleware.RetryFeature
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.middleware.Phase
 import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.retries.impl.*
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -86,11 +88,18 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         UserAgent.create {
             staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
         },
+        RetryFeature.create {
+            val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
+            val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
+            strategy = StandardRetryStrategy(StandardRetryStrategyOptions.Default, tokenBucket, delayProvider)
+            policy = ImdsRetryPolicy()
+        },
+        // must come after retries
         TokenMiddleware.create {
             httpClient = this@ImdsClient.httpClient
             ttl = tokenTtl
             clock = this@ImdsClient.clock
-        }
+        },
     )
 
     public companion object {
