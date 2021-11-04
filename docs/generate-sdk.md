@@ -6,7 +6,7 @@ learning how AWS SDKs work internally, or just experimentation.
 ### NOTE
 
 This process is not necessary to use an AWS SDK, as one can simply depend on the artifacts available in 
-[Maven Central](https://search.maven.org/search?q=aws.sdk.kotlin).  See the [usage doc](sdk-usage.md) for details.
+[Maven Central](https://search.maven.org/search?q=aws.sdk.kotlin).  See the [getting started guide](GettingStarted.md) for details.
 
 ## Prerequisites
 * Git
@@ -17,7 +17,7 @@ This process is not necessary to use an AWS SDK, as one can simply depend on the
 In this example we'll build the AWS DynamoDB SDK from the `0.8.0-alpha` release.
 
 ### Clone this repo using a release tag
-```
+```sh
 git clone --branch v0.8.0-alpha https://github.com/awslabs/aws-sdk-kotlin.git
 cd aws-sdk-kotlin
 ```
@@ -25,25 +25,26 @@ cd aws-sdk-kotlin
 ### Generate the SDK source
 
 Before building the SDK we will change its version to prevent having the same version as provided by Maven Central:
-```
+```sh
 sed -i 's/sdkVersion=0.8.0-alpha/sdkVersion=0.8.0-localtest/' gradle.properties
 ```
 
 Now we can generate the DynamoDB SDK:
-```
+```sh
 ./gradlew -Paws.services=+dynamodb :codegen:sdk:bootstrap
 ```
-Notice we specify the name of the service as `dynamodb`.  The names for all AWS services can be found in 
-`codegen/sdk/aws-models`.  So for example the name used for AWS CloudFormation's model `cloudformation.2010-05-15.json` 
+Notice we specify the name of the service as `dynamodb`.  The names for all AWS services can be found in
+[`codegen/sdk/aws-models`](../codegen/sdk/aws-models).
+.  So for example the name used for AWS CloudFormation's model `cloudformation.2010-05-15.json` 
 would be `cloudformation`.  The date and json extension are removed.
 
 ### Compile and test the generated SDK
-```
+```sh
 ./gradlew :services:dynamodb:build
 ```
 Once this completes a compiled SDK for the AWS DynamoDB service has been generated.
 
-```
+```sh
 ls services/dynamodb/build/libs      
 dynamodb-0.8.0-localtest.jar
 ```
@@ -52,7 +53,7 @@ To use this compiled SDK from another program locally, the local Maven repositor
 will publish artifacts from `aws-sdk-kotlin` to the local maven repository, including the DynamoDB service and supporting
 runtime libraries:
 
-```
+```sh
 ./gradlew publishToMavenLocal
 ```
 

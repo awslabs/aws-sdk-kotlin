@@ -14,7 +14,7 @@ This repo contains the AWS SDK for Kotlin and its [public roadmap](https://githu
 
 ## Getting Started
 
-See the [Getting Started Guide](docs/sdk-usage.md) to learn how to use AWS SDKs in your program.
+See the [Getting Started Guide](docs/GettingStarted.md) to learn how to use AWS SDKs in your program.
 
 ## Feedback
 
