@@ -47,8 +47,9 @@ jobs:
         id: gen-docs
         run: |
           set -x
+          smithy_kotlin_package_list_path="$(pwd)/smithy-kotlin-docs/package-list"
           pwd
-          ls -l smithy-kotlin-docs
+          ls -l $smithy_kotlin_package_list_path
           # Do not generate SDKs for the following unsupported SDKs
           excluded_services=("transcribestreaming" "timestreamwrite" "timestreamquery")
 
@@ -77,7 +78,7 @@ jobs:
               n=0
               until [ "$n" -ge 5 ]
               do
-                 ./gradlew --no-parallel -PdokkaOutSubDir=$SERVICE_NAME -PsmithyKotlinPackageListUrl=file://smithy-kotlin-docs/package-list dokkaHtmlMultiModule && break
+                 ./gradlew --no-parallel -PdokkaOutSubDir=$SERVICE_NAME -PsmithyKotlinPackageListUrl=file://$smithy_kotlin_package_list_path dokkaHtmlMultiModule && break
                  n=$((n+1))
                  sleep 15
               done
