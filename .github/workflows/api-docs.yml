@@ -68,14 +68,14 @@ jobs:
             if [[ $excluded == 0 ]]; then
               echo "Building docs for $SERVICE_NAME"
 
-              ./gradlew -Paws.services=+$SERVICE_NAME -PsmithyKotlinPackageListUrl=file://smithy-kotlin-docs/package-list :codegen:sdk:bootstrap  # generate SDK
+              ./gradlew -Paws.services=+$SERVICE_NAME :codegen:sdk:bootstrap  # generate SDK
 
               # Retry due to transient network failures during doc generation
               # https://unix.stackexchange.com/a/82602
               n=0
               until [ "$n" -ge 5 ]
               do
-                 ./gradlew --no-parallel -PdokkaOutSubDir=$SERVICE_NAME dokkaHtmlMultiModule && break
+                 ./gradlew --no-parallel -PdokkaOutSubDir=$SERVICE_NAME -PsmithyKotlinPackageListUrl=file://smithy-kotlin-docs/package-list dokkaHtmlMultiModule && break
                  n=$((n+1))
                  sleep 15
               done
