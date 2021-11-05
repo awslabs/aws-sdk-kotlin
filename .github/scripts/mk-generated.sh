@@ -14,7 +14,6 @@ set -e
 
 # Redirect stdout to stderr for all the code in `{ .. }`
 {
-  git diff --quiet || (echo 'working tree not clean, aborting' && exit 1)
   gh_branch=${GITHUB_HEAD_REF##*/}
   base_branch=${GITHUB_BASE_REF##*/}
   if [ -n "$base_branch" ]; then
