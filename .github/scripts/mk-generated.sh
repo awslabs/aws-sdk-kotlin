@@ -14,7 +14,6 @@ set -e
 
 # Redirect stdout to stderr for all the code in `{ .. }`
 {
-  git diff --quiet || (echo 'working tree not clean, aborting' && exit 1)
   gh_branch=${GITHUB_HEAD_REF##*/}
   base_branch=${GITHUB_BASE_REF##*/}
   if [ -n "$base_branch" ]; then
@@ -28,6 +27,15 @@ set -e
   gen_branch="__generated-$current_branch"
   repo_root=$(git rev-parse --show-toplevel)
   cd "$repo_root" && ./gradlew :codegen:sdk:bootstrap
+  # repo may be dirty due to gradle.properties being manipulated to have upstream deps match (e.g. by set_upstream_versions.py)
+  # test that we are running in a GitHub workflow before blowing away any unsaved changes
+  if [[ -z "${GITHUB_WORKFLOW}" ]]; then
+    git diff --quiet || (echo 'working tree not clean, aborting' && exit 1)
+  else
+    echo "working tree dirty, violently resetting HEAD"
+    git reset HEAD --hard
+  fi
+
   target="$(mktemp -d)"
   mv "$repo_root"/services "$target"
   # checkout and reset $gen_branch to be based on the __generated__ history
