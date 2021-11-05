@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service-prefix: [ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z ] # TODO: flatter svc distribution
+        service-prefix: [x,v] # [ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z ] # TODO: flatter svc distribution
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
@@ -168,13 +168,9 @@ jobs:
           commit_message: Update docs
           disable_nojekyll: true
           enable_jekyll: false
-      - name: Compress Complete Docs
-        if: env.PUBLISH_ARTIFACT == 'true'
-        run: |
-          tar cJvf api-docs.tar.xz target/*
       - name: Upload Complete Artifact
         if: env.PUBLISH_ARTIFACT == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: all-api-docs
-          path: api-docs.tar.xz
+          path: target/*
