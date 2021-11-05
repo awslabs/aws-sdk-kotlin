@@ -20,12 +20,13 @@ jobs:
         id: smithy-kotlin-build
         run: |
           ./gradlew dokkaHtmlMultiModule
-          echo ::set-output name=smithy-kotlin-package-list::"$(pwd)/build/dokka/htmlMultiModule/package-list"
+          mkdir smithy-kotlin-docs
+          mv build/dokka/htmlMultiModule/* smithy-kotlin-docs/
       - name: Upload Smithy-Kotlin Doc Artifact
         uses: actions/upload-artifact@v2
         with:
           name: smithy-kotlin-docs
-          path: build/dokka/htmlMultiModule/*
+          path: smithy-kotlin-docs
 
   api-doc-gen-parallel:
     runs-on: ubuntu-latest
@@ -106,6 +107,9 @@ jobs:
         uses: actions/download-artifact@v2
       - name: Consolidate Service Docs
         run: |
+          set -x
+          pwd
+          ls -l
           mkdir target
 
           for suffix in {a..z}
