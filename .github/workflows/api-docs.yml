@@ -15,7 +15,7 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
-          repository: awslabs/smithy-koltin # todo sync versions
+          repository: awslabs/smithy-kotlin # todo sync versions
       - name: Build upstream docs
         id: smithy-kotlin-build
         run: |
