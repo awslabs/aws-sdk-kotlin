@@ -9,17 +9,43 @@ env:
   PUBLISH_ARTIFACT: true # toggle publishing all docs as artifact
 
 jobs:
+  smithy-kotlin-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+        with:
+          repository: awslabs/smithy-koltin # todo sync versions
+      - name: Build upstream docs
+        id: smithy-kotlin-build
+        run: |
+          ./gradlew dokkaHtmlMultiModule
+          echo ::set-output name=smithy-kotlin-package-list::"$(pwd)/build/dokka/htmlMultiModule/package-list"
+      - name: Upload Smithy-Kotlin Doc Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: smithy-kotlin-docs
+          path: build/dokka/htmlMultiModule/*
+
   api-doc-gen-parallel:
     runs-on: ubuntu-latest
+    needs: smithy-kotlin-docs
     strategy:
       matrix:
         service-prefix: [x,v] # [ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z ] # TODO: flatter svc distribution
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
+      - name: Download smithy-kotlin artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: smithy-kotlin-docs
       - name: Generate API Docs
         id: gen-docs
         run: |
+          set -x
+          pwd
+          ls -l
           # Do not generate SDKs for the following unsupported SDKs
           excluded_services=("transcribestreaming" "timestreamwrite" "timestreamquery")
 
@@ -41,7 +67,7 @@ jobs:
             if [[ $excluded == 0 ]]; then
               echo "Building docs for $SERVICE_NAME"
 
-              ./gradlew -Paws.services=+$SERVICE_NAME :codegen:sdk:bootstrap  # generate SDK
+              ./gradlew -Paws.services=+$SERVICE_NAME -PsmithyKotlinPackageListUrl=file://smithy-kotlin-docs/package-list :codegen:sdk:bootstrap  # generate SDK
 
               # Retry due to transient network failures during doc generation
               # https://unix.stackexchange.com/a/82602
@@ -94,6 +120,12 @@ jobs:
               echo "Did not find archive for $ARCHIVE"
             fi
           done
+      - name: Add smithy-kotlin docs
+        run: |
+          set -x
+          pwd
+          ls -l
+          mv smithy-kotlin-docs target/
       - name: Generate Top Level Index
         run: |
           INDEX_FILE=target/index.html
@@ -174,3 +206,10 @@ jobs:
         with:
           name: all-api-docs
           path: target/*
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        # if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: api-docs
+          files: |
+            all-api-docs.zip
