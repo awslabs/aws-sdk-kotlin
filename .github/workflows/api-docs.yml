@@ -22,6 +22,7 @@ jobs:
           ./gradlew dokkaHtmlMultiModule
           mkdir smithy-kotlin-docs
           mv build/dokka/htmlMultiModule/* smithy-kotlin-docs/
+          find smithy-kotlin-docs/
       - name: Upload Smithy-Kotlin Doc Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -47,7 +48,7 @@ jobs:
         run: |
           set -x
           pwd
-          ls -l
+          ls -l smithy-kotlin-docs
           # Do not generate SDKs for the following unsupported SDKs
           excluded_services=("transcribestreaming" "timestreamwrite" "timestreamquery")
 
