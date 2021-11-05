@@ -41,6 +41,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: smithy-kotlin-docs
+          path: smithy-kotlin-docs
       - name: Generate API Docs
         id: gen-docs
         run: |
