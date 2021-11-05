@@ -5,6 +5,8 @@ on: # TODO: determine best event hook (release, etc)
 
 env:
   DOC_BRANCH_NAME: api-docs # the branch from which github pages content is sourced
+  PUBLISH_GH_PAGES: false # toggle publishing on github pages branch
+  PUBLISH_ARTIFACT: true # toggle publishing all docs as artifact
 
 jobs:
   api-doc-gen-parallel:
@@ -67,6 +69,7 @@ jobs:
         with:
           name: api-docs-${{ matrix.service-prefix }}
           path: api-docs-${{ matrix.service-prefix }}.tar.xz
+          retention-days: 1 # These intra-workflow artifacts are not needed after final docs generated
 
   # Download all artifacts from previous job, extract them to common dir, add top-level index and push to ghpages branch
   combine-docs:
@@ -152,6 +155,7 @@ jobs:
           FIRST_SERVICE=$(find target/ -maxdepth 1 -mindepth 1 -type d | head -n 1)
           cp -r $FIRST_SERVICE/styles $FIRST_SERVICE/images target/
       - name: Stage in branch
+        if: env.PUBLISH_GH_PAGES == 'true'
         uses: peaceiris/actions-gh-pages@v3.7.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -163,3 +167,14 @@ jobs:
           user_email: nobody@amazonaws.com
           commit_message: Update docs
           disable_nojekyll: true
+          enable_jekyll: false
+      - name: Compress Complete Docs
+        if: env.PUBLISH_ARTIFACT == 'true'
+        run: |
+          tar cJvf api-docs.tar.xz target/*
+      - name: Upload Complete Artifact
+        if: env.PUBLISH_ARTIFACT == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: all-api-docs
+          path: api-docs.tar.xz
