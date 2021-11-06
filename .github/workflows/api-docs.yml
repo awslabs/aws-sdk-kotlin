@@ -54,7 +54,7 @@ jobs:
           excluded_services=("transcribestreaming" "timestreamwrite" "timestreamquery")
 
           # Resource mgmt optimization for Dokka
-          echo "org.gradle.daemon=false" >> gradle.properties
+          printf "\norg.gradle.daemon=false" >> gradle.properties
 
           # do not execute following loop if no files w prefix
           shopt -s nullglob
@@ -167,7 +167,7 @@ jobs:
           # Generate list of services
           for aws_service_dir in target/*
           do
-            if [ "$aws_service_dir" !=  "target/index.html" ]; then # no self reference
+            if [[ "$aws_service_dir" !=  "target/index.html" && "$aws_service_dir" !=  "target/smithy-kotlin-docs" ]]; then # no self reference
               SERVICE_NAME=${aws_service_dir##*/}    # Extract the filename from the path
 
               echo "    <div class='table-row'>" >> $INDEX_FILE
