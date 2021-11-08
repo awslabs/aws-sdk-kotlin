@@ -206,14 +206,16 @@ jobs:
           disable_nojekyll: true
           enable_jekyll: false
       - name: Prepare Release
+        id: prep-release
         if: env.PUBLISH_ARTIFACT == 'true'
         run: |
           mv target kotlin-sdk-api-docs
           zip -r kotlin-sdk-api-docs.zip kotlin-sdk-api-docs/
+          echo "::set-output name=timestamp::$(date +'%s')"
       - name: Release
         if: env.PUBLISH_ARTIFACT == 'true'
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: api-docs
+          tag_name: api-docs-${{ steps.prep-release.outputs.timestamp }}
           files: |
             kotlin-sdk-api-docs.zip
