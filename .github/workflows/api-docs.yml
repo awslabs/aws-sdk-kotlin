@@ -211,10 +211,14 @@ jobs:
         with:
           name: all-api-docs
           path: target/*
+      - name: Prepare Release
+        run: |
+          mv target kotlin-sdk-api-docs
+          zip -r kotlin-sdk-api-docs-${{ github.ref }}.zip kotlin-sdk-api-docs/
       - name: Release
         uses: softprops/action-gh-release@v1
         # if: startsWith(github.ref, 'refs/tags/')
         with:
-          tag_name: api-docs
+          tag_name: api-docs-${{ github.ref }}
           files: |
-            all-api-docs.zip
+            kotlin-sdk-api-docs-${{ github.ref }}.zip
