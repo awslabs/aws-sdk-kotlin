@@ -213,8 +213,7 @@ jobs:
       - name: Release
         if: env.PUBLISH_ARTIFACT == 'true'
         uses: softprops/action-gh-release@v1
-        # if: startsWith(github.ref, 'refs/tags/')
         with:
-          tag_name: api-docs-${{ github.ref }}
+          tag_name: api-docs
           files: |
             kotlin-sdk-api-docs.zip
