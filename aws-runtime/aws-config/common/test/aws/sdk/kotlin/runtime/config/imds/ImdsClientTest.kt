@@ -218,14 +218,15 @@ class ImdsClientTest {
         }
 
         val start = Instant.now()
-        assertFails {
+        val ex = assertFails {
             withTimeout(3000) {
                 client.get("/latest/metadata")
             }
-        }.message.shouldContain("timed out")
+        }
+        assertTrue(ex.message!!.contains("timed out"), "message `${ex.message}`")
         val elapsed = Instant.now().epochMilliseconds - start.epochMilliseconds
-        assertTrue(elapsed >= 1000)
-        assertTrue(elapsed < 2000)
+        assertTrue(elapsed >= 1000, "expected elapsed ms to be greater than 1000; actual = $elapsed")
+        assertTrue(elapsed < 2000, "expected elapsed ms to be less than 2000; actual = $elapsed")
     }
 
     data class ImdsConfigTest(
