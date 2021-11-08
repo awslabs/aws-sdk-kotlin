@@ -27,10 +27,10 @@ class AwsDefaultRetryIntegration : KotlinIntegration {
 }
 
 private val middleware = object : HttpFeatureMiddleware() {
-    override val name: String = "RetryFeature"
+    override val name: String = "Retry"
 
     override fun renderConfigure(writer: KotlinWriter) {
-        writer.addImport(RuntimeTypes.Http.Middlware.RetryFeature)
+        writer.addImport(RuntimeTypes.Http.Middlware.Retry)
         writer.addImport(AwsRuntimeTypes.Http.Retries.AwsDefaultRetryPolicy)
 
         writer.write("strategy = config.retryStrategy")
