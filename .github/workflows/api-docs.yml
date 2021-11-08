@@ -33,7 +33,7 @@ jobs:
     needs: smithy-kotlin-docs
     strategy:
       matrix:
-        service-prefix: [ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z ] # TODO: flatter svc distribution
+        service-prefix: [ b,h,q,x,v ] # [ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z ]
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
