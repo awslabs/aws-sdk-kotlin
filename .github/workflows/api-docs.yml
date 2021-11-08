@@ -33,7 +33,7 @@ jobs:
     needs: smithy-kotlin-docs
     strategy:
       matrix:
-        service-prefix: [ b,h,q,x,v ] # [ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z ]
+        service-prefix: [ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z ]
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
@@ -208,11 +208,8 @@ jobs:
       - name: Prepare Release
         if: env.PUBLISH_ARTIFACT == 'true'
         run: |
-          set -x
-          ls -l
           mv target kotlin-sdk-api-docs
           zip -r kotlin-sdk-api-docs.zip kotlin-sdk-api-docs/
-          ls -l
       - name: Release
         if: env.PUBLISH_ARTIFACT == 'true'
         uses: softprops/action-gh-release@v1
