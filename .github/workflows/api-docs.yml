@@ -205,17 +205,13 @@ jobs:
           commit_message: Update docs
           disable_nojekyll: true
           enable_jekyll: false
-      - name: Upload Complete Artifact
-        if: env.PUBLISH_ARTIFACT == 'true'
-        uses: actions/upload-artifact@v2
-        with:
-          name: all-api-docs
-          path: target/*
       - name: Prepare Release
+        if: env.PUBLISH_ARTIFACT == 'true'
         run: |
           mv target kotlin-sdk-api-docs
           zip -r kotlin-sdk-api-docs-${{ github.ref }}.zip kotlin-sdk-api-docs/
       - name: Release
+        if: env.PUBLISH_ARTIFACT == 'true'
         uses: softprops/action-gh-release@v1
         # if: startsWith(github.ref, 'refs/tags/')
         with:
