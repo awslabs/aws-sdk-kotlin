@@ -4,13 +4,9 @@
  */
 package aws.sdk.kotlin.e2etest
 
-import aws.sdk.kotlin.e2etest.S3TestUtils.httpResponseFromGetRequest
-import aws.sdk.kotlin.e2etest.S3TestUtils.responseCodeFromPut
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
-import aws.sdk.kotlin.services.s3.model.PutObjectRequest
-import aws.sdk.kotlin.services.s3.presign
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.content.fromFile
@@ -34,11 +30,11 @@ class S3BucketOpsIntegrationTest {
         const val DEFAULT_REGION = "us-east-2"
     }
 
-    val client = S3Client {
+    private val client = S3Client {
         region = DEFAULT_REGION
     }
 
-    lateinit var testBucket: String
+    private lateinit var testBucket: String
 
     @BeforeAll
     private fun createResources(): Unit = runBlocking {
@@ -101,48 +97,5 @@ class S3BucketOpsIntegrationTest {
 
         val contents = tempFile.readText()
         assertEquals(contents, roundTrippedContents)
-    }
-
-    @Test
-    fun testPutObjectPresigner() = runSuspendTest {
-        val contents = "presign-test"
-        val keyName = "put-obj-from-memory-presigned.txt"
-
-        val presignedRequest = PutObjectRequest {
-            bucket = testBucket
-            key = keyName
-        }.presign(client.config, 60)
-
-        responseCodeFromPut(presignedRequest, contents)
-
-        val req = GetObjectRequest {
-            bucket = testBucket
-            key = keyName
-        }
-        val roundTrippedContents = client.getObject(req) { it.body?.decodeToString() }
-
-        assertEquals(contents, roundTrippedContents)
-    }
-
-    @Test
-    fun testGetObjectPresigner() = runSuspendTest {
-        val contents = "presign-test"
-        val keyName = "put-obj-from-memory-presigned.txt"
-
-        client.putObject {
-            bucket = testBucket
-            key = keyName
-            body = ByteStream.fromString(contents)
-        }
-
-        val presignedRequest = GetObjectRequest {
-            bucket = testBucket
-            key = keyName
-        }.presign(client.config, 60)
-
-        val (code, content) = httpResponseFromGetRequest(presignedRequest)
-
-        assertEquals(code, 200)
-        assertEquals(content, contents)
     }
 }

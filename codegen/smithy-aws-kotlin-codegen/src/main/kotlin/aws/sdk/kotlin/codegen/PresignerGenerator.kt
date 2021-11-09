@@ -111,8 +111,10 @@ class PresignerGenerator : KotlinIntegration {
         }
     }
 
-    // Determine if body should be signed.  If body is to be signed, null is passed to signer for signedBodyValue
-    // parameter which signals that the body should be signed. Otherwise AwsSignedBodyValue.UNSIGNED_PAYLOAD is passed.
+    // Determine if body should be read and signed by CRT.  If body is to be signed by CRT, null is passed to signer
+    // for signedBodyValue parameter. This causes CRT to read the body and compute the signature.
+    // Otherwise AwsSignedBodyValue.UNSIGNED_PAYLOAD is passed specifying that the body will be ignored and CRT
+    // will not take the body into account when signing the request.
     private fun signBody(protocol: String) =
         when (protocol) {
             "awsQuery" -> true // Query protocol always contains a body

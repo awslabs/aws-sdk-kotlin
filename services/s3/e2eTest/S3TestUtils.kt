@@ -5,7 +5,11 @@
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.services.s3.S3Client
-import aws.sdk.kotlin.services.s3.model.*
+import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
+import aws.sdk.kotlin.services.s3.model.ExpirationStatus
+import aws.sdk.kotlin.services.s3.model.LifecycleRule
+import aws.sdk.kotlin.services.s3.model.LifecycleRuleFilter
+import aws.sdk.kotlin.services.s3.model.NotFound
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
@@ -15,7 +19,6 @@ import java.util.*
 import javax.net.ssl.HttpsURLConnection
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlin.time.seconds
 
 object S3TestUtils {
 
@@ -96,26 +99,6 @@ object S3TestUtils {
         } catch (ex: Exception) {
             println("Failed to delete bucket: $bucketName")
             throw ex
-        }
-    }
-
-    fun httpResponseFromGetRequest(presignedRequest: HttpRequest): Pair<Int, String?> {
-        val url = URL(presignedRequest.url.toString())
-        var urlConnection: HttpsURLConnection? = null
-        try {
-            urlConnection = url.openConnection() as HttpsURLConnection? ?: error("could not construct client")
-            presignedRequest.headers.forEach { key, values ->
-                urlConnection.setRequestProperty(key, values.first())
-            }
-            urlConnection.connect()
-
-            if (urlConnection.errorStream != null) {
-                error("request failed: ${urlConnection.errorStream?.bufferedReader()?.readText()}")
-            }
-
-            return urlConnection.responseCode to urlConnection.inputStream?.bufferedReader()?.readText()
-        } finally {
-            urlConnection!!.inputStream.close()
         }
     }
 
