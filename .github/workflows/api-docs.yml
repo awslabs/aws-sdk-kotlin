@@ -5,7 +5,6 @@ on: # TODO: determine best event hook (release, etc)
 
 env:
   DOC_BRANCH_NAME: api-docs # the branch from which github pages content is sourced
-  PUBLISH_GH_PAGES: false # toggle publishing on github pages branch
   PUBLISH_ARTIFACT: true # toggle publishing all docs as artifact
 
 jobs:
@@ -108,9 +107,6 @@ jobs:
         uses: actions/download-artifact@v2
       - name: Consolidate Service Docs
         run: |
-          set -x
-          pwd
-          ls -l
           mkdir target
 
           for suffix in {a..z}
@@ -127,9 +123,6 @@ jobs:
           done
       - name: Add smithy-kotlin docs
         run: |
-          set -x
-          pwd
-          ls -l
           mv smithy-kotlin-docs target/
       - name: Generate Top Level Index
         run: |
@@ -188,23 +181,8 @@ jobs:
           echo "</html>" >> $INDEX_FILE
       - name: Copy Styles to root # Take the styles and images from a service into the root for consistent styling
         run: |
-          set -x
           FIRST_SERVICE=$(find target/ -maxdepth 1 -mindepth 1 -type d | head -n 1)
           cp -r $FIRST_SERVICE/styles $FIRST_SERVICE/images target/
-      - name: Stage in branch
-        if: env.PUBLISH_GH_PAGES == 'true'
-        uses: peaceiris/actions-gh-pages@v3.7.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: ${{ env.DOC_BRANCH_NAME }}
-          publish_dir: target
-          destination_dir: .
-          allow_empty_commit: false # optional, default is false
-          user_name: AWS CI
-          user_email: nobody@amazonaws.com
-          commit_message: Update docs
-          disable_nojekyll: true
-          enable_jekyll: false
       - name: Prepare Release
         id: prep-release
         if: env.PUBLISH_ARTIFACT == 'true'
