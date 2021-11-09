@@ -3,10 +3,6 @@ name: API Docs
 on: # TODO: determine best event hook (release, etc)
   workflow_dispatch:
 
-env:
-  DOC_BRANCH_NAME: api-docs # the branch from which github pages content is sourced
-  PUBLISH_ARTIFACT: true # toggle publishing all docs as artifact
-
 jobs:
   smithy-kotlin-docs:
     runs-on: ubuntu-latest
@@ -186,13 +182,11 @@ jobs:
           cp -r $FIRST_SERVICE/styles $FIRST_SERVICE/images target/
       - name: Prepare Release
         id: prep-release
-        if: env.PUBLISH_ARTIFACT == 'true'
         run: |
           mv target kotlin-sdk-api-docs
           zip -r kotlin-sdk-api-docs.zip kotlin-sdk-api-docs/
           echo "::set-output name=timestamp::$(date +'%s')"
       - name: Release
-        if: env.PUBLISH_ARTIFACT == 'true'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: api-docs-${{ steps.prep-release.outputs.timestamp }}
