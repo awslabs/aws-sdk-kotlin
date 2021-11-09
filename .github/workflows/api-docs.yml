@@ -63,6 +63,7 @@ jobs:
             # delete src for any previously generated SDK
             git clean -dfx services
 
+            docs_generated=true
             MODEL_FILENAME=${aws_model_file##*/}    # Extract the filename from the path
             SERVICE_NAME=$(echo "$MODEL_FILENAME" | cut -d. -f1 ) # Extract the service name from the filename
             excluded=$(echo "${excluded_services[@]}" | grep -ow "$SERVICE_NAME" | wc -w)
@@ -80,17 +81,16 @@ jobs:
                  n=$((n+1))
                  sleep 15
               done
-
-              echo ::set-output name=docs-generated::"true"
             else # SDK was excluded
               echo "Ignoring excluded service $SERVICE_NAME"
-              echo ::set-output name=docs-generated::"false"
+              docs_generated=false
             fi
           done
+          echo ::set-output name=docs-generated::"$docs_generated"
       - name: Compress Docs
         if: steps.gen-docs.outputs.docs-generated == 'true'
         run: |
-          tar cJvf api-docs-${{ matrix.service-prefix }}.tar.xz build/dokka/*
+          tar cJf api-docs-${{ matrix.service-prefix }}.tar.xz build/dokka/*
       - name: Upload Artifact
         if: steps.gen-docs.outputs.docs-generated == 'true'
         uses: actions/upload-artifact@v2
