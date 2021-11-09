@@ -43,13 +43,13 @@ import software.amazon.smithy.model.traits.TimestampFormatTrait
  *
  * @property serviceId ID of service presigning applies to
  * @property operationId Operation capable of presigning
- * @property hasBody true if operation will pass an unsigned body with the request
+ * @property signBody true if the body is to be read and signed, otherwise body specified as unsigned.
  *
  */
 data class PresignableOperation(
     val serviceId: String,
     val operationId: String,
-    val hasBody: Boolean,
+    val signBody: Boolean,
 )
 
 /**
@@ -113,7 +113,7 @@ class PresignerGenerator : KotlinIntegration {
 
     // Determine if body should be read and signed by CRT.  If body is to be signed by CRT, null is passed to signer
     // for signedBodyValue parameter. This causes CRT to read the body and compute the signature.
-    // Otherwise AwsSignedBodyValue.UNSIGNED_PAYLOAD is passed specifying that the body will be ignored and CRT
+    // Otherwise, AwsSignedBodyValue.UNSIGNED_PAYLOAD is passed specifying that the body will be ignored and CRT
     // will not take the body into account when signing the request.
     private fun signBody(protocol: String) =
         when (protocol) {
@@ -307,7 +307,7 @@ class PresignerGenerator : KotlinIntegration {
                     write("httpRequestBuilder.url.path,")
                     presignConfigFnVisitor.renderQueryParameters(writer)
                     write("durationSeconds.toLong(),")
-                    write("${presignableOp.hasBody},")
+                    write("${presignableOp.signBody},")
                     write("SigningLocation.HEADER")
                 }
             }
