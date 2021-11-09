@@ -54,7 +54,7 @@ jobs:
           smithy_kotlin_package_list_path="$(pwd)/smithy-kotlin-docs/package-list"
 
           # Track if docs were generated in this segment of job run.
-          docs_generated=true
+          docs_generated=false
 
           # Iterate over service models, extract the name and codegen each SDK discretely
           for aws_model_file in codegen/sdk/aws-models/${{ matrix.service-prefix }}*.json
@@ -79,9 +79,10 @@ jobs:
                  n=$((n+1))
                  sleep 15
               done
+
+              docs_generated=true
             else # SDK was excluded
               echo "Ignoring excluded service $SERVICE_NAME"
-              docs_generated=false
             fi
           done
           echo ::set-output name=docs-generated::"$docs_generated"
