@@ -16,3 +16,4 @@ aws.sdk.kotlin.codegen.customization.polly.PollyPresigner
 aws.sdk.kotlin.codegen.customization.BoxServices
 aws.sdk.kotlin.codegen.customization.glacier.GlacierBodyChecksum
 aws.sdk.kotlin.codegen.customization.machinelearning.MachineLearningEndpointCustomization
+aws.sdk.kotlin.codegen.customization.sts.StsDisableAuthForOperations
