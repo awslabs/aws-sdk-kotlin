@@ -53,13 +53,15 @@ jobs:
           # configure path to smithy-kotlin's package-list
           smithy_kotlin_package_list_path="$(pwd)/smithy-kotlin-docs/package-list"
 
+          # Track if docs were generated in this segment of job run.
+          docs_generated=true
+
           # Iterate over service models, extract the name and codegen each SDK discretely
           for aws_model_file in codegen/sdk/aws-models/${{ matrix.service-prefix }}*.json
           do
             # delete src for any previously generated SDK
             git clean -dfx services
 
-            docs_generated=true
             MODEL_FILENAME=${aws_model_file##*/}    # Extract the filename from the path
             SERVICE_NAME=$(echo "$MODEL_FILENAME" | cut -d. -f1 ) # Extract the service name from the filename
             excluded=$(echo "${excluded_services[@]}" | grep -ow "$SERVICE_NAME" | wc -w)
