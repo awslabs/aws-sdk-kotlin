@@ -59,7 +59,7 @@ public enum class SigningLocation {
  * @property path HTTP path of the presigned request
  * @property queryString the HTTP querystring of the presigned request
  * @property durationSeconds Number of seconds that the request will be valid for after being signed.
- * @property hasBody Specifies if the request contains a body
+ * @property signBody Specifies if the request body should be signed
  * @property signingLocation Specifies where the signing information should be placed in the presigned request
  * @property additionalHeaders Custom headers that should be signed as part of the request
  */
@@ -68,7 +68,7 @@ public data class PresignedRequestConfig(
     public val path: String,
     public val queryString: QueryParameters = QueryParameters.Empty,
     public val durationSeconds: Long,
-    public val hasBody: Boolean = false,
+    public val signBody: Boolean = false,
     public val signingLocation: SigningLocation,
     public val additionalHeaders: Headers = Headers.Empty
 )
@@ -90,7 +90,7 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
         credentials = crtCredentials
         signatureType = if (requestConfig.signingLocation == SigningLocation.HEADER) AwsSignatureType.HTTP_REQUEST_VIA_HEADERS else AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
         signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
-        signedBodyValue = if (requestConfig.hasBody) AwsSignedBodyValue.UNSIGNED_PAYLOAD else null
+        signedBodyValue = if (requestConfig.signBody) null else AwsSignedBodyValue.UNSIGNED_PAYLOAD
         expirationInSeconds = requestConfig.durationSeconds
     }
 

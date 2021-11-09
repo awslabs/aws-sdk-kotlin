@@ -6,9 +6,13 @@ package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.*
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
+import java.io.OutputStreamWriter
+import java.net.URL
 import java.util.*
+import javax.net.ssl.HttpsURLConnection
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 import kotlin.time.seconds
@@ -93,5 +97,45 @@ object S3TestUtils {
             println("Failed to delete bucket: $bucketName")
             throw ex
         }
+    }
+
+    fun httpResponseFromGetRequest(presignedRequest: HttpRequest): Pair<Int, String?> {
+        val url = URL(presignedRequest.url.toString())
+        var urlConnection: HttpsURLConnection? = null
+        try {
+            urlConnection = url.openConnection() as HttpsURLConnection? ?: error("could not construct client")
+            presignedRequest.headers.forEach { key, values ->
+                urlConnection.setRequestProperty(key, values.first())
+            }
+            urlConnection.connect()
+
+            if (urlConnection.errorStream != null) {
+                error("request failed: ${urlConnection.errorStream?.bufferedReader()?.readText()}")
+            }
+
+            return urlConnection.responseCode to urlConnection.inputStream?.bufferedReader()?.readText()
+        } finally {
+            urlConnection!!.inputStream.close()
+        }
+    }
+
+    fun responseCodeFromPut(presignedRequest: HttpRequest, content: String): Int {
+        val url = URL(presignedRequest.url.toString())
+        val connection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
+        presignedRequest.headers.forEach { key, values ->
+            connection.setRequestProperty(key, values.first())
+        }
+
+        connection.doOutput = true
+        connection.requestMethod = "PUT"
+        val out = OutputStreamWriter(connection.outputStream)
+        out.write(content)
+        out.close()
+
+        if (connection.errorStream != null) {
+            error("request failed: ${connection.errorStream?.bufferedReader()?.readText()}")
+        }
+
+        return connection.responseCode
     }
 }
