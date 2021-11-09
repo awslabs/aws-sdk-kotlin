@@ -17,7 +17,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3PresignerTest {
@@ -89,5 +88,4 @@ class S3PresignerTest {
             assertEquals(contents, body)
         }
     }
-
 }

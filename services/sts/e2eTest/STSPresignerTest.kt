@@ -3,14 +3,9 @@ package aws.sdk.kotlin.services.sts
 import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.sts.model.GetCallerIdentityRequest
-import aws.smithy.kotlin.runtime.content.decodeToString
-import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
-import aws.smithy.kotlin.runtime.http.toByteStream
 import org.junit.jupiter.api.TestInstance
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -36,4 +31,3 @@ class StsPresignerTest {
         }
     }
 }
-
