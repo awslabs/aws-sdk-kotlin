@@ -10,7 +10,7 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
-          repository: kggilmer/smithy-kotlin
+          repository: kggilmer/smithy-kotlin # NOTE: All references to 'kggilmer' will change to 'awslabs' before push
           ref: ${{ env.GITHUB_REF }}
       - name: Build upstream docs
         id: smithy-kotlin-build
