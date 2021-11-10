@@ -1,16 +1,24 @@
 name: API Docs
 
-on: # TODO: determine best event hook (release, etc)
+on:
   workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   smithy-kotlin-docs:
     runs-on: ubuntu-latest
     steps:
+      - name: Get repo owner
+        id: repo-owner
+        run: |
+          set -x
+          owner=$(echo ${{ env.GITHUB_REPOSITORY }} | cut -d/ -f1)
+          echo ::set-output name=repo-owner::"$owner"
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
-          repository: kggilmer/smithy-kotlin # NOTE: All references to 'kggilmer' will change to 'awslabs' before push
+          repository: ${{ steps.repo-owner.outputs.repo-owner }}/smithy-kotlin
           ref: ${{ env.GITHUB_REF }}
       - name: Build upstream docs
         id: smithy-kotlin-build
