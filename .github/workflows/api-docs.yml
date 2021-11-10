@@ -16,6 +16,7 @@ jobs:
       - name: Consolidate source ref
         id: source-ref
         run: |
+          set -x
           if [ -z "${{ github.event.inputs.tags }}" ]; then
             echo ::set-output name=build_ref::"$GITHUB_REF"
           else
@@ -29,9 +30,6 @@ jobs:
       - name: Get repo owner and version
         id: repo-owner
         run: |
-          set -x
-          pwd
-          ls -l
           owner=$(echo ${GITHUB_REPOSITORY} | cut -d/ -f1)
           echo ::set-output name=repo-owner::"$owner"
           smithy_kotlin_version=$(cat aws-sdk-kotlin/gradle.properties | grep smithyKotlinVersion | cut -d= -f2)
@@ -45,9 +43,6 @@ jobs:
       - name: Build upstream docs
         id: smithy-kotlin-build
         run: |
-          set -x
-          pwd
-          ls -l
           cd smithy-kotlin
           ./gradlew dokkaHtmlMultiModule
           mkdir smithy-kotlin-docs
