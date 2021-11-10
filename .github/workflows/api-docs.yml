@@ -17,10 +17,10 @@ jobs:
         id: source-ref
         run: |
           set -x
-          if [ -z "${{ github.event.inputs.tags }}" ]; then
+          if [ -z "${{ github.event.inputs.release-tag }}" ]; then
             echo ::set-output name=build_ref::"$GITHUB_REF"
           else
-            echo ::set-output name=build_ref::"${{ github.event.inputs.tags }}"
+            echo ::set-output name=build_ref::"${{ github.event.inputs.release-tag }}"
           fi
       - name: Checkout aws-sdk-kotlin sources
         uses: actions/checkout@v2
