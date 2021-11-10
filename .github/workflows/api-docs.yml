@@ -9,20 +9,33 @@ jobs:
   smithy-kotlin-docs:
     runs-on: ubuntu-latest
     steps:
-      - name: Get repo owner
+      - name: Checkout aws-sdk-kotlin sources
+        uses: actions/checkout@v2
+        with:
+          path: aws-sdk-kotlin
+      - name: Get repo owner and version
         id: repo-owner
         run: |
           set -x
+          pwd
+          ls -l
           owner=$(echo ${GITHUB_REPOSITORY} | cut -d/ -f1)
           echo ::set-output name=repo-owner::"$owner"
-      - name: Checkout sources
+          smithy_kotlin_version=$(cat aws-sdk-kotlin/gradle.properties | grep smithyKotlinVersion | cut -d= -f2)
+          echo ::set-output smithy_kotlin_version=repo-owner::"v$smithy_kotlin_version"
+      - name: Checkout smithy-kotlin sources
         uses: actions/checkout@v2
         with:
           repository: ${{ steps.repo-owner.outputs.repo-owner }}/smithy-kotlin
           ref: ${{ env.GITHUB_REF }}
+          path: smithy-kotlin
       - name: Build upstream docs
         id: smithy-kotlin-build
         run: |
+          set -x
+          pwd
+          ls -l
+          cd smithy-kotlin
           ./gradlew dokkaHtmlMultiModule
           mkdir smithy-kotlin-docs
           mv build/dokka/htmlMultiModule/* smithy-kotlin-docs/
@@ -30,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: smithy-kotlin-docs
-          path: smithy-kotlin-docs
+          path: smithy-kotlin/smithy-kotlin-docs
 
   api-doc-gen-parallel:
     runs-on: ubuntu-latest
