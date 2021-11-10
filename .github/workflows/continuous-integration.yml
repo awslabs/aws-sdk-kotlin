@@ -71,9 +71,3 @@ jobs:
           python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
           java -version
           python3 builder.pyz build -p ${{ env.PACKAGE_NAME }}
-      - name: Archive Files
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: memory-dump
-          path: ${{ github.workspace }}/aws-runtime/http-client-engine-crt/*.log

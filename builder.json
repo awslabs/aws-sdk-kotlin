@@ -16,7 +16,7 @@
         "windows": {
             "_comment": "windows GH runner fails with project defaults in gradle.properties",
             "!build_steps": [
-                "{gradlew} assemble --parallel -Dorg.gradle.jvmargs=-Xmx2g"
+                "{gradlew} assemble --parallel -Dorg.gradle.jvmargs=-Xmx4g"
             ],
             "!imports": [],
             "!env": {}
