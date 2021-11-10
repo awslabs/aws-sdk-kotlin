@@ -196,10 +196,8 @@ jobs:
         run: |
           mv target kotlin-sdk-api-docs
           zip -r kotlin-sdk-api-docs.zip kotlin-sdk-api-docs/
-          echo "::set-output name=timestamp::$(date +'%s')"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: api-docs-${{ steps.prep-release.outputs.timestamp }}
           files: |
             kotlin-sdk-api-docs.zip
