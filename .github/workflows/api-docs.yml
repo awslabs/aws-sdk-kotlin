@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       release-tag:
-          description: The aws-sdk-kotlin release tag to generate docs from.
+          description: The aws-sdk-kotlin release tag
           required: true
   release:
     types: [published]
@@ -16,7 +16,6 @@ jobs:
       - name: Consolidate source ref
         id: source-ref
         run: |
-          set -x
           if [ -z "${{ github.event.inputs.release-tag }}" ]; then
             echo ::set-output name=build_ref::"$GITHUB_REF"
           else
