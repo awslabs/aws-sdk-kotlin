@@ -27,10 +27,10 @@ import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 class AsyncStressTest : TestWithLocalServer() {
-    init {
-        System.setProperty("aws.crt.log.level", "Trace")
-        System.setProperty("aws.crt.log.destination", "Stdout")
-    }
+//    init {
+//        System.setProperty("aws.crt.log.level", "Trace")
+//        System.setProperty("aws.crt.log.destination", "Stdout")
+//    }
 
     override val server = embeddedServer(CIO, serverPort) {
         routing {
