@@ -51,6 +51,8 @@ jobs:
         with:
           name: smithy-kotlin-docs
           path: smithy-kotlin/smithy-kotlin-docs
+    outputs:
+      source-ref: ${{ steps.source-ref.outputs.build_ref }}
 
   api-doc-gen-parallel:
     runs-on: ubuntu-latest
@@ -128,7 +130,7 @@ jobs:
 
   # Download all artifacts from previous job, extract them to common dir, add top-level index and push to ghpages branch
   combine-docs:
-    needs: api-doc-gen-parallel
+    needs: [ smithy-kotlin-docs, api-doc-gen-parallel ]
     runs-on: ubuntu-latest
     steps:
       - name: Download all workflow run artifacts
@@ -219,5 +221,6 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ needs.smithy-kotlin-docs.outputs.build_ref }}
           files: |
             kotlin-sdk-api-docs.zip
