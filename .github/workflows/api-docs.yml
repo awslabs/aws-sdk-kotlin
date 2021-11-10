@@ -2,6 +2,10 @@ name: API Docs
 
 on:
   workflow_dispatch:
+    inputs:
+      release-tag:
+          description: The aws-sdk-kotlin release tag to generate docs from.
+          required: true
   release:
     types: [published]
 
@@ -9,9 +13,18 @@ jobs:
   smithy-kotlin-docs:
     runs-on: ubuntu-latest
     steps:
+      - name: Consolidate source ref
+        id: source-ref
+        run: |
+          if [ -z "${{ github.event.inputs.tags }}" ]; then
+            echo ::set-output name=build_ref::"$GITHUB_REF"
+          else
+            echo ::set-output name=build_ref::"${{ github.event.inputs.tags }}"
+          fi
       - name: Checkout aws-sdk-kotlin sources
         uses: actions/checkout@v2
         with:
+          ref: ${{ steps.source-ref.outputs.build_ref }}
           path: aws-sdk-kotlin
       - name: Get repo owner and version
         id: repo-owner
