@@ -14,22 +14,17 @@ This process is not necessary to use an AWS SDK, as one can simply depend on the
 
 ## Generate an SDK
 
-In this example we'll build the AWS DynamoDB SDK from the `0.8.0-alpha` release.
+In this example we'll build the AWS DynamoDB SDK.
 
-### Clone this repo using a release tag
+### Clone this repo 
 ```sh
-git clone --branch v0.8.0-alpha https://github.com/awslabs/aws-sdk-kotlin.git
+git clone https://github.com/awslabs/aws-sdk-kotlin.git
 cd aws-sdk-kotlin
 ```
 
 ### Generate the SDK source
 
-Before building the SDK we will change its version to prevent having the same version as provided by Maven Central:
-```sh
-sed -i 's/sdkVersion=0.8.0-alpha/sdkVersion=0.8.0-localtest/' gradle.properties
-```
-
-Now we can generate the DynamoDB SDK:
+Generate the DynamoDB SDK:
 ```sh
 ./gradlew -Paws.services=+dynamodb :codegen:sdk:bootstrap
 ```
@@ -42,11 +37,12 @@ would be `cloudformation`.  The date and json extension are removed.
 ```sh
 ./gradlew :services:dynamodb:build
 ```
-Once this completes a compiled SDK for the AWS DynamoDB service has been generated.
+Once this completes a compiled SDK for the AWS DynamoDB service has been generated.  The version will vary depending
+on whatever is the latest version in the repository.
 
 ```sh
 ls services/dynamodb/build/libs      
-dynamodb-0.8.0-localtest.jar
+dynamodb-<version>.jar
 ```
 
 To use this compiled SDK from another program locally, the local Maven repository can be used.  The following command 
@@ -72,7 +68,7 @@ And then simply add the dependency:
 
 ```
 dependencies {
-    implementation("aws.sdk.kotlin:dynamodb:0.8.0-localtest")
+    implementation("aws.sdk.kotlin:dynamodb:<version>")
 }
 ```
 
