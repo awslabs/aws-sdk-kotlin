@@ -38,6 +38,11 @@
             "!test_steps": [
                 "{gradlew} test allTests"
             ]
+        },
+        "codegen-preview": {
+            "!imports": [],
+            "!build_steps": [],
+            "!test_steps": []
         }
     }
 }

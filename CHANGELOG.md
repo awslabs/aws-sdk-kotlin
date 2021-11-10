@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.9.1-alpha] - 11/04/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### New features
+* implement retries for imds [#404](https://github.com/awslabs/aws-sdk-kotlin/pull/404)
+* enable machinelearning endpoint customization [#378](https://github.com/awslabs/aws-sdk-kotlin/pull/378)
+* add glacier request body checksum [#379](https://github.com/awslabs/aws-sdk-kotlin/pull/379)
+
+### Fixes
+* restJson1 empty httpPayload body serialization [#402](https://github.com/awslabs/aws-sdk-kotlin/pull/402)
+
 ## [0.9.0-alpha] - 10/28/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
@@ -420,7 +432,7 @@
 * use sdkId if available for service client generation (https://github.com/awslabs/smithy-kotlin/issues/276)
 * explicitly set jvm target compatibility (https://github.com/awslabs/aws-sdk-kotlin/issues/103)
 * http error registration (https://github.com/awslabs/aws-sdk-kotlin/issues/118)
-  
+
 ### Other
 
 * generate per/service base exception types (https://github.com/awslabs/smithy-kotlin/issues/270)
@@ -453,6 +465,6 @@ NOTES:
 
 ### Features
 * Coroutine API
-* DSL Builders  
+* DSL Builders
 * Default (environment or config) or static credential providers only. Additional providers will be added in later releases.
 * JVM only support (multiplatform support is on the roadmap)

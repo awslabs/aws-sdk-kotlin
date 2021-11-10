@@ -2,7 +2,6 @@ package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
 import aws.sdk.kotlin.codegen.protocols.core.AwsEndpointResolverGenerator
-import aws.sdk.kotlin.codegen.protocols.core.QueryBindingResolver
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
@@ -31,8 +30,6 @@ import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpTraitResolver
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.hasHttpBody
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
 import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.model.shapes.OperationShape
@@ -46,16 +43,13 @@ import software.amazon.smithy.model.traits.TimestampFormatTrait
  *
  * @property serviceId ID of service presigning applies to
  * @property operationId Operation capable of presigning
- * @property presignedParameterId (Optional) parameter in which presigned URL should be passed in the request
- * @property hasBody true if operation will pass an unsigned body with the request
+ * @property signBody true if the body is to be read and signed, otherwise body specified as unsigned.
  *
  */
 data class PresignableOperation(
     val serviceId: String,
     val operationId: String,
-    // TODO ~ Implementation of embedded presigned URLs is TBD
-    val presignedParameterId: String?,
-    val hasBody: Boolean,
+    val signBody: Boolean,
 )
 
 /**
@@ -103,9 +97,10 @@ class PresignerGenerator : KotlinIntegration {
             .filter { operationShape -> operationShape.hasTrait(Presignable.ID) }
             .map { operationShape ->
                 check(AwsSignatureVersion4.hasSigV4AuthScheme(ctx.model, service, operationShape)) { "Operation does not have valid auth trait" }
-                val resolver: HttpBindingResolver = getProtocolHttpBindingResolver(ctx, service)
-                val hasBody = resolver.hasHttpBody(operationShape)
-                PresignableOperation(service.id.toString(), operationShape.id.toString(), null, hasBody)
+                val protocol = requireNotNull(ctx.protocolGenerator).protocol.name
+                val shouldSignBody = signBody(protocol)
+
+                PresignableOperation(service.id.toString(), operationShape.id.toString(), shouldSignBody)
             }
 
         // If presignable operations found for this service, generate a Presigner file
@@ -115,6 +110,16 @@ class PresignerGenerator : KotlinIntegration {
             }
         }
     }
+
+    // Determine if body should be read and signed by CRT.  If body is to be signed by CRT, null is passed to signer
+    // for signedBodyValue parameter. This causes CRT to read the body and compute the signature.
+    // Otherwise, AwsSignedBodyValue.UNSIGNED_PAYLOAD is passed specifying that the body will be ignored and CRT
+    // will not take the body into account when signing the request.
+    private fun signBody(protocol: String) =
+        when (protocol) {
+            "awsQuery" -> true // Query protocol always contains a body
+            else -> false
+        }
 
     private fun renderPresigner(
         writer: KotlinWriter,
@@ -302,7 +307,7 @@ class PresignerGenerator : KotlinIntegration {
                     write("httpRequestBuilder.url.path,")
                     presignConfigFnVisitor.renderQueryParameters(writer)
                     write("durationSeconds.toLong(),")
-                    write("${presignableOp.hasBody},")
+                    write("${presignableOp.signBody},")
                     write("SigningLocation.HEADER")
                 }
             }
@@ -345,12 +350,4 @@ class PresignerGenerator : KotlinIntegration {
             write("return createPresignedRequest(presignConfig, $requestConfigFnName(this, durationSeconds))")
         }
     }
-
-    private fun getProtocolHttpBindingResolver(ctx: CodegenContext, service: ServiceShape): HttpBindingResolver =
-        when (requireNotNull(ctx.protocolGenerator).protocol) {
-            AwsQueryTrait.ID -> QueryBindingResolver(ctx.model, service)
-            RestJson1Trait.ID -> HttpTraitResolver(ctx.model, service, "application/json")
-            RestXmlTrait.ID -> HttpTraitResolver(ctx.model, service, "application/xml")
-            else -> throw CodegenException("Unable to create HttpBindingResolver for unhandled protocol ${ctx.protocolGenerator?.protocol}")
-        }
 }
