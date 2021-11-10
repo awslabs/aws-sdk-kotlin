@@ -13,7 +13,7 @@ jobs:
         id: repo-owner
         run: |
           set -x
-          owner=$(echo ${{ env.GITHUB_REPOSITORY }} | cut -d/ -f1)
+          owner=$(echo ${GITHUB_REPOSITORY} | cut -d/ -f1)
           echo ::set-output name=repo-owner::"$owner"
       - name: Checkout sources
         uses: actions/checkout@v2
