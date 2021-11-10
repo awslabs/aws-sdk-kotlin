@@ -16,7 +16,7 @@ import kotlin.test.assertEquals
 class StsPresignerTest {
 
     @Test
-    fun testPutObjectPresigner() = runSuspendTest {
+    fun testGetCallerIdentityPresigner() = runSuspendTest {
         val c = StsClient { region = "us-east-2" }
         val req = GetCallerIdentityRequest { }
         val presignedRequest = req.presign(c.config, 60)
