@@ -22,7 +22,7 @@ jobs:
           owner=$(echo ${GITHUB_REPOSITORY} | cut -d/ -f1)
           echo ::set-output name=repo-owner::"$owner"
           smithy_kotlin_version=$(cat aws-sdk-kotlin/gradle.properties | grep smithyKotlinVersion | cut -d= -f2)
-          echo ::set-output smithy_kotlin_version=repo-owner::"v$smithy_kotlin_version"
+          echo ::set-output name=smithy_kotlin_version::"v$smithy_kotlin_version"
       - name: Checkout smithy-kotlin sources
         uses: actions/checkout@v2
         with:
