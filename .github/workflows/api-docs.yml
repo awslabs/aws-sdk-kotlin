@@ -65,6 +65,10 @@ jobs:
       matrix:
         service-prefix: [ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z ]
     steps:
+      - name: debug
+        run: |
+          set -x
+          echo ${{ needs.smithy-kotlin-docs.outputs.build_ref }}
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
