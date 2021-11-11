@@ -69,11 +69,11 @@ jobs:
       - name: debug
         run: |
           set -x
-          echo ${{ needs.smithy-kotlin-docs.outputs.build_ref }}
+          echo ${{ needs.smithy-kotlin-docs.outputs.source-ref }}
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
-          ref: ${{ needs.smithy-kotlin-docs.outputs.build_ref }}
+          ref: ${{ needs.smithy-kotlin-docs.outputs.source-ref }}
       - name: Download smithy-kotlin artifacts
         uses: actions/download-artifact@v2
         with:
