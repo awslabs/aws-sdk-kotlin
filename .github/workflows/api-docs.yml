@@ -31,7 +31,6 @@ jobs:
       - name: Get repo owner and version
         id: repo-owner
         run: |
-          set -x
           owner=$(echo ${GITHUB_REPOSITORY} | cut -d/ -f1)
           echo ::set-output name=repo-owner::"$owner"
           smithy_kotlin_version=$(cat aws-sdk-kotlin/gradle.properties | grep smithyKotlinVersion | cut -d= -f2)
