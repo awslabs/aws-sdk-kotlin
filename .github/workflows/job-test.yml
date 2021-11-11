@@ -18,6 +18,7 @@ jobs:
       - name: Consolidate source ref
         id: source-ref
         run: |
+          set -x
           if [ -z "${{ github.event.inputs.release-tag }}" ]; then
             echo ::set-output name=build_ref::"$GITHUB_REF"
           else
