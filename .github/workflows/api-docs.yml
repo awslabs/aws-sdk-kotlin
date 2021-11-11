@@ -128,7 +128,7 @@ jobs:
           path: api-docs-${{ matrix.service-prefix }}.tar.xz
           retention-days: 1 # These intra-workflow artifacts are not needed after final docs generated
 
-  # Download all artifacts from previous job, extract them to common dir, add top-level index and push to ghpages branch
+  # Download all artifacts from previous job, extract them to common dir, add top-level index and publish docs as release artifact
   combine-docs:
     needs: [ smithy-kotlin-docs, api-doc-gen-parallel ]
     runs-on: ubuntu-latest
