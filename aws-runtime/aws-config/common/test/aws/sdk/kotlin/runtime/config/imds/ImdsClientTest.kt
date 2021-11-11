@@ -13,6 +13,7 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.operation.Endpoint
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.testing.IgnoreWindows
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
@@ -209,8 +210,7 @@ class ImdsClientTest {
         connection.assertRequests()
     }
 
-    // failure mode is different on windows vs *nix
-    @Ignore
+    @IgnoreWindows("DNS fails faster on windows and results in a different error")
     @Test
     fun testHttpConnectTimeouts(): Unit = runSuspendTest {
         // end-to-end real client times out after 1-second
@@ -225,9 +225,7 @@ class ImdsClientTest {
                 client.get("/latest/metadata")
             }
         }
-        // on windows DNS fails faster
-        // FIXME - on windows this fails with:
-        // message `socket connect failure, no route to host.
+        // on windows DNS fails faster with message `socket connect failure, no route to host.
         assertTrue(ex.message!!.contains("timed out"), "message `${ex.message}`")
         val elapsed = Instant.now().epochMilliseconds - start.epochMilliseconds
         assertTrue(elapsed >= 1000, "expected elapsed ms to be greater than 1000; actual = $elapsed")
