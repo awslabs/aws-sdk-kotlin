@@ -34,7 +34,7 @@ jobs:
         id: prep-release
         run: |
           set -x
-          echo ${{needs.smithy-kotlin-docs.outputs.build_ref}}
+          echo ${{needs.smithy-kotlin-docs.outputs.source-ref}}
 
   job1:
     runs-on: ubuntu-latest
