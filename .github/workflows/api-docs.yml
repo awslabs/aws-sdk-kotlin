@@ -12,6 +12,8 @@ on:
 jobs:
   smithy-kotlin-docs:
     runs-on: ubuntu-latest
+    outputs:
+      source-ref: ${{ steps.source-ref.outputs.build_ref }}
     steps:
       - name: Consolidate source ref
         id: source-ref
@@ -51,8 +53,6 @@ jobs:
         with:
           name: smithy-kotlin-docs
           path: smithy-kotlin/smithy-kotlin-docs
-    outputs:
-      source-ref: ${{ steps.source-ref.outputs.build_ref }}
 
   api-doc-gen-parallel:
     runs-on: ubuntu-latest
@@ -216,6 +216,8 @@ jobs:
       - name: Prepare Release
         id: prep-release
         run: |
+          set -x
+          echo ${{ needs.smithy-kotlin-docs.outputs.build_ref }}
           mv target kotlin-sdk-api-docs
           zip -r kotlin-sdk-api-docs.zip kotlin-sdk-api-docs/
       - name: Release
