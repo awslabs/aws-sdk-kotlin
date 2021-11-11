@@ -1,0 +1,36 @@
+name: API Docs Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-tag:
+          description: The aws-sdk-kotlin release tag
+          required: true
+  release:
+    types: [published]
+
+jobs:
+  smithy-kotlin-docs:
+    runs-on: ubuntu-latest
+    outputs:
+      source-ref: ${{ steps.source-ref.outputs.build_ref }}
+    steps:
+      - name: Consolidate source ref
+        id: source-ref
+        run: |
+          if [ -z "${{ github.event.inputs.release-tag }}" ]; then
+            echo ::set-output name=build_ref::"$GITHUB_REF"
+          else
+            echo ::set-output name=build_ref::"${{ github.event.inputs.release-tag }}"
+          fi
+
+  # Download all artifacts from previous job, extract them to common dir, add top-level index and push to ghpages branch
+  combine-docs:
+    needs: [ smithy-kotlin-docs ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare Release
+        id: prep-release
+        run: |
+          set -x
+          echo ${{ needs.smithy-kotlin-docs.outputs.build_ref }}
