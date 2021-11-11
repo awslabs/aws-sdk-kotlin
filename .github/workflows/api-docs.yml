@@ -31,6 +31,7 @@ jobs:
       - name: Get repo owner and version
         id: repo-owner
         run: |
+          set -x
           owner=$(echo ${GITHUB_REPOSITORY} | cut -d/ -f1)
           echo ::set-output name=repo-owner::"$owner"
           smithy_kotlin_version=$(cat aws-sdk-kotlin/gradle.properties | grep smithyKotlinVersion | cut -d= -f2)
@@ -39,7 +40,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ${{ steps.repo-owner.outputs.repo-owner }}/smithy-kotlin
-          ref: ${{ env.GITHUB_REF }}
+          ref: ${{ steps.repo-owner.outputs.smithy_kotlin_version }}
           path: smithy-kotlin
       - name: Build upstream docs
         id: smithy-kotlin-build
