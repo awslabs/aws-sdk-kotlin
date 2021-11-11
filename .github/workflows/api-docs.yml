@@ -67,6 +67,8 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.smithy-kotlin-docs.outputs.build_ref }}
       - name: Download smithy-kotlin artifacts
         uses: actions/download-artifact@v2
         with:
@@ -220,8 +222,6 @@ jobs:
       - name: Prepare Release
         id: prep-release
         run: |
-          set -x
-          echo ${{ needs.smithy-kotlin-docs.outputs.build_ref }}
           mv target kotlin-sdk-api-docs
           zip -r kotlin-sdk-api-docs.zip kotlin-sdk-api-docs/
       - name: Release
