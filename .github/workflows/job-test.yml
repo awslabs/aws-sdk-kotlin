@@ -20,21 +20,21 @@ jobs:
         run: |
           set -x
           if [ -z "${{ github.event.inputs.release-tag }}" ]; then
-            echo ::set-output name=build_ref::"$GITHUB_REF"
+            echo "::set-output name=build_ref::$GITHUB_REF"
           else
-            echo ::set-output name=build_ref::"${{ github.event.inputs.release-tag }}"
+            echo "::set-output name=build_ref::${{ github.event.inputs.release-tag }}"
           fi
 
   # Download all artifacts from previous job, extract them to common dir, add top-level index and push to ghpages branch
   combine-docs:
-    needs: [ smithy-kotlin-docs ]
     runs-on: ubuntu-latest
+    needs: [ smithy-kotlin-docs ]
     steps:
       - name: Prepare Release
         id: prep-release
         run: |
           set -x
-          echo ${{ needs.smithy-kotlin-docs.outputs.build_ref }}
+          echo ${{needs.smithy-kotlin-docs.outputs.build_ref}}
 
   job1:
     runs-on: ubuntu-latest
