@@ -45,6 +45,10 @@ jobs:
         id: smithy-kotlin-build
         run: |
           cd smithy-kotlin
+
+          # Dokka 1.5.3 requires additional memory to generate docs
+          printf "\norg.gradle.jvmargs=-Xmx6g -XX:MaxPermSize=6g" >> gradle.properties
+
           ./gradlew dokkaHtmlMultiModule
           mkdir smithy-kotlin-docs
           mv build/dokka/htmlMultiModule/* smithy-kotlin-docs/
