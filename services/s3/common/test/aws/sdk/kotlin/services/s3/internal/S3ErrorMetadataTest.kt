@@ -4,13 +4,12 @@
  */
 package aws.sdk.kotlin.services.s3.internal
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import kotlin.test.*
 
 class S3ErrorDeserializerTest {
 
     @Test
-    fun `it deserializes s3 errors`() = runSuspendTest {
+    fun `it deserializes s3 errors`() {
         val payload = """
             <Error>
                 <Type>Sender</Type>
@@ -31,7 +30,7 @@ class S3ErrorDeserializerTest {
     }
 
     @Test
-    fun `it partially deserializes s3 errors`() = runSuspendTest {
+    fun `it partially deserializes s3 errors`() {
         val tests = listOf(
             """
                 <Error>
