@@ -62,7 +62,7 @@ class PollyPresigner : KotlinIntegration {
                 httpRequestBuilder.url.path,
                 queryStringBuilder.build(),
                 durationSeconds.toLong(),
-                false,
+                true,
                 SigningLocation.QUERY_STRING
             )
             """.trimIndent()

@@ -176,7 +176,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.path,
                     httpRequestBuilder.url.parameters.build(),
                     durationSeconds.toLong(),
-                    true,
+                    false,
                     SigningLocation.HEADER
                 )
             }
@@ -214,7 +214,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.path,
                     httpRequestBuilder.url.parameters.build(),
                     durationSeconds.toLong(),
-                    true,
+                    false,
                     SigningLocation.HEADER
                 )
             }
@@ -233,7 +233,7 @@ class PresignerGeneratorTest {
                 companion object {
                     @JvmStatic
                     fun fluentBuilder(): FluentBuilder = BuilderImpl()
-
+            
                     operator fun invoke(block: DslBuilder.() -> kotlin.Unit): ServicePresignConfig = BuilderImpl().apply(block).build()
                 }
             
