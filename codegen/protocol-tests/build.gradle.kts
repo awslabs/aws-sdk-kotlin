@@ -163,12 +163,10 @@ open class ProtocolTestTask : DefaultTask() {
         if (!generatedBuildDir.exists()) {
             throw GradleException("$generatedBuildDir does not exist")
         }
-        val gradlew = project.rootProject.file("gradlew").absolutePath
+        val wrapper = if (System.getProperty("os.name").toLowerCase().contains("windows")) "gradlew.bat" else "gradlew"
+        val gradlew = project.rootProject.file(wrapper).absolutePath
 
-        // FIXME - this still requires us to publish to maven local.
-        // We might be able to do something clever with an init script by overriding dependencies or something
-        // and passing as a cli arg to gradle invocation
-        // https://docs.gradle.org/current/userguide/init_scripts.html
+        // NOTE - this still requires us to publish to maven local.
         project.exec {
             workingDir = generatedBuildDir
             executable = gradlew
