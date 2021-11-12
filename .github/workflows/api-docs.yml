@@ -227,6 +227,6 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ needs.smithy-kotlin-docs.outputs.source-ref }}
+          tag_name: ${{ needs.smithy-kotlin-docs.outputs.source-ref }}-api-docs
           files: |
             kotlin-sdk-api-docs.zip
