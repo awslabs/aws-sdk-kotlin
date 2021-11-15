@@ -10,10 +10,10 @@ import aws.sdk.kotlin.services.machinelearning.model.MachineLearningException
 import aws.sdk.kotlin.services.machinelearning.model.PredictRequest
 import aws.sdk.kotlin.services.machinelearning.model.PredictResponse
 import aws.smithy.kotlin.runtime.http.middleware.setRequestEndpoint
-import aws.smithy.kotlin.runtime.http.operation.AutoInstall
+import aws.smithy.kotlin.runtime.http.operation.InlineMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 
-internal class ResolvePredictEndpoint : AutoInstall<PredictRequest, PredictResponse> {
+internal class ResolvePredictEndpoint : InlineMiddleware<PredictRequest, PredictResponse> {
     override fun install(op: SdkHttpOperation<PredictRequest, PredictResponse>) {
         op.execution.initialize.intercept { req, next ->
             val input = req.subject
