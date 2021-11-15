@@ -48,10 +48,8 @@ class ResolveAwsEndpointTest {
         }
 
         val endpoint = AwsEndpoint("https://api.test.com")
-        op.install(ResolveAwsEndpoint) {
-            resolver = AwsEndpointResolver { _, _ -> endpoint }
-            serviceId = "TestService"
-        }
+        val resolver = AwsEndpointResolver { _, _ -> endpoint }
+        op.install(ResolveAwsEndpoint("TestService", resolver))
 
         op.roundTrip(client, Unit)
         val actual = op.context[HttpOperationContext.HttpCallList].first().request
@@ -78,10 +76,8 @@ class ResolveAwsEndpointTest {
         }
 
         val endpoint = AwsEndpoint("https://api.test.com", CredentialScope("us-west-2", "foo"))
-        op.install(ResolveAwsEndpoint) {
-            resolver = AwsEndpointResolver { _, _ -> endpoint }
-            serviceId = "TestService"
-        }
+        val resolver = AwsEndpointResolver { _, _ -> endpoint }
+        op.install(ResolveAwsEndpoint("TestService", resolver))
 
         op.roundTrip(client, Unit)
         val actual = op.context[HttpOperationContext.HttpCallList].first().request

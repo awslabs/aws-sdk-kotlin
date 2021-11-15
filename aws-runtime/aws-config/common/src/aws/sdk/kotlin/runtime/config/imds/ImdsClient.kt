@@ -81,26 +81,18 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     }
 
     // cached middleware instances
-    private val middleware: List<Feature> = listOf(
-        ResolveEndpoint.create {
-            resolver = ImdsEndpointResolver(platformProvider, endpointConfiguration)
-        },
-        UserAgent.create {
-            staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
-        },
-        RetryFeature.create {
-            val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
-            val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
-            strategy = StandardRetryStrategy(StandardRetryStrategyOptions.Default, tokenBucket, delayProvider)
-            policy = ImdsRetryPolicy()
-        },
-        // must come after retries
-        TokenMiddleware.create {
-            httpClient = this@ImdsClient.httpClient
-            ttl = tokenTtl
-            clock = this@ImdsClient.clock
-        },
+    private val resolveEndpointMiddleware = ResolveEndpoint(ImdsEndpointResolver(platformProvider, endpointConfiguration))
+    private val userAgentMiddleware = UserAgent(
+        staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
     )
+    private val retryMiddleware = run {
+        val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
+        val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
+        val strategy = StandardRetryStrategy(StandardRetryStrategyOptions.Default, tokenBucket, delayProvider)
+        val policy = ImdsRetryPolicy()
+        RetryFeature<Unit, String>(strategy, policy)
+    }
+    private val tokenMiddleware = TokenMiddleware(httpClient, tokenTtl, clock)
 
     public companion object {
         public operator fun invoke(block: Builder.() -> Unit): ImdsClient = ImdsClient(Builder().apply(block))
@@ -142,7 +134,10 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
                 set(SdkClientOption.LogMode, sdkLogMode)
             }
         }
-        middleware.forEach { it.install(op) }
+        op.install(resolveEndpointMiddleware)
+        op.install(userAgentMiddleware)
+        op.install(retryMiddleware)
+        op.install(tokenMiddleware)
         op.execution.mutate.intercept(Phase.Order.Before) { req, next ->
             req.subject.url.path = path
             next.call(req)
