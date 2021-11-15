@@ -17,6 +17,8 @@ import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
+// FIXME - this is wrong, it's removing the default aws endpoint resolver middleware and only adding back a resolver if the
+// protocol middleware is enabled...
 class MachineLearningEndpointCustomization : KotlinIntegration {
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
@@ -26,14 +28,16 @@ class MachineLearningEndpointCustomization : KotlinIntegration {
             .customizeMiddleware(ctx, resolved)
             .replace(endpointResolverMiddleware) { it is ResolveAwsEndpointMiddleware }
 
-    private val endpointResolverMiddleware = object : HttpFeatureMiddleware() {
+    private val endpointResolverMiddleware = object : ProtocolMiddleware {
         override val name: String = "ResolvePredictEndpoint"
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
             op.id.name == "Predict"
 
-        override fun renderConfigure(writer: KotlinWriter) {
-            writer.addImport(machineLearningSymbol("ResolvePredictEndpoint"))
+        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            val symbol = machineLearningSymbol("ResolvePredictEndpoint")
+            writer.addImport(symbol)
+            writer.write("op.install(#T())", symbol)
         }
 
         private fun machineLearningSymbol(name: String) = buildSymbol {

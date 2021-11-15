@@ -9,22 +9,21 @@ import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpFeatureMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.model.shapes.OperationShape
 
 /**
  * HTTP client interceptor that resolves service endpoints for a single service
  */
-class ResolveAwsEndpointMiddleware(private val ctx: ProtocolGenerator.GenerationContext) : HttpFeatureMiddleware() {
+class ResolveAwsEndpointMiddleware(private val ctx: ProtocolGenerator.GenerationContext) : ProtocolMiddleware {
     override val name: String = "ResolveAwsEndpoint"
-    override fun renderConfigure(writer: KotlinWriter) {
+    override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         val resolverFeatureSymbol = buildSymbol {
             name = "ResolveAwsEndpoint"
             namespace(AwsKotlinDependency.AWS_HTTP, subpackage = "middleware")
         }
         writer.addImport(resolverFeatureSymbol)
-
-        writer.write("serviceId = ServiceId")
-        writer.write("resolver = config.endpointResolver")
+        writer.write("op.install(#T(ServiceId, config.endpointResolver))", resolverFeatureSymbol)
     }
 }
