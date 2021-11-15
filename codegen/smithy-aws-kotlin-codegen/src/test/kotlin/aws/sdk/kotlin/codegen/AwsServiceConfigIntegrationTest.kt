@@ -50,9 +50,9 @@ class AwsServiceConfigIntegrationTest {
         contents.shouldContainOnlyOnceWithDiff(expectedProps)
 
         val expectedImpl = """
-        override var credentialsProvider: CredentialsProvider? = null
-        override var endpointResolver: AwsEndpointResolver? = null
-        override var region: String? = null
+        var credentialsProvider: CredentialsProvider? = null
+        var endpointResolver: AwsEndpointResolver? = null
+        var region: String? = null
 """
         contents.shouldContainOnlyOnceWithDiff(expectedImpl)
     }
