@@ -90,7 +90,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
         val strategy = StandardRetryStrategy(StandardRetryStrategyOptions.Default, tokenBucket, delayProvider)
         val policy = ImdsRetryPolicy()
-        RetryFeature<Unit, String>(strategy, policy)
+        RetryFeature<String>(strategy, policy)
     }
     private val tokenMiddleware = TokenMiddleware(httpClient, tokenTtl, clock)
 
