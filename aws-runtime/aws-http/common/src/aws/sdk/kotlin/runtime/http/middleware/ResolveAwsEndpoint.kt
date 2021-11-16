@@ -12,7 +12,6 @@ import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.middleware.setRequestEndpoint
 import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
-import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.http.operation.getLogger
 import aws.smithy.kotlin.runtime.util.get
@@ -33,10 +32,6 @@ public class ResolveAwsEndpoint(
     private val resolver: AwsEndpointResolver
 
 ) : ModifyRequestMiddleware {
-
-    override fun install(op: SdkHttpOperation<*, *>) {
-        op.execution.mutate.register(this)
-    }
 
     override suspend fun modifyRequest(req: SdkHttpRequest): SdkHttpRequest {
         val region = req.context[AwsClientOption.Region]
