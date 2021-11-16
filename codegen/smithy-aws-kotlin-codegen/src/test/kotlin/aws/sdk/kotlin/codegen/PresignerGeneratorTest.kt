@@ -234,7 +234,7 @@ class PresignerGeneratorTest {
                     operator fun invoke(block: Builder.() -> kotlin.Unit): ServicePresignConfig = Builder().apply(block).build()
                 }
             
-                public class Builder() {
+                class Builder {
                     var credentialsProvider: CredentialsProvider? = null
                     var endpointResolver: AwsEndpointResolver? = null
                     var region: String? = null
