@@ -14,7 +14,7 @@ labels: bug, needs-triage
 <!--- Tell us what happens instead of the expected behavior -->
 
 <!--- Include full errors, uncaught exceptions, stack traces, and relevant logs -->
-<!--- To turn on SDK logging, follow instructions here: http://github.com/aws-sdk-kotlin/tree/main/docs/debugging.md -->
+<!--- To turn on SDK logging, follow instructions here: https://github.com/awslabs/aws-sdk-kotlin/tree/main/docs/debugging.md -->
 <!--- If service responses are relevant, please include wirelogs (after removing any sensitive content!) -->
 
 ## Steps to Reproduce
