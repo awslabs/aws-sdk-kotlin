@@ -175,7 +175,7 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
         val boundMemberName = boundMember.capitalizedDefaultName()
         val deserializeLambdaIdent = "deserialize$boundMemberName"
         writer.withBlock("val $deserializeLambdaIdent = {", "}") {
-            write("val builder = #T.builder()", memberSymbol)
+            write("val builder = #T.Builder()", memberSymbol)
             renderDeserializerBody(ctx, copyWithMemberTraits, targetShape.members().toList(), writer)
             write("builder.build()")
         }
