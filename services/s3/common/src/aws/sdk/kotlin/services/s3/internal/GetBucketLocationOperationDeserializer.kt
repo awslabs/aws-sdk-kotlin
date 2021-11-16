@@ -28,7 +28,7 @@ internal class GetBucketLocationOperationDeserializer : HttpDeserialize<GetBucke
     }
 }
 
-private suspend fun deserializeGetBucketLocationOperationBody(builder: GetBucketLocationResponse.DslBuilder, payload: ByteArray) {
+private fun deserializeGetBucketLocationOperationBody(builder: GetBucketLocationResponse.DslBuilder, payload: ByteArray) {
     val dom = parseDom(xmlStreamReader(payload))
     check(dom.name.local == "LocationConstraint") { "Expected top-level tag of 'LocationConstraint' but found ${dom.name}." }
     val rawLocationConstraint = checkNotNull(dom.text) { "Did not receive a value for 'LocationConstraint' in response." }

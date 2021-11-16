@@ -41,7 +41,7 @@ internal fun setS3ErrorMetadata(exception: Any, response: HttpResponse, errorDet
     }
 }
 
-internal suspend fun parseS3ErrorResponse(payload: ByteArray): S3ErrorDetails {
+internal fun parseS3ErrorResponse(payload: ByteArray): S3ErrorDetails {
     val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
     val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Code"))
     val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
