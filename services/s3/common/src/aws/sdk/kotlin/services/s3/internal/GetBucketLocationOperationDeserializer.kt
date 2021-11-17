@@ -18,7 +18,7 @@ import aws.smithy.kotlin.runtime.serde.xml.xmlStreamReader
 internal class GetBucketLocationOperationDeserializer : HttpDeserialize<GetBucketLocationResponse> {
 
     override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): GetBucketLocationResponse {
-        val builder = GetBucketLocationResponse.builder()
+        val builder = GetBucketLocationResponse.Builder()
 
         val payload = response.body.readAll()
         if (payload != null) {
