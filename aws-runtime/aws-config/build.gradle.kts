@@ -2,6 +2,9 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
+plugins {
+    id("aws.sdk.kotlin.codegen")
+}
 
 description = "Support for AWS configuration"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.config"
@@ -31,6 +34,15 @@ kotlin {
                 implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
                 implementation(project(":aws-runtime:crt-util"))
 
+
+
+                // generated sts provider
+                implementation("aws.smithy.kotlin:serde-form-url:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
+                implementation(project(":aws-runtime:protocols:aws-xml-protocols"))
+                implementation(project(":aws-runtime:aws-endpoint"))
+                implementation(project(":aws-runtime:aws-signing"))
             }
         }
         commonTest {
@@ -55,3 +67,71 @@ kotlin {
         }
     }
 }
+
+fun awsModelFile(name: String): String =
+    rootProject.file("codegen/sdk/aws-models/$name").absolutePath
+
+codegen {
+    projection("sts-credentials-provider") {
+        imports = listOf(
+            awsModelFile("sts.2011-06-15.json")
+        )
+
+        // FIXME - we could make this a typed object if we want or even re-use smithy-kotlin type
+        // language=JSON
+        pluginSettings = """
+            {
+                "service": "com.amazonaws.sts#AWSSecurityTokenServiceV20110615",
+                "package" : {
+                    "name": "aws.sdk.kotlin.runtime.auth.credentials.internal.sts",
+                    "version": "$version",
+                    "description": "Internal STS credentials provider"
+                },
+                "sdkId": "STS",
+                "build": {
+                    "generateDefaultBuildFiles": false
+                }
+            }
+        """.trimIndent()
+    }
+}
+
+val codegenTasks = tasks.withType<aws.sdk.kotlin.build.plugin.CodegenTask>()
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
+    dependsOn(codegenTasks)
+}
+
+codegen.projections {
+    // add this projected source dir to the common sourceSet
+    val projectedSrcDir = projectionRootDir.resolve("src/main/kotlin")
+    kotlin.sourceSets.commonMain {
+        println("add $projectedSrcDir to common sourceSet")
+        kotlin.srcDir(projectedSrcDir)
+    }
+}
+
+
+//tasks.register<aws.sdk.kotlin.build.plugin.CodegenTask>("generateCredentialProviders") {
+//    description = "generate STS and SSO credential providers for aws-config to consume"
+//    projectionName = "sts-credentials-provider"
+//
+//    imports = listOf(
+//        awsModelFile("sts.2011-06-15.json")
+//    )
+//
+//    pluginSettings = """
+//        {
+//            "service": ""com.amazonaws.sts#AWSSecurityTokenServiceV20110615",
+//            "package" : {
+//                "name": "aws.sdk.kotlin.runtime.auth.credentials.internal.sts",
+//                "version": "$version",
+//                "description": "Internal STS credentials provider"
+//            },
+//            "sdkId": "Sts",
+//            "build": {
+//                "generateDefaultBuildFiles": false
+//            }
+//        }
+//    """.trimIndent()
+//
+//}
