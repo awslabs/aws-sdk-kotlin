@@ -103,6 +103,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 
 codegen.projections {
     // add this projected source dir to the common sourceSet
+    // TODO- build.gradle.kts is still being generated, it's NOT used though, we should probably either have a postProcessing spec or a
+    //       plugin setting to not generate it to avoid confusion
     val projectedSrcDir = projectionRootDir.resolve("src/main/kotlin")
     kotlin.sourceSets.commonMain {
         println("add $projectedSrcDir to common sourceSet")
