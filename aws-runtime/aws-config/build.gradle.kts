@@ -77,8 +77,6 @@ codegen {
             awsModelFile("sts.2011-06-15.json")
         )
 
-        // FIXME - we could make this a typed object if we want or even re-use smithy-kotlin type
-        // language=JSON
         pluginSettings = """
             {
                 "service": "com.amazonaws.sts#AWSSecurityTokenServiceV20110615",
@@ -96,7 +94,7 @@ codegen {
     }
 }
 
-val codegenTasks = tasks.withType<aws.sdk.kotlin.build.plugin.CodegenTask>()
+val codegenTasks = tasks.withType<aws.sdk.kotlin.build.plugin.tasks.CodegenTask>()
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
     dependsOn(codegenTasks)
 }
@@ -109,29 +107,3 @@ codegen.projections {
         kotlin.srcDir(projectedSrcDir)
     }
 }
-
-
-//tasks.register<aws.sdk.kotlin.build.plugin.CodegenTask>("generateCredentialProviders") {
-//    description = "generate STS and SSO credential providers for aws-config to consume"
-//    projectionName = "sts-credentials-provider"
-//
-//    imports = listOf(
-//        awsModelFile("sts.2011-06-15.json")
-//    )
-//
-//    pluginSettings = """
-//        {
-//            "service": ""com.amazonaws.sts#AWSSecurityTokenServiceV20110615",
-//            "package" : {
-//                "name": "aws.sdk.kotlin.runtime.auth.credentials.internal.sts",
-//                "version": "$version",
-//                "description": "Internal STS credentials provider"
-//            },
-//            "sdkId": "Sts",
-//            "build": {
-//                "generateDefaultBuildFiles": false
-//            }
-//        }
-//    """.trimIndent()
-//
-//}
