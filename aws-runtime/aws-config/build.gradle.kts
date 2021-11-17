@@ -94,9 +94,11 @@ codegen {
     }
 }
 
-val codegenTasks = tasks.withType<aws.sdk.kotlin.build.plugin.tasks.CodegenTask>()
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
-    dependsOn(codegenTasks)
+val codegenTasks = tasks.withType<aws.sdk.kotlin.gradle.tasks.CodegenTask>()
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+//    dependsOn(codegenTasks)
+    // FIXME - this isn't working correctly, it generates the code before compile fine but it's recompiling everytime still
+    codegenTasks.forEach { dependsOn(it) }
 }
 
 codegen.projections {

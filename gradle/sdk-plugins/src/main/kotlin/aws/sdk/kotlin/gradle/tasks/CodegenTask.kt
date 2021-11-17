@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.build.plugin.tasks
+package aws.sdk.kotlin.gradle.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
