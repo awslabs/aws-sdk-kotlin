@@ -231,7 +231,7 @@ class PresignerGeneratorTest {
                 override val serviceId: String = "example"
                 override val signingName: String = "example-signing-name"
                 companion object {
-                    operator fun invoke(block: Builder.() -> kotlin.Unit): ServicePresignConfig = Builder().apply(block).build()
+                    inline operator fun invoke(block: Builder.() -> kotlin.Unit): ServicePresignConfig = Builder().apply(block).build()
                 }
             
                 class Builder {
@@ -239,7 +239,8 @@ class PresignerGeneratorTest {
                     var endpointResolver: AwsEndpointResolver? = null
                     var region: String? = null
             
-                    fun build(): TestPresignConfig = TestPresignConfig(this)
+                    @PublishedApi
+                    internal fun build(): TestPresignConfig = TestPresignConfig(this)
                 }
             }
         """.trimIndent()
