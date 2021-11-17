@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.codegen.customization.machinelearning
 
-import aws.sdk.kotlin.codegen.protocols.middleware.ResolveAwsEndpointMiddleware
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
@@ -18,21 +17,22 @@ import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
 class MachineLearningEndpointCustomization : KotlinIntegration {
+    // the default resolver middleware will still be present in the operation's execution stack, we just
+    // need to ensure that the custom resolver runs _after_ the default
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
         resolved: List<ProtocolMiddleware>
-    ): List<ProtocolMiddleware> =
-        super
-            .customizeMiddleware(ctx, resolved)
-            .replace(endpointResolverMiddleware) { it is ResolveAwsEndpointMiddleware }
+    ): List<ProtocolMiddleware> = resolved + endpointResolverMiddleware
 
     private val endpointResolverMiddleware = object : HttpFeatureMiddleware() {
         override val name: String = "ResolvePredictEndpoint"
+        override val needsConfiguration: Boolean = false
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
             op.id.name == "Predict"
 
-        override fun renderConfigure(writer: KotlinWriter) {
+        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            super.render(ctx, op, writer)
             writer.addImport(machineLearningSymbol("ResolvePredictEndpoint"))
         }
 
