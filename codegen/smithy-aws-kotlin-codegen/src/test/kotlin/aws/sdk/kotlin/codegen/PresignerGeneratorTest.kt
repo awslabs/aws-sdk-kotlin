@@ -235,8 +235,17 @@ class PresignerGeneratorTest {
                 }
             
                 class Builder {
+                    /**
+                     * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.
+                     */
                     var credentialsProvider: CredentialsProvider? = null
+                    /**
+                     * Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option.
+                     */
                     var endpointResolver: AwsEndpointResolver? = null
+                    /**
+                     * AWS region to make requests for
+                     */
                     var region: String? = null
             
                     @PublishedApi
