@@ -18,12 +18,12 @@ abstract class CodegenTask: DefaultTask() {
         description = "Generate code using smithy-kotlin"
     }
 
-
-
     @TaskAction
     fun generateCode() {
         logger.info("generating code for projection: $projectionName")
         // NOTE: this task has dependencies on a smithy build task for the projection
+        // it doesn't actually do any work (yet) but it does give us our own task to extend _AFTER_ code
+        // has been generated
     }
 
 }

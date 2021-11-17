@@ -92,6 +92,9 @@ codegen {
             }
         """.trimIndent()
     }
+
+    // TODO - to re-use this infrastracture in say sdk bootstrap or protocol tests it would be useful to
+    //        have a way to completely control the projection
 }
 
 val codegenTasks = tasks.withType<aws.sdk.kotlin.gradle.tasks.CodegenTask>()

@@ -13,8 +13,6 @@ buildscript {
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-    // FIXME - can we get this to sync with gradle.properties from root project
-    kotlin("jvm") version "1.5.31"
 }
 
 repositories {
@@ -35,7 +33,6 @@ fun loadVersions() {
 // use the versions from aws-sdk-kotlin/gradle.properties
 loadVersions()
 
-val kotlinVersion: String by project
 val smithyVersion: String by project
 val smithyGradleVersion: String by project
 
