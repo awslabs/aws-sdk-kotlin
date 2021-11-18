@@ -5,6 +5,12 @@
 
 package aws.sdk.kotlin.gradle
 
+import software.amazon.smithy.model.node.ArrayNode
+import software.amazon.smithy.model.node.Node
+import software.amazon.smithy.model.node.ObjectNode
+import software.amazon.smithy.model.node.ToNode
+import java.util.*
+
 // /**
 // * A set of specifications for post-processing the generated files (e.g. remove files, move files around, etc)
 // */
@@ -50,6 +56,38 @@ class KotlinCodegenProjection(
     //    fun postProcess(spec: PostProcessSpec.() -> Unit) {
     //        postProcessSpec = PostProcessSpec().apply(spec)
     //    }
+
+    internal fun toNode(): Node {
+        // escape windows paths for valid json
+        val formattedImports = imports
+            .map { it.replace("\\", "\\\\") }
+
+        val transformNodes = transforms.map { Node.parse(it) }
+        val obj = ObjectNode.objectNodeBuilder()
+            .withArrayMember("imports", formattedImports)
+            .withMember("transforms", ArrayNode.fromNodes(transformNodes))
+            .withObjectMember("plugins") {
+                withMember("kotlin-codegen", pluginSettings.toNode())
+            }
+        return obj.build()
+    }
+}
+
+class SmithyKotlinBuildSettings : ToNode {
+    var generateFullProject: Boolean? = null
+    var generateDefaultBuildFiles: Boolean? = null
+    var optInAnnotations: List<String>? = null
+
+    override fun toNode(): Node {
+        val builder = ObjectNode.objectNodeBuilder()
+
+        builder.withOptionalMember("rootProject", generateFullProject)
+        builder.withOptionalMember("generateDefaultBuildFiles", generateDefaultBuildFiles)
+
+        val optInArrNode = optInAnnotations?.map { Node.from(it) }?.let { ArrayNode.fromNodes(it) }
+        builder.withOptionalMember("optInAnnotations", Optional.ofNullable(optInArrNode))
+        return builder.build()
+    }
 }
 
 class SmithyKotlinPluginSettings {
@@ -58,7 +96,12 @@ class SmithyKotlinPluginSettings {
     var packageVersion: String? = null
     var packageDescription: String? = null
     var sdkId: String? = null
-    var buildSettings: Map<String, Any>? = null
+
+    internal var buildSettings: SmithyKotlinBuildSettings? = null
+    fun buildSettings(configure: SmithyKotlinBuildSettings.() -> Unit) {
+        if (buildSettings == null) buildSettings = SmithyKotlinBuildSettings()
+        buildSettings!!.apply(configure)
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -84,5 +127,19 @@ class SmithyKotlinPluginSettings {
         result = 31 * result + (sdkId?.hashCode() ?: 0)
         result = 31 * result + (buildSettings?.hashCode() ?: 0)
         return result
+    }
+
+    internal fun toNode(): Node {
+        val obj = ObjectNode.objectNodeBuilder()
+            .withMember("service", serviceShapeId!!)
+            .withObjectMember("package") {
+                withMember("name", packageName!!)
+                withOptionalMember("version", packageVersion)
+                withOptionalMember("version", packageDescription)
+            }
+            .withOptionalMember("sdkId", sdkId)
+            .withOptionalMember("build", buildSettings)
+
+        return obj.build()
     }
 }

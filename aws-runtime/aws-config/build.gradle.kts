@@ -75,9 +75,9 @@ fun awsModelFile(name: String): String =
 
 codegen {
     val basePackage = "aws.sdk.kotlin.runtime.auth.credentials.internal"
-    val sharedBuildSettings = mapOf<String, Any>(
-        "generateDefaultBuildFiles" to false
-    )
+//    val sharedBuildSettings = mapOf<String, Any>(
+//        "generateDefaultBuildFiles" to false
+//    )
 
     // generate an sts client
     projection("sts-credentials-provider") {
@@ -91,7 +91,10 @@ codegen {
             packageVersion = project.version.toString()
             packageDescription = "Internal STS credentials provider"
             sdkId = "STS"
-            buildSettings = sharedBuildSettings
+            buildSettings {
+                generateDefaultBuildFiles = false
+                generateFullProject = false
+            }
         }
 
         transforms = listOf(
@@ -105,8 +108,7 @@ codegen {
                     ]
                 }
             }
-            """.trimIndent()
-
+            """
         )
     }
 
@@ -123,7 +125,7 @@ codegen {
             packageVersion = project.version.toString()
             packageDescription = "Internal SSO credentials provider"
             sdkId = "SSO"
-            buildSettings = sharedBuildSettings
+//            buildSettings = sharedBuildSettings
         }
 
         transforms = listOf(
@@ -136,7 +138,7 @@ codegen {
                     ]
                 }
             }
-            """.trimIndent()
+            """
         )
     }
 }

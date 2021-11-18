@@ -8,12 +8,14 @@ package aws.sdk.kotlin.gradle.tasks
 import aws.sdk.kotlin.gradle.KotlinCodegenProjection
 import aws.sdk.kotlin.gradle.codegenExtension
 import aws.sdk.kotlin.gradle.projectionRootDir
+import aws.sdk.kotlin.gradle.withObjectMember
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
 import software.amazon.smithy.gradle.tasks.SmithyBuild
+import software.amazon.smithy.model.node.Node
 
 internal fun Project.registerCodegenTasks() {
     // generate the projection file for smithy to consume
@@ -81,57 +83,16 @@ internal fun Project.registerCodegenTasks() {
  * Generate the "smithy-build.json" defining the projection
  */
 private fun generateSmithyBuild(projections: Collection<KotlinCodegenProjection>): String {
-    val formattedProjections = projections.joinToString(",") { projection ->
-        // escape windows paths for valid json
-        val imports = projection.imports
-            .map { it.replace("\\", "\\\\") }
-            .joinToString { "\"$it\"" }
-
-        // TODO - probably need some validation in here...
-        val buildPairs = projection.pluginSettings.buildSettings?.entries?.joinToString(
-            separator = ",\n",
-            prefix = "{",
-            postfix = "}"
-        ) {
-            val value = when (it.value) {
-                is Boolean -> it.value.toString()
-                else -> "\"${it.value}\""
+    val buildConfig = Node.objectNodeBuilder()
+        .withMember("version", "1.0")
+        .withObjectMember("projections") {
+            projections.forEach { projection ->
+                withMember(projection.name, projection.toNode())
             }
-            """"${it.key}": $value"""
         }
+        .build()
 
-        val transforms = projection.transforms.joinToString()
-
-        val config = """
-            "${projection.name}": {
-                "imports": [$imports],
-                "transforms": [$transforms],
-                "plugins": {
-                    "kotlin-codegen": {
-                        "service": "${projection.pluginSettings.serviceShapeId}",
-                        "package": {
-                            "name": "${projection.pluginSettings.packageName}",
-                            "version": "${projection.pluginSettings.packageVersion}",
-                            "description": "${projection.pluginSettings.packageDescription}"
-                        },
-                        "sdkId": "${projection.pluginSettings.sdkId}",
-                        "build": $buildPairs
-                    }
-                }
-            }
-        """.trimIndent()
-
-        config
-    }
-
-    return """
-            {
-                "version": "1.0",
-                "projections": {
-                    $formattedProjections
-                }
-            }
-    """.trimIndent()
+    return Node.prettyPrintJson(buildConfig)
 }
 
 // create a configuration (classpath) needed by the SmithyBuild task
