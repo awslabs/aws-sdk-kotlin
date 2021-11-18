@@ -22,6 +22,7 @@ class CodegenPlugin : Plugin<Project> {
     override fun apply(target: Project):Unit = target.run {
         configurePlugins()
         installExtension()
+        registerCodegenTasks()
     }
 
     private fun Project.configurePlugins() {

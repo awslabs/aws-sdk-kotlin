@@ -9,27 +9,39 @@ import aws.sdk.kotlin.gradle.tasks.CodegenTask
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 
+/**
+ * Register and build Smithy projections
+ */
 open class CodegenExtension(private val project: Project) {
-    private val projections = mutableMapOf<String, KotlinCodegenProjection>()
+    internal val projections = mutableMapOf<String, KotlinCodegenProjection>()
 
     // TODO - typed plugin settings and defaults for all projections
 
+    /**
+     * Configure a new projection
+     */
     fun projection(name: String, configure: Action<KotlinCodegenProjection>) {
+        println("configuring projection $name")
         val p = KotlinCodegenProjection(name, project.projectionRootDir(name))
         configure.execute(p)
-        // register codegen tasks for projection
-        project.registerCodegenTasksForProjection(p)
-
         projections[name] = p
     }
 
+    /**
+     * Execute [action] for each projection
+     */
     fun projections(action: Action<in KotlinCodegenProjection>) = projections.values.forEach { action.execute(it) }
 
+    /**
+     * Get a projection by name
+     */
     fun getProjectionByName(name: String): KotlinCodegenProjection? = projections[name]
 }
 
@@ -59,7 +71,7 @@ class KotlinCodegenProjection(
      *
      * See https://awslabs.github.io/smithy/1.0/guides/building-models/build-config.html#projections
      */
-    var imports: List<String>? = null
+    var imports: List<String> = emptyList()
 
 
     /**
@@ -92,15 +104,17 @@ class KotlinCodegenProjection(
 internal fun Project.projectionRootDir(projectionName: String): java.io.File
     = file("${project.buildDir}/smithyprojections/${project.name}/${projectionName}/kotlin-codegen")
 
-private fun Project.registerCodegenTasksForProjection(projection: KotlinCodegenProjection) {
+private val Project.codegenExtension: CodegenExtension
+    get() = (this as ExtensionAware).extensions[CODEGEN_EXTENSION_NAME] as CodegenExtension
+
+internal fun Project.registerCodegenTasks() {
     // generate the projection file for smithy to consume
-    val smithyBuildConfig = buildDir.resolve("smithy-build-${projection.name}.json")
-    val generateSmithyBuild = tasks.register("${projection.name}-smithyBuildJson") {
+    val smithyBuildConfig = buildDir.resolve("smithy-build.json")
+    val generateSmithyBuild = tasks.register("generateSmithyBuildJson") {
         description = "generate smithy-build.json"
         group = "codegen"
 
         outputs.file(smithyBuildConfig)
-        inputs.property("${projection.name}-configuration", projection.pluginSettings)
         doFirst {
             if (smithyBuildConfig.exists()) {
                 smithyBuildConfig.delete()
@@ -108,22 +122,26 @@ private fun Project.registerCodegenTasksForProjection(projection: KotlinCodegenP
         }
         doLast {
             buildDir.mkdir()
-            smithyBuildConfig.writeText(generateSmithyBuild(projection))
+            val extension = project.codegenExtension
+            smithyBuildConfig.writeText(generateSmithyBuild(extension.projections.values))
         }
     }
 
     val codegenConfig = createCodegenConfiguration()
-    val buildTask = project.tasks.register<SmithyBuild>("${projection.name}-smithyBuild") {
+    val buildTask = project.tasks.register<SmithyBuild>("kotlinCodegenSmithyBuild") {
         dependsOn(generateSmithyBuild)
-        description = "generate code for $name task"
+        description = "generate code using smithy-kotlin"
         group = "codegen"
         classpath = codegenConfig
         smithyBuildConfigs = files(smithyBuildConfig)
 
         inputs.file(smithyBuildConfig)
 
+        val extension = project.codegenExtension
+        println("registering imports for kotlinCodegenSmithyBuild: ${extension.projections.keys.joinToString()}")
         // register the model file(s) (imports)
-        projection.imports?.forEach { importPath ->
+        val imports = extension.projections.values.flatMap{ it.imports }
+        imports.forEach { importPath ->
             val f = project.file(importPath)
             if (f.exists()){
                 if (f.isDirectory) inputs.dir(f) else inputs.file(f)
@@ -133,23 +151,28 @@ private fun Project.registerCodegenTasksForProjection(projection: KotlinCodegenP
         // ensure smithy-aws-kotlin-codegen is up to date
         inputs.files(codegenConfig)
 
-        outputs.dir(project.projectionRootDir(projection.name))
+        extension.projections.keys.forEach { projectionName ->
+            outputs.dir(project.projectionRootDir(projectionName))
+        }
     }
 
-    project.tasks.register<CodegenTask>("${projection.name}-codegen") {
-        // FIXME - maybe use the name directly?
+    project.tasks.register<CodegenTask>("kotlinCodegen") {
         dependsOn(buildTask)
-        this.projectionName = projection.name
-        description = "generate code for $projectionName"
+        description = "generate code for projections"
     }
 }
 
 /**
  * Generate the "smithy-build.json" defining the projection
  */
-private fun generateSmithyBuild(projection: KotlinCodegenProjection): String {
-    val imports = projection.imports!!.joinToString { "\"$it\"" }
-    val config = """
+private fun generateSmithyBuild(projections: Collection<KotlinCodegenProjection>): String {
+    val formattedProjections = projections.joinToString(",") { projection ->
+        // escape windows paths for valid json
+        val imports = projection.imports
+            .map { it.replace("\\", "\\\\") }
+            .joinToString { "\"$it\"" }
+
+        val config = """
             "${projection.name}": {
                 "imports": [$imports],
                 "plugins": {
@@ -158,11 +181,14 @@ private fun generateSmithyBuild(projection: KotlinCodegenProjection): String {
             }
         """.trimIndent()
 
+        config
+    }
+
     return """
             {
                 "version": "1.0",
                 "projections": {
-                    $config
+                    $formattedProjections
                 }
             }
         """.trimIndent()
