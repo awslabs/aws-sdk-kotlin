@@ -75,9 +75,6 @@ fun awsModelFile(name: String): String =
 
 codegen {
     val basePackage = "aws.sdk.kotlin.runtime.auth.credentials.internal"
-//    val sharedBuildSettings = mapOf<String, Any>(
-//        "generateDefaultBuildFiles" to false
-//    )
 
     // generate an sts client
     projection("sts-credentials-provider") {
