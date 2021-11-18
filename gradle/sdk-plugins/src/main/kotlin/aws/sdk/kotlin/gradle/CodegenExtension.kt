@@ -15,22 +15,22 @@ import org.gradle.kotlin.dsl.register
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 
 open class CodegenExtension(private val project: Project) {
-    private val projections = mutableListOf<KotlinCodegenProjection>()
+    private val projections = mutableMapOf<String, KotlinCodegenProjection>()
 
     // TODO - typed plugin settings and defaults for all projections
 
-    fun projection(name: String, configure: Action<ProjectionConfiguration>) {
-        val pc = ProjectionConfiguration()
-        configure.execute(pc)
+    fun projection(name: String, configure: Action<KotlinCodegenProjection>) {
+        val p = KotlinCodegenProjection(name, project.projectionRootDir(name))
+        configure.execute(p)
         // register codegen tasks for projection
-        project.registerCodegenTasksForProjection(name, pc)
+        project.registerCodegenTasksForProjection(p)
 
-        projections.add(KotlinCodegenProjection(name, project))
+        projections[name] = p
     }
 
-    fun projections(action: Action<in KotlinCodegenProjection>) = projections.forEach { action.execute(it) }
+    fun projections(action: Action<in KotlinCodegenProjection>) = projections.values.forEach { action.execute(it) }
 
-    fun getProjection(name: String): KotlinCodegenProjection? = projections.find { it.name == name }
+    fun getProjectionByName(name: String): KotlinCodegenProjection? = projections[name]
 }
 
 ///**
@@ -42,8 +42,17 @@ open class CodegenExtension(private val project: Project) {
 //}
 
 
-class ProjectionConfiguration{
-    // TODO - add immutable name property, rename to just Projection
+class KotlinCodegenProjection(
+    /**
+     * The name of the projection
+     */
+    val name: String,
+
+    /**
+     * Root directory for this projection
+     */
+    val projectionRootDir: java.io.File
+){
 
     /**
      * List of files/directories to import when building the projection
@@ -83,27 +92,15 @@ class ProjectionConfiguration{
 internal fun Project.projectionRootDir(projectionName: String): java.io.File
     = file("${project.buildDir}/smithyprojections/${project.name}/${projectionName}/kotlin-codegen")
 
-class KotlinCodegenProjection(
-    val name: String,
-    private val project: Project
-) {
-    /**
-     * Root directory for this projection
-     */
-    val projectionRootDir: java.io.File
-        get() = project.file("${project.buildDir}/smithyprojections/${project.name}/${name}/kotlin-codegen")
-
-}
-
-private fun Project.registerCodegenTasksForProjection(projectionName: String, configuration: ProjectionConfiguration) {
+private fun Project.registerCodegenTasksForProjection(projection: KotlinCodegenProjection) {
     // generate the projection file for smithy to consume
-    val smithyBuildConfig = buildDir.resolve("smithy-build-$projectionName.json")
-    val generateSmithyBuild = tasks.register("$projectionName-smithyBuildJson") {
+    val smithyBuildConfig = buildDir.resolve("smithy-build-${projection.name}.json")
+    val generateSmithyBuild = tasks.register("${projection.name}-smithyBuildJson") {
         description = "generate smithy-build.json"
         group = "codegen"
 
         outputs.file(smithyBuildConfig)
-        inputs.property("$projectionName-configuration", configuration.pluginSettings)
+        inputs.property("${projection.name}-configuration", projection.pluginSettings)
         doFirst {
             if (smithyBuildConfig.exists()) {
                 smithyBuildConfig.delete()
@@ -111,12 +108,12 @@ private fun Project.registerCodegenTasksForProjection(projectionName: String, co
         }
         doLast {
             buildDir.mkdir()
-            smithyBuildConfig.writeText(generateSmithyBuild(projectionName, configuration))
+            smithyBuildConfig.writeText(generateSmithyBuild(projection))
         }
     }
 
     val codegenConfig = createCodegenConfiguration()
-    val buildTask = project.tasks.register<SmithyBuild>("$projectionName-smithyBuild") {
+    val buildTask = project.tasks.register<SmithyBuild>("${projection.name}-smithyBuild") {
         dependsOn(generateSmithyBuild)
         description = "generate code for $name task"
         group = "codegen"
@@ -126,7 +123,7 @@ private fun Project.registerCodegenTasksForProjection(projectionName: String, co
         inputs.file(smithyBuildConfig)
 
         // register the model file(s) (imports)
-        configuration.imports?.forEach { importPath ->
+        projection.imports?.forEach { importPath ->
             val f = project.file(importPath)
             if (f.exists()){
                 if (f.isDirectory) inputs.dir(f) else inputs.file(f)
@@ -136,13 +133,13 @@ private fun Project.registerCodegenTasksForProjection(projectionName: String, co
         // ensure smithy-aws-kotlin-codegen is up to date
         inputs.files(codegenConfig)
 
-        outputs.dir(project.projectionRootDir(projectionName))
+        outputs.dir(project.projectionRootDir(projection.name))
     }
 
-    project.tasks.register<CodegenTask>("$projectionName-codegen") {
+    project.tasks.register<CodegenTask>("${projection.name}-codegen") {
         // FIXME - maybe use the name directly?
         dependsOn(buildTask)
-        this.projectionName = projectionName
+        this.projectionName = projection.name
         description = "generate code for $projectionName"
     }
 }
@@ -150,13 +147,13 @@ private fun Project.registerCodegenTasksForProjection(projectionName: String, co
 /**
  * Generate the "smithy-build.json" defining the projection
  */
-private fun generateSmithyBuild(projectionName: String, configuration: ProjectionConfiguration): String {
-    val imports = configuration.imports!!.joinToString { "\"$it\"" }
-    val projection = """
-            "$projectionName": {
+private fun generateSmithyBuild(projection: KotlinCodegenProjection): String {
+    val imports = projection.imports!!.joinToString { "\"$it\"" }
+    val config = """
+            "${projection.name}": {
                 "imports": [$imports],
                 "plugins": {
-                    "kotlin-codegen": ${configuration.pluginSettings!!}
+                    "kotlin-codegen": ${projection.pluginSettings!!}
                 }
             }
         """.trimIndent()
@@ -165,7 +162,7 @@ private fun generateSmithyBuild(projectionName: String, configuration: Projectio
             {
                 "version": "1.0",
                 "projections": {
-                    $projection
+                    $config
                 }
             }
         """.trimIndent()
