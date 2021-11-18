@@ -21,7 +21,7 @@ class IncludeOperations : ConfigurableProjectionTransformer<IncludeOperations.Co
         var operations: Set<String> = emptySet()
     }
 
-    override fun getName(): String = "awsSdkKotlinIncludeServices"
+    override fun getName(): String = "awsSdkKotlinIncludeOperations"
     override fun getConfigType(): Class<Config> = Config::class.java
 
     override fun transformWithConfig(context: TransformContext, config: Config): Model {
