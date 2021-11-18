@@ -10,9 +10,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 const val CODEGEN_EXTENSION_NAME = "codegen"
-// TODO - create custom transform to include specific operations
-// TODO - create custom transform to add `InternalSdkApi` to generated client OR change visibility?
-//          - e.g. custom trait (@kotlinVisibility("internal"))
 
 /**
  * This plugin handles:

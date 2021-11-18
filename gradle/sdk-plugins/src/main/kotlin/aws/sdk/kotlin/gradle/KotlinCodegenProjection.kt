@@ -32,6 +32,13 @@ class KotlinCodegenProjection(
      */
     var imports: List<String> = emptyList()
 
+    /**
+     * A list of transforms to apply
+     *
+     * See https://awslabs.github.io/smithy/1.0/guides/building-models/build-config.html#transforms
+     */
+    var transforms: List<String> = emptyList()
+
     internal var pluginSettings: SmithyKotlinPluginSettings = SmithyKotlinPluginSettings()
 
     /**

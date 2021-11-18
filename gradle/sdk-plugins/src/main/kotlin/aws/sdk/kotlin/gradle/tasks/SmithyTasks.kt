@@ -100,9 +100,12 @@ private fun generateSmithyBuild(projections: Collection<KotlinCodegenProjection>
             """"${it.key}": $value"""
         }
 
+        val transforms = projection.transforms.joinToString()
+
         val config = """
             "${projection.name}": {
                 "imports": [$imports],
+                "transforms": [$transforms],
                 "plugins": {
                     "kotlin-codegen": {
                         "service": "${projection.pluginSettings.serviceShapeId}",

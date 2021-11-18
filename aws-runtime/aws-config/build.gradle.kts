@@ -93,6 +93,21 @@ codegen {
             sdkId = "STS"
             buildSettings = sharedBuildSettings
         }
+
+        transforms = listOf(
+            """
+            {
+                "name": "awsSdkKotlinIncludeServices",
+                "args": {
+                    "operations": [
+                        "com.amazonaws.sts#AssumeRoleWithWebIdentity",
+                        "com.amazonaws.sts#AssumeRole"
+                    ]
+                }
+            }
+            """.trimIndent()
+
+        )
     }
 
     // generate an sso client
@@ -101,14 +116,28 @@ codegen {
             awsModelFile("sso.2019-06-10.json")
         )
 
+        val serviceShape = "com.amazonaws.sso#SWBPortalService"
         pluginSettings {
-            serviceShapeId = "com.amazonaws.sso#SWBPortalService"
+            serviceShapeId = serviceShape
             packageName = "${basePackage}.sso"
             packageVersion = project.version.toString()
             packageDescription = "Internal SSO credentials provider"
             sdkId = "SSO"
             buildSettings = sharedBuildSettings
         }
+
+        transforms = listOf(
+            """
+            {
+                "name": "awsSdkKotlinIncludeServices",
+                "args": {
+                    "operations": [
+                        "com.amazonaws.sso#GetRoleCredentials"
+                    ]
+                }
+            }
+            """.trimIndent()
+        )
     }
 }
 
