@@ -114,6 +114,13 @@ internal fun Project.registerCodegenTasks() {
         description = "generate smithy-build.json"
         group = "codegen"
 
+        // set an input property based on a hash of all the plugin settings to get this task's
+        // up-to-date checks to work correctly (model files are already an input to the actual build task)
+        val pluginSettingsHash = project.codegenExtension.projections.values.fold(0){ acc, projection ->
+            acc + (projection.pluginSettings?.hashCode() ?: 0)
+        }
+
+        inputs.property("pluginSettingsHash", pluginSettingsHash)
         outputs.file(smithyBuildConfig)
         doFirst {
             if (smithyBuildConfig.exists()) {
