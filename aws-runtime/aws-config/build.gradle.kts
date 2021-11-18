@@ -122,7 +122,10 @@ codegen {
             packageVersion = project.version.toString()
             packageDescription = "Internal SSO credentials provider"
             sdkId = "SSO"
-//            buildSettings = sharedBuildSettings
+            buildSettings {
+                generateDefaultBuildFiles = false
+                generateFullProject = false
+            }
         }
 
         transforms = listOf(
