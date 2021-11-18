@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.gradle
 
+import aws.sdk.kotlin.gradle.tasks.registerCodegenTasks
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
