@@ -47,13 +47,13 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         val serviceSymbol: Symbol = writer.getContextValue(ServiceGenerator.SectionServiceCompanionObject.ServiceSymbol)
         writer.withBlock("companion object {", "}") {
             withBlock(
-                "operator fun invoke(sharedConfig: #T? = null, block: Config.DslBuilder.() -> Unit = {}): #L {",
+                "operator fun invoke(sharedConfig: #T? = null, block: Config.Builder.() -> Unit = {}): #L {",
                 "}",
                 AwsRuntimeTypes.Types.AwsClientConfig,
                 serviceSymbol.name
             ) {
                 withBlock(
-                    "val config = Config.BuilderImpl().apply { ",
+                    "val config = Config.Builder().apply { ",
                     "}.apply(block).build()"
                 ) {
                     write("region = sharedConfig?.region")
