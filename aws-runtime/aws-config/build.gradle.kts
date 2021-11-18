@@ -97,11 +97,31 @@ codegen {
     //        have a way to completely control the projection
 }
 
+// TODO/NOTE - need `compileKotlinJvm` (Type=KotlinCompile), `compileKotlinMetadata` (Type=KotlinCompileCommon), `sourcesJar` and `jvmSourcesJar` (Type=org.gradle.jvm.tasks.Jar)
 val codegenTasks = tasks.withType<aws.sdk.kotlin.gradle.tasks.CodegenTask>()
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-//    dependsOn(codegenTasks)
-    // FIXME - this isn't working correctly, it generates the code before compile fine but it's recompiling everytime still
-    codegenTasks.forEach { dependsOn(it) }
+    println("kotlin compile task: $name")
+    codegenTasks.forEach {
+        println("adding dependency on codegen task: $it")
+        dependsOn(it)
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
+    println("KotlinCompileCommon task: $name")
+    codegenTasks.forEach {
+        println("adding dependency on codegen task: $it")
+        dependsOn(it)
+    }
+}
+
+
+tasks.withType<org.gradle.jvm.tasks.Jar> {
+    println("jar explicit task: $name")
+    codegenTasks.forEach {
+        println("adding dependency on codegen task: $it")
+        dependsOn(it)
+    }
 }
 
 codegen.projections {
@@ -110,7 +130,7 @@ codegen.projections {
     //       plugin setting to not generate it to avoid confusion
     val projectedSrcDir = projectionRootDir.resolve("src/main/kotlin")
     kotlin.sourceSets.commonMain {
-        println("add $projectedSrcDir to common sourceSet")
+        println("added $projectedSrcDir to common sourceSet")
         kotlin.srcDir(projectedSrcDir)
     }
 }

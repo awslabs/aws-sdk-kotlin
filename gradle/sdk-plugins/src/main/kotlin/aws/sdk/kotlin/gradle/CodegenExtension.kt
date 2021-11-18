@@ -17,6 +17,8 @@ import software.amazon.smithy.gradle.tasks.SmithyBuild
 open class CodegenExtension(private val project: Project) {
     private val projections = mutableListOf<KotlinCodegenProjection>()
 
+    // TODO - typed plugin settings and defaults for all projections
+
     fun projection(name: String, configure: Action<ProjectionConfiguration>) {
         val pc = ProjectionConfiguration()
         configure.execute(pc)
@@ -41,6 +43,8 @@ open class CodegenExtension(private val project: Project) {
 
 
 class ProjectionConfiguration{
+    // TODO - add immutable name property, rename to just Projection
+
     /**
      * List of files/directories to import when building the projection
      *
@@ -76,6 +80,9 @@ class ProjectionConfiguration{
     //    }
 }
 
+internal fun Project.projectionRootDir(projectionName: String): java.io.File
+    = file("${project.buildDir}/smithyprojections/${project.name}/${projectionName}/kotlin-codegen")
+
 class KotlinCodegenProjection(
     val name: String,
     private val project: Project
@@ -94,6 +101,7 @@ private fun Project.registerCodegenTasksForProjection(projectionName: String, co
     val generateSmithyBuild = tasks.register("$projectionName-smithyBuildJson") {
         description = "generate smithy-build.json"
         group = "codegen"
+
         outputs.file(smithyBuildConfig)
         inputs.property("$projectionName-configuration", configuration.pluginSettings)
         doFirst {
@@ -114,14 +122,25 @@ private fun Project.registerCodegenTasksForProjection(projectionName: String, co
         group = "codegen"
         classpath = codegenConfig
         smithyBuildConfigs = files(smithyBuildConfig)
+
         inputs.file(smithyBuildConfig)
-        // outputs.dir(...)
+
+        // register the model file(s) (imports)
+        configuration.imports?.forEach { importPath ->
+            val f = project.file(importPath)
+            if (f.exists()){
+                if (f.isDirectory) inputs.dir(f) else inputs.file(f)
+            }
+        }
 
         // ensure smithy-aws-kotlin-codegen is up to date
         inputs.files(codegenConfig)
+
+        outputs.dir(project.projectionRootDir(projectionName))
     }
 
     project.tasks.register<CodegenTask>("$projectionName-codegen") {
+        // FIXME - maybe use the name directly?
         dependsOn(buildTask)
         this.projectionName = projectionName
         description = "generate code for $projectionName"
