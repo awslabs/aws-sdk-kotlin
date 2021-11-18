@@ -14,7 +14,6 @@ import org.gradle.api.Project
 open class CodegenExtension(private val project: Project) {
     internal val projections = mutableMapOf<String, KotlinCodegenProjection>()
 
-
 //     FIXME - not all settings make sense to be defaulted...
 //    /**
 //     * Set default plugin settings that each projection uses if no value is set
@@ -45,6 +44,3 @@ open class CodegenExtension(private val project: Project) {
      */
     fun getProjectionByName(name: String): KotlinCodegenProjection? = projections[name]
 }
-
-
-

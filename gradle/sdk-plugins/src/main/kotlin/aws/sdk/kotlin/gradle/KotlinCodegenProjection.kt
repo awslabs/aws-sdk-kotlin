@@ -5,13 +5,13 @@
 
 package aws.sdk.kotlin.gradle
 
-///**
+// /**
 // * A set of specifications for post-processing the generated files (e.g. remove files, move files around, etc)
 // */
-//class PostProcessSpec {
+// class PostProcessSpec {
 //
 //
-//}
+// }
 
 class KotlinCodegenProjection(
     /**
@@ -23,7 +23,7 @@ class KotlinCodegenProjection(
      * Root directory for this projection
      */
     val projectionRootDir: java.io.File,
-){
+) {
 
     /**
      * List of files/directories to import when building the projection
@@ -32,21 +32,18 @@ class KotlinCodegenProjection(
      */
     var imports: List<String> = emptyList()
 
-
     internal var pluginSettings: SmithyKotlinPluginSettings = SmithyKotlinPluginSettings()
 
     /**
      * Configure smithy-kotlin plugin settings.
      */
-    fun pluginSettings(configure: SmithyKotlinPluginSettings.() -> Unit): Unit { pluginSettings.also(configure) }
-
+    fun pluginSettings(configure: SmithyKotlinPluginSettings.() -> Unit) { pluginSettings.also(configure) }
 
     //    private var postProcessSpec: PostProcessSpec? = null
     //    fun postProcess(spec: PostProcessSpec.() -> Unit) {
     //        postProcessSpec = PostProcessSpec().apply(spec)
     //    }
 }
-
 
 class SmithyKotlinPluginSettings {
     var serviceShapeId: String? = null

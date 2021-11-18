@@ -24,7 +24,7 @@ internal fun Project.registerCodegenTasks() {
 
         // set an input property based on a hash of all the plugin settings to get this task's
         // up-to-date checks to work correctly (model files are already an input to the actual build task)
-        val pluginSettingsHash = project.codegenExtension.projections.values.fold(0){ acc, projection ->
+        val pluginSettingsHash = project.codegenExtension.projections.values.fold(0) { acc, projection ->
             acc + projection.pluginSettings.hashCode()
         }
 
@@ -55,10 +55,10 @@ internal fun Project.registerCodegenTasks() {
         val extension = project.codegenExtension
         println("registering imports for kotlinCodegenSmithyBuild: ${extension.projections.keys.joinToString()}")
         // register the model file(s) (imports)
-        val imports = extension.projections.values.flatMap{ it.imports }
+        val imports = extension.projections.values.flatMap { it.imports }
         imports.forEach { importPath ->
             val f = project.file(importPath)
-            if (f.exists()){
+            if (f.exists()) {
                 if (f.isDirectory) inputs.dir(f) else inputs.file(f)
             }
         }
@@ -93,7 +93,7 @@ private fun generateSmithyBuild(projections: Collection<KotlinCodegenProjection>
             prefix = "{",
             postfix = "}"
         ) {
-            val value = when(it.value) {
+            val value = when (it.value) {
                 is Boolean -> it.value.toString()
                 else -> "\"${it.value}\""
             }
@@ -128,9 +128,8 @@ private fun generateSmithyBuild(projections: Collection<KotlinCodegenProjection>
                     $formattedProjections
                 }
             }
-        """.trimIndent()
+    """.trimIndent()
 }
-
 
 // create a configuration (classpath) needed by the SmithyBuild task
 private fun Project.createCodegenConfiguration(): Configuration {
@@ -151,5 +150,3 @@ private fun Project.createCodegenConfiguration(): Configuration {
 
     return codegenConfig
 }
-
-

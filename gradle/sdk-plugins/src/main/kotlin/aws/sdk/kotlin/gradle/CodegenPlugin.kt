@@ -20,7 +20,7 @@ const val CODEGEN_EXTENSION_NAME = "codegen"
  * - providing a [CodegenTask] to generate Kotlin sources from their respective smithy models.
  */
 class CodegenPlugin : Plugin<Project> {
-    override fun apply(target: Project):Unit = target.run {
+    override fun apply(target: Project): Unit = target.run {
         configurePlugins()
         installExtension()
         registerCodegenTasks()
@@ -36,4 +36,3 @@ class CodegenPlugin : Plugin<Project> {
         return extensions.create(CODEGEN_EXTENSION_NAME, CodegenExtension::class.java, project)
     }
 }
-

@@ -12,8 +12,8 @@ import org.gradle.kotlin.dsl.get
 /**
  * Get the root directory of the generated kotlin code for a projection
  */
-internal fun Project.projectionRootDir(projectionName: String): java.io.File
-        = file("${project.buildDir}/smithyprojections/${project.name}/${projectionName}/kotlin-codegen")
+internal fun Project.projectionRootDir(projectionName: String): java.io.File =
+    file("${project.buildDir}/smithyprojections/${project.name}/$projectionName/kotlin-codegen")
 
 /**
  * Get the [CodegenExtension] instance configured for the project

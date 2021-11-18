@@ -8,7 +8,7 @@ package aws.sdk.kotlin.gradle.tasks
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-abstract class CodegenTask: DefaultTask() {
+abstract class CodegenTask : DefaultTask() {
     init {
         group = "codegen"
         description = "Generate code using smithy-kotlin"
@@ -21,5 +21,4 @@ abstract class CodegenTask: DefaultTask() {
         // it doesn't actually do any work (yet) but it does give us our own task to extend _AFTER_ code
         // has been generated
     }
-
 }
