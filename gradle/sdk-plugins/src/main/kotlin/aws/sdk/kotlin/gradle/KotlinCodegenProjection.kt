@@ -22,7 +22,7 @@ class KotlinCodegenProjection(
     /**
      * Root directory for this projection
      */
-    val projectionRootDir: java.io.File
+    val projectionRootDir: java.io.File,
 ){
 
     /**
@@ -33,29 +33,52 @@ class KotlinCodegenProjection(
     var imports: List<String> = emptyList()
 
 
+    internal var pluginSettings: SmithyKotlinPluginSettings = SmithyKotlinPluginSettings()
+
     /**
-     * Smithy Kotlin plugin settings. This *MUST* be a valid JSON object that conforms to the
-     * plugin settings for smithy kotlin.
-     *
-     * Example:
-     * ```json
-     * {
-     *     "service": <service shape ID>,
-     *     "package": {
-     *         "name": <generated package name>,
-     *         "version": <generated version>
-     *         "description": <description>
-     *     },
-     *     "sdkId": <SDK ID> (Optional: defaults to shape id if not set),
-     *     "build": { <build settings> }
-     * }
-     * ```
+     * Configure smithy-kotlin plugin settings.
      */
-    // FIXME - we could make this a typed object if we want or even re-use smithy-kotlin type
-    var pluginSettings: String? = null
+    fun pluginSettings(configure: SmithyKotlinPluginSettings.() -> Unit): Unit { pluginSettings.also(configure) }
+
 
     //    private var postProcessSpec: PostProcessSpec? = null
     //    fun postProcess(spec: PostProcessSpec.() -> Unit) {
     //        postProcessSpec = PostProcessSpec().apply(spec)
     //    }
+}
+
+
+class SmithyKotlinPluginSettings {
+    var serviceShapeId: String? = null
+    var packageName: String? = null
+    var packageVersion: String? = null
+    var packageDescription: String? = null
+    var sdkId: String? = null
+    var buildSettings: Map<String, Any>? = null
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SmithyKotlinPluginSettings
+
+        if (serviceShapeId != other.serviceShapeId) return false
+        if (packageName != other.packageName) return false
+        if (packageVersion != other.packageVersion) return false
+        if (packageDescription != other.packageDescription) return false
+        if (sdkId != other.sdkId) return false
+        if (buildSettings != other.buildSettings) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = serviceShapeId?.hashCode() ?: 0
+        result = 31 * result + (packageName?.hashCode() ?: 0)
+        result = 31 * result + (packageVersion?.hashCode() ?: 0)
+        result = 31 * result + (packageDescription?.hashCode() ?: 0)
+        result = 31 * result + (sdkId?.hashCode() ?: 0)
+        result = 31 * result + (buildSettings?.hashCode() ?: 0)
+        return result
+    }
 }

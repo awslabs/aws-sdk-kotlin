@@ -36,13 +36,15 @@ kotlin {
 
 
 
-                // generated sts provider
+                // additional dependencies required by generated sts provider
                 implementation("aws.smithy.kotlin:serde-form-url:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:protocols:aws-xml-protocols"))
                 implementation(project(":aws-runtime:aws-endpoint"))
                 implementation(project(":aws-runtime:aws-signing"))
+
+                // additional dependencies required by generated sso provider
+                implementation(project(":aws-runtime:protocols:aws-json-protocols"))
             }
         }
         commonTest {
@@ -72,62 +74,68 @@ fun awsModelFile(name: String): String =
     rootProject.file("codegen/sdk/aws-models/$name").absolutePath
 
 codegen {
+    val basePackage = "aws.sdk.kotlin.runtime.auth.credentials.internal"
+    val sharedBuildSettings = mapOf<String, Any>(
+        "generateDefaultBuildFiles" to false
+    )
+
+    // generate an sts client
     projection("sts-credentials-provider") {
         imports = listOf(
             awsModelFile("sts.2011-06-15.json")
         )
 
-        pluginSettings = """
-            {
-                "service": "com.amazonaws.sts#AWSSecurityTokenServiceV20110615",
-                "package" : {
-                    "name": "aws.sdk.kotlin.runtime.auth.credentials.internal.sts",
-                    "version": "$version",
-                    "description": "Internal STS credentials provider"
-                },
-                "sdkId": "STS",
-                "build": {
-                    "generateDefaultBuildFiles": false
-                }
-            }
-        """.trimIndent()
+        pluginSettings {
+            serviceShapeId = "com.amazonaws.sts#AWSSecurityTokenServiceV20110615"
+            packageName = "${basePackage}.sts"
+            packageVersion = project.version.toString()
+            packageDescription = "Internal STS credentials provider"
+            sdkId = "STS"
+            buildSettings = sharedBuildSettings
+        }
     }
 
-    // TODO - to re-use this infrastracture in say sdk bootstrap or protocol tests it would be useful to
-    //        have a way to completely control the projection
+    // generate an sso client
+    projection("sso-credentials-provider") {
+        imports = listOf(
+            awsModelFile("sso.2019-06-10.json")
+        )
+
+        pluginSettings {
+            serviceShapeId = "com.amazonaws.sso#SWBPortalService"
+            packageName = "${basePackage}.sso"
+            packageVersion = project.version.toString()
+            packageDescription = "Internal SSO credentials provider"
+            sdkId = "SSO"
+            buildSettings = sharedBuildSettings
+        }
+    }
 }
 
-// TODO/NOTE - need `compileKotlinJvm` (Type=KotlinCompile), `compileKotlinMetadata` (Type=KotlinCompileCommon), `sourcesJar` and `jvmSourcesJar` (Type=org.gradle.jvm.tasks.Jar)
+/*
+NOTE: We need the following tasks to depend on codegen for gradle caching/up-to-date checks to work correctly:
+
+* `compileKotlinJvm` (Type=KotlinCompile)
+* `compileKotlinMetadata` (Type=KotlinCompileCommon)
+* `sourcesJar` and `jvmSourcesJar` (Type=org.gradle.jvm.tasks.Jar)
+*/
 val codegenTasks = tasks.withType<aws.sdk.kotlin.gradle.tasks.CodegenTask>()
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    println("kotlin compile task: $name")
-    codegenTasks.forEach {
-        println("adding dependency on codegen task: $it")
-        dependsOn(it)
-    }
+    dependsOn(codegenTasks)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
-    println("KotlinCompileCommon task: $name")
-    codegenTasks.forEach {
-        println("adding dependency on codegen task: $it")
-        dependsOn(it)
-    }
+    dependsOn(codegenTasks)
 }
 
-
 tasks.withType<org.gradle.jvm.tasks.Jar> {
-    println("jar explicit task: $name")
-    codegenTasks.forEach {
-        println("adding dependency on codegen task: $it")
-        dependsOn(it)
-    }
+    dependsOn(codegenTasks)
 }
 
 codegen.projections {
     // add this projected source dir to the common sourceSet
-    // TODO- build.gradle.kts is still being generated, it's NOT used though, we should probably either have a postProcessing spec or a
-    //       plugin setting to not generate it to avoid confusion
+    // NOTE - build.gradle.kts is still being generated, it's NOT used though
+    // TODO - we should probably either have a postProcessing spec or a plugin setting to not generate it to avoid confusion
     val projectedSrcDir = projectionRootDir.resolve("src/main/kotlin")
     kotlin.sourceSets.commonMain {
         println("added $projectedSrcDir to common sourceSet")

@@ -25,7 +25,7 @@ internal fun Project.registerCodegenTasks() {
         // set an input property based on a hash of all the plugin settings to get this task's
         // up-to-date checks to work correctly (model files are already an input to the actual build task)
         val pluginSettingsHash = project.codegenExtension.projections.values.fold(0){ acc, projection ->
-            acc + (projection.pluginSettings?.hashCode() ?: 0)
+            acc + projection.pluginSettings.hashCode()
         }
 
         inputs.property("pluginSettingsHash", pluginSettingsHash)
@@ -87,11 +87,33 @@ private fun generateSmithyBuild(projections: Collection<KotlinCodegenProjection>
             .map { it.replace("\\", "\\\\") }
             .joinToString { "\"$it\"" }
 
+        // TODO - probably need some validation in here...
+        val buildPairs = projection.pluginSettings.buildSettings?.entries?.joinToString(
+            separator = ",\n",
+            prefix = "{",
+            postfix = "}"
+        ) {
+            val value = when(it.value) {
+                is Boolean -> it.value.toString()
+                else -> "\"${it.value}\""
+            }
+            """"${it.key}": $value"""
+        }
+
         val config = """
             "${projection.name}": {
                 "imports": [$imports],
                 "plugins": {
-                    "kotlin-codegen": ${projection.pluginSettings!!}
+                    "kotlin-codegen": {
+                        "service": "${projection.pluginSettings.serviceShapeId}",
+                        "package": {
+                            "name": "${projection.pluginSettings.packageName}",
+                            "version": "${projection.pluginSettings.packageVersion}",
+                            "description": "${projection.pluginSettings.packageDescription}"
+                        },
+                        "sdkId": "${projection.pluginSettings.sdkId}",
+                        "build": $buildPairs
+                    }
                 }
             }
         """.trimIndent()

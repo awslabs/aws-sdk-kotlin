@@ -14,7 +14,16 @@ import org.gradle.api.Project
 open class CodegenExtension(private val project: Project) {
     internal val projections = mutableMapOf<String, KotlinCodegenProjection>()
 
-    // TODO - typed plugin settings and defaults for all projections
+
+//     FIXME - not all settings make sense to be defaulted...
+//    /**
+//     * Set default plugin settings that each projection uses if no value is set
+//     */
+//    private var defaultPluginSettings: SmithyKotlinPluginSettings? = null
+//    fun defaultPluginSettings(configure: SmithyKotlinPluginSettings.() -> Unit): Unit {
+//        if (defaultPluginSettings == null) { defaultPluginSettings = SmithyKotlinPluginSettings() }
+//        defaultPluginSettings!!.apply(configure)
+//    }
 
     /**
      * Configure a new projection
