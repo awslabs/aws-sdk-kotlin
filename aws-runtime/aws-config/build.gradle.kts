@@ -94,6 +94,7 @@ codegen {
             }
         }
 
+        // TODO - could we add a trait such that we change visibility to `internal` or a build setting...?
         transforms = listOf(
             """
             {
