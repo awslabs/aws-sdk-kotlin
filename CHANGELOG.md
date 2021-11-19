@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.3-alpha] - 11/19/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Fixes
+* render default endpoint resolver for machinelearning [#424](https://github.com/awslabs/aws-sdk-kotlin/pull/424)
+
 ## [0.9.2-alpha] - 11/11/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
