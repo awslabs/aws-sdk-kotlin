@@ -76,27 +76,28 @@ fun awsModelFile(name: String): String =
 codegen {
     val basePackage = "aws.sdk.kotlin.runtime.auth.credentials.internal"
 
-    // generate an sts client
-    projection("sts-credentials-provider") {
-        imports = listOf(
-            awsModelFile("sts.2011-06-15.json")
-        )
+    projections {
+        // generate an sts client
+        create("sts-credentials-provider") {
+            imports = listOf(
+                awsModelFile("sts.2011-06-15.json")
+            )
 
-        pluginSettings {
-            serviceShapeId = "com.amazonaws.sts#AWSSecurityTokenServiceV20110615"
-            packageName = "${basePackage}.sts"
-            packageVersion = project.version.toString()
-            packageDescription = "Internal STS credentials provider"
-            sdkId = "STS"
-            buildSettings {
-                generateDefaultBuildFiles = false
-                generateFullProject = false
+            pluginSettings {
+                serviceShapeId = "com.amazonaws.sts#AWSSecurityTokenServiceV20110615"
+                packageName = "${basePackage}.sts"
+                packageVersion = project.version.toString()
+                packageDescription = "Internal STS credentials provider"
+                sdkId = "STS"
+                buildSettings {
+                    generateDefaultBuildFiles = false
+                    generateFullProject = false
+                }
             }
-        }
 
-        // TODO - could we add a trait such that we change visibility to `internal` or a build setting...?
-        transforms = listOf(
-            """
+            // TODO - could we add a trait such that we change visibility to `internal` or a build setting...?
+            transforms = listOf(
+                """
             {
                 "name": "awsSdkKotlinIncludeOperations",
                 "args": {
@@ -107,30 +108,30 @@ codegen {
                 }
             }
             """
-        )
-    }
-
-    // generate an sso client
-    projection("sso-credentials-provider") {
-        imports = listOf(
-            awsModelFile("sso.2019-06-10.json")
-        )
-
-        val serviceShape = "com.amazonaws.sso#SWBPortalService"
-        pluginSettings {
-            serviceShapeId = serviceShape
-            packageName = "${basePackage}.sso"
-            packageVersion = project.version.toString()
-            packageDescription = "Internal SSO credentials provider"
-            sdkId = "SSO"
-            buildSettings {
-                generateDefaultBuildFiles = false
-                generateFullProject = false
-            }
+            )
         }
 
-        transforms = listOf(
-            """
+        // generate an sso client
+        create("sso-credentials-provider") {
+            imports = listOf(
+                awsModelFile("sso.2019-06-10.json")
+            )
+
+            val serviceShape = "com.amazonaws.sso#SWBPortalService"
+            pluginSettings {
+                serviceShapeId = serviceShape
+                packageName = "${basePackage}.sso"
+                packageVersion = project.version.toString()
+                packageDescription = "Internal SSO credentials provider"
+                sdkId = "SSO"
+                buildSettings {
+                    generateDefaultBuildFiles = false
+                    generateFullProject = false
+                }
+            }
+
+            transforms = listOf(
+                """
             {
                 "name": "awsSdkKotlinIncludeOperations",
                 "args": {
@@ -140,7 +141,8 @@ codegen {
                 }
             }
             """
-        )
+            )
+        }
     }
 }
 
@@ -164,7 +166,8 @@ tasks.withType<org.gradle.jvm.tasks.Jar> {
     dependsOn(codegenTasks)
 }
 
-codegen.projections {
+
+codegen.projections.all {
     // add this projected source dir to the common sourceSet
     // NOTE - build.gradle.kts is still being generated, it's NOT used though
     // TODO - we should probably either have a postProcessing spec or a plugin setting to not generate it to avoid confusion

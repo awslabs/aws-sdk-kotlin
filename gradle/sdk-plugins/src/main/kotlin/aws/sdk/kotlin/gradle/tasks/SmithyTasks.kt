@@ -7,7 +7,6 @@ package aws.sdk.kotlin.gradle.tasks
 
 import aws.sdk.kotlin.gradle.KotlinCodegenProjection
 import aws.sdk.kotlin.gradle.codegenExtension
-import aws.sdk.kotlin.gradle.projectionRootDir
 import aws.sdk.kotlin.gradle.withObjectMember
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
@@ -24,13 +23,14 @@ internal fun Project.registerCodegenTasks() {
         description = "generate smithy-build.json"
         group = "codegen"
 
-        // set an input property based on a hash of all the plugin settings to get this task's
-        // up-to-date checks to work correctly (model files are already an input to the actual build task)
-        val pluginSettingsHash = project.codegenExtension.projections.values.fold(0) { acc, projection ->
-            acc + projection.pluginSettings.hashCode()
+        // set an input property based on a hash of all the projections to get this task's
+        // up-to-date checks to work correctly (model files are configured as an input to the actual build task)
+        val projectionHash = project.objects.property(Int::class.java)
+        projectionHash.set(0)
+        project.codegenExtension.projections.all {
+            projectionHash.set(projectionHash.get() + hashCode())
         }
-
-        inputs.property("pluginSettingsHash", pluginSettingsHash)
+        inputs.property("projectionHash", projectionHash)
         outputs.file(smithyBuildConfig)
         doFirst {
             if (smithyBuildConfig.exists()) {
@@ -40,7 +40,8 @@ internal fun Project.registerCodegenTasks() {
         doLast {
             buildDir.mkdir()
             val extension = project.codegenExtension
-            smithyBuildConfig.writeText(generateSmithyBuild(extension.projections.values))
+            val projections = extension.projections.asMap
+            smithyBuildConfig.writeText(generateSmithyBuild(projections.values))
         }
     }
 
@@ -55,22 +56,20 @@ internal fun Project.registerCodegenTasks() {
         inputs.file(smithyBuildConfig)
 
         val extension = project.codegenExtension
-        println("registering imports for kotlinCodegenSmithyBuild: ${extension.projections.keys.joinToString()}")
-        // register the model file(s) (imports)
-        val imports = extension.projections.values.flatMap { it.imports }
-        imports.forEach { importPath ->
-            val f = project.file(importPath)
-            if (f.exists()) {
-                if (f.isDirectory) inputs.dir(f) else inputs.file(f)
+
+        // every time a projection is added wire up the imports and outputs appropriately for this task
+        extension.projections.all {
+            imports.forEach { importPath ->
+                val f = project.file(importPath)
+                if (f.exists()) {
+                    if (f.isDirectory) inputs.dir(f) else inputs.file(f)
+                }
             }
+            outputs.dir(projectionRootDir)
         }
 
         // ensure smithy-aws-kotlin-codegen is up to date
         inputs.files(codegenConfig)
-
-        extension.projections.keys.forEach { projectionName ->
-            outputs.dir(project.projectionRootDir(projectionName))
-        }
     }
 
     project.tasks.register<CodegenTask>("kotlinCodegen") {

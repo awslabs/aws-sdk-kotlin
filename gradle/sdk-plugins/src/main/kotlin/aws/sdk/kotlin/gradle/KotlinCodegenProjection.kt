@@ -71,6 +71,28 @@ class KotlinCodegenProjection(
             }
         return obj.build()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as KotlinCodegenProjection
+
+        if (name != other.name) return false
+        if (imports != other.imports) return false
+        if (transforms != other.transforms) return false
+        if (pluginSettings != other.pluginSettings) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + imports.hashCode()
+        result = 31 * result + transforms.hashCode()
+        result = 31 * result + pluginSettings.hashCode()
+        return result
+    }
 }
 
 class SmithyKotlinBuildSettings : ToNode {
