@@ -47,7 +47,7 @@ private class GlacierAccountIdMiddleware : ProtocolMiddleware {
         val accountId = ctx.model.expectShape<StructureShape>(op.input.get()).members().first { it.memberName.lowercase() == "accountid" }
         writer.addImport(RuntimeTypes.Http.Operation.OperationRequest)
 
-        writer.withBlock("execution.initialize.intercept { req, next -> ", "}") {
+        writer.withBlock("op.execution.initialize.intercept { req, next -> ", "}") {
             openBlock("if (req.subject.#L.isNullOrEmpty()) {", accountId.defaultName())
                 .write("val updated = req.subject.copy { #L = #S }", accountId.defaultName(), "-")
                 .write("next.call(#T(req.context, updated))", RuntimeTypes.Http.Operation.OperationRequest)

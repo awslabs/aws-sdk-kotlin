@@ -18,7 +18,7 @@ import aws.smithy.kotlin.runtime.serde.xml.xmlStreamReader
 internal class GetBucketLocationOperationDeserializer : HttpDeserialize<GetBucketLocationResponse> {
 
     override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): GetBucketLocationResponse {
-        val builder = GetBucketLocationResponse.builder()
+        val builder = GetBucketLocationResponse.Builder()
 
         val payload = response.body.readAll()
         if (payload != null) {
@@ -28,7 +28,7 @@ internal class GetBucketLocationOperationDeserializer : HttpDeserialize<GetBucke
     }
 }
 
-private suspend fun deserializeGetBucketLocationOperationBody(builder: GetBucketLocationResponse.DslBuilder, payload: ByteArray) {
+private fun deserializeGetBucketLocationOperationBody(builder: GetBucketLocationResponse.Builder, payload: ByteArray) {
     val dom = parseDom(xmlStreamReader(payload))
     check(dom.name.local == "LocationConstraint") { "Expected top-level tag of 'LocationConstraint' but found ${dom.name}." }
     val rawLocationConstraint = checkNotNull(dom.text) { "Did not receive a value for 'LocationConstraint' in response." }

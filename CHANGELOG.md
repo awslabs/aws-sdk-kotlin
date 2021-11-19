@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.9.2-alpha] - 11/11/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### New features
+* SDK generation and build docs [#377](https://github.com/awslabs/aws-sdk-kotlin/pull/377)
+
+### Fixes
+* disable signing for sts operations AssumeRoleWithSaml and AssumeRoleWithWebIdentity [#407](https://github.com/awslabs/aws-sdk-kotlin/pull/407)
+
+### Miscellaneous
+* Add howto to override default http client. [#412](https://github.com/awslabs/aws-sdk-kotlin/pull/412)
+
 ## [0.9.1-alpha] - 11/04/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
