@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.gradle.codegen
 
+import aws.sdk.kotlin.gradle.codegen.tasks.createSmithyCliConfiguration
 import aws.sdk.kotlin.gradle.codegen.tasks.registerCodegenTasks
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -24,6 +25,7 @@ class CodegenPlugin : Plugin<Project> {
     }
 
     private fun Project.configurePlugins() {
+        createSmithyCliConfiguration()
         // unfortunately all of the tasks provided by smithy rely on the plugin extension, so it also needs applied
         plugins.apply("software.amazon.smithy")
         tasks.getByName("smithyBuildJar").enabled = false

@@ -41,7 +41,7 @@ val enabledProtocols = listOf(
 
 codegen {
     enabledProtocols.forEach { test ->
-        projections.create(test.projectionName) {
+        projections.register(test.projectionName) {
             transforms = listOf(
                 """
                 {
@@ -70,7 +70,7 @@ codegen {
     }
 }
 
-tasks.getByName<SmithyBuild>("generateProjections") {
+tasks.named<SmithyBuild>("generateSmithyProjections") {
     // NOTE: The protocol tests are published to maven as a jar, this ensures that
     // the aws-protocol-tests dependency is found when generating code such that the `includeServices` transform
     // actually works

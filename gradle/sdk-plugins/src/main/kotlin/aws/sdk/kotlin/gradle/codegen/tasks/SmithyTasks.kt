@@ -16,10 +16,13 @@ import org.gradle.kotlin.dsl.register
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 import software.amazon.smithy.model.node.Node
 
+private const val GENERATE_SMITHY_BUILD_CONFIG_TASK_NAME = "generateSmithyBuildConfig"
+private const val GENERATE_SMITHY_PROJECTIONS_TASK_NAME = "generateSmithyProjections"
+
 internal fun Project.registerCodegenTasks() {
     // generate the projection file for smithy to consume
     val smithyBuildConfig = buildDir.resolve("smithy-build.json")
-    val generateSmithyBuild = tasks.register("generateSmithyBuildConfig") {
+    val generateSmithyBuild = tasks.register(GENERATE_SMITHY_BUILD_CONFIG_TASK_NAME) {
         description = "generate smithy-build.json"
         group = "codegen"
 
@@ -46,9 +49,9 @@ internal fun Project.registerCodegenTasks() {
     }
 
     val codegenConfig = createCodegenConfiguration()
-    val buildTask = project.tasks.register<SmithyBuild>("generateProjections") {
+    val buildTask = project.tasks.register<SmithyBuild>(GENERATE_SMITHY_PROJECTIONS_TASK_NAME) {
         dependsOn(generateSmithyBuild)
-        description = "generate code using smithy-kotlin"
+        description = "generate projections (code) using Smithy"
         group = "codegen"
         classpath = codegenConfig
         smithyBuildConfigs = files(smithyBuildConfig)
@@ -97,19 +100,27 @@ private fun generateSmithyBuild(projections: Collection<SmithyProjection>): Stri
 // create a configuration (classpath) needed by the SmithyBuild task
 private fun Project.createCodegenConfiguration(): Configuration {
     val codegenConfig = configurations.maybeCreate("codegenTaskConfiguration")
+    codegenConfig.extendsFrom(createSmithyCliConfiguration())
 
     dependencies {
         // depend on aws-kotlin code generation
         codegenConfig(project(":codegen:smithy-aws-kotlin-codegen"))
-
-        // smithy plugin requires smithy-cli to be on the classpath, for whatever reason configuring the plugin
-        // from this plugin doesn't work correctly so we explicitly set it
-        val smithyVersion: String by project
-        codegenConfig("software.amazon.smithy:smithy-cli:$smithyVersion")
-
-        // add aws traits to the compile classpath so that the smithy build task can discover them
-        codegenConfig("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
     }
 
     return codegenConfig
+}
+
+internal fun Project.createSmithyCliConfiguration(): Configuration {
+    // see: https://github.com/awslabs/smithy-gradle-plugin/blob/main/src/main/java/software/amazon/smithy/gradle/SmithyPlugin.java#L119
+    val smithyCliConfig = configurations.maybeCreate("smithyCli")
+    dependencies {
+        // smithy plugin requires smithy-cli to be on the classpath, for whatever reason configuring the plugin
+        // from this plugin doesn't work correctly so we explicitly set it
+        val smithyVersion: String by project
+        smithyCliConfig("software.amazon.smithy:smithy-cli:$smithyVersion")
+
+        // add aws traits to the compile classpath so that the smithy build task can discover them
+        smithyCliConfig("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
+    }
+    return smithyCliConfig
 }
