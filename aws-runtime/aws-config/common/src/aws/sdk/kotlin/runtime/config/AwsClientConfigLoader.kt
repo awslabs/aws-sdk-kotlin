@@ -35,7 +35,7 @@ public class AwsClientConfigLoadOptions {
     /**
      * The [SdkLogMode] to apply to service clients.
      */
-    public var sdkLogMode: SdkLogMode? = null
+    public var sdkLogMode: SdkLogMode = SdkLogMode.Default
 
     // FIXME - expose profile name override and thread through region/cred provider chains
 }
@@ -55,7 +55,7 @@ internal suspend fun loadAwsClientConfig(
 
     val region = opts.region ?: resolveRegion(platformProvider)
     val credentialsProvider = opts.credentialsProvider ?: DefaultChainCredentialsProvider()
-    val sdkLogMode = opts.sdkLogMode ?: SdkLogMode.Default
+    val sdkLogMode = opts.sdkLogMode
 
     return ResolvedAwsConfig(region, credentialsProvider, sdkLogMode)
 }
