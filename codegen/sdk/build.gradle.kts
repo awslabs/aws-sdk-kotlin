@@ -6,7 +6,9 @@
 // This build file has been adapted from the Go v2 SDK, here:
 // https://github.com/aws/aws-sdk-go-v2/blob/master/codegen/sdk-codegen/build.gradle.kts
 
-import software.amazon.smithy.gradle.tasks.SmithyBuild
+import aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection
+import aws.sdk.kotlin.gradle.codegen.dsl.projectionRootDir
+import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.util.*
@@ -16,26 +18,19 @@ import kotlin.streams.toList
 description = "AWS SDK codegen tasks"
 
 plugins {
-    id("software.amazon.smithy")
+    id("aws.sdk.kotlin.codegen")
 }
 
 buildscript {
     val smithyVersion: String by project
     dependencies {
+        classpath("software.amazon.smithy:smithy-model:$smithyVersion")
         classpath("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
-        classpath("software.amazon.smithy:smithy-cli:$smithyVersion")
     }
-}
-
-dependencies {
-    implementation(project(":codegen:smithy-aws-kotlin-codegen"))
 }
 
 // This project doesn't produce a JAR.
 tasks["jar"].enabled = false
-
-// Run the SmithyBuild task manually since this project needs the built JAR
-tasks["smithyBuildJar"].enabled = false
 
 // get a project property by name if it exists (including from local.properties)
 fun getProperty(name: String): String? {
@@ -108,55 +103,48 @@ val disabledServices = setOf(
     "timestreamquery"
 )
 
-// Generates a smithy-build.json file by creating a new projection.
-// The generated smithy-build.json file is not committed to git since
-// it's rebuilt each time codegen is performed.
-fun generateSmithyBuild(services: List<AwsService>): String {
-    require(services.isNotEmpty()) {
-        "No services discovered. Verify aws.services and aws.protocols properties in local.build. Aborting."
-    }
+// Manually create the projections rather than using the extension to avoid unnecessary configuration evaluation.
+// Otherwise we would be reading the models from disk on every gradle invocation for unrelated projects/tasks
+fun awsServiceProjections(): Provider<List<SmithyProjection>> {
+    val p = project.provider {
+        println("AWS service projection provider called")
+        discoveredServices
+    }.map {
+        it.map { service ->
+            SmithyProjection(
+                service.projectionName,
+                project.projectionRootDir(service.projectionName)
+            ).apply {
+                val importPaths = mutableListOf(service.modelFile.absolutePath)
+                if (file(service.modelExtrasDir).exists()) {
+                    importPaths.add(service.modelExtrasDir)
+                }
+                imports = importPaths
+                transforms = transformsForService(service) ?: emptyList()
 
-    val projections = services.joinToString(",") { service ->
-        // escape windows paths for valid json
-        val absModelPath = service.modelFile.absolutePath.replace("\\", "\\\\")
-        val importPaths = mutableListOf(absModelPath)
-        if (file(service.modelExtrasDir).exists()) {
-            importPaths.add(service.modelExtrasDir.replace("\\", "\\\\"))
-        }
-        val imports = importPaths.joinToString { "\"$it\"" }
-        val transforms = transformsForService(service)
-
-        """
-            "${service.projectionName}": {
-                "imports": [$imports],
-                "plugins": {
-                    "kotlin-codegen": {
-                      "service": "${service.name}",
-                      "package" : {
-                          "name": "${service.packageName}",
-                          "version": "${service.packageVersion}",
-                          "description": "${service.description}"                      
-                      },
-                      "sdkId": "${service.sdkId}",
-                      "build": {
-                          "generateDefaultBuildFiles": false
-                      }
+                smithyKotlinPlugin {
+                    serviceShapeId = service.name
+                    packageName = service.packageName
+                    packageVersion = service.packageVersion
+                    packageDescription = service.description
+                    sdkId = service.sdkId
+                    buildSettings {
+                        generateFullProject = false
+                        generateDefaultBuildFiles = false
                     }
-                },
-                "transforms": $transforms
+                }
             }
-        """
-    }
-
-    return """
-    {
-        "version": "1.0",
-        "projections": {
-            $projections
         }
     }
-    """.trimIndent()
+
+    // get around class cast issues, listProperty implements what we need to pass this to `NamedObjectContainer`
+    return project.objects.listProperty<SmithyProjection>().value(p)
 }
+
+// this will lazily evaluate the provider and only cause the models to be
+// mapped if the tasks are actually needed
+// NOTE: FYI evaluation still happens if you ask for the list of tasks or rebuild the gradle model in intellij
+codegen.projections.addAllLater(awsServiceProjections())
 
 /**
  * This function retrieves Smithy transforms associated with the target service to be merged into generated
@@ -168,11 +156,11 @@ fun generateSmithyBuild(services: List<AwsService>): String {
  * <transform operation>-<target shape(s)>.json
  * Example: renameShapes-MarketplaceCommerceAnalyticsException.json
  */
-fun transformsForService(service: AwsService): String {
+fun transformsForService(service: AwsService): List<String>? {
     val transformsDir = File(service.transformsDir)
     return transformsDir.listFiles()?.map { transformFile ->
         transformFile.readText()
-    }?.toString() ?: "[]"
+    }
 }
 
 val discoveredServices: List<AwsService> by lazy { discoverServices() }
@@ -185,6 +173,7 @@ val sdkPackageNamePrefix = "aws.sdk.kotlin.services."
  * membership tests
  */
 fun discoverServices(applyFilters: Boolean = true): List<AwsService> {
+    println("discover services called")
     val modelsDir: String by project
     val serviceMembership = parseMembership(getProperty("aws.services"))
     val protocolMembership = parseMembership(getProperty("aws.protocols"))
@@ -294,43 +283,6 @@ fun <T> java.util.Optional<T>.orNull(): T? = this.orElse(null)
 fun String.kotlinNamespace(): String = split(".")
     .joinToString(separator = ".") { segment -> segment.filter { it.isLetterOrDigit() } }
 
-// Generate smithy-build.json as first step in build task
-task("generateSmithyBuild") {
-    group = "codegen"
-    description = "generate smithy-build.json"
-    doFirst {
-        projectDir
-            .resolve("smithy-build.json")
-            .writeText(generateSmithyBuild(discoveredServices))
-    }
-}
-
-tasks.create<SmithyBuild>("generateSdk") {
-    group = "codegen"
-    // ensure the generated clients use the same version of the runtime as the aws aws-runtime
-    val smithyKotlinVersion: String by project
-    doFirst {
-        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinVersion)
-    }
-
-    addRuntimeClasspath = true
-    dependsOn(tasks["generateSmithyBuild"])
-    inputs.file(projectDir.resolve("smithy-build.json"))
-    // ensure smithy-aws-kotlin-codegen is up to date
-    inputs.files(configurations.compileClasspath)
-}
-
-// Remove generated model file for clean
-tasks["clean"].doFirst {
-    delete("smithy-build.json")
-}
-
-/**
- * The directory code is generated to
- */
-val AwsService.projectionOutputDir: String
-    get() = project.file("${project.buildDir}/smithyprojections/${project.name}/${projectionName}/kotlin-codegen").absolutePath
-
 /**
  * The project directory under `aws-sdk-kotlin/services`
  */
@@ -352,31 +304,33 @@ val AwsService.modelExtrasDir: String
 val AwsService.transformsDir: String
     get() = rootProject.file("${destinationDir}/transforms").absolutePath
 
-task("stageSdks") {
+val stageSdks = tasks.register("stageSdks") {
     group = "codegen"
     description = "relocate generated SDK(s) from build directory to services/ dir"
-    dependsOn("generateSdk")
+    dependsOn(tasks.named("generateSmithyProjections"))
     doLast {
+        println("discoveredServices = ${discoveredServices.joinToString { it.sdkId }}")
         discoveredServices.forEach {
-            logger.info("copying ${it.projectionOutputDir} to ${it.destinationDir}")
+            val projectionOutputDir = codegen.projections.getByName(it.projectionName).projectionRootDir
+            logger.info("copying $projectionOutputDir to ${it.destinationDir}")
             copy {
-                from("${it.projectionOutputDir}/src")
+                from("$projectionOutputDir/src")
                 into("${it.destinationDir}/generated-src")
             }
             copy {
-                from("${it.projectionOutputDir}/build.gradle.kts")
-                into("${it.destinationDir}")
+                from("$projectionOutputDir/build.gradle.kts")
+                into(it.destinationDir)
             }
         }
     }
 }
 
-tasks.create("bootstrap") {
+tasks.register("bootstrap") {
     group = "codegen"
     description = "Generate AWS SDK's and register them with the build"
 
-    dependsOn(tasks["generateSdk"])
-    finalizedBy(tasks["stageSdks"])
+    dependsOn(tasks.named("generateSmithyProjections"))
+    finalizedBy(stageSdks)
 }
 
 

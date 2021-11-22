@@ -19,7 +19,7 @@ import java.util.*
 /**
  * Get the root directory of the generated kotlin code for a projection
  */
-internal fun Project.projectionRootDir(projectionName: String): java.io.File =
+fun Project.projectionRootDir(projectionName: String): java.io.File =
     file("${project.buildDir}/smithyprojections/${project.name}/$projectionName/kotlin-codegen")
 
 /**
