@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.gradle.codegen
+package aws.sdk.kotlin.gradle.codegen.dsl
 
+import aws.sdk.kotlin.gradle.codegen.CODEGEN_EXTENSION_NAME
+import aws.sdk.kotlin.gradle.codegen.CodegenExtension
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.get

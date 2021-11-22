@@ -5,9 +5,9 @@
 
 package aws.sdk.kotlin.gradle.codegen.tasks
 
-import aws.sdk.kotlin.gradle.codegen.KotlinCodegenProjection
-import aws.sdk.kotlin.gradle.codegen.codegenExtension
-import aws.sdk.kotlin.gradle.codegen.withObjectMember
+import aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection
+import aws.sdk.kotlin.gradle.codegen.dsl.codegenExtension
+import aws.sdk.kotlin.gradle.codegen.dsl.withObjectMember
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.kotlin.dsl.dependencies
@@ -81,7 +81,7 @@ internal fun Project.registerCodegenTasks() {
 /**
  * Generate the "smithy-build.json" defining the projection
  */
-private fun generateSmithyBuild(projections: Collection<KotlinCodegenProjection>): String {
+private fun generateSmithyBuild(projections: Collection<SmithyProjection>): String {
     val buildConfig = Node.objectNodeBuilder()
         .withMember("version", "1.0")
         .withObjectMember("projections") {

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.gradle.codegen
+package aws.sdk.kotlin.gradle.codegen.dsl
 
 import software.amazon.smithy.model.node.ArrayNode
 import software.amazon.smithy.model.node.Node
@@ -19,7 +19,7 @@ import java.util.*
 //
 // }
 
-class KotlinCodegenProjection(
+class SmithyProjection(
     /**
      * The name of the projection
      */
@@ -76,7 +76,7 @@ class KotlinCodegenProjection(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as KotlinCodegenProjection
+        other as SmithyProjection
 
         if (name != other.name) return false
         if (imports != other.imports) return false

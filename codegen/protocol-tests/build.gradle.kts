@@ -87,7 +87,7 @@ open class ProtocolTestTask : DefaultTask() {
      * The projection
      */
     @get:Input
-    var projection: aws.sdk.kotlin.gradle.codegen.KotlinCodegenProjection? = null
+    var projection: aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection? = null
 
 
     @TaskAction
