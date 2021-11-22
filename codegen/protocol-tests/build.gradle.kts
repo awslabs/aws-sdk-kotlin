@@ -53,7 +53,7 @@ codegen {
                 """
             )
 
-            smithyKotlinPlugin{
+            smithyKotlinPlugin {
                 serviceShapeId = test.serviceShapeId
                 packageName = "aws.sdk.kotlin.services.${test.packageName}"
                 packageVersion = "1.0"

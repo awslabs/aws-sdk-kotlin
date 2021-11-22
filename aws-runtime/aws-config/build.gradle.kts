@@ -85,7 +85,7 @@ codegen {
                 awsModelFile("sts.2011-06-15.json")
             )
 
-            smithyKotlinPlugin{
+            smithyKotlinPlugin {
                 serviceShapeId = "com.amazonaws.sts#AWSSecurityTokenServiceV20110615"
                 packageName = "${basePackage}.sts"
                 packageVersion = project.version.toString()
@@ -120,7 +120,7 @@ codegen {
             )
 
             val serviceShape = "com.amazonaws.sso#SWBPortalService"
-            smithyKotlinPlugin{
+            smithyKotlinPlugin {
                 serviceShapeId = serviceShape
                 packageName = "${basePackage}.sso"
                 packageVersion = project.version.toString()
