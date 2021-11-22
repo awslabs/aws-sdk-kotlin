@@ -19,7 +19,7 @@ import software.amazon.smithy.model.node.Node
 internal fun Project.registerCodegenTasks() {
     // generate the projection file for smithy to consume
     val smithyBuildConfig = buildDir.resolve("smithy-build.json")
-    val generateSmithyBuild = tasks.register("kotlinCodegenGenerateBuildConfig") {
+    val generateSmithyBuild = tasks.register("generateSmithyBuildConfig") {
         description = "generate smithy-build.json"
         group = "codegen"
 
@@ -46,7 +46,7 @@ internal fun Project.registerCodegenTasks() {
     }
 
     val codegenConfig = createCodegenConfiguration()
-    val buildTask = project.tasks.register<SmithyBuild>("kotlinCodegenSmithyBuild") {
+    val buildTask = project.tasks.register<SmithyBuild>("generateProjections") {
         dependsOn(generateSmithyBuild)
         description = "generate code using smithy-kotlin"
         group = "codegen"

@@ -1,3 +1,5 @@
+import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
+
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
@@ -83,7 +85,7 @@ codegen {
                 awsModelFile("sts.2011-06-15.json")
             )
 
-            pluginSettings {
+            smithyKotlinPlugin{
                 serviceShapeId = "com.amazonaws.sts#AWSSecurityTokenServiceV20110615"
                 packageName = "${basePackage}.sts"
                 packageVersion = project.version.toString()
@@ -118,7 +120,7 @@ codegen {
             )
 
             val serviceShape = "com.amazonaws.sso#SWBPortalService"
-            pluginSettings {
+            smithyKotlinPlugin{
                 serviceShapeId = serviceShape
                 packageName = "${basePackage}.sso"
                 packageVersion = project.version.toString()

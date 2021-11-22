@@ -2,6 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
+import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 
 plugins {
@@ -52,7 +53,7 @@ codegen {
                 """
             )
 
-            pluginSettings {
+            smithyKotlinPlugin{
                 serviceShapeId = test.serviceShapeId
                 packageName = "aws.sdk.kotlin.services.${test.packageName}"
                 packageVersion = "1.0"
@@ -69,7 +70,7 @@ codegen {
     }
 }
 
-tasks.getByName<SmithyBuild>("kotlinCodegenSmithyBuild") {
+tasks.getByName<SmithyBuild>("generateProjections") {
     // NOTE: The protocol tests are published to maven as a jar, this ensures that
     // the aws-protocol-tests dependency is found when generating code such that the `includeServices` transform
     // actually works
