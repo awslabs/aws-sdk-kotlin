@@ -58,6 +58,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 ) {
                     write("region = sharedConfig?.region")
                     write("credentialsProvider = sharedConfig?.credentialsProvider")
+                    write("sdkLogMode = sharedConfig?.sdkLogMode ?: SdkLogMode.Default")
                 }
                 write("return Default${serviceSymbol.name}(config)")
             }
