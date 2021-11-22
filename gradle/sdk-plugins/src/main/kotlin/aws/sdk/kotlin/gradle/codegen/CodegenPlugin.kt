@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.gradle
+package aws.sdk.kotlin.gradle.codegen
 
-import aws.sdk.kotlin.gradle.tasks.registerCodegenTasks
+import aws.sdk.kotlin.gradle.codegen.tasks.registerCodegenTasks
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

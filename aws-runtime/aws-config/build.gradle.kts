@@ -153,7 +153,7 @@ NOTE: We need the following tasks to depend on codegen for gradle caching/up-to-
 * `compileKotlinMetadata` (Type=KotlinCompileCommon)
 * `sourcesJar` and `jvmSourcesJar` (Type=org.gradle.jvm.tasks.Jar)
 */
-val codegenTasks = tasks.withType<aws.sdk.kotlin.gradle.tasks.CodegenTask>()
+val codegenTasks = tasks.withType<aws.sdk.kotlin.gradle.codegen.tasks.CodegenTask>()
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     dependsOn(codegenTasks)
 }

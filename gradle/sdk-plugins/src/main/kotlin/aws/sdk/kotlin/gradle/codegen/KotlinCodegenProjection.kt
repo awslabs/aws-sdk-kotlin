@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.gradle
+package aws.sdk.kotlin.gradle.codegen
 
 import software.amazon.smithy.model.node.ArrayNode
 import software.amazon.smithy.model.node.Node

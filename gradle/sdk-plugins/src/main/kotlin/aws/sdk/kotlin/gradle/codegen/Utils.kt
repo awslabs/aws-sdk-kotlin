@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.gradle
+package aws.sdk.kotlin.gradle.codegen
 
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware

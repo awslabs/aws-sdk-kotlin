@@ -47,7 +47,7 @@ gradlePlugin {
     plugins {
         val awsCodegenPlugin by creating {
             id = "aws.sdk.kotlin.codegen"
-            implementationClass = "aws.sdk.kotlin.gradle.CodegenPlugin"
+            implementationClass = "aws.sdk.kotlin.gradle.codegen.CodegenPlugin"
         }
     }
 }
