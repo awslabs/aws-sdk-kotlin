@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.codegen.customization.machinelearning
 
-import aws.sdk.kotlin.codegen.protocols.middleware.ResolveAwsEndpointMiddleware
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
@@ -17,16 +16,13 @@ import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
-// FIXME - this is wrong, it's removing the default aws endpoint resolver middleware and only adding back a resolver if the
-// protocol middleware is enabled...
 class MachineLearningEndpointCustomization : KotlinIntegration {
+    // the default resolver middleware will still be present in the operation's execution stack, we just
+    // need to ensure that the custom resolver runs _after_ the default
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
         resolved: List<ProtocolMiddleware>
-    ): List<ProtocolMiddleware> =
-        super
-            .customizeMiddleware(ctx, resolved)
-            .replace(endpointResolverMiddleware) { it is ResolveAwsEndpointMiddleware }
+    ): List<ProtocolMiddleware> = resolved + endpointResolverMiddleware
 
     private val endpointResolverMiddleware = object : ProtocolMiddleware {
         override val name: String = "ResolvePredictEndpoint"

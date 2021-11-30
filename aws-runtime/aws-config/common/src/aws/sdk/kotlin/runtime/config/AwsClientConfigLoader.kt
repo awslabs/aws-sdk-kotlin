@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
 import aws.sdk.kotlin.runtime.client.AwsClientConfig
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.smithy.kotlin.runtime.client.SdkLogMode
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
@@ -31,6 +32,11 @@ public class AwsClientConfigLoadOptions {
      */
     public var credentialsProvider: CredentialsProvider? = null
 
+    /**
+     * The [SdkLogMode] to apply to service clients.
+     */
+    public var sdkLogMode: SdkLogMode = SdkLogMode.Default
+
     // FIXME - expose profile name override and thread through region/cred provider chains
 }
 
@@ -48,13 +54,14 @@ internal suspend fun loadAwsClientConfig(
     val opts = AwsClientConfigLoadOptions().apply(block)
 
     val region = opts.region ?: resolveRegion(platformProvider)
-
     val credentialsProvider = opts.credentialsProvider ?: DefaultChainCredentialsProvider()
+    val sdkLogMode = opts.sdkLogMode
 
-    return ResolvedAwsConfig(region, credentialsProvider)
+    return ResolvedAwsConfig(region, credentialsProvider, sdkLogMode)
 }
 
 private data class ResolvedAwsConfig(
     override val region: String,
-    override val credentialsProvider: CredentialsProvider
+    override val credentialsProvider: CredentialsProvider,
+    override val sdkLogMode: SdkLogMode,
 ) : AwsClientConfig

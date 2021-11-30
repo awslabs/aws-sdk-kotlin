@@ -50,13 +50,13 @@ jobs:
           printf "\norg.gradle.jvmargs=-Xmx6g -XX:MaxPermSize=6g" >> gradle.properties
 
           ./gradlew dokkaHtmlMultiModule
-          mkdir smithy-kotlin-docs
-          mv build/dokka/htmlMultiModule/* smithy-kotlin-docs/
+          mkdir smithy-kotlin
+          mv build/dokka/htmlMultiModule/* smithy-kotlin/
       - name: Upload Smithy-Kotlin Doc Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: smithy-kotlin-docs
-          path: smithy-kotlin/smithy-kotlin-docs
+          name: smithy-kotlin
+          path: smithy-kotlin/smithy-kotlin
 
   api-doc-gen-parallel:
     runs-on: ubuntu-latest
@@ -72,8 +72,8 @@ jobs:
       - name: Download smithy-kotlin artifacts
         uses: actions/download-artifact@v2
         with:
-          name: smithy-kotlin-docs
-          path: smithy-kotlin-docs
+          name: smithy-kotlin
+          path: smithy-kotlin
       - name: Generate API Docs
         id: gen-docs
         run: |
@@ -87,7 +87,7 @@ jobs:
           shopt -s nullglob
 
           # configure path to smithy-kotlin's package-list
-          smithy_kotlin_package_list_path="$(pwd)/smithy-kotlin-docs/package-list"
+          smithy_kotlin_package_list_path="$(pwd)/smithy-kotlin/package-list"
 
           # Track if docs were generated in this segment of job run.
           docs_generated=false
@@ -111,7 +111,11 @@ jobs:
               n=0
               until [ "$n" -ge 5 ]
               do
-                 ./gradlew --no-parallel -PdokkaOutSubDir=$SERVICE_NAME -PsmithyKotlinPackageListUrl=file://$smithy_kotlin_package_list_path dokkaHtmlMultiModule && break
+                 ./gradlew --no-parallel -PdokkaOutSubDir=$SERVICE_NAME \
+                    -PsmithyKotlinDocBaseUrl=https://docs.aws.amazon.com/sdk-for-kotlin/latest/reference/smithy-kotlin \
+                    -PsmithyKotlinPackageListUrl=file://$smithy_kotlin_package_list_path \
+                    dokkaHtmlMultiModule && break
+
                  n=$((n+1))
                  sleep 15
               done
@@ -159,7 +163,7 @@ jobs:
           done
       - name: Add smithy-kotlin docs
         run: |
-          mv smithy-kotlin-docs target/
+          mv smithy-kotlin target/
       - name: Generate Top Level Index
         run: |
           INDEX_FILE=target/index.html
@@ -188,13 +192,13 @@ jobs:
           echo "            <div id='logo'></div>" >> $INDEX_FILE
           echo "        </div>" >> $INDEX_FILE
           echo "        <div id='main' class='main-content'>" >> $INDEX_FILE
-          echo "            <h2>AWS SDK for Kotlin API Docs</h2>" >> $INDEX_FILE
+          echo "            <h2>AWS SDK for Kotlin API Reference</h2>" >> $INDEX_FILE
           echo "            <div class='table'>" >> $INDEX_FILE
 
           # Generate list of services
           for aws_service_dir in target/*
           do
-            if [[ "$aws_service_dir" !=  "target/index.html" && "$aws_service_dir" !=  "target/smithy-kotlin-docs" ]]; then # no self reference
+            if [[ "$aws_service_dir" !=  "target/index.html" && "$aws_service_dir" !=  "target/smithy-kotlin" ]]; then # no self reference
               SERVICE_NAME=${aws_service_dir##*/}    # Extract the filename from the path
 
               echo "    <div class='table-row'>" >> $INDEX_FILE
@@ -219,6 +223,9 @@ jobs:
         run: |
           FIRST_SERVICE=$(find target/ -maxdepth 1 -mindepth 1 -type d | head -n 1)
           cp -r $FIRST_SERVICE/styles $FIRST_SERVICE/images target/
+      - name: Patch smithy-kotlin docs # See https://github.com/Kotlin/dokka/issues/2211
+        run: |
+          cp -rv target/smithy-kotlin/runtime/* target/smithy-kotlin/
       - name: Prepare Release
         id: prep-release
         run: |

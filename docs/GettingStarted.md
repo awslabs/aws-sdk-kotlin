@@ -22,15 +22,11 @@ Consult the [stability guide](stability.md) for more information on SDK stabilit
     ```kt
     # file: my-project/build.gradle.kts
 
-    val awsKotlinSdkVersion = "0.9.2-alpha"
-    // OR put it in gradle.properties
-    // val awsKotlinSdkVersion: String by project
-
     dependencies {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
         
         // The following line adds a dependency on the dynamodb client.
-        implementation("aws.sdk.kotlin:dynamodb:$awsKotlinSdkVersion")
+        implementation("aws.sdk.kotlin:dynamodb:0.+")
     }
     ```
 
