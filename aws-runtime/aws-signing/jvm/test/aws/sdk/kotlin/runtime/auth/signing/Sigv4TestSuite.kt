@@ -78,9 +78,8 @@ class Sigv4TestSuite {
         "get-vanilla-query-order-key",
         "get-vanilla-query-order-value",
 
-        // FIXME - crt-java has utf8 bug when converting request, file a ticket.
-        //  They don't allocate enough space for utf8 byte size (instead they allocate based of string size)
-        // https://github.com/awslabs/aws-crt-java/blob/main/src/main/java/software/amazon/awssdk/crt/http/HttpRequest.java#L168
+        // FIXME - crt-java has utf8 bug when converting request,
+        // re-enable after https://github.com/awslabs/aws-crt-java/pull/419 is merged
         "get-vanilla-utf8-query",
 
         // fixme - revisit why this fails
