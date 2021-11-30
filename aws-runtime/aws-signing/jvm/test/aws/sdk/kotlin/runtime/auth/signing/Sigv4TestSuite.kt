@@ -37,7 +37,7 @@ import kotlin.time.ExperimentalTime
 
 private const val DEFAULT_SIGNING_ISO_DATE = "2015-08-30T12:36:00Z"
 
-private val DefaultTestSigningConfig = AwsSigningConfig {
+private val DefaultTestSigningConfig = AwsSigningConfig.Builder().apply {
     algorithm = AwsSigningAlgorithm.SIGV4
     credentials = Credentials(
         accessKeyId = "AKIDEXAMPLE",
@@ -55,7 +55,7 @@ data class Sigv4TestSuiteTest(
     val path: String,
     val request: HttpRequestBuilder,
     val signedRequest: HttpRequestBuilder,
-    val config: AwsSigningConfig = DefaultTestSigningConfig
+    val config: AwsSigningConfig = DefaultTestSigningConfig.build()
 )
 
 // FIXME - move to common test (will require ability to access test resources in a KMP compatible way)
@@ -66,6 +66,34 @@ class Sigv4TestSuite {
             val uri = this::class.java.classLoader.getResource("aws-signing-test-suite/v4") ?: error("failed to load sigv4 test suite resource")
             return Paths.get(uri.path).toFile()
         }
+
+    private val disabledTests = setOf(
+        // ktor-http-cio parser doesn't support parsing multiline headers since they are deprecated in RFC7230
+        "get-header-value-multiline",
+        // ktor fails to parse with space in it (expects it to be a valid request already encoded)
+        "get-space-normalized",
+        "get-space-unnormalized",
+
+        // no signed request to test against
+        "get-vanilla-query-order-key",
+        "get-vanilla-query-order-value",
+
+        // FIXME - crt-java has utf8 bug when converting request, file a ticket.
+        //  They don't allocate enough space for utf8 byte size (instead they allocate based of string size)
+        // https://github.com/awslabs/aws-crt-java/blob/main/src/main/java/software/amazon/awssdk/crt/http/HttpRequest.java#L168
+        "get-vanilla-utf8-query",
+
+        // fixme - revisit why this fails
+        "get-utf8"
+    )
+
+    // get all directories with a request.txt file in it
+    private val testDirs = testSuiteDir
+        .walkTopDown()
+        .filter { !it.isDirectory && it.name == "request.txt" }
+        .filterNot { it.parentFile.name in disabledTests }
+        // .filter{ it.parentFile.name == "get-vanilla-query-order-key-case" }
+        .map { it.parent }
 
     @Test
     fun testParseRequest() {
@@ -84,42 +112,35 @@ class Sigv4TestSuite {
     }
 
     @Test
-    fun testSigv4TestSuite() {
+    fun testSigv4TestSuiteHeaders() {
         assertTrue(testSuiteDir.isDirectory)
-
-        val disabledTests = setOf(
-            // ktor-http-cio parser doesn't support parsing multiline headers since they are deprecated in RFC7230
-            "get-header-value-multiline",
-            // ktor fails to parse with space in it (expects it to be a valid request already encoded)
-            "get-space-normalized",
-            "get-space-unnormalized",
-
-            // no signed request to test against
-            "get-vanilla-query-order-key",
-            "get-vanilla-query-order-value",
-
-            // FIXME - crt-java has utf8 bug when converting request, file a ticket.
-            //  They don't allocate enough space for utf8 byte size (instead they allocate based of string size)
-            // https://github.com/awslabs/aws-crt-java/blob/main/src/main/java/software/amazon/awssdk/crt/http/HttpRequest.java#L168
-            "get-vanilla-utf8-query",
-
-            // fixme - revisit why this fails
-            "get-utf8"
-        )
-
-        // get all directories with a request.txt file in it
-        val testDirs = testSuiteDir
-            .walkTopDown()
-            .filter { !it.isDirectory && it.name == "request.txt" }
-            .filterNot { it.parentFile.name in disabledTests }
-            .map { it.parent }
 
         val tests = testDirs.map { dir ->
             try {
                 val req = getRequest(dir)
                 val sreq = getSignedRequest(dir)
                 val config = getSigningConfig(dir) ?: DefaultTestSigningConfig
-                Sigv4TestSuiteTest(dir, req, sreq, config)
+                Sigv4TestSuiteTest(dir, req, sreq, config.build())
+            } catch (ex: Exception) {
+                println("failed to get request from $dir: ${ex.message}")
+                throw ex
+            }
+        }
+
+        testSigv4Middleware(tests)
+    }
+
+    @Test
+    fun testSigv4TestSuiteQuery() {
+        assertTrue(testSuiteDir.isDirectory)
+
+        val tests = testDirs.map { dir ->
+            try {
+                val req = getRequest(dir)
+                val sreq = getQuerySignedRequest(dir)
+                val config = getSigningConfig(dir) ?: DefaultTestSigningConfig
+                config.signatureType = AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
+                Sigv4TestSuiteTest(dir, req, sreq, config.build())
             } catch (ex: Exception) {
                 println("failed to get request from $dir: ${ex.message}")
                 throw ex
@@ -179,7 +200,7 @@ class Sigv4TestSuite {
      * Parse context.json if it exists into a signing config
      */
     @OptIn(ExperimentalTime::class)
-    private fun getSigningConfig(dir: String): AwsSigningConfig? {
+    private fun getSigningConfig(dir: String): AwsSigningConfig.Builder? {
         val file = Paths.get(dir, "context.json")
         if (!file.exists()) return null
         val json = Json.parseToJsonElement(file.readText()).jsonObject
@@ -214,7 +235,7 @@ class Sigv4TestSuite {
             config.signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
         }
 
-        return config.build()
+        return config
     }
 
     /**
@@ -230,6 +251,14 @@ class Sigv4TestSuite {
      */
     private fun getSignedRequest(dir: String): HttpRequestBuilder {
         val file = Paths.get(dir, "header-signed-request.txt").toFile()
+        return parseRequestFromFile(file)
+    }
+
+    /**
+     * Get `query-signed-request.txt` from the given directory [dir]
+     */
+    private fun getQuerySignedRequest(dir: String): HttpRequestBuilder {
+        val file = Paths.get(dir, "query-signed-request.txt").toFile()
         return parseRequestFromFile(file)
     }
 
@@ -340,6 +369,7 @@ private fun buildOperation(
  * @param config The signing config to use when creating the middleware
  * @param operation The operation to sign
  */
+@OptIn(ExperimentalTime::class)
 private suspend fun getSignedRequest(
     config: AwsSigningConfig,
     operation: SdkHttpOperation<Unit, HttpResponse>
@@ -367,6 +397,8 @@ private suspend fun getSignedRequest(
         normalizeUriPath = config.normalizeUriPath
         omitSessionToken = config.omitSessionToken
         signedBodyHeaderType = config.signedBodyHeaderType
+        signatureType = config.signatureType
+        expiresAfter = config.expiresAfter
     }
 
     operation.roundTrip(client, Unit)
