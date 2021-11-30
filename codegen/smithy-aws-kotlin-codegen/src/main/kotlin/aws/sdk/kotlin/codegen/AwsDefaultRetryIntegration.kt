@@ -23,10 +23,10 @@ class AwsDefaultRetryIntegration : KotlinIntegration {
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
         resolved: List<ProtocolMiddleware>
-    ): List<ProtocolMiddleware> = resolved.replace(middleware) { it.name == StandardRetryMiddleware.name }
+    ): List<ProtocolMiddleware> = resolved.replace(middleware) { it is StandardRetryMiddleware }
 
     private val middleware = object : ProtocolMiddleware {
-        override val name: String = "Retry"
+        override val name: String = RuntimeTypes.Http.Middlware.Retry.name
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             writer.addImport(RuntimeTypes.Http.Middlware.Retry)
