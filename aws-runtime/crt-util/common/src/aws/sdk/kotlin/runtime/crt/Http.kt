@@ -78,7 +78,14 @@ public fun HttpRequestBuilder.update(crtRequest: HttpRequestCrt) {
 
     if (crtRequest.encodedPath.isNotBlank()) {
         crtRequest.queryParameters()?.let {
-            url.parameters.appendMissing(it)
+            it.forEach { key, values ->
+                // the crt request has a url encoded path which means
+                // simply appending missing could result in both the raw and percent-encoded
+                // value being present. Instead just append new keys added by signing
+                if (!url.parameters.contains(key)) {
+                    url.parameters.appendAll(key, values)
+                }
+            }
         }
     }
 }
