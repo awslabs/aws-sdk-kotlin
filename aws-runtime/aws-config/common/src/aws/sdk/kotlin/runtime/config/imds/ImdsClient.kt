@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.AwsServiceException
-import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.http.ApiMetadata
 import aws.sdk.kotlin.runtime.http.AwsUserAgentMetadata
 import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
@@ -17,12 +16,11 @@ import aws.smithy.kotlin.runtime.client.SdkLogMode
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
-import aws.smithy.kotlin.runtime.http.middleware.RetryFeature
+import aws.smithy.kotlin.runtime.http.middleware.Retry
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.middleware.Phase
-import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.retries.impl.*
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.Platform
@@ -34,7 +32,7 @@ import kotlin.time.ExperimentalTime
  * Maximum time allowed by default (6 hours)
  */
 internal const val DEFAULT_TOKEN_TTL_SECONDS: Int = 21_600
-internal const val DEFAULT_MAX_RETRIES: UInt = 3u
+internal const val DEFAULT_MAX_RETRIES: Int = 3
 
 private const val SERVICE = "imds"
 
@@ -61,9 +59,7 @@ public interface InstanceMetadataProvider : Closeable {
 public class ImdsClient private constructor(builder: Builder) : InstanceMetadataProvider {
     public constructor() : this(Builder())
 
-    private val logger = Logger.getLogger<ImdsClient>()
-
-    private val maxRetries: UInt = builder.maxRetries
+    private val maxRetries: Int = builder.maxRetries
     private val endpointConfiguration: EndpointConfiguration = builder.endpointConfiguration
     private val tokenTtl: Duration = builder.tokenTtl
     private val clock: Clock = builder.clock
@@ -72,6 +68,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     private val httpClient: SdkHttpClient
 
     init {
+        require(maxRetries > 0) { "maxRetries must be greater than zero" }
         val engine = builder.engine ?: CrtHttpEngine {
             connectTimeout = Duration.seconds(1)
             socketReadTimeout = Duration.seconds(1)
@@ -88,10 +85,14 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         UserAgent.create {
             staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
         },
-        RetryFeature.create {
+        Retry.create {
             val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
             val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
-            strategy = StandardRetryStrategy(StandardRetryStrategyOptions.Default, tokenBucket, delayProvider)
+            strategy = StandardRetryStrategy(
+                StandardRetryStrategyOptions.Default.copy(maxAttempts = maxRetries),
+                tokenBucket,
+                delayProvider
+            )
             policy = ImdsRetryPolicy()
         },
         // must come after retries
@@ -138,7 +139,6 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
                 operationName = path
                 service = SERVICE
                 // artifact of re-using ServiceEndpointResolver middleware
-                set(AwsClientOption.Region, "not-used")
                 set(SdkClientOption.LogMode, sdkLogMode)
             }
         }
@@ -160,7 +160,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         /**
          * The maximum number of retries for fetching tokens and metadata
          */
-        public var maxRetries: UInt = DEFAULT_MAX_RETRIES
+        public var maxRetries: Int = DEFAULT_MAX_RETRIES
 
         /**
          * The endpoint configuration to use when making requests

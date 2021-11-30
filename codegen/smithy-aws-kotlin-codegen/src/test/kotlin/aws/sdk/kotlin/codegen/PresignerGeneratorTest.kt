@@ -224,53 +224,32 @@ class PresignerGeneratorTest {
              * This type can be used to presign requests in cases where an existing service client
              * instance is not available.
              */
-            class TestPresignConfig private constructor(builder: BuilderImpl): ServicePresignConfig {
+            class TestPresignConfig private constructor(builder: Builder): ServicePresignConfig {
                 override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
                 override val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
                 override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
                 override val serviceId: String = "example"
                 override val signingName: String = "example-signing-name"
                 companion object {
-                    @JvmStatic
-                    fun fluentBuilder(): FluentBuilder = BuilderImpl()
-            
-                    operator fun invoke(block: DslBuilder.() -> kotlin.Unit): ServicePresignConfig = BuilderImpl().apply(block).build()
+                    inline operator fun invoke(block: Builder.() -> kotlin.Unit): ServicePresignConfig = Builder().apply(block).build()
                 }
             
-                interface FluentBuilder {
-                    fun credentialsProvider(credentialsProvider: CredentialsProvider): FluentBuilder
-                    fun endpointResolver(endpointResolver: AwsEndpointResolver): FluentBuilder
-                    fun region(region: String): FluentBuilder
-                    fun build(): TestPresignConfig
-                }
-            
-                interface DslBuilder {
+                class Builder {
                     /**
                      * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.
                      */
-                    var credentialsProvider: CredentialsProvider?
-            
+                    var credentialsProvider: CredentialsProvider? = null
                     /**
                      * Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option.
                      */
-                    var endpointResolver: AwsEndpointResolver?
-            
+                    var endpointResolver: AwsEndpointResolver? = null
                     /**
                      * AWS region to make requests for
                      */
-                    var region: String?
+                    var region: String? = null
             
-                }
-            
-                internal class BuilderImpl() : FluentBuilder, DslBuilder {
-                    override var credentialsProvider: CredentialsProvider? = null
-                    override var endpointResolver: AwsEndpointResolver? = null
-                    override var region: String? = null
-            
-                    override fun build(): TestPresignConfig = TestPresignConfig(this)
-                    override fun credentialsProvider(credentialsProvider: CredentialsProvider): FluentBuilder = apply { this.credentialsProvider = credentialsProvider }
-                    override fun endpointResolver(endpointResolver: AwsEndpointResolver): FluentBuilder = apply { this.endpointResolver = endpointResolver }
-                    override fun region(region: String): FluentBuilder = apply { this.region = region }
+                    @PublishedApi
+                    internal fun build(): TestPresignConfig = TestPresignConfig(this)
                 }
             }
         """.trimIndent()
