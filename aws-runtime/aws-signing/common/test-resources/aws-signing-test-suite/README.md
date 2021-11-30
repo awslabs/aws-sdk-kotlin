@@ -1,8 +1,8 @@
 Where did the files in this directory come from?
 ================================================
 
-These test files were taken from the [aws-c-auth test suite](https://github.com/awslabs/aws-c-auth/tree/main/tests/aws-signing-test-suite)
-which was taken from the now defunct Signature Version 4 Test Suite documentation
+These test files were taken from the [aws-c-auth test suite](https://github.com/awslabs/aws-c-auth/tree/main/tests/aws-signing-test-suite).
+The original test suite comes from the (now defunct) Signature Version 4 Test Suite documentation
 from the [AWS General Reference](https://docs.aws.amazon.com/general/latest/gr/Welcome.html).
 
 Signature Version 4 Test Suite

@@ -72,19 +72,13 @@ private class HttpHeadersCrt(val headers: HeadersBuilder) : HeadersCrt {
  */
 @InternalSdkApi
 public fun HttpRequestBuilder.update(crtRequest: HttpRequestCrt) {
-    // overwrite with crt request values
-    headers.clear()
-    url.parameters.clear()
-
     crtRequest.headers.entries().forEach { entry ->
-        headers.appendAll(entry.key, entry.value)
+        headers.appendMissing(entry.key, entry.value)
     }
 
-    // uri - we overwrite because the values may have been double encoded during signing
     if (crtRequest.encodedPath.isNotBlank()) {
-        url.path = crtRequest.path()
         crtRequest.queryParameters()?.let {
-            url.parameters.appendAll(it)
+            url.parameters.appendMissing(it)
         }
     }
 }
