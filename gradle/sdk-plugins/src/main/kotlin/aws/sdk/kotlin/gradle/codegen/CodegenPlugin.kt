@@ -27,6 +27,7 @@ class CodegenPlugin : Plugin<Project> {
     private fun Project.configurePlugins() {
         createSmithyCliConfiguration()
         // unfortunately all of the tasks provided by smithy rely on the plugin extension, so it also needs applied
+        // see https://github.com/awslabs/smithy-gradle-plugin/issues/45
         plugins.apply("software.amazon.smithy")
         tasks.getByName("smithyBuildJar").enabled = false
     }

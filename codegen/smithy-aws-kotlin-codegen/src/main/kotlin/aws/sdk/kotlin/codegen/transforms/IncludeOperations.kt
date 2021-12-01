@@ -17,7 +17,6 @@ import software.amazon.smithy.model.shapes.OperationShape
 class IncludeOperations : ConfigurableProjectionTransformer<IncludeOperations.Config>() {
 
     class Config {
-//        var service: String = ""
         var operations: Set<String> = emptySet()
     }
 

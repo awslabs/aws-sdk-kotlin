@@ -12,8 +12,6 @@ build/
 .idea/
 __pycache__/
 local.properties
-!gradle/sdk-plugins/src/**
-!buildSrc/src/**
 # ignore generated files
 services/*/generated-src
 services/*/build.gradle.kts

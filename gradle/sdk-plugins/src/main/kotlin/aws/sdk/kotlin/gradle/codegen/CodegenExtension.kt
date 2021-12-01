@@ -14,7 +14,6 @@ import org.gradle.api.Project
  */
 open class CodegenExtension(private val project: Project) {
 
-    // TODO - allow setting default build settings that apply to every projection (or every projection starts with)?
     val projections = project.objects.domainObjectContainer(SmithyProjection::class.java) { name ->
         SmithyProjection(name, project.projectionRootDir(name))
     }
