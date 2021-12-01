@@ -155,17 +155,17 @@ NOTE: We need the following tasks to depend on codegen for gradle caching/up-to-
 * `compileKotlinMetadata` (Type=KotlinCompileCommon)
 * `sourcesJar` and `jvmSourcesJar` (Type=org.gradle.jvm.tasks.Jar)
 */
-val codegenTasks = tasks.withType<aws.sdk.kotlin.gradle.codegen.tasks.CodegenTask>()
+val codegenTask = tasks.named("generateSmithyProjections")
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    dependsOn(codegenTasks)
+    dependsOn(codegenTask)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
-    dependsOn(codegenTasks)
+    dependsOn(codegenTask)
 }
 
 tasks.withType<org.gradle.jvm.tasks.Jar> {
-    dependsOn(codegenTasks)
+    dependsOn(codegenTask)
 }
 
 

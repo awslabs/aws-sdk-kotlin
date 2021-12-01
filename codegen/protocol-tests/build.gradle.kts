@@ -110,12 +110,12 @@ open class ProtocolTestTask : DefaultTask() {
     }
 }
 
-val kotlinCodegenTask = tasks.getByName("kotlinCodegen")
+val codegenTask = tasks.getByName("generateSmithyProjections")
 codegen.projections.forEach {
     val protocolName = it.name
 
     tasks.register<ProtocolTestTask>("testProtocol-$protocolName") {
-        dependsOn(kotlinCodegenTask)
+        dependsOn(codegenTask)
         group = "Verification"
         projection = it
     }
@@ -128,7 +128,7 @@ codegen.projections.forEach {
         into(it.projectionRootDir.resolve("src/main/kotlin/"))
     }
 
-    kotlinCodegenTask.finalizedBy(copyStaticFiles)
+    codegenTask.finalizedBy(copyStaticFiles)
 }
 
 tasks.register("testAllProtocols") {

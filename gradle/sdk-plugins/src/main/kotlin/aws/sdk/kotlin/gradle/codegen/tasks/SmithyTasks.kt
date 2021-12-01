@@ -74,11 +74,6 @@ internal fun Project.registerCodegenTasks() {
         // ensure smithy-aws-kotlin-codegen is up to date
         inputs.files(codegenConfig)
     }
-
-    project.tasks.register<CodegenTask>("kotlinCodegen") {
-        dependsOn(buildTask)
-        description = "generate code for projections"
-    }
 }
 
 /**

@@ -14,8 +14,8 @@ const val CODEGEN_EXTENSION_NAME = "codegen"
 
 /**
  * This plugin handles:
- * - applying smithy plugins to the project to generate code
- * - providing a [CodegenTask] to generate Kotlin sources from their respective smithy models.
+ * - applying smithy-gradle-plugin to the project to generate code
+ * - providing a tasks to generate Kotlin sources from their respective smithy models.
  */
 class CodegenPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = target.run {
