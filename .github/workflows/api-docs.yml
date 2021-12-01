@@ -223,6 +223,9 @@ jobs:
         run: |
           FIRST_SERVICE=$(find target/ -maxdepth 1 -mindepth 1 -type d | head -n 1)
           cp -r $FIRST_SERVICE/styles $FIRST_SERVICE/images target/
+      - name: Patch smithy-kotlin docs # See https://github.com/Kotlin/dokka/issues/2211
+        run: |
+          cp -rv target/smithy-kotlin/runtime/* target/smithy-kotlin/
       - name: Prepare Release
         id: prep-release
         run: |
