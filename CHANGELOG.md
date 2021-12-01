@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.9.4-beta] - 12/01/2021
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+
 ## [0.9.3-alpha] - 11/19/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
