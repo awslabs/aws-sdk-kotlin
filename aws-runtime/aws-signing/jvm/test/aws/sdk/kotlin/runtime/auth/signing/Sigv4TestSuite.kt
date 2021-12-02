@@ -63,8 +63,8 @@ class Sigv4TestSuite {
 
     private val testSuiteDir: File
         get() {
-            val uri = this::class.java.classLoader.getResource("aws-signing-test-suite/v4") ?: error("failed to load sigv4 test suite resource")
-            return Paths.get(uri.path).toFile()
+            val url = this::class.java.classLoader.getResource("aws-signing-test-suite/v4") ?: error("failed to load sigv4 test suite resource")
+            return Paths.get(url.toURI()).toFile()
         }
 
     private val disabledTests = setOf(
