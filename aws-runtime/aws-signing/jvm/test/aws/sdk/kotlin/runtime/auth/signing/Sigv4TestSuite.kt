@@ -112,41 +112,36 @@ class Sigv4TestSuite {
 
     @Test
     fun testSigv4TestSuiteHeaders() {
-        assertTrue(testSuiteDir.isDirectory)
-
-        val tests = testDirs.map { dir ->
-            try {
-                val req = getRequest(dir)
-                val sreq = getSignedRequest(dir)
-                val config = getSigningConfig(dir) ?: DefaultTestSigningConfig
-                Sigv4TestSuiteTest(dir, req, sreq, config.build())
-            } catch (ex: Exception) {
-                println("failed to get request from $dir: ${ex.message}")
-                throw ex
-            }
-        }
-
+        val tests = getTests(AwsSignatureType.HTTP_REQUEST_VIA_HEADERS)
         testSigv4Middleware(tests)
     }
 
     @Test
     fun testSigv4TestSuiteQuery() {
+        val tests = getTests(AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS)
+        testSigv4Middleware(tests)
+    }
+
+    private fun getTests(signatureType: AwsSignatureType): Sequence<Sigv4TestSuiteTest> {
         assertTrue(testSuiteDir.isDirectory)
 
         val tests = testDirs.map { dir ->
             try {
                 val req = getRequest(dir)
-                val sreq = getQuerySignedRequest(dir)
                 val config = getSigningConfig(dir) ?: DefaultTestSigningConfig
-                config.signatureType = AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS
+                val sreq = when (signatureType) {
+                    AwsSignatureType.HTTP_REQUEST_VIA_HEADERS -> getSignedRequest(dir)
+                    AwsSignatureType.HTTP_REQUEST_VIA_QUERY_PARAMS -> getQuerySignedRequest(dir)
+                    else -> error("unsupported signature type $signatureType")
+                }
+                config.signatureType = signatureType
                 Sigv4TestSuiteTest(dir, req, sreq, config.build())
             } catch (ex: Exception) {
                 println("failed to get request from $dir: ${ex.message}")
                 throw ex
             }
         }
-
-        testSigv4Middleware(tests)
+        return tests
     }
 
     /**
