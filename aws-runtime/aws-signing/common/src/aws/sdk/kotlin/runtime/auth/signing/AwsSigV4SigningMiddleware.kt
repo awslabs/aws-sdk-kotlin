@@ -18,11 +18,14 @@ import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.withContext
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.util.get
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
 /**
  * HTTP request pipeline middleware that signs outgoing requests
  */
 @InternalSdkApi
+@OptIn(ExperimentalTime::class)
 public class AwsSigV4SigningMiddleware internal constructor(private val config: Config) : Feature {
 
     public class Config {
@@ -71,6 +74,13 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
          * Most services do not require this additional header.
          */
         public var signedBodyHeaderType: AwsSignedBodyHeaderType = AwsSignedBodyHeaderType.NONE
+
+        /**
+         * If non-zero and the signing transform is query param, then signing will add X-Amz-Expires to the query
+         * string, equal to the value specified here.  If this value is zero or if header signing is being used then
+         * this parameter has no effect.
+         */
+        public var expiresAfter: Duration? = null
     }
 
     public companion object Feature : HttpClientFeatureFactory<Config, AwsSigV4SigningMiddleware> {
@@ -132,6 +142,7 @@ public class AwsSigV4SigningMiddleware internal constructor(private val config: 
                 omitSessionToken = config.omitSessionToken
                 normalizeUriPath = config.normalizeUriPath
                 useDoubleUriEncode = config.useDoubleUriEncode
+                expiresAfter = config.expiresAfter
 
                 signedBodyHeader = config.signedBodyHeaderType
                 signedBodyValue = when {
