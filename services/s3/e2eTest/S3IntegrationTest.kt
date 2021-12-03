@@ -98,4 +98,17 @@ class S3BucketOpsIntegrationTest {
         val contents = tempFile.readText()
         assertEquals(contents, roundTrippedContents)
     }
+
+    @Test
+    fun testListObjectsWithDelimiter(): Unit = runSuspendTest {
+        // see: https://github.com/awslabs/aws-sdk-kotlin/issues/448
+
+        client.listObjects {
+            bucket = testBucket
+            delimiter = "/"
+            prefix = null
+        }
+
+        // only care that request is accepted, not the results
+    }
 }
