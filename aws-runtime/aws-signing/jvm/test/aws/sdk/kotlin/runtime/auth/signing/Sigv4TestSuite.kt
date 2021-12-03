@@ -81,8 +81,6 @@ class Sigv4TestSuite {
         // FIXME - crt-java has utf8 bug when converting request,
         // re-enable after https://github.com/awslabs/aws-crt-java/pull/419 is merged
         "get-vanilla-utf8-query",
-
-        // fixme - revisit why this fails
         "get-utf8"
     )
 
@@ -91,7 +89,6 @@ class Sigv4TestSuite {
         .walkTopDown()
         .filter { !it.isDirectory && it.name == "request.txt" }
         .filterNot { it.parentFile.name in disabledTests }
-        // .filter{ it.parentFile.name == "get-vanilla-query-order-key-case" }
         .map { it.parent }
 
     @Test
@@ -149,7 +146,6 @@ class Sigv4TestSuite {
      */
     private fun testSigv4Middleware(tests: Sequence<Sigv4TestSuiteTest>): Unit = runBlocking {
         tests.forEach { test ->
-            // println("running sigv4 middleware test for: ${test.path}")
             try {
                 val op = buildOperation(test.config, test.request)
                 val actual = getSignedRequest(test.config, op)
