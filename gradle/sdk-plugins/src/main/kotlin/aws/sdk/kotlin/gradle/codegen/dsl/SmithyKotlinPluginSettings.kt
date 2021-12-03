@@ -75,7 +75,7 @@ class SmithyKotlinPluginSettings : SmithyBuildPlugin {
             .withObjectMember("package") {
                 withMember("name", packageName!!)
                 withOptionalMember("version", packageVersion)
-                withOptionalMember("version", packageDescription)
+                withOptionalMember("description", packageDescription)
             }
             .withOptionalMember("sdkId", sdkId)
             .withOptionalMember("build", buildSettings)
