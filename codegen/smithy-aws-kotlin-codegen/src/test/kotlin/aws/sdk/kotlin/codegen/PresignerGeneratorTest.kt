@@ -139,7 +139,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.parameters.build(),
                     durationSeconds.toLong(),
                     false,
-                    SigningLocation.HEADER
+                    SigningLocation.QUERY_STRING
                 )
             }
             
@@ -177,7 +177,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.parameters.build(),
                     durationSeconds.toLong(),
                     false,
-                    SigningLocation.HEADER
+                    SigningLocation.QUERY_STRING
                 )
             }
             
@@ -215,7 +215,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.parameters.build(),
                     durationSeconds.toLong(),
                     false,
-                    SigningLocation.HEADER
+                    SigningLocation.QUERY_STRING
                 )
             }
             
