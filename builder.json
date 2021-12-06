@@ -12,6 +12,12 @@
     "env": {
         "JAVA_HOME": "{java_home}"
     },
+    "hosts": {
+        "windows": {
+            "!imports": [],
+            "!env": {}
+        }
+    },
     "_comment": "prebuild step defined in .builder/actions/set_upstream_versions.py",
     "pre_build_steps": [
         "set-upstream-versions"
@@ -38,6 +44,11 @@
             "!test_steps": [
                 "{gradlew} test allTests"
             ]
+        },
+        "codegen-preview": {
+            "!imports": [],
+            "!build_steps": [],
+            "!test_steps": []
         }
     }
 }

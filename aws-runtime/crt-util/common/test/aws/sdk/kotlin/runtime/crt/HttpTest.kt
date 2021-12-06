@@ -7,13 +7,13 @@ package aws.sdk.kotlin.runtime.crt
 
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.Protocol
+import aws.smithy.kotlin.runtime.http.encodedPath
 import aws.smithy.kotlin.runtime.http.parameters
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.headers
 import aws.smithy.kotlin.runtime.http.request.url
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import aws.sdk.kotlin.crt.http.Headers as HeadersCrt
 import aws.sdk.kotlin.crt.http.HttpRequest as HttpRequestCrt
@@ -38,7 +38,6 @@ class HttpTest {
             headers {
                 append("k1", "v1")
                 append("k2", "v3")
-                append("removed", "ignored")
             }
         }
 
@@ -65,8 +64,6 @@ class HttpTest {
                 assertTrue(builder.headers.contains(entry.key, value), "expected header pair: ${entry.key}: $value")
             }
         }
-
-        assertFalse(builder.headers.contains("removed"))
 
         assertEquals("/foo/bar/baz", builder.url.path)
 
@@ -98,5 +95,35 @@ class HttpTest {
         assertEquals(Protocol.HTTPS, builder.url.scheme)
 
         assertEquals("/foo", builder.url.path)
+    }
+
+    @Test
+    fun testEncodedPath() {
+        // test updating HttpRequestBuilder from a (signed) crt request with a percent-encoded path
+
+        val builder = HttpRequestBuilder().apply {
+            method = HttpMethod.POST
+            url {
+                scheme = Protocol.HTTPS
+                host = "test.com"
+                port = 3000
+                path = "/foo/bar/baz"
+                parameters {
+                    append("foo", "/")
+                }
+            }
+        }
+
+        // build a slightly modified crt request (e.g. after signing new headers or query params will be present)
+        val crtHeaders = HeadersCrt.build { }
+        val crtRequest = HttpRequestCrt("POST", builder.url.encodedPath, crtHeaders, null)
+
+        builder.update(crtRequest)
+
+        assertEquals("/foo/bar/baz", builder.url.path)
+
+        val values = builder.url.parameters.getAll("foo")!!
+        assertEquals(1, values.size)
+        assertEquals("/", values.first())
     }
 }

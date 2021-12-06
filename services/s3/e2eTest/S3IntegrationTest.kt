@@ -6,7 +6,7 @@ package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.s3.S3Client
-import aws.sdk.kotlin.services.s3.model.*
+import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.content.fromFile
@@ -22,7 +22,7 @@ import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 /**
- * Tests for bucket operations
+ * Tests for bucket operations and presigner
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3BucketOpsIntegrationTest {
@@ -30,11 +30,11 @@ class S3BucketOpsIntegrationTest {
         const val DEFAULT_REGION = "us-east-2"
     }
 
-    val client = S3Client {
+    private val client = S3Client {
         region = DEFAULT_REGION
     }
 
-    lateinit var testBucket: String
+    private lateinit var testBucket: String
 
     @BeforeAll
     private fun createResources(): Unit = runBlocking {
@@ -97,5 +97,18 @@ class S3BucketOpsIntegrationTest {
 
         val contents = tempFile.readText()
         assertEquals(contents, roundTrippedContents)
+    }
+
+    @Test
+    fun testListObjectsWithDelimiter(): Unit = runSuspendTest {
+        // see: https://github.com/awslabs/aws-sdk-kotlin/issues/448
+
+        client.listObjects {
+            bucket = testBucket
+            delimiter = "/"
+            prefix = null
+        }
+
+        // only care that request is accepted, not the results
     }
 }

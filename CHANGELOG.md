@@ -1,5 +1,53 @@
 # Changelog
 
+## [0.9.3-alpha] - 11/19/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Fixes
+* render default endpoint resolver for machinelearning [#424](https://github.com/awslabs/aws-sdk-kotlin/pull/424)
+
+## [0.9.2-alpha] - 11/11/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### New features
+* SDK generation and build docs [#377](https://github.com/awslabs/aws-sdk-kotlin/pull/377)
+
+### Fixes
+* disable signing for sts operations AssumeRoleWithSaml and AssumeRoleWithWebIdentity [#407](https://github.com/awslabs/aws-sdk-kotlin/pull/407)
+
+### Miscellaneous
+* Add howto to override default http client. [#412](https://github.com/awslabs/aws-sdk-kotlin/pull/412)
+
+## [0.9.1-alpha] - 11/04/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### New features
+* implement retries for imds [#404](https://github.com/awslabs/aws-sdk-kotlin/pull/404)
+* enable machinelearning endpoint customization [#378](https://github.com/awslabs/aws-sdk-kotlin/pull/378)
+* add glacier request body checksum [#379](https://github.com/awslabs/aws-sdk-kotlin/pull/379)
+
+### Fixes
+* restJson1 empty httpPayload body serialization [#402](https://github.com/awslabs/aws-sdk-kotlin/pull/402)
+
+## [0.9.0-alpha] - 10/28/2021
+
+**WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Breaking changes
+
+* overhaul endpoint resolver types [#361](https://github.com/awslabs/aws-sdk-kotlin/pull/361)
+
+### New features
+
+* extend user agent metadata with framework, feature, and config [#372](https://github.com/awslabs/aws-sdk-kotlin/pull/372)
+
+### Misc
+
+* add sync models task and sync latest models [#374](https://github.com/awslabs/aws-sdk-kotlin/pull/374)
+
 ## [0.8.0-alpha] - 10/21/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
@@ -404,7 +452,7 @@
 * use sdkId if available for service client generation (https://github.com/awslabs/smithy-kotlin/issues/276)
 * explicitly set jvm target compatibility (https://github.com/awslabs/aws-sdk-kotlin/issues/103)
 * http error registration (https://github.com/awslabs/aws-sdk-kotlin/issues/118)
-  
+
 ### Other
 
 * generate per/service base exception types (https://github.com/awslabs/smithy-kotlin/issues/270)
@@ -437,6 +485,6 @@ NOTES:
 
 ### Features
 * Coroutine API
-* DSL Builders  
+* DSL Builders
 * Default (environment or config) or static credential providers only. Additional providers will be added in later releases.
 * JVM only support (multiplatform support is on the roadmap)

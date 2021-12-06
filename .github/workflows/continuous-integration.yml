@@ -19,43 +19,61 @@ jobs:
   linux-compat:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout sources
-      uses: actions/checkout@v2
-    - name: Build and Test ${{ env.PACKAGE_NAME }}
-      env:
-        CI_USER: ${{ secrets.CI_USER}}
-        CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
-      run: |
-        echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u awslabs --password-stdin
-        export DOCKER_IMAGE=docker.pkg.github.com/awslabs/aws-crt-builder/aws-crt-ubuntu-16-x64:${{ env.BUILDER_VERSION }}
-        docker pull $DOCKER_IMAGE
-        docker run --mount type=bind,source=$(pwd),target=/root/${{ env.PACKAGE_NAME }} \
-          --env GITHUB_REF \
-          --env GITHUB_HEAD_REF \
-          --env CI_USER \
-          --env CI_ACCESS_TOKEN \
-          --env GIT_ASKPASS=/root/${{ env.PACKAGE_NAME }}/.github/scripts/git-ci-askpass.sh \
-          $DOCKER_IMAGE build -p ${{ env.PACKAGE_NAME }} --build-dir=/root/${{ env.PACKAGE_NAME }}
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Build and Test ${{ env.PACKAGE_NAME }}
+        run: |
+          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
+          chmod a+x builder.pyz
+          echo "kotlinWarningsAsErrors=true" >> $GITHUB_WORKSPACE/local.properties
+          ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
 
   macos-compat:
     runs-on: macos-latest
     steps:
-    - name: Checkout sources
-      uses: actions/checkout@v2
-    - uses: actions/cache@v2
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-    - name: Build and Test ${{ env.PACKAGE_NAME }}
-      env:
-        CI_USER: ${{ secrets.CI_USER}}
-        CI_ACCESS_TOKEN: ${{ secrets.CI_ACCESS_TOKEN }}
-      run: |
-        python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
-        chmod a+x builder.pyz
-        echo "kotlinWarningsAsErrors=true" >> $GITHUB_WORKSPACE/local.properties
-        GIT_ASKPASS="$(pwd)/.github/scripts/git-ci-askpass.sh" ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Build and Test ${{ env.PACKAGE_NAME }}
+        run: |
+          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
+          chmod a+x builder.pyz
+          echo "kotlinWarningsAsErrors=true" >> $GITHUB_WORKSPACE/local.properties
+          ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
+
+  windows-compat:
+    runs-on: windows-2019
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          cache: 'gradle'
+      - name: Modify Gradle Daemon JVM Args
+        # windows job runs out of memory with the defaults normally used
+        shell: bash
+        run: |
+          sed -i 's/org\.gradle\.jvmargs=.*$/org.gradle.jvmargs=-Xmx4g/' gradle.properties
+          cat gradle.properties
+      - name: Build and Test ${{ env.PACKAGE_NAME }}
+        run: |
+          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
+          java -version
+          python3 builder.pyz build -p ${{ env.PACKAGE_NAME }}

@@ -1,0 +1,239 @@
+name: API Docs
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-tag:
+          description: The aws-sdk-kotlin release tag
+          required: true
+  release:
+    types: [published]
+
+jobs:
+  smithy-kotlin-docs:
+    runs-on: ubuntu-latest
+    outputs:
+      source-ref: ${{ steps.source-ref.outputs.build_ref }}
+    steps:
+      - name: Consolidate source ref
+        id: source-ref
+        run: |
+          if [ -z "${{ github.event.inputs.release-tag }}" ]; then
+            echo ::set-output name=build_ref::"$GITHUB_REF"
+          else
+            echo ::set-output name=build_ref::"${{ github.event.inputs.release-tag }}"
+          fi
+      - name: Checkout aws-sdk-kotlin sources
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.source-ref.outputs.build_ref }}
+          path: aws-sdk-kotlin
+      - name: Get repo owner and version
+        id: repo-owner
+        run: |
+          owner=$(echo ${GITHUB_REPOSITORY} | cut -d/ -f1)
+          echo ::set-output name=repo-owner::"$owner"
+          smithy_kotlin_version=$(cat aws-sdk-kotlin/gradle.properties | grep smithyKotlinVersion | cut -d= -f2)
+          echo ::set-output name=smithy_kotlin_version::"v$smithy_kotlin_version"
+      - name: Checkout smithy-kotlin sources
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ steps.repo-owner.outputs.repo-owner }}/smithy-kotlin
+          ref: ${{ steps.repo-owner.outputs.smithy_kotlin_version }}
+          path: smithy-kotlin
+      - name: Build upstream docs
+        id: smithy-kotlin-build
+        run: |
+          cd smithy-kotlin
+
+          # Dokka 1.5.3 requires additional memory to generate docs
+          printf "\norg.gradle.jvmargs=-Xmx6g -XX:MaxPermSize=6g" >> gradle.properties
+
+          ./gradlew dokkaHtmlMultiModule
+          mkdir smithy-kotlin
+          mv build/dokka/htmlMultiModule/* smithy-kotlin/
+      - name: Upload Smithy-Kotlin Doc Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: smithy-kotlin
+          path: smithy-kotlin/smithy-kotlin
+
+  api-doc-gen-parallel:
+    runs-on: ubuntu-latest
+    needs: smithy-kotlin-docs
+    strategy:
+      matrix:
+        service-prefix: [ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z ]
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.smithy-kotlin-docs.outputs.source-ref }}
+      - name: Download smithy-kotlin artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: smithy-kotlin
+          path: smithy-kotlin
+      - name: Generate API Docs
+        id: gen-docs
+        run: |
+          # Do not generate SDKs for the following unsupported SDKs
+          excluded_services=("transcribestreaming" "timestreamwrite" "timestreamquery")
+
+          # Resource mgmt optimization for Dokka
+          printf "\norg.gradle.daemon=false" >> gradle.properties
+
+          # do not execute following loop if no files w prefix
+          shopt -s nullglob
+
+          # configure path to smithy-kotlin's package-list
+          smithy_kotlin_package_list_path="$(pwd)/smithy-kotlin/package-list"
+
+          # Track if docs were generated in this segment of job run.
+          docs_generated=false
+
+          # Iterate over service models, extract the name and codegen each SDK discretely
+          for aws_model_file in codegen/sdk/aws-models/${{ matrix.service-prefix }}*.json
+          do
+            # delete src for any previously generated SDK
+            git clean -dfx services
+
+            MODEL_FILENAME=${aws_model_file##*/}    # Extract the filename from the path
+            SERVICE_NAME=$(echo "$MODEL_FILENAME" | cut -d. -f1 ) # Extract the service name from the filename
+            excluded=$(echo "${excluded_services[@]}" | grep -ow "$SERVICE_NAME" | wc -w)
+            if [[ $excluded == 0 ]]; then
+              echo "Building docs for $SERVICE_NAME"
+
+              ./gradlew -Paws.services=+$SERVICE_NAME :codegen:sdk:bootstrap  # generate SDK
+
+              # Retry due to transient network failures during doc generation
+              # https://unix.stackexchange.com/a/82602
+              n=0
+              until [ "$n" -ge 5 ]
+              do
+                 ./gradlew --no-parallel -PdokkaOutSubDir=$SERVICE_NAME \
+                    -PsmithyKotlinDocBaseUrl=https://docs.aws.amazon.com/sdk-for-kotlin/latest/reference/smithy-kotlin \
+                    -PsmithyKotlinPackageListUrl=file://$smithy_kotlin_package_list_path \
+                    dokkaHtmlMultiModule && break
+
+                 n=$((n+1))
+                 sleep 15
+              done
+
+              docs_generated=true
+            else # SDK was excluded
+              echo "Ignoring excluded service $SERVICE_NAME"
+            fi
+          done
+          echo ::set-output name=docs-generated::"$docs_generated"
+      - name: Compress Docs
+        if: steps.gen-docs.outputs.docs-generated == 'true'
+        run: |
+          tar cJf api-docs-${{ matrix.service-prefix }}.tar.xz build/dokka/*
+      - name: Upload Artifact
+        if: steps.gen-docs.outputs.docs-generated == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: api-docs-${{ matrix.service-prefix }}
+          path: api-docs-${{ matrix.service-prefix }}.tar.xz
+          retention-days: 1 # These intra-workflow artifacts are not needed after final docs generated
+
+  # Download all artifacts from previous job, extract them to common dir, add top-level index and publish docs as release artifact
+  combine-docs:
+    needs: [ smithy-kotlin-docs, api-doc-gen-parallel ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v2
+      - name: Consolidate Service Docs
+        run: |
+          mkdir target
+
+          for suffix in {a..z}
+          do
+            ARCHIVE="api-docs-$suffix/api-docs-$suffix.tar.xz"
+
+            if [ -f "$ARCHIVE" ]; then
+              tar xf "$ARCHIVE"
+              mv build/dokka/* target/
+              rm -Rf build
+            else
+              echo "Did not find archive for $ARCHIVE"
+            fi
+          done
+      - name: Add smithy-kotlin docs
+        run: |
+          mv smithy-kotlin target/
+      - name: Generate Top Level Index
+        run: |
+          INDEX_FILE=target/index.html
+
+          # Generate page header
+          echo "<!DOCTYPE html>" >> $INDEX_FILE
+          echo "<html>" >> $INDEX_FILE
+          echo "" >> $INDEX_FILE
+          echo "<head>" >> $INDEX_FILE
+          echo "    <meta name='viewport' content='width=device-width, initial-scale=1' charset='UTF-8'>" >> $INDEX_FILE
+          echo "    <title>AWS Services</title>" >> $INDEX_FILE
+          echo "    <link href='images/logo-icon.svg' rel='icon' type='image/svg'>" >> $INDEX_FILE
+          echo "    <link href='styles/style.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "    <link href='styles/logo-styles.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "    <link href='styles/jetbrains-mono.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "    <link href='styles/main.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "    <link href='images/logo-icon.svg'>" >> $INDEX_FILE
+          echo "    <link href='images/aws_logo_white_59x35.png'>" >> $INDEX_FILE
+          echo "    <link href='styles/logo-styles.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "    <link href='styles/multimodule.css' rel='Stylesheet'>" >> $INDEX_FILE
+          echo "</head>" >> $INDEX_FILE
+          echo "" >> $INDEX_FILE
+          echo "<body>" >> $INDEX_FILE
+          echo "    <div id='container'>" >> $INDEX_FILE
+          echo "        <div id='leftColumn'>" >> $INDEX_FILE
+          echo "            <div id='logo'></div>" >> $INDEX_FILE
+          echo "        </div>" >> $INDEX_FILE
+          echo "        <div id='main' class='main-content'>" >> $INDEX_FILE
+          echo "            <h2>AWS SDK for Kotlin API Reference</h2>" >> $INDEX_FILE
+          echo "            <div class='table'>" >> $INDEX_FILE
+
+          # Generate list of services
+          for aws_service_dir in target/*
+          do
+            if [[ "$aws_service_dir" !=  "target/index.html" && "$aws_service_dir" !=  "target/smithy-kotlin" ]]; then # no self reference
+              SERVICE_NAME=${aws_service_dir##*/}    # Extract the filename from the path
+
+              echo "    <div class='table-row'>" >> $INDEX_FILE
+              echo "        <div class='main-subrow '>" >> $INDEX_FILE
+              echo "            <div class='w-100'>" >> $INDEX_FILE
+              echo "                <span class='inline-flex'>" >> $INDEX_FILE
+              echo "                    <a href='$SERVICE_NAME/index.html'>$SERVICE_NAME</a>" >> $INDEX_FILE
+              echo "                </span>" >> $INDEX_FILE
+              echo "            </div>" >> $INDEX_FILE
+              echo "        </div>" >> $INDEX_FILE
+              echo "    </div>" >> $INDEX_FILE
+
+            fi
+          done
+
+          # Generate page footer
+          echo "          </div>" >> $INDEX_FILE
+          echo "        </div>" >> $INDEX_FILE
+          echo "</body>" >> $INDEX_FILE
+          echo "</html>" >> $INDEX_FILE
+      - name: Copy Styles to root # Take the styles and images from a service into the root for consistent styling
+        run: |
+          FIRST_SERVICE=$(find target/ -maxdepth 1 -mindepth 1 -type d | head -n 1)
+          cp -r $FIRST_SERVICE/styles $FIRST_SERVICE/images target/
+      - name: Patch smithy-kotlin docs # See https://github.com/Kotlin/dokka/issues/2211
+        run: |
+          cp -rv target/smithy-kotlin/runtime/* target/smithy-kotlin/
+      - name: Prepare Release
+        id: prep-release
+        run: |
+          mv target kotlin-sdk-api-docs
+          zip -r kotlin-sdk-api-docs.zip kotlin-sdk-api-docs/
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.smithy-kotlin-docs.outputs.source-ref }}-api-docs
+          files: |
+            kotlin-sdk-api-docs.zip

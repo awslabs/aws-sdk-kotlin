@@ -169,6 +169,7 @@ internal class SdkStreamResponseHandler(
 
         if (forceClose) {
             conn.shutdown()
+            conn.close()
         }
     }
 }
