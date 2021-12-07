@@ -152,6 +152,8 @@ class SsoCredentialsProviderTest {
     @Test
     fun testSuccess(): Unit = runSuspendTest {
         val expectedExpiration = Instant.fromIso8601("2020-10-16T04:30:00Z")
+
+        // https://docs.aws.amazon.com/singlesignon/latest/PortalAPIReference/API_GetRoleCredentials.html#API_GetRoleCredentials_ResponseSyntax
         val serviceResp = """
         {
            "roleCredentials": { 
