@@ -11,7 +11,8 @@ import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.middleware.setRequestEndpoint
-import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
+import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
+import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.http.operation.getLogger
 import aws.smithy.kotlin.runtime.util.get
 
@@ -20,54 +21,35 @@ import aws.smithy.kotlin.runtime.util.get
  */
 @InternalSdkApi
 public class ResolveAwsEndpoint(
-    config: Config
-) : Feature {
+    /**
+     * The AWS service ID to resolve endpoints for
+     */
+    private val serviceId: String,
 
-    private val serviceId: String = requireNotNull(config.serviceId) { "ServiceId must not be null" }
-    private val resolver: AwsEndpointResolver = requireNotNull(config.resolver) { "EndpointResolver must not be null" }
+    /**
+     * The resolver to use
+     */
+    private val resolver: AwsEndpointResolver
 
-    public class Config {
-        /**
-         * The AWS service ID to resolve endpoints for
-         */
-        public var serviceId: String? = null
+) : ModifyRequestMiddleware {
 
-        /**
-         * The resolver to use
-         */
-        public var resolver: AwsEndpointResolver? = null
-    }
+    override suspend fun modifyRequest(req: SdkHttpRequest): SdkHttpRequest {
+        val region = req.context[AwsClientOption.Region]
+        val endpoint = resolver.resolve(serviceId, region)
+        setRequestEndpoint(req, endpoint.endpoint)
 
-    public companion object Feature : HttpClientFeatureFactory<Config, ResolveAwsEndpoint> {
-        override val key: FeatureKey<ResolveAwsEndpoint> = FeatureKey("ServiceEndpointResolver")
-
-        override fun create(block: Config.() -> Unit): ResolveAwsEndpoint {
-            val config = Config().apply(block)
-            return ResolveAwsEndpoint(config)
-        }
-    }
-
-    override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
-        operation.execution.mutate.intercept { req, next ->
-
-            val region = req.context[AwsClientOption.Region]
-            val endpoint = resolver.resolve(serviceId, region)
-            setRequestEndpoint(req, endpoint.endpoint)
-
-            endpoint.credentialScope?.let { scope ->
-                // resolved endpoint has credential scope override(s), update the context for downstream consumers
-                scope.service?.let {
-                    if (it.isNotBlank()) req.context[AuthAttributes.SigningService] = it
-                }
-                scope.region?.let {
-                    if (it.isNotBlank()) req.context[AuthAttributes.SigningRegion] = it
-                }
+        endpoint.credentialScope?.let { scope ->
+            // resolved endpoint has credential scope override(s), update the context for downstream consumers
+            scope.service?.let {
+                if (it.isNotBlank()) req.context[AuthAttributes.SigningService] = it
             }
-
-            val logger = req.context.getLogger("ResolveAwsEndpoint")
-            logger.trace { "resolved endpoint: $endpoint" }
-
-            next.call(req)
+            scope.region?.let {
+                if (it.isNotBlank()) req.context[AuthAttributes.SigningRegion] = it
+            }
         }
+
+        val logger = req.context.getLogger("ResolveAwsEndpoint")
+        logger.trace { "resolved endpoint: $endpoint" }
+        return req
     }
 }

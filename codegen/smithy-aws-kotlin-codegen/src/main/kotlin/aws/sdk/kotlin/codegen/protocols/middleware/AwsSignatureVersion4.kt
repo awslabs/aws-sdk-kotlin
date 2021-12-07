@@ -8,11 +8,12 @@ package aws.sdk.kotlin.codegen.protocols.middleware
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpFeatureMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.knowledge.ServiceIndex
 import software.amazon.smithy.model.shapes.OperationShape
@@ -24,7 +25,7 @@ import software.amazon.smithy.model.traits.OptionalAuthTrait
  * @param signingServiceName The credential scope service name to sign for
  * See the `name` property of: https://awslabs.github.io/smithy/1.0/spec/aws/aws-auth.html#aws-auth-sigv4-trait
  */
-open class AwsSignatureVersion4(private val signingServiceName: String) : HttpFeatureMiddleware() {
+open class AwsSignatureVersion4(private val signingServiceName: String) : ProtocolMiddleware {
     override val name: String = AwsRuntimeTypes.Signing.AwsSigV4SigningMiddleware.name
     override val order: Byte = 126 // Must come before GlacierBodyChecksum
 
@@ -37,9 +38,17 @@ open class AwsSignatureVersion4(private val signingServiceName: String) : HttpFe
         return hasSigV4AuthScheme(ctx.model, service, op)
     }
 
-    override fun renderConfigure(writer: KotlinWriter) {
+    final override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         writer.addImport(AwsRuntimeTypes.Signing.AwsSigV4SigningMiddleware)
 
+        writer.withBlock("op.install(", ")") {
+            withBlock("#T{", "}", AwsRuntimeTypes.Signing.AwsSigV4SigningMiddleware) {
+                renderSigningConfig(op, writer)
+            }
+        }
+    }
+
+    protected open fun renderSigningConfig(op: OperationShape, writer: KotlinWriter) {
         writer.write("this.credentialsProvider = config.credentialsProvider")
         writer.write("this.signingService = #S", signingServiceName)
     }

@@ -23,6 +23,8 @@ pluginManagement {
 
 rootProject.name = "aws-sdk-kotlin"
 
+includeBuild("./gradle/sdk-plugins")
+
 include(":dokka-aws")
 include(":codegen:sdk")
 include(":codegen:smithy-aws-kotlin-codegen")
