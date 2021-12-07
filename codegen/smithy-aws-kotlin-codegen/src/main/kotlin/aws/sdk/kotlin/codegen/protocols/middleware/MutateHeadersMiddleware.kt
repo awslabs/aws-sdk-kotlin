@@ -24,18 +24,18 @@ class MutateHeadersMiddleware(
     override val order: Byte = 10
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         writer.addImport(RuntimeTypes.Http.Middlware.MutateHeadersMiddleware)
-        writer.withBlock("op.install(", ")") {
-            withBlock("#T().apply {", "}", RuntimeTypes.Http.Middlware.MutateHeadersMiddleware) {
-                overrideHeaders.forEach {
-                    writer.write("set(#S, #S)", it.key, it.value)
-                }
-                extraHeaders.forEach {
-                    writer.write("append(#S, #S)", it.key, it.value)
-                }
-                addMissingHeaders.forEach {
-                    writer.write("setIfMissing(#S, #S)", it.key, it.value)
+            .withBlock("op.install(", ")") {
+                withBlock("#T().apply {", "}", RuntimeTypes.Http.Middlware.MutateHeadersMiddleware) {
+                    overrideHeaders.forEach {
+                        writer.write("set(#S, #S)", it.key, it.value)
+                    }
+                    extraHeaders.forEach {
+                        writer.write("append(#S, #S)", it.key, it.value)
+                    }
+                    addMissingHeaders.forEach {
+                        writer.write("setIfMissing(#S, #S)", it.key, it.value)
+                    }
                 }
             }
-        }
     }
 }
