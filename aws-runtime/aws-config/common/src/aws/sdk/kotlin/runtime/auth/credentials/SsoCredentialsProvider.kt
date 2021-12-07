@@ -23,7 +23,29 @@ import aws.smithy.kotlin.runtime.util.*
  * expects a valid non-expired access token for the AWS SSO user portal URL in `~/.aws/sso/cache`.
  * If a cached token is not found, it is expired, or the file is malformed an exception will be thrown.
  *
- * Additional Resources
+ *
+ * **Instantiating AWS SSO provider directly**
+ *
+ * You can programmatically construct the AWS SSO provider in your application, and provide the necessary
+ * information to load and retrieve temporary credentials using an access token from `~/.aws/sso/cache`.
+ *
+ * ```
+ * val source = SsoCredentialsProvider(
+ *     accountId = "123456789",
+ *     roleName = "SsoReadOnlyRole",
+ *     startUrl = "https://my-sso-portal.awsapps.com/start",
+ *     ssoRegion = "us-east-2"
+ * )
+ *
+ * // Wrap the provider with a caching provider to cache the credentials until their expiration time
+ * val ssoProvider = CachedCredentialsProvider(source)
+ * ```
+ * It is important that you wrap the provider with [CachedCredentialsProvider] if you are programatically constructing
+ * the provider directly. This prevents your application from accessing the cached access token and requesting new
+ * credentials each time the provider is used to source credentials.
+ *
+ *
+ * **Additional Resources**
  * * [Configuring the AWS CLI to use AWS Single Sign-On](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
  * * [AWS Single Sign-On User Guide](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html)
  */
