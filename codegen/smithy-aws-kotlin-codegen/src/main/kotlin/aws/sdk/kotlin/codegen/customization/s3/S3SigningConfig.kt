@@ -15,6 +15,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerato
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.replace
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
@@ -41,8 +42,8 @@ class S3SigningConfig : KotlinIntegration {
 }
 
 private class S3SigningMiddleware(signingServiceName: String) : AwsSignatureVersion4(signingServiceName) {
-    override fun renderConfigure(writer: KotlinWriter) {
-        super.renderConfigure(writer)
+    override fun renderSigningConfig(op: OperationShape, writer: KotlinWriter) {
+        super.renderSigningConfig(op, writer)
         val sbht = AwsRuntimeTypes.Signing.AwsSignedBodyHeaderType
         writer.addImport(sbht)
         writer.write("signedBodyHeaderType = #T.X_AMZ_CONTENT_SHA256", sbht)

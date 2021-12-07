@@ -67,10 +67,12 @@ class AwsSigv4SigningMiddlewareTest {
         }
         val client = sdkHttpClient(mockEngine)
 
-        operation.install(AwsSigV4SigningMiddleware) {
-            credentialsProvider = TestCredentialsProvider
-            signingService = "demo"
-        }
+        operation.install(
+            AwsSigV4SigningMiddleware {
+                credentialsProvider = TestCredentialsProvider
+                signingService = "demo"
+            }
+        )
 
         operation.roundTrip(client, Unit)
         return operation.context[HttpOperationContext.HttpCallList].last().request

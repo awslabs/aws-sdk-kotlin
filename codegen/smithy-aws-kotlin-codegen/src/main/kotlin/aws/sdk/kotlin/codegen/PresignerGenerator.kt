@@ -248,6 +248,7 @@ class PresignerGenerator : KotlinIntegration {
         ccg.render()
     }
 
+    // Captures protocol-specific state needed for presigning requests
     interface PresignConfigFnVisitor {
         fun renderHttpMethod(writer: KotlinWriter)
         fun renderQueryParameters(writer: KotlinWriter)
@@ -308,7 +309,7 @@ class PresignerGenerator : KotlinIntegration {
                     presignConfigFnVisitor.renderQueryParameters(writer)
                     write("durationSeconds.toLong(),")
                     write("${presignableOp.signBody},")
-                    write("SigningLocation.HEADER")
+                    write("SigningLocation.QUERY_STRING")
                 }
             }
         }

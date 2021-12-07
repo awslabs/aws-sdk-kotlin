@@ -13,7 +13,6 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.isStreaming
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpFeatureMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
@@ -31,7 +30,7 @@ public class GlacierBodyChecksum : KotlinIntegration {
         resolved: List<ProtocolMiddleware>,
     ): List<ProtocolMiddleware> = resolved + glacierBodyChecksumMiddleware
 
-    private val glacierBodyChecksumMiddleware = object : HttpFeatureMiddleware() {
+    private val glacierBodyChecksumMiddleware = object : ProtocolMiddleware {
         override val order: Byte = 127 // Must come after AwsSignatureVersion4
         override val name: String = "GlacierBodyChecksum"
 
@@ -40,13 +39,11 @@ public class GlacierBodyChecksum : KotlinIntegration {
             return input?.members()?.any { it.isStreaming || ctx.model.expectShape(it.target).isStreaming } == true
         }
 
-        override fun renderConfigure(writer: KotlinWriter) {
+        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             writer.addImport(RuntimeTypes.Utils.Sha256)
-            writer.addImport(glacierSymbol("GlacierBodyChecksum"))
-            writer.addImport(glacierSymbol("TreeHasherImpl"))
-
-            writer.write("val chunkSizeBytes = 1024 * 1024 // 1MB")
-            writer.write("treeHasher = TreeHasherImpl(chunkSizeBytes) { Sha256() }")
+            val middleware = glacierSymbol("GlacierBodyChecksum")
+            writer.addImport(middleware)
+            writer.write("op.install(#T())", middleware)
         }
 
         private fun glacierSymbol(name: String) = buildSymbol {
