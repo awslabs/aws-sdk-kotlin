@@ -373,23 +373,25 @@ private suspend fun getSignedRequest(
     }
     val client = sdkHttpClient(mockEngine)
 
-    operation.install(AwsSigV4SigningMiddleware) {
-        credentialsProvider = if (config.credentialsProvider != null) {
-            config.credentialsProvider
-        } else {
-            val creds = assertNotNull(config.credentials, "credentials or credentialsProvider must be set for test")
-            object : CredentialsProvider {
-                override suspend fun getCredentials(): Credentials = creds
+    operation.install(
+        AwsSigV4SigningMiddleware {
+            credentialsProvider = if (config.credentialsProvider != null) {
+                config.credentialsProvider
+            } else {
+                val creds = assertNotNull(config.credentials, "credentials or credentialsProvider must be set for test")
+                object : CredentialsProvider {
+                    override suspend fun getCredentials(): Credentials = creds
+                }
             }
+            signingService = config.service
+            useDoubleUriEncode = config.useDoubleUriEncode
+            normalizeUriPath = config.normalizeUriPath
+            omitSessionToken = config.omitSessionToken
+            signedBodyHeaderType = config.signedBodyHeaderType
+            signatureType = config.signatureType
+            expiresAfter = config.expiresAfter
         }
-        signingService = config.service
-        useDoubleUriEncode = config.useDoubleUriEncode
-        normalizeUriPath = config.normalizeUriPath
-        omitSessionToken = config.omitSessionToken
-        signedBodyHeaderType = config.signedBodyHeaderType
-        signatureType = config.signatureType
-        expiresAfter = config.expiresAfter
-    }
+    )
 
     operation.roundTrip(client, Unit)
     return operation.context[HttpOperationContext.HttpCallList].last().request

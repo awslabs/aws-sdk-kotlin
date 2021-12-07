@@ -41,10 +41,8 @@ class AwsJsonProtocolTest {
             }
         }
         val client = sdkHttpClient(mockEngine)
-        op.install(AwsJsonProtocol) {
-            serviceShapeName = "FooService_blah"
-            version = "1.1"
-        }
+        val m = AwsJsonProtocol("FooService_blah", "1.1")
+        op.install(m)
 
         op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
@@ -74,10 +72,7 @@ class AwsJsonProtocolTest {
             }
         }
         val client = sdkHttpClient(mockEngine)
-        op.install(AwsJsonProtocol) {
-            serviceShapeName = "FooService"
-            version = "1.1"
-        }
+        op.install(AwsJsonProtocol("FooService", "1.1"))
 
         op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
@@ -111,10 +106,7 @@ class AwsJsonProtocolTest {
             }
         }
         val client = sdkHttpClient(mockEngine)
-        op.install(AwsJsonProtocol) {
-            serviceShapeName = "FooService"
-            version = "1.1"
-        }
+        op.install(AwsJsonProtocol("FooService", "1.1"))
 
         op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request

@@ -24,16 +24,16 @@ class MachineLearningEndpointCustomization : KotlinIntegration {
         resolved: List<ProtocolMiddleware>
     ): List<ProtocolMiddleware> = resolved + endpointResolverMiddleware
 
-    private val endpointResolverMiddleware = object : HttpFeatureMiddleware() {
+    private val endpointResolverMiddleware = object : ProtocolMiddleware {
         override val name: String = "ResolvePredictEndpoint"
-        override val needsConfiguration: Boolean = false
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
             op.id.name == "Predict"
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            super.render(ctx, op, writer)
-            writer.addImport(machineLearningSymbol("ResolvePredictEndpoint"))
+            val symbol = machineLearningSymbol("ResolvePredictEndpoint")
+            writer.addImport(symbol)
+            writer.write("op.install(#T())", symbol)
         }
 
         private fun machineLearningSymbol(name: String) = buildSymbol {
