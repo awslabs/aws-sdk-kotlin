@@ -19,8 +19,8 @@ class SmithyKotlinBuildSettings : ToNode {
     override fun toNode(): Node {
         val builder = ObjectNode.objectNodeBuilder()
 
-        builder.withOptionalMember("rootProject", generateFullProject)
-        builder.withOptionalMember("generateDefaultBuildFiles", generateDefaultBuildFiles)
+        builder.withNullableMember("rootProject", generateFullProject)
+        builder.withNullableMember("generateDefaultBuildFiles", generateDefaultBuildFiles)
 
         val optInArrNode = optInAnnotations?.map { Node.from(it) }?.let { ArrayNode.fromNodes(it) }
         builder.withOptionalMember("optInAnnotations", Optional.ofNullable(optInArrNode))
@@ -74,11 +74,11 @@ class SmithyKotlinPluginSettings : SmithyBuildPlugin {
             .withMember("service", serviceShapeId!!)
             .withObjectMember("package") {
                 withMember("name", packageName!!)
-                withOptionalMember("version", packageVersion)
-                withOptionalMember("description", packageDescription)
+                withNullableMember("version", packageVersion)
+                withNullableMember("description", packageDescription)
             }
-            .withOptionalMember("sdkId", sdkId)
-            .withOptionalMember("build", buildSettings)
+            .withNullableMember("sdkId", sdkId)
+            .withNullableMember("build", buildSettings)
 
         return obj.build()
     }

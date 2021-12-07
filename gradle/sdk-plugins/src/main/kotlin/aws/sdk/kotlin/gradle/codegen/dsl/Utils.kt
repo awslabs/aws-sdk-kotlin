@@ -33,17 +33,17 @@ internal fun ObjectNode.Builder.withObjectMember(key: String, block: ObjectNode.
     builder.apply(block)
     return withMember(key, builder.build())
 }
-internal fun ObjectNode.Builder.withOptionalMember(key: String, member: String?): ObjectNode.Builder = apply {
+internal fun ObjectNode.Builder.withNullableMember(key: String, member: String?): ObjectNode.Builder = apply {
     if (member == null) return this
     return withMember(key, member)
 }
 
-internal fun ObjectNode.Builder.withOptionalMember(key: String, member: Boolean?): ObjectNode.Builder = apply {
+internal fun ObjectNode.Builder.withNullableMember(key: String, member: Boolean?): ObjectNode.Builder = apply {
     if (member == null) return this
     return withMember(key, member)
 }
 
-internal fun <T : ToNode> ObjectNode.Builder.withOptionalMember(key: String, member: T?): ObjectNode.Builder =
+internal fun <T : ToNode> ObjectNode.Builder.withNullableMember(key: String, member: T?): ObjectNode.Builder =
     withOptionalMember(key, Optional.ofNullable(member))
 
 internal fun ObjectNode.Builder.withArrayMember(key: String, member: List<String>): ObjectNode.Builder = apply {

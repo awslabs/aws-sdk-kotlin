@@ -49,7 +49,7 @@ internal fun Project.registerCodegenTasks() {
     }
 
     val codegenConfig = createCodegenConfiguration()
-    val buildTask = project.tasks.register<SmithyBuild>(GENERATE_SMITHY_PROJECTIONS_TASK_NAME) {
+    project.tasks.register<SmithyBuild>(GENERATE_SMITHY_PROJECTIONS_TASK_NAME) {
         dependsOn(generateSmithyBuild)
         description = "generate projections (code) using Smithy"
         group = "codegen"

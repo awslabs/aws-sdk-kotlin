@@ -17,8 +17,7 @@ dependencies {
 }
 
 data class ProtocolTest(val projectionName: String, val serviceShapeId: String, val sdkId: String? = null) {
-    val packageName: String
-        get() = projectionName.toLowerCase().filter { it.isLetterOrDigit() }
+    val packageName: String = projectionName.toLowerCase().filter { it.isLetterOrDigit() }
 }
 
 
