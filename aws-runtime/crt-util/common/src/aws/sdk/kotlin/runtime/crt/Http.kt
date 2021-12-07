@@ -72,19 +72,20 @@ private class HttpHeadersCrt(val headers: HeadersBuilder) : HeadersCrt {
  */
 @InternalSdkApi
 public fun HttpRequestBuilder.update(crtRequest: HttpRequestCrt) {
-    // overwrite with crt request values
-    headers.clear()
-    url.parameters.clear()
-
     crtRequest.headers.entries().forEach { entry ->
-        headers.appendAll(entry.key, entry.value)
+        headers.appendMissing(entry.key, entry.value)
     }
 
-    // uri - we overwrite because the values may have been double encoded during signing
     if (crtRequest.encodedPath.isNotBlank()) {
-        url.path = crtRequest.path()
         crtRequest.queryParameters()?.let {
-            url.parameters.appendAll(it)
+            it.forEach { key, values ->
+                // the crt request has a url encoded path which means
+                // simply appending missing could result in both the raw and percent-encoded
+                // value being present. Instead just append new keys added by signing
+                if (!url.parameters.contains(key)) {
+                    url.parameters.appendAll(key, values)
+                }
+            }
         }
     }
 }

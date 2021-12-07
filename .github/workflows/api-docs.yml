@@ -192,7 +192,7 @@ jobs:
           echo "            <div id='logo'></div>" >> $INDEX_FILE
           echo "        </div>" >> $INDEX_FILE
           echo "        <div id='main' class='main-content'>" >> $INDEX_FILE
-          echo "            <h2>AWS SDK for Kotlin API Docs</h2>" >> $INDEX_FILE
+          echo "            <h2>AWS SDK for Kotlin API Reference</h2>" >> $INDEX_FILE
           echo "            <div class='table'>" >> $INDEX_FILE
 
           # Generate list of services
@@ -223,6 +223,9 @@ jobs:
         run: |
           FIRST_SERVICE=$(find target/ -maxdepth 1 -mindepth 1 -type d | head -n 1)
           cp -r $FIRST_SERVICE/styles $FIRST_SERVICE/images target/
+      - name: Patch smithy-kotlin docs # See https://github.com/Kotlin/dokka/issues/2211
+        run: |
+          cp -rv target/smithy-kotlin/runtime/* target/smithy-kotlin/
       - name: Prepare Release
         id: prep-release
         run: |
