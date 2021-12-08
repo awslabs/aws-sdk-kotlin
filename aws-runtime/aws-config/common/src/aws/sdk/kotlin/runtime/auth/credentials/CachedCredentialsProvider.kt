@@ -49,8 +49,13 @@ public class CachedCredentialsProvider(
     override suspend fun getCredentials(): Credentials = cachedCredentials.getOrLoad {
         val logger = Logger.getLogger<CachedCredentialsProvider>()
         logger.trace { "refreshing credentials cache" }
-        val creds = source.getCredentials()
-        val expiration = creds.expiration ?: (clock.now() + expireCredentialsAfter)
-        ExpiringValue(creds, expiration)
+        val providerCreds = source.getCredentials()
+        if (providerCreds.expiration != null) {
+            ExpiringValue(providerCreds, providerCreds.expiration!!)
+        } else {
+            val expiration = clock.now() + expireCredentialsAfter
+            val creds = providerCreds.copy(expiration = expiration)
+            ExpiringValue(creds, expiration)
+        }
     }
 }
