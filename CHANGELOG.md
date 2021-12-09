@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.9.5-beta] - 12/09/2021
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Fixes
+* move endpoint resolution log messages from DEBUG to TRACE [#443](https://github.com/awslabs/aws-sdk-kotlin/pull/443)
+* presigner cleanup [#452](https://github.com/awslabs/aws-sdk-kotlin/pull/452)
+* import signing test suite [#451](https://github.com/awslabs/aws-sdk-kotlin/pull/451)
+
 ## [0.9.4-beta] - 12/01/2021
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
