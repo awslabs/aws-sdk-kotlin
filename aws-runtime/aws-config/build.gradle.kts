@@ -36,6 +36,13 @@ kotlin {
                 implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
                 implementation(project(":aws-runtime:crt-util"))
 
+                // additional dependencies required by generated sts provider
+                implementation("aws.smithy.kotlin:serde-form-url:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
+                implementation(project(":aws-runtime:protocols:aws-xml-protocols"))
+                implementation(project(":aws-runtime:aws-endpoint"))
+                implementation(project(":aws-runtime:aws-signing"))
+
                 // additional dependencies required by generated sso provider
                 implementation(project(":aws-runtime:protocols:aws-json-protocols"))
             }
@@ -70,6 +77,40 @@ codegen {
     val basePackage = "aws.sdk.kotlin.runtime.auth.credentials.internal"
 
     projections {
+
+        // generate an sts client
+        create("sts-credentials-provider") {
+            imports = listOf(
+                awsModelFile("sts.2011-06-15.json")
+            )
+
+            smithyKotlinPlugin {
+                serviceShapeId = "com.amazonaws.sts#AWSSecurityTokenServiceV20110615"
+                packageName = "${basePackage}.sts"
+                packageVersion = project.version.toString()
+                packageDescription = "Internal STS credentials provider"
+                sdkId = "STS"
+                buildSettings {
+                    generateDefaultBuildFiles = false
+                    generateFullProject = false
+                }
+            }
+
+            // TODO - could we add a trait such that we change visibility to `internal` or a build setting...?
+            transforms = listOf(
+                """
+            {
+                "name": "awsSdkKotlinIncludeOperations",
+                "args": {
+                    "operations": [
+                        "com.amazonaws.sts#AssumeRole"
+                    ]
+                }
+            }
+            """
+            )
+        }
+
         // generate an sso client
         create("sso-credentials-provider") {
             imports = listOf(
