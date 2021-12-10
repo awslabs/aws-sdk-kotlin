@@ -13,7 +13,11 @@ import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 private const val DEFAULT_CREDENTIALS_REFRESH_BUFFER_SECONDS = 10
-private const val DEFAULT_CREDENTIALS_REFRESH_SECONDS = 60 * 15
+/**
+ * The amount of time credentials are valid for before being refreshed when an explicit value
+ * is not given to/from a provider
+ */
+public const val DEFAULT_CREDENTIALS_REFRESH_SECONDS: Int = 60 * 15
 
 /**
  * Creates a provider that functions as a caching decorator of another provider.

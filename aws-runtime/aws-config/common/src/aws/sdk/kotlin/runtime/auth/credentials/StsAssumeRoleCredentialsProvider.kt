@@ -7,10 +7,14 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.RegionDisabledException
+import aws.sdk.kotlin.runtime.config.AwsSdkSetting
+import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
+import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
@@ -43,13 +47,9 @@ public class StsAssumeRoleCredentialsProvider(
     private val region: String? = null,
     private val roleSessionName: String? = null,
     private val externalId: String? = null,
-    private val duration: Duration = Duration.minutes(15),
+    private val duration: Duration = Duration.seconds(DEFAULT_CREDENTIALS_REFRESH_SECONDS),
     private val httpClientEngine: HttpClientEngine? = null
 ) : CredentialsProvider {
-
-    // FIXME - should we use builders consistently or just add another constructor. A builder does allow for internal only parameters like httpClientEngine or clocks...
-
-    // FIXME/TODO - do we need MFA stuff exposed?
 
     override suspend fun getCredentials(): Credentials {
         val logger = Logger.getLogger<StsAssumeRoleCredentialsProvider>()
@@ -96,4 +96,5 @@ public class StsAssumeRoleCredentialsProvider(
 }
 
 // role session name must be provided to assume a role, when the user doesn't provide one we choose a name for them
-private fun defaultSessionName(): String = "aws-sdk-kotlin-${Instant.now().epochMilliseconds}"
+internal fun defaultSessionName(platformEnvironProvider: PlatformEnvironProvider = Platform): String =
+    AwsSdkSetting.AwsRoleSessionName.resolve(platformEnvironProvider) ?: "aws-sdk-kotlin-${Instant.now().epochMilliseconds}"

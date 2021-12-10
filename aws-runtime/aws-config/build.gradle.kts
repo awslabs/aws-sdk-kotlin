@@ -103,7 +103,8 @@ codegen {
                 "name": "awsSdkKotlinIncludeOperations",
                 "args": {
                     "operations": [
-                        "com.amazonaws.sts#AssumeRole"
+                        "com.amazonaws.sts#AssumeRole",
+                        "com.amazonaws.sts#AssumeRoleWithWebIdentity"
                     ]
                 }
             }
