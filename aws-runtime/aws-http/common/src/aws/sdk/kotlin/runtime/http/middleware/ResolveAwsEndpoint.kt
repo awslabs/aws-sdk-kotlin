@@ -49,7 +49,7 @@ public class ResolveAwsEndpoint(
         }
 
         val logger = req.context.getLogger("ResolveAwsEndpoint")
-        logger.debug { "resolved endpoint: $endpoint" }
+        logger.trace { "resolved endpoint: $endpoint" }
         return req
     }
 }
