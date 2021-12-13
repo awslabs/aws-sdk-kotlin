@@ -92,9 +92,27 @@ public sealed class AwsSdkSetting<T>(
     public object AwsEc2MetadataServiceEndpoint : AwsSdkSetting<String>("AWS_EC2_METADATA_SERVICE_ENDPOINT", "aws.ec2MetadataServiceEndpoint")
 
     /**
-     * The endpoint mode to use when connecting to the EC2 metadata service endpoint
+     * The endpoint mode to use when connecting to the EC2 metadata service endpoint. This is combined with
+     * [AwsContainerCredentialsRelativeUri] to form the full URI to retrieve container credentials from.
      */
     public object AwsEc2MetadataServiceEndpointMode : AwsSdkSetting<String>("AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE", "aws.ec2MetadataServiceEndpointMode")
+
+    /**
+     * The elastic container metadata service path that should be called by the [aws.sdk.kotlin.runtime.auth.credentials.EcsCredentialsProvider]
+     * when loading credentials from the container metadata service.
+     */
+    public object AwsContainerCredentialsRelativeUri : AwsSdkSetting<String> ("AWS_CONTAINER_CREDENTIALS_RELATIVE_URI", "aws.containerCredentialsPath", null)
+
+    /**
+     * The full URI path to a localhost metadata service to be used. This is ignored if
+     * [AwsContainerCredentialsRelativeUri] is set.
+     */
+    public object AwsContainerCredentialsFullUri : AwsSdkSetting<String>("AWS_CONTAINER_CREDENTIALS_FULL_URI", "aws.containerCredentialsFullUri", null)
+
+    /**
+     * An authorization token to pass to a container metadata service.
+     */
+    public object AwsContainerAuthorizationToken : AwsSdkSetting<String>("AWS_CONTAINER_AUTHORIZATION_TOKEN", "aws.containerAuthorizationToken", null)
 }
 
 /**
