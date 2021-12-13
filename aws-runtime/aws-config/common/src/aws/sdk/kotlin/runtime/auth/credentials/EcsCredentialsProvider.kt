@@ -125,8 +125,9 @@ public class EcsCredentialsProvider internal constructor(
 
         if (url.scheme == Protocol.HTTPS) return url
 
-        // TODO - validate localhost via DNS resolution instead of fixed set. Ipv6 and custom host names that resolve to localhost won't work until then
-        val allowedHosts = setOf("localhost", "127.0.0.1")
+        // TODO - validate loopback via DNS resolution instead of fixed set. Custom host names (including localhost) that
+        //  resolve to loopback won't work until then. ALL resolved addresses MUST resolve to the loopback device
+        val allowedHosts = setOf("127.0.0.1", "[::1]")
 
         if (url.host !in allowedHosts) {
             throw ProviderConfigurationException(

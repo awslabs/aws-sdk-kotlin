@@ -132,7 +132,7 @@ class EcsCredentialsProviderTest {
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<ProviderConfigurationException> {
             provider.getCredentials()
-        }.message.shouldContain("The container credentials full URI ($uri) has an invalid host. Host can only be one of [localhost, 127.0.0.1].")
+        }.message.shouldContain("The container credentials full URI ($uri) has an invalid host. Host can only be one of [127.0.0.1, [::1]].")
     }
 
     @Test
