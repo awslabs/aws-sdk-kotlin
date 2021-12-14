@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 import java.util.Properties
+import java.net.URL
 
 plugins {
     kotlin("jvm") version "1.6.10" apply false
