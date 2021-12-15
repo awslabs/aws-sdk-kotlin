@@ -133,6 +133,7 @@ class StsAssumeRoleCredentialsProviderTest {
         val provider = StsAssumeRoleCredentialsProvider(
             credentialsProvider = sourceProvider,
             roleArn = testArn,
+            region = "us-west-2",
             httpClientEngine = testEngine
         )
 
@@ -140,7 +141,7 @@ class StsAssumeRoleCredentialsProviderTest {
             provider.getCredentials()
         }
 
-        ex.message.shouldContain("STS is not activated in the requested region. Please check your configuration and activate STS in the target region if necessary")
+        ex.message.shouldContain("STS is not activated in the requested region (us-west-2). Please check your configuration and activate STS in the target region if necessary")
         assertIs<RegionDisabledException>(ex.cause)
     }
 
