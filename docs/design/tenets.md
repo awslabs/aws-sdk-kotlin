@@ -1,8 +1,8 @@
 # AWS SDK for Kotlin Design Tenets
 
-These are the tenets that drive the development of the AWS Kotlin SDK in priority order.
+These are the tenets that drive the development of the AWS SDK for Kotlin in order of priority.
 
-1. **Customer simplicity (aka Don’t Make Me Think)** - The AWS ecosystem is split into 1000s of teams - but that doesn’t mean that customers should have to care. In the case of the Kotlin SDK customers shouldn’t need to decide between a “mobile” version and a “server” version of the SDK: there should be a single low-level AWS Kotlin SDK, that is consistent in style and capabilities to any other supported AWS SDK.
+1. **Customer simplicity (aka Don’t Make Me Think)** - Kotlin SDK customers shouldn’t need to decide between different variants of the SDK.  Rather, there is a single AWS Kotlin SDK providing support for all customer use cases with functionality on par with other AWS SDKs.  The SDK itself should provide access to AWS services with obvious, flexible, and convienent APIs.
 2. **Mobile is a full citizen** - The world is mobile and customers expect mobile use-cases to be represented with equal weight to their server-based counterparts.
-3. **Kotlin idiomatic** - A Kotlin SDK should be geared towards developers working in Kotlin. While it’s true Kotlin has very good Java inter-op, as well as bindings to JS, Native and objc/SWIFT - the primary target customer will be pure-Kotlin applications. This means that Kotlin-only concepts like coroutines and rich DSLs can and should be part of the primary API; with wrappers for other runtimes as appropriate.
-4. **Multi-platform** - One of the key benefits of Kotlin is that it enables the ability to “write-once, run in many places”. The AWS SDK for Kotlin should support customers use-cases across the set of stable Kotlin target platforms.
+3. **Kotlin idiomatic** - A Kotlin SDK should be geared towards developers working in Kotlin. While Kotlin has bindings and interoperability with other languages, the primary use case will be Kotlin applications.
+4. **Multi-platform** - One of the key benefits of Kotlin is that it enables the ability to “write-once, run in many places”. The AWS SDK for Kotlin should support customers use cases across the set of stable Kotlin target platforms.
