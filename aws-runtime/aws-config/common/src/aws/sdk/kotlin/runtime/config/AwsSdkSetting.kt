@@ -92,10 +92,27 @@ public sealed class AwsSdkSetting<T>(
     public object AwsEc2MetadataServiceEndpoint : AwsSdkSetting<String>("AWS_EC2_METADATA_SERVICE_ENDPOINT", "aws.ec2MetadataServiceEndpoint")
 
     /**
-     * The endpoint mode to use when connecting to the EC2 metadata service endpoint. This is combined with
-     * [AwsContainerCredentialsRelativeUri] to form the full URI to retrieve container credentials from.
+     * The endpoint mode to use when connecting to the EC2 metadata service endpoint
      */
     public object AwsEc2MetadataServiceEndpointMode : AwsSdkSetting<String>("AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE", "aws.ec2MetadataServiceEndpointMode")
+
+    // TODO - Currently env/system properties around role ARN, role session name, etc are restricted to the STS web identity provider.
+    //        They should be applied more broadly but this needs fleshed out across AWS SDKs before we can do so.
+
+    /**
+     * The ARN of a role to assume
+     */
+    public object AwsRoleArn : AwsSdkSetting<String>("AWS_ROLE_ARN", "aws.roleArn")
+
+    /**
+     * The session name to use for assumed roles
+     */
+    public object AwsRoleSessionName : AwsSdkSetting<String>("AWS_ROLE_SESSION_NAME", "aws.roleSessionName")
+
+    /**
+     * The AWS web identity token file path
+     */
+    public object AwsWebIdentityTokenFile : AwsSdkSetting<String>("AWS_WEB_IDENTITY_TOKEN_FILE", "aws.webIdentityTokenFile")
 
     /**
      * The elastic container metadata service path that should be called by the [aws.sdk.kotlin.runtime.auth.credentials.EcsCredentialsProvider]
