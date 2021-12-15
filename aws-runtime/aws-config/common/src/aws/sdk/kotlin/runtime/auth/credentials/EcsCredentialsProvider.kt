@@ -20,11 +20,13 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.retries.RetryDirective
 import aws.smithy.kotlin.runtime.retries.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.RetryPolicy
 import aws.smithy.kotlin.runtime.retries.impl.*
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
+import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 
@@ -61,6 +63,7 @@ public class EcsCredentialsProvider internal constructor(
     }
 
     override suspend fun getCredentials(): Credentials {
+        val logger = Logger.getLogger<EcsCredentialsProvider>()
         val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platform)
         val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platform)
         val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platform)
@@ -83,10 +86,12 @@ public class EcsCredentialsProvider internal constructor(
         op.install(ResolveEndpoint(resolver = { Endpoint(url) }))
         op.install(retryMiddleware)
 
+        logger.debug { "retrieving container credentials" }
         val client = sdkHttpClient(httpClientEngine, manageEngine = false)
-        return try {
+        val creds = try {
             op.roundTrip(client, Unit)
         } catch (ex: Exception) {
+            logger.debug { "failed to obtain credentials from container metadata service" }
             throw when (ex) {
                 is CredentialsProviderException -> ex
                 else -> CredentialsProviderException("Failed to get credentials from container metadata service", ex)
@@ -94,6 +99,10 @@ public class EcsCredentialsProvider internal constructor(
         } finally {
             client.close()
         }
+
+        logger.debug { "obtained credentials from container metadata service; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
+
+        return creds
     }
 
     /**
