@@ -10,6 +10,7 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
@@ -93,8 +94,8 @@ public class StsWebIdentityCredentialsProvider(
             client.close()
         }
 
-        logger.debug { "obtained assumed credentials via web identity" }
         val roleCredentials = resp.credentials ?: throw CredentialsProviderException("STS credentials must not be null")
+        logger.debug { "obtained assumed credentials via web identity; expiration=${roleCredentials.expiration?.format(TimestampFormat.ISO_8601)}" }
 
         return Credentials(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRoleWithWebIdentity response" },

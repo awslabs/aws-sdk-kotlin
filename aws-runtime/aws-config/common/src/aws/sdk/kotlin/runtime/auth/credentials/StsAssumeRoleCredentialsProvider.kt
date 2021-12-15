@@ -12,6 +12,7 @@ import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
@@ -74,7 +75,7 @@ public class StsAssumeRoleCredentialsProvider(
             logger.debug { "sts refused to grant assumed role credentials" }
             when (ex) {
                 is RegionDisabledException -> throw ProviderConfigurationException(
-                    "STS is not activated in the requested region. Please check your configuration and activate STS in the target region if necessary",
+                    "STS is not activated in the requested region (${client.config.region}). Please check your configuration and activate STS in the target region if necessary",
                     ex
                 )
                 else -> throw CredentialsProviderException("failed to assume role from STS", ex)
@@ -83,8 +84,8 @@ public class StsAssumeRoleCredentialsProvider(
             client.close()
         }
 
-        logger.debug { "obtained assumed credentials" }
         val roleCredentials = resp.credentials ?: throw CredentialsProviderException("STS credentials must not be null")
+        logger.debug { "obtained assumed credentials; expiration=${roleCredentials.expiration?.format(TimestampFormat.ISO_8601)}" }
 
         return Credentials(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRole response" },
