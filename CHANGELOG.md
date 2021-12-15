@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.9.5-beta] - 12/09/2021
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Services new in this release
+
+* amplifyuibuilder
+* appconfigdata
+* backupgateway
+* chimesdkmeetings
+* drs
+* evidently
+* inspector2
+* iottwinmaker
+* migrationhubrefactorspaces
+* migrationhubstrategy
+* rbin
+* resiliencehub
+* rum
+* workspacesweb
+
+### Fixes
+* move endpoint resolution log messages from DEBUG to TRACE [#443](https://github.com/awslabs/aws-sdk-kotlin/pull/443)
+* presigner cleanup [#452](https://github.com/awslabs/aws-sdk-kotlin/pull/452)
+* import signing test suite [#451](https://github.com/awslabs/aws-sdk-kotlin/pull/451)
+
+## [0.9.4-beta] - 12/01/2021
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
 ## [0.9.3-alpha] - 11/19/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
