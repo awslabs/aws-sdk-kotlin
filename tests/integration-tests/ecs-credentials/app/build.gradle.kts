@@ -12,15 +12,18 @@ repositories {
     mavenCentral()
 }
 
-val sdkVersion = "0.9.5-beta"
+val awsSdkKotlinVersion: String by project
+val coroutinesVersion: String by project
+val slf4jVersion: String by project
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-    implementation("aws.sdk.kotlin:aws-config:$sdkVersion")
-    implementation("aws.sdk.kotlin:sts:$sdkVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 
-    implementation("org.slf4j:slf4j-simple:1.7.32")
+    implementation("aws.sdk.kotlin:aws-config:$awsSdkKotlinVersion")
+    implementation("aws.sdk.kotlin:sts:$awsSdkKotlinVersion")
+
+    implementation("org.slf4j:slf4j-simple:$slf4jVersion")
 }
 
 application {

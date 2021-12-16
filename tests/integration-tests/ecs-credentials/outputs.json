@@ -1,9 +1,0 @@
-{
-  "EcsCredentialsStack": {
-    "ClusterArn": "arn:aws:ecs:us-east-2:459419245142:cluster/EcsCredentialsStack-SdkTestCluster06538ACD-aCQzDyBXoD6B",
-    "ClusterVpcId": "vpc-0e22a66f11a9c2814",
-    "LogGroupName": "EcsCredentialsStack-TaskDefCredentialProviderTestContainerLogGroup691C353F-KogK3MEX6MOn",
-    "ClusterVpcSubnet0": "subnet-0728483a0df8a7c55",
-    "TaskArn": "arn:aws:ecs:us-east-2:459419245142:task-definition/EcsCredentialsStackTaskDef4FBE4EF2:3"
-  }
-}
