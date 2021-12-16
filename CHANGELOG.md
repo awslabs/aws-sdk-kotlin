@@ -4,6 +4,23 @@
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
 
+### Services new in this release
+
+* amplifyuibuilder
+* appconfigdata
+* backupgateway
+* chimesdkmeetings
+* drs
+* evidently
+* inspector2
+* iottwinmaker
+* migrationhubrefactorspaces
+* migrationhubstrategy
+* rbin
+* resiliencehub
+* rum
+* workspacesweb
+
 ### Fixes
 * move endpoint resolution log messages from DEBUG to TRACE [#443](https://github.com/awslabs/aws-sdk-kotlin/pull/443)
 * presigner cleanup [#452](https://github.com/awslabs/aws-sdk-kotlin/pull/452)
