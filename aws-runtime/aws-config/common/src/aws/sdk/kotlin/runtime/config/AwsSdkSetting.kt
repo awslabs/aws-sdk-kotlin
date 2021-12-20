@@ -113,6 +113,23 @@ public sealed class AwsSdkSetting<T>(
      * The AWS web identity token file path
      */
     public object AwsWebIdentityTokenFile : AwsSdkSetting<String>("AWS_WEB_IDENTITY_TOKEN_FILE", "aws.webIdentityTokenFile")
+
+    /**
+     * The elastic container metadata service path that should be called by the [aws.sdk.kotlin.runtime.auth.credentials.EcsCredentialsProvider]
+     * when loading credentials from the container metadata service.
+     */
+    public object AwsContainerCredentialsRelativeUri : AwsSdkSetting<String> ("AWS_CONTAINER_CREDENTIALS_RELATIVE_URI", "aws.containerCredentialsPath", null)
+
+    /**
+     * The full URI path to a localhost metadata service to be used. This is ignored if
+     * [AwsContainerCredentialsRelativeUri] is set.
+     */
+    public object AwsContainerCredentialsFullUri : AwsSdkSetting<String>("AWS_CONTAINER_CREDENTIALS_FULL_URI", "aws.containerCredentialsFullUri", null)
+
+    /**
+     * An authorization token to pass to a container metadata service.
+     */
+    public object AwsContainerAuthorizationToken : AwsSdkSetting<String>("AWS_CONTAINER_AUTHORIZATION_TOKEN", "aws.containerAuthorizationToken", null)
 }
 
 /**
