@@ -40,7 +40,7 @@ class EcsCredentialsProviderTest {
         expectedExpiration
     )
 
-    private fun ecs_response(): HttpResponse {
+    private fun ecsResponse(): HttpResponse {
         val payload = """
         {
             "Code" : "Success",
@@ -55,7 +55,7 @@ class EcsCredentialsProviderTest {
         return HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(payload))
     }
 
-    private fun error_response(): HttpResponse {
+    private fun errorResponse(): HttpResponse {
         val payload = """
         {
             "Code" : "TestError",
@@ -66,7 +66,7 @@ class EcsCredentialsProviderTest {
         return HttpResponse(HttpStatusCode.BadRequest, Headers.Empty, ByteArrayContent(payload))
     }
 
-    private fun ecs_request(url: String, authToken: String? = null): HttpRequest {
+    private fun ecsRequest(url: String, authToken: String? = null): HttpRequest {
         val resolvedUrl = Url.parse(url)
         val builder = HttpRequestBuilder().apply {
             method = HttpMethod.GET
@@ -85,8 +85,8 @@ class EcsCredentialsProviderTest {
     fun testRelativeUri(): Unit = runSuspendTest {
         val engine = buildTestConnection {
             expect(
-                ecs_request("http://169.254.170.2/relative?foo=bar"),
-                ecs_response()
+                ecsRequest("http://169.254.170.2/relative?foo=bar"),
+                ecsResponse()
             )
         }
 
@@ -105,8 +105,8 @@ class EcsCredentialsProviderTest {
         val uri = "http://127.0.0.1/full?foo=bar"
         val engine = buildTestConnection {
             expect(
-                ecs_request(uri),
-                ecs_response()
+                ecsRequest(uri),
+                ecsResponse()
             )
         }
 
@@ -140,8 +140,8 @@ class EcsCredentialsProviderTest {
         val uri = "https://amazonaws.com/full"
         val engine = buildTestConnection {
             expect(
-                ecs_request(uri),
-                ecs_response()
+                ecsRequest(uri),
+                ecsResponse()
             )
         }
 
@@ -171,8 +171,8 @@ class EcsCredentialsProviderTest {
         val token = "auth-token"
         val engine = buildTestConnection {
             expect(
-                ecs_request("http://169.254.170.2/relative", token),
-                ecs_response()
+                ecsRequest("http://169.254.170.2/relative", token),
+                ecsResponse()
             )
         }
 
@@ -193,8 +193,8 @@ class EcsCredentialsProviderTest {
     fun testErrorResponse(): Unit = runSuspendTest {
         val engine = buildTestConnection {
             expect(
-                ecs_request("http://169.254.170.2/relative"),
-                error_response()
+                ecsRequest("http://169.254.170.2/relative"),
+                errorResponse()
             )
         }
 
