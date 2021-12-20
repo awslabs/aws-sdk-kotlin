@@ -5,15 +5,16 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.crt.auth.credentials.build
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.config.resolve
-import aws.sdk.kotlin.runtime.crt.SdkDefaultIO
-import aws.smithy.kotlin.runtime.util.Platform
-import aws.sdk.kotlin.crt.auth.credentials.ProfileCredentialsProvider as ProfileCredentialsProviderCrt
 
 /**
- * A provider that gets credentials from a profile.
+ * A [CredentialsProvider] that gets credentials from a profile in `~/.aws/config` or the shared credentials
+ * file `~/.aws/credentials`. The locations of these files are configurable via environment or system property on
+ * the JVM (see [AwsSdkSetting.AwsConfigFile] and [AwsSdkSetting.AwsSharedCredentialsFile]).
+ *
+ * NOTE: This provider does not implement any caching. It will reload and reparse the profile from the file system
+ * when called. Use [CachedCredentialsProvider] to decorate the profile provider to get caching behavior.
+ *
  * @param profileName The name of the profile to use (or `"default"` if none is specified).
  * @param configFileName The name of the config file to use. If none is specified, the default is `".aws/config"` on
  * Linux/Mac and`"%USERPROFILE%\.aws\config"` on Windows.
@@ -24,12 +25,9 @@ public class ProfileCredentialsProvider public constructor(
     profileName: String? = null,
     configFileName: String? = null,
     credentialsFileName: String? = null,
-) : CrtCredentialsProvider {
-    override val crtProvider: ProfileCredentialsProviderCrt = ProfileCredentialsProviderCrt.build {
-        clientBootstrap = SdkDefaultIO.ClientBootstrap
-        tlsContext = SdkDefaultIO.TlsContext
-        this.profileName = profileName ?: AwsSdkSetting.AwsProfile.resolve(Platform)
-        this.configFileName = configFileName
-        this.credentialsFileName = credentialsFileName
+) : CredentialsProvider {
+
+    override suspend fun getCredentials(): Credentials {
+        TODO("Not yet implemented")
     }
 }
