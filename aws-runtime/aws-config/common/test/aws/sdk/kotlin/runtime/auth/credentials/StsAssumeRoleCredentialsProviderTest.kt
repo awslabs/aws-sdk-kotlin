@@ -12,14 +12,11 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
-import aws.smithy.kotlin.runtime.time.Instant
-import aws.smithy.kotlin.runtime.time.TimestampFormat
 import io.kotest.matchers.string.shouldContain
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -29,52 +26,12 @@ class StsAssumeRoleCredentialsProviderTest {
         secretAccessKey = "secret"
     }
 
-    private val epoch = Instant.fromIso8601("2020-10-16T03:56:00Z")
-    private val expectedCredentialsBase = Credentials(
-        "AKIDTest",
-        "test-secret",
-        "test-token",
-        epoch + Duration.minutes(15)
-    )
-
     private val testArn = "arn:aws:iam:1234567/test-role"
-
-    // see https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html#API_AssumeRole_ResponseElements
-    private fun sts_response(
-        roleArn: String,
-        expiration: Instant? = null
-    ): HttpResponse {
-        val roleId = roleArn.split("/").last()
-        val expiry = expiration ?: expectedCredentialsBase.expiration!!
-        val body = """
-            <AssumeRoleResponse xmlns="https://sts.amazonaws.com/doc/2011-06-15/">
-              <AssumeRoleResult>
-              <SourceIdentity>Alice</SourceIdentity>
-                <AssumedRoleUser>
-                  <Arn>$roleArn</Arn>
-                  <AssumedRoleId>ARO123EXAMPLE123:$roleId</AssumedRoleId>
-                </AssumedRoleUser>
-                <Credentials>
-                  <AccessKeyId>AKIDTest</AccessKeyId>
-                  <SecretAccessKey>test-secret</SecretAccessKey>
-                  <SessionToken>test-token</SessionToken>
-                  <Expiration>${expiry.format(TimestampFormat.ISO_8601)}</Expiration>
-                </Credentials>
-                <PackedPolicySize>6</PackedPolicySize>
-              </AssumeRoleResult>
-              <ResponseMetadata>
-                <RequestId>c6104cbe-af31-11e0-8154-cbc7ccf896c7</RequestId>
-              </ResponseMetadata>
-            </AssumeRoleResponse>
-        """.trimIndent()
-
-        return HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(body.encodeToByteArray()))
-    }
 
     @Test
     fun testSuccess(): Unit = runSuspendTest {
         val testEngine = buildTestConnection {
-            expect(sts_response(testArn))
+            expect(StsTestUtils.stsResponse(testArn))
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
@@ -84,7 +41,7 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         val actual = provider.getCredentials()
-        assertEquals(expectedCredentialsBase, actual)
+        assertEquals(StsTestUtils.expectedCredentialsBase, actual)
     }
 
     @Test
@@ -148,7 +105,7 @@ class StsAssumeRoleCredentialsProviderTest {
     @Test
     fun testGlobalEndpoint(): Unit = runSuspendTest {
         val testEngine = buildTestConnection {
-            expect(sts_response(testArn))
+            expect(StsTestUtils.stsResponse(testArn))
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
@@ -158,7 +115,7 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         val actual = provider.getCredentials()
-        assertEquals(expectedCredentialsBase, actual)
+        assertEquals(StsTestUtils.expectedCredentialsBase, actual)
         val req = testEngine.requests().first()
         assertEquals("sts.amazonaws.com", req.actual.url.host)
     }
@@ -166,7 +123,7 @@ class StsAssumeRoleCredentialsProviderTest {
     @Test
     fun testRegionalEndpoint(): Unit = runSuspendTest {
         val testEngine = buildTestConnection {
-            expect(sts_response(testArn))
+            expect(StsTestUtils.stsResponse(testArn))
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
@@ -177,7 +134,7 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         val actual = provider.getCredentials()
-        assertEquals(expectedCredentialsBase, actual)
+        assertEquals(StsTestUtils.expectedCredentialsBase, actual)
         val req = testEngine.requests().first()
         assertEquals("sts.us-west-2.amazonaws.com", req.actual.url.host)
     }

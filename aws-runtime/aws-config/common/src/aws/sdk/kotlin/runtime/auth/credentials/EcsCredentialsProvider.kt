@@ -46,13 +46,20 @@ private const val AWS_CONTAINER_SERVICE_ENDPOINT = "http://169.254.170.2"
  *
  * For more information on configuring ECS credentials see [IAM Roles for tasks](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html)
  *
+ * @param platform the platform provider
+ * @param httpClientEngine the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+ * are NOT managed by the provider. Caller is responsible for closing.
+ *
  */
 public class EcsCredentialsProvider internal constructor(
     private val platform: PlatformEnvironProvider,
-    private val httpClientEngine: HttpClientEngine
+    httpClientEngine: HttpClientEngine? = null
 ) : CredentialsProvider, Closeable {
 
-    public constructor() : this(Platform, CrtHttpEngine())
+    public constructor() : this(Platform)
+
+    private val manageEngine = httpClientEngine == null
+    private val httpClientEngine = httpClientEngine ?: CrtHttpEngine()
 
     private val retryMiddleware = run {
         val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
@@ -147,9 +154,12 @@ public class EcsCredentialsProvider internal constructor(
     }
 
     override fun close() {
-        httpClientEngine.close()
+        if (manageEngine) {
+            httpClientEngine.close()
+        }
     }
 }
+
 private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
     override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): Credentials {
         val payload = response.body.readAll() ?: throw CredentialsProviderException("HTTP credentials response did not contain a payload")

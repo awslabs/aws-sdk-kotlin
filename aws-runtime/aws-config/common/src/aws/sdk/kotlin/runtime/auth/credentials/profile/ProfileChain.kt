@@ -20,14 +20,22 @@ import aws.sdk.kotlin.runtime.config.profile.ProfileMap
  * providers that don't actually have implementations.
  */
 internal data class ProfileChain(
+    /**
+     * The credentials provider that starts the assume role chain.
+     */
     val leaf: LeafProvider,
-    val chain: List<RoleArn>
+
+    /**
+     * The list of roles to assume (in-order). The first role will be assumed with credentials from [leaf].
+     * Every role after that should be assumed with the prior role credentials.
+     */
+    val roles: List<RoleArn>
 ) {
     companion object {
-        internal fun resolve(profiles: ProfileMap, profileNameOverride: String? = null): ProfileChain {
+        internal fun resolve(profiles: ProfileMap, profileName: String): ProfileChain {
             val visited = mutableListOf<String>()
             val chain = mutableListOf<RoleArn>()
-            var sourceProfileName = profileNameOverride ?: TODO("resolve active source profile")
+            var sourceProfileName = profileName
             var leaf: LeafProvider?
             loop@while (true) {
                 val profile = profiles.getOrThrow(sourceProfileName) {
