@@ -15,6 +15,8 @@ import aws.sdk.kotlin.runtime.config.profile.resolveConfigSource
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
@@ -89,7 +91,9 @@ public class ProfileCredentialsProvider(
     )
 
     override suspend fun getCredentials(): Credentials {
+        val logger = Logger.getLogger<ProfileCredentialsProvider>()
         val source = resolveConfigSource(platform, profileName)
+        logger.debug { "loading credentials from profile `${source.profile}`" }
         val profiles = loadAwsProfiles(platform, source)
         val chain = ProfileChain.resolve(profiles, source.profile)
 
@@ -98,13 +102,16 @@ public class ProfileCredentialsProvider(
         val region = region ?: profileOverride?.get("region") ?: resolveRegion(platform)
 
         val leaf = chain.leaf.toCredentialsProvider(region)
+        logger.debug { "resolving credentials from ${chain.leaf.description()}" }
         var creds = leaf.getCredentials()
 
         chain.roles.forEach { roleArn ->
+            logger.debug { "assuming role `${roleArn.roleArn}`" }
             val assumeProvider = roleArn.toCredentialsProvider(creds, region)
             creds = assumeProvider.getCredentials()
         }
 
+        logger.debug { "obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
         return creds
     }
 
@@ -146,4 +153,11 @@ public class ProfileCredentialsProvider(
         externalId = externalId,
         httpClientEngine = httpClientEngine
     )
+
+    private fun LeafProvider.description(): String = when (this) {
+        is LeafProvider.NamedSource -> "named source $name"
+        is LeafProvider.AccessKey -> "static credentials"
+        is LeafProvider.WebIdentityTokenRole -> "web identity token"
+        is LeafProvider.Sso -> "single sign-on"
+    }
 }
