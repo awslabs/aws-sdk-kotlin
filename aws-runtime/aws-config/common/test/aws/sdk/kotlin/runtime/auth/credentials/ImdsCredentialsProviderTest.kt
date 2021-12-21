@@ -78,7 +78,8 @@ class ImdsCredentialsProviderTest {
             "ASIARTEST",
             "xjtest",
             "IQote///test",
-            Instant.fromEpochSeconds(1631935916)
+            Instant.fromEpochSeconds(1631935916),
+            "IMDSv2"
         )
         assertEquals(expected, actual)
     }
@@ -122,7 +123,8 @@ class ImdsCredentialsProviderTest {
             "ASIARTEST",
             "xjtest",
             "IQote///test",
-            Instant.fromEpochSeconds(1631935916)
+            Instant.fromEpochSeconds(1631935916),
+            "IMDSv2"
         )
         assertEquals(expected, actual)
     }

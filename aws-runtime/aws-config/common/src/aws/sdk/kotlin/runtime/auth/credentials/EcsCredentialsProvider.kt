@@ -38,6 +38,8 @@ import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
  */
 private const val AWS_CONTAINER_SERVICE_ENDPOINT = "http://169.254.170.2"
 
+private const val PROVIDER_NAME = "EcsContainer"
+
 /**
  * A [CredentialsProvider] that sources credentials from a local metadata service.
  *
@@ -169,7 +171,8 @@ private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
                 resp.accessKeyId,
                 resp.secretAccessKey,
                 resp.sessionToken,
-                resp.expiration
+                resp.expiration,
+                PROVIDER_NAME
             )
             is JsonCredentialsResponse.Error -> throw CredentialsProviderException("Error retrieving credentials from container service: code=${resp.code}; message=${resp.message}")
         }

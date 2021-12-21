@@ -91,7 +91,8 @@ public class StsAssumeRoleCredentialsProvider(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRole response" },
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRole response" },
             sessionToken = roleCredentials.sessionToken,
-            expiration = roleCredentials.expiration
+            expiration = roleCredentials.expiration,
+            providerName = PROVIDER_NAME
         )
     }
 }

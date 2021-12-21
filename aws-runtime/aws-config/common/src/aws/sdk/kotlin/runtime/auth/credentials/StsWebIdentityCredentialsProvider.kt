@@ -101,7 +101,8 @@ public class StsWebIdentityCredentialsProvider(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRoleWithWebIdentity response" },
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRoleWithWebIdentity response" },
             sessionToken = roleCredentials.sessionToken,
-            expiration = roleCredentials.expiration
+            expiration = roleCredentials.expiration,
+            providerName = PROVIDER_NAME
         )
     }
 }

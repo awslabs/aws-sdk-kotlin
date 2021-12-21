@@ -21,7 +21,8 @@ object StsTestUtils {
         "AKIDTest",
         "test-secret",
         "test-token",
-        epoch + Duration.minutes(15)
+        epoch + Duration.minutes(15),
+        "AssumeRoleProvider"
     )
 
     // see https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html#API_AssumeRole_ResponseElements

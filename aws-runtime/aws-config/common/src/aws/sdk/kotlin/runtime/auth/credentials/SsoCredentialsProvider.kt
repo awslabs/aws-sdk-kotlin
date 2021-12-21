@@ -114,7 +114,8 @@ public class SsoCredentialsProvider public constructor(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in SSO roleCredentials response" },
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in SSO roleCredentials response" },
             sessionToken = roleCredentials.sessionToken,
-            expiration = Instant.fromEpochSeconds(roleCredentials.expiration)
+            expiration = Instant.fromEpochSeconds(roleCredentials.expiration),
+            "SSO"
         )
     }
 

@@ -30,13 +30,14 @@ class StsWebIdentityCredentialsProviderTest {
         "AKIDTest",
         "test-secret",
         "test-token",
-        epoch + Duration.minutes(15)
+        epoch + Duration.minutes(15),
+        "WebIdentityToken"
     )
 
     private val testArn = "arn:aws:iam:1234567/test-role"
 
     // see https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html#API_AssumeRoleWithWebIdentity_ResponseElements
-    private fun sts_response(
+    private fun stsResponse(
         roleArn: String,
         expiration: Instant? = null
     ): HttpResponse {
@@ -72,7 +73,7 @@ class StsWebIdentityCredentialsProviderTest {
     @Test
     fun testSuccess(): Unit = runSuspendTest {
         val testEngine = buildTestConnection {
-            expect(sts_response(testArn))
+            expect(stsResponse(testArn))
         }
 
         val testPlatform = TestPlatformProvider(

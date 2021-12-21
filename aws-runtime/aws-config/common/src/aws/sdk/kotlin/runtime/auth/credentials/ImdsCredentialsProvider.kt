@@ -66,7 +66,8 @@ public class ImdsCredentialsProvider(
                 resp.accessKeyId,
                 resp.secretAccessKey,
                 resp.sessionToken,
-                resp.expiration
+                resp.expiration,
+                "IMDSv2"
             )
             is JsonCredentialsResponse.Error -> {
                 when (resp.code) {
