@@ -37,10 +37,11 @@ internal data class ProfileChain(
             val chain = mutableListOf<RoleArn>()
             var sourceProfileName = profileName
             var leaf: LeafProvider?
+
             loop@while (true) {
                 val profile = profiles.getOrThrow(sourceProfileName) {
                     val msg = if (visited.isEmpty()) {
-                        "could not find profile $sourceProfileName"
+                        "could not find source profile $sourceProfileName"
                     } else {
                         "could not find source profile $sourceProfileName referenced from ${visited.last()}"
                     }
@@ -66,7 +67,6 @@ internal data class ProfileChain(
                     chain.add(roleArn)
                 } else {
                     // have to find a leaf provider or error
-                    // TODO - if we are looking at first provider we want to surface errors as is otherwise transform message to indicate InvalidCredentialsSource
                     leaf = profile.leafProvider()
                     break@loop
                 }
