@@ -20,6 +20,7 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
 
 private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/security-credentials"
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
+private const val PROVIDER_NAME = "IMDSv2"
 
 /**
  * [CredentialsProvider] that uses EC2 instance metadata service (IMDS) to provide credentials information.
@@ -67,7 +68,7 @@ public class ImdsCredentialsProvider(
                 resp.secretAccessKey,
                 resp.sessionToken,
                 resp.expiration,
-                "IMDSv2"
+                PROVIDER_NAME
             )
             is JsonCredentialsResponse.Error -> {
                 when (resp.code) {
