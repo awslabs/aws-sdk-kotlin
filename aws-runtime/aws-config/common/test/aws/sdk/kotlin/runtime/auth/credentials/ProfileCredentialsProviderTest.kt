@@ -114,6 +114,7 @@ class ProfileCredentialsProviderTest {
                 source_profile = B
                 
                 [profile B]
+                region = us-east-1
                 aws_access_key_id = AKID-Profile
                 aws_secret_access_key = Profile-Secret
                 """.trimIndent()
@@ -132,6 +133,7 @@ class ProfileCredentialsProviderTest {
 
         testEngine.assertRequests()
         val req = testEngine.requests().first()
+        // region is overridden from the environment which should take precedence
         assertEquals("sts.us-west-2.amazonaws.com", req.actual.url.host)
     }
 }
