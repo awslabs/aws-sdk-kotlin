@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.ClientException
+import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger
 
 /**
@@ -16,7 +17,7 @@ import aws.smithy.kotlin.runtime.logging.Logger
  */
 public open class CredentialsProviderChain(
     protected vararg val providers: CredentialsProvider
-) : CredentialsProvider {
+) : CredentialsProvider, Closeable {
     private val logger = Logger.getLogger<CredentialsProviderChain>()
 
     init {
@@ -27,14 +28,21 @@ public open class CredentialsProviderChain(
         (listOf(this) + providers).map { it::class.simpleName }.joinToString(" -> ")
 
     override suspend fun getCredentials(): Credentials {
+        // FIXME - this should be a CredentialsProviderException
+        val chainException = lazy { ClientException("No credentials could be loaded from the chain: $this") }
         for (provider in providers) {
             try {
                 return provider.getCredentials()
             } catch (ex: Exception) {
                 logger.debug { "unable to load credentials from $provider: ${ex.message}" }
+                chainException.value.addSuppressed(ex)
             }
         }
 
-        throw ClientException("No credentials could be loaded from the chain: $this")
+        throw chainException.value
+    }
+
+    override fun close() {
+        providers.forEach { (it as? Closeable)?.close() }
     }
 }

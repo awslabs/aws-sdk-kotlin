@@ -5,9 +5,16 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.crt.auth.credentials.build
-import aws.sdk.kotlin.runtime.crt.SdkDefaultIO
-import aws.sdk.kotlin.crt.auth.credentials.DefaultChainCredentialsProvider as DefaultChainCredentialsProviderCrt
+import aws.sdk.kotlin.runtime.config.imds.ImdsClient
+import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
+import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
+
+// TODO - update these docs
+// TODO - remove CRT references here and build file
+// TODO - allow region, profile, etc to be passed in
 
 /**
  * Creates the default provider chain used by most AWS SDKs.
@@ -23,10 +30,34 @@ import aws.sdk.kotlin.crt.auth.credentials.DefaultChainCredentialsProvider as De
  *
  * @return the newly-constructed credentials provider
  */
-public class DefaultChainCredentialsProvider : CrtCredentialsProvider {
-    override val crtProvider: DefaultChainCredentialsProviderCrt by lazy {
-        DefaultChainCredentialsProviderCrt.build {
-            clientBootstrap = SdkDefaultIO.ClientBootstrap
-        }
+public class DefaultChainCredentialsProvider internal constructor(
+    private val platformProvider: PlatformProvider = Platform,
+    private val httpClientEngine: HttpClientEngine? = null
+) : CredentialsProvider, Closeable {
+
+    public constructor() : this(Platform, CrtHttpEngine())
+
+    private val chain = CredentialsProviderChain(
+        EnvironmentCredentialsProvider(platformProvider::getenv),
+        ProfileCredentialsProvider(platform = platformProvider, httpClientEngine = httpClientEngine),
+        // TODO - explicitly add Sts and StsWebIdentity since they can be configured via environment
+        EcsCredentialsProvider(platformProvider, httpClientEngine),
+        ImdsCredentialsProvider(
+            client = lazy {
+                ImdsClient {
+                    platformProvider = this@DefaultChainCredentialsProvider.platformProvider
+                    engine = httpClientEngine
+                }
+            },
+            platformProvider = platformProvider
+        )
+    )
+
+    private val provider = CachedCredentialsProvider(chain)
+
+    override suspend fun getCredentials(): Credentials = provider.getCredentials()
+
+    override fun close() {
+        chain.close()
     }
 }
