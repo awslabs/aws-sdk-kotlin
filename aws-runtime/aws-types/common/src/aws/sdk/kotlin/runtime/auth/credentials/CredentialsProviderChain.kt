@@ -10,8 +10,10 @@ import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger
 
 /**
- * Composite [CredentialsProvider] that delegates to a chain of providers.
- * [providers] are consulted in the order given and the first region found is returned
+ * Composite [CredentialsProvider] that delegates to a chain of providers. When asked for credentials [providers]
+ * are consulted in the order given until one succeeds. If none of the providers in the chain can provide credentials
+ * then this class will throw an exception. The exception will include the providers tried in the message. Each
+ * individual exception is available as a suppressed exception.
  *
  * @param providers the list of providers to delegate to
  */

@@ -11,6 +11,7 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlin.time.ExperimentalTime
 
 // TODO - update these docs
 // TODO - remove CRT references here and build file
@@ -40,7 +41,8 @@ public class DefaultChainCredentialsProvider internal constructor(
     private val chain = CredentialsProviderChain(
         EnvironmentCredentialsProvider(platformProvider::getenv),
         ProfileCredentialsProvider(platform = platformProvider, httpClientEngine = httpClientEngine),
-        // TODO - explicitly add Sts and StsWebIdentity since they can be configured via environment
+        // STS web identity provider can be constructed from either the profile OR 100% from the environment
+        StsWebIdentityProvider(platformProvider = platformProvider, httpClientEngine = httpClientEngine),
         EcsCredentialsProvider(platformProvider, httpClientEngine),
         ImdsCredentialsProvider(
             client = lazy {
@@ -59,5 +61,20 @@ public class DefaultChainCredentialsProvider internal constructor(
 
     override fun close() {
         chain.close()
+    }
+}
+
+/**
+ * Wrapper around [StsWebIdentityCredentialsProvider] that delays any exceptions until [getCredentials] is invoked.
+ * This allows it to be part of the default chain and any failures result in the chain to move onto the next provider.
+ */
+@OptIn(ExperimentalTime::class)
+private class StsWebIdentityProvider(
+    val platformProvider: PlatformProvider,
+    val httpClientEngine: HttpClientEngine? = null
+) : CredentialsProvider {
+    override suspend fun getCredentials(): Credentials {
+        val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClientEngine = httpClientEngine)
+        return wrapped.getCredentials()
     }
 }
