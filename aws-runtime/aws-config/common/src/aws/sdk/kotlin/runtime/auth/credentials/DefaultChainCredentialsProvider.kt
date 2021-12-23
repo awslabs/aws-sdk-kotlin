@@ -13,20 +13,22 @@ import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.ExperimentalTime
 
-// TODO - update these docs
 // TODO - allow region, profile, etc to be passed in
 
 /**
- * Creates the default provider chain used by most AWS SDKs.
+ * Default AWS credential provider chain used by most AWS SDKs.
  *
- * Generally:
+ * Resolution order:
  *
- * (1) Environment
- * (2) Profile
- * (3) (conditional, off by default) ECS
- * (4) (conditional, on by default) EC2 Instance Metadata
+ * 1. Environment variables ([EnvironmentCredentialsProvider])
+ * 2. Profile ([ProfileCredentialsProvider])
+ * 3. Web Identity Tokens ([StsWebIdentityCredentialsProvider]]
+ * 4. ECS (IAM roles for tasks) ([EcsCredentialsProvider])
+ * 5. EC2 Instance Metadata (IMDSv2) ([ImdsCredentialsProvider])
  *
- * Support for environmental control of the default provider chain is not yet implemented.
+ * The chain is decorated with a [CachedCredentialsProvider].
+ *
+ * Closing the chain will close all child providers that implement [Closeable].
  *
  * @return the newly-constructed credentials provider
  */
@@ -35,6 +37,7 @@ public class DefaultChainCredentialsProvider internal constructor(
     private val httpClientEngine: HttpClientEngine? = null
 ) : CredentialsProvider, Closeable {
 
+    // FIXME - need to manage engine lifetime
     public constructor() : this(Platform, CrtHttpEngine())
 
     private val chain = CredentialsProviderChain(
