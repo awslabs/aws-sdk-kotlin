@@ -14,7 +14,6 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.ExperimentalTime
 
 // TODO - update these docs
-// TODO - remove CRT references here and build file
 // TODO - allow region, profile, etc to be passed in
 
 /**
