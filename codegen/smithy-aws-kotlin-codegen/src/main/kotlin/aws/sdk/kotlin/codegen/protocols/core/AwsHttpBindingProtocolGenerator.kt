@@ -136,7 +136,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             }
             .dedent()
             .withBlock("} catch (ex: Exception) {", "}") {
-                withBlock("""throw #T("failed to parse response as ${ctx.protocol.name} error", ex).also {""", "}", AwsRuntimeTypes.Core.UnknownServiceErrorException) {
+                withBlock("""throw #T("Failed to parse response as '${ctx.protocol.name}' error", ex).also {""", "}", exceptionBaseSymbol) {
                     write("#T(it, wrappedResponse, null)", AwsRuntimeTypes.Http.setAseErrorMetadata)
                 }
             }
