@@ -12,6 +12,7 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.time.fromEpochMilliseconds
 import aws.smithy.kotlin.runtime.util.*
 
 private const val PROVIDER_NAME = "SSO"
@@ -116,7 +117,7 @@ public class SsoCredentialsProvider public constructor(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in SSO roleCredentials response" },
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in SSO roleCredentials response" },
             sessionToken = roleCredentials.sessionToken,
-            expiration = Instant.fromEpochSeconds(roleCredentials.expiration),
+            expiration = Instant.fromEpochMilliseconds(roleCredentials.expiration),
             PROVIDER_NAME
         )
     }

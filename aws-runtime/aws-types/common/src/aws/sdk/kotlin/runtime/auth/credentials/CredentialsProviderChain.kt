@@ -9,6 +9,8 @@ import aws.smithy.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger
 
+// TODO - support caching the provider that actually resolved credentials such that future calls don't involve going through the full chain
+
 /**
  * Composite [CredentialsProvider] that delegates to a chain of providers. When asked for credentials [providers]
  * are consulted in the order given until one succeeds. If none of the providers in the chain can provide credentials

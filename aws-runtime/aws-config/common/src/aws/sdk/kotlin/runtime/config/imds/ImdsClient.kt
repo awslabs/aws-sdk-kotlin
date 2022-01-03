@@ -140,7 +140,6 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             next.call(req)
         }
 
-        // TODO - retries
         return op.roundTrip(httpClient, Unit)
     }
 

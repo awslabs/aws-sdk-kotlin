@@ -133,8 +133,7 @@ class DefaultChainCredentialsProviderTest {
      */
     fun executeTest(name: String): Unit = runSuspendTest {
         val test = makeTest(name)
-        println(test)
-        val provider = DefaultChainCredentialsProvider(test.testPlatform, test.testEngine)
+        val provider = DefaultChainCredentialsProvider(platformProvider = test.testPlatform, httpClientEngine = test.testEngine)
         val actual = runCatching { provider.getCredentials() }
         val expected = test.expected
         when {
