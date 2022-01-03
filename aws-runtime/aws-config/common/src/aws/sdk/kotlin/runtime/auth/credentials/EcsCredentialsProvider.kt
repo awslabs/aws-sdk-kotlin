@@ -48,13 +48,13 @@ private const val PROVIDER_NAME = "EcsContainer"
  *
  * For more information on configuring ECS credentials see [IAM Roles for tasks](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html)
  *
- * @param platform the platform provider
+ * @param platformProvider the platform provider
  * @param httpClientEngine the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
  *
  */
 public class EcsCredentialsProvider internal constructor(
-    private val platform: PlatformEnvironProvider,
+    private val platformProvider: PlatformEnvironProvider,
     httpClientEngine: HttpClientEngine? = null
 ) : CredentialsProvider, Closeable {
 
@@ -73,9 +73,9 @@ public class EcsCredentialsProvider internal constructor(
 
     override suspend fun getCredentials(): Credentials {
         val logger = Logger.getLogger<EcsCredentialsProvider>()
-        val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platform)
-        val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platform)
-        val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platform)
+        val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
+        val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
+        val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)
 
         val url = when {
             relativeUri?.isBlank() == false -> validateRelativeUri(relativeUri)

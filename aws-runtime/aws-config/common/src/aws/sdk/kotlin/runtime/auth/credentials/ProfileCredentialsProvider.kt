@@ -64,42 +64,42 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * @param profileName Override the profile name to use. If not provided it will be resolved internally
  * via environment (see [AwsSdkSetting.AwsProfile]) or defaulted to `default` if not configured.
  * @param region The AWS region to use, this will be resolved internally if not provided.
- * @param platform The platform API provider
+ * @param platformProvider The platform API provider
  * @param httpClientEngine the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class ProfileCredentialsProvider(
     private val profileName: String? = null,
     private val region: String? = null,
-    private val platform: PlatformProvider = Platform,
+    private val platformProvider: PlatformProvider = Platform,
     private val httpClientEngine: HttpClientEngine? = null,
 ) : CredentialsProvider, Closeable {
 
     private val namedProviders = mapOf(
-        "Environment" to EnvironmentCredentialsProvider(platform::getenv),
+        "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
         "Ec2InstanceMetadata" to ImdsCredentialsProvider(
             profileOverride = profileName,
             client = lazy {
                 ImdsClient {
-                    platformProvider = platform
+                    platformProvider = this@ProfileCredentialsProvider.platformProvider
                     engine = httpClientEngine
                 }
             },
-            platformProvider = platform
+            platformProvider = platformProvider
         ),
-        "EcsContainer" to EcsCredentialsProvider(platform, httpClientEngine)
+        "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClientEngine)
     )
 
     override suspend fun getCredentials(): Credentials {
         val logger = Logger.getLogger<ProfileCredentialsProvider>()
-        val source = resolveConfigSource(platform, profileName)
+        val source = resolveConfigSource(platformProvider, profileName)
         logger.debug { "Loading credentials from profile `${source.profile}`" }
-        val profiles = loadAwsProfiles(platform, source)
+        val profiles = loadAwsProfiles(platformProvider, source)
         val chain = ProfileChain.resolve(profiles, source.profile)
 
         // if profile is overridden for this provider, attempt to resolve it from there first
         val profileOverride = profileName?.let { profiles[it] }
-        val region = region ?: profileOverride?.get("region") ?: resolveRegion(platform)
+        val region = region ?: profileOverride?.get("region") ?: resolveRegion(platformProvider)
 
         val leaf = chain.leaf.toCredentialsProvider(region)
         logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
@@ -129,7 +129,7 @@ public class ProfileCredentialsProvider(
             webIdentityTokenFile,
             region = region,
             roleSessionName = sessionName,
-            platformProvider = platform,
+            platformProvider = platformProvider,
             httpClientEngine = httpClientEngine
         )
         is LeafProvider.Sso -> SsoCredentialsProvider(
@@ -138,7 +138,7 @@ public class ProfileCredentialsProvider(
             startUrl = ssoStartUrl,
             ssoRegion = ssoRegion,
             httpClientEngine = httpClientEngine,
-            platformProvider = platform
+            platformProvider = platformProvider
         )
     }
 

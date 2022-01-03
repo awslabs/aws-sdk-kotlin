@@ -29,7 +29,7 @@ class ProfileCredentialsProviderTest {
         val testEngine = TestConnection()
 
         val provider = ProfileCredentialsProvider(
-            platform = testProvider,
+            platformProvider = testProvider,
             httpClientEngine = testEngine
         )
         val actual = provider.getCredentials()
@@ -58,7 +58,7 @@ class ProfileCredentialsProviderTest {
 
         val provider = ProfileCredentialsProvider(
             profileName = "my-profile",
-            platform = testProvider,
+            platformProvider = testProvider,
             httpClientEngine = testEngine
         )
         val actual = provider.getCredentials()
@@ -89,7 +89,7 @@ class ProfileCredentialsProviderTest {
         val testEngine = TestConnection()
 
         val provider = ProfileCredentialsProvider(
-            platform = testProvider,
+            platformProvider = testProvider,
             httpClientEngine = testEngine
         )
         val actual = provider.getCredentials()
@@ -125,7 +125,7 @@ class ProfileCredentialsProviderTest {
         }
 
         val provider = ProfileCredentialsProvider(
-            platform = testProvider,
+            platformProvider = testProvider,
             httpClientEngine = testEngine
         )
         val actual = provider.getCredentials()
