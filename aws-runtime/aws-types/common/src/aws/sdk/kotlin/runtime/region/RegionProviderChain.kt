@@ -31,8 +31,10 @@ public open class RegionProviderChain(
             try {
                 val region = provider.getRegion()
                 if (region != null) {
+                    logger.debug { "resolved region ($region) from $provider " }
                     return region
                 }
+                logger.debug { "failed to resolve region from $provider" }
             } catch (ex: Exception) {
                 logger.debug { "unable to load region from $provider: ${ex.message}" }
             }
