@@ -236,4 +236,7 @@ class DefaultChainCredentialsProviderTest {
 
     @Test
     fun testWebIdentityTokenSourceProfile() = executeTest("web_identity_token_source_profile")
+
+    @Test
+    fun testSsoRole() = executeTest("sso_role")
 }
