@@ -29,10 +29,10 @@ internal data class ExpiringValue<T> (val value: T, val expiresAt: Instant)
 @OptIn(ExperimentalTime::class)
 internal class CachedValue<T> (
     private var value: ExpiringValue<T>? = null,
-    private val bufferTime: Duration = Duration.seconds(0),
+    private val bufferTime: Duration = Duration.ZERO,
     private val clock: Clock = Clock.System
 ) {
-    constructor(value: T, expiresAt: Instant, bufferTime: Duration = Duration.seconds(0), clock: Clock = Clock.System) : this(ExpiringValue(value, expiresAt), bufferTime, clock)
+    constructor(value: T, expiresAt: Instant, bufferTime: Duration = Duration.ZERO, clock: Clock = Clock.System) : this(ExpiringValue(value, expiresAt), bufferTime, clock)
     private val mu = Mutex()
 
     /**

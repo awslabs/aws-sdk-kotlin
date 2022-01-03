@@ -24,7 +24,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
 import kotlin.test.Test
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 class AsyncStressTest : TestWithLocalServer() {
@@ -90,7 +90,7 @@ class AsyncStressTest : TestWithLocalServer() {
             }
         }
 
-        withTimeout(Duration.seconds(5)) {
+        withTimeout(5.seconds) {
             repeat(1_000) {
                 async {
                     try {
