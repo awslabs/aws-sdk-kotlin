@@ -38,6 +38,7 @@ public class AwsClientConfigLoadOptions {
     public var sdkLogMode: SdkLogMode = SdkLogMode.Default
 
     // FIXME - expose profile name override and thread through region/cred provider chains
+    // FIXME - expose httpClientEngine and thread through region/cred provider chains
 }
 
 /**

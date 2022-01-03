@@ -34,11 +34,13 @@ import kotlin.time.ExperimentalTime
  */
 public class DefaultChainCredentialsProvider internal constructor(
     private val platformProvider: PlatformProvider = Platform,
-    private val httpClientEngine: HttpClientEngine? = null
+    httpClientEngine: HttpClientEngine? = null
 ) : CredentialsProvider, Closeable {
 
-    // FIXME - need to manage engine lifetime
-    public constructor() : this(Platform, CrtHttpEngine())
+    private val manageEngine = httpClientEngine == null
+    private val httpClientEngine = httpClientEngine ?: CrtHttpEngine()
+
+    public constructor() : this(Platform)
 
     private val chain = CredentialsProviderChain(
         EnvironmentCredentialsProvider(platformProvider::getenv),
@@ -63,6 +65,9 @@ public class DefaultChainCredentialsProvider internal constructor(
 
     override fun close() {
         chain.close()
+        if (manageEngine) {
+            httpClientEngine.close()
+        }
     }
 }
 
