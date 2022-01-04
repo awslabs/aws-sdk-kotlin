@@ -13,7 +13,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.yield
 import kotlin.test.*
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -31,7 +31,7 @@ class CachedValueTest {
     @Test
     fun testExpiration() = runSuspendTest {
         val epoch = Instant.fromEpochSeconds(0)
-        val expiresAt = epoch + Duration.seconds(10)
+        val expiresAt = epoch + 10.seconds
         val clock = ManualClock(epoch)
 
         val value = CachedValue("foo", expiresAt, clock = clock)
@@ -39,7 +39,7 @@ class CachedValueTest {
         assertFalse(value.isExpired())
         assertEquals("foo", value.get())
 
-        clock.advance(Duration.seconds(10))
+        clock.advance(10.seconds)
         assertTrue(value.isExpired())
         assertNull(value.get())
     }
@@ -47,15 +47,15 @@ class CachedValueTest {
     @Test
     fun testExpirationBuffer() = runSuspendTest {
         val epoch = Instant.fromEpochSeconds(0)
-        val expiresAt = epoch + Duration.seconds(100)
+        val expiresAt = epoch + 100.seconds
         val clock = ManualClock(epoch)
 
-        val value = CachedValue("foo", expiresAt, bufferTime = Duration.seconds(30), clock = clock)
+        val value = CachedValue("foo", expiresAt, bufferTime = 30.seconds, clock = clock)
 
         assertFalse(value.isExpired())
         assertEquals("foo", value.get())
 
-        clock.advance(Duration.seconds(70))
+        clock.advance(70.seconds)
         assertTrue(value.isExpired())
         assertNull(value.get())
     }
@@ -63,16 +63,16 @@ class CachedValueTest {
     @Test
     fun testGetOrLoad() = runSuspendTest {
         val epoch = Instant.fromEpochSeconds(0)
-        val expiresAt = epoch + Duration.seconds(100)
+        val expiresAt = epoch + 100.seconds
         val clock = ManualClock(epoch)
 
-        val value = CachedValue("foo", expiresAt, bufferTime = Duration.seconds(30), clock = clock)
+        val value = CachedValue("foo", expiresAt, bufferTime = 30.seconds, clock = clock)
 
         var count = 0
         val mu = Mutex()
         val initializer = suspend {
             mu.withLock { count++ }
-            ExpiringValue("bar", expiresAt + Duration.seconds(count * 100))
+            ExpiringValue("bar", expiresAt + count.seconds * 100)
         }
 
         assertFalse(value.isExpired())
@@ -80,13 +80,13 @@ class CachedValueTest {
         assertEquals(0, count)
 
         // t = 90
-        clock.advance(Duration.seconds(90))
+        clock.advance(90.seconds)
         assertEquals("bar", value.getOrLoad(initializer))
         assertFalse(value.isExpired())
         assertEquals(1, count)
 
         // t = 180
-        clock.advance(Duration.seconds(90))
+        clock.advance(90.seconds)
         repeat(10) {
             async {
                 value.getOrLoad(initializer)
