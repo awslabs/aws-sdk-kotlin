@@ -7,6 +7,8 @@ package aws.sdk.kotlin.runtime.region
 
 import aws.smithy.kotlin.runtime.logging.Logger
 
+// FIXME - this should cache the region as it's not able to change at runtime
+
 /**
  * Composite [RegionProvider] that delegates to a chain of providers.
  * [providers] are consulted in the order given and the first region found is returned
