@@ -387,6 +387,6 @@ class PresignerGenerator : KotlinIntegration {
     // Determine normalizeUriPath setting based on service
     // From https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-header-based-auth.html#canonical-request:
     //   "You do not normalize URI paths for requests to Amazon S3. For example, you may have a bucket with an object named "my-object//example//photo.user". Normalizing the path changes the object name in the request to "my-object/example/photo.user". This is an incorrect path for that object."
-    private fun normalizeUriPathValueForService(serviceId: String): String
-            = useDoubleUriEncodeValueForService(serviceId)
+    private fun normalizeUriPathValueForService(serviceId: String): String =
+        useDoubleUriEncodeValueForService(serviceId)
 }
