@@ -67,7 +67,6 @@ class S3PresignerTest {
         val contents = "presign-test"
 
         testKeyNames.reversed().forEach { keyName ->
-            println("testing $keyName")
             client.putObject {
                 bucket = testBucket
                 key = keyName
