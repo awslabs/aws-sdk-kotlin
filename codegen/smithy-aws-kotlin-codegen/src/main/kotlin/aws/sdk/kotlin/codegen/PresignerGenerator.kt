@@ -56,9 +56,8 @@ data class PresignableOperation(
  * This integration applies to any AWS service that provides presign capability on one or more operations.
  */
 class PresignerGenerator : KotlinIntegration {
-
     /**
-     * Identifies the [PresignConfigFn] section for overriding generated implementation.
+     * Identifies the [PresignConfigFnSection] section for overriding generated implementation.
      */
     object PresignConfigFnSection : SectionId {
         const val CodegenContext = "CodegenContext"
@@ -183,11 +182,12 @@ class PresignerGenerator : KotlinIntegration {
         }
 
         // Generate presign config builder
+        val clientProperties: List<ClientConfigProperty> = getClientProperties(sigv4ServiceName, serviceShape.sdkId)
         val rc = RenderingContext(writer, serviceShape, ctx.model, ctx.symbolProvider, ctx.settings)
-        renderPresignConfigBuilder(writer, presignConfigTypeName, sigv4ServiceName, serviceShape.sdkId, rc)
+        renderPresignConfigBuilder(writer, presignConfigTypeName, rc, clientProperties)
     }
 
-    private fun renderPresignConfigBuilder(writer: KotlinWriter, presignConfigTypeName: String, sigv4ServiceName: String, serviceId: String, renderingContext: RenderingContext<ServiceShape>) {
+    private fun renderPresignConfigBuilder(writer: KotlinWriter, presignConfigTypeName: String, renderingContext: RenderingContext<ServiceShape>, clientProperties: List<ClientConfigProperty>) {
         writer.dokka {
             write("Provides a subset of the service client configuration necessary to presign a request.")
             write("This type can be used to presign requests in cases where an existing service client")
@@ -195,55 +195,12 @@ class PresignerGenerator : KotlinIntegration {
         }
         writer.addImport(AwsRuntimeTypes.Core.ClientException)
         writer.putContext("configClass.name", presignConfigTypeName)
-        val credentialsProviderProperty = ClientConfigProperty {
-            symbol = AwsRuntimeTypes.Types.CredentialsProvider
-            name = "credentialsProvider"
-            documentation = "The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used."
-            baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultChainCredentialsProvider()")
-        }
-        val endpointResolverProperty = ClientConfigProperty {
-            symbol = AwsRuntimeTypes.Endpoint.AwsEndpointResolver
-            name = "endpointResolver"
-            documentation = "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
-            baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultEndpointResolver()")
-        }
-        val region = ClientConfigProperty {
-            symbol = buildSymbol {
-                name = "String"
-                namespace = "kotlin"
-                nullable = true
-            }
-            name = "region"
-            documentation = "AWS region to make requests for"
-            baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            propertyType = ClientConfigPropertyType.Required()
-        }
-        val signingNameProperty = ClientConfigProperty {
-            symbol = KotlinTypes.String
-            name = "signingName"
-            documentation = "Service identifier used to sign requests"
-            baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            propertyType = ClientConfigPropertyType.ConstantValue(sigv4ServiceName.dq())
-        }
-        val serviceIdProperty = ClientConfigProperty {
-            symbol = KotlinTypes.String
-            name = "serviceId"
-            documentation = "Service identifier used to resolve endpoints"
-            baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-            propertyType = ClientConfigPropertyType.ConstantValue(serviceId.dq())
-        }
 
         val ccg = ClientConfigGenerator(
             renderingContext,
             false,
             AwsRuntimeTypes.Signing.ServicePresignConfig,
-            credentialsProviderProperty,
-            endpointResolverProperty,
-            region,
-            signingNameProperty,
-            serviceIdProperty
+            *clientProperties.toTypedArray()
         )
         ccg.render()
     }
@@ -351,4 +308,85 @@ class PresignerGenerator : KotlinIntegration {
             write("return createPresignedRequest(presignConfig, $requestConfigFnName(this, durationSeconds))")
         }
     }
+
+    // Provide all client properties for a presigner client
+    private fun getClientProperties(sigv4ServiceName: String, serviceId: String): List<ClientConfigProperty> =
+        listOf(
+            ClientConfigProperty {
+                symbol = AwsRuntimeTypes.Types.CredentialsProvider
+                name = "credentialsProvider"
+                documentation = "The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used."
+                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultChainCredentialsProvider()")
+            },
+            ClientConfigProperty {
+                symbol = AwsRuntimeTypes.Endpoint.AwsEndpointResolver
+                name = "endpointResolver"
+                documentation = "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
+                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultEndpointResolver()")
+            },
+            ClientConfigProperty {
+                symbol = buildSymbol {
+                    name = "String"
+                    namespace = "kotlin"
+                    nullable = true
+                }
+                name = "region"
+                documentation = "AWS region to make requests for"
+                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                propertyType = ClientConfigPropertyType.Required()
+            },
+            ClientConfigProperty {
+                symbol = KotlinTypes.String
+                name = "signingName"
+                documentation = "Service identifier used to sign requests"
+                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                propertyType = ClientConfigPropertyType.ConstantValue(sigv4ServiceName.dq())
+            },
+            ClientConfigProperty {
+                symbol = KotlinTypes.String
+                name = "serviceId"
+                documentation = "Service identifier used to resolve endpoints"
+                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                propertyType = ClientConfigPropertyType.ConstantValue(serviceId.dq())
+            },
+            ClientConfigProperty {
+                symbol = buildSymbol {
+                    name = "Boolean"
+                    namespace = "kotlin"
+                    nullable = true
+                }
+                name = "useDoubleUriEncode"
+                documentation = "Determines if presigner should double encode Uri"
+                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                propertyType = ClientConfigPropertyType.ConstantValue(useDoubleUriEncodeValueForService(serviceId))
+            },
+            ClientConfigProperty {
+                symbol = buildSymbol {
+                    name = "Boolean"
+                    namespace = "kotlin"
+                    nullable = true
+                }
+                name = "normalizeUriPath"
+                documentation = "Determines if presigned URI path will be normalized"
+                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                propertyType = ClientConfigPropertyType.ConstantValue(normalizeUriPathValueForService(serviceId))
+            }
+        )
+
+    // Determine useDoubleUriEncode setting based on service
+    // From https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html:
+    //   "Each path segment must be URI-encoded twice (except for Amazon S3 which only gets URI-encoded once)."
+    private fun useDoubleUriEncodeValueForService(serviceId: String): String =
+        when (serviceId) {
+            "S3" -> false
+            else -> true
+        }.toString()
+
+    // Determine normalizeUriPath setting based on service
+    // From https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-header-based-auth.html#canonical-request:
+    //   "You do not normalize URI paths for requests to Amazon S3. For example, you may have a bucket with an object named "my-object//example//photo.user". Normalizing the path changes the object name in the request to "my-object/example/photo.user". This is an incorrect path for that object."
+    private fun normalizeUriPathValueForService(serviceId: String): String =
+        useDoubleUriEncodeValueForService(serviceId)
 }
