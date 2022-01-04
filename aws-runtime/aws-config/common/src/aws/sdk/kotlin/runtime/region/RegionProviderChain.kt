@@ -6,8 +6,7 @@
 package aws.sdk.kotlin.runtime.region
 
 import aws.smithy.kotlin.runtime.logging.Logger
-
-// FIXME - this should cache the region as it's not able to change at runtime
+import aws.smithy.kotlin.runtime.util.asyncLazy
 
 /**
  * Composite [RegionProvider] that delegates to a chain of providers.
@@ -20,6 +19,8 @@ public open class RegionProviderChain(
 ) : RegionProvider {
     private val logger = Logger.getLogger<RegionProviderChain>()
 
+    private val resolvedRegion = asyncLazy(::resolveRegion)
+
     init {
         require(providers.isNotEmpty()) { "at least one provider must be in the chain" }
     }
@@ -27,8 +28,9 @@ public open class RegionProviderChain(
     override fun toString(): String =
         (listOf(this) + providers).map { it::class.simpleName }.joinToString(" -> ")
 
-    override suspend fun getRegion(): String? {
+    override suspend fun getRegion(): String? = resolvedRegion.get()
 
+    private suspend fun resolveRegion(): String? {
         for (provider in providers) {
             try {
                 val region = provider.getRegion()
