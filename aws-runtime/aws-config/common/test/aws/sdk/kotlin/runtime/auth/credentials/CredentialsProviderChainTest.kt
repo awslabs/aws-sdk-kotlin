@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import aws.smithy.kotlin.runtime.ClientException
 import io.kotest.matchers.string.shouldContain
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -42,8 +41,11 @@ class CredentialsProviderChainTest {
             TestProvider(null),
         )
 
-        assertFailsWith<ClientException> {
+        val ex = assertFailsWith<CredentialsProviderException> {
             chain.getCredentials()
-        }.message.shouldContain("No credentials could be loaded from the chain: CredentialsProviderChain -> TestProvider -> TestProvider")
+        }
+        ex.message.shouldContain("No credentials could be loaded from the chain: CredentialsProviderChain -> TestProvider -> TestProvider")
+
+        assertEquals(2, ex.suppressedExceptions.size)
     }
 }
