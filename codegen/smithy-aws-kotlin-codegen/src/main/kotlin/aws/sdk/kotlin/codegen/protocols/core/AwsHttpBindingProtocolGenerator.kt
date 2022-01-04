@@ -121,7 +121,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         listOf(
             exceptionBaseSymbol,
             RuntimeTypes.Http.readAll,
-            AwsRuntimeTypes.Core.UnknownServiceErrorException,
             AwsRuntimeTypes.Http.withPayload,
             AwsRuntimeTypes.Http.setAseErrorMetadata,
         ).forEach(writer::addImport)

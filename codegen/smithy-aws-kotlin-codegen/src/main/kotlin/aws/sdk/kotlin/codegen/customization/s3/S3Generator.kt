@@ -65,7 +65,6 @@ class S3Generator : RestXml() {
             exceptionBaseSymbol,
             RuntimeTypes.Http.readAll,
             RuntimeTypes.Http.StatusCode,
-            AwsRuntimeTypes.Core.UnknownServiceErrorException,
             AwsRuntimeTypes.Http.withPayload,
             s3ErrorDetails,
             setS3ErrorMetadata,

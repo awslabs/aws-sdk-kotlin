@@ -76,10 +76,10 @@ class AwsHttpBindingProtocolGeneratorTest {
         }
 
         override val defaultTimestampFormat: TimestampFormatTrait.Format
-            get() = TODO("Unneeded for test")
+            get() = throw RuntimeException("Unneeded for test")
 
         override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver {
-            TODO("Unneeded for test")
+            throw RuntimeException("Unneeded for test")
         }
 
         override fun renderSerializeOperationBody(
@@ -87,7 +87,7 @@ class AwsHttpBindingProtocolGeneratorTest {
             op: OperationShape,
             writer: KotlinWriter
         ) {
-            TODO("Unneeded for test")
+            throw RuntimeException("Unneeded for test")
         }
 
         override fun renderDeserializeOperationBody(
@@ -95,7 +95,7 @@ class AwsHttpBindingProtocolGeneratorTest {
             op: OperationShape,
             writer: KotlinWriter
         ) {
-            TODO("Unneeded for test")
+            throw RuntimeException("Unneeded for test")
         }
 
         override fun renderSerializeDocumentBody(
@@ -103,7 +103,7 @@ class AwsHttpBindingProtocolGeneratorTest {
             shape: Shape,
             writer: KotlinWriter
         ) {
-            TODO("Unneeded for test")
+            throw RuntimeException("Unneeded for test")
         }
 
         override fun renderDeserializeDocumentBody(
@@ -111,7 +111,7 @@ class AwsHttpBindingProtocolGeneratorTest {
             shape: Shape,
             writer: KotlinWriter
         ) {
-            TODO("Unneeded for test")
+            throw RuntimeException("Unneeded for test")
         }
 
         override fun renderDeserializeException(
@@ -119,10 +119,10 @@ class AwsHttpBindingProtocolGeneratorTest {
             shape: Shape,
             writer: KotlinWriter
         ) {
-            TODO("Unneeded for test")
+            throw RuntimeException("Unneeded for test")
         }
 
         override val protocol: ShapeId
-            get() = TODO("Unneeded for test")
+            get() = throw RuntimeException("Unneeded for test")
     }
 }
