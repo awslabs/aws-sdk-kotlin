@@ -43,49 +43,53 @@ class S3PresignerTest {
     @Test
     fun testPutObjectPresigner() = runSuspendTest {
         val contents = "presign-test"
-        val keyName = "put-obj-from-memory-presigned.txt"
+        val keyNames = listOf("put-obj-from-memory-presigned.txt", "nameé.txt", "ZA̡͊͠͝LGΌ")
 
-        val presignedRequest = PutObjectRequest {
-            bucket = testBucket
-            key = keyName
-        }.presign(client.config, 60)
+        keyNames.forEach { keyName ->
+            val presignedRequest = PutObjectRequest {
+                bucket = testBucket
+                key = keyName
+            }.presign(client.config, 60)
 
-        S3TestUtils.responseCodeFromPut(presignedRequest, contents)
+            S3TestUtils.responseCodeFromPut(presignedRequest, contents)
 
-        val req = GetObjectRequest {
-            bucket = testBucket
-            key = keyName
+            val req = GetObjectRequest {
+                bucket = testBucket
+                key = keyName
+            }
+            val roundTrippedContents = client.getObject(req) { it.body?.decodeToString() }
+
+            assertEquals(contents, roundTrippedContents)
         }
-        val roundTrippedContents = client.getObject(req) { it.body?.decodeToString() }
-
-        assertEquals(contents, roundTrippedContents)
     }
 
     @Test
     fun testGetObjectPresigner() = runSuspendTest {
         val contents = "presign-test"
-        val keyName = "put-obj-from-memory-presigned.txt"
+        val keyNames = listOf("put-obj-from-memory-presigned.txt", "nameé.txt", "ZA̡͊͠͝LGΌ")
 
-        client.putObject {
-            bucket = testBucket
-            key = keyName
-            body = ByteStream.fromString(contents)
-        }
+        keyNames.forEach { keyName ->
+            client.putObject {
+                bucket = testBucket
+                key = keyName
+                body = ByteStream.fromString(contents)
+            }
 
-        val presignedRequest = GetObjectRequest {
-            bucket = testBucket
-            key = keyName
-        }.presign(client.config, 60)
+            val presignedRequest = GetObjectRequest {
+                bucket = testBucket
+                key = keyName
+            }.presign(client.config, 60)
 
-        CrtHttpEngine().use { engine ->
-            val httpClient = sdkHttpClient(engine)
+            CrtHttpEngine().use { engine ->
+                val httpClient = sdkHttpClient(engine)
 
-            val call = httpClient.call(presignedRequest)
-            call.complete()
+                val call = httpClient.call(presignedRequest)
+                call.complete()
 
-            assertEquals(200, call.response.status.value)
-            val body = call.response.body.toByteStream()?.decodeToString()
-            assertEquals(contents, body)
+                assertEquals(200, call.response.status.value)
+                val body = call.response.body.toByteStream()?.decodeToString()
+                assertEquals(contents, body)
+            }
         }
     }
 }
