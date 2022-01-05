@@ -22,7 +22,7 @@ class EnvironmentCredentialsProviderTest {
             AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def",
             AwsSdkSetting.AwsSessionToken.environmentVariable to "ghi",
         )
-        assertEquals(provider.getCredentials(), Credentials("abc", "def", "ghi"))
+        assertEquals(provider.getCredentials(), Credentials("abc", "def", "ghi", providerName = "Environment"))
     }
 
     @Test
@@ -31,7 +31,7 @@ class EnvironmentCredentialsProviderTest {
             AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc",
             AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def",
         )
-        assertEquals(provider.getCredentials(), Credentials("abc", "def", null))
+        assertEquals(provider.getCredentials(), Credentials("abc", "def", null, providerName = "Environment"))
     }
 
     @Test

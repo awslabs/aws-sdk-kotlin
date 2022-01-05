@@ -14,6 +14,8 @@ import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.*
 
+private const val PROVIDER_NAME = "SSO"
+
 /**
  * [CredentialsProvider] that uses AWS Single Sign-On (AWS SSO) to source credentials. The
  * provider is expected to be configured for the AWS Region where the AWS SSO user portal is hosted.
@@ -114,7 +116,8 @@ public class SsoCredentialsProvider public constructor(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in SSO roleCredentials response" },
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in SSO roleCredentials response" },
             sessionToken = roleCredentials.sessionToken,
-            expiration = Instant.fromEpochSeconds(roleCredentials.expiration)
+            expiration = Instant.fromEpochSeconds(roleCredentials.expiration),
+            PROVIDER_NAME
         )
     }
 

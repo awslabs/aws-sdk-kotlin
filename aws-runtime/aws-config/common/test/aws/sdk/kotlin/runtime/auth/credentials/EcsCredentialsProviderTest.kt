@@ -37,7 +37,8 @@ class EcsCredentialsProviderTest {
         "AKID",
         "test-secret",
         "test-token",
-        expectedExpiration
+        expectedExpiration,
+        "EcsContainer"
     )
 
     private fun ecsResponse(): HttpResponse {

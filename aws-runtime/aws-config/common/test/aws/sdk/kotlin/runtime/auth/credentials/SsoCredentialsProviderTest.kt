@@ -200,7 +200,7 @@ class SsoCredentialsProviderTest {
         )
 
         val actual = provider.getCredentials()
-        val expected = Credentials("AKID", "secret", "session-token", expectedExpiration)
+        val expected = Credentials("AKID", "secret", "session-token", expectedExpiration, "SSO")
         assertEquals(expected, actual)
     }
 }
