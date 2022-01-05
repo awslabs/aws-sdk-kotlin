@@ -33,27 +33,24 @@ internal data class ProfileChain(
 ) {
     companion object {
         internal fun resolve(profiles: ProfileMap, profileName: String): ProfileChain {
-            val visited = mutableListOf<String>()
+            val visited = mutableSetOf<String>()
             val chain = mutableListOf<RoleArn>()
             var sourceProfileName = profileName
             var leaf: LeafProvider?
 
             loop@while (true) {
                 val profile = profiles.getOrThrow(sourceProfileName) {
-                    val msg = if (visited.isEmpty()) {
+                    if (visited.isEmpty()) {
                         "could not find source profile $sourceProfileName"
                     } else {
                         "could not find source profile $sourceProfileName referenced from ${visited.last()}"
                     }
-                    ProviderConfigurationException(msg)
                 }
 
-                if (visited.contains(sourceProfileName)) {
+                if (!visited.add(sourceProfileName)) {
                     // we're in a loop, break out
                     throw ProviderConfigurationException("profile formed an infinite loop: ${visited.joinToString(separator = " -> ")} -> $sourceProfileName")
                 }
-
-                visited.add(sourceProfileName)
 
                 // when chaining assume role profiles, SDKs MUST terminate the chain as soon as they hit a profile with static credentials
                 if (visited.size > 1) {
@@ -88,8 +85,8 @@ internal data class ProfileChain(
     }
 }
 
-private inline fun ProfileMap.getOrThrow(name: String, lazyException: () -> Throwable): AwsProfile {
-    val props = get(name) ?: throw lazyException()
+private inline fun ProfileMap.getOrThrow(name: String, lazyMessage: () -> String): AwsProfile {
+    val props = get(name) ?: throw ProviderConfigurationException(lazyMessage())
     return AwsProfile(name, props)
 }
 
@@ -155,9 +152,7 @@ private fun AwsProfile.webIdentityTokenCredsOrNull(): LeafProvider? {
     return when {
         tokenFile == null -> null
         roleArn == null -> throw ProviderConfigurationException("profile ($name) missing `$ROLE_ARN`")
-        else -> {
-            LeafProvider.WebIdentityTokenRole(roleArn, tokenFile, sessionName)
-        }
+        else -> LeafProvider.WebIdentityTokenRole(roleArn, tokenFile, sessionName)
     }
 }
 
@@ -186,8 +181,8 @@ private fun AwsProfile.staticCreds(): LeafProvider {
     val secretKey = get(AWS_SECRET_ACCESS_KEY)
     return when {
         accessKeyId == null && secretKey == null -> throw ProviderConfigurationException("profile ($name) did not contain credential information")
-        accessKeyId == null -> throw throw ProviderConfigurationException("profile ($name) missing `aws_access_key_id`")
-        secretKey == null -> throw throw ProviderConfigurationException("profile ($name) missing `aws_secret_access_key`")
+        accessKeyId == null -> throw ProviderConfigurationException("profile ($name) missing `aws_access_key_id`")
+        secretKey == null -> throw ProviderConfigurationException("profile ($name) missing `aws_secret_access_key`")
         else -> {
             val sessionToken = get(AWS_SESSION_TOKEN)
             LeafProvider.AccessKey(Credentials(accessKeyId, secretKey, sessionToken))
@@ -226,8 +221,7 @@ private fun AwsProfile.chainProvider(): NextProfile {
             NextProfile.Named(sourceProfile)
         }
         // loop back into this profile and pick up the credential source
-        sourceProfile == null && credSource != null -> NextProfile.SelfReference
-        else -> error("shouldn't be able to get here, this is a bug please file a ticket")
+        else -> NextProfile.SelfReference
     }
 }
 
