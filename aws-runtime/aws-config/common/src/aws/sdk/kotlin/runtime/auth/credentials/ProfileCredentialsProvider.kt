@@ -93,7 +93,7 @@ public class ProfileCredentialsProvider(
     override suspend fun getCredentials(): Credentials {
         val logger = Logger.getLogger<ProfileCredentialsProvider>()
         val source = resolveConfigSource(platform, profileName)
-        logger.debug { "loading credentials from profile `${source.profile}`" }
+        logger.debug { "Loading credentials from profile `${source.profile}`" }
         val profiles = loadAwsProfiles(platform, source)
         val chain = ProfileChain.resolve(profiles, source.profile)
 
@@ -102,16 +102,16 @@ public class ProfileCredentialsProvider(
         val region = region ?: profileOverride?.get("region") ?: resolveRegion(platform)
 
         val leaf = chain.leaf.toCredentialsProvider(region)
-        logger.debug { "resolving credentials from ${chain.leaf.description()}" }
+        logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
         var creds = leaf.getCredentials()
 
         chain.roles.forEach { roleArn ->
-            logger.debug { "assuming role `${roleArn.roleArn}`" }
+            logger.debug { "Assuming role `${roleArn.roleArn}`" }
             val assumeProvider = roleArn.toCredentialsProvider(creds, region)
             creds = assumeProvider.getCredentials()
         }
 
-        logger.debug { "obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
+        logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
         return creds
     }
 
