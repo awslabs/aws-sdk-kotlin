@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials.profile
 
 import aws.sdk.kotlin.runtime.auth.credentials.Credentials
 import aws.sdk.kotlin.runtime.auth.credentials.ProviderConfigurationException
+import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProviderResult.Err
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.ProfileMap
 
@@ -141,18 +142,54 @@ private fun AwsProfile.roleArnOrNull(): RoleArn? {
     )
 }
 
+private sealed class LeafProviderResult {
+    /**
+     * Success, provider found and configured
+     */
+    data class Ok(val provider: LeafProvider) : LeafProviderResult()
+
+    /**
+     * Provider was found but had missing or invalid configuration
+     */
+    data class Err(val errorMessage: String) : LeafProviderResult()
+}
+
+/**
+ * Unwrap the result or throw an exception if the result is [Err]
+ */
+private fun LeafProviderResult.unwrap(): LeafProvider = when (this) {
+    is LeafProviderResult.Ok -> provider
+    is Err -> throw ProviderConfigurationException(errorMessage)
+}
+
+/**
+ * Returns the current result if not null or computes it by invoking [fn]
+ */
+private inline fun LeafProviderResult?.unwrapOrElse(fn: () -> LeafProviderResult): LeafProviderResult = when (this) {
+    null -> fn()
+    else -> this
+}
+
+/**
+ * Return current result if not null, otherwise use the result from calling [fn]
+ */
+private inline fun LeafProviderResult?.orElse(fn: () -> LeafProviderResult?): LeafProviderResult? = when (this) {
+    null -> fn()
+    else -> this
+}
+
 /**
  * Attempt to load [LeafProvider.WebIdentityTokenRole] from the current profile or `null` if the profile
  * does not contain a web identity token provider
  */
-private fun AwsProfile.webIdentityTokenCredsOrNull(): LeafProvider? {
+private fun AwsProfile.webIdentityTokenCreds(): LeafProviderResult? {
     val roleArn = get(ROLE_ARN)
     val tokenFile = get(WEB_IDENTITY_TOKEN_FILE)
     val sessionName = get(ROLE_SESSION_NAME)
     return when {
         tokenFile == null -> null
-        roleArn == null -> throw ProviderConfigurationException("profile ($name) missing `$ROLE_ARN`")
-        else -> LeafProvider.WebIdentityTokenRole(roleArn, tokenFile, sessionName)
+        roleArn == null -> LeafProviderResult.Err("profile ($name) missing `$ROLE_ARN`")
+        else -> LeafProviderResult.Ok(LeafProvider.WebIdentityTokenRole(roleArn, tokenFile, sessionName))
     }
 }
 
@@ -160,32 +197,33 @@ private fun AwsProfile.webIdentityTokenCredsOrNull(): LeafProvider? {
  * Attempt to load [LeafProvider.Sso] from the current profile or `null` if the current profile does not contain
  * an SSO provider
  */
-private fun AwsProfile.ssoCredsOrNull(): LeafProvider? {
+private fun AwsProfile.ssoCreds(): LeafProviderResult? {
     if (!contains(SSO_START_URL) && !contains(SSO_REGION) && !contains(SSO_ACCOUNT_ID) && !contains(SSO_ROLE_NAME)) return null
 
     // if one or more of the above configuration values is present the profile MUST be resolved by the SSO credential provider.
-    val startUrl = get(SSO_START_URL) ?: throw ProviderConfigurationException("profile ($name) missing `$SSO_START_URL`")
-    val ssoRegion = get(SSO_REGION) ?: throw ProviderConfigurationException("profile ($name) missing `$SSO_REGION`")
-    val accountId = get(SSO_ACCOUNT_ID) ?: throw ProviderConfigurationException("profile ($name) missing `$SSO_ACCOUNT_ID`")
-    val roleName = get(SSO_ROLE_NAME) ?: throw ProviderConfigurationException("profile ($name) missing `$SSO_ROLE_NAME`")
+    val startUrl = get(SSO_START_URL) ?: return LeafProviderResult.Err("profile ($name) missing `$SSO_START_URL`")
+    val ssoRegion = get(SSO_REGION) ?: return LeafProviderResult.Err("profile ($name) missing `$SSO_REGION`")
+    val accountId = get(SSO_ACCOUNT_ID) ?: return LeafProviderResult.Err("profile ($name) missing `$SSO_ACCOUNT_ID`")
+    val roleName = get(SSO_ROLE_NAME) ?: return LeafProviderResult.Err("profile ($name) missing `$SSO_ROLE_NAME`")
 
-    return LeafProvider.Sso(startUrl, ssoRegion, accountId, roleName)
+    return LeafProviderResult.Ok(LeafProvider.Sso(startUrl, ssoRegion, accountId, roleName))
 }
 
 /**
  * Load [LeafProvider.AccessKey] from the current profile or throw an exception if the profile does not contain
  * credentials
  */
-private fun AwsProfile.staticCreds(): LeafProvider {
+private fun AwsProfile.staticCreds(): LeafProviderResult {
     val accessKeyId = get(AWS_ACCESS_KEY_ID)
     val secretKey = get(AWS_SECRET_ACCESS_KEY)
     return when {
-        accessKeyId == null && secretKey == null -> throw ProviderConfigurationException("profile ($name) did not contain credential information")
-        accessKeyId == null -> throw ProviderConfigurationException("profile ($name) missing `aws_access_key_id`")
-        secretKey == null -> throw ProviderConfigurationException("profile ($name) missing `aws_secret_access_key`")
+        accessKeyId == null && secretKey == null -> LeafProviderResult.Err("profile ($name) did not contain credential information")
+        accessKeyId == null -> LeafProviderResult.Err("profile ($name) missing `aws_access_key_id`")
+        secretKey == null -> LeafProviderResult.Err("profile ($name) missing `aws_secret_access_key`")
         else -> {
             val sessionToken = get(AWS_SESSION_TOKEN)
-            LeafProvider.AccessKey(Credentials(accessKeyId, secretKey, sessionToken))
+            val provider = LeafProvider.AccessKey(Credentials(accessKeyId, secretKey, sessionToken))
+            LeafProviderResult.Ok(provider)
         }
     }
 }
@@ -194,10 +232,9 @@ private fun AwsProfile.staticCreds(): LeafProvider {
  * Attempt to load [LeafProvider.AccessKey] from the current profile or `null` if the current profile does not contain
  * credentials
  */
-private fun AwsProfile.staticCredsOrNull(): LeafProvider? = try {
-    staticCreds()
-} catch (_: ProviderConfigurationException) {
-    null
+private fun AwsProfile.staticCredsOrNull(): LeafProvider? = when (val result = staticCreds()) {
+    is LeafProviderResult.Ok -> result.provider
+    else -> null
 }
 
 private sealed class NextProfile {
@@ -233,7 +270,10 @@ private fun AwsProfile.leafProvider(): LeafProvider {
     val credSource = get(CREDENTIAL_SOURCE)
     if (credSource != null) return LeafProvider.NamedSource(credSource)
 
-    return webIdentityTokenCredsOrNull()
-        ?: ssoCredsOrNull()
-        ?: staticCreds()
+    // we want to stop on errors in earlier providers to get the right exception message, thus we take the first
+    // non-null LeafProviderResult we encounter
+    return webIdentityTokenCreds()
+        .orElse(::ssoCreds)
+        .unwrapOrElse(::staticCreds)
+        .unwrap()
 }
