@@ -21,7 +21,6 @@ object AwsRuntimeTypes {
         val AwsClientOption = runtimeSymbol("AwsClientOption", AwsKotlinDependency.AWS_CORE, "client")
         val AuthAttributes = runtimeSymbol("AuthAttributes", AwsKotlinDependency.AWS_CORE, "execution")
         val AwsErrorMetadata = runtimeSymbol("AwsErrorMetadata", AwsKotlinDependency.AWS_CORE)
-        val UnknownServiceErrorException = runtimeSymbol("UnknownServiceErrorException", AwsKotlinDependency.AWS_CORE)
         val ClientException = runtimeSymbol("ClientException", AwsKotlinDependency.AWS_CORE)
     }
 

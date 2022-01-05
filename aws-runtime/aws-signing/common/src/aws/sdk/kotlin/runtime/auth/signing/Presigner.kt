@@ -29,11 +29,13 @@ import aws.sdk.kotlin.crt.http.HttpRequest as CrtHttpRequest
 /**
  * The service configuration details for a presigned request
  *
- * @property region The AWS region to which the request is going.
- * @property signingName The signing name used to sign the request.
- * @property serviceId the service id used to sign the request.
- * @property endpointResolver Resolves the endpoint to determine where the request should be sent.
- * @property credentialsProvider Resolves credentials to sign the request with.
+ * @property region The AWS region to which the request is going
+ * @property signingName The signing name used to sign the request
+ * @property serviceId the service id used to sign the request
+ * @property endpointResolver Resolves the endpoint to determine where the request should be sent
+ * @property credentialsProvider Resolves credentials to sign the request with
+ * @property useDoubleUriEncode Determines if presigner should double encode Uri
+ * @property normalizeUriPath Determines if presigned URI path will be normalized
  */
 public interface ServicePresignConfig {
     public val region: String
@@ -41,12 +43,14 @@ public interface ServicePresignConfig {
     public val serviceId: String
     public val endpointResolver: AwsEndpointResolver
     public val credentialsProvider: CredentialsProvider
+    public val useDoubleUriEncode: Boolean
+    public val normalizeUriPath: Boolean
 }
 
 /**
  * Where the signature is placed in the presigned request
- * @property HEADER Signing details to be placed in a header.
- * @property QUERY_STRING Signing details to be added to the query string.
+ * @property HEADER Signing details to be placed in a header
+ * @property QUERY_STRING Signing details to be added to the query string
  */
 public enum class SigningLocation {
     HEADER,
@@ -58,7 +62,7 @@ public enum class SigningLocation {
  * @property method HTTP method of the presigned request
  * @property path HTTP path of the presigned request
  * @property queryString the HTTP querystring of the presigned request
- * @property durationSeconds Number of seconds that the request will be valid for after being signed.
+ * @property durationSeconds Number of seconds that the request will be valid for after being signed
  * @property signBody Specifies if the request body should be signed
  * @property signingLocation Specifies where the signing information should be placed in the presigned request
  * @property additionalHeaders Custom headers that should be signed as part of the request
@@ -74,10 +78,10 @@ public data class PresignedRequestConfig(
 )
 
 /**
- * Generate a presigned request given the service and operation configurations.
+ * Generate a presigned request given the service and operation configurations
  * @param serviceConfig The service configuration to use in signing the request
  * @param requestConfig The presign configuration to use in signing the request
- * @return a [HttpRequest] that can be executed by any HTTP client within the specified duration.
+ * @return a [HttpRequest] that can be executed by any HTTP client within the specified duration
  */
 @InternalSdkApi
 public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, requestConfig: PresignedRequestConfig): HttpRequest {
@@ -92,6 +96,8 @@ public suspend fun createPresignedRequest(serviceConfig: ServicePresignConfig, r
         signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
         signedBodyValue = if (requestConfig.signBody) null else AwsSignedBodyValue.UNSIGNED_PAYLOAD
         expirationInSeconds = requestConfig.durationSeconds
+        useDoubleUriEncode = serviceConfig.useDoubleUriEncode
+        normalizeUriPath = serviceConfig.normalizeUriPath
     }
 
     val unsignedUrl = Url(

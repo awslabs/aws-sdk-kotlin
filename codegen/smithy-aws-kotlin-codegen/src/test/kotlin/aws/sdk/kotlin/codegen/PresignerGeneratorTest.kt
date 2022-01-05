@@ -227,9 +227,11 @@ class PresignerGeneratorTest {
             class TestPresignConfig private constructor(builder: Builder): ServicePresignConfig {
                 override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
                 override val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
+                override val normalizeUriPath: Boolean = true
                 override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
                 override val serviceId: String = "example"
                 override val signingName: String = "example-signing-name"
+                override val useDoubleUriEncode: Boolean = true
                 companion object {
                     inline operator fun invoke(block: Builder.() -> kotlin.Unit): ServicePresignConfig = Builder().apply(block).build()
                 }
