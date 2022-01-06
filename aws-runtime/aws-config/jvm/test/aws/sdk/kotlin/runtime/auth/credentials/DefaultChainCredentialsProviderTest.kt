@@ -239,4 +239,7 @@ class DefaultChainCredentialsProviderTest {
 
     @Test
     fun testSsoRole() = executeTest("sso_role")
+
+    @Test
+    fun testStsRetryOnError() = executeTest("retry_on_error")
 }
