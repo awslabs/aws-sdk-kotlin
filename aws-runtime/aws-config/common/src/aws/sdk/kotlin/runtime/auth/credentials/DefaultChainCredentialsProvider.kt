@@ -37,10 +37,10 @@ public class DefaultChainCredentialsProvider internal constructor(
     httpClientEngine: HttpClientEngine? = null
 ) : CredentialsProvider, Closeable {
 
+    public constructor() : this(Platform)
+
     private val manageEngine = httpClientEngine == null
     private val httpClientEngine = httpClientEngine ?: CrtHttpEngine()
-
-    public constructor() : this(Platform)
 
     private val chain = CredentialsProviderChain(
         EnvironmentCredentialsProvider(platformProvider::getenv),
@@ -64,7 +64,7 @@ public class DefaultChainCredentialsProvider internal constructor(
     override suspend fun getCredentials(): Credentials = provider.getCredentials()
 
     override fun close() {
-        chain.close()
+        provider.close()
         if (manageEngine) {
             httpClientEngine.close()
         }

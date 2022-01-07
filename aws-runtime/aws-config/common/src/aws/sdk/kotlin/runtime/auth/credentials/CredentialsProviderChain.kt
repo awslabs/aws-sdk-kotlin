@@ -45,6 +45,19 @@ public open class CredentialsProviderChain(
     }
 
     override fun close() {
-        providers.forEach { (it as? Closeable)?.close() }
+        var closeEx: Throwable? = null
+        providers.forEach {
+            try {
+                (it as? Closeable)?.close()
+            } catch (ex: Exception) {
+                if (closeEx == null) {
+                    closeEx = ex
+                } else {
+                    closeEx!!.addSuppressed(ex)
+                }
+            }
+
+            if (closeEx != null) throw closeEx!!
+        }
     }
 }
