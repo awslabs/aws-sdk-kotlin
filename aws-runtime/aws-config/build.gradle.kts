@@ -172,9 +172,11 @@ codegen.projections.all {
     }
 }
 
-// Necessary to avoid Gradle problems identifying correct variant of aws-config
+// Necessary to avoid Gradle problems identifying correct variant of aws-config. This stems from the smithy-gradle
+plugin (used by codegen plugin) applying the Java plugin which creates these configurations.
 listOf("apiElements", "runtimeElements").forEach {
     configurations.named(it) {
         isCanBeConsumed = false
     }
 }
+
