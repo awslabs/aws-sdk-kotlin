@@ -5,16 +5,18 @@
 
 package aws.sdk.kotlin.runtime.config
 
+import aws.sdk.kotlin.runtime.auth.credentials.BorrowedCredentialsProvider
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
 import aws.sdk.kotlin.runtime.client.AwsClientConfig
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.client.SdkLogMode
+import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
- * Options that control how an [aws.sdk.kotlin.runtime.client.AwsClientConfig] is resolved
+ * Options that control how an [aws.sdk.kotlin.runtime.client.AwsClientConfig] is resolved.
  */
 public class AwsClientConfigLoadOptions {
     // TODO - see Go SDK for an idea of possible knobs
@@ -55,7 +57,7 @@ internal suspend fun loadAwsClientConfig(
     val opts = AwsClientConfigLoadOptions().apply(block)
 
     val region = opts.region ?: resolveRegion(platformProvider)
-    val credentialsProvider = opts.credentialsProvider ?: DefaultChainCredentialsProvider()
+    val credentialsProvider = opts.credentialsProvider?.let { BorrowedCredentialsProvider(it) } ?: DefaultChainCredentialsProvider()
     val sdkLogMode = opts.sdkLogMode
 
     return ResolvedAwsConfig(region, credentialsProvider, sdkLogMode)
@@ -65,4 +67,8 @@ private data class ResolvedAwsConfig(
     override val region: String,
     override val credentialsProvider: CredentialsProvider,
     override val sdkLogMode: SdkLogMode,
-) : AwsClientConfig
+) : AwsClientConfig {
+    override fun close() {
+        (credentialsProvider as? Closeable)?.close()
+    }
+}

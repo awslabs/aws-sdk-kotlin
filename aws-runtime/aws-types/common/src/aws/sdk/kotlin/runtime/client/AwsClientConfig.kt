@@ -7,13 +7,12 @@ package aws.sdk.kotlin.runtime.client
 
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.client.SdkLogMode
-
-// FIXME - needs to implement closeable
+import aws.smithy.kotlin.runtime.io.Closeable
 
 /**
  * Shared AWS service client configuration that all AWS service clients implement as part of their configuration state.
  */
-public interface AwsClientConfig {
+public interface AwsClientConfig : Closeable {
     /**
      * The AWS region to make requests to
      */
@@ -28,6 +27,9 @@ public interface AwsClientConfig {
      * The [SdkLogMode] to apply to service clients.
      */
     public val sdkLogMode: SdkLogMode
+
+    // provide default no-op close
+    override fun close() { }
 
     public companion object {}
 }
