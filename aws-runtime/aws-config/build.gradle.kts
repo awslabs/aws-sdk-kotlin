@@ -161,7 +161,6 @@ tasks.withType<org.gradle.jvm.tasks.Jar> {
     dependsOn(codegenTask)
 }
 
-
 codegen.projections.all {
     // add this projected source dir to the common sourceSet
     // NOTE - build.gradle.kts is still being generated, it's NOT used though
@@ -170,5 +169,12 @@ codegen.projections.all {
     kotlin.sourceSets.commonMain {
         println("added $projectedSrcDir to common sourceSet")
         kotlin.srcDir(projectedSrcDir)
+    }
+}
+
+// Necessary to avoid Gradle problems identifying correct variant of aws-config
+listOf("apiElements", "runtimeElements").forEach {
+    configurations.named(it) {
+        isCanBeConsumed = false
     }
 }
