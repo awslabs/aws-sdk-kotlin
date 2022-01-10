@@ -45,19 +45,18 @@ public open class CredentialsProviderChain(
     }
 
     override fun close() {
-        var closeEx: Throwable? = null
-        providers.forEach {
+        val exceptions = providers.mapNotNull {
             try {
                 (it as? Closeable)?.close()
+                null
             } catch (ex: Exception) {
-                if (closeEx == null) {
-                    closeEx = ex
-                } else {
-                    closeEx!!.addSuppressed(ex)
-                }
+                ex
             }
-
-            if (closeEx != null) throw closeEx!!
+        }
+        if (exceptions.isNotEmpty()) {
+            val ex = exceptions.first()
+            exceptions.drop(1).forEach(ex::addSuppressed)
+            throw ex
         }
     }
 }
