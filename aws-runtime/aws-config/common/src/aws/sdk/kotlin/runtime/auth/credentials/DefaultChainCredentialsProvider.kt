@@ -5,28 +5,83 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.crt.auth.credentials.build
-import aws.sdk.kotlin.runtime.crt.SdkDefaultIO
-import aws.sdk.kotlin.crt.auth.credentials.DefaultChainCredentialsProvider as DefaultChainCredentialsProviderCrt
+import aws.sdk.kotlin.runtime.config.imds.ImdsClient
+import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
+import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlin.time.ExperimentalTime
+
+// TODO - allow region, profile, etc to be passed in
 
 /**
- * Creates the default provider chain used by most AWS SDKs.
+ * Default AWS credential provider chain used by most AWS SDKs.
  *
- * Generally:
+ * Resolution order:
  *
- * (1) Environment
- * (2) Profile
- * (3) (conditional, off by default) ECS
- * (4) (conditional, on by default) EC2 Instance Metadata
+ * 1. Environment variables ([EnvironmentCredentialsProvider])
+ * 2. Profile ([ProfileCredentialsProvider])
+ * 3. Web Identity Tokens ([StsWebIdentityCredentialsProvider]]
+ * 4. ECS (IAM roles for tasks) ([EcsCredentialsProvider])
+ * 5. EC2 Instance Metadata (IMDSv2) ([ImdsCredentialsProvider])
  *
- * Support for environmental control of the default provider chain is not yet implemented.
+ * The chain is decorated with a [CachedCredentialsProvider].
+ *
+ * Closing the chain will close all child providers that implement [Closeable].
  *
  * @return the newly-constructed credentials provider
  */
-public class DefaultChainCredentialsProvider : CrtCredentialsProvider {
-    override val crtProvider: DefaultChainCredentialsProviderCrt by lazy {
-        DefaultChainCredentialsProviderCrt.build {
-            clientBootstrap = SdkDefaultIO.ClientBootstrap
+public class DefaultChainCredentialsProvider internal constructor(
+    private val platformProvider: PlatformProvider = Platform,
+    httpClientEngine: HttpClientEngine? = null
+) : CredentialsProvider, Closeable {
+
+    public constructor() : this(Platform)
+
+    private val manageEngine = httpClientEngine == null
+    private val httpClientEngine = httpClientEngine ?: CrtHttpEngine()
+
+    private val chain = CredentialsProviderChain(
+        EnvironmentCredentialsProvider(platformProvider::getenv),
+        ProfileCredentialsProvider(platformProvider = platformProvider, httpClientEngine = httpClientEngine),
+        // STS web identity provider can be constructed from either the profile OR 100% from the environment
+        StsWebIdentityProvider(platformProvider = platformProvider, httpClientEngine = httpClientEngine),
+        EcsCredentialsProvider(platformProvider, httpClientEngine),
+        ImdsCredentialsProvider(
+            client = lazy {
+                ImdsClient {
+                    platformProvider = this@DefaultChainCredentialsProvider.platformProvider
+                    engine = httpClientEngine
+                }
+            },
+            platformProvider = platformProvider
+        )
+    )
+
+    private val provider = CachedCredentialsProvider(chain)
+
+    override suspend fun getCredentials(): Credentials = provider.getCredentials()
+
+    override fun close() {
+        provider.close()
+        if (manageEngine) {
+            httpClientEngine.close()
         }
+    }
+}
+
+/**
+ * Wrapper around [StsWebIdentityCredentialsProvider] that delays any exceptions until [getCredentials] is invoked.
+ * This allows it to be part of the default chain and any failures result in the chain to move onto the next provider.
+ */
+@OptIn(ExperimentalTime::class)
+private class StsWebIdentityProvider(
+    val platformProvider: PlatformProvider,
+    val httpClientEngine: HttpClientEngine? = null
+) : CredentialsProvider {
+    override suspend fun getCredentials(): Credentials {
+        val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClientEngine = httpClientEngine)
+        return wrapped.getCredentials()
     }
 }

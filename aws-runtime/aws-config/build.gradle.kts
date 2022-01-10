@@ -12,8 +12,6 @@ description = "Support for AWS configuration"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.config"
 
 val smithyKotlinVersion: String by project
-val crtKotlinVersion: String by project
-
 val kotestVersion: String by project
 
 kotlin {
@@ -31,10 +29,6 @@ kotlin {
                 // parsing common JSON credentials responses
                 implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
 
-
-                // credential providers
-                implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
-                implementation(project(":aws-runtime:crt-util"))
 
                 // additional dependencies required by generated sts provider
                 implementation("aws.smithy.kotlin:serde-form-url:$smithyKotlinVersion")

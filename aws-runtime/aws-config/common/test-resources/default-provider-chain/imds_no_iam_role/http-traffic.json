@@ -1,0 +1,48 @@
+[
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/api/token",
+      "headers": {
+        "x-aws-ec2-metadata-token-ttl-seconds": "21600"
+      },
+      "method": "PUT",
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "version": "HTTP/1.1",
+      "headers": {
+        "content-type": "text/plain",
+        "date": "Mon, 20 Sep 2021 20:51:52 GMT",
+        "x-aws-ec2-metadata-token-ttl-seconds": "21600",
+        "connection": "close",
+        "server": "EC2ws",
+        "content-length": "56"
+      },
+      "body": "faketoken"
+    }
+  },
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/meta-data/iam/security-credentials",
+      "headers": {
+        "x-aws-ec2-metadata-token": "faketoken"
+      },
+      "method": "GET",
+      "body": null
+    },
+    "response": {
+      "status": 404,
+      "version": "HTTP/1.1",
+      "headers": {
+        "content-length": "339",
+        "date": "Mon, 20 Sep 2021 20:51:52 GMT",
+        "content-type": "text/html",
+        "x-aws-ec2-metadata-token-ttl-seconds": "21600",
+        "connection": "close",
+        "server": "EC2ws"
+      },
+      "body": "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n\t\t \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n <head>\n  <title>404 - Not Found</title>\n </head>\n <body>\n  <h1>404 - Not Found</h1>\n </body>\n</html>\n"
+    }
+  }
+]

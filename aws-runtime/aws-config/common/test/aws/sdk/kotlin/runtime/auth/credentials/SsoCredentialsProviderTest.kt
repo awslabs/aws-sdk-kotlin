@@ -16,6 +16,7 @@ import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
+import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import io.kotest.matchers.string.shouldContain
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -160,7 +161,7 @@ class SsoCredentialsProviderTest {
               "accessKeyId": "AKID",
               "secretAccessKey": "secret",
               "sessionToken": "session-token",
-              "expiration": ${expectedExpiration.epochSeconds}
+              "expiration": ${expectedExpiration.epochMilliseconds}
            }
         } 
         """

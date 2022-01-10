@@ -8,6 +8,8 @@ package aws.sdk.kotlin.runtime.client
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.client.SdkLogMode
 
+// FIXME - needs to implement closeable
+
 /**
  * Shared AWS service client configuration that all AWS service clients implement as part of their configuration state.
  */
