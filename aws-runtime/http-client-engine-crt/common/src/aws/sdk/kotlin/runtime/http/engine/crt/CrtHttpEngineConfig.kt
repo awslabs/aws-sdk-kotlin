@@ -17,6 +17,9 @@ public class CrtHttpEngineConfig private constructor(builder: Builder) : HttpCli
          * The default engine config. Most clients should use this.
          */
         public val Default: CrtHttpEngineConfig = CrtHttpEngineConfig(Builder())
+
+        public operator fun invoke(block: Builder.() -> Unit): CrtHttpEngineConfig =
+            Builder().apply(block).build()
     }
 
     /**
