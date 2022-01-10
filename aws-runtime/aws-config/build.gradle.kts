@@ -161,7 +161,6 @@ tasks.withType<org.gradle.jvm.tasks.Jar> {
     dependsOn(codegenTask)
 }
 
-
 codegen.projections.all {
     // add this projected source dir to the common sourceSet
     // NOTE - build.gradle.kts is still being generated, it's NOT used though
@@ -172,3 +171,12 @@ codegen.projections.all {
         kotlin.srcDir(projectedSrcDir)
     }
 }
+
+// Necessary to avoid Gradle problems identifying correct variant of aws-config. This stems from the smithy-gradle
+// plugin (used by codegen plugin) applying the Java plugin which creates these configurations.
+listOf("apiElements", "runtimeElements").forEach {
+    configurations.named(it) {
+        isCanBeConsumed = false
+    }
+}
+
