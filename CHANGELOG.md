@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.10.0-beta] - 01/06/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Breaking changes
+* Update codegen to generate base exception rather than UnknownServiceErrorException [#484](https://github.com/awslabs/aws-sdk-kotlin/pull/484)
+
+### New features
+* update AWS models to latest versions
+* upgrade to Kotlin 1.6.10 [#474](https://github.com/awslabs/aws-sdk-kotlin/pull/474)
+
+### Fixes
+* Fix usage of unicode in bucket names of s3 presigner [#487](https://github.com/awslabs/aws-sdk-kotlin/pull/487)
+* Add new services in published release [#468](https://github.com/awslabs/aws-sdk-kotlin/pull/468)
+
+### Miscellaneous
+* Add design tenets [#466](https://github.com/awslabs/aws-sdk-kotlin/pull/466)
+* updated the Readme doc to include API reference guide [#471](https://github.com/awslabs/aws-sdk-kotlin/pull/471)
+
 ## [0.9.5-beta] - 12/09/2021
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
