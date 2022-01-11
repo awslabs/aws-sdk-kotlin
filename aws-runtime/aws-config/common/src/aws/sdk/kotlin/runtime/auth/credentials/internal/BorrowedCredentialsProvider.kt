@@ -17,7 +17,7 @@ private class BorrowedCredentialsProvider(
 
 /**
  * Wraps another [CredentialsProvider] with a no-op close implementation. This inserts a level of indirection for
- * use cases when a provider is explicitly given to the SDK, and it's ownership should remain with the caller.
+ * use cases when a provider is explicitly given to the SDK, and its ownership should remain with the caller.
  * This allows the SDK to treat resources as owned and not have to track ownership state.
  */
 @InternalSdkApi
