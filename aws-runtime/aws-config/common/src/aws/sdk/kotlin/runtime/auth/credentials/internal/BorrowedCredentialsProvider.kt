@@ -3,10 +3,17 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-package aws.sdk.kotlin.runtime.auth.credentials
+package aws.sdk.kotlin.runtime.auth.credentials.internal
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.Closeable
+
+private class BorrowedCredentialsProvider(
+    private val borrowed: CredentialsProvider
+) : CredentialsProvider by borrowed, Closeable {
+    override fun close() { }
+}
 
 /**
  * Wraps another [CredentialsProvider] with a no-op close implementation. This inserts a level of indirection for
@@ -14,8 +21,7 @@ import aws.smithy.kotlin.runtime.io.Closeable
  * This allows the SDK to treat resources as owned and not have to track ownership state.
  */
 @InternalSdkApi
-public class BorrowedCredentialsProvider(
-    private val borrowed: CredentialsProvider
-) : CredentialsProvider by borrowed, Closeable {
-    override fun close() { }
+public fun CredentialsProvider.borrow(): CredentialsProvider = when (this) {
+    is BorrowedCredentialsProvider -> this
+    else -> BorrowedCredentialsProvider(this)
 }

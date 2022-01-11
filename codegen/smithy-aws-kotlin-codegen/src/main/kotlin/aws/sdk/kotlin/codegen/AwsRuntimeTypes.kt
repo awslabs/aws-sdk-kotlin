@@ -46,6 +46,7 @@ object AwsRuntimeTypes {
         object Credentials {
             val DefaultChainCredentialsProvider = runtimeSymbol("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_CONFIG, "auth.credentials")
             val StaticCredentialsProvider = runtimeSymbol("StaticCredentialsProvider", AwsKotlinDependency.AWS_CONFIG, "auth.credentials")
+            val borrow = runtimeSymbol("borrow", AwsKotlinDependency.AWS_CONFIG, "auth.credentials.internal")
         }
 
         val AwsClientConfigLoadOptions = runtimeSymbol("AwsClientConfigLoadOptions", AwsKotlinDependency.AWS_CONFIG, "config")

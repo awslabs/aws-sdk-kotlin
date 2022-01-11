@@ -5,9 +5,9 @@
 
 package aws.sdk.kotlin.runtime.config
 
-import aws.sdk.kotlin.runtime.auth.credentials.BorrowedCredentialsProvider
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
+import aws.sdk.kotlin.runtime.auth.credentials.internal.borrow
 import aws.sdk.kotlin.runtime.client.AwsClientConfig
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.client.SdkLogMode
@@ -57,7 +57,7 @@ internal suspend fun loadAwsClientConfig(
     val opts = AwsClientConfigLoadOptions().apply(block)
 
     val region = opts.region ?: resolveRegion(platformProvider)
-    val credentialsProvider = opts.credentialsProvider?.let { BorrowedCredentialsProvider(it) } ?: DefaultChainCredentialsProvider()
+    val credentialsProvider = opts.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider()
     val sdkLogMode = opts.sdkLogMode
 
     return ResolvedAwsConfig(region, credentialsProvider, sdkLogMode)
