@@ -49,9 +49,10 @@ class SdkStreamResponseHandlerTest {
         assertEquals(HttpStatusCode.OK, resp.status)
 
         assertTrue(resp.body is HttpBody.Empty)
+        handler.onResponseComplete(stream, 0)
 
         assertFalse(mockConn.isClosed)
-        handler.onResponseComplete(stream, 0)
+        handler.complete()
         assertTrue(mockConn.isClosed)
     }
 
@@ -65,7 +66,6 @@ class SdkStreamResponseHandlerTest {
 
         val resp = handler.waitForResponse()
         assertEquals(HttpStatusCode.OK, resp.status)
-        assertTrue(mockConn.isClosed)
     }
 
     @Test
@@ -80,8 +80,6 @@ class SdkStreamResponseHandlerTest {
         assertFails {
             handler.waitForResponse()
         }
-
-        assertTrue(mockConn.isClosed)
     }
 
     @Test
@@ -107,7 +105,6 @@ class SdkStreamResponseHandlerTest {
 
         assertFalse(mockConn.isClosed)
         handler.onResponseComplete(stream, 0)
-        assertTrue(mockConn.isClosed)
         assertTrue(respChan.isClosedForWrite)
     }
 
@@ -134,7 +131,6 @@ class SdkStreamResponseHandlerTest {
         assertTrue(resp.body is HttpBody.Streaming)
         val respChan = (resp.body as HttpBody.Streaming).readFrom()
 
-        assertTrue(mockConn.isClosed)
         assertTrue(respChan.isClosedForWrite)
 
         assertEquals(data, respChan.readRemaining().decodeToString())
