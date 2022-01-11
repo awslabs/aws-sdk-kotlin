@@ -177,7 +177,7 @@ internal class SdkStreamResponseHandler(
             val forceClose = !streamCompleted
 
             if (forceClose) {
-                logger.trace { "stream did not complete before job, forcing connection shutdown! handler=$this; conn=$conn; stream=$crtStream" }
+                logger.debug { "stream did not complete before job, forcing connection shutdown! handler=$this; conn=$conn; stream=$crtStream" }
                 conn.shutdown()
                 cancelled = true
             }
