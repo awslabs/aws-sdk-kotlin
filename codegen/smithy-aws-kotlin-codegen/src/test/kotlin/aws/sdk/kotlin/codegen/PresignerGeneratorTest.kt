@@ -81,7 +81,7 @@ class PresignerGeneratorTest {
 
         testContext.generationCtx.delegator.flushWriters()
         val testManifest = testContext.generationCtx.delegator.fileManifest as MockManifest
-        val actual = testManifest.expectFileString("src/main/kotlin/smithy/kotlin/traits/presigners/Presigner.kt")
+        val actual = testManifest.expectFileString("src/main/kotlin/smithy/kotlin/traits/presigners/Presigners.kt")
 
         val expected = """
             package smithy.kotlin.traits.presigners
