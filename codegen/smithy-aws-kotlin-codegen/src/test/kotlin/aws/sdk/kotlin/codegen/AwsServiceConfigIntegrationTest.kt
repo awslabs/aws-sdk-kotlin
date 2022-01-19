@@ -43,9 +43,9 @@ class AwsServiceConfigIntegrationTest {
         val contents = writer.toString()
 
         val expectedProps = """
-    override val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider()
+    val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider()
     val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
-    override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
+    val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
 """
         contents.shouldContainOnlyOnceWithDiff(expectedProps)
 

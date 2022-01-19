@@ -39,7 +39,6 @@ object AwsRuntimeTypes {
     object Types {
         val CredentialsProvider = runtimeSymbol("CredentialsProvider", AwsKotlinDependency.AWS_TYPES, "auth.credentials")
         val Credentials = runtimeSymbol("Credentials", AwsKotlinDependency.AWS_TYPES, "auth.credentials")
-        val AwsClientConfig = runtimeSymbol("AwsClientConfig", AwsKotlinDependency.AWS_TYPES, "client")
     }
 
     object Config {
@@ -49,8 +48,9 @@ object AwsRuntimeTypes {
             val borrow = runtimeSymbol("borrow", AwsKotlinDependency.AWS_CONFIG, "auth.credentials.internal")
         }
 
-        val AwsClientConfigLoadOptions = runtimeSymbol("AwsClientConfigLoadOptions", AwsKotlinDependency.AWS_CONFIG, "config")
-        val fromEnvironment = runtimeSymbol("fromEnvironment", AwsKotlinDependency.AWS_CONFIG, "config")
+        object Region {
+            val resolveRegion = runtimeSymbol("resolveRegion", AwsKotlinDependency.AWS_CONFIG, "region")
+        }
     }
 
     object Signing {
