@@ -76,36 +76,30 @@ public class CrtHttpEngine(public val config: CrtHttpEngineConfig) : HttpClientE
     override suspend fun roundTrip(request: HttpRequest): HttpCall {
         val callContext = callContext()
         val manager = getManagerForUri(request.uri)
+
+        // LIFETIME: connection will be released back to the pool/manager when
+        // the response completes OR on exception (both handled by the completion handler registered on the stream
+        // handler)
         val conn = withTimeoutOrNull(config.connectionAcquireTimeout) {
             manager.acquireConnection()
         } ?: throw ClientException("timed out waiting for an HTTP connection to be acquired from the pool")
 
-        try {
-            val reqTime = Instant.now()
-            val engineRequest = request.toCrtRequest(callContext)
-
-            // LIFETIME: connection will be released back to the pool/manager when
-            // the response completes OR on exception
-            val respHandler = SdkStreamResponseHandler(conn)
-            callContext.job.invokeOnCompletion {
-                // ensures the stream is driven to completion regardless of what the downstream consumer does
-                respHandler.complete()
-            }
-
-            val stream = conn.makeRequest(engineRequest, respHandler)
-            stream.activate()
-
-            val resp = respHandler.waitForResponse()
-
-            return HttpCall(request, resp, reqTime, Instant.now(), callContext)
-        } catch (ex: Exception) {
-            try {
-                manager.releaseConnection(conn)
-            } catch (ex2: Exception) {
-                ex.addSuppressed(ex2)
-            }
-            throw ex
+        val respHandler = SdkStreamResponseHandler(conn)
+        callContext.job.invokeOnCompletion {
+            logger.trace { "completing handler; cause=$it" }
+            // ensures the stream is driven to completion regardless of what the downstream consumer does
+            respHandler.complete()
         }
+
+        val reqTime = Instant.now()
+        val engineRequest = request.toCrtRequest(callContext)
+
+        val stream = conn.makeRequest(engineRequest, respHandler)
+        stream.activate()
+
+        val resp = respHandler.waitForResponse()
+
+        return HttpCall(request, resp, reqTime, Instant.now(), callContext)
     }
 
     override fun shutdown() {
