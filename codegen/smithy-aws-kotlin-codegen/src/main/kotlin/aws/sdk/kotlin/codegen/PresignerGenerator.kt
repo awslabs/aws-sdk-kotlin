@@ -324,7 +324,8 @@ class PresignerGenerator : KotlinIntegration {
                 name = "endpointResolver"
                 documentation = "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
                 baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultEndpointResolver()")
+                // TODO - we could probably relax this and instead create a default chain in createPresignedRequest on-demand in the runtime and close it when done signing
+                propertyType = ClientConfigPropertyType.Required()
             },
             ClientConfigProperty {
                 symbol = buildSymbol {
