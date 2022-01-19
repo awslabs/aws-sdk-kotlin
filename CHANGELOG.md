@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.10.1-beta] - 01/13/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### New features
+* update AWS models to latest versions [#499](https://github.com/awslabs/aws-sdk-kotlin/pull/499)
+* Paginators! [smithy-kotlin#557](https://github.com/awslabs/smithy-kotlin/pull/557)
+
+### Fixes
+* enforce only once shutdown logic for crt engine connections [#497](https://github.com/awslabs/aws-sdk-kotlin/pull/497)
+
 ## [0.10.0-beta] - 01/06/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
