@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
@@ -12,8 +13,6 @@ import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.ExperimentalTime
-
-// TODO - allow region, profile, etc to be passed in
 
 /**
  * Default AWS credential provider chain used by most AWS SDKs.
@@ -30,21 +29,25 @@ import kotlin.time.ExperimentalTime
  *
  * Closing the chain will close all child providers that implement [Closeable].
  *
+ * @param profileName Override the profile name to use. If not provided it will be resolved internally
+ * via environment (see [AwsSdkSetting.AwsProfile]) or defaulted to `default` if not configured.
+ * @param platformProvider The platform API provider
+ * @param httpClientEngine the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+ * are NOT managed by the provider. Caller is responsible for closing.
  * @return the newly-constructed credentials provider
  */
-public class DefaultChainCredentialsProvider internal constructor(
+public class DefaultChainCredentialsProvider constructor(
+    private val profileName: String? = null,
     private val platformProvider: PlatformProvider = Platform,
     httpClientEngine: HttpClientEngine? = null
 ) : CredentialsProvider, Closeable {
-
-    public constructor() : this(Platform)
 
     private val manageEngine = httpClientEngine == null
     private val httpClientEngine = httpClientEngine ?: CrtHttpEngine()
 
     private val chain = CredentialsProviderChain(
         EnvironmentCredentialsProvider(platformProvider::getenv),
-        ProfileCredentialsProvider(platformProvider = platformProvider, httpClientEngine = httpClientEngine),
+        ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClientEngine = httpClientEngine),
         // STS web identity provider can be constructed from either the profile OR 100% from the environment
         StsWebIdentityProvider(platformProvider = platformProvider, httpClientEngine = httpClientEngine),
         EcsCredentialsProvider(platformProvider, httpClientEngine),
