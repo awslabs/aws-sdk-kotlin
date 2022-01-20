@@ -3,6 +3,7 @@ package aws.sdk.kotlin.services.sts
 import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.sts.model.GetCallerIdentityRequest
+import aws.sdk.kotlin.services.sts.presigners.presign
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import org.junit.jupiter.api.TestInstance
