@@ -6253,7 +6253,7 @@
                 "LogType": {
                     "target": "com.amazonaws.elasticache#LogType",
                     "traits": {
-                        "smithy.api#documentation": "<p>Refers to <a href=\"https://redis.io/commands/slowlog\">slow-log</a>.</p>"
+                        "smithy.api#documentation": "<p>Refers to <a href=\"https://redis.io/commands/slowlog\">slow-log</a> or engine-log.</p>"
                     }
                 },
                 "DestinationType": {
@@ -6306,7 +6306,7 @@
                 "LogType": {
                     "target": "com.amazonaws.elasticache#LogType",
                     "traits": {
-                        "smithy.api#documentation": "<p>Refers to <a href=\"https://redis.io/commands/slowlog\">slow-log</a>.</p>"
+                        "smithy.api#documentation": "<p>Refers to <a href=\"https://redis.io/commands/slowlog\">slow-log</a> or engine-log..</p>"
                     }
                 },
                 "DestinationType": {
@@ -6396,6 +6396,10 @@
                     {
                         "value": "slow-log",
                         "name": "SLOW_LOG"
+                    },
+                    {
+                        "value": "engine-log",
+                        "name": "ENGINE_LOG"
                     }
                 ]
             }
@@ -7905,7 +7909,7 @@
                 "LogType": {
                     "target": "com.amazonaws.elasticache#LogType",
                     "traits": {
-                        "smithy.api#documentation": "<p>Refers to <a href=\"https://redis.io/commands/slowlog\">slow-log</a>.</p>"
+                        "smithy.api#documentation": "<p>Refers to <a href=\"https://redis.io/commands/slowlog\">slow-log</a> or engine-log..</p>"
                     }
                 },
                 "DestinationType": {
