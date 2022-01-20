@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.11.0-beta] - 01/20/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Breaking changes
+* Generate presigner into nested package for consistency [#502](https://github.com/awslabs/aws-sdk-kotlin/pull/502)
+
+### New features
+* update AWS models to latest versions [#505](https://github.com/awslabs/aws-sdk-kotlin/pull/505)
+
 ## [0.10.1-beta] - 01/13/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
