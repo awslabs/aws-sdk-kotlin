@@ -8,9 +8,9 @@ package aws.sdk.kotlin.runtime.http.retries
 import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.smithy.kotlin.runtime.ServiceErrorMetadata
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.retries.RetryDirective
-import aws.smithy.kotlin.runtime.retries.RetryErrorType.*
-import aws.smithy.kotlin.runtime.retries.impl.StandardRetryPolicy
+import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
+import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType.*
+import aws.smithy.kotlin.runtime.retries.policy.StandardRetryPolicy
 
 public object AwsDefaultRetryPolicy : StandardRetryPolicy() {
     internal val knownErrorTypes = mapOf(
