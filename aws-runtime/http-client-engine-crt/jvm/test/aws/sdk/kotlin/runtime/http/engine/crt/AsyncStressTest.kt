@@ -14,7 +14,6 @@ import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.httptest.TestWithLocalServer
-import aws.smithy.kotlin.runtime.testing.IgnoreWindows
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -24,7 +23,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
 import kotlin.test.Test
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 class AsyncStressTest : TestWithLocalServer() {
@@ -71,7 +70,6 @@ class AsyncStressTest : TestWithLocalServer() {
         }
     }
 
-    @IgnoreWindows("https://github.com/awslabs/aws-sdk-kotlin/issues/413")
     @OptIn(ExperimentalTime::class)
     @Test
     fun testStreamNotConsumed() = runSuspendTest {
@@ -90,7 +88,7 @@ class AsyncStressTest : TestWithLocalServer() {
             }
         }
 
-        withTimeout(Duration.seconds(5)) {
+        withTimeout(5.seconds) {
             repeat(1_000) {
                 async {
                     try {

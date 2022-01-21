@@ -50,9 +50,8 @@ class UserAgentTest {
         }
 
         val provider = TestPlatformProvider()
-        op.install(UserAgent) {
-            staticMetadata = loadAwsUserAgentMetadataFromEnvironment(provider, ApiMetadata("Test Service", "1.2.3"))
-        }
+        val metadata = loadAwsUserAgentMetadataFromEnvironment(provider, ApiMetadata("Test Service", "1.2.3"))
+        op.install(UserAgent(metadata))
 
         op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
@@ -75,9 +74,7 @@ class UserAgentTest {
 
         val provider = TestPlatformProvider()
         val staticMeta = loadAwsUserAgentMetadataFromEnvironment(provider, ApiMetadata("Test Service", "1.2.3"))
-        op.install(UserAgent) {
-            staticMetadata = staticMeta
-        }
+        op.install(UserAgent(staticMeta))
 
         op.context.customUserAgentMetadata.add("foo", "bar")
 
@@ -96,9 +93,7 @@ class UserAgentTest {
             }
         }
 
-        op2.install(UserAgent) {
-            staticMetadata = staticMeta
-        }
+        op2.install(UserAgent(staticMeta))
 
         op2.context.customUserAgentMetadata.add("baz", "quux")
 

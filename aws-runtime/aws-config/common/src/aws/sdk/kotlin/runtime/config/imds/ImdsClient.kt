@@ -26,6 +26,7 @@ import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 /**
@@ -70,38 +71,26 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     init {
         require(maxRetries > 0) { "maxRetries must be greater than zero" }
         val engine = builder.engine ?: CrtHttpEngine {
-            connectTimeout = Duration.seconds(1)
-            socketReadTimeout = Duration.seconds(1)
+            connectTimeout = 1.seconds
+            socketReadTimeout = 1.seconds
         }
 
         httpClient = sdkHttpClient(engine)
     }
 
     // cached middleware instances
-    private val middleware: List<Feature> = listOf(
-        ResolveEndpoint.create {
-            resolver = ImdsEndpointResolver(platformProvider, endpointConfiguration)
-        },
-        UserAgent.create {
-            staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
-        },
-        Retry.create {
-            val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
-            val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
-            strategy = StandardRetryStrategy(
-                StandardRetryStrategyOptions.Default.copy(maxAttempts = maxRetries),
-                tokenBucket,
-                delayProvider
-            )
-            policy = ImdsRetryPolicy()
-        },
-        // must come after retries
-        TokenMiddleware.create {
-            httpClient = this@ImdsClient.httpClient
-            ttl = tokenTtl
-            clock = this@ImdsClient.clock
-        },
+    private val resolveEndpointMiddleware = ResolveEndpoint(ImdsEndpointResolver(platformProvider, endpointConfiguration))
+    private val userAgentMiddleware = UserAgent(
+        staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
     )
+    private val retryMiddleware = run {
+        val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
+        val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
+        val strategy = StandardRetryStrategy(StandardRetryStrategyOptions.Default, tokenBucket, delayProvider)
+        val policy = ImdsRetryPolicy()
+        Retry<String>(strategy, policy)
+    }
+    private val tokenMiddleware = TokenMiddleware(httpClient, tokenTtl, clock)
 
     public companion object {
         public operator fun invoke(block: Builder.() -> Unit): ImdsClient = ImdsClient(Builder().apply(block))
@@ -142,7 +131,10 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
                 set(SdkClientOption.LogMode, sdkLogMode)
             }
         }
-        middleware.forEach { it.install(op) }
+        op.install(resolveEndpointMiddleware)
+        op.install(userAgentMiddleware)
+        op.install(retryMiddleware)
+        op.install(tokenMiddleware)
         op.execution.mutate.intercept(Phase.Order.Before) { req, next ->
             req.subject.url.path = path
             next.call(req)
@@ -170,7 +162,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         /**
          * Override the time-to-live for the session token
          */
-        public var tokenTtl: Duration = Duration.seconds(DEFAULT_TOKEN_TTL_SECONDS)
+        public var tokenTtl: Duration = DEFAULT_TOKEN_TTL_SECONDS.seconds
 
         /**
          * Configure the [SdkLogMode] used by the client

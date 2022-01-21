@@ -65,7 +65,6 @@ class S3Generator : RestXml() {
             exceptionBaseSymbol,
             RuntimeTypes.Http.readAll,
             RuntimeTypes.Http.StatusCode,
-            AwsRuntimeTypes.Core.UnknownServiceErrorException,
             AwsRuntimeTypes.Http.withPayload,
             s3ErrorDetails,
             setS3ErrorMetadata,
@@ -92,7 +91,7 @@ class S3Generator : RestXml() {
             }
             .dedent()
             .withBlock("} catch (ex: Exception) {", "}") {
-                withBlock("""throw #T("failed to parse response as ${ctx.protocol.name} error", ex).also {""", "}", AwsRuntimeTypes.Core.UnknownServiceErrorException) {
+                withBlock("""throw #T("Failed to parse response as '${ctx.protocol.name}' error", ex).also {""", "}", exceptionBaseSymbol) {
                     write("#T(it, wrappedResponse, null)", setS3ErrorMetadata)
                 }
             }

@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.config.imds
 import aws.sdk.kotlin.runtime.config.CachedValue
 import aws.sdk.kotlin.runtime.config.ExpiringValue
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.http.operation.getLogger
@@ -16,6 +17,7 @@ import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.time.Clock
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 /**
@@ -29,33 +31,21 @@ internal const val X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS = "x-aws-ec2-metadata-to
 internal const val X_AWS_EC2_METADATA_TOKEN = "x-aws-ec2-metadata-token"
 
 @OptIn(ExperimentalTime::class)
-internal class TokenMiddleware(config: Config) : Feature {
-    private val ttl: Duration = config.ttl
-    private val httpClient = requireNotNull(config.httpClient) { "SdkHttpClient is required for token middleware to make requests" }
-    private val clock: Clock = config.clock
-    private var cachedToken = CachedValue<Token>(null, bufferTime = Duration.seconds(TOKEN_REFRESH_BUFFER_SECONDS), clock = clock)
+internal class TokenMiddleware(
+    private val httpClient: SdkHttpClient,
+    private val ttl: Duration = DEFAULT_TOKEN_TTL_SECONDS.seconds,
+    private val clock: Clock = Clock.System
+) : ModifyRequestMiddleware {
+    private var cachedToken = CachedValue<Token>(null, bufferTime = TOKEN_REFRESH_BUFFER_SECONDS.seconds, clock = clock)
 
-    public class Config {
-        var ttl: Duration = Duration.seconds(DEFAULT_TOKEN_TTL_SECONDS)
-        var httpClient: SdkHttpClient? = null
-        var clock: Clock = Clock.System
+    override fun install(op: SdkHttpOperation<*, *>) {
+        op.execution.finalize.register(this)
     }
 
-    public companion object Feature :
-        HttpClientFeatureFactory<Config, TokenMiddleware> {
-        override val key: FeatureKey<TokenMiddleware> = FeatureKey("EC2Metadata_Token_Middleware")
-        override fun create(block: Config.() -> Unit): TokenMiddleware {
-            val config = Config().apply(block)
-            return TokenMiddleware(config)
-        }
-    }
-
-    override fun <I, O> install(operation: SdkHttpOperation<I, O>) {
-        operation.execution.finalize.intercept { req, next ->
-            val token = cachedToken.getOrLoad { getToken(clock, req).let { ExpiringValue(it, it.expires) } }
-            req.subject.headers.append(X_AWS_EC2_METADATA_TOKEN, token.value.decodeToString())
-            next.call(req)
-        }
+    override suspend fun modifyRequest(req: SdkHttpRequest): SdkHttpRequest {
+        val token = cachedToken.getOrLoad { getToken(clock, req).let { ExpiringValue(it, it.expires) } }
+        req.subject.headers.append(X_AWS_EC2_METADATA_TOKEN, token.value.decodeToString())
+        return req
     }
 
     private suspend fun getToken(clock: Clock, req: SdkHttpRequest): Token {
@@ -76,14 +66,13 @@ internal class TokenMiddleware(config: Config) : Feature {
             }
         }
 
-        // TODO - retries with custom policy around 400 and 403
         val call = httpClient.call(tokenReq)
         return try {
             when (call.response.status) {
                 HttpStatusCode.OK -> {
                     val ttl = call.response.headers[X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS]?.toLong() ?: throw EC2MetadataError(200, "No TTL provided in IMDS response")
                     val token = call.response.body.readAll() ?: throw EC2MetadataError(200, "No token provided in IMDS response")
-                    val expires = clock.now() + Duration.seconds(ttl)
+                    val expires = clock.now() + ttl.seconds
                     Token(token, expires)
                 }
                 else -> {

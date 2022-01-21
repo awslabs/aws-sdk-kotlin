@@ -13,6 +13,7 @@ import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.HeadersBuilder
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
+import aws.smithy.kotlin.runtime.logging.Logger
 import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,13 +31,17 @@ internal class SdkStreamResponseHandler(
     // There is no great way to do that currently without either (1) closing the connection or (2) throwing an
     // exception from a callback such that AWS_OP_ERROR is returned. Wait for HttpStream to have explicit cancellation
 
+    private val logger = Logger.getLogger<SdkStreamResponseHandler>()
     private val responseReady = Channel<HttpResponse>(1)
     private val headers = HeadersBuilder()
 
     private var sdkBody: BufferedReadChannel? = null
 
-    private val lock = reentrantLock()
+    private val lock = reentrantLock() // protects crtStream and cancelled state
     private var crtStream: HttpStream? = null
+    // if the (coroutine) job is completed before the stream's onResponseComplete callback is
+    // invoked (for any reason) we consider the stream "cancelled"
+    private var cancelled = false
 
     private val Int.isMainHeadersBlock: Boolean
         get() = when (this) {
@@ -115,7 +120,13 @@ internal class SdkStreamResponseHandler(
     }
 
     override fun onResponseBody(stream: HttpStream, bodyBytesIn: Buffer): Int {
-        lock.withLock { crtStream = stream }
+        val isCancelled = lock.withLock {
+            crtStream = stream
+            cancelled
+        }
+
+        // short circuit, stop buffering data and discard remaining incoming bytes
+        if (isCancelled) return bodyBytesIn.len
 
         // we should have created a response channel if we expected a body
         val sdkRespChan = checkNotNull(sdkBody) { "unexpected response body" }
@@ -133,10 +144,6 @@ internal class SdkStreamResponseHandler(
             crtStream = null
             streamCompleted = true
         }
-
-        // release it back to the pool, this is safe to do now since the body (and any other response data)
-        // has been copied to buffers we own by now
-        conn.close()
 
         // close the body channel
         if (errorCode != 0) {
@@ -162,13 +169,19 @@ internal class SdkStreamResponseHandler(
     internal fun complete() {
         // We have no way of cancelling the stream, we have to drive it to exhaustion OR close the connection.
         // At this point we know it's safe to release resources so if the stream hasn't completed yet
-        // we forcefully close the connection. This can happen when the stream's window is full and it's waiting
+        // we forcefully shutdown the connection. This can happen when the stream's window is full and it's waiting
         // on the window to be incremented to proceed (i.e. the user didn't consume the stream for whatever reason
-        // and more data is pending arrival).
-        val forceClose = lock.withLock { !streamCompleted }
+        // and more data is pending arrival). It can also happen if the coroutine for this request is cancelled
+        // before onResponseComplete fires.
+        lock.withLock {
+            val forceClose = !streamCompleted
 
-        if (forceClose) {
-            conn.shutdown()
+            if (forceClose) {
+                logger.debug { "stream did not complete before job, forcing connection shutdown! handler=$this; conn=$conn; stream=$crtStream" }
+                conn.shutdown()
+                cancelled = true
+            }
+
             conn.close()
         }
     }

@@ -1,5 +1,75 @@
 # Changelog
 
+## [0.11.0-beta] - 01/20/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Breaking changes
+* Generate presigner into nested package for consistency [#502](https://github.com/awslabs/aws-sdk-kotlin/pull/502)
+
+### New features
+* update AWS models to latest versions [#505](https://github.com/awslabs/aws-sdk-kotlin/pull/505)
+
+## [0.10.1-beta] - 01/13/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### New features
+* update AWS models to latest versions [#499](https://github.com/awslabs/aws-sdk-kotlin/pull/499)
+* Paginators! [smithy-kotlin#557](https://github.com/awslabs/smithy-kotlin/pull/557)
+
+### Fixes
+* enforce only once shutdown logic for crt engine connections [#497](https://github.com/awslabs/aws-sdk-kotlin/pull/497)
+
+## [0.10.0-beta] - 01/06/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Breaking changes
+* Update codegen to generate base exception rather than UnknownServiceErrorException [#484](https://github.com/awslabs/aws-sdk-kotlin/pull/484)
+
+### New features
+* update AWS models to latest versions
+* upgrade to Kotlin 1.6.10 [#474](https://github.com/awslabs/aws-sdk-kotlin/pull/474)
+
+### Fixes
+* Fix usage of unicode in bucket names of s3 presigner [#487](https://github.com/awslabs/aws-sdk-kotlin/pull/487)
+* Add new services in published release [#468](https://github.com/awslabs/aws-sdk-kotlin/pull/468)
+
+### Miscellaneous
+* Add design tenets [#466](https://github.com/awslabs/aws-sdk-kotlin/pull/466)
+* updated the Readme doc to include API reference guide [#471](https://github.com/awslabs/aws-sdk-kotlin/pull/471)
+
+## [0.9.5-beta] - 12/09/2021
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Services new in this release
+
+* amplifyuibuilder
+* appconfigdata
+* backupgateway
+* chimesdkmeetings
+* drs
+* evidently
+* inspector2
+* iottwinmaker
+* migrationhubrefactorspaces
+* migrationhubstrategy
+* rbin
+* resiliencehub
+* rum
+* workspacesweb
+
+### Fixes
+* move endpoint resolution log messages from DEBUG to TRACE [#443](https://github.com/awslabs/aws-sdk-kotlin/pull/443)
+* presigner cleanup [#452](https://github.com/awslabs/aws-sdk-kotlin/pull/452)
+* import signing test suite [#451](https://github.com/awslabs/aws-sdk-kotlin/pull/451)
+
+## [0.9.4-beta] - 12/01/2021
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
 ## [0.9.3-alpha] - 11/19/2021
 
 **WARNING: Alpha releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**

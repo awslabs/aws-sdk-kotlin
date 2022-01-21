@@ -5,6 +5,8 @@ import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
+import aws.sdk.kotlin.services.polly.presigners.PollyPresignConfig
+import aws.sdk.kotlin.services.polly.presigners.presign
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import kotlin.test.Test
 import kotlin.test.assertEquals

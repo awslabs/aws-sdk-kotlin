@@ -21,7 +21,7 @@ import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.*
 import kotlin.test.*
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -80,12 +80,12 @@ class ImdsClientTest {
             engine = connection
             endpointConfiguration = EndpointConfiguration.ModeOverride(EndpointMode.IPv6)
             clock = testClock
-            tokenTtl = Duration.seconds(600)
+            tokenTtl = 600.seconds
         }
 
         val r1 = client.get("/latest/metadata")
         assertEquals("output 1", r1)
-        testClock.advance(Duration.seconds(600))
+        testClock.advance(600.seconds)
 
         val r2 = client.get("/latest/metadata")
         assertEquals("output 2", r2)
@@ -127,17 +127,17 @@ class ImdsClientTest {
             engine = connection
             endpointConfiguration = EndpointConfiguration.ModeOverride(EndpointMode.IPv6)
             clock = testClock
-            tokenTtl = Duration.seconds(600)
+            tokenTtl = 600.seconds
         }
 
         val r1 = client.get("/latest/metadata")
         assertEquals("output 1", r1)
-        testClock.advance(Duration.seconds(400))
+        testClock.advance(400.seconds)
 
         val r2 = client.get("/latest/metadata")
         assertEquals("output 2", r2)
 
-        testClock.advance(Duration.seconds(150))
+        testClock.advance(150.seconds)
         val r3 = client.get("/latest/metadata")
         assertEquals("output 3", r3)
 

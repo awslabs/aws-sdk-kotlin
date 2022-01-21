@@ -32,7 +32,7 @@ import kotlin.io.path.exists
 import kotlin.io.path.name
 import kotlin.io.path.readText
 import kotlin.test.*
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 private const val DEFAULT_SIGNING_ISO_DATE = "2015-08-30T12:36:00Z"
@@ -205,7 +205,7 @@ class Sigv4TestSuite {
         config.service = json["service"]!!.jsonPrimitive.content
 
         json["expiration_in_seconds"]?.jsonPrimitive?.int?.let {
-            config.expiresAfter = Duration.seconds(it)
+            config.expiresAfter = it.seconds
         }
 
         json["normalize"]?.jsonPrimitive?.boolean?.let {
@@ -373,23 +373,25 @@ private suspend fun getSignedRequest(
     }
     val client = sdkHttpClient(mockEngine)
 
-    operation.install(AwsSigV4SigningMiddleware) {
-        credentialsProvider = if (config.credentialsProvider != null) {
-            config.credentialsProvider
-        } else {
-            val creds = assertNotNull(config.credentials, "credentials or credentialsProvider must be set for test")
-            object : CredentialsProvider {
-                override suspend fun getCredentials(): Credentials = creds
+    operation.install(
+        AwsSigV4SigningMiddleware {
+            credentialsProvider = if (config.credentialsProvider != null) {
+                config.credentialsProvider
+            } else {
+                val creds = assertNotNull(config.credentials, "credentials or credentialsProvider must be set for test")
+                object : CredentialsProvider {
+                    override suspend fun getCredentials(): Credentials = creds
+                }
             }
+            signingService = config.service
+            useDoubleUriEncode = config.useDoubleUriEncode
+            normalizeUriPath = config.normalizeUriPath
+            omitSessionToken = config.omitSessionToken
+            signedBodyHeaderType = config.signedBodyHeaderType
+            signatureType = config.signatureType
+            expiresAfter = config.expiresAfter
         }
-        signingService = config.service
-        useDoubleUriEncode = config.useDoubleUriEncode
-        normalizeUriPath = config.normalizeUriPath
-        omitSessionToken = config.omitSessionToken
-        signedBodyHeaderType = config.signedBodyHeaderType
-        signatureType = config.signatureType
-        expiresAfter = config.expiresAfter
-    }
+    )
 
     operation.roundTrip(client, Unit)
     return operation.context[HttpOperationContext.HttpCallList].last().request
