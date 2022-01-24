@@ -81,11 +81,11 @@ class PresignerGeneratorTest {
 
         testContext.generationCtx.delegator.flushWriters()
         val testManifest = testContext.generationCtx.delegator.fileManifest as MockManifest
-        val actual = testManifest.expectFileString("src/main/kotlin/smithy/kotlin/traits/Presigner.kt")
+        val actual = testManifest.expectFileString("src/main/kotlin/smithy/kotlin/traits/presigners/Presigners.kt")
 
         val expected = """
-            package smithy.kotlin.traits
-            
+            package smithy.kotlin.traits.presigners
+
             import aws.sdk.kotlin.runtime.ClientException
             import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
             import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
@@ -97,6 +97,7 @@ class PresignerGeneratorTest {
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
             import aws.smithy.kotlin.runtime.http.request.HttpRequest
+            import smithy.kotlin.traits.TestClient
             import smithy.kotlin.traits.internal.DefaultEndpointResolver
             import smithy.kotlin.traits.model.GetFooRequest
             import smithy.kotlin.traits.model.PostFooRequest
