@@ -7,7 +7,7 @@ import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.retries.RetryDirective
+import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
