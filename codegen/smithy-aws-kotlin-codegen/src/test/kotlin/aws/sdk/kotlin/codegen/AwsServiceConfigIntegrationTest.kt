@@ -43,9 +43,9 @@ class AwsServiceConfigIntegrationTest {
         val contents = writer.toString()
 
         val expectedProps = """
-    override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
+    val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider()
     val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
-    override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
+    val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
 """
         contents.shouldContainOnlyOnceWithDiff(expectedProps)
 
@@ -53,6 +53,8 @@ class AwsServiceConfigIntegrationTest {
         /**
          * The AWS credentials provider to use for authenticating requests. If not provided a
          * [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.
+         * NOTE: The caller is responsible for managing the lifetime of the provider when set. The SDK
+         * client will not close it when the client is closed.
          */
         var credentialsProvider: CredentialsProvider? = null
         /**
