@@ -51,11 +51,13 @@ subprojects {
 
         val smithyKotlinPackageListUrl: String by project
         val smithyKotlinDocBaseUrl: String by project
-        // Configure Dokka to link to smithy-kotlin types
-        dokkaSourceSets.configureEach {
-            externalDocumentationLink {
-                packageListUrl.set(URL(smithyKotlinPackageListUrl))
-                url.set(URL(smithyKotlinDocBaseUrl))
+        if (smithyKotlinPackageListUrl.isNotEmpty() && smithyKotlinDocBaseUrl.isNotEmpty()) {
+            // Configure Dokka to link to smithy-kotlin types
+            dokkaSourceSets.configureEach {
+                externalDocumentationLink {
+                    packageListUrl.set(URL(smithyKotlinPackageListUrl))
+                    url.set(URL(smithyKotlinDocBaseUrl))
+                }
             }
         }
     }
@@ -101,15 +103,6 @@ tasks.dokkaHtmlMultiModule.configure {
         project(":aws-runtime:crt-util"),
     )
     removeChildTasks(excludeFromDocumentation)
-
-    // This allows docs generation to be overridden on the command line.
-    // Used to generate each AWS service individually.
-    if (project.hasProperty("dokkaOutSubDir")) {
-        val subDir = project.prop("dokkaOutSubDir");
-        val targetDir = buildDir.resolve("dokka/$subDir")
-        println("Generating docs in $targetDir")
-        outputDirectory.set(targetDir)
-    }
 }
 
 if (
