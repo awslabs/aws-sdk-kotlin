@@ -7,7 +7,6 @@ import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.filterDocumentBoundMembers
 import software.amazon.smithy.kotlin.codegen.rendering.serde.*
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.pattern.UriPattern
@@ -70,44 +69,44 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
         }
     }
 
-    override fun renderDeserializeDocumentBody(
-        ctx: ProtocolGenerator.GenerationContext,
-        shape: Shape,
-        writer: KotlinWriter
-    ) {
-        renderDeserializerBody(ctx, shape, shape.members().toList(), writer)
-    }
-
-    override fun renderDeserializeException(
-        ctx: ProtocolGenerator.GenerationContext,
-        shape: Shape,
-        writer: KotlinWriter
-    ) {
-        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
-        val responseBindings = resolver.responseBindings(shape)
-        val documentMembers = responseBindings.filterDocumentBoundMembers()
-        writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
-        writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
-        renderDeserializerBody(ctx, shape, documentMembers, writer)
-    }
-
-    override fun renderDeserializeOperationBody(
-        ctx: ProtocolGenerator.GenerationContext,
-        op: OperationShape,
-        writer: KotlinWriter
-    ) {
-        writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
-        writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
-
-        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
-        val responseBindings = resolver.responseBindings(op)
-        val documentMembers = responseBindings.filterDocumentBoundMembers()
-
-        val shape = ctx.model.expectShape(op.output.get())
-
-        unwrapOperationResponseBody(op.id.name, writer)
-        renderDeserializerBody(ctx, shape, documentMembers, writer)
-    }
+    // override fun renderDeserializeDocumentBody(
+    //     ctx: ProtocolGenerator.GenerationContext,
+    //     shape: Shape,
+    //     writer: KotlinWriter
+    // ) {
+    //     renderDeserializerBody(ctx, shape, shape.members().toList(), writer)
+    // }
+    //
+    // override fun renderDeserializeException(
+    //     ctx: ProtocolGenerator.GenerationContext,
+    //     shape: Shape,
+    //     writer: KotlinWriter
+    // ) {
+    //     val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
+    //     val responseBindings = resolver.responseBindings(shape)
+    //     val documentMembers = responseBindings.filterDocumentBoundMembers()
+    //     writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+    //     writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+    //     renderDeserializerBody(ctx, shape, documentMembers, writer)
+    // }
+    //
+    // override fun renderDeserializeOperationBody(
+    //     ctx: ProtocolGenerator.GenerationContext,
+    //     op: OperationShape,
+    //     writer: KotlinWriter
+    // ) {
+    //     writer.addImport(RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+    //     writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+    //
+    //     val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
+    //     val responseBindings = resolver.responseBindings(op)
+    //     val documentMembers = responseBindings.filterDocumentBoundMembers()
+    //
+    //     val shape = ctx.model.expectShape(op.output.get())
+    //
+    //     unwrapOperationResponseBody(op.id.name, writer)
+    //     renderDeserializerBody(ctx, shape, documentMembers, writer)
+    // }
 
     private fun renderSerializerBody(
         ctx: ProtocolGenerator.GenerationContext,
@@ -124,13 +123,13 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
         }
     }
 
-    override fun renderSerializeDocumentBody(
-        ctx: ProtocolGenerator.GenerationContext,
-        shape: Shape,
-        writer: KotlinWriter
-    ) {
-        renderSerializerBody(ctx, shape, shape.members().toList(), writer)
-    }
+    // override fun renderSerializeDocumentBody(
+    //     ctx: ProtocolGenerator.GenerationContext,
+    //     shape: Shape,
+    //     writer: KotlinWriter
+    // ) {
+    //     renderSerializerBody(ctx, shape, shape.members().toList(), writer)
+    // }
 
     override fun renderSerializeHttpBody(
         ctx: ProtocolGenerator.GenerationContext,
@@ -153,22 +152,29 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
         }
     }
 
-    override fun renderSerializeOperationBody(
-        ctx: ProtocolGenerator.GenerationContext,
-        op: OperationShape,
-        writer: KotlinWriter
-    ) {
-        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
-        val requestBindings = resolver.requestBindings(op)
-        val documentMembers = requestBindings.filterDocumentBoundMembers()
+    // override fun renderSerializeOperationBody(
+    //     ctx: ProtocolGenerator.GenerationContext,
+    //     op: OperationShape,
+    //     writer: KotlinWriter
+    // ) {
+    //     val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
+    //     val requestBindings = resolver.requestBindings(op)
+    //     val documentMembers = requestBindings.filterDocumentBoundMembers()
+    //
+    //     val shape = ctx.model.expectShape(op.input.get())
+    //
+    //     // import and instantiate a serializer
+    //     writer.addImport(RuntimeTypes.Serde.SerdeFormUrl.FormUrlSerializer)
+    //     writer.write("val serializer = #T()", RuntimeTypes.Serde.SerdeFormUrl.FormUrlSerializer)
+    //     renderSerializerBody(ctx, shape, documentMembers, writer)
+    //     writer.write("return serializer.toByteArray()")
+    // }
+    override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator {
+        TODO("Not yet implemented")
+    }
 
-        val shape = ctx.model.expectShape(op.input.get())
-
-        // import and instantiate a serializer
-        writer.addImport(RuntimeTypes.Serde.SerdeFormUrl.FormUrlSerializer)
-        writer.write("val serializer = #T()", RuntimeTypes.Serde.SerdeFormUrl.FormUrlSerializer)
-        renderSerializerBody(ctx, shape, documentMembers, writer)
-        writer.write("return serializer.toByteArray()")
+    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializeGenerator {
+        TODO("Not yet implemented")
     }
 
     abstract fun unwrapOperationResponseBody(operationName: String, writer: KotlinWriter)
