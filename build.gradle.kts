@@ -52,10 +52,12 @@ subprojects {
         val smithyKotlinPackageListUrl: String by project
         val smithyKotlinDocBaseUrl: String by project
         // Configure Dokka to link to smithy-kotlin types
-        dokkaSourceSets.configureEach {
-            externalDocumentationLink {
-                packageListUrl.set(URL(smithyKotlinPackageListUrl))
-                url.set(URL(smithyKotlinDocBaseUrl))
+        if (smithyKotlinDocBaseUrl.isNotEmpty() && smithyKotlinPackageListUrl.isNotEmpty()) {
+            dokkaSourceSets.configureEach {
+                externalDocumentationLink {
+                    packageListUrl.set(URL(smithyKotlinPackageListUrl))
+                    url.set(URL(smithyKotlinDocBaseUrl))
+                }
             }
         }
     }
