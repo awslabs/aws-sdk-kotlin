@@ -19,7 +19,6 @@ import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 
 /**
  * Tests for bucket operations and presigner
@@ -73,7 +72,6 @@ class S3BucketOpsIntegrationTest {
         assertEquals(contents, roundTrippedContents)
     }
 
-    @OptIn(ExperimentalTime::class)
     @Test
     fun testPutObjectFromFile() = runSuspendTest {
         val tempFile = RandomTempFile(1024)

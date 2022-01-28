@@ -30,7 +30,7 @@ class BufferedReadChannelByteBufferTest : ManualDispatchTestBase() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun testReadBeforeAvailable() = runTest {
+    fun testReadBeforeAvailable() = runDispatchingTest {
         // test readAvailable() suspends when no data is available
         expect(1)
 
@@ -61,7 +61,7 @@ class BufferedReadChannelByteBufferTest : ManualDispatchTestBase() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun testReadAfterAvailable() = runTest {
+    fun testReadAfterAvailable() = runDispatchingTest {
         // test readAvailable() does NOT suspend when data is available
         expect(1)
         ch.write("1234")

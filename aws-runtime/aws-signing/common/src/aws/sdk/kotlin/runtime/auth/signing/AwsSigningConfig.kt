@@ -10,7 +10,6 @@ import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 
 /**
  * Predicate function used to determine if a specific header should be signed or not
@@ -20,7 +19,6 @@ public typealias ShouldSignHeaderFn = (String) -> Boolean
 /**
  * Configuration that tells the underlying AWS signer how to sign requests
  */
-@OptIn(ExperimentalTime::class)
 public class AwsSigningConfig private constructor(builder: Builder) {
     public companion object {
         public operator fun invoke(block: Builder.() -> Unit): AwsSigningConfig = Builder().apply(block).build()
@@ -232,7 +230,6 @@ internal fun AwsSigningAlgorithm.toCrt(): aws.sdk.kotlin.crt.auth.signing.AwsSig
 internal fun Credentials.toCrt(): aws.sdk.kotlin.crt.auth.credentials.Credentials =
     aws.sdk.kotlin.crt.auth.credentials.Credentials(accessKeyId, secretAccessKey, sessionToken)
 
-@OptIn(ExperimentalTime::class)
 internal suspend fun AwsSigningConfig.toCrt(): aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig {
     val config = this
     // NOTE: we cannot pass a credentialsProvider due to https://github.com/awslabs/aws-crt-kotlin/issues/15

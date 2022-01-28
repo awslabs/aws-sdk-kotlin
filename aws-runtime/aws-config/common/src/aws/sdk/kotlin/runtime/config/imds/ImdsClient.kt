@@ -27,7 +27,6 @@ import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 /**
  * Maximum time allowed by default (6 hours)
@@ -56,7 +55,6 @@ public interface InstanceMetadataProvider : Closeable {
  * See [transitioning to IMDSv2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html#instance-metadata-transition-to-version-2)
  * for more information.
  */
-@OptIn(ExperimentalTime::class)
 public class ImdsClient private constructor(builder: Builder) : InstanceMetadataProvider {
     public constructor() : this(Builder())
 

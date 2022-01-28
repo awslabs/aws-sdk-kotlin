@@ -14,7 +14,6 @@ import aws.smithy.kotlin.runtime.time.ManualClock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
-import kotlin.time.ExperimentalTime
 
 class ImdsRegionProviderTest {
 
@@ -28,7 +27,6 @@ class ImdsRegionProviderTest {
         assertNull(provider.getRegion())
     }
 
-    @OptIn(ExperimentalTime::class)
     @Test
     fun testResolveRegion() = runSuspendTest {
 

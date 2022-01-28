@@ -12,6 +12,7 @@ import aws.smithy.kotlin.runtime.testing.ManualDispatchTestBase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import java.lang.RuntimeException
+import java.nio.ByteBuffer
 import kotlin.test.*
 
 internal fun BufferedReadChannel.write(bytes: ByteArray) {
@@ -51,7 +52,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadBeforeAvailable() = runTest {
+    fun testReadBeforeAvailable() = runDispatchingTest {
         // test readAvailable() suspends when no data is available
         expect(1)
 
@@ -80,7 +81,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadBeforeAvailableFully() = runTest {
+    fun testReadBeforeAvailableFully() = runDispatchingTest {
         // test readFully() suspends when no data is available
         expect(1)
 
@@ -108,7 +109,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadAfterAvailable() = runTest {
+    fun testReadAfterAvailable() = runDispatchingTest {
         // test readAvailable() does NOT suspend when data is available
         expect(1)
         ch.write("1234")
@@ -131,7 +132,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadAfterAvailableFully() = runTest {
+    fun testReadAfterAvailableFully() = runDispatchingTest {
         // test readFully() does NOT suspend when data is available to satisfy the request
         expect(1)
 
@@ -154,7 +155,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadFullySuspends() = runTest {
+    fun testReadFullySuspends() = runDispatchingTest {
         // test readFully() suspends when not enough data is available to satisfy the request
         expect(1)
 
@@ -182,7 +183,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadToEmpty() = runTest {
+    fun testReadToEmpty() = runDispatchingTest {
         // test readAvailable() does not suspend when length is zero
         // (in practice you wouldn't set 0 but it could happen when combined with an offset)
         expect(1)
@@ -196,7 +197,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadToEmptyFromFailedChannel() = runTest {
+    fun testReadToEmptyFromFailedChannel() = runDispatchingTest {
         expect(1)
         ch.cancel(TestException())
         val buf = ByteArray(16)
@@ -207,7 +208,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadToEmptyFromClosedChannel() = runTest {
+    fun testReadToEmptyFromClosedChannel() = runDispatchingTest {
         expect(1)
         ch.close()
         val buf = ByteArray(16)
@@ -218,7 +219,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadFullyFromFailedChannel() = runTest {
+    fun testReadFullyFromFailedChannel() = runDispatchingTest {
         expect(1)
         ch.cancel(TestException())
         assertFails {
@@ -229,7 +230,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadFullyFromClosedChannel() = runTest {
+    fun testReadFullyFromClosedChannel() = runDispatchingTest {
         expect(1)
         ch.close()
         assertFails {
@@ -240,7 +241,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun readPartialSegment() = runTest {
+    fun readPartialSegment() = runDispatchingTest {
         expect(1)
         ch.write("1234")
         launch {
@@ -262,7 +263,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadState() = runTest {
+    fun testReadState() = runDispatchingTest {
         assertFalse(ch.isClosedForWrite)
         assertFalse(ch.isClosedForRead)
         assertEquals(0, ch.availableForRead)
@@ -281,7 +282,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadRemaining() = runTest {
+    fun testReadRemaining() = runDispatchingTest {
         expect(1)
         ch.write("1234")
         launch {
@@ -300,7 +301,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadRemainingLimit() = runTest {
+    fun testReadRemainingLimit() = runDispatchingTest {
         // should test partial segment reading
         expect(1)
         ch.write("123")
@@ -331,7 +332,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadInProgress() = runTest {
+    fun testReadInProgress() = runDispatchingTest {
         expect(1)
         launch {
             expect(3)
@@ -351,7 +352,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadFullyEof() = runTest {
+    fun testReadFullyEof() = runDispatchingTest {
         expect(1)
         ch.write("1234")
         val buf = ByteArray(16)
@@ -370,7 +371,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testResumeReadFromFailedChannel() = runTest {
+    fun testResumeReadFromFailedChannel() = runDispatchingTest {
         expect(1)
 
         launch {
@@ -388,7 +389,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testResumeReadAvailableFromClosedChannelNoContent() = runTest {
+    fun testResumeReadAvailableFromClosedChannelNoContent() = runDispatchingTest {
         expect(1)
 
         launch {
@@ -404,7 +405,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testReadAndWriteFully() = runTest {
+    fun testReadAndWriteFully() = runDispatchingTest {
         val bytes = byteArrayOf(1, 2, 3, 4, 5)
         ch.write(bytes)
         val buf = ByteArray(5)
@@ -424,7 +425,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
     }
 
     @Test
-    fun testLargeTransfer() = runTest {
+    fun testLargeTransfer() = runDispatchingTest {
         val size = 262144 + 512
         launch {
             ch.write(ByteArray(size))

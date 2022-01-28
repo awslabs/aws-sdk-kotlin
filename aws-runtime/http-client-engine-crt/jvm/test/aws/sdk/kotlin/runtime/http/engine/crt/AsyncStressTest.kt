@@ -24,7 +24,6 @@ import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
 import kotlin.test.Test
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 class AsyncStressTest : TestWithLocalServer() {
 
@@ -70,7 +69,6 @@ class AsyncStressTest : TestWithLocalServer() {
         }
     }
 
-    @OptIn(ExperimentalTime::class)
     @Test
     fun testStreamNotConsumed() = runSuspendTest {
         // test that filling the stream window and not consuming the body stream still cleans up resources

@@ -18,7 +18,6 @@ import java.net.URL
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 
 object S3TestUtils {
 
@@ -26,7 +25,6 @@ object S3TestUtils {
 
     suspend fun getTestBucket(client: S3Client): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX)
 
-    @OptIn(ExperimentalTime::class)
     suspend fun getBucketWithPrefix(client: S3Client, prefix: String): String = withTimeout(Duration.seconds(60)) {
         var testBucket = client.listBuckets {}
             .buckets

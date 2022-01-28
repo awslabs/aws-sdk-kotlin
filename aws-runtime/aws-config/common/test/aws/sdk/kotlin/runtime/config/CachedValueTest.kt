@@ -14,9 +14,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.yield
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 class CachedValueTest {
     @Test
     fun testNull() = runSuspendTest {

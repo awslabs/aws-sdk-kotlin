@@ -7,7 +7,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.crt.auth.credentials.build
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 import aws.sdk.kotlin.crt.auth.credentials.CachedCredentialsProvider as CachedCredentialsProviderCrt
 
 /**
@@ -24,7 +23,6 @@ import aws.sdk.kotlin.crt.auth.credentials.CachedCredentialsProvider as CachedCr
  */
 public class CachedCredentialsProvider private constructor(builder: Builder) : CrtCredentialsProvider {
 
-    @OptIn(ExperimentalTime::class)
     override val crtProvider: CachedCredentialsProviderCrt = CachedCredentialsProviderCrt.build {
         refreshTimeInMilliseconds = builder.refreshTime.inWholeMilliseconds
 
@@ -39,7 +37,6 @@ public class CachedCredentialsProvider private constructor(builder: Builder) : C
         public fun build(block: Builder.() -> Unit): CachedCredentialsProvider = Builder().apply(block).build()
     }
 
-    @OptIn(ExperimentalTime::class)
     public class Builder {
         /**
          * The provider to cache credentials query results from

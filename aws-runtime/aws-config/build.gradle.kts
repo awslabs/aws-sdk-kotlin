@@ -26,11 +26,9 @@ kotlin {
                 // parsing common JSON credentials responses
                 implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
 
-
                 // credential providers
                 implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
                 implementation(project(":aws-runtime:crt-util"))
-
             }
         }
         commonTest {
