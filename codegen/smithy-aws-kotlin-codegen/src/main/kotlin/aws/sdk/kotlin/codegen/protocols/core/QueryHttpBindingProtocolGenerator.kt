@@ -135,7 +135,7 @@ abstract class AbstractQueryFormUrlSerializerGenerator(
         val symbol = ctx.symbolProvider.toSymbol(shape)
         return symbol.documentSerializer(ctx.settings) { writer ->
             val fnName = symbol.documentSerializerName()
-            writer.openBlock("internal fun #L(serializer: #T, input: #T){", fnName, RuntimeTypes.Serde.Serializer, symbol)
+            writer.openBlock("internal fun #L(serializer: #T, input: #T) {", fnName, RuntimeTypes.Serde.Serializer, symbol)
                 .call {
                     renderSerializerBody(ctx, shape, shape.members().toList(), writer)
                 }

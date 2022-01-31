@@ -16,6 +16,7 @@ import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
@@ -114,10 +115,11 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     override fun operationErrorHandler(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Symbol =
         op.errorHandler(ctx.settings) { writer ->
             writer.withBlock(
-                "private suspend fun ${op.errorHandlerName()}(context: #T, response: #T): Nothing {",
+                "private suspend fun ${op.errorHandlerName()}(context: #T, response: #T): #Q {",
                 "}",
                 RuntimeTypes.Core.ExecutionContext,
-                RuntimeTypes.Http.Response.HttpResponse
+                RuntimeTypes.Http.Response.HttpResponse,
+                KotlinTypes.Nothing
             ) {
                 renderThrowOperationError(ctx, op, writer)
             }
@@ -154,7 +156,9 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             .write("")
 
         if (op.errors.isEmpty()) {
-            writer.write("throw #T(errorDetails.message)", exceptionBaseSymbol)
+            writer.write("val ex = #T(errorDetails.message)", exceptionBaseSymbol)
+            writer.write("#T(ex, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
+            writer.write("throw ex")
         } else {
             writer.openBlock("val modeledExceptionDeserializer = when(errorDetails.code) {", "}") {
                 op.errors.forEach { err ->

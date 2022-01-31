@@ -98,7 +98,9 @@ class S3Generator : RestXml() {
             .write("")
 
         if (op.errors.isEmpty()) {
-            writer.write("throw #T(errorDetails.message)", exceptionBaseSymbol)
+            writer.write("val ex = #T(errorDetails.message)", exceptionBaseSymbol)
+            writer.write("#T(ex, wrappedResponse, errorDetails)", setS3ErrorMetadata)
+            writer.write("throw ex")
         } else {
             writer.openBlock("val modeledExceptionDeserializer = when(errorDetails.code) {", "}") {
                 op.errors.forEach { err ->
