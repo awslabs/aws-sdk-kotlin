@@ -22,7 +22,7 @@ import kotlin.test.Test
 class AwsHttpBindingProtocolGeneratorTest {
 
     @Test
-    fun `it throws base service exception on error parse failure`() {
+    fun itThrowsBaseServiceExceptionOnErrorParseFailure() {
         val model = """
             namespace com.test
             use aws.protocols#restJson1
@@ -50,13 +50,19 @@ class AwsHttpBindingProtocolGeneratorTest {
             serviceName = "Example",
             settings = model.defaultSettings(sdkId = serviceSdkName)
         )
-        val writer = KotlinWriter("com.test")
         val unit = TestableAwsHttpBindingProtocolGenerator()
         val op = model.expectShape<OperationShape>("com.test#GetFoo")
 
-        unit.renderThrowOperationError(testCtx.generationCtx, op, writer)
+        val fn = unit.operationErrorHandler(testCtx.generationCtx, op)
 
-        val actual = writer.toString()
+        // use the symbol to ensure it's generated via GeneratedDependency
+        testCtx.generationCtx.delegator.useFileWriter("GetFooOperationDeserializer.kt", "com.test.transform") {
+            it.write("#T(context, response)", fn)
+        }
+
+        testCtx.generationCtx.delegator.finalize()
+        testCtx.generationCtx.delegator.flushWriters()
+        val actual = testCtx.manifest.expectFileString("src/main/kotlin/com/test/transform/GetFooOperationDeserializer.kt")
         val expected = """
             throw ${serviceSdkName}Exception("Failed to parse response as 'restJson1' error", ex).also {
         """.trimIndent()
