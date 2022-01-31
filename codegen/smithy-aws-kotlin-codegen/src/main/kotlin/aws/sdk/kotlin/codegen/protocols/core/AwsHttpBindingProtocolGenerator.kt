@@ -111,7 +111,19 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
      */
     abstract fun renderDeserializeErrorDetails(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter)
 
-    override fun renderThrowOperationError(
+    override fun operationErrorHandler(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Symbol =
+        op.errorHandler(ctx.settings) { writer ->
+            writer.withBlock(
+                "private suspend fun ${op.errorHandlerName()}(context: #T, response: #T): Nothing {",
+                "}",
+                RuntimeTypes.Core.ExecutionContext,
+                RuntimeTypes.Http.Response.HttpResponse
+            ) {
+                renderThrowOperationError(ctx, op, writer)
+            }
+        }
+
+    protected open fun renderThrowOperationError(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
         writer: KotlinWriter
@@ -153,7 +165,11 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                     }
                     writer.write("#S -> #T()", getErrorCode(ctx, err), errDeserializerSymbol)
                 }
-                writer.write("else -> throw #T(errorDetails.message)", exceptionBaseSymbol)
+                writer.withBlock("else -> {", "}") {
+                    write("val ex = #T(errorDetails.message)", exceptionBaseSymbol)
+                    write("#T(ex, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
+                    write("throw ex")
+                }
             }
 
             writer.write("")

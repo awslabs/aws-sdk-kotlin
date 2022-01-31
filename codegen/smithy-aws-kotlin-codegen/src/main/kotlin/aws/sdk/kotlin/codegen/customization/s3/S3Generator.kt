@@ -109,7 +109,11 @@ class S3Generator : RestXml() {
                     }
                     writer.write("#S -> #T()", getErrorCode(ctx, err), errDeserializerSymbol)
                 }
-                writer.write("else -> throw #T(errorDetails.message)", exceptionBaseSymbol)
+                writer.withBlock("else -> {", "}") {
+                    write("val ex = #T(errorDetails.message)", exceptionBaseSymbol)
+                    write("#T(ex, wrappedResponse, errorDetails)", setS3ErrorMetadata)
+                    write("throw ex")
+                }
             }
 
             writer.write("")
