@@ -235,7 +235,7 @@ internal abstract class AbstractBufferedReadChannel(
         val success = _closed.compareAndSet(null, ClosedSentinel(cause))
         if (!success) return false
 
-        segments.close()
+        segments.close(cause)
 
         readOp.getAndSet(null)?.let { cont ->
             if (cause != null) {
