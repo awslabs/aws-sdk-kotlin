@@ -91,8 +91,6 @@ class RestXmlParserGenerator(
             namespace = ctx.settings.pkg.subpackage("transform")
             definitionFile = "${memberSymbol.name}PayloadDeserializer.kt"
             renderBy = { writer ->
-                // TODO - it would be nice to just inline this into the operation file as a private function instead
-                //  since that is the only place it should be accessed
                 addNestedDocumentDeserializers(ctx, targetShape, writer)
                 writer.dokka("Payload deserializer for ${memberSymbol.name} with a different XML name trait (${xmlNameTrait.value})")
                 writer.withBlock("internal fun $name(payload: ByteArray): #T {", "}", memberSymbol) {
