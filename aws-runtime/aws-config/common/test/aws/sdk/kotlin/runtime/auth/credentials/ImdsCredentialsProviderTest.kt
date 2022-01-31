@@ -8,7 +8,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.*
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -18,15 +17,18 @@ import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ImdsCredentialsProviderTest {
 
     @Test
-    fun testImdsDisabled(): Unit = runSuspendTest {
+    fun testImdsDisabled() = runTest {
         val platform = TestPlatformProvider(
             env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true")
         )
@@ -37,7 +39,7 @@ class ImdsCredentialsProviderTest {
     }
 
     @Test
-    fun testSuccess(): Unit = runSuspendTest {
+    fun testSuccess() = runTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
@@ -84,7 +86,7 @@ class ImdsCredentialsProviderTest {
     }
 
     @Test
-    fun testSuccessProfileOverride(): Unit = runSuspendTest {
+    fun testSuccessProfileOverride() = runTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
@@ -128,7 +130,7 @@ class ImdsCredentialsProviderTest {
     }
 
     @Test
-    fun testTokenFailure(): Unit = runSuspendTest {
+    fun testTokenFailure() = runTest {
         // when attempting to retrieve initial token, IMDS replied with 403, indicating IMDS is disabled or not allowed through permissions
         val connection = buildTestConnection {
             expect(
@@ -154,7 +156,7 @@ class ImdsCredentialsProviderTest {
     }
 
     @Test
-    fun testNoInstanceProfileConfigured(): Unit = runSuspendTest {
+    fun testNoInstanceProfileConfigured() = runTest {
 
         val connection = buildTestConnection {
             expect(

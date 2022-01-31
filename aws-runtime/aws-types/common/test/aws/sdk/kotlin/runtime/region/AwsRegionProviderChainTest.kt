@@ -5,11 +5,13 @@
 
 package aws.sdk.kotlin.runtime.region
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AwsRegionProviderChainTest {
     @Test
     fun testNoProviders() {
@@ -22,7 +24,7 @@ class AwsRegionProviderChainTest {
     }
 
     @Test
-    fun testChain() = runSuspendTest {
+    fun testChain() = runTest {
         val chain = RegionProviderChain(
             TestProvider(null),
             TestProvider("us-east-1"),

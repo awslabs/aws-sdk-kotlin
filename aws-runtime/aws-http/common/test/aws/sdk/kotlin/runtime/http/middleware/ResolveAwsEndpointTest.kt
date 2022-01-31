@@ -10,7 +10,6 @@ import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
 import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
 import aws.sdk.kotlin.runtime.endpoint.CredentialScope
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.operation.*
@@ -19,10 +18,12 @@ import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.get
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(ExperimentalStdlibApi::class)
+@OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
 class ResolveAwsEndpointTest {
 
     private val mockEngine = object : HttpClientEngineBase("test") {
@@ -34,7 +35,7 @@ class ResolveAwsEndpointTest {
     private val client = sdkHttpClient(mockEngine)
 
     @Test
-    fun testHostIsSet(): Unit = aws.smithy.kotlin.runtime.testing.runSuspendTest {
+    fun testHostIsSet() = runTest {
         // sanity check - most of this is covered by setRequestEndpoint() from smithy-kotlin runtime
         val op = SdkHttpOperation.build<Unit, HttpResponse> {
             serializer = UnitSerializer
@@ -60,7 +61,7 @@ class ResolveAwsEndpointTest {
     }
 
     @Test
-    fun testOverrideCredentialScopes(): Unit = runSuspendTest {
+    fun testOverrideCredentialScopes() = runTest {
         // if an endpoint specifies credential scopes we should override the context
         val op = SdkHttpOperation.build<Unit, HttpResponse> {
             serializer = UnitSerializer
