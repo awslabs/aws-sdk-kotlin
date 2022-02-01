@@ -104,7 +104,7 @@ class PresignerGenerator : KotlinIntegration {
 
         // If presignable operations found for this service, generate a Presigner file
         if (presignOperations.isNotEmpty()) {
-            delegator.useFileWriter("Presigner.kt", ctx.settings.pkg.name) { writer ->
+            delegator.useFileWriter("Presigners.kt", "${ctx.settings.pkg.name}.presigners") { writer ->
                 renderPresigner(writer, ctx, httpBindingResolver, service.expectTrait<SigV4Trait>().name, presignOperations, defaultTimestampFormat)
             }
         }

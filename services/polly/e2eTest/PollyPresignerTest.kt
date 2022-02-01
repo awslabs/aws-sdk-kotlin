@@ -4,6 +4,7 @@ import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
+import aws.sdk.kotlin.services.polly.presigners.presign
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.testing.runSuspendTest
