@@ -40,7 +40,9 @@ subprojects {
             kotlin.srcDir("generated-src/test")
 
             dependencies {
+                val coroutinesVersion: String by project
                 implementation(kotlin("test-junit5"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation(project(":aws-runtime:testing"))
             }
         }

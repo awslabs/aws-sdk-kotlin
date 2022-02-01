@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.e2etest
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.smithy.kotlin.runtime.content.ByteStream
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
+import kotlin.test.runTest
 import kotlin.test.assertEquals
 import kotlin.time.Duration
 
@@ -46,7 +46,7 @@ class S3BucketOpsIntegrationTest {
     }
 
     @Test
-    fun testPutObjectFromMemory() = runSuspendTest {
+    fun testPutObjectFromMemory() = runTest {
         val contents = """
             A lep is a ball.
             A tay is a hammer.
@@ -73,7 +73,7 @@ class S3BucketOpsIntegrationTest {
     }
 
     @Test
-    fun testPutObjectFromFile() = runSuspendTest {
+    fun testPutObjectFromFile() = runTest {
         val tempFile = RandomTempFile(1024)
         val keyName = "put-obj-from-file.txt"
 
@@ -98,7 +98,7 @@ class S3BucketOpsIntegrationTest {
     }
 
     @Test
-    fun testListObjectsWithDelimiter(): Unit = runSuspendTest {
+    fun testListObjectsWithDelimiter(): Unit = runTest {
         // see: https://github.com/awslabs/aws-sdk-kotlin/issues/448
 
         client.listObjects {

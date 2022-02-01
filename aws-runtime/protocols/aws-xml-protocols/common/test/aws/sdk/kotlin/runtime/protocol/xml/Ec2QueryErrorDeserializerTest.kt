@@ -4,8 +4,8 @@
  */
 package aws.sdk.kotlin.runtime.protocol.xml
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.serde.DeserializationException
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -13,7 +13,7 @@ import kotlin.test.assertNull
 
 class Ec2QueryErrorDeserializerTest {
     @Test
-    fun `it deserializes ec2Query errors`() = runSuspendTest {
+    fun `it deserializes ec2Query errors`() = runTest {
         val payload = """
             <Response>
                 <Errors>
@@ -33,7 +33,7 @@ class Ec2QueryErrorDeserializerTest {
     }
 
     @Test
-    fun `it fails to deserialize invalid ec2Query errors`() = runSuspendTest {
+    fun `it fails to deserialize invalid ec2Query errors`() = runTest {
         val tests = listOf(
             """
                 <SomeRandomNode>
@@ -67,7 +67,7 @@ class Ec2QueryErrorDeserializerTest {
     }
 
     @Test
-    fun `it partially deserializes ec2Query errors`() = runSuspendTest {
+    fun `it partially deserializes ec2Query errors`() = runTest {
         val tests = listOf(
             """
                 <Response>

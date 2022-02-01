@@ -5,13 +5,15 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.Platform
 import io.kotest.matchers.maps.shouldContainAll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
@@ -24,6 +26,7 @@ import kotlin.test.assertTrue
 /**
  * Tests that exercise logic associated with the filesystem
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class AWSConfigLoaderFilesystemTest {
 
     @TempDir
@@ -31,7 +34,7 @@ class AWSConfigLoaderFilesystemTest {
     val tempDir: Path? = null
 
     @Test
-    fun itLoadsConfigFileFromFilesystem() = runSuspendTest {
+    fun itLoadsConfigFileFromFilesystem() = runTest {
         requireNotNull(tempDir)
         val configFile = tempDir.resolve("config")
         val credentialsFile = tempDir.resolve("credentials")
@@ -58,7 +61,7 @@ class AWSConfigLoaderFilesystemTest {
     }
 
     @Test
-    fun itLoadsConfigAndCredsFileFromFilesystem() = runSuspendTest {
+    fun itLoadsConfigAndCredsFileFromFilesystem() = runTest {
         requireNotNull(tempDir)
         val configFile = tempDir.resolve("config")
         val credentialsFile = tempDir.resolve("credentials")
@@ -88,7 +91,7 @@ class AWSConfigLoaderFilesystemTest {
         credentialsFile.deleteIfExists()
     }
 
-    internal fun mockPlatform(
+    private fun mockPlatform(
         pathSegment: String,
         awsProfileEnv: String? = null,
         awsConfigFileEnv: String? = null,

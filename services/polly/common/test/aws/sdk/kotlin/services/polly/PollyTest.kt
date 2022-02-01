@@ -9,13 +9,14 @@ import aws.sdk.kotlin.services.polly.presigners.PollyPresignConfig
 import aws.sdk.kotlin.services.polly.presigners.presign
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import kotlin.test.Test
+import kotlin.test.runTest
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class PollyPresignerTest {
 
     @Test
-    fun itProducesExpectedUrlComponents() = runSuspendTest {
+    fun itProducesExpectedUrlComponents() = runTest {
         val request = SynthesizeSpeechRequest {
             voiceId = VoiceId.Salli
             outputFormat = OutputFormat.Pcm

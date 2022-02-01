@@ -8,17 +8,19 @@ package aws.sdk.kotlin.runtime.region
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.*
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.ManualClock
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ImdsRegionProviderTest {
 
     @Test
-    fun testImdsDisabled() = runSuspendTest {
+    fun testImdsDisabled() = runTest {
         val platform = TestPlatformProvider(
             env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true")
         )
@@ -28,7 +30,7 @@ class ImdsRegionProviderTest {
     }
 
     @Test
-    fun testResolveRegion() = runSuspendTest {
+    fun testResolveRegion() = runTest {
 
         val connection = buildTestConnection {
             expect(

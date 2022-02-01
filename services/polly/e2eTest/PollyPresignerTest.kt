@@ -10,6 +10,7 @@ import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.testing.runSuspendTest
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
+import kotlin.test.runTest
 import kotlin.test.assertEquals
 
 /**
@@ -19,7 +20,7 @@ import kotlin.test.assertEquals
 class PollyPresignerTest {
 
     @Test
-    fun clientBasedPresign() = runSuspendTest {
+    fun clientBasedPresign() = runTest {
         val request = SynthesizeSpeechRequest {
             voiceId = VoiceId.Salli
             outputFormat = OutputFormat.Pcm

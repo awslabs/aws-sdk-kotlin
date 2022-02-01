@@ -6,14 +6,24 @@
 package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.sdk.kotlin.crt.io.byteArrayBuffer
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.io.readByte
 import aws.smithy.kotlin.runtime.testing.ManualDispatchTestBase
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import java.lang.RuntimeException
-import java.nio.ByteBuffer
-import kotlin.test.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.yield
+import kotlin.test.AfterTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 internal fun BufferedReadChannel.write(bytes: ByteArray) {
     write(byteArrayBuffer(bytes))
@@ -438,7 +448,7 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
 
     @OptIn(DelicateCoroutinesApi::class)
     @Test
-    fun testWriteRaceCondition() = runSuspendTest {
+    fun testWriteRaceCondition() = runTest {
         var totalBytes = 0
         val channel = bufferedReadChannel { size -> totalBytes += size }
         val writeJob = GlobalScope.async {

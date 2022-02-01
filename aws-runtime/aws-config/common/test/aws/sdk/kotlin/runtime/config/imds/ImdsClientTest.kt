@@ -22,9 +22,10 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.*
 import kotlin.test.*
-import kotlin.time.seconds
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
 class ImdsClientTest {
 
     @Test

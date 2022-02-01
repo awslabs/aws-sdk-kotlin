@@ -9,6 +9,7 @@ import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.*
 
 /**
  * Tests for presigner
@@ -17,7 +18,7 @@ import kotlin.test.assertEquals
 class StsPresignerTest {
 
     @Test
-    fun testGetCallerIdentityPresigner() = runSuspendTest {
+    fun testGetCallerIdentityPresigner() = runTest {
         val c = StsClient { region = "us-east-2" }
         val req = GetCallerIdentityRequest { }
         val presignedRequest = req.presign(c.config, 60)

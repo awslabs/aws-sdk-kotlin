@@ -5,17 +5,19 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.Instant
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class JsonCredentialsDeserializerTest {
     @Test
-    fun testSuccessResponse() = runSuspendTest {
+    fun testSuccessResponse() = runTest {
         val payload = """
         {
             "Code" : "Success",
@@ -40,7 +42,7 @@ class JsonCredentialsDeserializerTest {
     }
 
     @Test
-    fun testInvalidJson(): Unit = runSuspendTest {
+    fun testInvalidJson() = runTest {
         val payload = "404: not found"
         val deserializer = JsonDeserializer(payload.encodeToByteArray())
 
@@ -51,7 +53,7 @@ class JsonCredentialsDeserializerTest {
     }
 
     @Test
-    fun testSuccessResponseMissingCode() = runSuspendTest {
+    fun testSuccessResponseMissingCode() = runTest {
         val payload = """
         {
             "LastUpdated" : "2021-09-17T20:57:08Z",
@@ -75,7 +77,7 @@ class JsonCredentialsDeserializerTest {
     }
 
     @Test
-    fun testMissingAccessKeyId() = runSuspendTest {
+    fun testMissingAccessKeyId() = runTest {
         val payload = """
         {
             "LastUpdated" : "2021-09-17T20:57:08Z",
@@ -93,7 +95,7 @@ class JsonCredentialsDeserializerTest {
     }
 
     @Test
-    fun testMissingSecretAccessKey() = runSuspendTest {
+    fun testMissingSecretAccessKey() = runTest {
         val payload = """
         {
             "LastUpdated" : "2021-09-17T20:57:08Z",
@@ -111,7 +113,7 @@ class JsonCredentialsDeserializerTest {
     }
 
     @Test
-    fun testMissingSessionToken() = runSuspendTest {
+    fun testMissingSessionToken() = runTest {
         val payload = """
         {
             "LastUpdated" : "2021-09-17T20:57:08Z",
@@ -129,7 +131,7 @@ class JsonCredentialsDeserializerTest {
     }
 
     @Test
-    fun testErrorResponse() = runSuspendTest {
+    fun testErrorResponse() = runTest {
         val payload = """
         {
             "Code" : "AssumeRoleUnauthorizedAccess",

@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.region
 
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -14,7 +14,7 @@ import kotlin.test.assertNull
 class JvmSystemPropRegionProviderTest {
 
     @Test
-    fun testGetRegion() = runSuspendTest {
+    fun testGetRegion() = runTest {
         val provider = JvmSystemPropRegionProvider(TestPlatformProvider())
 
         assertNull(provider.getRegion())

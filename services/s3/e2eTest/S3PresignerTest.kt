@@ -1,7 +1,6 @@
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
+import kotlin.test.runTest
 import kotlin.test.assertEquals
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -41,7 +41,7 @@ class S3PresignerTest {
     }
 
     @Test
-    fun testPutObjectPresigner() = runSuspendTest {
+    fun testPutObjectPresigner() = runTest {
         val contents = "presign-test"
 
         testKeyNames.forEach { keyName ->
@@ -63,7 +63,7 @@ class S3PresignerTest {
     }
 
     @Test
-    fun testGetObjectPresigner() = runSuspendTest {
+    fun testGetObjectPresigner() = runTest {
         val contents = "presign-test"
 
         testKeyNames.reversed().forEach { keyName ->

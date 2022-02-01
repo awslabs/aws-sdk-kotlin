@@ -5,13 +5,13 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class StaticCredentialsProviderTest {
     @Test
-    fun testStaticProvider() = runSuspendTest {
+    fun testStaticProvider() = runTest {
         val expected = Credentials("access_key_id", "secret_access_key", "session_token")
         val provider = StaticCredentialsProvider(expected)
         assertEquals(expected, provider.getCredentials())

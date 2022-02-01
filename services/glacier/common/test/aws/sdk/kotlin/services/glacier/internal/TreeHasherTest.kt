@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.services.glacier.internal
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import kotlin.test.runTest
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.toHttpBody
@@ -25,7 +25,7 @@ private const val megabyte = 1024 * 1024
 
 class TreeHasherTest {
     @Test
-    fun testCalculateHashes() = runSuspendTest {
+    fun testCalculateHashes() = runTest {
         val chunk1 = byteArrayOf(1, 2, 3)
         val chunk2 = byteArrayOf(4, 5, 6)
         val payload = chunk1 + chunk2
@@ -43,7 +43,7 @@ class TreeHasherTest {
     }
 
     @Test
-    fun integrationTestCalculateHashes() = runSuspendTest {
+    fun integrationTestCalculateHashes() = runTest {
         val byteStream = object : ByteStream.ReplayableStream() {
             override fun newReader(): SdkByteReadChannel {
                 val byteChannel = SdkByteChannel()

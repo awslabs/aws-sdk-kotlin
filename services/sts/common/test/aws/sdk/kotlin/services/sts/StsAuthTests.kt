@@ -41,7 +41,7 @@ class StsAuthTests {
     private val credentials = Credentials("ANOTREAL", "notrealrnrELgWzOk3IFjzDKtFBhDby", "notarealsessiontoken")
 
     @Test
-    fun testAssumeRoleIsSigned(): Unit = runSuspendTest {
+    fun testAssumeRoleIsSigned(): Unit = runTest {
         val client = StsClient {
             region = "us-east-2"
             credentialsProvider = StaticCredentialsProvider(credentials)
@@ -54,7 +54,7 @@ class StsAuthTests {
     }
 
     @Test
-    fun testWebIdentityIsUnsigned(): Unit = runSuspendTest {
+    fun testWebIdentityIsUnsigned(): Unit = runTest {
         val client = StsClient {
             region = "us-east-2"
             credentialsProvider = StaticCredentialsProvider(credentials)
@@ -67,7 +67,7 @@ class StsAuthTests {
     }
 
     @Test
-    fun testAssumeRoleSamlIsUnsigned(): Unit = runSuspendTest {
+    fun testAssumeRoleSamlIsUnsigned(): Unit = runTest {
         val client = StsClient {
             region = "us-east-2"
             credentialsProvider = StaticCredentialsProvider(credentials)
