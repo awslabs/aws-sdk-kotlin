@@ -10,8 +10,8 @@ import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.TestInstance
-import kotlin.test.Test
 import kotlin.test.Ignore
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
 

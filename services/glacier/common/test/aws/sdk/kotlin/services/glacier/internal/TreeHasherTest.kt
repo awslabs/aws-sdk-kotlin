@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.services.glacier.internal
 
-import kotlin.test.runTest
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.toHttpBody
@@ -20,6 +19,7 @@ import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.fail
+import kotlin.test.runTest
 
 private const val megabyte = 1024 * 1024
 
