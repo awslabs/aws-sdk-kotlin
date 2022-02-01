@@ -1,18 +1,20 @@
 package aws.sdk.kotlin.services.polly
 
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
 import aws.sdk.kotlin.services.polly.presigners.PollyPresignConfig
 import aws.sdk.kotlin.services.polly.presigners.presign
 import aws.smithy.kotlin.runtime.http.HttpMethod
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.runTest
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class PollyPresignerTest {
 
     @Test
@@ -31,7 +33,7 @@ class PollyPresignerTest {
             }
         }
 
-        val presignedRequest = request.presign(clientConfig, 10)
+        val presignedRequest = request.presign(clientConfig, 10.seconds)
 
         assertEquals(HttpMethod.GET, presignedRequest.method)
         assertTrue(presignedRequest.headers.entries().size == 1)

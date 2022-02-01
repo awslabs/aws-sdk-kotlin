@@ -97,6 +97,7 @@ class PresignerGeneratorTest {
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
             import aws.smithy.kotlin.runtime.http.request.HttpRequest
+            import kotlin.time.Duration
             import smithy.kotlin.traits.TestClient
             import smithy.kotlin.traits.internal.DefaultEndpointResolver
             import smithy.kotlin.traits.model.GetFooRequest
@@ -138,7 +139,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.method,
                     httpRequestBuilder.url.path,
                     httpRequestBuilder.url.parameters.build(),
-                    duration.inWholeSeconds,
+                    duration,
                     false,
                     SigningLocation.QUERY_STRING
                 )
@@ -176,7 +177,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.method,
                     httpRequestBuilder.url.path,
                     httpRequestBuilder.url.parameters.build(),
-                    duration.inWholeSeconds,
+                    duration,
                     false,
                     SigningLocation.QUERY_STRING
                 )
@@ -214,7 +215,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.method,
                     httpRequestBuilder.url.path,
                     httpRequestBuilder.url.parameters.build(),
-                    duration.inWholeSeconds,
+                    duration,
                     false,
                     SigningLocation.QUERY_STRING
                 )

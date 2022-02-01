@@ -61,7 +61,7 @@ class PollyPresigner : KotlinIntegration {
                 HttpMethod.GET,
                 httpRequestBuilder.url.path,
                 queryStringBuilder.build(),
-                duration.inWholeSeconds,
+                duration,
                 true,
                 SigningLocation.QUERY_STRING
             )

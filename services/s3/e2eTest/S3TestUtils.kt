@@ -17,15 +17,15 @@ import java.io.OutputStreamWriter
 import java.net.URL
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 object S3TestUtils {
 
-    const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
+    private const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
 
     suspend fun getTestBucket(client: S3Client): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX)
 
-    suspend fun getBucketWithPrefix(client: S3Client, prefix: String): String = withTimeout(Duration.seconds(60)) {
+    private suspend fun getBucketWithPrefix(client: S3Client, prefix: String): String = withTimeout(60.seconds) {
         var testBucket = client.listBuckets {}
             .buckets
             ?.mapNotNull { it.name }
@@ -36,7 +36,7 @@ object S3TestUtils {
             client.createBucket {
                 bucket = testBucket
                 createBucketConfiguration {
-                    locationConstraint = BucketLocationConstraint.fromValue(client.config.region!!)
+                    locationConstraint = BucketLocationConstraint.fromValue(client.config.region)
                 }
             }
 
