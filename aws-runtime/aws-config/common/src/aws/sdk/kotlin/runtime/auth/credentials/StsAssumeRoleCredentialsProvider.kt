@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.crt.auth.credentials.build
 import aws.sdk.kotlin.runtime.crt.SdkDefaultIO
+import kotlin.time.Duration
 import aws.sdk.kotlin.crt.auth.credentials.StsAssumeRoleCredentialsProvider as StsAssumeRoleCredentialsProviderCrt
 
 /**
@@ -15,13 +16,13 @@ import aws.sdk.kotlin.crt.auth.credentials.StsAssumeRoleCredentialsProvider as S
  * @param credentialsProvider The underlying Credentials Provider to use for source credentials
  * @param roleArn The target role's ARN
  * @param sessionName The name to associate with the session
- * @param durationSeconds The number of seconds from authentication that the session is valid for
+ * @param duration Amount of time from authentication that the session is valid for
  */
 public class StsAssumeRoleCredentialsProvider public constructor(
     credentialsProvider: CredentialsProvider,
     roleArn: String,
     sessionName: String,
-    durationSeconds: Int? = null,
+    duration: Duration? = null,
 ) : CrtCredentialsProvider {
     override val crtProvider: StsAssumeRoleCredentialsProviderCrt = StsAssumeRoleCredentialsProviderCrt.build {
         clientBootstrap = SdkDefaultIO.ClientBootstrap
@@ -29,6 +30,6 @@ public class StsAssumeRoleCredentialsProvider public constructor(
         this.credentialsProvider = asCrt(credentialsProvider)
         this.roleArn = roleArn
         this.sessionName = sessionName
-        this.durationSeconds = durationSeconds
+        this.durationSeconds = duration?.inWholeSeconds?.toInt()
     }
 }
