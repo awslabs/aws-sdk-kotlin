@@ -30,7 +30,7 @@ import software.amazon.smithy.model.traits.*
 class AwsQuery : QueryHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = AwsQueryTrait.ID
 
-    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializeGenerator =
+    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializerGenerator =
         AwsQuerySerializerGenerator(this)
 
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =

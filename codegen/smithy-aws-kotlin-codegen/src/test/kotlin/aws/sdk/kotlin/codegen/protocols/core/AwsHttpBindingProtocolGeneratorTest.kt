@@ -106,8 +106,8 @@ class AwsHttpBindingProtocolGeneratorTest {
                 }
             }
 
-        override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializeGenerator =
-            object : StructuredDataSerializeGenerator {
+        override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializerGenerator =
+            object : StructuredDataSerializerGenerator {
                 override fun operationSerializer(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, members: List<MemberShape>): Symbol {
                     error("Unneeded for test")
                 }

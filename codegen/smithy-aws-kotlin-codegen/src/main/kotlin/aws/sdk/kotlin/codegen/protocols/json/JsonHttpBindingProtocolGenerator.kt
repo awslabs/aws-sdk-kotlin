@@ -23,7 +23,7 @@ abstract class JsonHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerato
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
         JsonParserGenerator(this)
 
-    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializeGenerator =
+    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializerGenerator =
         JsonSerializerGenerator(this)
 
     override fun renderDeserializeErrorDetails(

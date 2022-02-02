@@ -30,7 +30,7 @@ import software.amazon.smithy.model.traits.XmlNameTrait
 class Ec2Query : QueryHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = Ec2QueryTrait.ID
 
-    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializeGenerator =
+    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializerGenerator =
         Ec2QuerySerializerGenerator(this)
 
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =

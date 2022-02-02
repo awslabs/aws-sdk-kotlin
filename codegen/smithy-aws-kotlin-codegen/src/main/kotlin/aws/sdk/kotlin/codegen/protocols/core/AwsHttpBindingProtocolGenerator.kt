@@ -131,16 +131,8 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         writer: KotlinWriter
     ) {
         val exceptionBaseSymbol = ExceptionBaseClassGenerator.baseExceptionSymbol(ctx.settings)
-
-        listOf(
-            exceptionBaseSymbol,
-            RuntimeTypes.Http.readAll,
-            AwsRuntimeTypes.Http.withPayload,
-            AwsRuntimeTypes.Http.setAseErrorMetadata,
-        ).forEach(writer::addImport)
-
-        writer.write("""val payload = response.body.readAll()""")
-            .write("val wrappedResponse = response.withPayload(payload)")
+        writer.write("val payload = response.body.#T()", RuntimeTypes.Http.readAll)
+            .write("val wrappedResponse = response.#T(payload)", AwsRuntimeTypes.Http.withPayload)
             .write("")
             .write("val errorDetails = try {")
             .indent()
@@ -155,31 +147,20 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             }
             .write("")
 
-        if (op.errors.isEmpty()) {
-            writer.write("val ex = #T(errorDetails.message)", exceptionBaseSymbol)
-            writer.write("#T(ex, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
-            writer.write("throw ex")
-        } else {
-            writer.openBlock("val modeledExceptionDeserializer = when(errorDetails.code) {", "}") {
-                op.errors.forEach { err ->
-                    val errSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(err))
-                    val errDeserializerSymbol = buildSymbol {
-                        name = "${errSymbol.name}Deserializer"
-                        namespace = "${ctx.settings.pkg.name}.transform"
-                    }
-                    writer.write("#S -> #T()", getErrorCode(ctx, err), errDeserializerSymbol)
+        writer.withBlock("val ex = when(errorDetails.code) {", "}") {
+            op.errors.forEach { err ->
+                val errSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(err))
+                val errDeserializerSymbol = buildSymbol {
+                    name = "${errSymbol.name}Deserializer"
+                    namespace = "${ctx.settings.pkg.name}.transform"
                 }
-                writer.withBlock("else -> {", "}") {
-                    write("val ex = #T(errorDetails.message)", exceptionBaseSymbol)
-                    write("#T(ex, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
-                    write("throw ex")
-                }
+                writer.write("#S -> #T().deserialize(context, wrappedResponse)", getErrorCode(ctx, err), errDeserializerSymbol)
             }
-
-            writer.write("")
-                .write("val modeledException = modeledExceptionDeserializer.deserialize(context, wrappedResponse)")
-                .write("#T(modeledException, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
-                .write("throw modeledException")
+            write("else -> #T(errorDetails.message)", exceptionBaseSymbol)
         }
+
+        writer.write("")
+        writer.write("#T(ex, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
+        writer.write("throw ex")
     }
 }

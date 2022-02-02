@@ -80,7 +80,7 @@ class QueryBindingResolver(
 abstract class AbstractQueryFormUrlSerializerGenerator(
     private val protocolGenerator: ProtocolGenerator,
     private val defaultTimestampFormat: TimestampFormatTrait.Format
-) : StructuredDataSerializeGenerator {
+) : StructuredDataSerializerGenerator {
 
     abstract fun descriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,

@@ -36,7 +36,7 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
         RestXmlParserGenerator(this, defaultTimestampFormat)
 
-    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializeGenerator =
+    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializerGenerator =
         RestXmlSerializerGenerator(this, defaultTimestampFormat)
 
     override fun renderDeserializeErrorDetails(
