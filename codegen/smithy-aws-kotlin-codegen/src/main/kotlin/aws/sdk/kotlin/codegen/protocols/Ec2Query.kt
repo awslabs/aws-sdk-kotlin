@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.codegen.protocols
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.protocols.core.AbstractQueryFormUrlSerializerGenerator
 import aws.sdk.kotlin.codegen.protocols.core.QueryHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.formurl.QuerySerdeFormUrlDescriptorGenerator
 import software.amazon.smithy.aws.traits.protocols.Ec2QueryNameTrait
@@ -18,10 +19,7 @@ import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.traits.OperationOutput
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.toRenderingContext
-import software.amazon.smithy.kotlin.codegen.rendering.serde.AbstractSerdeDescriptorGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.serde.SdkFieldDescriptorTrait
-import software.amazon.smithy.kotlin.codegen.rendering.serde.XmlSerdeDescriptorGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.serde.add
+import software.amazon.smithy.kotlin.codegen.rendering.serde.*
 import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.XmlNameTrait
@@ -32,25 +30,11 @@ import software.amazon.smithy.model.traits.XmlNameTrait
 class Ec2Query : QueryHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = Ec2QueryTrait.ID
 
-    override fun getDeserializerDescriptorGenerator(
-        ctx: ProtocolGenerator.GenerationContext,
-        shape: Shape,
-        members: List<MemberShape>,
-        writer: KotlinWriter,
-    ): AbstractSerdeDescriptorGenerator =
-        Ec2QuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members)
+    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializerGenerator =
+        Ec2QuerySerializerGenerator(this)
 
-    override fun getSerializerDescriptorGenerator(
-        ctx: ProtocolGenerator.GenerationContext,
-        shape: Shape,
-        members: List<MemberShape>,
-        writer: KotlinWriter,
-    ): AbstractSerdeDescriptorGenerator =
-        Ec2QuerySerdeFormUrlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members)
-
-    override fun unwrapOperationResponseBody(operationName: String, writer: KotlinWriter) {
-        // Do nothing. EC2 query doesn't require the kind of response unwrapping that AWS query does.
-    }
+    override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
+        Ec2QueryParserGenerator(this)
 
     override fun renderDeserializeErrorDetails(
         ctx: ProtocolGenerator.GenerationContext,
@@ -105,4 +89,28 @@ private class Ec2QuerySerdeXmlDescriptorGenerator(
 
         return traits
     }
+}
+
+private class Ec2QuerySerializerGenerator(
+    private val protocolGenerator: Ec2Query
+) : AbstractQueryFormUrlSerializerGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
+
+    override fun descriptorGenerator(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        members: List<MemberShape>,
+        writer: KotlinWriter
+    ): FormUrlSerdeDescriptorGenerator = Ec2QuerySerdeFormUrlDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
+}
+
+private class Ec2QueryParserGenerator(
+    private val protocolGenerator: Ec2Query
+) : XmlParserGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
+
+    override fun descriptorGenerator(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        members: List<MemberShape>,
+        writer: KotlinWriter
+    ): XmlSerdeDescriptorGenerator = Ec2QuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 }
