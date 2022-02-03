@@ -8,6 +8,7 @@ import aws.sdk.kotlin.runtime.*
 import aws.sdk.kotlin.runtime.http.*
 import aws.sdk.kotlin.services.s3.model.S3ErrorMetadata
 import aws.sdk.kotlin.services.s3.model.S3Exception
+import aws.smithy.kotlin.runtime.ServiceErrorMetadata
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
@@ -33,7 +34,7 @@ internal data class S3ErrorDetails(
 internal fun setS3ErrorMetadata(exception: Any, response: HttpResponse, errorDetails: S3ErrorDetails?) {
     setAseErrorMetadata(exception, response, errorDetails)
     if (exception is AwsServiceException) {
-        exception.sdkErrorMetadata.attributes.setIfValueNotNull(AwsErrorMetadata.RequestId, errorDetails?.requestId)
+        exception.sdkErrorMetadata.attributes.setIfValueNotNull(ServiceErrorMetadata.RequestId, errorDetails?.requestId)
     }
     if (exception is S3Exception) {
         val requestId2 = errorDetails?.requestId2 ?: response.headers[X_AMZN_REQUEST_ID_2_HEADER]
