@@ -18,9 +18,9 @@ import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
