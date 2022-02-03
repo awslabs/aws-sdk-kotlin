@@ -61,26 +61,16 @@ class S3Generator : RestXml() {
             namespace = "${ctx.settings.pkg.name}.internal"
         }
 
-        listOf(
-            exceptionBaseSymbol,
-            RuntimeTypes.Http.readAll,
-            RuntimeTypes.Http.StatusCode,
-            AwsRuntimeTypes.Http.withPayload,
-            s3ErrorDetails,
-            setS3ErrorMetadata,
-            parseS3ErrorResponse,
-        ).forEach(writer::addImport)
-
-        writer.write("""val payload = response.body.readAll()""")
-            .write("val wrappedResponse = response.withPayload(payload)")
+        writer.write("val payload = response.body.#T()", RuntimeTypes.Http.readAll)
+            .write("val wrappedResponse = response.#T(payload)", AwsRuntimeTypes.Http.withPayload)
             .write("")
             .write("val errorDetails = try {")
             .indent()
             .call {
                 // customize error matching to handle HeadObject/HeadBucket error responses which have no payload
-                writer.write("if (payload == null && response.status == HttpStatusCode.NotFound) {")
+                writer.write("if (payload == null && response.status == #T.NotFound) {", RuntimeTypes.Http.StatusCode)
                     .indent()
-                    .write("""S3ErrorDetails(code = "NotFound")""")
+                    .write("#T(code = #S)", s3ErrorDetails, "NotFound")
                     .dedent()
                     .write("} else {")
                     .indent()
@@ -97,25 +87,20 @@ class S3Generator : RestXml() {
             }
             .write("")
 
-        if (op.errors.isEmpty()) {
-            writer.write("throw #T(errorDetails.message)", exceptionBaseSymbol)
-        } else {
-            writer.openBlock("val modeledExceptionDeserializer = when(errorDetails.code) {", "}") {
-                op.errors.forEach { err ->
-                    val errSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(err))
-                    val errDeserializerSymbol = buildSymbol {
-                        name = "${errSymbol.name}Deserializer"
-                        namespace = "${ctx.settings.pkg.name}.transform"
-                    }
-                    writer.write("#S -> #T()", getErrorCode(ctx, err), errDeserializerSymbol)
+        writer.withBlock("val ex = when(errorDetails.code) {", "}") {
+            op.errors.forEach { err ->
+                val errSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(err))
+                val errDeserializerSymbol = buildSymbol {
+                    name = "${errSymbol.name}Deserializer"
+                    namespace = "${ctx.settings.pkg.name}.transform"
                 }
-                writer.write("else -> throw #T(errorDetails.message)", exceptionBaseSymbol)
+                writer.write("#S -> #T().deserialize(context, wrappedResponse)", getErrorCode(ctx, err), errDeserializerSymbol)
             }
-
-            writer.write("")
-                .write("val modeledException = modeledExceptionDeserializer.deserialize(context, wrappedResponse)")
-                .write("#T(modeledException, wrappedResponse, errorDetails)", setS3ErrorMetadata)
-                .write("throw modeledException")
+            write("else -> #T(errorDetails.message)", exceptionBaseSymbol)
         }
+
+        writer.write("")
+        writer.write("#T(ex, wrappedResponse, errorDetails)", setS3ErrorMetadata)
+        writer.write("throw ex")
     }
 }

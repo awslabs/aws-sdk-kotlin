@@ -6,15 +6,13 @@
 package aws.sdk.kotlin.codegen.protocols
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.protocols.core.AbstractQueryFormUrlSerializerGenerator
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.core.QueryHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.formurl.QuerySerdeFormUrlDescriptorGenerator
 import software.amazon.smithy.aws.traits.protocols.AwsQueryErrorTrait
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.RenderingContext
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.addImport
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.model.traits.OperationOutput
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
@@ -32,56 +30,11 @@ import software.amazon.smithy.model.traits.*
 class AwsQuery : QueryHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = AwsQueryTrait.ID
 
-    override fun getDeserializerDescriptorGenerator(
-        ctx: ProtocolGenerator.GenerationContext,
-        shape: Shape,
-        members: List<MemberShape>,
-        writer: KotlinWriter,
-    ): AbstractSerdeDescriptorGenerator =
-        AwsQuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members)
+    override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializerGenerator =
+        AwsQuerySerializerGenerator(this)
 
-    override fun getSerializerDescriptorGenerator(
-        ctx: ProtocolGenerator.GenerationContext,
-        shape: Shape,
-        members: List<MemberShape>,
-        writer: KotlinWriter,
-    ): AbstractSerdeDescriptorGenerator =
-        AwsQuerySerdeFormUrlDescriptorGenerator(ctx.toRenderingContext(this, shape, writer), members)
-
-    /**
-     * Unwraps the response body as specified by
-     * https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#response-serialization so that the
-     * deserializer is in the correct state.
-     */
-    override fun unwrapOperationResponseBody(
-        operationName: String,
-        writer: KotlinWriter
-    ) {
-        writer
-            .addImport(
-                RuntimeTypes.Serde.SdkFieldDescriptor,
-                RuntimeTypes.Serde.SerdeXml.XmlSerialName,
-                RuntimeTypes.Serde.SdkObjectDescriptor,
-                RuntimeTypes.Serde.deserializeStruct
-            )
-            .write("")
-            .write("val resultDescriptor = #T(SerialKind.Struct, #T(#S))", RuntimeTypes.Serde.SdkFieldDescriptor, RuntimeTypes.Serde.SerdeXml.XmlSerialName, "${operationName}Result")
-            .openBlock("val wrapperDescriptor = #T.build {", "}", RuntimeTypes.Serde.SdkObjectDescriptor) {
-                writer
-                    .addImport(RuntimeTypes.Serde.field)
-                    .write("trait(#T(#S))", RuntimeTypes.Serde.SerdeXml.XmlSerialName, "${operationName}Response")
-                    .write("#T(resultDescriptor)", RuntimeTypes.Serde.field)
-            }
-            .write("")
-            // abandon the iterator, this only occurs at the top level operational output
-            .write("val wrapper = deserializer.#T(wrapperDescriptor)", RuntimeTypes.Serde.deserializeStruct)
-            .openBlock("if (wrapper.findNextFieldIndex() != resultDescriptor.index) {", "}") {
-                writer
-                    .addImport(RuntimeTypes.Serde.DeserializationException)
-                    .write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "failed to unwrap $operationName response")
-            }
-        writer.write("")
-    }
+    override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
+        AwsQueryXmlParserGenerator(this)
 
     override fun getErrorCode(ctx: ProtocolGenerator.GenerationContext, errShapeId: ShapeId): String {
         val errShape = ctx.model.expectShape(errShapeId)
@@ -132,5 +85,65 @@ private class AwsQuerySerdeXmlDescriptorGenerator(
         }
 
         return traits
+    }
+}
+
+private class AwsQuerySerializerGenerator(
+    private val protocolGenerator: AwsQuery
+) : AbstractQueryFormUrlSerializerGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
+    override fun descriptorGenerator(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        members: List<MemberShape>,
+        writer: KotlinWriter
+    ): FormUrlSerdeDescriptorGenerator = AwsQuerySerdeFormUrlDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
+}
+
+private class AwsQueryXmlParserGenerator(
+    private val protocolGenerator: AwsQuery
+) : XmlParserGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
+
+    override fun descriptorGenerator(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        members: List<MemberShape>,
+        writer: KotlinWriter
+    ): XmlSerdeDescriptorGenerator = AwsQuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
+
+    override fun renderDeserializeOperationBody(
+        ctx: ProtocolGenerator.GenerationContext,
+        op: OperationShape,
+        documentMembers: List<MemberShape>,
+        writer: KotlinWriter
+    ) {
+        writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+        unwrapOperationResponseBody(op.id.name, writer)
+        val shape = ctx.model.expectShape(op.output.get())
+        renderDeserializerBody(ctx, shape, documentMembers, writer)
+    }
+
+    /**
+     * Unwraps the response body as specified by
+     * https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#response-serialization so that the
+     * deserializer is in the correct state.
+     */
+    private fun unwrapOperationResponseBody(
+        operationName: String,
+        writer: KotlinWriter
+    ) {
+        writer.write("// begin unwrap response wrapper")
+            .write("val resultDescriptor = #T(#T.Struct, #T(#S))", RuntimeTypes.Serde.SdkFieldDescriptor, RuntimeTypes.Serde.SerialKind, RuntimeTypes.Serde.SerdeXml.XmlSerialName, "${operationName}Result")
+            .withBlock("val wrapperDescriptor = #T.build {", "}", RuntimeTypes.Serde.SdkObjectDescriptor) {
+                write("trait(#T(#S))", RuntimeTypes.Serde.SerdeXml.XmlSerialName, "${operationName}Response")
+                write("#T(resultDescriptor)", RuntimeTypes.Serde.field)
+            }
+            .write("")
+            // abandon the iterator, this only occurs at the top level operational output
+            .write("val wrapper = deserializer.#T(wrapperDescriptor)", RuntimeTypes.Serde.deserializeStruct)
+            .withBlock("if (wrapper.findNextFieldIndex() != resultDescriptor.index) {", "}") {
+                write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "failed to unwrap $operationName response")
+            }
+            .write("// end unwrap response wrapper")
+            .write("")
     }
 }
