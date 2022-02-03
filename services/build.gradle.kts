@@ -13,7 +13,7 @@ val sdkVersion: String by project
 
 val optinAnnotations = listOf(
     "aws.smithy.kotlin.runtime.util.InternalApi",
-    "aws.sdk.kotlin.runtime.InternalSdkApi"
+    "aws.sdk.kotlin.runtime.InternalSdkApi",
 )
 
 subprojects {
@@ -108,6 +108,11 @@ subprojects {
                         implementation(kotlin("test-junit5"))
                         implementation(project(":aws-runtime:testing"))
                     }
+                }
+                kotlinOptions {
+                    // Enable coroutine runTests in 1.6.10
+                    // NOTE: may be removed after coroutines-test runTests becomes stable
+                    freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
                 }
 
                 tasks.register<Test>("e2eTest") {
