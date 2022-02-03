@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1-beta] - 02/03/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Fixes
+* propagate crt stream errors to response body consumer [#510](https://github.com/awslabs/aws-sdk-kotlin/pull/510)
+
 ## [0.11.0-beta] - 01/20/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
