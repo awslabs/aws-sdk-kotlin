@@ -67,6 +67,9 @@ subprojects {
         kotlinOptions {
             jvmTarget = "1.8" // this is the default but it's better to be explicit (e.g. it may change in Kotlin 1.5)
             allWarningsAsErrors = false // FIXME Tons of errors occur in generated code
+            // Enable coroutine runTests in 1.6.10
+            // NOTE: may be removed after coroutines-test runTests becomes stable
+            freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
         }
     }
 
