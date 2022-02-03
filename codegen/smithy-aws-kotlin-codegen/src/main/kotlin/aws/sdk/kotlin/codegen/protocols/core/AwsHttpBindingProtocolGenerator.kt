@@ -16,6 +16,7 @@ import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
@@ -111,22 +112,27 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
      */
     abstract fun renderDeserializeErrorDetails(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter)
 
-    override fun renderThrowOperationError(
+    override fun operationErrorHandler(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Symbol =
+        op.errorHandler(ctx.settings) { writer ->
+            writer.withBlock(
+                "private suspend fun ${op.errorHandlerName()}(context: #T, response: #T): #Q {",
+                "}",
+                RuntimeTypes.Core.ExecutionContext,
+                RuntimeTypes.Http.Response.HttpResponse,
+                KotlinTypes.Nothing
+            ) {
+                renderThrowOperationError(ctx, op, writer)
+            }
+        }
+
+    protected open fun renderThrowOperationError(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
         writer: KotlinWriter
     ) {
         val exceptionBaseSymbol = ExceptionBaseClassGenerator.baseExceptionSymbol(ctx.settings)
-
-        listOf(
-            exceptionBaseSymbol,
-            RuntimeTypes.Http.readAll,
-            AwsRuntimeTypes.Http.withPayload,
-            AwsRuntimeTypes.Http.setAseErrorMetadata,
-        ).forEach(writer::addImport)
-
-        writer.write("""val payload = response.body.readAll()""")
-            .write("val wrappedResponse = response.withPayload(payload)")
+        writer.write("val payload = response.body.#T()", RuntimeTypes.Http.readAll)
+            .write("val wrappedResponse = response.#T(payload)", AwsRuntimeTypes.Http.withPayload)
             .write("")
             .write("val errorDetails = try {")
             .indent()
@@ -141,25 +147,20 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             }
             .write("")
 
-        if (op.errors.isEmpty()) {
-            writer.write("throw #T(errorDetails.message)", exceptionBaseSymbol)
-        } else {
-            writer.openBlock("val modeledExceptionDeserializer = when(errorDetails.code) {", "}") {
-                op.errors.forEach { err ->
-                    val errSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(err))
-                    val errDeserializerSymbol = buildSymbol {
-                        name = "${errSymbol.name}Deserializer"
-                        namespace = "${ctx.settings.pkg.name}.transform"
-                    }
-                    writer.write("#S -> #T()", getErrorCode(ctx, err), errDeserializerSymbol)
+        writer.withBlock("val ex = when(errorDetails.code) {", "}") {
+            op.errors.forEach { err ->
+                val errSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(err))
+                val errDeserializerSymbol = buildSymbol {
+                    name = "${errSymbol.name}Deserializer"
+                    namespace = "${ctx.settings.pkg.name}.transform"
                 }
-                writer.write("else -> throw #T(errorDetails.message)", exceptionBaseSymbol)
+                writer.write("#S -> #T().deserialize(context, wrappedResponse)", getErrorCode(ctx, err), errDeserializerSymbol)
             }
-
-            writer.write("")
-                .write("val modeledException = modeledExceptionDeserializer.deserialize(context, wrappedResponse)")
-                .write("#T(modeledException, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
-                .write("throw modeledException")
+            write("else -> #T(errorDetails.message)", exceptionBaseSymbol)
         }
+
+        writer.write("")
+        writer.write("#T(ex, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
+        writer.write("throw ex")
     }
 }
