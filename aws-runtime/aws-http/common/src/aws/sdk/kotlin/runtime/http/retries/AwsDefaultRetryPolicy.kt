@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.runtime.http.retries
 
-import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.smithy.kotlin.runtime.ServiceErrorMetadata
+import aws.smithy.kotlin.runtime.ServiceException
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType.*
@@ -40,12 +40,12 @@ public object AwsDefaultRetryPolicy : StandardRetryPolicy() {
         504 to Timeout,
     )
 
-    override fun evaluateOtherExceptions(ex: Throwable): RetryDirective? = when (ex) {
-        is AwsServiceException -> evaluateAwsServiceException(ex)
+    override fun evaluateSpecificExceptions(ex: Throwable): RetryDirective? = when (ex) {
+        is ServiceException -> evaluateServiceException(ex)
         else -> null
     }
 
-    private fun evaluateAwsServiceException(ex: AwsServiceException): RetryDirective? = with(ex.sdkErrorMetadata) {
+    private fun evaluateServiceException(ex: ServiceException): RetryDirective? = with(ex.sdkErrorMetadata) {
         (knownErrorTypes[errorCode] ?: knownStatusCodes[statusCode])
             ?.let { RetryDirective.RetryError(it) }
     }
