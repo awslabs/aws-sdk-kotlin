@@ -50,8 +50,7 @@ class S3BucketOpsIntegrationTest {
     }
 
     @Test
-    @Ignore // FIXME: CRT HTTP client fails to get connection after kotlinx-coroutines-test 1.6.0 upgrade
-    fun testPutObjectFromMemory() = runTest {
+    fun testPutObjectFromMemory(): Unit = runBlocking {
         val contents = """
             A lep is a ball.
             A tay is a hammer.
@@ -78,8 +77,7 @@ class S3BucketOpsIntegrationTest {
     }
 
     @Test
-    @Ignore // FIXME: CRT HTTP client fails to get connection after kotlinx-coroutines-test 1.6.0 upgrade
-    fun testPutObjectFromFile() = runTest {
+    fun testPutObjectFromFile(): Unit = runBlocking {
         val tempFile = RandomTempFile(1024)
         val keyName = "put-obj-from-file.txt"
 
@@ -104,8 +102,7 @@ class S3BucketOpsIntegrationTest {
     }
 
     @Test
-    @Ignore // FIXME: CRT HTTP client fails to get connection after kotlinx-coroutines-test 1.6.0 upgrade
-    fun testListObjectsWithDelimiter() = runTest {
+    fun testListObjectsWithDelimiter(): Unit = runBlocking {
         // see: https://github.com/awslabs/aws-sdk-kotlin/issues/448
 
         client.listObjects {

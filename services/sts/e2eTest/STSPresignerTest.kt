@@ -6,6 +6,7 @@ import aws.sdk.kotlin.services.sts.presigners.presign
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Ignore
@@ -21,8 +22,7 @@ import kotlin.time.Duration.Companion.seconds
 class StsPresignerTest {
 
     @Test
-    @Ignore // FIXME: CRT HTTP client fails to get connection after kotlinx-coroutines-test 1.6.0 upgrade
-    fun testGetCallerIdentityPresigner() = runTest {
+    fun testGetCallerIdentityPresigner() = runBlocking {
         val c = StsClient { region = "us-east-2" }
         val req = GetCallerIdentityRequest { }
         val presignedRequest = req.presign(c.config, 60.seconds)

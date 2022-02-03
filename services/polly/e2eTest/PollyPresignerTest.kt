@@ -7,10 +7,8 @@ import aws.sdk.kotlin.services.polly.model.VoiceId
 import aws.sdk.kotlin.services.polly.presigners.presign
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.TestInstance
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
@@ -22,8 +20,7 @@ import kotlin.time.Duration.Companion.seconds
 class PollyPresignerTest {
 
     @Test
-    @Ignore // FIXME: CRT HTTP client fails to get connection after kotlinx-coroutines-test 1.6.0 upgrade
-    fun clientBasedPresign() = runTest(context = StandardTestDispatcher()) {
+    fun clientBasedPresign() = runBlocking {
         val request = SynthesizeSpeechRequest {
             voiceId = VoiceId.Salli
             outputFormat = OutputFormat.Pcm

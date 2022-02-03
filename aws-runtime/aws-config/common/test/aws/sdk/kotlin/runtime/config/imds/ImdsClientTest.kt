@@ -20,6 +20,7 @@ import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
@@ -212,9 +213,8 @@ class ImdsClientTest {
     }
 
     @IgnoreWindows("DNS fails faster on windows and results in a different error")
-    @Ignore // FIXME: Test elapsed assertions fail after kotlinx-coroutines-test 1.6.0 upgrade
     @Test
-    fun testHttpConnectTimeouts() = runTest() {
+    fun testHttpConnectTimeouts() = runBlocking {
         // end-to-end real client times out after 1-second
         val client = ImdsClient {
             // will never resolve

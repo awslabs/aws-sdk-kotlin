@@ -20,10 +20,9 @@ import io.ktor.server.cio.*
 import io.ktor.server.engine.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.time.Duration.Companion.seconds
 
@@ -42,8 +41,7 @@ class AsyncStressTest : TestWithLocalServer() {
     }
 
     @Test
-    @Ignore // FIXME: Test fails after kotlinx-coroutines-test 1.6.0 upgrade
-    fun testConcurrentRequests() = runTest {
+    fun testConcurrentRequests() = runBlocking {
         // https://github.com/awslabs/aws-sdk-kotlin/issues/170
         val client = sdkHttpClient(CrtHttpEngine())
         val request = HttpRequestBuilder().apply {
@@ -74,8 +72,7 @@ class AsyncStressTest : TestWithLocalServer() {
     }
 
     @Test
-    @Ignore // FIXME: Test fails after kotlinx-coroutines-test 1.6.0 upgrade
-    fun testStreamNotConsumed() = runTest {
+    fun testStreamNotConsumed() = runBlocking {
         // test that filling the stream window and not consuming the body stream still cleans up resources
         // appropriately and allows requests to proceed (a stream that isn't consumed will be in a stuck state
         // if the window is full and never incremented again, this can lead to all connections being consumed
