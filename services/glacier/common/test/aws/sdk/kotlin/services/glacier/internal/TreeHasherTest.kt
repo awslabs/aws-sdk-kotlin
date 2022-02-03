@@ -15,12 +15,12 @@ import aws.smithy.kotlin.runtime.util.Sha256
 import aws.smithy.kotlin.runtime.util.encodeToHex
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.fail
-import kotlinx.coroutines.test.runTest
 
 private const val megabyte = 1024 * 1024
 
