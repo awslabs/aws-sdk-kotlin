@@ -40,7 +40,7 @@ public object AwsDefaultRetryPolicy : StandardRetryPolicy() {
         504 to Timeout,
     )
 
-    override fun evaluateOtherExceptions(ex: Throwable): RetryDirective? = when (ex) {
+    override fun evaluateSpecificExceptions(ex: Throwable): RetryDirective? = when (ex) {
         is ServiceException -> evaluateServiceException(ex)
         else -> null
     }
