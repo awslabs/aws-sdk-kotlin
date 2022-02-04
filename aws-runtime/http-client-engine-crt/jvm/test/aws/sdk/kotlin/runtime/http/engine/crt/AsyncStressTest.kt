@@ -72,7 +72,7 @@ class AsyncStressTest : TestWithLocalServer() {
         }
     }
 
-    @IgnoreWindows
+    @IgnoreWindows // FIXME - this test regressed with coroutines-test:1.6 in windows only, times out
     @Test
     fun testStreamNotConsumed() = runBlocking {
         // test that filling the stream window and not consuming the body stream still cleans up resources
