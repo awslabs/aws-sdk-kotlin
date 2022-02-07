@@ -25,6 +25,7 @@ import software.amazon.smithy.model.shapes.ShapeId
  */
 class AwsJson1_1 : JsonHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = AwsJson1_1Trait.ID
+    override val supportsJsonNameTrait: Boolean = false
 
     override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
         val httpMiddleware = super.getDefaultHttpMiddleware(ctx)
