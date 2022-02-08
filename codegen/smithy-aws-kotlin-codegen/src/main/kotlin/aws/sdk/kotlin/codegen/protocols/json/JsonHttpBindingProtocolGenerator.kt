@@ -20,11 +20,17 @@ abstract class JsonHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerato
 
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.EPOCH_SECONDS
 
+    /**
+     * Flag indicating if the jsonName trait is supported or not. When true the trait is processed when generating
+     * serializers and deserializers. When false the member name is used.
+     */
+    open val supportsJsonNameTrait: Boolean = true
+
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
-        JsonParserGenerator(this)
+        JsonParserGenerator(this, supportsJsonNameTrait = supportsJsonNameTrait)
 
     override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializerGenerator =
-        JsonSerializerGenerator(this)
+        JsonSerializerGenerator(this, supportsJsonNameTrait = supportsJsonNameTrait)
 
     override fun renderDeserializeErrorDetails(
         ctx: ProtocolGenerator.GenerationContext,

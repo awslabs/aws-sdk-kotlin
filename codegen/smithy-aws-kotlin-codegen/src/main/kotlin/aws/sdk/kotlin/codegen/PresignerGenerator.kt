@@ -237,7 +237,7 @@ class PresignerGenerator : KotlinIntegration {
                         writer.addImport(RuntimeTypes.Http.QueryParameters)
                         writer.addImport(RuntimeTypes.Http.toByteStream)
                         writer.addImport(RuntimeTypes.Core.Content.decodeToString)
-                        writer.addImport(RuntimeTypes.Http.splitAsQueryParameters)
+                        writer.addImport(RuntimeTypes.Http.Util.splitAsQueryParameters)
                         writer.write("""httpRequestBuilder.body.toByteStream()?.decodeToString()?.splitAsQueryParameters() ?: QueryParameters.Empty,""")
                     }
                 }
