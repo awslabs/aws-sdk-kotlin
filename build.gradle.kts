@@ -49,10 +49,11 @@ subprojects {
             }
         }
 
-        val smithyKotlinPackageListUrl: String by project
-        val smithyKotlinDocBaseUrl: String by project
+        val smithyKotlinPackageListUrl: String? by project
+        val smithyKotlinDocBaseUrl: String? by project
         // Configure Dokka to link to smithy-kotlin types if specified in properties
-        if (smithyKotlinDocBaseUrl.isNotEmpty() && smithyKotlinPackageListUrl.isNotEmpty()) {
+        // These optional properties are supplied api the api docs build job but are unneeded otherwise
+        if (!smithyKotlinDocBaseUrl.isNullOrEmpty() && !smithyKotlinPackageListUrl.isNullOrEmpty()) {
             dokkaSourceSets.configureEach {
                 externalDocumentationLink {
                     packageListUrl.set(URL(smithyKotlinPackageListUrl))
@@ -91,7 +92,7 @@ if (project.prop("kotlinWarningsAsErrors")?.toString()?.toBoolean() == true) {
 
 // configure the root multimodule docs
 tasks.dokkaHtmlMultiModule.configure {
-    moduleName.set("AWS Kotlin SDK")
+    moduleName.set("AWS SDK for Kotlin")
 
     includes.from(
         // NOTE: these get concatenated
