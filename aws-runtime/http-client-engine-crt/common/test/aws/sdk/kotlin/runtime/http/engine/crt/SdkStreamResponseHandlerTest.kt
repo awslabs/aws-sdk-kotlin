@@ -8,8 +8,10 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.byteArrayBuffer
 import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import aws.smithy.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.launch
 import kotlin.test.*
 
@@ -134,5 +136,34 @@ class SdkStreamResponseHandlerTest {
         assertTrue(respChan.isClosedForWrite)
 
         assertEquals(data, respChan.readRemaining().decodeToString())
+    }
+
+    @Test
+    fun testStreamError(): Unit = runSuspendTest {
+        val handler = SdkStreamResponseHandler(mockConn)
+        val stream = MockHttpStream(200)
+        val data = "foo bar"
+        val socketClosedEc = 1051
+        launch {
+            val headers = listOf(
+                HttpHeader("Content-Length", "${data.length}")
+            )
+            handler.onResponseHeaders(stream, 200, HttpHeaderBlock.MAIN.blockType, headers)
+            handler.onResponseHeadersDone(stream, HttpHeaderBlock.MAIN.blockType)
+            handler.onResponseBody(stream, byteArrayBuffer("foo".encodeToByteArray()))
+            handler.onResponseComplete(stream, socketClosedEc)
+        }
+
+        // should be signalled as soon as headers are available
+        val resp = handler.waitForResponse()
+        assertEquals(HttpStatusCode.OK, resp.status)
+
+        assertEquals(data.length.toLong(), resp.body.contentLength)
+        val respChan = (resp.body as HttpBody.Streaming).readFrom()
+
+        assertTrue(respChan.isClosedForWrite)
+        assertFailsWith<ClientException> {
+            respChan.readRemaining()
+        }.message.shouldContain("CrtHttpEngine::response failed: ec=$socketClosedEc")
     }
 }
