@@ -45,9 +45,9 @@ public data class ErrorDetails(
 @InternalSdkApi
 public fun setAseErrorMetadata(exception: Any, response: HttpResponse, errorDetails: AwsErrorDetails?) {
     if (exception is AwsServiceException) {
-        exception.sdkErrorMetadata.attributes.setIfValueNotNull(AwsErrorMetadata.ErrorCode, errorDetails?.code)
+        exception.sdkErrorMetadata.attributes.setIfValueNotNull(ServiceErrorMetadata.ErrorCode, errorDetails?.code)
         exception.sdkErrorMetadata.attributes.setIfValueNotNull(AwsErrorMetadata.ErrorMessage, errorDetails?.message)
-        exception.sdkErrorMetadata.attributes.setIfValueNotNull(AwsErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
+        exception.sdkErrorMetadata.attributes.setIfValueNotNull(ServiceErrorMetadata.RequestId, response.headers[X_AMZN_REQUEST_ID_HEADER])
         exception.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
     }
 }
