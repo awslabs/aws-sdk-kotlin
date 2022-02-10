@@ -78,6 +78,21 @@ object AwsRuntimeTypes {
         val parseRestXmlErrorResponse = runtimeSymbol("parseRestXmlErrorResponse", AwsKotlinDependency.AWS_XML_PROTOCOLS)
         val parseEc2QueryErrorResponse = runtimeSymbol("parseEc2QueryErrorResponse", AwsKotlinDependency.AWS_XML_PROTOCOLS)
     }
+
+    object AwsEventStream {
+        val decodeFrames = runtimeSymbol("decodeFrames", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val MessageType = runtimeSymbol("MessageType", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val MessageTypeExt = runtimeSymbol("type", AwsKotlinDependency.AWS_EVENT_STREAM)
+
+        val expectBool = runtimeSymbol("expectBool", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val expectByte = runtimeSymbol("expectByte", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val expectInt16 = runtimeSymbol("expectInt16", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val expectInt32 = runtimeSymbol("expectInt32", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val expectInt64 = runtimeSymbol("expectInt64", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val expectByteArray = runtimeSymbol("expectByteArray", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val expectString = runtimeSymbol("expectString", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val expectTimestamp = runtimeSymbol("expectTimestamp", AwsKotlinDependency.AWS_EVENT_STREAM)
+    }
 }
 
 private fun runtimeSymbol(name: String, dependency: KotlinDependency, subpackage: String = ""): Symbol = buildSymbol {

@@ -48,4 +48,9 @@ class FrameDecoderTest {
         assertEquals(expected2, actual[1])
         assertEquals(expected3, actual[2])
     }
+
+    @Test
+    fun testChannelClosed(): Unit = runSuspendTest {
+        TODO("not implemented yet: need to add test for channel closed normally while waiting on prelude")
+    }
 }
