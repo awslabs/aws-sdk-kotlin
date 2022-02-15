@@ -8,9 +8,9 @@ package aws.sdk.kotlin.runtime.config.imds
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.category
 import aws.smithy.kotlin.runtime.logging.Logger
-import aws.smithy.kotlin.runtime.retries.RetryDirective
-import aws.smithy.kotlin.runtime.retries.RetryErrorType
-import aws.smithy.kotlin.runtime.retries.RetryPolicy
+import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
+import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
+import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 
 internal class ImdsRetryPolicy : RetryPolicy<Any?> {
     override fun evaluate(result: Result<Any?>): RetryDirective = when {

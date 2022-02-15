@@ -21,7 +21,12 @@ import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.middleware.Phase
-import aws.smithy.kotlin.runtime.retries.impl.*
+import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
+import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
+import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitter
+import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitterOptions
+import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
+import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider

@@ -11,16 +11,8 @@ import aws.smithy.kotlin.runtime.ServiceException as SmithyServiceException
 
 public open class AwsErrorMetadata : ServiceErrorMetadata() {
     public companion object {
-        public val ErrorCode: AttributeKey<String> = AttributeKey("AwsErrorCode")
         public val ErrorMessage: AttributeKey<String> = AttributeKey("AwsErrorMessage")
-        public val RequestId: AttributeKey<String> = AttributeKey("AwsRequestId")
     }
-
-    /**
-     * Returns the error code associated with the response
-     */
-    public val errorCode: String?
-        get() = attributes.getOrNull(ErrorCode)
 
     /**
      * Returns the human readable error message. For errors with a `message` field as part of the model
@@ -28,12 +20,6 @@ public open class AwsErrorMetadata : ServiceErrorMetadata() {
      */
     public val errorMessage: String?
         get() = attributes.getOrNull(ErrorMessage)
-
-    /**
-     * The request ID that was returned by the called service
-     */
-    public val requestId: String?
-        get() = attributes.getOrNull(RequestId)
 }
 
 /**
