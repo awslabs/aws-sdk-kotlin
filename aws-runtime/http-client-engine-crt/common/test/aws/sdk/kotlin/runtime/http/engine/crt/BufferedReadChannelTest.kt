@@ -8,15 +8,14 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 import aws.sdk.kotlin.crt.io.byteArrayBuffer
 import aws.smithy.kotlin.runtime.io.readByte
 import aws.smithy.kotlin.runtime.testing.ManualDispatchTestBase
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import aws.smithy.kotlin.runtime.util.Sha256
+import aws.smithy.kotlin.runtime.util.encodeToHex
+import aws.smithy.kotlin.runtime.util.sha256
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.yield
+import kotlin.random.Random
+import kotlin.test.*
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -468,5 +467,82 @@ class BufferedReadChannelTest : ManualDispatchTestBase() {
         writeJob.await()
         readJob.await()
         assertEquals(1_000_000, totalBytes)
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private suspend fun runReadSuspendIntegrityTest(reader: suspend (BufferedReadChannel, Int) -> String) {
+        // writer is setup to write random lengths and delay to cause the reader to enter a suspend loop
+        val data = ByteArray(16 * 1024 * 1024) { it.toByte() }
+        var totalBytes = 0
+        val channel = bufferedReadChannel { size -> totalBytes += size }
+        val writeSha256 = GlobalScope.async {
+            var wcRemaining = data.size
+            var offset = 0
+            val checksum = Sha256()
+            while (wcRemaining > 0) {
+                // random write sizes
+                val wc = minOf(wcRemaining, Random.nextInt(256, 8 * 1024))
+                val slice = data.sliceArray(offset until offset + wc)
+                checksum.update(slice)
+                channel.write(slice)
+                offset += wc
+                wcRemaining -= wc
+
+                if (wcRemaining % 256 == 0) {
+                    delay(Random.nextLong(0, 10))
+                }
+            }
+
+            channel.close()
+
+            checksum.digest().encodeToHex()
+        }
+
+        val readSha256 = GlobalScope.async { reader(channel, data.size) }
+
+        val origSha = data.sha256().encodeToHex()
+        val writeSha = writeSha256.await()
+        val readSha = readSha256.await()
+        assertEquals(origSha, writeSha)
+        assertEquals(origSha, readSha)
+    }
+
+    @Test
+    fun testReadFullyIntegrity() = runTest {
+        // see https://github.com/awslabs/aws-sdk-kotlin/issues/526
+        runReadSuspendIntegrityTest { channel, totalSize ->
+            val dest = ByteArray(totalSize)
+            channel.readFully(dest)
+            dest.sha256().encodeToHex()
+        }
+    }
+
+    @Test
+    fun testReadAvailableIntegrity() = runTest {
+        runReadSuspendIntegrityTest { channel, totalSize ->
+            val checksum = Sha256()
+            var totalRead = 0
+            while (!channel.isClosedForRead) {
+                val chunk = ByteArray(8 * 1024)
+                val rc = channel.readAvailable(chunk)
+                if (rc < 0) break
+
+                totalRead += rc
+                val slice = if (rc != chunk.size) chunk.sliceArray(0 until rc) else chunk
+                checksum.update(slice)
+            }
+
+            assertEquals(totalSize, totalRead)
+            checksum.digest().encodeToHex()
+        }
+    }
+
+    @Test
+    fun testReadRemainingIntegrity() = runTest {
+        runReadSuspendIntegrityTest { channel, totalSize ->
+            val data = channel.readRemaining()
+            assertEquals(totalSize, data.size)
+            data.sha256().encodeToHex()
+        }
     }
 }
