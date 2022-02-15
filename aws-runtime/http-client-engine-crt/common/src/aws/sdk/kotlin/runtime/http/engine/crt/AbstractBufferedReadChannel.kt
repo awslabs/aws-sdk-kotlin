@@ -187,9 +187,10 @@ internal abstract class AbstractBufferedReadChannel(
                 throw ClosedReceiveChannelException("Unexpeced EOF: expected $remaining more bytes")
             }
 
-            consumed += readAsMuchAsPossible(dest, currOffset, remaining)
-            currOffset += consumed
-            remaining -= consumed
+            val rc = readAsMuchAsPossible(dest, currOffset, remaining)
+            consumed += rc
+            currOffset += rc
+            remaining = length - consumed
         } while (remaining > 0)
     }
 
