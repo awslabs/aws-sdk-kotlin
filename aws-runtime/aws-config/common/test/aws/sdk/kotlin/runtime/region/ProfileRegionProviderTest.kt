@@ -6,13 +6,15 @@
 package aws.sdk.kotlin.runtime.region
 
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ProfileRegionProviderTest {
     @Test
-    fun testSuccessDefaultProfile(): Unit = runSuspendTest {
+    fun testSuccessDefaultProfile() = runTest {
         val platform = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config"
@@ -27,7 +29,7 @@ class ProfileRegionProviderTest {
     }
 
     @Test
-    fun testSuccessProfileOverride(): Unit = runSuspendTest {
+    fun testSuccessProfileOverride() = runTest {
         val platform = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
@@ -43,7 +45,7 @@ class ProfileRegionProviderTest {
     }
 
     @Test
-    fun testNoRegion(): Unit = runSuspendTest {
+    fun testNoRegion() = runTest {
         val platform = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",

@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.runtime.http.engine.crt
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.Protocol
 import aws.smithy.kotlin.runtime.http.readAll
@@ -19,13 +18,15 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
 import kotlin.test.Test
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AsyncStressTest : TestWithLocalServer() {
 
     override val server = embeddedServer(CIO, serverPort) {
@@ -40,7 +41,7 @@ class AsyncStressTest : TestWithLocalServer() {
     }
 
     @Test
-    fun testConcurrentRequests() = runSuspendTest {
+    fun testConcurrentRequests() = runBlocking {
         // https://github.com/awslabs/aws-sdk-kotlin/issues/170
         val client = sdkHttpClient(CrtHttpEngine())
         val request = HttpRequestBuilder().apply {
@@ -70,9 +71,8 @@ class AsyncStressTest : TestWithLocalServer() {
         }
     }
 
-    @OptIn(ExperimentalTime::class)
     @Test
-    fun testStreamNotConsumed() = runSuspendTest {
+    fun testStreamNotConsumed() = runBlocking {
         // test that filling the stream window and not consuming the body stream still cleans up resources
         // appropriately and allows requests to proceed (a stream that isn't consumed will be in a stuck state
         // if the window is full and never incremented again, this can lead to all connections being consumed

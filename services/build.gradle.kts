@@ -13,7 +13,7 @@ val sdkVersion: String by project
 
 val optinAnnotations = listOf(
     "aws.smithy.kotlin.runtime.util.InternalApi",
-    "aws.sdk.kotlin.runtime.InternalSdkApi"
+    "aws.sdk.kotlin.runtime.InternalSdkApi",
 )
 
 subprojects {
@@ -40,7 +40,9 @@ subprojects {
             kotlin.srcDir("generated-src/test")
 
             dependencies {
+                val coroutinesVersion: String by project
                 implementation(kotlin("test-junit5"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation(project(":aws-runtime:testing"))
             }
         }
@@ -65,6 +67,9 @@ subprojects {
         kotlinOptions {
             jvmTarget = "1.8" // this is the default but it's better to be explicit (e.g. it may change in Kotlin 1.5)
             allWarningsAsErrors = false // FIXME Tons of errors occur in generated code
+            // Enable coroutine runTests in 1.6.10
+            // NOTE: may be removed after coroutines-test runTests becomes stable
+            freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
         }
     }
 
@@ -106,6 +111,11 @@ subprojects {
                         implementation(kotlin("test-junit5"))
                         implementation(project(":aws-runtime:testing"))
                     }
+                }
+                kotlinOptions {
+                    // Enable coroutine runTests in 1.6.10
+                    // NOTE: may be removed after coroutines-test runTests becomes stable
+                    freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
                 }
 
                 tasks.register<Test>("e2eTest") {

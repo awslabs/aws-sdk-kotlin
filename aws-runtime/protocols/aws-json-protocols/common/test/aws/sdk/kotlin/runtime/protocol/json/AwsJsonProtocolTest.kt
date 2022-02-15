@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.runtime.protocol.json
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
@@ -17,13 +16,16 @@ import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.get
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AwsJsonProtocolTest {
 
     @Test
-    fun testSetJsonProtocolHeaders() = runSuspendTest {
+    fun testSetJsonProtocolHeaders() = runTest {
         val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
@@ -54,7 +56,7 @@ class AwsJsonProtocolTest {
     }
 
     @Test
-    fun testEmptyBody() = runSuspendTest {
+    fun testEmptyBody() = runTest {
         val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
@@ -82,7 +84,7 @@ class AwsJsonProtocolTest {
     }
 
     @Test
-    fun testDoesNotOverride() = runSuspendTest {
+    fun testDoesNotOverride() = runTest {
         val mockEngine = object : HttpClientEngineBase("test") {
             override suspend fun roundTrip(request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)

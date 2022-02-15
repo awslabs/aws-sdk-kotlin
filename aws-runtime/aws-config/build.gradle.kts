@@ -6,10 +6,10 @@
 description = "Support for AWS configuration"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.config"
 
-val smithyKotlinVersion: String by project
+val coroutinesVersion: String by project
 val crtKotlinVersion: String by project
-
 val kotestVersion: String by project
+val smithyKotlinVersion: String by project
 
 kotlin {
     sourceSets {
@@ -17,6 +17,7 @@ kotlin {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
                 api(project(":aws-runtime:aws-types"))
+
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
@@ -26,16 +27,15 @@ kotlin {
                 // parsing common JSON credentials responses
                 implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
 
-
                 // credential providers
                 implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
                 implementation(project(":aws-runtime:crt-util"))
-
             }
         }
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
                 val kotlinxSerializationVersion: String by project
                 val mockkVersion: String by project

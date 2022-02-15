@@ -20,9 +20,10 @@ description = "Utilities for working with AWS CRT Kotlin"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: CRT :: Util"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.crt"
 
-val smithyKotlinVersion: String by project
-val crtKotlinVersion: String by project
 val atomicFuVersion: String by project
+val coroutinesVersion: String by project
+val crtKotlinVersion: String by project
+val smithyKotlinVersion: String by project
 
 kotlin {
     sourceSets {
@@ -37,6 +38,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
             }
         }
 

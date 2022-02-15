@@ -5,22 +5,24 @@
 
 package aws.sdk.kotlin.runtime.region
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class EnvironmentRegionProviderTest {
 
     @Test
-    fun noRegion() = runSuspendTest {
+    fun noRegion() = runTest {
         val environ = mapOf<String, String>()
         val provider = EnvironmentRegionProvider { environ[it] }
         assertNull(provider.getRegion())
     }
 
     @Test
-    fun providesRegion() = runSuspendTest {
+    fun providesRegion() = runTest {
         val environ = mapOf(
             "AWS_REGION" to "us-east-1"
         )
