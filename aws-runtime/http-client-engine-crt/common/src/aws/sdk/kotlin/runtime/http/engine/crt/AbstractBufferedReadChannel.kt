@@ -46,7 +46,7 @@ internal abstract class AbstractBufferedReadChannel(
         get() = segments.isClosedForSend
 
     override val isClosedForRead: Boolean
-        get() = closed != null && segments.isClosedForReceive
+        get() = availableForRead <= 0 && closed != null && segments.isClosedForReceive
 
     override val availableForRead: Int
         get() = _availableForRead.value
