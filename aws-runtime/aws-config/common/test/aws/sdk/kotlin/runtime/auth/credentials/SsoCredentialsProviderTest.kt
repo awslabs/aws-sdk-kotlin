@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -18,10 +17,13 @@ import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SsoCredentialsProviderTest {
 
     @Test
@@ -76,7 +78,7 @@ class SsoCredentialsProviderTest {
     }
 
     @Test
-    fun testExpiredToken(): Unit = runSuspendTest {
+    fun testExpiredToken() = runTest {
         val engine = TestConnection()
 
         val epoch = "2020-10-16T03:56:00Z"
@@ -111,7 +113,7 @@ class SsoCredentialsProviderTest {
     }
 
     @Test
-    fun testErrorResponse(): Unit = runSuspendTest {
+    fun testErrorResponse() = runTest {
         val engine = buildTestConnection {
             expect(
                 HttpResponse(HttpStatusCode.Unauthorized, Headers.Empty, HttpBody.Empty)
@@ -151,7 +153,7 @@ class SsoCredentialsProviderTest {
     }
 
     @Test
-    fun testSuccess(): Unit = runSuspendTest {
+    fun testSuccess() = runTest {
         val expectedExpiration = Instant.fromIso8601("2020-10-16T04:30:00Z")
 
         // https://docs.aws.amazon.com/singlesignon/latest/PortalAPIReference/API_GetRoleCredentials.html#API_GetRoleCredentials_ResponseSyntax

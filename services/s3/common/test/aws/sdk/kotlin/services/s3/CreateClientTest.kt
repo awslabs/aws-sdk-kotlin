@@ -5,8 +5,9 @@
 
 package aws.sdk.kotlin.services.s3
 
-import aws.smithy.kotlin.runtime.testing.runSuspendTest
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
@@ -15,6 +16,7 @@ import kotlin.test.assertFailsWith
  *
  * These are written against S3 but apply generically to any client.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class CreateClientTest {
 
     @Test
@@ -30,7 +32,7 @@ class CreateClientTest {
     }
 
     @Test
-    fun testFromEnvironmentWithOverrides(): Unit = runSuspendTest {
+    fun testFromEnvironmentWithOverrides() = runTest {
         S3Client.fromEnvironment { region = "us-east-2" }.use { }
     }
 }

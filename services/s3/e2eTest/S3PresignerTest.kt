@@ -1,7 +1,6 @@
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
@@ -11,13 +10,17 @@ import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.http.toByteStream
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.seconds
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3PresignerTest {
     companion object {
@@ -41,7 +44,7 @@ class S3PresignerTest {
     }
 
     @Test
-    fun testPutObjectPresigner() = runSuspendTest {
+    fun testPutObjectPresigner() = runTest {
         val contents = "presign-test"
 
         // FIXME - run these concurrently, test takes forever
@@ -49,7 +52,7 @@ class S3PresignerTest {
             val presignedRequest = PutObjectRequest {
                 bucket = testBucket
                 key = keyName
-            }.presign(client.config, 60)
+            }.presign(client.config, 60.seconds)
 
             S3TestUtils.responseCodeFromPut(presignedRequest, contents)
 
@@ -64,7 +67,7 @@ class S3PresignerTest {
     }
 
     @Test
-    fun testGetObjectPresigner() = runSuspendTest {
+    fun testGetObjectPresigner() = runTest {
         val contents = "presign-test"
 
         // FIXME - run these concurrently, test takes forever
@@ -78,7 +81,7 @@ class S3PresignerTest {
             val presignedRequest = GetObjectRequest {
                 bucket = testBucket
                 key = keyName
-            }.presign(client.config, 60)
+            }.presign(client.config, 60.seconds)
 
             CrtHttpEngine().use { engine ->
                 val httpClient = sdkHttpClient(engine)

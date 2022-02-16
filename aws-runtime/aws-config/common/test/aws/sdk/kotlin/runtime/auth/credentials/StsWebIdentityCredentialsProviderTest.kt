@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
@@ -16,6 +15,7 @@ import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -71,7 +71,7 @@ class StsWebIdentityCredentialsProviderTest {
     }
 
     @Test
-    fun testSuccess(): Unit = runSuspendTest {
+    fun testSuccess() = runTest {
         val testEngine = buildTestConnection {
             expect(stsResponse(testArn))
         }
@@ -93,7 +93,7 @@ class StsWebIdentityCredentialsProviderTest {
     }
 
     @Test
-    fun testServiceFailure(): Unit = runSuspendTest {
+    fun testServiceFailure() = runTest {
         val errorResponseBody = """
         <ErrorResponse>
             <Error>
@@ -127,7 +127,7 @@ class StsWebIdentityCredentialsProviderTest {
     }
 
     @Test
-    fun testJwtTokenMissing(): Unit = runSuspendTest {
+    fun testJwtTokenMissing() = runTest {
         val testEngine = TestConnection()
 
         val testPlatform = TestPlatformProvider()

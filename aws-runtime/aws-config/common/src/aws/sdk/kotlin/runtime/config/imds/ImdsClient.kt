@@ -21,13 +21,17 @@ import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.middleware.Phase
-import aws.smithy.kotlin.runtime.retries.impl.*
+import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
+import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
+import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitter
+import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitterOptions
+import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
+import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 /**
  * Maximum time allowed by default (6 hours)
@@ -56,7 +60,6 @@ public interface InstanceMetadataProvider : Closeable {
  * See [transitioning to IMDSv2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html#instance-metadata-transition-to-version-2)
  * for more information.
  */
-@OptIn(ExperimentalTime::class)
 public class ImdsClient private constructor(builder: Builder) : InstanceMetadataProvider {
     public constructor() : this(Builder())
 

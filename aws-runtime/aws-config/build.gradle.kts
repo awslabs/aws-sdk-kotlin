@@ -13,6 +13,7 @@ extra["moduleName"] = "aws.sdk.kotlin.runtime.config"
 
 val smithyKotlinVersion: String by project
 val kotestVersion: String by project
+val coroutinesVersion: String by project
 
 kotlin {
     sourceSets {
@@ -44,6 +45,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
                 val kotlinxSerializationVersion: String by project
                 val mockkVersion: String by project

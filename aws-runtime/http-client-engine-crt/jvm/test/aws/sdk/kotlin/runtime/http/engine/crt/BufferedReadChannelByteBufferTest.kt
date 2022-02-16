@@ -9,6 +9,7 @@ import aws.smithy.kotlin.runtime.testing.ManualDispatchTestBase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import java.nio.ByteBuffer
 import kotlin.test.AfterTest

@@ -46,7 +46,7 @@ internal sealed class JsonCredentialsResponse {
     //     // fields controlling the STS role:
     //     "RoleArn": "...", // required
     //     "RoleSessionName": "...", // required
-    //     // and also: DurationSeconds, ExternalId, SerialNumber, TokenCode, Policy
+    //     // and also: Duration, ExternalId, SerialNumber, TokenCode, Policy
     //     ...
     //   }
 

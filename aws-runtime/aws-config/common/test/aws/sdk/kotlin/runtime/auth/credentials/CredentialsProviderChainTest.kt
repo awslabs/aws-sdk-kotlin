@@ -5,13 +5,15 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class CredentialsProviderChainTest {
     @Test
     fun testNoProviders() {
@@ -24,7 +26,7 @@ class CredentialsProviderChainTest {
     }
 
     @Test
-    fun testChain() = runSuspendTest {
+    fun testChain() = runTest {
         val chain = CredentialsProviderChain(
             TestProvider(null),
             TestProvider(Credentials("akid1", "secret1")),
@@ -35,7 +37,7 @@ class CredentialsProviderChainTest {
     }
 
     @Test
-    fun testChainNoCredentials(): Unit = runSuspendTest {
+    fun testChainNoCredentials() = runTest {
         val chain = CredentialsProviderChain(
             TestProvider(null),
             TestProvider(null),

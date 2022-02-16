@@ -40,6 +40,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
             }
         }

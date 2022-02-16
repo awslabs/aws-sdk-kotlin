@@ -5,20 +5,21 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalTime::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class CachedCredentialsProviderTest {
     private val epoch = Instant.fromIso8601("2020-10-16T03:56:00Z")
-    private val testExpiration = epoch + Duration.minutes(30)
+    private val testExpiration = epoch + 30.minutes
     private val testClock = ManualClock(epoch)
 
     private class TestCredentialsProvider(
@@ -37,7 +38,7 @@ class CachedCredentialsProviderTest {
     }
 
     @Test
-    fun testLoadFirstCall(): Unit = runSuspendTest {
+    fun testLoadFirstCall() = runTest {
         // explicit expiration
         val source = TestCredentialsProvider(expiration = testExpiration)
         val provider = CachedCredentialsProvider(source, clock = testClock)
@@ -51,19 +52,19 @@ class CachedCredentialsProviderTest {
     }
 
     @Test
-    fun testDefaultExpiration(): Unit = runSuspendTest {
+    fun testDefaultExpiration() = runTest {
         // expiration should come from the cached provider
         val source = TestCredentialsProvider()
         val provider = CachedCredentialsProvider(source, clock = testClock)
         val creds = provider.getCredentials()
-        val expectedExpiration = epoch + Duration.minutes(15)
+        val expectedExpiration = epoch + 15.minutes
         val expected = Credentials("AKID", "secret", expiration = expectedExpiration)
         assertEquals(expected, creds)
         assertEquals(1, source.callCount)
     }
 
     @Test
-    fun testReloadExpiredCredentials(): Unit = runSuspendTest {
+    fun testReloadExpiredCredentials() = runTest {
         val source = TestCredentialsProvider(expiration = testExpiration)
         val provider = CachedCredentialsProvider(source, clock = testClock)
         val creds = provider.getCredentials()
@@ -72,13 +73,13 @@ class CachedCredentialsProviderTest {
         assertEquals(1, source.callCount)
 
         // 1 min past expiration
-        testClock.advance(Duration.minutes(31))
+        testClock.advance(31.minutes)
         provider.getCredentials()
         assertEquals(2, source.callCount)
     }
 
     @Test
-    fun testRefreshBufferWindow(): Unit = runSuspendTest {
+    fun testRefreshBufferWindow() = runTest {
         val source = TestCredentialsProvider(expiration = testExpiration)
         val provider = CachedCredentialsProvider(source, clock = testClock)
         val creds = provider.getCredentials()
@@ -87,19 +88,19 @@ class CachedCredentialsProviderTest {
         assertEquals(1, source.callCount)
 
         // default buffer window is 10 seconds, advance 29 minutes, 49 seconds
-        testClock.advance(Duration.seconds(29 * 60 + 49))
+        testClock.advance((29 * 60 + 49).seconds)
         provider.getCredentials()
         // not within window yet
         assertEquals(1, source.callCount)
 
         // now we should be within 10 sec window
-        testClock.advance(Duration.seconds(1))
+        testClock.advance(1.seconds)
         provider.getCredentials()
         assertEquals(2, source.callCount)
     }
 
     @Test
-    fun testLoadFailed(): Unit = runSuspendTest {
+    fun testLoadFailed() = runTest {
         val source = object : CredentialsProvider {
             private var count = 0
             override suspend fun getCredentials(): Credentials {

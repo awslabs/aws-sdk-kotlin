@@ -6,13 +6,13 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.RegionDisabledException
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -29,7 +29,7 @@ class StsAssumeRoleCredentialsProviderTest {
     private val testArn = "arn:aws:iam:1234567/test-role"
 
     @Test
-    fun testSuccess(): Unit = runSuspendTest {
+    fun testSuccess() = runTest {
         val testEngine = buildTestConnection {
             expect(StsTestUtils.stsResponse(testArn))
         }
@@ -45,7 +45,7 @@ class StsAssumeRoleCredentialsProviderTest {
     }
 
     @Test
-    fun testServiceFailure(): Unit = runSuspendTest {
+    fun testServiceFailure() = runTest {
         val errorResponseBody = """
         <ErrorResponse>
             <Error>
@@ -72,7 +72,7 @@ class StsAssumeRoleCredentialsProviderTest {
     }
 
     @Test
-    fun testRegionDisabled(): Unit = runSuspendTest {
+    fun testRegionDisabled() = runTest {
         val errorResponseBody = """
         <ErrorResponse>
             <Error>
@@ -103,7 +103,7 @@ class StsAssumeRoleCredentialsProviderTest {
     }
 
     @Test
-    fun testGlobalEndpoint(): Unit = runSuspendTest {
+    fun testGlobalEndpoint() = runTest {
         val testEngine = buildTestConnection {
             expect(StsTestUtils.stsResponse(testArn))
         }
@@ -121,7 +121,7 @@ class StsAssumeRoleCredentialsProviderTest {
     }
 
     @Test
-    fun testRegionalEndpoint(): Unit = runSuspendTest {
+    fun testRegionalEndpoint() = runTest {
         val testEngine = buildTestConnection {
             expect(StsTestUtils.stsResponse(testArn))
         }

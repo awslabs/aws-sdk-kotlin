@@ -7,14 +7,16 @@ package aws.sdk.kotlin.runtime.http.engine.crt
 
 import aws.sdk.kotlin.crt.http.*
 import aws.sdk.kotlin.crt.io.byteArrayBuffer
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import kotlin.test.*
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SdkStreamResponseHandlerTest {
 
     private class MockHttpStream(override val responseStatusCode: Int) : HttpStream {
@@ -34,7 +36,7 @@ class SdkStreamResponseHandlerTest {
     private val mockConn = MockHttpClientConnection()
 
     @Test
-    fun testWaitSuccessResponse() = runSuspendTest {
+    fun testWaitSuccessResponse() = runTest {
         val handler = SdkStreamResponseHandler(mockConn)
         val stream = MockHttpStream(200)
         launch {
@@ -59,7 +61,7 @@ class SdkStreamResponseHandlerTest {
     }
 
     @Test
-    fun testWaitNoHeaders() = runSuspendTest {
+    fun testWaitNoHeaders() = runTest {
         val handler = SdkStreamResponseHandler(mockConn)
         val stream = MockHttpStream(200)
         launch {
@@ -71,7 +73,7 @@ class SdkStreamResponseHandlerTest {
     }
 
     @Test
-    fun testWaitFailedResponse() = runSuspendTest {
+    fun testWaitFailedResponse() = runTest {
         val handler = SdkStreamResponseHandler(mockConn)
         val stream = MockHttpStream(200)
         launch {
@@ -85,7 +87,7 @@ class SdkStreamResponseHandlerTest {
     }
 
     @Test
-    fun testRespBodyCreated() = runSuspendTest {
+    fun testRespBodyCreated() = runTest {
         val handler = SdkStreamResponseHandler(mockConn)
         val stream = MockHttpStream(200)
         launch {
@@ -111,7 +113,7 @@ class SdkStreamResponseHandlerTest {
     }
 
     @Test
-    fun testRespBody() = runSuspendTest {
+    fun testRespBody() = runTest {
         val handler = SdkStreamResponseHandler(mockConn)
         val stream = MockHttpStream(200)
         val data = "Fool of a Took! Throw yourself in next time and rid us of your stupidity!"
@@ -139,7 +141,7 @@ class SdkStreamResponseHandlerTest {
     }
 
     @Test
-    fun testStreamError(): Unit = runSuspendTest {
+    fun testStreamError() = runTest {
         val handler = SdkStreamResponseHandler(mockConn)
         val stream = MockHttpStream(200)
         val data = "foo bar"

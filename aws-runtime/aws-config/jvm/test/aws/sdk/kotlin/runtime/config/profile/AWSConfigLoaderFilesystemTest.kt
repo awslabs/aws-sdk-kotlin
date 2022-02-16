@@ -5,15 +5,18 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.Platform
 import io.kotest.matchers.maps.shouldContainAll
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.deleteIfExists
@@ -24,6 +27,7 @@ import kotlin.test.assertTrue
 /**
  * Tests that exercise logic associated with the filesystem
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class AWSConfigLoaderFilesystemTest {
 
     @TempDir
@@ -31,7 +35,7 @@ class AWSConfigLoaderFilesystemTest {
     val tempDir: Path? = null
 
     @Test
-    fun itLoadsConfigFileFromFilesystem() = runSuspendTest {
+    fun itLoadsConfigFileFromFilesystem() = runTest {
         requireNotNull(tempDir)
         val configFile = tempDir.resolve("config")
         val credentialsFile = tempDir.resolve("credentials")
@@ -58,7 +62,7 @@ class AWSConfigLoaderFilesystemTest {
     }
 
     @Test
-    fun itLoadsConfigAndCredsFileFromFilesystem() = runSuspendTest {
+    fun itLoadsConfigAndCredsFileFromFilesystem() = runTest {
         requireNotNull(tempDir)
         val configFile = tempDir.resolve("config")
         val credentialsFile = tempDir.resolve("credentials")
@@ -88,7 +92,7 @@ class AWSConfigLoaderFilesystemTest {
         credentialsFile.deleteIfExists()
     }
 
-    internal fun mockPlatform(
+    private fun mockPlatform(
         pathSegment: String,
         awsProfileEnv: String? = null,
         awsConfigFileEnv: String? = null,
@@ -100,6 +104,7 @@ class AWSConfigLoaderFilesystemTest {
         val testPlatform = mockk<Platform>()
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
+        val filePath = slot<String>()
 
         every { testPlatform.filePathSeparator } returns pathSegment
         every { testPlatform.getenv(capture(envKeyParam)) } answers {
@@ -115,6 +120,21 @@ class AWSConfigLoaderFilesystemTest {
             if (propKeyParam.captured == "user.home") homeProp else null
         }
         every { testPlatform.osInfo() } returns os
+        coEvery {
+            testPlatform.readFileOrNull(capture(filePath))
+        } answers {
+            if (awsConfigFileEnv != null) {
+                val file = if (filePath.captured.endsWith("config")) {
+                    File(awsConfigFileEnv)
+                } else {
+                    File(awsSharedCredentialsFileEnv)
+                }
+
+                if (file.exists()) file.readBytes() else null
+            } else {
+                null
+            }
+        }
 
         return testPlatform
     }

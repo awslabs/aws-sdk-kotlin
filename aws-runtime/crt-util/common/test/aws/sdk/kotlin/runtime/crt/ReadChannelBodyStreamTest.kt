@@ -6,11 +6,22 @@
 package aws.sdk.kotlin.runtime.crt
 
 import aws.sdk.kotlin.crt.io.MutableBuffer
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
-import aws.smithy.kotlin.runtime.io.*
-import kotlinx.coroutines.*
-import kotlin.test.*
+import aws.smithy.kotlin.runtime.io.SdkByteChannel
+import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
+import aws.smithy.kotlin.runtime.io.writeUtf8
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.yield
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ReadChannelBodyStreamTest {
     private fun mutableBuffer(capacity: Int): Pair<MutableBuffer, ByteArray> {
         val dest = ByteArray(capacity)
@@ -18,7 +29,7 @@ class ReadChannelBodyStreamTest {
     }
 
     @Test
-    fun testClose() = runSuspendTest {
+    fun testClose() = runTest {
         val chan = SdkByteChannel()
         val (sendBuffer, _) = mutableBuffer(16)
 
@@ -34,7 +45,7 @@ class ReadChannelBodyStreamTest {
     }
 
     @Test
-    fun testCancellation(): Unit = runSuspendTest {
+    fun testCancellation() = runTest {
         val chan = SdkByteChannel()
         val job = Job()
         val stream = ReadChannelBodyStream(chan, coroutineContext + job)
@@ -48,7 +59,7 @@ class ReadChannelBodyStreamTest {
     }
 
     @Test
-    fun testReadFully() = runSuspendTest {
+    fun testReadFully() = runTest {
         val data = byteArrayOf(1, 2, 3, 4, 5)
         val chan = SdkByteReadChannel(data)
         val stream = ReadChannelBodyStream(chan, coroutineContext)
@@ -63,7 +74,7 @@ class ReadChannelBodyStreamTest {
     }
 
     @Test
-    fun testPartialRead() = runSuspendTest {
+    fun testPartialRead() = runTest {
         val chan = SdkByteReadChannel("123456".encodeToByteArray())
         val stream = ReadChannelBodyStream(chan, coroutineContext)
         yield()
@@ -81,7 +92,7 @@ class ReadChannelBodyStreamTest {
     }
 
     @Test
-    fun testLargeTransfer() = runSuspendTest {
+    fun testLargeTransfer() = runTest {
         val chan = SdkByteChannel()
 
         val data = "foobar"

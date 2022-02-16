@@ -7,7 +7,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -23,6 +22,7 @@ import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -83,7 +83,7 @@ class EcsCredentialsProviderTest {
     }
 
     @Test
-    fun testRelativeUri(): Unit = runSuspendTest {
+    fun testRelativeUri() = runTest {
         val engine = buildTestConnection {
             expect(
                 ecsRequest("http://169.254.170.2/relative?foo=bar"),
@@ -102,7 +102,7 @@ class EcsCredentialsProviderTest {
     }
 
     @Test
-    fun testFullUri(): Unit = runSuspendTest {
+    fun testFullUri() = runTest {
         val uri = "http://127.0.0.1/full?foo=bar"
         val engine = buildTestConnection {
             expect(
@@ -122,7 +122,7 @@ class EcsCredentialsProviderTest {
     }
 
     @Test
-    fun testNonLocalFullUri(): Unit = runSuspendTest {
+    fun testNonLocalFullUri() = runTest {
         val uri = "http://amazonaws.com/full"
         val engine = TestConnection()
 
@@ -137,7 +137,7 @@ class EcsCredentialsProviderTest {
     }
 
     @Test
-    fun testNonLocalFullUriHttps(): Unit = runSuspendTest {
+    fun testNonLocalFullUriHttps() = runTest {
         val uri = "https://amazonaws.com/full"
         val engine = buildTestConnection {
             expect(
@@ -157,7 +157,7 @@ class EcsCredentialsProviderTest {
     }
 
     @Test
-    fun testNoUri(): Unit = runSuspendTest {
+    fun testNoUri() = runTest {
         val engine = TestConnection()
         val testPlatform = TestPlatformProvider()
 
@@ -168,7 +168,7 @@ class EcsCredentialsProviderTest {
     }
 
     @Test
-    fun testAuthToken(): Unit = runSuspendTest {
+    fun testAuthToken() = runTest {
         val token = "auth-token"
         val engine = buildTestConnection {
             expect(
@@ -191,7 +191,7 @@ class EcsCredentialsProviderTest {
     }
 
     @Test
-    fun testErrorResponse(): Unit = runSuspendTest {
+    fun testErrorResponse() = runTest {
         val engine = buildTestConnection {
             expect(
                 ecsRequest("http://169.254.170.2/relative"),

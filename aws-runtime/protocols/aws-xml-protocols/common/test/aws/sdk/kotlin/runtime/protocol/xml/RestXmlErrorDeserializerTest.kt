@@ -4,14 +4,16 @@
  */
 package aws.sdk.kotlin.runtime.protocol.xml
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.serde.DeserializationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.*
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class RestXmlErrorDeserializerTest {
 
     @Test
-    fun `it deserializes aws restXml errors`() = runSuspendTest {
+    fun `it deserializes aws restXml errors`() = runTest {
         val tests = listOf(
             """
                 <ErrorResponse>
@@ -44,7 +46,7 @@ class RestXmlErrorDeserializerTest {
     }
 
     @Test
-    fun `it fails to deserialize invalid aws restXml errors`() = runSuspendTest {
+    fun `it fails to deserialize invalid aws restXml errors`() = runTest {
         val tests = listOf(
             """
                 <SomeRandomThing>
@@ -76,7 +78,7 @@ class RestXmlErrorDeserializerTest {
     }
 
     @Test
-    fun `it partially deserializes aws restXml errors`() = runSuspendTest {
+    fun `it partially deserializes aws restXml errors`() = runTest {
         val tests = listOf(
             """
                 <ErrorResponse>

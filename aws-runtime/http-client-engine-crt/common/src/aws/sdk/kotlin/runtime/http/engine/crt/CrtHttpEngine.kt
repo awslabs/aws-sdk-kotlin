@@ -20,14 +20,12 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
-import kotlin.time.ExperimentalTime
 
 internal const val DEFAULT_WINDOW_SIZE_BYTES: Int = 16 * 1024
 
 /**
  * [HttpClientEngine] based on the AWS Common Runtime HTTP client
  */
-@OptIn(ExperimentalTime::class)
 public class CrtHttpEngine(public val config: CrtHttpEngineConfig) : HttpClientEngineBase("crt") {
     public constructor() : this(CrtHttpEngineConfig.Default)
 
@@ -55,7 +53,6 @@ public class CrtHttpEngine(public val config: CrtHttpEngineConfig) : HttpClientE
         }
     }
 
-    @OptIn(ExperimentalTime::class)
     private val options = HttpClientConnectionManagerOptionsBuilder().apply {
         clientBootstrap = config.clientBootstrap ?: SdkDefaultIO.ClientBootstrap
         tlsContext = customTlsContext ?: config.tlsContext ?: SdkDefaultIO.TlsContext
@@ -72,7 +69,6 @@ public class CrtHttpEngine(public val config: CrtHttpEngineConfig) : HttpClientE
     private val connManagers = mutableMapOf<String, HttpClientConnectionManager>()
     private val mutex = Mutex()
 
-    @OptIn(ExperimentalTime::class)
     override suspend fun roundTrip(request: HttpRequest): HttpCall {
         val callContext = callContext()
         val manager = getManagerForUri(request.uri)

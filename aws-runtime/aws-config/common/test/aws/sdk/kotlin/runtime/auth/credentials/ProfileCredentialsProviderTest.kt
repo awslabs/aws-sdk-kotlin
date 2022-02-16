@@ -6,15 +6,17 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ProfileCredentialsProviderTest {
     @Test
-    fun testDefaultProfile(): Unit = runSuspendTest {
+    fun testDefaultProfile() = runTest {
         val testProvider = TestPlatformProvider(
             env = mapOf("AWS_CONFIG_FILE" to "config"),
             fs = mapOf(
@@ -38,7 +40,7 @@ class ProfileCredentialsProviderTest {
     }
 
     @Test
-    fun testExplicitProfileOverride(): Unit = runSuspendTest {
+    fun testExplicitProfileOverride() = runTest {
         val testProvider = TestPlatformProvider(
             env = mapOf("AWS_CONFIG_FILE" to "config"),
             fs = mapOf(
@@ -67,7 +69,7 @@ class ProfileCredentialsProviderTest {
     }
 
     @Test
-    fun testProfileOverrideFromEnvironment(): Unit = runSuspendTest {
+    fun testProfileOverrideFromEnvironment() = runTest {
         val testProvider = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
@@ -98,7 +100,7 @@ class ProfileCredentialsProviderTest {
     }
 
     @Test
-    fun testBasicAssumeRole(): Unit = runSuspendTest {
+    fun testBasicAssumeRole() = runTest {
         // smoke test for assume role, more involved scenarios are tested through the default chain
 
         val testArn = "arn:aws:iam:1234567/test-role"

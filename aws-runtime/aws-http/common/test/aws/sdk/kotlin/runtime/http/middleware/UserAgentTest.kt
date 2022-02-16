@@ -9,7 +9,6 @@ import aws.sdk.kotlin.runtime.http.ApiMetadata
 import aws.sdk.kotlin.runtime.http.loadAwsUserAgentMetadataFromEnvironment
 import aws.sdk.kotlin.runtime.http.operation.customUserAgentMetadata
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -23,12 +22,15 @@ import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.get
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class UserAgentTest {
-    val mockEngine = object : HttpClientEngineBase("test") {
+    private val mockEngine = object : HttpClientEngineBase("test") {
         override suspend fun roundTrip(request: HttpRequest): HttpCall {
             val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
             val now = Instant.now()
@@ -36,10 +38,10 @@ class UserAgentTest {
         }
     }
 
-    val client = sdkHttpClient(mockEngine)
+    private val client = sdkHttpClient(mockEngine)
 
     @Test
-    fun itSetsUAHeaders() = runSuspendTest {
+    fun itSetsUAHeaders() = runTest {
         val op = SdkHttpOperation.build<Unit, HttpResponse> {
             serializer = UnitSerializer
             deserializer = IdentityDeserializer
@@ -62,7 +64,7 @@ class UserAgentTest {
     }
 
     @Test
-    fun itAddsPerOperationMetadata() = runSuspendTest {
+    fun itAddsPerOperationMetadata() = runTest {
         val op = SdkHttpOperation.build<Unit, HttpResponse> {
             serializer = UnitSerializer
             deserializer = IdentityDeserializer

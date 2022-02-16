@@ -7,6 +7,7 @@ description = "HTTP core for AWS service clients"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: HTTP"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.http"
 
+val coroutinesVersion: String by project
 val smithyKotlinVersion: String by project
 
 kotlin {
@@ -22,6 +23,7 @@ kotlin {
 
         commonTest {
             dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation(project(":aws-runtime:testing"))
             }
         }

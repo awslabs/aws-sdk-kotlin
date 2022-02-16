@@ -33,7 +33,6 @@ import kotlin.io.path.name
 import kotlin.io.path.readText
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 private const val DEFAULT_SIGNING_ISO_DATE = "2015-08-30T12:36:00Z"
 
@@ -189,7 +188,6 @@ class Sigv4TestSuite {
     /**
      * Parse context.json if it exists into a signing config
      */
-    @OptIn(ExperimentalTime::class)
     private fun getSigningConfig(dir: String): AwsSigningConfig.Builder? {
         val file = Paths.get(dir, "context.json")
         if (!file.exists()) return null
@@ -359,7 +357,6 @@ private fun buildOperation(
  * @param config The signing config to use when creating the middleware
  * @param operation The operation to sign
  */
-@OptIn(ExperimentalTime::class)
 private suspend fun getSignedRequest(
     config: AwsSigningConfig,
     operation: SdkHttpOperation<Unit, HttpResponse>

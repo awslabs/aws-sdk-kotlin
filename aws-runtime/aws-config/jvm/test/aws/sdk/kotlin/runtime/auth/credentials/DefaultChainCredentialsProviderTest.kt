@@ -6,13 +6,14 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.httptest.TestConnection
-import aws.smithy.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.Filesystem
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.*
 import java.io.File
@@ -22,6 +23,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 // TODO - refactor to make this work in common
+@OptIn(ExperimentalCoroutinesApi::class)
 class DefaultChainCredentialsProviderTest {
 
     class FsRootedAt(val root: File) : Filesystem {
@@ -131,7 +133,7 @@ class DefaultChainCredentialsProviderTest {
      * Execute a test from the default chain test suite
      * @param name The name of root directory for the test (from common/test-resources/default-provider-chain)
      */
-    fun executeTest(name: String): Unit = runSuspendTest {
+    fun executeTest(name: String) = runTest {
         val test = makeTest(name)
         val provider = DefaultChainCredentialsProvider(platformProvider = test.testPlatform, httpClientEngine = test.testEngine)
         val actual = runCatching { provider.getCredentials() }

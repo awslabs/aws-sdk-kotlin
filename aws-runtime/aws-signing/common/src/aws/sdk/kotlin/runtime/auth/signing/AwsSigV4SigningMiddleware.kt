@@ -17,13 +17,11 @@ import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.util.get
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 
 /**
  * HTTP request pipeline middleware that signs outgoing requests
  */
 @InternalSdkApi
-@OptIn(ExperimentalTime::class)
 public class AwsSigV4SigningMiddleware(private val config: Config) : ModifyRequestMiddleware {
 
     public companion object {

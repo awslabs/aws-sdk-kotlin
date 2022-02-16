@@ -97,6 +97,7 @@ class PresignerGeneratorTest {
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
             import aws.smithy.kotlin.runtime.http.request.HttpRequest
+            import kotlin.time.Duration
             import smithy.kotlin.traits.TestClient
             import smithy.kotlin.traits.internal.DefaultEndpointResolver
             import smithy.kotlin.traits.model.GetFooRequest
@@ -109,36 +110,36 @@ class PresignerGeneratorTest {
             /**
              * Presign a [GetFooRequest] using a [ServicePresignConfig].
              * @param presignConfig the configuration used to generate the presigned request
-             * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
+             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun GetFooRequest.presign(presignConfig: ServicePresignConfig, durationSeconds: Long): HttpRequest {
-                return createPresignedRequest(presignConfig, getFooPresignConfig(this, durationSeconds))
+            suspend fun GetFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
+                return createPresignedRequest(presignConfig, getFooPresignConfig(this, duration))
             }
             
             /**
              * Presign a [GetFooRequest] using a [TestClient].
              * @param config the client configuration used to generate the presigned request.
-             * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
+             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun GetFooRequest.presign(config: TestClient.Config, durationSeconds: Long): HttpRequest {
+            suspend fun GetFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
                     credentialsProvider = config.credentialsProvider
                     endpointResolver = config.endpointResolver
                     region = config.region
                 }
-                return createPresignedRequest(presignConfig, getFooPresignConfig(this, durationSeconds))
+                return createPresignedRequest(presignConfig, getFooPresignConfig(this, duration))
             }
             
-            private suspend fun getFooPresignConfig(input: GetFooRequest, durationSeconds: Long) : PresignedRequestConfig {
-                require(durationSeconds > 0) { "duration must be greater than zero" }
+            private suspend fun getFooPresignConfig(input: GetFooRequest, duration: Duration) : PresignedRequestConfig {
+                require(duration.isPositive()) { "duration must be greater than zero" }
                 val httpRequestBuilder = GetFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
                     httpRequestBuilder.method,
                     httpRequestBuilder.url.path,
                     httpRequestBuilder.url.parameters.build(),
-                    durationSeconds.toLong(),
+                    duration,
                     false,
                     SigningLocation.QUERY_STRING
                 )
@@ -147,36 +148,36 @@ class PresignerGeneratorTest {
             /**
              * Presign a [PostFooRequest] using a [ServicePresignConfig].
              * @param presignConfig the configuration used to generate the presigned request
-             * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
+             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PostFooRequest.presign(presignConfig: ServicePresignConfig, durationSeconds: Long): HttpRequest {
-                return createPresignedRequest(presignConfig, postFooPresignConfig(this, durationSeconds))
+            suspend fun PostFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
+                return createPresignedRequest(presignConfig, postFooPresignConfig(this, duration))
             }
             
             /**
              * Presign a [PostFooRequest] using a [TestClient].
              * @param config the client configuration used to generate the presigned request.
-             * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
+             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PostFooRequest.presign(config: TestClient.Config, durationSeconds: Long): HttpRequest {
+            suspend fun PostFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
                     credentialsProvider = config.credentialsProvider
                     endpointResolver = config.endpointResolver
                     region = config.region
                 }
-                return createPresignedRequest(presignConfig, postFooPresignConfig(this, durationSeconds))
+                return createPresignedRequest(presignConfig, postFooPresignConfig(this, duration))
             }
             
-            private suspend fun postFooPresignConfig(input: PostFooRequest, durationSeconds: Long) : PresignedRequestConfig {
-                require(durationSeconds > 0) { "duration must be greater than zero" }
+            private suspend fun postFooPresignConfig(input: PostFooRequest, duration: Duration) : PresignedRequestConfig {
+                require(duration.isPositive()) { "duration must be greater than zero" }
                 val httpRequestBuilder = PostFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
                     httpRequestBuilder.method,
                     httpRequestBuilder.url.path,
                     httpRequestBuilder.url.parameters.build(),
-                    durationSeconds.toLong(),
+                    duration,
                     false,
                     SigningLocation.QUERY_STRING
                 )
@@ -185,36 +186,36 @@ class PresignerGeneratorTest {
             /**
              * Presign a [PutFooRequest] using a [ServicePresignConfig].
              * @param presignConfig the configuration used to generate the presigned request
-             * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
+             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PutFooRequest.presign(presignConfig: ServicePresignConfig, durationSeconds: Long): HttpRequest {
-                return createPresignedRequest(presignConfig, putFooPresignConfig(this, durationSeconds))
+            suspend fun PutFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
+                return createPresignedRequest(presignConfig, putFooPresignConfig(this, duration))
             }
             
             /**
              * Presign a [PutFooRequest] using a [TestClient].
              * @param config the client configuration used to generate the presigned request.
-             * @param durationSeconds the amount of time from signing for which the request is valid, with seconds granularity.
+             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PutFooRequest.presign(config: TestClient.Config, durationSeconds: Long): HttpRequest {
+            suspend fun PutFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
                     credentialsProvider = config.credentialsProvider
                     endpointResolver = config.endpointResolver
                     region = config.region
                 }
-                return createPresignedRequest(presignConfig, putFooPresignConfig(this, durationSeconds))
+                return createPresignedRequest(presignConfig, putFooPresignConfig(this, duration))
             }
             
-            private suspend fun putFooPresignConfig(input: PutFooRequest, durationSeconds: Long) : PresignedRequestConfig {
-                require(durationSeconds > 0) { "duration must be greater than zero" }
+            private suspend fun putFooPresignConfig(input: PutFooRequest, duration: Duration) : PresignedRequestConfig {
+                require(duration.isPositive()) { "duration must be greater than zero" }
                 val httpRequestBuilder = PutFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
                 return PresignedRequestConfig(
                     httpRequestBuilder.method,
                     httpRequestBuilder.url.path,
                     httpRequestBuilder.url.parameters.build(),
-                    durationSeconds.toLong(),
+                    duration,
                     false,
                     SigningLocation.QUERY_STRING
                 )

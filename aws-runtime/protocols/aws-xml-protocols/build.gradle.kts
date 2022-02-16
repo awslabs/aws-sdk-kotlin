@@ -7,6 +7,7 @@ description = "Support for the XML suite of AWS protocols"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: XML"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.protocol.xml"
 
+val coroutinesVersion: String by project
 val smithyKotlinVersion: String by project
 
 kotlin {
@@ -24,6 +25,7 @@ kotlin {
 
         commonTest {
             dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation(project(":aws-runtime:testing"))
             }
         }

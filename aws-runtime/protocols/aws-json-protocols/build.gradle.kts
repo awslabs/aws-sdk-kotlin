@@ -7,6 +7,7 @@ description = "Support for the JSON suite of AWS protocols"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: JSON"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.protocol.json"
 
+val coroutinesVersion: String by project
 val smithyKotlinVersion: String by project
 
 kotlin {
@@ -25,6 +26,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
             }
         }
 

@@ -11,6 +11,7 @@ plugins {
 
 val sdkVersion: String by project
 val kotlinVersion: String by project
+val coroutinesVersion: String by project
 val kotestVersion: String by project
 
 val optinAnnotations = listOf(
@@ -42,10 +43,11 @@ subprojects {
             kotlin.srcDir("generated-src/test")
 
             dependencies {
-                implementation("io.kotest:kotest-assertions-core:$kotestVersion")
-                implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation(kotlin("test-junit5"))
+                implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation(project(":aws-runtime:testing"))
+                implementation("io.kotest:kotest-assertions-core:$kotestVersion")
             }
         }
     }
@@ -69,6 +71,9 @@ subprojects {
         kotlinOptions {
             jvmTarget = "1.8" // this is the default but it's better to be explicit (e.g. it may change in Kotlin 1.5)
             allWarningsAsErrors = false // FIXME Tons of errors occur in generated code
+            // Enable coroutine runTests in 1.6.10
+            // NOTE: may be removed after coroutines-test runTests becomes stable
+            freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
         }
     }
 
@@ -110,6 +115,11 @@ subprojects {
                         implementation(kotlin("test-junit5"))
                         implementation(project(":aws-runtime:testing"))
                     }
+                }
+                kotlinOptions {
+                    // Enable coroutine runTests in 1.6.10
+                    // NOTE: may be removed after coroutines-test runTests becomes stable
+                    freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
                 }
 
                 tasks.register<Test>("e2eTest") {
