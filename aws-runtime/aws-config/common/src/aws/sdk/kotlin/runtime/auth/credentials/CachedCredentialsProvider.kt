@@ -11,6 +11,7 @@ import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.Clock
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 private const val DEFAULT_CREDENTIALS_REFRESH_BUFFER_SECONDS = 10
@@ -44,12 +45,12 @@ public const val DEFAULT_CREDENTIALS_REFRESH_SECONDS: Int = 60 * 15
 @OptIn(ExperimentalTime::class)
 public class CachedCredentialsProvider(
     private val source: CredentialsProvider,
-    private val expireCredentialsAfter: Duration = Duration.seconds(DEFAULT_CREDENTIALS_REFRESH_SECONDS),
-    refreshBufferWindow: Duration = Duration.seconds(DEFAULT_CREDENTIALS_REFRESH_BUFFER_SECONDS),
+    private val expireCredentialsAfter: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
+    refreshBufferWindow: Duration = DEFAULT_CREDENTIALS_REFRESH_BUFFER_SECONDS.seconds,
     private val clock: Clock = Clock.System
 ) : CredentialsProvider, Closeable {
 
-    private var cachedCredentials = CachedValue<Credentials>(null, bufferTime = refreshBufferWindow, clock)
+    private val cachedCredentials = CachedValue<Credentials>(null, bufferTime = refreshBufferWindow, clock)
 
     override suspend fun getCredentials(): Credentials = cachedCredentials.getOrLoad {
         val logger = Logger.getLogger<CachedCredentialsProvider>()

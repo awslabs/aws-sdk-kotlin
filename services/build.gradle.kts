@@ -16,7 +16,7 @@ val kotestVersion: String by project
 
 val optinAnnotations = listOf(
     "aws.smithy.kotlin.runtime.util.InternalApi",
-    "aws.sdk.kotlin.runtime.InternalSdkApi"
+    "aws.sdk.kotlin.runtime.InternalSdkApi",
 )
 
 subprojects {

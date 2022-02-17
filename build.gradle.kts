@@ -83,15 +83,9 @@ fun Project.prop(name: String): Any? =
     this.properties[name] ?: localProperties[name]
 
 if (project.prop("kotlinWarningsAsErrors")?.toString()?.toBoolean() == true) {
-    // generated sts/sso credential providers have quite a few warnings
-    val optOutWErrorProjects = setOf("aws-config")
-
     subprojects {
-        if (name !in optOutWErrorProjects) {
-            // FIXME - this is NOT lazily evaluated
-            tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-                kotlinOptions.allWarningsAsErrors = true
-            }
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+            kotlinOptions.allWarningsAsErrors = true
         }
     }
 }

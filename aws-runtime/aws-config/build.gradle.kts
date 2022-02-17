@@ -153,6 +153,9 @@ NOTE: We need the following tasks to depend on codegen for gradle caching/up-to-
 val codegenTask = tasks.named("generateSmithyProjections")
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     dependsOn(codegenTask)
+
+    // generated sts/sso credential providers have quite a few warnings
+    kotlinOptions.allWarningsAsErrors = false
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
