@@ -12,7 +12,6 @@ import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 private const val DEFAULT_CREDENTIALS_REFRESH_BUFFER_SECONDS = 10
 /**
@@ -42,7 +41,6 @@ public const val DEFAULT_CREDENTIALS_REFRESH_SECONDS: Int = 60 * 15
  *
  * @return the newly-constructed credentials provider
  */
-@OptIn(ExperimentalTime::class)
 public class CachedCredentialsProvider(
     private val source: CredentialsProvider,
     private val expireCredentialsAfter: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,

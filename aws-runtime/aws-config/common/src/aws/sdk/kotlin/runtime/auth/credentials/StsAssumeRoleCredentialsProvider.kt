@@ -17,7 +17,7 @@ import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
+import kotlin.time.Duration.Companion.seconds
 
 private const val GLOBAL_STS_PARTITION_ENDPOINT = "aws-global"
 private const val PROVIDER_NAME = "AssumeRoleProvider"
@@ -41,14 +41,13 @@ private const val PROVIDER_NAME = "AssumeRoleProvider"
  * @param duration The expiry duration of the STS credentials. Defaults to 15 minutes if not set.
  * @param httpClientEngine The [HttpClientEngine] to use when making requests to the STS service
  */
-@OptIn(ExperimentalTime::class)
 public class StsAssumeRoleCredentialsProvider(
     private val credentialsProvider: CredentialsProvider,
     private val roleArn: String,
     private val region: String? = null,
     private val roleSessionName: String? = null,
     private val externalId: String? = null,
-    private val duration: Duration = Duration.seconds(DEFAULT_CREDENTIALS_REFRESH_SECONDS),
+    private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val httpClientEngine: HttpClientEngine? = null
 ) : CredentialsProvider {
 

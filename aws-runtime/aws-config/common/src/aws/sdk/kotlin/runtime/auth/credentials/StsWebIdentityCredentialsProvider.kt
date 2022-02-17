@@ -14,7 +14,7 @@ import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
+import kotlin.time.Duration.Companion.seconds
 
 private const val PROVIDER_NAME = "WebIdentityToken"
 
@@ -32,13 +32,12 @@ private const val PROVIDER_NAME = "WebIdentityToken"
  * @param platformProvider The platform API provider
  * @param httpClientEngine The [HttpClientEngine] to use when making requests to the STS service
  */
-@OptIn(ExperimentalTime::class)
 public class StsWebIdentityCredentialsProvider(
     private val roleArn: String,
     private val webIdentityTokenFilePath: String,
     private val region: String,
     private val roleSessionName: String? = null,
-    private val duration: Duration = Duration.seconds(DEFAULT_CREDENTIALS_REFRESH_SECONDS),
+    private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val platformProvider: PlatformProvider = Platform,
     private val httpClientEngine: HttpClientEngine? = null
 ) : CredentialsProvider {
@@ -54,7 +53,7 @@ public class StsWebIdentityCredentialsProvider(
             webIdentityTokenFilePath: String? = null,
             region: String? = null,
             roleSessionName: String? = null,
-            duration: Duration = Duration.seconds(DEFAULT_CREDENTIALS_REFRESH_SECONDS),
+            duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
             platformProvider: PlatformProvider = Platform,
             httpClientEngine: HttpClientEngine? = null
         ): StsWebIdentityCredentialsProvider {

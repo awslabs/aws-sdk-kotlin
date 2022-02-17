@@ -12,7 +12,6 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
-import kotlin.time.ExperimentalTime
 
 /**
  * Default AWS credential provider chain used by most AWS SDKs.
@@ -78,7 +77,6 @@ public class DefaultChainCredentialsProvider constructor(
  * Wrapper around [StsWebIdentityCredentialsProvider] that delays any exceptions until [getCredentials] is invoked.
  * This allows it to be part of the default chain and any failures result in the chain to move onto the next provider.
  */
-@OptIn(ExperimentalTime::class)
 private class StsWebIdentityProvider(
     val platformProvider: PlatformProvider,
     val httpClientEngine: HttpClientEngine? = null
