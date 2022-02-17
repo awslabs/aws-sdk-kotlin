@@ -10,6 +10,9 @@ plugins {
 }
 
 val sdkVersion: String by project
+val kotlinVersion: String by project
+val coroutinesVersion: String by project
+val kotestVersion: String by project
 
 val optinAnnotations = listOf(
     "aws.smithy.kotlin.runtime.util.InternalApi",
@@ -40,10 +43,11 @@ subprojects {
             kotlin.srcDir("generated-src/test")
 
             dependencies {
-                val coroutinesVersion: String by project
                 implementation(kotlin("test-junit5"))
+                implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation(project(":aws-runtime:testing"))
+                implementation("io.kotest:kotest-assertions-core:$kotestVersion")
             }
         }
     }

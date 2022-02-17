@@ -358,7 +358,8 @@ class PresignerGenerator : KotlinIntegration {
                 documentation =
                     "The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used."
                 baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultChainCredentialsProvider()")
+                // TODO - we could probably relax this and instead create a default chain in createPresignedRequest on-demand in the runtime and close it when done signing
+                propertyType = ClientConfigPropertyType.Required()
             },
             ClientConfigProperty {
                 symbol = AwsRuntimeTypes.Endpoint.AwsEndpointResolver

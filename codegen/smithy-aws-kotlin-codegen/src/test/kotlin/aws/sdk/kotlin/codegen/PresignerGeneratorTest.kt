@@ -227,7 +227,7 @@ class PresignerGeneratorTest {
              * instance is not available.
              */
             class TestPresignConfig private constructor(builder: Builder): ServicePresignConfig {
-                override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider()
+                override val credentialsProvider: CredentialsProvider = requireNotNull(builder.credentialsProvider) { "credentialsProvider is a required configuration property" }
                 override val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
                 override val normalizeUriPath: Boolean = true
                 override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }

@@ -78,7 +78,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             socketReadTimeout = 1.seconds
         }
 
-        httpClient = sdkHttpClient(engine)
+        httpClient = sdkHttpClient(engine, manageEngine = builder.engine == null)
     }
 
     // cached middleware instances
@@ -143,7 +143,6 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             next.call(req)
         }
 
-        // TODO - retries
         return op.roundTrip(httpClient, Unit)
     }
 

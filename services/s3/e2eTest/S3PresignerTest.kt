@@ -47,6 +47,7 @@ class S3PresignerTest {
     fun testPutObjectPresigner() = runTest {
         val contents = "presign-test"
 
+        // FIXME - run these concurrently, test takes forever
         testKeyNames.forEach { keyName ->
             val presignedRequest = PutObjectRequest {
                 bucket = testBucket
@@ -69,6 +70,7 @@ class S3PresignerTest {
     fun testGetObjectPresigner() = runTest {
         val contents = "presign-test"
 
+        // FIXME - run these concurrently, test takes forever
         testKeyNames.reversed().forEach { keyName ->
             client.putObject {
                 bucket = testBucket

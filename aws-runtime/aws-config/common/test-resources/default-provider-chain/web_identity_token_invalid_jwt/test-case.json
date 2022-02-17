@@ -1,0 +1,7 @@
+{
+  "name": "web identity token bad JWT",
+  "docs": "Loads a web identity token but the server replies that the token is invalid",
+  "result": {
+    "ErrorContains": "STS failed to assume role from web identity"
+  }
+}

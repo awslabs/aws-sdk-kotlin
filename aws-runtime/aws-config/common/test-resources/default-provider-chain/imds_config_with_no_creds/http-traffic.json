@@ -1,0 +1,75 @@
+[
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/api/token",
+      "headers": {
+        "x-aws-ec2-metadata-token-ttl-seconds": "21600"
+      },
+      "method": "PUT",
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "version": "HTTP/1.1",
+      "headers": {
+        "x-aws-ec2-metadata-token-ttl-seconds": "21600",
+        "content-type": "text/plain",
+        "connection": "close",
+        "server": "EC2ws",
+        "content-length": "56",
+        "date": "Mon, 20 Sep 2021 21:43:31 GMT"
+      },
+      "body": "AQAEAKQRRHnsX8GCPgYTGMShrFJkMhru3n-8Ul5Gzvzj-bpWKYZuiw=="
+    }
+  },
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/meta-data/iam/security-credentials",
+      "headers": {
+        "x-aws-ec2-metadata-token": "AQAEAKQRRHnsX8GCPgYTGMShrFJkMhru3n-8Ul5Gzvzj-bpWKYZuiw=="
+      },
+      "method": "GET",
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "version": "HTTP/1.1",
+      "headers": {
+        "server": "EC2ws",
+        "content-length": "21",
+        "x-aws-ec2-metadata-token-ttl-seconds": "21600",
+        "connection": "close",
+        "last-modified": "Mon, 20 Sep 2021 21:41:54 GMT",
+        "content-type": "text/plain",
+        "date": "Mon, 20 Sep 2021 21:43:31 GMT",
+        "accept-ranges": "none"
+      },
+      "body": "imds-assume-role-test"
+    }
+  },
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-assume-role-test",
+      "headers": {
+        "x-aws-ec2-metadata-token": "AQAEAKQRRHnsX8GCPgYTGMShrFJkMhru3n-8Ul5Gzvzj-bpWKYZuiw=="
+      },
+      "method": "GET",
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "version": "HTTP/1.1",
+      "headers": {
+        "content-type": "text/plain",
+        "server": "EC2ws",
+        "content-length": "1322",
+        "accept-ranges": "none",
+        "date": "Mon, 20 Sep 2021 21:43:31 GMT",
+        "connection": "close",
+        "last-modified": "Mon, 20 Sep 2021 21:41:54 GMT",
+        "x-aws-ec2-metadata-token-ttl-seconds": "21600"
+      },
+      "body": "{\n  \"Code\" : \"Success\",\n  \"LastUpdated\" : \"2021-09-20T21:42:26Z\",\n  \"Type\" : \"AWS-HMAC\",\n  \"AccessKeyId\" : \"ASIARTEST\",\n  \"SecretAccessKey\" : \"testsecret\",\n  \"Token\" : \"testtoken\",\n  \"Expiration\" : \"2021-09-21T04:16:53Z\"\n}"
+    }
+  }
+]
