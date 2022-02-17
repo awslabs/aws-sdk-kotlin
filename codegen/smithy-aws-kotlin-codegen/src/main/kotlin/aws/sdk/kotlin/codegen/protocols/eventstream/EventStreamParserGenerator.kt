@@ -165,6 +165,7 @@ class EventStreamParserGenerator(
                 val payloadDeserializeFn = sdg.payloadDeserializer(ctx, member)
                 writer.write("builder.#L = #T(message.payload)", member.defaultName(), payloadDeserializeFn)
             }
+            else -> throw CodegenException("unsupported shape type `${target.type}` for target: $target; expected blob, string, structure, or union for eventPayload member: $member")
         }
     }
 }
