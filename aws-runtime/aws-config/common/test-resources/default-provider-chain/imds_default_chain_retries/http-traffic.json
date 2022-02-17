@@ -1,0 +1,123 @@
+[
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/api/token",
+      "headers": {
+        "x-aws-ec2-metadata-token-ttl-seconds": "21600"
+      },
+      "method": "PUT",
+      "body": null
+    },
+    "response": {
+      "status": 503,
+      "version": "HTTP/1.1",
+      "headers": {},
+      "body": null
+    }
+  },
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/api/token",
+      "headers": {
+        "x-aws-ec2-metadata-token-ttl-seconds": "21600"
+      },
+      "method": "PUT",
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "version": "HTTP/1.1",
+      "headers": {
+        "x-aws-ec2-metadata-token-ttl-seconds": "21600",
+        "server": "EC2ws",
+        "content-type": "text/plain",
+        "connection": "close",
+        "content-length": "56",
+        "date": "Tue, 21 Sep 2021 18:32:37 GMT"
+      },
+      "body": "imdstoken"
+    }
+  },
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/meta-data/iam/security-credentials",
+      "headers": {
+        "x-aws-ec2-metadata-token": "imdstoken"
+      },
+      "method": "GET",
+      "body": null
+    },
+    "response": {
+      "status": 503,
+      "version": "HTTP/1.1",
+      "headers": {},
+      "body": null
+    }
+  },
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/meta-data/iam/security-credentials",
+      "headers": {
+        "x-aws-ec2-metadata-token": "imdstoken"
+      },
+      "method": "GET",
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "version": "HTTP/1.1",
+      "headers": {
+        "content-length": "21",
+        "server": "EC2ws",
+        "connection": "close",
+        "accept-ranges": "none",
+        "last-modified": "Tue, 21 Sep 2021 18:31:13 GMT",
+        "date": "Tue, 21 Sep 2021 18:32:38 GMT",
+        "content-type": "text/plain",
+        "x-aws-ec2-metadata-token-ttl-seconds": "21599"
+      },
+      "body": "imds-assume-role-test"
+    }
+  },
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-assume-role-test",
+      "headers": {
+        "x-aws-ec2-metadata-token": "imdstoken"
+      },
+      "method": "GET",
+      "body": null
+    },
+    "response": {
+      "status": 503,
+      "version": "HTTP/1.1",
+      "headers": {},
+      "body": null
+    }
+  },
+  {
+    "request": {
+      "uri": "http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-assume-role-test",
+      "headers": {
+        "x-aws-ec2-metadata-token": "imdstoken"
+      },
+      "method": "GET",
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "version": "HTTP/1.1",
+      "headers": {
+        "content-length": "1322",
+        "server": "EC2ws",
+        "accept-ranges": "none",
+        "last-modified": "Tue, 21 Sep 2021 18:31:13 GMT",
+        "connection": "close",
+        "x-aws-ec2-metadata-token-ttl-seconds": "21599",
+        "content-type": "text/plain",
+        "date": "Tue, 21 Sep 2021 18:32:38 GMT"
+      },
+      "body": "{\n  \"Code\" : \"Success\",\n  \"LastUpdated\" : \"2021-09-21T18:30:29Z\",\n  \"Type\" : \"AWS-HMAC\",\n  \"AccessKeyId\" : \"ASIARTEST\",\n  \"SecretAccessKey\" : \"testsecret\",\n  \"Token\" : \"testtoken\",\n  \"Expiration\" : \"2021-09-22T00:35:06Z\"\n}"
+    }
+  }
+]

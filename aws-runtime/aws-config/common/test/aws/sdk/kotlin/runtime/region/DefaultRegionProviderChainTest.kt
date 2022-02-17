@@ -6,12 +6,14 @@
 package aws.sdk.kotlin.runtime.region
 
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.runtime.util.TestInstanceMetadataProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class DefaultRegionProviderChainTest {
     private data class RegionProviderChainTest(
         val name: String,
@@ -22,7 +24,7 @@ class DefaultRegionProviderChainTest {
     )
 
     @Test
-    fun testSuite(): Unit = runSuspendTest {
+    fun testSuite() = runTest {
         val tests = Json.parseToJsonElement(regionProviderChainTestSuite).jsonArray
             .map { it.jsonObject }
             .map {

@@ -4,16 +4,18 @@
  */
 package aws.sdk.kotlin.runtime.protocol.json
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Suppress("HttpUrlsUsage")
 class RestJsonErrorDeserializerTest {
 
-    @OptIn(ExperimentalStdlibApi::class)
+    @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
     @Test
-    fun `it deserializes aws restJson error codes`() = runSuspendTest {
+    fun `it deserializes aws restJson error codes`() = runTest {
         val tests = listOf(
             "FooError",
             "FooError:http://amazon.com/smithy/com.amazon.smithy.validate/",
@@ -62,9 +64,9 @@ class RestJsonErrorDeserializerTest {
         }
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
+    @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
     @Test
-    fun `it deserializes aws restJson error messages`() = runSuspendTest {
+    fun `it deserializes aws restJson error messages`() = runTest {
         val expected = "one ring to rule bring them all, and in the darkness bind them"
 
         // header tests

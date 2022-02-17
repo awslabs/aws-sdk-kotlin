@@ -46,7 +46,7 @@ internal abstract class AbstractBufferedReadChannel(
         get() = segments.isClosedForSend
 
     override val isClosedForRead: Boolean
-        get() = closed != null && segments.isClosedForReceive
+        get() = availableForRead <= 0 && closed != null && segments.isClosedForReceive
 
     override val availableForRead: Int
         get() = _availableForRead.value
@@ -187,9 +187,10 @@ internal abstract class AbstractBufferedReadChannel(
                 throw ClosedReceiveChannelException("Unexpeced EOF: expected $remaining more bytes")
             }
 
-            consumed += readAsMuchAsPossible(dest, currOffset, remaining)
-            currOffset += consumed
-            remaining -= consumed
+            val rc = readAsMuchAsPossible(dest, currOffset, remaining)
+            consumed += rc
+            currOffset += rc
+            remaining = length - consumed
         } while (remaining > 0)
     }
 

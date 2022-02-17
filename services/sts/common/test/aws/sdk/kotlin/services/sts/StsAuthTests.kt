@@ -15,8 +15,9 @@ import aws.smithy.kotlin.runtime.http.engine.callContext
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.time.Instant
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -25,6 +26,7 @@ import kotlin.test.assertTrue
 /**
  * Tests related to STS model and whether requests need to be signed or not
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class StsAuthTests {
 
     private val mockEngine = object : HttpClientEngineBase("mock-engine") {
@@ -41,7 +43,7 @@ class StsAuthTests {
     private val credentials = Credentials("ANOTREAL", "notrealrnrELgWzOk3IFjzDKtFBhDby", "notarealsessiontoken")
 
     @Test
-    fun testAssumeRoleIsSigned(): Unit = runSuspendTest {
+    fun testAssumeRoleIsSigned(): Unit = runTest {
         val client = StsClient {
             region = "us-east-2"
             credentialsProvider = StaticCredentialsProvider(credentials)
@@ -54,7 +56,7 @@ class StsAuthTests {
     }
 
     @Test
-    fun testWebIdentityIsUnsigned(): Unit = runSuspendTest {
+    fun testWebIdentityIsUnsigned(): Unit = runTest {
         val client = StsClient {
             region = "us-east-2"
             credentialsProvider = StaticCredentialsProvider(credentials)
@@ -67,7 +69,7 @@ class StsAuthTests {
     }
 
     @Test
-    fun testAssumeRoleSamlIsUnsigned(): Unit = runSuspendTest {
+    fun testAssumeRoleSamlIsUnsigned(): Unit = runTest {
         val client = StsClient {
             region = "us-east-2"
             credentialsProvider = StaticCredentialsProvider(credentials)

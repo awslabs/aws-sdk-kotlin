@@ -18,7 +18,6 @@ import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 /**
  * Tokens are cached to remove the need to reload the token between subsequent requests. To ensure
@@ -30,7 +29,6 @@ internal const val TOKEN_REFRESH_BUFFER_SECONDS = 120
 internal const val X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS = "x-aws-ec2-metadata-token-ttl-seconds"
 internal const val X_AWS_EC2_METADATA_TOKEN = "x-aws-ec2-metadata-token"
 
-@OptIn(ExperimentalTime::class)
 internal class TokenMiddleware(
     private val httpClient: SdkHttpClient,
     private val ttl: Duration = DEFAULT_TOKEN_TTL_SECONDS.seconds,

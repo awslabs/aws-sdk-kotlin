@@ -1,26 +1,29 @@
 package aws.sdk.kotlin.services.sts
 
 import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.sdk.kotlin.services.sts.model.GetCallerIdentityRequest
 import aws.sdk.kotlin.services.sts.presigners.presign
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Tests for presigner
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StsPresignerTest {
 
     @Test
-    fun testGetCallerIdentityPresigner() = runSuspendTest {
+    fun testGetCallerIdentityPresigner() = runBlocking {
         val c = StsClient { region = "us-east-2" }
         val req = GetCallerIdentityRequest { }
-        val presignedRequest = req.presign(c.config, 60)
+        val presignedRequest = req.presign(c.config, 60.seconds)
 
         CrtHttpEngine().use { engine ->
             val httpClient = sdkHttpClient(engine)

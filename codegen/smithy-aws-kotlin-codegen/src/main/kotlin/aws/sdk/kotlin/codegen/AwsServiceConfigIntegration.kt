@@ -21,7 +21,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         val RegionProp: ClientConfigProperty = ClientConfigProperty {
             name = "region"
             symbol = KotlinTypes.String.toBuilder().boxed().build()
-            baseClass = AwsRuntimeTypes.Types.AwsClientConfig
             documentation = """
                     AWS region to make requests to
             """.trimIndent()
@@ -30,15 +29,26 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         val CredentialsProviderProp: ClientConfigProperty = ClientConfigProperty {
             symbol = AwsRuntimeTypes.Types.CredentialsProvider
-            baseClass = AwsRuntimeTypes.Types.AwsClientConfig
             documentation = """
                 The AWS credentials provider to use for authenticating requests. If not provided a
                 [${symbol?.namespace}.DefaultChainCredentialsProvider] instance will be used.
+                NOTE: The caller is responsible for managing the lifetime of the provider when set. The SDK
+                client will not close it when the client is closed.
             """.trimIndent()
 
-            val defaultProvider = AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider
-            propertyType = ClientConfigPropertyType.RequiredWithDefault("${defaultProvider.name}()")
-            additionalImports = listOf(defaultProvider)
+            propertyType = ClientConfigPropertyType.Custom(render = { prop, writer ->
+                writer.write(
+                    "val #1L: #2T = builder.#1L?.borrow() ?: #3T()",
+                    prop.propertyName,
+                    prop.symbol,
+                    AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider
+                )
+            })
+
+            additionalImports = listOf(
+                AwsRuntimeTypes.Config.Credentials.borrow,
+                AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider
+            )
         }
     }
 
@@ -47,19 +57,11 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         val serviceSymbol: Symbol = writer.getContextValue(ServiceGenerator.SectionServiceCompanionObject.ServiceSymbol)
         writer.withBlock("companion object {", "}") {
             withBlock(
-                "operator fun invoke(sharedConfig: #T? = null, block: Config.Builder.() -> Unit = {}): #L {",
+                "operator fun invoke(block: Config.Builder.() -> Unit): #L {",
                 "}",
-                AwsRuntimeTypes.Types.AwsClientConfig,
                 serviceSymbol.name
             ) {
-                withBlock(
-                    "val config = Config.Builder().apply { ",
-                    "}.apply(block).build()"
-                ) {
-                    write("region = sharedConfig?.region")
-                    write("credentialsProvider = sharedConfig?.credentialsProvider")
-                    write("sdkLogMode = sharedConfig?.sdkLogMode ?: SdkLogMode.Default")
-                }
+                write("val config = Config.Builder().apply(block).build()")
                 write("return Default${serviceSymbol.name}(config)")
             }
 
@@ -67,30 +69,21 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             write("operator fun invoke(config: Config): ${serviceSymbol.name} = Default${serviceSymbol.name}(config)")
 
             // generate a convenience init to resolve a client from the current environment
-            listOf(
-                AwsRuntimeTypes.Types.AwsClientConfig,
-                AwsRuntimeTypes.Config.AwsClientConfigLoadOptions,
-                AwsRuntimeTypes.Config.fromEnvironment
-            ).forEach(writer::addImport)
-
             write("")
             dokka {
                 write("Construct a [${serviceSymbol.name}] by resolving the configuration from the current environment.")
-                write("NOTE: If you are using multiple AWS service clients you may wish to share the configuration among them")
-                write("by constructing a [#Q] and passing it to each client at construction.", AwsRuntimeTypes.Types.AwsClientConfig)
             }
             writer.withBlock(
-                "suspend fun fromEnvironment(block: #1T.() -> Unit = {}): #2T {",
+                "suspend fun fromEnvironment(block: (Config.Builder.() -> Unit)? = null): #T {",
                 "}",
-                AwsRuntimeTypes.Config.AwsClientConfigLoadOptions,
                 serviceSymbol
             ) {
-                write(
-                    "val sharedConfig = #T.#T(block)",
-                    AwsRuntimeTypes.Types.AwsClientConfig,
-                    AwsRuntimeTypes.Config.fromEnvironment
-                )
-                write("return #T(sharedConfig)", serviceSymbol)
+                write("val builder = Config.Builder()")
+                write("if (block != null) builder.apply(block)")
+
+                addImport(AwsRuntimeTypes.Config.Region.resolveRegion)
+                write("builder.region = builder.region ?: #T()", AwsRuntimeTypes.Config.Region.resolveRegion)
+                write("return Default${serviceSymbol.name}(builder.build())")
             }
         }
     }

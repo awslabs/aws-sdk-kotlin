@@ -5,19 +5,22 @@
 
 package aws.sdk.kotlin.runtime.auth.signing
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.time.Instant
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@Suppress("HttpUrlsUsage")
+@OptIn(ExperimentalCoroutinesApi::class)
 class AwsSigningTest {
 
     @Test
-    fun testSignRequestSigV4() = runSuspendTest {
+    fun testSignRequestSigV4() = runTest {
         // sanity test
         val request = HttpRequestBuilder().apply {
             method = HttpMethod.POST
@@ -52,7 +55,7 @@ class AwsSigningTest {
     }
 
     @Test
-    fun testSignRequestSigV4Asymmetric() = runSuspendTest {
+    fun testSignRequestSigV4Asymmetric() = runTest {
         // sanity test
         val request = HttpRequestBuilder().apply {
             method = HttpMethod.POST

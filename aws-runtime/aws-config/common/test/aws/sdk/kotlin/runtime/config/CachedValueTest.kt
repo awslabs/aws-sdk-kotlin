@@ -5,21 +5,21 @@
 
 package aws.sdk.kotlin.runtime.config
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class CachedValueTest {
     @Test
-    fun testNull() = runSuspendTest {
+    fun testNull() = runTest {
         val epoch = Instant.fromEpochSeconds(0)
         val clock = ManualClock(epoch)
         val value = CachedValue<String>(null, clock = clock)
@@ -29,7 +29,7 @@ class CachedValueTest {
     }
 
     @Test
-    fun testExpiration() = runSuspendTest {
+    fun testExpiration() = runTest {
         val epoch = Instant.fromEpochSeconds(0)
         val expiresAt = epoch + 10.seconds
         val clock = ManualClock(epoch)
@@ -45,7 +45,7 @@ class CachedValueTest {
     }
 
     @Test
-    fun testExpirationBuffer() = runSuspendTest {
+    fun testExpirationBuffer() = runTest {
         val epoch = Instant.fromEpochSeconds(0)
         val expiresAt = epoch + 100.seconds
         val clock = ManualClock(epoch)
@@ -61,7 +61,7 @@ class CachedValueTest {
     }
 
     @Test
-    fun testGetOrLoad() = runSuspendTest {
+    fun testGetOrLoad() = runTest {
         val epoch = Instant.fromEpochSeconds(0)
         val expiresAt = epoch + 100.seconds
         val clock = ManualClock(epoch)

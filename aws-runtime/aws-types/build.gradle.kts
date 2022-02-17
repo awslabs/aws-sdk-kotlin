@@ -7,6 +7,7 @@ description = "Common AWS Types"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: Types"
 extra["moduleName"] = "aws.sdk.kotlin.runtime"
 val smithyKotlinVersion: String by project
+val coroutinesVersion: String by project
 
 kotlin {
     sourceSets {
@@ -20,6 +21,7 @@ kotlin {
         }
         commonTest {
             dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation(project(":aws-runtime:testing"))
             }
         }

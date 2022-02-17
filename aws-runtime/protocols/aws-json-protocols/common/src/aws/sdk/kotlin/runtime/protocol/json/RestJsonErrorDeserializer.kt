@@ -45,7 +45,7 @@ public object RestJsonErrorDeserializer {
         field(MESSAGE_ALT3_DESCRIPTOR)
     }
 
-    public suspend fun deserialize(headers: Headers, payload: ByteArray?): ErrorDetails {
+    public fun deserialize(headers: Headers, payload: ByteArray?): ErrorDetails {
         var code: String? = headers[X_AMZN_ERROR_TYPE_HEADER_NAME]
         var message: String? = headers[X_AMZN_ERROR_MESSAGE_HEADER_NAME]
         if (message == null) {

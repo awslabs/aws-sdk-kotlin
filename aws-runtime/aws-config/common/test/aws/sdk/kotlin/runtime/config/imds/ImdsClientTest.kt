@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -18,17 +17,20 @@ import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
 class ImdsClientTest {
 
     @Test
-    fun testTokensAreCached() = runSuspendTest {
+    fun testTokensAreCached() = runTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
@@ -54,7 +56,7 @@ class ImdsClientTest {
     }
 
     @Test
-    fun testTokensCanExpire() = runSuspendTest {
+    fun testTokensCanExpire() = runTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://[fd00:ec2::254]", 600),
@@ -93,7 +95,7 @@ class ImdsClientTest {
     }
 
     @Test
-    fun testTokenRefreshBuffer() = runSuspendTest {
+    fun testTokenRefreshBuffer() = runTest {
         // tokens are refreshed up to 120 seconds early to avoid using an expired token
         val connection = buildTestConnection {
             expect(
@@ -145,7 +147,7 @@ class ImdsClientTest {
     }
 
     @Test
-    fun testRetryHttp500(): Unit = runSuspendTest {
+    fun testRetryHttp500() = runTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
@@ -168,7 +170,7 @@ class ImdsClientTest {
     }
 
     @Test
-    fun testRetryTokenFailure(): Unit = runSuspendTest {
+    fun testRetryTokenFailure() = runTest {
         // 500 during token acquisition should be retried
         val connection = buildTestConnection {
             expect(
@@ -192,7 +194,7 @@ class ImdsClientTest {
     }
 
     @Test
-    fun testNoRetryHttp403(): Unit = runSuspendTest {
+    fun testNoRetryHttp403() = runTest {
         // 403 responses from IMDS during token acquisition MUST not be retried
         val connection = buildTestConnection {
             expect(
@@ -212,7 +214,7 @@ class ImdsClientTest {
 
     @IgnoreWindows("DNS fails faster on windows and results in a different error")
     @Test
-    fun testHttpConnectTimeouts(): Unit = runSuspendTest {
+    fun testHttpConnectTimeouts() = runBlocking {
         // end-to-end real client times out after 1-second
         val client = ImdsClient {
             // will never resolve
@@ -226,7 +228,7 @@ class ImdsClientTest {
             }
         }
         // on windows DNS fails faster with message `socket connect failure, no route to host.
-        assertTrue(ex.message!!.contains("timed out"), "message `${ex.message}`")
+        assertTrue(ex.message!!.lowercase().contains("timed out"), "message `${ex.message}`")
         val elapsed = Instant.now().epochMilliseconds - start.epochMilliseconds
         assertTrue(elapsed >= 1000, "expected elapsed ms to be greater than 1000; actual = $elapsed")
         assertTrue(elapsed < 2000, "expected elapsed ms to be less than 2000; actual = $elapsed")
@@ -260,7 +262,7 @@ class ImdsClientTest {
     }
 
     @Test
-    fun testConfig(): Unit = runSuspendTest {
+    fun testConfig() = runTest {
         val tests = Json.parseToJsonElement(imdsTestSuite).jsonObject["tests"]!!.jsonArray.map { ImdsConfigTest.fromJson(it.jsonObject) }
         tests.forEach { test ->
             val result = runCatching { check(test) }

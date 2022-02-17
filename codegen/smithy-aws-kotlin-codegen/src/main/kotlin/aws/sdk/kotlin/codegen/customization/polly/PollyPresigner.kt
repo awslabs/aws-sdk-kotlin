@@ -44,7 +44,7 @@ class PollyPresigner : KotlinIntegration {
         writer.addImport(RuntimeTypes.Http.HttpMethod)
         writer.write(
             """            
-            require(durationSeconds > 0) { "duration must be greater than zero" }
+            require(duration.isPositive()) { "duration must be greater than zero" }
             val httpRequestBuilder = SynthesizeSpeechOperationSerializer().serialize(ExecutionContext.build { }, input)
             val queryStringBuilder = QueryParametersBuilder()
             """.trimIndent()
@@ -61,7 +61,7 @@ class PollyPresigner : KotlinIntegration {
                 HttpMethod.GET,
                 httpRequestBuilder.url.path,
                 queryStringBuilder.build(),
-                durationSeconds.toLong(),
+                duration,
                 true,
                 SigningLocation.QUERY_STRING
             )

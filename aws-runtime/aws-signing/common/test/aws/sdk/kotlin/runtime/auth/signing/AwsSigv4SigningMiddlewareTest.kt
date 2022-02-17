@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.auth.signing
 
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
@@ -19,9 +18,13 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.get
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Suppress("HttpUrlsUsage")
+@OptIn(ExperimentalCoroutinesApi::class)
 class AwsSigv4SigningMiddlewareTest {
 
     private fun buildOperation(streaming: Boolean = false, replayable: Boolean = true): SdkHttpOperation<Unit, HttpResponse> = SdkHttpOperation.build {
@@ -79,7 +82,7 @@ class AwsSigv4SigningMiddlewareTest {
     }
 
     @Test
-    fun testSignRequest() = runSuspendTest {
+    fun testSignRequest() = runTest {
         val op = buildOperation()
         val expectedDate = "20201016T195600Z"
         val expectedSig = "AWS4-HMAC-SHA256 Credential=AKID/20201016/us-east-1/demo/aws4_request, " +
@@ -92,7 +95,7 @@ class AwsSigv4SigningMiddlewareTest {
     }
 
     @Test
-    fun testUnsignedRequest() = runSuspendTest {
+    fun testUnsignedRequest() = runTest {
         val op = buildOperation()
         val expectedDate = "20201016T195600Z"
         val expectedSig = "AWS4-HMAC-SHA256 Credential=AKID/20201016/us-east-1/demo/aws4_request, " +
@@ -107,7 +110,7 @@ class AwsSigv4SigningMiddlewareTest {
     }
 
     @Test
-    fun testSignReplayableStreamingRequest() = runSuspendTest {
+    fun testSignReplayableStreamingRequest() = runTest {
         val op = buildOperation(streaming = true)
         val expectedDate = "20201016T195600Z"
         val expectedSig = "AWS4-HMAC-SHA256 Credential=AKID/20201016/us-east-1/demo/aws4_request, " +
@@ -120,7 +123,7 @@ class AwsSigv4SigningMiddlewareTest {
     }
 
     @Test
-    fun testSignOneShotStream() = runSuspendTest {
+    fun testSignOneShotStream() = runTest {
         val op = buildOperation(streaming = true, replayable = false)
         val expectedDate = "20201016T195600Z"
         // should have same signature as testUnsignedRequest()

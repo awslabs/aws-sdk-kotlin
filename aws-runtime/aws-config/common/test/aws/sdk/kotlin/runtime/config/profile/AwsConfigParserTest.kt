@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
@@ -13,11 +12,14 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AwsProfileParserTest {
 
     @Test
@@ -53,7 +55,7 @@ class AwsProfileParserTest {
     }
 
     @Test
-    fun itCanBeUsedInTests() = runSuspendTest {
+    fun itCanBeUsedInTests() = runTest {
         // NOTE: This is the minimal mock of the Platform type needed to support aws configuration loading of a specific kvp.
         val testPlatform = mockk<Platform>()
         val propKeyParam = slot<String>()

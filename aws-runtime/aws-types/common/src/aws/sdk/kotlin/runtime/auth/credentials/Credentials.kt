@@ -17,4 +17,5 @@ public data class Credentials(
     val secretAccessKey: String,
     val sessionToken: String? = null,
     val expiration: Instant? = null,
+    val providerName: String? = null,
 )

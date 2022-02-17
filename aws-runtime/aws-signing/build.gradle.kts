@@ -7,10 +7,11 @@ description = "AWS Signing Support"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: Signing"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.auth.signing"
 
-val smithyKotlinVersion: String by project
+val coroutinesVersion: String by project
 val kotestVersion: String by project
-val ktorVersion: String by project
 val kotlinxSerializationVersion: String by project
+val ktorVersion: String by project
+val smithyKotlinVersion: String by project
 
 kotlin {
     sourceSets {
@@ -32,6 +33,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
 
                 // sigv4 test suite
                 implementation("io.ktor:ktor-utils:$ktorVersion")

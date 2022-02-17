@@ -42,7 +42,7 @@ public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile 
  *
  * @return A map of all profiles, which each are a map of key/value pairs.
  */
-private suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): Map<String, Map<String, String>> {
+internal suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): Map<String, Map<String, String>> {
 
     // merged AWS configuration based on optional configuration and credential file contents
     return mergeProfiles(
@@ -66,11 +66,14 @@ internal data class AwsConfigurationSource(val profile: String, val configPath: 
 /**
  * Determine the source of AWS configuration
  */
-internal fun resolveConfigSource(platform: PlatformProvider) =
+internal fun resolveConfigSource(
+    platform: PlatformProvider,
+    profileNameOverride: String? = null
+) =
     AwsConfigurationSource(
         // If the user does not specify the profile to be used, the default profile must be used by the SDK.
         // The default profile must be overridable using the AWS_PROFILE environment variable.
-        AwsSdkSetting.AwsProfile.resolve(platform) ?: Literals.DEFAULT_PROFILE,
+        profileNameOverride ?: AwsSdkSetting.AwsProfile.resolve(platform) ?: Literals.DEFAULT_PROFILE,
         normalizePath(FileType.CONFIGURATION.path(platform), platform),
         normalizePath(FileType.CREDENTIAL.path(platform), platform)
     )

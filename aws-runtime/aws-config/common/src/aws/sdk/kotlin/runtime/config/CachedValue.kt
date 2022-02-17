@@ -10,7 +10,6 @@ import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 
 /**
  * A value with an expiration
@@ -26,7 +25,6 @@ internal data class ExpiringValue<T> (val value: T, val expiresAt: Instant)
  * expire BEFORE the actual expiration.
  * @param clock The clock to use for system time
  */
-@OptIn(ExperimentalTime::class)
 internal class CachedValue<T> (
     private var value: ExpiringValue<T>? = null,
     private val bufferTime: Duration = Duration.ZERO,
