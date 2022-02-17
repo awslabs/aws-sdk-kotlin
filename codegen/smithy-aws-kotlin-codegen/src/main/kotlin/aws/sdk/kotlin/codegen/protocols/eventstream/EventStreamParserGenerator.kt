@@ -77,9 +77,20 @@ class EventStreamParserGenerator(
                         }
                         write("else -> #T.SdkUnknown", streamSymbol)
                     }
-                    withBlock("is #T.Exception -> {", "}", messageTypeSymbol) {
-                        // TODO - render parsing of exceptions
-                        write("TODO(\"render parsing of exceptions\")")
+                    withBlock("is #T.Exception -> when(mt.shapeType){", "}", messageTypeSymbol) {
+                        // errors are completely bound to payload (at least according to design docs)
+                        val errorMembers = streamShape.members().filter {
+                            val target = ctx.model.expectShape(it.target)
+                            target.isError
+                        }
+                        errorMembers.forEach { member ->
+                            withBlock("#S -> {", "}", member.memberName) {
+                                val payloadDeserializeFn = sdg.payloadDeserializer(ctx, member)
+                                write("val err = #T(message.payload)", payloadDeserializeFn)
+                                write("throw err")
+                            }
+                        }
+                        write("else -> throw #T(#S)", baseExceptionSymbol, "error processing event stream, unrecognized errorType: \${mt.shapeType}")
                     }
                     // this is a service exception still, just un-modeled
                     write("is #T.Error -> throw #T(\"error processing event stream: errorCode=\${mt.errorCode}; message=\${mt.message}\")", messageTypeSymbol, baseExceptionSymbol)
@@ -96,8 +107,6 @@ class EventStreamParserGenerator(
 
         val eventHeaderBindings = variant.members().filter { it.hasTrait<EventHeaderTrait>() }
         val eventPayloadBinding = variant.members().firstOrNull { it.hasTrait<EventPayloadTrait>() }
-
-        // FIXME - should we strip out variants of `@streaming union` that target an error when generating since they will likely be thrown when encountered by an event stream?
 
         if (eventHeaderBindings.isEmpty() && eventPayloadBinding == null) {
             // the entire variant can be deserialized from the payload
