@@ -70,7 +70,7 @@ class EventStreamParserGenerator(
             .withBlock(".#T { message ->", "}", RuntimeTypes.KotlinxCoroutines.Flow.map) {
                 withBlock("when(val mt = message.#T()) {", "}", AwsRuntimeTypes.AwsEventStream.MessageTypeExt) {
                     withBlock("is #T.Event -> when(mt.shapeType) {", "}", messageTypeSymbol) {
-                        streamShape.members().forEach { member ->
+                        streamShape.filterEventStreamErrors(ctx.model).forEach { member ->
                             withBlock("#S -> {", "}", member.memberName) {
                                 renderDeserializeEventVariant(ctx, streamSymbol, member, writer)
                             }
