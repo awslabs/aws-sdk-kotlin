@@ -73,8 +73,12 @@ internal abstract class AbstractBufferedReadChannel(
     }
 
     private fun setReadContinuation(cont: CancellableContinuation<Boolean>) {
-        val success = readOp.compareAndSet(null, cont)
-        check(success) { "Read operation already in progress" }
+        if (availableForRead == 0) {
+            val success = readOp.compareAndSet(null, cont)
+            check(success) { "Read operation already in progress" }
+        } else {
+            cont.resume(true)
+        }
     }
 
     private fun resumeRead() {
