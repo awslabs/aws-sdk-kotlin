@@ -5,16 +5,18 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
-import aws.sdk.kotlin.runtime.testing.runSuspendTest
 import aws.smithy.kotlin.runtime.io.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class FrameDecoderTest {
 
     @Test
-    fun testFrameStreamSingleMessage(): Unit = runSuspendTest {
+    fun testFrameStreamSingleMessage() = runTest {
         val encoded = validMessageWithAllHeaders()
         val expected = Message.decode(SdkByteBuffer.wrapAsReadBuffer(encoded))
         val chan = SdkByteReadChannel(encoded)
@@ -27,7 +29,7 @@ class FrameDecoderTest {
     }
 
     @Test
-    fun testFrameStreamMultipleMessagesChunked(): Unit = runSuspendTest {
+    fun testFrameStreamMultipleMessagesChunked() = runTest {
         val encoded = SdkByteBuffer(0u).apply {
             writeFully(validMessageWithAllHeaders())
             writeFully(validMessageEmptyPayload())
@@ -50,7 +52,7 @@ class FrameDecoderTest {
     }
 
     @Test
-    fun testChannelClosed(): Unit = runSuspendTest {
+    fun testChannelClosed() = runTest {
         TODO("not implemented yet: need to add test for channel closed normally while waiting on prelude")
     }
 }

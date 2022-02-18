@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.auth.signing
 
 import aws.sdk.kotlin.crt.auth.signing.AwsSigner
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.crt.toSignableCrtRequest
 import aws.sdk.kotlin.runtime.crt.update
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
@@ -60,4 +61,19 @@ public suspend fun sign(request: HttpRequest, config: AwsSigningConfig): Signing
     builder.update(crtSignedRequest)
     val output = builder.build()
     return SigningResult(output, crtResult.signature)
+}
+
+/**
+ * Sign a body [chunk] using the given signing [config]
+ *
+ * @param chunk the body chunk to sign
+ * @param prevSignature the signature of the previous component of the request (either the initial request signature
+ * itself for the first chunk or the previous chunk otherwise)
+ * @param config the signing configuration to use
+ * @return the signing result
+ */
+@InternalSdkApi
+public suspend fun sign(chunk: ByteArray, prevSignature: ByteArray, config: AwsSigningConfig): SigningResult<Unit> {
+    val crtResult = AwsSigner.signChunk(chunk, prevSignature, config.toCrt())
+    return SigningResult(Unit, crtResult.signature)
 }

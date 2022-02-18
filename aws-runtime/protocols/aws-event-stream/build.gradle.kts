@@ -18,12 +18,14 @@ kotlin {
                 api("aws.smithy.kotlin:io:$smithyKotlinVersion")
                 // exposes Flow<T>
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation(project(":aws-runtime:aws-signing"))
             }
         }
 
         commonTest {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
             }
         }
 

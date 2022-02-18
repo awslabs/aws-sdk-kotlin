@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.signing
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.Credentials
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.time.Instant
@@ -119,6 +120,27 @@ public class AwsSigningConfig private constructor(builder: Builder) {
      */
     public val expiresAfter: Duration? = builder.expiresAfter
 
+    @InternalSdkApi
+    public fun toBuilder(): Builder {
+        val config = this
+        return Builder().apply {
+            region = config.region
+            service = config.service
+            date = config.date
+            algorithm = config.algorithm
+            shouldSignHeader = config.shouldSignHeader
+            signatureType = config.signatureType
+            useDoubleUriEncode = config.useDoubleUriEncode
+            normalizeUriPath = config.normalizeUriPath
+            omitSessionToken = config.omitSessionToken
+            signedBodyValue = config.signedBodyValue
+            signedBodyHeader = config.signedBodyHeaderType
+            credentials = config.credentials
+            credentialsProvider = config.credentialsProvider
+            expiresAfter = config.expiresAfter
+        }
+    }
+
     public class Builder {
         public var region: String? = null
         public var service: String? = null
@@ -135,7 +157,8 @@ public class AwsSigningConfig private constructor(builder: Builder) {
         public var credentialsProvider: CredentialsProvider? = null
         public var expiresAfter: Duration? = null
 
-        internal fun build(): AwsSigningConfig = AwsSigningConfig(this)
+        @InternalSdkApi
+        public fun build(): AwsSigningConfig = AwsSigningConfig(this)
     }
 }
 
