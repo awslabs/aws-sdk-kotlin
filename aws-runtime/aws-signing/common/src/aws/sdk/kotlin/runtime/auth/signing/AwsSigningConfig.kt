@@ -22,7 +22,7 @@ public typealias ShouldSignHeaderFn = (String) -> Boolean
  */
 public class AwsSigningConfig private constructor(builder: Builder) {
     public companion object {
-        public operator fun invoke(block: Builder.() -> Unit): AwsSigningConfig = Builder().apply(block).build()
+        public inline operator fun invoke(block: Builder.() -> Unit): AwsSigningConfig = Builder().apply(block).build()
     }
     /**
      * The region to sign against
