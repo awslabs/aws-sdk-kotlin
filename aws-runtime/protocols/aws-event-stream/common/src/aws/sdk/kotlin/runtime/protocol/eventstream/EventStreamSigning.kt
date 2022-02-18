@@ -5,9 +5,7 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
-import aws.sdk.kotlin.runtime.auth.signing.AwsSigningConfig
-import aws.sdk.kotlin.runtime.auth.signing.SigningResult
-import aws.sdk.kotlin.runtime.auth.signing.sign
+import aws.sdk.kotlin.runtime.auth.signing.*
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.io.SdkByteBuffer
@@ -15,6 +13,7 @@ import aws.smithy.kotlin.runtime.io.bytes
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.InternalApi
+import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -78,3 +77,25 @@ internal suspend fun signPayload(
  * Truncate the sub-seconds from the current time
  */
 private fun Instant.truncateSubsecs(): Instant = Instant.fromEpochSeconds(epochSeconds, 0)
+
+/**
+ * Create a new signing config for an event stream using the current context to set the operation/service specific
+ * configuration (e.g. region, signing service, credentials, etc)
+ */
+@InternalApi
+public fun ExecutionContext.newEventStreamSigningConfig(): AwsSigningConfig = AwsSigningConfig {
+    algorithm = AwsSigningAlgorithm.SIGV4
+    signatureType = AwsSignatureType.HTTP_REQUEST_CHUNK
+    region = this@newEventStreamSigningConfig[AuthAttributes.SigningRegion]
+    service = this@newEventStreamSigningConfig[AuthAttributes.SigningService]
+    useDoubleUriEncode = false
+    normalizeUriPath = true
+    signedBodyHeader = AwsSignedBodyHeaderType.NONE
+
+    // FIXME - needs to be set on the operation for initial request
+    // signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
+    // signedBodyValue = AwsSignedBodyValue.STREAMING_AWS4_HMAC_SHA256_PAYLOAD
+
+    // FIXME - need credentials from context
+    // credentialsProvider = this@newEventStreamSigningConfig[AuthAttributes.CredentialsProvider]
+}
