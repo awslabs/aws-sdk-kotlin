@@ -22,6 +22,8 @@ import software.amazon.smithy.model.traits.EventPayloadTrait
 /**
  * Implements rendering deserialize implementation for event streams implemented using the
  * `vnd.amazon.event-stream` content-type
+ *
+ * @param sdg the structured data parser generator
  */
 class EventStreamParserGenerator(
     private val ctx: ProtocolGenerator.GenerationContext,
@@ -165,6 +167,7 @@ class EventStreamParserGenerator(
         member: MemberShape,
         writer: KotlinWriter
     ) {
+        // FIXME - check content type for blob and string
         // structure > :test(member > :test(blob, string, structure, union))
         val target = ctx.model.expectShape(member.target)
         when (target.type) {

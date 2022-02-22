@@ -82,8 +82,16 @@ object AwsRuntimeTypes {
 
     object AwsEventStream {
         val decodeFrames = runtimeSymbol("decodeFrames", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val Message = runtimeSymbol("Message", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val HeaderValue = runtimeSymbol("HeaderValue", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val buildMessage = runtimeSymbol("buildMessage", AwsKotlinDependency.AWS_EVENT_STREAM)
         val MessageType = runtimeSymbol("MessageType", AwsKotlinDependency.AWS_EVENT_STREAM)
         val MessageTypeExt = runtimeSymbol("type", AwsKotlinDependency.AWS_EVENT_STREAM)
+
+        val sign = runtimeSymbol("sign", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val newEventStreamSigningConfig = runtimeSymbol("newEventStreamSigningConfig", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val encode = runtimeSymbol("encode", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val asEventStreamHttpBody = runtimeSymbol("asEventStreamHttpBody", AwsKotlinDependency.AWS_EVENT_STREAM)
 
         val expectBool = runtimeSymbol("expectBool", AwsKotlinDependency.AWS_EVENT_STREAM)
         val expectByte = runtimeSymbol("expectByte", AwsKotlinDependency.AWS_EVENT_STREAM)

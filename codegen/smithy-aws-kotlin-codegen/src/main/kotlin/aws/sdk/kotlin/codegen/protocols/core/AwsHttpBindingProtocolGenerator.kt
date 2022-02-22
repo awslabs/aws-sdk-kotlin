@@ -7,6 +7,7 @@ package aws.sdk.kotlin.codegen.protocols.core
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamParserGenerator
+import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamSerializerGenerator
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import aws.sdk.kotlin.codegen.protocols.middleware.ResolveAwsEndpointMiddleware
 import aws.sdk.kotlin.codegen.protocols.middleware.UserAgentMiddleware
@@ -112,6 +113,13 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
      * Render the code to parse the `ErrorDetails` from the HTTP response.
      */
     abstract fun renderDeserializeErrorDetails(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter)
+
+    override fun eventStreamRequestHandler(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Symbol {
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
+        val contentType = resolver.determineRequestContentType(op) ?: error("event streams must set a content-type")
+        val eventStreamSerializerGenerator = EventStreamSerializerGenerator(structuredDataSerializer(ctx), contentType)
+        return eventStreamSerializerGenerator.requestHandler(ctx, op)
+    }
 
     override fun eventStreamResponseHandler(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Symbol {
         val eventStreamParserGenerator = EventStreamParserGenerator(ctx, structuredDataParser(ctx))

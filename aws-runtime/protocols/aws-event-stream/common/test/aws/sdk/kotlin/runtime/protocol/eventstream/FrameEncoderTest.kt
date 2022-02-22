@@ -5,9 +5,11 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
+import aws.smithy.kotlin.runtime.http.readAll
 import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -40,5 +42,19 @@ class FrameEncoderTest {
         assertContentEquals(expected[0], actual[0])
         assertContentEquals(expected[1], actual[1])
         assertContentEquals(expected[2], actual[2])
+    }
+
+    @Test
+    fun testAsEventStreamHttpBody() = runTest {
+        val messages = flowOf(
+            "foo",
+            "bar",
+            "baz"
+        ).map { it.encodeToByteArray() }
+
+        val body = messages.asEventStreamHttpBody()
+        val actual = body.readAll()
+        val expected = "foobarbaz"
+        assertEquals(expected, actual?.decodeToString())
     }
 }

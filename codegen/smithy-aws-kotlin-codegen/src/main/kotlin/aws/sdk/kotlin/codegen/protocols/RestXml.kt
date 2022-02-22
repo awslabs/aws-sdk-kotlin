@@ -31,7 +31,7 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
 
     // See https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#content-type
     override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
-        HttpTraitResolver(model, serviceShape, "application/xml")
+        HttpTraitResolver(model, serviceShape, ProtocolContentTypes.consistent("application/xml"))
 
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
         RestXmlParserGenerator(this, defaultTimestampFormat)
