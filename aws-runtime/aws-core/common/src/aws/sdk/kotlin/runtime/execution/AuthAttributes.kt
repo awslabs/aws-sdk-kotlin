@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.execution
 
+import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.client.ClientOption
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.AttributeKey
@@ -36,6 +37,13 @@ public object AuthAttributes {
      * NOTE: This is not a common option.
      */
     public val SigningDate: ClientOption<Instant> = ClientOption("SigningDate")
+
+    /**
+     * The [CredentialsProvider] to complete the signing process with. Defaults to the provider configured
+     * on the service client.
+     * NOTE: This is not a common option.
+     */
+    public val CredentialsProvider: ClientOption<CredentialsProvider> = ClientOption("CredentialsProvider")
 
     /**
      * The signature of the HTTP request. This will only exist after the request has been signed!

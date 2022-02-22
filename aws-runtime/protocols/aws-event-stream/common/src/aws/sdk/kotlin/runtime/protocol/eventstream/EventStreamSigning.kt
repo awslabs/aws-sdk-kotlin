@@ -88,6 +88,7 @@ public fun ExecutionContext.newEventStreamSigningConfig(): AwsSigningConfig = Aw
     signatureType = AwsSignatureType.HTTP_REQUEST_CHUNK
     region = this@newEventStreamSigningConfig[AuthAttributes.SigningRegion]
     service = this@newEventStreamSigningConfig[AuthAttributes.SigningService]
+    credentialsProvider = this@newEventStreamSigningConfig[AuthAttributes.CredentialsProvider]
     useDoubleUriEncode = false
     normalizeUriPath = true
     signedBodyHeader = AwsSignedBodyHeaderType.NONE
@@ -95,7 +96,4 @@ public fun ExecutionContext.newEventStreamSigningConfig(): AwsSigningConfig = Aw
     // FIXME - needs to be set on the operation for initial request
     // signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
     // signedBodyValue = AwsSignedBodyValue.STREAMING_AWS4_HMAC_SHA256_PAYLOAD
-
-    // FIXME - need credentials from context
-    // credentialsProvider = this@newEventStreamSigningConfig[AuthAttributes.CredentialsProvider]
 }

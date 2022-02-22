@@ -153,7 +153,7 @@ public sealed class HeaderValue {
 private fun MutableBuffer.writeHeader(headerType: HeaderType) = writeByte(headerType.value)
 
 public fun HeaderValue.expectBool(): Boolean = checkNotNull((this as? HeaderValue.Bool)?.value) { "expected HeaderValue.Bool, found: $this" }
-public fun HeaderValue.expectByte(): UByte = checkNotNull((this as? HeaderValue.Byte)?.value) { "expected HeaderValue.Byte, found: $this" }
+public fun HeaderValue.expectByte(): Byte = checkNotNull((this as? HeaderValue.Byte)?.value?.toByte()) { "expected HeaderValue.Byte, found: $this" }
 public fun HeaderValue.expectInt16(): Short = checkNotNull((this as? HeaderValue.Int16)?.value) { "expected HeaderValue.Int16, found: $this" }
 public fun HeaderValue.expectInt32(): Int = checkNotNull((this as? HeaderValue.Int32)?.value) { "expected HeaderValue.Int32, found: $this" }
 public fun HeaderValue.expectInt64(): Long = checkNotNull((this as? HeaderValue.Int64)?.value) { "expected HeaderValue.Int64, found: $this" }

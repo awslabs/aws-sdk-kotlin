@@ -15,6 +15,9 @@ kotlin {
         commonMain {
             dependencies {
                 api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
+
+                // FIXME - should we just move these into core and get rid of aws-types at this point?
+                api(project(":aws-runtime:aws-types"))
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
             }
         }

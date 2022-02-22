@@ -44,7 +44,8 @@ class EventStreamParserGenerator(
             // members bound via HTTP bindings (e.g. httpHeader, statusCode, etc) are already deserialized via HttpDeserialize impl
             // we just need to deserialize the event stream member (and/or the initial response)
             writer.withBlock(
-                "private suspend fun #L(builder: #T.Builder, body: #T) {",
+                // FIXME - revert to private, exposed as internal temporarily while we figure out integration tests
+                "internal suspend fun #L(builder: #T.Builder, body: #T) {",
                 "}",
                 op.bodyDeserializerName(),
                 outputSymbol,
@@ -126,7 +127,6 @@ class EventStreamParserGenerator(
                 // :test(boolean, byte, short, integer, long, blob, string, timestamp))
                 val conversionFn = when (target.type) {
                     ShapeType.BOOLEAN -> AwsRuntimeTypes.AwsEventStream.expectBool
-                    // FIXME - byte shape is byte not ubyte
                     ShapeType.BYTE -> AwsRuntimeTypes.AwsEventStream.expectByte
                     ShapeType.SHORT -> AwsRuntimeTypes.AwsEventStream.expectInt16
                     ShapeType.INTEGER -> AwsRuntimeTypes.AwsEventStream.expectInt32
@@ -172,7 +172,7 @@ class EventStreamParserGenerator(
         val target = ctx.model.expectShape(member.target)
         when (target.type) {
             ShapeType.BLOB -> writer.write("builder.#L = message.payload", member.defaultName())
-            ShapeType.STRING -> writer.write("builder.#L = message.payload.decodeToString()", member.defaultName())
+            ShapeType.STRING -> writer.write("builder.#L = message.payload?.decodeToString()", member.defaultName())
             ShapeType.STRUCTURE, ShapeType.UNION -> {
                 val payloadDeserializeFn = sdg.payloadDeserializer(ctx, member)
                 writer.write("builder.#L = #T(message.payload)", member.defaultName(), payloadDeserializeFn)

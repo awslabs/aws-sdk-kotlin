@@ -18,7 +18,7 @@ class HeaderValueTest {
     @Test
     fun testExpectAs() {
         assertEquals(true, HeaderValue.Bool(true).expectBool())
-        assertEquals(12.toUByte(), HeaderValue.Byte(12u).expectByte())
+        assertEquals(12.toByte(), HeaderValue.Byte(12u).expectByte())
         assertEquals(12.toShort(), HeaderValue.Int16(12).expectInt16())
         assertEquals(12, HeaderValue.Int32(12).expectInt32())
         assertEquals(12L, HeaderValue.Int64(12L).expectInt64())

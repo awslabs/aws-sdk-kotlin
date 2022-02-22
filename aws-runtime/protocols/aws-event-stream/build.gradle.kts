@@ -18,7 +18,9 @@ kotlin {
                 api("aws.smithy.kotlin:io:$smithyKotlinVersion")
                 // exposes Flow<T>
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-                implementation(project(":aws-runtime:aws-signing"))
+
+                // exposes AwsSigningConfig
+                api(project(":aws-runtime:aws-signing"))
             }
         }
 

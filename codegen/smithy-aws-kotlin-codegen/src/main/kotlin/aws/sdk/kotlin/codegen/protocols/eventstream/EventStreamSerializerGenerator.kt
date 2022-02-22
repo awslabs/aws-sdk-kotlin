@@ -41,7 +41,8 @@ class EventStreamSerializerGenerator(
         op.bodySerializer(ctx.settings) { writer ->
             val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape<StructureShape>(op.input.get()))
             writer.withBlock(
-                "private suspend fun #L(context: #T, input: #T): #T {",
+                // FIXME - revert to private, exposed as internal temporarily while we figure out integration tests
+                "internal suspend fun #L(context: #T, input: #T): #T {",
                 "}",
                 op.bodySerializerName(),
                 RuntimeTypes.Core.ExecutionContext,
@@ -161,13 +162,13 @@ class EventStreamSerializerGenerator(
             }
             ShapeType.STRING -> {
                 writer.addStringHeader(":content-type", "text/plain")
-                writer.write("payload = input.value.#L.#T()", member.defaultName(), KotlinTypes.Text.encodeToByteArray)
+                writer.write("payload = input.value.#L?.#T()", member.defaultName(), KotlinTypes.Text.encodeToByteArray)
             }
             ShapeType.STRUCTURE, ShapeType.UNION -> {
                 writer.addStringHeader(":content-type", payloadContentType)
                 // re-use the payload serializer
                 val serializeFn = sdg.payloadSerializer(ctx, member)
-                writer.write("payload = #T(input.value)", serializeFn)
+                writer.write("payload = input.value.#L?.let { #T(it) }", member.defaultName(), serializeFn)
             }
             else -> throw CodegenException("unsupported shape type `${target.type}` for target: $target; expected blob, string, structure, or union for eventPayload member: $member")
         }
