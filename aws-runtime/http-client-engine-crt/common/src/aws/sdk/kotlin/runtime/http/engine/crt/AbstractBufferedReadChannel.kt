@@ -78,14 +78,9 @@ internal abstract class AbstractBufferedReadChannel(
         }
 
         return suspendCancellableCoroutine { cont ->
-            if (availableForRead > 0) {
-                cont.resume(true)
-            } else {
-                val success = readOp.compareAndSet(null, cont)
-                check(success) { "Read operation already in progress" }
-            }
-
+            val success = readOp.compareAndSet(null, cont)
             readOpMutex.unlock()
+            check(success) { "Read operation already in progress" }
         }
     }
 
