@@ -66,15 +66,11 @@ class EventStreamSerializerGenerator(
         writer.write("val signingConfig = context.#T()", AwsRuntimeTypes.AwsEventStream.newEventStreamSigningConfig)
 
         val encodeFn = encodeEventStreamMessage(ctx, op, streamShape)
-        writer.write("val messages = stream.#T {", RuntimeTypes.KotlinxCoroutines.Flow.map)
-            .indent()
-            .indent()
-            .write("#T(it)", encodeFn)
-            .dedent()
-            .write("}")
-            .write(".#T(context, signingConfig)", AwsRuntimeTypes.AwsEventStream.sign)
-            .write(".#T()", AwsRuntimeTypes.AwsEventStream.encode)
-            .dedent()
+        writer.withBlock("val messages = stream", "") {
+            write(".#T(::#T)", RuntimeTypes.KotlinxCoroutines.Flow.map, encodeFn)
+            write(".#T(context, signingConfig)", AwsRuntimeTypes.AwsEventStream.sign)
+            write(".#T()", AwsRuntimeTypes.AwsEventStream.encode)
+        }
 
         writer.write("")
         writer.write("return messages.#T()", AwsRuntimeTypes.AwsEventStream.asEventStreamHttpBody)

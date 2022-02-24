@@ -9,6 +9,7 @@ import aws.smithy.kotlin.runtime.io.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -51,6 +52,7 @@ class FrameDecoderTest {
         assertEquals(expected3, actual[2])
     }
 
+    @Ignore
     @Test
     fun testChannelClosed() = runTest {
         TODO("not implemented yet: need to add test for channel closed normally while waiting on prelude")
