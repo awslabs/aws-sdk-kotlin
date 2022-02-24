@@ -52,6 +52,15 @@ subprojects {
         }
     }
 
+    tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
+        dokkaSourceSets {
+            named("main") {
+                platform.set(org.jetbrains.dokka.Platform.jvm)
+                sourceRoots.from(kotlin.sourceSets.getByName("main").kotlin.srcDirs)
+            }
+        }
+    }
+
     tasks.test {
         useJUnitPlatform()
         testLogging {
