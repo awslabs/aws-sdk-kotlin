@@ -31,7 +31,7 @@ internal class BufferedReadChannelImpl(
     }
 
     private suspend fun readAvailableSuspend(dest: ByteBuffer): Int {
-        if (!readSuspend(1)) {
+        if (!readSuspend()) {
             return -1
         }
         return readAvailable(dest)
