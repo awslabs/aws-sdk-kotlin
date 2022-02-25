@@ -1,20 +1,11 @@
 # Changelog
 
-## [0.13.0-beta-api-docs] - 02/25/2022
+## [0.13.1-beta] - 02/25/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
 
-### Breaking changes
-* add sso credential provider; make all providers kmp compatible [#469](https://github.com/awslabs/aws-sdk-kotlin/pull/469)
-
-### New features
-* update AWS models to latest versions [#532](https://github.com/awslabs/aws-sdk-kotlin/pull/532)
-
 ### Fixes
 * improve detection of available read bytes to avoid hang [#535](https://github.com/awslabs/aws-sdk-kotlin/pull/535)
-* bump crt-kotlin to latest to fix leaked connections [#529](https://github.com/awslabs/aws-sdk-kotlin/pull/529)
-* isClosedForRead implies availableForRead is zero
-* fix CRT read channel buffer management
 
 ## [0.13.0-beta] - 02/17/2022
 
