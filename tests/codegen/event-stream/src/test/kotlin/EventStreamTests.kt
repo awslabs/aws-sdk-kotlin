@@ -9,10 +9,13 @@ import aws.sdk.kotlin.runtime.auth.signing.AwsSignedBodyValue
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import aws.sdk.kotlin.runtime.protocol.eventstream.*
 import aws.sdk.kotlin.test.eventstream.restjson1.model.*
+import aws.sdk.kotlin.test.eventstream.restjson1.transform.deserializeTestStreamOpOperationBody
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.serializeTestStreamOpOperationBody
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.HttpBody
+import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.io.SdkByteBuffer
+import aws.smithy.kotlin.runtime.io.bytes
 import aws.smithy.kotlin.runtime.smithy.test.assertJsonStringsEqual
 import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,12 +47,26 @@ class EventStreamTests {
         }
 
         val body = serializeTestStreamOpOperationBody(testContext, req)
-        assertIs< HttpBody.Streaming>(body)
+        assertIs<HttpBody.Streaming>(body)
 
         val signedMessage = decodeFrames(body.readFrom()).single()
         val buffer = SdkByteBuffer.of(signedMessage.payload)
         buffer.advance(signedMessage.payload.size.toULong())
         return Message.decode(buffer)
+    }
+
+    private suspend fun deserializedEvent(message: Message): TestStream {
+        val buffer = SdkByteBuffer(0U)
+        message.encode(buffer)
+        val body = ByteArrayContent(buffer.bytes())
+        val builder = TestStreamOpResponse.Builder()
+
+        deserializeTestStreamOpOperationBody(builder, body)
+
+        val resp = builder.build()
+        checkNotNull(resp.value)
+
+        return resp.value.single()
     }
 
     @Test
@@ -63,6 +80,10 @@ class EventStreamTests {
         assertEquals("MessageWithBlob", headers[":event-type"]?.expectString())
         assertEquals("application/octet-stream", headers[":content-type"]?.expectString())
         assertEquals("hello from Kotlin", message.payload.decodeToString())
+
+        val deserialized = deserializedEvent(message)
+        assertIs<TestStream.MessageWithBlob>(deserialized)
+        assertEquals(event, deserialized)
     }
 
     @Test
@@ -76,6 +97,10 @@ class EventStreamTests {
         assertEquals("MessageWithString", headers[":event-type"]?.expectString())
         assertEquals("text/plain", headers[":content-type"]?.expectString())
         assertEquals("hello from Kotlin", message.payload.decodeToString())
+
+        val deserialized = deserializedEvent(message)
+        assertIs<TestStream.MessageWithString>(deserialized)
+        assertEquals(event, deserialized)
     }
 
     @Test
@@ -98,6 +123,10 @@ class EventStreamTests {
 
         val expectedBody = """{"someInt":2,"someString":"hello struct!"}"""
         assertJsonStringsEqual(expectedBody, message.payload.decodeToString())
+
+        val deserialized = deserializedEvent(message)
+        assertIs<TestStream.MessageWithStruct>(deserialized)
+        assertEquals(event, deserialized)
     }
 
     @Test
@@ -117,6 +146,10 @@ class EventStreamTests {
 
         val expectedBody = """{"Foo":"a lep is a ball"}"""
         assertJsonStringsEqual(expectedBody, message.payload.decodeToString())
+
+        val deserialized = deserializedEvent(message)
+        assertIs<TestStream.MessageWithUnion>(deserialized)
+        assertEquals(event, deserialized)
     }
 
     @Test
@@ -147,6 +180,10 @@ class EventStreamTests {
         assertEquals(9_000_000_000L, headers["long"]?.expectInt64())
         assertEquals("a tay is a hammer", headers["string"]?.expectString())
         assertEquals(Instant.fromEpochSeconds(5), headers["timestamp"]?.expectTimestamp())
+
+        val deserialized = deserializedEvent(message)
+        assertIs<TestStream.MessageWithHeaders>(deserialized)
+        assertEquals(event, deserialized)
     }
 
     @Test
@@ -165,6 +202,10 @@ class EventStreamTests {
         assertEquals("MessageWithHeaderAndPayload", headers[":event-type"]?.expectString())
         assertEquals("a korf is a tiger", headers["header"]?.expectString())
         assertEquals("remember a korf is a tiger", message.payload.decodeToString())
+
+        val deserialized = deserializedEvent(message)
+        assertIs<TestStream.MessageWithHeaderAndPayload>(deserialized)
+        assertEquals(event, deserialized)
     }
 
     @Test
@@ -184,5 +225,9 @@ class EventStreamTests {
         assertEquals("application/json", headers[":content-type"]?.expectString())
         val expectedBody = """{"someInt":2,"someString":"a flix is comb"}"""
         assertJsonStringsEqual(expectedBody, message.payload.decodeToString())
+
+        val deserialized = deserializedEvent(message)
+        assertIs<TestStream.MessageWithNoHeaderPayloadTraits>(deserialized)
+        assertEquals(event, deserialized)
     }
 }
