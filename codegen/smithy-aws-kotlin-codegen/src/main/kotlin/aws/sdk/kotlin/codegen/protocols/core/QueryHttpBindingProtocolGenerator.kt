@@ -7,6 +7,7 @@ import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.knowledge.SerdeIndex
+import software.amazon.smithy.kotlin.codegen.model.targetOrSelf
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
@@ -158,10 +159,10 @@ abstract class AbstractQueryFormUrlSerializerGenerator(
         }
     }
 
-    override fun payloadSerializer(ctx: ProtocolGenerator.GenerationContext, member: MemberShape): Symbol {
+    override fun payloadSerializer(ctx: ProtocolGenerator.GenerationContext, shape: Shape): Symbol {
         // re-use document serializer (for the target shape!)
-        val target = ctx.model.expectShape(member.target)
-        val symbol = ctx.symbolProvider.toSymbol(member)
+        val target = shape.targetOrSelf(ctx.model)
+        val symbol = ctx.symbolProvider.toSymbol(shape)
         val serializeFn = documentSerializer(ctx, target)
         val fnName = symbol.payloadSerializerName()
         return symbol.payloadSerializer(ctx.settings) { writer ->
