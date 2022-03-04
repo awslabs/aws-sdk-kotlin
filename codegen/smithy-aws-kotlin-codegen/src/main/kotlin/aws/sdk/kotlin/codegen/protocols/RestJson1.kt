@@ -30,7 +30,7 @@ class RestJson1 : JsonHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = RestJson1Trait.ID
 
     override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
-        HttpTraitResolver(model, serviceShape, "application/json")
+        HttpTraitResolver(model, serviceShape, ProtocolContentTypes.consistent("application/json"))
 
     override fun renderSerializeHttpBody(
         ctx: ProtocolGenerator.GenerationContext,

@@ -151,3 +151,13 @@ public sealed class HeaderValue {
 }
 
 private fun MutableBuffer.writeHeader(headerType: HeaderType) = writeByte(headerType.value)
+
+public fun HeaderValue.expectBool(): Boolean = checkNotNull((this as? HeaderValue.Bool)?.value) { "expected HeaderValue.Bool, found: $this" }
+public fun HeaderValue.expectByte(): Byte = checkNotNull((this as? HeaderValue.Byte)?.value?.toByte()) { "expected HeaderValue.Byte, found: $this" }
+public fun HeaderValue.expectInt16(): Short = checkNotNull((this as? HeaderValue.Int16)?.value) { "expected HeaderValue.Int16, found: $this" }
+public fun HeaderValue.expectInt32(): Int = checkNotNull((this as? HeaderValue.Int32)?.value) { "expected HeaderValue.Int32, found: $this" }
+public fun HeaderValue.expectInt64(): Long = checkNotNull((this as? HeaderValue.Int64)?.value) { "expected HeaderValue.Int64, found: $this" }
+public fun HeaderValue.expectString(): String = checkNotNull((this as? HeaderValue.String)?.value) { "expected HeaderValue.String, found: $this" }
+public fun HeaderValue.expectByteArray(): ByteArray = checkNotNull((this as? HeaderValue.ByteArray)?.value) { "expected HeaderValue.ByteArray, found: $this" }
+public fun HeaderValue.expectTimestamp(): Instant = checkNotNull((this as? HeaderValue.Timestamp)?.value) { "expected HeaderValue.Bool, found: $this" }
+public fun HeaderValue.expectUuid(): Uuid = checkNotNull((this as? HeaderValue.Uuid)?.value) { "expected HeaderValue.Bool, found: $this" }

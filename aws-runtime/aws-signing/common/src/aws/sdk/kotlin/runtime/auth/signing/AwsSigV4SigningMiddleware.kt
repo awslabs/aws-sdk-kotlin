@@ -144,7 +144,12 @@ public class AwsSigV4SigningMiddleware(private val config: Config) : ModifyReque
             }
         }
 
-        val signedRequest = AwsSigner.signRequest(signableRequest, opSigningConfig.toCrt())
+        val signingResult = AwsSigner.sign(signableRequest, opSigningConfig.toCrt())
+        val signedRequest = checkNotNull(signingResult.signedRequest) { "signing result must return a non-null HTTP request" }
+
+        // Add the signature to the request context
+        req.context[AuthAttributes.RequestSignature] = signingResult.signature
+
         req.subject.update(signedRequest)
         req.subject.body.resetStream()
 
