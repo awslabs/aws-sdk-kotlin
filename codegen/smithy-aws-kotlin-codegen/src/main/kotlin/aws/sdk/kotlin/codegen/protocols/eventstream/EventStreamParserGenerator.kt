@@ -110,6 +110,7 @@ class EventStreamParserGenerator(
 
         val eventHeaderBindings = variant.members().filter { it.hasTrait<EventHeaderTrait>() }
         val eventPayloadBinding = variant.members().firstOrNull { it.hasTrait<EventPayloadTrait>() }
+        val unbound = variant.members().filterNot { it.hasTrait<EventHeaderTrait>() || it.hasTrait<EventPayloadTrait>() }
 
         if (eventHeaderBindings.isEmpty() && eventPayloadBinding == null) {
             // the entire variant can be deserialized from the payload
@@ -148,11 +149,10 @@ class EventStreamParserGenerator(
             if (eventPayloadBinding != null) {
                 renderDeserializeExplicitEventPayloadMember(ctx, eventPayloadBinding, writer)
             } else {
-                val members = variant.members().filterNot { it.hasTrait<EventHeaderTrait>() }
-                if (members.isNotEmpty()) {
+                if (unbound.isNotEmpty()) {
                     // all remaining members are bound to payload (but not explicitly bound via @eventPayload)
-                    // use the operation body deserializer
-                    TODO("render unbound event stream payload members")
+                    // FIXME - this would require us to generate a "partial" deserializer like we do for where the builder is passed in
+                    TODO("support for unbound event stream members is not implemented")
                 }
             }
 

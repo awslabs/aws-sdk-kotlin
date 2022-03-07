@@ -89,7 +89,7 @@ class EventStreamSerializerGenerator(
         definitionFile = "${op.serializerName()}.kt"
 
         renderBy = { writer ->
-            // FIXME - make internal and share across operations?
+            // TODO - make internal and share across operations?
             writer.withBlock(
                 "private fun #L(input: #T): #T = #T {", "}",
                 fnName,
@@ -100,10 +100,6 @@ class EventStreamSerializerGenerator(
                 addStringHeader(":message-type", "event")
 
                 withBlock("when(input) {", "}") {
-                    // FIXME - this doesn't handle the case when @eventPayload isn't used!
-                    //         2 cases, (1) no header and no payload we can re-use the payloadSerializer; (2) no eventPayload, remaining "unbound" members
-                    //         Perhaps: can we have payloadSerializer/Deserializer haven an "inline" option? or could be automatic. The concern is
-                    //         overlap if you need to serialize a shape w/all members in one case vs just some members in another. Naming is then hard.
                     streamShape.filterEventStreamErrors(ctx.model)
                         .forEach { member ->
                             withBlock(
@@ -112,11 +108,21 @@ class EventStreamSerializerGenerator(
                                 member.unionVariantName()
                             ) {
                                 addStringHeader(":event-type", member.memberName)
-                                val target = ctx.model.expectShape(member.target)
-                                target.members().forEach { targetMember ->
-                                    when {
-                                        targetMember.hasTrait<EventHeaderTrait>() -> renderSerializeEventHeader(ctx, targetMember, writer)
-                                        targetMember.hasTrait<EventPayloadTrait>() -> renderSerializeEventPayload(ctx, targetMember, writer)
+                                val variant = ctx.model.expectShape(member.target)
+
+                                val eventHeaderBindings = variant.members().filter { it.hasTrait<EventHeaderTrait>() }
+                                val eventPayloadBinding = variant.members().firstOrNull { it.hasTrait<EventPayloadTrait>() }
+                                val unbound = variant.members().filterNot { it.hasTrait<EventHeaderTrait>() || it.hasTrait<EventPayloadTrait>() }
+
+                                eventHeaderBindings.forEach { renderSerializeEventHeader(ctx, it, writer) }
+
+                                when {
+                                    eventPayloadBinding != null -> renderSerializeEventPayload(ctx, eventPayloadBinding, writer)
+                                    unbound.isNotEmpty() -> {
+                                        writer.addStringHeader(":content-type", payloadContentType)
+                                        // get a payload serializer for the given members of the variant
+                                        val serializeFn = sdg.payloadSerializer(ctx, variant, unbound)
+                                        writer.write("payload = #T(input.value)", serializeFn)
                                     }
                                 }
                             }
