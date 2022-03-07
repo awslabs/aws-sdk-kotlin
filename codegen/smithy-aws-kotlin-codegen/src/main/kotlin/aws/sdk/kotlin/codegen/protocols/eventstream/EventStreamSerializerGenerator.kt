@@ -37,7 +37,6 @@ class EventStreamSerializerGenerator(
      * ```
      */
     fun requestHandler(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Symbol =
-        // FIXME - don't use the body serializer name since we may need to re-use it (albeit with a different signature, we should still be more explicit than this)
         op.bodySerializer(ctx.settings) { writer ->
             val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape<StructureShape>(op.input.get()))
             writer.withBlock(
