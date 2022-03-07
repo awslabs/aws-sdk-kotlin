@@ -101,7 +101,7 @@ class AwsHttpBindingProtocolGeneratorTest {
                     error("Unneeded for test")
                 }
 
-                override fun payloadDeserializer(ctx: ProtocolGenerator.GenerationContext, member: MemberShape): Symbol {
+                override fun payloadDeserializer(ctx: ProtocolGenerator.GenerationContext, shape: Shape): Symbol {
                     error("Unneeded for test")
                 }
             }
@@ -112,7 +112,7 @@ class AwsHttpBindingProtocolGeneratorTest {
                     error("Unneeded for test")
                 }
 
-                override fun payloadSerializer(ctx: ProtocolGenerator.GenerationContext, member: MemberShape): Symbol {
+                override fun payloadSerializer(ctx: ProtocolGenerator.GenerationContext, shape: Shape): Symbol {
                     error("Unneeded for test")
                 }
             }
