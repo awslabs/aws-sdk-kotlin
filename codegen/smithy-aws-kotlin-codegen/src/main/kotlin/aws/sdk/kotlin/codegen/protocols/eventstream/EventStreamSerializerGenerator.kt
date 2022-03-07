@@ -100,6 +100,10 @@ class EventStreamSerializerGenerator(
                 addStringHeader(":message-type", "event")
 
                 withBlock("when(input) {", "}") {
+                    // FIXME - this doesn't handle the case when @eventPayload isn't used!
+                    //         2 cases, (1) no header and no payload we can re-use the payloadSerializer; (2) no eventPayload, remaining "unbound" members
+                    //         Perhaps: can we have payloadSerializer/Deserializer haven an "inline" option? or could be automatic. The concern is
+                    //         overlap if you need to serialize a shape w/all members in one case vs just some members in another. Naming is then hard.
                     streamShape.filterEventStreamErrors(ctx.model)
                         .forEach { member ->
                             withBlock(
