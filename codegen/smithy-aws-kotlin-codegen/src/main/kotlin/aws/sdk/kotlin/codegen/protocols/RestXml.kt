@@ -62,13 +62,13 @@ class RestXmlParserGenerator(
         writer: KotlinWriter
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
-    override fun payloadDeserializer(ctx: ProtocolGenerator.GenerationContext, member: MemberShape): Symbol {
-        return if (member.hasTrait<XmlNameTrait>()) {
+    override fun payloadDeserializer(ctx: ProtocolGenerator.GenerationContext, shape: Shape): Symbol {
+        return if (shape.hasTrait<XmlNameTrait>() && shape is MemberShape) {
             // can't delegate, have to generate a dedicated deserializer because the member xml name is different
             // from the name of the target shape
-            explicitBoundStructureDeserializer(ctx, member)
+            explicitBoundStructureDeserializer(ctx, shape)
         } else {
-            super.payloadDeserializer(ctx, member)
+            super.payloadDeserializer(ctx, shape)
         }
     }
 
@@ -116,13 +116,13 @@ class RestXmlSerializerGenerator(
         writer: KotlinWriter
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
-    override fun payloadSerializer(ctx: ProtocolGenerator.GenerationContext, member: MemberShape): Symbol {
-        return if (member.hasTrait<XmlNameTrait>()) {
+    override fun payloadSerializer(ctx: ProtocolGenerator.GenerationContext, shape: Shape): Symbol {
+        return if (shape.hasTrait<XmlNameTrait>() && shape is MemberShape) {
             // can't delegate, have to generate a dedicated serializer because the member xml name is different
             // from the name of the target shape
-            explicitBoundStructureSerializer(ctx, member)
+            explicitBoundStructureSerializer(ctx, shape)
         } else {
-            super.payloadSerializer(ctx, member)
+            super.payloadSerializer(ctx, shape)
         }
     }
 
