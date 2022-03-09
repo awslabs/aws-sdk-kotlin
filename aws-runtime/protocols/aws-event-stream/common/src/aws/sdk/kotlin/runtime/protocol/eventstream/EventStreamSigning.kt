@@ -50,6 +50,10 @@ public fun Flow<Message>.sign(
         prevSignature = result.signature
         emit(result.output)
     }
+
+    // end frame - empty body in event stream encoding
+    val endFrame = signPayload(configBuilder, prevSignature, ByteArray(0))
+    emit(endFrame.output)
 }
 
 internal suspend fun signPayload(
@@ -92,8 +96,4 @@ public fun ExecutionContext.newEventStreamSigningConfig(): AwsSigningConfig = Aw
     useDoubleUriEncode = false
     normalizeUriPath = true
     signedBodyHeader = AwsSignedBodyHeaderType.NONE
-
-    // FIXME - needs to be set on the operation for initial request
-    // signedBodyHeader = AwsSignedBodyHeaderType.X_AMZ_CONTENT_SHA256
-    // signedBodyValue = AwsSignedBodyValue.STREAMING_AWS4_HMAC_SHA256_PAYLOAD
 }

@@ -7,9 +7,9 @@ package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.HttpBody
-import aws.smithy.kotlin.runtime.http.toHttpBody
 import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteChannel
+import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import aws.smithy.kotlin.runtime.io.bytes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -34,6 +34,7 @@ public fun Flow<Message>.encode(): Flow<ByteArray> = map {
  */
 @InternalSdkApi
 public suspend fun Flow<ByteArray>.asEventStreamHttpBody(): HttpBody {
+    println("convert event stream body")
     val encodedMessages = this
     val ch = SdkByteChannel(true)
 
@@ -41,15 +42,25 @@ public suspend fun Flow<ByteArray>.asEventStreamHttpBody(): HttpBody {
     //         tie it to whatever arbitrary scope we are in
     val scope = CoroutineScope(coroutineContext)
 
-    val job = scope.launch {
-        encodedMessages.collect {
-            ch.writeFully(it)
+    return object : HttpBody.Streaming() {
+        override val contentLength: Long? = null
+        override val isReplayable: Boolean = false
+        override fun readFrom(): SdkByteReadChannel {
+            // FIXME - delaying launch here until the channel is consumed from the HTTP engine is a hacky way
+            //  of enforcing ordering to ensure the ExecutionContext is updated with the
+            //  AuthAttributes.RequestSignature by the time the messages are collected and sign() is called
+            val job = scope.launch {
+                encodedMessages.collect {
+                    ch.writeFully(it)
+                }
+            }
+
+            job.invokeOnCompletion { cause ->
+                cause?.let { it.printStackTrace() }
+                ch.close(cause)
+            }
+
+            return ch
         }
     }
-
-    job.invokeOnCompletion { cause ->
-        ch.close(cause)
-    }
-
-    return ch.toHttpBody()
 }
