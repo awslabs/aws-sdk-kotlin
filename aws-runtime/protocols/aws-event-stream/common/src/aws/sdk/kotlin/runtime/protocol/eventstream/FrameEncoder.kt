@@ -34,7 +34,6 @@ public fun Flow<Message>.encode(): Flow<ByteArray> = map {
  */
 @InternalSdkApi
 public suspend fun Flow<ByteArray>.asEventStreamHttpBody(): HttpBody {
-    println("convert event stream body")
     val encodedMessages = this
     val ch = SdkByteChannel(true)
 
