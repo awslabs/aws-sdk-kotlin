@@ -21,6 +21,7 @@ import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -49,7 +50,10 @@ class EventStreamTests {
         val body = serializeTestStreamOpOperationBody(testContext, req)
         assertIs<HttpBody.Streaming>(body)
 
-        val signedMessage = decodeFrames(body.readFrom()).single()
+        // should be the actual message + the empty end frame
+        val frames = decodeFrames(body.readFrom()).toList()
+        assertEquals(2, frames.size)
+        val signedMessage = frames[0]
         val buffer = SdkByteBuffer.of(signedMessage.payload)
         buffer.advance(signedMessage.payload.size.toULong())
         return Message.decode(buffer)

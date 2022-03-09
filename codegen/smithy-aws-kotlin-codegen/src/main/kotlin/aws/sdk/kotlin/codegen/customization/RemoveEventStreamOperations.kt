@@ -12,6 +12,7 @@ import software.amazon.smithy.kotlin.codegen.model.findStreamingMember
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.transform.ModelTransformer
 import java.util.logging.Logger
@@ -23,6 +24,14 @@ import java.util.logging.Logger
 class RemoveEventStreamOperations : KotlinIntegration {
     override val order: Byte = -127
     private val logger = Logger.getLogger(javaClass.name)
+
+    private val supportedServiceIds = setOf(
+        // integration tests
+        "aws.sdk.kotlin.test.eventstream#TestService"
+    ).map(ShapeId::from).toSet()
+
+    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
+        settings.service !in supportedServiceIds
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model =
         ModelTransformer.create().filterShapes(model) { parentShape ->

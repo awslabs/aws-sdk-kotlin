@@ -89,9 +89,11 @@ open class AwsHttpProtocolClientGenerator(
             write("ctx.#T(#T.LogMode, config.sdkLogMode)", putIfAbsentSym, sdkClientOptionSym)
 
             // fill in auth/signing attributes
-            val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.service)
+            if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
+                val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.service)
+                write("ctx.#T(#T.SigningService, #S)", putIfAbsentSym, AwsRuntimeTypes.Core.AuthAttributes, signingServiceName)
+            }
             write("ctx.#T(#T.SigningRegion, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.AuthAttributes)
-            write("ctx.#T(#T.SigningService, #S)", putIfAbsentSym, AwsRuntimeTypes.Core.AuthAttributes, signingServiceName)
             write("ctx.#T(#T.CredentialsProvider, config.credentialsProvider)", putIfAbsentSym, AwsRuntimeTypes.Core.AuthAttributes)
 
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
