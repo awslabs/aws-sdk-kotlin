@@ -37,7 +37,6 @@ class EventStreamParserGenerator(
      * ```
      */
     fun responseHandler(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Symbol =
-        // FIXME - don't use the body deserializer name since we may need to re-use it (albeit with a different signature, we should still be more explicit than this)
         op.bodyDeserializer(ctx.settings) { writer ->
             val outputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape<StructureShape>(op.output.get()))
             // we have access to the builder for the output type and the full HttpBody
@@ -110,6 +109,7 @@ class EventStreamParserGenerator(
 
         val eventHeaderBindings = variant.members().filter { it.hasTrait<EventHeaderTrait>() }
         val eventPayloadBinding = variant.members().firstOrNull { it.hasTrait<EventPayloadTrait>() }
+        val unbound = variant.members().filterNot { it.hasTrait<EventHeaderTrait>() || it.hasTrait<EventPayloadTrait>() }
 
         if (eventHeaderBindings.isEmpty() && eventPayloadBinding == null) {
             // the entire variant can be deserialized from the payload
@@ -117,7 +117,7 @@ class EventStreamParserGenerator(
             writer.write("val e = #T(message.payload)", payloadDeserializeFn)
         } else {
             val variantSymbol = ctx.symbolProvider.toSymbol(variant)
-            writer.write("val builder = #T.Builder()", variantSymbol)
+            writer.write("val eb = #T.Builder()", variantSymbol)
 
             // render members bound to header
             eventHeaderBindings.forEach { hdrBinding ->
@@ -142,21 +142,20 @@ class EventStreamParserGenerator(
                 } else {
                     ""
                 }
-                writer.write("builder.#L = message.headers.find { it.name == #S }?.value?.#T()$defaultValuePostfix", hdrBinding.defaultName(), hdrBinding.memberName, conversionFn)
+                writer.write("eb.#L = message.headers.find { it.name == #S }?.value?.#T()$defaultValuePostfix", hdrBinding.defaultName(), hdrBinding.memberName, conversionFn)
             }
 
             if (eventPayloadBinding != null) {
                 renderDeserializeExplicitEventPayloadMember(ctx, eventPayloadBinding, writer)
             } else {
-                val members = variant.members().filterNot { it.hasTrait<EventHeaderTrait>() }
-                if (members.isNotEmpty()) {
+                if (unbound.isNotEmpty()) {
                     // all remaining members are bound to payload (but not explicitly bound via @eventPayload)
-                    // use the operation body deserializer
-                    TODO("render unbound event stream payload members")
+                    // FIXME - this would require us to generate a "partial" deserializer like we do for where the builder is passed in
+                    TODO("support for unbound event stream members is not implemented")
                 }
             }
 
-            writer.write("val e = builder.build()")
+            writer.write("val e = eb.build()")
         }
 
         writer.write("#T.#L(e)", unionSymbol, member.unionVariantName())
@@ -167,15 +166,15 @@ class EventStreamParserGenerator(
         member: MemberShape,
         writer: KotlinWriter
     ) {
-        // FIXME - check content type for blob and string
+        // TODO - check content type for blob and string
         // structure > :test(member > :test(blob, string, structure, union))
         val target = ctx.model.expectShape(member.target)
         when (target.type) {
-            ShapeType.BLOB -> writer.write("builder.#L = message.payload", member.defaultName())
-            ShapeType.STRING -> writer.write("builder.#L = message.payload?.decodeToString()", member.defaultName())
+            ShapeType.BLOB -> writer.write("eb.#L = message.payload", member.defaultName())
+            ShapeType.STRING -> writer.write("eb.#L = message.payload.decodeToString()", member.defaultName())
             ShapeType.STRUCTURE, ShapeType.UNION -> {
                 val payloadDeserializeFn = sdg.payloadDeserializer(ctx, member)
-                writer.write("builder.#L = #T(message.payload)", member.defaultName(), payloadDeserializeFn)
+                writer.write("eb.#L = #T(message.payload)", member.defaultName(), payloadDeserializeFn)
             }
             else -> throw CodegenException("unsupported shape type `${target.type}` for target: $target; expected blob, string, structure, or union for eventPayload member: $member")
         }

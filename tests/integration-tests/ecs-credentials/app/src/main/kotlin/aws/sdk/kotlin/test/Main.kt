@@ -4,14 +4,13 @@
  */
 package aws.sdk.kotlin.test
 
-import kotlinx.coroutines.runBlocking
 import aws.sdk.kotlin.runtime.auth.credentials.EcsCredentialsProvider
 import aws.sdk.kotlin.services.sts.StsClient
-
+import kotlinx.coroutines.runBlocking
 
 fun main(): Unit = runBlocking {
 
-    StsClient{
+    StsClient {
         region = "us-east-2"
         credentialsProvider = EcsCredentialsProvider()
     }.use { client ->

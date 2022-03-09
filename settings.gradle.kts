@@ -42,8 +42,8 @@ include(":aws-runtime:protocols:aws-json-protocols")
 include(":aws-runtime:protocols:aws-xml-protocols")
 include(":aws-runtime:protocols:aws-event-stream")
 include(":aws-runtime:crt-util")
-// include(":tests")
-// include(":tests:codegen:event-stream")
+include(":tests")
+include(":tests:codegen:event-stream")
 
 // generated services
 fun File.isServiceDir(): Boolean {

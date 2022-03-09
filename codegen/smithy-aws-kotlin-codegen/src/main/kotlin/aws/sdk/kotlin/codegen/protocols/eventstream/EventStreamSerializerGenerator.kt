@@ -37,7 +37,6 @@ class EventStreamSerializerGenerator(
      * ```
      */
     fun requestHandler(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Symbol =
-        // FIXME - don't use the body serializer name since we may need to re-use it (albeit with a different signature, we should still be more explicit than this)
         op.bodySerializer(ctx.settings) { writer ->
             val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape<StructureShape>(op.input.get()))
             writer.withBlock(
@@ -89,7 +88,7 @@ class EventStreamSerializerGenerator(
         definitionFile = "${op.serializerName()}.kt"
 
         renderBy = { writer ->
-            // FIXME - make internal and share across operations?
+            // TODO - make internal and share across operations?
             writer.withBlock(
                 "private fun #L(input: #T): #T = #T {", "}",
                 fnName,
@@ -108,11 +107,21 @@ class EventStreamSerializerGenerator(
                                 member.unionVariantName()
                             ) {
                                 addStringHeader(":event-type", member.memberName)
-                                val target = ctx.model.expectShape(member.target)
-                                target.members().forEach { targetMember ->
-                                    when {
-                                        targetMember.hasTrait<EventHeaderTrait>() -> renderSerializeEventHeader(ctx, targetMember, writer)
-                                        targetMember.hasTrait<EventPayloadTrait>() -> renderSerializeEventPayload(ctx, targetMember, writer)
+                                val variant = ctx.model.expectShape(member.target)
+
+                                val eventHeaderBindings = variant.members().filter { it.hasTrait<EventHeaderTrait>() }
+                                val eventPayloadBinding = variant.members().firstOrNull { it.hasTrait<EventPayloadTrait>() }
+                                val unbound = variant.members().filterNot { it.hasTrait<EventHeaderTrait>() || it.hasTrait<EventPayloadTrait>() }
+
+                                eventHeaderBindings.forEach { renderSerializeEventHeader(ctx, it, writer) }
+
+                                when {
+                                    eventPayloadBinding != null -> renderSerializeEventPayload(ctx, eventPayloadBinding, writer)
+                                    unbound.isNotEmpty() -> {
+                                        writer.addStringHeader(":content-type", payloadContentType)
+                                        // get a payload serializer for the given members of the variant
+                                        val serializeFn = sdg.payloadSerializer(ctx, variant, unbound)
+                                        writer.write("payload = #T(input.value)", serializeFn)
                                     }
                                 }
                             }
