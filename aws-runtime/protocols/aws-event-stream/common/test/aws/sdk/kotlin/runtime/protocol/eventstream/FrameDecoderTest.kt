@@ -5,65 +5,56 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
-import aws.smithy.kotlin.runtime.io.SdkByteBuffer
-import aws.smithy.kotlin.runtime.io.writeByte
-import aws.smithy.kotlin.runtime.io.writeFully
-import kotlin.math.min
+import aws.smithy.kotlin.runtime.io.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.fail
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class FrameDecoderTest {
+
     @Test
-    fun testSingleStreamingMessage() {
+    fun testFrameStreamSingleMessage() = runTest {
         val encoded = validMessageWithAllHeaders()
+        val expected = Message.decode(SdkByteBuffer.wrapAsReadBuffer(encoded))
+        val chan = SdkByteReadChannel(encoded)
 
-        val decoder = FrameDecoder()
-        val buf = SdkByteBuffer(256u)
-        for (i in 0 until encoded.size - 1) {
-            buf.writeByte(encoded[i])
-            assertEquals(null, decoder.decodeFrame(buf), "incomplete frame shouldn't result in a message")
-        }
+        val frames = decodeFrames(chan)
+        val actual = frames.toList()
 
-        buf.writeByte(encoded.last())
-
-        when (val frame = decoder.decodeFrame(buf)) {
-            null -> fail("frame should be complete now")
-            else -> {
-                val expected = Message.decode(SdkByteBuffer.wrapAsReadBuffer(encoded))
-                assertEquals(expected, frame)
-            }
-        }
+        assertEquals(1, actual.size)
+        assertEquals(expected, actual.first())
     }
 
     @Test
-    fun testMultipleStreamingMessagesChunked() {
-        val encoded = SdkByteBuffer(256u).apply {
+    fun testFrameStreamMultipleMessagesChunked() = runTest {
+        val encoded = SdkByteBuffer(0u).apply {
             writeFully(validMessageWithAllHeaders())
             writeFully(validMessageEmptyPayload())
             writeFully(validMessageNoHeaders())
-        }
-
-        val decoder = FrameDecoder()
-        val chunkSize = 8
-
-        val totalChunks = encoded.readRemaining / chunkSize.toULong()
-        val buffer = SdkByteBuffer(256u)
-        val decoded = mutableListOf<Message>()
-        for (i in 0..totalChunks.toInt()) {
-            buffer.writeFully(encoded, min(chunkSize.toULong(), encoded.readRemaining))
-            when (val frame = decoder.decodeFrame(buffer)) {
-                null -> {}
-                else -> decoded.add(frame)
-            }
-        }
+        }.bytes()
 
         val expected1 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageWithAllHeaders()))
         val expected2 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageEmptyPayload()))
         val expected3 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageNoHeaders()))
-        assertEquals(3, decoded.size)
-        assertEquals(expected1, decoded[0])
-        assertEquals(expected2, decoded[1])
-        assertEquals(expected3, decoded[2])
+
+        val chan = SdkByteReadChannel(encoded)
+        val frames = decodeFrames(chan)
+
+        val actual = frames.toList()
+
+        assertEquals(3, actual.size)
+        assertEquals(expected1, actual[0])
+        assertEquals(expected2, actual[1])
+        assertEquals(expected3, actual[2])
+    }
+
+    @Ignore
+    @Test
+    fun testChannelClosed() = runTest {
+        TODO("not implemented yet: need to add test for channel closed normally while waiting on prelude")
     }
 }

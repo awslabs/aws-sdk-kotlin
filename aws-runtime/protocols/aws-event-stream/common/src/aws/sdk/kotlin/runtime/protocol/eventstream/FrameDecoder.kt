@@ -5,48 +5,50 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
+import aws.sdk.kotlin.runtime.ClientException
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.io.Buffer
-import aws.smithy.kotlin.runtime.io.SdkByteBuffer
-import aws.smithy.kotlin.runtime.io.readFully
+import aws.smithy.kotlin.runtime.io.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
+/**
+ * Exception thrown when deserializing raw event stream messages off the wire fails for some reason
+ */
+public class EventStreamFramingException(message: String, cause: Throwable? = null) : ClientException(message, cause)
+
+/**
+ * Convert the raw bytes coming off [chan] to a stream of messages
+ */
 @InternalSdkApi
-public class FrameDecoder {
-    private var prelude: Prelude? = null
+public suspend fun decodeFrames(chan: SdkByteReadChannel): Flow<Message> = flow {
+    while (!chan.isClosedForRead) {
+        // get the prelude to figure out how much is left to read of the message
+        val preludeBytes = ByteArray(PRELUDE_BYTE_LEN_WITH_CRC)
 
-    /**
-     * Reset the decoder discarding any intermediate state
-     */
-    public fun reset() { prelude = null }
-
-    private fun isFrameAvailable(buffer: Buffer): Boolean {
-        val totalLen = prelude?.totalLen ?: return false
-        val remaining = totalLen - PRELUDE_BYTE_LEN_WITH_CRC
-        return buffer.readRemaining >= remaining.toULong()
-    }
-
-    /**
-     * Attempt to decode a [Message] from the buffer. This function expects to be called over and over again
-     * with more data in the buffer each time its called. When there is not enough data to decode this function
-     * returns null.
-     * The decoder will consume the prelude when enough data is available. When it is invoked with enough
-     * data it will consume the remaining message bytes.
-     */
-    public fun decodeFrame(buffer: Buffer): Message? {
-        if (prelude == null && buffer.readRemaining >= PRELUDE_BYTE_LEN_WITH_CRC.toULong()) {
-            prelude = Prelude.decode(buffer)
+        try {
+            chan.readFully(preludeBytes)
+        } catch (ex: Exception) {
+            throw EventStreamFramingException("failed to read message prelude from channel", ex)
         }
 
-        return when (isFrameAvailable(buffer)) {
-            true -> {
-                val currPrelude = checkNotNull(prelude)
-                val messageBuf = SdkByteBuffer(currPrelude.totalLen.toULong())
-                currPrelude.encode(messageBuf)
-                buffer.readFully(messageBuf)
-                reset()
-                Message.decode(messageBuf)
-            }
-            else -> null
+        val preludeBuf = SdkByteBuffer.of(preludeBytes).apply { advance(preludeBytes.size.toULong()) }
+        val prelude = Prelude.decode(preludeBuf)
+
+        // get a buffer with one complete message in it, prelude has already been read though, leave room for it
+        val messageBytes = ByteArray(prelude.totalLen)
+
+        try {
+            chan.readFully(messageBytes, offset = PRELUDE_BYTE_LEN_WITH_CRC)
+        } catch (ex: Exception) {
+            throw EventStreamFramingException("failed to read message from channel", ex)
         }
+
+        val messageBuf = SdkByteBuffer.of(messageBytes)
+        messageBuf.writeFully(preludeBytes)
+        val remaining = prelude.totalLen - PRELUDE_BYTE_LEN_WITH_CRC
+        messageBuf.advance(remaining.toULong())
+
+        val message = Message.decode(messageBuf)
+        emit(message)
     }
 }

@@ -31,7 +31,7 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
 
     // See https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#content-type
     override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
-        HttpTraitResolver(model, serviceShape, "application/xml")
+        HttpTraitResolver(model, serviceShape, ProtocolContentTypes.consistent("application/xml"))
 
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
         RestXmlParserGenerator(this, defaultTimestampFormat)
@@ -62,13 +62,17 @@ class RestXmlParserGenerator(
         writer: KotlinWriter
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
-    override fun payloadDeserializer(ctx: ProtocolGenerator.GenerationContext, shape: Shape): Symbol {
+    override fun payloadDeserializer(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        members: Collection<MemberShape>?
+    ): Symbol {
         return if (shape.hasTrait<XmlNameTrait>() && shape is MemberShape) {
             // can't delegate, have to generate a dedicated deserializer because the member xml name is different
             // from the name of the target shape
             explicitBoundStructureDeserializer(ctx, shape)
         } else {
-            super.payloadDeserializer(ctx, shape)
+            super.payloadDeserializer(ctx, shape, members)
         }
     }
 
@@ -116,13 +120,17 @@ class RestXmlSerializerGenerator(
         writer: KotlinWriter
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
-    override fun payloadSerializer(ctx: ProtocolGenerator.GenerationContext, shape: Shape): Symbol {
+    override fun payloadSerializer(
+        ctx: ProtocolGenerator.GenerationContext,
+        shape: Shape,
+        members: Collection<MemberShape>?
+    ): Symbol {
         return if (shape.hasTrait<XmlNameTrait>() && shape is MemberShape) {
             // can't delegate, have to generate a dedicated serializer because the member xml name is different
             // from the name of the target shape
             explicitBoundStructureSerializer(ctx, shape)
         } else {
-            super.payloadSerializer(ctx, shape)
+            super.payloadSerializer(ctx, shape, members)
         }
     }
 

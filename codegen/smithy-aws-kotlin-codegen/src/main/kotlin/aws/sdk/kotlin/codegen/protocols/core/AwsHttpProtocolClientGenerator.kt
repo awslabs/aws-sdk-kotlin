@@ -7,14 +7,12 @@ package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.addImport
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
 import software.amazon.smithy.kotlin.codegen.model.namespace
@@ -75,22 +73,32 @@ open class AwsHttpProtocolClientGenerator(
     private fun renderMergeServiceDefaults(writer: KotlinWriter) {
         // FIXME - we likely need a way to let customizations modify/override this
         // FIXME - we also need a way to tie in config properties added via integrations that need to influence the context
-        writer.addImport(RuntimeTypes.Core.ExecutionContext)
-        writer.addImport("SdkClientOption", KotlinDependency.CORE, "${KotlinDependency.CORE.namespace}.client")
         writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
         writer.addImport(AwsRuntimeTypes.Core.AwsClientOption)
-        writer.addImport("putIfAbsent", KotlinDependency.UTILS)
+        val putIfAbsentSym = buildSymbol { name = "putIfAbsent"; namespace(KotlinDependency.UTILS) }
+        val sdkClientOptionSym = buildSymbol { name = "SdkClientOption"; namespace(KotlinDependency.CORE, "client") }
 
         writer.dokka("merge the defaults configured for the service into the execution context before firing off a request")
-        writer.openBlock("private suspend fun mergeServiceDefaults(ctx: ExecutionContext) {", "}") {
-            writer.write("ctx.putIfAbsent(AwsClientOption.Region, config.region)")
-            writer.write("ctx.putIfAbsent(AuthAttributes.SigningRegion, config.region)")
-            writer.write("ctx.putIfAbsent(SdkClientOption.ServiceName, serviceName)")
-            writer.write("ctx.putIfAbsent(SdkClientOption.LogMode, config.sdkLogMode)")
+        writer.withBlock(
+            "private suspend fun mergeServiceDefaults(ctx: #T) {",
+            "}",
+            RuntimeTypes.Core.ExecutionContext
+        ) {
+            write("ctx.#T(#T.Region, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.AwsClientOption)
+            write("ctx.#T(#T.ServiceName, serviceName)", putIfAbsentSym, sdkClientOptionSym)
+            write("ctx.#T(#T.LogMode, config.sdkLogMode)", putIfAbsentSym, sdkClientOptionSym)
+
+            // fill in auth/signing attributes
+            if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
+                val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.service)
+                write("ctx.#T(#T.SigningService, #S)", putIfAbsentSym, AwsRuntimeTypes.Core.AuthAttributes, signingServiceName)
+            }
+            write("ctx.#T(#T.SigningRegion, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.AuthAttributes)
+            write("ctx.#T(#T.CredentialsProvider, config.credentialsProvider)", putIfAbsentSym, AwsRuntimeTypes.Core.AuthAttributes)
 
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
-                writer.addImport(RuntimeTypes.Core.IdempotencyTokenProviderExt)
-                writer.write("config.idempotencyTokenProvider?.let { ctx[SdkClientOption.IdempotencyTokenProvider] = it }")
+                addImport(RuntimeTypes.Core.IdempotencyTokenProviderExt)
+                write("config.idempotencyTokenProvider?.let { ctx[#T.IdempotencyTokenProvider] = it }", sdkClientOptionSym)
             }
         }
     }

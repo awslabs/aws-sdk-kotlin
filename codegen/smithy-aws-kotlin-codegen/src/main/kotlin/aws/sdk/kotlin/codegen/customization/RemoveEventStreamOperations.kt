@@ -9,12 +9,11 @@ import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.findStreamingMember
-import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.StructureShape
-import software.amazon.smithy.model.traits.StreamingTrait
 import software.amazon.smithy.model.transform.ModelTransformer
 import java.util.logging.Logger
 
@@ -26,6 +25,14 @@ class RemoveEventStreamOperations : KotlinIntegration {
     override val order: Byte = -127
     private val logger = Logger.getLogger(javaClass.name)
 
+    private val supportedServiceIds = setOf(
+        // integration tests
+        "aws.sdk.kotlin.test.eventstream#TestService"
+    ).map(ShapeId::from).toSet()
+
+    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
+        settings.service !in supportedServiceIds
+
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model =
         ModelTransformer.create().filterShapes(model) { parentShape ->
             if (parentShape !is OperationShape) {
@@ -33,9 +40,9 @@ class RemoveEventStreamOperations : KotlinIntegration {
             } else {
                 val ioShapes = listOfNotNull(parentShape.output.getOrNull(), parentShape.input.getOrNull()).map { model.expectShape<StructureShape>(it) }
                 val hasEventStream = ioShapes.any { ioShape ->
-                    ioShape.allMembers.values.any { model.getShape(it.target).get().hasTrait<StreamingTrait>() }
                     val streamingMember = ioShape.findStreamingMember(model)
-                    streamingMember?.isUnionShape ?: false
+                    val target = streamingMember?.let { model.expectShape(it.target) }
+                    target?.isUnionShape ?: false
                 }
                 // If a streaming member has a union trait, it is an event stream. Event Streams are not currently supported
                 // by the SDK, so if we generate this API it won't work.

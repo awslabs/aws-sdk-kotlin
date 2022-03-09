@@ -3,7 +3,6 @@ aws.sdk.kotlin.codegen.AwsDefaultRetryIntegration
 aws.sdk.kotlin.codegen.customization.s3.S3GeneratorSupplier
 aws.sdk.kotlin.codegen.GradleGenerator
 aws.sdk.kotlin.codegen.AwsServiceConfigIntegration
-aws.sdk.kotlin.codegen.customization.RemoveEventStreamOperations
 aws.sdk.kotlin.codegen.customization.s3.S3SigningConfig
 aws.sdk.kotlin.codegen.customization.s3.S3ErrorMetadataIntegration
 aws.sdk.kotlin.codegen.customization.s3.GetBucketLocationDeserializerIntegration
@@ -17,3 +16,4 @@ aws.sdk.kotlin.codegen.customization.BoxServices
 aws.sdk.kotlin.codegen.customization.glacier.GlacierBodyChecksum
 aws.sdk.kotlin.codegen.customization.machinelearning.MachineLearningEndpointCustomization
 aws.sdk.kotlin.codegen.customization.sts.StsDisableAuthForOperations
+aws.sdk.kotlin.codegen.customization.RemoveEventStreamOperations

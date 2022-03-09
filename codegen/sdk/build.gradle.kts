@@ -95,7 +95,7 @@ data class AwsService(
 
 
 val disabledServices = setOf(
-    // transcribe streaming contains exclusively EventStream operations which are not supported
+    // Only contains event streams
     "transcribestreaming",
     // timestream requires endpoint discovery
     // https://github.com/awslabs/smithy-kotlin/issues/146
