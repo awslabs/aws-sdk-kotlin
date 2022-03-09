@@ -95,6 +95,8 @@ data class AwsService(
 
 
 val disabledServices = setOf(
+    // Only contains event streams
+    "transcribestreaming",
     // timestream requires endpoint discovery
     // https://github.com/awslabs/smithy-kotlin/issues/146
     "timestreamwrite",

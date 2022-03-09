@@ -70,6 +70,15 @@ public class AwsSigV4SigningMiddleware(private val config: Config) : ModifyReque
         public var omitSessionToken: Boolean = false
 
         /**
+         * Optional string to use as the canonical request's body public value.
+         * If string is empty, a public value will be calculated from the payload during signing.
+         * Typically, this is the SHA-256 of the (request/chunk/event) payload, written as lowercase hex.
+         * If this has been precalculated, it can be set here. Special public values used by certain services can also be set
+         * (e.g. "UNSIGNED-PAYLOAD" "STREAMING-AWS4-HMAC-SHA256-PAYLOAD" "STREAMING-AWS4-HMAC-SHA256-EVENTS").
+         */
+        public val signedBodyValue: String? = null
+
+        /**
          * Controls what body "hash" header, if any, should be added to the canonical request and the signed request.
          * Most services do not require this additional header.
          */
@@ -117,6 +126,10 @@ public class AwsSigV4SigningMiddleware(private val config: Config) : ModifyReque
         // then we must decide how to compute the payload hash ourselves (defaults to unsigned payload)
         val isUnboundedStream = signableRequest.body == null && req.subject.body is HttpBody.Streaming
 
+        // favor attributes from the current request context
+        val precomputedSignedBodyValue = req.context.getOrNull(AuthAttributes.SignedBodyValue)
+        val precomputedHeaderType = req.context.getOrNull(AuthAttributes.SignedBodyHeaderType)?.let { AwsSignedBodyHeaderType.valueOf(it) }
+
         // operation signing config is baseConfig + operation specific config/overrides
         val opSigningConfig = AwsSigningConfig {
             region = req.context[AuthAttributes.SigningRegion]
@@ -131,8 +144,9 @@ public class AwsSigV4SigningMiddleware(private val config: Config) : ModifyReque
             useDoubleUriEncode = config.useDoubleUriEncode
             expiresAfter = config.expiresAfter
 
-            signedBodyHeader = config.signedBodyHeaderType
+            signedBodyHeader = precomputedHeaderType ?: config.signedBodyHeaderType
             signedBodyValue = when {
+                precomputedSignedBodyValue != null -> precomputedSignedBodyValue
                 isUnsignedRequest -> AwsSignedBodyValue.UNSIGNED_PAYLOAD
                 req.subject.body is HttpBody.Empty -> AwsSignedBodyValue.EMPTY_SHA256
                 isUnboundedStream -> {

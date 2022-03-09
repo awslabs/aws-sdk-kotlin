@@ -13,14 +13,18 @@ import aws.smithy.kotlin.runtime.io.bytes
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.util.encodeToHex
+import aws.smithy.kotlin.runtime.util.sha256
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class EventStreamSigningTest {
 
+    // FIXME - see https://github.com/awslabs/aws-sdk-kotlin/issues/543
+    @Ignore
     @Test
     fun testSignPayload() = runTest {
         val messageToSign = buildMessage {
@@ -37,7 +41,7 @@ class EventStreamSigningTest {
             signatureType = AwsSignatureType.HTTP_REQUEST_CHUNK
         }
 
-        val prevSignature = "last message sts".encodeToByteArray()
+        val prevSignature = "last message sts".encodeToByteArray().sha256().encodeToHex().encodeToByteArray()
 
         val buffer = SdkByteBuffer(0U)
         messageToSign.encode(buffer)
@@ -53,5 +57,9 @@ class EventStreamSigningTest {
         val expectedSignature = result.signature.encodeToHex()
         val actualSignature = result.output.headers[1].value.expectByteArray().encodeToHex()
         assertEquals(expectedSignature, actualSignature)
+
+        // FIXME - based on Rust test: https://github.com/awslabs/smithy-rs/blob/v0.38.0/aws/rust-runtime/aws-sigv4/src/event_stream.rs#L166
+        val expected = "1ea04a4f6becd85ae3e38e379ffaf4bb95042603f209512476cc6416868b31ee"
+        assertEquals(expected, actualSignature)
     }
 }
