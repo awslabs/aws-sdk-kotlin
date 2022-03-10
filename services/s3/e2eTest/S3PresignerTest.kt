@@ -5,14 +5,11 @@ import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
 import aws.sdk.kotlin.services.s3.presigners.presign
-import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.http.toByteStream
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.*
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -27,8 +24,13 @@ class S3PresignerTest {
         const val DEFAULT_REGION = "us-east-2"
     }
 
+    private val engine = CrtHttpEngine {
+        maxConnections = 64u
+    }
+
     private val client = S3Client {
         region = DEFAULT_REGION
+        httpClientEngine = engine
     }
 
     private lateinit var testBucket: String
@@ -39,58 +41,36 @@ class S3PresignerTest {
     }
 
     @AfterAll
-    private fun cleanup() = runBlocking {
+    private fun cleanup(): Unit = runBlocking {
         S3TestUtils.deleteBucketAndAllContents(client, testBucket)
+        client.close()
+        engine.close()
     }
 
     @Test
-    fun testPutObjectPresigner() = runTest {
+    fun testRoundTripBlns() = runBlocking {
         val contents = "presign-test"
+        val dispatcher = Dispatchers.IO.limitedParallelism(64)
+        val httpClient = sdkHttpClient(engine)
 
-        // FIXME - run these concurrently, test takes forever
         testKeyNames.forEach { keyName ->
-            val presignedRequest = PutObjectRequest {
-                bucket = testBucket
-                key = keyName
-            }.presign(client.config, 60.seconds)
+            launch(dispatcher) {
+                val presignedPutRequest = PutObjectRequest {
+                    bucket = testBucket
+                    key = keyName
+                }.presign(client.config, 60.seconds)
 
-            S3TestUtils.responseCodeFromPut(presignedRequest, contents)
+                S3TestUtils.responseCodeFromPut(presignedPutRequest, contents)
 
-            val req = GetObjectRequest {
-                bucket = testBucket
-                key = keyName
-            }
-            val roundTrippedContents = client.getObject(req) { it.body?.decodeToString() }
+                val presignedGetRequest = GetObjectRequest {
+                    bucket = testBucket
+                    key = keyName
+                }.presign(client.config, 60.seconds)
 
-            assertEquals(contents, roundTrippedContents)
-        }
-    }
-
-    @Test
-    fun testGetObjectPresigner() = runTest {
-        val contents = "presign-test"
-
-        // FIXME - run these concurrently, test takes forever
-        testKeyNames.reversed().forEach { keyName ->
-            client.putObject {
-                bucket = testBucket
-                key = keyName
-                body = ByteStream.fromString(contents)
-            }
-
-            val presignedRequest = GetObjectRequest {
-                bucket = testBucket
-                key = keyName
-            }.presign(client.config, 60.seconds)
-
-            CrtHttpEngine().use { engine ->
-                val httpClient = sdkHttpClient(engine)
-
-                val call = httpClient.call(presignedRequest)
-                call.complete()
-
-                assertEquals(200, call.response.status.value)
+                val call = httpClient.call(presignedGetRequest)
                 val body = call.response.body.toByteStream()?.decodeToString()
+                call.complete()
+                assertEquals(200, call.response.status.value)
                 assertEquals(contents, body)
             }
         }
@@ -248,7 +228,7 @@ val testKeyNames: List<String>
             # Unicode additional control characters: all of the characters with
             # general category Cf (in Unicode 8.0.0).
             # The next line may appear to be blank or mojibake in some viewers.
-            ­؀؁؂؃؄؅؜۝܏᠎​‌‍‎‏‪‫‬‭‮⁠⁡⁢⁣⁤⁦⁧⁨⁩⁪⁫⁬⁭⁮⁯﻿￹￺￻𑂽𛲠𛲡𛲢𛲣𝅳𝅴𝅵𝅶𝅷𝅸𝅹𝅺󠀁󠀠󠀡󠀢󠀣󠀤󠀥󠀦󠀧󠀨󠀩󠀪󠀫󠀬󠀭󠀮󠀯󠀰󠀱󠀲󠀳󠀴󠀵󠀶󠀷󠀸󠀹󠀺󠀻󠀼󠀽󠀾󠀿󠁀󠁁󠁂󠁃󠁄󠁅󠁆󠁇󠁈󠁉󠁊󠁋󠁌󠁍󠁎󠁏󠁐󠁑󠁒󠁓󠁔󠁕󠁖󠁗󠁘󠁙󠁚󠁛󠁜󠁝󠁞󠁟󠁠󠁡󠁢󠁣󠁤󠁥󠁦󠁧󠁨󠁩󠁪󠁫󠁬󠁭󠁮󠁯󠁰󠁱󠁲󠁳󠁴󠁵󠁶󠁷󠁸󠁹󠁺󠁻󠁼󠁽󠁾󠁿
+            ­؀؁؂؃؄؅؜۝܏᠎​‌‍‎‏‪‫‬‭‮⁠⁡⁢⁣⁤⁦⁧⁨⁩⁪⁫⁬⁭⁮⁯￹￺￻𑂽𛲠𛲡𛲢𛲣𝅳𝅴𝅵𝅶𝅷𝅸𝅹𝅺󠀁󠀠󠀡󠀢󠀣󠀤󠀥󠀦󠀧󠀨󠀩󠀪󠀫󠀬󠀭󠀮󠀯󠀰󠀱󠀲󠀳󠀴󠀵󠀶󠀷󠀸󠀹󠀺󠀻󠀼󠀽󠀾󠀿󠁀󠁁󠁂󠁃󠁄󠁅󠁆󠁇󠁈󠁉󠁊󠁋󠁌󠁍󠁎󠁏󠁐󠁑󠁒󠁓󠁔󠁕󠁖󠁗󠁘󠁙󠁚󠁛󠁜󠁝󠁞󠁟󠁠󠁡󠁢󠁣󠁤󠁥󠁦󠁧󠁨󠁩󠁪󠁫󠁬󠁭󠁮󠁯󠁰󠁱󠁲󠁳󠁴󠁵󠁶󠁷󠁸󠁹󠁺󠁻󠁼󠁽󠁾󠁿
     
             # "Byte order marks", U+FEFF and U+FFFE, each on its own line.
             # The next two lines may appear to be blank or mojibake in some viewers.
