@@ -9,10 +9,11 @@ import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.ExpirationStatus
 import aws.sdk.kotlin.services.s3.model.LifecycleRule
 import aws.sdk.kotlin.services.s3.model.LifecycleRuleFilter
-import aws.sdk.kotlin.services.s3.model.NotFound
+import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
+import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import java.io.OutputStreamWriter
 import java.net.URL
 import java.util.*
@@ -40,15 +41,7 @@ object S3TestUtils {
                 }
             }
 
-            do {
-                val bucketExists = try {
-                    client.headBucket { bucket = testBucket }
-                    true
-                } catch (ex: NotFound) {
-                    delay(300)
-                    false
-                }
-            } while (!bucketExists)
+            client.waitUntilBucketExists { bucket = testBucket }
         }
 
         client.putBucketLifecycleConfiguration {
@@ -68,30 +61,31 @@ object S3TestUtils {
         testBucket
     }
 
-    suspend fun deleteBucketAndAllContents(client: S3Client, bucketName: String) {
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+    suspend fun deleteBucketAndAllContents(client: S3Client, bucketName: String): Unit = coroutineScope {
+        val scope = this
+
         try {
             println("Deleting S3 bucket: $bucketName")
+            val dispatcher = Dispatchers.Default.limitedParallelism(64)
+            val jobs = mutableListOf<Job>()
 
-            var resp = client.listObjectsV2 { bucket = bucketName }
-
-            do {
-                val objects = resp.contents
-                val truncated = resp.isTruncated
-
-                objects?.forEach {
-                    client.deleteObject {
-                        bucket = bucketName
-                        key = it.key
+            // FIXME - this should use the batch `DeleteObjects` request and delete by page rather than individual key
+            //         However the current XML serializer chokes on the BLNS keys used by the presign tests. Update after
+            //         new XML implementation is available
+            client.listObjectsV2Paginated { bucket = bucketName }
+                .flatMapConcat { it.contents?.asFlow() ?: flowOf() }
+                .collect { obj ->
+                    val job = scope.launch(dispatcher) {
+                        client.deleteObject {
+                            bucket = bucketName
+                            key = obj.key
+                        }
                     }
+                    jobs.add(job)
                 }
 
-                if (truncated) {
-                    resp = client.listObjectsV2 {
-                        bucket = bucketName
-                        continuationToken = resp.continuationToken
-                    }
-                }
-            } while (truncated)
+            jobs.joinAll()
 
             client.deleteBucket { bucket = bucketName }
         } catch (ex: Exception) {
