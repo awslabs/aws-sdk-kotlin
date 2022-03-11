@@ -70,6 +70,9 @@ object S3TestUtils {
             val dispatcher = Dispatchers.Default.limitedParallelism(64)
             val jobs = mutableListOf<Job>()
 
+            // FIXME - this should use the batch `DeleteObjects` request and delete by page rather than individual key
+            //         However the current XML serializer chokes on the BLNS keys used by the presign tests. Update after
+            //         new XML implementation is available
             client.listObjectsV2Paginated { bucket = bucketName }
                 .flatMapConcat { it.contents?.asFlow() ?: flowOf() }
                 .collect { obj ->
