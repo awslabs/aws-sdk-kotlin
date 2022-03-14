@@ -80,10 +80,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 // awsJson1.1
                 // FIXME - document type not fully supported yet, see https://github.com/awslabs/smithy-kotlin/issues/123
                 "PutAndGetInlineDocumentsInput",
-
-                // smithy-kotlin#519
-                "SimpleScalarPropertiesWithWhiteSpace",
-                "SimpleScalarPropertiesPureWhiteSpace",
             ),
             TestContainmentMode.EXCLUDE_TESTS
         )
