@@ -145,7 +145,7 @@ dependencies {
     implementation(project(":aws-runtime:protocols:aws-event-stream"))
     implementation(project(":aws-runtime:aws-http"))
     implementation(project(":aws-runtime:protocols:aws-json-protocols"))
-    implementation("aws.smithy.kotlin:http-client-engine-crt:$smithyKotlinVersion") // because it is hard coded in generated source currently
+    implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
     implementation(project(":aws-runtime:aws-config"))
     implementation(project(":aws-runtime:aws-core"))
     implementation(project(":aws-runtime:aws-endpoint"))

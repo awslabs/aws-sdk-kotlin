@@ -14,7 +14,7 @@ import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.client.SdkLogMode
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.http.engine.crt.CrtHttpEngine
+import aws.smithy.kotlin.runtime.http.engine.SdkHttpEngine
 import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
 import aws.smithy.kotlin.runtime.http.middleware.Retry
 import aws.smithy.kotlin.runtime.http.operation.*
@@ -73,7 +73,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
 
     init {
         require(maxRetries > 0) { "maxRetries must be greater than zero" }
-        val engine = builder.engine ?: CrtHttpEngine {
+        val engine = builder.engine ?: SdkHttpEngine {
             connectTimeout = 1.seconds
             socketReadTimeout = 1.seconds
         }
