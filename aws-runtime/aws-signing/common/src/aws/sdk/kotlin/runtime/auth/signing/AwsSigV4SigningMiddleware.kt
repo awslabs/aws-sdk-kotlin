@@ -9,10 +9,10 @@ import aws.sdk.kotlin.crt.auth.signing.AwsSignedBodyValue
 import aws.sdk.kotlin.crt.auth.signing.AwsSigner
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
-import aws.sdk.kotlin.runtime.crt.toSignableCrtRequest
-import aws.sdk.kotlin.runtime.crt.update
 import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import aws.smithy.kotlin.runtime.client.ExecutionContext
+import aws.smithy.kotlin.runtime.crt.toSignableCrtRequest
+import aws.smithy.kotlin.runtime.crt.update
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.util.get
