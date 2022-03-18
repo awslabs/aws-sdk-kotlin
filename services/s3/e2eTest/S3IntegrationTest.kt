@@ -124,6 +124,11 @@ class S3BucketOpsIntegrationTest {
         // this is mostly a stress test of signing w.r.t path encoding (since key is bound
         // via @httpLabel) and the ability of an HTTP engine to keep the same encoding going
         // out on the wire (e.g. not double percent encoding)
+
+        // NOTE: S3 provides guidance on choosing object key names: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html
+        // This test includes all printable chars (including ones S3 recommends avoiding). Users should
+        // strive to fall within the guidelines given by S3 though
+
         s3WithAllEngines { s3 ->
             val objKey = "foo$PRINTABLE_CHARS"
             val content = "hello rfc3986"
