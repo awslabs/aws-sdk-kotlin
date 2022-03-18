@@ -18,6 +18,7 @@ kotlin {
         commonMain {
             dependencies {
                 val crtKotlinVersion: String by project
+                api(project(":aws-runtime:aws-core"))
                 // signing config uses CredentialsProvider/Credentials
                 api(project(":aws-runtime:aws-types"))
                 // presigner config exposes endpoint resolver
@@ -25,7 +26,7 @@ kotlin {
                 // sign() API takes HttpRequest
                 api("aws.smithy.kotlin:http:$smithyKotlinVersion")
 
-                implementation(project(":aws-runtime:crt-util"))
+                implementation("aws.smithy.kotlin:crt-util:$smithyKotlinVersion")
                 implementation("aws.sdk.kotlin.crt:aws-crt-kotlin:$crtKotlinVersion")
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
             }

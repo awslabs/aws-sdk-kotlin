@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.codegen.protocols.core
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import aws.sdk.kotlin.codegen.sdkId
@@ -36,7 +35,7 @@ open class AwsHttpProtocolClientGenerator(
     override val defaultHttpClientEngineSymbol: Symbol
         get() = buildSymbol {
             name = "CrtHttpEngine"
-            namespace(AwsKotlinDependency.AWS_CRT_HTTP_ENGINE)
+            namespace(KotlinDependency.AWS_CRT_HTTP_ENGINE)
         }
 
     override fun render(writer: KotlinWriter) {

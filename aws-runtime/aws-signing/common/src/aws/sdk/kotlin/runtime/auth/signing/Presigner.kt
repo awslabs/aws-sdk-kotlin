@@ -12,11 +12,11 @@ import aws.sdk.kotlin.crt.auth.signing.AwsSigner
 import aws.sdk.kotlin.crt.auth.signing.AwsSigningConfig
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
-import aws.sdk.kotlin.runtime.crt.path
-import aws.sdk.kotlin.runtime.crt.queryParameters
-import aws.sdk.kotlin.runtime.crt.toCrtHeaders
-import aws.sdk.kotlin.runtime.crt.toSdkHeaders
 import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
+import aws.smithy.kotlin.runtime.crt.path
+import aws.smithy.kotlin.runtime.crt.queryParameters
+import aws.smithy.kotlin.runtime.crt.toCrtHeaders
+import aws.smithy.kotlin.runtime.crt.toSdkHeaders
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpMethod

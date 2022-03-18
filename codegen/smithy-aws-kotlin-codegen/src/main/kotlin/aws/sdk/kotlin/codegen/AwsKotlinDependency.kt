@@ -42,7 +42,6 @@ object AwsKotlinDependency {
     val AWS_TYPES = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-types", AWS_CLIENT_RT_VERSION)
     val AWS_JSON_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.json", AWS_CLIENT_RT_GROUP, "aws-json-protocols", AWS_CLIENT_RT_VERSION)
     val AWS_XML_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.xml", AWS_CLIENT_RT_GROUP, "aws-xml-protocols", AWS_CLIENT_RT_VERSION)
-    val AWS_CRT_HTTP_ENGINE = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http.engine.crt", AWS_CLIENT_RT_GROUP, "http-client-engine-crt", AWS_CLIENT_RT_VERSION)
     val AWS_EVENT_STREAM = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.eventstream", AWS_CLIENT_RT_GROUP, "aws-event-stream", AWS_CLIENT_RT_VERSION)
 }
 
@@ -59,7 +58,6 @@ private val sameProjectDeps: Map<KotlinDependency, String> by lazy {
         AwsKotlinDependency.AWS_TYPES to """project(":aws-runtime:aws-types")""",
         AwsKotlinDependency.AWS_JSON_PROTOCOLS to """project(":aws-runtime:protocols:aws-json-protocols")""",
         AwsKotlinDependency.AWS_XML_PROTOCOLS to """project(":aws-runtime:protocols:aws-xml-protocols")""",
-        AwsKotlinDependency.AWS_CRT_HTTP_ENGINE to """project(":aws-runtime:http-client-engine-crt")""",
         AwsKotlinDependency.AWS_EVENT_STREAM to """project(":aws-runtime:protocols:aws-event-stream")""",
     )
 }
