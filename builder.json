@@ -32,10 +32,10 @@
     ],
     "upstream": [
         {
-            "name": "smithy-kotlin"
+            "name": "aws-crt-kotlin"
         },
         {
-            "name": "aws-crt-kotlin"
+            "name": "smithy-kotlin"
         }
     ],
     "variants": {
