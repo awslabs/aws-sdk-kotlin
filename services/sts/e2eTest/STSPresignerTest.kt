@@ -1,8 +1,8 @@
 package aws.sdk.kotlin.services.sts
 
-import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import aws.sdk.kotlin.services.sts.model.GetCallerIdentityRequest
 import aws.sdk.kotlin.services.sts.presigners.presign
+import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,13 +25,13 @@ class StsPresignerTest {
         val req = GetCallerIdentityRequest { }
         val presignedRequest = req.presign(c.config, 60.seconds)
 
-        CrtHttpEngine().use { engine ->
+        withAllEngines { engine ->
             val httpClient = sdkHttpClient(engine)
 
             val call = httpClient.call(presignedRequest)
             call.complete()
 
-            assertEquals(200, call.response.status.value)
+            assertEquals(200, call.response.status.value, "presigned sts request failed for engine: $engine")
         }
     }
 }

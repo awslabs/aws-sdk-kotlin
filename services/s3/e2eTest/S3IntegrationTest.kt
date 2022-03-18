@@ -6,6 +6,8 @@ package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
+import aws.sdk.kotlin.testing.PRINTABLE_CHARS
+import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.content.fromFile
@@ -100,15 +102,63 @@ class S3BucketOpsIntegrationTest {
     }
 
     @Test
-    fun testListObjectsWithDelimiter(): Unit = runBlocking {
+    fun testQueryParameterEncoding(): Unit = runBlocking {
         // see: https://github.com/awslabs/aws-sdk-kotlin/issues/448
 
-        client.listObjects {
-            bucket = testBucket
-            delimiter = "/"
-            prefix = null
-        }
+        // this is mostly a stress test of signing w.r.t query parameter encoding (since
+        // delimiter is bound via @httpQuery) and the ability of an HTTP engine to keep
+        // the same encoding going out on the wire (e.g. not double percent encoding)
 
-        // only care that request is accepted, not the results
+        s3WithAllEngines { s3 ->
+            s3.listObjects {
+                bucket = testBucket
+                delimiter = PRINTABLE_CHARS
+                prefix = null
+            }
+            // only care that request is accepted, not the results
+        }
+    }
+
+    @Test
+    fun testPathEncoding(): Unit = runBlocking {
+        // this is mostly a stress test of signing w.r.t path encoding (since key is bound
+        // via @httpLabel) and the ability of an HTTP engine to keep the same encoding going
+        // out on the wire (e.g. not double percent encoding)
+        s3WithAllEngines { s3 ->
+            val objKey = "foo$PRINTABLE_CHARS"
+            val content = "hello rfc3986"
+
+            s3.putObject {
+                bucket = testBucket
+                key = objKey
+                body = ByteStream.fromString(content)
+            }
+
+            val req = GetObjectRequest {
+                bucket = testBucket
+                key = objKey
+            }
+
+            s3.getObject(req) { resp ->
+                val actual = resp.body!!.decodeToString()
+                assertEquals(content, actual)
+            }
+        }
+    }
+}
+
+internal suspend fun s3WithAllEngines(block: suspend (S3Client) -> Unit) {
+    withAllEngines { engine ->
+        S3Client {
+            region = S3BucketOpsIntegrationTest.DEFAULT_REGION
+            httpClientEngine = engine
+        }.use {
+            try {
+                block(it)
+            } catch (ex: Exception) {
+                println("test failed for engine $engine")
+                throw ex
+            }
+        }
     }
 }
