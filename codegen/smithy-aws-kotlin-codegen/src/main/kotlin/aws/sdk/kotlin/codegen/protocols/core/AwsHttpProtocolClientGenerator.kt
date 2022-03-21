@@ -10,7 +10,6 @@ import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.codegen.core.CodegenException
-import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
@@ -31,12 +30,6 @@ open class AwsHttpProtocolClientGenerator(
     middlewares: List<ProtocolMiddleware>,
     httpBindingResolver: HttpBindingResolver
 ) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
-
-    override val defaultHttpClientEngineSymbol: Symbol
-        get() = buildSymbol {
-            name = "CrtHttpEngine"
-            namespace(KotlinDependency.AWS_CRT_HTTP_ENGINE)
-        }
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")

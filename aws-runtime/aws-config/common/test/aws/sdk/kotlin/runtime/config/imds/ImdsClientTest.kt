@@ -212,7 +212,7 @@ class ImdsClientTest {
         connection.assertRequests()
     }
 
-    @IgnoreWindows("DNS fails faster on windows and results in a different error")
+    @IgnoreWindows("DNS fails faster on windows and results in a different error: `socket connect failure, no route to host`")
     @Test
     fun testHttpConnectTimeouts() = runBlocking {
         // end-to-end real client times out after 1-second
@@ -227,8 +227,9 @@ class ImdsClientTest {
                 client.get("/latest/metadata")
             }
         }
-        // on windows DNS fails faster with message `socket connect failure, no route to host.
-        assertTrue(ex.message!!.lowercase().contains("timed out"), "message `${ex.message}`")
+
+        // this message is asserted against whatever the default HTTP client engine throws for an exception...
+        assertTrue(ex.message!!.lowercase().contains("timeout has expired"), "message `${ex.message}`")
         val elapsed = Instant.now().epochMilliseconds - start.epochMilliseconds
         assertTrue(elapsed >= 1000, "expected elapsed ms to be greater than 1000; actual = $elapsed")
         assertTrue(elapsed < 2000, "expected elapsed ms to be less than 2000; actual = $elapsed")
