@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.testing
 
+import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.http.engine.SdkHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.crt.CrtHttpEngine
 
 /**
@@ -19,7 +19,7 @@ val PRINTABLE_CHARS = ByteArray(127 - 32) { (it + 32).toByte() }.decodeToString(
  */
 suspend fun withAllEngines(block: suspend (HttpClientEngine) -> Unit) {
     val engines = listOf(
-        SdkHttpEngine(),
+        DefaultHttpEngine(),
         CrtHttpEngine()
     )
 
