@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.services.s3.presigners
 
+import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.ObjectCannedAcl
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
@@ -25,7 +26,13 @@ class PresignersTest {
             key = "bar"
             acl = ObjectCannedAcl.BucketOwnerFullControl
         }
-        val config = S3Client.Config { region = "us-west-2" }
+        val config = S3Client.Config {
+            region = "us-west-2"
+            credentialsProvider = StaticCredentialsProvider {
+                accessKeyId = "AKID"
+                secretAccessKey = "secret"
+            }
+        }
         val presigned = req.presign(config, 1.days)
 
         val aclHeader = presigned.headers["x-amz-acl"]
