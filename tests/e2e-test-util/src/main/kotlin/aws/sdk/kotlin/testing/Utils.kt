@@ -12,7 +12,7 @@ import aws.smithy.kotlin.runtime.http.engine.crt.CrtHttpEngine
 /**
  * Printable ASCII characters
  */
-val PRINTABLE_CHARS = ByteArray(127 - 32) { (it + 32).toByte() }.decodeToString()
+val PRINTABLE_CHARS = (32 until 127).map(Int::toChar).joinToString("")
 
 /**
  * Run the [block] with each supported engine
