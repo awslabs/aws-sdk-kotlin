@@ -18,7 +18,7 @@ import software.amazon.smithy.model.transform.ModelTransformer
 import java.util.logging.Logger
 
 /**
- * Temporary integration to remove ChecksumAlgorithm fields from models.
+ * Temporary integration to remove flexible checksum fields from models.
  * TODO https://github.com/awslabs/aws-sdk-kotlin/issues/557
  */
 class RemoveChecksumSelectionFields : KotlinIntegration {
@@ -34,20 +34,14 @@ class RemoveChecksumSelectionFields : KotlinIntegration {
         val dropMembers = model
             .shapes<OperationShape>()
             .filter { it.hasTrait<HttpChecksumTrait>() }
-            .mapNotNull { op ->
-                val dropMemberName = op
-                    .expectTrait<HttpChecksumTrait>()
-                    .requestAlgorithmMember
-                    .getOrNull()
+            .flatMap { op ->
+                val trait = op.expectTrait<HttpChecksumTrait>()
 
-                if (dropMemberName == null) {
-                    null
-                } else {
-                    model
-                        .expectShape(op.inputShape)
-                        .members()
-                        .first { it.memberName == dropMemberName }
-                }
+                val requestAlgorithmMember = trait.requestAlgorithmMember.getOrNull()
+                val requestValidationModeMember = trait.requestValidationModeMember.getOrNull()
+
+                listOfNotNull(requestAlgorithmMember, requestValidationModeMember)
+                    .map { findInputMember(model, op, it) }
             }
             .toSet()
 
@@ -55,7 +49,7 @@ class RemoveChecksumSelectionFields : KotlinIntegration {
             when (shape) {
                 is MemberShape -> (shape !in dropMembers).also {
                     if (!it) {
-                        logger.warning("Removed $shape from model because it is a flexible checksum selector")
+                        logger.warning("Removed $shape from model because it is a flexible checksum member")
                     }
                 }
                 else -> true
@@ -63,3 +57,6 @@ class RemoveChecksumSelectionFields : KotlinIntegration {
         }
     }
 }
+
+private fun findInputMember(model: Model, op: OperationShape, name: String): MemberShape =
+    model.expectShape(op.inputShape).members().first { it.memberName == name }

@@ -19,6 +19,26 @@ class RemoveChecksumSelectionFieldsTest {
     fun testRemovingChecksumFields() {
         val model = """
             @httpChecksum(
+                requestValidationModeMember: "checksumMode"
+            )
+            operation GetObject {
+                input: GetObjectRequest,
+            }
+            
+            structure GetObjectRequest {
+                key: String,
+                checksumMode: ChecksumMode
+            }
+            
+            @enum([
+                {
+                    value: "ENABLED",
+                    name: "ENABLED"
+                }
+            ])
+            string ChecksumMode
+            
+            @httpChecksum(
                 requestAlgorithmMember: "checksumAlgorithm"
             )
             operation PutObject {
@@ -51,14 +71,20 @@ class RemoveChecksumSelectionFieldsTest {
             string ChecksumAlgorithm
         """.prependNamespaceAndService(
             imports = listOf("aws.protocols#httpChecksum"),
-            operations = listOf("PutObject"),
+            operations = listOf("GetObject", "PutObject"),
         ).toSmithyModel()
 
         val ctx = model.newTestContext()
         val transformed = RemoveChecksumSelectionFields().preprocessModel(model, ctx.generationCtx.settings)
-        val op = transformed.expectShape<OperationShape>("com.test#PutObject")
-        val req = transformed.expectShape<StructureShape>(op.inputShape)
-        assertTrue("key" in req.memberNames, "Expected 'key' in request object")
-        assertFalse("checksumAlgorithm" in req.memberNames, "Unexpected 'checksumAlgorithm' in request object")
+
+        val getOp = transformed.expectShape<OperationShape>("com.test#PutObject")
+        val getReq = transformed.expectShape<StructureShape>(getOp.inputShape)
+        assertTrue("key" in getReq.memberNames, "Expected 'key' in request object")
+        assertFalse("checksumMode" in getReq.memberNames, "Unexpected 'checksumMode' in request object")
+
+        val putOp = transformed.expectShape<OperationShape>("com.test#PutObject")
+        val putReq = transformed.expectShape<StructureShape>(putOp.inputShape)
+        assertTrue("key" in putReq.memberNames, "Expected 'key' in request object")
+        assertFalse("checksumAlgorithm" in putReq.memberNames, "Unexpected 'checksumAlgorithm' in request object")
     }
 }
