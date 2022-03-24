@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.14.0-beta] - 03/24/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Breaking changes
+* replace default HTTP client engine [#554](https://github.com/awslabs/aws-sdk-kotlin/pull/554)
+
+### New features
+* bootstrap event streams [#545](https://github.com/awslabs/aws-sdk-kotlin/pull/545)
+
+### Fixes
+* temporarily bypass httpchecksum traits until full flexible checksum support is available [#558](https://github.com/awslabs/aws-sdk-kotlin/pull/558)
+* include headers in presigning requests [#556](https://github.com/awslabs/aws-sdk-kotlin/pull/556)
+* backfill optional auth trait for cognito and cognito-idp [#555](https://github.com/awslabs/aws-sdk-kotlin/pull/555)
+
+### Miscellaneous
+* update AWS models to latest versions [#559](https://github.com/awslabs/aws-sdk-kotlin/pull/559)
+* cleanup presign tests [#546](https://github.com/awslabs/aws-sdk-kotlin/pull/546)
+
 ## [0.13.1-beta] - 02/25/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
