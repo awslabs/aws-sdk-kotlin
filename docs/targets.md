@@ -20,7 +20,6 @@ for the Android versions you choose to support in your application.
 Additional requirements:
 
 * Enable [core library desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
-* Exclude `xmlpull` module
 
 Example config fragments:
 
@@ -36,11 +35,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-}
-
-// get around a build issue with xmlpull as a dependency
-configurations.all {
-    exclude(group = "xmlpull", module = "xmlpull")
 }
 
 dependencies {
