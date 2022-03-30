@@ -101,7 +101,6 @@ tasks.dokkaHtmlMultiModule.configure {
 
     val excludeFromDocumentation = listOf(
         project(":aws-runtime:testing"),
-        project(":aws-runtime:crt-util"),
     )
     removeChildTasks(excludeFromDocumentation)
 }

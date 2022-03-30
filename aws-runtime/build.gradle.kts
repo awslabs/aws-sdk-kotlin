@@ -86,12 +86,6 @@ subprojects {
     }
 }
 
-// FIXME - resolves build deadlock with aws-core when using composite builds
-val topLevelModule = "crt-util"
-subprojects.filter { it.name != topLevelModule }.forEach { proj ->
-    proj.tasks.findByName("generatePomFileForJvmPublication")?.dependsOn(":aws-runtime:$topLevelModule:generatePomFileForJvmPublication")
-}
-
 task<org.jetbrains.kotlin.gradle.testing.internal.KotlinTestReport>("rootAllTest"){
     destinationDir = File(project.buildDir, "reports/tests/rootAllTest")
     val rootAllTest = this

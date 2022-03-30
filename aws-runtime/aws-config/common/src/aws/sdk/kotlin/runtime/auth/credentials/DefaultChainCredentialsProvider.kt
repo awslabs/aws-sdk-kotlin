@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
-import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
+import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.Platform
@@ -42,7 +42,7 @@ public class DefaultChainCredentialsProvider constructor(
 ) : CredentialsProvider, Closeable {
 
     private val manageEngine = httpClientEngine == null
-    private val httpClientEngine = httpClientEngine ?: CrtHttpEngine()
+    private val httpClientEngine = httpClientEngine ?: DefaultHttpEngine()
 
     private val chain = CredentialsProviderChain(
         EnvironmentCredentialsProvider(platformProvider::getenv),

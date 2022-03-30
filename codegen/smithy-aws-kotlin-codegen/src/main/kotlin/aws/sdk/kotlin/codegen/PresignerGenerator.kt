@@ -294,7 +294,8 @@ class PresignerGenerator : KotlinIntegration {
                     presignConfigFnVisitor.renderQueryParameters(writer)
                     write("duration,")
                     write("${presignableOp.signBody},")
-                    write("SigningLocation.QUERY_STRING")
+                    write("SigningLocation.QUERY_STRING,")
+                    write("httpRequestBuilder.headers.build(),")
                 }
             }
         }

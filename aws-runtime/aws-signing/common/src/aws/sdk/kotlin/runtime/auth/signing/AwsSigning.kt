@@ -7,8 +7,8 @@ package aws.sdk.kotlin.runtime.auth.signing
 
 import aws.sdk.kotlin.crt.auth.signing.AwsSigner
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.crt.toSignableCrtRequest
-import aws.sdk.kotlin.runtime.crt.update
+import aws.smithy.kotlin.runtime.crt.toSignableCrtRequest
+import aws.smithy.kotlin.runtime.crt.update
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.request.toBuilder
 

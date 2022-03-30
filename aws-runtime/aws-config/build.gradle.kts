@@ -24,7 +24,7 @@ kotlin {
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
-                implementation(project(":aws-runtime:http-client-engine-crt"))
+                implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:aws-http"))
 
                 // parsing common JSON credentials responses

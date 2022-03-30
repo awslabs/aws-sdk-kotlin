@@ -37,13 +37,12 @@ include(":aws-runtime:aws-config")
 include(":aws-runtime:aws-endpoint")
 include(":aws-runtime:aws-signing")
 include(":aws-runtime:aws-http")
-include(":aws-runtime:http-client-engine-crt")
 include(":aws-runtime:protocols:aws-json-protocols")
 include(":aws-runtime:protocols:aws-xml-protocols")
 include(":aws-runtime:protocols:aws-event-stream")
-include(":aws-runtime:crt-util")
 include(":tests")
 include(":tests:codegen:event-stream")
+include(":tests:e2e-test-util")
 
 // generated services
 fun File.isServiceDir(): Boolean {

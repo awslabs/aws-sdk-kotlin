@@ -8,10 +8,10 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsContainerCredentialsRelativeUri
 import aws.sdk.kotlin.runtime.config.resolve
-import aws.sdk.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import aws.smithy.kotlin.runtime.ServiceException
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
 import aws.smithy.kotlin.runtime.http.middleware.Retry
@@ -66,7 +66,7 @@ public class EcsCredentialsProvider internal constructor(
     public constructor() : this(Platform)
 
     private val manageEngine = httpClientEngine == null
-    private val httpClientEngine = httpClientEngine ?: CrtHttpEngine()
+    private val httpClientEngine = httpClientEngine ?: DefaultHttpEngine()
 
     private val retryMiddleware = run {
         val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
