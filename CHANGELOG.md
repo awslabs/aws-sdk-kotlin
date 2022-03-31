@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.14.1-beta] - 03/31/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### New features
+* implement KMP XML serde and remove XmlPull dependency [#563](https://github.com/awslabs/aws-sdk-kotlin/pull/563)
+
+### Miscellaneous
+* sync AWS service models [#564](https://github.com/awslabs/aws-sdk-kotlin/pull/564)
+
 ## [0.14.0-beta] - 03/24/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
