@@ -56,6 +56,10 @@ internal fun Project.registerCodegenTasks() {
         classpath = codegenConfig
         smithyBuildConfigs = files(smithyBuildConfig)
 
+        // use the actual project build directory rather than the erroneous default smithy uses which defaults is
+        // correct in the default case but doesn't respect the buildDir setting being changed
+        outputDirectory = buildDir.resolve("smithyprojections/${project.name}")
+
         inputs.file(smithyBuildConfig)
 
         val extension = project.codegenExtension
