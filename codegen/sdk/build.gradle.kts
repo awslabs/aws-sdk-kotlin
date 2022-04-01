@@ -91,7 +91,7 @@ data class AwsService(
      */
     val description: String? = null,
 
-    )
+)
 
 
 val disabledServices = setOf(
