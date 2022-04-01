@@ -290,10 +290,12 @@ fun String.kotlinNamespace(): String = split(".")
 
 /**
  * The project directory under `aws-sdk-kotlin/services`
+ *
+ * NOTE: this will also be the artifact name in the GAV coordinates
  */
 val AwsService.destinationDir: String
     get(){
-        val sanitizedName = projectionName.split(".")[0]
+        val sanitizedName = sdkId.replace(" ", "").replace("-", "").toLowerCase()
         return rootProject.file("services/${sanitizedName}").absolutePath
     }
 
