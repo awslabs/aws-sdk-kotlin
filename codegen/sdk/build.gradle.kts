@@ -55,7 +55,7 @@ data class AwsService(
     /**
      * The service shape ID name
      */
-    val name: String,
+    val serviceShapeId: String,
     /**
      * The package name to use for the service when generating smithy-build.json
      */
@@ -96,11 +96,11 @@ data class AwsService(
 
 val disabledServices = setOf(
     // Only contains event streams
-    "transcribestreaming",
+    "transcribe-streaming",
     // timestream requires endpoint discovery
     // https://github.com/awslabs/smithy-kotlin/issues/146
-    "timestreamwrite",
-    "timestreamquery"
+    "timestream-write",
+    "timestream-query"
 )
 
 // Manually create the projections rather than using the extension to avoid unnecessary configuration evaluation.
@@ -123,7 +123,7 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                 transforms = transformsForService(service) ?: emptyList()
 
                 smithyKotlinPlugin {
-                    serviceShapeId = service.name
+                    serviceShapeId = service.serviceShapeId
                     packageName = service.packageName
                     packageVersion = service.packageVersion
                     packageDescription = service.description
@@ -213,23 +213,28 @@ fun discoverServices(applyFilters: Boolean = true): List<AwsService> {
             include
         }
         .map { (file, service) ->
-            val serviceApi = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
+            val serviceTrait = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
                 ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
-            val (name, version, _) = file.name.split(".")
+            val name = file.nameWithoutExtension
 
-            val packageName = name.kotlinNamespace()
+            // derive a package namespace based on sdkId which should end up unique across AWS services
+            val packageName = serviceTrait.sdkId.replace(" ", "")
+                .replace("-", "")
+                .toLowerCase()
+                .kotlinNamespace()
+
             val description = service.getTrait(software.amazon.smithy.model.traits.TitleTrait::class.java).map { it.value }.orNull()
 
-            logger.info("discovered service: ${serviceApi.sdkId}")
+            logger.info("discovered service: ${serviceTrait.sdkId}")
 
             val sdkVersion: String by project
             AwsService(
-                name = service.id.toString(),
+                serviceShapeId = service.id.toString(),
                 packageName = "$sdkPackageNamePrefix$packageName",
                 packageVersion = sdkVersion,
                 modelFile = file,
-                projectionName = name + "." + version.toLowerCase(),
-                sdkId = serviceApi.sdkId,
+                projectionName = name,
+                sdkId = serviceTrait.sdkId,
                 version = service.version,
                 description = description
             )
@@ -285,10 +290,12 @@ fun String.kotlinNamespace(): String = split(".")
 
 /**
  * The project directory under `aws-sdk-kotlin/services`
+ *
+ * NOTE: this will also be the artifact name in the GAV coordinates
  */
 val AwsService.destinationDir: String
     get(){
-        val sanitizedName = projectionName.split(".")[0]
+        val sanitizedName = sdkId.replace(" ", "").replace("-", "").toLowerCase()
         return rootProject.file("services/${sanitizedName}").absolutePath
     }
 
@@ -356,8 +363,8 @@ data class SourceModel(
      */
     val destFilename: String
         get() {
-            val name = sdkId.replace(" ", "").replace("-", "").toLowerCase()
-            return "${name}.${version}.json"
+            val name = sdkId.replace(" ", "-").toLowerCase()
+            return "$name.json"
         }
 }
 
