@@ -14,7 +14,7 @@ tasks.register("javadocJar", Jar) {
 
 publishing {
     repositories {
-        maven { name = "testLocal"; url = "$rootProject.buildDir/m2" }
+        maven { name = "localBuildDir"; url = "$rootProject.buildDir/m2" }
         maven {
             name = "awsCodeArtifact"
             url = project.findProperty("codeartifact.url")

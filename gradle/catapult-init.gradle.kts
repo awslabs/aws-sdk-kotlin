@@ -7,6 +7,7 @@
 
 gradle.projectsLoaded {
     rootProject.allprojects {
+        // out of source build - place all build artifacts in a single location
         buildDir = rootProject.file("build-dir/${rootProject.name}/${project.name}")
     }
 }
