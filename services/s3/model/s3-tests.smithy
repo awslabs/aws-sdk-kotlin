@@ -73,7 +73,7 @@ apply CreateBucket @httpRequestTests([
         uri: "/mybucket",
         host: "s3.us-west-2.amazonaws.com",
         body: "",
-        forbidHeaders: ["Content-Type"],
+        forbidHeaders: ["Content-Type", "Content-Length"],
         params: {
             Bucket: "mybucket",
         }
@@ -87,7 +87,8 @@ apply CreateBucket @httpRequestTests([
         host: "s3.us-west-2.amazonaws.com",
         body: "<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\"><LocationConstraint>us-east-2</LocationConstraint></CreateBucketConfiguration>",
         headers: {
-            "Content-Type": "application/xml"
+            "Content-Type": "application/xml",
+            "Content-Length": "153"
         },
         params: {
             Bucket: "mybucket",
