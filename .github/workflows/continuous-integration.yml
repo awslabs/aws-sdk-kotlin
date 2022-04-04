@@ -72,7 +72,9 @@ jobs:
         # windows job runs out of memory with the defaults normally used
         shell: bash
         run: |
-          sed -i 's/org\.gradle\.jvmargs=.*$/org.gradle.jvmargs=-Xmx5g/' gradle.properties
+          systeminfo
+          sed -i 's/org\.gradle\.jvmargs=.*$/org.gradle.jvmargs=-Xmx4g/' gradle.properties
+          echo "org.gradle.parallel=false" >> gradle.properties
           cat gradle.properties
       - name: Build and Test ${{ env.PACKAGE_NAME }}
         run: |
