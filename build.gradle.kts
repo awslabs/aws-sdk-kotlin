@@ -6,7 +6,7 @@ import java.util.Properties
 import java.net.URL
 
 plugins {
-    kotlin("jvm") version "1.6.10" apply false
+    kotlin("jvm") version "1.6.20" apply false
     id("org.jetbrains.dokka")
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
