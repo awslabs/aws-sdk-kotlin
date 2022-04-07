@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.2-beta] - 04/07/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Fixes
+
+* fix timeout on large requests [#572](https://github.com/awslabs/aws-sdk-kotlin/issues/572)
+
 ## [0.14.1-beta] - 03/31/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
