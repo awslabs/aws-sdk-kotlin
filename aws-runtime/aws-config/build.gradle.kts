@@ -77,7 +77,7 @@ codegen {
         // generate an sts client
         create("sts-credentials-provider") {
             imports = listOf(
-                awsModelFile("sts.2011-06-15.json")
+                awsModelFile("sts.json")
             )
 
             smithyKotlinPlugin {
@@ -111,7 +111,7 @@ codegen {
         // generate an sso client
         create("sso-credentials-provider") {
             imports = listOf(
-                awsModelFile("sso.2019-06-10.json")
+                awsModelFile("sso.json")
             )
 
             val serviceShape = "com.amazonaws.sso#SWBPortalService"
