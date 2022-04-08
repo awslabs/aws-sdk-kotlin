@@ -13,6 +13,8 @@ import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.profile.loadAwsProfiles
 import aws.sdk.kotlin.runtime.config.profile.resolveConfigSource
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger

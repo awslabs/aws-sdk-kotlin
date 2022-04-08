@@ -9,8 +9,11 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsContainerCredentialsRelativeUri
 import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.ServiceException
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint

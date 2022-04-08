@@ -5,6 +5,9 @@
 
 package aws.sdk.kotlin.runtime.endpoint
 
+import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpoint
+import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpointResolver
+
 /**
  * An [AwsEndpointResolver] that returns a static endpoint
  */

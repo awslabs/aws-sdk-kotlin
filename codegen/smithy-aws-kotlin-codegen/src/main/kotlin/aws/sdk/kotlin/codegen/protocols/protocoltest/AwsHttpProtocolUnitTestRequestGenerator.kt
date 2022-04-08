@@ -8,6 +8,7 @@ package aws.sdk.kotlin.codegen.protocols.protocoltest
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestRequestGenerator
 import software.amazon.smithy.model.Model
@@ -26,12 +27,12 @@ class AwsHttpProtocolUnitTestRequestGenerator(builder: Builder) :
         renderConfigureAwsServiceClient(writer, model, serviceShape, operation)
         test.host.ifPresent { expectedHost ->
             // add an endpoint resolver
-            writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpoint)
-            writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpointResolver)
+            writer.addImport(RuntimeTypes.Http.Endpoints.AwsEndpoint)
+            writer.addImport(RuntimeTypes.Http.Endpoints.AwsEndpointResolver)
             writer.write(
                 "endpointResolver = #T { _, _ -> #T(#S) }",
-                AwsRuntimeTypes.Endpoint.AwsEndpointResolver,
-                AwsRuntimeTypes.Endpoint.AwsEndpoint,
+                RuntimeTypes.Http.Endpoints.AwsEndpointResolver,
+                RuntimeTypes.Http.Endpoints.AwsEndpoint,
                 "https://$expectedHost"
             )
         }
@@ -51,7 +52,7 @@ internal fun <T : HttpMessageTestCase> HttpProtocolUnitTestGenerator<T>.renderCo
 ) {
     if (AwsSignatureVersion4.hasSigV4AuthScheme(model, serviceShape, operation)) {
         writer.addImport(AwsRuntimeTypes.Config.Credentials.StaticCredentialsProvider)
-        writer.addImport(AwsRuntimeTypes.Types.Credentials)
+        writer.addImport(RuntimeTypes.Auth.Credentials.AwsCredentials.Credentials)
         writer.write("val credentials = Credentials(#S, #S)", "AKID", "SECRET")
         writer.write("credentialsProvider = StaticCredentialsProvider(credentials)")
     }

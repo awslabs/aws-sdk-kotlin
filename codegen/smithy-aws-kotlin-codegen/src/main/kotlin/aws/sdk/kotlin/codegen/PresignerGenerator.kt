@@ -72,13 +72,13 @@ class PresignerGenerator : KotlinIntegration {
         RuntimeTypes.Http.Request.HttpRequest,
         RuntimeTypes.Core.ExecutionContext,
         // AWS types
-        AwsRuntimeTypes.Types.CredentialsProvider,
+        RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider,
         AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
-        AwsRuntimeTypes.Signing.PresignedRequestConfig,
-        AwsRuntimeTypes.Signing.ServicePresignConfig,
-        AwsRuntimeTypes.Signing.SigningLocation,
-        AwsRuntimeTypes.Signing.createPresignedRequest,
-        AwsRuntimeTypes.Endpoint.AwsEndpointResolver
+        RuntimeTypes.Auth.Signing.AwsSigningCommon.PresignedRequestConfig,
+        RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig,
+        RuntimeTypes.Auth.Signing.AwsSigningCommon.SigningLocation,
+        RuntimeTypes.Auth.Signing.AwsSigningCommon.createPresignedRequest,
+        RuntimeTypes.Http.Endpoints.AwsEndpointResolver,
     )
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
@@ -223,7 +223,7 @@ class PresignerGenerator : KotlinIntegration {
         val ccg = ClientConfigGenerator(
             renderingContext,
             false,
-            AwsRuntimeTypes.Signing.ServicePresignConfig,
+            RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig,
             *clientProperties.toTypedArray()
         )
         ccg.render()
@@ -354,20 +354,30 @@ class PresignerGenerator : KotlinIntegration {
     private fun getClientProperties(sigv4ServiceName: String, serviceId: String): List<ClientConfigProperty> =
         listOf(
             ClientConfigProperty {
-                symbol = AwsRuntimeTypes.Types.CredentialsProvider
+                symbol = RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigner
+                name = "signer"
+                documentation = "The implementation of AWS signer to use for signing requests"
+                baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
+                propertyType = ClientConfigPropertyType.RequiredWithDefault("CrtAwsSigner")
+                additionalImports = listOf(
+                    RuntimeTypes.Auth.Signing.AwsSigningCrt.CrtAwsSigner,
+                )
+            },
+            ClientConfigProperty {
+                symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
                 name = "credentialsProvider"
                 documentation =
                     "The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used."
-                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
                 // TODO - we could probably relax this and instead create a default chain in createPresignedRequest on-demand in the runtime and close it when done signing
                 propertyType = ClientConfigPropertyType.Required()
             },
             ClientConfigProperty {
-                symbol = AwsRuntimeTypes.Endpoint.AwsEndpointResolver
+                symbol = RuntimeTypes.Http.Endpoints.AwsEndpointResolver
                 name = "endpointResolver"
                 documentation =
                     "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
-                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
                 propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultEndpointResolver()")
             },
             ClientConfigProperty {
@@ -378,21 +388,21 @@ class PresignerGenerator : KotlinIntegration {
                 }
                 name = "region"
                 documentation = "AWS region to make requests for"
-                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
                 propertyType = ClientConfigPropertyType.Required()
             },
             ClientConfigProperty {
                 symbol = KotlinTypes.String
                 name = "signingName"
                 documentation = "Service identifier used to sign requests"
-                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
                 propertyType = ClientConfigPropertyType.ConstantValue(sigv4ServiceName.dq())
             },
             ClientConfigProperty {
                 symbol = KotlinTypes.String
                 name = "serviceId"
                 documentation = "Service identifier used to resolve endpoints"
-                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
                 propertyType = ClientConfigPropertyType.ConstantValue(serviceId.dq())
             },
             ClientConfigProperty {
@@ -403,7 +413,7 @@ class PresignerGenerator : KotlinIntegration {
                 }
                 name = "useDoubleUriEncode"
                 documentation = "Determines if presigner should double encode Uri"
-                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
                 propertyType = ClientConfigPropertyType.ConstantValue(useDoubleUriEncodeValueForService(serviceId))
             },
             ClientConfigProperty {
@@ -414,7 +424,7 @@ class PresignerGenerator : KotlinIntegration {
                 }
                 name = "normalizeUriPath"
                 documentation = "Determines if presigned URI path will be normalized"
-                baseClass = AwsRuntimeTypes.Signing.ServicePresignConfig
+                baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
                 propertyType = ClientConfigPropertyType.ConstantValue(normalizeUriPathValueForService(serviceId))
             }
         )

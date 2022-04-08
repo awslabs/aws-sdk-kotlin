@@ -10,6 +10,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
 import aws.sdk.kotlin.runtime.config.profile.FileType
 import aws.sdk.kotlin.runtime.config.profile.parse
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.Credentials
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail

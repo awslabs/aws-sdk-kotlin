@@ -5,11 +5,11 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials.profile
 
-import aws.sdk.kotlin.runtime.auth.credentials.Credentials
 import aws.sdk.kotlin.runtime.auth.credentials.ProviderConfigurationException
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProviderResult.Err
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.ProfileMap
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.Credentials
 
 /**
  * A chain of profile providers

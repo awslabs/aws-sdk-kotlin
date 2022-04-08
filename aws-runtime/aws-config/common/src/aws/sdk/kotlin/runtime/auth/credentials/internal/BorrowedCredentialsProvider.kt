@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.auth.credentials.internal
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.Closeable
 
 private class BorrowedCredentialsProvider(

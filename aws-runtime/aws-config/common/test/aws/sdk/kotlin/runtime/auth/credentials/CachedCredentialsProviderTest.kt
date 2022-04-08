@@ -5,6 +5,8 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import io.kotest.matchers.string.shouldContain

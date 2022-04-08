@@ -47,7 +47,7 @@ public suspend fun Flow<ByteArray>.asEventStreamHttpBody(): HttpBody {
         override fun readFrom(): SdkByteReadChannel {
             // FIXME - delaying launch here until the channel is consumed from the HTTP engine is a hacky way
             //  of enforcing ordering to ensure the ExecutionContext is updated with the
-            //  AuthAttributes.RequestSignature by the time the messages are collected and sign() is called
+            //  AwsSigningAttributes.RequestSignature by the time the messages are collected and sign() is called
             val job = scope.launch {
                 encodedMessages.collect {
                     ch.writeFully(it)

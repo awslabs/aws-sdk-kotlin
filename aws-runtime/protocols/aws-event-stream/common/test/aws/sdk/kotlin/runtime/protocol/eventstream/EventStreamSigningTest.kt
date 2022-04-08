@@ -5,9 +5,11 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
-import aws.sdk.kotlin.runtime.auth.credentials.Credentials
-import aws.sdk.kotlin.runtime.auth.signing.AwsSignatureType
-import aws.sdk.kotlin.runtime.auth.signing.AwsSigningConfig
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.AwsSignatureType
+import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.AwsSigningConfig
+import aws.smithy.kotlin.runtime.auth.signing.awssigning.crt.CrtAwsSigner
 import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.bytes
 import aws.smithy.kotlin.runtime.time.Instant
@@ -35,7 +37,9 @@ class EventStreamSigningTest {
         val epoch = Instant.fromEpochSeconds(123_456_789L, 1234)
         val testClock = ManualClock(epoch)
         val signingConfig = AwsSigningConfig.Builder().apply {
-            credentials = Credentials("fake access key", "fake secret key")
+            credentialsProvider = object : CredentialsProvider {
+                override suspend fun getCredentials() = Credentials("fake access key", "fake secret key")
+            }
             region = "us-east-1"
             service = "testservice"
             signatureType = AwsSignatureType.HTTP_REQUEST_CHUNK
@@ -46,16 +50,16 @@ class EventStreamSigningTest {
         val buffer = SdkByteBuffer(0U)
         messageToSign.encode(buffer)
         val messagePayload = buffer.bytes()
-        val result = signPayload(signingConfig, prevSignature, messagePayload, testClock)
-        assertEquals(":date", result.output.headers[0].name)
+        val result = CrtAwsSigner.signPayload(signingConfig, prevSignature, messagePayload, testClock)
+        assertEquals(":date", result.message.headers[0].name)
 
-        val dateHeader = result.output.headers[0].value.expectTimestamp()
+        val dateHeader = result.message.headers[0].value.expectTimestamp()
         assertEquals(epoch.epochSeconds, dateHeader.epochSeconds)
         assertEquals(0, dateHeader.nanosecondsOfSecond)
 
-        assertEquals(":chunk-signature", result.output.headers[1].name)
+        assertEquals(":chunk-signature", result.message.headers[1].name)
         val expectedSignature = result.signature.encodeToHex()
-        val actualSignature = result.output.headers[1].value.expectByteArray().encodeToHex()
+        val actualSignature = result.message.headers[1].value.expectByteArray().encodeToHex()
         assertEquals(expectedSignature, actualSignature)
 
         // FIXME - based on Rust test: https://github.com/awslabs/smithy-rs/blob/v0.38.0/aws/rust-runtime/aws-sigv4/src/event_stream.rs#L166

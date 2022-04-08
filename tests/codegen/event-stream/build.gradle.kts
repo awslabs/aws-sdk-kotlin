@@ -137,24 +137,28 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
     testImplementation("aws.smithy.kotlin:smithy-test:$smithyKotlinVersion")
 
+    // TODO -- replace this once CRT is no longer the default signer
+    testImplementation("aws.smithy.kotlin:aws-signing-crt:$smithyKotlinVersion")
+
     // have to manually add all the dependencies of the generated client(s)
     // doing it this way (as opposed to doing what we do for protocol-tests) allows
     // the tests to work without a publish to maven-local step at the cost of maintaining
     // this set of dependencies manually
     // <-- BEGIN GENERATED DEPENDENCY LIST -->
+    implementation("aws.smithy.kotlin:aws-credentials:$smithyKotlinVersion")
     implementation(project(":aws-runtime:protocols:aws-event-stream"))
     implementation(project(":aws-runtime:aws-http"))
     implementation(project(":aws-runtime:protocols:aws-json-protocols"))
-    implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
-    implementation(project(":aws-runtime:aws-config"))
-    implementation(project(":aws-runtime:aws-core"))
-    implementation(project(":aws-runtime:aws-endpoint"))
-    implementation(project(":aws-runtime:aws-types"))
-    implementation("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
+    implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
+    implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:io:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
+    api(project(":aws-runtime:aws-config"))
+    api(project(":aws-runtime:aws-core"))
+    api(project(":aws-runtime:aws-endpoint"))
+    api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
     // <-- END GENERATED DEPENDENCY LIST -->
 }

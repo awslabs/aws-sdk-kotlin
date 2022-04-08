@@ -8,7 +8,6 @@ import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamParserGenerator
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamSerializerGenerator
-import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import aws.sdk.kotlin.codegen.protocols.middleware.ResolveAwsEndpointMiddleware
 import aws.sdk.kotlin.codegen.protocols.middleware.UserAgentMiddleware
 import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestErrorGenerator
@@ -47,11 +46,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             .replace(ResolveAwsEndpointMiddleware(ctx)) {
                 it is ResolveEndpointMiddleware
             }.toMutableList()
-
-        if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
-            val signingName = AwsSignatureVersion4.signingServiceName(ctx.service)
-            middleware.add(AwsSignatureVersion4(signingName))
-        }
 
         middleware.add(UserAgentMiddleware())
         return middleware

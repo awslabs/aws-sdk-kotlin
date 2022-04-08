@@ -26,7 +26,7 @@ class AwsEndpointResolverGenerator(private val endpointData: ObjectNode) {
 
     // Symbols which should be imported
     private val endpointResolverSymbols = setOf(
-        AwsRuntimeTypes.Endpoint.CredentialScope,
+        RuntimeTypes.Http.Endpoints.CredentialScope,
         AwsRuntimeTypes.Endpoint.Internal.EndpointDefinition,
         AwsRuntimeTypes.Endpoint.Internal.Partition,
         AwsRuntimeTypes.Endpoint.Internal.resolveEndpoint
@@ -40,8 +40,8 @@ class AwsEndpointResolverGenerator(private val endpointData: ObjectNode) {
     }
 
     private fun renderResolver(writer: KotlinWriter) {
-        writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpointResolver)
-        writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpoint)
+        writer.addImport(RuntimeTypes.Http.Endpoints.AwsEndpointResolver)
+        writer.addImport(RuntimeTypes.Http.Endpoints.AwsEndpoint)
         writer.addImport(AwsRuntimeTypes.Endpoint.Internal.resolveEndpoint)
         writer.addImport(AwsRuntimeTypes.Core.ClientException)
 

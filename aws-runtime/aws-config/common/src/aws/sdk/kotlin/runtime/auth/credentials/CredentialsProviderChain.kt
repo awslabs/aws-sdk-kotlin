@@ -5,6 +5,8 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger
 

@@ -85,17 +85,19 @@ class PresignerGeneratorTest {
 
         val expected = """
             package smithy.kotlin.traits.presigners
-
+            
             import aws.sdk.kotlin.runtime.ClientException
-            import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
             import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
-            import aws.sdk.kotlin.runtime.auth.signing.PresignedRequestConfig
-            import aws.sdk.kotlin.runtime.auth.signing.ServicePresignConfig
-            import aws.sdk.kotlin.runtime.auth.signing.SigningLocation
-            import aws.sdk.kotlin.runtime.auth.signing.createPresignedRequest
-            import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
+            import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.CredentialsProvider
+            import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.AwsSigner
+            import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.PresignedRequestConfig
+            import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.ServicePresignConfig
+            import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.SigningLocation
+            import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.createPresignedRequest
+            import aws.smithy.kotlin.runtime.auth.signing.awssigning.crt.CrtAwsSigner
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
+            import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpointResolver
             import aws.smithy.kotlin.runtime.http.request.HttpRequest
             import kotlin.time.Duration
             import smithy.kotlin.traits.TestClient
@@ -235,6 +237,7 @@ class PresignerGeneratorTest {
                 override val normalizeUriPath: Boolean = true
                 override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
                 override val serviceId: String = "example"
+                override val signer: AwsSigner = builder.signer ?: CrtAwsSigner
                 override val signingName: String = "example-signing-name"
                 override val useDoubleUriEncode: Boolean = true
                 companion object {
@@ -254,6 +257,10 @@ class PresignerGeneratorTest {
                      * AWS region to make requests for
                      */
                     var region: String? = null
+                    /**
+                     * The implementation of AWS signer to use for signing requests
+                     */
+                    var signer: AwsSigner? = null
             
                     @PublishedApi
                     internal fun build(): TestPresignConfig = TestPresignConfig(this)

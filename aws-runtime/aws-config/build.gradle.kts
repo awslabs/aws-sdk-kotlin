@@ -36,7 +36,10 @@ kotlin {
                 implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:protocols:aws-xml-protocols"))
                 implementation(project(":aws-runtime:aws-endpoint"))
-                implementation(project(":aws-runtime:aws-signing"))
+                implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
+
+                // TODO -- replace this once CRT is no longer the default signer
+                implementation("aws.smithy.kotlin:aws-signing-crt:$smithyKotlinVersion")
 
                 // additional dependencies required by generated sso provider
                 implementation(project(":aws-runtime:protocols:aws-json-protocols"))

@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.runtime.endpoint.internal
 
-import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
-import aws.sdk.kotlin.runtime.endpoint.CredentialScope
+import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpoint
+import aws.smithy.kotlin.runtime.http.endpoints.CredentialScope
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

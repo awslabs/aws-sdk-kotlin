@@ -6,11 +6,11 @@
 package aws.sdk.kotlin.runtime.http.middleware
 
 import aws.sdk.kotlin.runtime.client.AwsClientOption
-import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
-import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
-import aws.sdk.kotlin.runtime.endpoint.CredentialScope
-import aws.sdk.kotlin.runtime.execution.AuthAttributes
+import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpoint
+import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpointResolver
+import aws.smithy.kotlin.runtime.http.endpoints.CredentialScope
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
@@ -71,8 +71,8 @@ class ResolveAwsEndpointTest {
                 operationName = "testOperation"
 
                 set(AwsClientOption.Region, "us-east-1")
-                set(AuthAttributes.SigningRegion, "us-east-1")
-                set(AuthAttributes.SigningService, "quux")
+                set(AwsSigningAttributes.SigningRegion, "us-east-1")
+                set(AwsSigningAttributes.SigningService, "quux")
             }
         }
 
@@ -88,7 +88,7 @@ class ResolveAwsEndpointTest {
         assertEquals("api.test.com", actual.headers["Host"])
 
         op.roundTrip(client, Unit)
-        assertEquals("foo", op.context[AuthAttributes.SigningService])
-        assertEquals("us-west-2", op.context[AuthAttributes.SigningRegion])
+        assertEquals("foo", op.context[AwsSigningAttributes.SigningService])
+        assertEquals("us-west-2", op.context[AwsSigningAttributes.SigningRegion])
     }
 }

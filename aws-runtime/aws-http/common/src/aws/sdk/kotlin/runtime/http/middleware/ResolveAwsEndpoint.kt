@@ -7,9 +7,9 @@ package aws.sdk.kotlin.runtime.http.middleware
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.client.AwsClientOption
-import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
-import aws.sdk.kotlin.runtime.execution.AuthAttributes
+import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpointResolver
 import aws.smithy.kotlin.runtime.http.middleware.setRequestEndpoint
 import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
@@ -41,10 +41,10 @@ public class ResolveAwsEndpoint(
         endpoint.credentialScope?.let { scope ->
             // resolved endpoint has credential scope override(s), update the context for downstream consumers
             scope.service?.let {
-                if (it.isNotBlank()) req.context[AuthAttributes.SigningService] = it
+                if (it.isNotBlank()) req.context[AwsSigningAttributes.SigningService] = it
             }
             scope.region?.let {
-                if (it.isNotBlank()) req.context[AuthAttributes.SigningRegion] = it
+                if (it.isNotBlank()) req.context[AwsSigningAttributes.SigningRegion] = it
             }
         }
 

@@ -19,26 +19,16 @@ import software.amazon.smithy.kotlin.codegen.model.namespace
 object AwsRuntimeTypes {
     object Core {
         val AwsClientOption = runtimeSymbol("AwsClientOption", AwsKotlinDependency.AWS_CORE, "client")
-        val AuthAttributes = runtimeSymbol("AuthAttributes", AwsKotlinDependency.AWS_CORE, "execution")
         val AwsErrorMetadata = runtimeSymbol("AwsErrorMetadata", AwsKotlinDependency.AWS_CORE)
         val ClientException = runtimeSymbol("ClientException", AwsKotlinDependency.AWS_CORE)
     }
 
     object Endpoint {
-        val AwsEndpointResolver = runtimeSymbol("AwsEndpointResolver", AwsKotlinDependency.AWS_ENDPOINT)
-        val AwsEndpoint = runtimeSymbol("AwsEndpoint", AwsKotlinDependency.AWS_ENDPOINT)
-        val CredentialScope = runtimeSymbol("CredentialScope", AwsKotlinDependency.AWS_ENDPOINT)
-
         object Internal {
             val EndpointDefinition = runtimeSymbol("EndpointDefinition", AwsKotlinDependency.AWS_ENDPOINT, "internal")
             val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_ENDPOINT, "internal")
             val resolveEndpoint = runtimeSymbol("resolveEndpoint", AwsKotlinDependency.AWS_ENDPOINT, "internal")
         }
-    }
-
-    object Types {
-        val CredentialsProvider = runtimeSymbol("CredentialsProvider", AwsKotlinDependency.AWS_TYPES, "auth.credentials")
-        val Credentials = runtimeSymbol("Credentials", AwsKotlinDependency.AWS_TYPES, "auth.credentials")
     }
 
     object Config {
@@ -51,15 +41,6 @@ object AwsRuntimeTypes {
         object Region {
             val resolveRegion = runtimeSymbol("resolveRegion", AwsKotlinDependency.AWS_CONFIG, "region")
         }
-    }
-
-    object Signing {
-        val AwsSigV4SigningMiddleware = runtimeSymbol("AwsSigV4SigningMiddleware", AwsKotlinDependency.AWS_SIGNING)
-        val AwsSignedBodyHeaderType = runtimeSymbol("AwsSignedBodyHeaderType", AwsKotlinDependency.AWS_SIGNING)
-        val createPresignedRequest = runtimeSymbol("createPresignedRequest", AwsKotlinDependency.AWS_SIGNING)
-        val PresignedRequestConfig = runtimeSymbol("PresignedRequestConfig", AwsKotlinDependency.AWS_SIGNING)
-        val ServicePresignConfig = runtimeSymbol("ServicePresignConfig", AwsKotlinDependency.AWS_SIGNING)
-        val SigningLocation = runtimeSymbol("SigningLocation", AwsKotlinDependency.AWS_SIGNING)
     }
 
     object Http {

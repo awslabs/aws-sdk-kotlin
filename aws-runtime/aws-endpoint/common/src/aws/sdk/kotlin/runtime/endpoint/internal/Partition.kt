@@ -6,11 +6,11 @@
 package aws.sdk.kotlin.runtime.endpoint.internal
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
-import aws.sdk.kotlin.runtime.endpoint.CredentialScope
 import aws.smithy.kotlin.runtime.http.Protocol
 import aws.smithy.kotlin.runtime.http.Url
-import aws.smithy.kotlin.runtime.http.operation.Endpoint
+import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpoint
+import aws.smithy.kotlin.runtime.http.endpoints.CredentialScope
+import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 
 private const val defaultProtocol = "https"
 private const val defaultSigner = "v4"
