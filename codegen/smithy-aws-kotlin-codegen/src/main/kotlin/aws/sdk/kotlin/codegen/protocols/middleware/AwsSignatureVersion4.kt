@@ -39,22 +39,6 @@ open class AwsSignatureVersion4(private val service: String) : ProtocolMiddlewar
     }
 
     final override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-        writer.addImport(RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSignerContextMiddleware)
-
-        val requestType = ctx.model.expectShape(op.inputShape)
-        val requestSymbol = ctx.symbolProvider.toSymbol(requestType)
-        val responseType = ctx.model.expectShape(op.outputShape)
-        val responseSymbol = ctx.symbolProvider.toSymbol(responseType)
-
-        writer.withBlock("op.install(", ")") {
-            write(
-                "#T<#T, #T>(config.signer)",
-                RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSignerContextMiddleware,
-                requestSymbol,
-                responseSymbol,
-            )
-        }
-
         writer.addImport(RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningMiddleware)
 
         writer.withBlock("op.install(", ")") {

@@ -10,8 +10,8 @@ import aws.sdk.kotlin.runtime.config.imds.EC2MetadataError
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.imds.InstanceMetadataProvider
 import aws.sdk.kotlin.runtime.config.resolve
-import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger

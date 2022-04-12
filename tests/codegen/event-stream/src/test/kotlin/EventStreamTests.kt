@@ -9,10 +9,10 @@ import aws.sdk.kotlin.runtime.protocol.eventstream.*
 import aws.sdk.kotlin.test.eventstream.restjson1.model.*
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.deserializeTestStreamOpOperationBody
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.serializeTestStreamOpOperationBody
-import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.AwsSigningAttributes
-import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.BodyHashSource
-import aws.smithy.kotlin.runtime.auth.signing.awssigning.crt.CrtAwsSigner
+import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
+import aws.smithy.kotlin.runtime.auth.awssigning.BodyHash
+import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
@@ -46,7 +46,7 @@ class EventStreamTests {
             attributes[AwsSigningAttributes.CredentialsProvider] = StaticCredentialsProvider(
                 Credentials("fake-access-key", "fake-secret-key")
             )
-            attributes[AwsSigningAttributes.RequestSignature] = BodyHashSource.EmptyBody.hash!!.encodeToByteArray()
+            attributes[AwsSigningAttributes.RequestSignature] = BodyHash.EmptyBody.hash!!.encodeToByteArray()
             attributes[AwsSigningAttributes.Signer] = CrtAwsSigner
         }
 

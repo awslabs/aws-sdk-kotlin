@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test

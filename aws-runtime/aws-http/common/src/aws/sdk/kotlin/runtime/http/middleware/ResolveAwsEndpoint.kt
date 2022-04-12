@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.http.middleware
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.client.AwsClientOption
-import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.AwsSigningAttributes
+import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpointResolver
 import aws.smithy.kotlin.runtime.http.middleware.setRequestEndpoint

@@ -88,13 +88,13 @@ class PresignerGeneratorTest {
             
             import aws.sdk.kotlin.runtime.ClientException
             import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
-            import aws.smithy.kotlin.runtime.auth.credentials.awscredentials.CredentialsProvider
-            import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.AwsSigner
-            import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.PresignedRequestConfig
-            import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.ServicePresignConfig
-            import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.SigningLocation
-            import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.createPresignedRequest
-            import aws.smithy.kotlin.runtime.auth.signing.awssigning.crt.CrtAwsSigner
+            import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+            import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigner
+            import aws.smithy.kotlin.runtime.auth.awssigning.PresignedRequestConfig
+            import aws.smithy.kotlin.runtime.auth.awssigning.ServicePresignConfig
+            import aws.smithy.kotlin.runtime.auth.awssigning.SigningLocation
+            import aws.smithy.kotlin.runtime.auth.awssigning.createPresignedRequest
+            import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
             import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpointResolver

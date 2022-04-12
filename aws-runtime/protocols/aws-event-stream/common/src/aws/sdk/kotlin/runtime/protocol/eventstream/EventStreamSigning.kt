@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
-import aws.smithy.kotlin.runtime.auth.signing.awssigning.common.*
+import aws.smithy.kotlin.runtime.auth.awssigning.*
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.bytes
@@ -30,6 +30,8 @@ public fun Flow<Message>.sign(
 ): Flow<Message> = flow {
     val messages = this@sign
 
+    // FIXME Nothing actually populates this context attribute yet. It's possible we'll need some middleware or an
+    // alternate way of passing signers to this method.
     val signer = context.getOrNull(AwsSigningAttributes.Signer) ?: error("No signer was found in context")
 
     // NOTE: We need the signature of the initial HTTP request to seed the event stream signatures
@@ -49,12 +51,12 @@ public fun Flow<Message>.sign(
         // the entire message is wrapped as the payload of the signed message
         val result = signer.signPayload(configBuilder, prevSignature, buffer.bytes())
         prevSignature = result.signature
-        emit(result.message)
+        emit(result.output)
     }
 
     // end frame - empty body in event stream encoding
     val endFrame = signer.signPayload(configBuilder, prevSignature, ByteArray(0))
-    emit(endFrame.message)
+    emit(endFrame.output)
 }
 
 internal suspend fun AwsSigner.signPayload(
@@ -62,7 +64,7 @@ internal suspend fun AwsSigner.signPayload(
     prevSignature: ByteArray,
     messagePayload: ByteArray,
     clock: Clock = Clock.System
-): MessageSigningResult {
+): AwsSigningResult<Message> {
     val dt = clock.now().truncateSubsecs()
     val config = configBuilder.apply { signingDate = dt }.build()
 
@@ -75,27 +77,7 @@ internal suspend fun AwsSigner.signPayload(
         payload = messagePayload
     }
 
-    return MessageSigningResult(signedMessage, signature)
-}
-
-internal data class MessageSigningResult(val message: Message, val signature: ByteArray) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || this::class != other::class) return false
-
-        other as MessageSigningResult
-
-        if (message != other.message) return false
-        if (!signature.contentEquals(other.signature)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = message.hashCode()
-        result = 31 * result + signature.contentHashCode()
-        return result
-    }
+    return AwsSigningResult(signedMessage, signature)
 }
 
 /**
