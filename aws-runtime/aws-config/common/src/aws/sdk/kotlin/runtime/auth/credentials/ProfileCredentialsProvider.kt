@@ -128,8 +128,8 @@ public class ProfileCredentialsProvider(
 
     private suspend fun LeafProvider.toCredentialsProvider(region: LazyAsyncValue<String>): CredentialsProvider =
         when (this) {
-            is LeafProvider.NamedSource -> namedProviders[name] ?:
-                throw ProviderConfigurationException("unknown credentials source: $name")
+            is LeafProvider.NamedSource -> namedProviders[name]
+                ?: throw ProviderConfigurationException("unknown credentials source: $name")
 
             is LeafProvider.AccessKey -> StaticCredentialsProvider(credentials)
 
