@@ -63,3 +63,38 @@ apply PutObject @httpRequestTests([
         }
     }
 ])
+
+apply CreateBucket @httpRequestTests([
+    {
+        id: "CreateBucketNoBody",
+        documentation: "Validates https://github.com/awslabs/aws-sdk-kotlin/issues/567 (empty body)",
+        protocol: "aws.protocols#restXml",
+        method: "PUT",
+        uri: "/mybucket",
+        host: "s3.us-west-2.amazonaws.com",
+        body: "",
+        forbidHeaders: ["Content-Type", "Content-Length"],
+        params: {
+            Bucket: "mybucket",
+        }
+    },
+    {
+        id: "CreateBucketWithBody",
+        documentation: "This test case validates https://github.com/awslabs/aws-sdk-kotlin/issues/567 (non-empty body)",
+        protocol: "aws.protocols#restXml",
+        method: "PUT",
+        uri: "/mybucket",
+        host: "s3.us-west-2.amazonaws.com",
+        body: "<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\"><LocationConstraint>us-east-2</LocationConstraint></CreateBucketConfiguration>",
+        headers: {
+            "Content-Type": "application/xml",
+            "Content-Length": "153"
+        },
+        params: {
+            Bucket: "mybucket",
+            CreateBucketConfiguration: {
+                LocationConstraint: "us-east-2"
+            }
+        }
+    }
+])
