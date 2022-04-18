@@ -15,6 +15,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
+                api(project(":aws-runtime:aws-endpoint"))
                 api("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
                 api("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")

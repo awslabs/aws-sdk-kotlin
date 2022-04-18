@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.services.machinelearning.internal
 
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
 import aws.smithy.kotlin.runtime.client.ExecutionContext
-import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpoint
 import aws.smithy.kotlin.runtime.util.AttributeKey
 
 internal val predictEndpointKey = AttributeKey<AwsEndpoint>("PredictEndpointKey")

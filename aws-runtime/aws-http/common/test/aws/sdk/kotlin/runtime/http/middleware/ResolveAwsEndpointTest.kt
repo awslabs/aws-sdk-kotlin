@@ -6,11 +6,11 @@
 package aws.sdk.kotlin.runtime.http.middleware
 
 import aws.sdk.kotlin.runtime.client.AwsClientOption
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
+import aws.sdk.kotlin.runtime.endpoint.CredentialScope
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.http.*
-import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpoint
-import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpointResolver
-import aws.smithy.kotlin.runtime.http.endpoints.CredentialScope
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequest

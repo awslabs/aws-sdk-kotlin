@@ -27,12 +27,12 @@ class AwsHttpProtocolUnitTestRequestGenerator(builder: Builder) :
         renderConfigureAwsServiceClient(writer, model, serviceShape, operation)
         test.host.ifPresent { expectedHost ->
             // add an endpoint resolver
-            writer.addImport(RuntimeTypes.Http.Endpoints.AwsEndpoint)
-            writer.addImport(RuntimeTypes.Http.Endpoints.AwsEndpointResolver)
+            writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpoint)
+            writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpointResolver)
             writer.write(
                 "endpointResolver = #T { _, _ -> #T(#S) }",
-                RuntimeTypes.Http.Endpoints.AwsEndpointResolver,
-                RuntimeTypes.Http.Endpoints.AwsEndpoint,
+                AwsRuntimeTypes.Endpoint.AwsEndpointResolver,
+                AwsRuntimeTypes.Endpoint.AwsEndpoint,
                 "https://$expectedHost"
             )
         }

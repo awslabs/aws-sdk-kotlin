@@ -24,6 +24,11 @@ object AwsRuntimeTypes {
     }
 
     object Endpoint {
+        val asSigningEndpointProvider = runtimeSymbol("asSigningEndpointProvider", AwsKotlinDependency.AWS_ENDPOINT)
+        val AwsEndpointResolver = runtimeSymbol("AwsEndpointResolver", AwsKotlinDependency.AWS_ENDPOINT)
+        val AwsEndpoint = runtimeSymbol("AwsEndpoint", AwsKotlinDependency.AWS_ENDPOINT)
+        val CredentialScope = runtimeSymbol("CredentialScope", AwsKotlinDependency.AWS_ENDPOINT)
+
         object Internal {
             val EndpointDefinition = runtimeSymbol("EndpointDefinition", AwsKotlinDependency.AWS_ENDPOINT, "internal")
             val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_ENDPOINT, "internal")

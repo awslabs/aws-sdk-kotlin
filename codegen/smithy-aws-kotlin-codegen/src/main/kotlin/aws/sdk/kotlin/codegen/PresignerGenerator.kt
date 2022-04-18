@@ -78,7 +78,6 @@ class PresignerGenerator : KotlinIntegration {
         RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig,
         RuntimeTypes.Auth.Signing.AwsSigningCommon.SigningLocation,
         RuntimeTypes.Auth.Signing.AwsSigningCommon.createPresignedRequest,
-        RuntimeTypes.Http.Endpoints.AwsEndpointResolver,
     )
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
@@ -324,7 +323,7 @@ class PresignerGenerator : KotlinIntegration {
             ) {
                 withBlock("val presignConfig = $presignConfigTypeName {", "}") {
                     write("credentialsProvider = config.credentialsProvider")
-                    write("endpointResolver = config.endpointResolver")
+                    write("endpointProvider = config.endpointResolver.asSigningEndpointProvider()")
                     write("region = config.region")
                 }
                 write("return createPresignedRequest(presignConfig, $requestConfigFnName(this, duration))")
@@ -373,12 +372,15 @@ class PresignerGenerator : KotlinIntegration {
                 propertyType = ClientConfigPropertyType.Required()
             },
             ClientConfigProperty {
-                symbol = RuntimeTypes.Http.Endpoints.AwsEndpointResolver
-                name = "endpointResolver"
+                symbol = RuntimeTypes.Auth.Signing.AwsSigningCommon.SigningEndpointProvider
+                name = "endpointProvider"
                 documentation =
-                    "Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
+                    "Provides the endpoint (hostname) and signing context to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultEndpointResolver()")
+                propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultEndpointResolver().asSigningEndpointProvider()")
+                additionalImports = listOf(
+                    AwsRuntimeTypes.Endpoint.asSigningEndpointProvider,
+                )
             },
             ClientConfigProperty {
                 symbol = buildSymbol {

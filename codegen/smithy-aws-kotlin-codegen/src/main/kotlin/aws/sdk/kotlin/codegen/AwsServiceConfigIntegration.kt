@@ -118,7 +118,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 name = AwsEndpointResolverGenerator.typeName
                 namespace = "${ctx.settings.pkg.name}.internal"
             }
-            symbol = RuntimeTypes.Http.Endpoints.AwsEndpointResolver
+            symbol = AwsRuntimeTypes.Endpoint.AwsEndpointResolver
             propertyType = ClientConfigPropertyType.RequiredWithDefault("${defaultResolver.name}()")
             additionalImports = listOf(defaultResolver)
         }

@@ -5,10 +5,10 @@
 
 package aws.sdk.kotlin.services.machinelearning.internal
 
+import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
 import aws.sdk.kotlin.services.machinelearning.model.MachineLearningException
 import aws.sdk.kotlin.services.machinelearning.model.PredictRequest
 import aws.sdk.kotlin.services.machinelearning.model.PredictResponse
-import aws.smithy.kotlin.runtime.http.endpoints.AwsEndpoint
 import aws.smithy.kotlin.runtime.http.middleware.setRequestEndpoint
 import aws.smithy.kotlin.runtime.http.operation.InlineMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
