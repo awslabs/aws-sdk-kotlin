@@ -23,7 +23,6 @@ class ProfileCredentialsProviderTest {
             fs = mapOf(
                 "config" to """
                 [default]
-                region = us-east-2
                 aws_access_key_id = AKID-Default
                 aws_secret_access_key = Default-Secret
                 """.trimIndent()
@@ -51,7 +50,6 @@ class ProfileCredentialsProviderTest {
                 aws_secret_access_key = Default-Secret
                 
                 [profile my-profile]
-                region = us-east-2
                 aws_access_key_id = AKID-Profile
                 aws_secret_access_key = Profile-Secret
                 """.trimIndent()
@@ -75,7 +73,6 @@ class ProfileCredentialsProviderTest {
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
                 "AWS_PROFILE" to "my-profile",
-                "AWS_REGION" to "us-west-1"
             ),
             fs = mapOf(
                 "config" to """

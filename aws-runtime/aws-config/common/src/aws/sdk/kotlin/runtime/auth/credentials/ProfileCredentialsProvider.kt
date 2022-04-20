@@ -19,8 +19,10 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.TimestampFormat
+import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import aws.smithy.kotlin.runtime.util.asyncLazy
 
 /**
  * A [CredentialsProvider] that gets credentials from a profile in `~/.aws/config` or the shared credentials
@@ -76,7 +78,6 @@ public class ProfileCredentialsProvider(
     private val platformProvider: PlatformProvider = Platform,
     private val httpClientEngine: HttpClientEngine? = null,
 ) : CredentialsProvider, Closeable {
-
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
         "Ec2InstanceMetadata" to ImdsCredentialsProvider(
@@ -101,7 +102,7 @@ public class ProfileCredentialsProvider(
 
         // if profile is overridden for this provider, attempt to resolve it from there first
         val profileOverride = profileName?.let { profiles[it] }
-        val region = region ?: profileOverride?.get("region") ?: resolveRegion(platformProvider)
+        val region = asyncLazy { region ?: profileOverride?.get("region") ?: resolveRegion(platformProvider) }
 
         val leaf = chain.leaf.toCredentialsProvider(region)
         logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
@@ -123,34 +124,39 @@ public class ProfileCredentialsProvider(
         }
     }
 
-    private fun LeafProvider.toCredentialsProvider(region: String): CredentialsProvider = when (this) {
-        is LeafProvider.NamedSource -> namedProviders[name] ?: throw ProviderConfigurationException("unknown credentials source: $name")
-        is LeafProvider.AccessKey -> StaticCredentialsProvider(credentials)
-        is LeafProvider.WebIdentityTokenRole -> StsWebIdentityCredentialsProvider(
-            roleArn,
-            webIdentityTokenFile,
-            region = region,
-            roleSessionName = sessionName,
-            platformProvider = platformProvider,
-            httpClientEngine = httpClientEngine
-        )
-        is LeafProvider.Sso -> SsoCredentialsProvider(
-            accountId = ssoAccountId,
-            roleName = ssoRoleName,
-            startUrl = ssoStartUrl,
-            ssoRegion = ssoRegion,
-            httpClientEngine = httpClientEngine,
-            platformProvider = platformProvider
-        )
-    }
+    private suspend fun LeafProvider.toCredentialsProvider(region: LazyAsyncValue<String>): CredentialsProvider =
+        when (this) {
+            is LeafProvider.NamedSource -> namedProviders[name]
+                ?: throw ProviderConfigurationException("unknown credentials source: $name")
 
-    private fun RoleArn.toCredentialsProvider(
+            is LeafProvider.AccessKey -> StaticCredentialsProvider(credentials)
+
+            is LeafProvider.WebIdentityTokenRole -> StsWebIdentityCredentialsProvider(
+                roleArn,
+                webIdentityTokenFile,
+                region = region.get(),
+                roleSessionName = sessionName,
+                platformProvider = platformProvider,
+                httpClientEngine = httpClientEngine
+            )
+
+            is LeafProvider.Sso -> SsoCredentialsProvider(
+                accountId = ssoAccountId,
+                roleName = ssoRoleName,
+                startUrl = ssoStartUrl,
+                ssoRegion = ssoRegion,
+                httpClientEngine = httpClientEngine,
+                platformProvider = platformProvider
+            )
+        }
+
+    private suspend fun RoleArn.toCredentialsProvider(
         creds: Credentials,
-        region: String
+        region: LazyAsyncValue<String>,
     ): CredentialsProvider = StsAssumeRoleCredentialsProvider(
         credentialsProvider = StaticCredentialsProvider(creds),
         roleArn = roleArn,
-        region = region,
+        region = region.get(),
         roleSessionName = sessionName,
         externalId = externalId,
         httpClientEngine = httpClientEngine

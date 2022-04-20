@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.14.3-beta] - 04/14/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Fixes
+* resolve region only when profile credentials require it [#582](https://github.com/awslabs/aws-sdk-kotlin/pull/582)
+* only set Content-Type when appropriate [#570](https://github.com/awslabs/aws-sdk-kotlin/pull/570)
+
+### Miscellaneous
+* sync AWS models [#585](https://github.com/awslabs/aws-sdk-kotlin/pull/585)
+
 ## [0.14.2-beta] - 04/07/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
