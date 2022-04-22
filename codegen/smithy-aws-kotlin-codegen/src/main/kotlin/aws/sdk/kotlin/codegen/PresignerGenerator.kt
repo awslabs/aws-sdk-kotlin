@@ -2,7 +2,6 @@ package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
 import aws.sdk.kotlin.codegen.protocols.core.AwsEndpointResolverGenerator
-import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
@@ -31,6 +30,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
+import software.amazon.smithy.kotlin.codegen.signing.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -76,7 +76,6 @@ class PresignerGenerator : KotlinIntegration {
         AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
         RuntimeTypes.Auth.Signing.AwsSigningCommon.PresignedRequestConfig,
         RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig,
-        RuntimeTypes.Auth.Signing.AwsSigningCommon.SigningLocation,
         RuntimeTypes.Auth.Signing.AwsSigningCommon.createPresignedRequest,
     )
 
@@ -278,22 +277,23 @@ class PresignerGenerator : KotlinIntegration {
         contextMap: Map<String, Any?>
     ) {
         writer.withBlock(
-            "private suspend fun $requestConfigFnName(input: $requestTypeName, duration: #T) : PresignedRequestConfig {",
+            "private suspend fun $requestConfigFnName(input: $requestTypeName, duration: #T) : #T {",
             "}\n",
-            KotlinTypes.Time.Duration
+            KotlinTypes.Time.Duration,
+            RuntimeTypes.Auth.Signing.AwsSigningCommon.PresignedRequestConfig,
         ) {
 
             writer.declareSection(PresignConfigFnSection, contextMap) {
                 write("require(duration.isPositive()) { \"duration must be greater than zero\" }")
                 write("val httpRequestBuilder = #T().serialize(ExecutionContext.build {  }, input)", serializerSymbol)
 
-                writer.withBlock("return PresignedRequestConfig(", ")") {
+                writer.withBlock("return #T(", ")", RuntimeTypes.Auth.Signing.AwsSigningCommon.PresignedRequestConfig) {
                     presignConfigFnVisitor.renderHttpMethod(this)
                     write("httpRequestBuilder.url.path,")
                     presignConfigFnVisitor.renderQueryParameters(writer)
                     write("duration,")
                     write("${presignableOp.signBody},")
-                    write("SigningLocation.QUERY_STRING,")
+                    write("#T.QUERY_STRING,", RuntimeTypes.Auth.Signing.AwsSigningCommon.PresigningLocation)
                     write("httpRequestBuilder.headers.build(),")
                 }
             }

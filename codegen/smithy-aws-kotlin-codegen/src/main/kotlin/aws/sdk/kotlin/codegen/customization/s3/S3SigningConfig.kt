@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
@@ -14,6 +13,7 @@ import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.replace
+import software.amazon.smithy.kotlin.codegen.signing.AwsSignatureVersion4
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -45,7 +45,6 @@ private class S3SigningMiddleware(signingServiceName: String) : AwsSignatureVers
     override fun renderSigningConfig(op: OperationShape, writer: KotlinWriter) {
         super.renderSigningConfig(op, writer)
         val sbh = RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSignedBodyHeader
-        writer.addImport(sbh)
         writer.write("signedBodyHeader = #T.X_AMZ_CONTENT_SHA256", sbh)
 
         // https://github.com/awslabs/aws-sdk-kotlin/issues/200

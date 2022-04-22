@@ -6,9 +6,7 @@
 package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import aws.sdk.kotlin.codegen.sdkId
-import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
@@ -18,6 +16,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResol
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.signing.AwsSignatureVersion4
 import software.amazon.smithy.model.knowledge.OperationIndex
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.OperationShape
@@ -45,13 +44,6 @@ open class AwsHttpProtocolClientGenerator(
 
     override fun renderOperationSetup(writer: KotlinWriter, opIndex: OperationIndex, op: OperationShape) {
         super.renderOperationSetup(writer, opIndex, op)
-
-        // add in additional context and defaults
-        if (op.hasTrait(UnsignedPayloadTrait::class.java)) {
-            writer.addImport(RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
-            writer.write("op.context[AwsSigningAttributes.UnsignedPayload] = true")
-        }
-
         writer.write("mergeServiceDefaults(op.context)")
     }
 

@@ -92,9 +92,9 @@ class PresignerGeneratorTest {
             import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
             import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigner
             import aws.smithy.kotlin.runtime.auth.awssigning.PresignedRequestConfig
+            import aws.smithy.kotlin.runtime.auth.awssigning.PresigningLocation
             import aws.smithy.kotlin.runtime.auth.awssigning.ServicePresignConfig
             import aws.smithy.kotlin.runtime.auth.awssigning.SigningEndpointProvider
-            import aws.smithy.kotlin.runtime.auth.awssigning.SigningLocation
             import aws.smithy.kotlin.runtime.auth.awssigning.createPresignedRequest
             import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
             import aws.smithy.kotlin.runtime.client.ExecutionContext
@@ -144,7 +144,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.parameters.build(),
                     duration,
                     false,
-                    SigningLocation.QUERY_STRING,
+                    PresigningLocation.QUERY_STRING,
                     httpRequestBuilder.headers.build(),
                 )
             }
@@ -183,7 +183,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.parameters.build(),
                     duration,
                     false,
-                    SigningLocation.QUERY_STRING,
+                    PresigningLocation.QUERY_STRING,
                     httpRequestBuilder.headers.build(),
                 )
             }
@@ -222,7 +222,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.parameters.build(),
                     duration,
                     false,
-                    SigningLocation.QUERY_STRING,
+                    PresigningLocation.QUERY_STRING,
                     httpRequestBuilder.headers.build(),
                 )
             }
