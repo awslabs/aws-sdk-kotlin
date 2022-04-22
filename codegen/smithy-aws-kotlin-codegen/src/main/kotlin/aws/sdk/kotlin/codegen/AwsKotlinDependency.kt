@@ -37,9 +37,7 @@ object AwsKotlinDependency {
     val AWS_CONFIG = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-config", AWS_CLIENT_RT_VERSION)
     val AWS_ENDPOINT = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.endpoint", AWS_CLIENT_RT_GROUP, "aws-endpoint", AWS_CLIENT_RT_VERSION)
     val AWS_HTTP = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http", AWS_CLIENT_RT_GROUP, "aws-http", AWS_CLIENT_RT_VERSION)
-    val AWS_SIGNING = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.auth.signing", AWS_CLIENT_RT_GROUP, "aws-signing", AWS_CLIENT_RT_VERSION)
     val AWS_TESTING = KotlinDependency(GradleConfiguration.TestImplementation, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "testing", AWS_CLIENT_RT_VERSION)
-    val AWS_TYPES = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-types", AWS_CLIENT_RT_VERSION)
     val AWS_JSON_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.json", AWS_CLIENT_RT_GROUP, "aws-json-protocols", AWS_CLIENT_RT_VERSION)
     val AWS_XML_PROTOCOLS = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.xml", AWS_CLIENT_RT_GROUP, "aws-xml-protocols", AWS_CLIENT_RT_VERSION)
     val AWS_EVENT_STREAM = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.protocol.eventstream", AWS_CLIENT_RT_GROUP, "aws-event-stream", AWS_CLIENT_RT_VERSION)
@@ -53,9 +51,7 @@ private val sameProjectDeps: Map<KotlinDependency, String> by lazy {
         AwsKotlinDependency.AWS_CONFIG to """project(":aws-runtime:aws-config")""",
         AwsKotlinDependency.AWS_ENDPOINT to """project(":aws-runtime:aws-endpoint")""",
         AwsKotlinDependency.AWS_HTTP to """project(":aws-runtime:aws-http")""",
-        AwsKotlinDependency.AWS_SIGNING to """project(":aws-runtime:aws-signing")""",
         AwsKotlinDependency.AWS_TESTING to """project(":aws-runtime:testing")""",
-        AwsKotlinDependency.AWS_TYPES to """project(":aws-runtime:aws-types")""",
         AwsKotlinDependency.AWS_JSON_PROTOCOLS to """project(":aws-runtime:protocols:aws-json-protocols")""",
         AwsKotlinDependency.AWS_XML_PROTOCOLS to """project(":aws-runtime:protocols:aws-xml-protocols")""",
         AwsKotlinDependency.AWS_EVENT_STREAM to """project(":aws-runtime:protocols:aws-event-stream")""",

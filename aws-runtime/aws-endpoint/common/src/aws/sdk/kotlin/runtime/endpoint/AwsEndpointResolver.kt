@@ -5,6 +5,11 @@
 
 package aws.sdk.kotlin.runtime.endpoint
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.smithy.kotlin.runtime.auth.awssigning.SigningContext
+import aws.smithy.kotlin.runtime.auth.awssigning.SigningContextualizedEndpoint
+import aws.smithy.kotlin.runtime.auth.awssigning.SigningEndpointProvider
+
 /**
  * Resolves endpoints for a given service and region
  */
@@ -18,3 +23,11 @@ public fun interface AwsEndpointResolver {
      */
     public suspend fun resolve(service: String, region: String): AwsEndpoint
 }
+
+@InternalSdkApi
+public fun AwsEndpointResolver.asSigningEndpointProvider(): SigningEndpointProvider = {
+    val awsEndpoint = resolve(requireNotNull(it.service), requireNotNull(it.region))
+    SigningContextualizedEndpoint(awsEndpoint.endpoint, awsEndpoint.credentialScope?.asSigningContext())
+}
+
+private fun CredentialScope.asSigningContext() = SigningContext(service, region)

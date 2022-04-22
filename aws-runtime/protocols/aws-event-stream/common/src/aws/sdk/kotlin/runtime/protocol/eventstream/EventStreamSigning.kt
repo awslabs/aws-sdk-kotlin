@@ -5,8 +5,7 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
-import aws.sdk.kotlin.runtime.auth.signing.*
-import aws.sdk.kotlin.runtime.execution.AuthAttributes
+import aws.smithy.kotlin.runtime.auth.awssigning.*
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.bytes
@@ -31,11 +30,15 @@ public fun Flow<Message>.sign(
 ): Flow<Message> = flow {
     val messages = this@sign
 
+    // FIXME Nothing actually populates this context attribute yet. It's possible we'll need some middleware or an
+    // alternate way of passing signers to this method.
+    val signer = context.getOrNull(AwsSigningAttributes.Signer) ?: error("No signer was found in context")
+
     // NOTE: We need the signature of the initial HTTP request to seed the event stream signatures
     // This is a bit of a chicken and egg problem since the event stream is constructed before the request
     // is signed. The body of the stream shouldn't start being consumed though until after the entire request
     // is built. Thus, by the time we get here the signature will exist in the context.
-    var prevSignature = context.getOrNull(AuthAttributes.RequestSignature) ?: error("expected initial HTTP signature to be set before message signing commences")
+    var prevSignature = context.getOrNull(AwsSigningAttributes.RequestSignature) ?: error("expected initial HTTP signature to be set before message signing commences")
 
     // signature date is updated per event message
     val configBuilder = config.toBuilder()
@@ -46,26 +49,26 @@ public fun Flow<Message>.sign(
         message.encode(buffer)
 
         // the entire message is wrapped as the payload of the signed message
-        val result = signPayload(configBuilder, prevSignature, buffer.bytes())
+        val result = signer.signPayload(configBuilder, prevSignature, buffer.bytes())
         prevSignature = result.signature
         emit(result.output)
     }
 
     // end frame - empty body in event stream encoding
-    val endFrame = signPayload(configBuilder, prevSignature, ByteArray(0))
+    val endFrame = signer.signPayload(configBuilder, prevSignature, ByteArray(0))
     emit(endFrame.output)
 }
 
-internal suspend fun signPayload(
+internal suspend fun AwsSigner.signPayload(
     configBuilder: AwsSigningConfig.Builder,
     prevSignature: ByteArray,
     messagePayload: ByteArray,
     clock: Clock = Clock.System
-): SigningResult<Message> {
+): AwsSigningResult<Message> {
     val dt = clock.now().truncateSubsecs()
-    val config = configBuilder.apply { date = dt }.build()
+    val config = configBuilder.apply { signingDate = dt }.build()
 
-    val result = sign(messagePayload, prevSignature, config)
+    val result = signChunk(messagePayload, prevSignature, config)
     val signature = result.signature
 
     val signedMessage = buildMessage {
@@ -74,7 +77,7 @@ internal suspend fun signPayload(
         payload = messagePayload
     }
 
-    return SigningResult(signedMessage, signature)
+    return AwsSigningResult(signedMessage, signature)
 }
 
 /**
@@ -90,10 +93,10 @@ private fun Instant.truncateSubsecs(): Instant = Instant.fromEpochSeconds(epochS
 public fun ExecutionContext.newEventStreamSigningConfig(): AwsSigningConfig = AwsSigningConfig {
     algorithm = AwsSigningAlgorithm.SIGV4
     signatureType = AwsSignatureType.HTTP_REQUEST_CHUNK
-    region = this@newEventStreamSigningConfig[AuthAttributes.SigningRegion]
-    service = this@newEventStreamSigningConfig[AuthAttributes.SigningService]
-    credentialsProvider = this@newEventStreamSigningConfig[AuthAttributes.CredentialsProvider]
+    region = this@newEventStreamSigningConfig[AwsSigningAttributes.SigningRegion]
+    service = this@newEventStreamSigningConfig[AwsSigningAttributes.SigningService]
+    credentialsProvider = this@newEventStreamSigningConfig[AwsSigningAttributes.CredentialsProvider]
     useDoubleUriEncode = false
     normalizeUriPath = true
-    signedBodyHeader = AwsSignedBodyHeaderType.NONE
+    signedBodyHeader = AwsSignedBodyHeader.NONE
 }

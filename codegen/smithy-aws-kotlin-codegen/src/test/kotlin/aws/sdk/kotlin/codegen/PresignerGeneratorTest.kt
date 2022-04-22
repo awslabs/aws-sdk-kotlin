@@ -85,15 +85,18 @@ class PresignerGeneratorTest {
 
         val expected = """
             package smithy.kotlin.traits.presigners
-
+            
             import aws.sdk.kotlin.runtime.ClientException
-            import aws.sdk.kotlin.runtime.auth.credentials.CredentialsProvider
             import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
-            import aws.sdk.kotlin.runtime.auth.signing.PresignedRequestConfig
-            import aws.sdk.kotlin.runtime.auth.signing.ServicePresignConfig
-            import aws.sdk.kotlin.runtime.auth.signing.SigningLocation
-            import aws.sdk.kotlin.runtime.auth.signing.createPresignedRequest
-            import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
+            import aws.sdk.kotlin.runtime.endpoint.asSigningEndpointProvider
+            import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+            import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigner
+            import aws.smithy.kotlin.runtime.auth.awssigning.PresignedRequestConfig
+            import aws.smithy.kotlin.runtime.auth.awssigning.PresigningLocation
+            import aws.smithy.kotlin.runtime.auth.awssigning.ServicePresignConfig
+            import aws.smithy.kotlin.runtime.auth.awssigning.SigningEndpointProvider
+            import aws.smithy.kotlin.runtime.auth.awssigning.createPresignedRequest
+            import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
             import aws.smithy.kotlin.runtime.http.request.HttpRequest
@@ -126,7 +129,7 @@ class PresignerGeneratorTest {
             suspend fun GetFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
                     credentialsProvider = config.credentialsProvider
-                    endpointResolver = config.endpointResolver
+                    endpointProvider = config.endpointResolver.asSigningEndpointProvider()
                     region = config.region
                 }
                 return createPresignedRequest(presignConfig, getFooPresignConfig(this, duration))
@@ -141,7 +144,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.parameters.build(),
                     duration,
                     false,
-                    SigningLocation.QUERY_STRING,
+                    PresigningLocation.QUERY_STRING,
                     httpRequestBuilder.headers.build(),
                 )
             }
@@ -165,7 +168,7 @@ class PresignerGeneratorTest {
             suspend fun PostFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
                     credentialsProvider = config.credentialsProvider
-                    endpointResolver = config.endpointResolver
+                    endpointProvider = config.endpointResolver.asSigningEndpointProvider()
                     region = config.region
                 }
                 return createPresignedRequest(presignConfig, postFooPresignConfig(this, duration))
@@ -180,7 +183,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.parameters.build(),
                     duration,
                     false,
-                    SigningLocation.QUERY_STRING,
+                    PresigningLocation.QUERY_STRING,
                     httpRequestBuilder.headers.build(),
                 )
             }
@@ -204,7 +207,7 @@ class PresignerGeneratorTest {
             suspend fun PutFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
                     credentialsProvider = config.credentialsProvider
-                    endpointResolver = config.endpointResolver
+                    endpointProvider = config.endpointResolver.asSigningEndpointProvider()
                     region = config.region
                 }
                 return createPresignedRequest(presignConfig, putFooPresignConfig(this, duration))
@@ -219,7 +222,7 @@ class PresignerGeneratorTest {
                     httpRequestBuilder.url.parameters.build(),
                     duration,
                     false,
-                    SigningLocation.QUERY_STRING,
+                    PresigningLocation.QUERY_STRING,
                     httpRequestBuilder.headers.build(),
                 )
             }
@@ -231,10 +234,11 @@ class PresignerGeneratorTest {
              */
             class TestPresignConfig private constructor(builder: Builder): ServicePresignConfig {
                 override val credentialsProvider: CredentialsProvider = requireNotNull(builder.credentialsProvider) { "credentialsProvider is a required configuration property" }
-                override val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
+                override val endpointProvider: SigningEndpointProvider = builder.endpointProvider ?: DefaultEndpointResolver().asSigningEndpointProvider()
                 override val normalizeUriPath: Boolean = true
                 override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
                 override val serviceId: String = "example"
+                override val signer: AwsSigner = builder.signer ?: CrtAwsSigner
                 override val signingName: String = "example-signing-name"
                 override val useDoubleUriEncode: Boolean = true
                 companion object {
@@ -247,13 +251,17 @@ class PresignerGeneratorTest {
                      */
                     var credentialsProvider: CredentialsProvider? = null
                     /**
-                     * Determines the endpoint (hostname) to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option.
+                     * Provides the endpoint (hostname) and signing context to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option.
                      */
-                    var endpointResolver: AwsEndpointResolver? = null
+                    var endpointProvider: SigningEndpointProvider? = null
                     /**
                      * AWS region to make requests for
                      */
                     var region: String? = null
+                    /**
+                     * The implementation of AWS signer to use for signing requests
+                     */
+                    var signer: AwsSigner? = null
             
                     @PublishedApi
                     internal fun build(): TestPresignConfig = TestPresignConfig(this)

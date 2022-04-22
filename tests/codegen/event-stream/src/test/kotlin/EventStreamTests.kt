@@ -3,14 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-import aws.sdk.kotlin.runtime.auth.credentials.Credentials
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-import aws.sdk.kotlin.runtime.auth.signing.AwsSignedBodyValue
-import aws.sdk.kotlin.runtime.execution.AuthAttributes
 import aws.sdk.kotlin.runtime.protocol.eventstream.*
 import aws.sdk.kotlin.test.eventstream.restjson1.model.*
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.deserializeTestStreamOpOperationBody
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.serializeTestStreamOpOperationBody
+import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
+import aws.smithy.kotlin.runtime.auth.awssigning.BodyHash
+import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
@@ -31,7 +33,7 @@ import kotlin.test.assertIs
  * Integration test suite that checks the generated event stream serialization and deserialization codegen
  * works as expected.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, InternalSdkApi::class)
 class EventStreamTests {
     private suspend fun serializedMessage(event: TestStream): Message {
         val req = TestStreamOpRequest {
@@ -39,12 +41,13 @@ class EventStreamTests {
         }
 
         val testContext = ExecutionContext.build {
-            attributes[AuthAttributes.SigningRegion] = "us-east-2"
-            attributes[AuthAttributes.SigningService] = "test"
-            attributes[AuthAttributes.CredentialsProvider] = StaticCredentialsProvider(
+            attributes[AwsSigningAttributes.SigningRegion] = "us-east-2"
+            attributes[AwsSigningAttributes.SigningService] = "test"
+            attributes[AwsSigningAttributes.CredentialsProvider] = StaticCredentialsProvider(
                 Credentials("fake-access-key", "fake-secret-key")
             )
-            attributes[AuthAttributes.RequestSignature] = AwsSignedBodyValue.EMPTY_SHA256.encodeToByteArray()
+            attributes[AwsSigningAttributes.RequestSignature] = BodyHash.EmptyBody.hash!!.encodeToByteArray()
+            attributes[AwsSigningAttributes.Signer] = CrtAwsSigner
         }
 
         val body = serializeTestStreamOpOperationBody(testContext, req)

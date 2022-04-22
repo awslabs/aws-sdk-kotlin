@@ -6,9 +6,7 @@
 package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import aws.sdk.kotlin.codegen.sdkId
-import software.amazon.smithy.aws.traits.auth.UnsignedPayloadTrait
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
@@ -18,6 +16,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResol
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.signing.AwsSignatureVersion4
 import software.amazon.smithy.model.knowledge.OperationIndex
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.OperationShape
@@ -45,13 +44,6 @@ open class AwsHttpProtocolClientGenerator(
 
     override fun renderOperationSetup(writer: KotlinWriter, opIndex: OperationIndex, op: OperationShape) {
         super.renderOperationSetup(writer, opIndex, op)
-
-        // add in additional context and defaults
-        if (op.hasTrait(UnsignedPayloadTrait::class.java)) {
-            writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
-            writer.write("op.context[AuthAttributes.UnsignedPayload] = true")
-        }
-
         writer.write("mergeServiceDefaults(op.context)")
     }
 
@@ -65,7 +57,7 @@ open class AwsHttpProtocolClientGenerator(
     private fun renderMergeServiceDefaults(writer: KotlinWriter) {
         // FIXME - we likely need a way to let customizations modify/override this
         // FIXME - we also need a way to tie in config properties added via integrations that need to influence the context
-        writer.addImport(AwsRuntimeTypes.Core.AuthAttributes)
+        writer.addImport(RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
         writer.addImport(AwsRuntimeTypes.Core.AwsClientOption)
         val putIfAbsentSym = buildSymbol { name = "putIfAbsent"; namespace(KotlinDependency.UTILS) }
         val sdkClientOptionSym = buildSymbol { name = "SdkClientOption"; namespace(KotlinDependency.CORE, "client") }
@@ -83,10 +75,10 @@ open class AwsHttpProtocolClientGenerator(
             // fill in auth/signing attributes
             if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
                 val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.service)
-                write("ctx.#T(#T.SigningService, #S)", putIfAbsentSym, AwsRuntimeTypes.Core.AuthAttributes, signingServiceName)
+                write("ctx.#T(#T.SigningService, #S)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes, signingServiceName)
             }
-            write("ctx.#T(#T.SigningRegion, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.AuthAttributes)
-            write("ctx.#T(#T.CredentialsProvider, config.credentialsProvider)", putIfAbsentSym, AwsRuntimeTypes.Core.AuthAttributes)
+            write("ctx.#T(#T.SigningRegion, config.region)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
+            write("ctx.#T(#T.CredentialsProvider, config.credentialsProvider)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
 
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
                 addImport(RuntimeTypes.Core.IdempotencyTokenProviderExt)

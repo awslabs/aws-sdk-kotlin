@@ -5,15 +5,15 @@
 
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.replace
+import software.amazon.smithy.kotlin.codegen.signing.AwsSignatureVersion4
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -36,7 +36,7 @@ class S3SigningConfig : KotlinIntegration {
         val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.service)
 
         return resolved.replace(newValue = S3SigningMiddleware(signingServiceName)) { middleware ->
-            middleware.name == AwsRuntimeTypes.Signing.AwsSigV4SigningMiddleware.name
+            middleware.name == RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningMiddleware.name
         }
     }
 }
@@ -44,9 +44,8 @@ class S3SigningConfig : KotlinIntegration {
 private class S3SigningMiddleware(signingServiceName: String) : AwsSignatureVersion4(signingServiceName) {
     override fun renderSigningConfig(op: OperationShape, writer: KotlinWriter) {
         super.renderSigningConfig(op, writer)
-        val sbht = AwsRuntimeTypes.Signing.AwsSignedBodyHeaderType
-        writer.addImport(sbht)
-        writer.write("signedBodyHeaderType = #T.X_AMZ_CONTENT_SHA256", sbht)
+        val sbh = RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSignedBodyHeader
+        writer.write("signedBodyHeader = #T.X_AMZ_CONTENT_SHA256", sbh)
 
         // https://github.com/awslabs/aws-sdk-kotlin/issues/200
         writer.write("useDoubleUriEncode = false")

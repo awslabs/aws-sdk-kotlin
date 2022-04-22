@@ -18,7 +18,7 @@ internal class ResolvePredictEndpoint : InlineMiddleware<PredictRequest, Predict
         op.execution.initialize.intercept { req, next ->
             val input = req.subject
             if (input.predictEndpoint == null || input.predictEndpoint.isBlank()) {
-                throw MachineLearningException("Predict requires predictEnpoint to be set to a non-empty value")
+                throw MachineLearningException("Predict requires predictEndpoint to be set to a non-empty value")
             }
             // Stash the endpoint for later use by the mutate interceptor
             req.context.predictEndpoint = AwsEndpoint(input.predictEndpoint)

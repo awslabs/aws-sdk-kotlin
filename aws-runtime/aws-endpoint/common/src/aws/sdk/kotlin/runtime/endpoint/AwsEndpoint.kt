@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.endpoint
 
 import aws.smithy.kotlin.runtime.http.Url
-import aws.smithy.kotlin.runtime.http.operation.Endpoint
+import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 
 /**
  * Represents the endpoint a service client should make API operation calls to.

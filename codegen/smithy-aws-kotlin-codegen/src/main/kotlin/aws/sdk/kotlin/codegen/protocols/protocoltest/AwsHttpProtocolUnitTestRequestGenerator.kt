@@ -6,10 +6,11 @@
 package aws.sdk.kotlin.codegen.protocols.protocoltest
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.protocols.middleware.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestRequestGenerator
+import software.amazon.smithy.kotlin.codegen.signing.AwsSignatureVersion4
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -51,7 +52,7 @@ internal fun <T : HttpMessageTestCase> HttpProtocolUnitTestGenerator<T>.renderCo
 ) {
     if (AwsSignatureVersion4.hasSigV4AuthScheme(model, serviceShape, operation)) {
         writer.addImport(AwsRuntimeTypes.Config.Credentials.StaticCredentialsProvider)
-        writer.addImport(AwsRuntimeTypes.Types.Credentials)
+        writer.addImport(RuntimeTypes.Auth.Credentials.AwsCredentials.Credentials)
         writer.write("val credentials = Credentials(#S, #S)", "AKID", "SECRET")
         writer.write("credentialsProvider = StaticCredentialsProvider(credentials)")
     }

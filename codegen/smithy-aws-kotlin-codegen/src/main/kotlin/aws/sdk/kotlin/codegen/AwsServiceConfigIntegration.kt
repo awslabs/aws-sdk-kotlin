@@ -28,10 +28,10 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         }
 
         val CredentialsProviderProp: ClientConfigProperty = ClientConfigProperty {
-            symbol = AwsRuntimeTypes.Types.CredentialsProvider
+            symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
             documentation = """
                 The AWS credentials provider to use for authenticating requests. If not provided a
-                [${symbol?.namespace}.DefaultChainCredentialsProvider] instance will be used.
+                [${AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider}] instance will be used.
                 NOTE: The caller is responsible for managing the lifetime of the provider when set. The SDK
                 client will not close it when the client is closed.
             """.trimIndent()

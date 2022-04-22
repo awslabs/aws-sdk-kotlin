@@ -57,15 +57,17 @@ class PollyPresigner : KotlinIntegration {
 
         writer.write(
             """
-            return PresignedRequestConfig(
+            return #T(
                 HttpMethod.GET,
                 httpRequestBuilder.url.path,
                 queryStringBuilder.build(),
                 duration,
                 true,
-                SigningLocation.QUERY_STRING
+                #T.QUERY_STRING,
             )
-            """.trimIndent()
+            """.trimIndent(),
+            RuntimeTypes.Auth.Signing.AwsSigningCommon.PresignedRequestConfig,
+            RuntimeTypes.Auth.Signing.AwsSigningCommon.PresigningLocation,
         )
     }
 }

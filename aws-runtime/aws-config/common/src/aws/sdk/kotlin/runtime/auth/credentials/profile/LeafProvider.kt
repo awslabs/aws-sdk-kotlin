@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials.profile
 
-import aws.sdk.kotlin.runtime.auth.credentials.Credentials
+import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 
 /**
  * A standalone member of the profile chain. Leaf providers do not require
