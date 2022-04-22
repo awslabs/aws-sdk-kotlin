@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.14.4-beta] - 04/21/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Fixes
+* CreateMultipartUpload doesn't get signed correctly [#588](https://github.com/awslabs/aws-sdk-kotlin/issues/588)
+* Possible memory leak in new default HTTP engine [#587](https://github.com/awslabs/aws-sdk-kotlin/issues/587)
+
+### Miscellaneous
+* sync AWS models [#590](https://github.com/awslabs/aws-sdk-kotlin/pull/590)
+
 ## [0.14.3-beta] - 04/14/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
