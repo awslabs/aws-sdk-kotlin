@@ -25,7 +25,10 @@ allprojects {
         val pluginConfigMap = mapOf(
             "org.jetbrains.dokka.base.DokkaBase" to """
                 {
-                    "customStyleSheets": ["${rootProject.file("docs/dokka-presets/css/logo-styles.css")}"],
+                    "customStyleSheets": [
+                        "${rootProject.file("docs/dokka-presets/css/logo-styles.css")}",
+                        "${rootProject.file("docs/dokka-presets/css/aws-styles.css")}"
+                    ],
                     "customAssets": [
                         "${rootProject.file("docs/dokka-presets/assets/logo-icon.svg")}",
                         "${rootProject.file("docs/dokka-presets/assets/aws_logo_white_59x35.png")}"
@@ -90,19 +93,21 @@ if (project.prop("kotlinWarningsAsErrors")?.toString()?.toBoolean() == true) {
     }
 }
 
-// configure the root multimodule docs
-tasks.dokkaHtmlMultiModule.configure {
-    moduleName.set("AWS SDK for Kotlin")
+project.afterEvaluate {
+    // configure the root multimodule docs
+    tasks.dokkaHtmlMultiModule.configure {
+        moduleName.set("AWS SDK for Kotlin")
 
-    includes.from(
-        // NOTE: these get concatenated
-        rootProject.file("docs/dokka-presets/README.md"),
-    )
+        includes.from(
+            // NOTE: these get concatenated
+            rootProject.file("docs/dokka-presets/README.md"),
+        )
 
-    val excludeFromDocumentation = listOf(
-        project(":aws-runtime:testing"),
-    )
-    removeChildTasks(excludeFromDocumentation)
+        val excludeFromDocumentation = listOf(
+            project(":aws-runtime:testing")
+        )
+        removeChildTasks(excludeFromDocumentation)
+    }
 }
 
 if (

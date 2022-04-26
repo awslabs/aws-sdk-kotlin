@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
     id("aws.sdk.kotlin.codegen")
@@ -188,3 +189,13 @@ listOf("apiElements", "runtimeElements").forEach {
     }
 }
 
+
+// suppress internal generated clients
+tasks.named<DokkaTaskPartial>("dokkaHtmlPartial") {
+    dokkaSourceSets.configureEach {
+        perPackageOption {
+            matchingRegex.set(""".*\.internal.*""")
+            suppress.set(true)
+        }
+    }
+}
