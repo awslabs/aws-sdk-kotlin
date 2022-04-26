@@ -7,18 +7,18 @@ package aws.sdk.kotlin.services.glacier.internal
 
 import aws.sdk.kotlin.services.glacier.model.GlacierException
 import aws.smithy.kotlin.runtime.client.operationName
+import aws.smithy.kotlin.runtime.hashing.Sha256
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.http.request.headers
-import aws.smithy.kotlin.runtime.util.Sha256
 import aws.smithy.kotlin.runtime.util.encodeToHex
 
 private const val defaultChunkSizeBytes = 1024 * 1024 // 1MB
 
 internal class GlacierBodyChecksum(
-    private val treeHasher: TreeHasher = TreeHasherImpl(defaultChunkSizeBytes) { Sha256() }
+    private val treeHasher: TreeHasher = TreeHasherImpl(defaultChunkSizeBytes, ::Sha256)
 ) : ModifyRequestMiddleware {
     override fun install(op: SdkHttpOperation<*, *>) {
         op.execution.finalize.register(this)

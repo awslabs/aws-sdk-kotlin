@@ -6,8 +6,8 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.smithy.kotlin.runtime.hashing.crc32
 import aws.smithy.kotlin.runtime.io.*
-import aws.smithy.kotlin.runtime.util.crc32
 
 internal const val MESSAGE_CRC_BYTE_LEN = 4
 

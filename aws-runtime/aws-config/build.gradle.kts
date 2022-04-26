@@ -21,6 +21,7 @@ kotlin {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:hashing:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
