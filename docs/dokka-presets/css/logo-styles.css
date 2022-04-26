@@ -3,23 +3,20 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-#logo {
+.library-name a {
+    position: relative;
+    --logo-width: 72px;
+    margin-left: calc(var(--logo-width) + 5px);
+}
+
+.library-name a::before {
+    content: '';
+    /* path is relative to final asset location output dir */
     background-image: url('../images/aws_logo_white_59x35.png');
-    background-color: #232f3e;
-    color: #333;
-    background-size: 59px 35px;
-}
-
-body {
-    background-color: #f2f3f3;
-}
-
-/*
- * override markdown samples which appear to have broken and/or minimal style
- */
-.sample-container {
-    padding: 16px;
-    border-radius: 6px;
-    background-color: rgb(280, 280, 280);
-    margin: 12px 0 12px 0;
+    background-size: contain;
+    position: absolute;
+    width: 59px;
+    height: 35px;
+    top: -10px;
+    left: calc(-1 * var(--logo-width) - 5px);
 }
