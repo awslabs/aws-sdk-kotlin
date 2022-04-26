@@ -6,12 +6,12 @@
 package aws.sdk.kotlin.services.glacier.internal
 
 import aws.smithy.kotlin.runtime.content.ByteStream
+import aws.smithy.kotlin.runtime.hashing.HashFunction
+import aws.smithy.kotlin.runtime.hashing.Sha256
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.toHttpBody
 import aws.smithy.kotlin.runtime.io.SdkByteChannel
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
-import aws.smithy.kotlin.runtime.util.HashFunction
-import aws.smithy.kotlin.runtime.util.Sha256
 import aws.smithy.kotlin.runtime.util.encodeToHex
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -62,7 +62,7 @@ class TreeHasherTest {
             }
         }
 
-        val hasher = TreeHasherImpl(megabyte) { Sha256() }
+        val hasher = TreeHasherImpl(megabyte, ::Sha256)
         val hashes = hasher.calculateHashes(byteStream.toHttpBody())
 
         assertEquals("74df7872289a84fa31b6ae4cfdbac34ef911cfe9357e842c600a060da6a899ae", hashes.fullHash.encodeToHex())
@@ -77,6 +77,9 @@ class TreeHasherTest {
  */
 class RollingSumHashFunction(private val chunkSize: Int) : HashFunction {
     private val rollingHash = ByteArray(chunkSize)
+
+    override val blockSizeBytes: Int = chunkSize
+    override val digestSizeBytes: Int = chunkSize
 
     override fun digest(): ByteArray = rollingHash
     override fun reset() = fail("reset should not have been called")

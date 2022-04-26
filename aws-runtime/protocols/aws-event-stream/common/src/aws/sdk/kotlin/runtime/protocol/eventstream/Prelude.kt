@@ -6,8 +6,8 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.smithy.kotlin.runtime.hashing.crc32
 import aws.smithy.kotlin.runtime.io.*
-import aws.smithy.kotlin.runtime.util.crc32
 
 internal const val PRELUDE_BYTE_LEN = 8
 internal const val PRELUDE_BYTE_LEN_WITH_CRC = PRELUDE_BYTE_LEN + 4
@@ -36,7 +36,7 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
         preludeBuf.writeInt(headersLength)
 
         dest.writeFully(preludeBuf)
-        dest.writeInt(bytes.crc32().toInt())
+        dest.writeUInt(bytes.crc32())
     }
 
     public companion object {

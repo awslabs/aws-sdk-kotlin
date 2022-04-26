@@ -5,12 +5,11 @@
 
 package aws.sdk.kotlin.services.glacier.internal
 
+import aws.smithy.kotlin.runtime.hashing.HashSupplier
+import aws.smithy.kotlin.runtime.hashing.hash
 import aws.smithy.kotlin.runtime.http.HttpBody
-import aws.smithy.kotlin.runtime.util.HashFunction
 import kotlinx.coroutines.flow.*
 import kotlin.math.min
-
-internal typealias HashSupplier = () -> HashFunction
 
 /**
  * The result of a [TreeHasher] calculation.
@@ -43,12 +42,12 @@ internal class TreeHasherImpl(private val chunkSizeBytes: Int, private val hashS
 
         body.chunks().collect { chunk ->
             full.update(chunk)
-            hashTree.addLast(chunk.hash())
+            hashTree.addLast(chunk.hash(hashSupplier))
         }
 
         if (hashTree.isEmpty()) {
             // Edge case for empty bodies
-            hashTree.add(byteArrayOf().hash())
+            hashTree.add(byteArrayOf().hash(hashSupplier))
         }
 
         while (hashTree.size > 1) {
@@ -70,8 +69,6 @@ internal class TreeHasherImpl(private val chunkSizeBytes: Int, private val hashS
 
         return Hashes(full.digest(), hashTree.first())
     }
-
-    private fun ByteArray.hash(): ByteArray = hashSupplier().apply { update(this@hash) }.digest()
 
     private suspend fun HttpBody.chunks(): Flow<ByteArray> = when (this) {
         is HttpBody.Empty -> flowOf()
