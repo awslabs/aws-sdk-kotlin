@@ -1,5 +1,0 @@
-{
-    "id": "d08e52ab-010f-42f0-b4b5-e63bd3890da2",
-    "type": "misc",
-    "description": "Refactor hashing functions into new subproject"
-}
