@@ -137,8 +137,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
     testImplementation("aws.smithy.kotlin:smithy-test:$smithyKotlinVersion")
 
-    // TODO -- replace this once CRT is no longer the default signer
-    testImplementation("aws.smithy.kotlin:aws-signing-crt:$smithyKotlinVersion")
+    testImplementation("aws.smithy.kotlin:aws-signing-standard:$smithyKotlinVersion")
 
     // have to manually add all the dependencies of the generated client(s)
     // doing it this way (as opposed to doing what we do for protocol-tests) allows

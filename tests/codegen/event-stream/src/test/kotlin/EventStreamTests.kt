@@ -12,7 +12,7 @@ import aws.sdk.kotlin.test.eventstream.restjson1.transform.serializeTestStreamOp
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.auth.awssigning.BodyHash
-import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
+import aws.smithy.kotlin.runtime.auth.awssigning.standard.StandardAwsSigner
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
@@ -47,7 +47,7 @@ class EventStreamTests {
                 Credentials("fake-access-key", "fake-secret-key")
             )
             attributes[AwsSigningAttributes.RequestSignature] = BodyHash.EmptyBody.hash!!.encodeToByteArray()
-            attributes[AwsSigningAttributes.Signer] = CrtAwsSigner
+            attributes[AwsSigningAttributes.Signer] = StandardAwsSigner
         }
 
         val body = serializeTestStreamOpOperationBody(testContext, req)
