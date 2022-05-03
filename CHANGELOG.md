@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.15.1-beta] - 04/29/2022
+
+**WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
+
+### Documentation
+* update API reference doc styling
+
+### Miscellaneous
+* Sync latest AWS service models
+* Refactor hashing functions into new subproject
+
+## [0.15.0] - 04/29/2022
+
+**NOTE**: Do not use. Prefer 0.15.1-beta or later.
+
 ## [0.14.4-beta] - 04/21/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**
