@@ -29,8 +29,7 @@ kotlin {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-
-                implementation("aws.smithy.kotlin:aws-signing-standard:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
             }
         }
 

@@ -136,8 +136,7 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
     testImplementation("aws.smithy.kotlin:smithy-test:$smithyKotlinVersion")
-
-    testImplementation("aws.smithy.kotlin:aws-signing-standard:$smithyKotlinVersion")
+    testImplementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
 
     // have to manually add all the dependencies of the generated client(s)
     // doing it this way (as opposed to doing what we do for protocol-tests) allows
