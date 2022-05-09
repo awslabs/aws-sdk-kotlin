@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.codegen.protocols.middleware
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace
