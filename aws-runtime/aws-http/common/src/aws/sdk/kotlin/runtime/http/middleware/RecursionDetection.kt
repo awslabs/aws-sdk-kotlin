@@ -9,7 +9,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.util.EnvironmentProvider
-import aws.smithy.kotlin.runtime.util.text.urlEncodeComponent
+import aws.smithy.kotlin.runtime.util.text.percentEncode
 
 internal const val ENV_FUNCTION_NAME = "AWS_LAMBDA_FUNCTION_NAME"
 internal const val ENV_TRACE_ID = "_X_AMZN_TRACE_ID"
@@ -28,16 +28,27 @@ public class RecursionDetection(
         val traceId = env.getenv(ENV_TRACE_ID)
         if (env.getenv(ENV_FUNCTION_NAME) == null || traceId == null) return req
 
-        req.subject.headers[HEADER_TRACE_ID] = traceId.urlEncodeComponent(where = Char::isISOControl)
+        req.subject.headers[HEADER_TRACE_ID] = traceId.percentEncode()
         return req
     }
 }
 
 /**
- * Identifies characters that require %-encoding for the purposes of this specific header.
+ * Percent-encode ISO control characters for the purposes of this specific header.
  *
- * The existing `Char::isISOControl` doesn't apply here because that matches against characters in
+ * The existing `Char::isISOControl` check cannot be used here, because that matches against characters in
  * `[0x00, 0x1f] U [0x7f, 0x9f]`. The SEP for recursion detection dictates we should encode across
  * `[0x00, 0x1f] U [0x7f, 0xff]`.
  */
-private fun Char.isISOControl() = code in 0x00..0x1f || code in 0x7f..0xff
+private fun String.percentEncode(): String {
+    val sb = StringBuilder(this.length)
+    val data = this.encodeToByteArray()
+    for (cbyte in data) {
+        val chr = cbyte.toInt().toChar()
+        sb.append(
+            if (chr.code in 0x00..0x1f || chr.code in 0x7f..0xff)
+                cbyte.percentEncode() else chr
+        )
+    }
+    return sb.toString()
+}
