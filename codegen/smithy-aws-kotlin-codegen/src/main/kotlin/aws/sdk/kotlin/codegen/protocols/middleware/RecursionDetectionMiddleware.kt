@@ -26,17 +26,7 @@ class RecursionDetectionMiddleware : ProtocolMiddleware {
         namespace(AwsKotlinDependency.AWS_HTTP, subpackage = "middleware")
     }
 
-    private val platformSymbol = buildSymbol {
-        name = "Platform"
-        namespace(KotlinDependency.UTILS)
-    }
-
-    override fun renderProperties(writer: KotlinWriter) {
-        writer.addImport(middlewareSymbol)
-        writer.addImport(platformSymbol)
-    }
-
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-        writer.write("op.install(#T(Platform::getenv))", middlewareSymbol)
+        writer.write("op.install(#T())", middlewareSymbol)
     }
 }
