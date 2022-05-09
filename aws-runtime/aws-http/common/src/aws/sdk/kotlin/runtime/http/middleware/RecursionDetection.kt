@@ -10,7 +10,7 @@ import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.util.EnvironmentProvider
 import aws.smithy.kotlin.runtime.util.Platform
-import aws.smithy.kotlin.runtime.util.text.percentEncode
+import aws.smithy.kotlin.runtime.util.text.percentEncodeTo
 
 internal const val ENV_FUNCTION_NAME = "AWS_LAMBDA_FUNCTION_NAME"
 internal const val ENV_TRACE_ID = "_X_AMZN_TRACE_ID"
@@ -46,10 +46,11 @@ private fun String.percentEncode(): String {
     val data = this.encodeToByteArray()
     for (cbyte in data) {
         val chr = cbyte.toInt().toChar()
-        sb.append(
-            if (chr.code in 0x00..0x1f || chr.code in 0x7f..0xff)
-                cbyte.percentEncode() else chr
-        )
+        if (chr.code in 0x00..0x1f || chr.code in 0x7f..0xff) {
+            cbyte.percentEncodeTo(sb)
+        } else {
+            sb.append(chr)
+        }
     }
     return sb.toString()
 }
