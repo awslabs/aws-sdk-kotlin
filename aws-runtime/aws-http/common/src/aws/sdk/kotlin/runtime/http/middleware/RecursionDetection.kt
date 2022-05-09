@@ -12,7 +12,7 @@ import aws.smithy.kotlin.runtime.util.EnvironmentProvider
 import aws.smithy.kotlin.runtime.util.text.urlEncodeComponent
 
 internal const val ENV_FUNCTION_NAME = "AWS_LAMBDA_FUNCTION_NAME"
-internal const val ENV_TRACE_ID = "_X_AMZ_TRACE_ID"
+internal const val ENV_TRACE_ID = "_X_AMZN_TRACE_ID"
 internal const val HEADER_TRACE_ID = "X-Amzn-Trace-Id"
 
 /**
