@@ -357,9 +357,9 @@ class PresignerGenerator : KotlinIntegration {
                 name = "signer"
                 documentation = "The implementation of AWS signer to use for signing requests"
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.RequiredWithDefault("CrtAwsSigner")
+                propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultAwsSigner")
                 additionalImports = listOf(
-                    RuntimeTypes.Auth.Signing.AwsSigningCrt.CrtAwsSigner,
+                    RuntimeTypes.Auth.Signing.AwsSigningStandard.DefaultAwsSigner,
                 )
             },
             ClientConfigProperty {
