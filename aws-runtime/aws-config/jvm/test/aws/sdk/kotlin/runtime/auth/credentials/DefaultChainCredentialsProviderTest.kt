@@ -46,7 +46,9 @@ class DefaultChainCredentialsProviderTest {
         private val fs: Filesystem
     ) : PlatformProvider, Filesystem by fs {
         override fun osInfo(): OperatingSystem = OperatingSystem(OsFamily.Linux, "test")
+        override fun getAllProperties(): Map<String, String> = mapOf()
         override fun getProperty(key: String): String? = null
+        override fun getAllEnvVars(): Map<String, String> = env
         override fun getenv(key: String): String? = env[key]
     }
 

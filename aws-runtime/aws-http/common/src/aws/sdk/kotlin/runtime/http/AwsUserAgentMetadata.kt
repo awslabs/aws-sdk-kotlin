@@ -107,6 +107,8 @@ internal fun loadAwsUserAgentMetadataFromEnvironment(platform: PlatformProvider,
     val appId = platform.getProperty(AWS_APP_ID_PROP) ?: platform.getenv(AWS_APP_ID_ENV)
 
     val frameworkMetadata = FrameworkMetadata.fromEnvironment(platform)
+    val customMetadata = CustomUserAgentMetadata.fromEnvironment(platform)
+
     return AwsUserAgentMetadata(
         sdkMeta,
         apiMeta,
@@ -115,6 +117,7 @@ internal fun loadAwsUserAgentMetadataFromEnvironment(platform: PlatformProvider,
         detectExecEnv(platform),
         frameworkMetadata = frameworkMetadata,
         appId = appId,
+        customMetadata = customMetadata,
     )
 }
 
