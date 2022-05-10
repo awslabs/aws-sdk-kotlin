@@ -130,7 +130,7 @@ class RecursionDetectionTest {
     }
 
     @Test
-    fun `ignores other chars that are usually %-encoded`() = runTest {
+    fun `ignores other chars that are usually percent encoded`() = runTest {
         test(
             mapOf(
                 ENV_FUNCTION_NAME to "some-function",
