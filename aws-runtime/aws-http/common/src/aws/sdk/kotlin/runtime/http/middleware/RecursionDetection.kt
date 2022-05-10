@@ -38,15 +38,15 @@ public class RecursionDetection(
  * Percent-encode ISO control characters for the purposes of this specific header.
  *
  * The existing `Char::isISOControl` check cannot be used here, because that matches against characters in
- * `[0x00, 0x1f] U [0x7f, 0x9f]`. The SEP for recursion detection dictates we should encode across
- * `[0x00, 0x1f] U [0x7f, 0xff]`.
+ * `[0x00, 0x1f] U [0x7f, 0x9f]`. The SEP for recursion detection dictates we should only encode across
+ * `[0x00, 0x1f]`.
  */
 private fun String.percentEncode(): String {
     val sb = StringBuilder(this.length)
     val data = this.encodeToByteArray()
     for (cbyte in data) {
         val chr = cbyte.toInt().toChar()
-        if (chr.code in 0x00..0x1f || chr.code in 0x7f..0xff) {
+        if (chr.code in 0x00..0x1f) {
             cbyte.percentEncodeTo(sb)
         } else {
             sb.append(chr)

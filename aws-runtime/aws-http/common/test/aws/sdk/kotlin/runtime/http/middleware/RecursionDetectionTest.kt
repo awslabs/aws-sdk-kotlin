@@ -128,4 +128,16 @@ class RecursionDetectionTest {
             "first%0Asecond"
         )
     }
+
+    @Test
+    fun `ignores other chars that are usually %-encoded`() = runTest {
+        test(
+            mapOf(
+                ENV_FUNCTION_NAME to "some-function",
+                ENV_TRACE_ID to "test123-=;:+&[]{}\"'"
+            ),
+            null,
+            "test123-=;:+&[]{}\"'"
+        )
+    }
 }
