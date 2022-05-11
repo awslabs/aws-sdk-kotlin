@@ -6,9 +6,7 @@
 package aws.sdk.kotlin.runtime.http
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.http.operation.ConfigMetadata
 import aws.sdk.kotlin.runtime.http.operation.CustomUserAgentMetadata
-import aws.sdk.kotlin.runtime.http.operation.FeatureMetadata
 import aws.smithy.kotlin.runtime.util.*
 import kotlin.jvm.JvmInline
 
@@ -69,20 +67,23 @@ public data class AwsUserAgentMetadata(
                 ua.add("md/internal")
             }
 
+            // FIXME user agent strings are now too long so commenting out several metadata below.
+            // Re-enable once user agent strings can be longer.
+
             ua.add("$sdkMetadata")
-            ua.add("$apiMetadata")
+            // ua.add("$apiMetadata")
             ua.add("$osMetadata")
             ua.add("$languageMetadata")
-            execEnvMetadata?.let { ua.add("$it") }
+            // execEnvMetadata?.let { ua.add("$it") }
 
-            val features = customMetadata?.typedExtras?.filterIsInstance<FeatureMetadata>()
-            features?.forEach { ua.add("$it") }
+            // val features = customMetadata?.typedExtras?.filterIsInstance<FeatureMetadata>()
+            // features?.forEach { ua.add("$it") }
 
-            val config = customMetadata?.typedExtras?.filterIsInstance<ConfigMetadata>()
-            config?.forEach { ua.add("$it") }
+            // val config = customMetadata?.typedExtras?.filterIsInstance<ConfigMetadata>()
+            // config?.forEach { ua.add("$it") }
 
             frameworkMetadata?.let { ua.add("$it") }
-            appId?.let { ua.add("app/$it") }
+            // appId?.let { ua.add("app/$it") }
 
             customMetadata?.extras?.let {
                 val wrapper = AdditionalMetadata(it)
@@ -186,10 +187,12 @@ public data class LanguageMetadata(
 ) {
     override fun toString(): String = buildString {
         append("lang/kotlin/$version")
+        /* FIXME re-enable once user agent strings can be longer
         if (extras.isNotEmpty()) {
             val wrapper = AdditionalMetadata(extras)
             append(" $wrapper")
         }
+         */
     }
 }
 
