@@ -53,7 +53,9 @@ class AwsSdkSettingTest {
 
     private fun mockPlatform(env: Map<String, String>, jvmProps: Map<String, String>): PlatformEnvironProvider {
         return object : PlatformEnvironProvider {
+            override fun getAllEnvVars(): Map<String, String> = env
             override fun getenv(key: String): String? = env[key]
+            override fun getAllProperties(): Map<String, String> = jvmProps
             override fun getProperty(key: String): String? = jvmProps[key]
         }
     }

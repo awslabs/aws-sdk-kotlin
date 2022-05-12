@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.http
 import aws.sdk.kotlin.runtime.http.operation.CustomUserAgentMetadata
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.smithy.kotlin.runtime.util.OsFamily
-import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -31,7 +31,15 @@ class AwsUserAgentMetadataTest {
             add("foo", "bar")
         }
         val ua = AwsUserAgentMetadata(sdkMeta, apiMeta, osMetadata, langMeta, customMetadata = custom)
-        val expected = "aws-sdk-kotlin/1.2.3 api/test-service/1.2.3 os/linux/ubuntu-20.04 lang/kotlin/1.4.31 md/jvmVersion/1.11 md/foo/bar"
+        // FIXME re-enable once user agent strings can be longer
+        val expected = listOf(
+            "aws-sdk-kotlin/1.2.3",
+            // "api/test-service/1.2.3",
+            "os/linux/ubuntu-20.04",
+            "lang/kotlin/1.4.31",
+            // "md/jvmVersion/1.11",
+            "md/foo/bar",
+        ).joinToString(separator = " ")
         assertEquals(expected, ua.xAmzUserAgent)
     }
 
@@ -82,7 +90,10 @@ class AwsUserAgentMetadataTest {
         )
         testEnvironments.forEach { test ->
             val actual = loadAwsUserAgentMetadataFromEnvironment(test.provider, ApiMetadata("Test Service", "1.2.3"))
-            actual.xAmzUserAgent.shouldContain(test.expected)
+
+            // FIXME re-enable once user agent strings can be longer
+            // actual.xAmzUserAgent.shouldContain(test.expected)
+            actual.xAmzUserAgent.shouldNotContain(test.expected)
         }
     }
 }

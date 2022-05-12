@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.region
 
+import aws.smithy.kotlin.runtime.util.EnvironmentProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -13,11 +14,15 @@ import kotlin.test.assertNull
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class EnvironmentRegionProviderTest {
+    fun Map<String, String>.asEnvironmentProvider() = object : EnvironmentProvider {
+        override fun getAllEnvVars(): Map<String, String> = this@asEnvironmentProvider
+        override fun getenv(key: String): String? = this@asEnvironmentProvider[key]
+    }
 
     @Test
     fun noRegion() = runTest {
         val environ = mapOf<String, String>()
-        val provider = EnvironmentRegionProvider { environ[it] }
+        val provider = EnvironmentRegionProvider(environ.asEnvironmentProvider())
         assertNull(provider.getRegion())
     }
 
@@ -27,7 +32,7 @@ class EnvironmentRegionProviderTest {
             "AWS_REGION" to "us-east-1"
         )
 
-        val provider = EnvironmentRegionProvider { environ[it] }
+        val provider = EnvironmentRegionProvider(environ.asEnvironmentProvider())
 
         assertEquals("us-east-1", provider.getRegion())
     }
