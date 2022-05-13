@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.15.2-beta] - 05/13/2022
+
+### Features
+* Implement recursion detection middleware.
+* [#575](https://github.com/awslabs/aws-sdk-kotlin/issues/575) Add support for detecting custom metadata in system properties (starting with `aws.customMetadata.`) and environment variables (starting with `AWS_CUSTOM_METADATA_`)
+
 ## [0.15.1-beta] - 04/29/2022
 
 **WARNING: Beta releases may contain bugs and no guarantee is made about API stability. They are not recommended for production use!**

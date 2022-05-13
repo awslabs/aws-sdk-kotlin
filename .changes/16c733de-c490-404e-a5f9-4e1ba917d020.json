@@ -1,8 +1,0 @@
-{
-    "id": "16c733de-c490-404e-a5f9-4e1ba917d020",
-    "type": "feature",
-    "description": "Add support for detecting custom metadata in system properties (starting with `aws.customMetadata.`) and environment variables (starting with `AWS_CUSTOM_METADATA_`)",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#575"
-    ]
-}
