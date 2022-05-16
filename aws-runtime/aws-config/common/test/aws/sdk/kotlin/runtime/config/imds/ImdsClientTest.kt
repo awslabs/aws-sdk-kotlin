@@ -12,15 +12,10 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
-import aws.smithy.kotlin.runtime.testing.IgnoreWindows
-import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
-import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
@@ -210,29 +205,6 @@ class ImdsClientTest {
 
         assertEquals(HttpStatusCode.Forbidden.value, ex.statusCode)
         connection.assertRequests()
-    }
-
-    @IgnoreWindows("DNS fails faster on windows and results in a different error: `socket connect failure, no route to host`")
-    @Test
-    fun testHttpConnectTimeouts() = runBlocking {
-        // end-to-end real client times out after 1-second
-        val client = ImdsClient {
-            // will never resolve
-            endpointConfiguration = EndpointConfiguration.Custom("http://240.0.0.0".toEndpoint())
-        }
-
-        val start = Instant.now()
-        val ex = assertFails {
-            withTimeout(3000) {
-                client.get("/latest/metadata")
-            }
-        }
-
-        // this message is asserted against whatever the default HTTP client engine throws for an exception...
-        assertTrue(ex.message!!.lowercase().contains("timeout has expired"), "message `${ex.message}`")
-        val elapsed = Instant.now().epochMilliseconds - start.epochMilliseconds
-        assertTrue(elapsed >= 1000, "expected elapsed ms to be greater than 1000; actual = $elapsed")
-        assertTrue(elapsed < 2000, "expected elapsed ms to be less than 2000; actual = $elapsed")
     }
 
     data class ImdsConfigTest(
