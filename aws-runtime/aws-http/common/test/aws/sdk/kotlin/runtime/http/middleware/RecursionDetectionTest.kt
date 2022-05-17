@@ -38,7 +38,7 @@ class RecursionDetectionTest {
     }
 
     private val mockEngine = object : HttpClientEngineBase("test") {
-        override suspend fun roundTrip(request: HttpRequest): HttpCall {
+        override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
             val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
             val now = Instant.now()
             return HttpCall(request, resp, now, now)

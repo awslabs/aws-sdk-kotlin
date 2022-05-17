@@ -10,6 +10,7 @@ import aws.sdk.kotlin.runtime.endpoint.AwsEndpoint
 import aws.sdk.kotlin.runtime.endpoint.AwsEndpointResolver
 import aws.sdk.kotlin.runtime.endpoint.CredentialScope
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
+import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.operation.*
@@ -27,7 +28,7 @@ import kotlin.test.assertEquals
 class ResolveAwsEndpointTest {
 
     private val mockEngine = object : HttpClientEngineBase("test") {
-        override suspend fun roundTrip(request: HttpRequest): HttpCall {
+        override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
             val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
             return HttpCall(request, resp, Instant.now(), Instant.now())
         }
