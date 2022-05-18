@@ -39,8 +39,8 @@ public class AwsRetryMiddleware<O>(
     }
 
     override fun onAttempt(request: SdkHttpRequest, attempt: Int) {
-        // we don't know max attempts, it comes from the strategy and setting ttl would never be accurate
-        // set attempt which is the only additional metadata we know
-        request.subject.header(AMZ_SDK_REQUEST_HEADER, "attempt=$attempt")
+        // setting ttl would never be accurate, just set what we know which is attempt and maybe max attempt
+        val maxAttempts = strategy.options.maxAttempts?.let { "; max=$it" } ?: ""
+        request.subject.header(AMZ_SDK_REQUEST_HEADER, "attempt=${attempt}$maxAttempts")
     }
 }

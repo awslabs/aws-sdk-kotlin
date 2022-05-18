@@ -54,6 +54,7 @@ class AwsRetryMiddlewareTest {
             StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default),
             delayProvider
         )
+        val maxAttempts = strategy.options.maxAttempts
 
         op.install(AwsRetryMiddleware(strategy, AwsDefaultRetryPolicy))
 
@@ -63,7 +64,7 @@ class AwsRetryMiddlewareTest {
 
         assertTrue(calls.all { it.request.headers[AMZ_SDK_INVOCATION_ID_HEADER] == sdkRequestId })
         calls.forEachIndexed { idx, call ->
-            assertEquals("attempt=${idx + 1}", call.request.headers[AMZ_SDK_REQUEST_HEADER])
+            assertEquals("attempt=${idx + 1}; max=$maxAttempts", call.request.headers[AMZ_SDK_REQUEST_HEADER])
         }
     }
 }
