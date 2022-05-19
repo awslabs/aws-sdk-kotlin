@@ -1,0 +1,5 @@
+{
+    "id": "6c6fab02-75ef-4363-ab57-f9f45a25a3e9",
+    "type": "misc",
+    "description": "Upgrade smithy-kotlin to 0.9.2 which includes codegen updates to generate operations with all optional inputs to include a default parameter. See [smithy-kotlin#129](https://github.com/awslabs/smithy-kotlin/issues/129)"
+}
