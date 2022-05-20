@@ -155,10 +155,9 @@ abstract class AbstractQueryFormUrlSerializerGenerator(
     ) {
         // render the serde descriptors
         descriptorGenerator(ctx, shape, members, writer).render()
-        if (shape.isUnionShape) {
-            SerializeUnionGenerator(ctx, members, writer, defaultTimestampFormat).render()
-        } else {
-            SerializeStructGenerator(ctx, members, writer, defaultTimestampFormat).render()
+        when (shape) {
+            is UnionShape -> SerializeUnionGenerator(ctx, shape, members, writer, defaultTimestampFormat).render()
+            else -> SerializeStructGenerator(ctx, members, writer, defaultTimestampFormat).render()
         }
     }
 

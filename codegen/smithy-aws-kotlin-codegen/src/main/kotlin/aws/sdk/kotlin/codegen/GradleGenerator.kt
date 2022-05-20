@@ -49,16 +49,26 @@ class GradleGenerator : KotlinIntegration {
 
         writer.write("val kotlinVersion: String by project")
 
-        val dependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
+        val allDependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
 
-        writer.write("")
-            .withBlock("dependencies {", "}") {
-                val orderedDependencies = dependencies.sortedWith(compareBy({ it.config }, { it.artifact }))
-                for (dependency in orderedDependencies) {
-                    write(dependency.dependencyNotation())
+        writer
+            .write("")
+            .withBlock("kotlin {", "}") {
+                withBlock("sourceSets {", "}") {
+                    allDependencies
+                        .sortedWith(compareBy({ it.config }, { it.artifact }))
+                        .groupBy { it.config.sourceSet }
+                        .forEach { (sourceSet, dependencies) ->
+                            withBlock("$sourceSet {", "}") {
+                                withBlock("dependencies {", "}") {
+                                    dependencies
+                                        .map { it.dependencyNotation() }
+                                        .forEach(::write)
+                                }
+                            }
+                        }
                 }
             }
-            .write("")
 
         val contents = writer.toString()
         delegator.fileManifest.writeFile("build.gradle.kts", contents)

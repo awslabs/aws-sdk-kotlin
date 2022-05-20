@@ -62,8 +62,8 @@ internal fun KotlinDependency.dependencyNotation(allowProjectNotation: Boolean =
     val dep = this
     return if (allowProjectNotation && sameProjectDeps.contains(dep)) {
         val projectNotation = sameProjectDeps[dep]
-        "${dep.config}($projectNotation)"
+        "${dep.config.kmpName}($projectNotation)"
     } else {
-        "${dep.config}(\"${dep.group}:${dep.artifact}:${dep.version}\")"
+        "${dep.config.kmpName}(\"${dep.group}:${dep.artifact}:${dep.version}\")"
     }
 }
