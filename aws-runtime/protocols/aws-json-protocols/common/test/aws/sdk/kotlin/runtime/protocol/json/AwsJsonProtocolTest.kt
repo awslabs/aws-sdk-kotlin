@@ -27,7 +27,7 @@ class AwsJsonProtocolTest {
     @Test
     fun testSetJsonProtocolHeaders() = runTest {
         val mockEngine = object : HttpClientEngineBase("test") {
-            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+            override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
                 val now = Instant.now()
                 return HttpCall(request, resp, now, now)
@@ -58,7 +58,7 @@ class AwsJsonProtocolTest {
     @Test
     fun testEmptyBody() = runTest {
         val mockEngine = object : HttpClientEngineBase("test") {
-            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+            override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
                 val now = Instant.now()
                 return HttpCall(request, resp, now, now)
@@ -86,7 +86,7 @@ class AwsJsonProtocolTest {
     @Test
     fun testDoesNotOverride() = runTest {
         val mockEngine = object : HttpClientEngineBase("test") {
-            override suspend fun roundTrip(request: HttpRequest): HttpCall {
+            override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
                 val now = Instant.now()
                 return HttpCall(request, resp, now, now)
