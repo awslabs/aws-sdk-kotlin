@@ -1,11 +1,11 @@
-import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
-import org.jetbrains.kotlin.gradle.tasks.KotlinTest
-
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
- *
  */
+
+import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
+import org.jetbrains.kotlin.gradle.tasks.KotlinTest
+
 plugins {
     kotlin("multiplatform")
     `maven-publish`
@@ -130,7 +130,10 @@ subprojects {
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.allWarningsAsErrors = false // FIXME Tons of errors occur in generated code
+        kotlinOptions {
+            allWarningsAsErrors = false // FIXME Tons of errors occur in generated code
+            jvmTarget = "1.8" // fixes outgoing variant metadata: https://github.com/awslabs/smithy-kotlin/issues/258
+        }
     }
 
     apply(from = rootProject.file("gradle/publish.gradle"))
