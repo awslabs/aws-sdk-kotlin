@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.http.ApiMetadata
 import aws.sdk.kotlin.runtime.http.loadAwsUserAgentMetadataFromEnvironment
 import aws.sdk.kotlin.runtime.http.operation.customUserAgentMetadata
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
+import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -31,7 +32,7 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserAgentTest {
     private val mockEngine = object : HttpClientEngineBase("test") {
-        override suspend fun roundTrip(request: HttpRequest): HttpCall {
+        override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
             val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
             val now = Instant.now()
             return HttpCall(request, resp, now, now)
