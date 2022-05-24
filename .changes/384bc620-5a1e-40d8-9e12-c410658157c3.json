@@ -1,7 +1,7 @@
 {
     "id": "384bc620-5a1e-40d8-9e12-c410658157c3",
     "type": "bugfix",
-    "description": "Upgrade smithy-kotlin to 0.10.0 which upgrades to ktor-2.x",
+    "description": "Upgrade smithy-kotlin to 0.10.0 which upgrades to ktor-2.x. This is considered a **breaking change** as it may reverse the issue described in #480 and break ktor-1.x users.",
     "issues": [
         "awslabs/aws-sdk-kotlin#480"
     ]
