@@ -15,7 +15,16 @@
     "hosts": {
         "windows": {
             "!imports": [],
-            "!env": {}
+            "!env": {},
+            "!test_steps": [
+                "{gradlew} publishToMavenLocal",
+                "{gradlew} test allTests",
+                "systeminfo",
+                "{gradlew} --status",
+                "{gradlew} --stop",
+                "systeminfo",
+                "{gradlew} testAllProtocols"
+            ]
         }
     },
     "_comment": "prebuild step defined in .builder/actions/set_upstream_versions.py",
