@@ -1,0 +1,8 @@
+{
+    "id": "0011f293-6d95-46ab-ac8c-59d11ef54559",
+    "type": "feature",
+    "description": "Enhance generic codegen to be more KMP-friendly. This is a **breaking change** which means service client artifacts will now include their platform name (e.g., `s3-jvm-<version>.jar` vs `s3-<version>.jar`). Users consuming dependencies through the Gradle Kotlin plugin will have this handled automatically for them.",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#460"
+    ]
+}
