@@ -3,12 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 
-import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
-import org.jetbrains.kotlin.gradle.tasks.KotlinTest
-
 plugins {
     kotlin("multiplatform")
-    `maven-publish`
     id("org.jetbrains.dokka")
 }
 
