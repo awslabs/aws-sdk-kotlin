@@ -1,13 +1,14 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
- *
  */
+
 plugins {
-    kotlin("jvm")
-    `maven-publish`
+    kotlin("multiplatform")
     id("org.jetbrains.dokka")
 }
+
+val platforms = listOf("common", "jvm")
 
 val sdkVersion: String by project
 val kotlinVersion: String by project
@@ -17,149 +18,119 @@ val kotestVersion: String by project
 val optinAnnotations = listOf(
     "aws.smithy.kotlin.runtime.util.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi",
+    "kotlin.RequiresOptIn",
 )
+
+kotlin {
+    jvm() // Create a JVM target with the default name 'jvm'
+}
 
 subprojects {
     group = "aws.sdk.kotlin"
     version = sdkVersion
 
     apply {
-        plugin("org.jetbrains.kotlin.jvm")
+        plugin("org.jetbrains.kotlin.multiplatform")
         plugin("org.jetbrains.dokka")
     }
 
-    // have generated sdk's opt-in to internal runtime features
-    kotlin.sourceSets.all {
-        optinAnnotations.forEach { languageSettings.optIn(it) }
+    logger.info("configuring: $project")
+
+    platforms.forEach { platform ->
+        configure(listOf(project)) {
+            apply(from = rootProject.file("gradle/$platform.gradle"))
+        }
     }
 
     kotlin {
-        sourceSets.getByName("main") {
-            kotlin.srcDir("common/src")
-            kotlin.srcDir("generated-src/main/kotlin")
-        }
-        sourceSets.getByName("test") {
-            kotlin.srcDir("common/test")
-            kotlin.srcDir("generated-src/test")
+        sourceSets {
+            all {
+                val srcDir = if (name.endsWith("Main")) "src" else "test"
+                val resourcesPrefix = if (name.endsWith("Test")) "test-" else  ""
+                // the name is always the platform followed by a suffix of either "Main" or "Test" (e.g. jvmMain, commonTest, etc)
+                val platform = name.substring(0, name.length - 4)
+                kotlin.srcDir("$platform/$srcDir")
+                resources.srcDir("$platform/${resourcesPrefix}resources")
 
-            dependencies {
-                implementation(kotlin("test-junit5"))
-                implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-                implementation(project(":aws-runtime:testing"))
-                implementation("io.kotest:kotest-assertions-core:$kotestVersion")
+                languageSettings.progressiveMode = true
+
+                // have generated sdk's opt-in to internal runtime features
+                optinAnnotations.forEach { languageSettings.optIn(it) }
+            }
+
+            getByName("commonMain") {
+                kotlin.srcDir("generated-src/main/kotlin")
+            }
+
+            getByName("commonTest") {
+                kotlin.srcDir("generated-src/test")
+
+                dependencies {
+                    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+                    implementation(project(":aws-runtime:testing"))
+                }
+            }
+        }
+
+        if (project.file("e2eTest").exists()) {
+            jvm().compilations {
+                val main by getting
+                val e2eTest by creating {
+                    defaultSourceSet {
+                        kotlin.srcDir("e2eTest")
+
+                        dependencies {
+                            // Compile against the main compilation's compile classpath and outputs:
+                            implementation(main.compileDependencyFiles + main.output.classesDirs)
+
+                            implementation(kotlin("test"))
+                            implementation(kotlin("test-junit5"))
+                            implementation(project(":aws-runtime:testing"))
+                            implementation(project(":tests:e2e-test-util"))
+                        }
+                    }
+
+                    kotlinOptions {
+                        // Enable coroutine runTests in 1.6.10
+                        // NOTE: may be removed after coroutines-test runTests becomes stable
+                        freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
+                    }
+
+                    tasks.register<Test>("e2eTest") {
+                        description = "Run e2e service tests"
+                        group = "verification"
+
+                        // Run the tests with the classpath containing the compile dependencies (including 'main'),
+                        // runtime dependencies, and the outputs of this compilation:
+                        classpath = compileDependencyFiles + runtimeDependencyFiles + output.allOutputs
+
+                        // Run only the tests from this compilation's outputs:
+                        testClassesDirs = output.classesDirs
+
+                        useJUnitPlatform()
+                        testLogging {
+                            events("passed", "skipped", "failed")
+                            showStandardStreams = true
+                            showStackTraces = true
+                            showExceptions = true
+                            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                        }
+                    }
+                }
             }
         }
     }
 
-    tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
-        dokkaSourceSets {
-            named("main") {
-                platform.set(org.jetbrains.dokka.Platform.jvm)
-                sourceRoots.from(kotlin.sourceSets.getByName("main").kotlin.srcDirs)
-            }
-        }
+    dependencies {
+        dokkaPlugin(project(":dokka-aws"))
     }
 
-    tasks.test {
-        useJUnitPlatform()
-        testLogging {
-            events("passed", "skipped", "failed")
-            showStandardStreams = true
-            showStackTraces = true
-            showExceptions = true
-            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-        }
-    }
-
-
-    tasks.compileKotlin {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "1.8" // this is the default but it's better to be explicit (e.g. it may change in Kotlin 1.5)
             allWarningsAsErrors = false // FIXME Tons of errors occur in generated code
-        }
-    }
-    tasks.compileTestKotlin {
-        kotlinOptions {
-            jvmTarget = "1.8" // this is the default but it's better to be explicit (e.g. it may change in Kotlin 1.5)
-            allWarningsAsErrors = false // FIXME Tons of errors occur in generated code
-            // Enable coroutine runTests in 1.6.10
-            // NOTE: may be removed after coroutines-test runTests becomes stable
-            freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
-        }
-    }
-
-    // FIXME - we can remove this when we implement generated services as multiplatform.
-    setOutgoingVariantMetadata()
-
-    val sourcesJar by tasks.creating(Jar::class) {
-        group = "publishing"
-        description = "Assembles Kotlin sources jar"
-        classifier = "sources"
-        from(sourceSets.getByName("main").allSource)
-    }
-
-    // FIXME - kotlin multiplatform configures publications for you so when we switch we can remove this
-    // and just apply "publish.gradle" from the set of root gradle scripts (just like we do for the runtime)
-    plugins.apply("maven-publish")
-    publishing {
-        publications {
-            create<MavenPublication>("sdk"){
-                from(components["java"])
-                artifact(sourcesJar)
-            }
+            jvmTarget = "1.8" // fixes outgoing variant metadata: https://github.com/awslabs/smithy-kotlin/issues/258
         }
     }
 
     apply(from = rootProject.file("gradle/publish.gradle"))
-
-    if (project.file("e2eTest").exists()) {
-
-        kotlin.target.compilations {
-            val main by getting
-            val e2eTest by creating {
-                defaultSourceSet {
-                    kotlin.srcDir("e2eTest")
-                    dependencies {
-                        implementation(main.compileDependencyFiles + main.runtimeDependencyFiles + main.output.classesDirs)
-
-                        implementation(kotlin("test"))
-                        implementation(kotlin("test-junit5"))
-                        implementation(project(":aws-runtime:testing"))
-                        implementation(project(":tests:e2e-test-util"))
-                    }
-                }
-                kotlinOptions {
-                    // Enable coroutine runTests in 1.6.10
-                    // NOTE: may be removed after coroutines-test runTests becomes stable
-                    freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
-                }
-
-                tasks.register<Test>("e2eTest") {
-                    description = "Run e2e service tests"
-                    group = "verification"
-                    classpath = compileDependencyFiles + runtimeDependencyFiles
-                    testClassesDirs = output.classesDirs
-                    useJUnitPlatform()
-                    testLogging {
-                        events("passed", "skipped", "failed")
-                        showStandardStreams = true
-                        showStackTraces = true
-                        showExceptions = true
-                        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-// fixes outgoing variant metadata: https://github.com/awslabs/smithy-kotlin/issues/258
-fun Project.setOutgoingVariantMetadata() {
-    tasks.withType<JavaCompile>() {
-        val javaVersion = JavaVersion.VERSION_1_8.toString()
-        sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
-    }
 }

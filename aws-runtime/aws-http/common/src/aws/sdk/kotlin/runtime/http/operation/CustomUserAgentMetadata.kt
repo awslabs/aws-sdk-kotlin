@@ -8,6 +8,10 @@ package aws.sdk.kotlin.runtime.http.operation
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.util.AttributeKey
+import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
+
+private const val CUSTOM_METADATA_ENV_PREFIX = "AWS_CUSTOM_METADATA_"
+private const val CUSTOM_METADATA_PROP_PREFIX = "aws.customMetadata."
 
 /**
  * Operation context element for adding additional metadata to the `User-Agent` header string.
@@ -20,6 +24,17 @@ public class CustomUserAgentMetadata {
 
     internal companion object {
         public val ContextKey: AttributeKey<CustomUserAgentMetadata> = AttributeKey("CustomUserAgentMetadata")
+
+        internal fun fromEnvironment(provider: PlatformEnvironProvider): CustomUserAgentMetadata {
+            fun Map<String, String>.findAndStripKeyPrefix(prefix: String) = this
+                .filterKeys { it.startsWith(prefix) }
+                .mapKeys { (key, _) -> key.substring(prefix.length) }
+
+            val envVarMap = provider.getAllEnvVars().findAndStripKeyPrefix(CUSTOM_METADATA_ENV_PREFIX)
+            val propMap = provider.getAllProperties().findAndStripKeyPrefix(CUSTOM_METADATA_PROP_PREFIX)
+            val allProps = envVarMap + propMap
+            return CustomUserAgentMetadata().apply { allProps.forEach { (key, value) -> add(key, value) } }
+        }
     }
 
     /**

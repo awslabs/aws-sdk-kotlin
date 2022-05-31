@@ -73,7 +73,7 @@ jobs:
         shell: bash
         run: |
           systeminfo
-          sed -i 's/org\.gradle\.jvmargs=.*$/org.gradle.jvmargs=-Xmx4g/' gradle.properties
+          sed -i 's/org\.gradle\.jvmargs=.*$/org.gradle.jvmargs=-Xmx2g/' gradle.properties
           echo "org.gradle.parallel=false" >> gradle.properties
           cat gradle.properties
       - name: Build and Test ${{ env.PACKAGE_NAME }}

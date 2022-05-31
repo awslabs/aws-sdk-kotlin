@@ -47,7 +47,7 @@ codegen {
     tests.forEach { test ->
 
         projections.register(test.projectionName) {
-            imports = listOf(test.model.absolutePath)
+            imports = listOf(test.model.relativeTo(project.buildDir).toString())
             transforms = listOf(
                 """
                 {

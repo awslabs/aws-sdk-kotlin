@@ -34,6 +34,8 @@ object S3TestUtils {
 
         if (testBucket == null) {
             testBucket = prefix + UUID.randomUUID()
+            println("Creating S3 bucket: $testBucket")
+
             client.createBucket {
                 bucket = testBucket
                 createBucketConfiguration {
@@ -42,7 +44,7 @@ object S3TestUtils {
             }
 
             client.waitUntilBucketExists { bucket = testBucket }
-        }
+        } else println("Using existing S3 bucket: $testBucket")
 
         client.putBucketLifecycleConfiguration {
             bucket = testBucket

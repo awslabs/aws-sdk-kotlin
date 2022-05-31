@@ -35,6 +35,8 @@ public class TestPlatformProvider(
         }
 
     override fun osInfo(): OperatingSystem = os
+    override fun getAllProperties(): Map<String, String> = props
     override fun getProperty(key: String): String? = props[key]
+    override fun getAllEnvVars(): Map<String, String> = env
     override fun getenv(key: String): String? = env[key]
 }
