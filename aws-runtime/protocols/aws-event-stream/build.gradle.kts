@@ -29,9 +29,7 @@ kotlin {
             dependencies {
                 implementation(project(":aws-runtime:testing"))
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-
-                // TODO -- replace this once CRT is no longer the default signer
-                api("aws.smithy.kotlin:aws-signing-crt:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
             }
         }
 

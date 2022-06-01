@@ -83,7 +83,7 @@ class RollingSumHashFunction(private val chunkSize: Int) : HashFunction {
 
     override fun digest(): ByteArray = rollingHash
     override fun reset() = fail("reset should not have been called")
-    override fun update(input: ByteArray) {
+    override fun update(input: ByteArray, offset: Int, length: Int) {
         assertEquals(chunkSize, input.size, "Chunk size must be exactly $chunkSize")
         for (i in input.indices) {
             rollingHash[i] = (rollingHash[i] + input[i] + 1).toByte()

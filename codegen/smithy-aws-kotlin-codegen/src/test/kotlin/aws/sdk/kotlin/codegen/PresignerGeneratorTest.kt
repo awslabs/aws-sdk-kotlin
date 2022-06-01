@@ -91,12 +91,12 @@ class PresignerGeneratorTest {
             import aws.sdk.kotlin.runtime.endpoint.asSigningEndpointProvider
             import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
             import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigner
+            import aws.smithy.kotlin.runtime.auth.awssigning.DefaultAwsSigner
             import aws.smithy.kotlin.runtime.auth.awssigning.PresignedRequestConfig
             import aws.smithy.kotlin.runtime.auth.awssigning.PresigningLocation
             import aws.smithy.kotlin.runtime.auth.awssigning.ServicePresignConfig
             import aws.smithy.kotlin.runtime.auth.awssigning.SigningEndpointProvider
             import aws.smithy.kotlin.runtime.auth.awssigning.createPresignedRequest
-            import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
             import aws.smithy.kotlin.runtime.client.ExecutionContext
             import aws.smithy.kotlin.runtime.http.QueryParameters
             import aws.smithy.kotlin.runtime.http.request.HttpRequest
@@ -238,7 +238,7 @@ class PresignerGeneratorTest {
                 override val normalizeUriPath: Boolean = true
                 override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
                 override val serviceId: String = "example"
-                override val signer: AwsSigner = builder.signer ?: CrtAwsSigner
+                override val signer: AwsSigner = builder.signer ?: DefaultAwsSigner
                 override val signingName: String = "example-signing-name"
                 override val useDoubleUriEncode: Boolean = true
                 companion object {
