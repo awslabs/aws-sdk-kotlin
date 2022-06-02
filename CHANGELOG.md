@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.16.1-beta] - 06/02/2022
+
+### Features
+* [#617](https://github.com/awslabs/smithy-kotlin/issues/617) Add a new non-CRT SigV4 signer and use it as the default. This removes the CRT as a hard dependency for using the SDK (although the CRT signer can still be used via explicit configuration on client creation).
+
+### Miscellaneous
+* Sync AWS models to latest
+
 ## [0.16.0] - 05/26/2022
 
 ### Features
