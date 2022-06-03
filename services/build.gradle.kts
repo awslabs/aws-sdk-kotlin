@@ -11,6 +11,7 @@ plugins {
 val platforms = listOf("common", "jvm")
 
 val sdkVersion: String by project
+val smithyKotlinVersion: String by project
 val kotlinVersion: String by project
 val coroutinesVersion: String by project
 val kotestVersion: String by project
@@ -81,11 +82,12 @@ subprojects {
 
                         dependencies {
                             // Compile against the main compilation's compile classpath and outputs:
-                            implementation(main.compileDependencyFiles + main.output.classesDirs)
+                            implementation(main.compileDependencyFiles + main.runtimeDependencyFiles + main.output.classesDirs)
 
                             implementation(kotlin("test"))
                             implementation(kotlin("test-junit5"))
                             implementation(project(":aws-runtime:testing"))
+                            implementation("aws.smithy.kotlin:hashing:$smithyKotlinVersion")
                             implementation(project(":tests:e2e-test-util"))
                         }
                     }
