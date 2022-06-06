@@ -5,19 +5,24 @@
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.model.CompletedPart
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.testing.PRINTABLE_CHARS
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.content.ByteStream
+import aws.smithy.kotlin.runtime.content.asByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.content.fromFile
+import aws.smithy.kotlin.runtime.content.toByteArray
+import aws.smithy.kotlin.runtime.hashing.sha256
 import aws.smithy.kotlin.runtime.testing.RandomTempFile
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
+import aws.smithy.kotlin.runtime.util.encodeToHex
+import kotlinx.coroutines.*
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
+import java.io.File
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
@@ -150,7 +155,70 @@ class S3BucketOpsIntegrationTest {
             }
         }
     }
+
+    @Test
+    fun testMultipartUpload(): Unit = runBlocking {
+        s3WithAllEngines { s3 ->
+            val objKey = "test-multipart-${UUID.randomUUID()}"
+            val contentSize: Long = 8 * 1024 * 1024 // 2 parts
+            val file = RandomTempFile(sizeInBytes = contentSize)
+            val partSize = 5 * 1024 * 1024 // 5 MB - min part size
+
+            val expectedSha256 = file.readBytes().sha256().encodeToHex()
+
+            val resp = s3.createMultipartUpload {
+                bucket = testBucket
+                key = objKey
+            }
+
+            val completedParts = file.chunk(partSize)
+                .mapIndexed { idx, chunk ->
+                    async {
+                        val uploadResp = s3.uploadPart {
+                            bucket = testBucket
+                            key = objKey
+                            uploadId = resp.uploadId
+                            body = file.asByteStream(chunk)
+                            partNumber = idx + 1
+                        }
+
+                        CompletedPart {
+                            partNumber = idx + 1
+                            eTag = uploadResp.eTag
+                        }
+                    }
+                }
+                .toList()
+                .awaitAll()
+
+            s3.completeMultipartUpload {
+                bucket = testBucket
+                key = objKey
+                uploadId = resp.uploadId
+                multipartUpload {
+                    parts = completedParts
+                }
+            }
+
+            // TOOD - eventually make use of s3 checksums
+            val getRequest = GetObjectRequest {
+                bucket = testBucket
+                key = objKey
+            }
+            val actualSha256 = s3.getObject(getRequest) { resp ->
+                resp.body!!.toByteArray().sha256().encodeToHex()
+            }
+
+            assertEquals(expectedSha256, actualSha256)
+        }
+    }
 }
+
+// generate sequence of "chunks" where each range defines the inclusive start and end bytes
+private fun File.chunk(partSize: Int): Sequence<LongRange> =
+    (0 until length() step partSize.toLong()).asSequence().map {
+        it until minOf(it + partSize, length())
+    }
 
 internal suspend fun s3WithAllEngines(block: suspend (S3Client) -> Unit) {
     withAllEngines { engine ->
