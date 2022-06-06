@@ -215,18 +215,10 @@ class S3BucketOpsIntegrationTest {
 }
 
 // generate sequence of "chunks" where each range defines the inclusive start and end bytes
-private fun File.chunk(partSize: Int): Sequence<LongRange> {
-    val totalSize = length()
-    val firstEndExclusive = minOf(partSize.toLong() + 1, totalSize)
-    val seed = 0 until firstEndExclusive
-    return generateSequence(seed) {
-        if (it.last < totalSize - 1) {
-            it.last + 1 until minOf(it.last + partSize.toLong() + 1, totalSize)
-        } else {
-            null
-        }
+private fun File.chunk(partSize: Int): Sequence<LongRange> =
+    (0 until length() step partSize.toLong()).asSequence().map {
+        it until minOf(it + partSize, length())
     }
-}
 
 internal suspend fun s3WithAllEngines(block: suspend (S3Client) -> Unit) {
     withAllEngines { engine ->
