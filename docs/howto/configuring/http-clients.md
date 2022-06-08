@@ -29,6 +29,6 @@ dependencies {
 Application code:
 ```kotlin
 val client = S3Client.fromEnvironment {
-    httpClientEngine = KtorEngine()
+    httpClientEngine = CrtHttpEngine()
 }
 ```
