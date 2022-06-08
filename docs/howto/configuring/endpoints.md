@@ -18,8 +18,7 @@ resolver.
 The following code snippet shows how a service endpoint resolver can be overridden for S3:
 
 ```kotlin
-val sharedConfig = AwsClientConfig.fromEnvironment()
-val client = S3Client(sharedConfig) {
+val client = S3Client.fromEnvironment {
     endpointResolver = AwsEndpointResolver { service, region ->
        AwsEndpoint("https://mybucket.s3.us-west-2.amazonaws.com", CredentialScope(region = "us-west-2")) 
     }
