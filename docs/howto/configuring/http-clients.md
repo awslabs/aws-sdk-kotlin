@@ -1,6 +1,6 @@
 # Configuring HTTP Clients
 
-By default, the AWS SDK for Kotlin uses an HTTP client from Ktor. Customers may choose to override the default HTTP
+By default, the AWS SDK for Kotlin uses an HTTP client from OkHttp. Customers may choose to override the default HTTP
 client by specifying an existing
 [HttpClientEngine](https://github.com/awslabs/smithy-kotlin/blob/main/runtime/protocol/http/common/src/aws/smithy/kotlin/runtime/http/engine/HttpClientEngine.kt)
 implementation or implementing their own and referencing that implementation in the service client configuration at the
