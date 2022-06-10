@@ -1,8 +1,0 @@
-{
-    "id": "bd94e49c-61f2-4cf2-814c-77df7f651500",
-    "type": "documentation",
-    "description": "Update outdated howto docs to correctly describe client instantiation and client engine configuration",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#620"
-    ]
-}

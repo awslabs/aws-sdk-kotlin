@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.16.2-beta] - 06/10/2022
+
+### Fixes
+* [#619](https://github.com/awslabs/aws-sdk-kotlin/issues/619), [#657](https://github.com/awslabs/smithy-kotlin/issues/657) Upgrade smithy-kotlin to pull in fixes for signing bugs.
+
+### Documentation
+* [#620](https://github.com/awslabs/aws-sdk-kotlin/issues/620) Update outdated howto docs to correctly describe client instantiation and client engine configuration
+
+### Miscellaneous
+* Sync AWS models to latest
+
 ## [0.16.1-beta] - 06/02/2022
 
 ### Features

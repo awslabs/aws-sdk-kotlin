@@ -1,9 +1,0 @@
-{
-    "id": "a3605d3a-3319-4347-a5b6-bf1304fd5198",
-    "type": "bugfix",
-    "description": "Upgrade smithy-kotlin to pull in fixes for signing bugs.",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#619",
-        "awslabs/smithy-kotlin#657"
-    ]
-}
