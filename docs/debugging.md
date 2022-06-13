@@ -21,7 +21,7 @@ implementation("org.apache.logging.log4j:log4j-api:2.17.2")
 
 #### Log4j2 configuration file
 
-Create a file named **log4j2.xml** in your **resources** directory (e.g., **<project-dir>/src/main/resources**). Add
+Create a file named **log4j2.xml** in your **resources** directory (e.g., **\<project-dir>/src/main/resources**). Add
 the following XML configuration to the file:
 
 ```xml
