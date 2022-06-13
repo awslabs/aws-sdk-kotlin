@@ -164,8 +164,60 @@ fun transformsForService(service: AwsService): List<String>? {
 }
 
 val discoveredServices: List<AwsService> by lazy { discoverServices() }
+
 // The root namespace prefix for SDKs
 val sdkPackageNamePrefix = "aws.sdk.kotlin.services."
+
+val sdkVersion: String by project
+
+val serviceMembership: Membership by lazy { parseMembership(getProperty("aws.services")) }
+val protocolMembership: Membership by lazy { parseMembership(getProperty("aws.protocols")) }
+
+fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File ->
+    val filename = file.nameWithoutExtension
+    val model = Model.assembler().addImport(file.absolutePath).assemble().result.get()
+    val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
+    val service = services.singleOrNull() ?: error("Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}")
+    val protocol = service.protocol()
+    val serviceTrait = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
+        ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
+    val sdkId = serviceTrait.sdkId
+    val packageName = sdkId.replace(" ", "")
+        .replace("-", "")
+        .toLowerCase()
+        .kotlinNamespace()
+
+    when {
+        applyFilters && !serviceMembership.isMember(filename, packageName) -> {
+            logger.info("skipping ${file.absolutePath}, $filename/$packageName not a member of $serviceMembership")
+            null
+        }
+
+        applyFilters && !protocolMembership.isMember(protocol) -> {
+            logger.info("skipping ${file.absolutePath}, $protocol not a member of $protocolMembership")
+            null
+        }
+
+        applyFilters && filename in disabledServices -> {
+            logger.warn("skipping ${file.absolutePath}, it is explicitly disabled")
+            null
+        }
+
+        else -> {
+            logger.info("discovered service: ${serviceTrait.sdkId}")
+            AwsService(
+                serviceShapeId = service.id.toString(),
+                packageName = "$sdkPackageNamePrefix$packageName",
+                packageVersion = sdkVersion,
+                modelFile = file,
+                projectionName = filename,
+                sdkId = sdkId,
+                version = service.version,
+                description = description,
+            )
+        }
+    }
+}
 
 /**
  * Returns an AwsService model for every JSON file found in directory defined by property `modelsDirProp`
@@ -175,70 +227,7 @@ val sdkPackageNamePrefix = "aws.sdk.kotlin.services."
 fun discoverServices(applyFilters: Boolean = true): List<AwsService> {
     println("discover services called")
     val modelsDir: String by project
-    val serviceMembership = parseMembership(getProperty("aws.services"))
-    val protocolMembership = parseMembership(getProperty("aws.protocols"))
-
-    return fileTree(project.file(modelsDir))
-        .filter { file ->
-            if (!applyFilters) return@filter true
-            val svcName = file.name.split(".").first()
-            val include = serviceMembership.isMember(svcName)
-
-            if (!include) {
-                logger.info("skipping ${file.absolutePath}, $svcName not a member of $serviceMembership")
-            }
-
-            val isDisabled = svcName in disabledServices
-            if (include && isDisabled) {
-                logger.warn("skipping $svcName because it is explicitly disabled")
-            }
-
-            include && !isDisabled
-        }
-        .map { file ->
-            val model = Model.assembler().addImport(file.absolutePath).assemble().result.get()
-            val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
-            require(services.size == 1) { "Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}" }
-            val service = services.first()
-            file to service
-        }
-        .filter { (file, service) ->
-            if (!applyFilters) return@filter true
-            val protocol = service.protocol()
-            val include = protocolMembership.isMember(protocol)
-
-            if (!include) {
-                logger.info("skipping ${file.absolutePath}, $protocol not a member of $protocolMembership")
-            }
-            include
-        }
-        .map { (file, service) ->
-            val serviceTrait = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
-                ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
-            val name = file.nameWithoutExtension
-
-            // derive a package namespace based on sdkId which should end up unique across AWS services
-            val packageName = serviceTrait.sdkId.replace(" ", "")
-                .replace("-", "")
-                .toLowerCase()
-                .kotlinNamespace()
-
-            val description = service.getTrait(software.amazon.smithy.model.traits.TitleTrait::class.java).map { it.value }.orNull()
-
-            logger.info("discovered service: ${serviceTrait.sdkId}")
-
-            val sdkVersion: String by project
-            AwsService(
-                serviceShapeId = service.id.toString(),
-                packageName = "$sdkPackageNamePrefix$packageName",
-                packageVersion = sdkVersion,
-                modelFile = file,
-                projectionName = name,
-                sdkId = serviceTrait.sdkId,
-                version = service.version,
-                description = description
-            )
-        }
+    return fileTree(project.file(modelsDir)).mapNotNull(fileToService(applyFilters))
 }
 
 // Returns the trait name of the protocol of the service
@@ -254,12 +243,10 @@ fun ServiceShape.protocol(): String =
 
 // Class and functions for service and protocol membership for SDK generation
 data class Membership(val inclusions: Set<String> = emptySet(), val exclusions: Set<String> = emptySet())
-fun Membership.isMember(member: String): Boolean = when {
-    exclusions.contains(member) -> false
-    inclusions.contains(member) -> true
-    inclusions.isEmpty() -> true
-    else -> false
-}
+
+fun Membership.isMember(vararg memberNames: String): Boolean =
+    memberNames.none(exclusions::contains) && (inclusions.isEmpty() || memberNames.any(inclusions::contains))
+
 fun parseMembership(rawList: String?): Membership {
     if (rawList == null) return Membership()
 
