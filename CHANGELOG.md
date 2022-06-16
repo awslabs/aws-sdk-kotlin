@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.16.3-beta] - 06/16/2022
+
+### Features
+* Support bootstrapping services by package name (in addition to by model filename)
+
+### Documentation
+* Update the debugging guide to demonstrate how to use Log4j2 for logging
+
+### Miscellaneous
+* Sync AWS models to latest
+
 ## [0.16.2-beta] - 06/10/2022
 
 ### Fixes

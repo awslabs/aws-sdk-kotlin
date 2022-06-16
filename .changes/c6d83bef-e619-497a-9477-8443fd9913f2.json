@@ -1,5 +1,0 @@
-{
-    "id": "c6d83bef-e619-497a-9477-8443fd9913f2",
-    "type": "feature",
-    "description": "Support bootstrapping services by package name (in addition to by model filename)"
-}
