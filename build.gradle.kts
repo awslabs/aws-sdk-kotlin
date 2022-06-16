@@ -4,6 +4,7 @@
  */
 import java.util.Properties
 import java.net.URL
+import java.time.Duration
 
 plugins {
     kotlin("jvm") version "1.6.21" apply false
@@ -128,6 +129,11 @@ if (
                 username.set(project.property("sonatypeUsername") as String)
                 password.set(project.property("sonatypePassword") as String)
             }
+        }
+
+        transitionCheckOptions {
+            maxRetries.set(180)
+            delayBetween.set(Duration.ofSeconds(10))
         }
     }
 }
