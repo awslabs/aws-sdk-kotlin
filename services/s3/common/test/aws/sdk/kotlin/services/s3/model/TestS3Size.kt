@@ -15,7 +15,11 @@ class TestS3Size {
         // see: https://github.com/awslabs/aws-sdk-kotlin/issues/309
 
         val obj = Object { size = 100 }
-        val req = PutObjectRequest { contentLength = 100 }
+        val req = PutObjectRequest {
+            bucket = "foo"
+            key = "bar"
+            contentLength = 100
+        }
         assertIs<Long>(obj.size)
         assertIs<Long>(req.contentLength)
     }
