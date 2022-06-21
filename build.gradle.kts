@@ -154,6 +154,7 @@ val lintPaths = listOf(
     "examples/**/*.kt",
     "dokka-aws/**/*.kt",
     "gradle/sdk-plugins/src/**/*.kt",
+    "hlls/**/*.kt",
     "services/**/*.kt",
     "!services/*/generated-src/**/*.kt",
     "tests/**/*.kt"
