@@ -15,7 +15,6 @@ kotlin {
         commonMain {
             dependencies {
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
-                println("Resolved S3 client version to $releasedSdkVersion")
                 implementation("aws.sdk.kotlin:s3:$releasedSdkVersion")
             }
         }
