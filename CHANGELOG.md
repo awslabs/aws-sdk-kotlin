@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.16.4-beta] - 06/23/2022
+
+### Fixes
+* [#139](https://github.com/awslabs/smithy-kotlin/issues/139) Validate that members bound to URI paths are non-null at object construction
+
+### Miscellaneous
+* Upgrade smithy kotlin to [0.11.0](https://github.com/awslabs/smithy-kotlin/releases/tag/v0.11.0)
+
 ## [0.16.3-beta] - 06/16/2022
 
 ### Features
