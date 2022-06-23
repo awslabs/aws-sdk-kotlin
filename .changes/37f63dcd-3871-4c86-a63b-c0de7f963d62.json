@@ -1,0 +1,5 @@
+{
+    "id": "37f63dcd-3871-4c86-a63b-c0de7f963d62",
+    "type": "misc",
+    "description": "Upgrade smithy kotlin to [0.11.0](https://github.com/awslabs/smithy-kotlin/releases/tag/v0.11.0)"
+}
