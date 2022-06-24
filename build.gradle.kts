@@ -7,7 +7,7 @@ import java.net.URL
 import java.time.Duration
 
 plugins {
-    kotlin("jvm") version "1.6.21" apply false
+    kotlin("jvm") version "1.7.0" apply false
     id("org.jetbrains.dokka")
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
