@@ -1,0 +1,8 @@
+{
+    "id": "ee4c3b7d-005d-4e1d-bd3e-dd460fb9a18f",
+    "type": "misc",
+    "description": "Upgrade Kotlin to 1.7",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#622"
+    ]
+}
