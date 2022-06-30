@@ -76,10 +76,10 @@ open class AwsHttpProtocolClientGenerator(
             if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
                 val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.service)
                 write("ctx.#T(#T.SigningService, #S)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes, signingServiceName)
+                write("ctx.#T(#T.Signer, config.signer)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
             }
             write("ctx.#T(#T.SigningRegion, config.region)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
             write("ctx.#T(#T.CredentialsProvider, config.credentialsProvider)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
-            write("ctx.#T(#T.Signer, config.signer)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
 
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
                 addImport(RuntimeTypes.Core.IdempotencyTokenProviderExt)
