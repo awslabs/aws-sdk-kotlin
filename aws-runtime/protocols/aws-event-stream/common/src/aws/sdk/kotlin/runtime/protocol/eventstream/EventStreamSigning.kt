@@ -31,8 +31,6 @@ public fun Flow<Message>.sign(
 ): Flow<Message> = flow {
     val messages = this@sign
 
-    // FIXME Nothing actually populates this context attribute yet. It's possible we'll need some middleware or an
-    // alternate way of passing signers to this method.
     val signer = context.getOrNull(AwsSigningAttributes.Signer) ?: error("No signer was found in context")
 
     // NOTE: We need the signature of the initial HTTP request to seed the event stream signatures

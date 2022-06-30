@@ -7,9 +7,8 @@ package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awssigning.AwsSignatureType
-import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningConfig
-import aws.smithy.kotlin.runtime.auth.awssigning.DefaultAwsSigner
+import aws.smithy.kotlin.runtime.auth.awssigning.*
+import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.hashing.sha256
 import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.bytes
@@ -17,12 +16,17 @@ import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.util.encodeToHex
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class EventStreamSigningTest {
+    private val testCredentialsProvider = object : CredentialsProvider {
+        override suspend fun getCredentials() = Credentials("fake access key", "fake secret key")
+    }
 
     @Test
     fun testSignPayload() = runTest {
@@ -34,9 +38,7 @@ class EventStreamSigningTest {
         val epoch = Instant.fromEpochSeconds(123_456_789L, 1234)
         val testClock = ManualClock(epoch)
         val signingConfig = AwsSigningConfig.Builder().apply {
-            credentialsProvider = object : CredentialsProvider {
-                override suspend fun getCredentials() = Credentials("fake access key", "fake secret key")
-            }
+            credentialsProvider = testCredentialsProvider
             region = "us-east-1"
             service = "testservice"
             signatureType = AwsSignatureType.HTTP_REQUEST_EVENT
@@ -62,5 +64,25 @@ class EventStreamSigningTest {
 
         val expected = "1ea04a4f6becd85ae3e38e379ffaf4bb95042603f209512476cc6416868b31ee"
         assertEquals(expected, actualSignature)
+    }
+
+    @Test
+    fun testEmptyEndFrameSent() = runTest {
+        val messageToSign = buildMessage {
+            addHeader("some-header", HeaderValue.String("value"))
+            payload = "test payload".encodeToByteArray()
+        }
+
+        val context = ExecutionContext()
+        context[AwsSigningAttributes.Signer] = DefaultAwsSigner
+        context[AwsSigningAttributes.RequestSignature] = HashSpecification.EmptyBody.hash.encodeToByteArray()
+        context[AwsSigningAttributes.SigningRegion] = "us-east-2"
+        context[AwsSigningAttributes.SigningService] = "test"
+        context[AwsSigningAttributes.CredentialsProvider] = testCredentialsProvider
+
+        val config = context.newEventStreamSigningConfig()
+        val signedEvents = flowOf(messageToSign).sign(context, config).toList()
+        // 1 message + empty signed frame
+        assertEquals(2, signedEvents.size)
     }
 }

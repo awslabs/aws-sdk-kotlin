@@ -79,6 +79,7 @@ open class AwsHttpProtocolClientGenerator(
             }
             write("ctx.#T(#T.SigningRegion, config.region)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
             write("ctx.#T(#T.CredentialsProvider, config.credentialsProvider)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
+            write("ctx.#T(#T.Signer, config.signer)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
 
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
                 addImport(RuntimeTypes.Core.IdempotencyTokenProviderExt)
