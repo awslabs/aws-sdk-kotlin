@@ -63,11 +63,11 @@ private suspend fun readPrelude(chan: SdkByteReadChannel): ByteArray? {
         remaining -= rc
     }
 
-    // partial read -> failure
-    if (remaining in 1 until PRELUDE_BYTE_LEN_WITH_CRC) throw EventStreamFramingException("failed to read event stream message prelude from channel: read: $offset bytes, expected $remaining more bytes")
-
     // 0 bytes read and channel closed indicates no messages remaining -> null
     if (remaining == PRELUDE_BYTE_LEN_WITH_CRC && chan.isClosedForRead) return null
+
+    // partial read -> failure
+    if (remaining > 0) throw EventStreamFramingException("failed to read event stream message prelude from channel: read: $offset bytes, expected $remaining more bytes")
 
     return dest
 }
