@@ -23,13 +23,8 @@ public class EventStreamFramingException(message: String, cause: Throwable? = nu
 public suspend fun decodeFrames(chan: SdkByteReadChannel): Flow<Message> = flow {
     while (!chan.isClosedForRead) {
         // get the prelude to figure out how much is left to read of the message
-        val preludeBytes = ByteArray(PRELUDE_BYTE_LEN_WITH_CRC)
-
-        try {
-            chan.readFully(preludeBytes)
-        } catch (ex: Exception) {
-            throw EventStreamFramingException("failed to read message prelude from channel", ex)
-        }
+        // null indicates the channel was closed and that no more messages are coming
+        val preludeBytes = readPrelude(chan) ?: return@flow
 
         val preludeBuf = SdkByteBuffer.of(preludeBytes).apply { advance(preludeBytes.size.toULong()) }
         val prelude = Prelude.decode(preludeBuf)
@@ -51,4 +46,28 @@ public suspend fun decodeFrames(chan: SdkByteReadChannel): Flow<Message> = flow 
         val message = Message.decode(messageBuf)
         emit(message)
     }
+}
+
+/**
+ * Read the message prelude from the channel.
+ * @return prelude bytes or null if the channel is closed and no additional prelude is coming
+ */
+private suspend fun readPrelude(chan: SdkByteReadChannel): ByteArray? {
+    val dest = ByteArray(PRELUDE_BYTE_LEN_WITH_CRC)
+    var remaining = dest.size
+    var offset = 0
+    while (remaining > 0 && !chan.isClosedForRead) {
+        val rc = chan.readAvailable(dest, offset, remaining)
+        if (rc == -1) break
+        offset += rc
+        remaining -= rc
+    }
+
+    // 0 bytes read and channel closed indicates no messages remaining -> null
+    if (remaining == PRELUDE_BYTE_LEN_WITH_CRC && chan.isClosedForRead) return null
+
+    // partial read -> failure
+    if (remaining > 0) throw EventStreamFramingException("failed to read event stream message prelude from channel: read: $offset bytes, expected $remaining more bytes")
+
+    return dest
 }

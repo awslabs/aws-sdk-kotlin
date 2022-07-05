@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.16.5-beta] - 07/01/2022
+
+### Miscellaneous
+* [#622](https://github.com/awslabs/aws-sdk-kotlin/issues/622) Upgrade Kotlin to 1.7
+
 ## [0.16.4-beta] - 06/23/2022
 
 ### Fixes
