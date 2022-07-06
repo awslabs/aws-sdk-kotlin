@@ -232,10 +232,9 @@
                     }
                 },
                 "endpoint": {
-                    "target": "com.amazonaws.nimble#String",
+                    "target": "com.amazonaws.nimble#SensitiveString",
                     "traits": {
-                        "smithy.api#documentation": "<p>The endpoint of the ComputeFarm that is accessed by the studio component\n            resource.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>The endpoint of the ComputeFarm that is accessed by the studio component\n            resource.</p>"
                     }
                 }
             },
@@ -482,8 +481,7 @@
                 "description": {
                     "target": "com.amazonaws.nimble#StreamingImageDescription",
                     "traits": {
-                        "smithy.api#documentation": "<p>A human-readable description of the streaming image.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>A human-readable description of the streaming image.</p>"
                     }
                 },
                 "ec2ImageId": {
@@ -497,8 +495,7 @@
                     "target": "com.amazonaws.nimble#StreamingImageName",
                     "traits": {
                         "smithy.api#documentation": "<p>A friendly name for a streaming image resource.</p>",
-                        "smithy.api#required": {},
-                        "smithy.api#sensitive": {}
+                        "smithy.api#required": {}
                     }
                 },
                 "studioId": {
@@ -978,8 +975,7 @@
                     "traits": {
                         "aws.cloudformation#cfnMutability": "full",
                         "smithy.api#documentation": "<p>A friendly name for the studio.</p>",
-                        "smithy.api#required": {},
-                        "smithy.api#sensitive": {}
+                        "smithy.api#required": {}
                     }
                 },
                 "studioEncryptionConfiguration": {
@@ -3798,10 +3794,9 @@
             "type": "structure",
             "members": {
                 "endpoint": {
-                    "target": "com.amazonaws.nimble#String",
+                    "target": "com.amazonaws.nimble#SensitiveString",
                     "traits": {
-                        "smithy.api#documentation": "<p>The endpoint of the license service that is accessed by the studio component\n            resource.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>The endpoint of the license service that is accessed by the studio component\n            resource.</p>"
                     }
                 }
             },
@@ -5113,6 +5108,12 @@
         "com.amazonaws.nimble#SecurityGroupId": {
             "type": "string"
         },
+        "com.amazonaws.nimble#SensitiveString": {
+            "type": "string",
+            "traits": {
+                "smithy.api#sensitive": {}
+            }
+        },
         "com.amazonaws.nimble#ServiceQuotaExceededException": {
             "type": "structure",
             "members": {
@@ -5145,10 +5146,9 @@
             "type": "structure",
             "members": {
                 "endpoint": {
-                    "target": "com.amazonaws.nimble#String",
+                    "target": "com.amazonaws.nimble#SensitiveString",
                     "traits": {
-                        "smithy.api#documentation": "<p>The endpoint of the shared file system that is accessed by the studio component\n            resource.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>The endpoint of the shared file system that is accessed by the studio component\n            resource.</p>"
                     }
                 },
                 "fileSystemId": {
@@ -5164,10 +5164,9 @@
                     }
                 },
                 "shareName": {
-                    "target": "com.amazonaws.nimble#String",
+                    "target": "com.amazonaws.nimble#SensitiveString",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the file share.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>The name of the file share.</p>"
                     }
                 },
                 "windowsMountDrive": {
@@ -5611,8 +5610,7 @@
                     "target": "com.amazonaws.nimble#StreamingImageDescription",
                     "traits": {
                         "aws.cloudformation#cfnMutability": "full",
-                        "smithy.api#documentation": "<p>A human-readable description of the streaming image.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>A human-readable description of the streaming image.</p>"
                     }
                 },
                 "ec2ImageId": {
@@ -5640,8 +5638,7 @@
                     "target": "com.amazonaws.nimble#StreamingImageName",
                     "traits": {
                         "aws.cloudformation#cfnMutability": "full",
-                        "smithy.api#documentation": "<p>A friendly name for a streaming image resource.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>A friendly name for a streaming image resource.</p>"
                     }
                 },
                 "owner": {
@@ -5704,7 +5701,8 @@
                 "smithy.api#length": {
                     "min": 0,
                     "max": 256
-                }
+                },
+                "smithy.api#sensitive": {}
             }
         },
         "com.amazonaws.nimble#StreamingImageEncryptionConfiguration": {
@@ -5784,7 +5782,8 @@
                 "smithy.api#length": {
                     "min": 0,
                     "max": 64
-                }
+                },
+                "smithy.api#sensitive": {}
             }
         },
         "com.amazonaws.nimble#StreamingImageOwner": {
@@ -6402,10 +6401,9 @@
                     }
                 },
                 "url": {
-                    "target": "com.amazonaws.nimble#String",
+                    "target": "com.amazonaws.nimble#SensitiveString",
                     "traits": {
-                        "smithy.api#documentation": "<p>The URL to connect to this stream using the DCV client.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>The URL to connect to this stream using the DCV client.</p>"
                     }
                 }
             },
@@ -6520,8 +6518,7 @@
                 "displayName": {
                     "target": "com.amazonaws.nimble#StudioDisplayName",
                     "traits": {
-                        "smithy.api#documentation": "<p>A friendly name for the studio.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>A friendly name for the studio.</p>"
                     }
                 },
                 "homeRegion": {
@@ -7177,7 +7174,8 @@
                 "smithy.api#length": {
                     "min": 0,
                     "max": 64
-                }
+                },
+                "smithy.api#sensitive": {}
             }
         },
         "com.amazonaws.nimble#StudioEncryptionConfiguration": {
@@ -7997,15 +7995,13 @@
                 "description": {
                     "target": "com.amazonaws.nimble#StreamingImageDescription",
                     "traits": {
-                        "smithy.api#documentation": "<p>The description.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>The description.</p>"
                     }
                 },
                 "name": {
                     "target": "com.amazonaws.nimble#StreamingImageName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name for the streaming image.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>The name for the streaming image.</p>"
                     }
                 },
                 "streamingImageId": {
@@ -8234,8 +8230,7 @@
                 "displayName": {
                     "target": "com.amazonaws.nimble#StudioDisplayName",
                     "traits": {
-                        "smithy.api#documentation": "<p>A friendly name for the studio.</p>",
-                        "smithy.api#sensitive": {}
+                        "smithy.api#documentation": "<p>A friendly name for the studio.</p>"
                     }
                 },
                 "studioId": {
