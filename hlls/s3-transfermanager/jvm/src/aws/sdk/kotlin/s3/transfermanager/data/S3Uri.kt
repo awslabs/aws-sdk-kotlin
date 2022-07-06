@@ -1,11 +1,21 @@
 package aws.sdk.kotlin.s3.transfermanager.data
 
-data class S3Uri(val bucket: String, val key: String) {
+data class S3Uri(val bucket: String, val key: String)
 
-    // this constructor receives a s3URI with format of S3://bucket-name/key-name
-    // try to split bucket and key from it and store them separately
-    constructor(s3Path: String): this(
-                                        s3Path.substringAfter("S3://").substringBefore('/'),
-                                        s3Path.substringAfter("S3://").substringAfter('/')
-                                     ) {}
+/**
+ * this constructor receives a s3URI with format of S3://bucket-name/key-name
+ * try to split bucket and key from it, validate format, and store them separately
+ */
+fun S3Uri(s3Path: String): S3Uri {
+    if (!s3Path.startsWith("s3://")) {
+        throw IllegalArgumentException("s3Path input is invalid")
+    }
+    val bucket = s3Path.substringAfter("s3://").substringBefore('/')
+    val key = s3Path.substringAfter("s3://").substringAfter('/')
+
+    // check bucket and key is not empty and has valid format
+    require(bucket.isNotEmpty()) { "s3Path input is invalid" }
+    require(key.isNotEmpty()) { "s3Path input is invalid" }
+
+    return S3Uri(bucket, key)
 }

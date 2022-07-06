@@ -1,44 +1,96 @@
 
-import aws.sdk.kotlin.s3.transfermanager.DefaultS3TransferManager
+import aws.sdk.kotlin.s3.transfermanager.S3TransferManager
 import aws.sdk.kotlin.s3.transfermanager.data.S3Uri
+import aws.sdk.kotlin.services.s3.S3Client
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockkObject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
+import kotlin.test.assertFailsWith
 
 @OptIn(ExperimentalCoroutinesApi::class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DefaultS3TransferManagerTest {
 
-    val s3TranferManager = DefaultS3TransferManager()
+    @MockK
+    lateinit var s3Client: S3Client
 
-    private val fromList = listOf(
-        "/Users/wty/Desktop/folder1/a.png",
-        "/Users/wty/Desktop/folder1/",
-        "/Users/wty/Desktop/folder1",
-        "/Users/wty/Downloads/largeimage.png",
-    )
-    private val toList = listOf(
-        S3Uri("wty-bucket", "file1"),
-        S3Uri("wty-bucket", "folder1"),
-        S3Uri("S3://wty-bucket/folder2/folder3"),
-        S3Uri("S3://wty-bucket/large-folder/to_here/190MB")
-    )
+    private lateinit var s3TransferManager: S3TransferManager
 
-    @Test
-    fun testUpload() = runTest {
-        for (i in 0 until fromList.size) {     // test uploading a single file or directory with different suffix
-            val operation = s3TranferManager.upload(fromList[i], toList[i])
-            assertNotNull(operation, "The transfer manager doesn't tackle upload")
+    @BeforeAll
+    fun setUp() {
+        MockKAnnotations.init(this)
+        mockkObject(s3Client)
+        s3TransferManager = runBlocking {
+            S3TransferManager.fromEnvironment {
+                chunkSize = 8000000
+                s3 = s3Client
+            }
         }
     }
 
+//    TODO Need further investigation about mocking client response and lambda
+//    @Test
+//    fun testUpload() = runTest {
+//        val defaultPutObjectResponse = PutObjectResponse {}
+//        var testFile = RandomTempFile(6000000)
+////        coEvery {
+////            s3Client.putObject {
+////                body = ByteStream.fromFile(testFile)
+////            }
+////        } returns defaultPutObjectResponse
+//
+//        var operation = s3TransferManager.upload(testFile.path, S3Uri("s3://bucket/key"))
+//        assertNotNull(operation)
+//
+//        testFile = RandomTempFile(10000000)
+//        val createMultipartUploadRequest = CreateMultipartUploadRequest.invoke {
+//            bucket = "bucket"
+//            key = "key"
+//        }
+//
+//        val createMultipartUploadResponse = CreateMultipartUploadResponse.invoke {
+//            bucket = "bucket"
+//            key = "key"
+//            uploadId = "123456"
+//        }
+//
+//        val uploadPartRequest = UploadPartRequest.invoke {
+//            bucket = "bucket"
+//            key = "key"
+//            uploadId = createMultipartUploadResponse.uploadId
+//        }
+//
+//        val uploadPartResponse = UploadPartResponse.invoke {
+//            eTag = "654321"
+//        }
+//
+//        val completeMultipartUploadRequest = CompleteMultipartUploadRequest.invoke {
+//            bucket = "bucket"
+//            key = "key"
+//            uploadId = createMultipartUploadResponse.uploadId
+//        }
+//
+//        coEvery { s3Client.createMultipartUpload(createMultipartUploadRequest) } returns createMultipartUploadResponse
+//
+//        coEvery { s3Client.uploadPart(uploadPartRequest) } returns uploadPartResponse
+//
+//        operation = s3TransferManager.upload(testFile.path, S3Uri("bucket", "key"))
+//
+//        coVerify { s3Client.completeMultipartUpload(input = any()) }
+//
+//        assertNotNull(operation)
+//    }
+
     @Test
     fun testUploadInvalidFrom() = runTest {
-        try {
-            s3TranferManager.upload("/Users/wty/Desktop/folder1/haha", S3Uri("S3://wty-bucket/key"))
-        } catch (e: IllegalArgumentException) {
-            assertEquals(e.message, "From path is invalid")
+        assertFailsWith<IllegalArgumentException>("From path is invalid") {
+            s3TransferManager.upload("/Users/wty/Desktop/folder1/haha", S3Uri("S3://wty-bucket/key"))
         }
     }
 }
