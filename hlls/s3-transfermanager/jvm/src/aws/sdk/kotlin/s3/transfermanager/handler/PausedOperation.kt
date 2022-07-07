@@ -1,7 +1,7 @@
 package aws.sdk.kotlin.s3.transfermanager.handler
 
 import aws.sdk.kotlin.s3.transfermanager.data.TransferType
-import java.util.*
+import java.util.BitSet
 
 interface PausedOperation {
     val transferType: TransferType
