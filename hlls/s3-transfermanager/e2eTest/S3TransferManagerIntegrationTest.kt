@@ -17,24 +17,21 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
-import kotlin.time.ExperimentalTime
 
 /**
  * Tests for bucket operations and presigner
  */
 
-@OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3TransferManagerIntegrationTest {
 
     // create and operate all through user's S3 TransferManager and Client
     private val s3TransferManager = runBlocking {
-        S3TransferManager.fromEnvironment {
+        S3TransferManager {
             chunkSize = 8000000
             s3 = runBlocking {
-                S3Client.fromEnvironment {
-                    region = "us-west-2"
-                }
+                S3Client.fromEnvironment {}
             }
         }
     }
@@ -56,14 +53,16 @@ class S3TransferManagerIntegrationTest {
         val file3 = File.createTempFile("file3", ".jpeg", testDirectory1.toFile())
         val testDirectory2 = Files.createTempDirectory(testDirectory, "TestDirectory2")
 
-        Runtime.getRuntime().addShutdownHook(Thread {
-            file1.deleteOnExit()
-            file2.deleteOnExit()
-            file3.deleteOnExit()
-            testDirectory1.toFile().deleteOnExit()
-            testDirectory2.toFile().deleteOnExit()
-            testDirectory.toFile().deleteOnExit()
-        })
+        Runtime.getRuntime().addShutdownHook(
+            Thread {
+                file1.delete()
+                file2.delete()
+                file3.delete()
+                testDirectory1.toFile().delete()
+                testDirectory2.toFile().delete()
+                testDirectory.toFile().delete()
+            }
+        )
     }
 
     @AfterAll
@@ -73,9 +72,7 @@ class S3TransferManagerIntegrationTest {
 
     @Test
     fun testUpload() = runTest {
-        println(s3TransferManager.config.chunkSize)
-
-        var toUri = S3Uri(testBucket, "folder1")
+        val toUri = S3Uri(testBucket, "folder1")
 
         var operation = s3TransferManager.upload(testDirectory.toString(), toUri)
         assertNotNull(operation, "The transfer manager doesn't tackle directory upload")

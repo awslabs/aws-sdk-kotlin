@@ -29,16 +29,13 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
         // throw IllegalArgumentException if from path is invalid
         require(localFile.exists()) { "From path is invalid" }
 
-        if (localFile.isFile()) {
+        return if (localFile.isFile()) {
             uploadFile(localFile, to)
         } else if (localFile.isDirectory()) {
-            uploadDirectory(from, to, progressListener)
+            uploadDirectory(localFile, to, progressListener)
         } else {
             throw IllegalArgumentException("From path is invalid")
         }
-
-        val operation = DefaultOperation()
-        return operation
     }
 
     private suspend fun uploadFile(localFile: File, to: S3Uri): Operation {
@@ -48,14 +45,11 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
         // determine upload with single request or split parts request according to file size
 
         val fileSize = localFile.length()
-        if (fileSize <= config.chunkSize) { // for file smaller than config chunk size
+        return if (fileSize <= config.chunkSize) { // for file smaller than config chunk size
             uploadWholeFile(localFile, to)
         } else { // for large file over config chunk size
             uploadFileParts(localFile, to)
         }
-
-        val operation = DefaultOperation()
-        return operation
     }
 
     private suspend fun uploadWholeFile(localFile: File, to: S3Uri): Operation {
@@ -112,7 +106,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
         return operation
     }
 
-    private suspend fun uploadDirectory(from: String, to: S3Uri, progressListener: ProgressListener?): Operation {
+    private suspend fun uploadDirectory(localFile: File, to: S3Uri, progressListener: ProgressListener?): Operation {
         // for directory, just use double pointer to start from fileDirectory/s3Path and recursively traverse directory/path
         // and call upload() to recursively finish the directory upload level by level like this
 //            direc1     from: Users/direc1 		to:key
@@ -121,13 +115,11 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
 //                   |_b.jpg	from: Users/direc1/direc2/b.jpg	to: key/direc2/b.jpg
 //               |_direc3	from: Users/direc1/direc3	to: key/direc3
 
-        val localFile = File(from)
-
         val subFiles = localFile.listFiles()
-        subFiles.forEachIndexed { index, subFile ->
-            val subFrom = localFile.toPath().resolve(subFile.name).toString()
+        subFiles.forEach {
+            val subFrom = localFile.toPath().resolve(it.name).toString()
 
-            val subKey = Paths.get(to.key, subFile.name).toString()
+            val subKey = Paths.get(to.key, it.name).toString()
 
             val subTo = S3Uri(to.bucket, subKey) // next level recursion's to
 

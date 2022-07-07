@@ -8,14 +8,14 @@ data class S3Uri(val bucket: String, val key: String)
  */
 fun S3Uri(s3Path: String): S3Uri {
     if (!s3Path.startsWith("s3://")) {
-        throw IllegalArgumentException("s3Path input is invalid")
+        throw IllegalArgumentException("s3Path input is invalid: URIs must start with `s3://`")
     }
     val bucket = s3Path.substringAfter("s3://").substringBefore('/')
     val key = s3Path.substringAfter("s3://").substringAfter('/')
 
     // check bucket and key is not empty and has valid format
-    require(bucket.isNotEmpty()) { "s3Path input is invalid" }
-    require(key.isNotEmpty()) { "s3Path input is invalid" }
+    require(bucket.isNotEmpty()) { "s3Path input is invalid: bucket name can not be empty" }
+    require(key.isNotEmpty()) { "s3Path input is invalid: key name can not be empty" }
 
     return S3Uri(bucket, key)
 }

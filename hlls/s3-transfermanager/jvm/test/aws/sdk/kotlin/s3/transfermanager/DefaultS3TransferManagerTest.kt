@@ -2,7 +2,6 @@
 import aws.sdk.kotlin.s3.transfermanager.S3TransferManager
 import aws.sdk.kotlin.s3.transfermanager.data.S3Uri
 import aws.sdk.kotlin.services.s3.S3Client
-import io.kotest.inspectors.runTest
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkObject
@@ -28,7 +27,7 @@ class DefaultS3TransferManagerTest {
         MockKAnnotations.init(this)
         mockkObject(s3Client)
         s3TransferManager = runBlocking {
-            S3TransferManager.fromEnvironment {
+            S3TransferManager {
                 chunkSize = 8000000
                 s3 = s3Client
             }

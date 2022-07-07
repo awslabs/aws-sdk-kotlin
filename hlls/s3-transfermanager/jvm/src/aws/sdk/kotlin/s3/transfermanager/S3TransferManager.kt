@@ -21,7 +21,7 @@ public interface S3TransferManager {
     val config: Config
 
     companion object {
-        operator fun invoke(block: (Config.Builder) -> Unit): S3TransferManager {
+        operator fun invoke(block: Config.Builder.() -> Unit): S3TransferManager {
             val config = Config.Builder().apply(block).build()
             return DefaultS3TransferManager(config)
         }

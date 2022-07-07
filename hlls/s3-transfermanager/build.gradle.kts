@@ -12,8 +12,6 @@ val releasedSdkVersion: String by project
 val smithyKotlinVersion: String by project
 val releasedSmithyVersion: String by project
 val mockkVersion: String by project
-val kotestVersion: String by project
-val junitVersion: String by project
 
 kotlin {
     sourceSets {
@@ -27,11 +25,10 @@ kotlin {
         }
         commonTest {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test:$kotestVersion")
-                implementation("org.jetbrains.kotlin:kotlin-test-junit5:$junitVersion")
-                implementation("aws.smithy.kotlin:smithy-test:$smithyKotlinVersion")
+                implementation("org.jetbrains.kotlin:kotlin-test:1.6.21")
+                implementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.21")
                 implementation(project(":aws-runtime:testing"))
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
                 implementation("io.mockk:mockk:$mockkVersion")
             }
         }
@@ -43,6 +40,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
     }
 }
-dependencies {
-    testImplementation(kotlin("test"))
+
+tasks.named<Test>("jvmTest") {
+    useJUnitPlatform()
 }

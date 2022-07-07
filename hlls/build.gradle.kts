@@ -103,7 +103,7 @@ subprojects {
                     }
 
                     tasks.register<Test>("e2eTest") {
-                        description = "Run e2e service tests"
+                        description = "Run e2e HLL tests"
                         group = "verification"
 
                         // Run the tests with the classpath containing the compile dependencies (including 'main'),
