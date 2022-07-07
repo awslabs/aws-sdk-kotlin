@@ -54,32 +54,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     }
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
-        val ignoredTests = TestMemberDelta(
-            setOf(
-                // restJson
-                // FIXME - document type not fully supported yet, see https://github.com/awslabs/smithy-kotlin/issues/123
-                "DocumentTypeInputWithObject",
-                "DocumentTypeAsPayloadInput",
-                "DocumentTypeAsPayloadInputString",
-                "DocumentOutput",
-                "DocumentTypeAsPayloadOutput",
-                "DocumentTypeAsPayloadOutputString",
-                "DocumentInputWithString",
-                "DocumentInputWithNumber",
-                "DocumentInputWithBoolean",
-                "DocumentInputWithList",
-                "DocumentOutputString",
-                "DocumentOutputNumber",
-                "DocumentOutputBoolean",
-                "DocumentOutputArray",
-
-                // awsJson1.1
-                // FIXME - document type not fully supported yet, see https://github.com/awslabs/smithy-kotlin/issues/123
-                "PutAndGetInlineDocumentsInput",
-            ),
-            TestContainmentMode.EXCLUDE_TESTS
-        )
-
         // The following can be used to generate only a specific test by name.
         // val targetedTest = TestMemberDelta(setOf("RestJsonComplexErrorWithNoMessage"), TestContainmentMode.RUN_TESTS)
 
@@ -91,8 +65,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             ctx,
             requestTestBuilder,
             responseTestBuilder,
-            errorTestBuilder,
-            ignoredTests
+            errorTestBuilder
         ).generateProtocolTests()
     }
 
