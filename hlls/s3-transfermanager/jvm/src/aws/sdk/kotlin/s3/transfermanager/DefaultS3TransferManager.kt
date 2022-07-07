@@ -124,7 +124,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             val subTo = S3Uri(to.bucket, subKey) // next level recursion's to
 
             // need to consider listener and receiver suboperation in the future!!!
-            val subOperation = upload(subFrom, subTo, progressListener)
+            upload(subFrom, subTo, progressListener)
         }
 
         val operation = DefaultOperation()

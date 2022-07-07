@@ -3,7 +3,7 @@ package aws.sdk.kotlin.s3.transfermanager.data
 /**
  * class recording total workload and current finished work progress
  */
-data class Progress(
+public data class Progress(
     /**
      * total number of files to transfer in an operation
      */

@@ -12,7 +12,7 @@ val releasedSdkVersion: String by project
 val smithyKotlinVersion: String by project
 val releasedSmithyVersion: String by project
 val mockkVersion: String by project
-val kotestVersion: String by project
+val kotlinVersion: String by project
 val junitVersion: String by project
 
 kotlin {
@@ -27,8 +27,8 @@ kotlin {
         }
         commonTest {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test:$kotestVersion")
-                implementation("org.jetbrains.kotlin:kotlin-test-junit5:$junitVersion")
+                implementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
+                implementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")
                 implementation("aws.smithy.kotlin:smithy-test:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:testing"))
                 runtimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")

@@ -18,36 +18,36 @@ import aws.sdk.kotlin.services.s3.S3Client
  */
 public interface S3TransferManager {
 
-    val config: Config
+    public val config: Config
 
-    companion object {
-        operator fun invoke(block: Config.Builder.() -> Unit): S3TransferManager {
+    public companion object {
+        public operator fun invoke(block: Config.Builder.() -> Unit): S3TransferManager {
             val config = Config.Builder().apply(block).build()
             return DefaultS3TransferManager(config)
         }
 
-        operator fun invoke(config: Config): S3TransferManager = DefaultS3TransferManager(config)
+        public operator fun invoke(config: Config): S3TransferManager = DefaultS3TransferManager(config)
 
-        suspend fun fromEnvironment(block: (Config.Builder.() -> Unit)? = null): S3TransferManager {
+        public fun fromEnvironment(block: (Config.Builder.() -> Unit)? = null): S3TransferManager {
             val builder = Config.Builder()
             if (block != null) builder.apply(block)
             return DefaultS3TransferManager(builder.build())
         }
     }
 
-    class Config private constructor(builder: Builder) {
-        val s3: S3Client = requireNotNull(builder.s3) { "s3 client is a required field" }
+    public class Config private constructor(builder: Builder) {
+        public val s3: S3Client = requireNotNull(builder.s3) { "s3 client is a required field" }
 
-        val chunkSize: Long = builder.chunkSize
+        public val chunkSize: Long = builder.chunkSize
 
-        companion object {
-            inline operator fun invoke(block: Builder.() -> kotlin.Unit): Config = Builder().apply(block).build()
+        public companion object {
+            public inline operator fun invoke(block: Builder.() -> Unit): Config = Builder().apply(block).build()
         }
 
-        class Builder {
-            var s3: S3Client? = null
+        public class Builder {
+            public var s3: S3Client? = null
 
-            var chunkSize: Long = 8000000
+            public var chunkSize: Long = 8000000
 
             @PublishedApi
             internal fun build(): Config = Config(this)
