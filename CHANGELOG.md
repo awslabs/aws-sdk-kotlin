@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.16.6-beta] - 07/08/2022
+
+### Features
+* [#123](https://github.com/awslabs/smithy-kotlin/issues/123) Add support for smithy Document type.
+
+### Miscellaneous
+* Update AWS models to latest versions
+* Upgrade smithy-kotlin version to 0.11.2
+* [#599](https://github.com/awslabs/smithy-kotlin/issues/599) Upgrade Smithy version to 1.22
+
 ## [0.16.5-beta] - 07/01/2022
 
 ### Miscellaneous

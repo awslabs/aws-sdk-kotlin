@@ -1,8 +1,0 @@
-{
-    "id": "55cffe4d-8537-4dd0-8630-e4800d146f29",
-    "type": "misc",
-    "description": "Upgrade Smithy version to 1.22",
-    "issues": [
-        "awslabs/smithy-kotlin#599"
-    ]
-}
