@@ -77,6 +77,54 @@ subprojects {
                 optinAnnotations.forEach { languageSettings.optIn(it) }
             }
         }
+
+        if (project.file("e2eTest").exists()) {
+            jvm().compilations {
+                val main by getting
+                val e2eTest by creating {
+                    defaultSourceSet {
+                        kotlin.srcDir("e2eTest")
+
+                        dependencies {
+                            // Compile against the main compilation's compile classpath and outputs:
+                            implementation(main.compileDependencyFiles + main.runtimeDependencyFiles + main.output.classesDirs)
+
+                            implementation(kotlin("test"))
+                            implementation(kotlin("test-junit5"))
+                            implementation(project(":aws-runtime:testing"))
+                            implementation(project(":tests:e2e-test-util"))
+                        }
+                    }
+
+                    kotlinOptions {
+                        // Enable coroutine runTests in 1.6.10
+                        // NOTE: may be removed after coroutines-test runTests becomes stable
+                        freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
+                    }
+
+                    tasks.register<Test>("e2eTest") {
+                        description = "Run e2e HLL tests"
+                        group = "verification"
+
+                        // Run the tests with the classpath containing the compile dependencies (including 'main'),
+                        // runtime dependencies, and the outputs of this compilation:
+                        classpath = compileDependencyFiles + runtimeDependencyFiles + output.allOutputs
+
+                        // Run only the tests from this compilation's outputs:
+                        testClassesDirs = output.classesDirs
+
+                        useJUnitPlatform()
+                        testLogging {
+                            events("passed", "skipped", "failed")
+                            showStandardStreams = true
+                            showStackTraces = true
+                            showExceptions = true
+                            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                        }
+                    }
+                }
+            }
+        }
     }
 
     apply(from = rootProject.file("gradle/publish.gradle"))
