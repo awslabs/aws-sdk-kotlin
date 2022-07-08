@@ -89,7 +89,8 @@ class AwsServiceConfigIntegration : KotlinIntegration {
     }
 
     private val overrideServiceConfigObjectWriter = SectionWriter { writer, _ ->
-        val ctx = writer.getContextValue<RenderingContext<ServiceShape>>(ServiceGenerator.SectionServiceConfig.RenderingContext)
+        val ctx: RenderingContext<ServiceShape> =
+            writer.getContextValue(ServiceGenerator.SectionServiceConfig.RenderingContext)
 
         // We have to replace the default endpoint resolver with an AwsEndpointResolver
         val autoDetectedProps = ClientConfigGenerator.detectDefaultProps(ctx)
