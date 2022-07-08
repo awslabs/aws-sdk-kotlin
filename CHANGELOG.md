@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.16.6-beta] - 07/08/2022
+
+### Features
+* [#123](https://github.com/awslabs/smithy-kotlin/issues/123) Add support for smithy Document type.
+
+### Miscellaneous
+* Update AWS models to latest versions
+* Upgrade smithy-kotlin version to 0.11.2
+* [#599](https://github.com/awslabs/smithy-kotlin/issues/599) Upgrade Smithy version to 1.22
+
+## [0.16.5-beta] - 07/01/2022
+
+### Miscellaneous
+* [#622](https://github.com/awslabs/aws-sdk-kotlin/issues/622) Upgrade Kotlin to 1.7
+
+## [0.16.4-beta] - 06/23/2022
+
+### Fixes
+* [#139](https://github.com/awslabs/smithy-kotlin/issues/139) Validate that members bound to URI paths are non-null at object construction
+
+### Miscellaneous
+* Upgrade smithy kotlin to [0.11.0](https://github.com/awslabs/smithy-kotlin/releases/tag/v0.11.0)
+
 ## [0.16.3-beta] - 06/16/2022
 
 ### Features

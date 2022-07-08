@@ -6,7 +6,7 @@ package aws.sdk.kotlin.codegen
 
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.utils.CodeWriter
+import software.amazon.smithy.kotlin.codegen.rendering.GradleWriter
 
 // TODO - would be nice to allow integrations to define custom settings in the plugin
 // e.g. we could then more consistently apply this integration if we could define a property like: `build.isAwsSdk: true`
@@ -35,12 +35,7 @@ class GradleGenerator : KotlinIntegration {
             return
         }
 
-        val writer = CodeWriter().apply {
-            trimBlankLines()
-            trimTrailingSpaces()
-            setIndentText("    ")
-            expressionStart = '#'
-        }
+        val writer = GradleWriter()
 
         writer.write("")
         if (!ctx.settings.pkg.description.isNullOrEmpty()) {
