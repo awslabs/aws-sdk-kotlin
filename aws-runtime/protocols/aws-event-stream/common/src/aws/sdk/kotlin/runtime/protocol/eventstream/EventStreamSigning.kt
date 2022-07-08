@@ -12,6 +12,7 @@ import aws.smithy.kotlin.runtime.io.bytes
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.InternalApi
+import aws.smithy.kotlin.runtime.util.decodeHexBytes
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -30,8 +31,6 @@ public fun Flow<Message>.sign(
 ): Flow<Message> = flow {
     val messages = this@sign
 
-    // FIXME Nothing actually populates this context attribute yet. It's possible we'll need some middleware or an
-    // alternate way of passing signers to this method.
     val signer = context.getOrNull(AwsSigningAttributes.Signer) ?: error("No signer was found in context")
 
     // NOTE: We need the signature of the initial HTTP request to seed the event stream signatures
@@ -70,10 +69,12 @@ internal suspend fun AwsSigner.signPayload(
 
     val result = signChunk(messagePayload, prevSignature, config)
     val signature = result.signature
+    // TODO - consider adding a direct Bytes -> Bytes hex decode rather than having to go through string
+    val binarySignature = signature.decodeToString().decodeHexBytes()
 
     val signedMessage = buildMessage {
         addHeader(":date", HeaderValue.Timestamp(dt))
-        addHeader(":chunk-signature", HeaderValue.ByteArray(signature))
+        addHeader(":chunk-signature", HeaderValue.ByteArray(binarySignature))
         payload = messagePayload
     }
 
@@ -92,7 +93,7 @@ private fun Instant.truncateSubsecs(): Instant = Instant.fromEpochSeconds(epochS
 @InternalApi
 public fun ExecutionContext.newEventStreamSigningConfig(): AwsSigningConfig = AwsSigningConfig {
     algorithm = AwsSigningAlgorithm.SIGV4
-    signatureType = AwsSignatureType.HTTP_REQUEST_CHUNK
+    signatureType = AwsSignatureType.HTTP_REQUEST_EVENT
     region = this@newEventStreamSigningConfig[AwsSigningAttributes.SigningRegion]
     service = this@newEventStreamSigningConfig[AwsSigningAttributes.SigningService]
     credentialsProvider = this@newEventStreamSigningConfig[AwsSigningAttributes.CredentialsProvider]

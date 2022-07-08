@@ -63,9 +63,9 @@ class EventStreamSerializerGenerator(
 
         writer.write("val stream = input.#L ?: return #T.Empty", streamingMember.defaultName(), RuntimeTypes.Http.HttpBody)
         writer.write("val signingConfig = context.#T()", AwsRuntimeTypes.AwsEventStream.newEventStreamSigningConfig)
-        // FIXME - needs to be set on the operation for initial request
-        //   context[AwsSigningAttributes.SignedBodyHeader] = AwsSignedBodyHeader.X_AMZ_CONTENT_SHA256.name
-        //   context[AwsSigningAttributes.HashSpecification] = HashSpecification.StreamingAws4HmacSha256Events
+
+        // initial HTTP request should use an empty body hash since the actual body is the event stream
+        writer.write("context[#T.HashSpecification] = #T.EmptyBody", RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes, RuntimeTypes.Auth.Signing.AwsSigningCommon.HashSpecification)
 
         val encodeFn = encodeEventStreamMessage(ctx, op, streamShape)
         writer.withBlock("val messages = stream", "") {

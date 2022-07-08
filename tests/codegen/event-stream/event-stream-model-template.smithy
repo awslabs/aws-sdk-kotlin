@@ -2,8 +2,10 @@ namespace aws.sdk.kotlin.test.eventstream
 
 use aws.protocols#{protocol-name}
 use aws.api#service
+use aws.auth#sigv4
 
 @{protocol-name}
+@sigv4(name: "event-stream-test")
 @service(sdkId: "EventStreamTest")
 service TestService { version: "123", operations: [TestStreamOp] }
 
