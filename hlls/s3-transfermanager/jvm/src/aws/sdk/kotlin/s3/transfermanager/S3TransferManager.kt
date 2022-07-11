@@ -68,13 +68,6 @@ public interface S3TransferManager {
         progressListener: ProgressListener? = null, // can set a default value to Null
     ): Operation
 
-//    public fun upload(
-//        from: String,
-//        to: S3Uri,
-//        progressListener: ProgressListener? = null, // can set a default value to Null
-//        coroutineScope: CoroutineScope
-//    ): Operation
-
     /**
      * from S3, download a single object or key-prefix to given local path
      * can optionally pass progressListener to listen to transfer progress

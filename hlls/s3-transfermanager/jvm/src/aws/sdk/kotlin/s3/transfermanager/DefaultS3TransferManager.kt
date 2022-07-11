@@ -18,7 +18,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
 
     private val s3: S3Client = config.s3
 
-    // TODO enable context receiver after figuring out asynchronous work
     /**
      * upload a single file or directory locally to S3 bucket
      * starting from a main scope, generate children coroutine scope in such logic:
@@ -26,11 +25,9 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                                     | input file
                             parent coroutine
                     if file /	      		 \ if directory
-            child coroutine		         generate a child coroutine (as main coroutine of each subFile)
-            uploadFIle/uploadFileParts                     \ iterate subFiles
-                                                give each subFile a separate coroutine
-                                                as their parent coroutine
-                                                            | recursively judging…
+            child coroutine		          give each subFile a separate coroutine
+            uploadFIle/uploadFileParts    as their parent coroutine
+                                                | recursively judging…
      */
     context(CoroutineScope)
     override fun upload(from: String, to: S3Uri, progressListener: ProgressListener?): Operation {
@@ -52,13 +49,13 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
-    private fun uploadFile(localFile: File, to: S3Uri): Operation {
+    private fun uploadFile(localFile: File, to: S3Uri) {
         // for single file upload, generate multiple parallel PUT requests according to s3Path and send to S3 Client object
         // wait the S3 client to reply upload response, then use operator to listen to progress and control pausing and resuming
 
         // determine upload with single request or split parts request according to file size
         val fileSize = localFile.length()
-        return if (fileSize <= config.chunkSize) { // for file smaller than config chunk size
+        if (fileSize <= config.chunkSize) { // for file smaller than config chunk size
             uploadWholeFile(localFile, to)
         } else { // for large file over config chunk size
             uploadFileParts(localFile, to)
@@ -66,21 +63,19 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
-    private fun uploadWholeFile(localFile: File, to: S3Uri): Operation {
-        val deferred = async<Unit> {
+    private fun uploadWholeFile(localFile: File, to: S3Uri) {
+        async<Unit> {
             s3.putObject {
                 bucket = to.bucket
                 key = to.key
                 body = ByteStream.fromFile(localFile)
             }
         }
-
-        return DefaultOperation(deferred)
     }
 
     context(CoroutineScope)
-    private fun uploadFileParts(localFile: File, to: S3Uri): Operation {
-        val deferred = async<Unit> {
+    private fun uploadFileParts(localFile: File, to: S3Uri) {
+        async<Unit> {
             val fileSize = localFile.length()
 
             val chunkRanges = (0 until fileSize step config.chunkSize).map {
@@ -120,12 +115,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 multipartUpload { parts = completedParts }
             }
         }
-
-        return DefaultOperation(deferred)
     }
 
     context(CoroutineScope)
-    private fun uploadDirectory(localFile: File, to: S3Uri, progressListener: ProgressListener?): Operation {
+    private fun uploadDirectory(localFile: File, to: S3Uri, progressListener: ProgressListener?) {
         // for directory, just use double pointer to start from fileDirectory/s3Path and recursively traverse directory/path
         // and call upload() to recursively finish the directory upload level by level like this
 //            direc1     from: Users/direc1 		to:key
@@ -134,21 +127,17 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
 //                   |_b.jpg	from: Users/direc1/direc2/b.jpg	to: key/direc2/b.jpg
 //               |_direc3	from: Users/direc1/direc3	to: key/direc3
 
-        val deferred = async {
-            val subFiles = localFile.listFiles()
-            subFiles.forEach {
-                val subFrom = localFile.toPath().resolve(it.name).toString()
+        val subFiles = localFile.listFiles()
+        subFiles.forEach {
+            val subFrom = localFile.toPath().resolve(it.name).toString()
 
-                val subKey = Paths.get(to.key, it.name).toString()
+            val subKey = Paths.get(to.key, it.name).toString()
 
-                val subTo = S3Uri(to.bucket, subKey) // next level recursion's to
+            val subTo = S3Uri(to.bucket, subKey) // next level recursion's to
 
-                // need to consider listener and receiver suboperation in the future!!!
-                upload(subFrom, subTo, progressListener)
-            }
+            // need to consider listener and receiver suboperation in the future!!!
+            upload(subFrom, subTo, progressListener)
         }
-
-        return DefaultOperation(deferred)
     }
 
     override suspend fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
