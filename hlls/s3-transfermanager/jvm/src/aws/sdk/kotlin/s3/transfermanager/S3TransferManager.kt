@@ -9,6 +9,7 @@ import aws.sdk.kotlin.s3.transfermanager.data.S3Uri
 import aws.sdk.kotlin.s3.transfermanager.handler.Operation
 import aws.sdk.kotlin.s3.transfermanager.listener.ProgressListener
 import aws.sdk.kotlin.services.s3.S3Client
+import kotlinx.coroutines.CoroutineScope
 
 /**
  * Interface defining kotlin version S3 Transfer Manager and its functionalities including
@@ -60,11 +61,19 @@ public interface S3TransferManager {
      * IllegalArgumentException will be thrown if from path is invalid
      */
 //    context(CoroutineContext)
-    public suspend fun upload(
+    context(CoroutineScope)
+    public fun upload(
         from: String,
         to: S3Uri,
-        progressListener: ProgressListener? = null // can set a default value to Null
+        progressListener: ProgressListener? = null, // can set a default value to Null
     ): Operation
+
+//    public fun upload(
+//        from: String,
+//        to: S3Uri,
+//        progressListener: ProgressListener? = null, // can set a default value to Null
+//        coroutineScope: CoroutineScope
+//    ): Operation
 
     /**
      * from S3, download a single object or key-prefix to given local path
