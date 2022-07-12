@@ -9,6 +9,8 @@ import aws.sdk.kotlin.services.s3.model.CompletedPart
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.asByteStream
 import aws.smithy.kotlin.runtime.content.fromFile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import java.io.File
 import java.nio.file.Paths
 
@@ -16,97 +18,107 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
 
     private val s3: S3Client = config.s3
 
-    // TODO enable context receiver after figuring out asynchronous work
     /**
      * upload a single file or directory locally to S3 bucket
+     * starting from a main scope, generate children coroutine scope in such logic:
+     *                        main coroutine
+                                    | input file
+                            parent coroutine
+                    if file /	      		 \ if directory
+            child coroutine		          give each subFile a separate coroutine
+            uploadFIle/uploadFileParts    as their parent coroutine
+                                                | recursively judging…
      */
-    override suspend fun upload(from: String, to: S3Uri, progressListener: ProgressListener?): Operation {
-//        val job = async {
-//
-//        }
+    context(CoroutineScope)
+    override fun upload(from: String, to: S3Uri, progressListener: ProgressListener?): Operation {
+        val deferred = async<Unit> {
+            val localFile = File(from)
+            // throw IllegalArgumentException if from path is invalid
+            require(localFile.exists()) { "From path is invalid" }
 
-        val localFile = File(from)
-        // throw IllegalArgumentException if from path is invalid
-        require(localFile.exists()) { "From path is invalid" }
-
-        return if (localFile.isFile()) {
-            uploadFile(localFile, to)
-        } else if (localFile.isDirectory()) {
-            uploadDirectory(localFile, to, progressListener)
-        } else {
-            throw IllegalArgumentException("From path is invalid")
+            if (localFile.isFile()) {
+                uploadFile(localFile, to)
+            } else if (localFile.isDirectory()) {
+                uploadDirectory(localFile, to, progressListener)
+            } else {
+                throw IllegalArgumentException("From path is invalid")
+            }
         }
+
+        return DefaultOperation(deferred)
     }
 
-    private suspend fun uploadFile(localFile: File, to: S3Uri): Operation {
+    context(CoroutineScope)
+    private fun uploadFile(localFile: File, to: S3Uri) {
         // for single file upload, generate multiple parallel PUT requests according to s3Path and send to S3 Client object
         // wait the S3 client to reply upload response, then use operator to listen to progress and control pausing and resuming
 
         // determine upload with single request or split parts request according to file size
-
         val fileSize = localFile.length()
-        return if (fileSize <= config.chunkSize) { // for file smaller than config chunk size
+        if (fileSize <= config.chunkSize) { // for file smaller than config chunk size
             uploadWholeFile(localFile, to)
         } else { // for large file over config chunk size
             uploadFileParts(localFile, to)
         }
     }
 
-    private suspend fun uploadWholeFile(localFile: File, to: S3Uri): Operation {
-        s3.putObject {
-            bucket = to.bucket
-            key = to.key
-            body = ByteStream.fromFile(localFile)
+    context(CoroutineScope)
+    private fun uploadWholeFile(localFile: File, to: S3Uri) {
+        async<Unit> {
+            s3.putObject {
+                bucket = to.bucket
+                key = to.key
+                body = ByteStream.fromFile(localFile)
+            }
         }
-        val operation = DefaultOperation()
-        return operation
     }
 
-    private suspend fun uploadFileParts(localFile: File, to: S3Uri): Operation {
-        val fileSize = localFile.length()
+    context(CoroutineScope)
+    private fun uploadFileParts(localFile: File, to: S3Uri) {
+        async<Unit> {
+            val fileSize = localFile.length()
 
-        val chunkRanges = (0 until fileSize step config.chunkSize).map {
-            it until minOf(it + config.chunkSize, fileSize)
-        }
+            val chunkRanges = (0 until fileSize step config.chunkSize).map {
+                it until minOf(it + config.chunkSize, fileSize)
+            }
 
-        // initialize multipart upload
-        val createMultipartUploadResponse = s3.createMultipartUpload {
-            bucket = to.bucket
-            key = to.key
-        }
+            // initialize multipart upload
+            val createMultipartUploadResponse = s3.createMultipartUpload {
+                bucket = to.bucket
+                key = to.key
+            }
 
-        val completedParts = mutableListOf<CompletedPart>()
+            val completedParts = mutableListOf<CompletedPart>()
 
-        // call uploadPart() iteratively to continue uploading
-        chunkRanges.forEachIndexed { index, chunkRange ->
-            val uploadPartResponse = s3.uploadPart {
-                body = localFile.asByteStream(chunkRange)
+            // call uploadPart() iteratively to continue uploading
+            chunkRanges.forEachIndexed { index, chunkRange ->
+                val uploadPartResponse = s3.uploadPart {
+                    body = localFile.asByteStream(chunkRange)
+                    bucket = to.bucket
+                    key = to.key
+                    uploadId = createMultipartUploadResponse.uploadId
+                    partNumber = (index + 1)
+                }
+                completedParts.add(
+                    CompletedPart {
+                        eTag = uploadPartResponse.eTag
+                        partNumber = (index + 1)
+                    }
+                )
+            }
+
+            // complete multipart upload
+            s3.completeMultipartUpload {
                 bucket = to.bucket
                 key = to.key
                 uploadId = createMultipartUploadResponse.uploadId
-                partNumber = (index + 1)
+                multipartUpload { parts = completedParts }
             }
-            completedParts.add(
-                CompletedPart {
-                    eTag = uploadPartResponse.eTag
-                    partNumber = (index + 1)
-                }
-            )
         }
-
-        // complete multipart upload
-        s3.completeMultipartUpload {
-            bucket = to.bucket
-            key = to.key
-            uploadId = createMultipartUploadResponse.uploadId
-            multipartUpload { parts = completedParts }
-        }
-
-        val operation = DefaultOperation()
-        return operation
     }
 
-    private suspend fun uploadDirectory(localFile: File, to: S3Uri, progressListener: ProgressListener?): Operation {
+    context(CoroutineScope)
+    private fun uploadDirectory(localFile: File, to: S3Uri, progressListener: ProgressListener?) {
         // for directory, just use double pointer to start from fileDirectory/s3Path and recursively traverse directory/path
         // and call upload() to recursively finish the directory upload level by level like this
 //            direc1     from: Users/direc1 		to:key
@@ -126,9 +138,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             // need to consider listener and receiver suboperation in the future!!!
             upload(subFrom, subTo, progressListener)
         }
-
-        val operation = DefaultOperation()
-        return operation
     }
 
     override suspend fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
