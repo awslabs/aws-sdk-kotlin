@@ -1,0 +1,5 @@
+{
+    "id": "5e48cdf3-de2e-4274-8955-813c2897e3fc",
+    "type": "misc",
+    "description": "**Breaking**: Upgrade **smithy-kotlin** version which will replace all instances of `Set<T>` with `List<T>` in service shapes"
+}
