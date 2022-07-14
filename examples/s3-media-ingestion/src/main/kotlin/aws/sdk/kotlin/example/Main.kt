@@ -5,7 +5,12 @@
 package aws.sdk.kotlin.example
 
 import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.createBucket
+import aws.sdk.kotlin.services.s3.headBucket
+import aws.sdk.kotlin.services.s3.headObject
+import aws.sdk.kotlin.services.s3.listObjects
 import aws.sdk.kotlin.services.s3.model.*
+import aws.sdk.kotlin.services.s3.putObject
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.fromFile
 import aws.smithy.kotlin.runtime.content.writeToFile

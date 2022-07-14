@@ -5,11 +5,15 @@
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.createBucket
+import aws.sdk.kotlin.services.s3.deleteBucket
+import aws.sdk.kotlin.services.s3.deleteObject
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.ExpirationStatus
 import aws.sdk.kotlin.services.s3.model.LifecycleRule
 import aws.sdk.kotlin.services.s3.model.LifecycleRuleFilter
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
+import aws.sdk.kotlin.services.s3.putBucketLifecycleConfiguration
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import kotlinx.coroutines.*
@@ -27,7 +31,7 @@ object S3TestUtils {
     suspend fun getTestBucket(client: S3Client): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX)
 
     private suspend fun getBucketWithPrefix(client: S3Client, prefix: String): String = withTimeout(60.seconds) {
-        var testBucket = client.listBuckets {}
+        var testBucket = client.listBuckets()
             .buckets
             ?.mapNotNull { it.name }
             ?.firstOrNull { it.startsWith(prefix) }

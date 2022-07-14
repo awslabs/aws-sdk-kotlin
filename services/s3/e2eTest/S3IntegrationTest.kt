@@ -5,8 +5,13 @@
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.completeMultipartUpload
+import aws.sdk.kotlin.services.s3.createMultipartUpload
+import aws.sdk.kotlin.services.s3.listObjects
 import aws.sdk.kotlin.services.s3.model.CompletedPart
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
+import aws.sdk.kotlin.services.s3.putObject
+import aws.sdk.kotlin.services.s3.uploadPart
 import aws.sdk.kotlin.testing.PRINTABLE_CHARS
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.content.ByteStream
