@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.17.0-beta] - 07/14/2022
+
+### Fixes
+* **Breaking**: Move DSL overloads on generated clients to extension methods
+
+### Miscellaneous
+* Sync AWS service models.
+* **Breaking**: Upgrade **smithy-kotlin** version which will replace all instances of `Set<T>` with `List<T>` in service shapes
+
 ## [0.16.6-beta] - 07/08/2022
 
 ### Features
