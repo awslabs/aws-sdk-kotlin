@@ -62,4 +62,4 @@ private class TrimResourcePrefixMiddleware : ProtocolMiddleware {
 
 private fun MemberShape.shouldTrimResourcePrefix(): Boolean =
     (target.name == "ResourceId" || target.name == "ChangeId") &&
-    hasTrait<HttpLabelTrait>()
+        hasTrait<HttpLabelTrait>()
