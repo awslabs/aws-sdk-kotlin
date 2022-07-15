@@ -44,13 +44,12 @@ private class TrimResourcePrefixMiddleware : ProtocolMiddleware {
         ).defaultName()
 
         writer.withBlock("op.execution.initialize.intercept { req, next -> ", "}") {
-            write("val prefix = #S.toRegex()", "^/?.*?/")
+            write("""val prefix = "^/?.*?/".toRegex()""")
             withBlock("if (req.subject.#L?.contains(prefix) == true) {", "}", pathMember) {
                 write(
-                    "val updated = req.subject.copy { #L = req.subject.#L?.replace(prefix, #S) }",
+                    """val updated = req.subject.copy { #L = req.subject.#L?.replace(prefix, "") }""",
                     pathMember,
                     pathMember,
-                    "",
                 )
                 write("next.call(#T(req.context, updated))", RuntimeTypes.Http.Operation.OperationRequest)
             }
