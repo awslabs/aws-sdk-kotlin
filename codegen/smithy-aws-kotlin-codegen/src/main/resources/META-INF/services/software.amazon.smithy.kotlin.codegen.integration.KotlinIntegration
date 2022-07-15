@@ -19,3 +19,4 @@ aws.sdk.kotlin.codegen.customization.machinelearning.MachineLearningEndpointCust
 aws.sdk.kotlin.codegen.customization.BackfillOptionalAuth
 aws.sdk.kotlin.codegen.customization.RemoveEventStreamOperations
 aws.sdk.kotlin.codegen.customization.RemoveChecksumSelectionFields
+aws.sdk.kotlin.codegen.customization.route53.TrimResourcePrefix
