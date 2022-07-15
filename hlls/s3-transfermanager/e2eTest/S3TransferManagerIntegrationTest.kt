@@ -78,8 +78,6 @@ class S3TransferManagerIntegrationTest {
         assertNotNull(operation, "The transfer manager doesn't tackle directory upload")
 
         val testLargeFile = RandomTempFile(10000000)
-        println(testLargeFile.path)
-        println(testLargeFile.toString())
         operation = s3TransferManager.upload(testLargeFile.path, toUri)
         assertNotNull(operation, "The transfer manager doesn't tackle parts upload")
     }
@@ -90,5 +88,14 @@ class S3TransferManagerIntegrationTest {
         assertFailsWith<IllegalArgumentException>("From path is invalid") {
             s3TransferManager.upload("/Users/wty/Desktop/folder1/haha", S3Uri("S3://wty-bucket/key"))
         }
+    }
+
+    @Test
+    fun testDownload() = runTest {
+        val s3Uri = S3Uri(testBucket, "folder1")
+        s3TransferManager.upload(testDirectory.toString(), s3Uri)
+
+        val operation = s3TransferManager.download(s3Uri, testDirectory.toString())
+        assertNotNull(operation, "The transfer manager doesn't tackle directory download")
     }
 }
