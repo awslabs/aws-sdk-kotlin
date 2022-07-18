@@ -8,6 +8,7 @@ import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.model.CompletedPart
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.services.s3.model.ListObjectsV2Response
+import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.asByteStream
 import aws.smithy.kotlin.runtime.content.fromFile
@@ -15,6 +16,7 @@ import aws.smithy.kotlin.runtime.content.writeToFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.nio.file.Files
@@ -199,13 +201,17 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             if (!keyPrefix.endsWith('/')) {
                 keyPrefix = keyPrefix.plus('/')
             }
-            val response = s3.listObjectsV2 {
+            val response = s3.listObjectsV2Paginated {
                 bucket = from.bucket
                 prefix = keyPrefix
             }
-            if (response.keyCount > 0) {
+
+            if (response.toList()[0].contents != null) {
                 validFrom = true
-                downloadDirectory(response, localFile, progressListener)
+            }
+
+            response.collect {
+                downloadDirectory(it, localFile, progressListener)
             }
 
             if (!validFrom) {
