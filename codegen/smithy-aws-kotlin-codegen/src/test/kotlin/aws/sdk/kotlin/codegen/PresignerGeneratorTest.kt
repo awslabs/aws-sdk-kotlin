@@ -232,7 +232,7 @@ class PresignerGeneratorTest {
              * This type can be used to presign requests in cases where an existing service client
              * instance is not available.
              */
-            class TestPresignConfig private constructor(builder: Builder): ServicePresignConfig {
+            public class TestPresignConfig private constructor(builder: Builder): ServicePresignConfig {
                 override val credentialsProvider: CredentialsProvider = requireNotNull(builder.credentialsProvider) { "credentialsProvider is a required configuration property" }
                 override val endpointProvider: SigningEndpointProvider = builder.endpointProvider ?: DefaultEndpointResolver().asSigningEndpointProvider()
                 override val normalizeUriPath: Boolean = true
@@ -241,27 +241,27 @@ class PresignerGeneratorTest {
                 override val signer: AwsSigner = builder.signer ?: DefaultAwsSigner
                 override val signingName: String = "example-signing-name"
                 override val useDoubleUriEncode: Boolean = true
-                companion object {
-                    inline operator fun invoke(block: Builder.() -> kotlin.Unit): ServicePresignConfig = Builder().apply(block).build()
+                public companion object {
+                    public inline operator fun invoke(block: Builder.() -> kotlin.Unit): ServicePresignConfig = Builder().apply(block).build()
                 }
             
-                class Builder {
+                public class Builder {
                     /**
                      * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.
                      */
-                    var credentialsProvider: CredentialsProvider? = null
+                    public var credentialsProvider: CredentialsProvider? = null
                     /**
                      * Provides the endpoint (hostname) and signing context to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option.
                      */
-                    var endpointProvider: SigningEndpointProvider? = null
+                    public var endpointProvider: SigningEndpointProvider? = null
                     /**
                      * AWS region to make requests for
                      */
-                    var region: String? = null
+                    public var region: String? = null
                     /**
                      * The implementation of AWS signer to use for signing requests
                      */
-                    var signer: AwsSigner? = null
+                    public var signer: AwsSigner? = null
             
                     @PublishedApi
                     internal fun build(): TestPresignConfig = TestPresignConfig(this)
