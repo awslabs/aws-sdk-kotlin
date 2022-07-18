@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.e2etest
 
-import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.ExpirationStatus
 import aws.sdk.kotlin.services.s3.model.LifecycleRule
@@ -39,10 +39,10 @@ object S3TransferManagerTestUtils {
             println("Creating S3 bucket: $testBucket")
 
             client.createBucket {
-                bucket = testBucket
-                createBucketConfiguration {
-                    locationConstraint = BucketLocationConstraint.fromValue(client.config.region)
-                }
+                    bucket = testBucket
+                    createBucketConfiguration {
+                        locationConstraint = BucketLocationConstraint.fromValue(client.config.region)
+                    }
             }
 
             client.waitUntilBucketExists { bucket = testBucket }
