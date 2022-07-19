@@ -174,8 +174,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     context(CoroutineScope)
     override fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
         val deferred = async {
-            var validFrom = false
-
             try { // first check if bucket exists
                 s3.headBucket {
                     bucket = from.bucket
@@ -185,25 +183,13 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             }
 
             if (!from.key.endsWith('/')) {
-                try {
-                    // throw a not found exception if there's no such key object
-                    s3.headObject {
-                        bucket = from.bucket
-                        key = from.key
-                    }
-
-                    // if object exist, download that object
-                    validFrom = true
+                if (objectExists(from)) {
                     val subTo = Paths.get(to).resolve(from.key.substringAfterLast('/')).toString()
                     downloadFile(from, subTo)
-                } catch (_: NotFound) {
+                    return@async
                 }
             }
-
-            if (validFrom) { // if from refers to specific object, just download it and return
-                return@async
-            }
-
+            println("Continue!")
             // check if the current key is a keyPrefix
             val keyPrefix = if (from.key.endsWith('/')) from.key else from.key.plus('/')
 
@@ -212,20 +198,34 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 prefix = keyPrefix
             }
 
-            if (response.firstOrNull()?.contents?.isNotEmpty() == true) {
-                validFrom = true
+            if (
+                response.firstOrNull() == null || response.firstOrNull()!!.contents == null ||
+                !response.firstOrNull()!!.contents?.isNotEmpty()!!
+            ) {
+                throw IllegalArgumentException("From S3 uri contains invalid key/keyPrefix")
             }
 
             response.collect {
                 downloadDirectory(it, File(to), progressListener)
             }
-
-            if (!validFrom) {
-                throw IllegalArgumentException("From S3 uri contains invalid key/keyPrefix")
-            }
         }
 
         return DefaultOperation(deferred)
+    }
+
+    context(CoroutineScope)
+    private suspend fun objectExists(s3Uri: S3Uri): Boolean {
+        return try {
+            // throw a not found exception if there's no such key object
+            s3.headObject {
+                bucket = s3Uri.bucket
+                key = s3Uri.key
+            }
+
+            true
+        } catch (_: NotFound) {
+            false
+        }
     }
 
     /**

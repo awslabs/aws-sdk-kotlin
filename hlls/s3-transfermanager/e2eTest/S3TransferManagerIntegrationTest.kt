@@ -94,9 +94,10 @@ class S3TransferManagerIntegrationTest {
     @Test
     fun testDownload() = runTest {
         val s3Uri = S3Uri(testBucket, "folder1")
-        s3TransferManager.upload(testDirectory.toString(), s3Uri)
+        var operation = s3TransferManager.upload(testDirectory.toString(), s3Uri)
+        operation.await()
 
-        val operation = s3TransferManager.download(s3Uri, testDirectory.toString())
+        operation = s3TransferManager.download(s3Uri, testDirectory.toString())
         assertNotNull(operation, "The transfer manager didn't start directory download")
         operation.await()
     }
