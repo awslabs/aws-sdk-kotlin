@@ -4,21 +4,33 @@
  */
 package aws.sdk.kotlin.e2etest
 
-import aws.sdk.kotlin.services.s3.*
+import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.createBucket
+import aws.sdk.kotlin.services.s3.deleteBucket
+import aws.sdk.kotlin.services.s3.deleteObject
+import aws.sdk.kotlin.services.s3.listBuckets
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.ExpirationStatus
 import aws.sdk.kotlin.services.s3.model.LifecycleRule
 import aws.sdk.kotlin.services.s3.model.LifecycleRuleFilter
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
+import aws.sdk.kotlin.services.s3.putBucketLifecycleConfiguration
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import java.io.OutputStreamWriter
 import java.net.URL
-import java.util.*
+import java.util.UUID
 import javax.net.ssl.HttpsURLConnection
 import kotlin.time.Duration.Companion.seconds
 
@@ -39,10 +51,10 @@ object S3TransferManagerTestUtils {
             println("Creating S3 bucket: $testBucket")
 
             client.createBucket {
-                    bucket = testBucket
-                    createBucketConfiguration {
-                        locationConstraint = BucketLocationConstraint.fromValue(client.config.region)
-                    }
+                bucket = testBucket
+                createBucketConfiguration {
+                    locationConstraint = BucketLocationConstraint.fromValue(client.config.region)
+                }
             }
 
             client.waitUntilBucketExists { bucket = testBucket }

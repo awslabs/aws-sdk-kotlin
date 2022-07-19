@@ -4,20 +4,25 @@ import aws.sdk.kotlin.s3.transfermanager.data.S3Uri
 import aws.sdk.kotlin.s3.transfermanager.handler.DefaultOperation
 import aws.sdk.kotlin.s3.transfermanager.handler.Operation
 import aws.sdk.kotlin.s3.transfermanager.listener.ProgressListener
-import aws.sdk.kotlin.services.s3.*
+import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.completeMultipartUpload
+import aws.sdk.kotlin.services.s3.createMultipartUpload
+import aws.sdk.kotlin.services.s3.headBucket
+import aws.sdk.kotlin.services.s3.headObject
 import aws.sdk.kotlin.services.s3.model.CompletedPart
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.services.s3.model.ListObjectsV2Response
+import aws.sdk.kotlin.services.s3.model.NotFound
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
+import aws.sdk.kotlin.services.s3.putObject
+import aws.sdk.kotlin.services.s3.uploadPart
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.asByteStream
 import aws.smithy.kotlin.runtime.content.fromFile
 import aws.smithy.kotlin.runtime.content.writeToFile
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.firstOrNull
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -44,12 +49,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             // throw IllegalArgumentException if from path is invalid
             require(localFile.exists()) { "From path is invalid" }
 
-            if (localFile.isFile()) {
-                uploadFile(localFile, to)
-            } else if (localFile.isDirectory()) {
-                uploadDirectory(localFile, to, progressListener)
-            } else {
-                throw IllegalArgumentException("From path is invalid")
+            when {
+                localFile.isFile() -> uploadFile(localFile, to)
+                localFile.isDirectory() -> uploadDirectory(localFile, to, progressListener)
+                else -> throw IllegalArgumentException("From path is invalid")
             }
         }
 
@@ -172,12 +175,13 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     override fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
         val deferred = async {
             var validFrom = false
-            val localFile = File(to)
-            // create the target directory if to path doesn't exist
-            if (!localFile.exists() || !localFile.isDirectory()) {
-                withContext(Dispatchers.IO) {
-                    Files.createDirectories(Paths.get(to))
+
+            try { // first check if bucket exists
+                s3.headBucket {
+                    bucket = from.bucket
                 }
+            } catch (e: Exception) {
+                throw IllegalArgumentException("The bucket does not exist or has no access to it")
             }
 
             if (!from.key.endsWith('/')) {
@@ -190,65 +194,79 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
 
                     // if object exist, download that object
                     validFrom = true
-                    val subTo = localFile.toPath().resolve(from.key.substringAfterLast('/')).toString()
-                    downLoadFile(from, subTo)
-                } catch (_: Exception) {
+                    val subTo = Paths.get(to).resolve(from.key.substringAfterLast('/')).toString()
+                    downloadFile(from, subTo)
+                } catch (_: NotFound) {
                 }
             }
 
-            // check if the current key is a keyPrefix
-            var keyPrefix = from.key
-            if (!keyPrefix.endsWith('/')) {
-                keyPrefix = keyPrefix.plus('/')
+            if (validFrom) { // if from refers to specific object, just download it and return
+                return@async
             }
+
+            // check if the current key is a keyPrefix
+            val keyPrefix = if (from.key.endsWith('/')) from.key else from.key.plus('/')
+
             val response = s3.listObjectsV2Paginated {
                 bucket = from.bucket
                 prefix = keyPrefix
             }
 
-            if (response.toList()[0].contents != null) {
+            if (response.firstOrNull()?.contents?.isNotEmpty() == true) {
                 validFrom = true
             }
 
             response.collect {
-                downloadDirectory(it, localFile, progressListener)
+                downloadDirectory(it, File(to), progressListener)
             }
 
             if (!validFrom) {
-                throw IllegalArgumentException("From S3 uri contains invalid bucket/key/keyPrefix")
+                throw IllegalArgumentException("From S3 uri contains invalid key/keyPrefix")
             }
         }
 
         return DefaultOperation(deferred)
     }
 
+    /**
+     * download a single object to local path
+     * from is object's bucket-key
+     * to refers to specific path ending with the file name
+     */
     context(CoroutineScope)
-    private fun downLoadFile(from: S3Uri, to: String) {
+    private fun downloadFile(from: S3Uri, to: String) {
         async {
             val request = GetObjectRequest {
                 bucket = from.bucket
                 key = from.key
             }
             s3.getObject(request) { resp ->
-                val rc = resp.body?.writeToFile(Paths.get(to))
-                rc
+                val toPath = Paths.get(to)
+                // create the target directory if to path doesn't exist
+                Files.createDirectories(toPath.parent)
+                resp.body?.writeToFile(toPath)
             }
         }
     }
 
+    /**
+     * within a single response containing max of 1000 objects, iterate through common keyPrefix's all valid objects,
+     * extract and concatenate their local file path and call downloadFile() to download them separately
+     */
     context(CoroutineScope)
     private fun downloadDirectory(response: ListObjectsV2Response, localFile: File, progressListener: ProgressListener?) {
 //     to recursively execute single object download or sub-directory download at local next level
 
-        response.contents?.forEach {
+        response.contents?.forEach response@{
             val subFrom = response.prefix?.let { it1 -> it.key?.substringAfter(it1) }
-            if (subFrom != null) {
-                if (subFrom.contains('/')) { // subFrom still refers to some directory, create it first
-                    val subDirectory = localFile.toPath().resolve(subFrom.substringBeforeLast(('/')))
-                    Files.createDirectories(subDirectory)
-                }
-                val subTo = localFile.toPath().resolve(subFrom).toString()
-                response.name?.let { it1 -> it.key?.let { it2 -> S3Uri(it1, it2) } }?.let { it2 -> downLoadFile(it2, subTo) }
+            // continue to next object if current object refers to nothing
+            if (subFrom == null) {
+                return@response
+            }
+            val subTo = localFile.toPath().resolve(subFrom).toString()
+            if (response.name != null) {
+                val s3Uri = S3Uri(response.name!!, it.key!!)
+                downloadFile(s3Uri, subTo)
             }
         }
     }
