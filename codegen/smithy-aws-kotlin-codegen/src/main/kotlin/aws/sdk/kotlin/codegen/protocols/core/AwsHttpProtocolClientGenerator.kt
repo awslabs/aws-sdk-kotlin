@@ -32,9 +32,9 @@ open class AwsHttpProtocolClientGenerator(
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
-        writer.write("const val ServiceId: String = #S", ctx.service.sdkId)
-        writer.write("const val ServiceApiVersion: String = #S", ctx.service.version)
-        writer.write("const val SdkVersion: String = #S", ctx.settings.pkg.version)
+        writer.write("public const val ServiceId: String = #S", ctx.service.sdkId)
+        writer.write("public const val ServiceApiVersion: String = #S", ctx.service.version)
+        writer.write("public const val SdkVersion: String = #S", ctx.settings.pkg.version)
         writer.write("\n\n")
         super.render(writer)
 

@@ -43,7 +43,7 @@ class AwsServiceConfigIntegrationTest {
         val contents = writer.toString()
 
         val expectedProps = """
-    val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider()
+    public val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider()
     public val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
     public val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
 """
