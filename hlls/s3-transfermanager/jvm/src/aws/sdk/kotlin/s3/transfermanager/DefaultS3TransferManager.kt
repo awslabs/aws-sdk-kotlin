@@ -98,6 +98,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 bucket = to.bucket
                 key = to.key
             }
+
             val completedParts = mutableListOf<CompletedPart>()
 
             // call uploadPart() iteratively to continue uploading
