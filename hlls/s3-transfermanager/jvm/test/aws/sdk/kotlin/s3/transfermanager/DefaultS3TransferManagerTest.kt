@@ -1,5 +1,5 @@
+package aws.sdk.kotlin.s3.transfermanager
 
-import aws.sdk.kotlin.s3.transfermanager.S3TransferManager
 import aws.sdk.kotlin.s3.transfermanager.data.S3Uri
 import aws.sdk.kotlin.services.s3.S3Client
 import io.mockk.MockKAnnotations
@@ -49,28 +49,28 @@ class DefaultS3TransferManagerTest {
 //        assertNotNull(operation)
 //
 //        testFile = RandomTempFile(10000000)
-//        val createMultipartUploadRequest = CreateMultipartUploadRequest.invoke {
+//        val createMultipartUploadRequest = CreateMultipartUploadRequest {
 //            bucket = "bucket"
 //            key = "key"
 //        }
 //
-//        val createMultipartUploadResponse = CreateMultipartUploadResponse.invoke {
+//        val createMultipartUploadResponse = CreateMultipartUploadResponse {
 //            bucket = "bucket"
 //            key = "key"
 //            uploadId = "123456"
 //        }
 //
-//        val uploadPartRequest = UploadPartRequest.invoke {
+//        val uploadPartRequest = UploadPartRequest {
 //            bucket = "bucket"
 //            key = "key"
 //            uploadId = createMultipartUploadResponse.uploadId
 //        }
 //
-//        val uploadPartResponse = UploadPartResponse.invoke {
+//        val uploadPartResponse = UploadPartResponse {
 //            eTag = "654321"
 //        }
 //
-//        val completeMultipartUploadRequest = CompleteMultipartUploadRequest.invoke {
+//        val completeMultipartUploadRequest = CompleteMultipartUploadRequest {
 //            bucket = "bucket"
 //            key = "key"
 //            uploadId = createMultipartUploadResponse.uploadId
@@ -82,7 +82,7 @@ class DefaultS3TransferManagerTest {
 //
 //        operation = s3TransferManager.upload(testFile.path, S3Uri("bucket", "key"))
 //
-//        coVerify { s3Client.completeMultipartUpload(input = any()) }
+//        coVerify { s3Client.completeMultipartUpload(completeMultipartUploadRequest) }
 //
 //        assertNotNull(operation)
 //    }

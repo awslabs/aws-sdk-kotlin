@@ -5,13 +5,26 @@ import aws.sdk.kotlin.s3.transfermanager.handler.DefaultOperation
 import aws.sdk.kotlin.s3.transfermanager.handler.Operation
 import aws.sdk.kotlin.s3.transfermanager.listener.ProgressListener
 import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.completeMultipartUpload
+import aws.sdk.kotlin.services.s3.createMultipartUpload
+import aws.sdk.kotlin.services.s3.headBucket
+import aws.sdk.kotlin.services.s3.headObject
 import aws.sdk.kotlin.services.s3.model.CompletedPart
+import aws.sdk.kotlin.services.s3.model.GetObjectRequest
+import aws.sdk.kotlin.services.s3.model.NotFound
+import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
+import aws.sdk.kotlin.services.s3.putObject
+import aws.sdk.kotlin.services.s3.uploadPart
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.asByteStream
 import aws.smithy.kotlin.runtime.content.fromFile
+import aws.smithy.kotlin.runtime.content.writeToFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.transform
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Paths
 
 internal class DefaultS3TransferManager(override val config: S3TransferManager.Config) : S3TransferManager {
@@ -36,12 +49,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             // throw IllegalArgumentException if from path is invalid
             require(localFile.exists()) { "From path is invalid" }
 
-            if (localFile.isFile()) {
-                uploadFile(localFile, to)
-            } else if (localFile.isDirectory()) {
-                uploadDirectory(localFile, to, progressListener)
-            } else {
-                throw IllegalArgumentException("From path is invalid")
+            when {
+                localFile.isFile() -> uploadFile(localFile, to)
+                localFile.isDirectory() -> uploadDirectory(localFile, to, progressListener)
+                else -> throw IllegalArgumentException("From path is invalid")
             }
         }
 
@@ -140,9 +151,102 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
         }
     }
 
-    override suspend fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
-        TODO("Not yet implemented")
+    /**
+     * download a S3 bucket key object or key-prefix directory to local file system
+     * for directory download, ideal result is like this
+        S3:
+        keyPrefix: bucket/path/to/a/key/
+        valid objects:
+        bucket/path/to/a/key/file1
+        bucket/path/to/a/key/dir1/file2
+        bucket/path/to/a/key/dir1/file3
+        bucket/path/to/a/key/bar/file4
+        bucket/path/to/a/key/bar/dir1/file5
+
+        Files system:
+        /foo/bar/key/
+        downloaded files:
+        /foo/bar/key/file1
+        /foo/bar/key/dir1/file2
+        /foo/bar/key/dir1/file3
+        /foo/bar/key/bar/file4
+        /foo/bar/key/bar/dir1/file5
+     */
+    context(CoroutineScope)
+    override fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
+        val deferred = async {
+            try { // first check if bucket exists
+                s3.headBucket {
+                    bucket = from.bucket
+                }
+            } catch (e: Exception) {
+                throw IllegalArgumentException("The bucket does not exist or has no access to it")
+            }
+
+            if (!from.key.endsWith('/') && objectExists(from)) {
+                val subTo = Paths.get(to).resolve(from.key.substringAfterLast('/')).toString()
+                downloadFile(from, subTo)
+                return@async
+            }
+            // check if the current key is a keyPrefix
+            val keyPrefix = if (from.key.endsWith('/')) from.key else from.key.plus('/')
+
+            val response = s3.listObjectsV2Paginated {
+                bucket = from.bucket
+                prefix = keyPrefix
+            }
+
+            if (response.firstOrNull()?.contents?.isNotEmpty() != true) {
+                throw IllegalArgumentException("From S3 uri contains invalid key/keyPrefix")
+            }
+            response // Flow<ListObjectsV2Response>, a collection of pages
+                .transform { it.contents?.forEach { obj -> emit(obj) } }
+                .collect { obj ->
+                    val key = obj.key!!
+                    val s3Uri = S3Uri(from.bucket, key)
+                    val keySuffix = key.substringAfter(keyPrefix)
+                    val subTo = Paths.get(to, keySuffix).toString()
+                    downloadFile(s3Uri, subTo)
+                }
+        }
+
+        return DefaultOperation(deferred)
     }
+
+    private suspend fun objectExists(s3Uri: S3Uri): Boolean =
+        try {
+            // throw a not found exception if there's no such key object
+            s3.headObject {
+                bucket = s3Uri.bucket
+                key = s3Uri.key
+            }
+
+            true
+        } catch (_: NotFound) {
+            false
+        }
+
+    /**
+     * download a single object to local path
+     * from is object's bucket-key
+     * to refers to specific path ending with the file name
+     */
+    context(CoroutineScope)
+    private fun downloadFile(from: S3Uri, to: String) {
+        async {
+            val request = GetObjectRequest {
+                bucket = from.bucket
+                key = from.key
+            }
+            s3.getObject(request) { resp ->
+                val toPath = Paths.get(to)
+                // create the target directory if to path doesn't exist
+                Files.createDirectories(toPath.parent)
+                resp.body?.writeToFile(toPath)
+            }
+        }
+    }
+
     override suspend fun copy(from: List<S3Uri>, to: S3Uri, progressListener: ProgressListener?): Operation {
         TODO("Not yet implemented")
     }
