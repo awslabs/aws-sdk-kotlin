@@ -3320,7 +3320,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 0,
-                    "max": 20
+                    "max": 30
                 }
             }
         },
@@ -4418,7 +4418,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 0,
-                    "max": 20
+                    "max": 30
                 }
             }
         },
@@ -20770,6 +20770,69 @@
                 }
             }
         },
+        "com.amazonaws.sagemaker#InstanceGroup": {
+            "type": "structure",
+            "members": {
+                "InstanceType": {
+                    "target": "com.amazonaws.sagemaker#TrainingInstanceType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the instance type of the instance group.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "InstanceCount": {
+                    "target": "com.amazonaws.sagemaker#TrainingInstanceCount",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the number of instances of the instance group.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "InstanceGroupName": {
+                    "target": "com.amazonaws.sagemaker#InstanceGroupName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the name of the instance group.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Defines an instance group for heterogeneous cluster training. \n            When requesting a training job using the <a href=\"https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateTrainingJob.html\">CreateTrainingJob</a> API, \n            you can configure multiple instance groups .</p>"
+            }
+        },
+        "com.amazonaws.sagemaker#InstanceGroupName": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 64
+                },
+                "smithy.api#pattern": "^.+$"
+            }
+        },
+        "com.amazonaws.sagemaker#InstanceGroupNames": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.sagemaker#InstanceGroupName"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 5
+                }
+            }
+        },
+        "com.amazonaws.sagemaker#InstanceGroups": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.sagemaker#InstanceGroup"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 5
+                }
+            }
+        },
         "com.amazonaws.sagemaker#InstanceMetadataServiceConfiguration": {
             "type": "structure",
             "members": {
@@ -21136,7 +21199,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 0,
-                    "max": 20
+                    "max": 30
                 }
             }
         },
@@ -31119,7 +31182,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Specifies ranges of integer, continuous, and categorical hyperparameters that a\n            hyperparameter tuning job searches. The hyperparameter tuning job launches training jobs\n            with hyperparameter values within these ranges to find the combination of values that\n            result in the training job with the best performance as measured by the objective metric\n            of the hyperparameter tuning job.</p>\n        <note>\n            <p>You can specify a maximum of 20 hyperparameters that a hyperparameter tuning job\n                can search over. Every possible value of a categorical parameter range counts\n                against this limit.</p>\n        </note>"
+                "smithy.api#documentation": "<p>Specifies ranges of integer, continuous, and categorical hyperparameters that a\n            hyperparameter tuning job searches. The hyperparameter tuning job launches training jobs\n            with hyperparameter values within these ranges to find the combination of values that\n            result in the training job with the best performance as measured by the objective metric\n            of the hyperparameter tuning job.</p>\n        <note>\n            <p>The maximum number of items specified for <code>Array Members</code> refers to\n                the maximum number of hyperparameters for each range and also the maximum for the\n                hyperparameter tuning job itself. That is, the sum of the number of hyperparameters\n                for all the ranges can't exceed the maximum number specified.</p>\n        </note>"
             }
         },
         "com.amazonaws.sagemaker#ParameterType": {
@@ -31163,7 +31226,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 1,
-                    "max": 20
+                    "max": 30
                 }
             }
         },
@@ -33280,6 +33343,78 @@
                     {
                         "value": "ml.inf1.24xlarge",
                         "name": "ML_INF1_24XLARGE"
+                    },
+                    {
+                        "value": "ml.c6i.large",
+                        "name": "ML_C6I_LARGE"
+                    },
+                    {
+                        "value": "ml.c6i.xlarge",
+                        "name": "ML_C6I_XLARGE"
+                    },
+                    {
+                        "value": "ml.c6i.2xlarge",
+                        "name": "ML_C6I_2XLARGE"
+                    },
+                    {
+                        "value": "ml.c6i.4xlarge",
+                        "name": "ML_C6I_4XLARGE"
+                    },
+                    {
+                        "value": "ml.c6i.8xlarge",
+                        "name": "ML_C6I_8XLARGE"
+                    },
+                    {
+                        "value": "ml.c6i.12xlarge",
+                        "name": "ML_C6I_12XLARGE"
+                    },
+                    {
+                        "value": "ml.c6i.16xlarge",
+                        "name": "ML_C6I_16XLARGE"
+                    },
+                    {
+                        "value": "ml.c6i.24xlarge",
+                        "name": "ML_C6I_24XLARGE"
+                    },
+                    {
+                        "value": "ml.c6i.32xlarge",
+                        "name": "ML_C6I_32XLARGE"
+                    },
+                    {
+                        "value": "ml.g5.xlarge",
+                        "name": "ML_G5_XLARGE"
+                    },
+                    {
+                        "value": "ml.g5.2xlarge",
+                        "name": "ML_G5_2XLARGE"
+                    },
+                    {
+                        "value": "ml.g5.4xlarge",
+                        "name": "ML_G5_4XLARGE"
+                    },
+                    {
+                        "value": "ml.g5.8xlarge",
+                        "name": "ML_G5_8XLARGE"
+                    },
+                    {
+                        "value": "ml.g5.12xlarge",
+                        "name": "ML_G5_12XLARGE"
+                    },
+                    {
+                        "value": "ml.g5.16xlarge",
+                        "name": "ML_G5_16XLARGE"
+                    },
+                    {
+                        "value": "ml.g5.24xlarge",
+                        "name": "ML_G5_24XLARGE"
+                    },
+                    {
+                        "value": "ml.g5.48xlarge",
+                        "name": "ML_G5_48XLARGE"
+                    },
+                    {
+                        "value": "ml.p4d.24xlarge",
+                        "name": "ML_P4D_24XLARGE"
                     }
                 ]
             }
@@ -35064,15 +35199,13 @@
                 "InstanceType": {
                     "target": "com.amazonaws.sagemaker#TrainingInstanceType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ML compute instance type. </p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The ML compute instance type. </p>"
                     }
                 },
                 "InstanceCount": {
                     "target": "com.amazonaws.sagemaker#TrainingInstanceCount",
                     "traits": {
-                        "smithy.api#documentation": "<p>The number of ML compute instances to use. For distributed training, provide a\n            value greater than 1. </p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The number of ML compute instances to use. For distributed training, provide a\n            value greater than 1. </p>"
                     }
                 },
                 "VolumeSizeInGB": {
@@ -35086,6 +35219,12 @@
                     "target": "com.amazonaws.sagemaker#KmsKeyId",
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon Web Services KMS key that SageMaker uses to encrypt data on the storage volume attached to the ML\n            compute instance(s) that run the training job.</p>\n        <note>\n            <p>Certain Nitro-based instances include local storage, dependent on the instance\n                type. Local storage volumes are encrypted using a hardware module on the instance.\n                You can't request a <code>VolumeKmsKeyId</code> when using an instance type with\n                local storage.</p>\n            <p>For a list of instance types that support local instance storage, see <a href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#instance-store-volumes\">Instance Store Volumes</a>.</p>\n            <p>For more information about local instance storage encryption, see <a href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssd-instance-store.html\">SSD\n                    Instance Store Volumes</a>.</p>\n        </note>\n        <p>The <code>VolumeKmsKeyId</code> can be in any of the following formats:</p>\n        <ul>\n            <li>\n                <p>// KMS Key ID</p>\n                <p>\n                    <code>\"1234abcd-12ab-34cd-56ef-1234567890ab\"</code>\n                </p>\n            </li>\n            <li>\n                <p>// Amazon Resource Name (ARN) of a KMS Key</p>\n                <p>\n                    <code>\"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\"</code>\n                </p>\n            </li>\n         </ul>"
+                    }
+                },
+                "InstanceGroups": {
+                    "target": "com.amazonaws.sagemaker#InstanceGroups",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration of a heterogeneous cluster in JSON format.</p>"
                     }
                 }
             },
@@ -35510,6 +35649,12 @@
                     "target": "com.amazonaws.sagemaker#AttributeNames",
                     "traits": {
                         "smithy.api#documentation": "<p>A list of one or more attribute names to use that are found in a specified augmented\n            manifest file.</p>"
+                    }
+                },
+                "InstanceGroupNames": {
+                    "target": "com.amazonaws.sagemaker#InstanceGroupNames",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of names of instance groups that get data \n            from the S3 data source.</p>"
                     }
                 }
             },
@@ -38895,7 +39040,7 @@
             "type": "integer",
             "traits": {
                 "smithy.api#range": {
-                    "min": 1
+                    "min": 0
                 }
             }
         },
