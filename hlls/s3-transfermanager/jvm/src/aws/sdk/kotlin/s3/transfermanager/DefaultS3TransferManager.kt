@@ -201,12 +201,11 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             response // Flow<ListObjectsV2Response>, a collection of pages
                 .transform { it.contents?.forEach { obj -> emit(obj) } }
                 .collect { obj ->
-                    val s3Uri = obj.key?.let { S3Uri(from.bucket, it) }
-                    val keySuffix = obj.key?.substringAfter(keyPrefix)
+                    val key = obj.key!!
+                    val s3Uri = S3Uri(from.bucket, key)
+                    val keySuffix = key.substringAfter(keyPrefix)
                     val subTo = Paths.get(to, keySuffix).toString()
-                    if (s3Uri != null) {
-                        downloadFile(s3Uri, subTo)
-                    }
+                    downloadFile(s3Uri, subTo)
                 }
         }
 
