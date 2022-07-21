@@ -1,8 +1,0 @@
-{
-    "id": "8fa79617-cfb4-48f2-a031-32ee2f0341b3",
-    "type": "feature",
-    "description": "Implement ID prefix trimming for route53 resources.",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#509"
-    ]
-}

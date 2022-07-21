@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.17.1-beta] - 07/21/2022
+
+### Features
+* [#509](https://github.com/awslabs/aws-sdk-kotlin/issues/509) Implement ID prefix trimming for route53 resources.
+
+### Miscellaneous
+* Sync AWS service models.
+
 ## [0.17.0-beta] - 07/14/2022
 
 ### Fixes
