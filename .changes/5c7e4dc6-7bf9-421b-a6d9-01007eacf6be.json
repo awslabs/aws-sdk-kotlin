@@ -1,0 +1,8 @@
+{
+    "id": "5c7e4dc6-7bf9-421b-a6d9-01007eacf6be",
+    "type": "misc",
+    "description": "Enable [Explicit API mode](https://github.com/Kotlin/KEEP/blob/master/proposals/explicit-api-mode.md)",
+    "issues": [
+        "awslabs/smithy-kotlin#216"
+    ]
+}

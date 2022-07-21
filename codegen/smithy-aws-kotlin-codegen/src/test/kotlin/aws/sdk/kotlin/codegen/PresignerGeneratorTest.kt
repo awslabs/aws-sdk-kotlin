@@ -116,7 +116,7 @@ class PresignerGeneratorTest {
              * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun GetFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
+            public suspend fun GetFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
                 return createPresignedRequest(presignConfig, getFooPresignConfig(this, duration))
             }
             
@@ -126,7 +126,7 @@ class PresignerGeneratorTest {
              * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun GetFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
+            public suspend fun GetFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
                     credentialsProvider = config.credentialsProvider
                     endpointProvider = config.endpointResolver.asSigningEndpointProvider()
@@ -155,7 +155,7 @@ class PresignerGeneratorTest {
              * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PostFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
+            public suspend fun PostFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
                 return createPresignedRequest(presignConfig, postFooPresignConfig(this, duration))
             }
             
@@ -165,7 +165,7 @@ class PresignerGeneratorTest {
              * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PostFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
+            public suspend fun PostFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
                     credentialsProvider = config.credentialsProvider
                     endpointProvider = config.endpointResolver.asSigningEndpointProvider()
@@ -194,7 +194,7 @@ class PresignerGeneratorTest {
              * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PutFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
+            public suspend fun PutFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
                 return createPresignedRequest(presignConfig, putFooPresignConfig(this, duration))
             }
             
@@ -204,7 +204,7 @@ class PresignerGeneratorTest {
              * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
              * @return The [HttpRequest] that can be invoked within the specified time window.
              */
-            suspend fun PutFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
+            public suspend fun PutFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
                     credentialsProvider = config.credentialsProvider
                     endpointProvider = config.endpointResolver.asSigningEndpointProvider()
