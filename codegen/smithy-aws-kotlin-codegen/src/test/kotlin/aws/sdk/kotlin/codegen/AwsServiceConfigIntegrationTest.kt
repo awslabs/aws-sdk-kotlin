@@ -43,9 +43,9 @@ class AwsServiceConfigIntegrationTest {
         val contents = writer.toString()
 
         val expectedProps = """
-    val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider()
-    val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
-    val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
+    public val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider()
+    public val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
+    public val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
 """
         contents.shouldContainOnlyOnceWithDiff(expectedProps)
 
@@ -56,16 +56,16 @@ class AwsServiceConfigIntegrationTest {
          * NOTE: The caller is responsible for managing the lifetime of the provider when set. The SDK
          * client will not close it when the client is closed.
          */
-        var credentialsProvider: CredentialsProvider? = null
+        public var credentialsProvider: CredentialsProvider? = null
         /**
          * Determines the endpoint (hostname) to make requests to. When not provided a default
          * resolver is configured automatically. This is an advanced client option.
          */
-        var endpointResolver: AwsEndpointResolver? = null
+        public var endpointResolver: AwsEndpointResolver? = null
         /**
          * AWS region to make requests to
          */
-        var region: String? = null
+        public var region: String? = null
 """
         contents.shouldContainOnlyOnceWithDiff(expectedImpl)
     }
