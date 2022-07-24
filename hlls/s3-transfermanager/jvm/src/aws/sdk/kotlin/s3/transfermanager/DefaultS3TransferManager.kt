@@ -11,13 +11,16 @@ import aws.sdk.kotlin.services.s3.headBucket
 import aws.sdk.kotlin.services.s3.headObject
 import aws.sdk.kotlin.services.s3.model.CompletedPart
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
+import aws.sdk.kotlin.services.s3.model.HeadObjectResponse
 import aws.sdk.kotlin.services.s3.model.NotFound
+import aws.sdk.kotlin.services.s3.model.S3Exception
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.putObject
 import aws.sdk.kotlin.services.s3.uploadPart
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.asByteStream
 import aws.smithy.kotlin.runtime.content.fromFile
+import aws.smithy.kotlin.runtime.content.toByteArray
 import aws.smithy.kotlin.runtime.content.writeToFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -155,22 +158,22 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
      * download a S3 bucket key object or key-prefix directory to local file system
      * for directory download, ideal result is like this
         S3:
-        keyPrefix: bucket/path/to/a/key/
-        valid objects:
-        bucket/path/to/a/key/file1
-        bucket/path/to/a/key/dir1/file2
-        bucket/path/to/a/key/dir1/file3
-        bucket/path/to/a/key/bar/file4
-        bucket/path/to/a/key/bar/dir1/file5
+    keyPrefix: bucket/path/to/a/key/
+    valid objects:
+    bucket/path/to/a/key/file1
+    bucket/path/to/a/key/dir1/file2
+    bucket/path/to/a/key/dir1/file3
+    bucket/path/to/a/key/bar/file4
+    bucket/path/to/a/key/bar/dir1/file5
 
-        Files system:
-        /foo/bar/key/
-        downloaded files:
-        /foo/bar/key/file1
-        /foo/bar/key/dir1/file2
-        /foo/bar/key/dir1/file3
-        /foo/bar/key/bar/file4
-        /foo/bar/key/bar/dir1/file5
+    Files system:
+    /foo/bar/key/
+    downloaded files:
+    /foo/bar/key/file1
+    /foo/bar/key/dir1/file2
+    /foo/bar/key/dir1/file3
+    /foo/bar/key/bar/file4
+    /foo/bar/key/bar/dir1/file5
      */
     context(CoroutineScope)
     override fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
@@ -179,14 +182,19 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 s3.headBucket {
                     bucket = from.bucket
                 }
-            } catch (e: Exception) {
+            } catch (e: S3Exception) {
                 throw IllegalArgumentException("The bucket does not exist or has no access to it")
             }
 
-            if (!from.key.endsWith('/') && objectExists(from)) {
-                val subTo = Paths.get(to).resolve(from.key.substringAfterLast('/')).toString()
-                downloadFile(from, subTo)
-                return@async
+            if (!from.key.endsWith('/')) {
+                val response = headObject(from)
+                when {
+                    response != null -> {
+                        val subTo = Paths.get(to).resolve(from.key.substringAfterLast('/')).toString()
+                        downloadFile(response.contentLength, from, subTo)
+                        return@async
+                    }
+                }
             }
             // check if the current key is a keyPrefix
             val keyPrefix = if (from.key.endsWith('/')) from.key else from.key.plus('/')
@@ -199,6 +207,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             if (response.firstOrNull()?.contents?.isNotEmpty() != true) {
                 throw IllegalArgumentException("From S3 uri contains invalid key/keyPrefix")
             }
+
             response // Flow<ListObjectsV2Response>, a collection of pages
                 .transform { it.contents?.forEach { obj -> emit(obj) } }
                 .collect { obj ->
@@ -206,24 +215,24 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                     val s3Uri = S3Uri(from.bucket, key)
                     val keySuffix = key.substringAfter(keyPrefix)
                     val subTo = Paths.get(to, keySuffix).toString()
-                    downloadFile(s3Uri, subTo)
+                    downloadFile(obj.size, s3Uri, subTo)
                 }
         }
 
         return DefaultOperation(deferred)
     }
 
-    private suspend fun objectExists(s3Uri: S3Uri): Boolean =
+    private suspend fun headObject(s3Uri: S3Uri): HeadObjectResponse? =
         try {
             // throw a not found exception if there's no such key object
-            s3.headObject {
+            val response = s3.headObject {
                 bucket = s3Uri.bucket
                 key = s3Uri.key
             }
 
-            true
+            response
         } catch (_: NotFound) {
-            false
+            null
         }
 
     /**
@@ -232,7 +241,15 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
      * to refers to specific path ending with the file name
      */
     context(CoroutineScope)
-    private fun downloadFile(from: S3Uri, to: String) {
+    private fun downloadFile(fileSize: Long, from: S3Uri, to: String) {
+        when {
+            fileSize <= config.chunkSize -> downloadWholeFile(from, to)
+            else -> downloadFileParts(fileSize, from, to)
+        }
+    }
+
+    context(CoroutineScope)
+    private fun downloadWholeFile(from: S3Uri, to: String) {
         async {
             val request = GetObjectRequest {
                 bucket = from.bucket
@@ -243,6 +260,36 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 // create the target directory if to path doesn't exist
                 Files.createDirectories(toPath.parent)
                 resp.body?.writeToFile(toPath)
+            }
+        }
+    }
+
+    context(CoroutineScope)
+    private fun downloadFileParts(fileSize: Long, from: S3Uri, to: String) {
+        async {
+            val toPath = Paths.get(to)
+            // create the target directory if to path doesn't exist
+            Files.createDirectories(toPath.parent)
+
+            val chunkRanges = (0 until fileSize step config.chunkSize).map {
+                arrayOf(it, minOf(it + config.chunkSize - 1, fileSize - 1))
+            }
+
+            val file = File(to)
+            chunkRanges.forEach {
+                // contentRange format: "bytes=0-7999999"
+                val contentRange = "bytes=${it[0]}-${it[1]}"
+                val request = GetObjectRequest {
+                    bucket = from.bucket
+                    key = from.key
+                    range = contentRange
+                }
+                s3.getObject(request) { resp ->
+                    val byteArray = resp.body?.toByteArray()
+                    when {
+                        byteArray != null -> file.appendBytes(byteArray)
+                    }
+                }
             }
         }
     }
