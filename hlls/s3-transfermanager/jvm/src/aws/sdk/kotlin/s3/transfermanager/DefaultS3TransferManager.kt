@@ -27,6 +27,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.transform
 import java.io.File
+import java.io.RandomAccessFile
+import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -267,6 +269,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     context(CoroutineScope)
     private fun downloadFileParts(fileSize: Long, from: S3Uri, to: String) {
         async {
+            var position = 0L
             val toPath = Paths.get(to)
             // create the target directory if to path doesn't exist
             Files.createDirectories(toPath.parent)
@@ -285,13 +288,32 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                     range = contentRange
                 }
                 s3.getObject(request) { resp ->
-                    val byteArray = resp.body?.toByteArray()
+                    val objectContent = resp.body
                     when {
-                        byteArray != null -> file.appendBytes(byteArray)
+                        objectContent != null -> position = downloadFilePart(objectContent, file, position)
                     }
                 }
             }
         }
+    }
+
+    private suspend fun downloadFilePart(objectContent: ByteStream, localFile: File, position: Long): Long {
+        val randomAccessFile = RandomAccessFile(localFile, "rw")
+        val channel = randomAccessFile.channel
+        channel.position(position)
+        val filePosition: Long
+
+        try {
+            val byteArray = objectContent.toByteArray()
+            val byteBuffer = ByteBuffer.wrap(byteArray)
+            channel.write(byteBuffer)
+            byteBuffer.clear()
+
+            filePosition = channel.position()
+        } finally {
+        }
+
+        return filePosition
     }
 
     override suspend fun copy(from: List<S3Uri>, to: S3Uri, progressListener: ProgressListener?): Operation {
