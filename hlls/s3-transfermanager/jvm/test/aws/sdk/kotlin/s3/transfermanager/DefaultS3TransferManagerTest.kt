@@ -11,8 +11,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.Test
@@ -29,7 +29,7 @@ class DefaultS3TransferManagerTest {
     @MockK
     private lateinit var s3TransferManager: S3TransferManager
 
-    @BeforeAll
+    @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
 //        mockkObject(s3Client)
@@ -44,7 +44,7 @@ class DefaultS3TransferManagerTest {
         }
     }
 
-    @AfterAll
+    @AfterEach
     fun finish() {
         unmockkAll()
     }

@@ -21,7 +21,6 @@ import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.asByteStream
 import aws.smithy.kotlin.runtime.content.fromFile
 import aws.smithy.kotlin.runtime.content.toByteArray
-import aws.smithy.kotlin.runtime.content.writeToFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.firstOrNull
@@ -31,6 +30,7 @@ import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.io.path.createFile
 
 internal class DefaultS3TransferManager(override val config: S3TransferManager.Config) : S3TransferManager {
 
@@ -188,15 +188,11 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 throw IllegalArgumentException("The bucket does not exist or has no access to it")
             }
 
-            if (!from.key.endsWith('/')) {
-                val response = headObject(from)
-                when {
-                    response != null -> {
-                        val subTo = Paths.get(to).resolve(from.key.substringAfterLast('/')).toString()
-                        downloadFile(response.contentLength, from, subTo)
-                        return@async
-                    }
-                }
+            if (!from.key.endsWith('/') && s3.headObjectOrNull(from) != null) {
+                val response = s3.headObjectOrNull(from)
+                val subTo = Paths.get(to).resolve(from.key.substringAfterLast('/')).toString()
+                downloadFile(response!!.contentLength, from, subTo)
+                return@async
             }
             // check if the current key is a keyPrefix
             val keyPrefix = if (from.key.endsWith('/')) from.key else from.key.plus('/')
@@ -224,60 +220,28 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
         return DefaultOperation(deferred)
     }
 
-    private suspend fun headObject(s3Uri: S3Uri): HeadObjectResponse? =
-        try {
-            // throw a not found exception if there's no such key object
-            val response = s3.headObject {
-                bucket = s3Uri.bucket
-                key = s3Uri.key
-            }
-
-            response
-        } catch (_: NotFound) {
-            null
-        }
-
     /**
      * download a single object to local path
      * from is object's bucket-key
      * to refers to specific path ending with the file name
+     * the object is downloaded in single or multi chunks according to its size compared with config chunk size
      */
     context(CoroutineScope)
     private fun downloadFile(fileSize: Long, from: S3Uri, to: String) {
-        when {
-            fileSize <= config.chunkSize -> downloadWholeFile(from, to)
-            else -> downloadFileParts(fileSize, from, to)
-        }
-    }
-
-    context(CoroutineScope)
-    private fun downloadWholeFile(from: S3Uri, to: String) {
         async {
-            val request = GetObjectRequest {
-                bucket = from.bucket
-                key = from.key
-            }
-            s3.getObject(request) { resp ->
-                val toPath = Paths.get(to)
-                // create the target directory if to path doesn't exist
-                Files.createDirectories(toPath.parent)
-                resp.body?.writeToFile(toPath)
-            }
-        }
-    }
-
-    context(CoroutineScope)
-    private fun downloadFileParts(fileSize: Long, from: S3Uri, to: String) {
-        async {
-            var position = 0L
             val toPath = Paths.get(to)
             // create the target directory if to path doesn't exist
             Files.createDirectories(toPath.parent)
 
+            if (fileSize == 0L) { // for zero size file, can't chunk, so just download
+                toPath.createFile()
+                return@async
+            }
+
+            var position = 0L
             val chunkRanges = (0 until fileSize step config.chunkSize).map {
                 arrayOf(it, minOf(it + config.chunkSize - 1, fileSize - 1))
             }
-
             val file = File(to)
             chunkRanges.forEach {
                 // contentRange format: "bytes=0-7999999"
@@ -289,8 +253,8 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 }
                 s3.getObject(request) { resp ->
                     val objectContent = resp.body
-                    when {
-                        objectContent != null -> position = downloadFilePart(objectContent, file, position)
+                    if (objectContent != null) {
+                        position = downloadFilePart(objectContent, file, position)
                     }
                 }
             }
@@ -320,3 +284,16 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
         TODO("Not yet implemented")
     }
 }
+
+public suspend fun S3Client.headObjectOrNull(s3Uri: S3Uri): HeadObjectResponse? =
+    try {
+        // throw a not found exception if there's no such key object
+        val response = headObject {
+            bucket = s3Uri.bucket
+            key = s3Uri.key
+        }
+
+        response
+    } catch (_: NotFound) {
+        null
+    }
