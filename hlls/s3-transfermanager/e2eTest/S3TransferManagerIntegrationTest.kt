@@ -5,7 +5,10 @@ import aws.sdk.kotlin.s3.transfermanager.data.S3Uri
 import aws.sdk.kotlin.s3.transfermanager.headObjectOrNull
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.listObjectsV2
+import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
+import aws.smithy.kotlin.runtime.content.asByteStream
+import aws.smithy.kotlin.runtime.content.toByteArray
 import aws.smithy.kotlin.runtime.testing.RandomTempFile
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
@@ -51,18 +54,25 @@ class S3TransferManagerIntegrationTest {
 
     @BeforeEach
     private fun createResources(): Unit = runBlocking {
+        testBucket = S3TransferManagerTestUtils.getTestBucket(s3TransferManager.config.s3)
+    }
+
+    @AfterEach
+    private fun cleanup() = runBlocking {
+        S3TransferManagerTestUtils.deleteBucketAndAllContents(s3TransferManager.config.s3, testBucket)
+    }
+
+    private fun createUploadDirectory() {
+        //        test directory structure like this:
+        //        testUploadDirectory/
+        //            file1.txt
+        //            testUploadDirectory1/
+        //                file2.png
+        //                file3.jpeg
+        //            testUploadDirectory2/
         val home: String = System.getProperty("user.home")
         val dir = Paths.get(home, "Downloads")
-        testBucket = S3TransferManagerTestUtils.getTestBucket(s3TransferManager.config.s3)
         testUploadDirectory = Files.createTempDirectory(dir, "testUploadDirectory")
-        testDownloadDirectory = Files.createTempDirectory(dir, "testDownloadDirectory")
-//        test directory structure like this:
-//        testUploadDirectory/
-//            file1.txt
-//            testUploadDirectory1/
-//                file2.png
-//                file3.jpeg
-//            testUploadDirectory2/
         File.createTempFile("file1", ".txt", testUploadDirectory.toFile())
         val testUploadDirectory1 = Files.createTempDirectory(testUploadDirectory, "testUploadDirectory1")
         File.createTempFile("file2", ".png", testUploadDirectory1.toFile())
@@ -70,31 +80,31 @@ class S3TransferManagerIntegrationTest {
         Files.createTempDirectory(testUploadDirectory, "testUploadDirectory2")
     }
 
-    @AfterEach
-    private fun cleanup() = runBlocking {
-        deleteFiles(testUploadDirectory.toFile())
-        deleteFiles(testDownloadDirectory.toFile())
-        S3TransferManagerTestUtils.deleteBucketAndAllContents(s3TransferManager.config.s3, testBucket)
+    private fun createDownloadDirectory() {
+        val home: String = System.getProperty("user.home")
+        val dir = Paths.get(home, "Downloads")
+        testDownloadDirectory = Files.createTempDirectory(dir, "testDownloadDirectory")
     }
 
-    private fun deleteFiles(file: File) {
-        if (file.isDirectory) {
-            val subFiles = file.listFiles()
-            subFiles.forEach {
-                deleteFiles(it)
+    private fun File.deleteRecursive() {
+        if (isDirectory) {
+            listFiles().forEach {
+                it.deleteRecursive()
             }
         }
-        file.delete()
+        delete()
     }
 
     @Test
     fun testUpload() = runTest {
+        createUploadDirectory()
         val keyPrefix = "folder1"
         val toUri = S3Uri(testBucket, keyPrefix)
         val operation = s3TransferManager.upload(testUploadDirectory.toString(), toUri)
         assertNotNull(operation, "The transfer manager didn't start directory upload")
         operation.await()
         assertTrue(checkUpload(testUploadDirectory.toFile(), toUri))
+        testUploadDirectory.toFile().deleteRecursive()
     }
 
     @Test
@@ -106,12 +116,15 @@ class S3TransferManagerIntegrationTest {
         assertNotNull(operation, "The transfer manager didn't start parts upload")
         operation.await()
         assertTrue(checkUpload(testLargeFile, toUri))
-        testLargeFile.delete()
+        testLargeFile.deleteRecursive()
     }
 
     private suspend fun checkUpload(localFile: File, to: S3Uri): Boolean {
         when {
             localFile.isFile -> {
+                if (localFile.length() > s3TransferManager.config.chunkSize) {
+                    return chunksCompare(localFile, to)
+                }
                 return s3TransferManager.config.s3.headObjectOrNull(to) != null
             }
 
@@ -150,14 +163,18 @@ class S3TransferManagerIntegrationTest {
 
     @Test
     fun testDownload() = runTest {
+        createUploadDirectory()
         val s3Uri = S3Uri(testBucket, "folder1")
         val uploadOperation = s3TransferManager.upload(testUploadDirectory.toString(), s3Uri)
         uploadOperation.await()
+        testUploadDirectory.toFile().deleteRecursive()
 
+        createDownloadDirectory()
         val downloadOperation = s3TransferManager.download(s3Uri, testDownloadDirectory.toString())
         assertNotNull(downloadOperation, "The transfer manager didn't start directory download")
         downloadOperation.await()
         assertTrue(checkDownload(s3Uri, testDownloadDirectory.toFile()))
+        testDownloadDirectory.toFile().deleteRecursive()
     }
 
     @Test
@@ -167,14 +184,22 @@ class S3TransferManagerIntegrationTest {
         val s3Uri = S3Uri(testBucket, largeFileKey)
         val uploadOperation = s3TransferManager.upload(testLargeFile.path, s3Uri)
         uploadOperation.await()
+        testLargeFile.deleteRecursive()
+
+        createDownloadDirectory()
         val downloadOperation = s3TransferManager.download(s3Uri, testDownloadDirectory.toString())
         downloadOperation.await()
         val downloadFile = Paths.get(testDownloadDirectory.toString(), largeFileKey).toFile()
         assertTrue(checkDownload(s3Uri, downloadFile))
+        testDownloadDirectory.toFile().deleteRecursive()
     }
 
     private suspend fun checkDownload(from: S3Uri, localFile: File): Boolean {
-        if (!from.key.endsWith('/') && s3TransferManager.config.s3.headObjectOrNull(from) != null) {
+        val headObjectResponse = s3TransferManager.config.s3.headObjectOrNull(from)
+        if (!from.key.endsWith('/') && headObjectResponse != null) {
+            if (headObjectResponse.contentLength > s3TransferManager.config.chunkSize) {
+                return chunksCompare(localFile, from)
+            }
             return localFile.isFile()
         }
 
@@ -188,9 +213,10 @@ class S3TransferManagerIntegrationTest {
             .transform { it.contents?.forEach { obj -> emit(obj) } }
             .collect { obj ->
                 val key = obj.key!!
+                val subFrom = S3Uri(from.bucket, key)
                 val keySuffix = key.substringAfter(keyPrefix)
                 val subFile = Paths.get(localFile.toString(), keySuffix).toFile()
-                if (!subFile.isFile()) {
+                if (!checkDownload(subFrom, subFile)) {
                     checkResult = false
                     return@collect
                 }
@@ -201,10 +227,6 @@ class S3TransferManagerIntegrationTest {
 
     @Test
     fun testDownloadInvalidFromBucket() = runTest {
-        val s3Uri = S3Uri(testBucket, "folder1")
-        val operation = s3TransferManager.upload(testUploadDirectory.toString(), s3Uri)
-        operation.await()
-
         assertFailsWith<IllegalArgumentException>("The download is completed without throwing from bucket error") {
             coroutineScope {
                 s3TransferManager.download(S3Uri("s3://${testBucket}${Random.nextLong(Long.MAX_VALUE)}/folder1"), "/Users/wty/Desktop/folder1/haha").await()
@@ -214,14 +236,42 @@ class S3TransferManagerIntegrationTest {
 
     @Test
     fun testDownloadInvalidFromKey() = runTest {
-        val s3Uri = S3Uri(testBucket, "folder1")
-        val operation = s3TransferManager.upload(testUploadDirectory.toString(), s3Uri)
-        operation.await()
-
         assertFailsWith<IllegalArgumentException>("The download is completed without throwing from key error") {
             coroutineScope {
                 s3TransferManager.download(S3Uri(testBucket, "${Random.nextLong(Long.MAX_VALUE)}/${Random.nextInt(Int.MAX_VALUE)}"), "/Users/wty/Desktop/folder1/haha").await()
             }
         }
+    }
+
+    private suspend fun chunksCompare(localFile: File, s3Uri: S3Uri): Boolean {
+        val fileSize = localFile.length()
+        if (fileSize != s3TransferManager.config.s3.headObjectOrNull(s3Uri)?.contentLength) {
+            return false
+        }
+        val chunkRanges = (0 until fileSize step s3TransferManager.config.chunkSize).map {
+            it until minOf(it + s3TransferManager.config.chunkSize, fileSize)
+        }
+        var isEqual = true
+
+        chunkRanges.forEach {
+            val contentRange = "bytes=${it.first}-${it.last}"
+            val request = GetObjectRequest {
+                bucket = s3Uri.bucket
+                key = s3Uri.key
+                range = contentRange
+            }
+            s3TransferManager.config.s3.getObject(request) { resp ->
+                // compare s3 object chunk and local file's corresponding chunk after converting both to ByteArray
+                if (!resp.body?.toByteArray().contentEquals(localFile.asByteStream(it).toByteArray())) {
+                    isEqual = false
+                    return@getObject
+                }
+            }
+            if (!isEqual) {
+                return isEqual
+            }
+        }
+
+        return isEqual
     }
 }
