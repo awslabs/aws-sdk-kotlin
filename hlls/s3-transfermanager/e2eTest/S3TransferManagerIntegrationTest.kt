@@ -48,12 +48,14 @@ class S3TransferManagerIntegrationTest {
 
     private lateinit var testBucket: String
 
+    private lateinit var testBucket1: String
+
     private lateinit var testUploadDirectory: Path
 
     private lateinit var testDownloadDirectory: Path
 
     @BeforeEach
-    private fun createResources(): Unit = runBlocking {
+    private fun createResources() = runBlocking {
         testBucket = S3TransferManagerTestUtils.getTestBucket(s3TransferManager.config.s3)
     }
 
@@ -73,10 +75,10 @@ class S3TransferManagerIntegrationTest {
         val home: String = System.getProperty("user.home")
         val dir = Paths.get(home, "Downloads")
         testUploadDirectory = Files.createTempDirectory(dir, "testUploadDirectory")
-        File.createTempFile("file1", ".txt", testUploadDirectory.toFile())
+        Files.createTempFile(testUploadDirectory, "file1", ".txt")
         val testUploadDirectory1 = Files.createTempDirectory(testUploadDirectory, "testUploadDirectory1")
-        File.createTempFile("file2", ".png", testUploadDirectory1.toFile())
-        File.createTempFile("file3", ".jpeg", testUploadDirectory1.toFile())
+        Files.createTempFile(testUploadDirectory1, "file2", ".png")
+        Files.createTempFile(testUploadDirectory1, "file3", ".jpeg")
         Files.createTempDirectory(testUploadDirectory, "testUploadDirectory2")
     }
 
@@ -84,6 +86,14 @@ class S3TransferManagerIntegrationTest {
         val home: String = System.getProperty("user.home")
         val dir = Paths.get(home, "Downloads")
         testDownloadDirectory = Files.createTempDirectory(dir, "testDownloadDirectory")
+    }
+
+    private fun createBackUpBucket() = runBlocking {
+        testBucket1 = S3TransferManagerTestUtils.getBucketWithPrefix(s3TransferManager.config.s3, "test-bucket-s3")
+    }
+
+    private fun deleteBackUpBucket() = runBlocking {
+        S3TransferManagerTestUtils.deleteBucketAndAllContents(s3TransferManager.config.s3, testBucket1)
     }
 
     private fun File.deleteRecursive() {
@@ -162,6 +172,17 @@ class S3TransferManagerIntegrationTest {
     }
 
     @Test
+    fun testUploadInvalidToBucket() = runTest {
+        createUploadDirectory()
+        assertFailsWith<IllegalArgumentException>("The upload is completed without throwing invalid to bucket error") {
+            coroutineScope {
+                s3TransferManager.upload(testUploadDirectory.toString(), S3Uri("s3://${testBucket}${Random.nextLong(Long.MAX_VALUE)}/key")).await()
+            }
+        }
+        testUploadDirectory.toFile().deleteRecursive()
+    }
+
+    @Test
     fun testDownload() = runTest {
         createUploadDirectory()
         val s3Uri = S3Uri(testBucket, "folder1")
@@ -188,6 +209,7 @@ class S3TransferManagerIntegrationTest {
 
         createDownloadDirectory()
         val downloadOperation = s3TransferManager.download(s3Uri, testDownloadDirectory.toString())
+        assertNotNull(downloadOperation)
         downloadOperation.await()
         val downloadFile = Paths.get(testDownloadDirectory.toString(), largeFileKey).toFile()
         assertTrue(checkDownload(s3Uri, downloadFile))
@@ -195,12 +217,14 @@ class S3TransferManagerIntegrationTest {
     }
 
     private suspend fun checkDownload(from: S3Uri, localFile: File): Boolean {
-        val headObjectResponse = s3TransferManager.config.s3.headObjectOrNull(from)
-        if (!from.key.endsWith('/') && headObjectResponse != null) {
-            if (headObjectResponse.contentLength > s3TransferManager.config.chunkSize) {
-                return chunksCompare(localFile, from)
+        if (!from.key.endsWith('/')) {
+            val headObjectResponse = s3TransferManager.config.s3.headObjectOrNull(from)
+            if (headObjectResponse != null) {
+                if (headObjectResponse.contentLength > s3TransferManager.config.chunkSize) {
+                    return chunksCompare(localFile, from)
+                }
+                return localFile.isFile()
             }
-            return localFile.isFile()
         }
 
         val keyPrefix = if (from.key.endsWith('/')) from.key else from.key.plus('/')
@@ -239,6 +263,106 @@ class S3TransferManagerIntegrationTest {
         assertFailsWith<IllegalArgumentException>("The download is completed without throwing from key error") {
             coroutineScope {
                 s3TransferManager.download(S3Uri(testBucket, "${Random.nextLong(Long.MAX_VALUE)}/${Random.nextInt(Int.MAX_VALUE)}"), "/Users/wty/Desktop/folder1/haha").await()
+            }
+        }
+    }
+
+    @Test
+    fun testCopyInSingleBucket() = runTest {
+        createUploadDirectory()
+
+        val sourceUri = S3Uri(testBucket, "folder1")
+        val uploadOperation = s3TransferManager.upload(testUploadDirectory.toString(), sourceUri)
+        uploadOperation.await()
+
+        val destUri = S3Uri(testBucket, "folder/folder1")
+        val copyOperation = s3TransferManager.copy(sourceUri, destUri)
+        copyOperation.await()
+        assertNotNull(copyOperation)
+        assertTrue(checkUpload(testUploadDirectory.toFile(), destUri))
+        testUploadDirectory.toFile().deleteRecursive()
+    }
+
+    @Test
+    fun testCopyLargeObjectInSingleBucket() = runTest {
+        val testLargeFile = RandomTempFile(10000000)
+        val largeFileKey = "largefile"
+        val sourceUri = S3Uri(testBucket, largeFileKey)
+        val uploadOperation = s3TransferManager.upload(testLargeFile.path, sourceUri)
+        uploadOperation.await()
+
+        val destUri = S3Uri(testBucket, "folder/$largeFileKey")
+        val copyOperation = s3TransferManager.copy(sourceUri, destUri)
+        assertNotNull(copyOperation)
+        copyOperation.await()
+        assertTrue(checkUpload(testLargeFile, destUri))
+        testLargeFile.deleteRecursive()
+    }
+
+    @Test
+    fun testCopyBetweenBuckets() = runTest {
+        createUploadDirectory()
+
+        val sourceUri = S3Uri(testBucket, "folder1")
+        val uploadOperation = s3TransferManager.upload(testUploadDirectory.toString(), sourceUri)
+        uploadOperation.await()
+
+        createBackUpBucket()
+        val destUri = S3Uri(testBucket1, "folder/folder1")
+        val copyOperation = s3TransferManager.copy(sourceUri, destUri)
+        copyOperation.await()
+        assertNotNull(copyOperation)
+        assertTrue(checkUpload(testUploadDirectory.toFile(), destUri))
+        testUploadDirectory.toFile().deleteRecursive()
+        deleteBackUpBucket()
+    }
+
+    @Test
+    fun testCopyLargeObjectBetweenBuckets() = runTest {
+        val testLargeFile = RandomTempFile(10000000)
+        val largeFileKey = "largefile"
+        val sourceUri = S3Uri(testBucket, largeFileKey)
+        val uploadOperation = s3TransferManager.upload(testLargeFile.path, sourceUri)
+        uploadOperation.await()
+
+        createBackUpBucket()
+        val destUri = S3Uri(testBucket1, "folder/$largeFileKey")
+        val copyOperation = s3TransferManager.copy(sourceUri, destUri)
+        assertNotNull(copyOperation)
+        copyOperation.await()
+        assertTrue(checkUpload(testLargeFile, destUri))
+        testLargeFile.deleteRecursive()
+        deleteBackUpBucket()
+    }
+
+    @Test
+    fun testCopyInvalidFromBucket() = runTest {
+        assertFailsWith<IllegalArgumentException>("The copy is completed without throwing source bucket error") {
+            coroutineScope {
+                s3TransferManager.copy(S3Uri("${testBucket}${Random.nextLong(Long.MAX_VALUE)}", "key"), S3Uri(testBucket1, "key")).await()
+            }
+        }
+    }
+
+    @Test
+    fun testCopyInvalidFromKey() = runTest {
+        assertFailsWith<IllegalArgumentException>("The copy is completed without throwing source key error") {
+            coroutineScope {
+                s3TransferManager.copy(S3Uri(testBucket, "${Random.nextLong(Long.MAX_VALUE)}/${Random.nextInt(Int.MAX_VALUE)}"), S3Uri(testBucket1, "key")).await()
+            }
+        }
+    }
+
+    @Test
+    fun testCopyInvalidToBucket() = runTest {
+        createUploadDirectory()
+        val sourceUri = S3Uri(testBucket, "folder1")
+        val operation = s3TransferManager.upload(testUploadDirectory.toString(), sourceUri)
+        operation.await()
+        testUploadDirectory.toFile().deleteRecursive()
+        assertFailsWith<IllegalArgumentException>("The copy is completed without throwing destination bucket error") {
+            coroutineScope {
+                s3TransferManager.copy(sourceUri, S3Uri(testBucket1, "folder1")).await()
             }
         }
     }

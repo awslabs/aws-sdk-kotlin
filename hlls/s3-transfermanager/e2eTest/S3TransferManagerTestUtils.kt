@@ -40,7 +40,7 @@ object S3TransferManagerTestUtils {
 
     suspend fun getTestBucket(client: S3Client): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX)
 
-    private suspend fun getBucketWithPrefix(client: S3Client, prefix: String): String = withTimeout(60.seconds) {
+    suspend fun getBucketWithPrefix(client: S3Client, prefix: String): String = withTimeout(60.seconds) {
         var testBucket = client.listBuckets {}
             .buckets
             ?.mapNotNull { it.name }

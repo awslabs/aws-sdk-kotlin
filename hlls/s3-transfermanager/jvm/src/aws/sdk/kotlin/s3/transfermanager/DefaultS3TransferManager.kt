@@ -6,6 +6,7 @@ import aws.sdk.kotlin.s3.transfermanager.handler.Operation
 import aws.sdk.kotlin.s3.transfermanager.listener.ProgressListener
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.completeMultipartUpload
+import aws.sdk.kotlin.services.s3.copyObject
 import aws.sdk.kotlin.services.s3.createMultipartUpload
 import aws.sdk.kotlin.services.s3.headBucket
 import aws.sdk.kotlin.services.s3.headObject
@@ -17,6 +18,7 @@ import aws.sdk.kotlin.services.s3.model.S3Exception
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.putObject
 import aws.sdk.kotlin.services.s3.uploadPart
+import aws.sdk.kotlin.services.s3.uploadPartCopy
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.asByteStream
 import aws.smithy.kotlin.runtime.content.fromFile
@@ -54,7 +56,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             val localFile = File(from)
             // throw IllegalArgumentException if from path is invalid
             require(localFile.exists()) { "From path is invalid" }
-            println("Checking file or directory....")
+            if (!s3.headBucket(to.bucket)) {
+                throw java.lang.IllegalArgumentException("The bucket does not exist or has no access to it")
+            }
+
             when {
                 localFile.isFile() -> uploadFile(localFile, to)
                 localFile.isDirectory() -> uploadDirectory(localFile, to, progressListener)
@@ -73,7 +78,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
         // determine upload with single request or split parts request according to file size
         val fileSize = localFile.length()
         if (fileSize <= config.chunkSize) { // for file smaller than config chunk size
-            println("Downloading whole small file...")
             uploadWholeFile(localFile, to)
         } else { // for large file over config chunk size
             uploadFileParts(localFile, to)
@@ -83,7 +87,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     context(CoroutineScope)
     private fun uploadWholeFile(localFile: File, to: S3Uri) {
         async<Unit> {
-            println("Start downloading from S3Client!!!")
             s3.putObject {
                 bucket = to.bucket
                 key = to.key
@@ -183,11 +186,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     context(CoroutineScope)
     override fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
         val deferred = async {
-            try { // first check if bucket exists
-                s3.headBucket {
-                    bucket = from.bucket
-                }
-            } catch (e: S3Exception) {
+            if (!s3.headBucket(from.bucket)) { // first check if bucket exists
                 throw IllegalArgumentException("The bucket does not exist or has no access to it")
             }
 
@@ -265,8 +264,117 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
         }
     }
 
-    override suspend fun copy(from: List<S3Uri>, to: S3Uri, progressListener: ProgressListener?): Operation {
-        TODO("Not yet implemented")
+    /**
+     * copy a single object/directory from a S3 bucket to another S3 bucket
+     * when from key refers to a specific source object, to key should be the copied object key
+     * when from key refers to a key prefix of objects, to key should be the destination top directory of copied objects
+     */
+    context(CoroutineScope)
+    override fun copy(from: S3Uri, to: S3Uri, progressListener: ProgressListener?): Operation {
+        val deferred = async {
+            if (!s3.headBucket(from.bucket)) {
+                throw IllegalArgumentException("The source bucket does not exist or has no access to it")
+            }
+            if (!s3.headBucket(to.bucket)) {
+                throw IllegalArgumentException("The destination bucket does not exist or has no access to it")
+            }
+
+            if (!from.key.endsWith('/')) {
+                val response = s3.headObjectOrNull(from)
+                if (response != null) {
+                    copyObject(response.contentLength, from, to)
+                    return@async
+                }
+            }
+
+            val keyPrefix = if (from.key.endsWith('/')) from.key else from.key.plus('/')
+
+            val response = s3.listObjectsV2Paginated {
+                bucket = from.bucket
+                prefix = keyPrefix
+            }
+
+            if (response.firstOrNull()?.contents?.isNotEmpty() != true) {
+                throw IllegalArgumentException("From S3 uri contains invalid key/keyPrefix")
+            }
+
+            response // Flow<ListObjectsV2Response>, a collection of pages
+                .transform { it.contents?.forEach { obj -> emit(obj) } }
+                .collect { obj ->
+                    val key = obj.key!!
+                    val subFrom = S3Uri(from.bucket, key)
+                    val keySuffix = key.substringAfter(keyPrefix)
+                    val subToKey = Paths.get(to.key, keySuffix).toString()
+                    val subTo = S3Uri(to.bucket, subToKey)
+                    copyObject(obj.size, subFrom, subTo)
+                }
+        }
+
+        return DefaultOperation(deferred)
+    }
+
+    context(CoroutineScope)
+    private fun copyObject(fileSize: Long, from: S3Uri, to: S3Uri) {
+        // if file size <= chunkSize, call copyWholeObject
+        // otherwise, call copyObjectParts
+        if (fileSize <= config.chunkSize) {
+            copyWholeObject(from, to)
+        } else {
+            copyObjectParts(fileSize, from, to)
+        }
+    }
+
+    context(CoroutineScope)
+    private fun copyWholeObject(from: S3Uri, to: S3Uri) {
+        async {
+            s3.copyObject {
+                copySource = "${from.bucket}/${from.key}"
+                bucket = to.bucket
+                key = to.key
+            }
+        }
+    }
+
+    context(CoroutineScope)
+    private fun copyObjectParts(fileSize: Long, from: S3Uri, to: S3Uri) {
+        async {
+            val chunkRanges = (0 until fileSize step config.chunkSize).map {
+                arrayOf(it, minOf(it + config.chunkSize - 1, fileSize - 1))
+            }
+
+            val createMultipartCopyResponse = s3.createMultipartUpload {
+                bucket = to.bucket
+                key = to.key
+            }
+            val completedParts = mutableListOf<CompletedPart>()
+
+            chunkRanges.forEachIndexed { index, chunkRange ->
+                // contentRange format: "bytes=0-7999999"
+                val contentRange = "bytes=${chunkRange[0]}-${chunkRange[1]}"
+                val uploadPartCopyResponse = s3.uploadPartCopy {
+                    copySource = "${from.bucket}/${from.key}"
+                    bucket = to.bucket
+                    key = to.key
+                    copySourceRange = contentRange
+                    partNumber = (index + 1)
+                    uploadId = createMultipartCopyResponse.uploadId
+                }
+                val copyPartResult = uploadPartCopyResponse.copyPartResult!!
+                completedParts.add(
+                    CompletedPart {
+                        eTag = copyPartResult.eTag
+                        partNumber = (index + 1)
+                    }
+                )
+            }
+
+            s3.completeMultipartUpload {
+                bucket = to.bucket
+                key = to.key
+                uploadId = createMultipartCopyResponse.uploadId
+                multipartUpload { parts = completedParts }
+            }
+        }
     }
 }
 
@@ -282,6 +390,17 @@ public suspend fun S3Client.headObjectOrNull(s3Uri: S3Uri): HeadObjectResponse? 
     } catch (_: NotFound) {
         null
     }
+
+public suspend fun S3Client.headBucket(bucketName: String): Boolean {
+    return try { // first check if bucket exists
+        headBucket {
+            bucket = bucketName
+        }
+        true
+    } catch (e: S3Exception) {
+        false
+    }
+}
 
 public fun ByteStream.toReadChannel(): SdkByteReadChannel = when (this) {
     is ByteStream.OneShotStream -> readFrom()
