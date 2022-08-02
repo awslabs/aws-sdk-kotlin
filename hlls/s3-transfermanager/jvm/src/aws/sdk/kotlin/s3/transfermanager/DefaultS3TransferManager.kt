@@ -415,22 +415,3 @@ private fun ByteStream.toReadChannel(): SdkByteReadChannel = when (this) {
     is ByteStream.ReplayableStream -> newReader()
     is ByteStream.Buffer -> throw IllegalAccessError("In transfer manager, conversion from ByteStream to ByteBuffer shouldn't happen")
 }
-
-public suspend fun S3Client.headObjectOrNull(s3Uri: S3Uri): HeadObjectResponse? =
-    try {
-        // throw a not found exception if there's no such key object
-        val response = headObject {
-            bucket = s3Uri.bucket
-            key = s3Uri.key
-        }
-
-        response
-    } catch (_: NotFound) {
-        null
-    }
-
-public fun ByteStream.toReadChannel(): SdkByteReadChannel = when (this) {
-    is ByteStream.OneShotStream -> readFrom()
-    is ByteStream.ReplayableStream -> newReader()
-    is ByteStream.Buffer -> throw IllegalAccessError("In transfer manager, conversion from ByteStream to ByteBuffer shouldn't happen")
-}
