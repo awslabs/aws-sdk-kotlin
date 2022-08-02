@@ -317,8 +317,10 @@ class PresignerGenerator : KotlinIntegration {
         writer
             .addImport(KotlinTypes.Time.Duration)
             .withBlock(
-                "suspend fun $requestTypeName.presign(config: $serviceClientTypeName.Config, duration: #T): HttpRequest {",
+                "public suspend fun #L.presign(config: #L.Config, duration: #T): HttpRequest {",
                 "}\n",
+                requestTypeName,
+                serviceClientTypeName,
                 KotlinTypes.Time.Duration
             ) {
                 withBlock("val presignConfig = $presignConfigTypeName {", "}") {
@@ -341,8 +343,9 @@ class PresignerGenerator : KotlinIntegration {
         writer
             .addImport(KotlinTypes.Time.Duration)
             .withBlock(
-                "suspend fun $requestTypeName.presign(presignConfig: ServicePresignConfig, duration: #T): HttpRequest {",
+                "public suspend fun #L.presign(presignConfig: ServicePresignConfig, duration: #T): HttpRequest {",
                 "}\n",
+                requestTypeName,
                 KotlinTypes.Time.Duration
             ) {
                 write("return createPresignedRequest(presignConfig, $requestConfigFnName(this, duration))")

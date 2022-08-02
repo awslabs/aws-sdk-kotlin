@@ -62,8 +62,7 @@ subprojects {
     }
 
     kotlin {
-        // TODO - refactor this to error `explicitApi()`
-        explicitApiWarning()
+        explicitApi()
 
         sourceSets {
             all {
