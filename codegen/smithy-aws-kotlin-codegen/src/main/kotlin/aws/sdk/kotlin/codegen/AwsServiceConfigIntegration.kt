@@ -38,7 +38,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
             propertyType = ClientConfigPropertyType.Custom(render = { prop, writer ->
                 writer.write(
-                    "val #1L: #2T = builder.#1L?.borrow() ?: #3T()",
+                    "public val #1L: #2T = builder.#1L?.borrow() ?: #3T()",
                     prop.propertyName,
                     prop.symbol,
                     AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider
@@ -55,9 +55,9 @@ class AwsServiceConfigIntegration : KotlinIntegration {
     private val overrideServiceCompanionObjectWriter = SectionWriter { writer, _ ->
         // override the service client companion object for how a client is constructed
         val serviceSymbol: Symbol = writer.getContextValue(ServiceGenerator.SectionServiceCompanionObject.ServiceSymbol)
-        writer.withBlock("companion object {", "}") {
+        writer.withBlock("public companion object {", "}") {
             withBlock(
-                "operator fun invoke(block: Config.Builder.() -> Unit): #L {",
+                "public operator fun invoke(block: Config.Builder.() -> Unit): #L {",
                 "}",
                 serviceSymbol.name
             ) {
@@ -66,7 +66,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             }
 
             write("")
-            write("operator fun invoke(config: Config): ${serviceSymbol.name} = Default${serviceSymbol.name}(config)")
+            write("public operator fun invoke(config: Config): ${serviceSymbol.name} = Default${serviceSymbol.name}(config)")
 
             // generate a convenience init to resolve a client from the current environment
             write("")
@@ -74,7 +74,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 write("Construct a [${serviceSymbol.name}] by resolving the configuration from the current environment.")
             }
             writer.withBlock(
-                "suspend fun fromEnvironment(block: (Config.Builder.() -> Unit)? = null): #T {",
+                "public suspend fun fromEnvironment(block: (Config.Builder.() -> Unit)? = null): #T {",
                 "}",
                 serviceSymbol
             ) {

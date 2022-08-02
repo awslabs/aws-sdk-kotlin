@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.17.2-beta] - 07/28/2022
+
+### Miscellaneous
+* Sync AWS service models.
+* [#216](https://github.com/awslabs/smithy-kotlin/issues/216) Enable [Explicit API mode](https://github.com/Kotlin/KEEP/blob/master/proposals/explicit-api-mode.md)
+
+## [0.17.1-beta] - 07/21/2022
+
+### Features
+* [#509](https://github.com/awslabs/aws-sdk-kotlin/issues/509) Implement ID prefix trimming for route53 resources.
+
+### Miscellaneous
+* Sync AWS service models.
+
 ## [0.17.0-beta] - 07/14/2022
 
 ### Fixes
