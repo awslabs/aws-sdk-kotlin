@@ -12,6 +12,7 @@ import aws.sdk.kotlin.services.s3.headBucket
 import aws.sdk.kotlin.services.s3.headObject
 import aws.sdk.kotlin.services.s3.model.CompletedPart
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
+import aws.sdk.kotlin.services.s3.model.HeadBucketResponse
 import aws.sdk.kotlin.services.s3.model.HeadObjectResponse
 import aws.sdk.kotlin.services.s3.model.NotFound
 import aws.sdk.kotlin.services.s3.model.S3Exception
@@ -56,7 +57,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             val localFile = File(from)
             // throw IllegalArgumentException if from path is invalid
             require(localFile.exists()) { "From path is invalid" }
-            if (!s3.headBucket(to.bucket)) {
+            if (s3.headBucketOrNull(to.bucket) == null) {
                 throw java.lang.IllegalArgumentException("The bucket does not exist or has no access to it")
             }
 
@@ -98,11 +99,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     context(CoroutineScope)
     private fun uploadFileParts(localFile: File, to: S3Uri) {
         async<Unit> {
-            val fileSize = localFile.length()
-
-            val chunkRanges = (0 until fileSize step config.chunkSize).map {
-                it until minOf(it + config.chunkSize, fileSize)
-            }
+            val chunkRanges = partition(localFile.length(), config.chunkSize)
 
             // initialize multipart upload
             val createMultipartUploadResponse = s3.createMultipartUpload {
@@ -186,7 +183,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     context(CoroutineScope)
     override fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
         val deferred = async {
-            if (!s3.headBucket(from.bucket)) { // first check if bucket exists
+            if (s3.headBucketOrNull(from.bucket) == null) { // first check if bucket exists
                 throw IllegalArgumentException("The bucket does not exist or has no access to it")
             }
 
@@ -200,7 +197,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             }
 
             // check if the current key is a keyPrefix
-            val keyPrefix = if (from.key.endsWith('/')) from.key else from.key.plus('/')
+            val keyPrefix = from.key.makeEndWithSingleSlash()
 
             val response = s3.listObjectsV2Paginated {
                 bucket = from.bucket
@@ -244,13 +241,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 return@async
             }
 
-            val chunkRanges = (0 until fileSize step config.chunkSize).map {
-                arrayOf(it, minOf(it + config.chunkSize - 1, fileSize - 1))
-            }
+            val chunkRanges = partition(fileSize, config.chunkSize)
             val writeChannel = File(to).writeChannel()
             chunkRanges.forEach {
-                // contentRange format: "bytes=0-7999999"
-                val contentRange = "bytes=${it[0]}-${it[1]}"
+                val contentRange = "bytes=${it.start}-${it.endInclusive}"
                 val request = GetObjectRequest {
                     bucket = from.bucket
                     key = from.key
@@ -272,10 +266,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     context(CoroutineScope)
     override fun copy(from: S3Uri, to: S3Uri, progressListener: ProgressListener?): Operation {
         val deferred = async {
-            if (!s3.headBucket(from.bucket)) {
+            if (s3.headBucketOrNull(from.bucket) == null) {
                 throw IllegalArgumentException("The source bucket does not exist or has no access to it")
             }
-            if (!s3.headBucket(to.bucket)) {
+            if (s3.headBucketOrNull(to.bucket) == null) {
                 throw IllegalArgumentException("The destination bucket does not exist or has no access to it")
             }
 
@@ -287,7 +281,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 }
             }
 
-            val keyPrefix = if (from.key.endsWith('/')) from.key else from.key.plus('/')
+            val keyPrefix = from.key.makeEndWithSingleSlash()
 
             val response = s3.listObjectsV2Paginated {
                 bucket = from.bucket
@@ -338,9 +332,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     context(CoroutineScope)
     private fun copyObjectParts(fileSize: Long, from: S3Uri, to: S3Uri) {
         async {
-            val chunkRanges = (0 until fileSize step config.chunkSize).map {
-                arrayOf(it, minOf(it + config.chunkSize - 1, fileSize - 1))
-            }
+            val chunkRanges = partition(fileSize, config.chunkSize)
 
             val createMultipartCopyResponse = s3.createMultipartUpload {
                 bucket = to.bucket
@@ -349,8 +341,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             val completedParts = mutableListOf<CompletedPart>()
 
             chunkRanges.forEachIndexed { index, chunkRange ->
-                // contentRange format: "bytes=0-7999999"
-                val contentRange = "bytes=${chunkRange[0]}-${chunkRange[1]}"
+                val contentRange = "bytes=${chunkRange.start}-${chunkRange.endInclusive}"
                 val uploadPartCopyResponse = s3.uploadPartCopy {
                     copySource = "${from.bucket}/${from.key}"
                     bucket = to.bucket
@@ -391,15 +382,23 @@ public suspend fun S3Client.headObjectOrNull(s3Uri: S3Uri): HeadObjectResponse? 
         null
     }
 
-public suspend fun S3Client.headBucket(bucketName: String): Boolean {
-    return try { // first check if bucket exists
-        headBucket {
+private suspend fun S3Client.headBucketOrNull(bucketName: String): HeadBucketResponse? =
+    try { // first check if bucket exists
+        val response = headBucket {
             bucket = bucketName
         }
-        true
+        response
     } catch (e: S3Exception) {
-        false
+        null
     }
+
+public fun partition(fileSize: Long, chunkSize: Long): List<LongRange> =
+    (0 until fileSize step chunkSize).map {
+        it until minOf(it + chunkSize, fileSize)
+    }
+
+public fun String.makeEndWithSingleSlash(): String {
+    return if (this.endsWith('/')) this else this.plus('/')
 }
 
 public fun ByteStream.toReadChannel(): SdkByteReadChannel = when (this) {
