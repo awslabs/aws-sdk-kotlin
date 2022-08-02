@@ -372,7 +372,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 uploadId = createMultipartCopyResponse.uploadId
                 multipartUpload { parts = completedParts }
             }
-            writeChannel.close()
         }
     }
 }
