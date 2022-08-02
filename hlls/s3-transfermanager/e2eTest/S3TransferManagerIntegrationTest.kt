@@ -1,9 +1,11 @@
 package aws.sdk.kotlin.e2etest
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.s3.transfermanager.S3TransferManager
 import aws.sdk.kotlin.s3.transfermanager.data.S3Uri
+import aws.sdk.kotlin.s3.transfermanager.ensureEndsWith
 import aws.sdk.kotlin.s3.transfermanager.headObjectOrNull
-import aws.sdk.kotlin.s3.transfermanager.makeEndWithSingleSlash
+import aws.sdk.kotlin.s3.transfermanager.partition
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.listObjectsV2
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
@@ -241,6 +243,7 @@ class S3TransferManagerIntegrationTest {
         }
     }
 
+    @OptIn(InternalSdkApi::class)
     private suspend fun checkDownload(from: S3Uri, localFile: File): Boolean {
         if (!from.key.endsWith('/')) {
             s3TransferManager.config.s3.headObjectOrNull(from)?.let { headObjectResponse ->
@@ -248,7 +251,7 @@ class S3TransferManagerIntegrationTest {
             }
         }
 
-        val keyPrefix = from.key.makeEndWithSingleSlash()
+        val keyPrefix = from.key.ensureEndsWith('/')
         val response = s3TransferManager.config.s3.listObjectsV2Paginated {
             bucket = from.bucket
             prefix = keyPrefix
@@ -421,6 +424,7 @@ class S3TransferManagerIntegrationTest {
         }
     }
 
+    @OptIn(InternalSdkApi::class)
     private suspend fun chunksCompare(localFile: File, s3Uri: S3Uri): Boolean {
         val headObjectResponse = s3TransferManager.config.s3.headObjectOrNull(s3Uri)
         if (headObjectResponse == null || !localFile.isFile) {
@@ -431,7 +435,7 @@ class S3TransferManagerIntegrationTest {
             return false
         }
 
-        val chunkRanges = aws.sdk.kotlin.s3.transfermanager.partition(fileSize, s3TransferManager.config.chunkSize)
+        val chunkRanges = partition(fileSize, s3TransferManager.config.chunkSize)
         var isEqual = true
 
         chunkRanges.forEach {

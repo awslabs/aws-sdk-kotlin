@@ -1,5 +1,6 @@
 package aws.sdk.kotlin.s3.transfermanager
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.s3.transfermanager.data.S3Uri
 import aws.sdk.kotlin.s3.transfermanager.handler.DefaultOperation
 import aws.sdk.kotlin.s3.transfermanager.handler.Operation
@@ -97,6 +98,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
+    @OptIn(InternalSdkApi::class)
     private fun uploadFileParts(localFile: File, to: S3Uri) {
         async<Unit> {
             val chunkRanges = partition(localFile.length(), config.chunkSize)
@@ -181,6 +183,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     /foo/bar/key/bar/dir1/file5
      */
     context(CoroutineScope)
+    @OptIn(InternalSdkApi::class)
     override fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
         val deferred = async {
             if (s3.headBucketOrNull(from.bucket) == null) { // first check if bucket exists
@@ -197,7 +200,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             }
 
             // check if the current key is a keyPrefix
-            val keyPrefix = from.key.makeEndWithSingleSlash()
+            val keyPrefix = from.key.ensureEndsWith('/')
 
             val response = s3.listObjectsV2Paginated {
                 bucket = from.bucket
@@ -229,7 +232,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
      * the object is downloaded in single or multi chunks according to its size compared with config chunk size
      */
     context(CoroutineScope)
-    @OptIn(InternalApi::class)
+    @OptIn(InternalApi::class, InternalSdkApi::class)
     private fun downloadFile(fileSize: Long, from: S3Uri, to: String) {
         async {
             val toPath = Paths.get(to)
@@ -264,6 +267,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
      * when from key refers to a key prefix of objects, to key should be the destination top directory of copied objects
      */
     context(CoroutineScope)
+    @OptIn(InternalSdkApi::class)
     override fun copy(from: S3Uri, to: S3Uri, progressListener: ProgressListener?): Operation {
         val deferred = async {
             if (s3.headBucketOrNull(from.bucket) == null) {
@@ -281,7 +285,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 }
             }
 
-            val keyPrefix = from.key.makeEndWithSingleSlash()
+            val keyPrefix = from.key.ensureEndsWith('/')
 
             val response = s3.listObjectsV2Paginated {
                 bucket = from.bucket
@@ -330,6 +334,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
+    @OptIn(InternalSdkApi::class)
     private fun copyObjectParts(fileSize: Long, from: S3Uri, to: S3Uri) {
         async {
             val chunkRanges = partition(fileSize, config.chunkSize)
@@ -369,6 +374,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 }
 
+@InternalSdkApi
 public suspend fun S3Client.headObjectOrNull(s3Uri: S3Uri): HeadObjectResponse? =
     try {
         // throw a not found exception if there's no such key object
@@ -392,16 +398,16 @@ private suspend fun S3Client.headBucketOrNull(bucketName: String): HeadBucketRes
         null
     }
 
+@InternalSdkApi
 public fun partition(fileSize: Long, chunkSize: Long): List<LongRange> =
     (0 until fileSize step chunkSize).map {
         it until minOf(it + chunkSize, fileSize)
     }
 
-public fun String.makeEndWithSingleSlash(): String {
-    return if (this.endsWith('/')) this else this.plus('/')
-}
+@InternalSdkApi
+public fun String.ensureEndsWith(c: Char) = if (endsWith(c)) this else plus(c)
 
-public fun ByteStream.toReadChannel(): SdkByteReadChannel = when (this) {
+private fun ByteStream.toReadChannel(): SdkByteReadChannel = when (this) {
     is ByteStream.OneShotStream -> readFrom()
     is ByteStream.ReplayableStream -> newReader()
     is ByteStream.Buffer -> throw IllegalAccessError("In transfer manager, conversion from ByteStream to ByteBuffer shouldn't happen")
