@@ -80,6 +80,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
         // determine upload with single request or split parts request according to file size
         val fileSize = localFile.length()
         if (fileSize <= config.chunkSize) { // for file smaller than config chunk size
+            println("Downloading whole small file...")
             uploadWholeFile(localFile, to)
         } else { // for large file over config chunk size
             uploadFileParts(localFile, to)
@@ -89,6 +90,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     context(CoroutineScope)
     private fun uploadWholeFile(localFile: File, to: S3Uri) {
         async<Unit> {
+            println("Start downloading from S3Client!!!")
             s3.putObject {
                 bucket = to.bucket
                 key = to.key
@@ -370,6 +372,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 uploadId = createMultipartCopyResponse.uploadId
                 multipartUpload { parts = completedParts }
             }
+            writeChannel.close()
         }
     }
 }
@@ -408,6 +411,25 @@ public fun partition(fileSize: Long, chunkSize: Long): List<LongRange> =
 public fun String.ensureEndsWith(c: Char) = if (endsWith(c)) this else plus(c)
 
 private fun ByteStream.toReadChannel(): SdkByteReadChannel = when (this) {
+    is ByteStream.OneShotStream -> readFrom()
+    is ByteStream.ReplayableStream -> newReader()
+    is ByteStream.Buffer -> throw IllegalAccessError("In transfer manager, conversion from ByteStream to ByteBuffer shouldn't happen")
+}
+
+public suspend fun S3Client.headObjectOrNull(s3Uri: S3Uri): HeadObjectResponse? =
+    try {
+        // throw a not found exception if there's no such key object
+        val response = headObject {
+            bucket = s3Uri.bucket
+            key = s3Uri.key
+        }
+
+        response
+    } catch (_: NotFound) {
+        null
+    }
+
+public fun ByteStream.toReadChannel(): SdkByteReadChannel = when (this) {
     is ByteStream.OneShotStream -> readFrom()
     is ByteStream.ReplayableStream -> newReader()
     is ByteStream.Buffer -> throw IllegalAccessError("In transfer manager, conversion from ByteStream to ByteBuffer shouldn't happen")

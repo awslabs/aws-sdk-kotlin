@@ -109,6 +109,39 @@ class S3TransferManagerIntegrationTest {
         delete()
     }
 
+    private fun createUploadDirectory() {
+        //        test directory structure like this:
+        //        testUploadDirectory/
+        //            file1.txt
+        //            testUploadDirectory1/
+        //                file2.png
+        //                file3.jpeg
+        //            testUploadDirectory2/
+        val home: String = System.getProperty("user.home")
+        val dir = Paths.get(home, "Downloads")
+        testUploadDirectory = Files.createTempDirectory(dir, "testUploadDirectory")
+        File.createTempFile("file1", ".txt", testUploadDirectory.toFile())
+        val testUploadDirectory1 = Files.createTempDirectory(testUploadDirectory, "testUploadDirectory1")
+        File.createTempFile("file2", ".png", testUploadDirectory1.toFile())
+        File.createTempFile("file3", ".jpeg", testUploadDirectory1.toFile())
+        Files.createTempDirectory(testUploadDirectory, "testUploadDirectory2")
+    }
+
+    private fun createDownloadDirectory() {
+        val home: String = System.getProperty("user.home")
+        val dir = Paths.get(home, "Downloads")
+        testDownloadDirectory = Files.createTempDirectory(dir, "testDownloadDirectory")
+    }
+
+    private fun File.deleteRecursive() {
+        if (isDirectory) {
+            listFiles().forEach {
+                it.deleteRecursive()
+            }
+        }
+        delete()
+    }
+
     @Test
     fun testUpload() = runTest {
         createUploadDirectory()
