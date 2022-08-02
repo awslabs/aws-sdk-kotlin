@@ -85,11 +85,11 @@ public interface S3TransferManager {
      * can optionally pass progressListener to listen to transfer progress
      * IllegalArgumentException will be thrown if any from/to path is invalid
      */
-//    context(CoroutineScope) // context receiver
-    public suspend fun copy(
-        from: List<S3Uri>,
+    context(CoroutineScope) // context receiver
+    public fun copy(
+        from: S3Uri,
         to: S3Uri,
-        progressListener: ProgressListener?
+        progressListener: ProgressListener? = null
     ): Operation
 
 //    fun resume(pausedOperation: PausedOperation, progressListener: ProgressListener?): Operation
