@@ -407,7 +407,7 @@ public fun partition(fileSize: Long, chunkSize: Long): List<LongRange> =
     }
 
 @InternalSdkApi
-public fun String.ensureEndsWith(c: Char) = if (endsWith(c)) this else plus(c)
+public fun String.ensureEndsWith(c: Char): String = if (endsWith(c)) this else plus(c)
 
 private fun ByteStream.toReadChannel(): SdkByteReadChannel = when (this) {
     is ByteStream.OneShotStream -> readFrom()
