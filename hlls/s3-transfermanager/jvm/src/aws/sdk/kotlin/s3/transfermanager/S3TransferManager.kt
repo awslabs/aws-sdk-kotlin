@@ -65,7 +65,7 @@ public interface S3TransferManager {
     public fun upload(
         from: String,
         to: S3Uri,
-        progressListener: ProgressListener? = null, // can set a default value to Null
+        progressListener: ProgressListener? = null
     ): Operation
 
     /**

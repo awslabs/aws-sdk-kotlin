@@ -7,35 +7,35 @@ public data class Progress(
     /**
      * total number of files to transfer in an operation
      */
-    val totalFilesToTransfer: Long,
+    var totalFilesToTransfer: Long = 0,
 
     /**
      * total number of files' bytes to transfer in one operation
      */
-    val totalBytesToTransfer: Long,
+    var totalBytesToTransfer: Long = 0,
 
     /**
      * total number of split chunks to transfer in one operation
      */
-    val totalChunksToTransfer: Long,
+    var totalChunksToTransfer: Long = 0,
 
     /**
      * current number of transferred files in one operation
      */
-    val filesTransferred: Long,
+    var filesTransferred: Long = 0,
 
     /**
      * current number of transferred files' bytes in one operation
      */
-    val bytesTransferred: Long,
+    var bytesTransferred: Long = 0,
 
     /**
      * current number of transferred split chunks in one operation
      */
-    val chunksTransferred: Long,
+    var chunksTransferred: Long = 0,
 
     /**
      * indicator of whether this transfer is completed
      */
-    val isDone: Boolean
+    var isDone: Boolean = false
 )
