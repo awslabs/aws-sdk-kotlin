@@ -5,6 +5,7 @@ import aws.sdk.kotlin.s3.transfermanager.data.Progress
 import aws.sdk.kotlin.s3.transfermanager.data.S3Uri
 import aws.sdk.kotlin.s3.transfermanager.handler.DefaultOperation
 import aws.sdk.kotlin.s3.transfermanager.handler.Operation
+import aws.sdk.kotlin.s3.transfermanager.handler.ProgressUpdater
 import aws.sdk.kotlin.s3.transfermanager.listener.ProgressListener
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.completeMultipartUpload
@@ -32,7 +33,6 @@ import aws.smithy.kotlin.runtime.io.writeChannel
 import aws.smithy.kotlin.runtime.util.InternalApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.transform
 import java.io.File
@@ -56,14 +56,17 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                                                 | recursively judging…
      */
     context(CoroutineScope)
-    override fun upload(from: String, to: S3Uri, progressListener: ProgressListener?): Operation {
-        return upload(from, to, progressListener, null)
-    }
+    @OptIn(InternalSdkApi::class)
+    override fun upload(from: String, to: S3Uri, progressListener: ProgressListener?): Operation =
+        if (progressListener == null) {
+            upload(null, from, to)
+        } else {
+            upload(ProgressUpdater(Progress(), progressListener), from, to)
+        }
 
     context(CoroutineScope)
     @OptIn(InternalSdkApi::class)
-    fun upload(from: String, to: S3Uri, progressListener: ProgressListener?, curProgress: Progress?): Operation {
-        val progress = curProgress ?: Progress()
+    private fun upload(progressUpdater: ProgressUpdater?, from: String, to: S3Uri): Operation {
         val deferred = async<Unit> {
             val localFile = File(from)
             // throw IllegalArgumentException if from path is invalid
@@ -72,54 +75,56 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 throw java.lang.IllegalArgumentException("The bucket does not exist or has no access to it")
             }
             // do statistic of total workload at highest level from
-            if (progress.totalFilesToTransfer == 0L) {
-                localFile.uploadProgressEstimate(progress, config.chunkSize)
-                progressListener?.onProgress(progress)
+            if (progressUpdater?.progress?.totalFilesToTransfer == 0L) {
+                progressUpdater.estimateProgressForUpload(localFile, config.chunkSize)
+                progressUpdater.progressListener.onProgress(progressUpdater.progress)
             }
 
             when {
-                localFile.isFile() -> uploadFile(localFile, to, progressListener, progress)
-                localFile.isDirectory() -> uploadDirectory(localFile, to, progressListener, progress)
+                localFile.isFile() -> uploadFile(localFile, to, progressUpdater)
+                localFile.isDirectory() -> uploadDirectory(localFile, to, progressUpdater)
                 else -> throw IllegalArgumentException("From path is invalid")
             }
         }
 
-        return DefaultOperation(deferred, progress)
+        return DefaultOperation(deferred, progressUpdater)
     }
 
     context(CoroutineScope)
     @OptIn(InternalSdkApi::class)
-    private fun uploadFile(localFile: File, to: S3Uri, progressListener: ProgressListener?, progress: Progress) {
+    private fun uploadFile(localFile: File, to: S3Uri, progressUpdater: ProgressUpdater?) {
         // for single file upload, generate multiple parallel PUT requests according to s3Path and send to S3 Client object
         // wait the S3 client to reply upload response, then use operator to listen to progress and control pausing and resuming
         // determine upload with single request or split parts request according to file size
         val fileSize = localFile.length()
         if (fileSize <= config.chunkSize) { // for file smaller than config chunk size
-            uploadWholeFile(localFile, to, progressListener, progress)
+            uploadWholeFile(localFile, to, progressUpdater)
         } else { // for large file over config chunk size
-            uploadFileParts(localFile, to, progressListener, progress)
+            uploadFileParts(localFile, to, progressUpdater)
         }
     }
 
     context(CoroutineScope)
     @OptIn(InternalSdkApi::class)
-    private fun uploadWholeFile(localFile: File, to: S3Uri, progressListener: ProgressListener?, progress: Progress) {
+    private fun uploadWholeFile(localFile: File, to: S3Uri, progressUpdater: ProgressUpdater?) {
         async<Unit> {
             s3.putObject {
                 bucket = to.bucket
                 key = to.key
                 body = ByteStream.fromFile(localFile)
             }
-            val chunkNum = if (localFile.length() == 0L) 0L else 1L
-            progress.addBytesChunksTransferred(localFile.length(), chunkNum)
-            progress.addFilesTransferred(1)
-            progressListener?.onProgress(progress)
+            if (progressUpdater != null) {
+                val chunkNum = if (localFile.length() == 0L) 0L else 1L
+                progressUpdater.addBytesChunksTransferred(localFile.length(), chunkNum)
+                progressUpdater.addFilesTransferred(1)
+                progressUpdater.progressListener.onProgress(progressUpdater.progress)
+            }
         }
     }
 
     context(CoroutineScope)
     @OptIn(InternalSdkApi::class)
-    private fun uploadFileParts(localFile: File, to: S3Uri, progressListener: ProgressListener?, progress: Progress) {
+    private fun uploadFileParts(localFile: File, to: S3Uri, progressUpdater: ProgressUpdater?) {
         async<Unit> {
             val chunkRanges = partition(localFile.length(), config.chunkSize)
             // initialize multipart upload
@@ -145,8 +150,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                         partNumber = (index + 1)
                     }
                 )
-                progress.addBytesChunksTransferred(chunkRange.count().toLong(), 1L)
-                progressListener?.onProgress(progress)
+                if (progressUpdater != null) {
+                    progressUpdater.addBytesChunksTransferred(chunkRange.count().toLong(), 1L)
+                    progressUpdater.progressListener.onProgress(progressUpdater.progress)
+                }
             }
 
             // complete multipart upload
@@ -156,13 +163,16 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 uploadId = createMultipartUploadResponse.uploadId
                 multipartUpload { parts = completedParts }
             }
-            progress.addFilesTransferred(1)
-            progressListener?.onProgress(progress)
+            if (progressUpdater != null) {
+                progressUpdater.addFilesTransferred(1)
+                progressUpdater.progressListener.onProgress(progressUpdater.progress)
+            }
         }
     }
 
     context(CoroutineScope)
-    private fun uploadDirectory(localFile: File, to: S3Uri, progressListener: ProgressListener?, progress: Progress) {
+    @OptIn(InternalSdkApi::class)
+    private fun uploadDirectory(localFile: File, to: S3Uri, progressUpdater: ProgressUpdater?) {
         // for directory, just use double pointer to start from fileDirectory/s3Path and recursively traverse directory/path
         // and call upload() to recursively finish the directory upload level by level like this
 //            direc1     from: Users/direc1 		to:key
@@ -180,7 +190,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             val subTo = S3Uri(to.bucket, subKey) // next level recursion's to
 
             // need to consider listener and receiver suboperation in the future!!!
-            upload(subFrom, subTo, progressListener, progress)
+            upload(progressUpdater, subFrom, subTo)
         }
     }
 
@@ -207,8 +217,16 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
      */
     context(CoroutineScope)
     @OptIn(InternalSdkApi::class)
-    override fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
-        val progress = Progress()
+    override fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation =
+        if (progressListener == null) {
+            download(null, from, to)
+        } else {
+            download(ProgressUpdater(Progress(), progressListener), from, to)
+        }
+
+    context(CoroutineScope)
+    @OptIn(InternalSdkApi::class)
+    private fun download(progressUpdater: ProgressUpdater?, from: S3Uri, to: String): Operation {
         val deferred = async {
             if (s3.headBucketOrNull(from.bucket) == null) { // first check if bucket exists
                 throw IllegalArgumentException("The bucket does not exist or has no access to it")
@@ -217,10 +235,12 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             if (!from.key.endsWith('/')) {
                 val response = s3.headObjectOrNull(from)
                 if (response != null) {
-                    downloadProgressEstimate(progress, response.contentLength, null, config.chunkSize)
-                    progressListener?.onProgress(progress)
+                    if (progressUpdater != null) {
+                        progressUpdater.estimateProgressForDownload(response.contentLength, config.chunkSize)
+                        progressUpdater.progressListener.onProgress(progressUpdater.progress)
+                    }
                     val subTo = Paths.get(to).resolve(from.key.substringAfterLast('/')).toString()
-                    downloadFile(response.contentLength, from, subTo, progressListener, progress)
+                    downloadFile(response.contentLength, from, subTo, progressUpdater)
                     return@async
                 }
             }
@@ -237,19 +257,31 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 throw IllegalArgumentException("From S3 uri contains invalid key/keyPrefix")
             }
 
-            val objectFlow = response.transform { it.contents?.forEach { obj -> emit(obj) } } // Flow<ListObjectsV2Response>, a collection of pages
-            downloadProgressEstimate(progress, null, objectFlow, config.chunkSize)
-            progressListener?.onProgress(progress)
-            objectFlow.collect { obj ->
-                val key = obj.key!!
-                val s3Uri = S3Uri(from.bucket, key)
-                val keySuffix = key.substringAfter(keyPrefix)
-                val subTo = Paths.get(to, keySuffix).toString()
-                downloadFile(obj.size, s3Uri, subTo, progressListener, progress)
+            val objectFlow = response.transform { it.contents?.forEach { obj -> emit(obj) } }
+            if (progressUpdater != null) {
+                val objectList = progressUpdater.estimateProgressForDownload(objectFlow, config.chunkSize)
+                progressUpdater.progressListener.onProgress(progressUpdater.progress)
+                objectList.forEach {
+                    downloadFile(it, from.bucket, keyPrefix, to, progressUpdater)
+                }
+            } else {
+                objectFlow.collect {
+                    downloadFile(it, from.bucket, keyPrefix, to, progressUpdater)
+                }
             }
         }
 
-        return DefaultOperation(deferred, progress)
+        return DefaultOperation(deferred, progressUpdater)
+    }
+
+    context(CoroutineScope)
+    @OptIn(InternalSdkApi::class)
+    private fun downloadFile(obj: Object, bucket: String, keyPrefix: String, to: String, progressUpdater: ProgressUpdater?) {
+        val key = obj.key!!
+        val s3Uri = S3Uri(bucket, key)
+        val keySuffix = key.substringAfter(keyPrefix)
+        val subTo = Paths.get(to, keySuffix).toString()
+        downloadFile(obj.size, s3Uri, subTo, progressUpdater)
     }
 
     /**
@@ -260,7 +292,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
      */
     context(CoroutineScope)
     @OptIn(InternalApi::class, InternalSdkApi::class)
-    private fun downloadFile(fileSize: Long, from: S3Uri, to: String, progressListener: ProgressListener?, progress: Progress) {
+    private fun downloadFile(fileSize: Long, from: S3Uri, to: String, progressUpdater: ProgressUpdater?) {
         async {
             val toPath = Paths.get(to)
             // create the target directory if to path doesn't exist
@@ -268,8 +300,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
 
             if (fileSize == 0L) { // for zero size file, can't chunk, so just download
                 toPath.createFile()
-                progress.addFilesTransferred(1)
-                progressListener?.onProgress(progress)
+                if (progressUpdater != null) {
+                    progressUpdater.addFilesTransferred(1)
+                    progressUpdater.progressListener.onProgress(progressUpdater.progress)
+                }
                 return@async
             }
 
@@ -285,12 +319,16 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 s3.getObject(request) { resp ->
                     resp.body?.toReadChannel()?.copyTo(writeChannel, close = false)
                 }
-                progress.addBytesChunksTransferred(it.count().toLong(), 1L)
-                progressListener?.onProgress(progress)
+                if (progressUpdater != null) {
+                    progressUpdater.addBytesChunksTransferred(it.count().toLong(), 1L)
+                    progressUpdater.progressListener.onProgress(progressUpdater.progress)
+                }
             }
             writeChannel.close()
-            progress.addFilesTransferred(1)
-            progressListener?.onProgress(progress)
+            if (progressUpdater != null) {
+                progressUpdater.addFilesTransferred(1)
+                progressUpdater.progressListener.onProgress(progressUpdater.progress)
+            }
         }
     }
 
@@ -301,8 +339,16 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
      */
     context(CoroutineScope)
     @OptIn(InternalSdkApi::class)
-    override fun copy(from: S3Uri, to: S3Uri, progressListener: ProgressListener?): Operation {
-        val progress = Progress()
+    override fun copy(from: S3Uri, to: S3Uri, progressListener: ProgressListener?) =
+        if (progressListener == null) {
+            copy(null, from, to)
+        } else {
+            copy(ProgressUpdater(Progress(), progressListener), from, to)
+        }
+
+    context(CoroutineScope)
+    @OptIn(InternalSdkApi::class)
+    private fun copy(progressUpdater: ProgressUpdater?, from: S3Uri, to: S3Uri): Operation {
         val deferred = async {
             if (s3.headBucketOrNull(from.bucket) == null) {
                 throw IllegalArgumentException("The source bucket does not exist or has no access to it")
@@ -314,9 +360,11 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             if (!from.key.endsWith('/')) {
                 val response = s3.headObjectOrNull(from)
                 if (response != null) {
-                    downloadProgressEstimate(progress, response.contentLength, null, config.chunkSize)
-                    progressListener?.onProgress(progress)
-                    copyObject(response.contentLength, from, to, progressListener, progress)
+                    if (progressUpdater != null) {
+                        progressUpdater.estimateProgressForDownload(response.contentLength, config.chunkSize)
+                        progressUpdater.progressListener.onProgress(progressUpdater.progress)
+                    }
+                    copyObject(response.contentLength, from, to, progressUpdater)
                     return@async
                 }
             }
@@ -332,38 +380,49 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 throw IllegalArgumentException("From S3 uri contains invalid key/keyPrefix")
             }
 
-            val objectFlow = response
-                .transform { it.contents?.forEach { obj -> emit(obj) } }
-            downloadProgressEstimate(progress, null, objectFlow, config.chunkSize)
-            progressListener?.onProgress(progress)
-            objectFlow.collect { obj ->
-                val key = obj.key!!
-                val subFrom = S3Uri(from.bucket, key)
-                val keySuffix = key.substringAfter(keyPrefix)
-                val subToKey = Paths.get(to.key, keySuffix).toString()
-                val subTo = S3Uri(to.bucket, subToKey)
-                copyObject(obj.size, subFrom, subTo, progressListener, progress)
+            val objectFlow = response.transform { it.contents?.forEach { obj -> emit(obj) } }
+            if (progressUpdater != null) {
+                val objectList = progressUpdater.estimateProgressForDownload(objectFlow, config.chunkSize)
+                progressUpdater.progressListener.onProgress(progressUpdater.progress)
+                objectList.forEach {
+                    copyObject(it, from.bucket, keyPrefix, to, progressUpdater)
+                }
+            } else {
+                objectFlow.collect {
+                    copyObject(it, from.bucket, keyPrefix, to, progressUpdater)
+                }
             }
         }
 
-        return DefaultOperation(deferred, progress)
+        return DefaultOperation(deferred, progressUpdater)
     }
 
     context(CoroutineScope)
     @OptIn(InternalSdkApi::class)
-    private fun copyObject(fileSize: Long, from: S3Uri, to: S3Uri, progressListener: ProgressListener?, progress: Progress) {
+    private fun copyObject(obj: Object, fromBucket: String, keyPrefix: String, to: S3Uri, progressUpdater: ProgressUpdater?) {
+        val key = obj.key!!
+        val subFrom = S3Uri(fromBucket, key)
+        val keySuffix = key.substringAfter(keyPrefix)
+        val subToKey = Paths.get(to.key, keySuffix).toString()
+        val subTo = S3Uri(to.bucket, subToKey)
+        copyObject(obj.size, subFrom, subTo, progressUpdater)
+    }
+
+    context(CoroutineScope)
+    @OptIn(InternalSdkApi::class)
+    private fun copyObject(fileSize: Long, from: S3Uri, to: S3Uri, progressUpdater: ProgressUpdater?) {
         // if file size <= chunkSize, call copyWholeObject
         // otherwise, call copyObjectParts
         if (fileSize <= config.chunkSize) {
-            copyWholeObject(fileSize, from, to, progressListener, progress)
+            copyWholeObject(fileSize, from, to, progressUpdater)
         } else {
-            copyObjectParts(fileSize, from, to, progressListener, progress)
+            copyObjectParts(fileSize, from, to, progressUpdater)
         }
     }
 
     context(CoroutineScope)
     @OptIn(InternalSdkApi::class)
-    private fun copyWholeObject(fileSize: Long, from: S3Uri, to: S3Uri, progressListener: ProgressListener?, progress: Progress) {
+    private fun copyWholeObject(fileSize: Long, from: S3Uri, to: S3Uri, progressUpdater: ProgressUpdater?) {
         async {
             s3.copyObject {
                 copySource = "${from.bucket}/${from.key}"
@@ -372,15 +431,17 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             }
 
             val chunkNum = if (fileSize > 0) 1L else 0L
-            progress.addBytesChunksTransferred(fileSize, chunkNum)
-            progress.addFilesTransferred(1)
-            progressListener?.onProgress(progress)
+            if (progressUpdater != null) {
+                progressUpdater.addBytesChunksTransferred(fileSize, chunkNum)
+                progressUpdater.addFilesTransferred(1L)
+                progressUpdater.progressListener.onProgress(progressUpdater.progress)
+            }
         }
     }
 
     context(CoroutineScope)
     @OptIn(InternalSdkApi::class)
-    private fun copyObjectParts(fileSize: Long, from: S3Uri, to: S3Uri, progressListener: ProgressListener?, progress: Progress) {
+    private fun copyObjectParts(fileSize: Long, from: S3Uri, to: S3Uri, progressUpdater: ProgressUpdater?) {
         async {
             val chunkRanges = partition(fileSize, config.chunkSize)
 
@@ -407,8 +468,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                         partNumber = (index + 1)
                     }
                 )
-                progress.addBytesChunksTransferred(chunkRange.count().toLong(), 1L)
-                progressListener?.onProgress(progress)
+                if (progressUpdater != null) {
+                    progressUpdater.addBytesChunksTransferred(chunkRange.count().toLong(), 1L)
+                    progressUpdater.progressListener.onProgress(progressUpdater.progress)
+                }
             }
 
             s3.completeMultipartUpload {
@@ -417,8 +480,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 uploadId = createMultipartCopyResponse.uploadId
                 multipartUpload { parts = completedParts }
             }
-            progress.addFilesTransferred(1)
-            progressListener?.onProgress(progress)
+            if (progressUpdater != null) {
+                progressUpdater.addFilesTransferred(1L)
+                progressUpdater.progressListener.onProgress(progressUpdater.progress)
+            }
         }
     }
 }
@@ -460,50 +525,4 @@ private fun ByteStream.toReadChannel(): SdkByteReadChannel = when (this) {
     is ByteStream.OneShotStream -> readFrom()
     is ByteStream.ReplayableStream -> newReader()
     is ByteStream.Buffer -> throw IllegalAccessError("In transfer manager, conversion from ByteStream to ByteBuffer shouldn't happen")
-}
-
-@InternalSdkApi
-public fun File.uploadProgressEstimate(progress: Progress, chunkSize: Long) {
-    if (isFile) {
-        progress.addTotalProgress(length(), chunkSize)
-    } else if (isDirectory) {
-        listFiles().forEach {
-            it.uploadProgressEstimate(progress, chunkSize)
-        }
-    }
-}
-
-@OptIn(InternalSdkApi::class)
-public suspend fun downloadProgressEstimate(progress: Progress, singleObjectSize: Long?, objectFlow: Flow<Object>?, chunkSize: Long) {
-    if (singleObjectSize != null) {
-        progress.addTotalProgress(singleObjectSize, chunkSize)
-    } else if (objectFlow != null) {
-        objectFlow.collect { obj ->
-            progress.addTotalProgress(obj.size, chunkSize)
-        }
-    }
-}
-
-/**
- * add single file/object workload to total progress
- */
-@InternalSdkApi
-public fun Progress.addTotalProgress(size: Long, chunkSize: Long) {
-    totalFilesToTransfer++
-    totalBytesToTransfer += size
-    totalChunksToTransfer += if ((size % chunkSize) == 0L) size / chunkSize else size / chunkSize + 1
-}
-
-@InternalSdkApi
-public fun Progress.addFilesTransferred(num: Long) {
-    filesTransferred += num
-    if (filesTransferred == totalFilesToTransfer) {
-        isDone = true
-    }
-}
-
-@InternalSdkApi
-public fun Progress.addBytesChunksTransferred(byteLength: Long, chunkNum: Long) {
-    bytesTransferred += byteLength
-    chunksTransferred += chunkNum
 }
