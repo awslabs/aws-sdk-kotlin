@@ -108,9 +108,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 key = to.key
                 body = ByteStream.fromFile(localFile)
             }
-            if (progressUpdater != null) {
-                progressUpdater.updateProgress(1, localFile.length())
-            }
+            progressUpdater?.updateProgress(1L, localFile.length())
         }
     }
 
@@ -142,9 +140,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                         partNumber = (index + 1)
                     }
                 )
-                if (progressUpdater != null) {
-                    progressUpdater.updateProgress(0, chunkRange.count().toLong())
-                }
+                progressUpdater?.updateProgress(0, chunkRange.count().toLong())
             }
 
             // complete multipart upload
@@ -154,9 +150,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 uploadId = createMultipartUploadResponse.uploadId
                 multipartUpload { parts = completedParts }
             }
-            if (progressUpdater != null) {
-                progressUpdater.updateProgress(1L, 0)
-            }
+            progressUpdater?.updateProgress(1L, 0)
         }
     }
 
@@ -222,9 +216,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             if (!from.key.endsWith('/')) {
                 val response = s3.headObjectOrNull(from)
                 if (response != null) {
-                    if (progressUpdater != null) {
-                        progressUpdater.estimateProgressForDownload(response.contentLength)
-                    }
+                    progressUpdater?.estimateProgressForDownload(response.contentLength)
                     val subTo = Paths.get(to).resolve(from.key.substringAfterLast('/')).toString()
                     downloadFile(response.contentLength, from, subTo, progressUpdater)
                     return@async
@@ -285,9 +277,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
 
             if (fileSize == 0L) { // for zero size file, can't chunk, so just download
                 toPath.createFile()
-                if (progressUpdater != null) {
-                    progressUpdater.updateProgress(1L, 0)
-                }
+                progressUpdater?.updateProgress(1L, 0)
                 return@async
             }
 
@@ -303,14 +293,10 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 s3.getObject(request) { resp ->
                     resp.body?.toReadChannel()?.copyTo(writeChannel, close = false)
                 }
-                if (progressUpdater != null) {
-                    progressUpdater.updateProgress(0, it.count().toLong())
-                }
+                progressUpdater?.updateProgress(0, it.count().toLong())
             }
             writeChannel.close()
-            if (progressUpdater != null) {
-                progressUpdater.updateProgress(1L, 0)
-            }
+            progressUpdater?.updateProgress(1L, 0)
         }
     }
 
@@ -340,9 +326,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
             if (!from.key.endsWith('/')) {
                 val response = s3.headObjectOrNull(from)
                 if (response != null) {
-                    if (progressUpdater != null) {
-                        progressUpdater.estimateProgressForDownload(response.contentLength)
-                    }
+                    progressUpdater?.estimateProgressForDownload(response.contentLength)
                     copyObject(response.contentLength, from, to, progressUpdater)
                     return@async
                 }
@@ -406,9 +390,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 key = to.key
             }
 
-            if (progressUpdater != null) {
-                progressUpdater.updateProgress(1L, fileSize)
-            }
+            progressUpdater?.updateProgress(1L, fileSize)
         }
     }
 
@@ -441,9 +423,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                         partNumber = (index + 1)
                     }
                 )
-                if (progressUpdater != null) {
-                    progressUpdater.updateProgress(0, chunkRange.count().toLong())
-                }
+                progressUpdater?.updateProgress(0, chunkRange.count().toLong())
             }
 
             s3.completeMultipartUpload {
@@ -452,9 +432,7 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                 uploadId = createMultipartCopyResponse.uploadId
                 multipartUpload { parts = completedParts }
             }
-            if (progressUpdater != null) {
-                progressUpdater.updateProgress(1L, 0)
-            }
+            progressUpdater?.updateProgress(1L, 0)
         }
     }
 }
