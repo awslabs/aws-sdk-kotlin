@@ -112,7 +112,6 @@ class S3TransferManagerIntegrationTest {
         delete()
     }
 
-    @OptIn(InternalSdkApi::class)
     @Test
     fun testUpload() = runTest {
         createUploadDirectory()
@@ -123,14 +122,12 @@ class S3TransferManagerIntegrationTest {
             val operation = s3TransferManager.upload(testUploadDirectory.toString(), toUri, progressListener)
             assertNotNull(operation, "The transfer manager didn't start directory upload")
             operation.await()
-            assertTrue(checkUpload(testUploadDirectory.toFile(), toUri))
-            assertTrue(operation.progressUpdater!!.progress.checkUploadProgress(testUploadDirectory.toFile()))
+            assertTrue(checkUpload(testUploadDirectory.toFile(), toUri, operation.progress!!))
         } finally {
             testUploadDirectory.toFile().deleteRecursive()
         }
     }
 
-    @OptIn(InternalSdkApi::class)
     @Test
     fun testUploadLargeFile() = runTest {
         val testLargeFile = RandomTempFile(10000000)
@@ -141,14 +138,16 @@ class S3TransferManagerIntegrationTest {
             val operation = s3TransferManager.upload(testLargeFile.path, toUri, progressListener)
             assertNotNull(operation, "The transfer manager didn't start parts upload")
             operation.await()
-            assertTrue(checkUpload(testLargeFile, toUri))
-            assertTrue(operation.progressUpdater!!.progress.checkUploadProgress(testLargeFile))
+            assertTrue(checkUpload(testLargeFile, toUri, operation.progress!!))
         } finally {
             testLargeFile.deleteRecursive()
         }
     }
 
-    private suspend fun checkUpload(localFile: File, to: S3Uri): Boolean {
+    private suspend fun checkUpload(localFile: File, to: S3Uri, progress: Progress): Boolean =
+        checkUploadContent(localFile, to) && progress.checkUploadProgress(localFile)
+
+    private suspend fun checkUploadContent(localFile: File, to: S3Uri): Boolean {
         when {
             localFile.isFile -> {
                 return chunksCompare(localFile, to)
@@ -167,7 +166,7 @@ class S3TransferManagerIntegrationTest {
                 subFiles.forEach {
                     val subKey = Paths.get(to.key, it.name).toString()
                     val subTo = S3Uri(to.bucket, subKey)
-                    if (!checkUpload(it, subTo)) {
+                    if (!checkUploadContent(it, subTo)) {
                         return false
                     }
                 }
@@ -185,8 +184,8 @@ class S3TransferManagerIntegrationTest {
      */
     @OptIn(InternalSdkApi::class)
     private fun Progress.checkUploadProgress(localFile: File): Boolean {
-        val progressUpdater = ProgressUpdater(Progress(), TestingProgressListener())
-        progressUpdater.estimateProgressForUpload(localFile, s3TransferManager.config.chunkSize)
+        val progressUpdater = ProgressUpdater(Progress(), TestingProgressListener(), s3TransferManager.config.chunkSize)
+        progressUpdater.estimateProgressForUpload(localFile)
         return estimateCorrect(progressUpdater.progress) && progressFinish()
     }
 
@@ -217,7 +216,6 @@ class S3TransferManagerIntegrationTest {
         }
     }
 
-    @OptIn(InternalSdkApi::class)
     @Test
     fun testDownload() = runTest {
         createUploadDirectory()
@@ -235,14 +233,12 @@ class S3TransferManagerIntegrationTest {
             val downloadOperation = s3TransferManager.download(s3Uri, testDownloadDirectory.toString(), progressListener)
             assertNotNull(downloadOperation, "The transfer manager didn't start directory download")
             downloadOperation.await()
-            assertTrue(checkDownload(s3Uri, testDownloadDirectory.toFile()))
-            assertTrue(downloadOperation.progressUpdater!!.progress.checkDownloadProgress(s3Uri))
+            assertTrue(checkDownload(s3Uri, testDownloadDirectory.toFile(), downloadOperation.progress!!))
         } finally {
             testDownloadDirectory.toFile().deleteRecursive()
         }
     }
 
-    @OptIn(InternalSdkApi::class)
     @Test
     fun testDownloadLargeFile() = runTest {
         val testLargeFile = RandomTempFile(10000000)
@@ -263,15 +259,17 @@ class S3TransferManagerIntegrationTest {
             assertNotNull(downloadOperation)
             downloadOperation.await()
             val downloadFile = Paths.get(testDownloadDirectory.toString(), largeFileKey).toFile()
-            assertTrue(checkDownload(s3Uri, downloadFile))
-            assertTrue(downloadOperation.progressUpdater!!.progress.checkDownloadProgress(s3Uri))
+            assertTrue(checkDownload(s3Uri, downloadFile, downloadOperation.progress!!))
         } finally {
             testDownloadDirectory.toFile().deleteRecursive()
         }
     }
 
+    private suspend fun checkDownload(from: S3Uri, localFile: File, progress: Progress): Boolean =
+        checkDownloadContent(from, localFile) && progress.checkDownloadProgress(from)
+
     @OptIn(InternalSdkApi::class)
-    private suspend fun checkDownload(from: S3Uri, localFile: File): Boolean {
+    private suspend fun checkDownloadContent(from: S3Uri, localFile: File): Boolean {
         if (!from.key.endsWith('/')) {
             s3TransferManager.config.s3.headObjectOrNull(from)?.let { headObjectResponse ->
                 return chunksCompare(localFile, from)
@@ -291,7 +289,7 @@ class S3TransferManagerIntegrationTest {
                 val subFrom = S3Uri(from.bucket, key)
                 val keySuffix = key.substringAfter(keyPrefix)
                 val subFile = Paths.get(localFile.toString(), keySuffix).toFile()
-                if (!checkDownload(subFrom, subFile)) {
+                if (!checkDownloadContent(subFrom, subFile)) {
                     checkResult = false
                     return@collect
                 }
@@ -308,17 +306,17 @@ class S3TransferManagerIntegrationTest {
      */
     @OptIn(InternalSdkApi::class)
     private suspend fun Progress.checkDownloadProgress(s3Uri: S3Uri): Boolean {
-        val progressUpdater = ProgressUpdater(Progress(), TestingProgressListener())
+        val progressUpdater = ProgressUpdater(Progress(), TestingProgressListener(), s3TransferManager.config.chunkSize)
         if (s3Uri.key.endsWith('/')) {
             val response = s3TransferManager.config.s3.listObjectsV2Paginated {
                 bucket = s3Uri.bucket
                 prefix = s3Uri.key
             }
             val objectFlow = response.transform { it.contents?.forEach { obj -> emit(obj) } }
-            progressUpdater.estimateProgressForDownload(objectFlow, s3TransferManager.config.chunkSize)
+            progressUpdater.estimateProgressForDownload(objectFlow)
         } else {
             val response = s3TransferManager.config.s3.headObjectOrNull(s3Uri)
-            progressUpdater.estimateProgressForDownload(response!!.contentLength, s3TransferManager.config.chunkSize)
+            progressUpdater.estimateProgressForDownload(response!!.contentLength)
         }
         return estimateCorrect(progressUpdater.progress) && progressFinish()
     }
@@ -345,7 +343,6 @@ class S3TransferManagerIntegrationTest {
         }
     }
 
-    @OptIn(InternalSdkApi::class)
     @Test
     fun testCopyInSingleBucket() = runTest {
         createUploadDirectory()
@@ -359,14 +356,12 @@ class S3TransferManagerIntegrationTest {
             val copyOperation = s3TransferManager.copy(sourceUri, destUri, progressListener)
             copyOperation.await()
             assertNotNull(copyOperation)
-            assertTrue(checkUpload(testUploadDirectory.toFile(), destUri))
-            assertTrue(copyOperation.progressUpdater!!.progress.checkDownloadProgress(sourceUri))
+            assertTrue(checkCopy(testUploadDirectory.toFile(), sourceUri, destUri, copyOperation.progress!!))
         } finally {
             testUploadDirectory.toFile().deleteRecursive()
         }
     }
 
-    @OptIn(InternalSdkApi::class)
     @Test
     fun testCopyLargeObjectInSingleBucket() = runTest {
         val testLargeFile = RandomTempFile(10000000)
@@ -380,14 +375,12 @@ class S3TransferManagerIntegrationTest {
             val copyOperation = s3TransferManager.copy(sourceUri, destUri, progressListener)
             assertNotNull(copyOperation)
             copyOperation.await()
-            assertTrue(checkUpload(testLargeFile, destUri))
-            assertTrue(copyOperation.progressUpdater!!.progress.checkDownloadProgress(sourceUri))
+            assertTrue(checkCopy(testLargeFile, sourceUri, destUri, copyOperation.progress!!))
         } finally {
             testLargeFile.deleteRecursive()
         }
     }
 
-    @OptIn(InternalSdkApi::class)
     @Test
     fun testCopyBetweenBuckets() = runTest {
         createUploadDirectory()
@@ -408,15 +401,13 @@ class S3TransferManagerIntegrationTest {
             val copyOperation = s3TransferManager.copy(sourceUri, destUri, progressListener)
             copyOperation.await()
             assertNotNull(copyOperation)
-            assertTrue(checkUpload(testUploadDirectory.toFile(), destUri))
-            assertTrue(copyOperation.progressUpdater!!.progress.checkDownloadProgress(sourceUri))
+            assertTrue(checkCopy(testUploadDirectory.toFile(), sourceUri, destUri, copyOperation.progress!!))
         } finally {
             testUploadDirectory.toFile().deleteRecursive()
             deleteBackUpBucket()
         }
     }
 
-    @OptIn(InternalSdkApi::class)
     @Test
     fun testCopyLargeObjectBetweenBuckets() = runTest {
         val testLargeFile = RandomTempFile(10000000)
@@ -436,13 +427,15 @@ class S3TransferManagerIntegrationTest {
             val copyOperation = s3TransferManager.copy(sourceUri, destUri, progressListener)
             assertNotNull(copyOperation)
             copyOperation.await()
-            assertTrue(checkUpload(testLargeFile, destUri))
-            assertTrue(copyOperation.progressUpdater!!.progress.checkDownloadProgress(sourceUri))
+            assertTrue(checkCopy(testLargeFile, sourceUri, destUri, copyOperation.progress!!))
         } finally {
             testLargeFile.deleteRecursive()
             deleteBackUpBucket()
         }
     }
+
+    private suspend fun checkCopy(localFile: File, sourceUri: S3Uri, destUri: S3Uri, progress: Progress): Boolean =
+        checkUploadContent(localFile, destUri) && progress.checkDownloadProgress(sourceUri)
 
     @Test
     fun testCopyInvalidFromBucket() = runTest {
@@ -528,4 +521,10 @@ class S3TransferManagerIntegrationTest {
             println(progress)
         }
     }
+
+    private fun Progress.estimateCorrect(progress: Progress): Boolean =
+        totalFilesToTransfer == progress.totalFilesToTransfer && totalBytesToTransfer == progress.totalBytesToTransfer && totalChunksToTransfer == progress.totalChunksToTransfer
+
+    private fun Progress.progressFinish(): Boolean =
+        totalFilesToTransfer == filesTransferred && totalBytesToTransfer == bytesTransferred && totalChunksToTransfer == chunksTransferred && isDone
 }

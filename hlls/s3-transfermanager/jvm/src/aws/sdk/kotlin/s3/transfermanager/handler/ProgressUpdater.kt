@@ -10,66 +10,63 @@ import kotlinx.coroutines.sync.withLock
 import java.io.File
 
 @InternalSdkApi
-public data class ProgressUpdater(var progress: Progress, val progressListener: ProgressListener) {
+public data class ProgressUpdater(var progress: Progress, val progressListener: ProgressListener, val chunkSize: Long) {
     private val mutex = Mutex()
 
     @InternalSdkApi
-    public fun estimateProgressForUpload(file: File, chunkSize: Long) {
+    public fun estimateProgressForUpload(file: File) {
+        if (progress.totalFilesToTransfer == 0L) {
+            discoverProgressForUpload(file)
+        }
+    }
+
+    private fun discoverProgressForUpload(file: File) {
         if (file.isFile) {
-            addTotalProgress(file.length(), chunkSize)
+            addTotalProgress(file.length())
         } else if (file.isDirectory) {
             file.listFiles().forEach {
-                estimateProgressForUpload(it, chunkSize)
+                discoverProgressForUpload(it)
             }
         }
     }
 
-    @OptIn(InternalSdkApi::class)
-    public suspend fun estimateProgressForDownload(singleObjectSize: Long, chunkSize: Long) {
-        addTotalProgress(singleObjectSize, chunkSize)
+    public fun estimateProgressForDownload(singleObjectSize: Long) {
+        addTotalProgress(singleObjectSize)
     }
 
-    @OptIn(InternalSdkApi::class)
-    public suspend fun estimateProgressForDownload(objectFlow: Flow<Object>, chunkSize: Long): List<Object> {
+    public suspend fun estimateProgressForDownload(objectFlow: Flow<Object>): List<Object> {
         val objectList = mutableListOf<Object>()
         objectFlow.collect { obj ->
-            addTotalProgress(obj.size, chunkSize)
+            addTotalProgress(obj.size)
             objectList.add(obj)
         }
         return objectList
     }
 
+    public suspend fun updateProgress(fileNum: Long, byteLength: Long) {
+        mutex.withLock {
+            val chunks = (byteLength + chunkSize - 1) / chunkSize
+            progress = progress.copy(
+                filesTransferred = progress.filesTransferred + fileNum,
+                bytesTransferred = progress.bytesTransferred + byteLength,
+                chunksTransferred = progress.chunksTransferred + chunks
+            )
+            if (progress.filesTransferred == progress.totalFilesToTransfer) {
+                progress = progress.copy(isDone = true)
+            }
+            progressListener.onProgress(progress)
+        }
+    }
+
     /**
      * add single file/object workload to total progress
      */
-    @InternalSdkApi
-    private fun addTotalProgress(size: Long, chunkSize: Long) {
-        val newProgress = progress.copy()
-        newProgress.totalFilesToTransfer++
-        newProgress.totalBytesToTransfer += size
-        newProgress.totalChunksToTransfer += if ((size % chunkSize) == 0L) size / chunkSize else size / chunkSize + 1
-        progress = newProgress
-    }
-
-    @InternalSdkApi
-    public suspend fun addFilesTransferred(num: Long) {
-        mutex.withLock {
-            val newProgress = progress.copy()
-            newProgress.filesTransferred += num
-            if (newProgress.filesTransferred == newProgress.totalFilesToTransfer) {
-                newProgress.isDone = true
-            }
-            progress = newProgress
-        }
-    }
-
-    @InternalSdkApi
-    public suspend fun addBytesChunksTransferred(byteLength: Long, chunkNum: Long) {
-        mutex.withLock {
-            val newProgress = progress.copy()
-            newProgress.bytesTransferred += byteLength
-            newProgress.chunksTransferred += chunkNum
-            progress = newProgress
-        }
+    private fun addTotalProgress(size: Long) {
+        val chunks = (size + chunkSize - 1) / chunkSize
+        progress = progress.copy(
+            totalFilesToTransfer = progress.totalFilesToTransfer + 1,
+            totalBytesToTransfer = progress.totalBytesToTransfer + size,
+            totalChunksToTransfer = progress.totalChunksToTransfer + chunks
+        )
     }
 }
