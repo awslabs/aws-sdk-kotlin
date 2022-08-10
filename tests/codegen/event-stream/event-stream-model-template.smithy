@@ -16,7 +16,11 @@ operation TestStreamOp {
     errors: [SomeError],
 }
 
-structure TestStreamInputOutput { @required value: TestStream }
+structure TestStreamInputOutput {
+    @httpPayload
+    @required
+    value: TestStream
+}
 
 @error("client")
 structure SomeError {
@@ -71,5 +75,3 @@ union TestStream {
     MessageWithNoHeaderPayloadTraits: MessageWithNoHeaderPayloadTraits,
     SomeError: SomeError,
 }
-
-
