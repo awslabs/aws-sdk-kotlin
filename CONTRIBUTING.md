@@ -47,6 +47,7 @@ To send us a pull request, please:
 
 1. Fork the repository.
 2. Modify the source; please focus on the specific change you are contributing. If you also reformat all the code, it will be hard for us to focus on your change.
+   * Ensure your modifications are accompanied by a [changelog entry](#Changelog) where necessary.
 3. Ensure local tests pass.
 4. Commit to your fork using clear commit messages.
 5. Send us a pull request, answering any default questions in the pull request interface.
@@ -55,6 +56,40 @@ To send us a pull request, please:
 GitHub provides additional document on [forking a repository](https://help.github.com/articles/fork-a-repo/) and 
 [creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
 
+### Changelog
+Merges to this repository must include one or more changelog entries which describe the modifications made.
+
+Entries are placed in the top-level `.changes/` directory. An entry is a file containing a JSON object with the
+following fields:
+
+| Field name    | Type       | Required | Enum                                         | Description                                                                                                                                                                                                                                                                                                                                     |
+|---------------|------------|----------|----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | `string`   | yes      |                                              | A unique identifier for this entry. We recommend you generate a UUID for this field.                                                                                                                                                                                                                                                            |
+| `type`        | `string`   | yes      | `bugfix`, `feature`, `documentation`, `misc` | The type of change being made.                                                                                                                                                                                                                                                                                                                  |
+| `description` | `string`   | yes      |                                              | A description of the change being made.                                                                                                                                                                                                                                                                                                         |
+| `issues`      | `string[]` | no       |                                              | A list of references to any related issues in the relevant repositories. A reference can be specified in several ways:<ul><li>The issue number, if local to this repository (eg. `#12345`)</li><li>A fully-qualified issue ID (eg.`awslabs/smithy-kotlin#12345`)</li><li>A fully-qualified URL (eg. `https://issuetracker.com/12345`)</li></ul> |
+| `module`      | `string`   | no       |                                              | The area of the code affected by your changes. If unsure, leave this value unset.                                                                                                                                                                                                                                                               |
+
+The filename of an entry is arbitrary. We recommend `<id>.json`, where `<id>` corresponds to the `id` field of the entry
+itself.
+
+Entries in the `.changes/` directory are automatically rolled into the main `CHANGELOG.md` file in every release.
+
+If you believe that your modifications do not warrant a changelog entry, you can add the `no-changelog` label to your
+pull request. The label will suppress the CI that blocks merging in the absence of a changelog, though the reviewer(s)
+of your request may disagree and ask that you add one anyway.
+
+#### Example
+```json
+{
+  "id": "263ea6ab-4b75-41a8-9c37-821c30d7b9e5",
+  "type": "feature",
+  "description": "Add multiplatform support for URL parsing.",
+  "issues": [
+    "awslabs/aws-sdk-kotlin#12345"
+  ]
+}
+```
 
 ## Finding contributions to work on
 Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels ((enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any ['help wanted'](https://github.com/aws-samples/aws-sdk-kotlin/labels/help%20wanted) issues is a great place to start. 
