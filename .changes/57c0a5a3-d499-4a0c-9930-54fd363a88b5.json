@@ -1,0 +1,5 @@
+{
+    "id": "57c0a5a3-d499-4a0c-9930-54fd363a88b5",
+    "type": "misc",
+    "description": "Upgrade Smithy to 1.23.0, upgrade Smithy Gradle to 0.6.0"
+}
