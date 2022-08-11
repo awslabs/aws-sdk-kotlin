@@ -1,9 +1,0 @@
-{
-    "id": "40c6abed-d2e3-4edd-93d2-0a08f0379431",
-    "type": "bugfix",
-    "description": "test asdf",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#231"
-    ],
-    "module": "asdf"
-}
