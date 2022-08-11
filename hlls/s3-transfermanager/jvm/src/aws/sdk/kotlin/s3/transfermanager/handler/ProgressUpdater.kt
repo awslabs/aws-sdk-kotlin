@@ -1,6 +1,5 @@
 package aws.sdk.kotlin.s3.transfermanager.handler
 
-import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.s3.transfermanager.data.Progress
 import aws.sdk.kotlin.s3.transfermanager.listener.ProgressListener
 import aws.sdk.kotlin.services.s3.model.Object
@@ -9,11 +8,10 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
 
-@InternalSdkApi
-public data class ProgressUpdater(var progress: Progress, val progressListener: ProgressListener, val chunkSize: Long) {
+internal data class ProgressUpdater(var progress: Progress, val progressListener: ProgressListener, val chunkSize: Long) {
     private val mutex = Mutex()
 
-    internal suspend fun estimateProgressForUpload(file: File) {
+    internal fun estimateProgressForUpload(file: File) {
         if (progress.totalFilesToTransfer == 0L) {
             discoverProgressForUpload(file)
             progressListener.onProgress(progress)
@@ -30,7 +28,7 @@ public data class ProgressUpdater(var progress: Progress, val progressListener: 
         }
     }
 
-    internal suspend fun estimateProgressForDownload(singleObjectSize: Long) {
+    internal fun estimateProgressForDownload(singleObjectSize: Long) {
         addTotalProgress(singleObjectSize)
         progressListener.onProgress(progress)
     }

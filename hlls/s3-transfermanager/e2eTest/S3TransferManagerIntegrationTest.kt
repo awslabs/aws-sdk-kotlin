@@ -507,7 +507,7 @@ class S3TransferManagerIntegrationTest {
 
         private val mutex = Mutex()
 
-        override suspend fun onProgress(progress: Progress) {
+        override fun onProgress(progress: Progress) = runBlocking {
             mutex.withLock {
                 println(progress)
                 assertTrue(progress.filesTransferred >= prevProgress.filesTransferred)
