@@ -17,6 +17,7 @@ public data class ProgressUpdater(var progress: Progress, val progressListener: 
     public fun estimateProgressForUpload(file: File) {
         if (progress.totalFilesToTransfer == 0L) {
             discoverProgressForUpload(file)
+            progressListener.onProgress(progress)
         }
     }
 
@@ -30,32 +31,37 @@ public data class ProgressUpdater(var progress: Progress, val progressListener: 
         }
     }
 
+    @InternalSdkApi
     public fun estimateProgressForDownload(singleObjectSize: Long) {
         addTotalProgress(singleObjectSize)
+        progressListener.onProgress(progress)
     }
 
+    @InternalSdkApi
     public suspend fun estimateProgressForDownload(objectFlow: Flow<Object>): List<Object> {
         val objectList = mutableListOf<Object>()
         objectFlow.collect { obj ->
             addTotalProgress(obj.size)
             objectList.add(obj)
         }
+        progressListener.onProgress(progress)
         return objectList
     }
 
+    @InternalSdkApi
     public suspend fun updateProgress(fileNum: Long, byteLength: Long) {
-        mutex.withLock {
+        val newProgress = mutex.withLock {
+            val filesTransferred = progress.filesTransferred + fileNum
+            val isDone = (filesTransferred == progress.totalFilesToTransfer)
             val chunks = (byteLength + chunkSize - 1) / chunkSize
-            progress = progress.copy(
-                filesTransferred = progress.filesTransferred + fileNum,
+            progress.copy(
+                filesTransferred = filesTransferred,
                 bytesTransferred = progress.bytesTransferred + byteLength,
-                chunksTransferred = progress.chunksTransferred + chunks
-            )
-            if (progress.filesTransferred == progress.totalFilesToTransfer) {
-                progress = progress.copy(isDone = true)
-            }
-            progressListener.onProgress(progress)
+                chunksTransferred = progress.chunksTransferred + chunks,
+                isDone = isDone
+            ).also { progress = it }
         }
+        progressListener.onProgress(newProgress)
     }
 
     /**
