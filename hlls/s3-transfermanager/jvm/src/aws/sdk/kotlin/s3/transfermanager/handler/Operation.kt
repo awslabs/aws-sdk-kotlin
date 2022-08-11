@@ -6,8 +6,7 @@ import kotlinx.coroutines.Deferred
 public interface Operation : Deferred<Unit> {
 // inherits await(), cancel(), cancelAndJoin(), etc. from Deferred from Job
 
-    // class reflecting transfer progress and mark whether it is completed
-    public val progress: Progress
+    public val progress: Progress?
 
     public suspend fun pauseAndJoin(): PausedOperation
 }
