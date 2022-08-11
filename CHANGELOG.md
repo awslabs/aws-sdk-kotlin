@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.17.4-beta] - 08/11/2022
+
+### Fixes
+* Update event stream model test template
+
+### Miscellaneous
+* Upgrade Kotlin version to 1.7.10
+* Upgrade smithy-kotlin to 0.12.4.
+
 ## [0.17.3-beta] - 08/04/2022
 
 ### Miscellaneous
