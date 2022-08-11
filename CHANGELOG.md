@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.17.3-beta] - 08/04/2022
+
+### Miscellaneous
+* Sync AWS service models
+
 ## [0.17.2-beta] - 07/28/2022
 
 ### Miscellaneous
