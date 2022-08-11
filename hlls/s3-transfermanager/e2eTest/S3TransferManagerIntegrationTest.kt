@@ -20,6 +20,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -29,6 +31,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.io.path.appendBytes
 import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -82,9 +85,9 @@ class S3TransferManagerIntegrationTest {
         val home: String = System.getProperty("user.home")
         val dir = Paths.get(home, "Downloads")
         testUploadDirectory = Files.createTempDirectory(dir, "testUploadDirectory")
-        Files.createTempFile(testUploadDirectory, "file1", ".txt")
+        Files.createTempFile(testUploadDirectory, "file1", ".txt").appendBytes("ABCD".toByteArray())
         val testUploadDirectory1 = Files.createTempDirectory(testUploadDirectory, "testUploadDirectory1")
-        Files.createTempFile(testUploadDirectory1, "file2", ".png")
+        Files.createTempFile(testUploadDirectory1, "file2", ".png").appendBytes("image".toByteArray())
         Files.createTempFile(testUploadDirectory1, "file3", ".jpeg")
         Files.createTempDirectory(testUploadDirectory, "testUploadDirectory2")
     }
@@ -122,7 +125,7 @@ class S3TransferManagerIntegrationTest {
             val operation = s3TransferManager.upload(testUploadDirectory.toString(), toUri, progressListener)
             assertNotNull(operation, "The transfer manager didn't start directory upload")
             operation.await()
-            checkTransfer(testUploadDirectory.toFile(), toUri, operation.progress!!, 3L, 0, 0)
+            checkTransfer(testUploadDirectory.toFile(), toUri, operation.progress!!, 3L, 9L, 2L)
         } finally {
             testUploadDirectory.toFile().deleteRecursive()
         }
@@ -233,7 +236,7 @@ class S3TransferManagerIntegrationTest {
             val downloadOperation = s3TransferManager.download(s3Uri, testDownloadDirectory.toString(), progressListener)
             assertNotNull(downloadOperation, "The transfer manager didn't start directory download")
             downloadOperation.await()
-            checkTransfer(s3Uri, testDownloadDirectory.toFile(), downloadOperation.progress!!, 3L, 0, 0)
+            checkTransfer(s3Uri, testDownloadDirectory.toFile(), downloadOperation.progress!!, 3L, 9L, 2L)
         } finally {
             testDownloadDirectory.toFile().deleteRecursive()
         }
@@ -342,7 +345,7 @@ class S3TransferManagerIntegrationTest {
             val copyOperation = s3TransferManager.copy(sourceUri, destUri, progressListener)
             assertNotNull(copyOperation)
             copyOperation.await()
-            checkTransfer(testUploadDirectory.toFile(), destUri, copyOperation.progress!!, 3L, 0, 0)
+            checkTransfer(testUploadDirectory.toFile(), destUri, copyOperation.progress!!, 3L, 9L, 2L)
         } finally {
             testUploadDirectory.toFile().deleteRecursive()
         }
@@ -387,7 +390,7 @@ class S3TransferManagerIntegrationTest {
             val copyOperation = s3TransferManager.copy(sourceUri, destUri, progressListener)
             assertNotNull(copyOperation)
             copyOperation.await()
-            checkTransfer(testUploadDirectory.toFile(), destUri, copyOperation.progress!!, 3L, 0, 0)
+            checkTransfer(testUploadDirectory.toFile(), destUri, copyOperation.progress!!, 3L, 9L, 2L)
         } finally {
             testUploadDirectory.toFile().deleteRecursive()
             deleteBackUpBucket()
@@ -500,8 +503,18 @@ class S3TransferManagerIntegrationTest {
      * inner implementation of ProgressListener interface
      */
     private class TestingProgressListener : ProgressListener {
-        override fun onProgress(progress: Progress) {
-            println(progress)
+        private var prevProgress: Progress = Progress()
+
+        private val mutex = Mutex()
+
+        override suspend fun onProgress(progress: Progress) {
+            mutex.withLock {
+                println(progress)
+                assertTrue(progress.filesTransferred >= prevProgress.filesTransferred)
+                assertTrue(progress.bytesTransferred >= prevProgress.bytesTransferred)
+                assertTrue(progress.chunksTransferred >= prevProgress.chunksTransferred)
+                prevProgress = progress
+            }
         }
     }
 

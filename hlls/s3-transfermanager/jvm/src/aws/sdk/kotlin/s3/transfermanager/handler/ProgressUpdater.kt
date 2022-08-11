@@ -13,8 +13,7 @@ import java.io.File
 public data class ProgressUpdater(var progress: Progress, val progressListener: ProgressListener, val chunkSize: Long) {
     private val mutex = Mutex()
 
-    @InternalSdkApi
-    public fun estimateProgressForUpload(file: File) {
+    internal suspend fun estimateProgressForUpload(file: File) {
         if (progress.totalFilesToTransfer == 0L) {
             discoverProgressForUpload(file)
             progressListener.onProgress(progress)
@@ -31,14 +30,12 @@ public data class ProgressUpdater(var progress: Progress, val progressListener: 
         }
     }
 
-    @InternalSdkApi
-    public fun estimateProgressForDownload(singleObjectSize: Long) {
+    internal suspend fun estimateProgressForDownload(singleObjectSize: Long) {
         addTotalProgress(singleObjectSize)
         progressListener.onProgress(progress)
     }
 
-    @InternalSdkApi
-    public suspend fun estimateProgressForDownload(objectFlow: Flow<Object>): List<Object> {
+    internal suspend fun estimateProgressForDownload(objectFlow: Flow<Object>): List<Object> {
         val objectList = mutableListOf<Object>()
         objectFlow.collect { obj ->
             addTotalProgress(obj.size)
@@ -48,8 +45,7 @@ public data class ProgressUpdater(var progress: Progress, val progressListener: 
         return objectList
     }
 
-    @InternalSdkApi
-    public suspend fun updateProgress(fileNum: Long, byteLength: Long) {
+    internal suspend fun updateProgress(fileNum: Long, byteLength: Long) {
         val newProgress = mutex.withLock {
             val filesTransferred = progress.filesTransferred + fileNum
             val isDone = (filesTransferred == progress.totalFilesToTransfer)
