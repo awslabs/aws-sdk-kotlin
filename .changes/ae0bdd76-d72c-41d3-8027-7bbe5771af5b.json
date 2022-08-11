@@ -1,0 +1,8 @@
+{
+    "id": "ae0bdd76-d72c-41d3-8027-7bbe5771af5b",
+    "type": "bugfix",
+    "description": "test asdf",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#231"
+    ]
+}
