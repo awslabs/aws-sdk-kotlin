@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.runtime.protocol.json
 
@@ -20,7 +20,7 @@ class RestJsonErrorDeserializerTest {
             "FooError",
             "FooError:http://amazon.com/smithy/com.amazon.smithy.validate/",
             "aws.protocoltests.restjson#FooError",
-            "aws.protocoltests.restjson#FooError:http://amazon.com/smithy/com.amazon.smithy.validate/"
+            "aws.protocoltests.restjson#FooError:http://amazon.com/smithy/com.amazon.smithy.validate/",
         )
 
         val expected = "FooError"

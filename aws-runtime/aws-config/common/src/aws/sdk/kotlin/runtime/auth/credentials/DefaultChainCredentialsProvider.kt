@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -40,7 +40,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 public class DefaultChainCredentialsProvider constructor(
     private val profileName: String? = null,
     private val platformProvider: PlatformProvider = Platform,
-    httpClientEngine: HttpClientEngine? = null
+    httpClientEngine: HttpClientEngine? = null,
 ) : CredentialsProvider, Closeable {
 
     private val manageEngine = httpClientEngine == null
@@ -59,8 +59,8 @@ public class DefaultChainCredentialsProvider constructor(
                     engine = httpClientEngine
                 }
             },
-            platformProvider = platformProvider
-        )
+            platformProvider = platformProvider,
+        ),
     )
 
     private val provider = CachedCredentialsProvider(chain)
@@ -81,7 +81,7 @@ public class DefaultChainCredentialsProvider constructor(
  */
 private class StsWebIdentityProvider(
     val platformProvider: PlatformProvider,
-    val httpClientEngine: HttpClientEngine? = null
+    val httpClientEngine: HttpClientEngine? = null,
 ) : CredentialsProvider {
     override suspend fun getCredentials(): Credentials {
         val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClientEngine = httpClientEngine)

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.profile
@@ -51,7 +51,7 @@ class AwsConfigLoaderTest {
             pathSegment = "/",
             awsProfileEnv = "bob",
             homeEnv = "/home/user",
-            os = OperatingSystem(OsFamily.Linux, null)
+            os = OperatingSystem(OsFamily.Linux, null),
         )
 
         val config = loadActiveAwsProfile(testPlatform)
@@ -74,7 +74,7 @@ class AwsConfigLoaderTest {
         homeEnv: String? = null,
         awsSharedCredentialsFileEnv: String? = null,
         homeProp: String? = null,
-        os: OperatingSystem
+        os: OperatingSystem,
     ): Platform {
         val testPlatform = mockk<Platform>()
         val envKeyParam = slot<String>()
@@ -128,7 +128,7 @@ class AwsConfigLoaderTest {
         val platform: OsFamily,
         val profile: String?,
         val configLocation: String,
-        val credentialsLocation: String
+        val credentialsLocation: String,
     ) {
         companion object {
             fun fromJson(json: JsonObject): TestCase {
@@ -153,7 +153,7 @@ class AwsConfigLoaderTest {
                     platform,
                     profile,
                     configLocation,
-                    credentialsLocation
+                    credentialsLocation,
                 )
             }
         }

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.region
@@ -22,7 +22,7 @@ class ImdsRegionProviderTest {
     @Test
     fun testImdsDisabled() = runTest {
         val platform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true")
+            env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true"),
         )
 
         val provider = ImdsRegionProvider(platformProvider = platform)
@@ -31,15 +31,14 @@ class ImdsRegionProviderTest {
 
     @Test
     fun testResolveRegion() = runTest {
-
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
-                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
+                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
             )
             expect(
                 imdsRequest("http://169.254.169.254/latest/meta-data/placement/region", "TOKEN_A"),
-                imdsResponse("us-east-2")
+                imdsResponse("us-east-2"),
             )
         }
 

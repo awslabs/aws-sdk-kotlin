@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen
@@ -21,7 +21,7 @@ import software.amazon.smithy.model.shapes.OperationShape
 class AwsDefaultRetryIntegration : KotlinIntegration {
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
-        resolved: List<ProtocolMiddleware>
+        resolved: List<ProtocolMiddleware>,
     ): List<ProtocolMiddleware> = resolved.replace(middleware) { it is StandardRetryMiddleware }
 
     private val middleware = object : ProtocolMiddleware {
@@ -31,7 +31,7 @@ class AwsDefaultRetryIntegration : KotlinIntegration {
             writer.write(
                 "op.install(#T(config.retryStrategy, #T))",
                 AwsRuntimeTypes.Http.Middleware.AwsRetryMiddleware,
-                AwsRuntimeTypes.Http.Retries.AwsDefaultRetryPolicy
+                AwsRuntimeTypes.Http.Retries.AwsDefaultRetryPolicy,
             )
         }
     }

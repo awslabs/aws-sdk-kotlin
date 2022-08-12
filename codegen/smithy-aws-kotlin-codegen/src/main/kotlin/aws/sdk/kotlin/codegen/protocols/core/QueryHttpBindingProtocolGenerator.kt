@@ -29,7 +29,7 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
         val queryMiddleware = listOf(
             // ensure content-type gets set
             // see: https://awslabs.github.io/smithy/1.0/spec/aws/aws-query-protocol.html#protocol-behavior
-            MutateHeadersMiddleware(addMissingHeaders = mapOf("Content-Type" to QueryContentType))
+            MutateHeadersMiddleware(addMissingHeaders = mapOf("Content-Type" to QueryContentType)),
         )
 
         return middleware + queryMiddleware
@@ -41,7 +41,7 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
     override fun renderSerializeHttpBody(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
         val input = ctx.model.expectShape<StructureShape>(op.input.get())
         if (input.members().isEmpty()) {
@@ -64,7 +64,7 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
  */
 class QueryBindingResolver(
     model: Model,
-    service: ServiceShape
+    service: ServiceShape,
 ) : StaticHttpBindingResolver(model, service, QueryHttpTrait, QueryContentType, TimestampFormatTrait.Format.DATE_TIME) {
     constructor(ctx: ProtocolGenerator.GenerationContext) : this(ctx.model, ctx.service)
 
@@ -80,14 +80,14 @@ class QueryBindingResolver(
 
 abstract class AbstractQueryFormUrlSerializerGenerator(
     private val protocolGenerator: ProtocolGenerator,
-    private val defaultTimestampFormat: TimestampFormatTrait.Format
+    private val defaultTimestampFormat: TimestampFormatTrait.Format,
 ) : StructuredDataSerializerGenerator {
 
     abstract fun descriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: List<MemberShape>,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ): FormUrlSerdeDescriptorGenerator
 
     override fun operationSerializer(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, members: List<MemberShape>): Symbol {
@@ -124,7 +124,7 @@ abstract class AbstractQueryFormUrlSerializerGenerator(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
         documentMembers: List<MemberShape>,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
         val shape = ctx.model.expectShape(op.input.get())
         writer.write("val serializer = #T()", RuntimeTypes.Serde.SerdeFormUrl.FormUrlSerializer)
@@ -135,7 +135,7 @@ abstract class AbstractQueryFormUrlSerializerGenerator(
     private fun documentSerializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
-        members: Collection<MemberShape> = shape.members()
+        members: Collection<MemberShape> = shape.members(),
     ): Symbol {
         val symbol = ctx.symbolProvider.toSymbol(shape)
         return shape.documentSerializer(ctx.settings, symbol, members) { writer ->
@@ -164,7 +164,7 @@ abstract class AbstractQueryFormUrlSerializerGenerator(
     override fun payloadSerializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
-        members: Collection<MemberShape>?
+        members: Collection<MemberShape>?,
     ): Symbol {
         // re-use document serializer (for the target shape!)
         val target = shape.targetOrSelf(ctx.model)

@@ -47,7 +47,7 @@ class PollyPresigner : KotlinIntegration {
             require(duration.isPositive()) { "duration must be greater than zero" }
             val httpRequestBuilder = SynthesizeSpeechOperationSerializer().serialize(ExecutionContext.build { }, input)
             val queryStringBuilder = QueryParametersBuilder()
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         writer.openBlock("with(queryStringBuilder) {", "}") {

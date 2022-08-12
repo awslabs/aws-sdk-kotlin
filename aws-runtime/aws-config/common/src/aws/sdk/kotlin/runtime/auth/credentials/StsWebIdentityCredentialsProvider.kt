@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -42,7 +42,7 @@ public class StsWebIdentityCredentialsProvider(
     private val roleSessionName: String? = null,
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val platformProvider: PlatformProvider = Platform,
-    private val httpClientEngine: HttpClientEngine? = null
+    private val httpClientEngine: HttpClientEngine? = null,
 ) : CredentialsProvider {
 
     public companion object {
@@ -58,7 +58,7 @@ public class StsWebIdentityCredentialsProvider(
             roleSessionName: String? = null,
             duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
             platformProvider: PlatformProvider = Platform,
-            httpClientEngine: HttpClientEngine? = null
+            httpClientEngine: HttpClientEngine? = null,
         ): StsWebIdentityCredentialsProvider {
             val resolvedRoleArn = platformProvider.resolve(roleArn, AwsSdkSetting.AwsRoleArn, "roleArn")
             val resolvedTokenFilePath = platformProvider.resolve(webIdentityTokenFilePath, AwsSdkSetting.AwsWebIdentityTokenFile, "webIdentityTokenFilePath")
@@ -104,7 +104,7 @@ public class StsWebIdentityCredentialsProvider(
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRoleWithWebIdentity response" },
             sessionToken = roleCredentials.sessionToken,
             expiration = roleCredentials.expiration,
-            providerName = PROVIDER_NAME
+            providerName = PROVIDER_NAME,
         )
     }
 }
@@ -113,6 +113,6 @@ public class StsWebIdentityCredentialsProvider(
 private inline fun <reified T> PlatformProvider.resolve(explicit: T?, setting: AwsSdkSetting<T>, name: String): T {
     return explicit ?: setting.resolve(this)
         ?: throw ProviderConfigurationException(
-            "Required field `$name` could not be automatically inferred for StsWebIdentityCredentialsProvider. Either explicitly pass a value, set the environment variable `${setting.environmentVariable}`, or set the JVM system property `${setting.jvmProperty}`"
+            "Required field `$name` could not be automatically inferred for StsWebIdentityCredentialsProvider. Either explicitly pass a value, set the environment variable `${setting.environmentVariable}`, or set the JVM system property `${setting.jvmProperty}`",
         )
 }

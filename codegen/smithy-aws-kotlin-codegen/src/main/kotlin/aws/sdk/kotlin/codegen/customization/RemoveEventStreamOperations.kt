@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.customization
@@ -27,7 +27,7 @@ class RemoveEventStreamOperations : KotlinIntegration {
 
     private val supportedServiceIds = setOf(
         // integration tests
-        "aws.sdk.kotlin.test.eventstream#TestService"
+        "aws.sdk.kotlin.test.eventstream#TestService",
     ).map(ShapeId::from).toSet()
 
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =

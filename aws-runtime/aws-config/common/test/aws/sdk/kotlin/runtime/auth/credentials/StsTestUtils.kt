@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -23,13 +23,13 @@ object StsTestUtils {
         "test-secret",
         "test-token",
         epoch + Duration.minutes(15),
-        "AssumeRoleProvider"
+        "AssumeRoleProvider",
     )
 
     // see https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html#API_AssumeRole_ResponseElements
     fun stsResponse(
         roleArn: String,
-        expiration: Instant? = null
+        expiration: Instant? = null,
     ): HttpResponse {
         val roleId = roleArn.split("/").last()
         val expiry = expiration ?: expectedCredentialsBase.expiration!!

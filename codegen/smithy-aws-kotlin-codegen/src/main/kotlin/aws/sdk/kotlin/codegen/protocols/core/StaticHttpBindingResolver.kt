@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols.core
@@ -26,13 +26,13 @@ open class StaticHttpBindingResolver(
     protected val service: ServiceShape,
     protected val httpTrait: HttpTrait,
     protected val defaultContentType: String,
-    protected val defaultTimestampFormat: TimestampFormatTrait.Format
+    protected val defaultTimestampFormat: TimestampFormatTrait.Format,
 ) : HttpBindingResolver {
     constructor(
         context: ProtocolGenerator.GenerationContext,
         httpTrait: HttpTrait,
         defaultContentType: String,
-        defaultTimestampFormat: TimestampFormatTrait.Format
+        defaultTimestampFormat: TimestampFormatTrait.Format,
     ) : this(context.model, context.service, httpTrait, defaultContentType, defaultTimestampFormat)
 
     protected val topDownIndex: TopDownIndex = TopDownIndex.of(model)
@@ -44,7 +44,7 @@ open class StaticHttpBindingResolver(
     override fun determineTimestampFormat(
         member: ToShapeId,
         location: HttpBinding.Location,
-        defaultFormat: TimestampFormatTrait.Format
+        defaultFormat: TimestampFormatTrait.Format,
     ): TimestampFormatTrait.Format = defaultTimestampFormat
 
     /**

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.customization
@@ -25,13 +25,13 @@ class BackfillOptionalAuth : KotlinIntegration {
     private val disabledAuthOperationsByService = mapOf(
         "com.amazonaws.sts#AWSSecurityTokenServiceV20110615" to setOf(
             "com.amazonaws.sts#AssumeRoleWithSAML",
-            "com.amazonaws.sts#AssumeRoleWithWebIdentity"
+            "com.amazonaws.sts#AssumeRoleWithWebIdentity",
         ),
         "com.amazonaws.cognitoidentity#AWSCognitoIdentityService" to setOf(
             "com.amazonaws.cognitoidentity#GetId",
             "com.amazonaws.cognitoidentity#GetOpenIdToken",
             "com.amazonaws.cognitoidentity#UnlinkIdentity",
-            "com.amazonaws.cognitoidentity#GetCredentialsForIdentity"
+            "com.amazonaws.cognitoidentity#GetCredentialsForIdentity",
         ),
         // https://docs.aws.amazon.com/cognito/latest/developerguide/security_iam_service-with-iam.html
         "com.amazonaws.cognitoidentityprovider#AWSCognitoIdentityProviderService" to setOf(
@@ -41,8 +41,8 @@ class BackfillOptionalAuth : KotlinIntegration {
             "com.amazonaws.cognitoidentityprovider#GlobalSignOut",
             "com.amazonaws.cognitoidentityprovider#ListDevices",
             "com.amazonaws.cognitoidentityprovider#RevokeToken",
-            "com.amazonaws.cognitoidentityprovider#UpdateDeviceStatus"
-        )
+            "com.amazonaws.cognitoidentityprovider#UpdateDeviceStatus",
+        ),
     )
 
     // this should happen prior to most other integrations that could rely on the presence of this trait

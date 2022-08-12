@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.http.middleware
@@ -24,7 +24,7 @@ public class UserAgent(
     /**
      * Metadata that doesn't change per/request (e.g. sdk and environment related metadata)
      */
-    private val staticMetadata: AwsUserAgentMetadata
+    private val staticMetadata: AwsUserAgentMetadata,
 ) : ModifyRequestMiddleware {
 
     override fun install(op: SdkHttpOperation<*, *>) {

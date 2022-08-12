@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.region
@@ -29,7 +29,7 @@ class EnvironmentRegionProviderTest {
     @Test
     fun providesRegion() = runTest {
         val environ = mapOf(
-            "AWS_REGION" to "us-east-1"
+            "AWS_REGION" to "us-east-1",
         )
 
         val provider = EnvironmentRegionProvider(environ.asEnvironmentProvider())

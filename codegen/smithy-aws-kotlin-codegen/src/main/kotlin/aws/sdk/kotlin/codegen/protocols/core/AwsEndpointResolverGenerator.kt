@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols.core
@@ -29,7 +29,7 @@ class AwsEndpointResolverGenerator(private val endpointData: ObjectNode) {
         AwsRuntimeTypes.Endpoint.CredentialScope,
         AwsRuntimeTypes.Endpoint.Internal.EndpointDefinition,
         AwsRuntimeTypes.Endpoint.Internal.Partition,
-        AwsRuntimeTypes.Endpoint.Internal.resolveEndpoint
+        AwsRuntimeTypes.Endpoint.Internal.resolveEndpoint,
     )
 
     fun render(ctx: ProtocolGenerator.GenerationContext) {

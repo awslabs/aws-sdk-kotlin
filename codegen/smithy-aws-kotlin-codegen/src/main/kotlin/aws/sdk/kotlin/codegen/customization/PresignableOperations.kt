@@ -13,14 +13,14 @@ internal val DEFAULT_PRESIGNABLE_OPERATIONS: Map<String, Set<String>> = mapOf(
     "com.amazonaws.s3#AmazonS3" to setOf(
         "com.amazonaws.s3#GetObject",
         "com.amazonaws.s3#PutObject",
-        "com.amazonaws.s3#UploadPart"
+        "com.amazonaws.s3#UploadPart",
     ),
     "com.amazonaws.sts#AWSSecurityTokenServiceV20110615" to setOf(
-        "com.amazonaws.sts#GetCallerIdentity"
+        "com.amazonaws.sts#GetCallerIdentity",
     ),
     "com.amazonaws.polly#Parrot_v1" to setOf(
-        "com.amazonaws.polly#SynthesizeSpeech"
-    )
+        "com.amazonaws.polly#SynthesizeSpeech",
+    ),
 )
 
 /**

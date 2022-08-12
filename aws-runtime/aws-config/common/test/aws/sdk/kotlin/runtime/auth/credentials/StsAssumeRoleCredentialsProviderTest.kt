@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -37,7 +37,7 @@ class StsAssumeRoleCredentialsProviderTest {
         val provider = StsAssumeRoleCredentialsProvider(
             credentialsProvider = sourceProvider,
             roleArn = testArn,
-            httpClientEngine = testEngine
+            httpClientEngine = testEngine,
         )
 
         val actual = provider.getCredentials()
@@ -63,7 +63,7 @@ class StsAssumeRoleCredentialsProviderTest {
         val provider = StsAssumeRoleCredentialsProvider(
             credentialsProvider = sourceProvider,
             roleArn = testArn,
-            httpClientEngine = testEngine
+            httpClientEngine = testEngine,
         )
 
         assertFailsWith<CredentialsProviderException> {
@@ -91,7 +91,7 @@ class StsAssumeRoleCredentialsProviderTest {
             credentialsProvider = sourceProvider,
             roleArn = testArn,
             region = "us-west-2",
-            httpClientEngine = testEngine
+            httpClientEngine = testEngine,
         )
 
         val ex = assertFailsWith<ProviderConfigurationException> {
@@ -111,7 +111,7 @@ class StsAssumeRoleCredentialsProviderTest {
         val provider = StsAssumeRoleCredentialsProvider(
             credentialsProvider = sourceProvider,
             roleArn = testArn,
-            httpClientEngine = testEngine
+            httpClientEngine = testEngine,
         )
 
         val actual = provider.getCredentials()
@@ -130,7 +130,7 @@ class StsAssumeRoleCredentialsProviderTest {
             credentialsProvider = sourceProvider,
             roleArn = testArn,
             region = "us-west-2",
-            httpClientEngine = testEngine
+            httpClientEngine = testEngine,
         )
 
         val actual = provider.getCredentials()

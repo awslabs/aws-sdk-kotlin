@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -43,7 +43,7 @@ class DefaultChainCredentialsProviderTest {
 
     class DefaultChainPlatformProvider(
         private val env: Map<String, String>,
-        private val fs: Filesystem
+        private val fs: Filesystem,
     ) : PlatformProvider, Filesystem by fs {
         override fun osInfo(): OperatingSystem = OperatingSystem(OsFamily.Linux, "test")
         override fun getAllProperties(): Map<String, String> = mapOf()
@@ -59,13 +59,13 @@ class DefaultChainCredentialsProviderTest {
         data class Ok(
             override val name: String,
             override val docs: String,
-            val creds: Credentials
+            val creds: Credentials,
         ) : TestResult()
 
         data class ErrorContains(
             override val name: String,
             override val docs: String,
-            val message: String
+            val message: String,
         ) : TestResult()
         companion object {
 
@@ -81,7 +81,7 @@ class DefaultChainCredentialsProviderTest {
                             checkNotNull(o["access_key_id"]).jsonPrimitive.content,
                             checkNotNull(o["secret_access_key"]).jsonPrimitive.content,
                             o["session_token"]?.jsonPrimitive?.content,
-                            o["expiry"]?.jsonPrimitive?.longOrNull?.let { Instant.fromEpochSeconds(it) }
+                            o["expiry"]?.jsonPrimitive?.longOrNull?.let { Instant.fromEpochSeconds(it) },
                         )
                         Ok(name, docs, creds)
                     }

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -21,7 +21,7 @@ import aws.smithy.kotlin.runtime.logging.Logger
  * @param providers the list of providers to delegate to
  */
 public open class CredentialsProviderChain(
-    protected vararg val providers: CredentialsProvider
+    protected vararg val providers: CredentialsProvider,
 ) : CredentialsProvider, Closeable {
     private val logger = Logger.getLogger<CredentialsProviderChain>()
 

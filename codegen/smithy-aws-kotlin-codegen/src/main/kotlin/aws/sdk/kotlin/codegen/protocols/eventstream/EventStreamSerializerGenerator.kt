@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols.eventstream
@@ -46,7 +46,7 @@ class EventStreamSerializerGenerator(
                 op.bodySerializerName(),
                 RuntimeTypes.Core.ExecutionContext,
                 inputSymbol,
-                RuntimeTypes.Http.HttpBody
+                RuntimeTypes.Http.HttpBody,
             ) {
                 renderSerializeEventStream(ctx, op, writer)
             }
@@ -55,7 +55,7 @@ class EventStreamSerializerGenerator(
     private fun renderSerializeEventStream(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
         val input = ctx.model.expectShape<StructureShape>(op.input.get())
         val streamingMember = input.findStreamingMember(ctx.model) ?: error("expected a streaming member for $input")
@@ -93,11 +93,12 @@ class EventStreamSerializerGenerator(
         renderBy = { writer ->
             // TODO - make internal and share across operations?
             writer.withBlock(
-                "private fun #L(input: #T): #T = #T {", "}",
+                "private fun #L(input: #T): #T = #T {",
+                "}",
                 fnName,
                 streamSymbol,
                 AwsRuntimeTypes.AwsEventStream.Message,
-                AwsRuntimeTypes.AwsEventStream.buildMessage
+                AwsRuntimeTypes.AwsEventStream.buildMessage,
             ) {
                 addStringHeader(":message-type", "event")
 
@@ -105,9 +106,10 @@ class EventStreamSerializerGenerator(
                     streamShape.filterEventStreamErrors(ctx.model)
                         .forEach { member ->
                             withBlock(
-                                "is #T.#L -> {", "}",
+                                "is #T.#L -> {",
+                                "}",
                                 streamSymbol,
-                                member.unionVariantName()
+                                member.unionVariantName(),
                             ) {
                                 addStringHeader(":event-type", member.memberName)
                                 val variant = ctx.model.expectShape(member.target)
@@ -155,7 +157,7 @@ class EventStreamSerializerGenerator(
             member.defaultName(),
             member.memberName,
             AwsRuntimeTypes.AwsEventStream.HeaderValue,
-            headerValue
+            headerValue,
         )
     }
 

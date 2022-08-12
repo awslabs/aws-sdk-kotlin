@@ -52,7 +52,7 @@ class AwsRetryMiddlewareTest {
         val strategy = StandardRetryStrategy(
             StandardRetryStrategyOptions.Default,
             StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default),
-            delayProvider
+            delayProvider,
         )
         val maxAttempts = strategy.options.maxAttempts
 

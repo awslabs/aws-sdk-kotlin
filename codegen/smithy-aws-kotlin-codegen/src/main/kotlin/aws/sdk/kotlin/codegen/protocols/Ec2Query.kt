@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.codegen.protocols
 
@@ -39,7 +39,7 @@ class Ec2Query : QueryHttpBindingProtocolGenerator() {
     override fun renderDeserializeErrorDetails(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
         writer.addImport(AwsRuntimeTypes.XmlProtocols.parseEc2QueryErrorResponse)
         writer.write("""checkNotNull(payload){ "unable to parse error from empty response" }""")
@@ -92,25 +92,25 @@ private class Ec2QuerySerdeXmlDescriptorGenerator(
 }
 
 private class Ec2QuerySerializerGenerator(
-    private val protocolGenerator: Ec2Query
+    private val protocolGenerator: Ec2Query,
 ) : AbstractQueryFormUrlSerializerGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
 
     override fun descriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: List<MemberShape>,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ): FormUrlSerdeDescriptorGenerator = Ec2QuerySerdeFormUrlDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 }
 
 private class Ec2QueryParserGenerator(
-    private val protocolGenerator: Ec2Query
+    private val protocolGenerator: Ec2Query,
 ) : XmlParserGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
 
     override fun descriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: List<MemberShape>,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = Ec2QuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 }

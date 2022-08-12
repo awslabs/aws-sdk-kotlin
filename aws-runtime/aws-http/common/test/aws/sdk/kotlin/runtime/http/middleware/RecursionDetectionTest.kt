@@ -28,7 +28,7 @@ import kotlin.test.assertFalse
 @OptIn(ExperimentalCoroutinesApi::class)
 class RecursionDetectionTest {
     private class TraceHeaderSerializer(
-        private val traceHeader: String
+        private val traceHeader: String,
     ) : HttpSerialize<Unit> {
         override suspend fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder {
             val builder = HttpRequestBuilder()
@@ -50,7 +50,7 @@ class RecursionDetectionTest {
     private suspend fun test(
         env: Map<String, String>,
         existingTraceHeader: String?,
-        expectedTraceHeader: String?
+        expectedTraceHeader: String?,
     ) {
         val op = SdkHttpOperation.build<Unit, HttpResponse> {
             serializer = if (existingTraceHeader != null) TraceHeaderSerializer(existingTraceHeader) else UnitSerializer
@@ -78,7 +78,7 @@ class RecursionDetectionTest {
         test(
             emptyMap(),
             null,
-            null
+            null,
         )
     }
 
@@ -87,10 +87,10 @@ class RecursionDetectionTest {
         test(
             mapOf(
                 ENV_FUNCTION_NAME to "some-function",
-                ENV_TRACE_ID to "Root=1-5759e988-bd862e3fe1be46a994272793;Parent=53995c3f42cd8ad8;Sampled=1;lineage=a87bd80c:0,68fd508a:5,c512fbe3:2"
+                ENV_TRACE_ID to "Root=1-5759e988-bd862e3fe1be46a994272793;Parent=53995c3f42cd8ad8;Sampled=1;lineage=a87bd80c:0,68fd508a:5,c512fbe3:2",
             ),
             null,
-            "Root=1-5759e988-bd862e3fe1be46a994272793;Parent=53995c3f42cd8ad8;Sampled=1;lineage=a87bd80c:0,68fd508a:5,c512fbe3:2"
+            "Root=1-5759e988-bd862e3fe1be46a994272793;Parent=53995c3f42cd8ad8;Sampled=1;lineage=a87bd80c:0,68fd508a:5,c512fbe3:2",
         )
     }
 
@@ -98,10 +98,10 @@ class RecursionDetectionTest {
     fun `it noops if trace env set but no lambda env`() = runTest {
         test(
             mapOf(
-                ENV_TRACE_ID to "Root=1-5759e988-bd862e3fe1be46a994272793;Parent=53995c3f42cd8ad8;Sampled=1;lineage=a87bd80c:0,68fd508a:5,c512fbe3:2"
+                ENV_TRACE_ID to "Root=1-5759e988-bd862e3fe1be46a994272793;Parent=53995c3f42cd8ad8;Sampled=1;lineage=a87bd80c:0,68fd508a:5,c512fbe3:2",
             ),
             null,
-            null
+            null,
         )
     }
 
@@ -110,10 +110,10 @@ class RecursionDetectionTest {
         test(
             mapOf(
                 ENV_FUNCTION_NAME to "some-function",
-                ENV_TRACE_ID to "EnvValue"
+                ENV_TRACE_ID to "EnvValue",
             ),
             "OriginalValue",
-            "OriginalValue"
+            "OriginalValue",
         )
     }
 
@@ -122,10 +122,10 @@ class RecursionDetectionTest {
         test(
             mapOf(
                 ENV_FUNCTION_NAME to "some-function",
-                ENV_TRACE_ID to "first\nsecond"
+                ENV_TRACE_ID to "first\nsecond",
             ),
             null,
-            "first%0Asecond"
+            "first%0Asecond",
         )
     }
 
@@ -134,10 +134,10 @@ class RecursionDetectionTest {
         test(
             mapOf(
                 ENV_FUNCTION_NAME to "some-function",
-                ENV_TRACE_ID to "test123-=;:+&[]{}\"'"
+                ENV_TRACE_ID to "test123-=;:+&[]{}\"'",
             ),
             null,
-            "test123-=;:+&[]{}\"'"
+            "test123-=;:+&[]{}\"'",
         )
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.endpoint.internal
@@ -18,7 +18,7 @@ val testPartitions = listOf(
         defaults = EndpointDefinition(
             hostname = "service.{region}.amazonaws.com",
             protocols = listOf("https"),
-            signatureVersions = listOf("v4")
+            signatureVersions = listOf("v4"),
         ),
         partitionEndpoint = "",
         isRegionalized = true,
@@ -30,9 +30,9 @@ val testPartitions = listOf(
                 hostname = "service-alt.us-west-1.amazonaws.com",
                 protocols = listOf("http"),
                 signatureVersions = listOf("vFoo"),
-                credentialScope = CredentialScope("us-west-1", "foo")
-            )
-        )
+                credentialScope = CredentialScope("us-west-1", "foo"),
+            ),
+        ),
     ),
     // global (non-regionalized) partition
     Partition(
@@ -41,20 +41,20 @@ val testPartitions = listOf(
         defaults = EndpointDefinition(
             protocols = listOf("https"),
             signatureVersions = listOf("v4"),
-            credentialScope = CredentialScope(service = "foo")
+            credentialScope = CredentialScope(service = "foo"),
         ),
         partitionEndpoint = "partition",
         isRegionalized = false,
         endpoints = mapOf(
             "partition" to EndpointDefinition(
                 hostname = "some-global-thing.amazonaws.cn",
-                credentialScope = CredentialScope(region = "cn-east-1")
+                credentialScope = CredentialScope(region = "cn-east-1"),
             ),
             "fips-partition" to EndpointDefinition(
                 hostname = "some-global-thing-fips.amazonaws.cn",
-                credentialScope = CredentialScope(region = "cn-east-1")
-            )
-        )
+                credentialScope = CredentialScope(region = "cn-east-1"),
+            ),
+        ),
     ),
     // partition with only defaults
     Partition(
@@ -64,11 +64,11 @@ val testPartitions = listOf(
             hostname = "service.{region}.amazonaws.com",
             protocols = listOf("https"),
             signatureVersions = listOf("v4"),
-            credentialScope = CredentialScope(service = "foo")
+            credentialScope = CredentialScope(service = "foo"),
         ),
         partitionEndpoint = "",
         isRegionalized = true,
-        endpoints = mapOf()
+        endpoints = mapOf(),
     ),
 )
 
@@ -81,48 +81,48 @@ class EndpointsTest {
             region = "us-west-1",
             AwsEndpoint(
                 "https://service.us-west-1.amazonaws.com",
-                CredentialScope(region = "us-west-1")
-            )
+                CredentialScope(region = "us-west-1"),
+            ),
         ),
         ResolveTest(
             description = "modeled region with endpoint overrides",
             region = "us-west-1-alt",
             AwsEndpoint(
                 "http://service-alt.us-west-1.amazonaws.com",
-                CredentialScope(region = "us-west-1", service = "foo")
-            )
+                CredentialScope(region = "us-west-1", service = "foo"),
+            ),
         ),
         ResolveTest(
             description = "partition endpoint",
             region = "cn-central-1",
             AwsEndpoint(
                 "https://some-global-thing.amazonaws.cn",
-                CredentialScope(region = "cn-east-1", service = "foo")
-            )
+                CredentialScope(region = "cn-east-1", service = "foo"),
+            ),
         ),
         ResolveTest(
             description = "region with un-modeled endpoints (resolved through regex)",
             region = "eu-west-1",
             AwsEndpoint(
                 "https://service.eu-west-1.amazonaws.com",
-                CredentialScope(region = "eu-west-1", service = "foo")
-            )
+                CredentialScope(region = "eu-west-1", service = "foo"),
+            ),
         ),
         ResolveTest(
             description = "specified partition endpoint",
             region = "partition",
             AwsEndpoint(
                 "https://some-global-thing.amazonaws.cn",
-                CredentialScope(region = "cn-east-1", service = "foo")
-            )
+                CredentialScope(region = "cn-east-1", service = "foo"),
+            ),
         ),
         ResolveTest(
             description = "fips partition endpoint",
             region = "fips-partition",
             AwsEndpoint(
                 "https://some-global-thing-fips.amazonaws.cn",
-                CredentialScope(region = "cn-east-1", service = "foo")
-            )
+                CredentialScope(region = "cn-east-1", service = "foo"),
+            ),
         ),
     )
 

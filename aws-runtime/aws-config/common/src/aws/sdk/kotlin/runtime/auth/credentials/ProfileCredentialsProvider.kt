@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -88,9 +88,9 @@ public class ProfileCredentialsProvider(
                     engine = httpClientEngine
                 }
             },
-            platformProvider = platformProvider
+            platformProvider = platformProvider,
         ),
-        "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClientEngine)
+        "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClientEngine),
     )
 
     override suspend fun getCredentials(): Credentials {
@@ -137,7 +137,7 @@ public class ProfileCredentialsProvider(
                 region = region.get(),
                 roleSessionName = sessionName,
                 platformProvider = platformProvider,
-                httpClientEngine = httpClientEngine
+                httpClientEngine = httpClientEngine,
             )
 
             is LeafProvider.Sso -> SsoCredentialsProvider(
@@ -146,7 +146,7 @@ public class ProfileCredentialsProvider(
                 startUrl = ssoStartUrl,
                 ssoRegion = ssoRegion,
                 httpClientEngine = httpClientEngine,
-                platformProvider = platformProvider
+                platformProvider = platformProvider,
             )
         }
 
@@ -159,7 +159,7 @@ public class ProfileCredentialsProvider(
         region = region.get(),
         roleSessionName = sessionName,
         externalId = externalId,
-        httpClientEngine = httpClientEngine
+        httpClientEngine = httpClientEngine,
     )
 
     private fun LeafProvider.description(): String = when (this) {

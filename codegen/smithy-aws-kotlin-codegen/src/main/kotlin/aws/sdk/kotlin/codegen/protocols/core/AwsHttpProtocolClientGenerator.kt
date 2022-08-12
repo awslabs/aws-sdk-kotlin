@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols.core
@@ -27,7 +27,7 @@ import software.amazon.smithy.model.shapes.OperationShape
 open class AwsHttpProtocolClientGenerator(
     ctx: ProtocolGenerator.GenerationContext,
     middlewares: List<ProtocolMiddleware>,
-    httpBindingResolver: HttpBindingResolver
+    httpBindingResolver: HttpBindingResolver,
 ) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
 
     override fun render(writer: KotlinWriter) {
@@ -66,7 +66,7 @@ open class AwsHttpProtocolClientGenerator(
         writer.withBlock(
             "private suspend fun mergeServiceDefaults(ctx: #T) {",
             "}",
-            RuntimeTypes.Core.ExecutionContext
+            RuntimeTypes.Core.ExecutionContext,
         ) {
             write("ctx.#T(#T.Region, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.AwsClientOption)
             write("ctx.#T(#T.ServiceName, serviceName)", putIfAbsentSym, sdkClientOptionSym)

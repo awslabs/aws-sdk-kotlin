@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.imds
@@ -29,15 +29,15 @@ class ImdsClientTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
-                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
+                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
             )
             expect(
                 imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
-                imdsResponse("output 1")
+                imdsResponse("output 1"),
             )
             expect(
                 imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
-                imdsResponse("output 2")
+                imdsResponse("output 2"),
             )
         }
 
@@ -55,19 +55,19 @@ class ImdsClientTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://[fd00:ec2::254]", 600),
-                tokenResponse(600, "TOKEN_A")
+                tokenResponse(600, "TOKEN_A"),
             )
             expect(
                 imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_A"),
-                imdsResponse("output 1")
+                imdsResponse("output 1"),
             )
             expect(
                 tokenRequest("http://[fd00:ec2::254]", 600),
-                tokenResponse(600, "TOKEN_B")
+                tokenResponse(600, "TOKEN_B"),
             )
             expect(
                 imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_B"),
-                imdsResponse("output 2")
+                imdsResponse("output 2"),
             )
         }
 
@@ -95,26 +95,26 @@ class ImdsClientTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://[fd00:ec2::254]", 600),
-                tokenResponse(600, "TOKEN_A")
+                tokenResponse(600, "TOKEN_A"),
             )
             // t = 0
             expect(
                 imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_A"),
-                imdsResponse("output 1")
+                imdsResponse("output 1"),
             )
             // t = 400 (no refresh)
             expect(
                 imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_A"),
-                imdsResponse("output 2")
+                imdsResponse("output 2"),
             )
             // t = 550 (within buffer)
             expect(
                 tokenRequest("http://[fd00:ec2::254]", 600),
-                tokenResponse(600, "TOKEN_B")
+                tokenResponse(600, "TOKEN_B"),
             )
             expect(
                 imdsRequest("http://[fd00:ec2::254]/latest/metadata", "TOKEN_B"),
-                imdsResponse("output 3")
+                imdsResponse("output 3"),
             )
         }
 
@@ -146,15 +146,15 @@ class ImdsClientTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
-                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
+                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
             )
             expect(
                 imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
-                HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty)
+                HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
             )
             expect(
                 imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
-                imdsResponse("output 2")
+                imdsResponse("output 2"),
             )
         }
 
@@ -170,15 +170,15 @@ class ImdsClientTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
-                HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty)
+                HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
             )
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
-                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
+                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
             )
             expect(
                 imdsRequest("http://169.254.169.254/latest/metadata", "TOKEN_A"),
-                imdsResponse("output 2")
+                imdsResponse("output 2"),
             )
         }
 
@@ -194,7 +194,7 @@ class ImdsClientTest {
         val connection = buildTestConnection {
             expect(
                 tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
-                HttpResponse(HttpStatusCode.Forbidden, Headers.Empty, HttpBody.Empty)
+                HttpResponse(HttpStatusCode.Forbidden, Headers.Empty, HttpBody.Empty),
             )
         }
 
@@ -228,7 +228,7 @@ class ImdsClientTest {
                     element["fs"]!!.jsonObject.mapValues { it.value.jsonPrimitive.content },
                     element["endpointOverride"]?.jsonPrimitive?.content,
                     element["modeOverride"]?.jsonPrimitive?.content,
-                    result
+                    result,
                 )
             }
         }
@@ -256,7 +256,7 @@ class ImdsClientTest {
                 val endpoint = test.result.getOrThrow()
                 expect(
                     tokenRequest(endpoint, DEFAULT_TOKEN_TTL_SECONDS),
-                    tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A")
+                    tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
                 )
                 expect(imdsResponse("output 1"))
             }

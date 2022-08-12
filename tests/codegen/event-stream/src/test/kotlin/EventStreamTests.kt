@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
@@ -44,7 +44,7 @@ class EventStreamTests {
             attributes[AwsSigningAttributes.SigningRegion] = "us-east-2"
             attributes[AwsSigningAttributes.SigningService] = "test"
             attributes[AwsSigningAttributes.CredentialsProvider] = StaticCredentialsProvider(
-                Credentials("fake-access-key", "fake-secret-key")
+                Credentials("fake-access-key", "fake-secret-key"),
             )
             attributes[AwsSigningAttributes.RequestSignature] = HashSpecification.EmptyBody.hash.encodeToByteArray()
             attributes[AwsSigningAttributes.Signer] = DefaultAwsSigner
@@ -118,7 +118,7 @@ class EventStreamTests {
                     someInt = 2
                     someString = "hello struct!"
                 }
-            }
+            },
         )
 
         val message = serializedMessage(event)
@@ -141,7 +141,7 @@ class EventStreamTests {
         val event = TestStream.MessageWithUnion(
             MessageWithUnion {
                 someUnion = TestUnion.Foo("a lep is a ball")
-            }
+            },
         )
 
         val message = serializedMessage(event)
@@ -171,7 +171,7 @@ class EventStreamTests {
                 long = 9_000_000_000L
                 string = "a tay is a hammer"
                 timestamp = Instant.fromEpochSeconds(5)
-            }
+            },
         )
 
         val message = serializedMessage(event)
@@ -199,7 +199,7 @@ class EventStreamTests {
             MessageWithHeaderAndPayload {
                 header = "a korf is a tiger"
                 payload = "remember a korf is a tiger".encodeToByteArray()
-            }
+            },
         )
 
         val message = serializedMessage(event)
@@ -221,7 +221,7 @@ class EventStreamTests {
             MessageWithNoHeaderPayloadTraits {
                 someInt = 2
                 someString = "a flix is comb"
-            }
+            },
         )
 
         val message = serializedMessage(event)

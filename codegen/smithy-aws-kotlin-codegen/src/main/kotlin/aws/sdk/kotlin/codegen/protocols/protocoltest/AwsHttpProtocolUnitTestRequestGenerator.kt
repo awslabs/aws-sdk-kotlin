@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols.protocoltest
@@ -33,7 +33,7 @@ class AwsHttpProtocolUnitTestRequestGenerator(builder: Builder) :
                 "endpointResolver = #T { _, _ -> #T(#S) }",
                 AwsRuntimeTypes.Endpoint.AwsEndpointResolver,
                 AwsRuntimeTypes.Endpoint.AwsEndpoint,
-                "https://$expectedHost"
+                "https://$expectedHost",
             )
         }
     }
@@ -48,7 +48,7 @@ internal fun <T : HttpMessageTestCase> HttpProtocolUnitTestGenerator<T>.renderCo
     writer: KotlinWriter,
     model: Model,
     serviceShape: ServiceShape,
-    operation: OperationShape
+    operation: OperationShape,
 ) {
     if (AwsSignatureVersion4.hasSigV4AuthScheme(model, serviceShape, operation)) {
         writer.addImport(AwsRuntimeTypes.Config.Credentials.StaticCredentialsProvider)

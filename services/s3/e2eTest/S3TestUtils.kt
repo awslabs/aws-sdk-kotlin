@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.e2etest
 
@@ -59,7 +59,7 @@ object S3TestUtils {
                         filter = LifecycleRuleFilter.Prefix("")
                         status = ExpirationStatus.Enabled
                         id = "delete-old"
-                    }
+                    },
                 )
             }
         }

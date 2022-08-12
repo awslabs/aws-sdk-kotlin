@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -46,8 +46,8 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("abc123", "def456")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA")
-            )
+                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+            ),
         ),
         TestCase(
             "ignore explicit credentials when source profile is specified",
@@ -64,8 +64,8 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("ghi890", "jkl123")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA")
-            )
+                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+            ),
         ),
         TestCase(
             "load role_session_name for the AssumeRole provider",
@@ -81,8 +81,8 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("abc123", "def456")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA", "my_session_name")
-            )
+                RoleArn("arn:aws:iam::123456789:role/RoleA", "my_session_name"),
+            ),
         ),
         TestCase(
             "load external id for the AssumeRole provider",
@@ -98,8 +98,8 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("abc123", "def456")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA", externalId = "my_external_id")
-            )
+                RoleArn("arn:aws:iam::123456789:role/RoleA", externalId = "my_external_id"),
+            ),
         ),
         TestCase(
             "self referential profile (first load base creds, then use for the role)",
@@ -112,8 +112,8 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("abc123", "def456")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA")
-            )
+                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+            ),
         ),
         TestCase(
             "Load credentials from a credential_source",
@@ -124,8 +124,8 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.NamedSource("Ec2InstanceMetadata"),
-                RoleArn("arn:aws:iam::123456789:role/RoleA")
-            )
+                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+            ),
         ),
         TestCase(
             "role_arn without source source_profile",
@@ -133,7 +133,7 @@ class ProfileChainTest {
             [profile A]
             role_arn = arn:aws:iam::123456789:role/RoleA
             """,
-            TestOutput.Error("profile (A) must contain `source_profile` or `credential_source` but neither were defined")
+            TestOutput.Error("profile (A) must contain `source_profile` or `credential_source` but neither were defined"),
         ),
         TestCase(
             "source profile and credential source both present",
@@ -147,7 +147,7 @@ class ProfileChainTest {
             aws_access_key_id = !23
             aws_secret_access_key = 456
             """,
-            TestOutput.Error("profile (A) contained both `source_profile` and `credential_source`. Only one or the other can be defined.")
+            TestOutput.Error("profile (A) contained both `source_profile` and `credential_source`. Only one or the other can be defined."),
         ),
         TestCase(
             "partial credentials error (missing secret)",
@@ -159,7 +159,7 @@ class ProfileChainTest {
             [profile B]
             aws_access_key_id = abc123
             """,
-            TestOutput.Error("profile (B) missing `aws_secret_access_key`")
+            TestOutput.Error("profile (B) missing `aws_secret_access_key`"),
         ),
         TestCase(
             "partial credentials error (missing access key)",
@@ -171,7 +171,7 @@ class ProfileChainTest {
             [profile B]
             aws_secret_access_key = abc123
             """,
-            TestOutput.Error("profile (B) missing `aws_access_key_id`")
+            TestOutput.Error("profile (B) missing `aws_access_key_id`"),
         ),
         TestCase(
             "missing credentials error (empty source profile)",
@@ -182,7 +182,7 @@ class ProfileChainTest {
 
             [profile B]
             """,
-            TestOutput.Error("profile (B) did not contain credential information")
+            TestOutput.Error("profile (B) did not contain credential information"),
         ),
         TestCase(
             "profile only contains configuration",
@@ -190,7 +190,7 @@ class ProfileChainTest {
             [profile A]
             ec2_metadata_service_endpoint_mode = IPv6
             """,
-            TestOutput.Error("profile (A) did not contain credential information")
+            TestOutput.Error("profile (A) did not contain credential information"),
         ),
         TestCase(
             "missing source profile",
@@ -199,7 +199,7 @@ class ProfileChainTest {
             role_arn = arn:foo
             source_profile = B
             """,
-            TestOutput.Error("could not find source profile B referenced from A")
+            TestOutput.Error("could not find source profile B referenced from A"),
         ),
         TestCase(
             "multiple chained assume role profiles",
@@ -219,8 +219,8 @@ class ProfileChainTest {
             chain(
                 LeafProvider.AccessKey(Credentials("mno456", "pqr789")),
                 RoleArn("arn:aws:iam::123456789:role/RoleB"),
-                RoleArn("arn:aws:iam::123456789:role/RoleA")
-            )
+                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+            ),
         ),
         TestCase(
             "chained assume role profiles with static credentials (ignore assume role when static credentials present)",
@@ -243,8 +243,8 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("profile_b_key", "profile_b_secret")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA")
-            )
+                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+            ),
         ),
         TestCase(
             "assume role profile infinite loop",
@@ -257,7 +257,7 @@ class ProfileChainTest {
             role_arn = arn:aws:iam::123456789:role/RoleB
             source_profile = A
             """,
-            TestOutput.Error("profile formed an infinite loop: A -> B -> A")
+            TestOutput.Error("profile formed an infinite loop: A -> B -> A"),
         ),
         TestCase(
             "infinite loop with static credentials",
@@ -272,7 +272,7 @@ class ProfileChainTest {
             role_arn = arn:aws:iam::123456789:role/RoleB
             source_profile = A
             """,
-            TestOutput.Error("profile formed an infinite loop: A -> B -> A")
+            TestOutput.Error("profile formed an infinite loop: A -> B -> A"),
         ),
         TestCase(
             "web identity role",
@@ -282,8 +282,8 @@ class ProfileChainTest {
             web_identity_token_file = /var/token.jwt
             """,
             chain(
-                LeafProvider.WebIdentityTokenRole("arn:aws:iam::123456789:role/RoleA", "/var/token.jwt")
-            )
+                LeafProvider.WebIdentityTokenRole("arn:aws:iam::123456789:role/RoleA", "/var/token.jwt"),
+            ),
         ),
         TestCase(
             "web identity role with session name",
@@ -294,8 +294,8 @@ class ProfileChainTest {
             role_session_name = some_session_name
             """,
             chain(
-                LeafProvider.WebIdentityTokenRole("arn:aws:iam::123456789:role/RoleA", "/var/token.jwt", "some_session_name")
-            )
+                LeafProvider.WebIdentityTokenRole("arn:aws:iam::123456789:role/RoleA", "/var/token.jwt", "some_session_name"),
+            ),
         ),
         TestCase(
             "web identity missing role arn",
@@ -303,7 +303,7 @@ class ProfileChainTest {
             [profile A]
             web_identity_token_file = /var/token.jwt
             """,
-            TestOutput.Error("profile (A) missing `role_arn`")
+            TestOutput.Error("profile (A) missing `role_arn`"),
         ),
         TestCase(
             "web identity token as source profile",
@@ -319,8 +319,8 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.WebIdentityTokenRole("arn:aws:iam::123456789:role/RoleB", "/var/token.jwt", "some_session_name"),
-                RoleArn("arn:aws:iam::123456789:role/RoleA")
-            )
+                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+            ),
         ),
         TestCase(
             "single sign on",
@@ -332,8 +332,8 @@ class ProfileChainTest {
             sso_role_name = RoleA
             """,
             chain(
-                LeafProvider.Sso("https://d-92671207e4.awsapps.com/start", "us-east-2", "1234567", "RoleA")
-            )
+                LeafProvider.Sso("https://d-92671207e4.awsapps.com/start", "us-east-2", "1234567", "RoleA"),
+            ),
         ),
         TestCase(
             "single sign on as source profile",
@@ -351,8 +351,8 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.Sso("https://d-92671207e4.awsapps.com/start", "us-east-2", "1234567", "RoleA"),
-                RoleArn("arn:aws:iam::123456789:role/RoleA")
-            )
+                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+            ),
         ),
         TestCase(
             "single sign on missing start url",
@@ -362,7 +362,7 @@ class ProfileChainTest {
             sso_account_id = 1234567
             sso_role_name = RoleA
             """,
-            TestOutput.Error("profile (A) missing `sso_start_url`")
+            TestOutput.Error("profile (A) missing `sso_start_url`"),
         ),
         TestCase(
             "single sign on missing sso region",
@@ -372,7 +372,7 @@ class ProfileChainTest {
             sso_account_id = 1234567
             sso_role_name = RoleA
             """,
-            TestOutput.Error("profile (A) missing `sso_region`")
+            TestOutput.Error("profile (A) missing `sso_region`"),
         ),
         TestCase(
             "single sign on missing account id",
@@ -382,7 +382,7 @@ class ProfileChainTest {
             sso_region = us-east-2
             sso_role_name = RoleA
             """,
-            TestOutput.Error("profile (A) missing `sso_account_id`")
+            TestOutput.Error("profile (A) missing `sso_account_id`"),
         ),
         TestCase(
             "single sign on missing role name",
@@ -392,13 +392,12 @@ class ProfileChainTest {
             sso_region = us-east-2
             sso_account_id = 1234567
             """,
-            TestOutput.Error("profile (A) missing `sso_role_name`")
+            TestOutput.Error("profile (A) missing `sso_role_name`"),
         ),
     )
 
     @Test
     fun testProfileChainResolution() {
-
         tests.forEachIndexed { idx, test ->
             val profiles = parse(FileType.CONFIGURATION, test.profile.trimIndent())
             val result = runCatching { ProfileChain.resolve(profiles, test.activeProfile) }

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols.xml
@@ -21,12 +21,12 @@ import software.amazon.smithy.model.shapes.Shape
  */
 class RestXmlSerdeDescriptorGenerator(
     ctx: RenderingContext<Shape>,
-    memberShapes: List<MemberShape>? = null
+    memberShapes: List<MemberShape>? = null,
 ) : XmlSerdeDescriptorGenerator(ctx, memberShapes) {
     override fun getFieldDescriptorTraits(
         member: MemberShape,
         targetShape: Shape,
-        nameSuffix: String
+        nameSuffix: String,
     ): List<SdkFieldDescriptorTrait> {
         val traitList = super.getFieldDescriptorTraits(member, targetShape, nameSuffix).toMutableList()
 

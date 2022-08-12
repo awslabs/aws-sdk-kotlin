@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials.internal
@@ -10,7 +10,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.Closeable
 
 private class BorrowedCredentialsProvider(
-    private val borrowed: CredentialsProvider
+    private val borrowed: CredentialsProvider,
 ) : CredentialsProvider by borrowed, Closeable {
     override fun close() { }
 }

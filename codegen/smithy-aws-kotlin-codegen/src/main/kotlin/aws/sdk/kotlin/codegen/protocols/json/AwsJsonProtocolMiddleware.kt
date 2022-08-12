@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols.json
@@ -20,7 +20,7 @@ import software.amazon.smithy.model.shapes.ShapeId
  */
 class AwsJsonProtocolMiddleware(
     private val serviceShapeId: ShapeId,
-    private val protocolVersion: String
+    private val protocolVersion: String,
 ) : ProtocolMiddleware {
     override val name: String = "AwsJsonProtocol"
     override val order: Byte = 10

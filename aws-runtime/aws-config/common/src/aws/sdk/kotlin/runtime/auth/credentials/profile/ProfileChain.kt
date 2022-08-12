@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials.profile
@@ -30,7 +30,7 @@ internal data class ProfileChain(
      * The list of roles to assume (in-order). The first role will be assumed with credentials from [leaf].
      * Every role after that should be assumed with the prior role credentials.
      */
-    val roles: List<RoleArn>
+    val roles: List<RoleArn>,
 ) {
     companion object {
         internal fun resolve(profiles: ProfileMap, profileName: String): ProfileChain {
@@ -110,7 +110,7 @@ internal data class RoleArn(
     /**
      * External ID to pass to the assume role provider
      */
-    val externalId: String? = null
+    val externalId: String? = null,
 )
 
 private const val ROLE_ARN = "role_arn"
@@ -138,7 +138,7 @@ private fun AwsProfile.roleArnOrNull(): RoleArn? {
     return RoleArn(
         roleArn,
         sessionName = get(ROLE_SESSION_NAME),
-        externalId = get(EXTERNAL_ID)
+        externalId = get(EXTERNAL_ID),
     )
 }
 
