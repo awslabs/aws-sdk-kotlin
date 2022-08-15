@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
@@ -23,7 +23,7 @@ class FrameEncoderTest {
         val expected = listOf(
             validMessageWithAllHeaders(),
             validMessageEmptyPayload(),
-            validMessageNoHeaders()
+            validMessageNoHeaders(),
         )
 
         val message1 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageWithAllHeaders()))
@@ -33,7 +33,7 @@ class FrameEncoderTest {
         val messages = flowOf(
             message1,
             message2,
-            message3
+            message3,
         )
 
         val actual = messages.encode().toList()
@@ -49,7 +49,7 @@ class FrameEncoderTest {
         val messages = flowOf(
             "foo",
             "bar",
-            "baz"
+            "baz",
         ).map { it.encodeToByteArray() }
 
         val body = messages.asEventStreamHttpBody()

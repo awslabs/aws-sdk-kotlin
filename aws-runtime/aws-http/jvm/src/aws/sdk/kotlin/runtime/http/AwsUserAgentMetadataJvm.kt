@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.http
@@ -12,7 +12,7 @@ private val jvmMetadataExtras = lazy {
     val metadata = mutableMapOf(
         "javaVersion" to getSystemProperty("java.version"),
         "jvmName" to getSystemProperty("java.vm.name"),
-        "jvmVersion" to getSystemProperty("java.vm.version")
+        "jvmVersion" to getSystemProperty("java.vm.version"),
     )
 
     if (Platform.isAndroid) {

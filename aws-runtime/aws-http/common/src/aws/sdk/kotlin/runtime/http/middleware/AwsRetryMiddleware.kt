@@ -30,7 +30,7 @@ internal const val AMZ_SDK_REQUEST_HEADER = "amz-sdk-request"
 @InternalApi
 public class AwsRetryMiddleware<O>(
     strategy: RetryStrategy,
-    policy: RetryPolicy<Any?>
+    policy: RetryPolicy<Any?>,
 ) : Retry<O>(strategy, policy) {
 
     override suspend fun <H : Handler<SdkHttpRequest, O>> handle(request: SdkHttpRequest, next: H): O {

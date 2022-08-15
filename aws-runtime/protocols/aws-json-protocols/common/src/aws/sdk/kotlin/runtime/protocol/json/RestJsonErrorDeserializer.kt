@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.runtime.protocol.json
 
@@ -58,10 +58,12 @@ public object RestJsonErrorDeserializer {
                 loop@while (true) {
                     when (findNextFieldIndex()) {
                         ERR_CODE_ALT1_DESCRIPTOR.index,
-                        ERR_CODE_ALT2_DESCRIPTOR.index -> code = deserializeString()
+                        ERR_CODE_ALT2_DESCRIPTOR.index,
+                        -> code = deserializeString()
                         MESSAGE_ALT1_DESCRIPTOR.index,
                         MESSAGE_ALT2_DESCRIPTOR.index,
-                        MESSAGE_ALT3_DESCRIPTOR.index -> message = deserializeString()
+                        MESSAGE_ALT3_DESCRIPTOR.index,
+                        -> message = deserializeString()
                         null -> break@loop
                         else -> skipValue()
                     }

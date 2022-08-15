@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.imds
@@ -18,7 +18,7 @@ internal const val EC2_METADATA_SERVICE_ENDPOINT_MODE_PROFILE_KEY = "ec2_metadat
 
 internal class ImdsEndpointResolver(
     private val platformProvider: PlatformProvider,
-    private val endpointConfiguration: EndpointConfiguration
+    private val endpointConfiguration: EndpointConfiguration,
 ) : EndpointResolver {
     // cached endpoint and profile
     private val resolvedEndpoint = asyncLazy(::doResolveEndpoint)

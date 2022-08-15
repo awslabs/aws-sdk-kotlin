@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.region
@@ -18,7 +18,7 @@ internal actual class DefaultRegionProviderChain actual constructor(
         JvmSystemPropRegionProvider(platformProvider),
         EnvironmentRegionProvider(platformProvider),
         ProfileRegionProvider(platformProvider),
-        ImdsRegionProvider(client = imdsClient, platformProvider = platformProvider)
+        ImdsRegionProvider(client = imdsClient, platformProvider = platformProvider),
     ) {
 
     override fun close() {

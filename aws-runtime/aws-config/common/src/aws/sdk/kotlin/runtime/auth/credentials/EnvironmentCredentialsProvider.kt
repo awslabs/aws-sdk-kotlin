@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -26,6 +26,6 @@ public constructor(private val getEnv: (String) -> String?) : CredentialsProvide
         accessKeyId = requireEnv(AwsSdkSetting.AwsAccessKeyId.environmentVariable),
         secretAccessKey = requireEnv(AwsSdkSetting.AwsSecretAccessKey.environmentVariable),
         sessionToken = getEnv(AwsSdkSetting.AwsSessionToken.environmentVariable),
-        providerName = PROVIDER_NAME
+        providerName = PROVIDER_NAME,
     )
 }

@@ -24,7 +24,6 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
         model.expectShape<ServiceShape>(settings.service).isS3
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
-
         delegator.useFileWriter("S3ErrorMetadata.kt", "${ctx.settings.pkg.name}.model") { writer ->
             writer.addImport(AwsRuntimeTypes.Core.AwsErrorMetadata)
             writer.addImport(RuntimeTypes.Utils.AttributeKey)

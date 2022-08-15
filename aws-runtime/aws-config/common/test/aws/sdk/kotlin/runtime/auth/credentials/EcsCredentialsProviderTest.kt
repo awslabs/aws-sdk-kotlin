@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -39,7 +39,7 @@ class EcsCredentialsProviderTest {
         "test-secret",
         "test-token",
         expectedExpiration,
-        "EcsContainer"
+        "EcsContainer",
     )
 
     private fun ecsResponse(): HttpResponse {
@@ -88,12 +88,12 @@ class EcsCredentialsProviderTest {
         val engine = buildTestConnection {
             expect(
                 ecsRequest("http://169.254.170.2/relative?foo=bar"),
-                ecsResponse()
+                ecsResponse(),
             )
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative?foo=bar")
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative?foo=bar"),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -108,12 +108,12 @@ class EcsCredentialsProviderTest {
         val engine = buildTestConnection {
             expect(
                 ecsRequest(uri),
-                ecsResponse()
+                ecsResponse(),
             )
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.environmentVariable to uri)
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.environmentVariable to uri),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -128,7 +128,7 @@ class EcsCredentialsProviderTest {
         val engine = TestConnection()
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.environmentVariable to uri)
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.environmentVariable to uri),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -143,12 +143,12 @@ class EcsCredentialsProviderTest {
         val engine = buildTestConnection {
             expect(
                 ecsRequest(uri),
-                ecsResponse()
+                ecsResponse(),
             )
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.environmentVariable to uri)
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.environmentVariable to uri),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -174,15 +174,15 @@ class EcsCredentialsProviderTest {
         val engine = buildTestConnection {
             expect(
                 ecsRequest("http://169.254.170.2/relative", token),
-                ecsResponse()
+                ecsResponse(),
             )
         }
 
         val testPlatform = TestPlatformProvider(
             env = mapOf(
                 AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative",
-                AwsSdkSetting.AwsContainerAuthorizationToken.environmentVariable to token
-            )
+                AwsSdkSetting.AwsContainerAuthorizationToken.environmentVariable to token,
+            ),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -196,12 +196,12 @@ class EcsCredentialsProviderTest {
         val engine = buildTestConnection {
             expect(
                 ecsRequest("http://169.254.170.2/relative"),
-                errorResponse()
+                errorResponse(),
             )
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative")
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative"),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)

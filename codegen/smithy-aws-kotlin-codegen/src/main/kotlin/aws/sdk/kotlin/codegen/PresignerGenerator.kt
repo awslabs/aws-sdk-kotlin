@@ -97,8 +97,8 @@ class PresignerGenerator : KotlinIntegration {
                     AwsSignatureVersion4.hasSigV4AuthScheme(
                         ctx.model,
                         service,
-                        operationShape
-                    )
+                        operationShape,
+                    ),
                 ) { "Operation does not have valid auth trait" }
                 val protocol = requireNotNull(ctx.protocolGenerator).protocol.name
                 val shouldSignBody = signBody(protocol)
@@ -115,7 +115,7 @@ class PresignerGenerator : KotlinIntegration {
                     httpBindingResolver,
                     service.expectTrait<SigV4Trait>().name,
                     presignOperations,
-                    defaultTimestampFormat
+                    defaultTimestampFormat,
                 )
             }
         }
@@ -137,7 +137,7 @@ class PresignerGenerator : KotlinIntegration {
         httpBindingResolver: HttpBindingResolver,
         sigv4ServiceName: String,
         presignOperations: List<PresignableOperation>,
-        defaultTimestampFormat: TimestampFormatTrait.Format
+        defaultTimestampFormat: TimestampFormatTrait.Format,
     ) {
         val serviceShape = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
         val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
@@ -180,7 +180,7 @@ class PresignerGenerator : KotlinIntegration {
                 request.defaultName(serviceShape),
                 requestConfigFnName,
                 serviceSymbol.name,
-                presignConfigTypeName
+                presignConfigTypeName,
             )
 
             // Generate presign config function
@@ -188,13 +188,17 @@ class PresignerGenerator : KotlinIntegration {
                 PresignConfigFnSection.OperationId to presignableOp.operationId,
                 PresignConfigFnSection.CodegenContext to ctx,
                 PresignConfigFnSection.HttpBindingResolver to httpBindingResolver,
-                PresignConfigFnSection.DefaultTimestampFormat to defaultTimestampFormat
+                PresignConfigFnSection.DefaultTimestampFormat to defaultTimestampFormat,
             )
 
             renderPresignConfigFn(
-                writer, request.defaultName(serviceShape), requestConfigFnName, presignableOp,
-                serializerSymbol, presignConfigFnVisitorFactory(ctx.protocolGenerator!!.protocol),
-                contextMap
+                writer,
+                request.defaultName(serviceShape),
+                requestConfigFnName,
+                presignableOp,
+                serializerSymbol,
+                presignConfigFnVisitorFactory(ctx.protocolGenerator!!.protocol),
+                contextMap,
             )
         }
 
@@ -208,7 +212,7 @@ class PresignerGenerator : KotlinIntegration {
         writer: KotlinWriter,
         presignConfigTypeName: String,
         renderingContext: RenderingContext<ServiceShape>,
-        clientProperties: List<ClientConfigProperty>
+        clientProperties: List<ClientConfigProperty>,
     ) {
         writer.dokka {
             write("Provides a subset of the service client configuration necessary to presign a request.")
@@ -222,7 +226,7 @@ class PresignerGenerator : KotlinIntegration {
             renderingContext,
             false,
             RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig,
-            *clientProperties.toTypedArray()
+            *clientProperties.toTypedArray(),
         )
         ccg.render()
     }
@@ -236,7 +240,8 @@ class PresignerGenerator : KotlinIntegration {
     private fun presignConfigFnVisitorFactory(protocol: ShapeId): PresignConfigFnVisitor =
         when (protocol) {
             RestJson1Trait.ID,
-            RestXmlTrait.ID -> {
+            RestXmlTrait.ID,
+            -> {
                 object : PresignConfigFnVisitor {
                     override fun renderHttpMethod(writer: KotlinWriter) {
                         writer.write("httpRequestBuilder.method,")
@@ -274,7 +279,7 @@ class PresignerGenerator : KotlinIntegration {
         presignableOp: PresignableOperation,
         serializerSymbol: Symbol,
         presignConfigFnVisitor: PresignConfigFnVisitor,
-        contextMap: Map<String, Any?>
+        contextMap: Map<String, Any?>,
     ) {
         writer.withBlock(
             "private suspend fun $requestConfigFnName(input: $requestTypeName, duration: #T) : #T {",
@@ -282,7 +287,6 @@ class PresignerGenerator : KotlinIntegration {
             KotlinTypes.Time.Duration,
             RuntimeTypes.Auth.Signing.AwsSigningCommon.PresignedRequestConfig,
         ) {
-
             writer.declareSection(PresignConfigFnSection, contextMap) {
                 write("require(duration.isPositive()) { \"duration must be greater than zero\" }")
                 write("val httpRequestBuilder = #T().serialize(ExecutionContext.build {  }, input)", serializerSymbol)
@@ -321,7 +325,7 @@ class PresignerGenerator : KotlinIntegration {
                 "}\n",
                 requestTypeName,
                 serviceClientTypeName,
-                KotlinTypes.Time.Duration
+                KotlinTypes.Time.Duration,
             ) {
                 withBlock("val presignConfig = $presignConfigTypeName {", "}") {
                     write("credentialsProvider = config.credentialsProvider")
@@ -346,7 +350,7 @@ class PresignerGenerator : KotlinIntegration {
                 "public suspend fun #L.presign(presignConfig: ServicePresignConfig, duration: #T): HttpRequest {",
                 "}\n",
                 requestTypeName,
-                KotlinTypes.Time.Duration
+                KotlinTypes.Time.Duration,
             ) {
                 write("return createPresignedRequest(presignConfig, $requestConfigFnName(this, duration))")
             }
@@ -431,7 +435,7 @@ class PresignerGenerator : KotlinIntegration {
                 documentation = "Determines if presigned URI path will be normalized"
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
                 propertyType = ClientConfigPropertyType.ConstantValue(normalizeUriPathValueForService(serviceId))
-            }
+            },
         )
 
     // Determine useDoubleUriEncode setting based on service

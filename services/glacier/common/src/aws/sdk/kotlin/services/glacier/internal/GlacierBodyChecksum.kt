@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.services.glacier.internal
@@ -18,7 +18,7 @@ import aws.smithy.kotlin.runtime.util.encodeToHex
 private const val defaultChunkSizeBytes = 1024 * 1024 // 1MB
 
 internal class GlacierBodyChecksum(
-    private val treeHasher: TreeHasher = TreeHasherImpl(defaultChunkSizeBytes, ::Sha256)
+    private val treeHasher: TreeHasher = TreeHasherImpl(defaultChunkSizeBytes, ::Sha256),
 ) : ModifyRequestMiddleware {
     override fun install(op: SdkHttpOperation<*, *>) {
         op.execution.finalize.register(this)

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
@@ -62,7 +62,7 @@ internal suspend fun AwsSigner.signPayload(
     configBuilder: AwsSigningConfig.Builder,
     prevSignature: ByteArray,
     messagePayload: ByteArray,
-    clock: Clock = Clock.System
+    clock: Clock = Clock.System,
 ): AwsSigningResult<Message> {
     val dt = clock.now().truncateSubsecs()
     val config = configBuilder.apply { signingDate = dt }.build()

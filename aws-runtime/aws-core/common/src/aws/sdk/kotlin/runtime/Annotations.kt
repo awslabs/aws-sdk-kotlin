@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime
@@ -16,7 +16,7 @@ package aws.sdk.kotlin.runtime
 @Suppress("DEPRECATION")
 @RequiresOptIn(
     level = RequiresOptIn.Level.ERROR,
-    message = "This API is internal to aws-runtime and generated SDKs and should not be used. It could be removed or changed without notice."
+    message = "This API is internal to aws-runtime and generated SDKs and should not be used. It could be removed or changed without notice.",
 )
 @Target(
     AnnotationTarget.CLASS,
@@ -24,6 +24,6 @@ package aws.sdk.kotlin.runtime
     AnnotationTarget.FUNCTION,
     AnnotationTarget.PROPERTY,
     AnnotationTarget.FIELD,
-    AnnotationTarget.CONSTRUCTOR
+    AnnotationTarget.CONSTRUCTOR,
 )
 public annotation class InternalSdkApi

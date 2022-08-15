@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -32,7 +32,7 @@ class CredentialsProviderChainTest {
         val chain = CredentialsProviderChain(
             TestProvider(null),
             TestProvider(Credentials("akid1", "secret1")),
-            TestProvider(Credentials("akid2", "secret2"))
+            TestProvider(Credentials("akid2", "secret2")),
         )
 
         assertEquals(Credentials("akid1", "secret1"), chain.getCredentials())

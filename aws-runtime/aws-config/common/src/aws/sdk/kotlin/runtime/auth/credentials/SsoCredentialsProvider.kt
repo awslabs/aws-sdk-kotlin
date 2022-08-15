@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -90,12 +90,11 @@ public class SsoCredentialsProvider public constructor(
     /**
      * The source of time for the provider
      */
-    private val clock: Clock = Clock.System
+    private val clock: Clock = Clock.System,
 
 ) : CredentialsProvider {
 
     override suspend fun getCredentials(): Credentials {
-
         val token = loadTokenFile()
 
         val client = SsoClient {
@@ -122,7 +121,7 @@ public class SsoCredentialsProvider public constructor(
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in SSO roleCredentials response" },
             sessionToken = roleCredentials.sessionToken,
             expiration = Instant.fromEpochMilliseconds(roleCredentials.expiration),
-            PROVIDER_NAME
+            PROVIDER_NAME,
         )
     }
 
@@ -152,7 +151,7 @@ internal data class SsoToken(
     val accessToken: String,
     val expiresAt: Instant,
     val region: String? = null,
-    val startUrl: String? = null
+    val startUrl: String? = null,
 )
 
 internal fun deserializeSsoToken(json: ByteArray): SsoToken {
@@ -189,7 +188,7 @@ internal fun deserializeSsoToken(json: ByteArray): SsoToken {
         accessToken,
         expiresAt,
         region,
-        startUrl
+        startUrl,
     )
 }
 

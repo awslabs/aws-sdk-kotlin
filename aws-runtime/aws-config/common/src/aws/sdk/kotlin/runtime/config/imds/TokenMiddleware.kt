@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.imds
@@ -32,7 +32,7 @@ internal const val X_AWS_EC2_METADATA_TOKEN = "x-aws-ec2-metadata-token"
 internal class TokenMiddleware(
     private val httpClient: SdkHttpClient,
     private val ttl: Duration = DEFAULT_TOKEN_TTL_SECONDS.seconds,
-    private val clock: Clock = Clock.System
+    private val clock: Clock = Clock.System,
 ) : ModifyRequestMiddleware {
     private var cachedToken = CachedValue<Token>(null, bufferTime = TOKEN_REFRESH_BUFFER_SECONDS.seconds, clock = clock)
 

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config
@@ -28,7 +28,7 @@ internal data class ExpiringValue<T> (val value: T, val expiresAt: Instant)
 internal class CachedValue<T> (
     private var value: ExpiringValue<T>? = null,
     private val bufferTime: Duration = Duration.ZERO,
-    private val clock: Clock = Clock.System
+    private val clock: Clock = Clock.System,
 ) {
     constructor(value: T, expiresAt: Instant, bufferTime: Duration = Duration.ZERO, clock: Clock = Clock.System) : this(ExpiringValue(value, expiresAt), bufferTime, clock)
     private val mu = Mutex()

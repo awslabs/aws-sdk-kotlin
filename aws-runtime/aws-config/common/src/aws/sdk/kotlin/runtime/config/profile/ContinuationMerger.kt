@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.profile
@@ -59,14 +59,19 @@ private fun mergeContinuation(continuation: FileLine, lines: MutableList<FileLin
 
 // true if this is a comment line
 private fun String.isCommentLine() = startsWith(Literals.COMMENT_1) || startsWith(Literals.COMMENT_2)
+
 // true if this is a property line
 private fun String.isPropertyLine() = !isProfileLine() && !isContinuationLine() && contains(Literals.PROPERTY_SPLITTER)
+
 // true if this is a profile line.  Use Configuration variant as it can handle both forms.
 internal fun String.isProfileLine() = startsWith(Literals.PROFILE_PREFIX)
+
 // true if this is a continuation line
 internal fun String.isContinuationLine() = first().isWhitespace() && substring(1).isNotBlank()
+
 // true if this is a sub-property line
 private fun String.isSubPropertyLine() = contains(Literals.PROPERTY_SPLITTER) && trim().first() != Literals.PROPERTY_SPLITTER
+
 // true if line is the key part of a property definition of a continuation
 private fun String.isSubPropertyKeyLine() = trimEnd().endsWith(Literals.PROPERTY_SPLITTER)
 

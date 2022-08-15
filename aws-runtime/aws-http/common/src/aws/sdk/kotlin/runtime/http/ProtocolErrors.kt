@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.http
@@ -36,7 +36,7 @@ public interface AwsErrorDetails {
 public data class ErrorDetails(
     override val code: String?,
     override val message: String?,
-    override val requestId: String?
+    override val requestId: String?,
 ) : AwsErrorDetails
 
 /**

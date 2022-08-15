@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -16,6 +16,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 private const val DEFAULT_CREDENTIALS_REFRESH_BUFFER_SECONDS = 10
+
 /**
  * The amount of time credentials are valid for before being refreshed when an explicit value
  * is not given to/from a provider
@@ -47,7 +48,7 @@ public class CachedCredentialsProvider(
     private val source: CredentialsProvider,
     private val expireCredentialsAfter: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     refreshBufferWindow: Duration = DEFAULT_CREDENTIALS_REFRESH_BUFFER_SECONDS.seconds,
-    private val clock: Clock = Clock.System
+    private val clock: Clock = Clock.System,
 ) : CredentialsProvider, Closeable {
 
     private val cachedCredentials = CachedValue<Credentials>(null, bufferTime = refreshBufferWindow, clock)

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.http
@@ -45,7 +45,7 @@ class AwsUserAgentMetadataTest {
 
     data class EnvironmentTest(
         val provider: TestPlatformProvider,
-        val expected: String
+        val expected: String,
     )
 
     @Test
@@ -53,16 +53,16 @@ class AwsUserAgentMetadataTest {
         val testEnvironments = listOf(
             EnvironmentTest(
                 TestPlatformProvider(
-                    env = mapOf(FRAMEWORK_METADATA_ENV to "amplify:1.2.3")
+                    env = mapOf(FRAMEWORK_METADATA_ENV to "amplify:1.2.3"),
                 ),
-                "lib/amplify/1.2.3"
+                "lib/amplify/1.2.3",
             ),
             EnvironmentTest(
                 TestPlatformProvider(
                     env = mapOf(FRAMEWORK_METADATA_ENV to "amplify:1.2.3"),
-                    props = mapOf(FRAMEWORK_METADATA_PROP to "amplify:4.5.6")
+                    props = mapOf(FRAMEWORK_METADATA_PROP to "amplify:4.5.6"),
                 ),
-                "lib/amplify/4.5.6"
+                "lib/amplify/4.5.6",
             ),
         )
         testEnvironments.forEach { test ->
@@ -76,16 +76,16 @@ class AwsUserAgentMetadataTest {
         val testEnvironments = listOf(
             EnvironmentTest(
                 TestPlatformProvider(
-                    env = mapOf(AWS_APP_ID_ENV to "app-id-1")
+                    env = mapOf(AWS_APP_ID_ENV to "app-id-1"),
                 ),
-                "app/app-id-1"
+                "app/app-id-1",
             ),
             EnvironmentTest(
                 TestPlatformProvider(
                     env = mapOf(AWS_APP_ID_ENV to "app-id-1"),
                     props = mapOf(AWS_APP_ID_PROP to "app-id-2"),
                 ),
-                "app/app-id-2"
+                "app/app-id-2",
             ),
         )
         testEnvironments.forEach { test ->

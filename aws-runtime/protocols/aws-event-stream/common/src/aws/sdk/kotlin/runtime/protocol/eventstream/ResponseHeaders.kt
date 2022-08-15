@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
@@ -21,11 +21,11 @@ public fun Message.type(): MessageType {
     return when (messageType) {
         "event" -> MessageType.Event(
             checkNotNull(eventType) { "Invalid `event` message: `:event-type` header is missing" },
-            contentType
+            contentType,
         )
         "exception" -> MessageType.Exception(
             checkNotNull(exceptionType) { "Invalid `exception` message: `:exception-type` header is missing" },
-            contentType
+            contentType,
         )
         "error" -> {
             val errorCode = headersByName[":error-code"]?.value?.expectString() ?: error("Invalid `error` message: `:error-code` header is missing")

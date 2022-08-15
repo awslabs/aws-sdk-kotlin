@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -25,7 +25,7 @@ class CachedCredentialsProviderTest {
     private val testClock = ManualClock(epoch)
 
     private class TestCredentialsProvider(
-        private val expiration: Instant? = null
+        private val expiration: Instant? = null,
     ) : CredentialsProvider {
         var callCount = 0
 
@@ -34,7 +34,7 @@ class CachedCredentialsProviderTest {
             return Credentials(
                 "AKID",
                 "secret",
-                expiration = this@TestCredentialsProvider.expiration
+                expiration = this@TestCredentialsProvider.expiration,
             )
         }
     }

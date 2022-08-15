@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.region
@@ -28,7 +28,7 @@ class AwsRegionProviderChainTest {
         val chain = RegionProviderChain(
             TestProvider(null),
             TestProvider("us-east-1"),
-            TestProvider("us-east-2")
+            TestProvider("us-east-2"),
         )
 
         assertEquals("us-east-1", chain.getRegion())

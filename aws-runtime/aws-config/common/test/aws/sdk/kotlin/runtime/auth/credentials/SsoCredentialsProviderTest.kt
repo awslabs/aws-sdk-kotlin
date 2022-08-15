@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -56,7 +56,7 @@ class SsoCredentialsProviderTest {
         """.encodeToByteArray()
         assertEquals(
             SsoToken("a-token", ts, "us-west-2", "https://start-url"),
-            deserializeSsoToken(t2)
+            deserializeSsoToken(t2),
         )
 
         val t3 = """
@@ -95,7 +95,7 @@ class SsoCredentialsProviderTest {
 
         val testPlatform = TestPlatformProvider(
             env = mapOf("HOME" to "/home"),
-            fs = mapOf("/home/.aws/sso/cache/$key" to contents)
+            fs = mapOf("/home/.aws/sso/cache/$key" to contents),
         )
 
         val provider = SsoCredentialsProvider(
@@ -105,7 +105,7 @@ class SsoCredentialsProviderTest {
             ssoRegion = "us-east-2",
             httpClientEngine = engine,
             platformProvider = testPlatform,
-            clock = testClock
+            clock = testClock,
         )
 
         assertFailsWith<ProviderConfigurationException> {
@@ -117,7 +117,7 @@ class SsoCredentialsProviderTest {
     fun testErrorResponse() = runTest {
         val engine = buildTestConnection {
             expect(
-                HttpResponse(HttpStatusCode.Unauthorized, Headers.Empty, HttpBody.Empty)
+                HttpResponse(HttpStatusCode.Unauthorized, Headers.Empty, HttpBody.Empty),
             )
         }
 
@@ -135,7 +135,7 @@ class SsoCredentialsProviderTest {
 
         val testPlatform = TestPlatformProvider(
             env = mapOf("HOME" to "/home"),
-            fs = mapOf("/home/.aws/sso/cache/$key" to contents)
+            fs = mapOf("/home/.aws/sso/cache/$key" to contents),
         )
 
         val provider = SsoCredentialsProvider(
@@ -145,7 +145,7 @@ class SsoCredentialsProviderTest {
             ssoRegion = "us-east-2",
             httpClientEngine = engine,
             platformProvider = testPlatform,
-            clock = testClock
+            clock = testClock,
         )
 
         assertFailsWith<CredentialsNotLoadedException> {
@@ -171,7 +171,7 @@ class SsoCredentialsProviderTest {
 
         val engine = buildTestConnection {
             expect(
-                HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(serviceResp.encodeToByteArray()))
+                HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(serviceResp.encodeToByteArray())),
             )
         }
 
@@ -190,7 +190,7 @@ class SsoCredentialsProviderTest {
 
         val testPlatform = TestPlatformProvider(
             env = mapOf("HOME" to "/home"),
-            fs = mapOf("/home/.aws/sso/cache/$key" to contents)
+            fs = mapOf("/home/.aws/sso/cache/$key" to contents),
         )
 
         val provider = SsoCredentialsProvider(
@@ -200,7 +200,7 @@ class SsoCredentialsProviderTest {
             ssoRegion = "us-east-2",
             httpClientEngine = engine,
             platformProvider = testPlatform,
-            clock = testClock
+            clock = testClock,
         )
 
         val actual = provider.getCredentials()

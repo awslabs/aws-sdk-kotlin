@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.services.s3.internal
 
@@ -36,7 +36,7 @@ class S3ErrorDeserializerTest {
                 <Error>
                     <RequestId>foo-id</RequestId>
                 </Error>
-            """.trimIndent().encodeToByteArray()
+            """.trimIndent().encodeToByteArray(),
         )
 
         for (payload in tests) {

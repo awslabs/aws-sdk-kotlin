@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -32,7 +32,7 @@ class StsWebIdentityCredentialsProviderTest {
         "test-secret",
         "test-token",
         epoch + Duration.minutes(15),
-        "WebIdentityToken"
+        "WebIdentityToken",
     )
 
     private val testArn = "arn:aws:iam:1234567/test-role"
@@ -40,7 +40,7 @@ class StsWebIdentityCredentialsProviderTest {
     // see https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html#API_AssumeRoleWithWebIdentity_ResponseElements
     private fun stsResponse(
         roleArn: String,
-        expiration: Instant? = null
+        expiration: Instant? = null,
     ): HttpResponse {
         val roleId = roleArn.split("/").last()
         val expiry = expiration ?: expectedCredentialsBase.expiration!!
@@ -78,7 +78,7 @@ class StsWebIdentityCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            fs = mapOf("token-path" to "jwt-token")
+            fs = mapOf("token-path" to "jwt-token"),
         )
 
         val provider = StsWebIdentityCredentialsProvider(
@@ -86,7 +86,7 @@ class StsWebIdentityCredentialsProviderTest {
             webIdentityTokenFilePath = "token-path",
             region = "us-east-2",
             httpClientEngine = testEngine,
-            platformProvider = testPlatform
+            platformProvider = testPlatform,
         )
 
         val actual = provider.getCredentials()
@@ -111,7 +111,7 @@ class StsWebIdentityCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            fs = mapOf("token-path" to "jwt-token")
+            fs = mapOf("token-path" to "jwt-token"),
         )
 
         val provider = StsWebIdentityCredentialsProvider(
@@ -119,7 +119,7 @@ class StsWebIdentityCredentialsProviderTest {
             webIdentityTokenFilePath = "token-path",
             region = "us-east-2",
             httpClientEngine = testEngine,
-            platformProvider = testPlatform
+            platformProvider = testPlatform,
         )
 
         assertFailsWith<CredentialsProviderException> {
@@ -138,7 +138,7 @@ class StsWebIdentityCredentialsProviderTest {
             webIdentityTokenFilePath = "token-path",
             region = "us-east-2",
             httpClientEngine = testEngine,
-            platformProvider = testPlatform
+            platformProvider = testPlatform,
         )
 
         assertFailsWith<CredentialsProviderException> {
@@ -152,8 +152,8 @@ class StsWebIdentityCredentialsProviderTest {
             env = mapOf(
                 "AWS_ROLE_ARN" to "my-role",
                 "AWS_WEB_IDENTITY_TOKEN_FILE" to "token-file-path",
-                "AWS_REGION" to "us-east-2"
-            )
+                "AWS_REGION" to "us-east-2",
+            ),
         )
 
         StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = tp1)
@@ -163,8 +163,8 @@ class StsWebIdentityCredentialsProviderTest {
             val tp2 = TestPlatformProvider(
                 env = mapOf(
                     "AWS_WEB_IDENTITY_TOKEN_FILE" to "token-file-path",
-                    "AWS_REGION" to "us-east-2"
-                )
+                    "AWS_REGION" to "us-east-2",
+                ),
             )
             StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = tp2)
         }.message.shouldContain("Required field `roleArn` could not be automatically inferred for StsWebIdentityCredentialsProvider. Either explicitly pass a value, set the environment variable `AWS_ROLE_ARN`, or set the JVM system property `aws.roleArn`")

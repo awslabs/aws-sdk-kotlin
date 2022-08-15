@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.test
 
@@ -9,7 +9,6 @@ import aws.sdk.kotlin.services.sts.StsClient
 import kotlinx.coroutines.runBlocking
 
 fun main(): Unit = runBlocking {
-
     StsClient {
         region = "us-east-2"
         credentialsProvider = EcsCredentialsProvider()

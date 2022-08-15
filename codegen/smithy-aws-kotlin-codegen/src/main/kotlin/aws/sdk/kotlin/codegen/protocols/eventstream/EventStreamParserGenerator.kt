@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols.eventstream
@@ -27,7 +27,7 @@ import software.amazon.smithy.model.traits.EventPayloadTrait
  */
 class EventStreamParserGenerator(
     private val ctx: ProtocolGenerator.GenerationContext,
-    private val sdg: StructuredDataParserGenerator
+    private val sdg: StructuredDataParserGenerator,
 ) {
     /**
      * Return the function responsible for deserializing an operation output that targets an event stream
@@ -48,7 +48,7 @@ class EventStreamParserGenerator(
                 "}",
                 op.bodyDeserializerName(),
                 outputSymbol,
-                RuntimeTypes.Http.HttpBody
+                RuntimeTypes.Http.HttpBody,
             ) {
                 renderDeserializeEventStream(ctx, op, writer)
             }
@@ -164,7 +164,7 @@ class EventStreamParserGenerator(
     private fun renderDeserializeExplicitEventPayloadMember(
         ctx: ProtocolGenerator.GenerationContext,
         member: MemberShape,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
         // TODO - check content type for blob and string
         // structure > :test(member > :test(blob, string, structure, union))
