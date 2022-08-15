@@ -29,6 +29,7 @@ import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitterOptio
 import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
 import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.time.Clock
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
@@ -131,6 +132,10 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             context {
                 operationName = path
                 service = SERVICE
+
+                // TODO wire up real trace spans for client calls
+                traceSpan = NoOpTraceSpan
+
                 // artifact of re-using ServiceEndpointResolver middleware
                 set(SdkClientOption.LogMode, sdkLogMode)
             }

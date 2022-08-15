@@ -15,6 +15,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -40,6 +41,7 @@ class AwsJsonProtocolTest {
             context {
                 service = "FooService"
                 operationName = "Bar"
+                traceSpan = NoOpTraceSpan
             }
         }
         val client = sdkHttpClient(mockEngine)
@@ -71,6 +73,7 @@ class AwsJsonProtocolTest {
             context {
                 service = "FooService"
                 operationName = "Bar"
+                traceSpan = NoOpTraceSpan
             }
         }
         val client = sdkHttpClient(mockEngine)
@@ -105,6 +108,7 @@ class AwsJsonProtocolTest {
             context {
                 service = "FooService"
                 operationName = "Bar"
+                traceSpan = NoOpTraceSpan
             }
         }
         val client = sdkHttpClient(mockEngine)

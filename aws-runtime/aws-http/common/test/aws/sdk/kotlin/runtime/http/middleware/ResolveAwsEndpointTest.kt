@@ -18,6 +18,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -44,6 +45,7 @@ class ResolveAwsEndpointTest {
             context {
                 service = "TestService"
                 operationName = "testOperation"
+                traceSpan = NoOpTraceSpan
 
                 set(AwsClientOption.Region, "us-east-1")
             }
@@ -70,6 +72,7 @@ class ResolveAwsEndpointTest {
             context {
                 service = "TestService"
                 operationName = "testOperation"
+                traceSpan = NoOpTraceSpan
 
                 set(AwsClientOption.Region, "us-east-1")
                 set(AwsSigningAttributes.SigningRegion, "us-east-1")

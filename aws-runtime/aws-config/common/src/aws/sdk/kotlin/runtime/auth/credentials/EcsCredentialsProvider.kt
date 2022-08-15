@@ -35,6 +35,7 @@ import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.TimestampFormat
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 
@@ -97,6 +98,9 @@ public class EcsCredentialsProvider internal constructor(
             context {
                 operationName = "EcsCredentialsProvider"
                 service = "n/a"
+
+                // TODO wire up real trace spans for client calls
+                traceSpan = NoOpTraceSpan
             }
         }
 

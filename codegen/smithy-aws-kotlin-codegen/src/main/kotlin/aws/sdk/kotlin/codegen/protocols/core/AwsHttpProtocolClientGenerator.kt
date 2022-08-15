@@ -94,6 +94,7 @@ open class AwsHttpProtocolClientGenerator(
             .openBlock("override fun close() {")
             .write("client.close()")
             .write("(config.credentialsProvider as? #T)?.close()", RuntimeTypes.IO.Closeable)
+            .write("rootTraceSpan.close()")
             .closeBlock("}")
             .write("")
     }

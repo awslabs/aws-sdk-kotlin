@@ -20,6 +20,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.get
 import io.kotest.matchers.string.shouldContain
@@ -49,6 +50,7 @@ class UserAgentTest {
             context {
                 service = "Test Service"
                 operationName = "testOperation"
+                traceSpan = NoOpTraceSpan
             }
         }.apply {
             val apiMd = ApiMetadata("Test Service", "1.2.3")
