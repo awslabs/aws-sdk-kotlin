@@ -29,6 +29,8 @@ import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitterOptio
 import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
 import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.time.Clock
+import aws.smithy.kotlin.runtime.tracing.TraceEvent
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
@@ -144,7 +146,9 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             next.call(req)
         }
 
-        return op.roundTrip(httpClient, Unit)
+        return with(NoOpTraceSpan) {
+            op.roundTrip(httpClient, Unit)
+        }
     }
 
     override fun close() {
@@ -235,3 +239,13 @@ public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
  * @param message The error message
  */
 public class EC2MetadataError(public val statusCode: Int, message: String) : AwsServiceException(message)
+
+// TODO remove this in favor of a long-lived root TraceSpan—that somehow handles injection during testing? 🤷
+private object NoOpTraceSpan : TraceSpan {
+    override val id: String = ""
+    override val parent: TraceSpan? = null
+
+    override fun child(id: String): TraceSpan = this
+    override fun close() { }
+    override fun postEvents(events: Iterable<TraceEvent>) { }
+}

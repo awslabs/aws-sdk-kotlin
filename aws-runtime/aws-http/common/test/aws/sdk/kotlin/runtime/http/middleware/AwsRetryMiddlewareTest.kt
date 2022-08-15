@@ -17,6 +17,7 @@ import aws.smithy.kotlin.runtime.retries.delay.DelayProvider
 import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
 import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -58,7 +59,9 @@ class AwsRetryMiddlewareTest {
 
         op.install(AwsRetryMiddleware(strategy, AwsDefaultRetryPolicy))
 
-        op.roundTrip(client, Unit)
+        with(NoOpTraceSpan) {
+            op.roundTrip(client, Unit)
+        }
         val calls = op.context.attributes[HttpOperationContext.HttpCallList]
         val sdkRequestId = op.context[HttpOperationContext.SdkRequestId]
 

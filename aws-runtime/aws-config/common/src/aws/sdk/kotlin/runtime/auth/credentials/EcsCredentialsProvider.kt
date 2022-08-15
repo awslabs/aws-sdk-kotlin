@@ -25,16 +25,13 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
-import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
-import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitter
-import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitterOptions
-import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
-import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.TimestampFormat
+import aws.smithy.kotlin.runtime.tracing.TraceEvent
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 
@@ -70,14 +67,7 @@ public class EcsCredentialsProvider internal constructor(
 
     private val manageEngine = httpClientEngine == null
     private val httpClientEngine = httpClientEngine ?: DefaultHttpEngine()
-
-    private val retryMiddleware = run {
-        val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
-        val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
-        val strategy = StandardRetryStrategy(StandardRetryStrategyOptions.Default, tokenBucket, delayProvider)
-        val policy = EcsCredentialsRetryPolicy()
-        Retry<Credentials>(strategy, policy)
-    }
+    private val retryMiddleware = Retry<Credentials>(StandardRetryStrategy(), EcsCredentialsRetryPolicy())
 
     override suspend fun getCredentials(): Credentials {
         val logger = Logger.getLogger<EcsCredentialsProvider>()
@@ -106,7 +96,9 @@ public class EcsCredentialsProvider internal constructor(
         logger.debug { "retrieving container credentials" }
         val client = sdkHttpClient(httpClientEngine, manageEngine = false)
         val creds = try {
-            op.roundTrip(client, Unit)
+            with(NoOpTraceSpan) { // TODO wire up actual trace span context, possibly by contextualizing getCredentials
+                op.roundTrip(client, kotlin.Unit)
+            }
         } catch (ex: Exception) {
             logger.debug { "failed to obtain credentials from container metadata service" }
             throw when (ex) {
@@ -220,4 +212,14 @@ internal class EcsCredentialsRetryPolicy : RetryPolicy<Any?> {
         }
         else -> RetryDirective.TerminateAndFail
     }
+}
+
+// TODO remove this in favor of an actual TraceSpan context inherited from the caller
+private object NoOpTraceSpan : TraceSpan {
+    override val id: String = ""
+    override val parent: TraceSpan? = null
+
+    override fun child(id: String): TraceSpan = this
+    override fun close() { }
+    override fun postEvents(events: Iterable<TraceEvent>) { }
 }

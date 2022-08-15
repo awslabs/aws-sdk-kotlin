@@ -112,7 +112,10 @@ kotlin.sourceSets.getByName("test") {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>{
     dependsOn(generateProjectionsTask)
     // generated clients have quite a few warnings
-    kotlinOptions.allWarningsAsErrors = false
+    kotlinOptions {
+        allWarningsAsErrors = false
+        freeCompilerArgs += "-Xcontext-receivers"
+    }
 }
 
 tasks.test {
