@@ -106,15 +106,6 @@ class S3TransferManagerIntegrationTest {
         S3TransferManagerTestUtils.deleteBucketAndAllContents(s3TransferManager.config.s3, backUpBucket)
     }
 
-    private fun File.deleteRecursive() {
-        if (isDirectory) {
-            listFiles().forEach {
-                it.deleteRecursive()
-            }
-        }
-        delete()
-    }
-
     @Test
     fun testUpload() = runTest {
         createUploadDirectory()
@@ -127,7 +118,7 @@ class S3TransferManagerIntegrationTest {
             operation.await()
             checkTransfer(testUploadDirectory.toFile(), toUri, operation.progress!!, 3L, 9L, 2L)
         } finally {
-            testUploadDirectory.toFile().deleteRecursive()
+            testUploadDirectory.toFile().deleteRecursively()
         }
     }
 
@@ -143,7 +134,7 @@ class S3TransferManagerIntegrationTest {
             operation.await()
             checkTransfer(testLargeFile, toUri, operation.progress!!, 1L, 10000000L, 2L)
         } finally {
-            testLargeFile.deleteRecursive()
+            testLargeFile.deleteRecursively()
         }
     }
 
@@ -215,7 +206,7 @@ class S3TransferManagerIntegrationTest {
                 }
             }
         } finally {
-            testUploadDirectory.toFile().deleteRecursive()
+            testUploadDirectory.toFile().deleteRecursively()
         }
     }
 
@@ -227,7 +218,7 @@ class S3TransferManagerIntegrationTest {
             val uploadOperation = s3TransferManager.upload(testUploadDirectory.toString(), s3Uri)
             uploadOperation.await()
         } finally {
-            testUploadDirectory.toFile().deleteRecursive()
+            testUploadDirectory.toFile().deleteRecursively()
         }
 
         createDownloadDirectory()
@@ -238,7 +229,7 @@ class S3TransferManagerIntegrationTest {
             downloadOperation.await()
             checkTransfer(s3Uri, testDownloadDirectory.toFile(), downloadOperation.progress!!, 3L, 9L, 2L)
         } finally {
-            testDownloadDirectory.toFile().deleteRecursive()
+            testDownloadDirectory.toFile().deleteRecursively()
         }
     }
 
@@ -252,7 +243,7 @@ class S3TransferManagerIntegrationTest {
             val uploadOperation = s3TransferManager.upload(testLargeFile.path, s3Uri)
             uploadOperation.await()
         } finally {
-            testLargeFile.deleteRecursive()
+            testLargeFile.deleteRecursively()
         }
 
         createDownloadDirectory()
@@ -264,7 +255,7 @@ class S3TransferManagerIntegrationTest {
             val downloadFile = Paths.get(testDownloadDirectory.toString(), largeFileKey).toFile()
             checkTransfer(s3Uri, downloadFile, downloadOperation.progress!!, 1L, 10000000L, 2L)
         } finally {
-            testDownloadDirectory.toFile().deleteRecursive()
+            testDownloadDirectory.toFile().deleteRecursively()
         }
     }
 
@@ -347,7 +338,7 @@ class S3TransferManagerIntegrationTest {
             copyOperation.await()
             checkTransfer(testUploadDirectory.toFile(), destUri, copyOperation.progress!!, 3L, 9L, 2L)
         } finally {
-            testUploadDirectory.toFile().deleteRecursive()
+            testUploadDirectory.toFile().deleteRecursively()
         }
     }
 
@@ -366,7 +357,7 @@ class S3TransferManagerIntegrationTest {
             copyOperation.await()
             checkTransfer(testLargeFile, destUri, copyOperation.progress!!, 1L, 10000000L, 2L)
         } finally {
-            testLargeFile.deleteRecursive()
+            testLargeFile.deleteRecursively()
         }
     }
 
@@ -379,7 +370,7 @@ class S3TransferManagerIntegrationTest {
             val uploadOperation = s3TransferManager.upload(testUploadDirectory.toString(), sourceUri)
             uploadOperation.await()
         } catch (e: S3Exception) {
-            testUploadDirectory.toFile().deleteRecursive()
+            testUploadDirectory.toFile().deleteRecursively()
             throw e
         }
 
@@ -392,7 +383,7 @@ class S3TransferManagerIntegrationTest {
             copyOperation.await()
             checkTransfer(testUploadDirectory.toFile(), destUri, copyOperation.progress!!, 3L, 9L, 2L)
         } finally {
-            testUploadDirectory.toFile().deleteRecursive()
+            testUploadDirectory.toFile().deleteRecursively()
             deleteBackUpBucket()
         }
     }
@@ -406,7 +397,7 @@ class S3TransferManagerIntegrationTest {
             val uploadOperation = s3TransferManager.upload(testLargeFile.path, sourceUri)
             uploadOperation.await()
         } catch (e: S3Exception) {
-            testLargeFile.deleteRecursive()
+            testLargeFile.deleteRecursively()
         }
 
         createBackUpBucket()
@@ -418,7 +409,7 @@ class S3TransferManagerIntegrationTest {
             copyOperation.await()
             checkTransfer(testLargeFile, destUri, copyOperation.progress!!, 1L, 10000000L, 2L)
         } finally {
-            testLargeFile.deleteRecursive()
+            testLargeFile.deleteRecursively()
             deleteBackUpBucket()
         }
     }
@@ -453,7 +444,7 @@ class S3TransferManagerIntegrationTest {
             val operation = s3TransferManager.upload(testUploadDirectory.toString(), sourceUri)
             operation.await()
         } finally {
-            testUploadDirectory.toFile().deleteRecursive()
+            testUploadDirectory.toFile().deleteRecursively()
         }
 
         assertFailsWith<IllegalArgumentException>("The copy is completed without throwing destination bucket error") {
