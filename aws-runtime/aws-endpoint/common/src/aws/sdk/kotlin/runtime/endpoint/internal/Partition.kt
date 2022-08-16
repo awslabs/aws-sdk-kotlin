@@ -11,6 +11,7 @@ import aws.sdk.kotlin.runtime.endpoint.CredentialScope
 import aws.smithy.kotlin.runtime.http.Protocol
 import aws.smithy.kotlin.runtime.http.Url
 import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
+import aws.smithy.kotlin.runtime.util.net.Host
 
 private const val defaultProtocol = "https"
 private const val defaultSigner = "v4"
@@ -125,7 +126,7 @@ internal fun EndpointDefinition.resolve(region: String, defaults: EndpointDefini
     val signingName = merged.credentialScope?.service
     val signingRegion = merged.credentialScope?.region ?: region
 
-    val uri = Url(Protocol.parse(protocol), hostname)
+    val uri = Url(Protocol.parse(protocol), Host.Domain(hostname))
     val scope = CredentialScope(signingRegion, signingName)
     return AwsEndpoint(Endpoint(uri), scope)
 }
