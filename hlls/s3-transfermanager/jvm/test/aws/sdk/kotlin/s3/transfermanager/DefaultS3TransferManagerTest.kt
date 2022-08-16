@@ -400,9 +400,9 @@ class DefaultS3TransferManagerTest {
             return
         }
         val chunkRanges = partition(fileSize, s3TransferManager.config.chunkSize)
-        chunkRanges.forEach { it ->
-            val contentRange = "bytes=${it.start}-${it.endInclusive}"
-            coVerify {
+        coVerifyOrder {
+            chunkRanges.forEach { it ->
+                val contentRange = "bytes=${it.start}-${it.endInclusive}"
                 s3Client.getObject(
                     match {
                         it.bucket == bucket && it.key == key && it.range == contentRange
