@@ -12,7 +12,6 @@ import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.prependNamespaceAndService
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import software.amazon.smithy.model.shapes.StructureShape
-import software.amazon.smithy.model.traits.BoxTrait
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -51,10 +50,10 @@ class BoxServicesTest {
         struct.members().forEach {
             val target = transformed.expectShape(it.target)
             if (target.isBooleanShape || target.isNumberShape) {
-                assertTrue(it.hasTrait<BoxTrait>())
+                assertTrue(it.hasTrait<@Suppress("DEPRECATION") software.amazon.smithy.model.traits.BoxTrait>())
             } else {
-                assertFalse(target.hasTrait<BoxTrait>())
-                assertFalse(it.hasTrait<BoxTrait>())
+                assertFalse(target.hasTrait<@Suppress("DEPRECATION") software.amazon.smithy.model.traits.BoxTrait>())
+                assertFalse(it.hasTrait<@Suppress("DEPRECATION") software.amazon.smithy.model.traits.BoxTrait>())
             }
         }
     }

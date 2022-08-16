@@ -12,7 +12,6 @@ import software.amazon.smithy.kotlin.codegen.model.isNumberShape
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.neighbor.Walker
 import software.amazon.smithy.model.shapes.*
-import software.amazon.smithy.model.traits.BoxTrait
 import software.amazon.smithy.model.transform.ModelTransformer
 import software.amazon.smithy.utils.ToSmithyBuilder
 
@@ -85,7 +84,8 @@ class BoxServices : KotlinIntegration {
         get() = isBooleanShape || isNumberShape
 
     private fun <T> box(shape: T): Shape where T : Shape, T : ToSmithyBuilder<T> {
-        return (shape.toBuilder() as AbstractShapeBuilder<*, T>).addTrait(BoxTrait()).build()
+        return (shape.toBuilder() as AbstractShapeBuilder<*, T>)
+            .addTrait(@Suppress("DEPRECATION") software.amazon.smithy.model.traits.BoxTrait()).build()
     }
 
     private fun boxNumber(shape: NumberShape): Shape = when (shape) {
