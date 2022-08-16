@@ -1,5 +1,6 @@
 package aws.sdk.kotlin.s3.transfermanager
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.s3.transfermanager.data.S3Uri
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.CompleteMultipartUploadResponse
@@ -18,17 +19,14 @@ import aws.smithy.kotlin.runtime.testing.RandomTempFile
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder
-import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.extension.ExtendWith
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -37,7 +35,6 @@ import kotlin.test.assertNotNull
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith(MockKExtension::class)
 class DefaultS3TransferManagerTest {
 
     private lateinit var s3Client: S3Client
@@ -53,15 +50,10 @@ class DefaultS3TransferManagerTest {
         s3Client = mockk<S3Client>()
         s3TransferManager = runBlocking {
             S3TransferManager {
-                chunkSize = 8000000
+                chunkSize = 100L
                 s3 = s3Client
             }
         }
-    }
-
-    @AfterEach
-    private fun finish() {
-        unmockkAll()
     }
 
     private fun createUploadDirectory() {
@@ -101,18 +93,13 @@ class DefaultS3TransferManagerTest {
                 )
             } returns PutObjectResponse {}
 
-            val operation = s3TransferManager.upload(testUploadDirectory.toString(), S3Uri("s3://bucket/folder"))
+            val to = S3Uri("s3://bucket/folder")
+            val operation = s3TransferManager.upload(testUploadDirectory.toString(), to)
             assertNotNull(operation)
             operation.await()
 
             verifyHeadBucket("bucket")
-            coVerify(exactly = 3) {
-                s3Client.putObject(
-                    match {
-                        it.bucket == "bucket" && it.key?.startsWith("folder") ?: false
-                    }
-                )
-            }
+            verifyUploadDirectory(testUploadDirectory.toFile(), to)
         } finally {
             testUploadDirectory.toFile().deleteRecursively()
         }
@@ -120,7 +107,7 @@ class DefaultS3TransferManagerTest {
 
     @Test
     fun testUploadLargeFile() = runTest {
-        val testFile = RandomTempFile(10000000)
+        val testFile = RandomTempFile(150L)
         try {
             detectHeadBucket("bucket")
             detectMultiPartUpload("bucket", "key", "123456")
@@ -130,30 +117,7 @@ class DefaultS3TransferManagerTest {
             operation.await()
 
             verifyHeadBucket("bucket")
-            coVerify(exactly = 2) {
-                s3Client.uploadPart(
-                    match {
-                        it.bucket == "bucket" && it.key == "key" && it.uploadId == "123456"
-                    }
-                )
-            }
-            coVerifyOrder {
-                s3Client.createMultipartUpload(
-                    match {
-                        it.bucket == "bucket" && it.key == "key"
-                    }
-                )
-                s3Client.uploadPart(
-                    match {
-                        it.bucket == "bucket" && it.key == "key" && it.uploadId == "123456"
-                    }
-                )
-                s3Client.completeMultipartUpload(
-                    match {
-                        it.bucket == "bucket" && it.key == "key" && it.uploadId == "123456"
-                    }
-                )
-            }
+            verifyUploadPartsOrder("bucket", "key", "123456", 2)
         } finally {
             testFile.delete()
         }
@@ -164,7 +128,7 @@ class DefaultS3TransferManagerTest {
         createDownloadDirectory()
         try {
             detectHeadBucket("bucket")
-            detectListObjects("bucket", "folder/", "file")
+            detectListObjects("bucket", "folder/", "file", 3)
             coEvery {
                 s3Client.getObject(
                     match {
@@ -180,13 +144,8 @@ class DefaultS3TransferManagerTest {
 
             verifyHeadBucket("bucket")
             verifyListObjects("bucket", "folder/")
-            coVerify(exactly = 2) { // size 0 file doesn't call getObject
-                s3Client.getObject(
-                    match {
-                        it.bucket == "bucket" && it.key?.startsWith("folder/") ?: false
-                    },
-                    any<suspend (GetObjectResponse) -> Any?>()
-                )
+            for (i in 0 until 3) {
+                verifyDownloadObject("bucket", "folder/file$i", i.toLong())
             }
         } finally {
             testDownloadDirectory.toFile().deleteRecursively()
@@ -198,7 +157,7 @@ class DefaultS3TransferManagerTest {
         createDownloadDirectory()
         try {
             detectHeadBucket("bucket")
-            detectHeadLargeObject("bucket", "key")
+            detectHeadLargeObject("bucket", "key", 150L)
             coEvery {
                 s3Client.getObject(
                     match {
@@ -213,14 +172,7 @@ class DefaultS3TransferManagerTest {
             operation.await()
 
             verifyHeadBucket("bucket")
-            coVerify(exactly = 2) {
-                s3Client.getObject(
-                    match {
-                        it.bucket == "bucket" && it.key == "key"
-                    },
-                    any<suspend (GetObjectResponse) -> Any?>()
-                )
-            }
+            verifyDownloadObject("bucket", "key", 150L)
             coVerifyOrder {
                 s3Client.headObject(
                     match {
@@ -243,7 +195,7 @@ class DefaultS3TransferManagerTest {
     fun testCopyDirectory() = runTest {
         detectHeadBucket("bucket1")
         detectHeadBucket("bucket2")
-        detectListObjects("bucket1", "folder1/", "file")
+        detectListObjects("bucket1", "folder1/", "file", 3)
         coEvery {
             s3Client.copyObject(
                 match {
@@ -259,12 +211,8 @@ class DefaultS3TransferManagerTest {
         verifyHeadBucket("bucket1")
         verifyHeadBucket("bucket2")
         verifyListObjects("bucket1", "folder1/")
-        coVerify(exactly = 3) {
-            s3Client.copyObject(
-                match {
-                    it.copySource?.startsWith("bucket1/folder1/file") ?: false && it.bucket == "bucket2" && it.key?.startsWith("folder2/file") ?: false
-                }
-            )
+        for (i in 0 until 3) {
+            verifyCopyObject("bucket1/folder1/file$i", "bucket2", "folder2/file$i")
         }
     }
 
@@ -272,44 +220,18 @@ class DefaultS3TransferManagerTest {
     fun testCopyLargeObject() = runTest {
         detectHeadBucket("bucket1")
         detectHeadBucket("bucket2")
-        detectHeadLargeObject("bucket1", "key1")
+        detectHeadLargeObject("bucket1", "key1", 150L)
         detectMultiPartCopy("bucket1/key1", "bucket2", "key2", "123456")
 
-        val operation = s3TransferManager.copy(S3Uri("bucket1", "key1"), S3Uri("s3://bucket2/key2"))
+        val from = S3Uri("bucket1", "key1")
+        val to = S3Uri("s3://bucket2/key2")
+        val operation = s3TransferManager.copy(from, to)
         assertNotNull(operation)
         operation.await()
 
         verifyHeadBucket("bucket1")
         verifyHeadBucket("bucket2")
-        coVerifyOrder {
-            s3Client.headObject(
-                match {
-                    it.bucket == "bucket1" && it.key == "key1"
-                }
-            )
-            s3Client.createMultipartUpload(
-                match {
-                    it.bucket == "bucket2" && it.key == "key2"
-                }
-            )
-            s3Client.uploadPartCopy(
-                match {
-                    it.copySource == "bucket1/key1" && it.bucket == "bucket2" && it.key == "key2" && it.uploadId == "123456"
-                }
-            )
-            s3Client.completeMultipartUpload(
-                match {
-                    it.bucket == "bucket2" && it.key == "key2" && it.uploadId == "123456"
-                }
-            )
-        }
-        coVerify(exactly = 2) {
-            s3Client.uploadPartCopy(
-                match {
-                    it.copySource == "bucket1/key1" && it.bucket == "bucket2" && it.key == "key2" && it.uploadId == "123456"
-                }
-            )
-        }
+        verifyCopyPartsOrder(from, to, "123456", 150L)
     }
 
     private fun detectHeadBucket(bucket: String) {
@@ -322,7 +244,7 @@ class DefaultS3TransferManagerTest {
         } returns HeadBucketResponse {}
     }
 
-    private fun detectHeadLargeObject(bucket: String, key: String) {
+    private fun detectHeadLargeObject(bucket: String, key: String, size: Long) {
         coEvery {
             s3Client.headObject(
                 match {
@@ -330,14 +252,14 @@ class DefaultS3TransferManagerTest {
                 }
             )
         } returns HeadObjectResponse {
-            contentLength = 10000000L
+            contentLength = size
         }
     }
 
-    private fun detectListObjects(bucket: String, keyDirectory: String, fileNamePrefix: String) {
+    private fun detectListObjects(bucket: String, keyDirectory: String, fileNamePrefix: String, fileNum: Int) {
         val keyPrefix = Paths.get(keyDirectory, fileNamePrefix).toString()
         val objectList = mutableListOf<Object>()
-        for (i in 0 until 3) {
+        for (i in 0 until fileNum) {
             objectList.add(
                 Object {
                     key = "$keyPrefix$i"
@@ -417,11 +339,116 @@ class DefaultS3TransferManagerTest {
         }
     }
 
+    private fun verifyUploadDirectory(localFile: File, to: S3Uri) {
+        if (localFile.isFile()) {
+            verifyPutObject(to.bucket, to.key)
+        } else if (localFile.isDirectory()) {
+            val subFiles = localFile.listFiles()
+            subFiles.forEach {
+                val subKey = Paths.get(to.key, it.name).toString()
+                val subTo = S3Uri(to.bucket, subKey)
+                verifyUploadDirectory(it, subTo)
+            }
+        }
+    }
+
+    private fun verifyPutObject(bucket: String, key: String) {
+        coVerify() {
+            s3Client.putObject(
+                match {
+                    it.bucket == bucket && it.key == key
+                }
+            )
+        }
+    }
+
+    private fun verifyUploadPartsOrder(bucket: String, key: String, uploadId: String, chunksNum: Int) {
+        coVerifyOrder {
+            s3Client.createMultipartUpload(
+                match {
+                    it.bucket == bucket && it.key == key
+                }
+            )
+            for (i in 1 until chunksNum + 1) {
+                s3Client.uploadPart(
+                    match {
+                        it.bucket == bucket && it.key == key && it.uploadId == uploadId && it.partNumber == i
+                    }
+                )
+            }
+            s3Client.completeMultipartUpload(
+                match {
+                    it.bucket == bucket && it.key == key && it.uploadId == uploadId
+                }
+            )
+        }
+    }
+
     private fun verifyListObjects(bucket: String, keyPrefix: String) {
         coVerify {
             s3Client.listObjectsV2(
                 match {
                     it.bucket == bucket && it.prefix == keyPrefix
+                }
+            )
+        }
+    }
+
+    @OptIn(InternalSdkApi::class)
+    private fun verifyDownloadObject(bucket: String, key: String, fileSize: Long) {
+        if (fileSize == 0L) {
+            return
+        }
+        val chunkRanges = partition(fileSize, s3TransferManager.config.chunkSize)
+        chunkRanges.forEach { it ->
+            val contentRange = "bytes=${it.start}-${it.endInclusive}"
+            coVerify {
+                s3Client.getObject(
+                    match {
+                        it.bucket == bucket && it.key == key && it.range == contentRange
+                    },
+                    any<suspend (GetObjectResponse) -> Any?>()
+                )
+            }
+        }
+    }
+
+    private fun verifyCopyObject(copySource: String, bucket: String, key: String) {
+        coVerify {
+            s3Client.copyObject(
+                match {
+                    it.copySource == copySource && it.bucket == bucket && it.key == key
+                }
+            )
+        }
+    }
+
+    @OptIn(InternalSdkApi::class)
+    private fun verifyCopyPartsOrder(from: S3Uri, to: S3Uri, uploadId: String, size: Long) {
+        val chunkRanges = partition(size, s3TransferManager.config.chunkSize)
+        coVerifyOrder {
+            s3Client.headObject(
+                match {
+                    it.bucket == from.bucket && it.key == from.key
+                }
+            )
+            s3Client.createMultipartUpload(
+                match {
+                    it.bucket == to.bucket && it.key == to.key
+                }
+            )
+            chunkRanges.forEachIndexed { index, chunkRange ->
+                val contentRange = "bytes=${chunkRange.start}-${chunkRange.endInclusive}"
+                s3Client.uploadPartCopy(
+                    match {
+                        it.copySource == "${from.bucket}/${from.key}" && it.bucket == to.bucket && it.key == to.key && it.uploadId == uploadId &&
+                            it.partNumber == index + 1 && it.copySourceRange == contentRange
+                    }
+                )
+            }
+            s3Client.completeMultipartUpload(
+                match {
+                    it.bucket == to.bucket && it.key == to.key && it.uploadId == uploadId
                 }
             )
         }
