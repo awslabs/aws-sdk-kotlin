@@ -56,14 +56,12 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
                                                 | recursively judging…
      */
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     override fun upload(from: String, to: S3Uri, progressListener: ProgressListener?): Operation {
         val progressUpdater = progressListener?.let { ProgressUpdater(Progress(), it, config.chunkSize) }
         return upload(from, to, progressUpdater)
     }
 
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     private fun upload(from: String, to: S3Uri, progressUpdater: ProgressUpdater?): Operation {
         val deferred = async<Unit> {
             val localFile = File(from)
@@ -86,7 +84,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     private fun uploadFile(localFile: File, to: S3Uri, progressUpdater: ProgressUpdater?) {
         // for single file upload, generate multiple parallel PUT requests according to s3Path and send to S3 Client object
         // wait the S3 client to reply upload response, then use operator to listen to progress and control pausing and resuming
@@ -100,7 +97,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     private fun uploadWholeFile(localFile: File, to: S3Uri, progressUpdater: ProgressUpdater?) {
         async<Unit> {
             s3.putObject {
@@ -155,7 +151,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     private fun uploadDirectory(localFile: File, to: S3Uri, progressUpdater: ProgressUpdater?) {
         // for directory, just use double pointer to start from fileDirectory/s3Path and recursively traverse directory/path
         // and call upload() to recursively finish the directory upload level by level like this
@@ -199,7 +194,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     /foo/bar/key/bar/dir1/file5
      */
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     override fun download(from: S3Uri, to: String, progressListener: ProgressListener?): Operation {
         val progressUpdater = progressListener?.let { ProgressUpdater(Progress(), it, config.chunkSize) }
         return download(from, to, progressUpdater)
@@ -252,7 +246,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     private fun downloadFile(obj: Object, bucket: String, keyPrefix: String, to: String, progressUpdater: ProgressUpdater?) {
         val key = obj.key!!
         val s3Uri = S3Uri(bucket, key)
@@ -306,7 +299,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
      * when from key refers to a key prefix of objects, to key should be the destination top directory of copied objects
      */
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     override fun copy(from: S3Uri, to: S3Uri, progressListener: ProgressListener?): Operation {
         val progressUpdater = progressListener?.let { ProgressUpdater(Progress(), it, config.chunkSize) }
         return copy(from, to, progressUpdater)
@@ -360,7 +352,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     private fun copyObject(obj: Object, fromBucket: String, keyPrefix: String, to: S3Uri, progressUpdater: ProgressUpdater?) {
         val key = obj.key!!
         val subFrom = S3Uri(fromBucket, key)
@@ -371,7 +362,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     private fun copyObject(fileSize: Long, from: S3Uri, to: S3Uri, progressUpdater: ProgressUpdater?) {
         if (fileSize <= config.chunkSize) {
             copyWholeObject(fileSize, from, to, progressUpdater)
@@ -381,7 +371,6 @@ internal class DefaultS3TransferManager(override val config: S3TransferManager.C
     }
 
     context(CoroutineScope)
-    @OptIn(InternalSdkApi::class)
     private fun copyWholeObject(fileSize: Long, from: S3Uri, to: S3Uri, progressUpdater: ProgressUpdater?) {
         async {
             s3.copyObject {
