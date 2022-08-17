@@ -82,9 +82,7 @@ class S3TransferManagerIntegrationTest {
         //                file2.png
         //                file3.jpeg
         //            testUploadDirectory2/
-        val home: String = System.getProperty("user.home")
-        val dir = Paths.get(home, "Downloads")
-        testUploadDirectory = Files.createTempDirectory(dir, "testUploadDirectory")
+        testUploadDirectory = Files.createTempDirectory("testUploadDirectory")
         Files.createTempFile(testUploadDirectory, "file1", ".txt").appendBytes("ABCD".toByteArray())
         val testUploadDirectory1 = Files.createTempDirectory(testUploadDirectory, "testUploadDirectory1")
         Files.createTempFile(testUploadDirectory1, "file2", ".png").appendBytes("image".toByteArray())
@@ -93,9 +91,7 @@ class S3TransferManagerIntegrationTest {
     }
 
     private fun createDownloadDirectory() {
-        val home: String = System.getProperty("user.home")
-        val dir = Paths.get(home, "Downloads")
-        testDownloadDirectory = Files.createTempDirectory(dir, "testDownloadDirectory")
+        testDownloadDirectory = Files.createTempDirectory("testDownloadDirectory")
     }
 
     private fun createBackUpBucket() = runBlocking {
