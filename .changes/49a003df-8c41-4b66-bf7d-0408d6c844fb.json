@@ -1,0 +1,8 @@
+{
+    "id": "49a003df-8c41-4b66-bf7d-0408d6c844fb",
+    "type": "bugfix",
+    "description": "Upgrade smithy-kotlin dependency to fix Mac dlopen issue",
+    "issues": [
+        "awslabs/aws-crt-kotlin#55"
+    ]
+}
