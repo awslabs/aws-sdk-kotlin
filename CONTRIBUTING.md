@@ -91,6 +91,46 @@ of your request may disagree and ask that you add one anyway.
 }
 ```
 
+### Automated PR checks
+
+A number of automated workflows run when a PR is submitted. Generally speaking, each of these must pass before the PR is
+allowed to be merged. If your PR fails one of the checks, please attempt to address the problem and push a new commit to
+the PR. If you need help understanding or resolving a PR check failure, please reach out via a PR comment or a GitHub
+discussion. Please file a new issue if you believe there's a pre-existing bug in a PR check.
+
+#### Lint
+
+This repo uses [**ktlint**](https://github.com/pinterest/ktlint) (via the
+[ktlint Gradle plugin](https://github.com/JLLeitschuh/ktlint-gradle)). To run a lint check locally, run
+`./gradlew ktlint`.
+
+#### CI linux/macos/windows-compat
+
+To verify cross-OS compatibility, we run protocol tests on Linux, MacOS, and Windows runners provided by GitHub. Running
+these checks independently requires access to hosts with those operating systems. On a host with the correct operating
+system, run `./gradlew build publishToMavenlocal testAllProtocols`.
+
+#### AWS CodeBuild BuildBatch
+
+To verify that every service client behaves as expected, we codegen, compile, and test all services. Compiling every
+service client takes a long time and is dispatched to a build fleet when run as a PR check on GitHub. To run this check
+locally, run `./gradlew :codegen:sdk:bootstrap build`.
+
+It is recommended to build only a subset of the services when testing locally, typically one or two directly affected by
+the change under review. To codegen only select services, pass the `-Paws.services` argument with one or more services,
+comma-delimited and prefixed by `+`. For example:
+
+```shell
+./gradlew :codegen:sdk:bootstrap -Paws.services=+s3,+dynamodb,+sqs
+./gradlew build
+```
+
+See [the **:coddegen:sdk** build file](codegen/sdk/build.gradle.kts) for more details.
+
+#### Changelog verification
+
+This check enforces the changelog requirements [described above](#Changelog).
+
 ## Finding contributions to work on
 Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels ((enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any ['help wanted'](https://github.com/aws-samples/aws-sdk-kotlin/labels/help%20wanted) issues is a great place to start. 
 
