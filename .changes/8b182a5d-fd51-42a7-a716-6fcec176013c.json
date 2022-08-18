@@ -1,8 +1,0 @@
-{
-    "id": "8b182a5d-fd51-42a7-a716-6fcec176013c",
-    "type": "documentation",
-    "description": "Enhance **CONTRIBUTING.md** with additional details about required PR checks and how to run them locally",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#683"
-    ]
-}

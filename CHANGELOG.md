@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.17.5-beta] - 08/18/2022
+
+### Fixes
+* [#55](https://github.com/awslabs/aws-crt-kotlin/issues/55) Upgrade smithy-kotlin dependency to fix Mac dlopen issue
+* [#601](https://github.com/awslabs/aws-sdk-kotlin/issues/601) Remove incorrect `.` at end of license identifier header in source files.
+
+### Documentation
+* [#683](https://github.com/awslabs/aws-sdk-kotlin/issues/683) Enhance **CONTRIBUTING.md** with additional details about required PR checks and how to run them locally
+
+### Miscellaneous
+* Upgrade smithy-kotlin to latest released version, 0.12.5
+* Upgrade ktlint to 0.46.1.
+* Sync AWS service models
+* Upgrade Smithy to 1.23.0, upgrade Smithy Gradle to 0.6.0
+
 ## [0.17.4-beta] - 08/11/2022
 
 ### Fixes
