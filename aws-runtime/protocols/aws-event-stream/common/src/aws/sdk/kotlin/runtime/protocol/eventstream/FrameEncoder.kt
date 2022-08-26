@@ -44,6 +44,7 @@ public suspend fun Flow<ByteArray>.asEventStreamHttpBody(): HttpBody {
     return object : HttpBody.Streaming() {
         override val contentLength: Long? = null
         override val isReplayable: Boolean = false
+        override val isDuplex: Boolean = true
         override fun readFrom(): SdkByteReadChannel {
             // FIXME - delaying launch here until the channel is consumed from the HTTP engine is a hacky way
             //  of enforcing ordering to ensure the ExecutionContext is updated with the
