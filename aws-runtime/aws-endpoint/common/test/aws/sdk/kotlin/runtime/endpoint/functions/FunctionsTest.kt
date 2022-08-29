@@ -2,11 +2,11 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0.
  */
-package aws.sdk.kotlin.runtime.endpoint.util
+package aws.sdk.kotlin.runtime.endpoint.functions
 
 import kotlin.test.*
 
-class UtilTest {
+class FunctionsTest {
     @Test
     fun testPartitionAwsCn() =
         assertEquals(AwsCnPartition, partition("cn-1"))
