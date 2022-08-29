@@ -10,7 +10,7 @@ package aws.sdk.kotlin.runtime.endpoint.functions
 import aws.sdk.kotlin.runtime.InternalSdkApi
 
 // the number of top-level components an arn contains (separated by colons)
-private const val arnComponentCount = 6
+private const val ARN_COMPONENT_COUNT = 6
 
 @InternalSdkApi
 public fun partition(region: String): Partition =
@@ -24,9 +24,9 @@ public fun partition(region: String): Partition =
 
 @InternalSdkApi
 public fun parseArn(value: String): Arn? {
-    val split = value.split(':', limit = arnComponentCount)
+    val split = value.split(':', limit = ARN_COMPONENT_COUNT)
     if (split[0] != "arn") return null
-    if (split.size != arnComponentCount) return null
+    if (split.size != ARN_COMPONENT_COUNT) return null
 
     return Arn(
         split[1],
