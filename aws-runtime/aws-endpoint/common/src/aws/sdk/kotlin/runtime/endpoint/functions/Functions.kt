@@ -61,8 +61,8 @@ public val AwsCnPartition: Partition =
     Partition(
         name = "aws-cn",
         dnsSuffix = "amazonaws.com.cn",
-        dnsDualStackSuffix = "cndod",
-        supportsFips = false,
+        dnsDualStackSuffix = "api.amazonwebservices.com.cn",
+        supportsFips = true,
         supportsDualStack = true,
     )
 
@@ -71,7 +71,7 @@ public val AwsIsoPartition: Partition =
     Partition(
         name = "aws-iso",
         dnsSuffix = "c2s.ic.gov",
-        dnsDualStackSuffix = "cn-todo",
+        dnsDualStackSuffix = "c2s.ic.gov",
         supportsFips = true,
         supportsDualStack = false,
     )
@@ -81,7 +81,7 @@ public val AwsIsoBPartition: Partition =
     Partition(
         name = "aws-iso-b",
         dnsSuffix = "sc2s.sgov.gov",
-        dnsDualStackSuffix = "cn-todo",
+        dnsDualStackSuffix = "sc2s.sgov.gov",
         supportsFips = true,
         supportsDualStack = false,
     )
@@ -91,7 +91,7 @@ public val AwsUsGovPartition: Partition =
     Partition(
         name = "aws-us-gov",
         dnsSuffix = "amazonaws.com",
-        dnsDualStackSuffix = "cn-todo",
+        dnsDualStackSuffix = "api.aws",
         supportsFips = true,
         supportsDualStack = true,
     )

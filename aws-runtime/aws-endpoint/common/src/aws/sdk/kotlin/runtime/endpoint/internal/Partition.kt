@@ -18,6 +18,8 @@ private const val defaultSigner = "v4"
 private val protocolPriority = listOf("https", "http")
 private val signerPriority = listOf("v4")
 
+// FIXME: partitioning is becoming an implementation detail of endpoints v2, remove this when the feature goes to main
+// (it is replaced by aws.sdk.kotlin.runtime.endpoint.functions.Partition)
 /**
  * A description of a single service endpoint
  */
