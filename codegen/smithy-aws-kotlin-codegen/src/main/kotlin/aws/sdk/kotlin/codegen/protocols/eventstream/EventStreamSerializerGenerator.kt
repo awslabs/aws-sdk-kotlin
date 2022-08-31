@@ -75,7 +75,7 @@ class EventStreamSerializerGenerator(
         }
 
         writer.write("")
-        writer.write("return messages.#T()", AwsRuntimeTypes.AwsEventStream.asEventStreamHttpBody)
+        writer.write("return messages.#T(context)", AwsRuntimeTypes.AwsEventStream.asEventStreamHttpBody)
     }
 
     private fun encodeEventStreamMessage(

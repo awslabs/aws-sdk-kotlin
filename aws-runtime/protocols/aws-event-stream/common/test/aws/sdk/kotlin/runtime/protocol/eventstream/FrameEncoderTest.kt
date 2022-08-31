@@ -52,7 +52,7 @@ class FrameEncoderTest {
             "baz",
         ).map { it.encodeToByteArray() }
 
-        val body = messages.asEventStreamHttpBody()
+        val body = messages.asEventStreamHttpBody(this)
         val actual = body.readAll()
         val expected = "foobarbaz"
         assertEquals(expected, actual?.decodeToString())
