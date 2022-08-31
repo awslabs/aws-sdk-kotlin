@@ -153,7 +153,7 @@ internal const val imdsTestSuite = """
       },
       "fs": {},
       "result": {
-        "Err": "Illegal character"
+        "Err": "is not a valid inet host"
       }
     },
     {

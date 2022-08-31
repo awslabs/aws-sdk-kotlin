@@ -73,7 +73,7 @@ class EcsCredentialsProviderTest {
         val builder = HttpRequestBuilder().apply {
             method = HttpMethod.GET
             url(resolvedUrl)
-            header("Host", resolvedUrl.host)
+            header("Host", resolvedUrl.host.toString())
             header("Accept", "application/json")
             header("Accept-Encoding", "identity")
             if (authToken != null) {
@@ -134,7 +134,7 @@ class EcsCredentialsProviderTest {
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<ProviderConfigurationException> {
             provider.getCredentials()
-        }.message.shouldContain("The container credentials full URI ($uri) has an invalid host. Host can only be one of [127.0.0.1, [::1]].")
+        }.message.shouldContain("The container credentials full URI ($uri) has an invalid host. Host can only be one of [127.0.0.1, ::1].")
     }
 
     @Test

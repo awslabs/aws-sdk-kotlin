@@ -19,6 +19,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.get
+import aws.smithy.kotlin.runtime.util.net.Host
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -56,7 +57,7 @@ class ResolveAwsEndpointTest {
         op.roundTrip(client, Unit)
         val actual = op.context[HttpOperationContext.HttpCallList].first().request
 
-        assertEquals("api.test.com", actual.url.host)
+        assertEquals(Host.Domain("api.test.com"), actual.url.host)
         assertEquals(Protocol.HTTPS, actual.url.scheme)
         assertEquals("api.test.com", actual.headers["Host"])
     }
@@ -84,7 +85,7 @@ class ResolveAwsEndpointTest {
         op.roundTrip(client, Unit)
         val actual = op.context[HttpOperationContext.HttpCallList].first().request
 
-        assertEquals("api.test.com", actual.url.host)
+        assertEquals(Host.Domain("api.test.com"), actual.url.host)
         assertEquals(Protocol.HTTPS, actual.url.scheme)
         assertEquals("api.test.com", actual.headers["Host"])
 
