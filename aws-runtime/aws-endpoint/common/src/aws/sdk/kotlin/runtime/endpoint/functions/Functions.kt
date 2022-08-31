@@ -10,6 +10,9 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 // the number of top-level components an arn contains (separated by colons)
 private const val ARN_COMPONENT_COUNT = 6
 
+/**
+ * Identifies the partition for the given AWS region.
+ */
 @InternalSdkApi
 public fun partition(region: String): Partition =
     when {
@@ -21,6 +24,11 @@ public fun partition(region: String): Partition =
     }
 
 @InternalSdkApi
+/**
+ * Splits an ARN into its component parts.
+ *
+ * The resource identifier is further split based on the type or scope delimiter present (if any).
+ */
 public fun parseArn(value: String): Arn? {
     val split = value.split(':', limit = ARN_COMPONENT_COUNT)
     if (split[0] != "arn") return null
@@ -35,6 +43,9 @@ public fun parseArn(value: String): Arn? {
     )
 }
 
+/**
+ * A partition defines a broader set of AWS regions.
+ */
 @InternalSdkApi
 public data class Partition(
     public val name: String,
@@ -94,6 +105,9 @@ public val AwsUsGovPartition: Partition =
         supportsDualStack = true,
     )
 
+/**
+ * Represents a parsed form of an ARN (Amazon Resource Name).
+ */
 @InternalSdkApi
 public data class Arn(
     public val partition: String,
