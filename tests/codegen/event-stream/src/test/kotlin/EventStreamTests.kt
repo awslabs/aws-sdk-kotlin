@@ -237,4 +237,30 @@ class EventStreamTests {
         assertIs<TestStream.MessageWithNoHeaderPayloadTraits>(deserialized)
         assertEquals(event, deserialized)
     }
+
+    @Test
+    fun testSerializeMessageWithUnboundPayload() = runTest {
+        val event = TestStream.MessageWithUnboundPayloadTraits(
+            MessageWithUnboundPayloadTraits {
+                header = "a korf is a tiger"
+                unboundString = "a flix is comb"
+            },
+        )
+
+        val message = serializedMessage(event)
+
+        val headers = message.headers.associate { it.name to it.value }
+        assertEquals("event", headers[":message-type"]?.expectString())
+        assertEquals("MessageWithUnboundPayloadTraits", headers[":event-type"]?.expectString())
+        assertEquals("application/json", headers[":content-type"]?.expectString())
+
+        assertEquals("a korf is a tiger", headers["header"]?.expectString())
+
+        val expectedBody = """{"unboundString":"a flix is comb"}"""
+        assertJsonStringsEqual(expectedBody, message.payload.decodeToString())
+
+        val deserialized = deserializedEvent(message)
+        assertIs<TestStream.MessageWithUnboundPayloadTraits>(deserialized)
+        assertEquals(event, deserialized)
+    }
 }
