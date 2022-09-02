@@ -14,6 +14,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.io.File
+import java.nio.file.Paths
 import javax.sound.sampled.AudioSystem
 import kotlin.test.assertTrue
 
@@ -22,8 +23,11 @@ class TranscribeStreamingIntegrationTest {
 
     @Test
     fun testTranscribeEventStream(): Unit = runBlocking {
+        val url = this::class.java.classLoader.getResource("hello-kotlin-8000.wav") ?: error("failed to load test resource")
+        val audioFile = Paths.get(url.toURI()).toFile()
+
         TranscribeStreamingClient { region = "us-east-2" }.use { client ->
-            val transcript = getTranscript(client)
+            val transcript = getTranscript(client, audioFile)
             assertTrue(transcript.startsWith("Hello from", true), "full transcript: $transcript")
         }
     }
@@ -60,9 +64,7 @@ private fun audioStreamFromFile(file: File): Flow<AudioStream> {
     }.flowOn(Dispatchers.IO)
 }
 
-private suspend fun getTranscript(client: TranscribeStreamingClient): String {
-    // FIXME - move to test resources
-    val audioFile = File("/Users/todaaron/Downloads/hello-kotlin-8000.wav")
+private suspend fun getTranscript(client: TranscribeStreamingClient, audioFile: File): String {
     val req = StartStreamTranscriptionRequest {
         languageCode = LanguageCode.EnUs
         mediaSampleRateHertz = 8000
