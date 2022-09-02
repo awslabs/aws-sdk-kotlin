@@ -20,6 +20,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.get
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
@@ -41,20 +42,23 @@ class UserAgentTest {
 
     private val client = sdkHttpClient(mockEngine)
 
-    @Test
-    fun itSetsUAHeaders() = runTest {
-        val op = SdkHttpOperation.build<Unit, HttpResponse> {
+    private fun initializeOp(platformProvider: PlatformProvider = TestPlatformProvider()) =
+        SdkHttpOperation.build<Unit, HttpResponse> {
             serializer = UnitSerializer
             deserializer = IdentityDeserializer
             context {
                 service = "Test Service"
                 operationName = "testOperation"
             }
+        }.apply {
+            val apiMd = ApiMetadata("Test Service", "1.2.3")
+            val metadata = loadAwsUserAgentMetadataFromEnvironment(platformProvider, apiMd)
+            install(UserAgent(metadata))
         }
 
-        val provider = TestPlatformProvider()
-        val metadata = loadAwsUserAgentMetadataFromEnvironment(provider, ApiMetadata("Test Service", "1.2.3"))
-        op.install(UserAgent(metadata))
+    @Test
+    fun itSetsUAHeaders() = runTest {
+        val op = initializeOp()
 
         op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
@@ -68,19 +72,7 @@ class UserAgentTest {
 
     @Test
     fun itAddsPerOperationMetadata() = runTest {
-        val op = SdkHttpOperation.build<Unit, HttpResponse> {
-            serializer = UnitSerializer
-            deserializer = IdentityDeserializer
-            context {
-                service = "Test Service"
-                operationName = "testOperation"
-            }
-        }
-
-        val provider = TestPlatformProvider()
-        val staticMeta = loadAwsUserAgentMetadataFromEnvironment(provider, ApiMetadata("Test Service", "1.2.3"))
-        op.install(UserAgent(staticMeta))
-
+        val op = initializeOp()
         op.context.customUserAgentMetadata.add("foo", "bar")
 
         op.roundTrip(client, Unit)
@@ -89,17 +81,7 @@ class UserAgentTest {
         request.headers[USER_AGENT]!!.shouldContain("md/foo/bar")
 
         // verify per/request metadata is actually per/request
-        val op2 = SdkHttpOperation.build<Unit, HttpResponse> {
-            serializer = UnitSerializer
-            deserializer = IdentityDeserializer
-            context {
-                service = "Test Service"
-                operationName = "testOperation2"
-            }
-        }
-
-        op2.install(UserAgent(staticMeta))
-
+        val op2 = initializeOp()
         op2.context.customUserAgentMetadata.add("baz", "quux")
 
         op2.roundTrip(client, Unit)
@@ -107,5 +89,47 @@ class UserAgentTest {
 
         request2.headers[USER_AGENT]!!.shouldNotContain("md/foo/bar")
         request2.headers[USER_AGENT]!!.shouldContain("md/baz/quux")
+    }
+
+    @Test
+    fun itMergesCustomMetadataWithExisting() = runTest {
+        val platform = TestPlatformProvider(
+            props = mapOf(
+                "aws.customMetadata.foo" to "bar",
+                "aws.customMetadata.baz" to "qux",
+            ),
+        )
+        val op = initializeOp(platform)
+        op.context.customUserAgentMetadata.apply {
+            add("baz", "quux")
+            add("blerg", "blarg")
+        }
+
+        op.roundTrip(client, Unit)
+        val request = op.context[HttpOperationContext.HttpCallList].last().request
+        val uaString = request.headers[USER_AGENT]!!
+
+        uaString.shouldContain("md/foo/bar")
+        uaString.shouldContain("md/baz/quux")
+        uaString.shouldContain("md/blerg/blarg")
+        uaString.shouldNotContain("md/baz/qux") // This was overwritten by "baz/quux"
+    }
+
+    @Test
+    fun itDoesNotClobberExistingCustomMetadata() = runTest {
+        val platform = TestPlatformProvider(
+            props = mapOf(
+                "aws.customMetadata.foo" to "bar",
+                "aws.customMetadata.baz" to "qux",
+            ),
+        )
+        val op = initializeOp(platform)
+
+        op.roundTrip(client, Unit)
+        val request = op.context[HttpOperationContext.HttpCallList].last().request
+        val uaString = request.headers[USER_AGENT]!!
+
+        uaString.shouldContain("md/foo/bar")
+        uaString.shouldContain("md/baz/qux")
     }
 }
