@@ -7,7 +7,6 @@ package aws.sdk.kotlin.e2etest
 import aws.sdk.kotlin.services.transcribestreaming.TranscribeStreamingClient
 import aws.sdk.kotlin.services.transcribestreaming.model.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -39,9 +38,8 @@ private fun audioStreamFromFile(file: File): Flow<AudioStream> {
     println("audio stream format of $file: $format; bytesPerFrame=$bytesPerFrame")
 
     return flow {
-        val frameBuffer = ByteArray(FRAMES_PER_CHUNK * bytesPerFrame)
-
         while (true) {
+            val frameBuffer = ByteArray(FRAMES_PER_CHUNK * bytesPerFrame)
             val rc = ais.read(frameBuffer)
             if (rc <= 0) {
                 break
@@ -57,7 +55,7 @@ private fun audioStreamFromFile(file: File): Flow<AudioStream> {
             println("emitting event")
             emit(event)
             // simulate async nature of this
-            delay(400)
+            // delay(1000)
         }
     }.flowOn(Dispatchers.IO)
 }
