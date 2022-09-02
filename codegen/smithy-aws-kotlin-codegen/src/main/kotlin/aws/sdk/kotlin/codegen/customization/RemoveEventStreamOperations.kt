@@ -5,14 +5,16 @@
 
 package aws.sdk.kotlin.codegen.customization
 
+import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
+import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.findStreamingMember
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.knowledge.ServiceIndex
 import software.amazon.smithy.model.shapes.OperationShape
-import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.transform.ModelTransformer
 import java.util.logging.Logger
@@ -25,13 +27,18 @@ class RemoveEventStreamOperations : KotlinIntegration {
     override val order: Byte = -127
     private val logger = Logger.getLogger(javaClass.name)
 
-    private val supportedServiceIds = setOf(
-        // integration tests
-        "aws.sdk.kotlin.test.eventstream#TestService",
-    ).map(ShapeId::from).toSet()
+    private val supportedProtocols = setOf(
+        RestXmlTrait.ID,
+        RestJson1Trait.ID,
+    )
+    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
+        val serviceIndex = ServiceIndex(model)
+        val protocols = serviceIndex.getProtocols(settings.service)
+            .values
+            .map { it.toShapeId() }
 
-    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
-        settings.service !in supportedServiceIds
+        return protocols.any { it !in supportedProtocols }
+    }
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model =
         ModelTransformer.create().filterShapes(model) { parentShape ->
