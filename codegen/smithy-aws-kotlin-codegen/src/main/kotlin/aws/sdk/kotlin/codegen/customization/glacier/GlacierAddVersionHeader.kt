@@ -21,10 +21,10 @@ class GlacierAddVersionHeader : KotlinIntegration {
 
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
-        resolved: List<ProtocolMiddleware>
+        resolved: List<ProtocolMiddleware>,
     ) = resolved + MutateHeadersMiddleware(
         extraHeaders = mapOf(
-            "X-Amz-Glacier-Version" to ctx.model.expectShape<ServiceShape>(ctx.settings.service).version
-        )
+            "X-Amz-Glacier-Version" to ctx.model.expectShape<ServiceShape>(ctx.settings.service).version,
+        ),
     )
 }

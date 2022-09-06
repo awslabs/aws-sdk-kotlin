@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.http.middleware
@@ -28,7 +28,7 @@ public class ResolveAwsEndpoint(
     /**
      * The resolver to use
      */
-    private val resolver: AwsEndpointResolver
+    private val resolver: AwsEndpointResolver,
 
 ) : ModifyRequestMiddleware {
 

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.profile
@@ -87,12 +87,12 @@ class AwsProfileParserTest {
             "a" to mapOf("x" to "1"),
         )
         val m2 = mapOf(
-            "b" to mapOf("y" to "1")
+            "b" to mapOf("y" to "1"),
         )
 
         val expected = mapOf(
             "a" to mapOf("x" to "1"),
-            "b" to mapOf("y" to "1")
+            "b" to mapOf("y" to "1"),
         )
 
         val actual = mergeProfiles(m1, m2)
@@ -113,15 +113,16 @@ class AwsProfileParserTest {
         val expected = mapOf(
             "a" to mapOf(
                 "x" to "1",
-                "z" to "1"
+                "z" to "1",
             ),
-            "b" to mapOf("y" to "1")
+            "b" to mapOf("y" to "1"),
         )
 
         val actual = mergeProfiles(m1, m2)
 
         assertEquals(expected, actual)
     }
+
     @Test
     fun lastMapWinsMergingInProfiles() {
         val m1 = mapOf(
@@ -132,7 +133,7 @@ class AwsProfileParserTest {
         )
 
         val expected = mapOf(
-            "a" to mapOf("x" to "2")
+            "a" to mapOf("x" to "2"),
         )
 
         val actual = mergeProfiles(m1, m2)
@@ -179,7 +180,7 @@ class AwsProfileParserTest {
         data class MatchErrorCase(
             val name: String,
             val input: String,
-            val expectedErrorMessage: String
+            val expectedErrorMessage: String,
         ) : TestCase()
     }
 

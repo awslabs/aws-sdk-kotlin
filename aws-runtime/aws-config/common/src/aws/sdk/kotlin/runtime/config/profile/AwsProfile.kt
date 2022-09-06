@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.profile
@@ -13,7 +13,7 @@ package aws.sdk.kotlin.runtime.config.profile
  */
 public data class AwsProfile(
     val name: String,
-    private val properties: Map<String, String>
+    private val properties: Map<String, String>,
 ) : Map<String, String> by properties
 
 // Standard cross-SDK properties

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.profile
@@ -47,12 +47,14 @@ internal sealed class Token {
      * @property isValidForm true if the declaration is valid, false if declaration is not compatible with an associated [FileType].
      */
     data class Profile(val profilePrefix: Boolean, val name: String, val isValidForm: Boolean = true) : Token()
+
     /**
      * Represents a property definition line in an AWS configuration file.
      * @property key key of property
      * @property value value of property
      */
     data class Property(val key: String, val value: String) : Token()
+
     /**
      * Represents a line that is not a profile or property definition.
      * @property line string literal of line that could not be parsed.
@@ -77,17 +79,17 @@ internal sealed class Token {
 internal enum class FileType(
     private val setting: AwsSdkSetting<String>,
     private val lineParsers: List<ParseFn>,
-    private val pathSegments: List<String>
+    private val pathSegments: List<String>,
 ) {
     CONFIGURATION(
         AwsSdkSetting.AwsConfigFile,
         listOf(::configurationProfile, ::property, ::unmatchedLine),
-        listOf("~", ".aws", "config")
+        listOf("~", ".aws", "config"),
     ),
     CREDENTIAL(
         AwsSdkSetting.AwsSharedCredentialsFile,
         listOf(::credentialProfile, ::property, ::unmatchedLine),
-        listOf("~", ".aws", "credentials")
+        listOf("~", ".aws", "credentials"),
     );
 
     /**
@@ -170,7 +172,7 @@ internal fun parse(type: FileType, input: String?): ProfileMap {
                                         warn("'${token.key}' defined multiple times in profile '${lastProfile?.name}'", lineNumber)
                                     }
                                     put(token.key, token.value)
-                                }
+                                },
                             )
                         } else {
                             warn("Ignoring property '${token.key}' because '${lastProfile?.name}' is an invalid profile", lineNumber)
@@ -209,6 +211,7 @@ private fun mergeProfiles(tokenIndexMap: Map<Token.Profile, Map<String, String>>
 
 private val logger = Logger.getLogger("AwsConfigParser")
 private const val helpText = "See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for file format details."
+
 /**
  * Format (Configuration Files): [ Whitespace? profile Whitespace Identifier Whitespace? ] Whitespace? CommentLine?
  * Components: A profile line consists of brackets, and a profile name: [profile-name]. A comment line can be appended
@@ -321,8 +324,9 @@ private fun unmatchedLine(input: FileLine): Token = Token.Unmatched(input)
 // See above regarding Unknown Line Type cases
 private fun String.verifyProfileWrapper(lineNumber: Int): String {
     // Profile definitions without brackets cause parsing to fail immediately.
-    if (startsWith(Literals.PROFILE_PREFIX) && !endsWith(Literals.PROFILE_SUFFIX))
+    if (startsWith(Literals.PROFILE_PREFIX) && !endsWith(Literals.PROFILE_SUFFIX)) {
         throwParseException("Profile definition must end with '${Literals.PROFILE_SUFFIX}'", lineNumber)
+    }
 
     return this
 }

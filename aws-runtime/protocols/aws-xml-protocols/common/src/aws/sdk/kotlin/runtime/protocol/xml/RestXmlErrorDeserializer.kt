@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.runtime.protocol.xml
 
@@ -32,7 +32,7 @@ internal data class XmlErrorResponse(
 internal data class XmlError(
     override val requestId: String?,
     override val code: String?,
-    override val message: String?
+    override val message: String?,
 ) : RestXmlErrorDetails
 
 /**

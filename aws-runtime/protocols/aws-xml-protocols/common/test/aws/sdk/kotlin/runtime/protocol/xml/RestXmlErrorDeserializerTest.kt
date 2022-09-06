@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.runtime.protocol.xml
 
@@ -34,7 +34,7 @@ class RestXmlErrorDeserializerTest {
                     <AnotherSetting>setting</AnotherSetting>
                     <RequestId>foo-id</RequestId>
                 </Error>
-            """.trimIndent().encodeToByteArray()
+            """.trimIndent().encodeToByteArray(),
         )
 
         for (payload in tests) {
@@ -67,7 +67,7 @@ class RestXmlErrorDeserializerTest {
                     <AnotherSetting>setting</AnotherSetting>
                     <RequestId>foo-id</RequestId>
                 </SomeRandomThing>
-            """.trimIndent().encodeToByteArray()
+            """.trimIndent().encodeToByteArray(),
         )
 
         for (payload in tests) {
@@ -90,7 +90,7 @@ class RestXmlErrorDeserializerTest {
                     </SomeRandomThing>
                     <RequestId>foo-id</RequestId>
                 </ErrorResponse>
-            """.trimIndent().encodeToByteArray()
+            """.trimIndent().encodeToByteArray(),
         )
 
         for (payload in tests) {

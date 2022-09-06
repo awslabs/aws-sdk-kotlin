@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols
@@ -44,7 +44,7 @@ class AwsQuery : QueryHttpBindingProtocolGenerator() {
     override fun renderDeserializeErrorDetails(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
         writer.addImport(AwsRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
         writer.write("""checkNotNull(payload){ "unable to parse error from empty response" }""")
@@ -72,7 +72,7 @@ private class AwsQuerySerdeFormUrlDescriptorGenerator(
 
 private class AwsQuerySerdeXmlDescriptorGenerator(
     ctx: RenderingContext<Shape>,
-    memberShapes: List<MemberShape>? = null
+    memberShapes: List<MemberShape>? = null,
 ) : XmlSerdeDescriptorGenerator(ctx, memberShapes) {
 
     override fun getObjectDescriptorTraits(): List<SdkFieldDescriptorTrait> {
@@ -89,32 +89,32 @@ private class AwsQuerySerdeXmlDescriptorGenerator(
 }
 
 private class AwsQuerySerializerGenerator(
-    private val protocolGenerator: AwsQuery
+    private val protocolGenerator: AwsQuery,
 ) : AbstractQueryFormUrlSerializerGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
     override fun descriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: List<MemberShape>,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ): FormUrlSerdeDescriptorGenerator = AwsQuerySerdeFormUrlDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 }
 
 private class AwsQueryXmlParserGenerator(
-    private val protocolGenerator: AwsQuery
+    private val protocolGenerator: AwsQuery,
 ) : XmlParserGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
 
     override fun descriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: List<MemberShape>,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = AwsQuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
     override fun renderDeserializeOperationBody(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
         documentMembers: List<MemberShape>,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
         writer.write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
         unwrapOperationResponseBody(op.id.name, writer)
@@ -129,7 +129,7 @@ private class AwsQueryXmlParserGenerator(
      */
     private fun unwrapOperationResponseBody(
         operationName: String,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
         writer.write("// begin unwrap response wrapper")
             .write("val resultDescriptor = #T(#T.Struct, #T(#S))", RuntimeTypes.Serde.SdkFieldDescriptor, RuntimeTypes.Serde.SerialKind, RuntimeTypes.Serde.SerdeXml.XmlSerialName, "${operationName}Result")

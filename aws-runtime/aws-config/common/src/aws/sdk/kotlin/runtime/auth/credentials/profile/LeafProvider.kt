@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials.profile
@@ -44,7 +44,7 @@ internal sealed class LeafProvider {
     data class WebIdentityTokenRole(
         val roleArn: String,
         val webIdentityTokenFile: String,
-        val sessionName: String? = null
+        val sessionName: String? = null,
     ) : LeafProvider()
 
     /**
@@ -64,6 +64,6 @@ internal sealed class LeafProvider {
         val ssoStartUrl: String,
         val ssoRegion: String,
         val ssoAccountId: String,
-        val ssoRoleName: String
+        val ssoRoleName: String,
     ) : LeafProvider()
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols
@@ -42,7 +42,7 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
     override fun renderDeserializeErrorDetails(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
         writer.addImport(AwsRuntimeTypes.XmlProtocols.parseRestXmlErrorResponse)
         writer.write("""checkNotNull(payload){ "unable to parse error from empty response" }""")
@@ -52,20 +52,20 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
 
 class RestXmlParserGenerator(
     private val protocolGenerator: RestXml,
-    defaultTimestampFormat: TimestampFormatTrait.Format
+    defaultTimestampFormat: TimestampFormatTrait.Format,
 ) : XmlParserGenerator(protocolGenerator, defaultTimestampFormat) {
 
     override fun descriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: List<MemberShape>,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
     override fun payloadDeserializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
-        members: Collection<MemberShape>?
+        members: Collection<MemberShape>?,
     ): Symbol {
         return if (shape.hasTrait<XmlNameTrait>() && shape is MemberShape) {
             // can't delegate, have to generate a dedicated deserializer because the member xml name is different
@@ -78,7 +78,7 @@ class RestXmlParserGenerator(
 
     private fun explicitBoundStructureDeserializer(
         ctx: ProtocolGenerator.GenerationContext,
-        boundMember: MemberShape
+        boundMember: MemberShape,
     ): Symbol {
         val memberSymbol = ctx.symbolProvider.toSymbol(boundMember)
         val targetShape = ctx.model.expectShape<StructureShape>(boundMember.target)
@@ -110,20 +110,20 @@ class RestXmlParserGenerator(
 
 class RestXmlSerializerGenerator(
     private val protocolGenerator: RestXml,
-    defaultTimestampFormat: TimestampFormatTrait.Format
+    defaultTimestampFormat: TimestampFormatTrait.Format,
 ) : XmlSerializerGenerator(protocolGenerator, defaultTimestampFormat) {
 
     override fun descriptorGenerator(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: List<MemberShape>,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
     override fun payloadSerializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
-        members: Collection<MemberShape>?
+        members: Collection<MemberShape>?,
     ): Symbol {
         return if (shape.hasTrait<XmlNameTrait>() && shape is MemberShape) {
             // can't delegate, have to generate a dedicated serializer because the member xml name is different

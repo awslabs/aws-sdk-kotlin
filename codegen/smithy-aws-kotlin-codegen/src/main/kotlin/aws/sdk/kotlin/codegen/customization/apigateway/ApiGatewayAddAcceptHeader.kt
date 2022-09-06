@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.customization.apigateway
@@ -27,7 +27,7 @@ class ApiGatewayAddAcceptHeader : KotlinIntegration {
 
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
-        resolved: List<ProtocolMiddleware>
+        resolved: List<ProtocolMiddleware>,
     ): List<ProtocolMiddleware> {
         return resolved + addAcceptHeaderMiddleware
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.imds
@@ -27,7 +27,7 @@ fun tokenResponse(ttl: Int, token: String): HttpResponse = HttpResponse(
     Headers {
         append(X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS, ttl.toString())
     },
-    ByteArrayContent(token.encodeToByteArray())
+    ByteArrayContent(token.encodeToByteArray()),
 )
 
 fun imdsRequest(url: String, token: String): HttpRequest = HttpRequest {
@@ -39,5 +39,5 @@ fun imdsRequest(url: String, token: String): HttpRequest = HttpRequest {
 fun imdsResponse(body: String): HttpResponse = HttpResponse(
     HttpStatusCode.OK,
     Headers.Empty,
-    ByteArrayContent(body.encodeToByteArray())
+    ByteArrayContent(body.encodeToByteArray()),
 )

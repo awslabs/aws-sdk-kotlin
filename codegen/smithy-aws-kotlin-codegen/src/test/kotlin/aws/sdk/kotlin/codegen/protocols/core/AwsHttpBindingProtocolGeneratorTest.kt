@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.codegen.protocols.core
 
@@ -48,7 +48,7 @@ class AwsHttpBindingProtocolGeneratorTest {
 
         val testCtx = model.newTestContext(
             serviceName = "Example",
-            settings = model.defaultSettings(sdkId = serviceSdkName)
+            settings = model.defaultSettings(sdkId = serviceSdkName),
         )
         val unit = TestableAwsHttpBindingProtocolGenerator()
         val op = model.expectShape<OperationShape>("com.test#GetFoo")
@@ -75,7 +75,7 @@ class AwsHttpBindingProtocolGeneratorTest {
         override fun renderDeserializeErrorDetails(
             ctx: ProtocolGenerator.GenerationContext,
             op: OperationShape,
-            writer: KotlinWriter
+            writer: KotlinWriter,
         ) {
             // NOP
         }
@@ -96,7 +96,7 @@ class AwsHttpBindingProtocolGeneratorTest {
                 override fun errorDeserializer(
                     ctx: ProtocolGenerator.GenerationContext,
                     errorShape: StructureShape,
-                    members: List<MemberShape>
+                    members: List<MemberShape>,
                 ): Symbol {
                     error("Unneeded for test")
                 }
@@ -104,7 +104,7 @@ class AwsHttpBindingProtocolGeneratorTest {
                 override fun payloadDeserializer(
                     ctx: ProtocolGenerator.GenerationContext,
                     shape: Shape,
-                    members: Collection<MemberShape>?
+                    members: Collection<MemberShape>?,
                 ): Symbol {
                     error("Unneeded for test")
                 }
@@ -119,7 +119,7 @@ class AwsHttpBindingProtocolGeneratorTest {
                 override fun payloadSerializer(
                     ctx: ProtocolGenerator.GenerationContext,
                     shape: Shape,
-                    members: Collection<MemberShape>?
+                    members: Collection<MemberShape>?,
                 ): Symbol {
                     error("Unneeded for test")
                 }

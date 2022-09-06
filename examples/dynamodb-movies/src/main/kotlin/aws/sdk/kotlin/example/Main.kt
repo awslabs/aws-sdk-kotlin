@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.example
 
@@ -58,7 +58,7 @@ suspend fun createMoviesTable(client: DynamoDbClient, name: String) {
             KeySchemaElement {
                 attributeName = "title"
                 keyType = KeyType.Range
-            }
+            },
         )
 
         attributeDefinitions = listOf(
@@ -69,7 +69,7 @@ suspend fun createMoviesTable(client: DynamoDbClient, name: String) {
             AttributeDefinition {
                 attributeName = "title"
                 attributeType = ScalarAttributeType.S
-            }
+            },
         )
         provisionedThroughput {
             readCapacityUnits = 10
@@ -119,10 +119,10 @@ suspend fun DynamoDbClient.moviesInYear(name: String, year: Int): QueryResponse 
         tableName = name
         keyConditionExpression = "#yr = :yyyy"
         expressionAttributeNames = mapOf(
-            "#yr" to "year"
+            "#yr" to "year",
         )
         expressionAttributeValues = mapOf(
-            ":yyyy" to AttributeValue.N(year.toString())
+            ":yyyy" to AttributeValue.N(year.toString()),
         )
     }
     return query(req)
@@ -152,7 +152,7 @@ fun jsonElementToAttributeValue(element: JsonElement): AttributeValue = when {
         AttributeValue.M(
             element.asJsonObject.entrySet().associate {
                 it.key to jsonElementToAttributeValue(it.value)
-            }
+            },
         )
     }
     else -> throw IllegalStateException("unknown json element type: $element")

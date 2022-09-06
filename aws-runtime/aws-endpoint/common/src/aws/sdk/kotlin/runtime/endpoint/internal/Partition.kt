@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.endpoint.internal
@@ -49,7 +49,7 @@ public data class EndpointDefinition(
     /**
      * A list of allowable signature versions for the endpoint (e.g. "v4", "v2", "v3", "s3v3", etc)
      */
-    val signatureVersions: List<String> = emptyList()
+    val signatureVersions: List<String> = emptyList(),
 )
 
 /**
@@ -87,7 +87,7 @@ public data class Partition(
     /**
      * Map of endpoint names to their definitions
      */
-    val endpoints: Map<String, EndpointDefinition>
+    val endpoints: Map<String, EndpointDefinition>,
 )
 
 // test if this partition is able to resolve an endpoint for the given region
@@ -142,7 +142,7 @@ private fun mergeDefinitions(into: EndpointDefinition, from: EndpointDefinition)
     val protocols = if (into.protocols.isNotEmpty()) into.protocols else from.protocols
     val credentialScope = CredentialScope(
         region = into.credentialScope?.region ?: from.credentialScope?.region,
-        service = into.credentialScope?.service ?: from.credentialScope?.service
+        service = into.credentialScope?.service ?: from.credentialScope?.service,
     )
     val signatureVersions = if (into.signatureVersions.isNotEmpty()) into.signatureVersions else from.signatureVersions
     return EndpointDefinition(hostname, protocols, credentialScope, signatureVersions)

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.runtime.protocol.json
 
@@ -31,7 +31,7 @@ public class AwsJsonProtocol(
     /**
      * The protocol version e.g. "1.0"
      */
-    private val version: String
+    private val version: String,
 ) : ModifyRequestMiddleware {
 
     override suspend fun modifyRequest(req: SdkHttpRequest): SdkHttpRequest {

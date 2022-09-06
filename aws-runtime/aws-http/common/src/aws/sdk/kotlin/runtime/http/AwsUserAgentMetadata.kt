@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.http
@@ -29,7 +29,7 @@ public data class AwsUserAgentMetadata(
     val execEnvMetadata: ExecutionEnvMetadata? = null,
     val frameworkMetadata: FrameworkMetadata? = null,
     val appId: String? = null,
-    val customMetadata: CustomUserAgentMetadata? = null
+    val customMetadata: CustomUserAgentMetadata? = null,
 ) {
 
     public companion object {
@@ -183,7 +183,7 @@ public data class OsMetadata(val family: OsFamily, val version: String? = null) 
 public data class LanguageMetadata(
     val version: String = KotlinVersion.CURRENT.toString(),
     // additional metadata key/value pairs
-    val extras: Map<String, String> = emptyMap()
+    val extras: Map<String, String> = emptyMap(),
 ) {
     override fun toString(): String = buildString {
         append("lang/kotlin/$version")
@@ -244,7 +244,7 @@ private fun detectExecEnv(platform: PlatformEnvironProvider): ExecutionEnvMetada
 private val VALID_TCHAR = setOf(
     '!', '#', '$', '%', '&',
     '\'', '*', '+', '-', '.',
-    '^', '_', '`', '|', '~'
+    '^', '_', '`', '|', '~',
 )
 
 private fun String.encodeUaToken(): String {

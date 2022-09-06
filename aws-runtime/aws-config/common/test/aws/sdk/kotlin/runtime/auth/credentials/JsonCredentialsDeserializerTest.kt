@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -36,7 +36,7 @@ class JsonCredentialsDeserializerTest {
             "ASIARTEST",
             "xjtest",
             "IQote///test",
-            Instant.fromEpochSeconds(1631935916)
+            Instant.fromEpochSeconds(1631935916),
         )
         assertEquals(expected, parsed)
     }
@@ -71,7 +71,7 @@ class JsonCredentialsDeserializerTest {
             "ASIARTEST",
             "xjtest",
             "IQote///test",
-            Instant.fromEpochSeconds(1631935916)
+            Instant.fromEpochSeconds(1631935916),
         )
         assertEquals(expected, parsed)
     }
@@ -144,7 +144,7 @@ class JsonCredentialsDeserializerTest {
         val parsed = deserializeJsonCredentials(deserializer)
         val expected = JsonCredentialsResponse.Error(
             "AssumeRoleUnauthorizedAccess",
-            "EC2 cannot assume the role integration-test"
+            "EC2 cannot assume the role integration-test",
         )
         assertEquals(expected, parsed)
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -26,14 +26,14 @@ class ProfileCredentialsProviderTest {
                 [default]
                 aws_access_key_id = AKID-Default
                 aws_secret_access_key = Default-Secret
-                """.trimIndent()
-            )
+                """.trimIndent(),
+            ),
         )
         val testEngine = TestConnection()
 
         val provider = ProfileCredentialsProvider(
             platformProvider = testProvider,
-            httpClientEngine = testEngine
+            httpClientEngine = testEngine,
         )
         val actual = provider.getCredentials()
         val expected = Credentials("AKID-Default", "Default-Secret")
@@ -53,15 +53,15 @@ class ProfileCredentialsProviderTest {
                 [profile my-profile]
                 aws_access_key_id = AKID-Profile
                 aws_secret_access_key = Profile-Secret
-                """.trimIndent()
-            )
+                """.trimIndent(),
+            ),
         )
         val testEngine = TestConnection()
 
         val provider = ProfileCredentialsProvider(
             profileName = "my-profile",
             platformProvider = testProvider,
-            httpClientEngine = testEngine
+            httpClientEngine = testEngine,
         )
         val actual = provider.getCredentials()
         val expected = Credentials("AKID-Profile", "Profile-Secret")
@@ -84,14 +84,14 @@ class ProfileCredentialsProviderTest {
                 [profile my-profile]
                 aws_access_key_id = AKID-Profile
                 aws_secret_access_key = Profile-Secret
-                """.trimIndent()
-            )
+                """.trimIndent(),
+            ),
         )
         val testEngine = TestConnection()
 
         val provider = ProfileCredentialsProvider(
             platformProvider = testProvider,
-            httpClientEngine = testEngine
+            httpClientEngine = testEngine,
         )
         val actual = provider.getCredentials()
         val expected = Credentials("AKID-Profile", "Profile-Secret")
@@ -106,7 +106,7 @@ class ProfileCredentialsProviderTest {
         val testProvider = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
-                "AWS_REGION" to "us-west-2"
+                "AWS_REGION" to "us-west-2",
             ),
             fs = mapOf(
                 "config" to """
@@ -118,8 +118,8 @@ class ProfileCredentialsProviderTest {
                 region = us-east-1
                 aws_access_key_id = AKID-Profile
                 aws_secret_access_key = Profile-Secret
-                """.trimIndent()
-            )
+                """.trimIndent(),
+            ),
         )
         val testEngine = buildTestConnection {
             expect(StsTestUtils.stsResponse(testArn))
@@ -127,7 +127,7 @@ class ProfileCredentialsProviderTest {
 
         val provider = ProfileCredentialsProvider(
             platformProvider = testProvider,
-            httpClientEngine = testEngine
+            httpClientEngine = testEngine,
         )
         val actual = provider.getCredentials()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)

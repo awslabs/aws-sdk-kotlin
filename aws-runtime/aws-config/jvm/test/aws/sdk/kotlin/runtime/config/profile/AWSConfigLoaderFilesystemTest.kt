@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.profile
@@ -48,7 +48,7 @@ class AWSConfigLoaderFilesystemTest {
             homeEnv = "/home/user",
             awsConfigFileEnv = configFile.absolutePathString(),
             awsSharedCredentialsFileEnv = credentialsFile.absolutePathString(),
-            os = Platform.osInfo() // Actual value
+            os = Platform.osInfo(), // Actual value
         )
 
         val actual = loadActiveAwsProfile(testPlatform)
@@ -75,7 +75,7 @@ class AWSConfigLoaderFilesystemTest {
             homeEnv = "/home/user",
             awsConfigFileEnv = configFile.absolutePathString(),
             awsSharedCredentialsFileEnv = credentialsFile.absolutePathString(),
-            os = Platform.osInfo() // Actual value
+            os = Platform.osInfo(), // Actual value
         )
 
         val actual = loadActiveAwsProfile(testPlatform)
@@ -84,8 +84,10 @@ class AWSConfigLoaderFilesystemTest {
         assertEquals(3, actual.size)
         actual.shouldContainAll(
             mapOf(
-                "name" to "value", "name3" to "value3", "secret" to "foo"
-            )
+                "name" to "value",
+                "name3" to "value3",
+                "secret" to "foo",
+            ),
         )
 
         configFile.deleteIfExists()
@@ -99,7 +101,7 @@ class AWSConfigLoaderFilesystemTest {
         homeEnv: String? = null,
         awsSharedCredentialsFileEnv: String? = null,
         homeProp: String? = null,
-        os: OperatingSystem
+        os: OperatingSystem,
     ): Platform {
         val testPlatform = mockk<Platform>()
         val envKeyParam = slot<String>()

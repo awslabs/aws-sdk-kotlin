@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.region
@@ -15,7 +15,7 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
  * @param providers the list of providers to delegate to
  */
 public open class RegionProviderChain(
-    protected vararg val providers: RegionProvider
+    protected vararg val providers: RegionProvider,
 ) : RegionProvider {
     private val logger = Logger.getLogger<RegionProviderChain>()
 

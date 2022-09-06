@@ -21,7 +21,7 @@ internal const val HEADER_TRACE_ID = "X-Amzn-Trace-Id"
  */
 @InternalSdkApi
 public class RecursionDetection(
-    private val env: EnvironmentProvider = Platform
+    private val env: EnvironmentProvider = Platform,
 ) : ModifyRequestMiddleware {
     override suspend fun modifyRequest(req: SdkHttpRequest): SdkHttpRequest {
         if (req.subject.headers.contains(HEADER_TRACE_ID)) return req

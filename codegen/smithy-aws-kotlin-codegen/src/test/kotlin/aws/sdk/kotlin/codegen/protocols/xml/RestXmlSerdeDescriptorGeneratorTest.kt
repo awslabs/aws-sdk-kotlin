@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.codegen.protocols.xml
@@ -31,7 +31,7 @@ class RestXmlSerdeDescriptorGeneratorTest {
                     message: String,
                     foo: String
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         val expectedDescriptors = """
@@ -49,7 +49,7 @@ class RestXmlSerdeDescriptorGeneratorTest {
                 structure Foo { 
                     message: String
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         val expectedDescriptors = """

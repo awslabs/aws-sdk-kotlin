@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.imds
@@ -85,7 +85,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     // cached middleware instances
     private val resolveEndpointMiddleware = ResolveEndpoint(ImdsEndpointResolver(platformProvider, endpointConfiguration))
     private val userAgentMiddleware = UserAgent(
-        staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown"))
+        staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown")),
     )
     private val retryMiddleware = run {
         val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)

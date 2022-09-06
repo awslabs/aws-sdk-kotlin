@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.profile
@@ -43,7 +43,6 @@ public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile 
  * @return A map of all profiles, which each are a map of key/value pairs.
  */
 internal suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): Map<String, Map<String, String>> {
-
     // merged AWS configuration based on optional configuration and credential file contents
     return mergeProfiles(
         parse(FileType.CONFIGURATION, platform.readFileOrNull(source.configPath)?.decodeToString()),
@@ -68,14 +67,14 @@ internal data class AwsConfigurationSource(val profile: String, val configPath: 
  */
 internal fun resolveConfigSource(
     platform: PlatformProvider,
-    profileNameOverride: String? = null
+    profileNameOverride: String? = null,
 ) =
     AwsConfigurationSource(
         // If the user does not specify the profile to be used, the default profile must be used by the SDK.
         // The default profile must be overridable using the AWS_PROFILE environment variable.
         profileNameOverride ?: AwsSdkSetting.AwsProfile.resolve(platform) ?: Literals.DEFAULT_PROFILE,
         normalizePath(FileType.CONFIGURATION.path(platform), platform),
-        normalizePath(FileType.CREDENTIAL.path(platform), platform)
+        normalizePath(FileType.CREDENTIAL.path(platform), platform),
     )
 
 /**
@@ -110,8 +109,7 @@ internal fun normalizePath(path: String, platform: PlatformProvider): String {
 private fun resolveHomeDir(platform: PlatformProvider): String? =
     with(platform) {
         when (osInfo().family) {
-            OsFamily.Unknown,
-            OsFamily.Windows ->
+            OsFamily.Unknown, OsFamily.Windows ->
                 getenv("HOME")
                     ?: getenv("USERPROFILE")
                     ?: (getenv("HOMEDRIVE") to getenv("HOMEPATH")).concatOrNull()

@@ -1,0 +1,5 @@
+{
+    "id": "354c9857-8af1-43b7-9bcf-bff91aa32bc5",
+    "type": "misc",
+    "description": "Use explict CoroutineScope for consuming event stream flow"
+}

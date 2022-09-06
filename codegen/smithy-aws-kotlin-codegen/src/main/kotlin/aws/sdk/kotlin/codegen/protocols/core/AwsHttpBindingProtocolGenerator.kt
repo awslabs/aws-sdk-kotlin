@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.codegen.protocols.core
 
@@ -65,7 +65,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             ctx,
             requestTestBuilder,
             responseTestBuilder,
-            errorTestBuilder
+            errorTestBuilder,
         ).generateProtocolTests()
     }
 
@@ -98,7 +98,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "}",
                 RuntimeTypes.Core.ExecutionContext,
                 RuntimeTypes.Http.Response.HttpResponse,
-                KotlinTypes.Nothing
+                KotlinTypes.Nothing,
             ) {
                 renderThrowOperationError(ctx, op, writer)
             }
@@ -107,7 +107,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     protected open fun renderThrowOperationError(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
-        writer: KotlinWriter
+        writer: KotlinWriter,
     ) {
         val exceptionBaseSymbol = ExceptionBaseClassGenerator.baseExceptionSymbol(ctx.settings)
         writer.write("val payload = response.body.#T()", RuntimeTypes.Http.readAll)

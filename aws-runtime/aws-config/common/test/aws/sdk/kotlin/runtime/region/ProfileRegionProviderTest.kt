@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.region
@@ -17,11 +17,11 @@ class ProfileRegionProviderTest {
     fun testSuccessDefaultProfile() = runTest {
         val platform = TestPlatformProvider(
             env = mapOf(
-                "AWS_CONFIG_FILE" to "config"
+                "AWS_CONFIG_FILE" to "config",
             ),
             fs = mapOf(
-                "config" to "[default]\nregion = us-east-2"
-            )
+                "config" to "[default]\nregion = us-east-2",
+            ),
         )
 
         val provider = ProfileRegionProvider(platform)
@@ -33,11 +33,11 @@ class ProfileRegionProviderTest {
         val platform = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
-                "AWS_PROFILE" to "test-profile"
+                "AWS_PROFILE" to "test-profile",
             ),
             fs = mapOf(
-                "config" to "[default]\nregion = us-east-2\n[profile test-profile]\nregion = us-west-2"
-            )
+                "config" to "[default]\nregion = us-east-2\n[profile test-profile]\nregion = us-west-2",
+            ),
         )
 
         val provider = ProfileRegionProvider(platform)
@@ -51,8 +51,8 @@ class ProfileRegionProviderTest {
                 "AWS_CONFIG_FILE" to "config",
             ),
             fs = mapOf(
-                "config" to "[default]\naccess_key_id=AKID"
-            )
+                "config" to "[default]\naccess_key_id=AKID",
+            ),
         )
 
         val provider = ProfileRegionProvider(platform)

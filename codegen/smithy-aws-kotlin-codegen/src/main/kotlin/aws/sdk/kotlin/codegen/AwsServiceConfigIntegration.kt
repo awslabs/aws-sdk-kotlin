@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.codegen
 
@@ -41,13 +41,13 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                     "public val #1L: #2T = builder.#1L?.borrow() ?: #3T()",
                     prop.propertyName,
                     prop.symbol,
-                    AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider
+                    AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
                 )
-            })
+            },)
 
             additionalImports = listOf(
                 AwsRuntimeTypes.Config.Credentials.borrow,
-                AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider
+                AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
             )
         }
     }
@@ -59,7 +59,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             withBlock(
                 "public operator fun invoke(block: Config.Builder.() -> Unit): #L {",
                 "}",
-                serviceSymbol.name
+                serviceSymbol.name,
             ) {
                 write("val config = Config.Builder().apply(block).build()")
                 write("return Default${serviceSymbol.name}(config)")
@@ -76,7 +76,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             writer.withBlock(
                 "public suspend fun fromEnvironment(block: (Config.Builder.() -> Unit)? = null): #T {",
                 "}",
-                serviceSymbol
+                serviceSymbol,
             ) {
                 write("val builder = Config.Builder()")
                 write("if (block != null) builder.apply(block)")

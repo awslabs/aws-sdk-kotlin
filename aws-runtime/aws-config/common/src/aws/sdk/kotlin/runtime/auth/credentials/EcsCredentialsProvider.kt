@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -63,7 +63,7 @@ private const val PROVIDER_NAME = "EcsContainer"
  */
 public class EcsCredentialsProvider internal constructor(
     private val platformProvider: PlatformEnvironProvider,
-    httpClientEngine: HttpClientEngine? = null
+    httpClientEngine: HttpClientEngine? = null,
 ) : CredentialsProvider, Closeable {
 
     public constructor() : this(Platform)
@@ -157,7 +157,7 @@ public class EcsCredentialsProvider internal constructor(
 
         if (url.host.toString() !in allowedHosts) {
             throw ProviderConfigurationException(
-                "The container credentials full URI ($uri) has an invalid host. Host can only be one of [${allowedHosts.joinToString()}]."
+                "The container credentials full URI ($uri) has an invalid host. Host can only be one of [${allowedHosts.joinToString()}].",
             )
         }
         return url
@@ -180,7 +180,7 @@ private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
                 resp.secretAccessKey,
                 resp.sessionToken,
                 resp.expiration,
-                PROVIDER_NAME
+                PROVIDER_NAME,
             )
             is JsonCredentialsResponse.Error -> throw CredentialsProviderException("Error retrieving credentials from container service: code=${resp.code}; message=${resp.message}")
         }
@@ -188,7 +188,7 @@ private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
 }
 
 private class EcsCredentialsSerializer(
-    private val authToken: String? = null
+    private val authToken: String? = null,
 ) : HttpSerialize<Unit> {
     override suspend fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder {
         val builder = HttpRequestBuilder()

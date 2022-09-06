@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.config.profile
@@ -31,7 +31,7 @@ class ContinuationMergerTest {
         val negativeTestCases = listOf(
             " -continued" to "Expected a profile definition",
             "[profile foo]\n -continued" to "Expected a property definition",
-            "[profile foo]\nname = value\n[profile foo]\n -continued" to "Expected a property definition"
+            "[profile foo]\nname = value\n[profile foo]\n -continued" to "Expected a property definition",
         )
 
         negativeTestCases.forEach { testCase ->

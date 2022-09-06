@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -51,7 +51,7 @@ public class StsAssumeRoleCredentialsProvider(
     private val roleSessionName: String? = null,
     private val externalId: String? = null,
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
-    private val httpClientEngine: HttpClientEngine? = null
+    private val httpClientEngine: HttpClientEngine? = null,
 ) : CredentialsProvider {
 
     override suspend fun getCredentials(): Credentials {
@@ -78,7 +78,7 @@ public class StsAssumeRoleCredentialsProvider(
             when (ex) {
                 is RegionDisabledException -> throw ProviderConfigurationException(
                     "STS is not activated in the requested region (${client.config.region}). Please check your configuration and activate STS in the target region if necessary",
-                    ex
+                    ex,
                 )
                 else -> throw CredentialsProviderException("failed to assume role from STS", ex)
             }
@@ -94,7 +94,7 @@ public class StsAssumeRoleCredentialsProvider(
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRole response" },
             sessionToken = roleCredentials.sessionToken,
             expiration = roleCredentials.expiration,
-            providerName = PROVIDER_NAME
+            providerName = PROVIDER_NAME,
         )
     }
 }

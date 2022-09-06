@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.endpoint
@@ -19,7 +19,7 @@ import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
  */
 public data class AwsEndpoint(
     public val endpoint: Endpoint,
-    public val credentialScope: CredentialScope? = null
+    public val credentialScope: CredentialScope? = null,
 ) {
     public constructor(url: Url, credentialScope: CredentialScope? = null) : this(Endpoint(url), credentialScope)
     public constructor(url: String, credentialScope: CredentialScope? = null) : this(Endpoint(Url.parse(url)), credentialScope)

@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package aws.sdk.kotlin.runtime.auth.credentials
@@ -42,7 +42,7 @@ private const val PROVIDER_NAME = "IMDSv2"
 public class ImdsCredentialsProvider(
     private val profileOverride: String? = null,
     private val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
-    private val platformProvider: PlatformEnvironProvider = Platform
+    private val platformProvider: PlatformEnvironProvider = Platform,
 ) : CredentialsProvider, Closeable {
     private val logger = Logger.getLogger<ImdsCredentialsProvider>()
 
@@ -71,7 +71,7 @@ public class ImdsCredentialsProvider(
                 resp.secretAccessKey,
                 resp.sessionToken,
                 resp.expiration,
-                PROVIDER_NAME
+                PROVIDER_NAME,
             )
             is JsonCredentialsResponse.Error -> {
                 when (resp.code) {

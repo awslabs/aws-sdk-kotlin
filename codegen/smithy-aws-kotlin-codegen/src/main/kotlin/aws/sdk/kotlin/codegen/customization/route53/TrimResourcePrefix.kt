@@ -22,7 +22,7 @@ class TrimResourcePrefix : KotlinIntegration {
 
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
-        resolved: List<ProtocolMiddleware>
+        resolved: List<ProtocolMiddleware>,
     ): List<ProtocolMiddleware> =
         resolved + TrimResourcePrefixMiddleware()
 }
@@ -40,7 +40,7 @@ private class TrimResourcePrefixMiddleware : ProtocolMiddleware {
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         val pathMember = ctx.model.expectShape<StructureShape>(op.input.get()).members().first(
-            MemberShape::shouldTrimResourcePrefix
+            MemberShape::shouldTrimResourcePrefix,
         ).defaultName()
 
         writer.withBlock("op.execution.initialize.intercept { req, next -> ", "}") {
