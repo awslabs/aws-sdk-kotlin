@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 package aws.sdk.kotlin.runtime.endpoint.functions
 
@@ -49,6 +49,6 @@ class FunctionsTest {
                 "account-id",
                 listOf("resource-type", "resource-id"),
             ),
-            parseArn("arn:partition:service:region:account-id:resource-type/resource-id")
+            parseArn("arn:partition:service:region:account-id:resource-type/resource-id"),
         )
 }

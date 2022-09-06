@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0.
+ * SPDX-License-Identifier: Apache-2.0
  */
 // This package implements AWS-specific standard library functions used by endpoint resolvers of AWS SDKs.
 package aws.sdk.kotlin.runtime.endpoint.functions
