@@ -93,6 +93,7 @@ class UserAgentTest {
 
     @Test
     fun itMergesCustomMetadataWithExisting() = runTest {
+        // see: https://github.com/awslabs/aws-sdk-kotlin/issues/694
         val platform = TestPlatformProvider(
             props = mapOf(
                 "aws.customMetadata.foo" to "bar",
@@ -117,6 +118,7 @@ class UserAgentTest {
 
     @Test
     fun itDoesNotClobberExistingCustomMetadata() = runTest {
+        // see: https://github.com/awslabs/aws-sdk-kotlin/issues/694
         val platform = TestPlatformProvider(
             props = mapOf(
                 "aws.customMetadata.foo" to "bar",
