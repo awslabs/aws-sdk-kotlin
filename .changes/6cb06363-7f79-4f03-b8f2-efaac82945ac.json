@@ -1,0 +1,8 @@
+{
+    "id": "6cb06363-7f79-4f03-b8f2-efaac82945ac",
+    "type": "bugfix",
+    "description": "Merge per-op custom metadata to avoid clobbering per-client metadata",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#694"
+    ]
+}

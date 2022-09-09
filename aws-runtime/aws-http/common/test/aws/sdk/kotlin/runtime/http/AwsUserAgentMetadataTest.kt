@@ -27,9 +27,7 @@ class AwsUserAgentMetadataTest {
         val sdkMeta = SdkMetadata("kotlin", apiMeta.version)
         val osMetadata = OsMetadata(OsFamily.Linux, "ubuntu-20.04")
         val langMeta = LanguageMetadata("1.4.31", mapOf("jvmVersion" to "1.11"))
-        val custom = CustomUserAgentMetadata().apply {
-            add("foo", "bar")
-        }
+        val custom = CustomUserAgentMetadata(extras = mapOf("foo" to "bar"))
         val ua = AwsUserAgentMetadata(sdkMeta, apiMeta, osMetadata, langMeta, customMetadata = custom)
         // FIXME re-enable once user agent strings can be longer
         val expected = listOf(
