@@ -58,8 +58,6 @@ private fun audioStreamFromFile(file: File): Flow<AudioStream> {
 
             println("emitting event")
             emit(event)
-            // simulate async nature of this
-            // delay(1000)
         }
     }.flowOn(Dispatchers.IO)
 }
