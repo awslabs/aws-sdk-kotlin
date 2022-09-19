@@ -1,5 +1,0 @@
-{
-    "id": "6313ed78-29f9-4d71-af08-38b6a62bcd40",
-    "type": "feature",
-    "description": "Mark event stream HTTP body as duplex stream"
-}

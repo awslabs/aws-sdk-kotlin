@@ -1,8 +1,0 @@
-{
-    "id": "34fc4fc2-ad2d-4264-976c-5013324c10b7",
-    "type": "feature",
-    "description": "Add support for event streams",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#543"
-    ]
-}

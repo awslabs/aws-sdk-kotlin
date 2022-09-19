@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.17.6-beta] - 09/19/2022
+
+### Features
+* [#543](https://github.com/awslabs/aws-sdk-kotlin/issues/543) Add support for event streams
+* Mark event stream HTTP body as duplex stream
+
+### Fixes
+* [#694](https://github.com/awslabs/aws-sdk-kotlin/issues/694) Merge per-op custom metadata to avoid clobbering per-client metadata
+
+### Miscellaneous
+* Sync AWS service models
+* Update smithy-kotlin version
+* Add unbound event stream payload deserialization path
+* Use explict CoroutineScope for consuming event stream flow
+
 ## [0.17.5-beta] - 08/18/2022
 
 ### Fixes
