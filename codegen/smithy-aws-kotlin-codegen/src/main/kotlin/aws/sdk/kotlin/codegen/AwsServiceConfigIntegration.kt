@@ -83,6 +83,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
                 addImport(AwsRuntimeTypes.Config.Region.resolveRegion)
                 write("builder.region = builder.region ?: #T()", AwsRuntimeTypes.Config.Region.resolveRegion)
+                write("builder.retryStrategy = builder.retryStrategy ?: #T()", AwsRuntimeTypes.Config.Retries.resolveRetryStrategy)
                 write("return Default${serviceSymbol.name}(builder.build())")
             }
         }

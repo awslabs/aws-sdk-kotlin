@@ -130,6 +130,17 @@ public sealed class AwsSdkSetting<T>(
      * An authorization token to pass to a container metadata service.
      */
     public object AwsContainerAuthorizationToken : AwsSdkSetting<String>("AWS_CONTAINER_AUTHORIZATION_TOKEN", "aws.containerAuthorizationToken", null)
+
+    /**
+     * The maximum number of request attempts to perform. This is one more than the number of retries, so
+     * aws.maxAttempts = 1 will have 0 retries.
+     */
+    public object AwsMaxAttempts : AwsSdkSetting<String>("AWS_MAX_ATTEMPTS", "aws.maxAttempts")
+
+    /**
+     * Which RetryMode to use for the default RetryPolicy, when one is not specified at the client level.
+     */
+    public object AwsRetryMode : AwsSdkSetting<String>("AWS_RETRY_MODE", "aws.retryMode")
 }
 
 /**

@@ -53,3 +53,16 @@ public val AwsProfile.roleArn: String?
  */
 public val AwsProfile.sourceProfile: String?
     get() = this["source_profile"]
+
+/**
+ * The maximum number of request attempts to perform. This is one more than the number of retries, so
+ * aws.maxAttempts = 1 will have 0 retries.
+ */
+public val AwsProfile.maxRetryAttempts: String?
+        get() = this["max_attempts"]
+
+/**
+ * Which RetryMode to use for the default RetryPolicy, when one is not specified at the client level.
+ */
+public val AwsProfile.retryMode: String?
+    get() = this["retry_mode"]

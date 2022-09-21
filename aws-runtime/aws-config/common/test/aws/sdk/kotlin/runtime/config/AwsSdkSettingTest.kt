@@ -51,6 +51,24 @@ class AwsSdkSettingTest {
         assertEquals(true, actual)
     }
 
+    @Test
+    fun itResolvesMaxAttemptsFromEnvironmentVariables() {
+        val expected = "5"
+        val testPlatform = mockPlatform(mapOf("AWS_MAX_ATTEMPTS" to expected), mapOf())
+
+        val actual = AwsSdkSetting.AwsMaxAttempts.resolve(testPlatform)
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun itResolvesRetryModeFromSystemProperties() {
+        val expected = "legacy"
+        val testPlatform = mockPlatform(mapOf(), mapOf("aws.retryMode" to expected))
+
+        val actual = AwsSdkSetting.AwsRetryMode.resolve(testPlatform)
+        assertEquals(expected, actual)
+    }
+
     private fun mockPlatform(env: Map<String, String>, jvmProps: Map<String, String>): PlatformEnvironProvider {
         return object : PlatformEnvironProvider {
             override fun getAllEnvVars(): Map<String, String> = env
