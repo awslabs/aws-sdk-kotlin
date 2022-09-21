@@ -20,17 +20,18 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
 
 /**
  * Attempt to resolve the retry strategy used to make requests by fetching the max attempts and retry mode. Currently,
- * we only support the standard retry mode.
+ * we only support the legacy and standard retry modes.
  */
 @InternalSdkApi
 public suspend fun resolveRetryStrategy(platformProvider: PlatformProvider = Platform): RetryStrategy {
     val profile = asyncLazy { loadActiveAwsProfile(platformProvider) }
 
     // resolve max attempts
-    val maxAttempts: Int = (AwsSdkSetting.AwsMaxAttempts.resolve(platformProvider)
-        ?: profile.get().maxRetryAttempts
-        ?: (StandardRetryStrategyOptions.Default.maxAttempts).toString()
-    ).toInt()
+    val maxAttempts: Int = (
+        AwsSdkSetting.AwsMaxAttempts.resolve(platformProvider)
+            ?: profile.get().maxRetryAttempts
+            ?: (StandardRetryStrategyOptions.Default.maxAttempts).toString()
+        ).toInt()
 
     if (maxAttempts < 1) {
         throw IllegalArgumentException("max attempts was $maxAttempts but should be at least 1")
@@ -46,4 +47,3 @@ public suspend fun resolveRetryStrategy(platformProvider: PlatformProvider = Pla
 
     return StandardRetryStrategy(StandardRetryStrategyOptions(maxAttempts))
 }
-

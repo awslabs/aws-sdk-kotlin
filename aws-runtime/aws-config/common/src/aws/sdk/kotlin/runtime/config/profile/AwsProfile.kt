@@ -59,7 +59,7 @@ public val AwsProfile.sourceProfile: String?
  * aws.maxAttempts = 1 will have 0 retries.
  */
 public val AwsProfile.maxRetryAttempts: String?
-        get() = this["max_attempts"]
+    get() = this["max_attempts"]
 
 /**
  * Which RetryMode to use for the default RetryPolicy, when one is not specified at the client level.
