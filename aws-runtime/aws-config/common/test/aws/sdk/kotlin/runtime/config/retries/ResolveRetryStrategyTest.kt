@@ -146,7 +146,6 @@ class ResolveRetryStrategyTest {
         assertFailsWith<NotImplementedError> { resolveRetryStrategy(platform) }
     }
 
-
     @Test
     fun itResolvesMaxAttemptsAndRetryModeFromEnvironmentVariables() = runTest {
         val expectedMaxAttempts = 1
