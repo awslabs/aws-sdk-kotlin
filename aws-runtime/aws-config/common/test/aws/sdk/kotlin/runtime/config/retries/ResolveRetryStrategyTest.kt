@@ -9,11 +9,10 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ResolveRetryStrategyTest {
@@ -65,11 +64,7 @@ class ResolveRetryStrategyTest {
                 env = mapOf(AwsSdkSetting.AwsMaxAttempts.environmentVariable to invalidMaxAttempts.toString()),
             )
 
-            assertThrows(IllegalArgumentException::class.java) {
-                runBlocking {
-                    resolveRetryStrategy(platform)
-                }
-            }
+            assertFailsWith<IllegalArgumentException> { resolveRetryStrategy(platform) }
         }
     }
 
@@ -81,11 +76,7 @@ class ResolveRetryStrategyTest {
             env = mapOf(AwsSdkSetting.AwsRetryMode.environmentVariable to retryMode),
         )
 
-        assertThrows(IllegalArgumentException::class.java) {
-            runBlocking {
-                resolveRetryStrategy(platform)
-            }
-        }
+        assertFailsWith<IllegalArgumentException> { resolveRetryStrategy(platform) }
     }
 
     @Test
@@ -104,11 +95,7 @@ class ResolveRetryStrategyTest {
             ),
         )
 
-        assertThrows(IllegalArgumentException::class.java) {
-            runBlocking {
-                resolveRetryStrategy(platform)
-            }
-        }
+        assertFailsWith<IllegalArgumentException> { resolveRetryStrategy(platform) }
     }
 
     // TODO: Remove this test after https://github.com/awslabs/aws-sdk-kotlin/issues/701 is complete
@@ -120,15 +107,11 @@ class ResolveRetryStrategyTest {
             env = mapOf(AwsSdkSetting.AwsRetryMode.environmentVariable to adaptiveRetryMode),
         )
 
-        assertThrows(NotImplementedError::class.java) {
-            runBlocking {
-                resolveRetryStrategy(platform)
-            }
-        }
+        assertFailsWith<NotImplementedError> { resolveRetryStrategy(platform) }
     }
 
     @Test
-    fun itResolvesNonLowercaseRetryModeValues() = runTest {
+    fun itResolvesNonLowercaseRetryModeValuesFromEnvironmentVariables() = runTest {
         val expectedMaxAttempts = 16
         val retryMode = "lEgACY"
 
@@ -141,6 +124,28 @@ class ResolveRetryStrategyTest {
 
         assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).options.maxAttempts)
     }
+
+    @Test
+    fun itResolvesNonLowercaseRetryModeValuesFromProfile() = runTest {
+        val expectedMaxAttempts = 19
+        val retryMode = "aDAPtive"
+
+        val platform = TestPlatformProvider(
+            env = mapOf(
+                "AWS_CONFIG_FILE" to "config",
+            ),
+            fs = mapOf(
+                "config" to """
+                [default]
+                max_attempts=$expectedMaxAttempts
+                retry_mode=$retryMode
+                """.trimIndent(),
+            ),
+        )
+
+        assertFailsWith<NotImplementedError> { resolveRetryStrategy(platform) }
+    }
+
 
     @Test
     fun itResolvesMaxAttemptsAndRetryModeFromEnvironmentVariables() = runTest {
