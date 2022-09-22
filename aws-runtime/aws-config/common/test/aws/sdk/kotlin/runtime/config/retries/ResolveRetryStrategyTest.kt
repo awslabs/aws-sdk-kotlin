@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.config.retries
 
+import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
@@ -64,7 +65,7 @@ class ResolveRetryStrategyTest {
                 env = mapOf(AwsSdkSetting.AwsMaxAttempts.environmentVariable to invalidMaxAttempts.toString()),
             )
 
-            assertFailsWith<IllegalArgumentException> { resolveRetryStrategy(platform) }
+            assertFailsWith<ConfigurationException> { resolveRetryStrategy(platform) }
         }
     }
 
@@ -76,7 +77,7 @@ class ResolveRetryStrategyTest {
             env = mapOf(AwsSdkSetting.AwsRetryMode.environmentVariable to retryMode),
         )
 
-        assertFailsWith<IllegalArgumentException> { resolveRetryStrategy(platform) }
+        assertFailsWith<ConfigurationException> { resolveRetryStrategy(platform) }
     }
 
     @Test
@@ -95,7 +96,7 @@ class ResolveRetryStrategyTest {
             ),
         )
 
-        assertFailsWith<IllegalArgumentException> { resolveRetryStrategy(platform) }
+        assertFailsWith<ConfigurationException> { resolveRetryStrategy(platform) }
     }
 
     // TODO: Remove this test after https://github.com/awslabs/aws-sdk-kotlin/issues/701 is complete
