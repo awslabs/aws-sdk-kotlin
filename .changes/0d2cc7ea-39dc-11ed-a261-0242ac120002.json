@@ -1,0 +1,6 @@
+{
+  "id": "0d2cc7ea-39dc-11ed-a261-0242ac120002",
+  "type": "feature",
+  "description": "Enable configurability of the retry strategy through environment variables, system properties, and AWS profiles.",
+  "issues": ["#486"]
+}
