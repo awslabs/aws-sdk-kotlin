@@ -5,6 +5,8 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
+import aws.sdk.kotlin.runtime.config.retries.RetryMode
+
 /**
  * The properties and name of an AWS configuration profile.
  *
@@ -58,11 +60,15 @@ public val AwsProfile.sourceProfile: String?
  * The maximum number of request attempts to perform. This is one more than the number of retries, so
  * aws.maxAttempts = 1 will have 0 retries.
  */
-public val AwsProfile.maxRetryAttempts: String?
-    get() = this["max_attempts"]
+public val AwsProfile.maxAttempts: Int?
+    get() = try { this["max_attempts"]?.toInt() } catch (e: NumberFormatException) {
+        throw IllegalArgumentException("Failed to parse maxAttempts " + this["max_attempts"] + " as an integer", e)
+    }
 
 /**
- * Which RetryMode to use for the default RetryPolicy, when one is not specified at the client level.
+ * Which [RetryMode] to use for the default RetryPolicy, when one is not specified at the client level.
  */
-public val AwsProfile.retryMode: String?
-    get() = this["retry_mode"]
+public val AwsProfile.retryMode: RetryMode?
+    get() = try { this["retry_mode"]?.uppercase()?.let { RetryMode.valueOf(it) } } catch (e: IllegalArgumentException) {
+        throw IllegalArgumentException("Retry mode " + this["retry_mode"] + " is not supported, should be one of: \"legacy\", \"standard\", \"adaptive\"", e)
+    }

@@ -1,5 +1,6 @@
 package aws.sdk.kotlin.runtime.config
 
+import aws.sdk.kotlin.runtime.config.retries.RetryMode
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -53,8 +54,8 @@ class AwsSdkSettingTest {
 
     @Test
     fun itResolvesMaxAttemptsFromEnvironmentVariables() {
-        val expected = "5"
-        val testPlatform = mockPlatform(mapOf("AWS_MAX_ATTEMPTS" to expected), mapOf())
+        val expected = 5
+        val testPlatform = mockPlatform(mapOf("AWS_MAX_ATTEMPTS" to expected.toString()), mapOf())
 
         val actual = AwsSdkSetting.AwsMaxAttempts.resolve(testPlatform)
         assertEquals(expected, actual)
@@ -62,8 +63,8 @@ class AwsSdkSettingTest {
 
     @Test
     fun itResolvesRetryModeFromSystemProperties() {
-        val expected = "legacy"
-        val testPlatform = mockPlatform(mapOf(), mapOf("aws.retryMode" to expected))
+        val expected = RetryMode.LEGACY
+        val testPlatform = mockPlatform(mapOf(), mapOf("aws.retryMode" to "legacy"))
 
         val actual = AwsSdkSetting.AwsRetryMode.resolve(testPlatform)
         assertEquals(expected, actual)

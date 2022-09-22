@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.config.retries.RetryMode
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 
 // NOTE: The JVM property names MUST match the ones defined in the Java SDK for any setting added.
@@ -135,12 +136,12 @@ public sealed class AwsSdkSetting<T>(
      * The maximum number of request attempts to perform. This is one more than the number of retries, so
      * aws.maxAttempts = 1 will have 0 retries.
      */
-    public object AwsMaxAttempts : AwsSdkSetting<String>("AWS_MAX_ATTEMPTS", "aws.maxAttempts")
+    public object AwsMaxAttempts : AwsSdkSetting<Int>("AWS_MAX_ATTEMPTS", "aws.maxAttempts")
 
     /**
      * Which RetryMode to use for the default RetryPolicy, when one is not specified at the client level.
      */
-    public object AwsRetryMode : AwsSdkSetting<String>("AWS_RETRY_MODE", "aws.retryMode")
+    public object AwsRetryMode : AwsSdkSetting<RetryMode>("AWS_RETRY_MODE", "aws.retryMode")
 }
 
 /**
@@ -159,6 +160,11 @@ public inline fun <reified T> AwsSdkSetting<T>.resolve(platform: PlatformEnviron
             Int::class -> strValue.toInt()
             Long::class -> strValue.toLong()
             Boolean::class -> strValue.toBoolean()
+            RetryMode::class -> {
+                try { RetryMode.valueOf(strValue.uppercase()) } catch (e: IllegalArgumentException) {
+                    throw IllegalArgumentException("Retry mode $strValue is not supported, should be one of: \"legacy\", \"standard\", \"adaptive\"", e)
+                }
+            }
             else -> error("conversion to ${T::class} not implemented for AwsSdkSetting")
         }
         return typed as? T
