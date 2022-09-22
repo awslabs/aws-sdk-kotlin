@@ -81,7 +81,7 @@ class ResolveRetryStrategyTest {
             env = mapOf(AwsSdkSetting.AwsRetryMode.environmentVariable to retryMode),
         )
 
-        assertThrows(UnsupportedOperationException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             runBlocking {
                 resolveRetryStrategy(platform)
             }
@@ -104,7 +104,7 @@ class ResolveRetryStrategyTest {
             ),
         )
 
-        assertThrows(UnsupportedOperationException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             runBlocking {
                 resolveRetryStrategy(platform)
             }
@@ -125,6 +125,21 @@ class ResolveRetryStrategyTest {
                 resolveRetryStrategy(platform)
             }
         }
+    }
+
+    @Test
+    fun itResolvesNonLowercaseRetryModeValues() = runTest {
+        val expectedMaxAttempts = 16
+        val retryMode = "lEgACY"
+
+        val platform = TestPlatformProvider(
+            env = mapOf(
+                AwsSdkSetting.AwsMaxAttempts.environmentVariable to expectedMaxAttempts.toString(),
+                AwsSdkSetting.AwsRetryMode.environmentVariable to retryMode,
+            ),
+        )
+
+        assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).options.maxAttempts)
     }
 
     @Test

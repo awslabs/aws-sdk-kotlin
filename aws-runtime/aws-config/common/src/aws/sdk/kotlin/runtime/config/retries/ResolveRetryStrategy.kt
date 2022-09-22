@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.config.retries
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
-import aws.sdk.kotlin.runtime.config.profile.maxRetryAttempts
+import aws.sdk.kotlin.runtime.config.profile.maxAttempts
 import aws.sdk.kotlin.runtime.config.profile.retryMode
 import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.retries.RetryStrategy
@@ -27,23 +27,18 @@ public suspend fun resolveRetryStrategy(platformProvider: PlatformProvider = Pla
     val profile = asyncLazy { loadActiveAwsProfile(platformProvider) }
 
     // resolve max attempts
-    val maxAttempts: Int = (
-        AwsSdkSetting.AwsMaxAttempts.resolve(platformProvider)
-            ?: profile.get().maxRetryAttempts
-            ?: (StandardRetryStrategyOptions.Default.maxAttempts).toString()
-        ).toInt()
+    val maxAttempts = AwsSdkSetting.AwsMaxAttempts.resolve(platformProvider)
+        ?: profile.get().maxAttempts
+        ?: StandardRetryStrategyOptions.Default.maxAttempts
 
-    if (maxAttempts < 1) {
-        throw IllegalArgumentException("max attempts was $maxAttempts but should be at least 1")
-    }
+    require(maxAttempts > 0) { "max attempts was $maxAttempts, but should be at least 1" }
 
     // resolve retry mode
-    val retryMode = AwsSdkSetting.AwsRetryMode.resolve(platformProvider) ?: profile.get().retryMode ?: "standard"
-    if (retryMode == "adaptive") {
-        throw NotImplementedError("Retry mode $retryMode is not implemented yet. https://github.com/awslabs/aws-sdk-kotlin/issues/701")
-    } else if (retryMode != "legacy" && retryMode != "standard") {
-        throw UnsupportedOperationException("Retry mode $retryMode is not supported, should be one of: \"legacy\", \"standard\", \"adaptive\"")
-    }
+    val retryMode = AwsSdkSetting.AwsRetryMode.resolve(platformProvider) ?: profile.get().retryMode ?: RetryMode.STANDARD
 
-    return StandardRetryStrategy(StandardRetryStrategyOptions(maxAttempts))
+    // return the retry strategy
+    return when (retryMode) {
+        RetryMode.STANDARD, RetryMode.LEGACY -> StandardRetryStrategy(StandardRetryStrategyOptions(maxAttempts))
+        RetryMode.ADAPTIVE -> throw NotImplementedError("Retry mode $retryMode is not implemented yet. https://github.com/awslabs/aws-sdk-kotlin/issues/701")
+    }
 }
