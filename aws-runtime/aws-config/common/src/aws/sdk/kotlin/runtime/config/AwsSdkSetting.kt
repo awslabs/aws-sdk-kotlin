@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.config
 
+import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.retries.RetryMode
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
@@ -160,11 +161,8 @@ public inline fun <reified T> AwsSdkSetting<T>.resolve(platform: PlatformEnviron
             Int::class -> strValue.toInt()
             Long::class -> strValue.toLong()
             Boolean::class -> strValue.toBoolean()
-            RetryMode::class -> {
-                try { RetryMode.valueOf(strValue.uppercase()) } catch (e: IllegalArgumentException) {
-                    throw IllegalArgumentException("Retry mode $strValue is not supported, should be one of: \"legacy\", \"standard\", \"adaptive\"", e)
-                }
-            }
+            RetryMode::class -> RetryMode.values().firstOrNull { it.name.equals(strValue, ignoreCase = true) }
+                ?: throw ConfigurationException("Retry mode $strValue is not supported, should be one of: ${RetryMode.values().joinToString(", ")}")
             else -> error("conversion to ${T::class} not implemented for AwsSdkSetting")
         }
         return typed as? T
