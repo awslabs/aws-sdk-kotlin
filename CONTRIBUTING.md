@@ -66,7 +66,7 @@ following fields:
 |---------------|------------|----------|----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `id`          | `string`   | yes      |                                              | A unique identifier for this entry. We recommend you generate a UUID for this field.                                                                                                                                                                                                                                                            |
 | `type`        | `string`   | yes      | `bugfix`, `feature`, `documentation`, `misc` | The type of change being made.                                                                                                                                                                                                                                                                                                                  |
-| `description` | `string`   | yes      |                                              | A description of the change being made.                                                                                                                                                                                                                                                                                                         |
+| `description` | `string`   | yes      |                                              | A description of the change being made.<ul><li>Prefix with `**Breaking**:` if the change is breaking</li><li>Use the imperative present tense (e.g., "change" not "changed" nor "changes")</li><li>Capitalize first letter</li><li>No dot (.) at the end unless there are multiple sentences</li></ul>                                          |
 | `issues`      | `string[]` | no       |                                              | A list of references to any related issues in the relevant repositories. A reference can be specified in several ways:<ul><li>The issue number, if local to this repository (eg. `#12345`)</li><li>A fully-qualified issue ID (eg.`awslabs/smithy-kotlin#12345`)</li><li>A fully-qualified URL (eg. `https://issuetracker.com/12345`)</li></ul> |
 | `module`      | `string`   | no       |                                              | The area of the code affected by your changes. If unsure, leave this value unset.                                                                                                                                                                                                                                                               |
 
@@ -84,12 +84,68 @@ of your request may disagree and ask that you add one anyway.
 {
   "id": "263ea6ab-4b75-41a8-9c37-821c30d7b9e5",
   "type": "feature",
-  "description": "Add multiplatform support for URL parsing.",
+  "description": "Add multiplatform support for URL parsing",
   "issues": [
     "awslabs/aws-sdk-kotlin#12345"
   ]
 }
 ```
+
+### Git Commit Guidelines
+This project uses [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) for its commit message format and expects all contributors to follow these guidelines.
+
+Each commit message consists of a **header**, a **body** (optional), and a **footer** (optional). The header has a special format that includes a **type**, a **scope** and a **subject**:
+
+```
+<type>(<scope>): <subject>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+<footer>
+```
+
+Any line of the commit message should not be longer 100 characters. This allows the message to be easier to read on GitHub as well as in various git tools.
+
+#### Type
+
+Must be one of the following:
+
+- **feat**: A new feature
+- **fix**: A bug fix
+- **docs**: Documentation only changes
+- **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- **refactor**: A code change that neither fixes a bug or adds a feature
+- **perf**: A code change that improves performance
+- **test**: Adding missing tests
+- **chore**: Changes to the build process or auxiliary tools and libraries such as documentation generation
+- **ci**: Changes to CI/CD scripts and tooling
+
+#### Scope
+
+The scope is optional but should be included when possible and refer to a module that is being touched. Examples:
+
+- codegen
+- rt (optionally the target platform e.g. rt-android)
+
+#### Subject
+
+The subject contains succinct description of the change:
+
+- Use the imperative present tense (e.g., "change" not "changed" nor "changes")
+- Don't capitalize first letter
+- No dot (.) at the end
+
+#### Body (optional)
+
+Just as in the **subject**, use the imperative, present tense: "change" not "changed" nor "changes". The body should include the motivation for the change and contrast this with previous behavior.
+
+#### Footer (optional)
+
+The footer should contain any information about **Breaking Changes** and is also the place to reference GitHub issues that this commit **Closes**.
+
+The last line of commits introducing breaking changes should be in the form `BREAKING CHANGE: <desc>`
+
+Breaking changes should also add an exclamation mark `!` after the type/scope (e.g. `refactor(rt)!: drop support for Android API < 20`)
 
 ### Automated PR checks
 
