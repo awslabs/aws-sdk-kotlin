@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsContainerCredentialsRelativeUri
 import aws.sdk.kotlin.runtime.config.resolve
-import aws.smithy.kotlin.runtime.ServiceException
+import aws.smithy.kotlin.runtime.ErrorMetadata
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.client.ExecutionContext
@@ -172,19 +172,44 @@ public class EcsCredentialsProvider internal constructor(
 
 private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
     override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): Credentials {
+        if (!response.status.isSuccess()) {
+            throwCredentialsResponseException(response)
+        }
+
         val payload = response.body.readAll() ?: throw CredentialsProviderException("HTTP credentials response did not contain a payload")
         val deserializer = JsonDeserializer(payload)
-        return when (val resp = deserializeJsonCredentials(deserializer)) {
-            is JsonCredentialsResponse.SessionCredentials -> Credentials(
-                resp.accessKeyId,
-                resp.secretAccessKey,
-                resp.sessionToken,
-                resp.expiration,
-                PROVIDER_NAME,
-            )
-            is JsonCredentialsResponse.Error -> throw CredentialsProviderException("Error retrieving credentials from container service: code=${resp.code}; message=${resp.message}")
+        val resp = deserializeJsonCredentials(deserializer)
+        if (resp !is JsonCredentialsResponse.SessionCredentials) {
+            throw CredentialsProviderException("HTTP credentials response was not of expected format")
         }
+
+        return Credentials(
+            resp.accessKeyId,
+            resp.secretAccessKey,
+            resp.sessionToken,
+            resp.expiration,
+            PROVIDER_NAME,
+        )
     }
+}
+
+private suspend fun throwCredentialsResponseException(response: HttpResponse): Nothing {
+    val errorResp = tryParseErrorResponse(response)
+    val messageDetails = errorResp?.run { "code=$code; message=$message" } ?: "HTTP ${response.status}"
+
+    throw CredentialsProviderException("Error retrieving credentials from container service: $messageDetails").apply {
+        sdkErrorMetadata.attributes[ErrorMetadata.ThrottlingError] = response.status == HttpStatusCode.TooManyRequests
+        sdkErrorMetadata.attributes[ErrorMetadata.Retryable] =
+            sdkErrorMetadata.isThrottling ||
+            response.status.category() == HttpStatusCode.Category.SERVER_ERROR
+    }
+}
+
+private suspend fun tryParseErrorResponse(response: HttpResponse): JsonCredentialsResponse.Error? {
+    if (response.headers["Content-Type"] != "application/json") return null
+    val payload = response.body.readAll() ?: return null
+
+    return deserializeJsonCredentials(JsonDeserializer(payload)) as? JsonCredentialsResponse.Error
 }
 
 private class EcsCredentialsSerializer(
@@ -209,14 +234,10 @@ internal class EcsCredentialsRetryPolicy : RetryPolicy<Any?> {
     }
 
     private fun evaluate(throwable: Throwable): RetryDirective = when (throwable) {
-        is ServiceException -> {
-            val httpResp = throwable.sdkErrorMetadata.protocolResponse as? HttpResponse
-            val status = httpResp?.status
-            if (status?.category() == HttpStatusCode.Category.SERVER_ERROR) {
-                RetryDirective.RetryError(RetryErrorType.ServerSide)
-            } else {
-                RetryDirective.TerminateAndFail
-            }
+        is CredentialsProviderException -> when {
+            throwable.sdkErrorMetadata.isThrottling -> RetryDirective.RetryError(RetryErrorType.Throttling)
+            throwable.sdkErrorMetadata.isRetryable -> RetryDirective.RetryError(RetryErrorType.ServerSide)
+            else -> RetryDirective.TerminateAndFail
         }
         else -> RetryDirective.TerminateAndFail
     }
