@@ -111,7 +111,7 @@ public class EcsCredentialsProvider internal constructor(
         } catch (ex: Exception) {
             logger.debug { "failed to obtain credentials from container metadata service" }
             throw when (ex) {
-                is CredentialsProviderException, is CredentialsProviderServiceException -> ex
+                is CredentialsProviderException -> ex
                 else -> CredentialsProviderException("Failed to get credentials from container metadata service", ex)
             }
         } finally {
@@ -174,26 +174,44 @@ public class EcsCredentialsProvider internal constructor(
 private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
     override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): Credentials {
         if (!response.status.isSuccess()) {
-            throw CredentialsProviderServiceException("Error retrieving credentials from container service: HTTP ${response.status}").apply {
-                if (response.status == HttpStatusCode.TooManyRequests) {
-                    sdkErrorMetadata.attributes[ErrorMetadata.ThrottlingError] = true
-                }
-            }
+            throwCredentialsResponseException(response)
         }
 
         val payload = response.body.readAll() ?: throw CredentialsProviderException("HTTP credentials response did not contain a payload")
         val deserializer = JsonDeserializer(payload)
-        return when (val resp = deserializeJsonCredentials(deserializer)) {
-            is JsonCredentialsResponse.SessionCredentials -> Credentials(
-                resp.accessKeyId,
-                resp.secretAccessKey,
-                resp.sessionToken,
-                resp.expiration,
-                PROVIDER_NAME,
-            )
-            is JsonCredentialsResponse.Error -> throw CredentialsProviderServiceException("Error retrieving credentials from container service: code=${resp.code}; message=${resp.message}")
+        val resp = deserializeJsonCredentials(deserializer)
+        if (resp !is JsonCredentialsResponse.SessionCredentials) {
+            throw CredentialsProviderException("HTTP credentials response was not of expected format")
         }
+
+        return Credentials(
+            resp.accessKeyId,
+            resp.secretAccessKey,
+            resp.sessionToken,
+            resp.expiration,
+            PROVIDER_NAME,
+        )
     }
+}
+
+private suspend fun throwCredentialsResponseException(response: HttpResponse): Nothing {
+    val errorResp = tryParseErrorResponse(response)
+
+    val messageDetails = if (errorResp != null) {
+        "code=${errorResp.code}; message=${errorResp.message}"
+    } else {
+        "HTTP ${response.status}"
+    }
+    throw CredentialsProviderException("Error retrieving credentials from container service: $messageDetails").apply {
+        sdkErrorMetadata.attributes[ErrorMetadata.ThrottlingError] = response.status == HttpStatusCode.TooManyRequests
+    }
+}
+
+private suspend fun tryParseErrorResponse(response: HttpResponse): JsonCredentialsResponse.Error? {
+    if (response.headers["Content-Type"] != "application/json") return null
+    val payload = response.body.readAll() ?: return null
+
+    return deserializeJsonCredentials(JsonDeserializer(payload)) as? JsonCredentialsResponse.Error
 }
 
 private class EcsCredentialsSerializer(
@@ -218,13 +236,20 @@ internal class EcsCredentialsRetryPolicy : RetryPolicy<Any?> {
     }
 
     private fun evaluate(throwable: Throwable): RetryDirective = when (throwable) {
+        is CredentialsProviderException -> {
+           if (throwable.sdkErrorMetadata.isThrottling) {
+               RetryDirective.RetryError(RetryErrorType.Throttling)
+           } else {
+               RetryDirective.TerminateAndFail
+           }
+        }
         is ServiceException -> {
             val httpResp = throwable.sdkErrorMetadata.protocolResponse as? HttpResponse
             val status = httpResp?.status
-            when {
-                status?.category() == HttpStatusCode.Category.SERVER_ERROR -> RetryDirective.RetryError(RetryErrorType.ServerSide)
-                throwable.sdkErrorMetadata.isThrottling -> RetryDirective.RetryError(RetryErrorType.Throttling)
-                else -> RetryDirective.TerminateAndFail
+            if (status?.category() == HttpStatusCode.Category.SERVER_ERROR) {
+                RetryDirective.RetryError(RetryErrorType.ServerSide)
+            } else {
+                RetryDirective.TerminateAndFail
             }
         }
         else -> RetryDirective.TerminateAndFail

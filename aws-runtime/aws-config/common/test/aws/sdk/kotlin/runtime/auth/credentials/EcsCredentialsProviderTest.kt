@@ -58,8 +58,12 @@ class EcsCredentialsProviderTest {
         return HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(payload))
     }
 
-    private fun errorResponse(statusCode: HttpStatusCode = HttpStatusCode.BadRequest): HttpResponse =
-        HttpResponse(statusCode, Headers.Empty, ByteArrayContent("error".encodeToByteArray()))
+    private fun errorResponse(
+        statusCode: HttpStatusCode = HttpStatusCode.BadRequest,
+        headers: Headers = Headers.Empty,
+        body: String = "",
+    ): HttpResponse =
+        HttpResponse(statusCode, headers, ByteArrayContent(body.encodeToByteArray()))
 
     private fun ecsRequest(url: String, authToken: String? = null): HttpRequest {
         val resolvedUrl = Url.parse(url)
@@ -198,7 +202,7 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        assertFailsWith<CredentialsProviderServiceException> {
+        assertFailsWith<CredentialsProviderException> {
             provider.getCredentials()
         }.message.shouldContain("Error retrieving credentials from container service: HTTP 400: Bad Request")
 
@@ -211,7 +215,7 @@ class EcsCredentialsProviderTest {
             repeat(StandardRetryStrategyOptions.Default.maxAttempts) {
                 expect(
                     ecsRequest("http://169.254.170.2/relative"),
-                    errorResponse(HttpStatusCode.TooManyRequests),
+                    errorResponse(statusCode = HttpStatusCode.TooManyRequests),
                 )
             }
         }
@@ -221,9 +225,71 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        assertFailsWith<CredentialsProviderServiceException> {
+        assertFailsWith<CredentialsProviderException> {
             provider.getCredentials()
         }.message.shouldContain("Error retrieving credentials from container service: HTTP 429: Too Many Requests")
+
+        engine.assertRequests()
+    }
+
+    @Test
+    fun testJsonErrorResponse() = runTest {
+        val engine = buildTestConnection {
+            expect(
+                ecsRequest("http://169.254.170.2/relative"),
+                errorResponse(
+                    HttpStatusCode.BadRequest,
+                    Headers { append("Content-Type", "application/json") },
+                    """
+                        {
+                            "Code": "failed",
+                            "Message": "request was malformed"
+                        }
+                    """,
+                ),
+            )
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative"),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<CredentialsProviderException> {
+            provider.getCredentials()
+        }.message.shouldContain("Error retrieving credentials from container service: code=failed; message=request was malformed")
+
+        engine.assertRequests()
+    }
+
+    @Test
+    fun testThrottledJsonErrorResponse() = runTest {
+        val engine = buildTestConnection {
+            repeat(StandardRetryStrategyOptions.Default.maxAttempts) {
+                expect(
+                    ecsRequest("http://169.254.170.2/relative"),
+                    errorResponse(
+                        HttpStatusCode.TooManyRequests,
+                        Headers { append("Content-Type", "application/json") },
+                        """
+                        {
+                            "Code": "failed",
+                            "Message": "too many requests"
+                        }
+                    """,
+                    ),
+                )
+            }
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative"),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<CredentialsProviderException> {
+            provider.getCredentials()
+        }.message.shouldContain("Error retrieving credentials from container service: code=failed; message=too many requests")
 
         engine.assertRequests()
     }

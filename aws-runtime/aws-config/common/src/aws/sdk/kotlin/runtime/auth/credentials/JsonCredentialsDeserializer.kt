@@ -53,7 +53,7 @@ internal sealed class JsonCredentialsResponse {
     /**
      * Response successfully parsed as an error response
      */
-    data class Error(val code: String, val message: String?) : JsonCredentialsResponse()
+    data class Error(val code: String?, val message: String?) : JsonCredentialsResponse()
 }
 
 /**
@@ -125,6 +125,6 @@ internal suspend fun deserializeJsonCredentials(deserializer: Deserializer): Jso
             if (expiration == null) throw InvalidJsonCredentialsException("missing field `Expiration`")
             JsonCredentialsResponse.SessionCredentials(accessKeyId!!, secretAccessKey!!, sessionToken!!, expiration!!)
         }
-        else -> JsonCredentialsResponse.Error(code!!, message)
+        else -> JsonCredentialsResponse.Error(code, message)
     }
 }
