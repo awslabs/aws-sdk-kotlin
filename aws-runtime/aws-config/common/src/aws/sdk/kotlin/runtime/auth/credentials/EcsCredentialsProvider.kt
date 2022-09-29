@@ -234,12 +234,10 @@ internal class EcsCredentialsRetryPolicy : RetryPolicy<Any?> {
     }
 
     private fun evaluate(throwable: Throwable): RetryDirective = when (throwable) {
-        is CredentialsProviderException -> {
-            when {
-                throwable.sdkErrorMetadata.isThrottling -> RetryDirective.RetryError(RetryErrorType.Throttling)
-                throwable.sdkErrorMetadata.isRetryable -> RetryDirective.RetryError(RetryErrorType.ServerSide)
-                else -> RetryDirective.TerminateAndFail
-            }
+        is CredentialsProviderException -> when {
+            throwable.sdkErrorMetadata.isThrottling -> RetryDirective.RetryError(RetryErrorType.Throttling)
+            throwable.sdkErrorMetadata.isRetryable -> RetryDirective.RetryError(RetryErrorType.ServerSide)
+            else -> RetryDirective.TerminateAndFail
         }
         else -> RetryDirective.TerminateAndFail
     }
