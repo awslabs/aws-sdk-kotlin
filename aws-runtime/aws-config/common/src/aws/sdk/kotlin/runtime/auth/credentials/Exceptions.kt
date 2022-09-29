@@ -7,7 +7,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.ClientException
 import aws.sdk.kotlin.runtime.ConfigurationException
-import aws.smithy.kotlin.runtime.ServiceException
 
 /**
  * No credentials were available from this [CredentialsProvider]

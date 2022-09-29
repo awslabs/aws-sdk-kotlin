@@ -196,12 +196,8 @@ private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
 
 private suspend fun throwCredentialsResponseException(response: HttpResponse): Nothing {
     val errorResp = tryParseErrorResponse(response)
+    val messageDetails = errorResp?.run { "code=$code; message=$message" } ?: "HTTP ${response.status}"
 
-    val messageDetails = if (errorResp != null) {
-        "code=${errorResp.code}; message=${errorResp.message}"
-    } else {
-        "HTTP ${response.status}"
-    }
     throw CredentialsProviderException("Error retrieving credentials from container service: $messageDetails").apply {
         sdkErrorMetadata.attributes[ErrorMetadata.ThrottlingError] = response.status == HttpStatusCode.TooManyRequests
     }
@@ -237,11 +233,11 @@ internal class EcsCredentialsRetryPolicy : RetryPolicy<Any?> {
 
     private fun evaluate(throwable: Throwable): RetryDirective = when (throwable) {
         is CredentialsProviderException -> {
-           if (throwable.sdkErrorMetadata.isThrottling) {
-               RetryDirective.RetryError(RetryErrorType.Throttling)
-           } else {
-               RetryDirective.TerminateAndFail
-           }
+            if (throwable.sdkErrorMetadata.isThrottling) {
+                RetryDirective.RetryError(RetryErrorType.Throttling)
+            } else {
+                RetryDirective.TerminateAndFail
+            }
         }
         is ServiceException -> {
             val httpResp = throwable.sdkErrorMetadata.protocolResponse as? HttpResponse
