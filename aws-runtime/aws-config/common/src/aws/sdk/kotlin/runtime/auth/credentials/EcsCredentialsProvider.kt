@@ -9,7 +9,6 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsContainerCredentialsRelativeUri
 import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.ErrorMetadata
-import aws.smithy.kotlin.runtime.ServiceException
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.client.ExecutionContext
@@ -200,6 +199,9 @@ private suspend fun throwCredentialsResponseException(response: HttpResponse): N
 
     throw CredentialsProviderException("Error retrieving credentials from container service: $messageDetails").apply {
         sdkErrorMetadata.attributes[ErrorMetadata.ThrottlingError] = response.status == HttpStatusCode.TooManyRequests
+        sdkErrorMetadata.attributes[ErrorMetadata.Retryable] =
+            sdkErrorMetadata.isThrottling ||
+            response.status.category() == HttpStatusCode.Category.SERVER_ERROR
     }
 }
 
@@ -233,19 +235,10 @@ internal class EcsCredentialsRetryPolicy : RetryPolicy<Any?> {
 
     private fun evaluate(throwable: Throwable): RetryDirective = when (throwable) {
         is CredentialsProviderException -> {
-            if (throwable.sdkErrorMetadata.isThrottling) {
-                RetryDirective.RetryError(RetryErrorType.Throttling)
-            } else {
-                RetryDirective.TerminateAndFail
-            }
-        }
-        is ServiceException -> {
-            val httpResp = throwable.sdkErrorMetadata.protocolResponse as? HttpResponse
-            val status = httpResp?.status
-            if (status?.category() == HttpStatusCode.Category.SERVER_ERROR) {
-                RetryDirective.RetryError(RetryErrorType.ServerSide)
-            } else {
-                RetryDirective.TerminateAndFail
+            when {
+                throwable.sdkErrorMetadata.isThrottling -> RetryDirective.RetryError(RetryErrorType.Throttling)
+                throwable.sdkErrorMetadata.isRetryable -> RetryDirective.RetryError(RetryErrorType.ServerSide)
+                else -> RetryDirective.TerminateAndFail
             }
         }
         else -> RetryDirective.TerminateAndFail

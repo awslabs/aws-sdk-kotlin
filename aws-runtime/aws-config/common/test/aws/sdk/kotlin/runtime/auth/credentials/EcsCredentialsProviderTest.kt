@@ -293,4 +293,29 @@ class EcsCredentialsProviderTest {
 
         engine.assertRequests()
     }
+
+    @Test
+    fun test5XXErrorResponse() = runTest {
+        val engine = buildTestConnection {
+            repeat(StandardRetryStrategyOptions.Default.maxAttempts) {
+                expect(
+                    ecsRequest("http://169.254.170.2/relative"),
+                    errorResponse(
+                        HttpStatusCode.BadGateway,
+                    ),
+                )
+            }
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative"),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<CredentialsProviderException> {
+            provider.getCredentials()
+        }.message.shouldContain("Error retrieving credentials from container service: HTTP 502: Bad Gateway")
+
+        engine.assertRequests()
+    }
 }
