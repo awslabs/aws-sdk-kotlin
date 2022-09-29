@@ -23,7 +23,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
 import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitter
@@ -35,7 +35,8 @@ import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.logger
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 
@@ -80,8 +81,8 @@ public class EcsCredentialsProvider internal constructor(
         Retry<Credentials>(strategy, policy)
     }
 
-    override suspend fun getCredentials(): Credentials {
-        val logger = Logger.getLogger<EcsCredentialsProvider>()
+    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials = traceSpan.child("Ecs").use { childSpan ->
+        val logger = childSpan.logger<EcsCredentialsProvider>()
         val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
         val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
         val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)
@@ -98,9 +99,7 @@ public class EcsCredentialsProvider internal constructor(
             context {
                 operationName = "EcsCredentialsProvider"
                 service = "n/a"
-
-                // TODO wire up real trace spans for client calls
-                traceSpan = NoOpTraceSpan
+                this.traceSpan = childSpan
             }
         }
 

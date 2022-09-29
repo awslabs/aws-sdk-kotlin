@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -24,7 +25,8 @@ class CredentialsProviderChainTest {
         }
     }
     data class TestProvider(val credentials: Credentials? = null) : CredentialsProvider {
-        override suspend fun getCredentials(): Credentials = credentials ?: throw IllegalStateException("no credentials available")
+        override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
+            credentials ?: throw IllegalStateException("no credentials available")
     }
 
     @Test

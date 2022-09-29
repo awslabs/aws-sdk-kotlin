@@ -9,6 +9,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -29,7 +30,7 @@ class CachedCredentialsProviderTest {
     ) : CredentialsProvider {
         var callCount = 0
 
-        override suspend fun getCredentials(): Credentials {
+        override suspend fun getCredentials(traceSpan: TraceSpan): Credentials {
             callCount++
             return Credentials(
                 "AKID",
@@ -105,7 +106,7 @@ class CachedCredentialsProviderTest {
     fun testLoadFailed() = runTest {
         val source = object : CredentialsProvider {
             private var count = 0
-            override suspend fun getCredentials(): Credentials {
+            override suspend fun getCredentials(traceSpan: TraceSpan): Credentials {
                 if (count <= 0) {
                     count++
                     throw RuntimeException("test error")

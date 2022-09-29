@@ -13,10 +13,12 @@ import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.logger
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import kotlin.time.Duration
@@ -54,49 +56,50 @@ public class StsAssumeRoleCredentialsProvider(
     private val httpClientEngine: HttpClientEngine? = null,
 ) : CredentialsProvider {
 
-    override suspend fun getCredentials(): Credentials {
-        val logger = Logger.getLogger<StsAssumeRoleCredentialsProvider>()
-        logger.debug { "retrieving assumed credentials" }
+    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
+        traceSpan.child("StsAssumeRole").use { childSpan ->
+            val logger = childSpan.logger<StsAssumeRoleCredentialsProvider>()
+            logger.debug { "retrieving assumed credentials" }
 
-        // NOTE: multi region access points require regional STS endpoints
-        val provider = this
-        val client = StsClient {
-            region = provider.region ?: GLOBAL_STS_PARTITION_ENDPOINT
-            credentialsProvider = provider.credentialsProvider
-            httpClientEngine = provider.httpClientEngine
-        }
-
-        val resp = try {
-            client.assumeRole {
-                roleArn = provider.roleArn
-                externalId = provider.externalId
-                roleSessionName = provider.roleSessionName ?: defaultSessionName()
-                durationSeconds = provider.duration.inWholeSeconds.toInt()
+            // NOTE: multi region access points require regional STS endpoints
+            val provider = this
+            val client = StsClient {
+                region = provider.region ?: GLOBAL_STS_PARTITION_ENDPOINT
+                credentialsProvider = provider.credentialsProvider
+                httpClientEngine = provider.httpClientEngine
             }
-        } catch (ex: Exception) {
-            logger.debug { "sts refused to grant assumed role credentials" }
-            when (ex) {
-                is RegionDisabledException -> throw ProviderConfigurationException(
-                    "STS is not activated in the requested region (${client.config.region}). Please check your configuration and activate STS in the target region if necessary",
-                    ex,
-                )
-                else -> throw CredentialsProviderException("failed to assume role from STS", ex)
+
+            val resp = try {
+                client.assumeRole {
+                    roleArn = provider.roleArn
+                    externalId = provider.externalId
+                    roleSessionName = provider.roleSessionName ?: defaultSessionName()
+                    durationSeconds = provider.duration.inWholeSeconds.toInt()
+                }
+            } catch (ex: Exception) {
+                logger.debug { "sts refused to grant assumed role credentials" }
+                when (ex) {
+                    is RegionDisabledException -> throw ProviderConfigurationException(
+                        "STS is not activated in the requested region (${client.config.region}). Please check your configuration and activate STS in the target region if necessary",
+                        ex,
+                    )
+                    else -> throw CredentialsProviderException("failed to assume role from STS", ex)
+                }
+            } finally {
+                client.close()
             }
-        } finally {
-            client.close()
+
+            val roleCredentials = resp.credentials ?: throw CredentialsProviderException("STS credentials must not be null")
+            logger.debug { "obtained assumed credentials; expiration=${roleCredentials.expiration?.format(TimestampFormat.ISO_8601)}" }
+
+            Credentials(
+                accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRole response" },
+                secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRole response" },
+                sessionToken = roleCredentials.sessionToken,
+                expiration = roleCredentials.expiration,
+                providerName = PROVIDER_NAME,
+            )
         }
-
-        val roleCredentials = resp.credentials ?: throw CredentialsProviderException("STS credentials must not be null")
-        logger.debug { "obtained assumed credentials; expiration=${roleCredentials.expiration?.format(TimestampFormat.ISO_8601)}" }
-
-        return Credentials(
-            accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRole response" },
-            secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRole response" },
-            sessionToken = roleCredentials.sessionToken,
-            expiration = roleCredentials.expiration,
-            providerName = PROVIDER_NAME,
-        )
-    }
 }
 
 // role session name must be provided to assume a role, when the user doesn't provide one we choose a name for them

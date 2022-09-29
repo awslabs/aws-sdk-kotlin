@@ -30,6 +30,7 @@ import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
 import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
@@ -49,8 +50,11 @@ private const val SERVICE = "imds"
 public interface InstanceMetadataProvider : Closeable {
     /**
      * Gets the specified instance metadata value by the given path.
+     * @param path The URI path to fetch
+     * @param traceSpan The span to which tracing events should be omitted. Defaults to [NoOpTraceSpan] if none is
+     * specified.
      */
-    public suspend fun get(path: String): String
+    public suspend fun get(path: String, traceSpan: TraceSpan = NoOpTraceSpan): String
 }
 
 /**
@@ -116,7 +120,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
      * val amiId = client.get("/latest/meta-data/ami-id")
      * ```
      */
-    public override suspend fun get(path: String): String {
+    public override suspend fun get(path: String, traceSpan: TraceSpan): String {
         val op = SdkHttpOperation.build<Unit, String> {
             serializer = UnitSerializer
             deserializer = object : HttpDeserialize<String> {
@@ -132,9 +136,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             context {
                 operationName = path
                 service = SERVICE
-
-                // TODO wire up real trace spans for client calls
-                traceSpan = NoOpTraceSpan
+                this.traceSpan = traceSpan
 
                 // artifact of re-using ServiceEndpointResolver middleware
                 set(SdkClientOption.LogMode, sdkLogMode)

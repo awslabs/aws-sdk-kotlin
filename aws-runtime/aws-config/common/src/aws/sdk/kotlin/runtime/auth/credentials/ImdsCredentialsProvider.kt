@@ -14,11 +14,15 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.logger
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
-import aws.smithy.kotlin.runtime.util.asyncLazy
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/security-credentials"
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
@@ -34,30 +38,28 @@ private const val PROVIDER_NAME = "IMDSv2"
  *
  * @param profileOverride override the instance profile name. When retrieving credentials, a call must first be made to
  * `<IMDS_BASE_URL>/latest/meta-data/iam/security-credentials`. This returns the instance profile used. If
- * [profileOverride] is set, the initial call to retrieve the profile is skipped and the provided value is used instead.
+ * this value is set, the initial call to retrieve the profile is skipped and the provided value is used instead.
  * @param client the IMDS client to use to resolve credentials information with. This provider takes ownership over
  * the lifetime of the given [ImdsClient] and will close it when the provider is closed.
  * @param platformProvider the [PlatformEnvironProvider] instance
  */
 public class ImdsCredentialsProvider(
-    private val profileOverride: String? = null,
+    profileOverride: String? = null,
     private val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
     private val platformProvider: PlatformEnvironProvider = Platform,
 ) : CredentialsProvider, Closeable {
-    private val logger = Logger.getLogger<ImdsCredentialsProvider>()
+    private val profile = ProfileLoader(profileOverride, client)
 
-    private val profile = asyncLazy {
-        if (profileOverride != null) return@asyncLazy profileOverride
-        loadProfile()
-    }
+    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials = traceSpan.child("Imds").use { childSpan ->
+        val logger = childSpan.logger<ImdsCredentialsProvider>()
 
-    override suspend fun getCredentials(): Credentials {
         if (AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true) {
             throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
         }
 
+        logger.trace { "Attempting to load IMDS profile" }
         val profileName = try {
-            profile.get()
+            profile.get(logger)
         } catch (ex: Exception) {
             throw CredentialsProviderException("failed to load instance profile", ex)
         }
@@ -65,7 +67,7 @@ public class ImdsCredentialsProvider(
         val payload = client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
         val deserializer = JsonDeserializer(payload.encodeToByteArray())
 
-        return when (val resp = deserializeJsonCredentials(deserializer)) {
+        when (val resp = deserializeJsonCredentials(deserializer)) {
             is JsonCredentialsResponse.SessionCredentials -> Credentials(
                 resp.accessKeyId,
                 resp.secretAccessKey,
@@ -88,14 +90,22 @@ public class ImdsCredentialsProvider(
         }
     }
 
-    private suspend fun loadProfile(): String {
-        return try {
-            client.value.get(CREDENTIALS_BASE_PATH)
-        } catch (ex: EC2MetadataError) {
-            if (ex.statusCode == HttpStatusCode.NotFound.value) {
-                logger.info { "Received 404 from IMDS when loading profile information. Hint: This instance may not have an IAM role associated." }
+    private class ProfileLoader(private var contents: String?, private val client: Lazy<InstanceMetadataProvider>) {
+        private val mutex = Mutex()
+
+        suspend fun get(logger: Logger): String =
+            contents ?: mutex.withLock {
+                contents ?: loadProfile(logger).also { contents = it }
             }
-            throw ex
-        }
+
+        private suspend fun loadProfile(logger: Logger): String =
+            try {
+                client.value.get(CREDENTIALS_BASE_PATH)
+            } catch (ex: EC2MetadataError) {
+                if (ex.statusCode == HttpStatusCode.NotFound.value) {
+                    logger.info { "Received 404 from IMDS when loading profile information. Hint: This instance may not have an IAM role associated." }
+                }
+                throw ex
+            }
     }
 }

@@ -13,10 +13,12 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.hashing.sha1
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
+import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.fromEpochMilliseconds
+import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.*
 
 private const val PROVIDER_NAME = "SSO"
@@ -94,12 +96,18 @@ public class SsoCredentialsProvider public constructor(
 
 ) : CredentialsProvider {
 
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials = traceSpan.child("Sso").use { childSpan ->
+        val logger = childSpan.logger<SsoCredentialsProvider>()
+
+        logger.trace { "Attempting to load token file" }
         val token = loadTokenFile()
 
         val client = SsoClient {
             region = ssoRegion
             httpClientEngine = this@SsoCredentialsProvider.httpClientEngine
+
+            // TODO wire tracing through generated clients too
+            traceProbe = NoOpTraceProbe
         }
 
         val resp = try {

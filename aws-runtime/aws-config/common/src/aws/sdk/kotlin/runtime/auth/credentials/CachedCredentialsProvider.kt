@@ -10,8 +10,10 @@ import aws.sdk.kotlin.runtime.config.ExpiringValue
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.time.Clock
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.trace
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -53,16 +55,17 @@ public class CachedCredentialsProvider(
 
     private val cachedCredentials = CachedValue<Credentials>(null, bufferTime = refreshBufferWindow, clock)
 
-    override suspend fun getCredentials(): Credentials = cachedCredentials.getOrLoad {
-        val logger = Logger.getLogger<CachedCredentialsProvider>()
-        logger.trace { "refreshing credentials cache" }
-        val providerCreds = source.getCredentials()
-        if (providerCreds.expiration != null) {
-            ExpiringValue(providerCreds, providerCreds.expiration!!)
-        } else {
-            val expiration = clock.now() + expireCredentialsAfter
-            val creds = providerCreds.copy(expiration = expiration)
-            ExpiringValue(creds, expiration)
+    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials = cachedCredentials.getOrLoad {
+        traceSpan.child("Cached").use { childSpan ->
+            traceSpan.trace<CachedCredentialsProvider> { "refreshing credentials cache" }
+            val providerCreds = source.getCredentials(childSpan)
+            if (providerCreds.expiration != null) {
+                ExpiringValue(providerCreds, providerCreds.expiration!!)
+            } else {
+                val expiration = clock.now() + expireCredentialsAfter
+                val creds = providerCreds.copy(expiration = expiration)
+                ExpiringValue(creds, expiration)
+            }
         }
     }
 

@@ -8,7 +8,10 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.io.use
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.debug
+import aws.smithy.kotlin.runtime.tracing.logger
 
 // TODO - support caching the provider that actually resolved credentials such that future calls don't involve going through the full chain
 
@@ -23,8 +26,6 @@ import aws.smithy.kotlin.runtime.logging.Logger
 public open class CredentialsProviderChain(
     protected vararg val providers: CredentialsProvider,
 ) : CredentialsProvider, Closeable {
-    private val logger = Logger.getLogger<CredentialsProviderChain>()
-
     init {
         require(providers.isNotEmpty()) { "at least one provider must be in the chain" }
     }
@@ -32,18 +33,24 @@ public open class CredentialsProviderChain(
     override fun toString(): String =
         (listOf(this) + providers).map { it::class.simpleName }.joinToString(" -> ")
 
-    override suspend fun getCredentials(): Credentials {
-        val chainException = lazy { CredentialsProviderException("No credentials could be loaded from the chain: $this") }
-        for (provider in providers) {
-            try {
-                return provider.getCredentials()
-            } catch (ex: Exception) {
-                logger.debug { "unable to load credentials from $provider: ${ex.message}" }
-                chainException.value.addSuppressed(ex)
+    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials {
+        traceSpan.child("Chain").use { childSpan ->
+            val logger = childSpan.logger<CredentialsProviderChain>()
+            val chainException = lazy { CredentialsProviderException("No credentials could be loaded from the chain: $this") }
+            for (provider in providers) {
+                logger.trace { "Attempting to load credentials from $provider" }
+                try {
+                    return provider.getCredentials(childSpan)
+                } catch (ex: Exception) {
+                    childSpan.debug<CredentialsProviderChain> {
+                        "unable to load credentials from $provider: ${ex.message}"
+                    }
+                    chainException.value.addSuppressed(ex)
+                }
             }
-        }
 
-        throw chainException.value
+            throw chainException.value
+        }
     }
 
     override fun close() {

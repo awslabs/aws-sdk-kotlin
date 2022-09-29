@@ -17,8 +17,10 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.time.TimestampFormat
+import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.logger
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -93,30 +95,31 @@ public class ProfileCredentialsProvider(
         "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClientEngine),
     )
 
-    override suspend fun getCredentials(): Credentials {
-        val logger = Logger.getLogger<ProfileCredentialsProvider>()
-        val source = resolveConfigSource(platformProvider, profileName)
-        logger.debug { "Loading credentials from profile `${source.profile}`" }
-        val profiles = loadAwsProfiles(platformProvider, source)
-        val chain = ProfileChain.resolve(profiles, source.profile)
+    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
+        traceSpan.child("Profile").use { childSpan ->
+            val logger = childSpan.logger<ProfileCredentialsProvider>()
+            val source = resolveConfigSource(platformProvider, profileName)
+            logger.debug { "Loading credentials from profile `${source.profile}`" }
+            val profiles = loadAwsProfiles(platformProvider, source)
+            val chain = ProfileChain.resolve(profiles, source.profile)
 
-        // if profile is overridden for this provider, attempt to resolve it from there first
-        val profileOverride = profileName?.let { profiles[it] }
-        val region = asyncLazy { region ?: profileOverride?.get("region") ?: resolveRegion(platformProvider) }
+            // if profile is overridden for this provider, attempt to resolve it from there first
+            val profileOverride = profileName?.let { profiles[it] }
+            val region = asyncLazy { region ?: profileOverride?.get("region") ?: resolveRegion(platformProvider) }
 
-        val leaf = chain.leaf.toCredentialsProvider(region)
-        logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
-        var creds = leaf.getCredentials()
+            val leaf = chain.leaf.toCredentialsProvider(region)
+            logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
+            var creds = leaf.getCredentials(childSpan)
 
-        chain.roles.forEach { roleArn ->
-            logger.debug { "Assuming role `${roleArn.roleArn}`" }
-            val assumeProvider = roleArn.toCredentialsProvider(creds, region)
-            creds = assumeProvider.getCredentials()
+            chain.roles.forEach { roleArn ->
+                logger.debug { "Assuming role `${roleArn.roleArn}`" }
+                val assumeProvider = roleArn.toCredentialsProvider(creds, region)
+                creds = assumeProvider.getCredentials(childSpan)
+            }
+
+            logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
+            creds
         }
-
-        logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
-        return creds
-    }
 
     override fun close() {
         namedProviders.forEach { entry ->
