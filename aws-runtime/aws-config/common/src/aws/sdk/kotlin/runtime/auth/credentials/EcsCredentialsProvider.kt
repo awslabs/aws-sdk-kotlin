@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsContainerCredentialsRelativeUri
 import aws.sdk.kotlin.runtime.config.resolve
+import aws.smithy.kotlin.runtime.ErrorMetadata
 import aws.smithy.kotlin.runtime.ServiceException
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
@@ -110,7 +111,7 @@ public class EcsCredentialsProvider internal constructor(
         } catch (ex: Exception) {
             logger.debug { "failed to obtain credentials from container metadata service" }
             throw when (ex) {
-                is CredentialsProviderException -> ex
+                is CredentialsProviderException, is CredentialsProviderServiceException -> ex
                 else -> CredentialsProviderException("Failed to get credentials from container metadata service", ex)
             }
         } finally {
@@ -172,6 +173,14 @@ public class EcsCredentialsProvider internal constructor(
 
 private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
     override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): Credentials {
+        if (!response.status.isSuccess()) {
+            throw CredentialsProviderServiceException("Error retrieving credentials from container service: HTTP ${response.status}").apply {
+                if (response.status == HttpStatusCode.TooManyRequests) {
+                    sdkErrorMetadata.attributes[ErrorMetadata.ThrottlingError] = true
+                }
+            }
+        }
+
         val payload = response.body.readAll() ?: throw CredentialsProviderException("HTTP credentials response did not contain a payload")
         val deserializer = JsonDeserializer(payload)
         return when (val resp = deserializeJsonCredentials(deserializer)) {
@@ -182,7 +191,7 @@ private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
                 resp.expiration,
                 PROVIDER_NAME,
             )
-            is JsonCredentialsResponse.Error -> throw CredentialsProviderException("Error retrieving credentials from container service: code=${resp.code}; message=${resp.message}")
+            is JsonCredentialsResponse.Error -> throw CredentialsProviderServiceException("Error retrieving credentials from container service: code=${resp.code}; message=${resp.message}")
         }
     }
 }
@@ -212,10 +221,10 @@ internal class EcsCredentialsRetryPolicy : RetryPolicy<Any?> {
         is ServiceException -> {
             val httpResp = throwable.sdkErrorMetadata.protocolResponse as? HttpResponse
             val status = httpResp?.status
-            if (status?.category() == HttpStatusCode.Category.SERVER_ERROR) {
-                RetryDirective.RetryError(RetryErrorType.ServerSide)
-            } else {
-                RetryDirective.TerminateAndFail
+            when {
+                status?.category() == HttpStatusCode.Category.SERVER_ERROR -> RetryDirective.RetryError(RetryErrorType.ServerSide)
+                throwable.sdkErrorMetadata.isThrottling -> RetryDirective.RetryError(RetryErrorType.Throttling)
+                else -> RetryDirective.TerminateAndFail
             }
         }
         else -> RetryDirective.TerminateAndFail

@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.ClientException
 import aws.sdk.kotlin.runtime.ConfigurationException
+import aws.smithy.kotlin.runtime.ServiceException
 
 /**
  * No credentials were available from this [CredentialsProvider]
@@ -23,3 +24,8 @@ public class ProviderConfigurationException(message: String, cause: Throwable? =
  * The [CredentialsProvider] experienced an error during credentials resolution
  */
 public class CredentialsProviderException(message: String, cause: Throwable? = null) : ClientException(message, cause)
+
+/**
+ * The [CredentialsProvider] received an error response from an external service while attempting to retrieve credentials
+ */
+public class CredentialsProviderServiceException(message: String, cause: Throwable? = null) : ServiceException(message, cause)

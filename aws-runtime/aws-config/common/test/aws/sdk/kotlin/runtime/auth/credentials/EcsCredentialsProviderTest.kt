@@ -20,6 +20,7 @@ import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import io.kotest.matchers.string.shouldContain
@@ -57,16 +58,8 @@ class EcsCredentialsProviderTest {
         return HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(payload))
     }
 
-    private fun errorResponse(): HttpResponse {
-        val payload = """
-        {
-            "Code" : "TestError",
-            "LastUpdated" : "2021-09-17T20:57:08Z",
-            "Message": "Test error code response"
-        }
-        """.encodeToByteArray()
-        return HttpResponse(HttpStatusCode.BadRequest, Headers.Empty, ByteArrayContent(payload))
-    }
+    private fun errorResponse(statusCode: HttpStatusCode = HttpStatusCode.BadRequest): HttpResponse =
+        HttpResponse(statusCode, Headers.Empty, ByteArrayContent("error".encodeToByteArray()))
 
     private fun ecsRequest(url: String, authToken: String? = null): HttpRequest {
         val resolvedUrl = Url.parse(url)
@@ -205,9 +198,32 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        assertFailsWith<CredentialsProviderException> {
+        assertFailsWith<CredentialsProviderServiceException> {
             provider.getCredentials()
-        }.message.shouldContain("Error retrieving credentials from container service: code=TestError; message=Test error code response")
+        }.message.shouldContain("Error retrieving credentials from container service: HTTP 400: Bad Request")
+
+        engine.assertRequests()
+    }
+
+    @Test
+    fun testThrottledErrorResponse() = runTest {
+        val engine = buildTestConnection {
+            repeat(StandardRetryStrategyOptions.Default.maxAttempts) {
+                expect(
+                    ecsRequest("http://169.254.170.2/relative"),
+                    errorResponse(HttpStatusCode.TooManyRequests),
+                )
+            }
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative"),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<CredentialsProviderServiceException> {
+            provider.getCredentials()
+        }.message.shouldContain("Error retrieving credentials from container service: HTTP 429: Too Many Requests")
 
         engine.assertRequests()
     }

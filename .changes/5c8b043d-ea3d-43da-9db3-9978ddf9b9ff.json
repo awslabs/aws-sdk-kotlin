@@ -1,0 +1,8 @@
+{
+    "id": "5c8b043d-ea3d-43da-9db3-9978ddf9b9ff",
+    "type": "bugfix",
+    "description": "Correct handling of non-success responses when retrieving credentials on ECS.",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#697"
+    ]
+}
