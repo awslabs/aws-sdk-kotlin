@@ -35,12 +35,8 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3BucketOpsIntegrationTest {
-    companion object {
-        const val DEFAULT_REGION = "us-east-2"
-    }
-
     private val client = S3Client {
-        region = DEFAULT_REGION
+        region = S3TestUtils.DEFAULT_REGION
     }
 
     private lateinit var testBucket: String
@@ -216,58 +212,56 @@ class S3BucketOpsIntegrationTest {
 
     @Test
     fun testSelectObjectEventStream(): Unit = runBlocking {
-        S3Client.fromEnvironment().use { s3 ->
-            // upload our content to select from
-            val objKey = "developers.csv"
+        // upload our content to select from
+        val objKey = "developers.csv"
 
-            val content = """
-            Name,PhoneNumber,City,Occupation
-            Sam,(949) 555-6701,Irvine,Solutions Architect
-            Vinod,(949) 555-6702,Los Angeles,Solutions Architect
-            Jeff,(949) 555-6703,Seattle,AWS Evangelist
-            Jane,(949) 555-6704,Chicago,Developer
-            Sean,(949) 555-6705,Indianapolis,Developer
-            Mary,(949) 555-6706,Detroit,Developer
-            Kate,(949) 555-6707,Boston,Solutions Architect
-            """.trimIndent()
+        val content = """
+        Name,PhoneNumber,City,Occupation
+        Sam,(949) 555-6701,Irvine,Solutions Architect
+        Vinod,(949) 555-6702,Los Angeles,Solutions Architect
+        Jeff,(949) 555-6703,Seattle,AWS Evangelist
+        Jane,(949) 555-6704,Chicago,Developer
+        Sean,(949) 555-6705,Indianapolis,Developer
+        Mary,(949) 555-6706,Detroit,Developer
+        Kate,(949) 555-6707,Boston,Solutions Architect
+        """.trimIndent()
 
-            s3.putObject {
-                bucket = testBucket
-                key = objKey
-                body = ByteStream.fromString(content)
-            }
-
-            // select content as an event stream
-            val req = SelectObjectContentRequest {
-                bucket = testBucket
-                key = objKey
-                expressionType = ExpressionType.Sql
-                expression = """SELECT * FROM s3object s where s."Name" = 'Jane'"""
-                inputSerialization {
-                    csv {
-                        fileHeaderInfo = FileHeaderInfo.Use
-                    }
-                    compressionType = CompressionType.None
-                }
-                outputSerialization {
-                    csv { }
-                }
-            }
-
-            val events = s3.selectObjectContent(req) { resp ->
-                // collect flow to list
-                resp.payload!!.toList()
-            }
-
-            assertEquals(3, events.size)
-
-            val records = assertIs<SelectObjectContentEventStream.Records>(events[0])
-            assertIs<SelectObjectContentEventStream.Stats>(events[1])
-            assertIs<SelectObjectContentEventStream.End>(events[2])
-
-            val expectedRecord = "Jane,(949) 555-6704,Chicago,Developer\n"
-            assertEquals(expectedRecord, records.value.payload?.decodeToString())
+        client.putObject {
+            bucket = testBucket
+            key = objKey
+            body = ByteStream.fromString(content)
         }
+
+        // select content as an event stream
+        val req = SelectObjectContentRequest {
+            bucket = testBucket
+            key = objKey
+            expressionType = ExpressionType.Sql
+            expression = """SELECT * FROM s3object s where s."Name" = 'Jane'"""
+            inputSerialization {
+                csv {
+                    fileHeaderInfo = FileHeaderInfo.Use
+                }
+                compressionType = CompressionType.None
+            }
+            outputSerialization {
+                csv { }
+            }
+        }
+
+        val events = client.selectObjectContent(req) { resp ->
+            // collect flow to list
+            resp.payload!!.toList()
+        }
+
+        assertEquals(3, events.size)
+
+        val records = assertIs<SelectObjectContentEventStream.Records>(events[0])
+        assertIs<SelectObjectContentEventStream.Stats>(events[1])
+        assertIs<SelectObjectContentEventStream.End>(events[2])
+
+        val expectedRecord = "Jane,(949) 555-6704,Chicago,Developer\n"
+        assertEquals(expectedRecord, records.value.payload?.decodeToString())
     }
 }
 
@@ -280,7 +274,7 @@ private fun File.chunk(partSize: Int): Sequence<LongRange> =
 internal suspend fun s3WithAllEngines(block: suspend (S3Client) -> Unit) {
     withAllEngines { engine ->
         S3Client {
-            region = S3BucketOpsIntegrationTest.DEFAULT_REGION
+            region = S3TestUtils.DEFAULT_REGION
             httpClientEngine = engine
         }.use {
             try {
