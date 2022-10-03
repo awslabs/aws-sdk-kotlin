@@ -22,6 +22,7 @@ START_RESULT=$(
 )
 
 if [ "$?" != "0" ]; then
+  echo "Start result was: $START_RESULT"
   error_exit "Could not start project. Exiting."
 else
   echo "Build started successfully."
