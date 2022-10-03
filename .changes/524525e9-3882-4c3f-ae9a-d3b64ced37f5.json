@@ -1,5 +1,0 @@
-{
-    "id": "524525e9-3882-4c3f-ae9a-d3b64ced37f5",
-    "type": "misc",
-    "description": "Upgrade Kotlin version and dependencies in ECS credentials integration test."
-}

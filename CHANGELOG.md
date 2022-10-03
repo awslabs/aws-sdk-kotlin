@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.17.7-beta] - 10/03/2022
+
+### Features
+* #486 Enable configurability of the retry strategy through environment variables, system properties, and AWS profiles.
+
+### Fixes
+* [#697](https://github.com/awslabs/aws-sdk-kotlin/issues/697) Correct handling of non-success responses when retrieving credentials on ECS.
+
+### Miscellaneous
+* Upgrade smithy-kotlin version.
+* Update/clarify changelog and add commit instructions in the Contributing Guidelines
+* Upgrade Kotlin version and dependencies in ECS credentials integration test.
+* Sync AWS models and upgrade smithy-kotlin.
+
 ## [0.17.6-beta] - 09/19/2022
 
 ### Features
