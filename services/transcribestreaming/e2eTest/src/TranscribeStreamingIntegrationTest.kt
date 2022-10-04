@@ -26,7 +26,7 @@ class TranscribeStreamingIntegrationTest {
         val url = this::class.java.classLoader.getResource("hello-kotlin-8000.wav") ?: error("failed to load test resource")
         val audioFile = Paths.get(url.toURI()).toFile()
 
-        TranscribeStreamingClient { region = "us-east-2" }.use { client ->
+        TranscribeStreamingClient { region = "us-west-2" }.use { client ->
             val transcript = getTranscript(client, audioFile)
             assertTrue(transcript.startsWith("Hello from", true), "full transcript: $transcript")
         }

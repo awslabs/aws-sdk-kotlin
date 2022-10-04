@@ -21,12 +21,9 @@ import kotlin.time.Duration.Companion.seconds
 @OptIn(ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3PresignerTest {
-    companion object {
-        const val DEFAULT_REGION = "us-east-2"
-    }
 
     private val client = S3Client {
-        region = DEFAULT_REGION
+        region = S3TestUtils.DEFAULT_REGION
     }
 
     private lateinit var testBucket: String

@@ -26,6 +26,8 @@ import kotlin.time.Duration.Companion.seconds
 
 object S3TestUtils {
 
+    const val DEFAULT_REGION = "us-west-2"
+
     private const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
 
     suspend fun getTestBucket(client: S3Client): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX)
