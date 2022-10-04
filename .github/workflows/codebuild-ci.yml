@@ -35,4 +35,4 @@ jobs:
           aws-region: us-west-2
       - name: Run Service Check Batch
         run: |
-          .github/scripts/runCodeBuildBatchJob.sh gh-aws-sdk-kotlin-svc-check-batch ${{ github.event.pull_request.head.sha }}
+          .github/scripts/run-codebuild-batch-job.sh gh-aws-sdk-kotlin-svc-check-batch ${{ github.event.pull_request.head.sha }}

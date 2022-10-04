@@ -1,18 +1,17 @@
 name: codegen diff preview
-# This job will generate a branch containing exclusively codegen output and push it to GitHub
-# once the branch is deployed, it will comment on GitHub with a link where you can see the generated diff.
+# This job will generate a codegen output diff comparing the target base ref with current HEAD ref and push it to S3
+# and comment on GitHub PR with a link to the HTML output.
 on:
-  push:
-    branches:
-      # this is a load-bearing branch filter: if this isn't here, you may
-      # end up generating diffs for __generated-* branches which would lead to infinite recursion...
-      - main
   pull_request:
     types:
       - opened
       - reopened
-      - closed
       - synchronize
+
+# TODO/FIXME - missing CDN URL and secret for s3 bucket name (both require CR approval and deployment)
+
+permissions:
+  id-token: write
 
 # Allow one instance of this workflow per pull request, and cancel older runs when new changes are pushed
 concurrency:
@@ -26,6 +25,7 @@ env:
   BUILDER_HOST: https://d19elf31gohf1l.cloudfront.net
   PACKAGE_NAME: aws-sdk-kotlin
   RUN: ${{ github.run_id }}-${{ github.run_number }}
+  DIFF2HTML_VERSION: 5.2.5
   # Below is the set of services that are generated for codegen preview
   # These are carefully selected to exercise every Smithy protocol.
   #  - @awsJson1_0: dynamodb
@@ -37,34 +37,13 @@ env:
   PREVIEW_SERVICES: +dynamodb,+codebuild,+sts,+ec2,+polly,+s3
 
 jobs:
-  cleanup-branch:
-    if: ${{ github.event.action == 'closed' }}
-    runs-on: ubuntu-latest
-    name: cleanup generated code branch
-    steps:
-      - name: gen branch output
-        run: echo "::set-output name=branchname::${GITHUB_HEAD_REF##*/}"
-        id: branch_output
-      - uses: actions/github-script@v5
-        with:
-          script: |
-            console.log("deleting the generated code branch");
-            await github.rest.git.deleteRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: "heads/__generated-${{ steps.branch_output.outputs.branchname }}"
-            })
 
-  push-generated-code:
+  generate-codegen-diff:
     runs-on: ubuntu-latest
-    name: Push generated code to a branch
-    if: ${{ github.event.action != 'closed' }}
+    name: Generate diff and upload to S3
+    outputs:
+      bot-message: ${{ steps.generate-diff.outputs.codegen-diff-msg }}
     steps:
-      # this is not technically necessary because of the branch filter above, but better to check
-      # twice than have an infinitely recursing PR job
-      - name: Assert we aren't already on a generated branch
-        run: |
-          [[ ${GITHUB_HEAD_REF:-$GITHUB_REF} != "*__generated*" ]]
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
         name: Gradle Cache
@@ -79,33 +58,45 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ env.JAVA_VERSION }}
-      - name: download-deps
+      - name: Install and build deps
         # abuse crt builder to download and build upstream dependencies like smithy-kotlin
         run: |
+          npm install -g diff2html-cli@${{ env.DIFF2HTML_VERSION }}
           python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
           chmod a+x builder.pyz
           ./builder.pyz build -p ${{ env.PACKAGE_NAME }} --variant codegen-preview
-      - name: mk-generated
+      - name: Generate diff
+        id: generate-diff
         run: |
-          echo "aws.services=${{ env.PREVIEW_SERVICES }}" >> local.properties
-          .github/scripts/mk-generated.sh
-      - name: push generated branch
+          .github/scripts/codegen-diff-revisions.py --bootstrap ${{ env.PREVIEW_SERVICES }} . ${{ github.event.pull_request.base.sha }}
+          echo ::set-output name=codegen-diff-msg::"$(cat ./tmp-codegen-diff/bot-message)"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
+          aws-region: us-west-2
+      - name: Upload diff to S3
         run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git push -f origin "$(git rev-parse --abbrev-ref HEAD)"
-      - name: finalize
-        run: echo "generated output pushed to $(git rev-parse --abbrev-ref HEAD)"
-      - name: gen branch output
-        run: echo "::set-output name=branchname::$(git rev-parse --abbrev-ref HEAD)"
-        id: branch_output
-      - uses: actions/github-script@v5
-        # NOTE: if comments on each commit become bothersome, add a check that github.event.pull_request.action == "opened"
-        if: ${{ github.head_ref != null }}
+          if [[ -d ./tmp-codegen-diff/${{ github.event.pull_request.base.sha }} ]]; then
+            aws s3 cp ./tmp-codegen-diff/${{ github.event.pull_request.base.sha }} \
+                "s3://${{ secrets.CDN_S3_BUCKET_NAME }}/codegen-diff/${{ github.event.pull_request.base.sha }}" --recursive
+          fi
+
+
+  # TODO - generate doc preview for N services and upload and link as well
+  post-bot-comment:
+    name: Post bot comment
+    runs-on: ubuntu-latest
+    needs:
+      - generate-codegen-diff
+    steps:
+      - name: Post bot comment
+        uses: actions/github-script@v5
         with:
           script: |
             await github.rest.issues.createComment({
-              issue_number: context.issue.number,
+              issue_number: ${{ github.event.number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `A new generated diff is ready to view: https://github.com/${context.repo.owner}/${context.repo.repo}/compare/__generated-main...${{ steps.branch_output.outputs.branchname }}`
+              body: '${{ needs.generate-codegen-diff.outputs.bot-message }}\n\n'
             })

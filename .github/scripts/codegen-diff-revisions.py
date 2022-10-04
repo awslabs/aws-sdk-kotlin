@@ -14,7 +14,7 @@
 #
 # ```
 # $ cd test/aws-sdk-kotlin
-# $ ../../aws-sdk-kotlin/tools/codegen-diff-revisions.py . <some commit hash to diff against>
+# $ ../../aws-sdk-kotlin/.github/scripts/codegen-diff-revisions.py . <some commit hash to diff against>
 # ```
 #
 # It will diff the generated code from HEAD against any commit hash you feed it. If you want to test
@@ -40,6 +40,7 @@ OUTPUT_PATH = "tmp-codegen-diff/"
 COMMIT_AUTHOR_NAME = "GitHub Action (generated codegen diff)"
 COMMIT_AUTHOR_EMAIL = "generated-code-action@github.com"
 
+# FIXME - move to CLI option
 CDN_URL = "http://localhost:8080"
 
 
