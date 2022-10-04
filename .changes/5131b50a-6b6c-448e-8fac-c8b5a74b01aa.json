@@ -1,0 +1,8 @@
+{
+    "id": "5131b50a-6b6c-448e-8fac-c8b5a74b01aa",
+    "type": "bugfix",
+    "description": "Enable intra-repo links in API ref docs",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#715"
+    ]
+}
