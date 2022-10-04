@@ -13,6 +13,12 @@ on:
       - reopened
       - closed
       - synchronize
+
+# Allow one instance of this workflow per pull request, and cancel older runs when new changes are pushed
+concurrency:
+  group: ci-codegen-diff-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   JAVA_VERSION: 11
   BUILDER_VERSION: v0.8.22
@@ -23,12 +29,12 @@ env:
   # Below is the set of services that are generated for codegen preview
   # These are carefully selected to exercise every Smithy protocol.
   #  - @awsJson1_0: dynamodb
-  #  - @awsJson1_1: config
+  #  - @awsJson1_1: codebuild
   #  - @awsQuery: sts
   #  - @ec2Query: ec2
   #  - @restJson1: polly
   #  - @restXml: s3
-  PREVIEW_SERVICES: +dynamodb,+config,+sts,+ec2,+polly,+s3
+  PREVIEW_SERVICES: +dynamodb,+codebuild,+sts,+ec2,+polly,+s3
 
 jobs:
   cleanup-branch:
