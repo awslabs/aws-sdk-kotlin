@@ -166,6 +166,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
 
 tasks.withType<org.gradle.jvm.tasks.Jar> {
     dependsOn(codegenTask)
+
+    if (name == "jar" || name == "javadocJar") {
+        archiveBaseName.set("aws-config-smithycodegen")
+    }
 }
 
 codegen.projections.all {
