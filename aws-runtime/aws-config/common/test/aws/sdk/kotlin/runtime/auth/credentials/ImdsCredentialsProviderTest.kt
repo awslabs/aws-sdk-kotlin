@@ -29,11 +29,11 @@ import io.mockk.coVerify
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import java.net.SocketTimeoutException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
-import java.net.SocketTimeoutException
 import kotlin.test.assertNotEquals
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -255,7 +255,7 @@ class ImdsCredentialsProviderTest {
         val provider = ImdsCredentialsProvider(
             profileOverride = "imds-test-role",
             client = lazyOf(client),
-            clock = testClock
+            clock = testClock,
         )
 
         val actual = provider.getCredentials()
@@ -266,7 +266,7 @@ class ImdsCredentialsProviderTest {
             sessionToken = "IQote///test",
             expiration = Instant.fromEpochSeconds(1631935916),
             providerName = "IMDSv2",
-            nextRefresh = testClock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds // 15 minutes
+            nextRefresh = testClock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds, // 15 minutes
         )
 
         assertEquals(expected, actual)
@@ -300,10 +300,12 @@ class ImdsCredentialsProviderTest {
 
         val testClock = ManualClock()
 
-        val client = spyk(ImdsClient {
-            engine = connection
-            clock = testClock
-        })
+        val client = spyk(
+            ImdsClient {
+                engine = connection
+                clock = testClock
+            },
+        )
 
         val provider = ImdsCredentialsProvider(
             profileOverride = "imds-test-role",
@@ -317,7 +319,7 @@ class ImdsCredentialsProviderTest {
         }
 
         // make sure ImdsClient only gets called once
-        coVerify (exactly = 1) {
+        coVerify(exactly = 1) {
             client.get(any())
         }
     }
@@ -365,10 +367,12 @@ class ImdsCredentialsProviderTest {
 
         val testClock = ManualClock()
 
-        val client = spyk(ImdsClient {
-            engine = connection
-            clock = testClock
-        })
+        val client = spyk(
+            ImdsClient {
+                engine = connection
+                clock = testClock
+            },
+        )
 
         val provider = ImdsCredentialsProvider(
             profileOverride = "imds-test-role",
@@ -380,7 +384,7 @@ class ImdsCredentialsProviderTest {
         testClock.advance(20.minutes) // 20 minutes later, we should try to refresh the expired credentials
         val second = provider.getCredentials()
 
-        coVerify (exactly = 2) {
+        coVerify(exactly = 2) {
             client.get(any())
         }
 
@@ -410,14 +414,14 @@ class ImdsCredentialsProviderTest {
             sessionToken = "IQote///test",
             expiration = Instant.fromEpochSeconds(1631935916),
             providerName = "IMDSv2",
-            nextRefresh = testClock.now() - 1.seconds // nextRefresh is NOW! this will guarantee we call IMDS the next time around
+            nextRefresh = testClock.now() - 1.seconds, // nextRefresh is NOW! this will guarantee we call IMDS the next time around
         )
 
         val provider = ImdsCredentialsProvider(
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
-            previousCredentials = previousCredentials  // pretend that we served these credentials previously
+            previousCredentials = previousCredentials, // pretend that we served these credentials previously
         )
 
         val credentials = provider.getCredentials()
@@ -456,7 +460,6 @@ class ImdsCredentialsProviderTest {
         }
     }
 
-
     @Test
     fun testUsesPreviousCredentialsOnServerError() = runTest {
         val testClock = ManualClock()
@@ -468,7 +471,7 @@ class ImdsCredentialsProviderTest {
                     HttpRequest(HttpMethod.GET, Url(Protocol.HTTP, "test", Protocol.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
                     HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
                     testClock.now(),
-                    testClock.now()
+                    testClock.now(),
                 )
             }
         }
@@ -484,14 +487,14 @@ class ImdsCredentialsProviderTest {
             sessionToken = "IQote///test",
             expiration = Instant.fromEpochSeconds(1631935916),
             providerName = "IMDSv2",
-            nextRefresh = testClock.now() - 1.seconds // nextRefresh is NOW! this will guarantee we call IMDS the next time around
+            nextRefresh = testClock.now() - 1.seconds, // nextRefresh is NOW! this will guarantee we call IMDS the next time around
         )
 
         val provider = ImdsCredentialsProvider(
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
-            previousCredentials = previousCredentials  // pretend that we served these credentials previously
+            previousCredentials = previousCredentials, // pretend that we served these credentials previously
         )
 
         val credentials = provider.getCredentials()
@@ -514,7 +517,7 @@ class ImdsCredentialsProviderTest {
                     HttpRequest(HttpMethod.GET, Url(Protocol.HTTP, "test", Protocol.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
                     HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
                     testClock.now(),
-                    testClock.now()
+                    testClock.now(),
                 )
             }
         }

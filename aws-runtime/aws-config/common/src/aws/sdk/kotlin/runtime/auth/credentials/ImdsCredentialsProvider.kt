@@ -27,7 +27,7 @@ private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/securit
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
 private const val PROVIDER_NAME = "IMDSv2"
 private const val STATIC_STABILITY_LOG_MESSAGE: String = "Attempting credential expiration extension due to a " +
-        "credential service availability issue. A refresh of these credentials will be attempted again in %d minutes."
+    "credential service availability issue. A refresh of these credentials will be attempted again in %d minutes."
 
 /**
  * [CredentialsProvider] that uses EC2 instance metadata service (IMDS) to provide credentials information.
@@ -64,9 +64,10 @@ public class ImdsCredentialsProvider(
         }
 
         // if we have previously served IMDS credentials and it's not time for a refresh, just return the previous credentials
-        if (previousCredentials != null
-            && previousCredentials!!.nextRefresh != null
-            && clock.now() < previousCredentials!!.nextRefresh!!) {
+        if (previousCredentials != null &&
+            previousCredentials!!.nextRefresh != null &&
+            clock.now() < previousCredentials!!.nextRefresh!!
+        ) {
             return previousCredentials as Credentials
         }
 
@@ -74,8 +75,8 @@ public class ImdsCredentialsProvider(
             profile.get()
         } catch (ex: Exception) {
             when {
-                ex is IOException
-                || (ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value) -> {
+                ex is IOException ||
+                    ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
                     previousCredentials = previousCredentials?.copy(nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds)
                     return previousCredentials ?: throw CredentialsProviderException("failed to load instance profile", ex)
                 }
@@ -87,8 +88,8 @@ public class ImdsCredentialsProvider(
             client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
         } catch (ex: Exception) {
             when {
-                ex is IOException
-                || (ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value) -> {
+                ex is IOException ||
+                    ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
                     previousCredentials = previousCredentials?.copy(nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds)
                     return previousCredentials ?: throw CredentialsProviderException("failed to load credentials", ex)
                 }
