@@ -40,8 +40,7 @@ OUTPUT_PATH = "tmp-codegen-diff/"
 COMMIT_AUTHOR_NAME = "GitHub Action (generated codegen diff)"
 COMMIT_AUTHOR_EMAIL = "generated-code-action@github.com"
 
-# FIXME - move to CLI option
-CDN_URL = "http://localhost:8080"
+CDN_URL = "https://d3l30fr4k4zcv0.cloudfront.net"
 
 
 def eprint(*args, **kwargs):

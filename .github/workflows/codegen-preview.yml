@@ -8,8 +8,6 @@ on:
       - reopened
       - synchronize
 
-# TODO/FIXME - missing CDN URL and secret for s3 bucket name (both require CR approval and deployment)
-
 permissions:
   id-token: write
 
