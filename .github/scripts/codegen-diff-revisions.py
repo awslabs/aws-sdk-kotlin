@@ -126,7 +126,7 @@ def write_html_template(title, subtitle, tmp_file):
         '  });',
         '  </script>',
         "</head>",
-        "<body>",
+        '<body style="font-family: sans-serif;">',
         f"  <h1>Codegen diff for the {title}</h1>",
         f"  <p>{subtitle}</p>",
         '  <div id="diff">',
