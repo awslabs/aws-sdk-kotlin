@@ -165,7 +165,12 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
 }
 
 tasks.withType<org.gradle.jvm.tasks.Jar> {
-    dependsOn(codegenTask)
+    if (name == "jar" || name == "javadocJar") {
+        println("Disabling $project task '$name' because it conflicts with Kotlin JAR tasks")
+        enabled = false
+    } else {
+        dependsOn(codegenTask)
+    }
 }
 
 codegen.projections.all {

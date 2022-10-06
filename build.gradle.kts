@@ -55,13 +55,19 @@ subprojects {
 
         val smithyKotlinPackageListUrl: String? by project
         val smithyKotlinDocBaseUrl: String? by project
+        val smithyKotlinVersion: String by project
+
         // Configure Dokka to link to smithy-kotlin types if specified in properties
         // These optional properties are supplied api the api docs build job but are unneeded otherwise
-        if (!smithyKotlinDocBaseUrl.isNullOrEmpty() && !smithyKotlinPackageListUrl.isNullOrEmpty()) {
+        smithyKotlinDocBaseUrl.takeUnless { it.isNullOrEmpty() }?.let { docBaseUrl ->
+            val expandedDocBaseUrl = docBaseUrl.replace("\$smithyKotlinVersion", smithyKotlinVersion)
             dokkaSourceSets.configureEach {
                 externalDocumentationLink {
-                    packageListUrl.set(URL(smithyKotlinPackageListUrl))
-                    url.set(URL(smithyKotlinDocBaseUrl))
+                    url.set(URL(expandedDocBaseUrl))
+
+                    smithyKotlinPackageListUrl
+                        .takeUnless { it.isNullOrEmpty() }
+                        ?.let { packageListUrl.set(URL(it)) }
                 }
             }
         }
@@ -98,6 +104,12 @@ project.afterEvaluate {
     // configure the root multimodule docs
     tasks.dokkaHtmlMultiModule.configure {
         moduleName.set("AWS SDK for Kotlin")
+
+        // Output subprojects' docs to <docs-base>/project-name/* instead of <docs-base>/path/to/project-name/*
+        // This is especially important for inter-repo linking (e.g., via externalDocumentationLink) because the
+        // package-list doesn't contain enough project path information to indicate where modules' documentation are
+        // located.
+        fileLayout.set { parent, child -> parent.outputDirectory.get().resolve(child.project.name) }
 
         includes.from(
             // NOTE: these get concatenated
