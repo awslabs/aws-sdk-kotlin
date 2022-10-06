@@ -58,10 +58,10 @@ public class CachedCredentialsProvider(
         logger.trace { "refreshing credentials cache" }
         val providerCreds = source.getCredentials()
         if (providerCreds.expiration != null) {
-            val expirationTime = providerCreds.nextRefresh ?: minOf(providerCreds.expiration!!, (clock.now() + expireCredentialsAfter))
-            ExpiringValue(providerCreds, expirationTime)
+            val expiration = minOf(providerCreds.expiration!!, (clock.now() + expireCredentialsAfter))
+            ExpiringValue(providerCreds, expiration)
         } else {
-            val expiration = providerCreds.nextRefresh ?: (clock.now() + expireCredentialsAfter)
+            val expiration = clock.now() + expireCredentialsAfter
             val creds = providerCreds.copy(expiration = expiration)
             ExpiringValue(creds, expiration)
         }

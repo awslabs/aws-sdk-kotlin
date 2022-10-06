@@ -36,7 +36,6 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNotEquals
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ImdsCredentialsProviderTest {
@@ -266,7 +265,6 @@ class ImdsCredentialsProviderTest {
             sessionToken = "IQote///test",
             expiration = Instant.fromEpochSeconds(1631935916),
             providerName = "IMDSv2",
-            nextRefresh = testClock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds, // 15 minutes
         )
 
         assertEquals(expected, actual)
@@ -408,13 +406,12 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        var previousCredentials = Credentials(
+        val previousCredentials = Credentials(
             accessKeyId = "ASIARTEST",
             secretAccessKey = "xjtest",
             sessionToken = "IQote///test",
             expiration = Instant.fromEpochSeconds(1631935916),
             providerName = "IMDSv2",
-            nextRefresh = testClock.now() - 1.seconds, // nextRefresh is NOW! this will guarantee we call IMDS the next time around
         )
 
         val provider = ImdsCredentialsProvider(
@@ -426,10 +423,7 @@ class ImdsCredentialsProviderTest {
 
         val credentials = provider.getCredentials()
 
-        // copy the new credentials' nextRefresh value, since it will be updated, and we only want to compare the other fields
-        previousCredentials = previousCredentials.copy(nextRefresh = credentials.nextRefresh)
-
-        // a read timeout should cause provider to return the previously-served credentials with an updated nextRefresh time
+        // a read timeout should cause provider to return the previously-served credentials
         assertEquals(credentials, previousCredentials)
     }
 
@@ -481,13 +475,12 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        var previousCredentials = Credentials(
+        val previousCredentials = Credentials(
             accessKeyId = "ASIARTEST",
             secretAccessKey = "xjtest",
             sessionToken = "IQote///test",
             expiration = Instant.fromEpochSeconds(1631935916),
             providerName = "IMDSv2",
-            nextRefresh = testClock.now() - 1.seconds, // nextRefresh is NOW! this will guarantee we call IMDS the next time around
         )
 
         val provider = ImdsCredentialsProvider(
@@ -499,10 +492,7 @@ class ImdsCredentialsProviderTest {
 
         val credentials = provider.getCredentials()
 
-        // copy the new credentials' nextRefresh value, since it will be updated, and we only want to compare the other fields
-        previousCredentials = previousCredentials.copy(nextRefresh = credentials.nextRefresh)
-
-        // a 500 error should cause provider to return the previously-served credentials with an updated nextRefresh time
+        // a 500 error should cause provider to return the previously-served credentials
         assertEquals(credentials, previousCredentials)
     }
 
