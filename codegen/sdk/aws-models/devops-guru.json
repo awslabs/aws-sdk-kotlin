@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -89,12 +89,14 @@
                 "OpenProactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumOpenProactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>An integer that specifies the number of open proactive insights in your Amazon Web Services\n\t\t\taccount.</p>"
                     }
                 },
                 "OpenReactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumOpenReactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>An integer that specifies the number of open reactive insights in your Amazon Web Services\n\t\t\taccount.</p>"
                     }
                 }
@@ -181,6 +183,9 @@
                 "smithy.api#documentation": "<p>Information about your account's integration with Amazon CodeGuru Profiler. This\n\t\t\treturns whether DevOps Guru is configured to consume recommendations generated from Amazon\n\t\t\tCodeGuru Profiler.</p>"
             }
         },
+        "com.amazonaws.devopsguru#AnalyzedResourceCount": {
+            "type": "long"
+        },
         "com.amazonaws.devopsguru#AnomalousLogGroup": {
             "type": "structure",
             "members": {
@@ -205,6 +210,7 @@
                 "NumberOfLogLinesScanned": {
                     "target": "com.amazonaws.devopsguru#NumberOfLogLinesScanned",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>\n\t\t\tThe number of log lines that were scanned for anomalous log events.\n\t\t</p>"
                     }
                 },
@@ -239,10 +245,7 @@
             }
         },
         "com.amazonaws.devopsguru#AnomalyLimit": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.devopsguru#AnomalyName": {
             "type": "string"
@@ -295,22 +298,26 @@
             }
         },
         "com.amazonaws.devopsguru#AnomalySeverity": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "LOW",
-                        "name": "LOW"
-                    },
-                    {
-                        "value": "MEDIUM",
-                        "name": "MEDIUM"
-                    },
-                    {
-                        "value": "HIGH",
-                        "name": "HIGH"
+            "type": "enum",
+            "members": {
+                "LOW": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LOW"
                     }
-                ]
+                },
+                "MEDIUM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MEDIUM"
+                    }
+                },
+                "HIGH": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HIGH"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#AnomalySource": {
@@ -363,18 +370,20 @@
             }
         },
         "com.amazonaws.devopsguru#AnomalyStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "ONGOING",
-                        "name": "ONGOING"
-                    },
-                    {
-                        "value": "CLOSED",
-                        "name": "CLOSED"
+            "type": "enum",
+            "members": {
+                "ONGOING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ONGOING"
                     }
-                ]
+                },
+                "CLOSED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CLOSED"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#AnomalyTimeRange": {
@@ -399,18 +408,20 @@
             }
         },
         "com.amazonaws.devopsguru#AnomalyType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "CAUSAL",
-                        "name": "CAUSAL"
-                    },
-                    {
-                        "value": "CONTEXTUAL",
-                        "name": "CONTEXTUAL"
+            "type": "enum",
+            "members": {
+                "CAUSAL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CAUSAL"
                     }
-                ]
+                },
+                "CONTEXTUAL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CONTEXTUAL"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#AppBoundaryKey": {
@@ -441,21 +452,6 @@
         },
         "com.amazonaws.devopsguru#CapstoneControlPlaneService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "DevOps Guru",
-                    "arnNamespace": "devops-guru",
-                    "cloudFormationName": "DevOpsGuru",
-                    "cloudTrailEventSource": "devopsguru.amazonaws.com",
-                    "endpointPrefix": "devops-guru"
-                },
-                "aws.auth#sigv4": {
-                    "name": "devops-guru"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p> Amazon DevOps Guru is a fully managed service that helps you identify anomalous behavior in\n\t\t\tbusiness critical operational applications. You specify the Amazon Web Services resources that you\n\t\t\twant DevOps Guru to cover, then the Amazon CloudWatch metrics and Amazon Web Services CloudTrail events related to those\n\t\t\tresources are analyzed. When anomalous behavior is detected, DevOps Guru creates an\n\t\t\t\t<i>insight</i> that includes recommendations, related events, and\n\t\t\trelated metrics that can help you improve your operational applications. For more\n\t\t\tinformation, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/welcome.html\">What is Amazon DevOps Guru</a>. </p>\n\n\t\t       <p> You can specify 1 or 2 Amazon Simple Notification Service topics so you are notified every time a new insight\n\t\t\tis created. You can also enable DevOps Guru to generate an OpsItem in Amazon Web Services Systems Manager for each\n\t\t\tinsight to help you manage and track your work addressing insights. </p>\n\n\t\t       <p> To learn about the DevOps Guru workflow, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/welcome.html#how-it-works\">How DevOps Guru works</a>. To\n\t\t\tlearn about DevOps Guru concepts, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/concepts.html\">Concepts in DevOps Guru</a>. </p>",
-                "smithy.api#title": "Amazon DevOps Guru"
-            },
             "version": "2020-12-01",
             "operations": [
                 {
@@ -551,7 +547,1212 @@
                 {
                     "target": "com.amazonaws.devopsguru#UpdateServiceIntegration"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "DevOps Guru",
+                    "arnNamespace": "devops-guru",
+                    "cloudFormationName": "DevOpsGuru",
+                    "cloudTrailEventSource": "devopsguru.amazonaws.com",
+                    "endpointPrefix": "devops-guru"
+                },
+                "aws.auth#sigv4": {
+                    "name": "devops-guru"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p> Amazon DevOps Guru is a fully managed service that helps you identify anomalous behavior in\n\t\t\tbusiness critical operational applications. You specify the Amazon Web Services resources that you\n\t\t\twant DevOps Guru to cover, then the Amazon CloudWatch metrics and Amazon Web Services CloudTrail events related to those\n\t\t\tresources are analyzed. When anomalous behavior is detected, DevOps Guru creates an\n\t\t\t\t<i>insight</i> that includes recommendations, related events, and\n\t\t\trelated metrics that can help you improve your operational applications. For more\n\t\t\tinformation, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/welcome.html\">What is Amazon DevOps Guru</a>. </p>\n\n\t\t       <p> You can specify 1 or 2 Amazon Simple Notification Service topics so you are notified every time a new insight\n\t\t\tis created. You can also enable DevOps Guru to generate an OpsItem in Amazon Web Services Systems Manager for each\n\t\t\tinsight to help you manage and track your work addressing insights. </p>\n\n\t\t       <p> To learn about the DevOps Guru workflow, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/welcome.html#how-it-works\">How DevOps Guru works</a>. To\n\t\t\tlearn about DevOps Guru concepts, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/concepts.html\">Concepts in DevOps Guru</a>. </p>",
+                "smithy.api#title": "Amazon DevOps Guru",
+                "smithy.rules#endpointRuleSet": {
+                    "version": "1.0",
+                    "parameters": {
+                        "Region": {
+                            "builtIn": "AWS::Region",
+                            "required": false,
+                            "documentation": "The AWS region used to dispatch the request.",
+                            "type": "String"
+                        },
+                        "UseDualStack": {
+                            "builtIn": "AWS::UseDualStack",
+                            "required": true,
+                            "default": false,
+                            "documentation": "When true, use the dual-stack endpoint. If the configured endpoint does not support dual-stack, dispatching the request MAY return an error.",
+                            "type": "Boolean"
+                        },
+                        "UseFIPS": {
+                            "builtIn": "AWS::UseFIPS",
+                            "required": true,
+                            "default": false,
+                            "documentation": "When true, send this request to the FIPS-compliant regional endpoint. If the configured endpoint does not have a FIPS compliant endpoint, dispatching the request will return an error.",
+                            "type": "Boolean"
+                        },
+                        "Endpoint": {
+                            "builtIn": "SDK::Endpoint",
+                            "required": false,
+                            "documentation": "Override the endpoint used to send this request",
+                            "type": "String"
+                        }
+                    },
+                    "rules": [
+                        {
+                            "conditions": [
+                                {
+                                    "fn": "aws.partition",
+                                    "argv": [
+                                        {
+                                            "ref": "Region"
+                                        }
+                                    ],
+                                    "assign": "PartitionResult"
+                                }
+                            ],
+                            "type": "tree",
+                            "rules": [
+                                {
+                                    "conditions": [
+                                        {
+                                            "fn": "isSet",
+                                            "argv": [
+                                                {
+                                                    "ref": "Endpoint"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "fn": "parseURL",
+                                            "argv": [
+                                                {
+                                                    "ref": "Endpoint"
+                                                }
+                                            ],
+                                            "assign": "url"
+                                        }
+                                    ],
+                                    "type": "tree",
+                                    "rules": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseFIPS"
+                                                        },
+                                                        true
+                                                    ]
+                                                }
+                                            ],
+                                            "error": "Invalid Configuration: FIPS and custom endpoint are not supported",
+                                            "type": "error"
+                                        },
+                                        {
+                                            "conditions": [],
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                {
+                                                                    "ref": "UseDualStack"
+                                                                },
+                                                                true
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
+                                                    "type": "error"
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "endpoint": {
+                                                        "url": {
+                                                            "ref": "Endpoint"
+                                                        },
+                                                        "properties": {},
+                                                        "headers": {}
+                                                    },
+                                                    "type": "endpoint"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "conditions": [
+                                        {
+                                            "fn": "booleanEquals",
+                                            "argv": [
+                                                {
+                                                    "ref": "UseFIPS"
+                                                },
+                                                true
+                                            ]
+                                        },
+                                        {
+                                            "fn": "booleanEquals",
+                                            "argv": [
+                                                {
+                                                    "ref": "UseDualStack"
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    ],
+                                    "type": "tree",
+                                    "rules": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        true,
+                                                        {
+                                                            "fn": "getAttr",
+                                                            "argv": [
+                                                                {
+                                                                    "ref": "PartitionResult"
+                                                                },
+                                                                "supportsFIPS"
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        true,
+                                                        {
+                                                            "fn": "getAttr",
+                                                            "argv": [
+                                                                {
+                                                                    "ref": "PartitionResult"
+                                                                },
+                                                                "supportsDualStack"
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [],
+                                                    "endpoint": {
+                                                        "url": "https://devops-guru-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                        "properties": {},
+                                                        "headers": {}
+                                                    },
+                                                    "type": "endpoint"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "conditions": [],
+                                            "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
+                                            "type": "error"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "conditions": [
+                                        {
+                                            "fn": "booleanEquals",
+                                            "argv": [
+                                                {
+                                                    "ref": "UseFIPS"
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    ],
+                                    "type": "tree",
+                                    "rules": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        true,
+                                                        {
+                                                            "fn": "getAttr",
+                                                            "argv": [
+                                                                {
+                                                                    "ref": "PartitionResult"
+                                                                },
+                                                                "supportsFIPS"
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [],
+                                                            "endpoint": {
+                                                                "url": "https://devops-guru-fips.{Region}.{PartitionResult#dnsSuffix}",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "conditions": [],
+                                            "error": "FIPS is enabled but this partition does not support FIPS",
+                                            "type": "error"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "conditions": [
+                                        {
+                                            "fn": "booleanEquals",
+                                            "argv": [
+                                                {
+                                                    "ref": "UseDualStack"
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    ],
+                                    "type": "tree",
+                                    "rules": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        true,
+                                                        {
+                                                            "fn": "getAttr",
+                                                            "argv": [
+                                                                {
+                                                                    "ref": "PartitionResult"
+                                                                },
+                                                                "supportsDualStack"
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [],
+                                                    "endpoint": {
+                                                        "url": "https://devops-guru.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                        "properties": {},
+                                                        "headers": {}
+                                                    },
+                                                    "type": "endpoint"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "conditions": [],
+                                            "error": "DualStack is enabled but this partition does not support DualStack",
+                                            "type": "error"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "conditions": [],
+                                    "endpoint": {
+                                        "url": "https://devops-guru.{Region}.{PartitionResult#dnsSuffix}",
+                                        "properties": {},
+                                        "headers": {}
+                                    },
+                                    "type": "endpoint"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "smithy.rules#endpointTests": {
+                    "testCases": [
+                        {
+                            "documentation": "For region ap-south-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-south-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ap-south-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-south-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-south-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ap-south-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-south-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-south-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ap-south-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-south-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-south-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ap-south-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ca-central-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ca-central-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ca-central-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ca-central-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ca-central-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ca-central-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ca-central-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ca-central-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ca-central-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ca-central-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ca-central-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ca-central-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-central-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-central-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "eu-central-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-central-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-central-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "eu-central-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-central-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-central-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "eu-central-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-central-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-central-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "eu-central-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.us-west-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "us-west-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.us-west-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "us-west-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.us-west-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "us-west-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.us-west-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "us-west-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-2 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.us-west-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "us-west-2",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-2 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.us-west-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "us-west-2",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-2 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.us-west-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "us-west-2",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.us-west-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "us-west-2",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-north-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-north-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "eu-north-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-north-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-north-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "eu-north-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-north-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-north-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "eu-north-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-north-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-north-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "eu-north-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-3 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-3.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "eu-west-3",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-3 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-3.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "eu-west-3",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-3 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-3.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "eu-west-3",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-3 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-3.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "eu-west-3",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-2 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "eu-west-2",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-2 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "eu-west-2",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-2 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "eu-west-2",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "eu-west-2",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "eu-west-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "eu-west-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "eu-west-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "eu-west-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-2 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-northeast-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ap-northeast-2",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-2 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-northeast-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ap-northeast-2",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-2 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-northeast-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ap-northeast-2",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-northeast-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ap-northeast-2",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-northeast-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ap-northeast-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-northeast-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ap-northeast-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-northeast-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ap-northeast-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-northeast-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ap-northeast-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region sa-east-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.sa-east-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "sa-east-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region sa-east-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.sa-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "sa-east-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region sa-east-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.sa-east-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "sa-east-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region sa-east-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.sa-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "sa-east-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-southeast-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ap-southeast-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-southeast-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ap-southeast-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-southeast-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ap-southeast-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-southeast-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ap-southeast-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-2 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-southeast-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ap-southeast-2",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-2 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-southeast-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "ap-southeast-2",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-2 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-southeast-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ap-southeast-2",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-southeast-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "ap-southeast-2",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.us-east-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "us-east-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.us-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "us-east-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.us-east-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "us-east-1",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.us-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "us-east-1",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-2 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.us-east-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "us-east-2",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-2 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.us-east-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "us-east-2",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-2 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.us-east-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "us-east-2",
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.us-east-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "us-east-2",
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For custom endpoint with fips disabled and dualstack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://example.com"
+                                }
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "us-east-1",
+                                "UseDualStack": false,
+                                "Endpoint": "https://example.com"
+                            }
+                        },
+                        {
+                            "documentation": "For custom endpoint with fips enabled and dualstack disabled",
+                            "expect": {
+                                "error": "Invalid Configuration: FIPS and custom endpoint are not supported"
+                            },
+                            "params": {
+                                "UseFIPS": true,
+                                "Region": "us-east-1",
+                                "UseDualStack": false,
+                                "Endpoint": "https://example.com"
+                            }
+                        },
+                        {
+                            "documentation": "For custom endpoint with fips disabled and dualstack enabled",
+                            "expect": {
+                                "error": "Invalid Configuration: Dualstack and custom endpoint are not supported"
+                            },
+                            "params": {
+                                "UseFIPS": false,
+                                "Region": "us-east-1",
+                                "UseDualStack": true,
+                                "Endpoint": "https://example.com"
+                            }
+                        }
+                    ],
+                    "version": "1.0"
+                }
+            }
         },
         "com.amazonaws.devopsguru#Channels": {
             "type": "list",
@@ -625,6 +1826,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p> Information about the health of the Amazon Web Services resources in your account that are\n\t\t\tspecified by an Amazon Web Services CloudFormation stack, including the number of open proactive, open reactive\n\t\t\tinsights, and the Mean Time to Recover (MTTR) of closed insights. </p>"
                     }
+                },
+                "AnalyzedResourceCount": {
+                    "target": "com.amazonaws.devopsguru#AnalyzedResourceCount",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n\t\t\tNumber of resources that DevOps Guru is monitoring in your account that are specified by an Amazon Web Services CloudFormation stack.\n\t\t</p>"
+                    }
                 }
             },
             "traits": {
@@ -638,22 +1845,26 @@
             }
         },
         "com.amazonaws.devopsguru#CloudWatchMetricDataStatusCode": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "Complete",
-                        "name": "COMPLETE"
-                    },
-                    {
-                        "value": "InternalError",
-                        "name": "INTERNAL_ERROR"
-                    },
-                    {
-                        "value": "PartialData",
-                        "name": "PARTIAL_DATA"
+            "type": "enum",
+            "members": {
+                "COMPLETE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Complete"
                     }
-                ]
+                },
+                "INTERNAL_ERROR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "InternalError"
+                    }
+                },
+                "PARTIAL_DATA": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PartialData"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#CloudWatchMetricsDataSummary": {
@@ -712,6 +1923,7 @@
                 "Period": {
                     "target": "com.amazonaws.devopsguru#CloudWatchMetricsPeriod",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The length of time associated with the CloudWatch metric in number of seconds. </p>"
                     }
                 },
@@ -771,45 +1983,62 @@
             "type": "string"
         },
         "com.amazonaws.devopsguru#CloudWatchMetricsPeriod": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#CloudWatchMetricsStat": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "Sum",
-                        "name": "SUM"
-                    },
-                    {
-                        "value": "Average",
-                        "name": "AVERAGE"
-                    },
-                    {
-                        "value": "SampleCount",
-                        "name": "SAMPLE_COUNT"
-                    },
-                    {
-                        "value": "Minimum",
-                        "name": "MINIMUM"
-                    },
-                    {
-                        "value": "Maximum",
-                        "name": "MAXIMUM"
-                    },
-                    {
-                        "value": "p99",
-                        "name": "P99"
-                    },
-                    {
-                        "value": "p90",
-                        "name": "P90"
-                    },
-                    {
-                        "value": "p50",
-                        "name": "P50"
+            "type": "enum",
+            "members": {
+                "SUM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Sum"
                     }
-                ]
+                },
+                "AVERAGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Average"
+                    }
+                },
+                "SAMPLE_COUNT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SampleCount"
+                    }
+                },
+                "MINIMUM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Minimum"
+                    }
+                },
+                "MAXIMUM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Maximum"
+                    }
+                },
+                "P99": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "p99"
+                    }
+                },
+                "P90": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "p90"
+                    }
+                },
+                "P50": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "p50"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#CloudWatchMetricsUnit": {
@@ -846,7 +2075,10 @@
             }
         },
         "com.amazonaws.devopsguru#Cost": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#CostEstimationResourceCollectionFilter": {
             "type": "structure",
@@ -860,7 +2092,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#TagCostEstimationResourceCollectionFilters",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services tags used to filter the resource collection that is used for a cost\n\t\t\testimate.</p> \n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>The Amazon Web Services tags used to filter the resource collection that is used for a cost\n\t\t\testimate.</p> \n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
                     }
                 }
             },
@@ -869,21 +2101,26 @@
             }
         },
         "com.amazonaws.devopsguru#CostEstimationServiceResourceCount": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#CostEstimationServiceResourceState": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "ACTIVE",
-                        "name": "ACTIVE"
-                    },
-                    {
-                        "value": "INACTIVE",
-                        "name": "INACTIVE"
+            "type": "enum",
+            "members": {
+                "ACTIVE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ACTIVE"
                     }
-                ]
+                },
+                "INACTIVE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INACTIVE"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#CostEstimationStackNames": {
@@ -899,18 +2136,20 @@
             }
         },
         "com.amazonaws.devopsguru#CostEstimationStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "ONGOING",
-                        "name": "ONGOING"
-                    },
-                    {
-                        "value": "COMPLETED",
-                        "name": "COMPLETED"
+            "type": "enum",
+            "members": {
+                "ONGOING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ONGOING"
                     }
-                ]
+                },
+                "COMPLETED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "COMPLETED"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#CostEstimationTagValues": {
@@ -1040,6 +2279,7 @@
                 "OpenReactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumOpenReactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> An integer that specifies the number of open reactive insights in your Amazon Web Services account.\n\t\t</p>",
                         "smithy.api#required": {}
                     }
@@ -1047,6 +2287,7 @@
                 "OpenProactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumOpenProactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> An integer that specifies the number of open proactive insights in your Amazon Web Services\n\t\t\taccount. </p>",
                         "smithy.api#required": {}
                     }
@@ -1054,6 +2295,7 @@
                 "MetricsAnalyzed": {
                     "target": "com.amazonaws.devopsguru#NumMetricsAnalyzed",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> An integer that specifies the number of metrics that have been analyzed in your Amazon Web Services\n\t\t\taccount. </p>",
                         "smithy.api#required": {}
                     }
@@ -1063,6 +2305,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The number of Amazon DevOps Guru resource analysis hours billed to the current Amazon Web Services account in\n\t\t\tthe last hour. </p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "AnalyzedResourceCount": {
+                    "target": "com.amazonaws.devopsguru#AnalyzedResourceCount",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n\t\t\tNumber of resources that DevOps Guru is monitoring in your Amazon Web Services account.\n\t\t</p>"
                     }
                 }
             }
@@ -1122,6 +2370,7 @@
                 "ReactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumReactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> An integer that specifies the number of open reactive insights in your Amazon Web Services account\n\t\t\tthat were created during the time range passed in. </p>",
                         "smithy.api#required": {}
                     }
@@ -1129,6 +2378,7 @@
                 "ProactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumProactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> An integer that specifies the number of open proactive insights in your Amazon Web Services account\n\t\t\tthat were created during the time range passed in. </p>",
                         "smithy.api#required": {}
                     }
@@ -1437,6 +2687,7 @@
                 "OpenReactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumOpenReactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>An integer that specifies the number of open reactive insights in your Amazon Web Services\n\t\t\taccount.</p>",
                         "smithy.api#required": {}
                     }
@@ -1444,6 +2695,7 @@
                 "OpenProactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumOpenProactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>An integer that specifies the number of open proactive insights in your Amazon Web Services\n\t\t\taccount.</p>",
                         "smithy.api#required": {}
                     }
@@ -1451,6 +2703,7 @@
                 "MetricsAnalyzed": {
                     "target": "com.amazonaws.devopsguru#NumMetricsAnalyzed",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>An integer that specifies the number of metrics that have been analyzed in your\n\t\t\torganization.</p>",
                         "smithy.api#required": {}
                     }
@@ -1531,6 +2784,7 @@
                 "ReactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumReactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>An integer that specifies the number of open reactive insights in your Amazon Web Services\n\t\t\taccount.</p>",
                         "smithy.api#required": {}
                     }
@@ -1538,6 +2792,7 @@
                 "ProactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumProactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>An integer that specifies the number of open proactive insights in your Amazon Web Services\n\t\t\taccount.</p>",
                         "smithy.api#required": {}
                     }
@@ -1645,7 +2900,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#TagHealths",
                     "traits": {
-                        "smithy.api#documentation": "<p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
                     }
                 }
             }
@@ -1729,7 +2984,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#TagHealths",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services tags that are used by resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>The Amazon Web Services tags that are used by resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
                     }
                 }
             }
@@ -1866,45 +3121,55 @@
             }
         },
         "com.amazonaws.devopsguru#EventClass": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "INFRASTRUCTURE",
-                        "name": "INFRASTRUCTURE"
-                    },
-                    {
-                        "value": "DEPLOYMENT",
-                        "name": "DEPLOYMENT"
-                    },
-                    {
-                        "value": "SECURITY_CHANGE",
-                        "name": "SECURITY_CHANGE"
-                    },
-                    {
-                        "value": "CONFIG_CHANGE",
-                        "name": "CONFIG_CHANGE"
-                    },
-                    {
-                        "value": "SCHEMA_CHANGE",
-                        "name": "SCHEMA_CHANGE"
+            "type": "enum",
+            "members": {
+                "INFRASTRUCTURE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INFRASTRUCTURE"
                     }
-                ]
+                },
+                "DEPLOYMENT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DEPLOYMENT"
+                    }
+                },
+                "SECURITY_CHANGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SECURITY_CHANGE"
+                    }
+                },
+                "CONFIG_CHANGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CONFIG_CHANGE"
+                    }
+                },
+                "SCHEMA_CHANGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SCHEMA_CHANGE"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#EventDataSource": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "AWS_CLOUD_TRAIL",
-                        "name": "AWS_CLOUD_TRAIL"
-                    },
-                    {
-                        "value": "AWS_CODE_DEPLOY",
-                        "name": "AWS_CODE_DEPLOY"
+            "type": "enum",
+            "members": {
+                "AWS_CLOUD_TRAIL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS_CLOUD_TRAIL"
                     }
-                ]
+                },
+                "AWS_CODE_DEPLOY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS_CODE_DEPLOY"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#EventId": {
@@ -1992,18 +3257,20 @@
             }
         },
         "com.amazonaws.devopsguru#EventSourceOptInStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "ENABLED",
-                        "name": "ENABLED"
-                    },
-                    {
-                        "value": "DISABLED",
-                        "name": "DISABLED"
+            "type": "enum",
+            "members": {
+                "ENABLED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ENABLED"
                     }
-                ]
+                },
+                "DISABLED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DISABLED"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#EventSourcesConfig": {
@@ -2137,6 +3404,7 @@
                 "TotalCost": {
                     "target": "com.amazonaws.devopsguru#Cost",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The estimated monthly cost to analyze the Amazon Web Services resources. This value is the sum of\n\t\t\tthe estimated costs to analyze each resource in the <code>Costs</code> object in this\n\t\t\tresponse.</p>"
                     }
                 },
@@ -2247,30 +3515,38 @@
             }
         },
         "com.amazonaws.devopsguru#InsightFeedbackOption": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "VALID_COLLECTION",
-                        "name": "VALID_COLLECTION"
-                    },
-                    {
-                        "value": "RECOMMENDATION_USEFUL",
-                        "name": "RECOMMENDATION_USEFUL"
-                    },
-                    {
-                        "value": "ALERT_TOO_SENSITIVE",
-                        "name": "ALERT_TOO_SENSITIVE"
-                    },
-                    {
-                        "value": "DATA_NOISY_ANOMALY",
-                        "name": "DATA_NOISY_ANOMALY"
-                    },
-                    {
-                        "value": "DATA_INCORRECT",
-                        "name": "DATA_INCORRECT"
+            "type": "enum",
+            "members": {
+                "VALID_COLLECTION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "VALID_COLLECTION"
                     }
-                ]
+                },
+                "RECOMMENDATION_USEFUL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "RECOMMENDATION_USEFUL"
+                    }
+                },
+                "ALERT_TOO_SENSITIVE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ALERT_TOO_SENSITIVE"
+                    }
+                },
+                "DATA_NOISY_ANOMALY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DATA_NOISY_ANOMALY"
+                    }
+                },
+                "DATA_INCORRECT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DATA_INCORRECT"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#InsightHealth": {
@@ -2279,12 +3555,14 @@
                 "OpenProactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumOpenProactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The number of open proactive insights. </p>"
                     }
                 },
                 "OpenReactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumOpenReactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The number of open reactive insights. </p>"
                     }
                 },
@@ -2332,37 +3610,43 @@
             }
         },
         "com.amazonaws.devopsguru#InsightSeverity": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "LOW",
-                        "name": "LOW"
-                    },
-                    {
-                        "value": "MEDIUM",
-                        "name": "MEDIUM"
-                    },
-                    {
-                        "value": "HIGH",
-                        "name": "HIGH"
+            "type": "enum",
+            "members": {
+                "LOW": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LOW"
                     }
-                ]
+                },
+                "MEDIUM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MEDIUM"
+                    }
+                },
+                "HIGH": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HIGH"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#InsightStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "ONGOING",
-                        "name": "ONGOING"
-                    },
-                    {
-                        "value": "CLOSED",
-                        "name": "CLOSED"
+            "type": "enum",
+            "members": {
+                "ONGOING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ONGOING"
                     }
-                ]
+                },
+                "CLOSED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CLOSED"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#InsightStatuses": {
@@ -2399,18 +3683,20 @@
             }
         },
         "com.amazonaws.devopsguru#InsightType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "REACTIVE",
-                        "name": "REACTIVE"
-                    },
-                    {
-                        "value": "PROACTIVE",
-                        "name": "PROACTIVE"
+            "type": "enum",
+            "members": {
+                "REACTIVE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REACTIVE"
                     }
-                ]
+                },
+                "PROACTIVE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PROACTIVE"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#InternalServerException": {
@@ -2425,6 +3711,7 @@
                 "RetryAfterSeconds": {
                     "target": "com.amazonaws.devopsguru#RetryAfterSeconds",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The number of seconds after which the action that caused the internal server\n\t\t\texception can be retried. </p>",
                         "smithy.api#httpHeader": "Retry-After"
                     }
@@ -2478,7 +3765,6 @@
         "com.amazonaws.devopsguru#ListAnomaliesForInsightMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 500
@@ -2587,7 +3873,6 @@
         "com.amazonaws.devopsguru#ListAnomalousLogGroupsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 200
@@ -2727,7 +4012,6 @@
         "com.amazonaws.devopsguru#ListEventsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 200
@@ -2877,7 +4161,6 @@
         "com.amazonaws.devopsguru#ListInsightsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -3045,7 +4328,6 @@
         "com.amazonaws.devopsguru#ListMonitoredResourcesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -3058,8 +4340,7 @@
                 "Filters": {
                     "target": "com.amazonaws.devopsguru#ListMonitoredResourcesFilters",
                     "traits": {
-                        "smithy.api#documentation": "<p>\n\t\t\tFilters to determine which monitored resources you want to retrieve. You can filter by resource type or resource permission status.\n\t\t</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>\n\t\t\tFilters to determine which monitored resources you want to retrieve. You can filter by resource type or resource permission status.\n\t\t</p>"
                     }
                 },
                 "MaxResults": {
@@ -3339,54 +4620,74 @@
             }
         },
         "com.amazonaws.devopsguru#Locale": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "DE_DE",
-                        "name": "DE_DE"
-                    },
-                    {
-                        "value": "EN_US",
-                        "name": "EN_US"
-                    },
-                    {
-                        "value": "EN_GB",
-                        "name": "EN_GB"
-                    },
-                    {
-                        "value": "ES_ES",
-                        "name": "ES_ES"
-                    },
-                    {
-                        "value": "FR_FR",
-                        "name": "FR_FR"
-                    },
-                    {
-                        "value": "IT_IT",
-                        "name": "IT_IT"
-                    },
-                    {
-                        "value": "JA_JP",
-                        "name": "JA_JP"
-                    },
-                    {
-                        "value": "KO_KR",
-                        "name": "KO_KR"
-                    },
-                    {
-                        "value": "PT_BR",
-                        "name": "PT_BR"
-                    },
-                    {
-                        "value": "ZH_CN",
-                        "name": "ZH_CN"
-                    },
-                    {
-                        "value": "ZH_TW",
-                        "name": "ZH_TW"
+            "type": "enum",
+            "members": {
+                "DE_DE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DE_DE"
                     }
-                ]
+                },
+                "EN_US": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "EN_US"
+                    }
+                },
+                "EN_GB": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "EN_GB"
+                    }
+                },
+                "ES_ES": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ES_ES"
+                    }
+                },
+                "FR_FR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FR_FR"
+                    }
+                },
+                "IT_IT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IT_IT"
+                    }
+                },
+                "JA_JP": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "JA_JP"
+                    }
+                },
+                "KO_KR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "KO_KR"
+                    }
+                },
+                "PT_BR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PT_BR"
+                    }
+                },
+                "ZH_CN": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ZH_CN"
+                    }
+                },
+                "ZH_TW": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ZH_TW"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#LogAnomalyClass": {
@@ -3425,6 +4726,7 @@
                 "NumberOfLogLinesOccurrences": {
                     "target": "com.amazonaws.devopsguru#NumberOfLogLinesOccurrences",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>\n\t\t\tThe number of log lines where this anomalous log event occurs.\n\t\t</p>"
                     }
                 },
@@ -3487,42 +4789,56 @@
             }
         },
         "com.amazonaws.devopsguru#LogAnomalyType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "KEYWORD",
-                        "name": "KEYWORD"
-                    },
-                    {
-                        "value": "KEYWORD_TOKEN",
-                        "name": "KEYWORD_TOKEN"
-                    },
-                    {
-                        "value": "FORMAT",
-                        "name": "FORMAT"
-                    },
-                    {
-                        "value": "HTTP_CODE",
-                        "name": "HTTP_CODE"
-                    },
-                    {
-                        "value": "BLOCK_FORMAT",
-                        "name": "BLOCK_FORMAT"
-                    },
-                    {
-                        "value": "NUMERICAL_POINT",
-                        "name": "NUMERICAL_POINT"
-                    },
-                    {
-                        "value": "NUMERICAL_NAN",
-                        "name": "NUMERICAL_NAN"
-                    },
-                    {
-                        "value": "NEW_FIELD_NAME",
-                        "name": "NEW_FIELD_NAME"
+            "type": "enum",
+            "members": {
+                "KEYWORD": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "KEYWORD"
                     }
-                ]
+                },
+                "KEYWORD_TOKEN": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "KEYWORD_TOKEN"
+                    }
+                },
+                "FORMAT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FORMAT"
+                    }
+                },
+                "HTTP_CODE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HTTP_CODE"
+                    }
+                },
+                "BLOCK_FORMAT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "BLOCK_FORMAT"
+                    }
+                },
+                "NUMERICAL_POINT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NUMERICAL_POINT"
+                    }
+                },
+                "NUMERICAL_NAN": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NUMERICAL_NAN"
+                    }
+                },
+                "NEW_FIELD_NAME": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NEW_FIELD_NAME"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#LogEventId": {
@@ -3581,16 +4897,10 @@
             }
         },
         "com.amazonaws.devopsguru#MeanTimeToRecoverInMilliseconds": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.devopsguru#MetricValue": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.devopsguru#MonitoredResourceIdentifier": {
             "type": "structure",
@@ -3612,6 +4922,15 @@
                     "traits": {
                         "smithy.api#documentation": "<p>\n\t\t\tThe permission status of a resource.\n\t\t</p>"
                     }
+                },
+                "LastUpdated": {
+                    "target": "com.amazonaws.devopsguru#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n\t\t\tThe time at which DevOps Guru last updated this resource.\n\t\t</p>"
+                    }
+                },
+                "ResourceCollection": {
+                    "target": "com.amazonaws.devopsguru#ResourceCollection"
                 }
             },
             "traits": {
@@ -3663,6 +4982,12 @@
                         "smithy.api#documentation": "<p> Information about a notification channel configured in DevOps Guru to send notifications\n\t\t\twhen insights are created. </p> \n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission \n\t\t\t\tto it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. DevOps Guru only supports standard SNS topics. \n\t\t\t\tFor more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-required-permissions.html\">Permissions \n\t\t\t\tfor cross account Amazon SNS topics</a>.</p>\n\t\t\t\t     <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission to it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. For more information, see Permissions for cross account Amazon SNS topics.</p>\n\t\t\t\t     <p>If you use an Amazon SNS topic that is encrypted by an Amazon Web Services Key Management Service customer-managed key (CMK), then you must add permissions \n\t\t\t\tto the CMK. For more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-kms-permissions.html\">Permissions for \n\t\t\t\tAmazon Web Services KMS–encrypted Amazon SNS topics</a>.</p>",
                         "smithy.api#required": {}
                     }
+                },
+                "Filters": {
+                    "target": "com.amazonaws.devopsguru#NotificationFilterConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n\t\t\tThe filter configurations for the Amazon SNS notification topic you use with DevOps Guru. \n\t\t\tIf you do not provide filter configurations, the default configurations are to receive notifications for all message types of <code>High</code> or <code>Medium</code> severity.\n\t\t</p>"
+                    }
                 }
             },
             "traits": {
@@ -3679,26 +5004,114 @@
                 "smithy.api#pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
             }
         },
+        "com.amazonaws.devopsguru#NotificationFilterConfig": {
+            "type": "structure",
+            "members": {
+                "Severities": {
+                    "target": "com.amazonaws.devopsguru#InsightSeverities",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n\t\t\tThe severity levels that you want to receive notifications for. For example, you can choose to receive notifications only for insights with <code>HIGH</code> and <code>MEDIUM</code> severity levels. \n\t\t\tFor more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/working-with-insights.html#understanding-insights-severities\">Understanding insight severities</a>.\n\t\t</p>"
+                    }
+                },
+                "MessageTypes": {
+                    "target": "com.amazonaws.devopsguru#NotificationMessageTypes",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n\t\t\tThe events that you want to receive notifications for. For example, you can choose to receive notifications only when the severity level is upgraded or a new insight is created.\n\t\t</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>\n\t\t\tThe filter configurations for the Amazon SNS notification topic you use with DevOps Guru. You can choose to specify which events or message types to receive notifications for.\n\t\t\tYou can also choose to specify which severity levels to receive notifications for. \n\t\t</p>"
+            }
+        },
+        "com.amazonaws.devopsguru#NotificationMessageType": {
+            "type": "enum",
+            "members": {
+                "NEW_INSIGHT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NEW_INSIGHT"
+                    }
+                },
+                "CLOSED_INSIGHT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CLOSED_INSIGHT"
+                    }
+                },
+                "NEW_ASSOCIATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NEW_ASSOCIATION"
+                    }
+                },
+                "SEVERITY_UPGRADED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SEVERITY_UPGRADED"
+                    }
+                },
+                "NEW_RECOMMENDATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NEW_RECOMMENDATION"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.devopsguru#NotificationMessageTypes": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.devopsguru#NotificationMessageType"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 5
+                }
+            }
+        },
         "com.amazonaws.devopsguru#NumMetricsAnalyzed": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#NumOpenProactiveInsights": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#NumOpenReactiveInsights": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#NumProactiveInsights": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#NumReactiveInsights": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#NumberOfLogLinesOccurrences": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#NumberOfLogLinesScanned": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#OpsCenterIntegration": {
             "type": "structure",
@@ -3729,25 +5142,28 @@
             }
         },
         "com.amazonaws.devopsguru#OptInStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#documentation": "<p> Specifies if DevOps Guru is enabled to create an Amazon Web Services Systems Manager OpsItem for each created\n\t\t\tinsight. </p>",
-                "smithy.api#enum": [
-                    {
-                        "value": "ENABLED",
-                        "name": "ENABLED"
-                    },
-                    {
-                        "value": "DISABLED",
-                        "name": "DISABLED"
+            "type": "enum",
+            "members": {
+                "ENABLED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ENABLED"
                     }
-                ]
+                },
+                "DISABLED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DISABLED"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p> Specifies if DevOps Guru is enabled to create an Amazon Web Services Systems Manager OpsItem for each created\n\t\t\tinsight. </p>"
             }
         },
         "com.amazonaws.devopsguru#OrganizationResourceCollectionMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 500
@@ -3755,26 +5171,32 @@
             }
         },
         "com.amazonaws.devopsguru#OrganizationResourceCollectionType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "AWS_CLOUD_FORMATION",
-                        "name": "AWS_CLOUD_FORMATION"
-                    },
-                    {
-                        "value": "AWS_SERVICE",
-                        "name": "AWS_SERVICE"
-                    },
-                    {
-                        "value": "AWS_ACCOUNT",
-                        "name": "AWS_ACCOUNT"
-                    },
-                    {
-                        "value": "AWS_TAGS",
-                        "name": "AWS_TAGS"
+            "type": "enum",
+            "members": {
+                "AWS_CLOUD_FORMATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS_CLOUD_FORMATION"
                     }
-                ]
+                },
+                "AWS_SERVICE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS_SERVICE"
+                    }
+                },
+                "AWS_ACCOUNT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS_ACCOUNT"
+                    }
+                },
+                "AWS_TAGS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS_TAGS"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#OrganizationalUnitId": {
@@ -3858,7 +5280,6 @@
         "com.amazonaws.devopsguru#PerformanceInsightsMetricLimitInteger": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10
@@ -4054,10 +5475,7 @@
             }
         },
         "com.amazonaws.devopsguru#PerformanceInsightsValueDouble": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.devopsguru#PredictionTimeRange": {
             "type": "structure",
@@ -5126,7 +6544,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#TagCollections",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services tags that are used by resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>The Amazon Web Services tags that are used by resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
                     }
                 }
             },
@@ -5146,7 +6564,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#TagCollectionFilters",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services tags used to filter the resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>The Amazon Web Services tags used to filter the resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
                     }
                 }
             },
@@ -5155,29 +6573,30 @@
             }
         },
         "com.amazonaws.devopsguru#ResourceCollectionType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "AWS_CLOUD_FORMATION",
-                        "name": "AWS_CLOUD_FORMATION"
-                    },
-                    {
-                        "value": "AWS_SERVICE",
-                        "name": "AWS_SERVICE"
-                    },
-                    {
-                        "value": "AWS_TAGS",
-                        "name": "AWS_TAGS"
+            "type": "enum",
+            "members": {
+                "AWS_CLOUD_FORMATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS_CLOUD_FORMATION"
                     }
-                ]
+                },
+                "AWS_SERVICE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS_SERVICE"
+                    }
+                },
+                "AWS_TAGS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS_TAGS"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#ResourceHours": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.devopsguru#ResourceIdString": {
             "type": "string"
@@ -5219,18 +6638,20 @@
             }
         },
         "com.amazonaws.devopsguru#ResourcePermission": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "FULL_PERMISSION",
-                        "name": "FULL_PERMISSION"
-                    },
-                    {
-                        "value": "MISSING_PERMISSION",
-                        "name": "MISSING_PERMISSION"
+            "type": "enum",
+            "members": {
+                "FULL_PERMISSION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FULL_PERMISSION"
                     }
-                ]
+                },
+                "MISSING_PERMISSION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MISSING_PERMISSION"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#ResourceType": {
@@ -5244,14 +6665,170 @@
             }
         },
         "com.amazonaws.devopsguru#ResourceTypeFilter": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "LOG_GROUPS",
-                        "name": "LOG_GROUPS"
+            "type": "enum",
+            "members": {
+                "LOG_GROUPS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LOG_GROUPS"
                     }
-                ]
+                },
+                "CLOUDFRONT_DISTRIBUTION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CLOUDFRONT_DISTRIBUTION"
+                    }
+                },
+                "DYNAMODB_TABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DYNAMODB_TABLE"
+                    }
+                },
+                "EC2_NAT_GATEWAY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "EC2_NAT_GATEWAY"
+                    }
+                },
+                "ECS_CLUSTER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ECS_CLUSTER"
+                    }
+                },
+                "ECS_SERVICE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ECS_SERVICE"
+                    }
+                },
+                "EKS_CLUSTER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "EKS_CLUSTER"
+                    }
+                },
+                "ELASTIC_BEANSTALK_ENVIRONMENT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ELASTIC_BEANSTALK_ENVIRONMENT"
+                    }
+                },
+                "ELASTIC_LOAD_BALANCER_LOAD_BALANCER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ELASTIC_LOAD_BALANCER_LOAD_BALANCER"
+                    }
+                },
+                "ELASTIC_LOAD_BALANCING_V2_LOAD_BALANCER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ELASTIC_LOAD_BALANCING_V2_LOAD_BALANCER"
+                    }
+                },
+                "ELASTIC_LOAD_BALANCING_V2_TARGET_GROUP": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ELASTIC_LOAD_BALANCING_V2_TARGET_GROUP"
+                    }
+                },
+                "ELASTICACHE_CACHE_CLUSTER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ELASTICACHE_CACHE_CLUSTER"
+                    }
+                },
+                "ELASTICSEARCH_DOMAIN": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ELASTICSEARCH_DOMAIN"
+                    }
+                },
+                "KINESIS_STREAM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "KINESIS_STREAM"
+                    }
+                },
+                "LAMBDA_FUNCTION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LAMBDA_FUNCTION"
+                    }
+                },
+                "OPEN_SEARCH_SERVICE_DOMAIN": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "OPEN_SEARCH_SERVICE_DOMAIN"
+                    }
+                },
+                "RDS_DB_INSTANCE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "RDS_DB_INSTANCE"
+                    }
+                },
+                "RDS_DB_CLUSTER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "RDS_DB_CLUSTER"
+                    }
+                },
+                "REDSHIFT_CLUSTER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REDSHIFT_CLUSTER"
+                    }
+                },
+                "ROUTE53_HOSTED_ZONE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ROUTE53_HOSTED_ZONE"
+                    }
+                },
+                "ROUTE53_HEALTH_CHECK": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ROUTE53_HEALTH_CHECK"
+                    }
+                },
+                "S3_BUCKET": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "S3_BUCKET"
+                    }
+                },
+                "SAGEMAKER_ENDPOINT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SAGEMAKER_ENDPOINT"
+                    }
+                },
+                "SNS_TOPIC": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SNS_TOPIC"
+                    }
+                },
+                "SQS_QUEUE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SQS_QUEUE"
+                    }
+                },
+                "STEP_FUNCTIONS_ACTIVITY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "STEP_FUNCTIONS_ACTIVITY"
+                    }
+                },
+                "STEP_FUNCTIONS_STATE_MACHINE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "STEP_FUNCTIONS_STATE_MACHINE"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#ResourceTypeFilters": {
@@ -5261,7 +6838,10 @@
             }
         },
         "com.amazonaws.devopsguru#RetryAfterSeconds": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.devopsguru#SearchInsights": {
             "type": "operation",
@@ -5286,7 +6866,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p> Returns a list of insights in your Amazon Web Services account. You can specify which insights are\n\t\t\treturned by their start time, one or more statuses (<code>ONGOING</code>,\n\t\t\t\t<code>CLOSED</code>, and <code>CLOSED</code>), one or more severities\n\t\t\t\t(<code>LOW</code>, <code>MEDIUM</code>, and <code>HIGH</code>), and type\n\t\t\t\t(<code>REACTIVE</code> or <code>PROACTIVE</code>). </p>\n\t\t       <p> Use the <code>Filters</code> parameter to specify status and severity search\n\t\t\tparameters. Use the <code>Type</code> parameter to specify <code>REACTIVE</code> or\n\t\t\t\t<code>PROACTIVE</code> in your search. </p>",
+                "smithy.api#documentation": "<p> Returns a list of insights in your Amazon Web Services account. You can specify which insights are\n\t\t\treturned by their start time, one or more statuses (<code>ONGOING</code> or <code>CLOSED</code>), one or more severities\n\t\t\t\t(<code>LOW</code>, <code>MEDIUM</code>, and <code>HIGH</code>), and type\n\t\t\t\t(<code>REACTIVE</code> or <code>PROACTIVE</code>). </p>\n\t\t       <p> Use the <code>Filters</code> parameter to specify status and severity search\n\t\t\tparameters. Use the <code>Type</code> parameter to specify <code>REACTIVE</code> or\n\t\t\t\t<code>PROACTIVE</code> in your search. </p>",
                 "smithy.api#http": {
                     "method": "POST",
                     "uri": "/insights/search",
@@ -5343,7 +6923,6 @@
         "com.amazonaws.devopsguru#SearchInsightsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -5475,7 +7054,6 @@
         "com.amazonaws.devopsguru#SearchOrganizationInsightsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -5576,6 +7154,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Represents the health of an Amazon Web Services service. This is a <code>ServiceInsightHealth</code>\n\t\t\tthat contains the number of open proactive and reactive insights for this\n\t\t\tservice.</p>"
                     }
+                },
+                "AnalyzedResourceCount": {
+                    "target": "com.amazonaws.devopsguru#AnalyzedResourceCount",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n\t\t\tNumber of resources that DevOps Guru is monitoring in an analyzed Amazon Web Services service.\n\t\t</p>"
+                    }
                 }
             },
             "traits": {
@@ -5594,12 +7178,14 @@
                 "OpenProactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumOpenProactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of open proactive insights in the Amazon Web Services service</p>"
                     }
                 },
                 "OpenReactiveInsights": {
                     "target": "com.amazonaws.devopsguru#NumOpenReactiveInsights",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of open reactive insights in the Amazon Web Services service</p>"
                     }
                 }
@@ -5629,110 +7215,158 @@
             }
         },
         "com.amazonaws.devopsguru#ServiceName": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "API_GATEWAY",
-                        "name": "API_GATEWAY"
-                    },
-                    {
-                        "value": "APPLICATION_ELB",
-                        "name": "APPLICATION_ELB"
-                    },
-                    {
-                        "value": "AUTO_SCALING_GROUP",
-                        "name": "AUTO_SCALING_GROUP"
-                    },
-                    {
-                        "value": "CLOUD_FRONT",
-                        "name": "CLOUD_FRONT"
-                    },
-                    {
-                        "value": "DYNAMO_DB",
-                        "name": "DYNAMO_DB"
-                    },
-                    {
-                        "value": "EC2",
-                        "name": "EC2"
-                    },
-                    {
-                        "value": "ECS",
-                        "name": "ECS"
-                    },
-                    {
-                        "value": "EKS",
-                        "name": "EKS"
-                    },
-                    {
-                        "value": "ELASTIC_BEANSTALK",
-                        "name": "ELASTIC_BEANSTALK"
-                    },
-                    {
-                        "value": "ELASTI_CACHE",
-                        "name": "ELASTI_CACHE"
-                    },
-                    {
-                        "value": "ELB",
-                        "name": "ELB"
-                    },
-                    {
-                        "value": "ES",
-                        "name": "ES"
-                    },
-                    {
-                        "value": "KINESIS",
-                        "name": "KINESIS"
-                    },
-                    {
-                        "value": "LAMBDA",
-                        "name": "LAMBDA"
-                    },
-                    {
-                        "value": "NAT_GATEWAY",
-                        "name": "NAT_GATEWAY"
-                    },
-                    {
-                        "value": "NETWORK_ELB",
-                        "name": "NETWORK_ELB"
-                    },
-                    {
-                        "value": "RDS",
-                        "name": "RDS"
-                    },
-                    {
-                        "value": "REDSHIFT",
-                        "name": "REDSHIFT"
-                    },
-                    {
-                        "value": "ROUTE_53",
-                        "name": "ROUTE_53"
-                    },
-                    {
-                        "value": "S3",
-                        "name": "S3"
-                    },
-                    {
-                        "value": "SAGE_MAKER",
-                        "name": "SAGE_MAKER"
-                    },
-                    {
-                        "value": "SNS",
-                        "name": "SNS"
-                    },
-                    {
-                        "value": "SQS",
-                        "name": "SQS"
-                    },
-                    {
-                        "value": "STEP_FUNCTIONS",
-                        "name": "STEP_FUNCTIONS"
-                    },
-                    {
-                        "value": "SWF",
-                        "name": "SWF"
+            "type": "enum",
+            "members": {
+                "API_GATEWAY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "API_GATEWAY"
                     }
-                ]
+                },
+                "APPLICATION_ELB": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "APPLICATION_ELB"
+                    }
+                },
+                "AUTO_SCALING_GROUP": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AUTO_SCALING_GROUP"
+                    }
+                },
+                "CLOUD_FRONT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CLOUD_FRONT"
+                    }
+                },
+                "DYNAMO_DB": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DYNAMO_DB"
+                    }
+                },
+                "EC2": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "EC2"
+                    }
+                },
+                "ECS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ECS"
+                    }
+                },
+                "EKS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "EKS"
+                    }
+                },
+                "ELASTIC_BEANSTALK": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ELASTIC_BEANSTALK"
+                    }
+                },
+                "ELASTI_CACHE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ELASTI_CACHE"
+                    }
+                },
+                "ELB": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ELB"
+                    }
+                },
+                "ES": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ES"
+                    }
+                },
+                "KINESIS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "KINESIS"
+                    }
+                },
+                "LAMBDA": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LAMBDA"
+                    }
+                },
+                "NAT_GATEWAY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NAT_GATEWAY"
+                    }
+                },
+                "NETWORK_ELB": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NETWORK_ELB"
+                    }
+                },
+                "RDS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "RDS"
+                    }
+                },
+                "REDSHIFT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REDSHIFT"
+                    }
+                },
+                "ROUTE_53": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ROUTE_53"
+                    }
+                },
+                "S3": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "S3"
+                    }
+                },
+                "SAGE_MAKER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SAGE_MAKER"
+                    }
+                },
+                "SNS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SNS"
+                    }
+                },
+                "SQS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SQS"
+                    }
+                },
+                "STEP_FUNCTIONS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "STEP_FUNCTIONS"
+                    }
+                },
+                "SWF": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SWF"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#ServiceNames": {
@@ -5772,18 +7406,21 @@
                 "Count": {
                     "target": "com.amazonaws.devopsguru#CostEstimationServiceResourceCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of active resources analyzed for this service to create a monthly cost\n\t\t\testimate.</p>"
                     }
                 },
                 "UnitCost": {
                     "target": "com.amazonaws.devopsguru#Cost",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The price per hour to analyze the resources in the service.\n\t\t\tFor more information, \n\t\t\tsee <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/cost-estimate.html\">Estimate your \n\t\t\tAmazon DevOps Guru costs</a> and \n\t\t\t<a href=\"http://aws.amazon.com/devops-guru/pricing/\">Amazon DevOps Guru pricing</a>.</p>"
                     }
                 },
                 "Cost": {
                     "target": "com.amazonaws.devopsguru#Cost",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total estimated monthly cost to analyze the active resources for this\n\t\t\tresource.</p>"
                     }
                 }
@@ -5924,7 +7561,7 @@
                 "AppBoundaryKey": {
                     "target": "com.amazonaws.devopsguru#AppBoundaryKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
+                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
                         "smithy.api#required": {}
                     }
                 },
@@ -5937,7 +7574,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A collection of Amazon Web Services stags.</p> \n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                "smithy.api#documentation": "<p>A collection of Amazon Web Services tags.</p> \n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
             }
         },
         "com.amazonaws.devopsguru#TagCollectionFilter": {
@@ -5946,7 +7583,7 @@
                 "AppBoundaryKey": {
                     "target": "com.amazonaws.devopsguru#AppBoundaryKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
+                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
                         "smithy.api#required": {}
                     }
                 },
@@ -5980,7 +7617,7 @@
                 "AppBoundaryKey": {
                     "target": "com.amazonaws.devopsguru#AppBoundaryKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
+                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
                         "smithy.api#required": {}
                     }
                 },
@@ -6008,7 +7645,7 @@
                 "AppBoundaryKey": {
                     "target": "com.amazonaws.devopsguru#AppBoundaryKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
                     }
                 },
                 "TagValue": {
@@ -6021,6 +7658,12 @@
                     "target": "com.amazonaws.devopsguru#InsightHealth",
                     "traits": {
                         "smithy.api#documentation": "<p>Information about the health of the Amazon Web Services resources in your account that are specified\n\t\t\tby an Amazon Web Services tag, including the number of open proactive, open reactive insights, and the\n\t\t\tMean Time to Recover (MTTR) of closed insights. </p>"
+                    }
+                },
+                "AnalyzedResourceCount": {
+                    "target": "com.amazonaws.devopsguru#AnalyzedResourceCount",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n\t\t\tNumber of resources that DevOps Guru is monitoring in your account that are specified by an Amazon Web Services tag.\n\t\t</p>"
                     }
                 }
             },
@@ -6074,6 +7717,7 @@
                 "RetryAfterSeconds": {
                     "target": "com.amazonaws.devopsguru#RetryAfterSeconds",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The number of seconds after which the action that caused the throttling exception can\n\t\t\tbe retried. </p>",
                         "smithy.api#httpHeader": "Retry-After"
                     }
@@ -6219,18 +7863,20 @@
             }
         },
         "com.amazonaws.devopsguru#UpdateResourceCollectionAction": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "ADD",
-                        "name": "ADD"
-                    },
-                    {
-                        "value": "REMOVE",
-                        "name": "REMOVE"
+            "type": "enum",
+            "members": {
+                "ADD": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ADD"
                     }
-                ]
+                },
+                "REMOVE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REMOVE"
+                    }
+                }
             }
         },
         "com.amazonaws.devopsguru#UpdateResourceCollectionFilter": {
@@ -6245,7 +7891,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#UpdateTagCollectionFilters",
                     "traits": {
-                        "smithy.api#documentation": "<p>The updated Amazon Web Services tags used to filter the resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>The updated Amazon Web Services tags used to filter the resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
                     }
                 }
             },
@@ -6360,7 +8006,7 @@
                 "AppBoundaryKey": {
                     "target": "com.amazonaws.devopsguru#AppBoundaryKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>Devops-guru-deployment-application</code> or\n\t\t\t<code>Devops-guru-rds-application</code>. While <i>keys</i> are case-sensitive, the\n\t\t\tcase of <i>key</i> characters don't matter to DevOps Guru. For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
+                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
                         "smithy.api#required": {}
                     }
                 },
@@ -6462,34 +8108,44 @@
             }
         },
         "com.amazonaws.devopsguru#ValidationExceptionReason": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "UNKNOWN_OPERATION",
-                        "name": "UNKNOWN_OPERATION"
-                    },
-                    {
-                        "value": "CANNOT_PARSE",
-                        "name": "CANNOT_PARSE"
-                    },
-                    {
-                        "value": "FIELD_VALIDATION_FAILED",
-                        "name": "FIELD_VALIDATION_FAILED"
-                    },
-                    {
-                        "value": "OTHER",
-                        "name": "OTHER"
-                    },
-                    {
-                        "value": "INVALID_PARAMETER_COMBINATION",
-                        "name": "INVALID_PARAMETER_COMBINATION"
-                    },
-                    {
-                        "value": "PARAMETER_INCONSISTENT_WITH_SERVICE_STATE",
-                        "name": "PARAMETER_INCONSISTENT_WITH_SERVICE_STATE"
+            "type": "enum",
+            "members": {
+                "UNKNOWN_OPERATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "UNKNOWN_OPERATION"
                     }
-                ]
+                },
+                "CANNOT_PARSE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CANNOT_PARSE"
+                    }
+                },
+                "FIELD_VALIDATION_FAILED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FIELD_VALIDATION_FAILED"
+                    }
+                },
+                "OTHER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "OTHER"
+                    }
+                },
+                "INVALID_PARAMETER_COMBINATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INVALID_PARAMETER_COMBINATION"
+                    }
+                },
+                "PARAMETER_INCONSISTENT_WITH_SERVICE_STATE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PARAMETER_INCONSISTENT_WITH_SERVICE_STATE"
+                    }
+                }
             }
         }
     }

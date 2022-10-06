@@ -11,4 +11,5 @@ package aws.sdk.kotlin.runtime.endpoint
  * @property region A custom sigv4 signing name
  * @property service A custom sigv4 service name to use when signing a request
  */
+// TODO: replaced by AwsEndpoint AuthScheme - remove when endpoints2 is fully implemented
 public data class CredentialScope(val region: String? = null, val service: String? = null)
