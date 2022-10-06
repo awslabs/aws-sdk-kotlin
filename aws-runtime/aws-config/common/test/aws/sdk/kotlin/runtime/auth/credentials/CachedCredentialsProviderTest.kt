@@ -122,4 +122,25 @@ class CachedCredentialsProviderTest {
         // future successful invocations should continue to work
         provider.getCredentials()
     }
+
+    @Test
+    fun testNextRefreshOverridesExpirationTime() = runTest {
+        val source = object : CredentialsProvider {
+            var callCount = 0
+
+            // return credentials with nextRefresh time of 5 minutes, which is earlier than expiration time
+            override suspend fun getCredentials(): Credentials {
+                callCount++
+                return Credentials("AKID", "secret", expiration = testExpiration, nextRefresh = epoch + 5.minutes)
+            }
+        }
+
+        val provider = CachedCredentialsProvider(source, clock = testClock)
+        provider.getCredentials()
+        assertEquals(1, source.callCount)
+
+        testClock.advance(6.minutes) // 1 minute past expiration
+        provider.getCredentials()
+        assertEquals(2, source.callCount)
+    }
 }
