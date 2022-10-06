@@ -150,7 +150,7 @@ class DefaultChainCredentialsProviderTest {
                 val actualCreds = actual.getOrThrow()
 
                 val sanitizedExpiration = if (expected.creds.expiration == null) null else actualCreds.expiration
-                val creds = actualCreds.copy(providerName = null, expiration = sanitizedExpiration,)
+                val creds = actualCreds.copy(providerName = null, expiration = sanitizedExpiration)
                 assertEquals(expected.creds, creds)
 
                 // assert http traffic to the extent we can. These tests do not have specific timestamps they
