@@ -20,6 +20,8 @@ import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.io.IOException
 import kotlin.time.Duration.Companion.seconds
 
@@ -52,6 +54,7 @@ public class ImdsCredentialsProvider(
     private val clock: Clock = Clock.System,
 ) : CredentialsProvider, Closeable {
     private val logger = Logger.getLogger<ImdsCredentialsProvider>()
+    private val mu = Mutex()
 
     private val profile = asyncLazy {
         if (profileOverride != null) return@asyncLazy profileOverride
@@ -64,11 +67,10 @@ public class ImdsCredentialsProvider(
         }
 
         // if we have previously served IMDS credentials and it's not time for a refresh, just return the previous credentials
-        if (previousCredentials != null &&
-            previousCredentials!!.nextRefresh != null &&
-            clock.now() < previousCredentials!!.nextRefresh!!
-        ) {
-            return previousCredentials as Credentials
+        mu.withLock {
+            previousCredentials?.nextRefresh?.takeIf { clock.now() < it }?.run {
+                return previousCredentials!!
+            }
         }
 
         val profileName = try {
@@ -77,8 +79,10 @@ public class ImdsCredentialsProvider(
             when {
                 ex is IOException ||
                     ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
-                    previousCredentials = previousCredentials?.copy(nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds)
-                    return previousCredentials ?: throw CredentialsProviderException("failed to load instance profile", ex)
+                    mu.withLock {
+                        previousCredentials = previousCredentials?.copy(nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds)
+                        return previousCredentials ?: throw CredentialsProviderException("failed to load instance profile", ex)
+                    }
                 }
                 else -> throw CredentialsProviderException("failed to load instance profile", ex)
             }
@@ -90,8 +94,10 @@ public class ImdsCredentialsProvider(
             when {
                 ex is IOException ||
                     ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
-                    previousCredentials = previousCredentials?.copy(nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds)
-                    return previousCredentials ?: throw CredentialsProviderException("failed to load credentials", ex)
+                    mu.withLock {
+                        previousCredentials = previousCredentials?.copy(nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds)
+                        return previousCredentials ?: throw CredentialsProviderException("failed to load credentials", ex)
+                    }
                 }
                 else -> throw CredentialsProviderException("failed to load credentials", ex)
             }
@@ -101,22 +107,23 @@ public class ImdsCredentialsProvider(
 
         return when (val resp = deserializeJsonCredentials(deserializer)) {
             is JsonCredentialsResponse.SessionCredentials -> {
-                var creds = Credentials(
+                val nextRefresh = if (resp.expiration < clock.now()) {
+                    logger.warn { STATIC_STABILITY_LOG_MESSAGE.format(DEFAULT_CREDENTIALS_REFRESH_SECONDS / 60) }
+                    clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds
+                } else null
+
+                val creds = Credentials(
                     resp.accessKeyId,
                     resp.secretAccessKey,
                     resp.sessionToken,
                     resp.expiration,
                     PROVIDER_NAME,
+                    nextRefresh,
                 )
 
-                if (creds.expiration!! < clock.now()) {
-                    // let the user know we will be using expired credentials
-                    logger.info { STATIC_STABILITY_LOG_MESSAGE.format(DEFAULT_CREDENTIALS_REFRESH_SECONDS / 60) }
-                    creds = creds.copy(nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds)
+                creds.also {
+                    mu.withLock { previousCredentials = it }
                 }
-
-                previousCredentials = creds
-                creds
             }
             is JsonCredentialsResponse.Error -> {
                 when (resp.code) {
