@@ -83,7 +83,7 @@ class CachedCredentialsProviderTest {
     @Test
     fun testRefreshBufferWindow() = runTest {
         val source = TestCredentialsProvider(expiration = testExpiration)
-        val provider = CachedCredentialsProvider(source, clock = testClock)
+        val provider = CachedCredentialsProvider(source, clock = testClock, expireCredentialsAfter = 60.minutes)
         val creds = provider.getCredentials()
         val expected = Credentials("AKID", "secret", expiration = testExpiration)
         assertEquals(expected, creds)
