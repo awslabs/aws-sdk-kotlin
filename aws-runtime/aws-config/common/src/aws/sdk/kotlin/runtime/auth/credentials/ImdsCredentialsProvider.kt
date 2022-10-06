@@ -17,6 +17,7 @@ import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.Clock
+import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
@@ -55,6 +56,7 @@ public class ImdsCredentialsProvider(
 ) : CredentialsProvider, Closeable {
     private val logger = Logger.getLogger<ImdsCredentialsProvider>()
     private val mu = Mutex()
+    private var nextRefresh: Instant? = null
 
     private val profile = asyncLazy {
         if (profileOverride != null) return@asyncLazy profileOverride
@@ -68,8 +70,10 @@ public class ImdsCredentialsProvider(
 
         // if we have previously served IMDS credentials and it's not time for a refresh, just return the previous credentials
         mu.withLock {
-            previousCredentials?.nextRefresh?.takeIf { clock.now() < it }?.run {
-                return previousCredentials!!
+            previousCredentials?.run {
+                nextRefresh?.takeIf { clock.now() < it }?.run {
+                    return previousCredentials!!
+                }
             }
         }
 
@@ -80,7 +84,7 @@ public class ImdsCredentialsProvider(
                 ex is IOException ||
                     ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
                     mu.withLock {
-                        previousCredentials = previousCredentials?.copy(nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds)
+                        previousCredentials?.run { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
                         return previousCredentials ?: throw CredentialsProviderException("failed to load instance profile", ex)
                     }
                 }
@@ -95,7 +99,7 @@ public class ImdsCredentialsProvider(
                 ex is IOException ||
                     ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
                     mu.withLock {
-                        previousCredentials = previousCredentials?.copy(nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds)
+                        previousCredentials?.run { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
                         return previousCredentials ?: throw CredentialsProviderException("failed to load credentials", ex)
                     }
                 }
@@ -107,7 +111,7 @@ public class ImdsCredentialsProvider(
 
         return when (val resp = deserializeJsonCredentials(deserializer)) {
             is JsonCredentialsResponse.SessionCredentials -> {
-                val nextRefresh = if (resp.expiration < clock.now()) {
+                nextRefresh = if (resp.expiration < clock.now()) {
                     logger.warn { STATIC_STABILITY_LOG_MESSAGE.format(DEFAULT_CREDENTIALS_REFRESH_SECONDS / 60) }
                     clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds
                 } else null
@@ -118,7 +122,6 @@ public class ImdsCredentialsProvider(
                     resp.sessionToken,
                     resp.expiration,
                     PROVIDER_NAME,
-                    nextRefresh,
                 )
 
                 creds.also {
