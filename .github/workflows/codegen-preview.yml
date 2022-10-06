@@ -43,6 +43,8 @@ jobs:
       bot-message: ${{ steps.generate-diff.outputs.codegen-diff-msg }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/cache@v2
         name: Gradle Cache
         with:
@@ -77,7 +79,10 @@ jobs:
             -c "user.email=generated-code-action@github.com" \
             commit -m "codegen diff autocommit" --allow-empty
           fi
-          .github/scripts/codegen-diff-revisions.py --bootstrap ${{ env.PREVIEW_SERVICES }} . ${{ github.event.pull_request.base.sha }}
+          .github/scripts/codegen-diff-revisions.py \
+            --bootstrap ${{ env.PREVIEW_SERVICES }} \
+            --head-sha ${{ github.event.pull_request.head.sha }} \
+            . ${{ github.event.pull_request.base.sha }}
           echo ::set-output name=codegen-diff-msg::"$(cat ./tmp-codegen-diff/bot-message)"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1

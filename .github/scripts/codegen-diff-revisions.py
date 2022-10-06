@@ -190,6 +190,7 @@ def create_cli():
     parser.add_argument("base_sha", help="base commit to diff against (SHA-like)")
     parser.add_argument("--bootstrap", help="services to pass to bootstrap and include in diff output",
                         default="+dynamodb,+codebuild,+sts,+ec2,+polly,+s3")
+    parser.add_argument("--head-sha", help="head commit to use (defaults to whatever current HEAD) is")
 
     return parser
 
@@ -201,7 +202,12 @@ def main():
 
     os.chdir(opts.repo_root)
 
-    head_sha = get_cmd_output("git rev-parse HEAD")
+    if opts.head_sha is None:
+        head_sha = get_cmd_output("git rev-parse HEAD")
+    else:
+        head_sha = opts.head_sha
+
+    print(f"using head sha is {head_sha}")
 
     # Make sure the working tree is clean
     if get_cmd_status("git diff --quiet") != 0:
@@ -209,12 +215,12 @@ def main():
         sys.exit(1)
 
     # Generate code for HEAD
-    eprint(f"Creating temporary branch with generated code for the HEAD revision {head_sha}")
+    print(f"Creating temporary branch with generated code for the HEAD revision {head_sha}")
     run(f"git checkout {head_sha} -b {HEAD_BRANCH_NAME}")
     generate_and_commit_generated_code(head_sha, opts.bootstrap)
 
     # Generate code for base
-    eprint(f"Creating temporary branch with generated code for the base revision {opts.base_sha}")
+    print(f"Creating temporary branch with generated code for the base revision {opts.base_sha}")
     run(f"git checkout {opts.base_sha} -b {BASE_BRANCH_NAME}")
     generate_and_commit_generated_code(opts.base_sha, opts.bootstrap)
 
