@@ -66,6 +66,9 @@ jobs:
       - name: Generate diff
         id: generate-diff
         run: |
+          # codegen-diff-revisions requires a clean index, set-upstream-versions.py can modify local repo state
+          # we don't push these branches/commits anywhere so just commit it and move on
+          git diff --quiet gradle.properties || (echo 'gradle.properties dirty; commiting before generating diffs' && git add gradle.properties && git commit -m "codegen diff autocommit")
           .github/scripts/codegen-diff-revisions.py --bootstrap ${{ env.PREVIEW_SERVICES }} . ${{ github.event.pull_request.base.sha }}
           echo ::set-output name=codegen-diff-msg::"$(cat ./tmp-codegen-diff/bot-message)"
       - name: Configure AWS Credentials
