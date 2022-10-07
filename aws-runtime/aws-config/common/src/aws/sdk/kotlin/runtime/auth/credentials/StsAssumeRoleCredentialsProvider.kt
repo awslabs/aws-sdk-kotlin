@@ -13,12 +13,13 @@ import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.asNestedTracer
 import aws.smithy.kotlin.runtime.tracing.logger
+import aws.smithy.kotlin.runtime.tracing.withChildSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import kotlin.time.Duration
@@ -57,7 +58,7 @@ public class StsAssumeRoleCredentialsProvider(
 ) : CredentialsProvider {
 
     override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
-        traceSpan.child("StsAssumeRole").use { childSpan ->
+        traceSpan.withChildSpan("StsAssumeRole") { childSpan ->
             val logger = childSpan.logger<StsAssumeRoleCredentialsProvider>()
             logger.debug { "retrieving assumed credentials" }
 
@@ -67,6 +68,7 @@ public class StsAssumeRoleCredentialsProvider(
                 region = provider.region ?: GLOBAL_STS_PARTITION_ENDPOINT
                 credentialsProvider = provider.credentialsProvider
                 httpClientEngine = provider.httpClientEngine
+                tracer = childSpan.asNestedTracer("STS")
             }
 
             val resp = try {

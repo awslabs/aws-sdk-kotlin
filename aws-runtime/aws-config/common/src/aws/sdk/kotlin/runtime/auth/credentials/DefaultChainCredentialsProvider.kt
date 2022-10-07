@@ -12,8 +12,8 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.withChildSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
@@ -68,9 +68,7 @@ public class DefaultChainCredentialsProvider constructor(
     private val provider = CachedCredentialsProvider(chain)
 
     override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
-        traceSpan.child("DefaultChain").use { childSpan ->
-            provider.getCredentials(childSpan)
-        }
+        traceSpan.withChildSpan("DefaultChain") { provider.getCredentials(it) }
 
     override fun close() {
         provider.close()

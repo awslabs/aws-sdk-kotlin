@@ -17,10 +17,10 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import aws.smithy.kotlin.runtime.tracing.logger
+import aws.smithy.kotlin.runtime.tracing.withChildSpan
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -96,7 +96,7 @@ public class ProfileCredentialsProvider(
     )
 
     override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
-        traceSpan.child("Profile").use { childSpan ->
+        traceSpan.withChildSpan("Profile") { childSpan ->
             val logger = childSpan.logger<ProfileCredentialsProvider>()
             val source = resolveConfigSource(platformProvider, profileName)
             logger.debug { "Loading credentials from profile `${source.profile}`" }

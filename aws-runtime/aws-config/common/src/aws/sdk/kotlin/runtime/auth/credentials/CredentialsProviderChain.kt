@@ -8,10 +8,10 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import aws.smithy.kotlin.runtime.tracing.debug
 import aws.smithy.kotlin.runtime.tracing.logger
+import aws.smithy.kotlin.runtime.tracing.withChildSpan
 
 // TODO - support caching the provider that actually resolved credentials such that future calls don't involve going through the full chain
 
@@ -34,7 +34,7 @@ public open class CredentialsProviderChain(
         (listOf(this) + providers).map { it::class.simpleName }.joinToString(" -> ")
 
     override suspend fun getCredentials(traceSpan: TraceSpan): Credentials {
-        traceSpan.child("Chain").use { childSpan ->
+        traceSpan.withChildSpan("Chain") { childSpan ->
             val logger = childSpan.logger<CredentialsProviderChain>()
             val chainException = lazy { CredentialsProviderException("No credentials could be loaded from the chain: $this") }
             for (provider in providers) {

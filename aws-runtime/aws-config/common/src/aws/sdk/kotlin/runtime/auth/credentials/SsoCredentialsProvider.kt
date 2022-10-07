@@ -13,7 +13,6 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.hashing.sha1
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
@@ -96,42 +95,41 @@ public class SsoCredentialsProvider public constructor(
 
 ) : CredentialsProvider {
 
-    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials = traceSpan.child("Sso").use { childSpan ->
-        val logger = childSpan.logger<SsoCredentialsProvider>()
+    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
+        traceSpan.withChildSpan("SSO") { childSpan ->
+            val logger = childSpan.logger<SsoCredentialsProvider>()
 
-        logger.trace { "Attempting to load token file" }
-        val token = loadTokenFile()
+            logger.trace { "Attempting to load token file" }
+            val token = loadTokenFile()
 
-        val client = SsoClient {
-            region = ssoRegion
-            httpClientEngine = this@SsoCredentialsProvider.httpClientEngine
-
-            // TODO wire tracing through generated clients too
-            traceProbe = NoOpTraceProbe
-        }
-
-        val resp = try {
-            client.getRoleCredentials {
-                accountId = this@SsoCredentialsProvider.accountId
-                roleName = this@SsoCredentialsProvider.roleName
-                accessToken = token.accessToken
+            val client = SsoClient {
+                region = ssoRegion
+                httpClientEngine = this@SsoCredentialsProvider.httpClientEngine
+                tracer = childSpan.asNestedTracer("SSO")
             }
-        } catch (ex: Exception) {
-            throw CredentialsNotLoadedException("GetRoleCredentials operation failed", ex)
-        } finally {
-            client.close()
+
+            val resp = try {
+                client.getRoleCredentials {
+                    accountId = this@SsoCredentialsProvider.accountId
+                    roleName = this@SsoCredentialsProvider.roleName
+                    accessToken = token.accessToken
+                }
+            } catch (ex: Exception) {
+                throw CredentialsNotLoadedException("GetRoleCredentials operation failed", ex)
+            } finally {
+                client.close()
+            }
+
+            val roleCredentials = resp.roleCredentials ?: throw CredentialsProviderException("Expected SSO roleCredentials to not be null")
+
+            return Credentials(
+                accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in SSO roleCredentials response" },
+                secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in SSO roleCredentials response" },
+                sessionToken = roleCredentials.sessionToken,
+                expiration = Instant.fromEpochMilliseconds(roleCredentials.expiration),
+                PROVIDER_NAME,
+            )
         }
-
-        val roleCredentials = resp.roleCredentials ?: throw CredentialsProviderException("Expected SSO roleCredentials to not be null")
-
-        return Credentials(
-            accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in SSO roleCredentials response" },
-            secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in SSO roleCredentials response" },
-            sessionToken = roleCredentials.sessionToken,
-            expiration = Instant.fromEpochMilliseconds(roleCredentials.expiration),
-            PROVIDER_NAME,
-        )
-    }
 
     private suspend fun loadTokenFile(): SsoToken {
         val key = getCacheFilename(startUrl)

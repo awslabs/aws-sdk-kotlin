@@ -14,11 +14,11 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import aws.smithy.kotlin.runtime.tracing.logger
+import aws.smithy.kotlin.runtime.tracing.withChildSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import kotlinx.coroutines.sync.Mutex
@@ -50,39 +50,40 @@ public class ImdsCredentialsProvider(
 ) : CredentialsProvider, Closeable {
     private val profile = ProfileLoader(profileOverride, client)
 
-    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials = traceSpan.child("Imds").use { childSpan ->
-        val logger = childSpan.logger<ImdsCredentialsProvider>()
+    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
+        traceSpan.withChildSpan("Imds") { childSpan ->
+            val logger = childSpan.logger<ImdsCredentialsProvider>()
 
-        if (AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true) {
-            throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
-        }
+            if (AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true) {
+                throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
+            }
 
-        logger.trace { "Attempting to load IMDS profile" }
-        val profileName = try {
-            profile.get(logger)
-        } catch (ex: Exception) {
-            throw CredentialsProviderException("failed to load instance profile", ex)
-        }
+            logger.trace { "Attempting to load IMDS profile" }
+            val profileName = try {
+                profile.get(logger)
+            } catch (ex: Exception) {
+                throw CredentialsProviderException("failed to load instance profile", ex)
+            }
 
-        val payload = client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
-        val deserializer = JsonDeserializer(payload.encodeToByteArray())
+            val payload = client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
+            val deserializer = JsonDeserializer(payload.encodeToByteArray())
 
-        when (val resp = deserializeJsonCredentials(deserializer)) {
-            is JsonCredentialsResponse.SessionCredentials -> Credentials(
-                resp.accessKeyId,
-                resp.secretAccessKey,
-                resp.sessionToken,
-                resp.expiration,
-                PROVIDER_NAME,
-            )
-            is JsonCredentialsResponse.Error -> {
-                when (resp.code) {
-                    CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS -> throw ProviderConfigurationException("Incorrect IMDS/IAM configuration: [${resp.code}] ${resp.message}. Hint: Does this role have a trust relationship with EC2?")
-                    else -> throw CredentialsProviderException("Error retrieving credentials from IMDS: code=${resp.code}; ${resp.message}")
+            when (val resp = deserializeJsonCredentials(deserializer)) {
+                is JsonCredentialsResponse.SessionCredentials -> Credentials(
+                    resp.accessKeyId,
+                    resp.secretAccessKey,
+                    resp.sessionToken,
+                    resp.expiration,
+                    PROVIDER_NAME,
+                )
+                is JsonCredentialsResponse.Error -> {
+                    when (resp.code) {
+                        CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS -> throw ProviderConfigurationException("Incorrect IMDS/IAM configuration: [${resp.code}] ${resp.message}. Hint: Does this role have a trust relationship with EC2?")
+                        else -> throw CredentialsProviderException("Error retrieving credentials from IMDS: code=${resp.code}; ${resp.message}")
+                    }
                 }
             }
         }
-    }
 
     override fun close() {
         if (client.isInitialized()) {

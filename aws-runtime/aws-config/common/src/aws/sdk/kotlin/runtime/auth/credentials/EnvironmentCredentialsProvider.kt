@@ -8,9 +8,9 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import aws.smithy.kotlin.runtime.tracing.trace
+import aws.smithy.kotlin.runtime.tracing.withChildSpan
 import aws.smithy.kotlin.runtime.util.Platform
 
 private const val PROVIDER_NAME = "Environment"
@@ -30,7 +30,7 @@ public constructor(private val getEnv: (String) -> String?) : CredentialsProvide
         getEnv(variable) ?: throw ProviderConfigurationException("Missing value for environment variable `$variable`")
 
     override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
-        traceSpan.child("Environment").use { childSpan ->
+        traceSpan.withChildSpan("Environment") { childSpan ->
             childSpan.trace<EnvironmentCredentialsProvider> {
                 "Attempting to load credentials from env vars $ACCESS_KEY_ID/$SECRET_ACCESS_KEY/$SESSION_TOKEN"
             }
