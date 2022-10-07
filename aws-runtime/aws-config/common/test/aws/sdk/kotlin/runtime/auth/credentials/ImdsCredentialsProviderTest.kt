@@ -53,7 +53,7 @@ class ImdsCredentialsProviderTest {
     @Test
     fun testSuccess() = runTest {
         val testClock = ManualClock()
-        val expiration: Instant = testClock.now() + 5.minutes
+        val expiration = Instant.fromEpochSeconds((testClock.now() + 5.minutes).epochSeconds)
 
         val connection = buildTestConnection {
             expect(
@@ -103,7 +103,7 @@ class ImdsCredentialsProviderTest {
     @Test
     fun testSuccessProfileOverride() = runTest {
         val testClock = ManualClock()
-        val expiration = testClock.now() + 5.minutes
+        val expiration = Instant.fromEpochSeconds((testClock.now() + 5.minutes).epochSeconds)
 
         val connection = buildTestConnection {
             expect(
