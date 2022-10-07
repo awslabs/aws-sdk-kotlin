@@ -53,7 +53,7 @@ class ImdsCredentialsProviderTest {
     @Test
     fun testSuccess() = runTest {
         val testClock = ManualClock()
-        val expiration = Instant.fromEpochSeconds((testClock.now() + 5.minutes).epochSeconds)
+        val expiration = testClock.now() + 5.minutes
 
         val connection = buildTestConnection {
             expect(
@@ -87,7 +87,7 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsCredentialsProvider(client = lazyOf(client))
+        val provider = ImdsCredentialsProvider(client = lazyOf(client), clock=testClock)
 
         val actual = provider.getCredentials()
         val expected = Credentials(
@@ -103,7 +103,7 @@ class ImdsCredentialsProviderTest {
     @Test
     fun testSuccessProfileOverride() = runTest {
         val testClock = ManualClock()
-        val expiration = Instant.fromEpochSeconds((testClock.now() + 5.minutes).epochSeconds)
+        val expiration = testClock.now() + 5.minutes
 
         val connection = buildTestConnection {
             expect(
@@ -134,7 +134,7 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsCredentialsProvider(profileOverride = "imds-test-role", client = lazyOf(client))
+        val provider = ImdsCredentialsProvider(profileOverride = "imds-test-role", client = lazyOf(client), clock=testClock)
 
         val actual = provider.getCredentials()
         val expected = Credentials(
@@ -163,7 +163,7 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsCredentialsProvider(client = lazyOf(client))
+        val provider = ImdsCredentialsProvider(client = lazyOf(client), clock = testClock)
 
         val ex = assertFailsWith<CredentialsProviderException> {
             provider.getCredentials()
@@ -209,7 +209,7 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsCredentialsProvider(client = lazyOf(client))
+        val provider = ImdsCredentialsProvider(client = lazyOf(client), clock = testClock)
 
         assertFailsWith<CredentialsProviderException> {
             provider.getCredentials()
