@@ -23,14 +23,13 @@ import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.io.IOException
 import kotlin.time.Duration.Companion.seconds
 
 private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/security-credentials"
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
 private const val PROVIDER_NAME = "IMDSv2"
-private const val STATIC_STABILITY_LOG_MESSAGE: String = "Attempting credential expiration extension due to a " +
-    "credential service availability issue. A refresh of these credentials will be attempted again in %d minutes."
+
+public expect class SdkIOException : Exception // FIXME move this to the proper place when we do the larger KMP Exception refactor
 
 /**
  * [CredentialsProvider] that uses EC2 instance metadata service (IMDS) to provide credentials information.
@@ -56,6 +55,8 @@ public class ImdsCredentialsProvider(
 ) : CredentialsProvider, Closeable {
     private val logger = Logger.getLogger<ImdsCredentialsProvider>()
     private val mu = Mutex()
+
+    // the time to refresh the Credentials. If set, it will take precedence over the Credentials' expiration time
     private var nextRefresh: Instant? = null
 
     private val profile = asyncLazy {
@@ -81,7 +82,7 @@ public class ImdsCredentialsProvider(
             profile.get()
         } catch (ex: Exception) {
             when {
-                ex is IOException ||
+                ex is SdkIOException ||
                     ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
                     mu.withLock {
                         previousCredentials?.run { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
@@ -96,7 +97,7 @@ public class ImdsCredentialsProvider(
             client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
         } catch (ex: Exception) {
             when {
-                ex is IOException ||
+                ex is SdkIOException ||
                     ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
                     mu.withLock {
                         previousCredentials?.run { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
@@ -112,7 +113,11 @@ public class ImdsCredentialsProvider(
         return when (val resp = deserializeJsonCredentials(deserializer)) {
             is JsonCredentialsResponse.SessionCredentials -> {
                 nextRefresh = if (resp.expiration < clock.now()) {
-                    logger.warn { STATIC_STABILITY_LOG_MESSAGE.format(DEFAULT_CREDENTIALS_REFRESH_SECONDS / 60) }
+                    logger.warn {
+                        "Attempting credential expiration extension due to a credential service availability issue. " +
+                            "A refresh of these credentials will be attempted again in " +
+                            "${ DEFAULT_CREDENTIALS_REFRESH_SECONDS / 60 } minutes."
+                    }
                     clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds
                 } else null
 

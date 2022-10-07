@@ -29,7 +29,6 @@ import io.mockk.coVerify
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import java.net.SocketTimeoutException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -395,7 +394,7 @@ class ImdsCredentialsProviderTest {
         // this engine throws read timeout exceptions
         val readTimeoutEngine = object : HttpClientEngineBase("readTimeout") {
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
-                throw SocketTimeoutException()
+                throw SdkIOException()
             }
         }
 
@@ -431,7 +430,7 @@ class ImdsCredentialsProviderTest {
     fun testThrowsExceptionOnReadTimeoutWhenMissingPreviousCredentials() = runTest {
         val readTimeoutEngine = object : HttpClientEngineBase("readTimeout") {
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
-                throw SocketTimeoutException()
+                throw SdkIOException()
             }
         }
 
