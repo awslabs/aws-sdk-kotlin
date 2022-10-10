@@ -75,7 +75,7 @@ class ImdsCredentialsProviderTest {
                         "AccessKeyId" : "ASIARTEST",
                         "SecretAccessKey" : "xjtest",
                         "Token" : "IQote///test",
-                        "Expiration" : "$expiration"
+                        "Expiration" : "${Instant.fromEpochSeconds(expiration.epochSeconds)}"
                     }
                 """,
                 ),
@@ -122,7 +122,7 @@ class ImdsCredentialsProviderTest {
                         "AccessKeyId" : "ASIARTEST",
                         "SecretAccessKey" : "xjtest",
                         "Token" : "IQote///test",
-                        "Expiration" : "$expiration"
+                        "Expiration" : "${Instant.fromEpochSeconds(expiration.epochSeconds)}"                    
                     }
                 """,
                 ),
