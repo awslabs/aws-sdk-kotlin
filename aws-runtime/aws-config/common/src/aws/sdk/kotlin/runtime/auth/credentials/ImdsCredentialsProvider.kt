@@ -29,7 +29,7 @@ private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/securit
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
 private const val PROVIDER_NAME = "IMDSv2"
 
-public expect class SdkIOException : Exception // FIXME move this to the proper place when we do the larger KMP Exception refactor
+internal expect class SdkIOException : Exception // FIXME move this to the proper place when we do the larger KMP Exception refactor
 
 /**
  * [CredentialsProvider] that uses EC2 instance metadata service (IMDS) to provide credentials information.
@@ -50,14 +50,16 @@ public class ImdsCredentialsProvider(
     private val profileOverride: String? = null,
     private val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
     private val platformProvider: PlatformEnvironProvider = Platform,
-    private var previousCredentials: Credentials? = null,
     private val clock: Clock = Clock.System,
 ) : CredentialsProvider, Closeable {
     private val logger = Logger.getLogger<ImdsCredentialsProvider>()
-    private val mu = Mutex()
+    private var previousCredentials: Credentials? = null
 
     // the time to refresh the Credentials. If set, it will take precedence over the Credentials' expiration time
     private var nextRefresh: Instant? = null
+
+    // protects previousCredentials and nextRefresh
+    private val mu = Mutex()
 
     private val profile = asyncLazy {
         if (profileOverride != null) return@asyncLazy profileOverride
@@ -81,31 +83,13 @@ public class ImdsCredentialsProvider(
         val profileName = try {
             profile.get()
         } catch (ex: Exception) {
-            when {
-                ex is SdkIOException ||
-                    ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
-                    mu.withLock {
-                        previousCredentials?.run { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
-                        return previousCredentials ?: throw CredentialsProviderException("failed to load instance profile", ex)
-                    }
-                }
-                else -> throw CredentialsProviderException("failed to load instance profile", ex)
-            }
+            return useCachedCredentials(ex) ?: throw CredentialsProviderException("failed to load instance profile", ex)
         }
 
         val payload = try {
             client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
         } catch (ex: Exception) {
-            when {
-                ex is SdkIOException ||
-                    ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
-                    mu.withLock {
-                        previousCredentials?.run { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
-                        return previousCredentials ?: throw CredentialsProviderException("failed to load credentials", ex)
-                    }
-                }
-                else -> throw CredentialsProviderException("failed to load credentials", ex)
-            }
+            return useCachedCredentials(ex) ?: throw CredentialsProviderException("failed to load credentials", ex)
         }
 
         val deserializer = JsonDeserializer(payload.encodeToByteArray())
@@ -157,5 +141,15 @@ public class ImdsCredentialsProvider(
             }
             throw ex
         }
+    }
+
+    private suspend fun useCachedCredentials(ex: Exception): Credentials? = when {
+        ex is SdkIOException || ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
+            mu.withLock {
+                previousCredentials?.run { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
+                return previousCredentials
+            }
+        }
+        else -> null
     }
 }

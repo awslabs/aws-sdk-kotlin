@@ -313,7 +313,7 @@ class ImdsCredentialsProviderTest {
         )
 
         // call getCredentials 3 times
-        for (i in 1..3) {
+        repeat(3) {
             provider.getCredentials()
         }
 
@@ -393,14 +393,46 @@ class ImdsCredentialsProviderTest {
 
     @Test
     fun testUsesPreviousCredentialsOnReadTimeout() = runTest {
-        // this engine throws read timeout exceptions
+        val testClock = ManualClock()
+
+        // this engine throws read timeout exceptions for any requests after the initial one
+        // (i.e allow 1 TTL token and 1 credentials request)
         val readTimeoutEngine = object : HttpClientEngineBase("readTimeout") {
+            var successfulCallCount = 0
+
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
-                throw SdkIOException()
+                if (successfulCallCount >= 2) {
+                    throw SdkIOException()
+                } else {
+                    successfulCallCount += 1
+
+                    return when (successfulCallCount) {
+                        1 -> HttpCall(
+                            tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
+                            tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
+                            testClock.now(),
+                            testClock.now(),
+                        )
+                        else -> HttpCall(
+                            imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
+                            imdsResponse("""
+                            {
+                                "Code" : "Success",
+                                "LastUpdated" : "2021-09-17T20:57:08Z",
+                                "Type" : "AWS-HMAC",
+                                "AccessKeyId" : "ASIARTEST",
+                                "SecretAccessKey" : "xjtest",
+                                "Token" : "IQote///test",
+                                "Expiration" : "2021-09-18T03:31:56Z"
+                            }""",
+                            ),
+                            testClock.now(),
+                            testClock.now(),
+                        )
+                    }
+                }
             }
         }
-
-        val testClock = ManualClock()
 
         val client = ImdsClient {
             engine = readTimeoutEngine
@@ -419,13 +451,17 @@ class ImdsCredentialsProviderTest {
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
-            previousCredentials = previousCredentials, // pretend that we served these credentials previously
         )
 
+        // call the engine the first time to get a proper credentials response from IMDS
         val credentials = provider.getCredentials()
-
-        // a read timeout should cause provider to return the previously-served credentials
         assertEquals(credentials, previousCredentials)
+
+        // call it again and get a read timeout exception from the engine
+        val newCredentials = provider.getCredentials()
+
+        // should cause provider to return the previously-served credentials
+        assertEquals(newCredentials, previousCredentials)
     }
 
     @Test
@@ -459,15 +495,46 @@ class ImdsCredentialsProviderTest {
     fun testUsesPreviousCredentialsOnServerError() = runTest {
         val testClock = ManualClock()
 
-        // this engine just returns 500 errors
-        val internalServerErrorEngine = object : HttpClientEngineBase("readTimeout") {
+        // this engine returns 500 errors for any requests after the initial one (i.e allow 1 TTL token and 1 credentials request)
+        val internalServerErrorEngine = object : HttpClientEngineBase("internalServerError") {
+            var successfulCallCount = 0
+
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
-                return HttpCall(
-                    HttpRequest(HttpMethod.GET, Url(Protocol.HTTP, "test", Protocol.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
-                    HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
-                    testClock.now(),
-                    testClock.now(),
-                )
+                if (successfulCallCount >= 2) {
+                    return HttpCall(
+                        HttpRequest(HttpMethod.GET, Url(Protocol.HTTP, "test", Protocol.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
+                        HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
+                        testClock.now(),
+                        testClock.now(),
+                    )
+                } else {
+                    successfulCallCount += 1
+
+                    return when (successfulCallCount) {
+                        1 -> HttpCall(
+                            tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
+                            tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
+                            testClock.now(),
+                            testClock.now(),
+                        )
+                        else -> HttpCall(
+                            imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
+                            imdsResponse("""
+                            {
+                                "Code" : "Success",
+                                "LastUpdated" : "2021-09-17T20:57:08Z",
+                                "Type" : "AWS-HMAC",
+                                "AccessKeyId" : "ASIARTEST",
+                                "SecretAccessKey" : "xjtest",
+                                "Token" : "IQote///test",
+                                "Expiration" : "2021-09-18T03:31:56Z"
+                            }""",
+                            ),
+                            testClock.now(),
+                            testClock.now(),
+                        )
+                    }
+                }
             }
         }
 
@@ -488,13 +555,17 @@ class ImdsCredentialsProviderTest {
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
-            previousCredentials = previousCredentials, // pretend that we served these credentials previously
         )
 
+        // call the engine the first time to get a proper credentials response from IMDS
         val credentials = provider.getCredentials()
+        assertEquals(previousCredentials, credentials)
 
-        // a 500 error should cause provider to return the previously-served credentials
-        assertEquals(credentials, previousCredentials)
+        // call it again and get a 500 error from the engine
+        val newCredentials = provider.getCredentials()
+
+        // should cause provider to return the previously-served credentials
+        assertEquals(newCredentials, previousCredentials)
     }
 
     @Test
@@ -502,7 +573,7 @@ class ImdsCredentialsProviderTest {
         val testClock = ManualClock()
 
         // this engine just returns 500 errors
-        val internalServerErrorEngine = object : HttpClientEngineBase("readTimeout") {
+        val internalServerErrorEngine = object : HttpClientEngineBase("internalServerError") {
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 return HttpCall(
                     HttpRequest(HttpMethod.GET, Url(Protocol.HTTP, "test", Protocol.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
