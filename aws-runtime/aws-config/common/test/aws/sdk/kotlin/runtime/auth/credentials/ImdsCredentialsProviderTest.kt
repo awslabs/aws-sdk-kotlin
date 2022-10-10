@@ -415,7 +415,8 @@ class ImdsCredentialsProviderTest {
                         )
                         else -> HttpCall(
                             imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
-                            imdsResponse("""
+                            imdsResponse(
+                                """
                             {
                                 "Code" : "Success",
                                 "LastUpdated" : "2021-09-17T20:57:08Z",
@@ -519,7 +520,8 @@ class ImdsCredentialsProviderTest {
                         )
                         else -> HttpCall(
                             imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
-                            imdsResponse("""
+                            imdsResponse(
+                                """
                             {
                                 "Code" : "Success",
                                 "LastUpdated" : "2021-09-17T20:57:08Z",
