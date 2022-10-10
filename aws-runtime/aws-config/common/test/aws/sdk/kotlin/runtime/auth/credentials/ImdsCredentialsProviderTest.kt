@@ -87,7 +87,7 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsCredentialsProvider(client = lazyOf(client), clock=testClock)
+        val provider = ImdsCredentialsProvider(client = lazyOf(client), clock = testClock)
 
         val actual = provider.getCredentials()
         val expected = Credentials(
@@ -134,7 +134,7 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsCredentialsProvider(profileOverride = "imds-test-role", client = lazyOf(client), clock=testClock)
+        val provider = ImdsCredentialsProvider(profileOverride = "imds-test-role", client = lazyOf(client), clock = testClock)
 
         val actual = provider.getCredentials()
         val expected = Credentials(
