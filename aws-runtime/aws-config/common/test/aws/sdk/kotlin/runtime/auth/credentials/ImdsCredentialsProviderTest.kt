@@ -24,6 +24,8 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
+import aws.smithy.kotlin.runtime.time.epochMilliseconds
+import aws.smithy.kotlin.runtime.time.fromEpochMilliseconds
 import io.kotest.matchers.string.shouldContain
 import io.mockk.coVerify
 import io.mockk.spyk
@@ -53,7 +55,7 @@ class ImdsCredentialsProviderTest {
     @Test
     fun testSuccess() = runTest {
         val testClock = ManualClock()
-        val expiration = testClock.now() + 5.minutes
+        val expiration = Instant.fromEpochMilliseconds(testClock.now().epochMilliseconds)
 
         val connection = buildTestConnection {
             expect(
@@ -103,7 +105,7 @@ class ImdsCredentialsProviderTest {
     @Test
     fun testSuccessProfileOverride() = runTest {
         val testClock = ManualClock()
-        val expiration = testClock.now() + 5.minutes
+        val expiration = Instant.fromEpochMilliseconds(testClock.now().epochMilliseconds)
 
         val connection = buildTestConnection {
             expect(
