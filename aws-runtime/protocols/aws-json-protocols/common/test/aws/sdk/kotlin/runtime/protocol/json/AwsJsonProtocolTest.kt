@@ -16,6 +16,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootSpan
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -41,14 +42,16 @@ class AwsJsonProtocolTest {
             context {
                 service = "FooService"
                 operationName = "Bar"
-                traceSpan = NoOpTraceSpan
             }
         }
         val client = sdkHttpClient(mockEngine)
         val m = AwsJsonProtocol("FooService_blah", "1.1")
         op.install(m)
 
-        op.roundTrip(client, Unit)
+        op.context.withRootSpan(NoOpTraceSpan) {
+            op.roundTrip(client, Unit)
+        }
+
         val request = op.context[HttpOperationContext.HttpCallList].last().request
 
         assertEquals("application/x-amz-json-1.1", request.headers["Content-Type"])
@@ -73,13 +76,15 @@ class AwsJsonProtocolTest {
             context {
                 service = "FooService"
                 operationName = "Bar"
-                traceSpan = NoOpTraceSpan
             }
         }
         val client = sdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol("FooService", "1.1"))
 
-        op.roundTrip(client, Unit)
+        op.context.withRootSpan(NoOpTraceSpan) {
+            op.roundTrip(client, Unit)
+        }
+
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val actual = request.body.readAll()?.decodeToString()
 
@@ -108,13 +113,15 @@ class AwsJsonProtocolTest {
             context {
                 service = "FooService"
                 operationName = "Bar"
-                traceSpan = NoOpTraceSpan
             }
         }
         val client = sdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol("FooService", "1.1"))
 
-        op.roundTrip(client, Unit)
+        op.context.withRootSpan(NoOpTraceSpan) {
+            op.roundTrip(client, Unit)
+        }
+
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val actual = request.body.readAll()?.decodeToString()
         assertEquals("application/xml", request.headers["Content-Type"])

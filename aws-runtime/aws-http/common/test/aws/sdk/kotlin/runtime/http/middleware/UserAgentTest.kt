@@ -21,6 +21,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.TracingContext
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.get
 import io.kotest.matchers.string.shouldContain
@@ -50,13 +51,12 @@ class UserAgentTest {
             context {
                 service = "Test Service"
                 operationName = "testOperation"
-                traceSpan = NoOpTraceSpan
             }
         }.apply {
             val apiMd = ApiMetadata("Test Service", "1.2.3")
             val metadata = loadAwsUserAgentMetadataFromEnvironment(platformProvider, apiMd)
             install(UserAgent(metadata))
-        }
+        }.apply { context[TracingContext.TraceSpan] = NoOpTraceSpan }
 
     @Test
     fun itSetsUAHeaders() = runTest {

@@ -31,6 +31,7 @@ import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
 import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
@@ -136,7 +137,6 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             context {
                 operationName = path
                 service = SERVICE
-                this.traceSpan = traceSpan
 
                 // artifact of re-using ServiceEndpointResolver middleware
                 set(SdkClientOption.LogMode, sdkLogMode)
@@ -151,7 +151,9 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             next.call(req)
         }
 
-        return op.roundTrip(httpClient, Unit)
+        return op.context.withRootSpan(traceSpan) {
+            op.roundTrip(httpClient, Unit)
+        }
     }
 
     override fun close() {

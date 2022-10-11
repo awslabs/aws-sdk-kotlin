@@ -19,6 +19,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootSpan
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -59,13 +60,15 @@ class RecursionDetectionTest {
             context {
                 service = "Test Service"
                 operationName = "testOperation"
-                traceSpan = NoOpTraceSpan
             }
         }
 
         val provider = TestPlatformProvider(env)
         op.install(RecursionDetection(provider))
-        op.roundTrip(client, Unit)
+
+        op.context.withRootSpan(NoOpTraceSpan) {
+            op.roundTrip(client, Unit)
+        }
 
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         if (expectedTraceHeader != null) {

@@ -37,6 +37,7 @@ import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import aws.smithy.kotlin.runtime.tracing.logger
 import aws.smithy.kotlin.runtime.tracing.withChildSpan
+import aws.smithy.kotlin.runtime.tracing.withRootSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 
@@ -100,7 +101,6 @@ public class EcsCredentialsProvider internal constructor(
                 context {
                     operationName = "EcsCredentialsProvider"
                     service = "n/a"
-                    this.traceSpan = childSpan
                 }
             }
 
@@ -110,7 +110,9 @@ public class EcsCredentialsProvider internal constructor(
             logger.debug { "retrieving container credentials" }
             val client = sdkHttpClient(httpClientEngine, manageEngine = false)
             val creds = try {
-                op.roundTrip(client, Unit)
+                op.context.withRootSpan(childSpan) {
+                    op.roundTrip(client, Unit)
+                }
             } catch (ex: Exception) {
                 logger.debug { "failed to obtain credentials from container metadata service" }
                 throw when (ex) {
