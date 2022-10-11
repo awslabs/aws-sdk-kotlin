@@ -146,8 +146,7 @@ public class ImdsCredentialsProvider(
     private suspend fun useCachedCredentials(ex: Exception): Credentials? = when {
         ex is SdkIOException || ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
             mu.withLock {
-                previousCredentials?.run { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
-                return previousCredentials
+                previousCredentials?.apply { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
             }
         }
         else -> null
