@@ -16,13 +16,20 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
+import aws.smithy.kotlin.runtime.time.Clock
+import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlin.time.Duration.Companion.seconds
 
 private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/security-credentials"
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
 private const val PROVIDER_NAME = "IMDSv2"
+
+internal expect class SdkIOException : Exception // FIXME move this to the proper place when we do the larger KMP Exception refactor
 
 /**
  * [CredentialsProvider] that uses EC2 instance metadata service (IMDS) to provide credentials information.
@@ -43,8 +50,16 @@ public class ImdsCredentialsProvider(
     private val profileOverride: String? = null,
     private val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
     private val platformProvider: PlatformEnvironProvider = Platform,
+    private val clock: Clock = Clock.System,
 ) : CredentialsProvider, Closeable {
     private val logger = Logger.getLogger<ImdsCredentialsProvider>()
+    private var previousCredentials: Credentials? = null
+
+    // the time to refresh the Credentials. If set, it will take precedence over the Credentials' expiration time
+    private var nextRefresh: Instant? = null
+
+    // protects previousCredentials and nextRefresh
+    private val mu = Mutex()
 
     private val profile = asyncLazy {
         if (profileOverride != null) return@asyncLazy profileOverride
@@ -56,23 +71,52 @@ public class ImdsCredentialsProvider(
             throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
         }
 
+        // if we have previously served IMDS credentials and it's not time for a refresh, just return the previous credentials
+        mu.withLock {
+            previousCredentials?.run {
+                nextRefresh?.takeIf { clock.now() < it }?.run {
+                    return previousCredentials!!
+                }
+            }
+        }
+
         val profileName = try {
             profile.get()
         } catch (ex: Exception) {
-            throw CredentialsProviderException("failed to load instance profile", ex)
+            return useCachedCredentials(ex) ?: throw CredentialsProviderException("failed to load instance profile", ex)
         }
 
-        val payload = client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
+        val payload = try {
+            client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
+        } catch (ex: Exception) {
+            return useCachedCredentials(ex) ?: throw CredentialsProviderException("failed to load credentials", ex)
+        }
+
         val deserializer = JsonDeserializer(payload.encodeToByteArray())
 
         return when (val resp = deserializeJsonCredentials(deserializer)) {
-            is JsonCredentialsResponse.SessionCredentials -> Credentials(
-                resp.accessKeyId,
-                resp.secretAccessKey,
-                resp.sessionToken,
-                resp.expiration,
-                PROVIDER_NAME,
-            )
+            is JsonCredentialsResponse.SessionCredentials -> {
+                nextRefresh = if (resp.expiration < clock.now()) {
+                    logger.warn {
+                        "Attempting credential expiration extension due to a credential service availability issue. " +
+                            "A refresh of these credentials will be attempted again in " +
+                            "${ DEFAULT_CREDENTIALS_REFRESH_SECONDS / 60 } minutes."
+                    }
+                    clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds
+                } else null
+
+                val creds = Credentials(
+                    resp.accessKeyId,
+                    resp.secretAccessKey,
+                    resp.sessionToken,
+                    resp.expiration,
+                    PROVIDER_NAME,
+                )
+
+                creds.also {
+                    mu.withLock { previousCredentials = it }
+                }
+            }
             is JsonCredentialsResponse.Error -> {
                 when (resp.code) {
                     CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS -> throw ProviderConfigurationException("Incorrect IMDS/IAM configuration: [${resp.code}] ${resp.message}. Hint: Does this role have a trust relationship with EC2?")
@@ -97,5 +141,14 @@ public class ImdsCredentialsProvider(
             }
             throw ex
         }
+    }
+
+    private suspend fun useCachedCredentials(ex: Exception): Credentials? = when {
+        ex is SdkIOException || ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
+            mu.withLock {
+                previousCredentials?.apply { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
+            }
+        }
+        else -> null
     }
 }
