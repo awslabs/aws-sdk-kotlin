@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -38,6 +38,7 @@
                 "DaysAfterInitiation": {
                     "target": "com.amazonaws.s3#DaysAfterInitiation",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the number of days after which Amazon S3 aborts an incomplete multipart\n         upload.</p>"
                     }
                 }
@@ -184,7 +185,10 @@
             "type": "string"
         },
         "com.amazonaws.s3#AllowQuotedRecordDelimiter": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#AllowedHeader": {
             "type": "string"
@@ -215,26 +219,6 @@
         },
         "com.amazonaws.s3#AmazonS3": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "S3",
-                    "arnNamespace": "s3",
-                    "cloudFormationName": "S3",
-                    "cloudTrailEventSource": "s3.amazonaws.com",
-                    "endpointPrefix": "s3"
-                },
-                "aws.auth#sigv4": {
-                    "name": "s3"
-                },
-                "aws.protocols#restXml": {
-                    "noErrorWrapping": true
-                },
-                "smithy.api#documentation": "<p></p>",
-                "smithy.api#title": "Amazon Simple Storage Service",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://s3.amazonaws.com/doc/2006-03-01/"
-                }
-            },
             "version": "2006-03-01",
             "operations": [
                 {
@@ -516,7 +500,27 @@
                 {
                     "target": "com.amazonaws.s3#WriteGetObjectResponse"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "S3",
+                    "arnNamespace": "s3",
+                    "cloudFormationName": "S3",
+                    "cloudTrailEventSource": "s3.amazonaws.com",
+                    "endpointPrefix": "s3"
+                },
+                "aws.auth#sigv4": {
+                    "name": "s3"
+                },
+                "aws.protocols#restXml": {
+                    "noErrorWrapping": true
+                },
+                "smithy.api#documentation": "<p></p>",
+                "smithy.api#title": "Amazon Simple Storage Service",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://s3.amazonaws.com/doc/2006-03-01/"
+                }
+            }
         },
         "com.amazonaws.s3#AnalyticsAndOperator": {
             "type": "structure",
@@ -756,7 +760,10 @@
             }
         },
         "com.amazonaws.s3#BucketKeyEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#BucketLifecycleConfiguration": {
             "type": "structure",
@@ -940,16 +947,28 @@
             }
         },
         "com.amazonaws.s3#BypassGovernanceRetention": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#BytesProcessed": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#BytesReturned": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#BytesScanned": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#CORSConfiguration": {
             "type": "structure",
@@ -1014,6 +1033,7 @@
                 "MaxAgeSeconds": {
                     "target": "com.amazonaws.s3#MaxAgeSeconds",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time in seconds that your browser is to cache the preflight response for the\n         specified resource.</p>"
                     }
                 }
@@ -1070,6 +1090,7 @@
                 "AllowQuotedRecordDelimiter": {
                     "target": "com.amazonaws.s3#AllowQuotedRecordDelimiter",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies that CSV field values may contain quoted record delimiters and such records\n         should be allowed. Default value is FALSE. Setting this value to TRUE may lower\n         performance.</p>"
                     }
                 }
@@ -1328,6 +1349,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -1494,6 +1516,7 @@
                 "PartNumber": {
                     "target": "com.amazonaws.s3#PartNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Part number that identifies the part. This is a positive integer between 1 and\n         10,000.</p>"
                     }
                 }
@@ -1548,7 +1571,10 @@
             }
         },
         "com.amazonaws.s3#ConfirmRemoveSelfBucketAccess": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#ContentDisposition": {
             "type": "string"
@@ -1560,7 +1586,10 @@
             "type": "string"
         },
         "com.amazonaws.s3#ContentLength": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#ContentMD5": {
             "type": "string"
@@ -1669,6 +1698,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the copied object uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -1900,6 +1930,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with server-side encryption using AWS KMS (SSE-KMS). Setting this header to <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with SSE-KMS. </p>\n         <p>Specifying this header with a COPY action doesn’t affect bucket-level settings for S3 Bucket Key.</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -2214,6 +2245,7 @@
                 "ObjectLockEnabledForBucket": {
                     "target": "com.amazonaws.s3#ObjectLockEnabledForBucket",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether you want S3 Object Lock to be enabled for the new bucket.</p>",
                         "smithy.api#httpHeader": "x-amz-bucket-object-lock-enabled"
                     }
@@ -2317,6 +2349,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -2501,6 +2534,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with server-side encryption using AWS KMS (SSE-KMS). Setting this header to <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with SSE-KMS.</p>\n         <p>Specifying this header with an object action doesn’t affect bucket-level settings for S3 Bucket Key.</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -2565,10 +2599,16 @@
             }
         },
         "com.amazonaws.s3#Days": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#DaysAfterInitiation": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#DefaultRetention": {
             "type": "structure",
@@ -2582,12 +2622,14 @@
                 "Days": {
                     "target": "com.amazonaws.s3#Days",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of days that you want to specify for the default retention period. Must be\n         used with <code>Mode</code>.</p>"
                     }
                 },
                 "Years": {
                     "target": "com.amazonaws.s3#Years",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of years that you want to specify for the default retention period. Must be\n         used with <code>Mode</code>.</p>"
                     }
                 }
@@ -2611,6 +2653,7 @@
                 "Quiet": {
                     "target": "com.amazonaws.s3#Quiet",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Element to enable quiet mode for the request. When you add this element, you must set\n         its value to true.</p>"
                     }
                 }
@@ -2623,6 +2666,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#documentation": "<p>Deletes the S3 bucket. All objects (including all object versions and delete markers) in\n         the bucket must be deleted before the bucket itself can be deleted.</p>\n      \n         <p class=\"title\">\n            <b>Related Resources</b>\n         </p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html\">CreateBucket</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html\">DeleteObject</a>\n               </p>\n            </li>\n         </ul>",
@@ -2637,6 +2683,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketAnalyticsConfigurationRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#documentation": "<p>Deletes an analytics configuration for the bucket (specified by the analytics\n         configuration ID).</p>\n         <p>To use this operation, you must have permissions to perform the\n            <code>s3:PutAnalyticsConfiguration</code> action. The bucket owner has this permission\n         by default. The bucket owner can grant this permission to others. For more information\n         about permissions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources\">Permissions Related to Bucket Subresource Operations</a> and <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html\">Managing Access Permissions to Your Amazon S3\n            Resources</a>.</p>\n\n         <p>For information about the Amazon S3 analytics feature, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html\">Amazon S3 Analytics – Storage Class\n            Analysis</a>. </p>\n\n         <p>The following operations are related to\n         <code>DeleteBucketAnalyticsConfiguration</code>:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAnalyticsConfiguration.html\">GetBucketAnalyticsConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html\">ListBucketAnalyticsConfigurations</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html\">PutBucketAnalyticsConfiguration</a>\n               </p>\n            </li>\n         </ul>",
@@ -2680,6 +2729,9 @@
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketCorsRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>Deletes the <code>cors</code> configuration information set for the bucket.</p>\n         <p>To use this operation, you must have permission to perform the\n            <code>s3:PutBucketCORS</code> action. The bucket owner has this permission by default\n         and can grant this permission to others. </p>\n         <p>For information about <code>cors</code>, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html\">Enabling\n            Cross-Origin Resource Sharing</a> in the <i>Amazon S3 User Guide</i>.</p>\n      \n         <p class=\"title\">\n            <b>Related Resources:</b>\n         </p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketCors.html\">PutBucketCors</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/RESTOPTIONSobject.html\">RESTOPTIONSobject</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -2713,6 +2765,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketEncryptionRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#documentation": "<p>This implementation of the DELETE action removes default encryption from the bucket.\n         For information about the Amazon S3 default encryption feature, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html\">Amazon S3 Default Bucket Encryption</a> in the\n            <i>Amazon S3 User Guide</i>.</p>\n         <p>To use this operation, you must have permissions to perform the\n            <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission\n         by default. The bucket owner can grant this permission to others. For more information\n         about permissions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources\">Permissions Related to Bucket Subresource Operations</a> and <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html\">Managing Access Permissions to your Amazon S3\n            Resources</a> in the <i>Amazon S3 User Guide</i>.</p>\n      \n         <p class=\"title\">\n            <b>Related Resources</b>\n         </p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html\">PutBucketEncryption</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketEncryption.html\">GetBucketEncryption</a>\n               </p>\n            </li>\n         </ul>",
@@ -2748,6 +2803,9 @@
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketIntelligentTieringConfigurationRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>Deletes the S3 Intelligent-Tiering configuration from the specified bucket.</p>\n         <p>The S3 Intelligent-Tiering storage class is designed to optimize storage costs by automatically moving data to the most cost-effective storage access tier, without performance impact or operational overhead. S3 Intelligent-Tiering delivers automatic cost savings in three low latency and high throughput access tiers. To get the lowest storage cost on data that can be accessed in minutes to hours, you can choose to activate additional archiving capabilities.</p>\n         <p>The S3 Intelligent-Tiering storage class is  the ideal storage class for data with unknown, changing, or unpredictable access patterns, independent of object size or retention period. If the size of an object is less than 128 KB, it is not monitored and not eligible for auto-tiering. Smaller objects can be stored, but they are always charged at the Frequent Access tier rates in the S3 Intelligent-Tiering storage class.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access\">Storage class for automatically optimizing frequently and infrequently accessed objects</a>.</p> \n         <p>Operations related to\n            <code>DeleteBucketIntelligentTieringConfiguration</code> include: </p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketIntelligentTieringConfiguration.html\">GetBucketIntelligentTieringConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketIntelligentTieringConfiguration.html\">PutBucketIntelligentTieringConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketIntelligentTieringConfigurations.html\">ListBucketIntelligentTieringConfigurations</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -2782,6 +2840,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketInventoryConfigurationRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#documentation": "<p>Deletes an inventory configuration (identified by the inventory ID) from the\n         bucket.</p>\n         <p>To use this operation, you must have permissions to perform the\n            <code>s3:PutInventoryConfiguration</code> action. The bucket owner has this permission\n         by default. The bucket owner can grant this permission to others. For more information\n         about permissions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources\">Permissions Related to Bucket Subresource Operations</a> and <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html\">Managing Access Permissions to Your Amazon S3\n            Resources</a>.</p>\n         <p>For information about the Amazon S3 inventory feature, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html\">Amazon S3 Inventory</a>.</p>\n         <p>Operations related to <code>DeleteBucketInventoryConfiguration</code> include: </p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketInventoryConfiguration.html\">GetBucketInventoryConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketInventoryConfiguration.html\">PutBucketInventoryConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html\">ListBucketInventoryConfigurations</a>\n               </p>\n            </li>\n         </ul>",
@@ -2825,6 +2886,9 @@
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketLifecycleRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>Deletes the lifecycle configuration from the specified bucket. Amazon S3 removes all the\n         lifecycle configuration rules in the lifecycle subresource associated with the bucket. Your\n         objects never expire, and Amazon S3 no longer automatically deletes any objects on the basis of\n         rules contained in the deleted lifecycle configuration.</p>\n         <p>To use this operation, you must have permission to perform the\n            <code>s3:PutLifecycleConfiguration</code> action. By default, the bucket owner has this\n         permission and the bucket owner can grant this permission to others.</p>\n\n         <p>There is usually some time lag before lifecycle configuration deletion is fully\n         propagated to all the Amazon S3 systems.</p>\n\n         <p>For more information about the object expiration, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html#intro-lifecycle-rules-actions\">Elements to\n            Describe Lifecycle Actions</a>.</p>\n         <p>Related actions include:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html\">PutBucketLifecycleConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycleConfiguration.html\">GetBucketLifecycleConfiguration</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -2858,6 +2922,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketMetricsConfigurationRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#documentation": "<p>Deletes a metrics configuration for the Amazon CloudWatch request metrics (specified by the\n         metrics configuration ID) from the bucket. Note that this doesn't include the daily storage\n         metrics.</p>\n\n         <p> To use this operation, you must have permissions to perform the\n            <code>s3:PutMetricsConfiguration</code> action. The bucket owner has this permission by\n         default. The bucket owner can grant this permission to others. For more information about\n         permissions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources\">Permissions Related to Bucket Subresource Operations</a> and <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html\">Managing Access Permissions to Your Amazon S3\n            Resources</a>.</p>\n\n         <p>For information about CloudWatch request metrics for Amazon S3, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html\">Monitoring Metrics with Amazon CloudWatch</a>. </p>\n         <p>The following operations are related to\n         <code>DeleteBucketMetricsConfiguration</code>:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketMetricsConfiguration.html\">GetBucketMetricsConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html\">PutBucketMetricsConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html\">ListBucketMetricsConfigurations</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html\">Monitoring Metrics with Amazon\n                  CloudWatch</a>\n               </p>\n            </li>\n         </ul>",
@@ -2901,6 +2968,9 @@
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketOwnershipControlsRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>Removes <code>OwnershipControls</code> for an Amazon S3 bucket. To use this operation, you\n         must have the <code>s3:PutBucketOwnershipControls</code> permission. For more information\n         about Amazon S3 permissions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html\">Specifying\n            Permissions in a Policy</a>.</p>\n         <p>For information about Amazon S3 Object Ownership, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/about-object-ownership.html\">Using Object Ownership</a>. </p>\n         <p>The following operations are related to\n         <code>DeleteBucketOwnershipControls</code>:</p>\n         <ul>\n            <li>\n               <p>\n                  <a>GetBucketOwnershipControls</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a>PutBucketOwnershipControls</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -2935,6 +3005,9 @@
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketPolicyRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>This implementation of the DELETE action uses the policy subresource to delete the\n         policy of a specified bucket. If you are using an identity other than the root user of the\n         Amazon Web Services account that owns the bucket, the calling identity must have the\n            <code>DeleteBucketPolicy</code> permissions on the specified bucket and belong to the\n         bucket owner's account to use this operation. </p>\n\n         <p>If you don't have <code>DeleteBucketPolicy</code> permissions, Amazon S3 returns a <code>403\n            Access Denied</code> error. If you have the correct permissions, but you're not using an\n         identity that belongs to the bucket owner's account, Amazon S3 returns a <code>405 Method Not\n            Allowed</code> error. </p>\n\n         <important>\n            <p>As a security precaution, the root user of the Amazon Web Services account that owns a bucket can\n            always use this operation, even if the policy explicitly denies the root user the\n            ability to perform this action.</p>\n         </important>\n\n         <p>For more information about bucket policies, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html\">Using Bucket Policies and\n            UserPolicies</a>. </p>\n         <p>The following operations are related to <code>DeleteBucketPolicy</code>\n         </p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html\">CreateBucket</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html\">DeleteObject</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -2968,6 +3041,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketReplicationRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#documentation": "<p> Deletes the replication configuration from the bucket.</p>\n         <p>To use this operation, you must have permissions to perform the\n            <code>s3:PutReplicationConfiguration</code> action. The bucket owner has these\n         permissions by default and can grant it to others. For more information about permissions,\n         see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources\">Permissions Related to Bucket Subresource Operations</a> and <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html\">Managing Access Permissions to Your Amazon S3\n            Resources</a>. </p>\n         <note>\n            <p>It can take a while for the deletion of a replication configuration to fully\n            propagate.</p>\n         </note>\n\n         <p> For information about replication configuration, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/replication.html\">Replication</a> in the <i>Amazon S3 User Guide</i>.</p>\n\n         <p>The following operations are related to <code>DeleteBucketReplication</code>:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketReplication.html\">PutBucketReplication</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketReplication.html\">GetBucketReplication</a>\n               </p>\n            </li>\n         </ul>",
@@ -3023,6 +3099,9 @@
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketTaggingRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>Deletes the tags from the bucket.</p>\n\n         <p>To use this operation, you must have permission to perform the\n            <code>s3:PutBucketTagging</code> action. By default, the bucket owner has this\n         permission and can grant this permission to others. </p>\n         <p>The following operations are related to <code>DeleteBucketTagging</code>:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketTagging.html\">GetBucketTagging</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html\">PutBucketTagging</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -3057,6 +3136,9 @@
             "input": {
                 "target": "com.amazonaws.s3#DeleteBucketWebsiteRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>This action removes the website configuration for a bucket. Amazon S3 returns a <code>200\n            OK</code> response upon successfully deleting a website configuration on the specified\n         bucket. You will get a <code>200 OK</code> response if the website configuration you are\n         trying to delete does not exist on the bucket. Amazon S3 returns a <code>404</code> response if\n         the bucket specified in the request does not exist.</p>\n\n         <p>This DELETE action requires the <code>S3:DeleteBucketWebsite</code> permission. By\n         default, only the bucket owner can delete the website configuration attached to a bucket.\n         However, bucket owners can grant other users permission to delete the website configuration\n         by writing a bucket policy granting them the <code>S3:DeleteBucketWebsite</code>\n         permission. </p>\n\n         <p>For more information about hosting websites, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html\">Hosting Websites on Amazon S3</a>. </p>\n\n         <p>The following operations are related to <code>DeleteBucketWebsite</code>:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketWebsite.html\">GetBucketWebsite</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketWebsite.html\">PutBucketWebsite</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -3087,7 +3169,10 @@
             }
         },
         "com.amazonaws.s3#DeleteMarker": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#DeleteMarkerEntry": {
             "type": "structure",
@@ -3113,6 +3198,7 @@
                 "IsLatest": {
                     "target": "com.amazonaws.s3#IsLatest",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the object is (true) or is not (false) the latest version of an\n         object.</p>"
                     }
                 },
@@ -3188,6 +3274,7 @@
                 "DeleteMarker": {
                     "target": "com.amazonaws.s3#DeleteMarker",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the versioned object that was permanently deleted was (true) or was\n         not (false) a delete marker.</p>",
                         "smithy.api#httpHeader": "x-amz-delete-marker"
                     }
@@ -3249,6 +3336,7 @@
                 "BypassGovernanceRetention": {
                     "target": "com.amazonaws.s3#BypassGovernanceRetention",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether S3 Object Lock should bypass Governance-mode restrictions to process\n         this operation. To use this header, you must have the <code>s3:BypassGovernanceRetention</code>\n         permission.</p>",
                         "smithy.api#httpHeader": "x-amz-bypass-governance-retention"
                     }
@@ -3412,6 +3500,7 @@
                 "BypassGovernanceRetention": {
                     "target": "com.amazonaws.s3#BypassGovernanceRetention",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether you want to delete this object even if it has a Governance-type Object\n         Lock in place. To use this header, you must have the <code>s3:BypassGovernanceRetention</code>\n         permission.</p>",
                         "smithy.api#httpHeader": "x-amz-bypass-governance-retention"
                     }
@@ -3436,6 +3525,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#DeletePublicAccessBlockRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#documentation": "<p>Removes the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket. To use this\n         operation, you must have the <code>s3:PutBucketPublicAccessBlock</code> permission. For\n         more information about permissions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources\">Permissions Related to Bucket Subresource Operations</a> and <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html\">Managing Access Permissions to Your Amazon S3\n            Resources</a>.</p>\n\n         <p>The following operations are related to <code>DeletePublicAccessBlock</code>:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html\">Using Amazon S3 Block\n                  Public Access</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetPublicAccessBlock.html\">GetPublicAccessBlock</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutPublicAccessBlock.html\">PutPublicAccessBlock</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketPolicyStatus.html\">GetBucketPolicyStatus</a>\n               </p>\n            </li>\n         </ul>",
@@ -3484,6 +3576,7 @@
                 "DeleteMarker": {
                     "target": "com.amazonaws.s3#DeleteMarker",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the versioned object that was permanently deleted was (true) or was\n         not (false) a delete marker. In a simple DELETE, this header indicates whether (true) or\n         not (false) a delete marker was created.</p>"
                     }
                 },
@@ -3571,7 +3664,10 @@
             "type": "string"
         },
         "com.amazonaws.s3#EnableRequestProgress": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#EncodingType": {
             "type": "string",
@@ -3627,7 +3723,10 @@
             }
         },
         "com.amazonaws.s3#End": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#EndEvent": {
             "type": "structure",
@@ -3846,7 +3945,10 @@
             }
         },
         "com.amazonaws.s3#ExpiredObjectDeleteMarker": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#Expires": {
             "type": "timestamp"
@@ -3875,7 +3977,10 @@
             }
         },
         "com.amazonaws.s3#FetchOwner": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#FieldDelimiter": {
             "type": "string"
@@ -5144,6 +5249,7 @@
                 "DeleteMarker": {
                     "target": "com.amazonaws.s3#DeleteMarker",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the object retrieved was (<code>true</code>) or was not\n            (<code>false</code>) a delete marker. If <code>false</code>, this response header does\n         not appear in the response.</p>",
                         "smithy.api#httpHeader": "x-amz-delete-marker"
                     }
@@ -5195,6 +5301,7 @@
                 "ObjectSize": {
                     "target": "com.amazonaws.s3#ObjectSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size of the object in bytes.</p>"
                     }
                 }
@@ -5206,6 +5313,7 @@
                 "TotalPartsCount": {
                     "target": "com.amazonaws.s3#PartsCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of parts.</p>",
                         "smithy.api#xmlName": "PartsCount"
                     }
@@ -5225,12 +5333,14 @@
                 "MaxParts": {
                     "target": "com.amazonaws.s3#MaxParts",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of parts allowed in the response.</p>"
                     }
                 },
                 "IsTruncated": {
                     "target": "com.amazonaws.s3#IsTruncated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the returned list of parts is truncated. A value of\n            <code>true</code> indicates that the list was truncated. A list can be truncated if the\n         number of parts exceeds the limit returned in the <code>MaxParts</code> element.</p>"
                     }
                 },
@@ -5276,6 +5386,7 @@
                 "MaxParts": {
                     "target": "com.amazonaws.s3#MaxParts",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Sets the maximum number of parts to return.</p>",
                         "smithy.api#httpHeader": "x-amz-max-parts"
                     }
@@ -5456,6 +5567,7 @@
                 "Body": {
                     "target": "com.amazonaws.s3#StreamingBlob",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>Object data.</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -5463,6 +5575,7 @@
                 "DeleteMarker": {
                     "target": "com.amazonaws.s3#DeleteMarker",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If\n         false, this response header does not appear in the response.</p>",
                         "smithy.api#httpHeader": "x-amz-delete-marker"
                     }
@@ -5498,6 +5611,7 @@
                 "ContentLength": {
                     "target": "com.amazonaws.s3#ContentLength",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Size of the body in bytes.</p>",
                         "smithy.api#httpHeader": "Content-Length"
                     }
@@ -5540,6 +5654,7 @@
                 "MissingMeta": {
                     "target": "com.amazonaws.s3#MissingMeta",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>This is set to the number of metadata entries not returned in <code>x-amz-meta</code>\n         headers. This can happen if you create metadata using an API like SOAP that supports more\n         flexible metadata than the REST API. For example, using SOAP, you can create metadata whose\n         values are not legal HTTP headers.</p>",
                         "smithy.api#httpHeader": "x-amz-missing-meta"
                     }
@@ -5645,6 +5760,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the object uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -5672,6 +5788,7 @@
                 "PartsCount": {
                     "target": "com.amazonaws.s3#PartsCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The count of parts this object has. This value is only returned if you specify <code>partNumber</code>\n        in your request and the object was uploaded as a multipart upload.</p>",
                         "smithy.api#httpHeader": "x-amz-mp-parts-count"
                     }
@@ -5679,6 +5796,7 @@
                 "TagCount": {
                     "target": "com.amazonaws.s3#TagCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of tags, if any, on the object.</p>",
                         "smithy.api#httpHeader": "x-amz-tagging-count"
                     }
@@ -5839,6 +5957,7 @@
                 "PartNumber": {
                     "target": "com.amazonaws.s3#PartNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Part number of the object being read. This is a positive integer between 1 and 10,000.\n         Effectively performs a 'ranged' GET request for the part specified. Useful for downloading\n         just a part of an object.</p>",
                         "smithy.api#httpQuery": "partNumber"
                     }
@@ -5860,7 +5979,10 @@
             }
         },
         "com.amazonaws.s3#GetObjectResponseStatusCode": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#GetObjectRetention": {
             "type": "operation",
@@ -6035,6 +6157,7 @@
                 "Body": {
                     "target": "com.amazonaws.s3#StreamingBlob",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>A Bencoded dictionary as defined by the BitTorrent specification</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -6239,6 +6362,9 @@
             "input": {
                 "target": "com.amazonaws.s3#HeadBucketRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.s3#NotFound"
@@ -6361,6 +6487,7 @@
                 "DeleteMarker": {
                     "target": "com.amazonaws.s3#DeleteMarker",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If\n         false, this response header does not appear in the response.</p>",
                         "smithy.api#httpHeader": "x-amz-delete-marker"
                     }
@@ -6403,6 +6530,7 @@
                 "ContentLength": {
                     "target": "com.amazonaws.s3#ContentLength",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Size of the body in bytes.</p>",
                         "smithy.api#httpHeader": "Content-Length"
                     }
@@ -6445,6 +6573,7 @@
                 "MissingMeta": {
                     "target": "com.amazonaws.s3#MissingMeta",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>This is set to the number of metadata entries not returned in <code>x-amz-meta</code>\n         headers. This can happen if you create metadata using an API like SOAP that supports more\n         flexible metadata than the REST API. For example, using SOAP, you can create metadata whose\n         values are not legal HTTP headers.</p>",
                         "smithy.api#httpHeader": "x-amz-missing-meta"
                     }
@@ -6543,6 +6672,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the object uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -6570,6 +6700,7 @@
                 "PartsCount": {
                     "target": "com.amazonaws.s3#PartsCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The count of parts this object has. This value is only returned if you specify <code>partNumber</code>\n           in your request and the object was uploaded as a multipart upload.</p>",
                         "smithy.api#httpHeader": "x-amz-mp-parts-count"
                     }
@@ -6688,6 +6819,7 @@
                 "PartNumber": {
                     "target": "com.amazonaws.s3#PartNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Part number of the object being read. This is a positive integer between 1 and 10,000.\n         Effectively performs a 'ranged' HEAD request for the part specified. Useful querying about\n         the size of the part and the number of parts in this object.</p>",
                         "smithy.api#httpQuery": "partNumber"
                     }
@@ -6883,7 +7015,10 @@
             }
         },
         "com.amazonaws.s3#IntelligentTieringDays": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#IntelligentTieringFilter": {
             "type": "structure",
@@ -6954,6 +7089,7 @@
                 "IsEnabled": {
                     "target": "com.amazonaws.s3#IsEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the inventory is enabled or disabled. If set to <code>True</code>, an\n         inventory list is generated. If set to <code>False</code>, no inventory list is\n         generated.</p>",
                         "smithy.api#required": {}
                     }
@@ -7230,16 +7366,28 @@
             }
         },
         "com.amazonaws.s3#IsEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#IsLatest": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#IsPublic": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#IsTruncated": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#JSONInput": {
             "type": "structure",
@@ -7288,7 +7436,10 @@
             "type": "string"
         },
         "com.amazonaws.s3#KeyCount": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#KeyMarker": {
             "type": "string"
@@ -7351,12 +7502,14 @@
                 "Days": {
                     "target": "com.amazonaws.s3#Days",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Indicates the lifetime, in days, of the objects that are subject to the rule. The value\n         must be a non-zero positive integer.</p>"
                     }
                 },
                 "ExpiredObjectDeleteMarker": {
                     "target": "com.amazonaws.s3#ExpiredObjectDeleteMarker",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether Amazon S3 will remove a delete marker with no noncurrent versions. If set\n         to true, the delete marker will be expired; if set to false the policy takes no action.\n         This cannot be specified with Days or Date in a Lifecycle Expiration Policy.</p>"
                     }
                 }
@@ -7447,12 +7600,14 @@
                 "ObjectSizeGreaterThan": {
                     "target": "com.amazonaws.s3#ObjectSizeGreaterThanBytes",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Minimum object size to which the rule applies.</p>"
                     }
                 },
                 "ObjectSizeLessThan": {
                     "target": "com.amazonaws.s3#ObjectSizeLessThanBytes",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum object size to which the rule applies.</p>"
                     }
                 }
@@ -7525,6 +7680,7 @@
                 "IsTruncated": {
                     "target": "com.amazonaws.s3#IsTruncated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the returned list of analytics configurations is complete. A value of\n         true indicates that the list is not complete and the NextContinuationToken will be provided\n         for a subsequent request.</p>"
                     }
                 },
@@ -7603,6 +7759,7 @@
                 "IsTruncated": {
                     "target": "com.amazonaws.s3#IsTruncated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the returned list of analytics configurations is complete. A value of\n            <code>true</code> indicates that the list is not complete and the\n            <code>NextContinuationToken</code> will be provided for a subsequent request.</p>"
                     }
                 },
@@ -7685,6 +7842,7 @@
                 "IsTruncated": {
                     "target": "com.amazonaws.s3#IsTruncated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Tells whether the returned list of inventory configurations is complete. A value of true\n         indicates that the list is not complete and the NextContinuationToken is provided for a\n         subsequent request.</p>"
                     }
                 },
@@ -7749,6 +7907,7 @@
                 "IsTruncated": {
                     "target": "com.amazonaws.s3#IsTruncated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the returned list of metrics configurations is complete. A value of\n         true indicates that the list is not complete and the NextContinuationToken will be provided\n         for a subsequent request.</p>"
                     }
                 },
@@ -7806,6 +7965,9 @@
         },
         "com.amazonaws.s3#ListBuckets": {
             "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
             "output": {
                 "target": "com.amazonaws.s3#ListBucketsOutput"
             },
@@ -7903,12 +8065,14 @@
                 "MaxUploads": {
                     "target": "com.amazonaws.s3#MaxUploads",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum number of multipart uploads that could have been included in the\n         response.</p>"
                     }
                 },
                 "IsTruncated": {
                     "target": "com.amazonaws.s3#IsTruncated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the returned list of multipart uploads is truncated. A value of true\n         indicates that the list was truncated. The list can be truncated if the number of multipart\n         uploads exceeds the limit allowed or specified by max uploads.</p>"
                     }
                 },
@@ -7972,6 +8136,7 @@
                 "MaxUploads": {
                     "target": "com.amazonaws.s3#MaxUploads",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Sets the maximum number of multipart uploads, from 1 to 1,000, to return in the response\n         body. 1,000 is the maximum number of uploads that can be returned in a response.</p>",
                         "smithy.api#httpQuery": "max-uploads"
                     }
@@ -8022,6 +8187,7 @@
                 "IsTruncated": {
                     "target": "com.amazonaws.s3#IsTruncated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A flag that indicates whether Amazon S3 returned all of the results that satisfied the search\n         criteria. If your results were truncated, you can make a follow-up paginated request using\n         the NextKeyMarker and NextVersionIdMarker response parameters as a starting place in\n         another request to return the rest of the results.</p>"
                     }
                 },
@@ -8086,6 +8252,7 @@
                 "MaxKeys": {
                     "target": "com.amazonaws.s3#MaxKeys",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the maximum number of objects to return.</p>"
                     }
                 },
@@ -8141,6 +8308,7 @@
                 "MaxKeys": {
                     "target": "com.amazonaws.s3#MaxKeys",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Sets the maximum number of keys returned in the response. By default the action returns up\n         to 1,000 key names. The response might contain fewer keys but will never contain more. If\n         additional keys satisfy the search criteria, but were not returned because max-keys was\n         exceeded, the response contains <isTruncated>true</isTruncated>. To return the\n         additional keys, see key-marker and version-id-marker.</p>",
                         "smithy.api#httpQuery": "max-keys"
                     }
@@ -8196,6 +8364,7 @@
                 "IsTruncated": {
                     "target": "com.amazonaws.s3#IsTruncated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A flag that indicates whether Amazon S3 returned all of the results that satisfied the search\n         criteria.</p>"
                     }
                 },
@@ -8239,6 +8408,7 @@
                 "MaxKeys": {
                     "target": "com.amazonaws.s3#MaxKeys",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of keys returned in the response body.</p>"
                     }
                 },
@@ -8294,6 +8464,7 @@
                 "MaxKeys": {
                     "target": "com.amazonaws.s3#MaxKeys",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Sets the maximum number of keys returned in the response. By default the action returns up\n         to 1,000 key names. The response might contain fewer keys but will never contain more.\n      </p>",
                         "smithy.api#httpQuery": "max-keys"
                     }
@@ -8354,6 +8525,7 @@
                 "IsTruncated": {
                     "target": "com.amazonaws.s3#IsTruncated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to false if all of the results were returned. Set to true if more keys are available\n         to return. If the number of results exceeds that specified by MaxKeys, all of the results\n         might not be returned.</p>"
                     }
                 },
@@ -8385,6 +8557,7 @@
                 "MaxKeys": {
                     "target": "com.amazonaws.s3#MaxKeys",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Sets the maximum number of keys returned in the response. By default the action returns up\n         to 1,000 key names. The response might contain fewer keys but will never contain\n         more.</p>"
                     }
                 },
@@ -8404,6 +8577,7 @@
                 "KeyCount": {
                     "target": "com.amazonaws.s3#KeyCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>KeyCount is the number of keys returned with this request. KeyCount will always be less\n         than or equals to MaxKeys field. Say you ask for 50 keys, your result will include less than\n         equals 50 keys </p>"
                     }
                 },
@@ -8458,6 +8632,7 @@
                 "MaxKeys": {
                     "target": "com.amazonaws.s3#MaxKeys",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Sets the maximum number of keys returned in the response. By default the action returns up\n         to 1,000 key names. The response might contain fewer keys but will never contain\n         more.</p>",
                         "smithy.api#httpQuery": "max-keys"
                     }
@@ -8479,6 +8654,7 @@
                 "FetchOwner": {
                     "target": "com.amazonaws.s3#FetchOwner",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The owner field is not present in listV2 by default, if you want to return owner field\n         with each key in the result then set the fetch owner field to true.</p>",
                         "smithy.api#httpQuery": "fetch-owner"
                     }
@@ -8579,12 +8755,14 @@
                 "MaxParts": {
                     "target": "com.amazonaws.s3#MaxParts",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum number of parts that were allowed in the response.</p>"
                     }
                 },
                 "IsTruncated": {
                     "target": "com.amazonaws.s3#IsTruncated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Indicates whether the returned list of parts is truncated. A true value indicates that\n         the list was truncated. A list can be truncated if the number of parts exceeds the limit\n         returned in the MaxParts element.</p>"
                     }
                 },
@@ -8653,6 +8831,7 @@
                 "MaxParts": {
                     "target": "com.amazonaws.s3#MaxParts",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Sets the maximum number of parts to return.</p>",
                         "smithy.api#httpQuery": "max-parts"
                     }
@@ -8779,16 +8958,28 @@
             "type": "string"
         },
         "com.amazonaws.s3#MaxAgeSeconds": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#MaxKeys": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#MaxParts": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#MaxUploads": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#Message": {
             "type": "string"
@@ -8970,10 +9161,16 @@
             }
         },
         "com.amazonaws.s3#Minutes": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#MissingMeta": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#MultipartUpload": {
             "type": "structure",
@@ -9082,12 +9279,14 @@
                 "NoncurrentDays": {
                     "target": "com.amazonaws.s3#Days",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the\n         associated action. The value must be a non-zero positive integer. For information about the noncurrent days calculations, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html#non-current-days-calculations\">How\n            Amazon S3 Calculates When an Object Became Noncurrent</a> in the <i>Amazon S3 User Guide</i>.</p>"
                     }
                 },
                 "NewerNoncurrentVersions": {
                     "target": "com.amazonaws.s3#VersionCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies how many noncurrent versions Amazon S3 will retain. If there are this many more recent\n         noncurrent versions, Amazon S3 will take the associated action. For more information about noncurrent\n         versions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html\">Lifecycle configuration elements</a>\n         in the <i>Amazon S3 User Guide</i>.</p>"
                     }
                 }
@@ -9102,6 +9301,7 @@
                 "NoncurrentDays": {
                     "target": "com.amazonaws.s3#Days",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the\n         associated action. For information about the noncurrent days calculations, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html#non-current-days-calculations\">How\n            Amazon S3 Calculates How Long an Object Has Been Noncurrent</a> in the\n            <i>Amazon S3 User Guide</i>.</p>"
                     }
                 },
@@ -9114,6 +9314,7 @@
                 "NewerNoncurrentVersions": {
                     "target": "com.amazonaws.s3#VersionCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies how many noncurrent versions Amazon S3 will retain. If there are this many more recent\n         noncurrent versions, Amazon S3 will take the associated action. For more information about noncurrent\n         versions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html\">Lifecycle configuration elements</a>\n         in the <i>Amazon S3 User Guide</i>.</p>"
                     }
                 }
@@ -9225,6 +9426,7 @@
                 "Size": {
                     "target": "com.amazonaws.s3#Size",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Size in bytes of the object</p>"
                     }
                 },
@@ -9394,7 +9596,10 @@
             }
         },
         "com.amazonaws.s3#ObjectLockEnabledForBucket": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#ObjectLockLegalHold": {
             "type": "structure",
@@ -9532,12 +9737,14 @@
                 "PartNumber": {
                     "target": "com.amazonaws.s3#PartNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The part number identifying the part. This value is a positive integer between 1 and\n         10,000.</p>"
                     }
                 },
                 "Size": {
                     "target": "com.amazonaws.s3#Size",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size of the uploaded part in bytes.</p>"
                     }
                 },
@@ -9571,13 +9778,22 @@
             }
         },
         "com.amazonaws.s3#ObjectSize": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#ObjectSizeGreaterThanBytes": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#ObjectSizeLessThanBytes": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#ObjectStorageClass": {
             "type": "string",
@@ -9641,6 +9857,7 @@
                 "Size": {
                     "target": "com.amazonaws.s3#Size",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Size in bytes of the object.</p>"
                     }
                 },
@@ -9665,6 +9882,7 @@
                 "IsLatest": {
                     "target": "com.amazonaws.s3#IsLatest",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the object is (true) or is not (false) the latest version of an\n         object.</p>"
                     }
                 },
@@ -9820,6 +10038,7 @@
                 "PartNumber": {
                     "target": "com.amazonaws.s3#PartNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Part number identifying the part. This is a positive integer between 1 and\n         10,000.</p>"
                     }
                 },
@@ -9838,6 +10057,7 @@
                 "Size": {
                     "target": "com.amazonaws.s3#Size",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Size in bytes of the uploaded part data.</p>"
                     }
                 },
@@ -9871,7 +10091,10 @@
             }
         },
         "com.amazonaws.s3#PartNumber": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#PartNumberMarker": {
             "type": "string"
@@ -9883,7 +10106,10 @@
             }
         },
         "com.amazonaws.s3#PartsCount": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#PartsList": {
             "type": "list",
@@ -9942,6 +10168,7 @@
                 "IsPublic": {
                     "target": "com.amazonaws.s3#IsPublic",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The policy status for this bucket. <code>TRUE</code> indicates that this bucket is\n         public. <code>FALSE</code> indicates that the bucket is not public.</p>",
                         "smithy.api#xmlName": "IsPublic"
                     }
@@ -9955,7 +10182,10 @@
             "type": "string"
         },
         "com.amazonaws.s3#Priority": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#Progress": {
             "type": "structure",
@@ -9963,18 +10193,21 @@
                 "BytesScanned": {
                     "target": "com.amazonaws.s3#BytesScanned",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The current number of object bytes scanned.</p>"
                     }
                 },
                 "BytesProcessed": {
                     "target": "com.amazonaws.s3#BytesProcessed",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The current number of uncompressed object bytes processed.</p>"
                     }
                 },
                 "BytesReturned": {
                     "target": "com.amazonaws.s3#BytesReturned",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The current number of bytes of records payload data returned.</p>"
                     }
                 }
@@ -10019,6 +10252,7 @@
                 "BlockPublicAcls": {
                     "target": "com.amazonaws.s3#Setting",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket\n         and objects in this bucket. Setting this element to <code>TRUE</code> causes the following\n         behavior:</p>\n         <ul>\n            <li>\n               <p>PUT Bucket ACL and PUT Object ACL calls fail if the specified ACL is\n               public.</p>\n            </li>\n            <li>\n               <p>PUT Object calls fail if the request includes a public ACL.</p>\n            </li>\n            <li>\n               <p>PUT Bucket calls fail if the request includes a public ACL.</p>\n            </li>\n         </ul>\n         <p>Enabling this setting doesn't affect existing policies or ACLs.</p>",
                         "smithy.api#xmlName": "BlockPublicAcls"
                     }
@@ -10026,6 +10260,7 @@
                 "IgnorePublicAcls": {
                     "target": "com.amazonaws.s3#Setting",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Amazon S3 should ignore public ACLs for this bucket and objects in this\n         bucket. Setting this element to <code>TRUE</code> causes Amazon S3 to ignore all public ACLs on\n         this bucket and objects in this bucket.</p>\n         <p>Enabling this setting doesn't affect the persistence of any existing ACLs and doesn't\n         prevent new public ACLs from being set.</p>",
                         "smithy.api#xmlName": "IgnorePublicAcls"
                     }
@@ -10033,6 +10268,7 @@
                 "BlockPublicPolicy": {
                     "target": "com.amazonaws.s3#Setting",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Amazon S3 should block public bucket policies for this bucket. Setting this\n         element to <code>TRUE</code> causes Amazon S3 to reject calls to PUT Bucket policy if the\n         specified bucket policy allows public access. </p>\n         <p>Enabling this setting doesn't affect existing bucket policies.</p>",
                         "smithy.api#xmlName": "BlockPublicPolicy"
                     }
@@ -10040,6 +10276,7 @@
                 "RestrictPublicBuckets": {
                     "target": "com.amazonaws.s3#Setting",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Amazon S3 should restrict public bucket policies for this bucket. Setting\n         this element to <code>TRUE</code> restricts access to this bucket to only Amazon Web Service\n         principals and authorized users within this account if the bucket has a public\n         policy.</p>\n         <p>Enabling this setting doesn't affect previously stored bucket policies, except that\n         public and cross-account access within any public bucket policy, including non-public\n         delegation to specific accounts, is blocked.</p>",
                         "smithy.api#xmlName": "RestrictPublicBuckets"
                     }
@@ -10053,6 +10290,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#PutBucketAccelerateConfigurationRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "aws.protocols#httpChecksum": {
@@ -10106,6 +10346,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#PutBucketAclRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "aws.protocols#httpChecksum": {
@@ -10209,6 +10452,9 @@
             "input": {
                 "target": "com.amazonaws.s3#PutBucketAnalyticsConfigurationRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>Sets an analytics configuration for the bucket (specified by the analytics configuration\n         ID). You can have up to 1,000 analytics configurations per bucket.</p>\n\n         <p>You can choose to have storage class analysis export analysis reports sent to a\n         comma-separated values (CSV) flat file. See the <code>DataExport</code> request element.\n         Reports are updated daily and are based on the object filters that you configure. When\n         selecting data export, you specify a destination bucket and an optional destination prefix\n         where the file is written. You can export the data to a destination bucket in a different\n         account. However, the destination bucket must be in the same Region as the bucket that you\n         are making the PUT analytics configuration to. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html\">Amazon S3 Analytics – Storage Class\n            Analysis</a>. </p>\n\n         <important>\n            <p>You must create a bucket policy on the destination bucket where the exported file is\n            written to grant permissions to Amazon S3 to write objects to the bucket. For an example\n            policy, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-9\">Granting Permissions for Amazon S3 Inventory and Storage Class Analysis</a>.</p>\n         </important>\n\n         <p>To use this operation, you must have permissions to perform the\n            <code>s3:PutAnalyticsConfiguration</code> action. The bucket owner has this permission\n         by default. The bucket owner can grant this permission to others. For more information\n         about permissions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources\">Permissions Related to Bucket Subresource Operations</a> and <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html\">Managing Access Permissions to Your Amazon S3\n            Resources</a>.</p>\n\n\n         <p class=\"title\">\n            <b>Special Errors</b>\n         </p>\n         <ul>\n            <li>\n               <ul>\n                  <li>\n                     <p>\n                        <i>HTTP Error: HTTP 400 Bad Request</i>\n                     </p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Code: InvalidArgument</i>\n                     </p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Cause: Invalid argument.</i>\n                     </p>\n                  </li>\n               </ul>\n            </li>\n            <li>\n               <ul>\n                  <li>\n                     <p>\n                        <i>HTTP Error: HTTP 400 Bad Request</i>\n                     </p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Code: TooManyConfigurations</i>\n                     </p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Cause: You are attempting to create a new configuration but have\n                        already reached the 1,000-configuration limit.</i>\n                     </p>\n                  </li>\n               </ul>\n            </li>\n            <li>\n               <ul>\n                  <li>\n                     <p>\n                        <i>HTTP Error: HTTP 403 Forbidden</i>\n                     </p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Code: AccessDenied</i>\n                     </p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Cause: You are not the owner of the specified bucket, or you do\n                        not have the s3:PutAnalyticsConfiguration bucket permission to set the\n                        configuration on the bucket.</i>\n                     </p>\n                  </li>\n               </ul>\n            </li>\n         </ul>\n\n      \n\n\n\n\n         <p class=\"title\">\n            <b>Related Resources</b>\n         </p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAnalyticsConfiguration.html\">GetBucketAnalyticsConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketAnalyticsConfiguration.html\">DeleteBucketAnalyticsConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html\">ListBucketAnalyticsConfigurations</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -10259,6 +10505,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#PutBucketCorsRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "aws.protocols#httpChecksum": {
@@ -10321,6 +10570,9 @@
             "input": {
                 "target": "com.amazonaws.s3#PutBucketEncryptionRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "aws.protocols#httpChecksum": {
                     "requestAlgorithmMember": "ChecksumAlgorithm",
@@ -10381,6 +10633,9 @@
             "input": {
                 "target": "com.amazonaws.s3#PutBucketIntelligentTieringConfigurationRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>Puts a S3 Intelligent-Tiering configuration to the specified bucket.\n      You can have up to 1,000 S3 Intelligent-Tiering configurations per bucket.</p>\n         <p>The S3 Intelligent-Tiering storage class is designed to optimize storage costs by automatically moving data to the most cost-effective storage access tier, without performance impact or operational overhead. S3 Intelligent-Tiering delivers automatic cost savings in three low latency and high throughput access tiers. To get the lowest storage cost on data that can be accessed in minutes to hours, you can choose to activate additional archiving capabilities.</p>\n         <p>The S3 Intelligent-Tiering storage class is  the ideal storage class for data with unknown, changing, or unpredictable access patterns, independent of object size or retention period. If the size of an object is less than 128 KB, it is not monitored and not eligible for auto-tiering. Smaller objects can be stored, but they are always charged at the Frequent Access tier rates in the S3 Intelligent-Tiering storage class.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access\">Storage class for automatically optimizing frequently and infrequently accessed objects</a>.</p> \n         <p>Operations related to\n            <code>PutBucketIntelligentTieringConfiguration</code> include: </p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketIntelligentTieringConfiguration.html\">DeleteBucketIntelligentTieringConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketIntelligentTieringConfiguration.html\">GetBucketIntelligentTieringConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketIntelligentTieringConfigurations.html\">ListBucketIntelligentTieringConfigurations</a>\n               </p>\n            </li>\n         </ul>\n         <note>\n            <p>You only need S3 Intelligent-Tiering enabled on a bucket if you want to automatically\n            move objects stored in the S3 Intelligent-Tiering storage class to the\n            Archive Access or Deep Archive Access tier.</p>\n         </note>\n      \n         <p class=\"title\">\n            <b>Special Errors</b>\n         </p>\n         <ul>\n            <li>\n               <p class=\"title\">\n                  <b>HTTP 400 Bad Request Error</b>\n               </p>\n               <ul>\n                  <li>\n                     <p>\n                        <i>Code:</i> InvalidArgument</p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Cause:</i> Invalid Argument</p>\n                  </li>\n               </ul>\n            </li>\n            <li>\n               <p class=\"title\">\n                  <b>HTTP 400 Bad Request Error</b>\n               </p>\n               <ul>\n                  <li>\n                     <p>\n                        <i>Code:</i> TooManyConfigurations</p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Cause:</i> You are attempting to create a new configuration\n                     but have already reached the 1,000-configuration limit. </p>\n                  </li>\n               </ul>\n            </li>\n            <li>\n               <p class=\"title\">\n                  <b>HTTP 403 Forbidden Error</b>\n               </p>\n               <ul>\n                  <li>\n                     <p>\n                        <i>Code:</i> AccessDenied</p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Cause:</i> You are not the owner of the specified bucket,\n                     or you do not have the <code>s3:PutIntelligentTieringConfiguration</code> bucket\n                     permission to set the configuration on the bucket. </p>\n                  </li>\n               </ul>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -10424,6 +10679,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#PutBucketInventoryConfigurationRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#documentation": "<p>This implementation of the <code>PUT</code> action adds an inventory configuration\n         (identified by the inventory ID) to the bucket. You can have up to 1,000 inventory\n         configurations per bucket. </p>\n         <p>Amazon S3 inventory generates inventories of the objects in the bucket on a daily or weekly\n         basis, and the results are published to a flat file. The bucket that is inventoried is\n         called the <i>source</i> bucket, and the bucket where the inventory flat file\n         is stored is called the <i>destination</i> bucket. The\n            <i>destination</i> bucket must be in the same Amazon Web Services Region as the\n            <i>source</i> bucket. </p>\n         <p>When you configure an inventory for a <i>source</i> bucket, you specify\n         the <i>destination</i> bucket where you want the inventory to be stored, and\n         whether to generate the inventory daily or weekly. You can also configure what object\n         metadata to include and whether to inventory all object versions or only current versions.\n         For more information, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html\">Amazon S3\n            Inventory</a> in the Amazon S3 User Guide.</p>\n         <important>\n            <p>You must create a bucket policy on the <i>destination</i> bucket to\n            grant permissions to Amazon S3 to write objects to the bucket in the defined location. For an\n            example policy, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-9\">\n               Granting Permissions for Amazon S3 Inventory and Storage Class Analysis</a>.</p>\n         </important>\n         <p>To use this operation, you must have permissions to perform the\n            <code>s3:PutInventoryConfiguration</code> action. The bucket owner has this permission\n         by default and can grant this permission to others. For more information about permissions,\n         see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources\">Permissions Related to Bucket Subresource Operations</a> and <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html\">Managing Access Permissions to Your Amazon S3\n            Resources</a> in the Amazon S3 User Guide.</p>\n      \n         <p class=\"title\">\n            <b>Special Errors</b>\n         </p>\n         <ul>\n            <li>\n               <p class=\"title\">\n                  <b>HTTP 400 Bad Request Error</b>\n               </p>\n               <ul>\n                  <li>\n                     <p>\n                        <i>Code:</i> InvalidArgument</p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Cause:</i> Invalid Argument</p>\n                  </li>\n               </ul>\n            </li>\n            <li>\n               <p class=\"title\">\n                  <b>HTTP 400 Bad Request Error</b>\n               </p>\n               <ul>\n                  <li>\n                     <p>\n                        <i>Code:</i> TooManyConfigurations</p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Cause:</i> You are attempting to create a new configuration\n                     but have already reached the 1,000-configuration limit. </p>\n                  </li>\n               </ul>\n            </li>\n            <li>\n               <p class=\"title\">\n                  <b>HTTP 403 Forbidden Error</b>\n               </p>\n               <ul>\n                  <li>\n                     <p>\n                        <i>Code:</i> AccessDenied</p>\n                  </li>\n                  <li>\n                     <p>\n                        <i>Cause:</i> You are not the owner of the specified bucket,\n                     or you do not have the <code>s3:PutInventoryConfiguration</code> bucket\n                     permission to set the configuration on the bucket. </p>\n                  </li>\n               </ul>\n            </li>\n         </ul>\n      \n         <p class=\"title\">\n            <b>Related Resources</b>\n         </p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketInventoryConfiguration.html\">GetBucketInventoryConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketInventoryConfiguration.html\">DeleteBucketInventoryConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html\">ListBucketInventoryConfigurations</a>\n               </p>\n            </li>\n         </ul>",
@@ -10475,6 +10733,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#PutBucketLifecycleConfigurationRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "aws.protocols#httpChecksum": {
@@ -10528,6 +10789,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#PutBucketLoggingRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "aws.protocols#httpChecksum": {
@@ -10590,6 +10854,9 @@
             "input": {
                 "target": "com.amazonaws.s3#PutBucketMetricsConfigurationRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>Sets a metrics configuration (specified by the metrics configuration ID) for the bucket.\n         You can have up to 1,000 metrics configurations per bucket. If you're updating an existing\n         metrics configuration, note that this is a full replacement of the existing metrics\n         configuration. If you don't include the elements you want to keep, they are erased.</p>\n\n         <p>To use this operation, you must have permissions to perform the\n            <code>s3:PutMetricsConfiguration</code> action. The bucket owner has this permission by\n         default. The bucket owner can grant this permission to others. For more information about\n         permissions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources\">Permissions Related to Bucket Subresource Operations</a> and <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html\">Managing Access Permissions to Your Amazon S3\n            Resources</a>.</p>\n\n         <p>For information about CloudWatch request metrics for Amazon S3, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html\">Monitoring Metrics with Amazon\n            CloudWatch</a>.</p>\n\n         <p>The following operations are related to\n         <code>PutBucketMetricsConfiguration</code>:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketMetricsConfiguration.html\">DeleteBucketMetricsConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketMetricsConfiguration.html\">GetBucketMetricsConfiguration</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html\">ListBucketMetricsConfigurations</a>\n               </p>\n            </li>\n         </ul>\n\n         <p>\n            <code>GetBucketLifecycle</code> has the following special error:</p>\n         <ul>\n            <li>\n               <p>Error code: <code>TooManyConfigurations</code>\n               </p>\n               <ul>\n                  <li>\n                     <p>Description: You are attempting to create a new configuration but have\n                     already reached the 1,000-configuration limit.</p>\n                  </li>\n                  <li>\n                     <p>HTTP Status Code: HTTP 400 Bad Request</p>\n                  </li>\n               </ul>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -10641,6 +10908,9 @@
             "input": {
                 "target": "com.amazonaws.s3#PutBucketNotificationConfigurationRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "smithy.api#documentation": "<p>Enables notifications of specified events for a bucket. For more information about event\n         notifications, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Event\n            Notifications</a>.</p>\n\n         <p>Using this API, you can replace an existing notification configuration. The\n         configuration is an XML file that defines the event types that you want Amazon S3 to publish and\n         the destination where you want Amazon S3 to publish an event notification when it detects an\n         event of the specified type.</p>\n\n         <p>By default, your bucket has no event notifications configured. That is, the notification\n         configuration will be an empty <code>NotificationConfiguration</code>.</p>\n\n         <p>\n            <code><NotificationConfiguration></code>\n         </p>\n         <p>\n            <code></NotificationConfiguration></code>\n         </p>\n         <p>This action replaces the existing notification configuration with the configuration\n         you include in the request body.</p>\n\n         <p>After Amazon S3 receives this request, it first verifies that any Amazon Simple Notification\n         Service (Amazon SNS) or Amazon Simple Queue Service (Amazon SQS) destination exists, and\n         that the bucket owner has permission to publish to it by sending a test notification. In\n         the case of Lambda destinations, Amazon S3 verifies that the Lambda function permissions\n         grant Amazon S3 permission to invoke the function from the Amazon S3 bucket. For more information,\n         see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Notifications for Amazon S3\n            Events</a>.</p>\n\n         <p>You can disable notifications by adding the empty NotificationConfiguration\n         element.</p>\n         <p>For more information about the number of event notification configurations that you can create per bucket, see\n         <a href=\"https://docs.aws.amazon.com/general/latest/gr/s3.html#limits_s3\">Amazon S3 service quotas</a> in <i>Amazon Web Services General Reference</i>.</p>\n         <p>By default, only the bucket owner can configure notifications on a bucket. However,\n         bucket owners can use a bucket policy to grant permission to other users to set this\n         configuration with <code>s3:PutBucketNotification</code> permission.</p>\n\n         <note>\n            <p>The PUT notification is an atomic operation. For example, suppose your notification\n            configuration includes SNS topic, SQS queue, and Lambda function configurations. When\n            you send a PUT request with this configuration, Amazon S3 sends test messages to your SNS\n            topic. If the message fails, the entire PUT action will fail, and Amazon S3 will not add\n            the configuration to your bucket.</p>\n         </note>\n\n         <p>\n            <b>Responses</b>\n         </p>\n         <p>If the configuration in the request body includes only one\n            <code>TopicConfiguration</code> specifying only the\n            <code>s3:ReducedRedundancyLostObject</code> event type, the response will also include\n         the <code>x-amz-sns-test-message-id</code> header containing the message ID of the test\n         notification sent to the topic.</p>\n\n         <p>The following action is related to\n         <code>PutBucketNotificationConfiguration</code>:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotificationConfiguration.html\">GetBucketNotificationConfiguration</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
@@ -10679,6 +10949,7 @@
                 "SkipDestinationValidation": {
                     "target": "com.amazonaws.s3#SkipValidation",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Skips validation of Amazon SQS, Amazon SNS, and Lambda destinations. True or false value.</p>",
                         "smithy.api#httpHeader": "x-amz-skip-destination-validation"
                     }
@@ -10689,6 +10960,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#PutBucketOwnershipControlsRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "aws.protocols#httpChecksum": {
@@ -10743,6 +11017,9 @@
             "input": {
                 "target": "com.amazonaws.s3#PutBucketPolicyRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "aws.protocols#httpChecksum": {
                     "requestAlgorithmMember": "ChecksumAlgorithm",
@@ -10784,6 +11061,7 @@
                 "ConfirmRemoveSelfBucketAccess": {
                     "target": "com.amazonaws.s3#ConfirmRemoveSelfBucketAccess",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set this parameter to true to confirm that you want to remove your permissions to change\n         this bucket policy in the future.</p>",
                         "smithy.api#httpHeader": "x-amz-confirm-remove-self-bucket-access"
                     }
@@ -10809,6 +11087,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#PutBucketReplicationRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "aws.protocols#httpChecksum": {
@@ -10877,6 +11158,9 @@
             "input": {
                 "target": "com.amazonaws.s3#PutBucketRequestPaymentRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "aws.protocols#httpChecksum": {
                     "requestAlgorithmMember": "ChecksumAlgorithm",
@@ -10938,6 +11222,9 @@
             "input": {
                 "target": "com.amazonaws.s3#PutBucketTaggingRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "aws.protocols#httpChecksum": {
                     "requestAlgorithmMember": "ChecksumAlgorithm",
@@ -10998,6 +11285,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#PutBucketVersioningRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "aws.protocols#httpChecksum": {
@@ -11066,6 +11356,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3#PutBucketWebsiteRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "aws.protocols#httpChecksum": {
@@ -11557,6 +11850,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the uploaded object uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -11582,6 +11876,7 @@
                 "Body": {
                     "target": "com.amazonaws.s3#StreamingBlob",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>Object data.</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -11625,6 +11920,7 @@
                 "ContentLength": {
                     "target": "com.amazonaws.s3#ContentLength",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Size of the body in bytes. This parameter is useful when the size of the body cannot be\n         determined automatically. For more information, see <a href=\"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.13\">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.13</a>.</p>",
                         "smithy.api#httpHeader": "Content-Length"
                     }
@@ -11787,6 +12083,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with server-side encryption using AWS KMS (SSE-KMS). Setting this header to <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with SSE-KMS.</p>\n         <p>Specifying this header with a PUT action doesn’t affect bucket-level settings for S3 Bucket Key.</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -11909,6 +12206,7 @@
                 "BypassGovernanceRetention": {
                     "target": "com.amazonaws.s3#BypassGovernanceRetention",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether this action should bypass Governance-mode restrictions.</p>",
                         "smithy.api#httpHeader": "x-amz-bypass-governance-retention"
                     }
@@ -12038,6 +12336,9 @@
             "input": {
                 "target": "com.amazonaws.s3#PutPublicAccessBlockRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "aws.protocols#httpChecksum": {
                     "requestAlgorithmMember": "ChecksumAlgorithm",
@@ -12135,7 +12436,10 @@
             }
         },
         "com.amazonaws.s3#Quiet": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#QuoteCharacter": {
             "type": "string"
@@ -12313,6 +12617,7 @@
                 "Priority": {
                     "target": "com.amazonaws.s3#Priority",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The priority indicates which rule has precedence whenever two or more replication rules\n         conflict. Amazon S3 will attempt to replicate objects according to all replication rules.\n         However, if there are two or more rules with the same destination bucket, then objects will\n         be replicated according to the rule with the highest priority. The higher the number, the\n         higher the priority. </p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/replication.html\">Replication</a> in the\n            <i>Amazon S3 User Guide</i>.</p>"
                     }
                 },
@@ -12495,6 +12800,7 @@
                 "Minutes": {
                     "target": "com.amazonaws.s3#Minutes",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> Contains an integer specifying time in minutes. </p>\n         <p> Valid value: 15</p>"
                     }
                 }
@@ -12548,6 +12854,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.s3#EnableRequestProgress",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether periodic QueryProgress frames should be sent. Valid values: TRUE,\n         FALSE. Default value: FALSE.</p>"
                     }
                 }
@@ -12693,6 +13000,7 @@
                 "Days": {
                     "target": "com.amazonaws.s3#Days",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Lifetime of the active copy in days. Do not use with restores that specify\n            <code>OutputLocation</code>.</p>\n         <p>The Days element is required for regular restores, and must not be provided for select\n         requests.</p>"
                     }
                 },
@@ -12905,12 +13213,14 @@
                 "Start": {
                     "target": "com.amazonaws.s3#Start",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the start of the byte range. This parameter is optional. Valid values:\n         non-negative integers. The default value is 0. If only <code>start</code> is supplied, it\n         means scan from that point to the end of the file. For example,\n            <code><scanrange><start>50</start></scanrange></code> means scan\n         from byte 50 until the end of the file.</p>"
                     }
                 },
                 "End": {
                     "target": "com.amazonaws.s3#End",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the end of the byte range. This parameter is optional. Valid values:\n         non-negative integers. The default value is one less than the size of the object being\n         queried. If only the End parameter is supplied, it is interpreted to mean scan the last N\n         bytes of the file. For example,\n            <code><scanrange><end>50</end></scanrange></code> means scan the\n         last 50 bytes.</p>"
                     }
                 }
@@ -13180,6 +13490,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Amazon S3 should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS) for new objects in the bucket. Existing objects are not affected. Setting the <code>BucketKeyEnabled</code> element to <code>true</code> causes Amazon S3 to use an S3 Bucket Key. By default, S3 Bucket Key is not enabled.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html\">Amazon S3 Bucket Keys</a> in the <i>Amazon S3 User Guide</i>.</p>"
                     }
                 }
@@ -13195,13 +13506,22 @@
             }
         },
         "com.amazonaws.s3#Setting": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#Size": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#SkipValidation": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.s3#SourceSelectionCriteria": {
             "type": "structure",
@@ -13254,7 +13574,10 @@
             }
         },
         "com.amazonaws.s3#Start": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#StartAfter": {
             "type": "string"
@@ -13265,18 +13588,21 @@
                 "BytesScanned": {
                     "target": "com.amazonaws.s3#BytesScanned",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of object bytes scanned.</p>"
                     }
                 },
                 "BytesProcessed": {
                     "target": "com.amazonaws.s3#BytesProcessed",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of uncompressed object bytes processed.</p>"
                     }
                 },
                 "BytesReturned": {
                     "target": "com.amazonaws.s3#BytesReturned",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of bytes of records payload data returned.</p>"
                     }
                 }
@@ -13422,7 +13748,10 @@
             }
         },
         "com.amazonaws.s3#TagCount": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#TagSet": {
             "type": "list",
@@ -13530,6 +13859,7 @@
                 "Days": {
                     "target": "com.amazonaws.s3#IntelligentTieringDays",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of consecutive days of no access after which an object will be eligible to be\n         transitioned to the corresponding tier. The minimum number of days specified for\n         Archive Access tier must be at least 90 days and Deep Archive Access tier must be at least\n         180 days. The maximum can be up to 2 years (730 days).</p>",
                         "smithy.api#required": {}
                     }
@@ -13607,6 +13937,7 @@
                 "Days": {
                     "target": "com.amazonaws.s3#Days",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Indicates the number of days after creation when objects are transitioned to the\n         specified storage class. The value must be a positive integer.</p>"
                     }
                 },
@@ -13768,6 +14099,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -13845,6 +14177,7 @@
                 "PartNumber": {
                     "target": "com.amazonaws.s3#PartNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Part number of part being copied. This is a positive integer between 1 and\n         10,000.</p>",
                         "smithy.api#httpQuery": "partNumber",
                         "smithy.api#required": {}
@@ -13991,6 +14324,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>",
                         "smithy.api#httpHeader": "x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -14009,6 +14343,7 @@
                 "Body": {
                     "target": "com.amazonaws.s3#StreamingBlob",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>Object data.</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -14024,6 +14359,7 @@
                 "ContentLength": {
                     "target": "com.amazonaws.s3#ContentLength",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Size of the body in bytes. This parameter is useful when the size of the body cannot be\n         determined automatically.</p>",
                         "smithy.api#httpHeader": "Content-Length"
                     }
@@ -14081,6 +14417,7 @@
                 "PartNumber": {
                     "target": "com.amazonaws.s3#PartNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Part number of part being uploaded. This is a positive integer between 1 and\n         10,000.</p>",
                         "smithy.api#httpQuery": "partNumber",
                         "smithy.api#required": {}
@@ -14143,7 +14480,10 @@
             "type": "string"
         },
         "com.amazonaws.s3#VersionCount": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.s3#VersionIdMarker": {
             "type": "string"
@@ -14209,6 +14549,9 @@
             "input": {
                 "target": "com.amazonaws.s3#WriteGetObjectResponseRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "traits": {
                 "aws.auth#unsignedPayload": {},
                 "smithy.api#auth": [
@@ -14248,6 +14591,7 @@
                 "Body": {
                     "target": "com.amazonaws.s3#StreamingBlob",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>The object data.</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -14255,6 +14599,7 @@
                 "StatusCode": {
                     "target": "com.amazonaws.s3#GetObjectResponseStatusCode",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The integer status code for an HTTP response of a corresponding <code>GetObject</code>\n         request.</p>\n             <p class=\"title\">\n            <b>Status Codes</b>\n         </p>\n         <ul>\n            <li>\n                   <p>\n                  <code>200 - OK</code>\n               </p>\n                </li>\n            <li>\n                   <p>\n                  <code>206 - Partial Content</code>\n               </p>\n                </li>\n            <li>\n                   <p>\n                  <code>304 - Not Modified</code>\n               </p>\n                </li>\n            <li>\n                   <p>\n                  <code>400 - Bad Request</code>\n                   </p>\n                </li>\n            <li>\n                   <p>\n                  <code>401 - Unauthorized</code>\n                   </p>\n                </li>\n            <li>\n                   <p>\n                  <code>403 - Forbidden</code>\n                   </p>\n                </li>\n            <li>\n                   <p>\n                  <code>404 - Not Found</code>\n                   </p>\n                </li>\n            <li>\n                   <p>\n                  <code>405 - Method Not Allowed</code>\n                   </p>\n                </li>\n            <li>\n                   <p>\n                  <code>409 - Conflict</code>\n                   </p>\n                </li>\n            <li>\n                   <p>\n                  <code>411 - Length Required</code>\n                   </p>\n                </li>\n            <li>\n                   <p>\n                  <code>412 - Precondition Failed</code>\n                   </p>\n                </li>\n            <li>\n                   <p>\n                  <code>416 - Range Not Satisfiable</code>\n                   </p>\n                </li>\n            <li>\n                   <p>\n                  <code>500 - Internal Server Error</code>\n                   </p>\n                </li>\n            <li>\n                   <p>\n                  <code>503 - Service Unavailable</code>\n                   </p>\n                </li>\n         </ul>",
                         "smithy.api#httpHeader": "x-amz-fwd-status"
                     }
@@ -14311,6 +14656,7 @@
                 "ContentLength": {
                     "target": "com.amazonaws.s3#ContentLength",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size of the content body in bytes.</p>",
                         "smithy.api#httpHeader": "Content-Length"
                     }
@@ -14360,6 +14706,7 @@
                 "DeleteMarker": {
                     "target": "com.amazonaws.s3#DeleteMarker",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether an object stored in Amazon S3 is (<code>true</code>) or is not\n            (<code>false</code>) a delete marker. </p>",
                         "smithy.api#httpHeader": "x-amz-fwd-header-x-amz-delete-marker"
                     }
@@ -14395,6 +14742,7 @@
                 "MissingMeta": {
                     "target": "com.amazonaws.s3#MissingMeta",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Set to the number of metadata entries not returned in <code>x-amz-meta</code> headers.\n         This can happen if you create metadata using an API like SOAP that supports more flexible\n         metadata than the REST API. For example, using SOAP, you can create metadata whose values\n         are not legal HTTP headers.</p>",
                         "smithy.api#httpHeader": "x-amz-fwd-header-x-amz-missing-meta"
                     }
@@ -14430,6 +14778,7 @@
                 "PartsCount": {
                     "target": "com.amazonaws.s3#PartsCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The count of parts this object has.</p>",
                         "smithy.api#httpHeader": "x-amz-fwd-header-x-amz-mp-parts-count"
                     }
@@ -14492,6 +14841,7 @@
                 "TagCount": {
                     "target": "com.amazonaws.s3#TagCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of tags, if any, on the object.</p>",
                         "smithy.api#httpHeader": "x-amz-fwd-header-x-amz-tagging-count"
                     }
@@ -14506,6 +14856,7 @@
                 "BucketKeyEnabled": {
                     "target": "com.amazonaws.s3#BucketKeyEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Indicates whether the object stored in Amazon S3 uses an S3 bucket key for server-side\n         encryption with Amazon Web Services KMS (SSE-KMS).</p>",
                         "smithy.api#httpHeader": "x-amz-fwd-header-x-amz-server-side-encryption-bucket-key-enabled"
                     }
@@ -14513,7 +14864,10 @@
             }
         },
         "com.amazonaws.s3#Years": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         }
     }
 }

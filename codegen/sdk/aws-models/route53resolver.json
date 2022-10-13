@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -422,7 +422,6 @@
         "com.amazonaws.route53resolver#BlockOverrideTtl": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 604800
@@ -449,7 +448,10 @@
             }
         },
         "com.amazonaws.route53resolver#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.route53resolver#ConflictException": {
             "type": "structure",
@@ -464,7 +466,10 @@
             }
         },
         "com.amazonaws.route53resolver#Count": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.route53resolver#CreateFirewallDomainList": {
             "type": "operation",
@@ -690,7 +695,7 @@
                 "BlockOverrideTtl": {
                     "target": "com.amazonaws.route53resolver#BlockOverrideTtl",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The recommended amount of time, in seconds, for the DNS resolver or web browser to cache the provided override record. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p>\n         <p>This setting is required if the <code>BlockResponse</code> setting is <code>OVERRIDE</code>.</p>"
                     }
                 },
@@ -3112,10 +3117,7 @@
             }
         },
         "com.amazonaws.route53resolver#IpAddressCount": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.route53resolver#IpAddressRequest": {
             "type": "structure",
@@ -3300,7 +3302,6 @@
         "com.amazonaws.route53resolver#ListDomainMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 5000
@@ -3341,7 +3342,6 @@
         "com.amazonaws.route53resolver#ListFirewallConfigsMaxResult": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5,
                     "max": 10
@@ -3354,7 +3354,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#ListFirewallConfigsMaxResult",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of objects that you want Resolver to return for this request. If more\n            objects are available, in the response, Resolver provides a\n           <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> \n         <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>"
                     }
                 },
@@ -3420,7 +3420,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of objects that you want Resolver to return for this request. If more\n            objects are available, in the response, Resolver provides a\n           <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> \n         <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>"
                     }
                 },
@@ -3496,7 +3496,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#ListDomainMaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of objects that you want Resolver to return for this request. If more\n            objects are available, in the response, Resolver provides a\n           <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> \n         <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>"
                     }
                 },
@@ -3574,7 +3574,7 @@
                 "Priority": {
                     "target": "com.amazonaws.route53resolver#Priority",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The setting that determines the processing order of the rule group among the rule\n\t\t\tgroups that are associated with a single VPC. DNS Firewall filters VPC traffic starting\n\t\t\tfrom the rule group with the lowest numeric priority setting. </p>"
                     }
                 },
@@ -3587,7 +3587,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of objects that you want Resolver to return for this request. If more\n            objects are available, in the response, Resolver provides a\n           <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> \n         <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>"
                     }
                 },
@@ -3653,7 +3653,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of objects that you want Resolver to return for this request. If more\n            objects are available, in the response, Resolver provides a\n           <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> \n         <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>"
                     }
                 },
@@ -3729,7 +3729,7 @@
                 "Priority": {
                     "target": "com.amazonaws.route53resolver#Priority",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Optional additional filter for the rules to retrieve.</p>\n         <p>The setting that determines the processing order of the rules in a rule group. DNS Firewall \n           processes the rules in a rule group by order of priority, starting from the lowest setting.</p>"
                     }
                 },
@@ -3742,7 +3742,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of objects that you want Resolver to return for this request. If more\n            objects are available, in the response, Resolver provides a\n           <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> \n         <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>"
                     }
                 },
@@ -3811,7 +3811,6 @@
         "com.amazonaws.route53resolver#ListResolverConfigsMaxResult": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5,
                     "max": 100
@@ -3824,7 +3823,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#ListResolverConfigsMaxResult",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of Resolver configurations that you want to return in the response to \n\t\t\ta <code>ListResolverConfigs</code> request. If you don't specify a value for <code>MaxResults</code>, \n\t\t\tup to 100 Resolver configurations are returned.</p>"
                     }
                 },
@@ -3896,7 +3895,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>\n            <i>Optional</i>: An integer that specifies the maximum number of DNSSEC configuration results that you want Amazon Route 53 to return. \n\t\t\tIf you don't specify a value for <code>MaxResults</code>, Route 53 returns up to 100 configuration per page.</p>"
                     }
                 },
@@ -3978,7 +3977,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of IP addresses that you want to return in the response to a <code>ListResolverEndpointIpAddresses</code> request. \n\t\t\tIf you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 IP addresses. </p>"
                     }
                 },
@@ -4053,7 +4052,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of Resolver endpoints that you want to return in the response to a <code>ListResolverEndpoints</code> request. \n\t\t\tIf you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 Resolver endpoints. </p>"
                     }
                 },
@@ -4178,12 +4177,14 @@
                 "TotalCount": {
                     "target": "com.amazonaws.route53resolver#Count",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of query logging associations that were created by the current account in the specified Region. This count can differ from the \n\t\t\tnumber of associations that are returned in a <code>ListResolverQueryLogConfigAssociations</code> response, depending on the values that you specify \n\t\t\tin the request.</p>"
                     }
                 },
                 "TotalFilteredCount": {
                     "target": "com.amazonaws.route53resolver#Count",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of query logging associations that were created by the current account in the specified Region and that match the filters \n\t\t\tthat were specified in the <code>ListResolverQueryLogConfigAssociations</code> request. For the total number of associations that were created by the \n\t\t\tcurrent account in the specified Region, see <code>TotalCount</code>.</p>"
                     }
                 },
@@ -4238,7 +4239,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of query logging configurations that you want to return in the response to a <code>ListResolverQueryLogConfigs</code> request. \n\t\t\tIf you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 query logging configurations. </p>"
                     }
                 },
@@ -4280,12 +4281,14 @@
                 "TotalCount": {
                     "target": "com.amazonaws.route53resolver#Count",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of query logging configurations that were created by the current account in the specified Region. This count can differ from the \n\t\t\tnumber of query logging configurations that are returned in a <code>ListResolverQueryLogConfigs</code> response, depending on the values that you specify \n\t\t\tin the request.</p>"
                     }
                 },
                 "TotalFilteredCount": {
                     "target": "com.amazonaws.route53resolver#Count",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of query logging configurations that were created by the current account in the specified Region and that match the filters \n\t\t\tthat were specified in the <code>ListResolverQueryLogConfigs</code> request. For the total number of query logging configurations that were created by the \n\t\t\tcurrent account in the specified Region, see <code>TotalCount</code>.</p>"
                     }
                 },
@@ -4337,7 +4340,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of rule associations that you want to return in the response to a <code>ListResolverRuleAssociations</code> request. \n\t\t\tIf you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 rule associations. </p>"
                     }
                 },
@@ -4418,7 +4421,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of Resolver rules that you want to return in the response to a <code>ListResolverRules</code> request. \n\t\t\tIf you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 Resolver rules.</p>"
                     }
                 },
@@ -4509,7 +4512,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.route53resolver#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of tags that you want to return in the response to a <code>ListTagsForResource</code> request. \n\t\t\tIf you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 tags.</p>"
                     }
                 },
@@ -4541,7 +4544,6 @@
         "com.amazonaws.route53resolver#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4579,7 +4581,6 @@
         "com.amazonaws.route53resolver#Port": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 65535
@@ -4587,10 +4588,7 @@
             }
         },
         "com.amazonaws.route53resolver#Priority": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.route53resolver#PutFirewallRuleGroupPolicy": {
             "type": "operation",
@@ -4646,6 +4644,7 @@
                 "ReturnValue": {
                     "target": "com.amazonaws.route53resolver#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p></p>"
                     }
                 }
@@ -4708,6 +4707,7 @@
                 "ReturnValue": {
                     "target": "com.amazonaws.route53resolver#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether the <code>PutResolverQueryLogConfigPolicy</code> request was successful.</p>"
                     }
                 }
@@ -4767,6 +4767,7 @@
                 "ReturnValue": {
                     "target": "com.amazonaws.route53resolver#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether the <code>PutResolverRulePolicy</code> request was successful.</p>"
                     }
                 }
@@ -5059,6 +5060,7 @@
                 "AssociationCount": {
                     "target": "com.amazonaws.route53resolver#Count",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of VPCs that are associated with the query logging configuration.</p>"
                     }
                 },
@@ -6020,7 +6022,7 @@
                 "Port": {
                     "target": "com.amazonaws.route53resolver#Port",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The port at <code>Ip</code> that you want to forward DNS queries to.</p>"
                     }
                 }
@@ -6065,10 +6067,7 @@
             }
         },
         "com.amazonaws.route53resolver#Unsigned": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.route53resolver#UntagResource": {
             "type": "operation",
@@ -6348,7 +6347,7 @@
                 "Priority": {
                     "target": "com.amazonaws.route53resolver#Priority",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The setting that determines the processing order of the rule group among the rule\n\t\t\tgroups that you associate with the specified VPC. DNS Firewall filters VPC traffic\n\t\t\tstarting from the rule group with the lowest numeric priority setting. </p>\n         <p>You must specify a unique priority for each rule group that you associate with a single VPC. \n           To make it easier to insert rule groups later, leave space between the numbers, for example, use 100, 200, and so on. You \n   can change the priority setting for a rule group association after you create it.</p>"
                     }
                 },
@@ -6397,7 +6396,7 @@
                 "Priority": {
                     "target": "com.amazonaws.route53resolver#Priority",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The setting that determines the processing order of the rule in the rule group. DNS Firewall \n           processes the rules in a rule group by order of priority, starting from the lowest setting.</p>\n         <p>You must specify a unique priority for each rule in a rule group. \n           To make it easier to insert rules later, leave space between the numbers, for example, use 100, 200, and so on. You \n   can change the priority setting for the rules in a rule group at any time.</p>"
                     }
                 },
@@ -6428,7 +6427,7 @@
                 "BlockOverrideTtl": {
                     "target": "com.amazonaws.route53resolver#BlockOverrideTtl",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The recommended amount of time, in seconds, for the DNS resolver or web browser to cache the provided override record. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p>"
                     }
                 },

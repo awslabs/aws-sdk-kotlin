@@ -925,16 +925,12 @@
                 "IsMultiRegionTrail": {
                     "target": "com.amazonaws.cloudtrail#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the trail is created in the current region or in all regions. The default is false, which creates a trail only in the region where you are signed in. As a best practice, consider\n      creating trails that log events in all regions.</p>"
                     }
                 },
                 "EnableLogFileValidation": {
                     "target": "com.amazonaws.cloudtrail#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether log file integrity validation is enabled. The default is false.</p>\n         <note>\n            <p>When you disable log file integrity validation, the chain of digest files is broken after one hour. CloudTrail does \n            not create digest files for log files that were delivered during a period in which log file integrity validation was disabled. \n            For example, if you enable log file integrity validation at noon on January 1, disable it at noon on January 2, and re-enable \n            it at noon on January 10, digest files will not be created for the log files delivered from noon on January 2 to noon on \n            January 10. The same applies whenever you stop CloudTrail logging or delete a trail.</p>\n         </note>"
                     }
                 },
@@ -959,8 +955,6 @@
                 "IsOrganizationTrail": {
                     "target": "com.amazonaws.cloudtrail#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the trail is created for all accounts in an organization in Organizations, or only for the current Amazon Web Services account. \n         The default is false, and cannot be true unless the call is made on behalf of an Amazon Web Services account that is the management account for an organization in \n         Organizations.</p>"
                     }
                 },
@@ -1338,8 +1332,6 @@
                 "includeShadowTrails": {
                     "target": "com.amazonaws.cloudtrail#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": true,
                         "smithy.api#documentation": "<p>Specifies whether to include shadow trails in the response. A shadow trail is the replication in a region of a trail that was created in a different region,\n         or in the case of an organization trail, the replication of an organization trail in member accounts. If you do not include shadow trails, organization trails in a member account\n         and region replication trails will not be returned. The default is true.</p>"
                     }
                 }
@@ -4310,8 +4302,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cloudtrail#MaxResults",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": 50,
                         "smithy.api#documentation": "<p>The number of events to return. Possible values are 1 through 50. The default is 50.</p>"
                     }
                 },
@@ -6380,16 +6370,12 @@
                 "IsMultiRegionTrail": {
                     "target": "com.amazonaws.cloudtrail#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the trail applies only to the current region or to all regions. The default is false. If the trail exists only in the current region and this value is set to true, \n         shadow trails (replications of the trail) will be created in the other regions. If the trail exists in all regions and this value is set to false, the trail will remain in the region \n         where it was created, and its shadow trails in other regions will be deleted. As a best practice, consider\n         using trails that log events in all regions.</p>"
                     }
                 },
                 "EnableLogFileValidation": {
                     "target": "com.amazonaws.cloudtrail#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether log file validation is enabled. The default is false.</p>\n         <note>\n            <p>When you disable log file integrity validation, the chain of digest files is broken after one hour. CloudTrail \n            does not create digest files for log files that were delivered during a period in which log file integrity validation \n            was disabled. For example, if you enable log file integrity validation at noon on January 1, disable it at noon on \n            January 2, and re-enable it at noon on January 10, digest files will not be created for the log files delivered from noon \n            on January 2 to noon on January 10. The same applies whenever you stop CloudTrail logging or delete a trail.</p>\n         </note>"
                     }
                 },
@@ -6414,8 +6400,6 @@
                 "IsOrganizationTrail": {
                     "target": "com.amazonaws.cloudtrail#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the trail is applied to all accounts in an organization in Organizations, or only for the current Amazon Web Services account. \n         The default is false, and cannot be true unless the call is made on behalf of an Amazon Web Services account that is the management account for an organization in \n         Organizations. If the trail is not an organization trail and this is set to <code>true</code>, the trail will be created in all Amazon Web Services accounts that belong\n         to the organization. If the trail is an organization trail and this is set to <code>false</code>, the trail will remain in the current Amazon Web Services account but be \n         deleted from all member accounts in the organization.</p>"
                     }
                 }

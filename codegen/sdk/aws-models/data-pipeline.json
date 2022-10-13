@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -353,6 +353,9 @@
             "input": {
                 "target": "com.amazonaws.datapipeline#DeletePipelineInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.datapipeline#InternalServiceError"
@@ -434,6 +437,7 @@
                 "evaluateExpressions": {
                     "target": "com.amazonaws.datapipeline#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether any expressions in the object should be evaluated when the object descriptions are returned.</p>"
                     }
                 },
@@ -467,6 +471,7 @@
                 "hasMoreResults": {
                     "target": "com.amazonaws.datapipeline#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether there are more results to return.</p>"
                     }
                 }
@@ -812,6 +817,7 @@
                 "hasMoreResults": {
                     "target": "com.amazonaws.datapipeline#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether there are more results that can be obtained by a subsequent call.</p>"
                     }
                 }
@@ -1234,6 +1240,7 @@
                 "errored": {
                     "target": "com.amazonaws.datapipeline#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether there were validation errors, and the pipeline definition is stored but cannot be \n            activated until you correct the pipeline and call <code>PutPipelineDefinition</code> to commit the corrected pipeline.</p>",
                         "smithy.api#required": {}
                     }
@@ -1347,6 +1354,7 @@
                 "hasMoreResults": {
                     "target": "com.amazonaws.datapipeline#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether there are more results that can be obtained by a subsequent call.</p>"
                     }
                 }
@@ -1466,6 +1474,7 @@
                 "canceled": {
                     "target": "com.amazonaws.datapipeline#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, the calling task runner should cancel processing of the task. The task runner does not need to call <a>SetTaskStatus</a> for canceled tasks.</p>",
                         "smithy.api#required": {}
                     }
@@ -1528,6 +1537,7 @@
                 "terminate": {
                     "target": "com.amazonaws.datapipeline#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the calling task runner should terminate.</p>",
                         "smithy.api#required": {}
                     }
@@ -1567,6 +1577,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.datapipeline#SetStatusInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1857,6 +1870,7 @@
                 "errored": {
                     "target": "com.amazonaws.datapipeline#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether there were validation errors.</p>",
                         "smithy.api#required": {}
                     }
@@ -1939,13 +1953,13 @@
             }
         },
         "com.amazonaws.datapipeline#boolean": {
-            "type": "boolean"
-        },
-        "com.amazonaws.datapipeline#cancelActive": {
             "type": "boolean",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": false
             }
+        },
+        "com.amazonaws.datapipeline#cancelActive": {
+            "type": "boolean"
         },
         "com.amazonaws.datapipeline#errorMessage": {
             "type": "string"
@@ -1993,10 +2007,7 @@
             }
         },
         "com.amazonaws.datapipeline#int": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.datapipeline#longString": {
             "type": "string",

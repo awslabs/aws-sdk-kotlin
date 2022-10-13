@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,21 +31,6 @@
     "shapes": {
         "com.amazonaws.savingsplans#AWSSavingsPlan": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "savingsplans",
-                    "arnNamespace": "savingsplans",
-                    "cloudFormationName": "Savingsplans",
-                    "cloudTrailEventSource": "savingsplans.amazonaws.com",
-                    "endpointPrefix": "savingsplans"
-                },
-                "aws.auth#sigv4": {
-                    "name": "savingsplans"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>Savings Plans are a pricing model that offer significant savings on AWS usage (for\n        example, on Amazon EC2 instances). You commit to a consistent amount of usage, in USD\n        per hour, for a term of 1 or 3 years, and receive a lower price for that usage. For\n        more information, see the <a href=\"https://docs.aws.amazon.com/savingsplans/latest/userguide/\">AWS Savings Plans User Guide</a>.</p>",
-                "smithy.api#title": "AWS Savings Plans"
-            },
             "version": "2019-06-28",
             "operations": [
                 {
@@ -75,7 +60,22 @@
                 {
                     "target": "com.amazonaws.savingsplans#UntagResource"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "savingsplans",
+                    "arnNamespace": "savingsplans",
+                    "cloudFormationName": "Savingsplans",
+                    "cloudTrailEventSource": "savingsplans.amazonaws.com",
+                    "endpointPrefix": "savingsplans"
+                },
+                "aws.auth#sigv4": {
+                    "name": "savingsplans"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>Savings Plans are a pricing model that offer significant savings on AWS usage (for\n        example, on Amazon EC2 instances). You commit to a consistent amount of usage, in USD\n        per hour, for a term of 1 or 3 years, and receive a lower price for that usage. For\n        more information, see the <a href=\"https://docs.aws.amazon.com/savingsplans/latest/userguide/\">AWS Savings Plans User Guide</a>.</p>",
+                "smithy.api#title": "AWS Savings Plans"
+            }
         },
         "com.amazonaws.savingsplans#Amount": {
             "type": "string"
@@ -428,6 +428,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.savingsplans#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve additional results, make another\n       call with the returned token value.</p>"
                     }
                 }
@@ -553,6 +554,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.savingsplans#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve additional results, make another\n       call with the returned token value.</p>"
                     }
                 }
@@ -734,7 +736,6 @@
         "com.amazonaws.savingsplans#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -744,6 +745,7 @@
         "com.amazonaws.savingsplans#PageSize": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1000
@@ -784,6 +786,7 @@
                 "durationSeconds": {
                     "target": "com.amazonaws.savingsplans#SavingsPlansDuration",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The duration, in seconds.</p>"
                     }
                 },
@@ -929,6 +932,7 @@
                 "termDurationInSeconds": {
                     "target": "com.amazonaws.savingsplans#TermDurationInSeconds",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The duration of the term, in seconds.</p>"
                     }
                 },
@@ -1050,6 +1054,7 @@
                 "durationSeconds": {
                     "target": "com.amazonaws.savingsplans#SavingsPlansDuration",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The duration, in seconds.</p>"
                     }
                 },
@@ -1758,6 +1763,7 @@
         "com.amazonaws.savingsplans#SavingsPlansDuration": {
             "type": "long",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -1905,7 +1911,10 @@
             "type": "string"
         },
         "com.amazonaws.savingsplans#TermDurationInSeconds": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.savingsplans#UUID": {
             "type": "string",

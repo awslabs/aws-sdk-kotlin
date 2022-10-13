@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -421,7 +421,10 @@
             }
         },
         "com.amazonaws.codebuild#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codebuild#BucketOwnerAccess": {
             "type": "string",
@@ -581,6 +584,7 @@
                 "buildComplete": {
                     "target": "com.amazonaws.codebuild#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether the build is complete. True if complete; otherwise, false.</p>"
                     }
                 },
@@ -822,6 +826,7 @@
                 "complete": {
                     "target": "com.amazonaws.codebuild#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if the batch build is complete.</p>"
                     }
                 },
@@ -1013,6 +1018,7 @@
                 "ignoreFailure": {
                     "target": "com.amazonaws.codebuild#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies if failures in this build group can be ignored.</p>"
                     }
                 },
@@ -2088,6 +2094,7 @@
                 "deleteReports": {
                     "target": "com.amazonaws.codebuild#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If <code>true</code>, deletes any reports that belong to a report group before deleting\n            the report group. </p>\n         <p>If <code>false</code>, you must delete any reports in the report group. Use <a href=\"https://docs.aws.amazon.com/codebuild/latest/APIReference/API_ListReportsForReportGroup.html\">ListReportsForReportGroup</a> to get the reports in a report group. Use <a href=\"https://docs.aws.amazon.com/codebuild/latest/APIReference/API_DeleteReport.html\">DeleteReport</a> to delete the reports. If you call\n      <code>DeleteReportGroup</code> for a report group that contains one or more reports,\n            an exception is thrown. </p>"
                     }
                 }
@@ -2710,7 +2717,6 @@
         "com.amazonaws.codebuild#GitCloneDepth": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -3802,7 +3808,6 @@
         "com.amazonaws.codebuild#NonNegativeInt": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -3823,7 +3828,6 @@
         "com.amazonaws.codebuild#PageSize": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -3833,7 +3837,6 @@
         "com.amazonaws.codebuild#Percentage": {
             "type": "double",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -4158,6 +4161,7 @@
                 "badgeEnabled": {
                     "target": "com.amazonaws.codebuild#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set this to true to generate a publicly accessible URL for your project's build\n            badge.</p>"
                     }
                 },
@@ -6194,7 +6198,6 @@
         "com.amazonaws.codebuild#TimeOut": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5,
                     "max": 480
@@ -6525,6 +6528,7 @@
                 "rotateSecret": {
                     "target": "com.amazonaws.codebuild#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> A boolean value that specifies whether the associated GitHub repository's secret\n      token should be updated. If you use Bitbucket for your repository,\n      <code>rotateSecret</code> is ignored. </p>"
                     }
                 },
@@ -6714,22 +6718,13 @@
             }
         },
         "com.amazonaws.codebuild#WrapperBoolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.codebuild#WrapperInt": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.codebuild#WrapperLong": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         }
     }
 }

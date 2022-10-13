@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.kafkaconnect#ApacheKafkaCluster": {
             "type": "structure",
@@ -49,6 +49,7 @@
                 "maxWorkerCount": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max10",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of workers allocated to the connector.</p>",
                         "smithy.api#required": {}
                     }
@@ -56,6 +57,7 @@
                 "mcuCount": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max8",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of microcontroller units (MCUs) allocated to each connector worker. The valid\n         values are 1,2,4,8.</p>",
                         "smithy.api#required": {}
                     }
@@ -63,6 +65,7 @@
                 "minWorkerCount": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max10",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum number of workers allocated to the connector.</p>",
                         "smithy.api#required": {}
                     }
@@ -90,18 +93,21 @@
                 "maxWorkerCount": {
                     "target": "com.amazonaws.kafkaconnect#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of workers allocated to the connector.</p>"
                     }
                 },
                 "mcuCount": {
                     "target": "com.amazonaws.kafkaconnect#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of microcontroller units (MCUs) allocated to each connector worker. The valid\n         values are 1,2,4,8.</p>"
                     }
                 },
                 "minWorkerCount": {
                     "target": "com.amazonaws.kafkaconnect#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum number of workers allocated to the connector.</p>"
                     }
                 },
@@ -128,6 +134,7 @@
                 "maxWorkerCount": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max10",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The target maximum number of workers allocated to the connector.</p>",
                         "smithy.api#required": {}
                     }
@@ -135,6 +142,7 @@
                 "mcuCount": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max8",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The target number of microcontroller units (MCUs) allocated to each connector worker.\n         The valid values are 1,2,4,8.</p>",
                         "smithy.api#required": {}
                     }
@@ -142,6 +150,7 @@
                 "minWorkerCount": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max10",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The target minimum number of workers allocated to the connector.</p>",
                         "smithy.api#required": {}
                     }
@@ -244,6 +253,7 @@
                 "enabled": {
                     "target": "com.amazonaws.kafkaconnect#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether log delivery to Amazon CloudWatch Logs is enabled.</p>",
                         "smithy.api#required": {}
                     }
@@ -265,6 +275,7 @@
                 "enabled": {
                     "target": "com.amazonaws.kafkaconnect#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether log delivery to Amazon CloudWatch Logs is enabled.</p>"
                     }
                 },
@@ -668,6 +679,7 @@
                 "revision": {
                     "target": "com.amazonaws.kafkaconnect#__long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The revision of the custom plugin.</p>"
                     }
                 }
@@ -783,6 +795,7 @@
                 "revision": {
                     "target": "com.amazonaws.kafkaconnect#__longMin1",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The revision of the custom plugin.</p>",
                         "smithy.api#required": {}
                     }
@@ -819,6 +832,7 @@
                 "revision": {
                     "target": "com.amazonaws.kafkaconnect#__long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The revision of the custom plugin.</p>"
                     }
                 }
@@ -839,6 +853,7 @@
                 "fileSize": {
                     "target": "com.amazonaws.kafkaconnect#__long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size in bytes of the custom plugin file. You can use it to validate the file.</p>"
                     }
                 }
@@ -912,6 +927,7 @@
                 "revision": {
                     "target": "com.amazonaws.kafkaconnect#__long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The revision of the custom plugin.</p>"
                     }
                 }
@@ -1507,6 +1523,7 @@
                 "enabled": {
                     "target": "com.amazonaws.kafkaconnect#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether connector logs get delivered to Amazon Kinesis Data Firehose.</p>",
                         "smithy.api#required": {}
                     }
@@ -1528,6 +1545,7 @@
                 "enabled": {
                     "target": "com.amazonaws.kafkaconnect#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether connector logs get delivered to Amazon Kinesis Data Firehose.</p>"
                     }
                 }
@@ -1681,29 +1699,6 @@
         },
         "com.amazonaws.kafkaconnect#KafkaConnect": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "KafkaConnect",
-                    "name": "kafkaconnect",
-                    "arnNamespace": "kafkaconnect",
-                    "cloudFormationName": "KafkaConnect",
-                    "cloudTrailEventSource": "kafkaconnect.amazonaws.com",
-                    "endpointPrefix": "kafkaconnect"
-                },
-                "aws.auth#sigv4": {
-                    "name": "kafkaconnect"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#cors": {
-                    "additionalAllowedHeaders": [
-                        "X-Api-Key",
-                        "Content-Type",
-                        "Content-Length"
-                    ]
-                },
-                "smithy.api#documentation": "<p/>",
-                "smithy.api#title": "Managed Streaming for Kafka Connect"
-            },
             "version": "2021-09-14",
             "operations": [
                 {
@@ -1742,7 +1737,30 @@
                 {
                     "target": "com.amazonaws.kafkaconnect#UpdateConnector"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "KafkaConnect",
+                    "name": "kafkaconnect",
+                    "arnNamespace": "kafkaconnect",
+                    "cloudFormationName": "KafkaConnect",
+                    "cloudTrailEventSource": "kafkaconnect.amazonaws.com",
+                    "endpointPrefix": "kafkaconnect"
+                },
+                "aws.auth#sigv4": {
+                    "name": "kafkaconnect"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#cors": {
+                    "additionalAllowedHeaders": [
+                        "X-Api-Key",
+                        "Content-Type",
+                        "Content-Length"
+                    ]
+                },
+                "smithy.api#documentation": "<p/>",
+                "smithy.api#title": "Managed Streaming for Kafka Connect"
+            }
         },
         "com.amazonaws.kafkaconnect#ListConnectors": {
             "type": "operation",
@@ -1804,6 +1822,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.kafkaconnect#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of connectors to list in one response.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1887,6 +1906,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.kafkaconnect#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of custom plugins to list in one response.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1970,6 +1990,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.kafkaconnect#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of worker configurations to list in one response.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -2032,6 +2053,7 @@
         "com.amazonaws.kafkaconnect#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -2086,6 +2108,7 @@
                 "mcuCount": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max8",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of microcontroller units (MCUs) allocated to each connector worker. The valid\n         values are 1,2,4,8.</p>",
                         "smithy.api#required": {}
                     }
@@ -2093,6 +2116,7 @@
                 "workerCount": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max10",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of workers that are allocated to the connector.</p>",
                         "smithy.api#required": {}
                     }
@@ -2108,12 +2132,14 @@
                 "mcuCount": {
                     "target": "com.amazonaws.kafkaconnect#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of microcontroller units (MCUs) allocated to each connector worker. The valid\n         values are 1,2,4,8.</p>"
                     }
                 },
                 "workerCount": {
                     "target": "com.amazonaws.kafkaconnect#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of workers that are allocated to the connector.</p>"
                     }
                 }
@@ -2128,6 +2154,7 @@
                 "mcuCount": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max8",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of microcontroller units (MCUs) allocated to each connector worker. The valid\n         values are 1,2,4,8.</p>",
                         "smithy.api#required": {}
                     }
@@ -2135,6 +2162,7 @@
                 "workerCount": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max10",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of workers that are allocated to the connector.</p>",
                         "smithy.api#required": {}
                     }
@@ -2210,6 +2238,7 @@
                 "enabled": {
                     "target": "com.amazonaws.kafkaconnect#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether connector logs get sent to the specified Amazon S3 destination.</p>",
                         "smithy.api#required": {}
                     }
@@ -2237,6 +2266,7 @@
                 "enabled": {
                     "target": "com.amazonaws.kafkaconnect#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether connector logs get sent to the specified Amazon S3 destination.</p>"
                     }
                 },
@@ -2257,6 +2287,7 @@
                 "cpuUtilizationPercentage": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max100",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the CPU utilization percentage threshold at which you want connector scale in\n         to be triggered.</p>",
                         "smithy.api#required": {}
                     }
@@ -2272,6 +2303,7 @@
                 "cpuUtilizationPercentage": {
                     "target": "com.amazonaws.kafkaconnect#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the CPU utilization percentage threshold at which you want connector scale in\n         to be triggered.</p>"
                     }
                 }
@@ -2286,6 +2318,7 @@
                 "cpuUtilizationPercentage": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max100",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The target CPU utilization percentage threshold at which you want connector scale in to\n         be triggered.</p>",
                         "smithy.api#required": {}
                     }
@@ -2301,6 +2334,7 @@
                 "cpuUtilizationPercentage": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max100",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The CPU utilization percentage threshold at which you want connector scale out to be\n         triggered.</p>",
                         "smithy.api#required": {}
                     }
@@ -2316,6 +2350,7 @@
                 "cpuUtilizationPercentage": {
                     "target": "com.amazonaws.kafkaconnect#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The CPU utilization percentage threshold at which you want connector scale out to be\n         triggered.</p>"
                     }
                 }
@@ -2330,6 +2365,7 @@
                 "cpuUtilizationPercentage": {
                     "target": "com.amazonaws.kafkaconnect#__integerMin1Max100",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The target CPU utilization percentage threshold at which you want connector scale out to\n         be triggered.</p>",
                         "smithy.api#required": {}
                     }
@@ -2531,6 +2567,7 @@
                 "revision": {
                     "target": "com.amazonaws.kafkaconnect#__longMin1",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The revision of the worker configuration.</p>",
                         "smithy.api#required": {}
                     }
@@ -2553,6 +2590,7 @@
                 "revision": {
                     "target": "com.amazonaws.kafkaconnect#__long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The revision of the worker configuration.</p>"
                     }
                 },
@@ -2591,6 +2629,7 @@
                 "revision": {
                     "target": "com.amazonaws.kafkaconnect#__long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The description of a revision of the worker configuration.</p>"
                     }
                 }
@@ -2617,6 +2656,7 @@
                 "revision": {
                     "target": "com.amazonaws.kafkaconnect#__long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The revision of a worker configuration.</p>"
                     }
                 }
@@ -2716,14 +2756,21 @@
             }
         },
         "com.amazonaws.kafkaconnect#__boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.kafkaconnect#__integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.kafkaconnect#__integerMin1Max10": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10
@@ -2733,6 +2780,7 @@
         "com.amazonaws.kafkaconnect#__integerMin1Max100": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -2742,6 +2790,7 @@
         "com.amazonaws.kafkaconnect#__integerMin1Max8": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 8
@@ -2785,11 +2834,15 @@
             }
         },
         "com.amazonaws.kafkaconnect#__long": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.kafkaconnect#__longMin1": {
             "type": "long",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 9223372036854775807

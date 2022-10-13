@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -276,6 +276,9 @@
             "input": {
                 "target": "com.amazonaws.sagemakerfeaturestoreruntime#DeleteRecordRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.sagemakerfeaturestoreruntime#AccessForbidden"
@@ -480,6 +483,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.sagemakerfeaturestoreruntime#PutRecordRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {

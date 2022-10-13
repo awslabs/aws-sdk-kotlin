@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -240,6 +240,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#AssignInstanceRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -276,6 +279,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#AssignVolumeRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -311,6 +317,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#AssociateElasticIpRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -345,6 +354,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#AttachElasticLoadBalancerRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -481,10 +493,7 @@
             }
         },
         "com.amazonaws.opsworks#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.opsworks#ChefConfiguration": {
             "type": "structure",
@@ -2026,6 +2035,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#DeleteAppRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -2054,6 +2066,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#DeleteInstanceRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2096,6 +2111,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#DeleteLayerRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -2125,6 +2143,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#DeleteStackRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -2153,6 +2174,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#DeleteUserProfileRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2354,6 +2378,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#DeregisterEcsClusterRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -2382,6 +2409,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#DeregisterElasticIpRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2412,6 +2442,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#DeregisterInstanceRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -2441,6 +2474,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#DeregisterRdsDbInstanceRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -2469,6 +2505,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#DeregisterVolumeRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -3478,6 +3517,9 @@
         },
         "com.amazonaws.opsworks#DescribeMyUserProfile": {
             "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
             "output": {
                 "target": "com.amazonaws.opsworks#DescribeMyUserProfileResult"
             },
@@ -3501,6 +3543,9 @@
         },
         "com.amazonaws.opsworks#DescribeOperatingSystems": {
             "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
             "output": {
                 "target": "com.amazonaws.opsworks#DescribeOperatingSystemsResponse"
             },
@@ -4041,6 +4086,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#DetachElasticLoadBalancerRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -4074,6 +4122,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#DisassociateElasticIpRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -4099,10 +4150,7 @@
             }
         },
         "com.amazonaws.opsworks#Double": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.opsworks#EbsBlockDevice": {
             "type": "structure",
@@ -4842,10 +4890,7 @@
             }
         },
         "com.amazonaws.opsworks#Integer": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.opsworks#Layer": {
             "type": "structure",
@@ -5217,6 +5262,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opsworks#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Do not use. A validation exception occurs if you add a <code>MaxResults</code> parameter to a <code>ListTagsRequest</code> call.\n      </p>"
                     }
                 },
@@ -5287,12 +5333,14 @@
             }
         },
         "com.amazonaws.opsworks#MaxResults": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.opsworks#Minute": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -5848,6 +5896,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#RebootInstanceRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -6103,6 +6154,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#RegisterRdsDbInstanceRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -6346,6 +6400,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#SetLoadBasedAutoScalingRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -6392,6 +6449,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#SetPermissionRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -6446,6 +6506,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#SetTimeBasedAutoScalingRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -6827,6 +6890,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#StartInstanceRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -6856,6 +6922,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#StartStackRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -6884,6 +6953,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#StopInstanceRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -6919,6 +6991,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#StopStackRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -6969,6 +7044,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#TagResourceRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -7076,6 +7154,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#UnassignInstanceRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -7105,6 +7186,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#UnassignVolumeRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -7133,6 +7217,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#UntagResourceRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -7169,6 +7256,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#UpdateAppRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -7259,6 +7349,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#UpdateElasticIpRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -7293,6 +7386,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#UpdateInstanceRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -7388,6 +7484,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#UpdateLayerRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -7514,6 +7613,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#UpdateMyUserProfileRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ValidationException"
@@ -7538,6 +7640,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#UpdateRdsDbInstanceRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -7579,6 +7684,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#UpdateStackRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -7711,6 +7819,9 @@
             "input": {
                 "target": "com.amazonaws.opsworks#UpdateUserProfileRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.opsworks#ResourceNotFoundException"
@@ -7757,6 +7868,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.opsworks#UpdateVolumeRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -7841,7 +7955,6 @@
         "com.amazonaws.opsworks#ValidForInMinutes": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 60,
                     "max": 1440

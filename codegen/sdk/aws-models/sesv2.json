@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -503,6 +503,7 @@
                 "UnsubscribeAll": {
                     "target": "com.amazonaws.sesv2#UnsubscribeAll",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A boolean value status noting if the contact is unsubscribed from all contact list\n            topics.</p>"
                     }
                 },
@@ -899,6 +900,7 @@
                 "UnsubscribeAll": {
                     "target": "com.amazonaws.sesv2#UnsubscribeAll",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A boolean value status noting if the contact is unsubscribed from all contact list\n            topics.</p>"
                     }
                 },
@@ -1323,6 +1325,7 @@
                 "VerifiedForSendingStatus": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether or not the identity is verified. You can only send email from\n            verified email addresses or domains. For more information about verifying identities,\n            see the <a href=\"https://docs.aws.amazon.com/pinpoint/latest/userguide/channels-email-manage-verify.html\">Amazon Pinpoint User Guide</a>.</p>"
                     }
                 },
@@ -2322,6 +2325,7 @@
                 "SigningEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If the value is <code>true</code>, then the messages that you send from the identity\n            are signed using DKIM. If the value is <code>false</code>, then the messages that you\n            send from the identity aren't DKIM-signed.</p>"
                     }
                 },
@@ -2770,13 +2774,13 @@
             }
         },
         "com.amazonaws.sesv2#Enabled": {
-            "type": "boolean"
-        },
-        "com.amazonaws.sesv2#EnabledWrapper": {
             "type": "boolean",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": false
             }
+        },
+        "com.amazonaws.sesv2#EnabledWrapper": {
+            "type": "boolean"
         },
         "com.amazonaws.sesv2#ErrorMessage": {
             "type": "string"
@@ -2803,6 +2807,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If <code>true</code>, the event destination is enabled. When the event destination is\n            enabled, the specified event types are sent to the destinations in this\n                <code>EventDestinationDefinition</code>.</p>\n        <p>If <code>false</code>, the event destination is disabled. When the event destination\n            is disabled, events aren't sent to the specified destinations.</p>"
                     }
                 },
@@ -2848,6 +2853,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If <code>true</code>, the event destination is enabled. When the event destination is\n            enabled, the specified event types are sent to the destinations in this\n                <code>EventDestinationDefinition</code>.</p>\n        <p>If <code>false</code>, the event destination is disabled. When the event destination\n            is disabled, events aren't sent to the specified destinations.</p>"
                     }
                 },
@@ -2953,10 +2959,7 @@
             }
         },
         "com.amazonaws.sesv2#FailedRecordsCount": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.sesv2#FailedRecordsS3Url": {
             "type": "string"
@@ -3031,6 +3034,7 @@
                 "DedicatedIpAutoWarmupEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether or not the automatic warm-up feature is enabled for dedicated IP\n            addresses that are associated with your account.</p>"
                     }
                 },
@@ -3043,6 +3047,7 @@
                 "ProductionAccessEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether or not your account has production access in the current Amazon Web Services\n            Region.</p>\n        <p>If the value is <code>false</code>, then your account is in the\n                <i>sandbox</i>. When your account is in the sandbox, you can only send\n            email to verified identities. Additionally, the maximum number of emails you can send in\n            a 24-hour period (your sending quota) is 200, and the maximum number of emails you can\n            send per second (your maximum sending rate) is 1.</p>\n        <p>If the value is <code>true</code>, then your account has production access. When your\n            account has production access, you can send email to any address. The sending quota and\n            maximum sending rate for your account vary based on your specific use case.</p>"
                     }
                 },
@@ -3055,6 +3060,7 @@
                 "SendingEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether or not email sending is enabled for your Amazon SES account in the\n            current Amazon Web Services Region.</p>"
                     }
                 },
@@ -3447,6 +3453,7 @@
                 "UnsubscribeAll": {
                     "target": "com.amazonaws.sesv2#UnsubscribeAll",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A boolean value status noting if the contact is unsubscribed from all contact list\n            topics.</p>"
                     }
                 },
@@ -3739,6 +3746,7 @@
                 "DashboardEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the Deliverability dashboard is enabled. If this value is <code>true</code>,\n            the dashboard is enabled.</p>",
                         "smithy.api#required": {}
                     }
@@ -4112,12 +4120,14 @@
                 "FeedbackForwardingStatus": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The feedback forwarding configuration for the identity.</p>\n        <p>If the value is <code>true</code>, you receive email notifications when bounce or\n            complaint events occur. These notifications are sent to the address that you specified\n            in the <code>Return-Path</code> header of the original email.</p>\n        <p>You're required to have a method of tracking bounces and complaints. If you haven't\n            set up another mechanism for receiving bounce or complaint notifications (for example,\n            by setting up an event destination), you receive an email notification when these events\n            occur (even if this setting is disabled).</p>"
                     }
                 },
                 "VerifiedForSendingStatus": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether or not the identity is verified. You can only send email from\n            verified email addresses or domains. For more information about verifying identities,\n            see the <a href=\"https://docs.aws.amazon.com/pinpoint/latest/userguide/channels-email-manage-verify.html\">Amazon Pinpoint User Guide</a>.</p>"
                     }
                 },
@@ -4413,6 +4423,7 @@
                 "SendingEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether or not you can send email from the identity.</p>\n        <p>An <i>identity</i> is an email address or domain that you send email\n            from. Before you can send email from an identity, you have to demostrate that you own\n            the identity, and that you authorize Amazon SES to send email from that identity.</p>"
                     }
                 }
@@ -4545,6 +4556,7 @@
                 "Global": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether inbox placement data is being tracked for the domain.</p>"
                     }
                 },
@@ -5758,16 +5770,19 @@
             }
         },
         "com.amazonaws.sesv2#Max24HourSend": {
-            "type": "double"
-        },
-        "com.amazonaws.sesv2#MaxItems": {
-            "type": "integer",
+            "type": "double",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": 0
             }
         },
+        "com.amazonaws.sesv2#MaxItems": {
+            "type": "integer"
+        },
         "com.amazonaws.sesv2#MaxSendRate": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.sesv2#Message": {
             "type": "structure",
@@ -5904,15 +5919,11 @@
         "com.amazonaws.sesv2#Percentage": {
             "type": "double",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#documentation": "<p>An object that contains information about inbox placement percentages.</p>"
             }
         },
         "com.amazonaws.sesv2#Percentage100Wrapper": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.sesv2#PinpointDestination": {
             "type": "structure",
@@ -6015,10 +6026,7 @@
             }
         },
         "com.amazonaws.sesv2#ProcessedRecordsCount": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.sesv2#PutAccountDedicatedIpWarmupAttributes": {
             "type": "operation",
@@ -6051,6 +6059,7 @@
                 "AutoWarmupEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Enables or disables the automatic warm-up feature for dedicated IP addresses that are\n            associated with your Amazon SES account in the current Amazon Web Services Region. Set to <code>true</code>\n            to enable the automatic warm-up feature, or set to <code>false</code> to disable\n            it.</p>"
                     }
                 }
@@ -6179,6 +6188,7 @@
                 "SendingEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Enables or disables your account's ability to send email. Set to <code>true</code> to\n            enable email sending, or set to <code>false</code> to disable email sending.</p>\n        <note>\n            <p>If Amazon Web Services paused your account's ability to send email, you can't use this operation\n                to resume your account's ability to send email.</p>\n        </note>"
                     }
                 }
@@ -6345,6 +6355,7 @@
                 "ReputationMetricsEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If <code>true</code>, tracking of reputation metrics is enabled for the configuration\n            set. If <code>false</code>, tracking of reputation metrics is disabled for the\n            configuration set.</p>"
                     }
                 }
@@ -6402,6 +6413,7 @@
                 "SendingEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If <code>true</code>, email sending is enabled for the configuration set. If\n                <code>false</code>, email sending is disabled for the configuration set.</p>"
                     }
                 }
@@ -6687,6 +6699,7 @@
                 "DashboardEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether to enable the Deliverability dashboard. To enable the dashboard, set this\n            value to <code>true</code>.</p>",
                         "smithy.api#required": {}
                     }
@@ -6808,6 +6821,7 @@
                 "SigningEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Sets the DKIM signing configuration for the identity.</p>\n        <p>When you set this value <code>true</code>, then the messages that are sent from the\n            identity are signed using DKIM. If you set this value to <code>false</code>, your\n            messages are sent without DKIM signing.</p>"
                     }
                 }
@@ -6942,6 +6956,7 @@
                 "EmailForwardingEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Sets the feedback forwarding configuration for the identity.</p>\n        <p>If the value is <code>true</code>, you receive email notifications when bounce or\n            complaint events occur. These notifications are sent to the address that you specified\n            in the <code>Return-Path</code> header of the original email.</p>\n        <p>You're required to have a method of tracking bounces and complaints. If you haven't\n            set up another mechanism for receiving bounce or complaint notifications (for example,\n            by setting up an event destination), you receive an email notification when these events\n            occur (even if this setting is disabled).</p>"
                     }
                 }
@@ -7153,6 +7168,7 @@
                 "ReputationMetricsEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If <code>true</code>, tracking of reputation metrics is enabled for the configuration\n            set. If <code>false</code>, tracking of reputation metrics is disabled for the\n            configuration set.</p>"
                     }
                 },
@@ -7563,18 +7579,21 @@
                 "Max24HourSend": {
                     "target": "com.amazonaws.sesv2#Max24HourSend",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of emails that you can send in the current Amazon Web Services Region over a\n            24-hour period. This value is also called your <i>sending\n            quota</i>.</p>"
                     }
                 },
                 "MaxSendRate": {
                     "target": "com.amazonaws.sesv2#MaxSendRate",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of emails that you can send per second in the current Amazon Web Services Region.\n            This value is also called your <i>maximum sending rate</i> or your\n                <i>maximum TPS (transactions per second) rate</i>.</p>"
                     }
                 },
                 "SentLast24Hours": {
                     "target": "com.amazonaws.sesv2#SentLast24Hours",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of emails sent from your Amazon SES account in the current Amazon Web Services Region over the\n            past 24 hours.</p>"
                     }
                 }
@@ -7589,6 +7608,7 @@
                 "SendingEnabled": {
                     "target": "com.amazonaws.sesv2#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If <code>true</code>, email sending is enabled for the configuration set. If\n                <code>false</code>, email sending is disabled for the configuration set.</p>"
                     }
                 }
@@ -7617,7 +7637,10 @@
             }
         },
         "com.amazonaws.sesv2#SentLast24Hours": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.sesv2#SimpleEmailService_v2": {
             "type": "service",
@@ -8364,6 +8387,7 @@
                 "UseDefaultIfPreferenceUnavailable": {
                     "target": "com.amazonaws.sesv2#UseDefaultIfPreferenceUnavailable",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Notes that the default subscription status should be applied to a contact because the\n            contact has not noted their preference for subscribing to a topic.</p>"
                     }
                 }
@@ -8425,7 +8449,10 @@
             }
         },
         "com.amazonaws.sesv2#UnsubscribeAll": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.sesv2#UntagResource": {
             "type": "operation",
@@ -8668,6 +8695,7 @@
                 "UnsubscribeAll": {
                     "target": "com.amazonaws.sesv2#UnsubscribeAll",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A boolean value status noting if the contact is unsubscribed from all contact list\n            topics.</p>"
                     }
                 },
@@ -8904,12 +8932,14 @@
             }
         },
         "com.amazonaws.sesv2#UseDefaultIfPreferenceUnavailable": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.sesv2#Volume": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#documentation": "<p>An object that contains information about inbox placement volume.</p>"
             }
         },

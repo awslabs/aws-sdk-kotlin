@@ -7756,8 +7756,6 @@
                 "active": {
                     "target": "com.amazonaws.lexmodelsv2#BoxedBoolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": true,
                         "smithy.api#documentation": "<p>Specifies whether an intent's closing response is used. When this\n         field is false, the closing response isn't sent to the user. If the\n            <code>active</code> field isn't specified, the default is\n         true.</p>"
                     }
                 },
@@ -7797,8 +7795,6 @@
                 "active": {
                     "target": "com.amazonaws.lexmodelsv2#BoxedBoolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": true,
                         "smithy.api#documentation": "<p>Specifies whether the intent's confirmation is sent to the user.\n         When this field is false, confirmation and declination responses aren't\n         sent. If the <code>active</code> field isn't specified, the default is\n         true.</p>"
                     }
                 },
@@ -11060,8 +11056,6 @@
                 "searchOrder": {
                     "target": "com.amazonaws.lexmodelsv2#SearchOrder",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "Descending",
                         "smithy.api#documentation": "<p>How SearchResults are ordered. Valid values are Ascending or\n         Descending. The default is Descending.</p>"
                     }
                 },
@@ -11918,8 +11912,6 @@
                 "resolutionStrategy": {
                     "target": "com.amazonaws.lexmodelsv2#SlotValueResolutionStrategy",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "OriginalValue",
                         "smithy.api#documentation": "<p>Determines the slot resolution strategy that Amazon Lex uses to\n         return slot type values. The field can be set to one of the following\n         values:</p>\n\n         <ul>\n            <li>\n               <p>OriginalValue - Returns the value entered by the user, if the\n               user value is similar to the slot value.</p>\n            </li>\n            <li>\n               <p>TopResolution - If there is a resolution list for the slot,\n               return the first value in the resolution list as the slot type\n               value. If there is no resolution list, null is returned.</p>\n            </li>\n         </ul>\n\n         <p>If you don't specify the valueSelectionStrategy, the default is\n         OriginalValue. </p>",
                         "smithy.api#required": {}
                     }
@@ -14392,8 +14384,6 @@
                 "engine": {
                     "target": "com.amazonaws.lexmodelsv2#VoiceEngine",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "standard",
                         "smithy.api#documentation": "<p>Indicates the type of Amazon Polly voice that Amazon Lex should use for voice interaction with the user. For more\n         information, see the <a href=\"https://docs.aws.amazon.com/polly/latest/dg/API_SynthesizeSpeech.html#polly-SynthesizeSpeech-request-Engine\">\n               <code>engine</code> parameter of the\n               <code>SynthesizeSpeech</code> operation</a> in the\n               <i>Amazon Polly developer guide</i>.</p>\n         <p>If you do not specify a value, the default is\n         <code>standard</code>.</p>"
                     }
                 }
@@ -14428,8 +14418,6 @@
                 "active": {
                     "target": "com.amazonaws.lexmodelsv2#BoxedBoolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": true,
                         "smithy.api#documentation": "<p>Specifies whether the bot will wait for a user to respond. When this\n         field is false, wait and continue responses for a slot aren't used. If\n         the <code>active</code> field isn't specified, the default is\n         true.</p>"
                     }
                 }

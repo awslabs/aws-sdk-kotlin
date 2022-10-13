@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -177,6 +177,7 @@
                 "IncludeEncoderConfigurationInSegments": {
                     "target": "com.amazonaws.mediapackagevod#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback.",
                         "smithy.api#jsonName": "includeEncoderConfigurationInSegments"
                     }
@@ -184,6 +185,7 @@
                 "SegmentDurationSeconds": {
                     "target": "com.amazonaws.mediapackagevod#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Duration (in seconds) of each fragment. Actual fragments will be\nrounded to the nearest multiple of the source fragment duration.",
                         "smithy.api#jsonName": "segmentDurationSeconds"
                     }
@@ -750,6 +752,7 @@
                 "MinBufferTimeSeconds": {
                     "target": "com.amazonaws.mediapackagevod#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Minimum duration (in seconds) that a player will buffer media before starting the presentation.",
                         "smithy.api#jsonName": "minBufferTimeSeconds"
                     }
@@ -799,6 +802,7 @@
                 "IncludeEncoderConfigurationInSegments": {
                     "target": "com.amazonaws.mediapackagevod#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback.",
                         "smithy.api#jsonName": "includeEncoderConfigurationInSegments"
                     }
@@ -813,6 +817,7 @@
                 "SegmentDurationSeconds": {
                     "target": "com.amazonaws.mediapackagevod#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Duration (in seconds) of each segment. Actual segments will be\nrounded to the nearest multiple of the source segment duration.",
                         "smithy.api#jsonName": "segmentDurationSeconds"
                     }
@@ -1425,6 +1430,7 @@
                 "IncludeIframeOnlyStream": {
                     "target": "com.amazonaws.mediapackagevod#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "When enabled, an I-Frame only stream will be included in the output.",
                         "smithy.api#jsonName": "includeIframeOnlyStream"
                     }
@@ -1439,6 +1445,7 @@
                 "ProgramDateTimeIntervalSeconds": {
                     "target": "com.amazonaws.mediapackagevod#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "The interval (in seconds) between each EXT-X-PROGRAM-DATE-TIME tag\ninserted into manifests. Additionally, when an interval is specified\nID3Timed Metadata messages will be generated every 5 seconds using the\ningest time of the content.\nIf the interval is not specified, or set to 0, then\nno EXT-X-PROGRAM-DATE-TIME tags will be inserted into manifests and no\nID3Timed Metadata messages will be generated. Note that irrespective\nof this parameter, if any ID3 Timed Metadata is found in HTTP Live Streaming (HLS) input,\nit will be passed through to HLS output.",
                         "smithy.api#jsonName": "programDateTimeIntervalSeconds"
                     }
@@ -1446,6 +1453,7 @@
                 "RepeatExtXKey": {
                     "target": "com.amazonaws.mediapackagevod#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "When enabled, the EXT-X-KEY tag will be repeated in output manifests.",
                         "smithy.api#jsonName": "repeatExtXKey"
                     }
@@ -1481,6 +1489,7 @@
                 "IncludeDvbSubtitles": {
                     "target": "com.amazonaws.mediapackagevod#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "When enabled, MediaPackage passes through digital video broadcasting (DVB) subtitles into the output.",
                         "smithy.api#jsonName": "includeDvbSubtitles"
                     }
@@ -1488,6 +1497,7 @@
                 "SegmentDurationSeconds": {
                     "target": "com.amazonaws.mediapackagevod#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Duration (in seconds) of each fragment. Actual fragments will be\nrounded to the nearest multiple of the source fragment duration.",
                         "smithy.api#jsonName": "segmentDurationSeconds"
                     }
@@ -1495,6 +1505,7 @@
                 "UseAudioRenditionGroup": {
                     "target": "com.amazonaws.mediapackagevod#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "When enabled, audio streams will be placed in rendition groups in the output.",
                         "smithy.api#jsonName": "useAudioRenditionGroup"
                     }
@@ -1569,6 +1580,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.mediapackagevod#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Upper bound on number of records to return.",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1657,6 +1669,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.mediapackagevod#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Upper bound on number of records to return.",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1745,6 +1758,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.mediapackagevod#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Upper bound on number of records to return.",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1837,6 +1851,7 @@
         "com.amazonaws.mediapackagevod#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -1845,21 +1860,6 @@
         },
         "com.amazonaws.mediapackagevod#MediaPackageVod": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "MediaPackage Vod",
-                    "arnNamespace": "mediapackage-vod",
-                    "cloudFormationName": "MediaPackageVod",
-                    "cloudTrailEventSource": "mediapackagevod.amazonaws.com",
-                    "endpointPrefix": "mediapackage-vod"
-                },
-                "aws.auth#sigv4": {
-                    "name": "mediapackage-vod"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "AWS Elemental MediaPackage VOD",
-                "smithy.api#title": "AWS Elemental MediaPackage VOD"
-            },
             "version": "2018-11-07",
             "operations": [
                 {
@@ -1913,7 +1913,22 @@
                 {
                     "target": "com.amazonaws.mediapackagevod#UpdatePackagingGroup"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "MediaPackage Vod",
+                    "arnNamespace": "mediapackage-vod",
+                    "cloudFormationName": "MediaPackageVod",
+                    "cloudTrailEventSource": "mediapackagevod.amazonaws.com",
+                    "endpointPrefix": "mediapackage-vod"
+                },
+                "aws.auth#sigv4": {
+                    "name": "mediapackage-vod"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "AWS Elemental MediaPackage VOD",
+                "smithy.api#title": "AWS Elemental MediaPackage VOD"
+            }
         },
         "com.amazonaws.mediapackagevod#MssEncryption": {
             "type": "structure",
@@ -1971,6 +1986,7 @@
                 "SegmentDurationSeconds": {
                     "target": "com.amazonaws.mediapackagevod#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "The duration (in seconds) of each segment.",
                         "smithy.api#jsonName": "segmentDurationSeconds"
                     }
@@ -2224,6 +2240,7 @@
                 "MaxVideoBitsPerSecond": {
                     "target": "com.amazonaws.mediapackagevod#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "The maximum video bitrate (bps) to include in output.",
                         "smithy.api#jsonName": "maxVideoBitsPerSecond"
                     }
@@ -2231,6 +2248,7 @@
                 "MinVideoBitsPerSecond": {
                     "target": "com.amazonaws.mediapackagevod#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "The minimum video bitrate (bps) to include in output.",
                         "smithy.api#jsonName": "minVideoBitsPerSecond"
                     }
@@ -2251,6 +2269,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.mediapackagevod#TagResourceRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#documentation": "Adds tags to the specified resource. You can specify one or more tags to add.",
@@ -2330,6 +2351,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.mediapackagevod#UntagResourceRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#documentation": "Removes tags from the specified resource. You can specify one or more tags to remove.",
@@ -2476,10 +2500,16 @@
             }
         },
         "com.amazonaws.mediapackagevod#__boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.mediapackagevod#__integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.mediapackagevod#__listOfAssetShallow": {
             "type": "list",

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -99,7 +99,7 @@
                 "required": {
                     "target": "com.amazonaws.fis#ActionParameterRequired",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Indicates whether the parameter is required.</p>"
                     }
                 }
@@ -138,7 +138,10 @@
             }
         },
         "com.amazonaws.fis#ActionParameterRequired": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.fis#ActionSummary": {
             "type": "structure",
@@ -1805,21 +1808,6 @@
         },
         "com.amazonaws.fis#FaultInjectionSimulator": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "fis",
-                    "arnNamespace": "fis",
-                    "cloudFormationName": "Fis",
-                    "cloudTrailEventSource": "fis.amazonaws.com",
-                    "endpointPrefix": "fis"
-                },
-                "aws.auth#sigv4": {
-                    "name": "fis"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>Fault Injection Simulator is a managed service that enables you to perform fault injection \n           experiments on your Amazon Web Services workloads. For more information, see the <a href=\"https://docs.aws.amazon.com/fis/latest/userguide/\">Fault Injection Simulator User Guide</a>.</p>",
-                "smithy.api#title": "AWS Fault Injection Simulator"
-            },
             "version": "2020-12-01",
             "operations": [
                 {
@@ -1870,7 +1858,22 @@
                 {
                     "target": "com.amazonaws.fis#UpdateExperimentTemplate"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "fis",
+                    "arnNamespace": "fis",
+                    "cloudFormationName": "Fis",
+                    "cloudTrailEventSource": "fis.amazonaws.com",
+                    "endpointPrefix": "fis"
+                },
+                "aws.auth#sigv4": {
+                    "name": "fis"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>Fault Injection Simulator is a managed service that enables you to perform fault injection \n           experiments on your Amazon Web Services workloads. For more information, see the <a href=\"https://docs.aws.amazon.com/fis/latest/userguide/\">Fault Injection Simulator User Guide</a>.</p>",
+                "smithy.api#title": "AWS Fault Injection Simulator"
+            }
         },
         "com.amazonaws.fis#GetAction": {
             "type": "operation",
@@ -2101,6 +2104,7 @@
         "com.amazonaws.fis#ListActionsMaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -2113,7 +2117,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.fis#ListActionsMaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -2174,6 +2178,7 @@
         "com.amazonaws.fis#ListExperimentTemplatesMaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -2186,7 +2191,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.fis#ListExperimentTemplatesMaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -2247,6 +2252,7 @@
         "com.amazonaws.fis#ListExperimentsMaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -2259,7 +2265,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.fis#ListExperimentsMaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -2361,6 +2367,7 @@
         "com.amazonaws.fis#ListTargetResourceTypesMaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -2373,7 +2380,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.fis#ListTargetResourceTypesMaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -2405,10 +2412,7 @@
             }
         },
         "com.amazonaws.fis#LogSchemaVersion": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.fis#NextToken": {
             "type": "string",
@@ -2783,7 +2787,7 @@
                 "required": {
                     "target": "com.amazonaws.fis#TargetResourceTypeParameterRequired",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Indicates whether the parameter is required.</p>"
                     }
                 }
@@ -2822,7 +2826,10 @@
             }
         },
         "com.amazonaws.fis#TargetResourceTypeParameterRequired": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.fis#TargetResourceTypeSummary": {
             "type": "structure",

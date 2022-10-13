@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -1023,6 +1023,7 @@
                 "DeleteLambda": {
                     "target": "com.amazonaws.synthetics#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether to also delete the Lambda functions and layers used by this canary. The default\n      is false.</p>\n         <p>Type: Boolean</p>",
                         "smithy.api#httpQuery": "deleteLambda"
                     }
@@ -2007,7 +2008,6 @@
         "com.amazonaws.synthetics#MaxCanaryResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 20
@@ -2017,7 +2017,6 @@
         "com.amazonaws.synthetics#MaxFifteenMinutesInSeconds": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 3,
                     "max": 840
@@ -2027,7 +2026,6 @@
         "com.amazonaws.synthetics#MaxGroupResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 20
@@ -2037,7 +2035,6 @@
         "com.amazonaws.synthetics#MaxOneYearInSeconds": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 31622400
@@ -2047,7 +2044,6 @@
         "com.amazonaws.synthetics#MaxSize100": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -2057,7 +2053,6 @@
         "com.amazonaws.synthetics#MaxSize1024": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1024
@@ -2067,7 +2062,6 @@
         "com.amazonaws.synthetics#MaxSize3008": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 960,
                     "max": 3008
@@ -2088,10 +2082,7 @@
             }
         },
         "com.amazonaws.synthetics#NullableBoolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.synthetics#PaginationToken": {
             "type": "string",
@@ -2363,21 +2354,6 @@
         },
         "com.amazonaws.synthetics#Synthetics": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "synthetics",
-                    "arnNamespace": "synthetics",
-                    "cloudFormationName": "Synthetics",
-                    "cloudTrailEventSource": "synthetics.amazonaws.com",
-                    "endpointPrefix": "synthetics"
-                },
-                "aws.auth#sigv4": {
-                    "name": "synthetics"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<fullname>Amazon CloudWatch Synthetics</fullname>\n         <p>You can use Amazon CloudWatch Synthetics to continually monitor your services. You can\n         create and manage <i>canaries</i>, which are modular, lightweight scripts \n         that monitor your endpoints and APIs\n            from the outside-in. You can set up your canaries to run\n         24 hours a day, once per minute. The canaries help you check the availability and latency\n         of your web services and troubleshoot anomalies by investigating load time data,\n         screenshots of the UI, logs, and metrics. The canaries seamlessly integrate with CloudWatch\n         ServiceLens to help you trace the causes of impacted nodes in your applications. For more\n         information, see <a href=\"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ServiceLens.html\">Using ServiceLens to Monitor\n            the Health of Your Applications</a> in the <i>Amazon CloudWatch User\n            Guide</i>.</p>\n      \n         <p>Before you create and manage canaries, be aware of the security considerations. For more\n         information, see <a href=\"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/servicelens_canaries_security.html\">Security\n            Considerations for Synthetics Canaries</a>.</p>",
-                "smithy.api#title": "Synthetics"
-            },
             "version": "2017-10-11",
             "operations": [
                 {
@@ -2443,7 +2419,22 @@
                 {
                     "target": "com.amazonaws.synthetics#UpdateCanary"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "synthetics",
+                    "arnNamespace": "synthetics",
+                    "cloudFormationName": "Synthetics",
+                    "cloudTrailEventSource": "synthetics.amazonaws.com",
+                    "endpointPrefix": "synthetics"
+                },
+                "aws.auth#sigv4": {
+                    "name": "synthetics"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<fullname>Amazon CloudWatch Synthetics</fullname>\n         <p>You can use Amazon CloudWatch Synthetics to continually monitor your services. You can\n         create and manage <i>canaries</i>, which are modular, lightweight scripts \n         that monitor your endpoints and APIs\n            from the outside-in. You can set up your canaries to run\n         24 hours a day, once per minute. The canaries help you check the availability and latency\n         of your web services and troubleshoot anomalies by investigating load time data,\n         screenshots of the UI, logs, and metrics. The canaries seamlessly integrate with CloudWatch\n         ServiceLens to help you trace the causes of impacted nodes in your applications. For more\n         information, see <a href=\"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ServiceLens.html\">Using ServiceLens to Monitor\n            the Health of Your Applications</a> in the <i>Amazon CloudWatch User\n            Guide</i>.</p>\n      \n         <p>Before you create and manage canaries, be aware of the security considerations. For more\n         information, see <a href=\"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/servicelens_canaries_security.html\">Security\n            Considerations for Synthetics Canaries</a>.</p>",
+                "smithy.api#title": "Synthetics"
+            }
         },
         "com.amazonaws.synthetics#TagKey": {
             "type": "string",
@@ -2860,7 +2851,10 @@
             "type": "string"
         },
         "com.amazonaws.synthetics#boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -2595,7 +2595,6 @@
         "com.amazonaws.ssoadmin#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -3102,21 +3101,6 @@
         },
         "com.amazonaws.ssoadmin#SWBExternalService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "SSO Admin",
-                    "arnNamespace": "sso",
-                    "cloudFormationName": "SSOAdmin",
-                    "cloudTrailEventSource": "ssoadmin.amazonaws.com",
-                    "endpointPrefix": "sso"
-                },
-                "aws.auth#sigv4": {
-                    "name": "sso"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>AWS IAM Identity Center (successor to AWS Single Sign-On) helps you securely create, or connect, your workforce identities and manage their\n      access centrally across AWS accounts and applications. IAM Identity Center is the recommended\n      approach for workforce authentication and authorization in AWS, for organizations of any size\n      and type.</p>\n         <note>\n            <p>Although AWS Single Sign-On was renamed, the <code>sso</code> and\n        <code>identitystore</code> API namespaces will continue to retain their original name for\n        backward compatibility purposes. For more information, see <a href=\"https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html#renamed\">IAM Identity Center rename</a>.</p>\n         </note>\n         <p>This reference guide provides information on single sign-on operations which could be used for\n      access management of AWS accounts. For information about IAM Identity Center features, see the <a href=\"https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html\">IAM Identity Center User\n        Guide</a>.</p>\n         <p>Many operations in the IAM Identity Center APIs rely on identifiers for users and groups, known as\n      principals. For more information about how to work with principals and principal IDs in IAM Identity Center,\n      see the <a href=\"https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/welcome.html\">Identity Store API\n        Reference</a>.</p>\n         <note>\n            <p>AWS provides SDKs that consist of libraries and sample code for various programming\n        languages and platforms (Java, Ruby, .Net, iOS, Android, and more). The SDKs provide a\n        convenient way to create programmatic access to IAM Identity Center and other AWS services. For more\n        information about the AWS SDKs, including how to download and install them, see <a href=\"http://aws.amazon.com/tools/\">Tools for Amazon Web Services</a>.</p>\n         </note>",
-                "smithy.api#title": "AWS Single Sign-On Admin"
-            },
             "version": "2020-07-20",
             "operations": [
                 {
@@ -3230,7 +3214,22 @@
                 {
                     "target": "com.amazonaws.ssoadmin#UpdatePermissionSet"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "SSO Admin",
+                    "arnNamespace": "sso",
+                    "cloudFormationName": "SSOAdmin",
+                    "cloudTrailEventSource": "ssoadmin.amazonaws.com",
+                    "endpointPrefix": "sso"
+                },
+                "aws.auth#sigv4": {
+                    "name": "sso"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<p>AWS IAM Identity Center (successor to AWS Single Sign-On) helps you securely create, or connect, your workforce identities and manage their\n      access centrally across AWS accounts and applications. IAM Identity Center is the recommended\n      approach for workforce authentication and authorization in AWS, for organizations of any size\n      and type.</p>\n         <note>\n            <p>Although AWS Single Sign-On was renamed, the <code>sso</code> and\n        <code>identitystore</code> API namespaces will continue to retain their original name for\n        backward compatibility purposes. For more information, see <a href=\"https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html#renamed\">IAM Identity Center rename</a>.</p>\n         </note>\n         <p>This reference guide provides information on single sign-on operations which could be used for\n      access management of AWS accounts. For information about IAM Identity Center features, see the <a href=\"https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html\">IAM Identity Center User\n        Guide</a>.</p>\n         <p>Many operations in the IAM Identity Center APIs rely on identifiers for users and groups, known as\n      principals. For more information about how to work with principals and principal IDs in IAM Identity Center,\n      see the <a href=\"https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/welcome.html\">Identity Store API\n        Reference</a>.</p>\n         <note>\n            <p>AWS provides SDKs that consist of libraries and sample code for various programming\n        languages and platforms (Java, Ruby, .Net, iOS, Android, and more). The SDKs provide a\n        convenient way to create programmatic access to IAM Identity Center and other AWS services. For more\n        information about the AWS SDKs, including how to download and install them, see <a href=\"http://aws.amazon.com/tools/\">Tools for Amazon Web Services</a>.</p>\n         </note>",
+                "smithy.api#title": "AWS Single Sign-On Admin"
+            }
         },
         "com.amazonaws.ssoadmin#ServiceQuotaExceededException": {
             "type": "structure",

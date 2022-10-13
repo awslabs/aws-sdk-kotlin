@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -47,21 +47,6 @@
         },
         "com.amazonaws.connectparticipant#AmazonConnectParticipantServiceLambda": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "ConnectParticipant",
-                    "arnNamespace": "connect",
-                    "cloudFormationName": "ConnectParticipant",
-                    "cloudTrailEventSource": "connectparticipant.amazonaws.com",
-                    "endpointPrefix": "participant.connect"
-                },
-                "aws.auth#sigv4": {
-                    "name": "execute-api"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>Amazon Connect is a cloud-based contact center solution that makes it easy to set up and manage\n            a customer contact center and provide reliable customer engagement at any scale.</p>\n        <p>Amazon Connect enables customer contacts through voice or chat.</p>\n\n        <p>The APIs described here are used by chat participants, such as agents and\n            customers.</p>",
-                "smithy.api#title": "Amazon Connect Participant Service"
-            },
             "version": "2018-09-07",
             "operations": [
                 {
@@ -88,7 +73,22 @@
                 {
                     "target": "com.amazonaws.connectparticipant#StartAttachmentUpload"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "ConnectParticipant",
+                    "arnNamespace": "connect",
+                    "cloudFormationName": "ConnectParticipant",
+                    "cloudTrailEventSource": "connectparticipant.amazonaws.com",
+                    "endpointPrefix": "participant.connect"
+                },
+                "aws.auth#sigv4": {
+                    "name": "execute-api"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>Amazon Connect is a cloud-based contact center solution that makes it easy to set up and manage\n            a customer contact center and provide reliable customer engagement at any scale.</p>\n        <p>Amazon Connect enables customer contacts through voice or chat.</p>\n\n        <p>The APIs described here are used by chat participants, such as agents and\n            customers.</p>",
+                "smithy.api#title": "Amazon Connect Participant Service"
+            }
         },
         "com.amazonaws.connectparticipant#ArtifactId": {
             "type": "string",
@@ -174,6 +174,7 @@
         "com.amazonaws.connectparticipant#AttachmentSizeInBytes": {
             "type": "long",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -186,10 +187,7 @@
             }
         },
         "com.amazonaws.connectparticipant#Bool": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.connectparticipant#ChatContent": {
             "type": "string",
@@ -677,7 +675,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.connectparticipant#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return in the page. Default: 10. </p>"
                     }
                 },
@@ -831,6 +829,7 @@
         "com.amazonaws.connectparticipant#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -843,6 +842,7 @@
         "com.amazonaws.connectparticipant#MostRecent": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -1187,6 +1187,7 @@
                 "AttachmentSizeInBytes": {
                     "target": "com.amazonaws.connectparticipant#AttachmentSizeInBytes",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size of the attachment in bytes.</p>",
                         "smithy.api#required": {}
                     }
@@ -1251,6 +1252,7 @@
                 "MostRecent": {
                     "target": "com.amazonaws.connectparticipant#MostRecent",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The start position of the most recent message where you want to start. </p>"
                     }
                 }

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -193,6 +193,7 @@
                 "Ttl": {
                     "target": "com.amazonaws.kinesisvideosignaling#Ttl",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The period of time, in seconds, during which the username and password are\n            valid.</p>"
                     }
                 }
@@ -384,6 +385,7 @@
         "com.amazonaws.kinesisvideosignaling#Ttl": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 30,
                     "max": 86400

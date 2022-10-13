@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -73,6 +73,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.apigatewaymanagementapi#DeleteConnectionRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -239,6 +242,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.apigatewaymanagementapi#PostToConnectionRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {

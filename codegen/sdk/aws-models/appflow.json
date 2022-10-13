@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -316,6 +316,7 @@
                 "isRequired": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether this authentication parameter is required.</p>"
                     }
                 },
@@ -334,6 +335,7 @@
                 "isSensitiveField": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether this authentication parameter is a sensitive field.</p>"
                     }
                 },
@@ -360,24 +362,28 @@
                 "isBasicAuthSupported": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether basic authentication is supported by the connector.</p>"
                     }
                 },
                 "isApiKeyAuthSupported": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether API key authentication is supported by the connector</p>"
                     }
                 },
                 "isOAuth2Supported": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether OAuth 2.0 authentication is supported by the connector.</p>"
                     }
                 },
                 "isCustomAuthSupported": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether custom authentication is supported by the connector</p>"
                     }
                 },
@@ -444,7 +450,10 @@
             }
         },
         "com.amazonaws.appflow#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.appflow#BucketName": {
             "type": "string",
@@ -555,12 +564,14 @@
                 "canUseAsSource": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies whether the connector can be used as a source. </p>"
                     }
                 },
                 "canUseAsDestination": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies whether the connector can be used as a destination. </p>"
                     }
                 },
@@ -579,12 +590,14 @@
                 "isPrivateLinkEnabled": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies if PrivateLink is enabled for that connector. </p>"
                     }
                 },
                 "isPrivateLinkEndpointUrlRequired": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies if a PrivateLink endpoint URL is required. </p>"
                     }
                 },
@@ -825,6 +838,7 @@
                 "hasNestedEntities": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies whether the connector entity is a parent or a category and has more entities\n      nested underneath it. If another call is made with <code>entitiesPath =\n        \"the_current_entity_name_with_hasNestedEntities_true\"</code>, then it returns the nested\n      entities underneath it. This provides a way to retrieve all supported entities in a recursive\n      fashion. </p>"
                     }
                 }
@@ -858,6 +872,7 @@
                 "isPrimaryKey": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Booelan value that indicates whether this field can be used as a primary key.</p>"
                     }
                 },
@@ -870,6 +885,7 @@
                 "isDeprecated": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Booelan value that indicates whether this field is deprecated or not.</p>"
                     }
                 },
@@ -1631,6 +1647,7 @@
                 "isRequired": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether this connector runtime setting is required.</p>"
                     }
                 },
@@ -2538,6 +2555,7 @@
                 "forceDelete": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Indicates whether Amazon AppFlow should delete the profile, even if it is currently\n      in use in one or more flows. </p>"
                     }
                 }
@@ -2588,6 +2606,7 @@
                 "forceDelete": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Indicates whether Amazon AppFlow should delete the flow, even if it is currently in\n      use. </p>"
                     }
                 }
@@ -3212,30 +3231,35 @@
                 "isCreatable": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies if the destination field can be created by the current user. </p>"
                     }
                 },
                 "isNullable": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies if the destination field can have a null value. </p>"
                     }
                 },
                 "isUpsertable": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies if the flow run can either insert new rows in the destination field if they do\n      not already exist, or update them if they do. </p>"
                     }
                 },
                 "isUpdatable": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies whether the field can be updated during an <code>UPDATE</code> or\n        <code>UPSERT</code> write operation. </p>"
                     }
                 },
                 "isDefaultedOnCreate": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the field can use the default value during a Create operation.</p>"
                     }
                 },
@@ -3311,7 +3335,10 @@
             }
         },
         "com.amazonaws.appflow#Double": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.appflow#DynatraceConnectorOperator": {
             "type": "string",
@@ -3458,6 +3485,7 @@
                 "failOnFirstDestinationError": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies if the flow should fail after the first instance of a failure when attempting\n      to place data in the destination. </p>"
                     }
                 },
@@ -3881,6 +3909,7 @@
         "com.amazonaws.appflow#FlowErrorDeactivationThreshold": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4313,10 +4342,7 @@
             }
         },
         "com.amazonaws.appflow#JavaBoolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.appflow#KMSArn": {
             "type": "string",
@@ -4639,10 +4665,7 @@
             }
         },
         "com.amazonaws.appflow#Long": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.appflow#LookoutMetricsDestinationProperties": {
             "type": "structure",
@@ -4814,7 +4837,6 @@
         "com.amazonaws.appflow#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4898,6 +4920,7 @@
                 "isRequired": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the custom parameter for OAuth 2.0 authentication is required.</p>"
                     }
                 },
@@ -4916,6 +4939,7 @@
                 "isSensitiveField": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether this authentication custom parameter is a sensitive field.</p>"
                     }
                 },
@@ -5412,6 +5436,7 @@
         "com.amazonaws.appflow#PortNumber": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 65535
@@ -5627,12 +5652,14 @@
                 "maximum": {
                     "target": "com.amazonaws.appflow#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum value supported by the field.</p>"
                     }
                 },
                 "minimum": {
                     "target": "com.amazonaws.appflow#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Minimum value supported by the field.</p>"
                     }
                 }
@@ -6225,7 +6252,7 @@
                 "portNumber": {
                     "target": "com.amazonaws.appflow#PortNumber",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p> The port number of the SAPOData instance. </p>",
                         "smithy.api#required": {}
                     }
@@ -6446,6 +6473,7 @@
                 "isSandboxEnvironment": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Indicates whether the connector profile applies to a sandbox or production environment.\n    </p>"
                     }
                 }
@@ -6514,12 +6542,14 @@
                 "enableDynamicFieldUpdate": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> The flag that enables dynamic fetching of new (recently added) fields in the Salesforce\n      objects while running a flow. </p>"
                     }
                 },
                 "includeDeletedRecords": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Indicates whether Amazon AppFlow includes deleted files in the flow run. </p>"
                     }
                 }
@@ -6530,21 +6560,6 @@
         },
         "com.amazonaws.appflow#SandstoneConfigurationServiceLambda": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Appflow",
-                    "arnNamespace": "appflow",
-                    "cloudFormationName": "Appflow",
-                    "cloudTrailEventSource": "appflow.amazonaws.com",
-                    "endpointPrefix": "appflow"
-                },
-                "aws.auth#sigv4": {
-                    "name": "appflow"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>Welcome to the Amazon AppFlow API reference. This guide is for developers who need\n      detailed information about the Amazon AppFlow API operations, data types, and errors. </p>\n         <p>Amazon AppFlow is a fully managed integration service that enables you to securely\n      transfer data between software as a service (SaaS) applications like Salesforce, Marketo,\n      Slack, and ServiceNow, and Amazon Web Services like Amazon S3 and Amazon Redshift. </p>\n         <p>Use the following links to get started on the Amazon AppFlow API:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/appflow/1.0/APIReference/API_Operations.html\">Actions</a>: An alphabetical list of all Amazon AppFlow API\n          operations.</p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/appflow/1.0/APIReference/API_Types.html\">Data\n            types</a>: An alphabetical list of all Amazon AppFlow data types.</p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/appflow/1.0/APIReference/CommonParameters.html\">Common parameters</a>: Parameters that all Query operations can use.</p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/appflow/1.0/APIReference/CommonErrors.html\">Common\n            errors</a>: Client and server errors that all operations can return.</p>\n            </li>\n         </ul>\n         <p>If you're new to Amazon AppFlow, we recommend that you review the <a href=\"https://docs.aws.amazon.com/appflow/latest/userguide/what-is-appflow.html\">Amazon AppFlow User Guide</a>.</p>\n         <p>Amazon AppFlow API users can use vendor-specific mechanisms for OAuth, and include\n      applicable OAuth attributes (such as <code>auth-code</code> and <code>redirecturi</code>) with\n      the connector-specific <code>ConnectorProfileProperties</code> when creating a new connector\n      profile using Amazon AppFlow API operations. For example, Salesforce users can refer to\n      the <a href=\"https://help.salesforce.com/articleView?id=remoteaccess_authenticate.htm\">\n               <i>Authorize Apps with OAuth</i>\n            </a> documentation.</p>",
-                "smithy.api#title": "Amazon Appflow"
-            },
             "version": "2020-08-23",
             "operations": [
                 {
@@ -6613,7 +6628,22 @@
                 {
                     "target": "com.amazonaws.appflow#UpdateFlow"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Appflow",
+                    "arnNamespace": "appflow",
+                    "cloudFormationName": "Appflow",
+                    "cloudTrailEventSource": "appflow.amazonaws.com",
+                    "endpointPrefix": "appflow"
+                },
+                "aws.auth#sigv4": {
+                    "name": "appflow"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>Welcome to the Amazon AppFlow API reference. This guide is for developers who need\n      detailed information about the Amazon AppFlow API operations, data types, and errors. </p>\n         <p>Amazon AppFlow is a fully managed integration service that enables you to securely\n      transfer data between software as a service (SaaS) applications like Salesforce, Marketo,\n      Slack, and ServiceNow, and Amazon Web Services like Amazon S3 and Amazon Redshift. </p>\n         <p>Use the following links to get started on the Amazon AppFlow API:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/appflow/1.0/APIReference/API_Operations.html\">Actions</a>: An alphabetical list of all Amazon AppFlow API\n          operations.</p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/appflow/1.0/APIReference/API_Types.html\">Data\n            types</a>: An alphabetical list of all Amazon AppFlow data types.</p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/appflow/1.0/APIReference/CommonParameters.html\">Common parameters</a>: Parameters that all Query operations can use.</p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/appflow/1.0/APIReference/CommonErrors.html\">Common\n            errors</a>: Client and server errors that all operations can return.</p>\n            </li>\n         </ul>\n         <p>If you're new to Amazon AppFlow, we recommend that you review the <a href=\"https://docs.aws.amazon.com/appflow/latest/userguide/what-is-appflow.html\">Amazon AppFlow User Guide</a>.</p>\n         <p>Amazon AppFlow API users can use vendor-specific mechanisms for OAuth, and include\n      applicable OAuth attributes (such as <code>auth-code</code> and <code>redirecturi</code>) with\n      the connector-specific <code>ConnectorProfileProperties</code> when creating a new connector\n      profile using Amazon AppFlow API operations. For example, Salesforce users can refer to\n      the <a href=\"https://help.salesforce.com/articleView?id=remoteaccess_authenticate.htm\">\n               <i>Authorize Apps with OAuth</i>\n            </a> documentation.</p>",
+                "smithy.api#title": "Amazon Appflow"
+            }
         },
         "com.amazonaws.appflow#ScheduleExpression": {
             "type": "string",
@@ -6659,6 +6689,7 @@
         "com.amazonaws.appflow#ScheduleOffset": {
             "type": "long",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 36000
@@ -6702,7 +6733,7 @@
                 "scheduleOffset": {
                     "target": "com.amazonaws.appflow#ScheduleOffset",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p> Specifies the optional offset that is added to the time interval for a schedule-triggered\n      flow. </p>"
                     }
                 },
@@ -6715,7 +6746,7 @@
                 "flowErrorDeactivationThreshold": {
                     "target": "com.amazonaws.appflow#FlowErrorDeactivationThreshold",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Defines how many times a scheduled flow fails consecutively before Amazon AppFlow\n      deactivates it.</p>"
                     }
                 }
@@ -7399,18 +7430,21 @@
                 "isRetrievable": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Indicates whether the field can be returned in a search result. </p>"
                     }
                 },
                 "isQueryable": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Indicates if the field can be queried. </p>"
                     }
                 },
                 "isTimestampFieldForIncrementalQueries": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if this timestamp field can be used for incremental queries.</p>"
                     }
                 }
@@ -8139,6 +8173,7 @@
                 "forceDelete": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether Amazon AppFlow should unregister the connector, even if it is\n      currently in use in one or more connector profiles. The default value is false.</p>"
                     }
                 }
@@ -8646,18 +8681,21 @@
                 "includeSourceFiles": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Boolean value to include source files in Veeva document extract flow.</p>"
                     }
                 },
                 "includeRenditions": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Boolean value to include file renditions in Veeva document extract flow.</p>"
                     }
                 },
                 "includeAllVersions": {
                     "target": "com.amazonaws.appflow#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Boolean value to include All Versions of files in Veeva document extract flow.</p>"
                     }
                 }

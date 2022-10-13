@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -99,7 +99,7 @@
                 "delete": {
                     "target": "com.amazonaws.iotsecuretunneling#DeleteFlag",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>When set to true, IoT Secure Tunneling deletes the tunnel data\n\t\t\timmediately.</p>",
                         "smithy.api#httpQuery": "delete"
                     }
@@ -149,7 +149,10 @@
             "type": "timestamp"
         },
         "com.amazonaws.iotsecuretunneling#DeleteFlag": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.iotsecuretunneling#DescribeTunnel": {
             "type": "operation",
@@ -229,21 +232,6 @@
         },
         "com.amazonaws.iotsecuretunneling#IoTSecuredTunneling": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "IoTSecureTunneling",
-                    "arnNamespace": "iotsecuredtunneling",
-                    "cloudFormationName": "IoTSecureTunneling",
-                    "cloudTrailEventSource": "iotsecuretunneling.amazonaws.com",
-                    "endpointPrefix": "api.tunneling.iot"
-                },
-                "aws.auth#sigv4": {
-                    "name": "IoTSecuredTunneling"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<fullname>IoT Secure Tunneling</fullname>\n\t\t       <p>IoT Secure Tunneling creates remote connections to devices deployed in the\n\t\t\tfield.</p>\n\t\t       <p>For more information about how IoT Secure Tunneling works, see <a href=\"https://docs.aws.amazon.com/iot/latest/developerguide/secure-tunneling.html\">IoT\n\t\t\t\tSecure Tunneling</a>.</p>",
-                "smithy.api#title": "AWS IoT Secure Tunneling"
-            },
             "version": "2018-10-05",
             "operations": [
                 {
@@ -270,7 +258,22 @@
                 {
                     "target": "com.amazonaws.iotsecuretunneling#UntagResource"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "IoTSecureTunneling",
+                    "arnNamespace": "iotsecuredtunneling",
+                    "cloudFormationName": "IoTSecureTunneling",
+                    "cloudTrailEventSource": "iotsecuretunneling.amazonaws.com",
+                    "endpointPrefix": "api.tunneling.iot"
+                },
+                "aws.auth#sigv4": {
+                    "name": "IoTSecuredTunneling"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<fullname>IoT Secure Tunneling</fullname>\n\t\t       <p>IoT Secure Tunneling creates remote connections to devices deployed in the\n\t\t\tfield.</p>\n\t\t       <p>For more information about how IoT Secure Tunneling works, see <a href=\"https://docs.aws.amazon.com/iot/latest/developerguide/secure-tunneling.html\">IoT\n\t\t\t\tSecure Tunneling</a>.</p>",
+                "smithy.api#title": "AWS IoT Secure Tunneling"
+            }
         },
         "com.amazonaws.iotsecuretunneling#LimitExceededException": {
             "type": "structure",
@@ -370,7 +373,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.iotsecuretunneling#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return at once.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -404,6 +407,7 @@
         "com.amazonaws.iotsecuretunneling#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -729,7 +733,7 @@
                 "maxLifetimeTimeoutMinutes": {
                     "target": "com.amazonaws.iotsecuretunneling#TimeoutInMin",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum amount of time (in minutes) a tunnel can remain open. If not specified,\n\t\t\tmaxLifetimeTimeoutMinutes defaults to 720 minutes. Valid values are from 1 minute to 12\n\t\t\thours (720 minutes) </p>"
                     }
                 }
@@ -741,6 +745,7 @@
         "com.amazonaws.iotsecuretunneling#TimeoutInMin": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 720

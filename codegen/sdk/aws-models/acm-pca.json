@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,21 +31,6 @@
     "shapes": {
         "com.amazonaws.acmpca#ACMPrivateCA": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "ACM PCA",
-                    "arnNamespace": "acm-pca",
-                    "cloudFormationName": "ACMPCA",
-                    "cloudTrailEventSource": "acmpca.amazonaws.com",
-                    "endpointPrefix": "acm-pca"
-                },
-                "aws.auth#sigv4": {
-                    "name": "acm-pca"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>This is the <i>Certificate Manager Private Certificate Authority (PCA) API Reference</i>. It provides descriptions,\n\t\t\tsyntax, and usage examples for each of the actions and data types involved in creating\n\t\t\tand managing a private certificate authority (CA) for your organization.</p>\n\t\t       <p>The documentation for each action shows the API request parameters and the JSON\n\t\t\tresponse. Alternatively, you can use one of the Amazon Web Services SDKs to access an API that is\n\t\t\ttailored to the programming language or platform that you prefer. For more information,\n\t\t\tsee <a href=\"https://aws.amazon.com/tools/#SDKs\">Amazon Web Services SDKs</a>.</p>\n\t\t       <p>Each ACM Private CA API operation has a quota that determines the number of times the\n\t\t\toperation can be called per second. ACM Private CA throttles API requests at different rates\n\t\t\tdepending on the operation. Throttling means that ACM Private CA rejects an otherwise valid\n\t\t\trequest because the request exceeds the operation's quota for the number of requests per\n\t\t\tsecond. When a request is throttled, ACM Private CA returns a <a href=\"https://docs.aws.amazon.com/acm-pca/latest/APIReference/CommonErrors.html\">ThrottlingException</a> error. ACM Private CA does not guarantee a minimum request\n\t\t\trate for APIs. </p>\n\t\t       <p>To see an up-to-date list of your ACM Private CA quotas, or to request a quota increase,\n\t\t\tlog into your Amazon Web Services account and visit the <a href=\"https://console.aws.amazon.com/servicequotas/\">Service Quotas</a>\n\t\t\tconsole.</p>",
-                "smithy.api#title": "AWS Certificate Manager Private Certificate Authority"
-            },
             "version": "2017-08-22",
             "operations": [
                 {
@@ -117,7 +102,22 @@
                 {
                     "target": "com.amazonaws.acmpca#UpdateCertificateAuthority"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "ACM PCA",
+                    "arnNamespace": "acm-pca",
+                    "cloudFormationName": "ACMPCA",
+                    "cloudTrailEventSource": "acmpca.amazonaws.com",
+                    "endpointPrefix": "acm-pca"
+                },
+                "aws.auth#sigv4": {
+                    "name": "acm-pca"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<p>This is the <i>Certificate Manager Private Certificate Authority (PCA) API Reference</i>. It provides descriptions,\n\t\t\tsyntax, and usage examples for each of the actions and data types involved in creating\n\t\t\tand managing a private certificate authority (CA) for your organization.</p>\n\t\t       <p>The documentation for each action shows the API request parameters and the JSON\n\t\t\tresponse. Alternatively, you can use one of the Amazon Web Services SDKs to access an API that is\n\t\t\ttailored to the programming language or platform that you prefer. For more information,\n\t\t\tsee <a href=\"https://aws.amazon.com/tools/#SDKs\">Amazon Web Services SDKs</a>.</p>\n\t\t       <p>Each ACM Private CA API operation has a quota that determines the number of times the\n\t\t\toperation can be called per second. ACM Private CA throttles API requests at different rates\n\t\t\tdepending on the operation. Throttling means that ACM Private CA rejects an otherwise valid\n\t\t\trequest because the request exceeds the operation's quota for the number of requests per\n\t\t\tsecond. When a request is throttled, ACM Private CA returns a <a href=\"https://docs.aws.amazon.com/acm-pca/latest/APIReference/CommonErrors.html\">ThrottlingException</a> error. ACM Private CA does not guarantee a minimum request\n\t\t\trate for APIs. </p>\n\t\t       <p>To see an up-to-date list of your ACM Private CA quotas, or to request a quota increase,\n\t\t\tlog into your Amazon Web Services account and visit the <a href=\"https://console.aws.amazon.com/servicequotas/\">Service Quotas</a>\n\t\t\tconsole.</p>",
+                "smithy.api#title": "AWS Certificate Manager Private Certificate Authority"
+            }
         },
         "com.amazonaws.acmpca#ASN1PrintableString64": {
             "type": "string",
@@ -427,7 +427,10 @@
             }
         },
         "com.amazonaws.acmpca#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.acmpca#CertificateAuthorities": {
             "type": "list",
@@ -909,7 +912,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Boolean value that specifies whether certificate revocation lists (CRLs) are enabled.\n\t\t\tYou can use this value to enable certificate revocation for a new CA when you call the\n\t\t\t\t<a href=\"https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CreateCertificateAuthority.html\">CreateCertificateAuthority</a> action or for an existing CA when you call the\n\t\t\t\t<a href=\"https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_UpdateCertificateAuthority.html\">UpdateCertificateAuthority</a> action. </p>",
                         "smithy.api#required": {}
                     }
@@ -917,7 +920,7 @@
                 "ExpirationInDays": {
                     "target": "com.amazonaws.acmpca#Integer1To5000",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Validity period of the CRL in days.</p>"
                     }
                 },
@@ -1030,7 +1033,7 @@
                 "Critical": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p></p>\n\t\t       <p>Specifies the critical flag of the X.509 extension.</p>"
                     }
                 }
@@ -1894,7 +1897,6 @@
         "com.amazonaws.acmpca#Integer1To5000": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 5000
@@ -2130,54 +2132,63 @@
                 "DigitalSignature": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Key can be used for digital signing.</p>"
                     }
                 },
                 "NonRepudiation": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Key can be used for non-repudiation.</p>"
                     }
                 },
                 "KeyEncipherment": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Key can be used to encipher data.</p>"
                     }
                 },
                 "DataEncipherment": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Key can be used to decipher data.</p>"
                     }
                 },
                 "KeyAgreement": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Key can be used in a key-agreement protocol.</p>"
                     }
                 },
                 "KeyCertSign": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Key can be used to sign certificates.</p>"
                     }
                 },
                 "CRLSign": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Key can be used to sign CRLs.</p>"
                     }
                 },
                 "EncipherOnly": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Key can be used only to encipher data.</p>"
                     }
                 },
                 "DecipherOnly": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Key can be used only to decipher data.</p>"
                     }
                 }
@@ -2446,7 +2457,6 @@
         "com.amazonaws.acmpca#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -2468,7 +2478,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.acmpca#Boolean",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Flag enabling use of the Online Certificate Status Protocol (OCSP) for validating\n\t\t\tcertificate revocation status.</p>",
                         "smithy.api#required": {}
                     }
@@ -2509,7 +2519,6 @@
         "com.amazonaws.acmpca#PermanentDeletionTimeInDays": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 7,
                     "max": 30
@@ -2652,7 +2661,6 @@
         "com.amazonaws.acmpca#PositiveLong": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -3350,7 +3358,7 @@
                 "Value": {
                     "target": "com.amazonaws.acmpca#PositiveLong",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>A long integer interpreted according to the value of <code>Type</code>, below.</p>",
                         "smithy.api#required": {}
                     }

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -97,7 +97,7 @@
                 "remoteAccessAllowed": {
                     "target": "com.amazonaws.codestar#RemoteAccessAllowed",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Whether the team member is allowed to use an SSH public/private key pair to remotely\n      access project resources, for example Amazon EC2 instances.</p>"
                     }
                 }
@@ -550,6 +550,7 @@
                 "deleteStack": {
                     "target": "com.amazonaws.codestar#DeleteStack",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether to send a delete request for the primary stack in AWS CloudFormation originally\n      used to generate the project and its resources. This option will delete all AWS resources for\n      the project (except for any buckets in Amazon S3) as well as deleting the project itself.\n      Recommended for most use cases.</p>"
                     }
                 }
@@ -573,7 +574,10 @@
             }
         },
         "com.amazonaws.codestar#DeleteStack": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codestar#DeleteUserProfile": {
             "type": "operation",
@@ -885,6 +889,7 @@
                 "privateRepository": {
                     "target": "com.amazonaws.codestar#RepositoryIsPrivate",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether the GitHub repository is to be a private repository.</p>",
                         "smithy.api#required": {}
                     }
@@ -892,6 +897,7 @@
                 "issuesEnabled": {
                     "target": "com.amazonaws.codestar#RepositoryEnableIssues",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether to enable issues for the GitHub repository.</p>",
                         "smithy.api#required": {}
                     }
@@ -991,7 +997,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.codestar#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum amount of data that can be contained in a single set of results.</p>"
                     }
                 }
@@ -1057,7 +1063,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.codestar#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum amount of data that can be contained in a single set of results.</p>"
                     }
                 }
@@ -1122,7 +1128,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.codestar#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Reserved for future use.</p>"
                     }
                 }
@@ -1187,7 +1193,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.codestar#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of team members you want returned in a response.</p>"
                     }
                 }
@@ -1243,7 +1249,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.codestar#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return in a response.</p>"
                     }
                 }
@@ -1270,6 +1276,7 @@
         "com.amazonaws.codestar#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -1451,7 +1458,10 @@
             }
         },
         "com.amazonaws.codestar#RemoteAccessAllowed": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codestar#RepositoryDescription": {
             "type": "string",
@@ -1464,10 +1474,16 @@
             }
         },
         "com.amazonaws.codestar#RepositoryEnableIssues": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codestar#RepositoryIsPrivate": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codestar#RepositoryName": {
             "type": "string",
@@ -1699,7 +1715,7 @@
                 "remoteAccessAllowed": {
                     "target": "com.amazonaws.codestar#RemoteAccessAllowed",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Whether the user is allowed to remotely access project resources using an SSH\n      public/private key pair.</p>"
                     }
                 }
@@ -1976,7 +1992,7 @@
                 "remoteAccessAllowed": {
                     "target": "com.amazonaws.codestar#RemoteAccessAllowed",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Whether a team member is allowed to remotely access project resources using the SSH\n      public key associated with the user's profile. Even if this is set to True, the user must\n      associate a public key with their profile before the user can access resources.</p>"
                     }
                 }
@@ -2000,7 +2016,7 @@
                 "remoteAccessAllowed": {
                     "target": "com.amazonaws.codestar#RemoteAccessAllowed",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Whether a team member is allowed to remotely access project resources using the SSH\n      public key associated with the user's profile.</p>"
                     }
                 }

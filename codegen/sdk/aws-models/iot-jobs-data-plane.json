@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -30,10 +30,7 @@
     },
     "shapes": {
         "com.amazonaws.iotjobsdataplane#ApproximateSecondsBeforeTimedOut": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.iotjobsdataplane#BinaryBlob": {
             "type": "blob"
@@ -173,16 +170,10 @@
             }
         },
         "com.amazonaws.iotjobsdataplane#ExecutionNumber": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.iotjobsdataplane#ExpectedVersion": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.iotjobsdataplane#GetPendingJobExecutions": {
             "type": "operation",
@@ -249,16 +240,10 @@
             }
         },
         "com.amazonaws.iotjobsdataplane#IncludeExecutionState": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.iotjobsdataplane#IncludeJobDocument": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.iotjobsdataplane#InvalidRequestException": {
             "type": "structure",
@@ -361,6 +346,7 @@
                 "queuedAt": {
                     "target": "com.amazonaws.iotjobsdataplane#QueuedAt",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time, in milliseconds since the epoch, when the job execution was enqueued.</p>"
                     }
                 },
@@ -373,6 +359,7 @@
                 "lastUpdatedAt": {
                     "target": "com.amazonaws.iotjobsdataplane#LastUpdatedAt",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time, in milliseconds since the epoch, when the job execution was last updated. </p>"
                     }
                 },
@@ -385,6 +372,7 @@
                 "versionNumber": {
                     "target": "com.amazonaws.iotjobsdataplane#VersionNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The version of the job execution. Job execution versions are incremented each time they are updated by a\n         device.</p>"
                     }
                 },
@@ -423,6 +411,7 @@
                 "versionNumber": {
                     "target": "com.amazonaws.iotjobsdataplane#VersionNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The version of the job execution. Job execution versions are incremented each time they are updated by a\n         device.</p>"
                     }
                 }
@@ -482,6 +471,7 @@
                 "queuedAt": {
                     "target": "com.amazonaws.iotjobsdataplane#QueuedAt",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time, in milliseconds since the epoch, when the job execution was enqueued.</p>"
                     }
                 },
@@ -494,12 +484,14 @@
                 "lastUpdatedAt": {
                     "target": "com.amazonaws.iotjobsdataplane#LastUpdatedAt",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time, in milliseconds since the epoch, when the job execution was last updated.</p>"
                     }
                 },
                 "versionNumber": {
                     "target": "com.amazonaws.iotjobsdataplane#VersionNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The version of the job execution. Job execution versions are incremented each time AWS IoT Jobs receives\n         an update from a device.</p>"
                     }
                 },
@@ -531,10 +523,16 @@
             }
         },
         "com.amazonaws.iotjobsdataplane#LastUpdatedAt": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.iotjobsdataplane#QueuedAt": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.iotjobsdataplane#ResourceNotFoundException": {
             "type": "structure",
@@ -639,16 +637,10 @@
             }
         },
         "com.amazonaws.iotjobsdataplane#StartedAt": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.iotjobsdataplane#StepTimeoutInMinutes": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.iotjobsdataplane#TerminalStateException": {
             "type": "structure",
@@ -814,7 +806,10 @@
             }
         },
         "com.amazonaws.iotjobsdataplane#VersionNumber": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.iotjobsdataplane#errorMessage": {
             "type": "string"

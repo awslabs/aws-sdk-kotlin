@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -178,16 +178,10 @@
             }
         },
         "com.amazonaws.applicationinsights#AutoConfigEnabled": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.applicationinsights#AutoCreate": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.applicationinsights#BadRequestException": {
             "type": "structure",
@@ -207,10 +201,7 @@
             }
         },
         "com.amazonaws.applicationinsights#CWEMonitorEnabled": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.applicationinsights#CloudWatchEventDetailType": {
             "type": "string"
@@ -592,6 +583,7 @@
                 "Rank": {
                     "target": "com.amazonaws.applicationinsights#LogPatternRank",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Rank of the log pattern. Must be a value between <code>1</code> and\n            <code>1,000,000</code>. The patterns are sorted by rank, so we recommend that you set\n         your highest priority patterns with the lowest rank. A pattern of rank <code>1</code> will\n         be the first to get matched to a log line. A pattern of rank <code>1,000,000</code> will be\n         last to get matched. When you configure custom log patterns from the console, a\n            <code>Low</code> severity pattern translates to a <code>750,000</code> rank. A\n            <code>Medium</code> severity pattern translates to a <code>500,000</code> rank. And a\n            <code>High</code> severity pattern translates to a <code>250,000</code> rank. Rank\n         values less than <code>1</code> or greater than <code>1,000,000</code> are reserved for\n         AWS-provided patterns. </p>",
                         "smithy.api#required": {}
                     }
@@ -1226,21 +1218,6 @@
         },
         "com.amazonaws.applicationinsights#EC2WindowsBarleyService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Application Insights",
-                    "arnNamespace": "applicationinsights",
-                    "cloudFormationName": "ApplicationInsights",
-                    "cloudTrailEventSource": "applicationinsights.amazonaws.com",
-                    "endpointPrefix": "applicationinsights"
-                },
-                "aws.auth#sigv4": {
-                    "name": "applicationinsights"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<fullname>Amazon CloudWatch Application Insights</fullname>\n         <p> Amazon CloudWatch Application Insights is a service that helps you detect common\n         problems with your applications. It enables you to pinpoint the source of issues in your\n         applications (built with technologies such as Microsoft IIS, .NET, and Microsoft SQL\n         Server), by providing key insights into detected problems.</p>\n         <p>After you onboard your application, CloudWatch Application Insights identifies,\n         recommends, and sets up metrics and logs. It continuously analyzes and correlates your\n         metrics and logs for unusual behavior to surface actionable problems with your application.\n         For example, if your application is slow and unresponsive and leading to HTTP 500 errors in\n         your Application Load Balancer (ALB), Application Insights informs you that a memory\n         pressure problem with your SQL Server database is occurring. It bases this analysis on\n         impactful metrics and log errors. </p>",
-                "smithy.api#title": "Amazon CloudWatch Application Insights"
-            },
             "version": "2018-11-25",
             "operations": [
                 {
@@ -1324,7 +1301,22 @@
                 {
                     "target": "com.amazonaws.applicationinsights#UpdateLogPattern"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Application Insights",
+                    "arnNamespace": "applicationinsights",
+                    "cloudFormationName": "ApplicationInsights",
+                    "cloudTrailEventSource": "applicationinsights.amazonaws.com",
+                    "endpointPrefix": "applicationinsights"
+                },
+                "aws.auth#sigv4": {
+                    "name": "applicationinsights"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<fullname>Amazon CloudWatch Application Insights</fullname>\n         <p> Amazon CloudWatch Application Insights is a service that helps you detect common\n         problems with your applications. It enables you to pinpoint the source of issues in your\n         applications (built with technologies such as Microsoft IIS, .NET, and Microsoft SQL\n         Server), by providing key insights into detected problems.</p>\n         <p>After you onboard your application, CloudWatch Application Insights identifies,\n         recommends, and sets up metrics and logs. It continuously analyzes and correlates your\n         metrics and logs for unusual behavior to surface actionable problems with your application.\n         For example, if your application is slow and unresponsive and leading to HTTP 500 errors in\n         your Application Load Balancer (ALB), Application Insights informs you that a memory\n         pressure problem with your SQL Server database is occurring. It bases this analysis on\n         impactful metrics and log errors. </p>",
+                "smithy.api#title": "Amazon CloudWatch Application Insights"
+            }
         },
         "com.amazonaws.applicationinsights#EbsCause": {
             "type": "string"
@@ -2001,6 +1993,7 @@
                 "Rank": {
                     "target": "com.amazonaws.applicationinsights#LogPatternRank",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Rank of the log pattern. Must be a value between <code>1</code> and\n            <code>1,000,000</code>. The patterns are sorted by rank, so we recommend that you set\n         your highest priority patterns with the lowest rank. A pattern of rank <code>1</code> will\n         be the first to get matched to a log line. A pattern of rank <code>1,000,000</code> will be\n         last to get matched. When you configure custom log patterns from the console, a\n            <code>Low</code> severity pattern translates to a <code>750,000</code> rank. A\n            <code>Medium</code> severity pattern translates to a <code>500,000</code> rank. And a\n            <code>High</code> severity pattern translates to a <code>250,000</code> rank. Rank\n         values less than <code>1</code> or greater than <code>1,000,000</code> are reserved for\n         AWS-provided patterns. </p>"
                     }
                 }
@@ -2026,7 +2019,10 @@
             }
         },
         "com.amazonaws.applicationinsights#LogPatternRank": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.applicationinsights#LogPatternRegex": {
             "type": "string",
@@ -2060,7 +2056,6 @@
         "com.amazonaws.applicationinsights#MaxEntities": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 40
@@ -2080,10 +2075,7 @@
             "type": "string"
         },
         "com.amazonaws.applicationinsights#Monitor": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.applicationinsights#Observation": {
             "type": "structure",
@@ -2380,10 +2372,7 @@
             }
         },
         "com.amazonaws.applicationinsights#OpsCenterEnabled": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.applicationinsights#OpsItemSNSTopicArn": {
             "type": "string",
@@ -2523,10 +2512,7 @@
             "type": "string"
         },
         "com.amazonaws.applicationinsights#RecurringCount": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.applicationinsights#RelatedObservations": {
             "type": "structure",
@@ -2546,10 +2532,7 @@
             "type": "string"
         },
         "com.amazonaws.applicationinsights#RemoveSNSTopic": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.applicationinsights#ResourceARN": {
             "type": "string",
@@ -3233,6 +3216,7 @@
                 "Rank": {
                     "target": "com.amazonaws.applicationinsights#LogPatternRank",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Rank of the log pattern. Must be a value between <code>1</code> and\n            <code>1,000,000</code>. The patterns are sorted by rank, so we recommend that you set\n         your highest priority patterns with the lowest rank. A pattern of rank <code>1</code> will\n         be the first to get matched to a log line. A pattern of rank <code>1,000,000</code> will be\n         last to get matched. When you configure custom log patterns from the console, a\n            <code>Low</code> severity pattern translates to a <code>750,000</code> rank. A\n            <code>Medium</code> severity pattern translates to a <code>500,000</code> rank. And a\n            <code>High</code> severity pattern translates to a <code>250,000</code> rank. Rank\n         values less than <code>1</code> or greater than <code>1,000,000</code> are reserved for\n         AWS-provided patterns. </p>"
                     }
                 }
@@ -3273,10 +3257,7 @@
             }
         },
         "com.amazonaws.applicationinsights#Value": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.applicationinsights#WorkloadMetaData": {
             "type": "map",
@@ -3288,16 +3269,10 @@
             }
         },
         "com.amazonaws.applicationinsights#XRayErrorPercent": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.applicationinsights#XRayFaultPercent": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.applicationinsights#XRayNodeName": {
             "type": "string"
@@ -3306,22 +3281,13 @@
             "type": "string"
         },
         "com.amazonaws.applicationinsights#XRayRequestAverageLatency": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.applicationinsights#XRayRequestCount": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.applicationinsights#XRayThrottlePercent": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         }
     }
 }

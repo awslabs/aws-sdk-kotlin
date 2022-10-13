@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -378,7 +378,10 @@
             }
         },
         "com.amazonaws.machinelearning#ComputeStatistics": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.machinelearning#CreateBatchPrediction": {
             "type": "operation",
@@ -512,6 +515,7 @@
                 "ComputeStatistics": {
                     "target": "com.amazonaws.machinelearning#ComputeStatistics",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by \n            a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training.\n            This parameter must be set to <code>true</code> if the <code></code>DataSource<code></code> needs to be used for <code>MLModel</code> training.\n            </p>"
                     }
                 }
@@ -587,6 +591,7 @@
                 "ComputeStatistics": {
                     "target": "com.amazonaws.machinelearning#ComputeStatistics",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by \n            a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training.\n           This parameter must be set to <code>true</code> if the <code>DataSource</code> needs to\n          be used for <code>MLModel</code> training.</p>"
                     }
                 }
@@ -655,6 +660,7 @@
                 "ComputeStatistics": {
                     "target": "com.amazonaws.machinelearning#ComputeStatistics",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by \n            a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training.\n            This parameter must be set to <code>true</code> if the <code></code>DataSource<code></code> needs to be used for <code>MLModel</code> training.</p>"
                     }
                 }
@@ -979,6 +985,7 @@
                 "ComputeStatistics": {
                     "target": "com.amazonaws.machinelearning#ComputeStatistics",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>\n          The parameter is <code>true</code> if statistics need to be generated from the observation data.\n      </p>"
                     }
                 },
@@ -2144,7 +2151,10 @@
             }
         },
         "com.amazonaws.machinelearning#ErrorCode": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.machinelearning#ErrorMessage": {
             "type": "string",
@@ -2465,6 +2475,7 @@
                 "Verbose": {
                     "target": "com.amazonaws.machinelearning#Verbose",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the <code>GetDataSource</code> operation should return <code>DataSourceSchema</code>.</p>\n        <p>If true, <code>DataSourceSchema</code> is returned.</p>\n        <p>If false, <code>DataSourceSchema</code> is not returned.</p>"
                     }
                 }
@@ -2557,6 +2568,7 @@
                 "ComputeStatistics": {
                     "target": "com.amazonaws.machinelearning#ComputeStatistics",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>\n            The parameter is <code>true</code> if statistics need to be generated from the observation data.\n        </p>"
                     }
                 },
@@ -2758,6 +2770,7 @@
                 "Verbose": {
                     "target": "com.amazonaws.machinelearning#Verbose",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the <code>GetMLModel</code> operation should return <code>Recipe</code>.</p>\n        <p>If true, <code>Recipe</code> is returned.</p>\n        <p>If false, <code>Recipe</code> is not returned.</p>"
                     }
                 }
@@ -2901,7 +2914,10 @@
                     "target": "com.amazonaws.machinelearning#ErrorMessage"
                 },
                 "code": {
-                    "target": "com.amazonaws.machinelearning#ErrorCode"
+                    "target": "com.amazonaws.machinelearning#ErrorCode",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -2913,6 +2929,7 @@
         "com.amazonaws.machinelearning#IntegerType": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#documentation": "<p>Integer type that is a 32-bit signed number.</p>"
             }
         },
@@ -2923,7 +2940,10 @@
                     "target": "com.amazonaws.machinelearning#ErrorMessage"
                 },
                 "code": {
-                    "target": "com.amazonaws.machinelearning#ErrorCode"
+                    "target": "com.amazonaws.machinelearning#ErrorCode",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -2939,7 +2959,10 @@
                     "target": "com.amazonaws.machinelearning#ErrorMessage"
                 },
                 "code": {
-                    "target": "com.amazonaws.machinelearning#ErrorCode"
+                    "target": "com.amazonaws.machinelearning#ErrorCode",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -2974,7 +2997,10 @@
                     "target": "com.amazonaws.machinelearning#ErrorMessage"
                 },
                 "code": {
-                    "target": "com.amazonaws.machinelearning#ErrorCode"
+                    "target": "com.amazonaws.machinelearning#ErrorCode",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -2986,7 +3012,6 @@
         "com.amazonaws.machinelearning#LongType": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#documentation": "<p>Long integer type that is a 64-bit signed number.</p>"
             }
         },
@@ -3191,7 +3216,6 @@
         "com.amazonaws.machinelearning#PageLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -3548,6 +3572,7 @@
                 "PeakRequestsPerSecond": {
                     "target": "com.amazonaws.machinelearning#IntegerType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The maximum processing rate for the real-time endpoint for <code>MLModel</code>, measured in incoming requests per second.</p>"
                     }
                 },
@@ -3791,7 +3816,10 @@
                     "target": "com.amazonaws.machinelearning#ErrorMessage"
                 },
                 "code": {
-                    "target": "com.amazonaws.machinelearning#ErrorCode"
+                    "target": "com.amazonaws.machinelearning#ErrorCode",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -3855,13 +3883,13 @@
             }
         },
         "com.amazonaws.machinelearning#ScoreThreshold": {
-            "type": "float",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "float"
         },
         "com.amazonaws.machinelearning#ScoreValue": {
-            "type": "float"
+            "type": "float",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.machinelearning#ScoreValuePerLabelMap": {
             "type": "map",
@@ -4248,6 +4276,7 @@
         "com.amazonaws.machinelearning#Verbose": {
             "type": "boolean",
             "traits": {
+                "smithy.api#default": false,
                 "smithy.api#documentation": "<p>Specifies whether a describe operation should return exhaustive or abbreviated information.</p>"
             }
         },
@@ -4262,10 +4291,7 @@
             }
         },
         "com.amazonaws.machinelearning#floatLabel": {
-            "type": "float",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "float"
         }
     }
 }

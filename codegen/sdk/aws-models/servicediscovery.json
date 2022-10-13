@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -673,7 +673,6 @@
         "com.amazonaws.servicediscovery#DiscoverMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -798,7 +797,6 @@
         "com.amazonaws.servicediscovery#FailureThreshold": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10
@@ -1690,7 +1688,6 @@
         "com.amazonaws.servicediscovery#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -2413,7 +2410,6 @@
         "com.amazonaws.servicediscovery#RecordTTL": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 2147483647
@@ -2530,10 +2526,7 @@
             }
         },
         "com.amazonaws.servicediscovery#ResourceCount": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.servicediscovery#ResourceDescription": {
             "type": "string",
@@ -3289,6 +3282,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.servicediscovery#UpdateInstanceCustomHealthStatusRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {

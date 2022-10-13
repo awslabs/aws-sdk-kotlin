@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,21 +31,6 @@
     "shapes": {
         "com.amazonaws.rbin#AmazonRecycleBin": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "rbin",
-                    "arnNamespace": "rbin",
-                    "cloudFormationName": "Rbin",
-                    "cloudTrailEventSource": "rbin.amazonaws.com",
-                    "endpointPrefix": "rbin"
-                },
-                "aws.auth#sigv4": {
-                    "name": "rbin"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>This is the <i>Recycle Bin API Reference</i>. This documentation provides \n      descriptions and syntax for each of the actions and data types in Recycle Bin.</p>\n    \n         <p>Recycle Bin is a resource recovery feature that enables you to restore accidentally \n      deleted snapshots and EBS-backed AMIs. When using Recycle Bin, if your resources are \n      deleted, they are retained in the Recycle Bin for a time period that you specify.</p> \n    \n         <p>You can restore a resource from the Recycle Bin at any time before its retention period \n      expires. After you restore a resource from the Recycle Bin, the resource is removed from the \n      Recycle Bin, and you can then use it in the same way you use any other resource of that type \n      in your account. If the retention period expires and the resource is not restored, the resource \n      is permanently deleted from the Recycle Bin and is no longer available for recovery. For more \n      information about Recycle Bin, see <a href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-recycle-bin.html\">\n        Recycle Bin</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>",
-                "smithy.api#title": "Amazon Recycle Bin"
-            },
             "version": "2021-06-15",
             "operations": [
                 {
@@ -72,7 +57,22 @@
                 {
                     "target": "com.amazonaws.rbin#UpdateRule"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "rbin",
+                    "arnNamespace": "rbin",
+                    "cloudFormationName": "Rbin",
+                    "cloudTrailEventSource": "rbin.amazonaws.com",
+                    "endpointPrefix": "rbin"
+                },
+                "aws.auth#sigv4": {
+                    "name": "rbin"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>This is the <i>Recycle Bin API Reference</i>. This documentation provides \n      descriptions and syntax for each of the actions and data types in Recycle Bin.</p>\n    \n         <p>Recycle Bin is a resource recovery feature that enables you to restore accidentally \n      deleted snapshots and EBS-backed AMIs. When using Recycle Bin, if your resources are \n      deleted, they are retained in the Recycle Bin for a time period that you specify.</p> \n    \n         <p>You can restore a resource from the Recycle Bin at any time before its retention period \n      expires. After you restore a resource from the Recycle Bin, the resource is removed from the \n      Recycle Bin, and you can then use it in the same way you use any other resource of that type \n      in your account. If the retention period expires and the resource is not restored, the resource \n      is permanently deleted from the Recycle Bin and is no longer available for recovery. For more \n      information about Recycle Bin, see <a href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-recycle-bin.html\">\n        Recycle Bin</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>",
+                "smithy.api#title": "Amazon Recycle Bin"
+            }
         },
         "com.amazonaws.rbin#CreateRule": {
             "type": "operation",
@@ -464,7 +464,6 @@
         "com.amazonaws.rbin#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -603,7 +602,6 @@
         "com.amazonaws.rbin#RetentionPeriodValue": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 3650

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -379,7 +379,10 @@
             }
         },
         "com.amazonaws.licensemanager#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.licensemanager#BorrowConfiguration": {
             "type": "structure",
@@ -404,22 +407,13 @@
             }
         },
         "com.amazonaws.licensemanager#BoxBoolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.licensemanager#BoxInteger": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.licensemanager#BoxLong": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.licensemanager#CheckInLicense": {
             "type": "operation",
@@ -2509,6 +2503,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.licensemanager#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Checks whether you have the required permissions for the action, without actually making the request. Provides an error response if you do not have the required permissions.</p>"
                     }
                 }
@@ -3471,10 +3466,7 @@
             }
         },
         "com.amazonaws.licensemanager#Integer": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.licensemanager#InvalidParameterValueException": {
             "type": "structure",
@@ -5349,10 +5341,7 @@
             "type": "string"
         },
         "com.amazonaws.licensemanager#Long": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.licensemanager#ManagedResourceSummary": {
             "type": "structure",
@@ -5383,7 +5372,6 @@
         "com.amazonaws.licensemanager#MaxSize100": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -5450,6 +5438,7 @@
                 "EnableIntegration": {
                     "target": "com.amazonaws.licensemanager#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Enables Organizations integration.</p>",
                         "smithy.api#required": {}
                     }

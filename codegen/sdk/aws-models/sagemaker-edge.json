@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,6 +31,18 @@
     "shapes": {
         "com.amazonaws.sagemakeredge#AmazonSageMakerEdge": {
             "type": "service",
+            "version": "2020-09-23",
+            "operations": [
+                {
+                    "target": "com.amazonaws.sagemakeredge#GetDeployments"
+                },
+                {
+                    "target": "com.amazonaws.sagemakeredge#GetDeviceRegistration"
+                },
+                {
+                    "target": "com.amazonaws.sagemakeredge#SendHeartbeat"
+                }
+            ],
             "traits": {
                 "aws.api#service": {
                     "sdkId": "Sagemaker Edge",
@@ -45,19 +57,7 @@
                 "aws.protocols#restJson1": {},
                 "smithy.api#documentation": "<p>SageMaker Edge Manager dataplane service for communicating with active agents.</p>",
                 "smithy.api#title": "Amazon Sagemaker Edge Manager"
-            },
-            "version": "2020-09-23",
-            "operations": [
-                {
-                    "target": "com.amazonaws.sagemakeredge#GetDeployments"
-                },
-                {
-                    "target": "com.amazonaws.sagemakeredge#GetDeviceRegistration"
-                },
-                {
-                    "target": "com.amazonaws.sagemakeredge#SendHeartbeat"
-                }
-            ]
+            }
         },
         "com.amazonaws.sagemakeredge#CacheTTLSeconds": {
             "type": "string",
@@ -374,6 +374,7 @@
                 "Value": {
                     "target": "com.amazonaws.sagemakeredge#Value",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Returns the value of the metric.</p>"
                     }
                 },
@@ -706,7 +707,10 @@
             "type": "timestamp"
         },
         "com.amazonaws.sagemakeredge#Value": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.sagemakeredge#Version": {
             "type": "string",

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -30,10 +30,7 @@
     },
     "shapes": {
         "com.amazonaws.cloudformation#AcceptTermsAndConditions": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#Account": {
             "type": "string",
@@ -292,16 +289,10 @@
             }
         },
         "com.amazonaws.cloudformation#AutoDeploymentNullable": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#AutoUpdate": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#BatchDescribeTypeConfigurations": {
             "type": "operation",
@@ -388,15 +379,11 @@
             }
         },
         "com.amazonaws.cloudformation#BoxedInteger": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.cloudformation#BoxedMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -953,24 +940,6 @@
         },
         "com.amazonaws.cloudformation#CloudFormation": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "CloudFormation",
-                    "arnNamespace": "cloudformation",
-                    "cloudFormationName": "CloudFormation",
-                    "cloudTrailEventSource": "cloudformation.amazonaws.com",
-                    "endpointPrefix": "cloudformation"
-                },
-                "aws.auth#sigv4": {
-                    "name": "cloudformation"
-                },
-                "aws.protocols#awsQuery": {},
-                "smithy.api#documentation": "<fullname>CloudFormation</fullname>\n         <p>CloudFormation allows you to create and manage Amazon Web Services infrastructure\n         deployments predictably and repeatedly. You can use CloudFormation to leverage\n            Amazon Web Services products, such as Amazon Elastic Compute Cloud, Amazon Elastic Block Store,\n            Amazon Simple Notification Service, Elastic Load Balancing, and Auto Scaling to build highly\n         reliable, highly scalable, cost-effective applications without creating or configuring the\n         underlying Amazon Web Services infrastructure.</p>\n         <p>With CloudFormation, you declare all your resources and dependencies in a template\n         file. The template defines a collection of resources as a single unit called a stack.\n            CloudFormation creates and deletes all member resources of the stack together and\n         manages all dependencies between the resources for you.</p>\n         <p>For more information about CloudFormation, see the <a href=\"http://aws.amazon.com/cloudformation/\">CloudFormation product page</a>.</p>\n         <p>CloudFormation makes use of other Amazon Web Services products. If you need\n         additional technical information about a specific Amazon Web Services product, you can find\n         the product's technical documentation at <a href=\"https://docs.aws.amazon.com/\">\n               <code>docs.aws.amazon.com</code>\n            </a>.</p>",
-                "smithy.api#title": "AWS CloudFormation",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://cloudformation.amazonaws.com/doc/2010-05-15/"
-                }
-            },
             "version": "2010-05-15",
             "operations": [
                 {
@@ -1171,7 +1140,25 @@
                 {
                     "target": "com.amazonaws.cloudformation#ValidateTemplate"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "CloudFormation",
+                    "arnNamespace": "cloudformation",
+                    "cloudFormationName": "CloudFormation",
+                    "cloudTrailEventSource": "cloudformation.amazonaws.com",
+                    "endpointPrefix": "cloudformation"
+                },
+                "aws.auth#sigv4": {
+                    "name": "cloudformation"
+                },
+                "aws.protocols#awsQuery": {},
+                "smithy.api#documentation": "<fullname>CloudFormation</fullname>\n         <p>CloudFormation allows you to create and manage Amazon Web Services infrastructure\n         deployments predictably and repeatedly. You can use CloudFormation to leverage\n            Amazon Web Services products, such as Amazon Elastic Compute Cloud, Amazon Elastic Block Store,\n            Amazon Simple Notification Service, Elastic Load Balancing, and Auto Scaling to build highly\n         reliable, highly scalable, cost-effective applications without creating or configuring the\n         underlying Amazon Web Services infrastructure.</p>\n         <p>With CloudFormation, you declare all your resources and dependencies in a template\n         file. The template defines a collection of resources as a single unit called a stack.\n            CloudFormation creates and deletes all member resources of the stack together and\n         manages all dependencies between the resources for you.</p>\n         <p>For more information about CloudFormation, see the <a href=\"http://aws.amazon.com/cloudformation/\">CloudFormation product page</a>.</p>\n         <p>CloudFormation makes use of other Amazon Web Services products. If you need\n         additional technical information about a specific Amazon Web Services product, you can find\n         the product's technical documentation at <a href=\"https://docs.aws.amazon.com/\">\n               <code>docs.aws.amazon.com</code>\n            </a>.</p>",
+                "smithy.api#title": "AWS CloudFormation",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://cloudformation.amazonaws.com/doc/2010-05-15/"
+                }
+            }
         },
         "com.amazonaws.cloudformation#ConfigurationSchema": {
             "type": "string",
@@ -2016,6 +2003,7 @@
                 "RetainStacks": {
                     "target": "com.amazonaws.cloudformation#RetainStacks",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Removes the stack instances from the specified stack set, but doesn't delete the stacks.\n         You can't reassociate a retained stack or add an existing, saved stack to a new stack\n         set.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-ops-options\">Stack set operation options</a>.</p>",
                         "smithy.api#required": {}
                     }
@@ -3961,24 +3949,19 @@
             }
         },
         "com.amazonaws.cloudformation#DisableRollback": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#DriftedStackInstancesCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
             }
         },
         "com.amazonaws.cloudformation#EnableTerminationProtection": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#ErrorCode": {
             "type": "string",
@@ -4216,6 +4199,7 @@
         "com.amazonaws.cloudformation#FailedStackInstancesCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -4224,7 +4208,6 @@
         "com.amazonaws.cloudformation#FailureToleranceCount": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -4233,7 +4216,6 @@
         "com.amazonaws.cloudformation#FailureTolerancePercentage": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -4558,7 +4540,6 @@
         "com.amazonaws.cloudformation#HookInvocationCount": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4787,6 +4768,7 @@
         "com.amazonaws.cloudformation#InProgressStackInstancesCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -4795,16 +4777,14 @@
         "com.amazonaws.cloudformation#InSyncStackInstancesCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
             }
         },
         "com.amazonaws.cloudformation#IncludeNestedStacks": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#InsufficientCapabilitiesException": {
             "type": "structure",
@@ -4875,22 +4855,13 @@
             }
         },
         "com.amazonaws.cloudformation#IsActivated": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#IsDefaultConfiguration": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#IsDefaultVersion": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#Key": {
             "type": "string"
@@ -4919,10 +4890,7 @@
             "type": "string"
         },
         "com.amazonaws.cloudformation#LimitValue": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.cloudformation#ListChangeSets": {
             "type": "operation",
@@ -5805,7 +5773,6 @@
         "com.amazonaws.cloudformation#MajorVersion": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100000
@@ -5827,15 +5794,11 @@
             }
         },
         "com.amazonaws.cloudformation#ManagedExecutionNullable": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#MaxConcurrentCount": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -5844,7 +5807,6 @@
         "com.amazonaws.cloudformation#MaxConcurrentPercentage": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -5854,7 +5816,6 @@
         "com.amazonaws.cloudformation#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -5887,7 +5848,6 @@
         "com.amazonaws.cloudformation#MonitoringTimeInMinutes": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 180
@@ -5921,10 +5881,7 @@
             }
         },
         "com.amazonaws.cloudformation#NoEcho": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#NotificationARN": {
             "type": "string"
@@ -7276,19 +7233,16 @@
             }
         },
         "com.amazonaws.cloudformation#RetainStacks": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cloudformation#RetainStacksNullable": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#RetainStacksOnAccountRemovalNullable": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#RoleARN": {
             "type": "string",
@@ -8893,30 +8847,35 @@
                 "TotalStackInstancesCount": {
                     "target": "com.amazonaws.cloudformation#TotalStackInstancesCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of stack instances belonging to this stack set.</p>\n         <p>The total number of stack instances is equal to the total of:</p>\n         <ul>\n            <li>\n               <p>Stack instances that match the stack set configuration.</p>\n            </li>\n            <li>\n               <p>Stack instances that have drifted from the stack set configuration.</p>\n            </li>\n            <li>\n               <p>Stack instances where the drift detection operation has failed.</p>\n            </li>\n            <li>\n               <p>Stack instances currently being checked for drift.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "DriftedStackInstancesCount": {
                     "target": "com.amazonaws.cloudformation#DriftedStackInstancesCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of stack instances that have drifted from the expected template and parameter\n         configuration of the stack set. A stack instance is considered to have drifted if one or\n         more of the resources in the associated stack don't match their expected\n         configuration.</p>"
                     }
                 },
                 "InSyncStackInstancesCount": {
                     "target": "com.amazonaws.cloudformation#InSyncStackInstancesCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of stack instances which match the expected template and parameter\n         configuration of the stack set.</p>"
                     }
                 },
                 "InProgressStackInstancesCount": {
                     "target": "com.amazonaws.cloudformation#InProgressStackInstancesCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of stack instances that are currently being checked for drift.</p>"
                     }
                 },
                 "FailedStackInstancesCount": {
                     "target": "com.amazonaws.cloudformation#FailedStackInstancesCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of stack instances for which the drift detection operation failed.</p>"
                     }
                 }
@@ -9698,7 +9657,6 @@
         "com.amazonaws.cloudformation#SupportedMajorVersion": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 65535
@@ -9935,7 +9893,6 @@
         "com.amazonaws.cloudformation#TimeoutMinutes": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -9964,6 +9921,7 @@
         "com.amazonaws.cloudformation#TotalStackInstancesCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -10875,16 +10833,10 @@
             "type": "string"
         },
         "com.amazonaws.cloudformation#UsePreviousTemplate": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#UsePreviousValue": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudformation#ValidateTemplate": {
             "type": "operation",

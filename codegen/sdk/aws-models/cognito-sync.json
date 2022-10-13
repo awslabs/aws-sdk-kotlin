@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -144,7 +144,10 @@
             }
         },
         "com.amazonaws.cognitosync#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cognitosync#BulkPublish": {
             "type": "operation",
@@ -1004,6 +1007,7 @@
                 "DatasetCount": {
                     "target": "com.amazonaws.cognitosync#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Number of datasets for the\n      identity."
                     }
                 },
@@ -1019,10 +1023,16 @@
             }
         },
         "com.amazonaws.cognitosync#Integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.cognitosync#IntegerString": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.cognitosync#InternalErrorException": {
             "type": "structure",
@@ -1188,6 +1198,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitosync#IntegerString",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "The maximum number of results to be\n      returned.",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1209,6 +1220,7 @@
                 "Count": {
                     "target": "com.amazonaws.cognitosync#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Number of datasets returned."
                     }
                 },
@@ -1267,6 +1279,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitosync#IntegerString",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "The maximum number of results to\n      be returned.",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1288,12 +1301,14 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitosync#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "The maximum number of results to\n      be returned."
                     }
                 },
                 "Count": {
                     "target": "com.amazonaws.cognitosync#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Total number of identities for the\n      identity pool."
                     }
                 },
@@ -1383,6 +1398,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitosync#IntegerString",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "The maximum number of results to be\n      returned.",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1417,6 +1433,7 @@
                 "Count": {
                     "target": "com.amazonaws.cognitosync#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Total number of records."
                     }
                 },
@@ -1441,12 +1458,14 @@
                 "DatasetExists": {
                     "target": "com.amazonaws.cognitosync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "Indicates whether the dataset\n      exists."
                     }
                 },
                 "DatasetDeletedAfterRequestedSyncCount": {
                     "target": "com.amazonaws.cognitosync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "A boolean value\n      specifying whether to delete the dataset locally."
                     }
                 },
@@ -1462,10 +1481,7 @@
             }
         },
         "com.amazonaws.cognitosync#Long": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.cognitosync#MergedDatasetNameList": {
             "type": "list",
@@ -1793,6 +1809,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.cognitosync#SetCognitoEventsRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {

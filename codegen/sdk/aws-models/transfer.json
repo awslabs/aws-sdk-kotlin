@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -1111,7 +1111,6 @@
         "com.amazonaws.transfer#CustomStepTimeoutSeconds": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1800
@@ -3283,10 +3282,7 @@
             }
         },
         "com.amazonaws.transfer#Fips": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.transfer#Function": {
             "type": "string",
@@ -5196,7 +5192,6 @@
         "com.amazonaws.transfer#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -5329,7 +5324,6 @@
         "com.amazonaws.transfer#PosixId": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 4294967295
@@ -5995,10 +5989,7 @@
             }
         },
         "com.amazonaws.transfer#SshPublicKeyCount": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.transfer#SshPublicKeyId": {
             "type": "string",
@@ -6156,7 +6147,10 @@
             }
         },
         "com.amazonaws.transfer#StatusCode": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.transfer#StepResultOutputsJson": {
             "type": "string",
@@ -6427,6 +6421,7 @@
                 "StatusCode": {
                     "target": "com.amazonaws.transfer#StatusCode",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The HTTP status code that is the response from your API Gateway.</p>",
                         "smithy.api#required": {}
                     }
@@ -6493,21 +6488,6 @@
         },
         "com.amazonaws.transfer#TransferService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Transfer",
-                    "arnNamespace": "transfer",
-                    "cloudFormationName": "Transfer",
-                    "cloudTrailEventSource": "transfer.amazonaws.com",
-                    "endpointPrefix": "transfer"
-                },
-                "aws.auth#sigv4": {
-                    "name": "transfer"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>Transfer Family is a fully managed service that enables the transfer of files over the File\n      Transfer Protocol (FTP), File Transfer Protocol over SSL (FTPS), or Secure Shell (SSH) File\n      Transfer Protocol (SFTP) directly into and out of Amazon Simple Storage Service (Amazon S3) or Amazon EFS.\n      Additionally, you can use Applicability Statement 2 (AS2) to transfer files into and out of Amazon S3.\n      Amazon Web Services helps you seamlessly migrate your file transfer workflows to Transfer Family by integrating\n      with existing authentication systems, and providing DNS routing with Amazon Route 53 so\n      nothing changes for your customers and partners, or their applications. With your data in\n      Amazon S3, you can use it with Amazon Web Services for processing, analytics, machine learning, and\n      archiving. Getting started with Transfer Family is easy since there is no infrastructure to buy and\n      set up.</p>",
-                "smithy.api#title": "AWS Transfer Family"
-            },
             "version": "2018-11-05",
             "operations": [
                 {
@@ -6684,7 +6664,22 @@
                 {
                     "target": "com.amazonaws.transfer#UpdateUser"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Transfer",
+                    "arnNamespace": "transfer",
+                    "cloudFormationName": "Transfer",
+                    "cloudTrailEventSource": "transfer.amazonaws.com",
+                    "endpointPrefix": "transfer"
+                },
+                "aws.auth#sigv4": {
+                    "name": "transfer"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<p>Transfer Family is a fully managed service that enables the transfer of files over the File\n      Transfer Protocol (FTP), File Transfer Protocol over SSL (FTPS), or Secure Shell (SSH) File\n      Transfer Protocol (SFTP) directly into and out of Amazon Simple Storage Service (Amazon S3) or Amazon EFS.\n      Additionally, you can use Applicability Statement 2 (AS2) to transfer files into and out of Amazon S3.\n      Amazon Web Services helps you seamlessly migrate your file transfer workflows to Transfer Family by integrating\n      with existing authentication systems, and providing DNS routing with Amazon Route 53 so\n      nothing changes for your customers and partners, or their applications. With your data in\n      Amazon S3, you can use it with Amazon Web Services for processing, analytics, machine learning, and\n      archiving. Getting started with Transfer Family is easy since there is no infrastructure to buy and\n      set up.</p>",
+                "smithy.api#title": "AWS Transfer Family"
+            }
         },
         "com.amazonaws.transfer#UntagResource": {
             "type": "operation",
@@ -7452,10 +7447,7 @@
             }
         },
         "com.amazonaws.transfer#UserCount": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.transfer#UserDetails": {
             "type": "structure",

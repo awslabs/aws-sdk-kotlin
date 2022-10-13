@@ -229,8 +229,6 @@
                 "Status": {
                     "target": "com.amazonaws.codestarnotifications#NotificationRuleStatus",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "ENABLED",
                         "smithy.api#documentation": "<p>The status of the notification rule. The default value is <code>ENABLED</code>. If the status is\n            set to <code>DISABLED</code>, notifications aren't sent for the notification rule.</p>"
                     }
                 }

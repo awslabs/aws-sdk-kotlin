@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -33,6 +33,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.kinesis#AddTagsToStreamInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -75,10 +78,7 @@
             }
         },
         "com.amazonaws.kinesis#BooleanObject": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.kinesis#ChildShard": {
             "type": "structure",
@@ -163,7 +163,6 @@
         "com.amazonaws.kinesis#ConsumerCountObject": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1000000
@@ -253,6 +252,9 @@
             "input": {
                 "target": "com.amazonaws.kinesis#CreateStreamInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.kinesis#InvalidArgumentException"
@@ -309,6 +311,9 @@
             "input": {
                 "target": "com.amazonaws.kinesis#DecreaseStreamRetentionPeriodInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.kinesis#InvalidArgumentException"
@@ -354,6 +359,9 @@
             "input": {
                 "target": "com.amazonaws.kinesis#DeleteStreamInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.kinesis#LimitExceededException"
@@ -394,6 +402,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.kinesis#DeregisterStreamConsumerInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -623,7 +634,6 @@
         "com.amazonaws.kinesis#DescribeStreamInputLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10000
@@ -947,7 +957,6 @@
         "com.amazonaws.kinesis#GetRecordsInputLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10000
@@ -1097,6 +1106,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.kinesis#IncreaseStreamRetentionPeriodInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1266,27 +1278,6 @@
         },
         "com.amazonaws.kinesis#Kinesis_20131202": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Kinesis",
-                    "arnNamespace": "kinesis",
-                    "cloudFormationName": "Kinesis",
-                    "cloudTrailEventSource": "kinesis.amazonaws.com",
-                    "endpointPrefix": "kinesis"
-                },
-                "aws.auth#sigv4": {
-                    "name": "kinesis"
-                },
-                "aws.protocols#awsJson1_1": {
-                    "http": ["http/1.1", "h2"],
-                    "eventStreamHttp": ["h2"]
-                },
-                "smithy.api#documentation": "<fullname>Amazon Kinesis Data Streams Service API Reference</fullname>\n        <p>Amazon Kinesis Data Streams is a managed service that scales elastically for real-time\n            processing of streaming big data.</p>",
-                "smithy.api#title": "Amazon Kinesis",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://kinesis.amazonaws.com/doc/2013-12-02"
-                }
-            },
             "version": "2013-12-02",
             "operations": [
                 {
@@ -1376,7 +1367,33 @@
                 {
                     "target": "com.amazonaws.kinesis#UpdateStreamMode"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Kinesis",
+                    "arnNamespace": "kinesis",
+                    "cloudFormationName": "Kinesis",
+                    "cloudTrailEventSource": "kinesis.amazonaws.com",
+                    "endpointPrefix": "kinesis"
+                },
+                "aws.auth#sigv4": {
+                    "name": "kinesis"
+                },
+                "aws.protocols#awsJson1_1": {
+                    "http": [
+                        "http/1.1",
+                        "h2"
+                    ],
+                    "eventStreamHttp": [
+                        "h2"
+                    ]
+                },
+                "smithy.api#documentation": "<fullname>Amazon Kinesis Data Streams Service API Reference</fullname>\n        <p>Amazon Kinesis Data Streams is a managed service that scales elastically for real-time\n            processing of streaming big data.</p>",
+                "smithy.api#title": "Amazon Kinesis",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://kinesis.amazonaws.com/doc/2013-12-02"
+                }
+            }
         },
         "com.amazonaws.kinesis#LimitExceededException": {
             "type": "structure",
@@ -1466,7 +1483,6 @@
         "com.amazonaws.kinesis#ListShardsInputLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10000
@@ -1557,7 +1573,6 @@
         "com.amazonaws.kinesis#ListStreamConsumersInputLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10000
@@ -1621,7 +1636,6 @@
         "com.amazonaws.kinesis#ListStreamsInputLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10000
@@ -1703,7 +1717,6 @@
         "com.amazonaws.kinesis#ListTagsForStreamInputLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -1736,6 +1749,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.kinesis#MergeShardsInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1841,7 +1857,6 @@
         "com.amazonaws.kinesis#MillisBehindLatest": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -1859,7 +1874,6 @@
         "com.amazonaws.kinesis#OnDemandStreamCountLimitObject": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1000000
@@ -1869,7 +1883,6 @@
         "com.amazonaws.kinesis#OnDemandStreamCountObject": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1000000
@@ -1888,7 +1901,6 @@
         "com.amazonaws.kinesis#PositiveIntegerObject": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -2302,6 +2314,9 @@
             "input": {
                 "target": "com.amazonaws.kinesis#RemoveTagsFromStreamInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.kinesis#InvalidArgumentException"
@@ -2373,10 +2388,7 @@
             }
         },
         "com.amazonaws.kinesis#RetentionPeriodHours": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.kinesis#ScalingType": {
             "type": "string",
@@ -2460,7 +2472,6 @@
         "com.amazonaws.kinesis#ShardCountObject": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1000000
@@ -2588,6 +2599,9 @@
             "input": {
                 "target": "com.amazonaws.kinesis#SplitShardInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.kinesis#InvalidArgumentException"
@@ -2642,6 +2656,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.kinesis#StartStreamEncryptionInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2736,6 +2753,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.kinesis#StopStreamEncryptionInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -3330,6 +3350,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.kinesis#UpdateStreamModeInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {

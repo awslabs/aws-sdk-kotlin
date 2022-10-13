@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -92,7 +92,6 @@
         "com.amazonaws.cloud9#AutomaticStopTimeMinutes": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "max": 20160
                 }
@@ -108,7 +107,10 @@
                     "target": "com.amazonaws.cloud9#String"
                 },
                 "code": {
-                    "target": "com.amazonaws.cloud9#Integer"
+                    "target": "com.amazonaws.cloud9#Integer",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -144,7 +146,10 @@
                     "target": "com.amazonaws.cloud9#String"
                 },
                 "code": {
-                    "target": "com.amazonaws.cloud9#Integer"
+                    "target": "com.amazonaws.cloud9#Integer",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -162,7 +167,10 @@
                     "target": "com.amazonaws.cloud9#String"
                 },
                 "code": {
-                    "target": "com.amazonaws.cloud9#Integer"
+                    "target": "com.amazonaws.cloud9#Integer",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -975,7 +983,10 @@
                     "target": "com.amazonaws.cloud9#String"
                 },
                 "code": {
-                    "target": "com.amazonaws.cloud9#Integer"
+                    "target": "com.amazonaws.cloud9#Integer",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -1003,7 +1014,10 @@
             }
         },
         "com.amazonaws.cloud9#Integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.cloud9#InternalServerErrorException": {
             "type": "structure",
@@ -1015,7 +1029,10 @@
                     "target": "com.amazonaws.cloud9#String"
                 },
                 "code": {
-                    "target": "com.amazonaws.cloud9#Integer"
+                    "target": "com.amazonaws.cloud9#Integer",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -1033,7 +1050,10 @@
                     "target": "com.amazonaws.cloud9#String"
                 },
                 "code": {
-                    "target": "com.amazonaws.cloud9#Integer"
+                    "target": "com.amazonaws.cloud9#Integer",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -1230,7 +1250,6 @@
         "com.amazonaws.cloud9#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 25
@@ -1262,7 +1281,10 @@
                     "target": "com.amazonaws.cloud9#String"
                 },
                 "code": {
-                    "target": "com.amazonaws.cloud9#Integer"
+                    "target": "com.amazonaws.cloud9#Integer",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -1271,10 +1293,7 @@
             }
         },
         "com.amazonaws.cloud9#NullableBoolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloud9#Permissions": {
             "type": "string",
@@ -1445,7 +1464,10 @@
                     "target": "com.amazonaws.cloud9#String"
                 },
                 "code": {
-                    "target": "com.amazonaws.cloud9#Integer"
+                    "target": "com.amazonaws.cloud9#Integer",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {

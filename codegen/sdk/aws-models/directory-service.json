@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -160,6 +160,7 @@
                 "UpdateSecurityGroupForDirectoryControllers": {
                     "target": "com.amazonaws.directoryservice#UpdateSecurityGroupForDirectoryControllers",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If set to true, updates the inbound and outbound rules of the security group that has\n         the description: \"Amazon Web Services created security group for <i>directory ID</i>\n         directory controllers.\" Following are the new rules: </p>\n         <p>Inbound:</p>\n         <ul>\n            <li>\n               <p>Type: Custom UDP Rule, Protocol: UDP, Range: 88, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom UDP Rule, Protocol: UDP, Range: 123, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom UDP Rule, Protocol: UDP, Range: 138, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom UDP Rule, Protocol: UDP, Range: 389, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom UDP Rule, Protocol: UDP, Range: 464, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom UDP Rule, Protocol: UDP, Range: 445, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom TCP Rule, Protocol: TCP, Range: 88, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom TCP Rule, Protocol: TCP, Range: 135, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom TCP Rule, Protocol: TCP, Range: 445, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom TCP Rule, Protocol: TCP, Range: 464, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom TCP Rule, Protocol: TCP, Range: 636, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom TCP Rule, Protocol: TCP, Range: 1024-65535, Source:\n               0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: Custom TCP Rule, Protocol: TCP, Range: 3268-33269, Source:\n               0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: DNS (UDP), Protocol: UDP, Range: 53, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: DNS (TCP), Protocol: TCP, Range: 53, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: LDAP, Protocol: TCP, Range: 389, Source: 0.0.0.0/0</p>\n            </li>\n            <li>\n               <p>Type: All ICMP, Protocol: All, Range: N/A, Source: 0.0.0.0/0</p>\n            </li>\n         </ul>\n\n         <p></p>\n         <p>Outbound:</p>\n         <ul>\n            <li>\n               <p>Type: All traffic, Protocol: All, Range: All, Destination: 0.0.0.0/0</p>\n            </li>\n         </ul>\n         <p>These security rules impact an internal network interface that is not exposed\n         publicly.</p>"
                     }
                 }
@@ -763,7 +764,10 @@
             }
         },
         "com.amazonaws.directoryservice#CloudOnlyDirectoriesLimitReached": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.directoryservice#Computer": {
             "type": "structure",
@@ -948,7 +952,10 @@
             }
         },
         "com.amazonaws.directoryservice#ConnectedDirectoriesLimitReached": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.directoryservice#CreateAlias": {
             "type": "operation",
@@ -1459,7 +1466,10 @@
             }
         },
         "com.amazonaws.directoryservice#CreateSnapshotBeforeSchemaExtension": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.directoryservice#CreateSnapshotRequest": {
             "type": "structure",
@@ -1616,7 +1626,10 @@
             }
         },
         "com.amazonaws.directoryservice#DeleteAssociatedConditionalForwarder": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.directoryservice#DeleteConditionalForwarder": {
             "type": "operation",
@@ -1870,6 +1883,7 @@
                 "DeleteAssociatedConditionalForwarder": {
                     "target": "com.amazonaws.directoryservice#DeleteAssociatedConditionalForwarder",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Delete a conditional forwarder as part of a DeleteTrustRequest.</p>"
                     }
                 }
@@ -2926,6 +2940,7 @@
         "com.amazonaws.directoryservice#DesiredNumberOfDomainControllers": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 2
                 }
@@ -3244,12 +3259,14 @@
                 "SsoEnabled": {
                     "target": "com.amazonaws.directoryservice#SsoEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if single sign-on is enabled for the directory. For more information, see <a>EnableSso</a> and <a>DisableSso</a>.</p>"
                     }
                 },
                 "DesiredNumberOfDomainControllers": {
                     "target": "com.amazonaws.directoryservice#DesiredNumberOfDomainControllers",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The desired number of domain controllers in the directory if the directory is Microsoft\n      AD.</p>"
                     }
                 },
@@ -3357,6 +3374,7 @@
                 "CloudOnlyDirectoriesLimitReached": {
                     "target": "com.amazonaws.directoryservice#CloudOnlyDirectoriesLimitReached",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if the cloud directory limit has been reached.</p>"
                     }
                 },
@@ -3375,6 +3393,7 @@
                 "CloudOnlyMicrosoftADLimitReached": {
                     "target": "com.amazonaws.directoryservice#CloudOnlyDirectoriesLimitReached",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if the Managed Microsoft AD directory limit has been reached.</p>"
                     }
                 },
@@ -3393,6 +3412,7 @@
                 "ConnectedDirectoriesLimitReached": {
                     "target": "com.amazonaws.directoryservice#ConnectedDirectoriesLimitReached",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if the connected directory limit has been reached.</p>"
                     }
                 }
@@ -3424,24 +3444,6 @@
         },
         "com.amazonaws.directoryservice#DirectoryService_20150416": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Directory Service",
-                    "arnNamespace": "ds",
-                    "cloudFormationName": "DirectoryService",
-                    "cloudTrailEventSource": "directoryservice.amazonaws.com",
-                    "endpointPrefix": "ds"
-                },
-                "aws.auth#sigv4": {
-                    "name": "ds"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<fullname>Directory Service</fullname>\n         <p>Directory Service is a web service that makes it easy for you to setup and run directories in the\n         Amazon Web Services cloud, or connect your Amazon Web Services resources with an existing self-managed Microsoft Active\n         Directory. This guide provides detailed information about Directory Service operations, data types,\n         parameters, and errors. For information about Directory Services features, see <a href=\"https://aws.amazon.com/directoryservice/\">Directory Service</a> and the <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html\">Directory Service\n            Administration Guide</a>.</p>\n         <note>\n            <p>Amazon Web Services provides SDKs that consist of libraries and sample code for various\n            programming languages and platforms (Java, Ruby, .Net, iOS, Android, etc.). The SDKs\n            provide a convenient way to create programmatic access to Directory Service and other Amazon Web Services\n            services. For more information about the Amazon Web Services SDKs, including how to download and\n            install them, see <a href=\"http://aws.amazon.com/tools/\">Tools for Amazon Web\n               Services</a>.</p>\n         </note>",
-                "smithy.api#title": "AWS Directory Service",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://directoryservice.amazonaws.com/doc/2015-04-16/"
-                }
-            },
             "version": "2015-04-16",
             "operations": [
                 {
@@ -3639,7 +3641,25 @@
                 {
                     "target": "com.amazonaws.directoryservice#VerifyTrust"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Directory Service",
+                    "arnNamespace": "ds",
+                    "cloudFormationName": "DirectoryService",
+                    "cloudTrailEventSource": "directoryservice.amazonaws.com",
+                    "endpointPrefix": "ds"
+                },
+                "aws.auth#sigv4": {
+                    "name": "ds"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<fullname>Directory Service</fullname>\n         <p>Directory Service is a web service that makes it easy for you to setup and run directories in the\n         Amazon Web Services cloud, or connect your Amazon Web Services resources with an existing self-managed Microsoft Active\n         Directory. This guide provides detailed information about Directory Service operations, data types,\n         parameters, and errors. For information about Directory Services features, see <a href=\"https://aws.amazon.com/directoryservice/\">Directory Service</a> and the <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html\">Directory Service\n            Administration Guide</a>.</p>\n         <note>\n            <p>Amazon Web Services provides SDKs that consist of libraries and sample code for various\n            programming languages and platforms (Java, Ruby, .Net, iOS, Android, etc.). The SDKs\n            provide a convenient way to create programmatic access to Directory Service and other Amazon Web Services\n            services. For more information about the Amazon Web Services SDKs, including how to download and\n            install them, see <a href=\"http://aws.amazon.com/tools/\">Tools for Amazon Web\n               Services</a>.</p>\n         </note>",
+                "smithy.api#title": "AWS Directory Service",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://directoryservice.amazonaws.com/doc/2015-04-16/"
+                }
+            }
         },
         "com.amazonaws.directoryservice#DirectoryShortName": {
             "type": "string",
@@ -4949,7 +4969,6 @@
         "com.amazonaws.directoryservice#Limit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -5344,7 +5363,10 @@
             }
         },
         "com.amazonaws.directoryservice#ManualSnapshotsLimitReached": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.directoryservice#NextToken": {
             "type": "string"
@@ -5455,7 +5477,6 @@
         "com.amazonaws.directoryservice#PageLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -5472,6 +5493,7 @@
         "com.amazonaws.directoryservice#PortNumber": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1025,
                     "max": 65535
@@ -5513,6 +5535,7 @@
         "com.amazonaws.directoryservice#RadiusRetries": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 10
@@ -5531,18 +5554,21 @@
                 "RadiusPort": {
                     "target": "com.amazonaws.directoryservice#PortNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The port that your RADIUS server is using for communications. Your self-managed\n         network must allow inbound traffic over this port from the Directory Service servers.</p>"
                     }
                 },
                 "RadiusTimeout": {
                     "target": "com.amazonaws.directoryservice#RadiusTimeout",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The amount of time, in seconds, to wait for the RADIUS server to respond.</p>"
                     }
                 },
                 "RadiusRetries": {
                     "target": "com.amazonaws.directoryservice#RadiusRetries",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of times that communication with the RADIUS server is\n         attempted.</p>"
                     }
                 },
@@ -5567,6 +5593,7 @@
                 "UseSameUsername": {
                     "target": "com.amazonaws.directoryservice#UseSameUsername",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Not currently used.</p>"
                     }
                 }
@@ -5608,6 +5635,7 @@
         "com.amazonaws.directoryservice#RadiusTimeout": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 20
@@ -5647,6 +5675,7 @@
                 "DesiredNumberOfDomainControllers": {
                     "target": "com.amazonaws.directoryservice#DesiredNumberOfDomainControllers",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The desired number of domain controllers in the specified Region for the specified\n      directory.</p>"
                     }
                 },
@@ -6839,6 +6868,7 @@
                 "ManualSnapshotsLimitReached": {
                     "target": "com.amazonaws.directoryservice#ManualSnapshotsLimitReached",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if the manual snapshot limit has been reached.</p>"
                     }
                 }
@@ -6901,7 +6931,10 @@
             }
         },
         "com.amazonaws.directoryservice#SsoEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.directoryservice#StageReason": {
             "type": "string"
@@ -6954,6 +6987,7 @@
                 "CreateSnapshotBeforeSchemaExtension": {
                     "target": "com.amazonaws.directoryservice#CreateSnapshotBeforeSchemaExtension",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, creates a snapshot of the directory before applying the schema\n      extension.</p>",
                         "smithy.api#required": {}
                     }
@@ -7555,6 +7589,7 @@
                 "DesiredNumber": {
                     "target": "com.amazonaws.directoryservice#DesiredNumberOfDomainControllers",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of domain controllers desired in the directory.</p>",
                         "smithy.api#required": {}
                     }
@@ -7621,7 +7656,10 @@
             }
         },
         "com.amazonaws.directoryservice#UpdateSecurityGroupForDirectoryControllers": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.directoryservice#UpdateSettings": {
             "type": "operation",
@@ -7750,7 +7788,10 @@
             }
         },
         "com.amazonaws.directoryservice#UseSameUsername": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.directoryservice#UserDoesNotExistException": {
             "type": "structure",

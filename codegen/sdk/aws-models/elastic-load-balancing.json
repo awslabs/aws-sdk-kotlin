@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -35,6 +35,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.elasticloadbalancing#AccessLogEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether access logs are enabled for the load balancer.</p>",
                         "smithy.api#required": {}
                     }
@@ -63,13 +64,13 @@
             }
         },
         "com.amazonaws.elasticloadbalancing#AccessLogEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.elasticloadbalancing#AccessLogInterval": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.elasticloadbalancing#AccessLogPrefix": {
             "type": "string"
@@ -95,7 +96,10 @@
             }
         },
         "com.amazonaws.elasticloadbalancing#AccessPointPort": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.elasticloadbalancing#AddAvailabilityZonesInput": {
             "type": "structure",
@@ -408,6 +412,7 @@
                 "InstancePort": {
                     "target": "com.amazonaws.elasticloadbalancing#InstancePort",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The port on which the EC2 instance is listening.</p>"
                     }
                 },
@@ -507,6 +512,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.elasticloadbalancing#ConnectionDrainingEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether connection draining is enabled for the load balancer.</p>",
                         "smithy.api#required": {}
                     }
@@ -523,13 +529,13 @@
             }
         },
         "com.amazonaws.elasticloadbalancing#ConnectionDrainingEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.elasticloadbalancing#ConnectionDrainingTimeout": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.elasticloadbalancing#ConnectionSettings": {
             "type": "structure",
@@ -547,10 +553,7 @@
             }
         },
         "com.amazonaws.elasticloadbalancing#CookieExpirationPeriod": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.elasticloadbalancing#CookieName": {
             "type": "string"
@@ -932,6 +935,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.elasticloadbalancing#CrossZoneLoadBalancingEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether cross-zone load balancing is enabled for the load balancer.</p>",
                         "smithy.api#required": {}
                     }
@@ -942,7 +946,10 @@
             }
         },
         "com.amazonaws.elasticloadbalancing#CrossZoneLoadBalancingEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.elasticloadbalancing#DNSName": {
             "type": "string"
@@ -1811,10 +1818,7 @@
             }
         },
         "com.amazonaws.elasticloadbalancing#EndPointPort": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.elasticloadbalancing#ErrorDescription": {
             "type": "string"
@@ -1832,6 +1836,7 @@
                 "Interval": {
                     "target": "com.amazonaws.elasticloadbalancing#HealthCheckInterval",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The approximate interval, in seconds, between health checks of an individual instance.</p>",
                         "smithy.api#required": {}
                     }
@@ -1839,6 +1844,7 @@
                 "Timeout": {
                     "target": "com.amazonaws.elasticloadbalancing#HealthCheckTimeout",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The amount of time, in seconds, during which no response means a failed health check.</p>\n        <p>This value must be less than the <code>Interval</code> value.</p>",
                         "smithy.api#required": {}
                     }
@@ -1846,6 +1852,7 @@
                 "UnhealthyThreshold": {
                     "target": "com.amazonaws.elasticloadbalancing#UnhealthyThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of consecutive health check failures required before moving the instance to the <code>Unhealthy</code> state.</p>",
                         "smithy.api#required": {}
                     }
@@ -1853,6 +1860,7 @@
                 "HealthyThreshold": {
                     "target": "com.amazonaws.elasticloadbalancing#HealthyThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of consecutive health checks successes required before moving the instance to the <code>Healthy</code> state.</p>",
                         "smithy.api#required": {}
                     }
@@ -1865,6 +1873,7 @@
         "com.amazonaws.elasticloadbalancing#HealthCheckInterval": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 5,
                     "max": 300
@@ -1877,6 +1886,7 @@
         "com.amazonaws.elasticloadbalancing#HealthCheckTimeout": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 2,
                     "max": 60
@@ -1886,6 +1896,7 @@
         "com.amazonaws.elasticloadbalancing#HealthyThreshold": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 2,
                     "max": 10
@@ -1895,7 +1906,6 @@
         "com.amazonaws.elasticloadbalancing#IdleTimeout": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 3600
@@ -1922,6 +1932,7 @@
         "com.amazonaws.elasticloadbalancing#InstancePort": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 65535
@@ -2122,6 +2133,7 @@
                 "LoadBalancerPort": {
                     "target": "com.amazonaws.elasticloadbalancing#AccessPointPort",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The port on which the load balancer is listening. On EC2-VPC, you can specify any port from the range 1-65535. On EC2-Classic, you can specify any port from the following list: 25, 80, 443, 465, 587, 1024-65535.</p>",
                         "smithy.api#required": {}
                     }
@@ -2135,6 +2147,7 @@
                 "InstancePort": {
                     "target": "com.amazonaws.elasticloadbalancing#InstancePort",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The port on which the instance is listening.</p>",
                         "smithy.api#required": {}
                     }
@@ -2479,7 +2492,6 @@
         "com.amazonaws.elasticloadbalancing#PageSize": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 400
@@ -2937,6 +2949,7 @@
                 "LoadBalancerPort": {
                     "target": "com.amazonaws.elasticloadbalancing#AccessPointPort",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The port that uses the specified SSL certificate.</p>",
                         "smithy.api#required": {}
                     }
@@ -3058,6 +3071,7 @@
                 "LoadBalancerPort": {
                     "target": "com.amazonaws.elasticloadbalancing#AccessPointPort",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The external port of the load balancer.</p>",
                         "smithy.api#required": {}
                     }
@@ -3287,6 +3301,7 @@
         "com.amazonaws.elasticloadbalancing#UnhealthyThreshold": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 2,
                     "max": 10

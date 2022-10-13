@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -93,21 +93,6 @@
         },
         "com.amazonaws.forecast#AmazonForecast": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "forecast",
-                    "arnNamespace": "forecast",
-                    "cloudFormationName": "Forecast",
-                    "cloudTrailEventSource": "forecast.amazonaws.com",
-                    "endpointPrefix": "forecast"
-                },
-                "aws.auth#sigv4": {
-                    "name": "forecast"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>Provides APIs for creating and managing Amazon Forecast resources.</p>",
-                "smithy.api#title": "Amazon Forecast Service"
-            },
             "version": "2018-06-26",
             "operations": [
                 {
@@ -299,7 +284,22 @@
                 {
                     "target": "com.amazonaws.forecast#UpdateDatasetGroup"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "forecast",
+                    "arnNamespace": "forecast",
+                    "cloudFormationName": "Forecast",
+                    "cloudTrailEventSource": "forecast.amazonaws.com",
+                    "endpointPrefix": "forecast"
+                },
+                "aws.auth#sigv4": {
+                    "name": "forecast"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<p>Provides APIs for creating and managing Amazon Forecast resources.</p>",
+                "smithy.api#title": "Amazon Forecast Service"
+            }
         },
         "com.amazonaws.forecast#Arn": {
             "type": "string",
@@ -444,10 +444,7 @@
             }
         },
         "com.amazonaws.forecast#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.forecast#CategoricalParameterRange": {
             "type": "structure",
@@ -845,6 +842,7 @@
                 "UseGeolocationForTimeZone": {
                     "target": "com.amazonaws.forecast#UseGeolocationForTimeZone",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Automatically derive time zone information from the geolocation attribute. This option\n            is ideal for datasets that contain timestamps in multiple time zones and those\n            timestamps are expressed in local time.</p>"
                     }
                 },
@@ -1999,7 +1997,6 @@
         "com.amazonaws.forecast#DayOfMonth": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 28
@@ -2864,6 +2861,7 @@
                 "UseGeolocationForTimeZone": {
                     "target": "com.amazonaws.forecast#UseGeolocationForTimeZone",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether <code>TimeZone</code> is automatically derived from the geolocation\n            attribute.</p>"
                     }
                 },
@@ -4115,10 +4113,7 @@
             }
         },
         "com.amazonaws.forecast#Double": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.forecast#EncryptionConfig": {
             "type": "structure",
@@ -4844,7 +4839,6 @@
         "com.amazonaws.forecast#Hour": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 23
@@ -4887,10 +4881,7 @@
             }
         },
         "com.amazonaws.forecast#Integer": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.forecast#IntegerParameterRange": {
             "type": "structure",
@@ -5972,10 +5963,7 @@
             }
         },
         "com.amazonaws.forecast#Long": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.forecast#LongArn": {
             "type": "string",
@@ -5996,7 +5984,6 @@
         "com.amazonaws.forecast#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -7537,7 +7524,10 @@
             "members": {}
         },
         "com.amazonaws.forecast#UseGeolocationForTimeZone": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.forecast#Value": {
             "type": "string",

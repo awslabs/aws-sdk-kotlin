@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -670,6 +670,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.codestarconnections#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return in a single call. To retrieve the remaining\n      results, make another call with the returned <code>nextToken</code> value.</p>"
                     }
                 },
@@ -721,6 +722,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.codestarconnections#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return in a single call. To retrieve the remaining\n      results, make another call with the returned <code>nextToken</code> value.</p>"
                     }
                 },
@@ -792,6 +794,7 @@
         "com.amazonaws.codestarconnections#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100

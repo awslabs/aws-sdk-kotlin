@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,21 +31,6 @@
     "shapes": {
         "com.amazonaws.servicecatalog#AWS242ServiceCatalogService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Service Catalog",
-                    "arnNamespace": "servicecatalog",
-                    "cloudFormationName": "ServiceCatalog",
-                    "cloudTrailEventSource": "servicecatalog.amazonaws.com",
-                    "endpointPrefix": "servicecatalog"
-                },
-                "aws.auth#sigv4": {
-                    "name": "servicecatalog"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<fullname>AWS Service Catalog</fullname>\n         <p>\n            <a href=\"https://aws.amazon.com/servicecatalog/\">Service Catalog</a> enables\n         organizations to create and manage catalogs of IT services that are approved for Amazon Web Services. To\n         get the most out of this documentation, you should be familiar with the terminology\n         discussed in <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/what-is_concepts.html\">Service Catalog\n         Concepts</a>.</p>",
-                "smithy.api#title": "AWS Service Catalog"
-            },
             "version": "2015-12-10",
             "operations": [
                 {
@@ -309,7 +294,22 @@
                 {
                     "target": "com.amazonaws.servicecatalog#UpdateTagOption"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Service Catalog",
+                    "arnNamespace": "servicecatalog",
+                    "cloudFormationName": "ServiceCatalog",
+                    "cloudTrailEventSource": "servicecatalog.amazonaws.com",
+                    "endpointPrefix": "servicecatalog"
+                },
+                "aws.auth#sigv4": {
+                    "name": "servicecatalog"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<fullname>AWS Service Catalog</fullname>\n         <p>\n            <a href=\"https://aws.amazon.com/servicecatalog/\">Service Catalog</a> enables\n         organizations to create and manage catalogs of IT services that are approved for Amazon Web Services. To\n         get the most out of this documentation, you should be familiar with the terminology\n         discussed in <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/what-is_concepts.html\">Service Catalog\n         Concepts</a>.</p>",
+                "smithy.api#title": "AWS Service Catalog"
+            }
         },
         "com.amazonaws.servicecatalog#AcceptLanguage": {
             "type": "string",
@@ -463,7 +463,10 @@
             }
         },
         "com.amazonaws.servicecatalog#ApproximateCount": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.servicecatalog#AssociateBudgetWithResource": {
             "type": "operation",
@@ -841,7 +844,10 @@
             }
         },
         "com.amazonaws.servicecatalog#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.servicecatalog#BudgetDetail": {
             "type": "structure",
@@ -1378,6 +1384,7 @@
                 "ShareTagOptions": {
                     "target": "com.amazonaws.servicecatalog#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Enables or disables <code>TagOptions </code> sharing when creating the portfolio share. If this flag is not provided, TagOptions sharing is disabled.</p>"
                     }
                 }
@@ -2121,6 +2128,7 @@
                 "IgnoreErrors": {
                     "target": "com.amazonaws.servicecatalog#IgnoreErrors",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If set to true, Service Catalog stops managing the specified provisioned product even\n         if it cannot delete the underlying resources.</p>"
                     }
                 }
@@ -2588,6 +2596,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSizeMax100",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 }
@@ -2923,6 +2932,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -3013,6 +3023,7 @@
                 "Verbose": {
                     "target": "com.amazonaws.servicecatalog#Verbose",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether a verbose level of detail is enabled.</p>"
                     }
                 }
@@ -3200,6 +3211,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 }
@@ -3409,7 +3421,10 @@
             "members": {}
         },
         "com.amazonaws.servicecatalog#DisableTemplateValidation": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.servicecatalog#DisassociateBudgetFromResource": {
             "type": "operation",
@@ -4085,6 +4100,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -4114,7 +4130,10 @@
             }
         },
         "com.amazonaws.servicecatalog#HasDefaultPath": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.servicecatalog#Id": {
             "type": "string",
@@ -4137,7 +4156,10 @@
             }
         },
         "com.amazonaws.servicecatalog#IgnoreErrors": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.servicecatalog#ImportAsProvisionedProduct": {
             "type": "operation",
@@ -4372,6 +4394,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSizeMax100",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -4444,6 +4467,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -4522,6 +4546,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -4594,6 +4619,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -4682,6 +4708,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 }
@@ -4760,6 +4787,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSizeMax100",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 }
@@ -4854,6 +4882,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSizeMax100",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 }
@@ -4894,6 +4923,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSizeMax100",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 }
@@ -4960,6 +4990,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -5026,6 +5057,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -5118,6 +5150,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -5228,6 +5261,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -5325,6 +5359,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>",
                         "smithy.api#httpQuery": "pageSize"
                     }
@@ -5422,6 +5457,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -5468,6 +5504,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -5541,6 +5578,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 }
@@ -5626,6 +5664,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -5667,7 +5706,10 @@
             }
         },
         "com.amazonaws.servicecatalog#NoEcho": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.servicecatalog#NotificationArn": {
             "type": "string",
@@ -5692,10 +5734,7 @@
             }
         },
         "com.amazonaws.servicecatalog#NullableBoolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.servicecatalog#OperationNotSupportedException": {
             "type": "structure",
@@ -5793,6 +5832,7 @@
         "com.amazonaws.servicecatalog#PageSize": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 20
@@ -5802,6 +5842,7 @@
         "com.amazonaws.servicecatalog#PageSizeMax100": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -5993,12 +6034,14 @@
                 "Accepted": {
                     "target": "com.amazonaws.servicecatalog#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the shared portfolio is imported by the recipient account. If the recipient is in an organization node, the share is automatically imported, and the field is always set to true.</p>"
                     }
                 },
                 "ShareTagOptions": {
                     "target": "com.amazonaws.servicecatalog#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether TagOptions sharing is enabled or disabled for the portfolio share.</p>"
                     }
                 }
@@ -6133,6 +6176,7 @@
                 "ApproximateCount": {
                     "target": "com.amazonaws.servicecatalog#ApproximateCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>An approximate count of the products that match the value.</p>"
                     }
                 }
@@ -6338,6 +6382,7 @@
                 "HasDefaultPath": {
                     "target": "com.amazonaws.servicecatalog#HasDefaultPath",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the product has a default path.\n         If the product does not have a default path, call <a>ListLaunchPaths</a> \n         to disambiguate between paths. Otherwise, <a>ListLaunchPaths</a> is not \n         required, and the output of <a>ProductViewSummary</a> can be used directly with \n         <a>DescribeProvisioningParameters</a>.</p>"
                     }
                 },
@@ -7082,10 +7127,7 @@
             }
         },
         "com.amazonaws.servicecatalog#ProvisioningArtifactActive": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.servicecatalog#ProvisioningArtifactCreatedTime": {
             "type": "timestamp"
@@ -7266,6 +7308,7 @@
                 "IsNoEcho": {
                     "target": "com.amazonaws.servicecatalog#NoEcho",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If this value is true, the value for this parameter is obfuscated from view when the\n         parameter is retrieved. This parameter is used to hide sensitive information.</p>"
                     }
                 },
@@ -7343,6 +7386,7 @@
                 "DisableTemplateValidation": {
                     "target": "com.amazonaws.servicecatalog#DisableTemplateValidation",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If set to true, Amazon Web Services Service Catalog stops validating the specified provisioning artifact even if it is invalid.</p>"
                     }
                 }
@@ -8098,7 +8142,10 @@
             "type": "string"
         },
         "com.amazonaws.servicecatalog#RetainPhysicalResources": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.servicecatalog#RoleArn": {
             "type": "string",
@@ -8145,6 +8192,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -8274,6 +8322,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -8320,6 +8369,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#PageSizeMax100",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -8424,6 +8474,7 @@
                 "PageSize": {
                     "target": "com.amazonaws.servicecatalog#SearchProvisionedProductsPageSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of items to return with this call.</p>"
                     }
                 },
@@ -8447,6 +8498,7 @@
                 "TotalResultsCount": {
                     "target": "com.amazonaws.servicecatalog#TotalResultsCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of provisioned products found.</p>"
                     }
                 },
@@ -8461,6 +8513,7 @@
         "com.amazonaws.servicecatalog#SearchProvisionedProductsPageSize": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -8851,7 +8904,6 @@
         "com.amazonaws.servicecatalog#StackSetFailureToleranceCount": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -8860,7 +8912,6 @@
         "com.amazonaws.servicecatalog#StackSetFailureTolerancePercentage": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -8870,7 +8921,6 @@
         "com.amazonaws.servicecatalog#StackSetMaxConcurrencyCount": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -8879,7 +8929,6 @@
         "com.amazonaws.servicecatalog#StackSetMaxConcurrencyPercentage": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -9014,10 +9063,7 @@
             }
         },
         "com.amazonaws.servicecatalog#TagOptionActive": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.servicecatalog#TagOptionDetail": {
             "type": "structure",
@@ -9201,6 +9247,7 @@
                 "IgnoreErrors": {
                     "target": "com.amazonaws.servicecatalog#IgnoreErrors",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If set to true, Service Catalog stops managing the specified provisioned product even\n         if it cannot delete the underlying resources.</p>"
                     }
                 },
@@ -9213,6 +9260,7 @@
                 "RetainPhysicalResources": {
                     "target": "com.amazonaws.servicecatalog#RetainPhysicalResources",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When this boolean parameter is set to true, the <code>TerminateProvisionedProduct</code> API deletes\n         the Service Catalog provisioned product. However, it does not remove the CloudFormation\n         stack, stack set, or the underlying resources of the deleted provisioned product. The\n         default value is false.</p>"
                     }
                 }
@@ -9230,7 +9278,10 @@
             }
         },
         "com.amazonaws.servicecatalog#TotalResultsCount": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.servicecatalog#UpdateConstraint": {
             "type": "operation",
@@ -9895,6 +9946,7 @@
                 "UsePreviousValue": {
                     "target": "com.amazonaws.servicecatalog#UsePreviousValue",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If set to true, <code>Value</code> is ignored and the previous parameter value is kept.</p>"
                     }
                 }
@@ -10117,7 +10169,10 @@
             }
         },
         "com.amazonaws.servicecatalog#UsePreviousValue": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.servicecatalog#UserArn": {
             "type": "string"
@@ -10126,7 +10181,10 @@
             "type": "string"
         },
         "com.amazonaws.servicecatalog#Verbose": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         }
     }
 }

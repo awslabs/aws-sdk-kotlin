@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -260,6 +260,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhub#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional boolean flag to indicate whether any effect should take place. Used to test if\n         the caller has permission to make the call.</p>"
                     }
                 }
@@ -340,6 +341,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhub#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional boolean flag to indicate whether any effect should take place. Used to test if\n         the caller has permission to make the call.</p>"
                     }
                 }
@@ -410,6 +412,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhub#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional boolean flag to indicate whether any effect should take place. Used to test if\n         the caller has permission to make the call.</p>"
                     }
                 }
@@ -520,6 +523,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhub#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional boolean flag to indicate whether any effect should take place. Used to test if\n         the caller has permission to make the call.</p>"
                     }
                 }
@@ -729,6 +733,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhub#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional boolean flag to indicate whether any effect should take place. Used to test if\n         the caller has permission to make the call.</p>"
                     }
                 }
@@ -806,6 +811,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhub#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional boolean flag to indicate whether any effect should take place. Used to test if\n         the caller has permission to make the call.</p>"
                     }
                 }
@@ -853,7 +859,10 @@
             }
         },
         "com.amazonaws.migrationhub#DryRun": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.migrationhub#DryRunOperation": {
             "type": "structure",
@@ -943,6 +952,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhub#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional boolean flag to indicate whether any effect should take place. Used to test if\n         the caller has permission to make the call.</p>"
                     }
                 }
@@ -1403,7 +1413,6 @@
         "com.amazonaws.migrationhub#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -1413,7 +1422,6 @@
         "com.amazonaws.migrationhub#MaxResultsCreatedArtifacts": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10
@@ -1423,7 +1431,6 @@
         "com.amazonaws.migrationhub#MaxResultsResources": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10
@@ -1531,6 +1538,7 @@
         "com.amazonaws.migrationhub#NextUpdateSeconds": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -1606,6 +1614,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhub#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional boolean flag to indicate whether any effect should take place. Used to test if\n         the caller has permission to make the call.</p>"
                     }
                 }
@@ -1690,6 +1699,7 @@
                 "NextUpdateSeconds": {
                     "target": "com.amazonaws.migrationhub#NextUpdateSeconds",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Number of seconds after the UpdateDateTime within which the Migration Hub can expect an\n         update. If Migration Hub does not receive an update within the specified interval, then the\n         migration task will be considered stale.</p>",
                         "smithy.api#required": {}
                     }
@@ -1697,6 +1707,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhub#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional boolean flag to indicate whether any effect should take place. Used to test if\n         the caller has permission to make the call.</p>"
                     }
                 }
@@ -1721,7 +1732,6 @@
         "com.amazonaws.migrationhub#ProgressPercent": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -1826,6 +1836,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhub#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional boolean flag to indicate whether any effect should take place. Used to test if\n         the caller has permission to make the call.</p>"
                     }
                 }
@@ -1949,7 +1960,10 @@
             }
         },
         "com.amazonaws.migrationhub#RetryAfterSeconds": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.migrationhub#ServiceUnavailableException": {
             "type": "structure",
@@ -2036,6 +2050,7 @@
                 "RetryAfterSeconds": {
                     "target": "com.amazonaws.migrationhub#RetryAfterSeconds",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of seconds the caller should wait before retrying.</p>",
                         "smithy.api#httpHeader": "Retry-After"
                     }

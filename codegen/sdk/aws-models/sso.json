@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -89,7 +89,10 @@
             "type": "string"
         },
         "com.amazonaws.sso#ExpirationTimestampType": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.sso#GetRoleCredentials": {
             "type": "operation",
@@ -397,7 +400,6 @@
         "com.amazonaws.sso#MaxResultType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -444,6 +446,7 @@
                 "expiration": {
                     "target": "com.amazonaws.sso#ExpirationTimestampType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The date on which temporary security credentials expire.</p>"
                     }
                 }
@@ -483,21 +486,6 @@
         },
         "com.amazonaws.sso#SWBPortalService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "SSO",
-                    "arnNamespace": "awsssoportal",
-                    "cloudFormationName": "SSO",
-                    "cloudTrailEventSource": "sso.amazonaws.com",
-                    "endpointPrefix": "portal.sso"
-                },
-                "aws.auth#sigv4": {
-                    "name": "awsssoportal"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>AWS IAM Identity Center (successor to AWS Single Sign-On) Portal is a web service that makes it easy for you to assign user access to\n      IAM Identity Center resources such as the AWS access portal. Users can get AWS account applications and roles\n      assigned to them and get federated into the application.</p>\n\n         <note>\n            <p>Although AWS Single Sign-On was renamed, the <code>sso</code> and\n          <code>identitystore</code> API namespaces will continue to retain their original name for\n        backward compatibility purposes. For more information, see <a href=\"https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html#renamed\">IAM Identity Center rename</a>.</p>\n         </note>\n\n         <p>This reference guide describes the IAM Identity Center Portal operations that you can call\n      programatically and includes detailed information on data types and errors.</p>\n\n         <note>\n            <p>AWS provides SDKs that consist of libraries and sample code for various programming\n        languages and platforms, such as Java, Ruby, .Net, iOS, or Android. The SDKs provide a\n        convenient way to create programmatic access to IAM Identity Center and other AWS services. For more\n        information about the AWS SDKs, including how to download and install them, see <a href=\"http://aws.amazon.com/tools/\">Tools for Amazon Web Services</a>.</p>\n         </note>",
-                "smithy.api#title": "AWS Single Sign-On"
-            },
             "version": "2019-06-10",
             "operations": [
                 {
@@ -512,7 +500,22 @@
                 {
                     "target": "com.amazonaws.sso#Logout"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "SSO",
+                    "arnNamespace": "awsssoportal",
+                    "cloudFormationName": "SSO",
+                    "cloudTrailEventSource": "sso.amazonaws.com",
+                    "endpointPrefix": "portal.sso"
+                },
+                "aws.auth#sigv4": {
+                    "name": "awsssoportal"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>AWS IAM Identity Center (successor to AWS Single Sign-On) Portal is a web service that makes it easy for you to assign user access to\n      IAM Identity Center resources such as the AWS access portal. Users can get AWS account applications and roles\n      assigned to them and get federated into the application.</p>\n\n         <note>\n            <p>Although AWS Single Sign-On was renamed, the <code>sso</code> and\n          <code>identitystore</code> API namespaces will continue to retain their original name for\n        backward compatibility purposes. For more information, see <a href=\"https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html#renamed\">IAM Identity Center rename</a>.</p>\n         </note>\n\n         <p>This reference guide describes the IAM Identity Center Portal operations that you can call\n      programatically and includes detailed information on data types and errors.</p>\n\n         <note>\n            <p>AWS provides SDKs that consist of libraries and sample code for various programming\n        languages and platforms, such as Java, Ruby, .Net, iOS, or Android. The SDKs provide a\n        convenient way to create programmatic access to IAM Identity Center and other AWS services. For more\n        information about the AWS SDKs, including how to download and install them, see <a href=\"http://aws.amazon.com/tools/\">Tools for Amazon Web Services</a>.</p>\n         </note>",
+                "smithy.api#title": "AWS Single Sign-On"
+            }
         },
         "com.amazonaws.sso#SecretAccessKeyType": {
             "type": "string",

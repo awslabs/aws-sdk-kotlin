@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,21 +31,6 @@
     "shapes": {
         "com.amazonaws.servicecatalogappregistry#AWS242AppRegistry": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Service Catalog AppRegistry",
-                    "arnNamespace": "servicecatalog",
-                    "cloudFormationName": "ServiceCatalogAppRegistry",
-                    "cloudTrailEventSource": "servicecatalogappregistry.amazonaws.com",
-                    "endpointPrefix": "servicecatalog-appregistry"
-                },
-                "aws.auth#sigv4": {
-                    "name": "servicecatalog"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p> Amazon Web Services Service Catalog AppRegistry enables organizations to understand the application context of their Amazon Web Services resources. AppRegistry provides a repository of your applications, their resources, and the application metadata that you use within your enterprise.</p>",
-                "smithy.api#title": "AWS Service Catalog App Registry"
-            },
             "version": "2020-06-24",
             "operations": [
                 {
@@ -114,7 +99,22 @@
                 {
                     "target": "com.amazonaws.servicecatalogappregistry#UpdateAttributeGroup"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Service Catalog AppRegistry",
+                    "arnNamespace": "servicecatalog",
+                    "cloudFormationName": "ServiceCatalogAppRegistry",
+                    "cloudTrailEventSource": "servicecatalogappregistry.amazonaws.com",
+                    "endpointPrefix": "servicecatalog-appregistry"
+                },
+                "aws.auth#sigv4": {
+                    "name": "servicecatalog"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p> Amazon Web Services Service Catalog AppRegistry enables organizations to understand the application context of their Amazon Web Services resources. AppRegistry provides a repository of your applications, their resources, and the application metadata that you use within your enterprise.</p>",
+                "smithy.api#title": "AWS Service Catalog App Registry"
+            }
         },
         "com.amazonaws.servicecatalogappregistry#Application": {
             "type": "structure",
@@ -407,6 +407,7 @@
         "com.amazonaws.servicecatalogappregistry#AssociationCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -1103,6 +1104,7 @@
                 "associatedResourceCount": {
                     "target": "com.amazonaws.servicecatalogappregistry#AssociationCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of top-level resources that were registered as part of this application.</p>"
                     }
                 },
@@ -1358,7 +1360,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.servicecatalogappregistry#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The upper bound of the number of results to return (cannot exceed 25). If this parameter is omitted, it defaults to 25. This value is optional.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1438,7 +1440,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.servicecatalogappregistry#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The upper bound of the number of results to return (cannot exceed 25). If this parameter is omitted, it defaults to 25. This value is optional.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1518,7 +1520,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.servicecatalogappregistry#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The upper bound of the number of results to return (cannot exceed 25). If this parameter is omitted, it defaults to 25. This value is optional.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1630,7 +1632,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.servicecatalogappregistry#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The upper bound of the number of results to return. The value cannot exceed 25. If you omit this parameter, it defaults to 25. This value is optional.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1667,7 +1669,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.servicecatalogappregistry#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The upper bound of the number of results to return (cannot exceed 25). If this parameter is omitted, it defaults to 25. This value is optional.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -1746,6 +1748,7 @@
         "com.amazonaws.servicecatalogappregistry#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 25

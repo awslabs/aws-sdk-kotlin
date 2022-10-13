@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -45,10 +45,7 @@
             }
         },
         "com.amazonaws.iotevents#AcknowledgeFlowEnabled": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.iotevents#Action": {
             "type": "structure",
@@ -1895,10 +1892,7 @@
             }
         },
         "com.amazonaws.iotevents#DisabledOnInitialization": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.iotevents#DynamoDBAction": {
             "type": "structure",
@@ -3274,7 +3268,10 @@
             }
         },
         "com.amazonaws.iotevents#LoggingEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.iotevents#LoggingLevel": {
             "type": "string",
@@ -3315,6 +3312,7 @@
                 "enabled": {
                     "target": "com.amazonaws.iotevents#LoggingEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If TRUE, logging is enabled for AWS IoT Events.</p>",
                         "smithy.api#required": {}
                     }
@@ -3340,15 +3338,11 @@
             }
         },
         "com.amazonaws.iotevents#MaxAnalysisResults": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.iotevents#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 250
@@ -3499,6 +3493,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.iotevents#PutLoggingOptionsRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -3762,7 +3759,6 @@
         "com.amazonaws.iotevents#Seconds": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 31622400
@@ -3840,7 +3836,6 @@
         "com.amazonaws.iotevents#Severity": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 2147483647
@@ -4572,10 +4567,7 @@
             }
         },
         "com.amazonaws.iotevents#UseBase64": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.iotevents#VariableName": {
             "type": "string",

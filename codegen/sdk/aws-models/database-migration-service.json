@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -56,12 +56,14 @@
                 "Used": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The amount currently used toward the quota maximum.</p>"
                     }
                 },
                 "Max": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum allowed value for the quota.</p>"
                     }
                 }
@@ -127,24 +129,6 @@
         },
         "com.amazonaws.databasemigrationservice#AmazonDMSv20160101": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Database Migration Service",
-                    "arnNamespace": "dms",
-                    "cloudFormationName": "DMS",
-                    "cloudTrailEventSource": "databasemigrationservice.amazonaws.com",
-                    "endpointPrefix": "dms"
-                },
-                "aws.auth#sigv4": {
-                    "name": "dms"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<fullname>Database Migration Service</fullname>\n         <p>Database Migration Service (DMS) can migrate your data to and from the most\n         widely used commercial and open-source databases such as Oracle, PostgreSQL, Microsoft SQL\n         Server, Amazon Redshift, MariaDB, Amazon Aurora, MySQL, and SAP Adaptive Server Enterprise\n         (ASE). The service supports homogeneous migrations such as Oracle to Oracle, as well as\n         heterogeneous migrations between different database platforms, such as Oracle to MySQL or\n         SQL Server to PostgreSQL.</p>\n         <p>For more information about DMS, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html\">What Is Database Migration Service?</a>\n         in the <i>Database Migration Service User Guide.</i>\n         </p>",
-                "smithy.api#title": "AWS Database Migration Service",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://dms.amazonaws.com/doc/2016-01-01/"
-                }
-            },
             "version": "2016-01-01",
             "operations": [
                 {
@@ -342,7 +326,25 @@
                 {
                     "target": "com.amazonaws.databasemigrationservice#UpdateSubscriptionsToEventBridge"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Database Migration Service",
+                    "arnNamespace": "dms",
+                    "cloudFormationName": "DMS",
+                    "cloudTrailEventSource": "databasemigrationservice.amazonaws.com",
+                    "endpointPrefix": "dms"
+                },
+                "aws.auth#sigv4": {
+                    "name": "dms"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<fullname>Database Migration Service</fullname>\n         <p>Database Migration Service (DMS) can migrate your data to and from the most\n         widely used commercial and open-source databases such as Oracle, PostgreSQL, Microsoft SQL\n         Server, Amazon Redshift, MariaDB, Amazon Aurora, MySQL, and SAP Adaptive Server Enterprise\n         (ASE). The service supports homogeneous migrations such as Oracle to Oracle, as well as\n         heterogeneous migrations between different database platforms, such as Oracle to MySQL or\n         SQL Server to PostgreSQL.</p>\n         <p>For more information about DMS, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html\">What Is Database Migration Service?</a>\n         in the <i>Database Migration Service User Guide.</i>\n         </p>",
+                "smithy.api#title": "AWS Database Migration Service",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://dms.amazonaws.com/doc/2016-01-01/"
+                }
+            }
         },
         "com.amazonaws.databasemigrationservice#ApplyPendingMaintenanceAction": {
             "type": "operation",
@@ -465,13 +467,13 @@
             }
         },
         "com.amazonaws.databasemigrationservice#Boolean": {
-            "type": "boolean"
-        },
-        "com.amazonaws.databasemigrationservice#BooleanOptional": {
             "type": "boolean",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": false
             }
+        },
+        "com.amazonaws.databasemigrationservice#BooleanOptional": {
+            "type": "boolean"
         },
         "com.amazonaws.databasemigrationservice#CancelReplicationTaskAssessmentRun": {
             "type": "operation",
@@ -4823,10 +4825,7 @@
             }
         },
         "com.amazonaws.databasemigrationservice#DoubleOptional": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.databasemigrationservice#DynamoDbSettings": {
             "type": "structure",
@@ -5377,6 +5376,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.databasemigrationservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Boolean value that indicates if the event subscription is enabled.</p>"
                     }
                 }
@@ -5771,7 +5771,10 @@
             }
         },
         "com.amazonaws.databasemigrationservice#Integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.databasemigrationservice#IntegerList": {
             "type": "list",
@@ -5780,10 +5783,7 @@
             }
         },
         "com.amazonaws.databasemigrationservice#IntegerOptional": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.databasemigrationservice#InvalidCertificateFault": {
             "type": "structure",
@@ -6211,13 +6211,13 @@
             }
         },
         "com.amazonaws.databasemigrationservice#Long": {
-            "type": "long"
-        },
-        "com.amazonaws.databasemigrationservice#LongOptional": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": 0
             }
+        },
+        "com.amazonaws.databasemigrationservice#LongOptional": {
+            "type": "long"
         },
         "com.amazonaws.databasemigrationservice#MessageFormatValue": {
             "type": "string",
@@ -6746,6 +6746,7 @@
                 "ApplyImmediately": {
                     "target": "com.amazonaws.databasemigrationservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the changes should be applied immediately or during the next\n         maintenance window.</p>"
                     }
                 },
@@ -6782,6 +6783,7 @@
                 "AllowMajorVersionUpgrade": {
                     "target": "com.amazonaws.databasemigrationservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates that major version upgrades are allowed. Changing this parameter does not\n         result in an outage, and the change is asynchronously applied as soon as possible.</p>\n         <p>This parameter must be set to <code>true</code> when specifying a value for the\n            <code>EngineVersion</code> parameter that is a different major version than the\n         replication instance's current version.</p>"
                     }
                 },
@@ -7587,24 +7589,28 @@
                 "MinAllocatedStorage": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum amount of storage (in gigabytes) that can be allocated for the replication\n         instance.</p>"
                     }
                 },
                 "MaxAllocatedStorage": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum amount of storage (in gigabytes) that can be allocated for the replication\n         instance.</p>"
                     }
                 },
                 "DefaultAllocatedStorage": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The default amount of storage (in gigabytes) that is allocated for the replication\n         instance.</p>"
                     }
                 },
                 "IncludedAllocatedStorage": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The amount of storage (in gigabytes) that is allocated for the replication\n         instance.</p>"
                     }
                 },
@@ -7939,6 +7945,7 @@
                 "Port": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Transmission Control Protocol (TCP) port for the endpoint.</p>",
                         "smithy.api#required": {}
                     }
@@ -8452,6 +8459,7 @@
                 "AllocatedStorage": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The amount of storage (in gigabytes) that is allocated for the replication\n         instance.</p>"
                     }
                 },
@@ -8494,6 +8502,7 @@
                 "MultiAZ": {
                     "target": "com.amazonaws.databasemigrationservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies whether the replication instance is a Multi-AZ deployment. You can't set the\n            <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to\n            <code>true</code>. </p>"
                     }
                 },
@@ -8506,6 +8515,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.databasemigrationservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Boolean value indicating if minor version upgrades will be automatically applied to the\n         instance.</p>"
                     }
                 },
@@ -8550,6 +8560,7 @@
                 "PubliclyAccessible": {
                     "target": "com.amazonaws.databasemigrationservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies the accessibility options for the replication instance. A value of\n            <code>true</code> represents an instance with a public IP address. A value of\n            <code>false</code> represents an instance with a private IP address. The default value\n         is <code>true</code>. </p>"
                     }
                 },
@@ -8615,6 +8626,7 @@
                 "ReplicationInstanceTaskLogSize": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size, in bytes, of the replication task log.</p>"
                     }
                 }
@@ -8996,12 +9008,14 @@
                 "IndividualAssessmentCount": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of individual assessments that are specified to run.</p>"
                     }
                 },
                 "IndividualAssessmentCompletedCount": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of individual assessments that have completed, successfully or not.</p>"
                     }
                 }
@@ -9069,36 +9083,42 @@
                 "FullLoadProgressPercent": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The percent complete for the full load migration task.</p>"
                     }
                 },
                 "ElapsedTimeMillis": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The elapsed time of the task, in milliseconds.</p>"
                     }
                 },
                 "TablesLoaded": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of tables loaded for this task.</p>"
                     }
                 },
                 "TablesLoading": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of tables currently loading for this task.</p>"
                     }
                 },
                 "TablesQueued": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of tables queued for this task.</p>"
                     }
                 },
                 "TablesErrored": {
                     "target": "com.amazonaws.databasemigrationservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of errors that have occurred during this task.</p>"
                     }
                 },
@@ -10155,6 +10175,7 @@
                 "SupportsCDC": {
                     "target": "com.amazonaws.databasemigrationservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if change data capture (CDC) is supported.</p>"
                     }
                 },
@@ -10267,42 +10288,49 @@
                 "Inserts": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of insert actions performed on a table.</p>"
                     }
                 },
                 "Deletes": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of delete actions performed on a table.</p>"
                     }
                 },
                 "Updates": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of update actions performed on a table.</p>"
                     }
                 },
                 "Ddls": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The data definition language (DDL) used to build and modify the structure of your tables.</p>"
                     }
                 },
                 "FullLoadRows": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of rows added during the full load operation.</p>"
                     }
                 },
                 "FullLoadCondtnlChkFailedRows": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of rows that failed conditional checks during the full load operation (valid\n         only for migrations where DynamoDB is the target).</p>"
                     }
                 },
                 "FullLoadErrorRows": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of rows that failed to load during the full load operation (valid only for\n         migrations where DynamoDB is the target).</p>"
                     }
                 },
@@ -10339,18 +10367,21 @@
                 "ValidationPendingRecords": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of records that have yet to be validated.</p>"
                     }
                 },
                 "ValidationFailedRecords": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of records that failed validation.</p>"
                     }
                 },
                 "ValidationSuspendedRecords": {
                     "target": "com.amazonaws.databasemigrationservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of records that couldn't be validated.</p>"
                     }
                 },

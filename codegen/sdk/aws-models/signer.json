@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -184,6 +184,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.signer#CancelSigningProfileRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -608,12 +611,14 @@
                 "maxSizeInMB": {
                     "target": "com.amazonaws.signer#MaxSizeInMB",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum size (in MB) of the payload that can be signed by the target\n\t\t\tplatform.</p>"
                     }
                 },
                 "revocationSupported": {
                     "target": "com.amazonaws.signer#bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A flag indicating whether signatures generated for the signing platform can be\n\t\t\trevoked.</p>"
                     }
                 }
@@ -822,7 +827,10 @@
             }
         },
         "com.amazonaws.signer#Integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.signer#InternalServiceErrorException": {
             "type": "structure",
@@ -912,6 +920,7 @@
                 "policySizeBytes": {
                     "target": "com.amazonaws.signer#PolicySizeBytes",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Total size of the policy associated with the Signing Profile in bytes.</p>"
                     }
                 },
@@ -1006,6 +1015,7 @@
                 "isRevoked": {
                     "target": "com.amazonaws.signer#bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Filters results to return only signing jobs with revoked signatures.</p>",
                         "smithy.api#httpQuery": "isRevoked"
                     }
@@ -1182,6 +1192,7 @@
                 "includeCanceled": {
                     "target": "com.amazonaws.signer#bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Designates whether to include profiles with the status of\n\t\t\t<code>CANCELED</code>.</p>",
                         "smithy.api#httpQuery": "includeCanceled"
                     }
@@ -1291,7 +1302,6 @@
         "com.amazonaws.signer#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 25
@@ -1299,7 +1309,10 @@
             }
         },
         "com.amazonaws.signer#MaxSizeInMB": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.signer#NextToken": {
             "type": "string"
@@ -1362,7 +1375,10 @@
             "type": "string"
         },
         "com.amazonaws.signer#PolicySizeBytes": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.signer#Prefix": {
             "type": "string"
@@ -1604,6 +1620,9 @@
             "input": {
                 "target": "com.amazonaws.signer#RevokeSignatureRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.signer#AccessDeniedException"
@@ -1660,6 +1679,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.signer#RevokeSigningProfileRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1812,6 +1834,7 @@
                 "value": {
                     "target": "com.amazonaws.signer#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The numerical value of the time unit for signature validity.</p>"
                     }
                 },
@@ -1946,6 +1969,7 @@
                 "isRevoked": {
                     "target": "com.amazonaws.signer#bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the signing job is revoked.</p>"
                     }
                 },
@@ -2103,12 +2127,14 @@
                 "maxSizeInMB": {
                     "target": "com.amazonaws.signer#MaxSizeInMB",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum size (in MB) of code that can be signed by a code signing platform.</p>"
                     }
                 },
                 "revocationSupported": {
                     "target": "com.amazonaws.signer#bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether revocation is supported for the platform.</p>"
                     }
                 }
@@ -2713,7 +2739,10 @@
             }
         },
         "com.amazonaws.signer#bool": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         }
     }
 }

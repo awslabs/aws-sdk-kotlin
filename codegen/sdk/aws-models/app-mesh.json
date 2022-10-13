@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.appmesh#AccessLog": {
             "type": "union",
@@ -26,22 +26,6 @@
         },
         "com.amazonaws.appmesh#AppMesh": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "App Mesh",
-                    "arnNamespace": "appmesh",
-                    "cloudFormationName": "AppMesh",
-                    "cloudTrailEventSource": "appmesh.amazonaws.com",
-                    "endpointPrefix": "appmesh"
-                },
-                "aws.auth#sigv4": {
-                    "name": "appmesh"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#cors": {},
-                "smithy.api#documentation": "<p>App Mesh is a service mesh based on the Envoy proxy that makes it easy to\n         monitor and control microservices. App Mesh standardizes how your microservices\n         communicate, giving you end-to-end visibility and helping to ensure high availability for\n         your applications.</p>\n         <p>App Mesh gives you consistent visibility and network traffic controls for\n         every microservice in an application. You can use App Mesh with Amazon Web Services Fargate, Amazon ECS, Amazon EKS, Kubernetes on Amazon Web Services, and\n            Amazon EC2.</p>\n         <note>\n            <p>App Mesh supports microservice applications that use service discovery\n            naming for their components. For more information about service discovery on Amazon ECS, see <a href=\"https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html\">Service\n               Discovery</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. Kubernetes\n               <code>kube-dns</code> and <code>coredns</code> are supported. For more information,\n            see <a href=\"https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/\">DNS\n               for Services and Pods</a> in the Kubernetes documentation.</p>\n         </note>",
-                "smithy.api#title": "AWS App Mesh"
-            },
             "version": "2019-01-25",
             "operations": [
                 {
@@ -58,7 +42,23 @@
                 {
                     "target": "com.amazonaws.appmesh#Mesh"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "App Mesh",
+                    "arnNamespace": "appmesh",
+                    "cloudFormationName": "AppMesh",
+                    "cloudTrailEventSource": "appmesh.amazonaws.com",
+                    "endpointPrefix": "appmesh"
+                },
+                "aws.auth#sigv4": {
+                    "name": "appmesh"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#cors": {},
+                "smithy.api#documentation": "<p>App Mesh is a service mesh based on the Envoy proxy that makes it easy to\n         monitor and control microservices. App Mesh standardizes how your microservices\n         communicate, giving you end-to-end visibility and helping to ensure high availability for\n         your applications.</p>\n         <p>App Mesh gives you consistent visibility and network traffic controls for\n         every microservice in an application. You can use App Mesh with Amazon Web Services Fargate, Amazon ECS, Amazon EKS, Kubernetes on Amazon Web Services, and\n            Amazon EC2.</p>\n         <note>\n            <p>App Mesh supports microservice applications that use service discovery\n            naming for their components. For more information about service discovery on Amazon ECS, see <a href=\"https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html\">Service\n               Discovery</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. Kubernetes\n               <code>kube-dns</code> and <code>coredns</code> are supported. For more information,\n            see <a href=\"https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/\">DNS\n               for Services and Pods</a> in the Kubernetes documentation.</p>\n         </note>",
+                "smithy.api#title": "AWS App Mesh"
+            }
         },
         "com.amazonaws.appmesh#Arn": {
             "type": "string"
@@ -233,7 +233,7 @@
                 "enforce": {
                     "target": "smithy.api#Boolean",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't specified.</p>"
                     }
                 },
@@ -2358,7 +2358,6 @@
         "com.amazonaws.appmesh#DurationValue": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -2580,7 +2579,6 @@
         "com.amazonaws.appmesh#GatewayRoutePriority": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1000
@@ -3239,7 +3237,6 @@
         "com.amazonaws.appmesh#HealthCheckIntervalMillis": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5000,
                     "max": 300000
@@ -3273,6 +3270,7 @@
                 "port": {
                     "target": "com.amazonaws.appmesh#PortNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The destination port for the health check request. This port must match the port defined\n         in the <a>PortMapping</a> for the listener.</p>"
                     }
                 },
@@ -3285,6 +3283,7 @@
                 "healthyThreshold": {
                     "target": "com.amazonaws.appmesh#HealthCheckThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of consecutive successful health checks that must occur before declaring\n         listener healthy.</p>",
                         "smithy.api#required": {}
                     }
@@ -3292,6 +3291,7 @@
                 "unhealthyThreshold": {
                     "target": "com.amazonaws.appmesh#HealthCheckThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of consecutive failed health checks that must occur before declaring a\n         virtual node unhealthy. </p>",
                         "smithy.api#required": {}
                     }
@@ -3304,6 +3304,7 @@
         "com.amazonaws.appmesh#HealthCheckThreshold": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 2,
                     "max": 10
@@ -3313,7 +3314,6 @@
         "com.amazonaws.appmesh#HealthCheckTimeoutMillis": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 2000,
                     "max": 60000
@@ -4051,7 +4051,6 @@
         "com.amazonaws.appmesh#ListGatewayRoutesLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4145,7 +4144,6 @@
         "com.amazonaws.appmesh#ListMeshesLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4265,7 +4263,6 @@
         "com.amazonaws.appmesh#ListRoutesLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4472,7 +4469,6 @@
         "com.amazonaws.appmesh#ListVirtualGatewaysLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4581,7 +4577,6 @@
         "com.amazonaws.appmesh#ListVirtualNodesLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4693,7 +4688,6 @@
         "com.amazonaws.appmesh#ListVirtualRoutersLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4805,7 +4799,6 @@
         "com.amazonaws.appmesh#ListVirtualServicesLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4881,7 +4874,6 @@
         "com.amazonaws.appmesh#ListenerPort": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 65535
@@ -5151,6 +5143,7 @@
         "com.amazonaws.appmesh#MaxConnections": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -5159,6 +5152,7 @@
         "com.amazonaws.appmesh#MaxPendingRequests": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -5167,6 +5161,7 @@
         "com.amazonaws.appmesh#MaxRequests": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -5175,7 +5170,6 @@
         "com.amazonaws.appmesh#MaxRetries": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -5455,7 +5449,6 @@
         "com.amazonaws.appmesh#OutlierDetectionMaxEjectionPercent": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -5465,7 +5458,6 @@
         "com.amazonaws.appmesh#OutlierDetectionMaxServerErrors": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -5474,6 +5466,7 @@
         "com.amazonaws.appmesh#PercentInt": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -5486,6 +5479,7 @@
                 "port": {
                     "target": "com.amazonaws.appmesh#PortNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The port used for the port mapping.</p>",
                         "smithy.api#required": {}
                     }
@@ -5505,6 +5499,7 @@
         "com.amazonaws.appmesh#PortNumber": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 65535
@@ -5535,11 +5530,13 @@
             }
         },
         "com.amazonaws.appmesh#PortSet": {
-            "type": "set",
+            "type": "list",
             "member": {
                 "target": "com.amazonaws.appmesh#PortNumber"
             },
-            "traits": {}
+            "traits": {
+                "smithy.api#uniqueItems": {}
+            }
         },
         "com.amazonaws.appmesh#QueryParameterMatch": {
             "type": "structure",
@@ -5738,7 +5735,6 @@
         "com.amazonaws.appmesh#RoutePriority": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1000
@@ -6123,7 +6119,6 @@
         "com.amazonaws.appmesh#TagsLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -7242,7 +7237,7 @@
                 "enforce": {
                     "target": "smithy.api#Boolean",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't\n         specified.</p>"
                     }
                 },
@@ -7390,6 +7385,7 @@
                 "maxRequests": {
                     "target": "com.amazonaws.appmesh#MaxRequests",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum number of inflight requests Envoy can concurrently support across hosts in\n         upstream cluster.</p>",
                         "smithy.api#required": {}
                     }
@@ -7402,7 +7398,6 @@
         "com.amazonaws.appmesh#VirtualGatewayHealthCheckIntervalMillis": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5000,
                     "max": 300000
@@ -7436,6 +7431,7 @@
                 "port": {
                     "target": "com.amazonaws.appmesh#PortNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The destination port for the health check request. This port must match the port defined\n         in the <a>PortMapping</a> for the listener.</p>"
                     }
                 },
@@ -7448,6 +7444,7 @@
                 "healthyThreshold": {
                     "target": "com.amazonaws.appmesh#VirtualGatewayHealthCheckThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of consecutive successful health checks that must occur before declaring the\n         listener healthy.</p>",
                         "smithy.api#required": {}
                     }
@@ -7455,6 +7452,7 @@
                 "unhealthyThreshold": {
                     "target": "com.amazonaws.appmesh#VirtualGatewayHealthCheckThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of consecutive failed health checks that must occur before declaring a\n         virtual gateway unhealthy.</p>",
                         "smithy.api#required": {}
                     }
@@ -7467,6 +7465,7 @@
         "com.amazonaws.appmesh#VirtualGatewayHealthCheckThreshold": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 2,
                     "max": 10
@@ -7476,7 +7475,6 @@
         "com.amazonaws.appmesh#VirtualGatewayHealthCheckTimeoutMillis": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 2000,
                     "max": 60000
@@ -7489,6 +7487,7 @@
                 "maxRequests": {
                     "target": "com.amazonaws.appmesh#MaxRequests",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum number of inflight requests Envoy can concurrently support across hosts in\n         upstream cluster.</p>",
                         "smithy.api#required": {}
                     }
@@ -7504,6 +7503,7 @@
                 "maxConnections": {
                     "target": "com.amazonaws.appmesh#MaxConnections",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum number of outbound TCP connections Envoy can establish concurrently with all\n         hosts in upstream cluster.</p>",
                         "smithy.api#required": {}
                     }
@@ -7511,7 +7511,7 @@
                 "maxPendingRequests": {
                     "target": "com.amazonaws.appmesh#MaxPendingRequests",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Number of overflowing requests after <code>max_connections</code> Envoy will queue to\n         upstream cluster.</p>"
                     }
                 }
@@ -7751,6 +7751,7 @@
                 "port": {
                     "target": "com.amazonaws.appmesh#PortNumber",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The port used for the port mapping. Specify one protocol.</p>",
                         "smithy.api#required": {}
                     }
@@ -8123,6 +8124,7 @@
                 "maxRequests": {
                     "target": "com.amazonaws.appmesh#MaxRequests",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum number of inflight requests Envoy can concurrently support across hosts in\n         upstream cluster.</p>",
                         "smithy.api#required": {}
                     }
@@ -8138,6 +8140,7 @@
                 "maxRequests": {
                     "target": "com.amazonaws.appmesh#MaxRequests",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum number of inflight requests Envoy can concurrently support across hosts in\n         upstream cluster.</p>",
                         "smithy.api#required": {}
                     }
@@ -8153,6 +8156,7 @@
                 "maxConnections": {
                     "target": "com.amazonaws.appmesh#MaxConnections",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum number of outbound TCP connections Envoy can establish concurrently with all\n         hosts in upstream cluster.</p>",
                         "smithy.api#required": {}
                     }
@@ -8160,7 +8164,7 @@
                 "maxPendingRequests": {
                     "target": "com.amazonaws.appmesh#MaxPendingRequests",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Number of overflowing requests after <code>max_connections</code> Envoy will queue to\n         upstream cluster.</p>"
                     }
                 }
@@ -8332,6 +8336,7 @@
                 "maxConnections": {
                     "target": "com.amazonaws.appmesh#MaxConnections",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Maximum number of outbound TCP connections Envoy can establish concurrently with all\n         hosts in upstream cluster.</p>",
                         "smithy.api#required": {}
                     }
@@ -8834,6 +8839,7 @@
                 "weight": {
                     "target": "com.amazonaws.appmesh#PercentInt",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The relative weight of the weighted target.</p>",
                         "smithy.api#required": {}
                     }

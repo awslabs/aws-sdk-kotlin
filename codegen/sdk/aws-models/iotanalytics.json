@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -155,7 +155,6 @@
         "com.amazonaws.iotanalytics#ActivityBatchSize": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -2087,6 +2086,9 @@
             "input": {
                 "target": "com.amazonaws.iotanalytics#DeleteChannelRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.iotanalytics#InternalFailureException"
@@ -2131,6 +2133,9 @@
             "input": {
                 "target": "com.amazonaws.iotanalytics#DeleteDatasetRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.iotanalytics#InternalFailureException"
@@ -2161,6 +2166,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.iotanalytics#DeleteDatasetContentRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2226,6 +2234,9 @@
             "input": {
                 "target": "com.amazonaws.iotanalytics#DeleteDatastoreRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.iotanalytics#InternalFailureException"
@@ -2269,6 +2280,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.iotanalytics#DeletePipelineRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2394,6 +2408,7 @@
                 "includeStatistics": {
                     "target": "com.amazonaws.iotanalytics#IncludeStatisticsFlag",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, additional statistical information about the channel is included in the response.\n      This feature can't be used with a channel whose S3 storage is customer-managed.</p>",
                         "smithy.api#httpQuery": "includeStatistics"
                     }
@@ -2523,6 +2538,7 @@
                 "includeStatistics": {
                     "target": "com.amazonaws.iotanalytics#IncludeStatisticsFlag",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, additional statistical information about the data store is included in the\n      response. This feature can't be used with a data store whose S3 storage is\n      customer-managed.</p>",
                         "smithy.api#httpQuery": "includeStatistics"
                     }
@@ -2738,7 +2754,10 @@
             }
         },
         "com.amazonaws.iotanalytics#DoubleValue": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.iotanalytics#EndTime": {
             "type": "timestamp"
@@ -2973,7 +2992,10 @@
             }
         },
         "com.amazonaws.iotanalytics#IncludeStatisticsFlag": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.iotanalytics#InternalFailureException": {
             "type": "structure",
@@ -3646,7 +3668,10 @@
             "type": "string"
         },
         "com.amazonaws.iotanalytics#LoggingEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.iotanalytics#LoggingLevel": {
             "type": "string",
@@ -3679,6 +3704,7 @@
                 "enabled": {
                     "target": "com.amazonaws.iotanalytics#LoggingEnabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, logging is enabled for IoT Analytics.</p>",
                         "smithy.api#required": {}
                     }
@@ -3735,7 +3761,6 @@
         "com.amazonaws.iotanalytics#MaxMessages": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10
@@ -3745,7 +3770,6 @@
         "com.amazonaws.iotanalytics#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 250
@@ -3755,7 +3779,6 @@
         "com.amazonaws.iotanalytics#MaxVersions": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -3819,10 +3842,7 @@
             "type": "string"
         },
         "com.amazonaws.iotanalytics#OffsetSeconds": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.iotanalytics#OutputFileName": {
             "type": "string",
@@ -4079,6 +4099,9 @@
             "input": {
                 "target": "com.amazonaws.iotanalytics#PutLoggingOptionsRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.iotanalytics#InternalFailureException"
@@ -4279,6 +4302,7 @@
                 "volumeSizeInGB": {
                     "target": "com.amazonaws.iotanalytics#VolumeSizeInGB",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size, in GB, of the persistent storage available to the resource instance used to\n      execute the <code>containerAction</code> (min: 1, max: 50).</p>",
                         "smithy.api#required": {}
                     }
@@ -4307,6 +4331,7 @@
                 "unlimited": {
                     "target": "com.amazonaws.iotanalytics#UnlimitedRetentionPeriod",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, message data is kept indefinitely.</p>"
                     }
                 },
@@ -4324,7 +4349,6 @@
         "com.amazonaws.iotanalytics#RetentionPeriodInDays": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -4655,7 +4679,6 @@
         "com.amazonaws.iotanalytics#SessionTimeoutInMinutes": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 60
@@ -4663,10 +4686,7 @@
             }
         },
         "com.amazonaws.iotanalytics#SizeInBytes": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.iotanalytics#SqlQuery": {
             "type": "string"
@@ -4974,10 +4994,16 @@
             }
         },
         "com.amazonaws.iotanalytics#UnlimitedRetentionPeriod": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.iotanalytics#UnlimitedVersioning": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.iotanalytics#UntagResource": {
             "type": "operation",
@@ -5046,6 +5072,9 @@
             "input": {
                 "target": "com.amazonaws.iotanalytics#UpdateChannelRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.iotanalytics#InternalFailureException"
@@ -5101,6 +5130,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.iotanalytics#UpdateDatasetRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -5183,6 +5215,9 @@
             "input": {
                 "target": "com.amazonaws.iotanalytics#UpdateDatastoreRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.iotanalytics#InternalFailureException"
@@ -5244,6 +5279,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.iotanalytics#UpdatePipelineRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -5313,7 +5351,7 @@
                 "doubleValue": {
                     "target": "com.amazonaws.iotanalytics#DoubleValue",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The value of the variable as a double (numeric).</p>"
                     }
                 },
@@ -5361,6 +5399,7 @@
                 "unlimited": {
                     "target": "com.amazonaws.iotanalytics#UnlimitedVersioning",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, unlimited versions of dataset contents are kept.</p>"
                     }
                 },
@@ -5378,6 +5417,7 @@
         "com.amazonaws.iotanalytics#VolumeSizeInGB": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
