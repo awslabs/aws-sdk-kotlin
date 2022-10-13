@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -486,13 +486,13 @@
             }
         },
         "com.amazonaws.memorydb#Boolean": {
-            "type": "boolean"
-        },
-        "com.amazonaws.memorydb#BooleanOptional": {
             "type": "boolean",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": false
             }
+        },
+        "com.amazonaws.memorydb#BooleanOptional": {
+            "type": "boolean"
         },
         "com.amazonaws.memorydb#Cluster": {
             "type": "structure",
@@ -2019,6 +2019,7 @@
                 "DefaultOnly": {
                     "target": "com.amazonaws.memorydb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, specifies that only the default version of the specified engine or engine and major version combination is to be returned.</p>"
                     }
                 }
@@ -2544,7 +2545,10 @@
             }
         },
         "com.amazonaws.memorydb#Double": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.memorydb#DuplicateUserNameFault": {
             "type": "structure",
@@ -2575,6 +2579,7 @@
                 "Port": {
                     "target": "com.amazonaws.memorydb#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The port number that the engine is listening on.</p>"
                     }
                 }
@@ -2807,13 +2812,13 @@
             }
         },
         "com.amazonaws.memorydb#Integer": {
-            "type": "integer"
-        },
-        "com.amazonaws.memorydb#IntegerOptional": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": 0
             }
+        },
+        "com.amazonaws.memorydb#IntegerOptional": {
+            "type": "integer"
         },
         "com.amazonaws.memorydb#InvalidACLStateFault": {
             "type": "structure",
@@ -3500,6 +3505,7 @@
                 "ReplicaCount": {
                     "target": "com.amazonaws.memorydb#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of replicas to scale up or down to</p>"
                     }
                 }
@@ -3550,6 +3556,7 @@
                 "AllParameters": {
                     "target": "com.amazonaws.memorydb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, all parameters in the parameter group are reset to their default values. If false, only the parameters listed by ParameterNames are reset to their default values.</p>"
                     }
                 },
@@ -3844,6 +3851,7 @@
                 "ShardCount": {
                     "target": "com.amazonaws.memorydb#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of shards in the cluster</p>"
                     }
                 }
@@ -3939,6 +3947,7 @@
                 "ProgressPercentage": {
                     "target": "com.amazonaws.memorydb#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The percentage of the slot migration that is complete.</p>"
                     }
                 }

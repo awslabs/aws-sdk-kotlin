@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -495,7 +495,10 @@
             }
         },
         "com.amazonaws.codecommit#Approved": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#Arn": {
             "type": "string"
@@ -504,6 +507,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.codecommit#AssociateApprovalRuleTemplateWithRepositoryInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1422,10 +1428,7 @@
             }
         },
         "com.amazonaws.codecommit#CapitalBoolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.codecommit#ChangeTypeEnum": {
             "type": "string",
@@ -1767,6 +1770,7 @@
                 "deleted": {
                     "target": "com.amazonaws.codecommit#IsCommentDeleted",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean value indicating whether the comment has been deleted.</p>"
                     }
                 },
@@ -2263,6 +2267,7 @@
                 "numberOfConflicts": {
                     "target": "com.amazonaws.codecommit#NumberOfConflicts",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of conflicts, including both hunk conflicts and metadata conflicts.</p>"
                     }
                 },
@@ -2275,18 +2280,21 @@
                 "contentConflict": {
                     "target": "com.amazonaws.codecommit#IsContentConflict",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A boolean value indicating whether there are conflicts in the content of a file.</p>"
                     }
                 },
                 "fileModeConflict": {
                     "target": "com.amazonaws.codecommit#IsFileModeConflict",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A boolean value indicating whether there are conflicts in the file mode of a file.</p>"
                     }
                 },
                 "objectTypeConflict": {
                     "target": "com.amazonaws.codecommit#IsObjectTypeConflict",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A boolean value (true or false) indicating whether there are conflicts between the branches in the object type of a file, folder, or submodule.</p>"
                     }
                 },
@@ -2366,10 +2374,7 @@
             "type": "string"
         },
         "com.amazonaws.codecommit#Count": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.codecommit#CreateApprovalRuleTemplate": {
             "type": "operation",
@@ -2447,6 +2452,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.codecommit#CreateBranchInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2697,6 +2705,7 @@
                 "keepEmptyFolders": {
                     "target": "com.amazonaws.codecommit#KeepEmptyFolders",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If the commit contains deletions, whether to keep a folder or folder structure if the\n            changes leave the folders empty. If true, a ..gitkeep file is created for empty folders.\n            The default is false.</p>"
                     }
                 },
@@ -3268,6 +3277,7 @@
                 "keepEmptyFolders": {
                     "target": "com.amazonaws.codecommit#KeepEmptyFolders",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If the commit contains deletions, whether to keep a folder or folder structure if the\n            changes leave the folders empty. If this is specified as true, a .gitkeep file is\n            created for empty folders. The default is false.</p>"
                     }
                 },
@@ -3631,6 +3641,7 @@
                 "keepEmptyFolders": {
                     "target": "com.amazonaws.codecommit#KeepEmptyFolders",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If a file is the only object in the folder or directory, specifies whether to delete\n            the folder or directory that contains the file. By default, empty folders are deleted.\n            This includes empty folders that are part of the directory structure. For example, if\n            the path to a file is dir1/dir2/dir3/dir4, and dir2 and dir3 are empty, deleting the\n            last file in dir4 also deletes the empty folders dir4, dir3, and dir2.</p>"
                     }
                 },
@@ -4202,6 +4213,9 @@
             "input": {
                 "target": "com.amazonaws.codecommit#DisassociateApprovalRuleTemplateFromRepositoryInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.codecommit#ApprovalRuleTemplateDoesNotExistException"
@@ -4428,12 +4442,14 @@
                 "approved": {
                     "target": "com.amazonaws.codecommit#Approved",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether the state of the pull request is approved.</p>"
                     }
                 },
                 "overridden": {
                     "target": "com.amazonaws.codecommit#Overridden",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether the approval rule requirements for the pull request have been overridden and no longer need to be met.</p>"
                     }
                 },
@@ -4705,7 +4721,10 @@
             }
         },
         "com.amazonaws.codecommit#FileSize": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.codecommit#FileSizes": {
             "type": "structure",
@@ -4713,18 +4732,21 @@
                 "source": {
                     "target": "com.amazonaws.codecommit#FileSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The  size of a file in the source of a merge or pull request.</p>"
                     }
                 },
                 "destination": {
                     "target": "com.amazonaws.codecommit#FileSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size of a file in the destination of a merge or pull request.</p>"
                     }
                 },
                 "base": {
                     "target": "com.amazonaws.codecommit#FileSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size of a file in the base of a merge or pull request.</p>"
                     }
                 }
@@ -5756,6 +5778,7 @@
                 "fileSize": {
                     "target": "com.amazonaws.codecommit#ObjectSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size of the contents of the file, in bytes.</p>",
                         "smithy.api#required": {}
                     }
@@ -6164,6 +6187,7 @@
                 "mergeable": {
                     "target": "com.amazonaws.codecommit#IsMergeable",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean value that indicates whether the code is mergeable by the specified merge option.</p>",
                         "smithy.api#required": {}
                     }
@@ -6541,6 +6565,7 @@
                 "overridden": {
                     "target": "com.amazonaws.codecommit#Overridden",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean value that indicates whether a pull request has had its rules set aside (TRUE) or whether all approval rules still apply (FALSE).</p>"
                     }
                 },
@@ -7682,46 +7707,67 @@
             }
         },
         "com.amazonaws.codecommit#IsCommentDeleted": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#IsContentConflict": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#IsFileModeConflict": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#IsHunkConflict": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#IsMergeable": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#IsMerged": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#IsMove": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#IsObjectTypeConflict": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#KeepEmptyFolders": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#LastModifiedDate": {
             "type": "timestamp"
         },
         "com.amazonaws.codecommit#Limit": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.codecommit#LineNumber": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.codecommit#ListApprovalRuleTemplates": {
             "type": "operation",
@@ -8338,10 +8384,7 @@
             }
         },
         "com.amazonaws.codecommit#MaxResults": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.codecommit#MaximumBranchesExceededException": {
             "type": "structure",
@@ -8807,6 +8850,7 @@
                 "keepEmptyFolders": {
                     "target": "com.amazonaws.codecommit#KeepEmptyFolders",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If the commit contains deletions, whether to keep a folder or folder structure if the\n            changes leave the folders empty. If this is specified as true, a .gitkeep file is\n            created for empty folders. The default is false.</p>"
                     }
                 },
@@ -9029,6 +9073,7 @@
                 "keepEmptyFolders": {
                     "target": "com.amazonaws.codecommit#KeepEmptyFolders",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If the commit contains deletions, whether to keep a folder or folder structure if the\n            changes leave the folders empty. If true, a .gitkeep file is created for empty folders.\n            The default is false.</p>"
                     }
                 },
@@ -9063,6 +9108,7 @@
                 "isConflict": {
                     "target": "com.amazonaws.codecommit#IsHunkConflict",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean value indicating whether a combination of hunks contains a conflict.\n            Conflicts occur when the same file or the same lines in a file were modified in both the\n            source and destination of a merge or pull request. Valid values include true, false, and\n            null. True when the hunk represents a conflict and one or more files contains a line\n            conflict. File mode conflicts in a merge do not set this to true.</p>"
                     }
                 },
@@ -9127,6 +9173,7 @@
                 "isMerged": {
                     "target": "com.amazonaws.codecommit#IsMerged",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean value indicating whether the merge has been made.</p>"
                     }
                 },
@@ -9504,6 +9551,7 @@
                 "keepEmptyFolders": {
                     "target": "com.amazonaws.codecommit#KeepEmptyFolders",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If the commit contains deletions, whether to keep a folder or folder structure if the\n            changes leave the folders empty. If true, a .gitkeep file is created for empty folders.\n            The default is false.</p>"
                     }
                 },
@@ -9707,6 +9755,7 @@
                 "keepEmptyFolders": {
                     "target": "com.amazonaws.codecommit#KeepEmptyFolders",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If the commit contains deletions, whether to keep a folder or folder structure if the\n            changes leave the folders empty. If true, a .gitkeep file is created for empty folders.\n            The default is false.</p>"
                     }
                 },
@@ -9799,7 +9848,10 @@
             }
         },
         "com.amazonaws.codecommit#NumberOfConflicts": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.codecommit#NumberOfRuleTemplatesExceededException": {
             "type": "structure",
@@ -9835,7 +9887,10 @@
             "type": "string"
         },
         "com.amazonaws.codecommit#ObjectSize": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.codecommit#ObjectTypeEnum": {
             "type": "string",
@@ -9922,7 +9977,10 @@
             }
         },
         "com.amazonaws.codecommit#Overridden": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.codecommit#OverrideAlreadySetException": {
             "type": "structure",
@@ -9943,6 +10001,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.codecommit#OverridePullRequestApprovalRulesInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -10136,10 +10197,7 @@
             }
         },
         "com.amazonaws.codecommit#Position": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.codecommit#PostCommentForComparedCommit": {
             "type": "operation",
@@ -11070,6 +11128,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.codecommit#PutCommentReactionInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -12352,6 +12413,7 @@
                 "isMove": {
                     "target": "com.amazonaws.codecommit#IsMove",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether to remove the source file from the parent commit.</p>"
                     }
                 }
@@ -12479,6 +12541,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.codecommit#TagResourceInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -12822,6 +12887,9 @@
             "input": {
                 "target": "com.amazonaws.codecommit#UntagResourceInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.codecommit#InvalidRepositoryNameException"
@@ -13126,6 +13194,9 @@
             "input": {
                 "target": "com.amazonaws.codecommit#UpdateDefaultBranchInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.codecommit#BranchDoesNotExistException"
@@ -13297,6 +13368,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.codecommit#UpdatePullRequestApprovalStateInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -13584,6 +13658,9 @@
             "input": {
                 "target": "com.amazonaws.codecommit#UpdateRepositoryDescriptionInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.codecommit#EncryptionIntegrityChecksFailedException"
@@ -13642,6 +13719,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.codecommit#UpdateRepositoryNameInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {

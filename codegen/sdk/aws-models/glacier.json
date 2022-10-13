@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -33,6 +33,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.glacier#AbortMultipartUploadInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -93,6 +96,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.glacier#AbortVaultLockInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -170,6 +176,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.glacier#AddTagsToVaultInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -455,6 +464,9 @@
             "input": {
                 "target": "com.amazonaws.glacier#CompleteVaultLockInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.glacier#InvalidParameterValueException"
@@ -628,6 +640,9 @@
             "input": {
                 "target": "com.amazonaws.glacier#DeleteArchiveInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.glacier#InvalidParameterValueException"
@@ -688,6 +703,9 @@
             "input": {
                 "target": "com.amazonaws.glacier#DeleteVaultInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.glacier#InvalidParameterValueException"
@@ -715,6 +733,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.glacier#DeleteVaultAccessPolicyInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -791,6 +812,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.glacier#DeleteVaultNotificationsInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1023,12 +1047,14 @@
                 "NumberOfArchives": {
                     "target": "com.amazonaws.glacier#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of archives in the vault as of the last inventory date. This field will\n         return <code>null</code> if an inventory has not yet run on the vault, for example if you\n         just created the vault.</p>"
                     }
                 },
                 "SizeInBytes": {
                     "target": "com.amazonaws.glacier#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Total size, in bytes, of the archives in the vault as of the last inventory date.\n         This field will return null if an inventory has not yet run on the vault, for example if\n         you just created the vault.</p>"
                     }
                 }
@@ -1242,6 +1268,7 @@
                 "body": {
                     "target": "com.amazonaws.glacier#Stream",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>The job data, either archive data or inventory data.</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -1256,6 +1283,7 @@
                 "status": {
                     "target": "com.amazonaws.glacier#httpstatus",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The HTTP response code for a job output request. The value depends on whether a range\n         was specified in the request.</p>",
                         "smithy.api#httpResponseCode": {}
                     }
@@ -1685,6 +1713,7 @@
                 "Completed": {
                     "target": "com.amazonaws.glacier#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The job status. When a job is completed, you get the job's output using Get Job\n            Output (GET output).</p>"
                     }
                 },
@@ -2645,6 +2674,7 @@
                 "PartSizeInBytes": {
                     "target": "com.amazonaws.glacier#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The part size in bytes. This is the same value that you specified in the Initiate\n         Multipart Upload request.</p>"
                     }
                 },
@@ -2914,10 +2944,7 @@
             }
         },
         "com.amazonaws.glacier#NullableLong": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.glacier#OutputLocation": {
             "type": "structure",
@@ -3135,6 +3162,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.glacier#RemoveTagsFromVaultInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -3366,6 +3396,9 @@
             "input": {
                 "target": "com.amazonaws.glacier#SetDataRetrievalPolicyInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.glacier#InvalidParameterValueException"
@@ -3412,6 +3445,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.glacier#SetVaultAccessPolicyInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -3472,6 +3508,9 @@
             "input": {
                 "target": "com.amazonaws.glacier#SetVaultNotificationsInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.glacier#InvalidParameterValueException"
@@ -3527,10 +3566,7 @@
             }
         },
         "com.amazonaws.glacier#Size": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.glacier#StatusCode": {
             "type": "string",
@@ -3686,6 +3722,7 @@
                 "body": {
                     "target": "com.amazonaws.glacier#Stream",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>The data to upload.</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -3719,6 +3756,7 @@
                 "PartSizeInBytes": {
                     "target": "com.amazonaws.glacier#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The part size, in bytes, specified in the Initiate Multipart Upload request. This is\n         the size of all the parts in the upload except the last part, which may be smaller than\n         this size.</p>"
                     }
                 },
@@ -3811,6 +3849,7 @@
                 "body": {
                     "target": "com.amazonaws.glacier#Stream",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>The data to upload.</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -3896,7 +3935,10 @@
             }
         },
         "com.amazonaws.glacier#boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.glacier#hashmap": {
             "type": "map",
@@ -3908,10 +3950,16 @@
             }
         },
         "com.amazonaws.glacier#httpstatus": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.glacier#long": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.glacier#string": {
             "type": "string"

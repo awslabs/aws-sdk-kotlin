@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -490,24 +490,28 @@
                 "Width": {
                     "target": "com.amazonaws.textract#Float",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The width of the bounding box as a ratio of the overall document page\n         width.</p>"
                     }
                 },
                 "Height": {
                     "target": "com.amazonaws.textract#Float",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The height of the bounding box as a ratio of the overall document page\n         height.</p>"
                     }
                 },
                 "Left": {
                     "target": "com.amazonaws.textract#Float",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The left coordinate of the bounding box as a ratio of overall document page\n         width.</p>"
                     }
                 },
                 "Top": {
                     "target": "com.amazonaws.textract#Float",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The top coordinate of the bounding box as a ratio of overall document page\n         height.</p>"
                     }
                 }
@@ -871,7 +875,10 @@
             }
         },
         "com.amazonaws.textract#Float": {
-            "type": "float"
+            "type": "float",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.textract#FlowDefinitionArn": {
             "type": "string",
@@ -1632,7 +1639,6 @@
         "com.amazonaws.textract#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -1726,7 +1732,6 @@
         "com.amazonaws.textract#Percent": {
             "type": "float",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -1739,12 +1744,14 @@
                 "X": {
                     "target": "com.amazonaws.textract#Float",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The value of the X coordinate for a point on a <code>Polygon</code>.</p>"
                     }
                 },
                 "Y": {
                     "target": "com.amazonaws.textract#Float",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The value of the Y coordinate for a point on a <code>Polygon</code>.</p>"
                     }
                 }
@@ -2358,21 +2365,6 @@
         },
         "com.amazonaws.textract#Textract": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Textract",
-                    "arnNamespace": "textract",
-                    "cloudFormationName": "Textract",
-                    "cloudTrailEventSource": "textract.amazonaws.com",
-                    "endpointPrefix": "textract"
-                },
-                "aws.auth#sigv4": {
-                    "name": "textract"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>Amazon Textract detects and analyzes text in documents and converts it\n         into machine-readable text. This is the API reference documentation for\n         Amazon Textract.</p>",
-                "smithy.api#title": "Amazon Textract"
-            },
             "version": "2018-06-27",
             "operations": [
                 {
@@ -2405,7 +2397,22 @@
                 {
                     "target": "com.amazonaws.textract#StartExpenseAnalysis"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Textract",
+                    "arnNamespace": "textract",
+                    "cloudFormationName": "Textract",
+                    "cloudTrailEventSource": "textract.amazonaws.com",
+                    "endpointPrefix": "textract"
+                },
+                "aws.auth#sigv4": {
+                    "name": "textract"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<p>Amazon Textract detects and analyzes text in documents and converts it\n         into machine-readable text. This is the API reference documentation for\n         Amazon Textract.</p>",
+                "smithy.api#title": "Amazon Textract"
+            }
         },
         "com.amazonaws.textract#ThrottlingException": {
             "type": "structure",
@@ -2425,7 +2432,6 @@
         "com.amazonaws.textract#UInteger": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }

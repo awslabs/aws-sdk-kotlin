@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.connectcampaigns#AccessDeniedException": {
             "type": "structure",
@@ -25,19 +25,6 @@
         },
         "com.amazonaws.connectcampaigns#AmazonConnectCampaignService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "ConnectCampaigns",
-                    "arnNamespace": "connect-campaigns",
-                    "cloudTrailEventSource": "connect-campaigns.amazonaws.com"
-                },
-                "aws.auth#sigv4": {
-                    "name": "connect-campaigns"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "Provide APIs to create and manage Amazon Connect Campaigns.",
-                "smithy.api#title": "AmazonConnectCampaignService"
-            },
             "version": "2021-01-30",
             "operations": [
                 {
@@ -106,7 +93,20 @@
                 {
                     "target": "com.amazonaws.connectcampaigns#UpdateCampaignOutboundCallConfig"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "ConnectCampaigns",
+                    "arnNamespace": "connect-campaigns",
+                    "cloudTrailEventSource": "connect-campaigns.amazonaws.com"
+                },
+                "aws.auth#sigv4": {
+                    "name": "connect-campaigns"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "Provide APIs to create and manage Amazon Connect Campaigns.",
+                "smithy.api#title": "AmazonConnectCampaignService"
+            }
         },
         "com.amazonaws.connectcampaigns#AnswerMachineDetectionConfig": {
             "type": "structure",
@@ -171,7 +171,6 @@
         "com.amazonaws.connectcampaigns#BandwidthAllocation": {
             "type": "double",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#documentation": "The bandwidth allocation of a queue resource.",
                 "smithy.api#range": {
                     "min": 0,
@@ -766,6 +765,7 @@
         "com.amazonaws.connectcampaigns#Enabled": {
             "type": "boolean",
             "traits": {
+                "smithy.api#default": false,
                 "smithy.api#documentation": "Boolean to indicate if custom encryption has been enabled."
             }
         },
@@ -775,6 +775,7 @@
                 "enabled": {
                     "target": "com.amazonaws.connectcampaigns#Enabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#required": {}
                     }
                 },
@@ -1488,7 +1489,6 @@
         "com.amazonaws.connectcampaigns#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#documentation": "The maximum number of results to return per page.",
                 "smithy.api#range": {
                     "min": 1,

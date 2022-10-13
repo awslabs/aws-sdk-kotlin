@@ -2573,40 +2573,30 @@
                 "healthyThreshold": {
                     "target": "com.amazonaws.lightsail#integer",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": 2,
                         "smithy.api#documentation": "<p>The number of consecutive health checks successes required before moving the container to\n      the <code>Healthy</code> state. The default value is <code>2</code>.</p>"
                     }
                 },
                 "unhealthyThreshold": {
                     "target": "com.amazonaws.lightsail#integer",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": 2,
                         "smithy.api#documentation": "<p>The number of consecutive health check failures required before moving the container to\n      the <code>Unhealthy</code> state. The default value is <code>2</code>.</p>"
                     }
                 },
                 "timeoutSeconds": {
                     "target": "com.amazonaws.lightsail#integer",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": 2,
                         "smithy.api#documentation": "<p>The amount of time, in seconds, during which no response means a failed health check. You\n      can specify between 2 and 60 seconds. The default value is <code>2</code>.</p>"
                     }
                 },
                 "intervalSeconds": {
                     "target": "com.amazonaws.lightsail#integer",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": 5,
                         "smithy.api#documentation": "<p>The approximate interval, in seconds, between health checks of an individual container.\n      You can specify between 5 and 300 seconds. The default value is <code>5</code>.</p>"
                     }
                 },
                 "path": {
                     "target": "com.amazonaws.lightsail#string",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "/",
                         "smithy.api#documentation": "<p>The path on the container on which to perform the health check. The default value is\n        <code>/</code>.</p>"
                     }
                 },
@@ -4056,8 +4046,6 @@
                 "ipAddressType": {
                     "target": "com.amazonaws.lightsail#IpAddressType",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "dualstack",
                         "smithy.api#documentation": "<p>The IP address type for the distribution.</p>\n\n         <p>The possible values are <code>ipv4</code> for IPv4 only, and <code>dualstack</code> for\n      IPv4 and IPv6.</p>\n\n         <p>The default value is <code>dualstack</code>.</p>"
                     }
                 },
@@ -4444,8 +4432,6 @@
                 "ipAddressType": {
                     "target": "com.amazonaws.lightsail#IpAddressType",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "dualstack",
                         "smithy.api#documentation": "<p>The IP address type for the instance.</p>\n\n         <p>The possible values are <code>ipv4</code> for IPv4 only, and <code>dualstack</code> for\n      IPv4 and IPv6.</p>\n\n         <p>The default value is <code>dualstack</code>.</p>"
                     }
                 },
@@ -4545,8 +4531,6 @@
                 "ipAddressType": {
                     "target": "com.amazonaws.lightsail#IpAddressType",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "dualstack",
                         "smithy.api#documentation": "<p>The IP address type for the instance.</p>\n\n         <p>The possible values are <code>ipv4</code> for IPv4 only, and <code>dualstack</code> for\n      IPv4 and IPv6.</p>\n\n         <p>The default value is <code>dualstack</code>.</p>"
                     }
                 }
@@ -4741,8 +4725,6 @@
                 "ipAddressType": {
                     "target": "com.amazonaws.lightsail#IpAddressType",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "dualstack",
                         "smithy.api#documentation": "<p>The IP address type for the load balancer.</p>\n\n         <p>The possible values are <code>ipv4</code> for IPv4 only, and <code>dualstack</code> for\n      IPv4 and IPv6.</p>\n\n         <p>The default value is <code>dualstack</code>.</p>"
                     }
                 },

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -154,6 +154,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.s3outposts#DeleteEndpointRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -391,6 +394,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.s3outposts#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of endpoints that will be returned in the response.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -464,6 +468,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.s3outposts#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of endpoints that will be returned in the response.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -498,6 +503,7 @@
         "com.amazonaws.s3outposts#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -558,21 +564,6 @@
         },
         "com.amazonaws.s3outposts#S3Outposts": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "S3Outposts",
-                    "arnNamespace": "s3-outposts",
-                    "cloudFormationName": "S3Outposts",
-                    "cloudTrailEventSource": "s3outposts.amazonaws.com",
-                    "endpointPrefix": "s3-outposts"
-                },
-                "aws.auth#sigv4": {
-                    "name": "s3-outposts"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>Amazon S3 on Outposts provides access to S3 on Outposts operations.</p>",
-                "smithy.api#title": "Amazon S3 on Outposts"
-            },
             "version": "2017-07-25",
             "operations": [
                 {
@@ -587,7 +578,22 @@
                 {
                     "target": "com.amazonaws.s3outposts#ListSharedEndpoints"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "S3Outposts",
+                    "arnNamespace": "s3-outposts",
+                    "cloudFormationName": "S3Outposts",
+                    "cloudTrailEventSource": "s3outposts.amazonaws.com",
+                    "endpointPrefix": "s3-outposts"
+                },
+                "aws.auth#sigv4": {
+                    "name": "s3-outposts"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>Amazon S3 on Outposts provides access to S3 on Outposts operations.</p>",
+                "smithy.api#title": "Amazon S3 on Outposts"
+            }
         },
         "com.amazonaws.s3outposts#SecurityGroupId": {
             "type": "string",

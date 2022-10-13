@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -366,24 +366,6 @@
         },
         "com.amazonaws.opensearch#AmazonOpenSearchService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "OpenSearch",
-                    "arnNamespace": "es",
-                    "cloudFormationName": "OpenSearch",
-                    "cloudTrailEventSource": "opensearch.amazonaws.com",
-                    "endpointPrefix": "es"
-                },
-                "aws.auth#sigv4": {
-                    "name": "es"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<fullname>Amazon OpenSearch Configuration Service</fullname>\n    <p>Use the Amazon OpenSearch configuration API to create, configure, and manage Amazon OpenSearch Service domains.</p>\n    <p>For sample code that uses the configuration API, see the <a href=\"https://docs.aws.amazon.com/opensearch-service/latest/developerguide/opensearch-configuration-samples.html\">\n      Amazon OpenSearch Service Developer Guide</a>.\n      The guide also contains <a href=\"https://docs.aws.amazon.com/opensearch-service/latest/developerguide/request-signing.html\">\n        sample\n        code for sending signed HTTP requests to the OpenSearch APIs</a>.\n    </p>\n    <p>The endpoint for configuration service requests is region-specific: es.<i>region</i>.amazonaws.com.\n      For example, es.us-east-1.amazonaws.com. For a current list of supported regions and endpoints,\n      see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#service-regions\" target=\"_blank\">Regions and Endpoints</a>.\n    </p>",
-                "smithy.api#title": "Amazon OpenSearch Service",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://es.amazonaws.com/doc/2021-01-01/"
-                }
-            },
             "version": "2021-01-01",
             "operations": [
                 {
@@ -506,7 +488,25 @@
                 {
                     "target": "com.amazonaws.opensearch#UpgradeDomain"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "OpenSearch",
+                    "arnNamespace": "es",
+                    "cloudFormationName": "OpenSearch",
+                    "cloudTrailEventSource": "opensearch.amazonaws.com",
+                    "endpointPrefix": "es"
+                },
+                "aws.auth#sigv4": {
+                    "name": "es"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<fullname>Amazon OpenSearch Configuration Service</fullname>\n    <p>Use the Amazon OpenSearch configuration API to create, configure, and manage Amazon OpenSearch Service domains.</p>\n    <p>For sample code that uses the configuration API, see the <a href=\"https://docs.aws.amazon.com/opensearch-service/latest/developerguide/opensearch-configuration-samples.html\">\n      Amazon OpenSearch Service Developer Guide</a>.\n      The guide also contains <a href=\"https://docs.aws.amazon.com/opensearch-service/latest/developerguide/request-signing.html\">\n        sample\n        code for sending signed HTTP requests to the OpenSearch APIs</a>.\n    </p>\n    <p>The endpoint for configuration service requests is region-specific: es.<i>region</i>.amazonaws.com.\n      For example, es.us-east-1.amazonaws.com. For a current list of supported regions and endpoints,\n      see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#service-regions\" target=\"_blank\">Regions and Endpoints</a>.\n    </p>",
+                "smithy.api#title": "Amazon OpenSearch Service",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://es.amazonaws.com/doc/2021-01-01/"
+                }
+            }
         },
         "com.amazonaws.opensearch#AssociatePackage": {
             "type": "operation",
@@ -830,6 +830,7 @@
                 "UpdateVersion": {
                     "target": "com.amazonaws.opensearch#UIntValue",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The latest version of the Auto-Tune options.</p>"
                     }
                 },
@@ -894,10 +895,7 @@
             }
         },
         "com.amazonaws.opensearch#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.opensearch#CancelServiceSoftwareUpdate": {
             "type": "operation",
@@ -1074,6 +1072,7 @@
                 "TotalNumberOfStages": {
                     "target": "com.amazonaws.opensearch#TotalNumberOfStages",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of stages required for the configuration change.</p>"
                     }
                 },
@@ -2039,6 +2038,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>"
                     }
                 },
@@ -2334,6 +2334,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>"
                     }
                 },
@@ -2489,6 +2490,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>"
                     }
                 },
@@ -2634,6 +2636,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Limits results to a maximum number of packages.</p>"
                     }
                 },
@@ -2714,6 +2717,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -2799,6 +2803,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3425,16 +3430,10 @@
             }
         },
         "com.amazonaws.opensearch#Double": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.opensearch#DryRun": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.opensearch#DryRunResults": {
             "type": "structure",
@@ -3459,6 +3458,7 @@
                 "Value": {
                     "target": "com.amazonaws.opensearch#DurationValue",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Integer to specify the value of a maintenance schedule duration. See <a href=\"https://docs.aws.amazon.com/opensearch-service/latest/developerguide/auto-tune.html\" target=\"_blank\">\n      Auto-Tune for Amazon OpenSearch Service\n    </a> for more information.\n    </p>"
                     }
                 },
@@ -3476,6 +3476,7 @@
         "com.amazonaws.opensearch#DurationValue": {
             "type": "long",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#documentation": "<p>Integer to specify the value of a maintenance schedule duration. See <a href=\"https://docs.aws.amazon.com/opensearch-service/latest/developerguide/auto-tune.html\" target=\"_blank\">\n      Auto-Tune for Amazon OpenSearch Service\n    </a> for more information.\n    </p>",
                 "smithy.api#range": {
                     "min": 1,
@@ -3777,6 +3778,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Limits results to a maximum number of package versions.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3865,6 +3867,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "maxResults"
                     }
                 },
@@ -4084,6 +4087,7 @@
         "com.amazonaws.opensearch#InstanceCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#documentation": "<p>The number of EC2 instances in the domain.</p>",
                 "smithy.api#range": {
                     "min": 1
@@ -4094,10 +4098,16 @@
             "type": "structure",
             "members": {
                 "MinimumInstanceCount": {
-                    "target": "com.amazonaws.opensearch#MinimumInstanceCount"
+                    "target": "com.amazonaws.opensearch#MinimumInstanceCount",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 },
                 "MaximumInstanceCount": {
-                    "target": "com.amazonaws.opensearch#MaximumInstanceCount"
+                    "target": "com.amazonaws.opensearch#MaximumInstanceCount",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 }
             },
             "traits": {
@@ -4157,13 +4167,13 @@
             }
         },
         "com.amazonaws.opensearch#Integer": {
-            "type": "integer"
-        },
-        "com.amazonaws.opensearch#IntegerClass": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": 0
             }
+        },
+        "com.amazonaws.opensearch#IntegerClass": {
+            "type": "integer"
         },
         "com.amazonaws.opensearch#InternalException": {
             "type": "structure",
@@ -4405,6 +4415,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Limits the results to a maximum number of domains.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -4492,6 +4503,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "maxResults"
                     }
                 },
@@ -4567,6 +4579,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Limits results to a maximum number of packages.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -4706,6 +4719,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.opensearch#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>\n      Set this value to limit the number of results returned.\n      Value must be greater than 10 or it won't be honored.\n    </p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -4806,10 +4820,7 @@
             }
         },
         "com.amazonaws.opensearch#Long": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.opensearch#MasterUserOptions": {
             "type": "structure",
@@ -4840,6 +4851,7 @@
         "com.amazonaws.opensearch#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#documentation": "<p>\n      Set this value to limit the number of results returned.\n    </p>",
                 "smithy.api#range": {
                     "max": 100
@@ -4849,6 +4861,7 @@
         "com.amazonaws.opensearch#MaximumInstanceCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#documentation": "<p>\n      Maximum number of instances that can be instantiated for a given InstanceType.\n    </p>"
             }
         },
@@ -4864,6 +4877,7 @@
         "com.amazonaws.opensearch#MinimumInstanceCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#documentation": "<p>\n      Minimum number of instances that can be instantiated for a given InstanceType.\n    </p>"
             }
         },
@@ -5365,6 +5379,7 @@
                 "UpdateVersion": {
                     "target": "com.amazonaws.opensearch#UIntValue",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The latest version of the entity.</p>"
                     }
                 },
@@ -5799,6 +5814,7 @@
                 "InstanceCount": {
                     "target": "com.amazonaws.opensearch#InstanceCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of OpenSearch instances to reserve.</p>"
                     }
                 }
@@ -6023,6 +6039,7 @@
                 "Duration": {
                     "target": "com.amazonaws.opensearch#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The duration, in seconds, for which the OpenSearch instance is reserved.</p>"
                     }
                 },
@@ -6047,6 +6064,7 @@
                 "InstanceCount": {
                     "target": "com.amazonaws.opensearch#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of OpenSearch instances that have been reserved.</p>"
                     }
                 },
@@ -6097,6 +6115,7 @@
                 "Duration": {
                     "target": "com.amazonaws.opensearch#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The duration, in seconds, for which the offering will reserve the OpenSearch instance.</p>"
                     }
                 },
@@ -6759,11 +6778,15 @@
             }
         },
         "com.amazonaws.opensearch#TotalNumberOfStages": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.opensearch#UIntValue": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }

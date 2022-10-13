@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -1118,6 +1118,7 @@
                 "IsUnique": {
                     "target": "com.amazonaws.clouddirectory#Bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the attribute that is being indexed has unique values or\n       not.</p>",
                         "smithy.api#required": {}
                     }
@@ -2031,7 +2032,10 @@
             }
         },
         "com.amazonaws.clouddirectory#BatchOperationIndex": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.clouddirectory#BatchRead": {
             "type": "operation",
@@ -2550,7 +2554,10 @@
             "type": "structure",
             "members": {
                 "Index": {
-                    "target": "com.amazonaws.clouddirectory#BatchOperationIndex"
+                    "target": "com.amazonaws.clouddirectory#BatchOperationIndex",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
                 },
                 "Type": {
                     "target": "com.amazonaws.clouddirectory#BatchWriteExceptionType"
@@ -2886,13 +2893,13 @@
             "type": "blob"
         },
         "com.amazonaws.clouddirectory#Bool": {
-            "type": "boolean"
-        },
-        "com.amazonaws.clouddirectory#BooleanAttributeValue": {
             "type": "boolean",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": false
             }
+        },
+        "com.amazonaws.clouddirectory#BooleanAttributeValue": {
+            "type": "boolean"
         },
         "com.amazonaws.clouddirectory#CannotListParentOfRootException": {
             "type": "structure",
@@ -3182,6 +3189,7 @@
                 "IsUnique": {
                     "target": "com.amazonaws.clouddirectory#Bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the attribute that is being indexed has unique values or\n      not.</p>",
                         "smithy.api#required": {}
                     }
@@ -4052,6 +4060,9 @@
             "input": {
                 "target": "com.amazonaws.clouddirectory#DetachTypedLinkRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.clouddirectory#AccessDeniedException"
@@ -4462,6 +4473,7 @@
                 "IsImmutable": {
                     "target": "com.amazonaws.clouddirectory#Bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether the attribute is mutable or not.</p>"
                     }
                 },
@@ -6793,6 +6805,7 @@
                 "IncludeAllLinksToEachParent": {
                     "target": "com.amazonaws.clouddirectory#Bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When set to True, returns all <a>ListObjectParentsResponse$ParentLinks</a>. There could be multiple links between a parent-child pair.</p>"
                     }
                 }
@@ -7669,7 +7682,6 @@
         "com.amazonaws.clouddirectory#NumberResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -8517,7 +8529,6 @@
         "com.amazonaws.clouddirectory#TagsNumberResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 50
                 }
@@ -8621,6 +8632,7 @@
                 "IsImmutable": {
                     "target": "com.amazonaws.clouddirectory#Bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether the attribute is mutable or not.</p>"
                     }
                 },
@@ -9381,6 +9393,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.clouddirectory#Bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Used for testing whether the major version schemas are backward compatible or not. If schema compatibility fails, an exception would be thrown else the call would succeed but no changes will be saved. This parameter is optional.</p>"
                     }
                 }
@@ -9476,6 +9489,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.clouddirectory#Bool",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Used for testing whether the Development schema provided is backwards compatible, or not, with the publish schema provided by the user to be upgraded. If schema compatibility fails, an exception would be thrown else the call would succeed. This parameter is optional and defaults to false.</p>"
                     }
                 }

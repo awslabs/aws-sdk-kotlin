@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -237,6 +237,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.appstream#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If there is a problem, the application can be disabled after image creation.</p>"
                     }
                 },
@@ -366,6 +367,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.appstream#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Enables or disables persistent application settings for users during their streaming sessions. </p>",
                         "smithy.api#required": {}
                     }
@@ -387,6 +389,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.appstream#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether persistent application settings are enabled for users during their streaming sessions.</p>"
                     }
                 },
@@ -728,13 +731,13 @@
             }
         },
         "com.amazonaws.appstream#Boolean": {
-            "type": "boolean"
-        },
-        "com.amazonaws.appstream#BooleanObject": {
             "type": "boolean",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": false
             }
+        },
+        "com.amazonaws.appstream#BooleanObject": {
+            "type": "boolean"
         },
         "com.amazonaws.appstream#ComputeCapacity": {
             "type": "structure",
@@ -1884,6 +1887,7 @@
                 "dryRun": {
                     "target": "com.amazonaws.appstream#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether to display the status of image update availability before AppStream 2.0 initiates the process of creating a new updated image. If this value is set to <code>true</code>, AppStream 2.0 displays whether image updates are available. If this value is set to <code>false</code>, AppStream 2.0 initiates the process of creating a new updated image without displaying whether image updates are available.</p>"
                     }
                 }
@@ -1898,6 +1902,7 @@
                 "canUpdateImage": {
                     "target": "com.amazonaws.appstream#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether a new image can be created.</p>"
                     }
                 }
@@ -3066,7 +3071,6 @@
         "com.amazonaws.appstream#DescribeImagesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 25
@@ -4433,6 +4437,7 @@
                 "ImageBuilderSupported": {
                     "target": "com.amazonaws.appstream#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether an image builder can be launched from this image.</p>"
                     }
                 },
@@ -4821,10 +4826,7 @@
             }
         },
         "com.amazonaws.appstream#Integer": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.appstream#InvalidAccountStatusException": {
             "type": "structure",
@@ -5110,15 +5112,11 @@
             }
         },
         "com.amazonaws.appstream#Long": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.appstream#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 500
@@ -5220,21 +5218,6 @@
         },
         "com.amazonaws.appstream#PhotonAdminProxyService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "AppStream",
-                    "arnNamespace": "appstream",
-                    "cloudFormationName": "AppStream",
-                    "cloudTrailEventSource": "appstream.amazonaws.com",
-                    "endpointPrefix": "appstream2"
-                },
-                "aws.auth#sigv4": {
-                    "name": "appstream"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<fullname>Amazon AppStream 2.0</fullname>\n        <p>This is the <i>Amazon AppStream 2.0 API Reference</i>. This documentation provides descriptions and syntax for each of the actions and data types in AppStream 2.0. AppStream 2.0 is a fully managed, secure application streaming service that lets you stream desktop applications to users without rewriting applications. AppStream 2.0 manages the AWS resources that are required to host and run your applications, scales automatically, and provides access to your users on demand. </p>\n        \n        <note>\n            <p>You can call the AppStream 2.0 API operations by using an interface VPC endpoint (interface endpoint). For more information, see <a href=\"https://docs.aws.amazon.com/appstream2/latest/developerguide/access-api-cli-through-interface-vpc-endpoint.html\">Access AppStream 2.0 API Operations and CLI Commands Through an Interface VPC Endpoint</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>\n         </note>\n        \n        <p>To learn more about AppStream 2.0, see the following resources:</p>\n            \n            <ul>\n            <li>\n               <p> \n                  <a href=\"http://aws.amazon.com/appstream2\">Amazon AppStream 2.0 product page</a>\n               </p>\n            </li>\n            <li>\n               <p> \n                  <a href=\"http://aws.amazon.com/documentation/appstream2\">Amazon AppStream 2.0 documentation</a>\n               </p>\n            </li>\n         </ul>",
-                "smithy.api#title": "Amazon AppStream"
-            },
             "version": "2016-12-01",
             "operations": [
                 {
@@ -5432,7 +5415,22 @@
                 {
                     "target": "com.amazonaws.appstream#UpdateStack"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "AppStream",
+                    "arnNamespace": "appstream",
+                    "cloudFormationName": "AppStream",
+                    "cloudTrailEventSource": "appstream.amazonaws.com",
+                    "endpointPrefix": "appstream2"
+                },
+                "aws.auth#sigv4": {
+                    "name": "appstream"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<fullname>Amazon AppStream 2.0</fullname>\n        <p>This is the <i>Amazon AppStream 2.0 API Reference</i>. This documentation provides descriptions and syntax for each of the actions and data types in AppStream 2.0. AppStream 2.0 is a fully managed, secure application streaming service that lets you stream desktop applications to users without rewriting applications. AppStream 2.0 manages the AWS resources that are required to host and run your applications, scales automatically, and provides access to your users on demand. </p>\n        \n        <note>\n            <p>You can call the AppStream 2.0 API operations by using an interface VPC endpoint (interface endpoint). For more information, see <a href=\"https://docs.aws.amazon.com/appstream2/latest/developerguide/access-api-cli-through-interface-vpc-endpoint.html\">Access AppStream 2.0 API Operations and CLI Commands Through an Interface VPC Endpoint</a> in the <i>Amazon AppStream 2.0 Administration Guide</i>.</p>\n         </note>\n        \n        <p>To learn more about AppStream 2.0, see the following resources:</p>\n            \n            <ul>\n            <li>\n               <p> \n                  <a href=\"http://aws.amazon.com/appstream2\">Amazon AppStream 2.0 product page</a>\n               </p>\n            </li>\n            <li>\n               <p> \n                  <a href=\"http://aws.amazon.com/documentation/appstream2\">Amazon AppStream 2.0 documentation</a>\n               </p>\n            </li>\n         </ul>",
+                "smithy.api#title": "Amazon AppStream"
+            }
         },
         "com.amazonaws.appstream#PlatformType": {
             "type": "string",
@@ -6859,6 +6857,7 @@
                 "DeleteVpcConfig": {
                     "target": "com.amazonaws.appstream#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#deprecated": {},
                         "smithy.api#documentation": "<p>Deletes the VPC association for the specified fleet.</p>"
                     }
@@ -7073,6 +7072,7 @@
                 "DeleteStorageConnectors": {
                     "target": "com.amazonaws.appstream#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#deprecated": {},
                         "smithy.api#documentation": "<p>Deletes the storage connectors currently enabled for the stack.</p>"
                     }
@@ -7240,6 +7240,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.appstream#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the user in the user pool is enabled.</p>"
                     }
                 },
@@ -7365,6 +7366,7 @@
                 "SendEmailNotification": {
                     "target": "com.amazonaws.appstream#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether a welcome email is sent to a user after the user is created in the user pool.</p>"
                     }
                 }

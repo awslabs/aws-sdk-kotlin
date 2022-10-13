@@ -1,8 +1,37 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.grafana#AWSGrafanaControlPlane": {
             "type": "service",
+            "version": "2020-08-18",
+            "operations": [
+                {
+                    "target": "com.amazonaws.grafana#ListTagsForResource"
+                },
+                {
+                    "target": "com.amazonaws.grafana#TagResource"
+                },
+                {
+                    "target": "com.amazonaws.grafana#UntagResource"
+                }
+            ],
+            "resources": [
+                {
+                    "target": "com.amazonaws.grafana#ApiKey"
+                },
+                {
+                    "target": "com.amazonaws.grafana#Authentication"
+                },
+                {
+                    "target": "com.amazonaws.grafana#License"
+                },
+                {
+                    "target": "com.amazonaws.grafana#Permission"
+                },
+                {
+                    "target": "com.amazonaws.grafana#Workspace"
+                }
+            ],
             "traits": {
                 "aws.api#controlPlane": {},
                 "aws.api#service": {
@@ -35,36 +64,7 @@
                 },
                 "smithy.api#documentation": "<p>Amazon Managed Grafana is a fully managed and secure data visualization service that you can use to \n       instantly query, correlate, and visualize operational metrics, logs, and traces from multiple sources. \n       Amazon Managed Grafana makes it easy to deploy, operate, and scale Grafana, a widely deployed data visualization tool \n       that is popular for its extensible data support.</p>\n         <p>With Amazon Managed Grafana, you create logically isolated Grafana servers called <i>workspaces</i>. In\n        a workspace,  you can create  Grafana dashboards and visualizations to analyze your metrics, logs, and traces without having to\n       build, package, or deploy any hardware to run Grafana servers.  </p>",
                 "smithy.api#title": "Amazon Managed Grafana"
-            },
-            "version": "2020-08-18",
-            "operations": [
-                {
-                    "target": "com.amazonaws.grafana#ListTagsForResource"
-                },
-                {
-                    "target": "com.amazonaws.grafana#TagResource"
-                },
-                {
-                    "target": "com.amazonaws.grafana#UntagResource"
-                }
-            ],
-            "resources": [
-                {
-                    "target": "com.amazonaws.grafana#ApiKey"
-                },
-                {
-                    "target": "com.amazonaws.grafana#Authentication"
-                },
-                {
-                    "target": "com.amazonaws.grafana#License"
-                },
-                {
-                    "target": "com.amazonaws.grafana#Permission"
-                },
-                {
-                    "target": "com.amazonaws.grafana#Workspace"
-                }
-            ]
+            }
         },
         "com.amazonaws.grafana#AccessDeniedException": {
             "type": "structure",
@@ -1416,7 +1416,10 @@
             }
         },
         "com.amazonaws.grafana#LoginValidityDuration": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.grafana#NotificationDestinationType": {
             "type": "string",
@@ -1673,6 +1676,7 @@
                 "loginValidityDuration": {
                     "target": "com.amazonaws.grafana#LoginValidityDuration",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>How long a sign-on session by a SAML user is valid, before the user has to sign on\n         again.</p>"
                     }
                 }

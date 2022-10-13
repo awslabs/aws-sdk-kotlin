@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -48,10 +48,7 @@
             }
         },
         "com.amazonaws.cloudwatch#ActionsEnabled": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudwatch#ActionsSuppressedBy": {
             "type": "string",
@@ -615,6 +612,7 @@
                 "Size": {
                     "target": "com.amazonaws.cloudwatch#Size",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size of the dashboard, in bytes.</p>"
                     }
                 }
@@ -761,10 +759,7 @@
             }
         },
         "com.amazonaws.cloudwatch#DatapointValue": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.cloudwatch#DatapointValueMap": {
             "type": "map",
@@ -790,7 +785,6 @@
         "com.amazonaws.cloudwatch#DatapointsToAlarm": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -1722,7 +1716,6 @@
         "com.amazonaws.cloudwatch#EvaluationPeriods": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -2007,10 +2000,7 @@
             "type": "string"
         },
         "com.amazonaws.cloudwatch#GetMetricDataMaxDatapoints": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.cloudwatch#GetMetricDataOutput": {
             "type": "structure",
@@ -2297,24 +2287,6 @@
         },
         "com.amazonaws.cloudwatch#GraniteServiceVersion20100801": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "CloudWatch",
-                    "arnNamespace": "monitoring",
-                    "cloudFormationName": "CloudWatch",
-                    "cloudTrailEventSource": "cloudwatch.amazonaws.com",
-                    "endpointPrefix": "monitoring"
-                },
-                "aws.auth#sigv4": {
-                    "name": "monitoring"
-                },
-                "aws.protocols#awsQuery": {},
-                "smithy.api#documentation": "<p>Amazon CloudWatch monitors your Amazon Web Services (Amazon Web Services) resources and the\n\t\t\tapplications you run on Amazon Web Services in real time. You can use CloudWatch to collect and track\n\t\t\tmetrics, which are the variables you want to measure for your resources and\n\t\t\tapplications.</p>\n\n\t\t       <p>CloudWatch alarms send notifications or automatically change the resources you are monitoring based on rules\n\t\t\tthat you define. For example, you can monitor the CPU usage and disk reads and writes of your Amazon EC2\n\t\t\tinstances. Then, use this data to determine whether you should launch\n\t\t\tadditional instances to handle increased load. You can also use this data to stop\n\t\t\tunder-used instances to save\n\t\t\tmoney.</p>\n\n\t\t       <p>In addition to monitoring the built-in metrics that come with Amazon Web Services, you can monitor\n\t\t\tyour own custom metrics. With CloudWatch, you gain system-wide visibility into resource\n\t\t\tutilization, application performance, and operational health.</p>",
-                "smithy.api#title": "Amazon CloudWatch",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://monitoring.amazonaws.com/doc/2010-08-01/"
-                }
-            },
             "version": "2010-08-01",
             "operations": [
                 {
@@ -2431,7 +2403,25 @@
                 {
                     "target": "com.amazonaws.cloudwatch#UntagResource"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "CloudWatch",
+                    "arnNamespace": "monitoring",
+                    "cloudFormationName": "CloudWatch",
+                    "cloudTrailEventSource": "cloudwatch.amazonaws.com",
+                    "endpointPrefix": "monitoring"
+                },
+                "aws.auth#sigv4": {
+                    "name": "monitoring"
+                },
+                "aws.protocols#awsQuery": {},
+                "smithy.api#documentation": "<p>Amazon CloudWatch monitors your Amazon Web Services (Amazon Web Services) resources and the\n\t\t\tapplications you run on Amazon Web Services in real time. You can use CloudWatch to collect and track\n\t\t\tmetrics, which are the variables you want to measure for your resources and\n\t\t\tapplications.</p>\n\n\t\t       <p>CloudWatch alarms send notifications or automatically change the resources you are monitoring based on rules\n\t\t\tthat you define. For example, you can monitor the CPU usage and disk reads and writes of your Amazon EC2\n\t\t\tinstances. Then, use this data to determine whether you should launch\n\t\t\tadditional instances to handle increased load. You can also use this data to stop\n\t\t\tunder-used instances to save\n\t\t\tmoney.</p>\n\n\t\t       <p>In addition to monitoring the built-in metrics that come with Amazon Web Services, you can monitor\n\t\t\tyour own custom metrics. With CloudWatch, you gain system-wide visibility into resource\n\t\t\tutilization, application performance, and operational health.</p>",
+                "smithy.api#title": "Amazon CloudWatch",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://monitoring.amazonaws.com/doc/2010-08-01/"
+                }
+            }
         },
         "com.amazonaws.cloudwatch#HistoryData": {
             "type": "string",
@@ -2504,6 +2494,7 @@
                 "ManagedRule": {
                     "target": "com.amazonaws.cloudwatch#InsightRuleIsManaged",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>\n\t\t\tAn optional built-in rule that Amazon Web Services manages.\n\t\t</p>"
                     }
                 }
@@ -2607,12 +2598,14 @@
             }
         },
         "com.amazonaws.cloudwatch#InsightRuleIsManaged": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cloudwatch#InsightRuleMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 500
@@ -2738,22 +2731,13 @@
             }
         },
         "com.amazonaws.cloudwatch#InsightRuleUnboundDouble": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.cloudwatch#InsightRuleUnboundInteger": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.cloudwatch#InsightRuleUnboundLong": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.cloudwatch#InsightRules": {
             "type": "list",
@@ -3094,7 +3078,6 @@
         "com.amazonaws.cloudwatch#ListMetricStreamsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 500
@@ -3332,7 +3315,6 @@
         "com.amazonaws.cloudwatch#MaxRecords": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -3342,7 +3324,6 @@
         "com.amazonaws.cloudwatch#MaxReturnedResultsCount": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -4101,7 +4082,6 @@
         "com.amazonaws.cloudwatch#Period": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -4843,10 +4823,7 @@
             "type": "string"
         },
         "com.amazonaws.cloudwatch#ReturnData": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudwatch#ScanBy": {
             "type": "string",
@@ -4948,7 +4925,10 @@
             }
         },
         "com.amazonaws.cloudwatch#Size": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.cloudwatch#StandardUnit": {
             "type": "string",
@@ -5280,17 +5260,13 @@
         "com.amazonaws.cloudwatch#StorageResolution": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
             }
         },
         "com.amazonaws.cloudwatch#SuppressorPeriod": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.cloudwatch#Tag": {
             "type": "structure",
@@ -5404,10 +5380,7 @@
             }
         },
         "com.amazonaws.cloudwatch#Threshold": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.cloudwatch#Timestamp": {
             "type": "timestamp"

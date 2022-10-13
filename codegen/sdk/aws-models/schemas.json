@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -153,6 +153,7 @@
                 "CrossAccount": {
                     "target": "com.amazonaws.schemas#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Support discovery of schemas in events sent to the bus from another account. (default: true).</p>"
                     }
                 },
@@ -201,6 +202,7 @@
                 "CrossAccount": {
                     "target": "com.amazonaws.schemas#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The Status if the discoverer will discover schemas from events sent from another account.</p>"
                     }
                 },
@@ -443,6 +445,9 @@
             "input": {
                 "target": "com.amazonaws.schemas#DeleteDiscovererRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.schemas#BadRequestException"
@@ -489,6 +494,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.schemas#DeleteRegistryRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -537,6 +545,9 @@
             "input": {
                 "target": "com.amazonaws.schemas#DeleteResourcePolicyRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.schemas#BadRequestException"
@@ -582,6 +593,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.schemas#DeleteSchemaRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -637,6 +651,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.schemas#DeleteSchemaVersionRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -927,6 +944,7 @@
                 "CrossAccount": {
                     "target": "com.amazonaws.schemas#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The Status if the discoverer will discover schemas from events sent from another account.</p>"
                     }
                 },
@@ -1189,6 +1207,7 @@
                 "CrossAccount": {
                     "target": "com.amazonaws.schemas#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The Status if the discoverer will discover schemas from events sent from another account.</p>"
                     }
                 },
@@ -1640,6 +1659,7 @@
                 "Limit": {
                     "target": "com.amazonaws.schemas#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "limit"
                     }
                 },
@@ -1722,6 +1742,7 @@
                 "Limit": {
                     "target": "com.amazonaws.schemas#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "limit"
                     }
                 },
@@ -1814,6 +1835,7 @@
                 "Limit": {
                     "target": "com.amazonaws.schemas#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "limit"
                     }
                 },
@@ -1905,6 +1927,7 @@
                 "Limit": {
                     "target": "com.amazonaws.schemas#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "limit"
                     }
                 },
@@ -2295,6 +2318,7 @@
                 "VersionCount": {
                     "target": "com.amazonaws.schemas#__long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of versions available for the schema.</p>"
                     }
                 }
@@ -2438,6 +2462,7 @@
                 "Limit": {
                     "target": "com.amazonaws.schemas#__integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "limit"
                     }
                 },
@@ -2643,6 +2668,9 @@
             "input": {
                 "target": "com.amazonaws.schemas#TagResourceRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.schemas#BadRequestException"
@@ -2768,6 +2796,9 @@
             "input": {
                 "target": "com.amazonaws.schemas#UntagResourceRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.schemas#BadRequestException"
@@ -2869,6 +2900,7 @@
                 "CrossAccount": {
                     "target": "com.amazonaws.schemas#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Support discovery of schemas in events sent to the bus from another account. (default: true)</p>"
                     }
                 }
@@ -2910,6 +2942,7 @@
                 "CrossAccount": {
                     "target": "com.amazonaws.schemas#__boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The Status if the discoverer will discover schemas from events sent from another account.</p>"
                     }
                 },
@@ -3145,10 +3178,16 @@
             }
         },
         "com.amazonaws.schemas#__boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.schemas#__integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.schemas#__listOfDiscovererSummary": {
             "type": "list",
@@ -3205,7 +3244,10 @@
             }
         },
         "com.amazonaws.schemas#__long": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.schemas#__string": {
             "type": "string"

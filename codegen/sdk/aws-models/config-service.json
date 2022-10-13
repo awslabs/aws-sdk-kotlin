@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -45,6 +45,7 @@
                 "AllAwsRegions": {
                     "target": "com.amazonaws.configservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, aggregate existing Config regions and future\n\t\t\tregions.</p>"
                     }
                 },
@@ -202,18 +203,21 @@
                 "CompliantRuleCount": {
                     "target": "com.amazonaws.configservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of compliant Config Rules.</p>"
                     }
                 },
                 "NonCompliantRuleCount": {
                     "target": "com.amazonaws.configservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of noncompliant Config Rules.</p>"
                     }
                 },
                 "TotalRuleCount": {
                     "target": "com.amazonaws.configservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Total number of compliant rules, noncompliant rules, and the rules that do not have any applicable resources to evaluate upon resulting in insufficient data.</p>"
                     }
                 }
@@ -228,12 +232,14 @@
                 "CompliantConformancePackCount": {
                     "target": "com.amazonaws.configservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Number of compliant conformance packs.</p>"
                     }
                 },
                 "NonCompliantConformancePackCount": {
                     "target": "com.amazonaws.configservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Number of noncompliant conformance packs.</p>"
                     }
                 }
@@ -584,7 +590,10 @@
             }
         },
         "com.amazonaws.configservice#AllSupported": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.configservice#AmazonResourceName": {
             "type": "string",
@@ -607,7 +616,6 @@
         "com.amazonaws.configservice#AutoRemediationAttemptSeconds": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 2678000
@@ -617,7 +625,6 @@
         "com.amazonaws.configservice#AutoRemediationAttempts": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 25
@@ -849,7 +856,10 @@
             }
         },
         "com.amazonaws.configservice#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.configservice#ChannelName": {
             "type": "string",
@@ -959,12 +969,14 @@
                 "CappedCount": {
                     "target": "com.amazonaws.configservice#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of Amazon Web Services resources or Config rules responsible for\n\t\t\tthe current compliance of the item.</p>"
                     }
                 },
                 "CapExceeded": {
                     "target": "com.amazonaws.configservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the maximum count is reached.</p>"
                     }
                 }
@@ -1327,6 +1339,7 @@
                 "FirstEvaluationStarted": {
                     "target": "com.amazonaws.configservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether Config has evaluated your resources\n\t\t\tagainst the rule at least once.</p>\n\t\t       <ul>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>true</code> - Config has evaluated your Amazon Web Services\n\t\t\t\t\tresources against the rule at least once.</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>false</code> - Config has not finished evaluating your Amazon Web Services resources against the\n\t\t\t\t\trule\n\t\t\t\t\tat least once.</p>\n\t\t\t         </li>\n         </ul>"
                     }
                 },
@@ -1760,6 +1773,7 @@
                 "recording": {
                     "target": "com.amazonaws.configservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether or not the recorder is currently\n\t\t\trecording.</p>"
                     }
                 },
@@ -2383,6 +2397,7 @@
         "com.amazonaws.configservice#CosmosPageLimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -2409,6 +2424,7 @@
                 "EnableDebugLogDelivery": {
                     "target": "com.amazonaws.configservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The boolean expression for enabling debug logging for your Config Custom Policy rule. The default value is <code>false</code>.</p>"
                     }
                 }
@@ -3214,6 +3230,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#GroupByAPILimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of evaluation results returned on each page.\n\t\t\tThe default is\n\t\t\tmaximum.\n\t\t\tIf you specify 0, Config uses the default.</p>"
                     }
                 },
@@ -3293,6 +3310,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of conformance packs compliance details returned on each page. The default is maximum. If you specify 0, Config uses the default. </p>"
                     }
                 },
@@ -3356,6 +3374,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of AggregationAuthorizations returned on\n\t\t\teach page. The default is maximum. If you specify 0, Config uses\n\t\t\tthe default.</p>"
                     }
                 },
@@ -3508,6 +3527,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of evaluation results returned on each page.\n\t\t\tThe default is 10. You cannot specify a number greater than 100. If\n\t\t\tyou specify 0, Config uses the default.</p>"
                     }
                 },
@@ -3589,6 +3609,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#RuleLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of rule evaluation results that you want\n\t\t\treturned.</p>\n\t\t\n\t\t       <p>This parameter is required if the rule limit for your account\n\t\t\tis more than the default of 150 rules.</p>\n\t\t       <p>For information about requesting a rule limit increase, see\n\t\t\t\t<a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">Config Limits</a> in the <i>Amazon Web Services General\n\t\t\t\tReference Guide</i>.</p>"
                     }
                 }
@@ -3739,6 +3760,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of AggregatorSourceStatus returned on each\n\t\t\tpage. The default is maximum. If you specify 0, Config uses the\n\t\t\tdefault.</p>"
                     }
                 }
@@ -3811,6 +3833,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of configuration aggregators returned on\n\t\t\teach page. The default is maximum. If you specify 0, Config uses\n\t\t\tthe default.</p>"
                     }
                 }
@@ -3960,6 +3983,7 @@
         "com.amazonaws.configservice#DescribeConformancePackComplianceLimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1000
@@ -3985,6 +4009,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#DescribeConformancePackComplianceLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of Config rules within a conformance pack are returned on each page.</p>"
                     }
                 },
@@ -4062,6 +4087,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#PageSizeLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of conformance packs status returned on each page.</p>"
                     }
                 },
@@ -4134,6 +4160,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#PageSizeLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of conformance packs returned on each page.</p>"
                     }
                 },
@@ -4296,6 +4323,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#CosmosPageLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of <code>OrganizationConfigRuleStatuses</code> returned on each page. If you do no specify a number, Config uses the default. The default is 100.</p>"
                     }
                 },
@@ -4368,6 +4396,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#CosmosPageLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of organization Config rules returned on each page. If you do no specify a number, Config uses the default. The default is 100.</p>"
                     }
                 },
@@ -4440,6 +4469,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#CosmosPageLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of OrganizationConformancePackStatuses returned on each page. \n\t\t\tIf you do no specify a number, Config uses the default. The default is 100. </p>"
                     }
                 },
@@ -4512,6 +4542,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#CosmosPageLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of organization config packs returned on each page. If you do no specify a\n\t\t\tnumber, Config uses the default. The default is 100.</p>"
                     }
                 },
@@ -4572,6 +4603,7 @@
         "com.amazonaws.configservice#DescribePendingAggregationRequestsLimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 20
@@ -4584,6 +4616,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#DescribePendingAggregationRequestsLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of evaluation results returned on each page.\n\t\t\tThe default is maximum. If you specify 0, Config uses the\n\t\t\tdefault.</p>"
                     }
                 },
@@ -4691,6 +4724,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of RemediationExceptionResourceKey returned on each page. The default is 25. If you specify 0, Config uses the default.</p>"
                     }
                 },
@@ -4767,6 +4801,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of RemediationExecutionStatuses returned on each page. The default is maximum. If you specify 0, Config uses the default. </p>"
                     }
                 },
@@ -5289,6 +5324,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of evaluation results returned on each page.\n\t\t\tThe default is 50. You cannot specify a number greater than 100. If\n\t\t\tyou specify 0, Config uses the default.</p>"
                     }
                 },
@@ -5373,6 +5409,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#GroupByAPILimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of evaluation results returned on each page.\n\t\t\tThe default is 1000. You cannot specify a number greater than 1000.\n\t\t\tIf you specify 0, Config uses the default.</p>"
                     }
                 },
@@ -5463,6 +5500,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results returned on each page. The default is maximum. If you specify 0, Config uses the default.</p>"
                     }
                 },
@@ -5553,6 +5591,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#GroupByAPILimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of <a>GroupedResourceCount</a> objects returned on each page. The default is 1000. You cannot specify a number greater than 1000. If you specify 0, Config uses the default.</p>"
                     }
                 },
@@ -5570,6 +5609,7 @@
                 "TotalDiscoveredResources": {
                     "target": "com.amazonaws.configservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of resources that are present in an aggregator with the filters that you provide.</p>",
                         "smithy.api#required": {}
                     }
@@ -5698,6 +5738,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of evaluation results returned on each page.\n\t\t\tThe default is 10. You cannot specify a number greater than 100. If\n\t\t\tyou specify 0, Config uses the default.</p>"
                     }
                 },
@@ -5916,6 +5957,7 @@
         "com.amazonaws.configservice#GetConformancePackComplianceDetailsLimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -5941,6 +5983,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#GetConformancePackComplianceDetailsLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of evaluation results returned on each page. If you do no specify a number, Config uses the default. The default is 100.</p>"
                     }
                 },
@@ -6018,6 +6061,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#PageSizeLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of conformance packs returned on each page.</p>"
                     }
                 },
@@ -6125,6 +6169,7 @@
                 "limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of <a>ResourceCount</a> objects\n\t\t\treturned on each page. The default is 100. You cannot specify a\n\t\t\tnumber greater than 100. If you specify 0, Config uses the\n\t\t\tdefault.</p>"
                     }
                 },
@@ -6142,6 +6187,7 @@
                 "totalDiscoveredResources": {
                     "target": "com.amazonaws.configservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of resources that Config is recording in\n\t\t\tthe region for your account. If you specify resource types in the\n\t\t\trequest, Config returns only the total number of resources for\n\t\t\tthose resource types.</p>\n\n\n\t\t       <p class=\"title\">\n            <b>Example</b>\n         </p>\n         <ol>\n            <li>\n\t\t\t\t           <p>Config is recording three resource types in the US\n\t\t\t\t\tEast (Ohio) Region for your account: 25 EC2 instances, 20\n\t\t\t\t\tIAM users, and 15 S3 buckets, for a total of 60\n\t\t\t\t\tresources.</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>You make a call to the\n\t\t\t\t\t\t<code>GetDiscoveredResourceCounts</code> action and\n\t\t\t\t\tspecify the resource type,\n\t\t\t\t\t\t<code>\"AWS::EC2::Instances\"</code>, in the\n\t\t\t\t\trequest.</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>Config returns 25 for\n\t\t\t\t\t\t<code>totalDiscoveredResources</code>.</p>\n\t\t\t         </li>\n         </ol>"
                     }
                 },
@@ -6210,6 +6256,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#CosmosPageLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of <code>OrganizationConfigRuleDetailedStatus</code> returned on each page. If you do not specify a number, Config uses the default. The default is 100.</p>"
                     }
                 },
@@ -6289,6 +6336,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#CosmosPageLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of <code>OrganizationConformancePackDetailedStatuses</code> returned on each page. \n\t\t\tIf you do not specify a number, Config uses the default. The default is 100. </p>"
                     }
                 },
@@ -6436,6 +6484,7 @@
                 "limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of configuration items returned on each\n\t\t\tpage. The default is 10. You cannot specify a number greater than\n\t\t\t100. If you specify 0, Config uses the default.</p>"
                     }
                 },
@@ -6516,6 +6565,7 @@
         "com.amazonaws.configservice#GroupByAPILimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1000
@@ -6535,6 +6585,7 @@
                 "ResourceCount": {
                     "target": "com.amazonaws.configservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of resources in the group.</p>",
                         "smithy.api#required": {}
                     }
@@ -6551,7 +6602,10 @@
             }
         },
         "com.amazonaws.configservice#IncludeGlobalResourceTypes": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.configservice#InsufficientDeliveryPolicyException": {
             "type": "structure",
@@ -6584,7 +6638,10 @@
             }
         },
         "com.amazonaws.configservice#Integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.configservice#InvalidConfigurationRecorderNameException": {
             "type": "structure",
@@ -6805,6 +6862,7 @@
         "com.amazonaws.configservice#Limit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -6884,6 +6942,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of resource identifiers returned on each page. You cannot specify a number greater than 100. If you specify 0, Config uses the default.</p>"
                     }
                 },
@@ -6964,6 +7023,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#PageSizeLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of conformance pack compliance scores returned on each page.</p>"
                     }
                 },
@@ -7050,12 +7110,14 @@
                 "limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of resource identifiers returned on each\n\t\t\tpage. The default is 100. You cannot specify a number greater than\n\t\t\t100. If you specify 0, Config uses the default.</p>"
                     }
                 },
                 "includeDeletedResources": {
                     "target": "com.amazonaws.configservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Config includes deleted resources in the\n\t\t\tresults. By default, deleted resources are not included.</p>"
                     }
                 },
@@ -7127,7 +7189,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to be returned with a single call.</p>"
                     }
                 }
@@ -7195,6 +7257,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of tags returned on each page. The limit maximum is 50. You cannot specify a number greater than 50. If you specify 0, Config uses the default. </p>"
                     }
                 },
@@ -7224,7 +7287,10 @@
             }
         },
         "com.amazonaws.configservice#Long": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.configservice#MaxActiveResourcesExceededException": {
             "type": "structure",
@@ -7769,6 +7835,7 @@
                 "AllAwsRegions": {
                     "target": "com.amazonaws.configservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If true, aggregate existing Config regions and future\n\t\t\tregions.</p>"
                     }
                 }
@@ -8616,6 +8683,7 @@
         "com.amazonaws.configservice#PageSizeLimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 20
@@ -8669,7 +8737,6 @@
         "com.amazonaws.configservice#Percentage": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -9092,6 +9159,7 @@
                 "TestMode": {
                     "target": "com.amazonaws.configservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Use this parameter to specify a test run for\n\t\t\t<code>PutEvaluations</code>. You can verify whether your Lambda function will deliver evaluation results to Config. No\n\t\t\tupdates occur to your existing evaluations, and evaluation results\n\t\t\tare not sent to Config.</p>\n\n\t\t       <note>\n\t\t\t         <p>When <code>TestMode</code> is <code>true</code>,\n\t\t\t\t\t<code>PutEvaluations</code> doesn't require a valid value\n\t\t\t\tfor the <code>ResultToken</code> parameter, but the value cannot\n\t\t\t\tbe null.</p>\n\t\t       </note>"
                     }
                 }
@@ -9541,6 +9609,7 @@
                 "RetentionPeriodInDays": {
                     "target": "com.amazonaws.configservice#RetentionPeriodInDays",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Number of days Config stores your historical\n\t\t\tinformation.</p>\n\t\t       <note>\n\t\t\t         <p>Currently, only applicable to the configuration item\n\t\t\t\thistory.</p>\n\t\t       </note>",
                         "smithy.api#required": {}
                     }
@@ -9708,12 +9777,14 @@
                 "allSupported": {
                     "target": "com.amazonaws.configservice#AllSupported",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Config records configuration changes for\n\t\t\tevery supported type of regional resource.</p>\n\t\t       <p>If you set this option to <code>true</code>, when Config\n\t\t\tadds support for a new type of regional resource, it starts\n\t\t\trecording resources of that type automatically.</p>\n\t\t       <p>If you set this option to <code>true</code>, you cannot\n\t\t\tenumerate a list of <code>resourceTypes</code>.</p>"
                     }
                 },
                 "includeGlobalResourceTypes": {
                     "target": "com.amazonaws.configservice#IncludeGlobalResourceTypes",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Config includes all supported types of\n\t\t\tglobal resources (for example, IAM resources) with the resources\n\t\t\tthat it records.</p>\n\t\t       <p>Before you can set this option to <code>true</code>, you must\n\t\t\tset the <code>allSupported</code> option to\n\t\t\t<code>true</code>.</p>\n\t\t       <p>If you set this option to <code>true</code>, when Config\n\t\t\tadds support for a new type of global resource, it starts recording\n\t\t\tresources of that type automatically.</p>\n\t\t       <p>The configuration details for any global resource are the same\n\t\t\tin all regions. To prevent duplicate configuration items, you should\n\t\t\tconsider customizing Config in only one region to record global\n\t\t\tresources.</p>"
                     }
                 },
@@ -9835,6 +9906,7 @@
                 "Automatic": {
                     "target": "com.amazonaws.configservice#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The remediation is triggered automatically.</p>"
                     }
                 },
@@ -10182,6 +10254,7 @@
                 "count": {
                     "target": "com.amazonaws.configservice#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of resources.</p>"
                     }
                 }
@@ -11093,6 +11166,7 @@
                 "RetentionPeriodInDays": {
                     "target": "com.amazonaws.configservice#RetentionPeriodInDays",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Number of days Config stores your historical information.</p>\n\t\t       <note>\n            <p>Currently, only applicable to the configuration item history.</p>\n         </note>",
                         "smithy.api#required": {}
                     }
@@ -11133,6 +11207,7 @@
         "com.amazonaws.configservice#RetentionPeriodInDays": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 30,
                     "max": 2557
@@ -11142,6 +11217,7 @@
         "com.amazonaws.configservice#RuleLimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 50
@@ -11254,12 +11330,14 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of query results returned on each page. </p>"
                     }
                 },
                 "MaxResults": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of query results returned on each page. Config also allows the Limit request parameter.</p>"
                     }
                 },
@@ -11333,6 +11411,7 @@
                 "Limit": {
                     "target": "com.amazonaws.configservice#Limit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of query results returned on each page. </p>"
                     }
                 },
@@ -11495,24 +11574,6 @@
         },
         "com.amazonaws.configservice#StarlingDoveService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Config Service",
-                    "arnNamespace": "config",
-                    "cloudFormationName": "Config",
-                    "cloudTrailEventSource": "configservice.amazonaws.com",
-                    "endpointPrefix": "config"
-                },
-                "aws.auth#sigv4": {
-                    "name": "config"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<fullname>Config</fullname>\n\n\t\t       <p>Config provides a way to keep track of the configurations\n\t\t\tof all the Amazon Web Services resources associated with your Amazon Web Services account. You can\n\t\t\tuse Config to get the current and historical configurations of\n\t\t\teach Amazon Web Services resource and also to get information about the relationship\n\t\t\tbetween the resources. An Amazon Web Services resource can be an Amazon Compute\n\t\t\tCloud (Amazon EC2) instance, an Elastic Block Store (EBS) volume, an\n\t\t\telastic network Interface (ENI), or a security group. For a complete\n\t\t\tlist of resources currently supported by Config, see <a href=\"https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources\">Supported Amazon Web Services resources</a>.</p>\n\n\t\t       <p>You can access and manage Config through the Amazon Web Services Management\n\t\t\tConsole, the Amazon Web Services Command Line Interface (Amazon Web Services CLI), the Config\n\t\t\tAPI, or the Amazon Web Services SDKs for Config. This reference guide contains\n\t\t\tdocumentation for the Config API and the Amazon Web Services CLI commands that\n\t\t\tyou can use to manage Config. The Config API uses the\n\t\t\tSignature Version 4 protocol for signing requests. For more\n\t\t\tinformation about how to sign a request with this protocol, see\n\t\t\t\t<a href=\"https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature\n\t\t\t\tVersion 4 Signing Process</a>. For detailed information\n\t\t\tabout Config features and their associated actions or commands,\n\t\t\tas well as how to work with Amazon Web Services Management Console, see <a href=\"https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html\">What Is Config</a> in the <i>Config Developer\n\t\t\t\tGuide</i>.</p>",
-                "smithy.api#title": "AWS Config",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://config.amazonaws.com/doc/2014-11-12/"
-                }
-            },
             "version": "2014-11-12",
             "operations": [
                 {
@@ -11782,7 +11843,25 @@
                 {
                     "target": "com.amazonaws.configservice#UntagResource"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Config Service",
+                    "arnNamespace": "config",
+                    "cloudFormationName": "Config",
+                    "cloudTrailEventSource": "configservice.amazonaws.com",
+                    "endpointPrefix": "config"
+                },
+                "aws.auth#sigv4": {
+                    "name": "config"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<fullname>Config</fullname>\n\n\t\t       <p>Config provides a way to keep track of the configurations\n\t\t\tof all the Amazon Web Services resources associated with your Amazon Web Services account. You can\n\t\t\tuse Config to get the current and historical configurations of\n\t\t\teach Amazon Web Services resource and also to get information about the relationship\n\t\t\tbetween the resources. An Amazon Web Services resource can be an Amazon Compute\n\t\t\tCloud (Amazon EC2) instance, an Elastic Block Store (EBS) volume, an\n\t\t\telastic network Interface (ENI), or a security group. For a complete\n\t\t\tlist of resources currently supported by Config, see <a href=\"https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources\">Supported Amazon Web Services resources</a>.</p>\n\n\t\t       <p>You can access and manage Config through the Amazon Web Services Management\n\t\t\tConsole, the Amazon Web Services Command Line Interface (Amazon Web Services CLI), the Config\n\t\t\tAPI, or the Amazon Web Services SDKs for Config. This reference guide contains\n\t\t\tdocumentation for the Config API and the Amazon Web Services CLI commands that\n\t\t\tyou can use to manage Config. The Config API uses the\n\t\t\tSignature Version 4 protocol for signing requests. For more\n\t\t\tinformation about how to sign a request with this protocol, see\n\t\t\t\t<a href=\"https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature\n\t\t\t\tVersion 4 Signing Process</a>. For detailed information\n\t\t\tabout Config features and their associated actions or commands,\n\t\t\tas well as how to work with Amazon Web Services Management Console, see <a href=\"https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html\">What Is Config</a> in the <i>Config Developer\n\t\t\t\tGuide</i>.</p>",
+                "smithy.api#title": "AWS Config",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://config.amazonaws.com/doc/2014-11-12/"
+                }
+            }
         },
         "com.amazonaws.configservice#StartConfigRulesEvaluation": {
             "type": "operation",

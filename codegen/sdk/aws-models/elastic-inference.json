@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -325,6 +325,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.elasticinference#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>\n            The total number of items to return in the command's output. If the total number of items available is more than the value specified, a NextToken is provided in the command's output.\n            To resume pagination, provide the NextToken value in the starting-token argument of a subsequent command.\n            Do not use the NextToken response element directly outside of the AWS CLI.\n        </p>"
                     }
                 },
@@ -496,7 +497,10 @@
             }
         },
         "com.amazonaws.elasticinference#Integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.elasticinference#InternalServerException": {
             "type": "structure",
@@ -533,6 +537,7 @@
                 "value": {
                     "target": "com.amazonaws.elasticinference#Value",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>\n            The throughput value of the Elastic Inference Accelerator type.\n        </p>"
                     }
                 }
@@ -628,6 +633,7 @@
         "com.amazonaws.elasticinference#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -640,6 +646,7 @@
                 "sizeInMiB": {
                     "target": "com.amazonaws.elasticinference#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>\n            The size in mebibytes of the Elastic Inference Accelerator type.\n        </p>"
                     }
                 }
@@ -867,7 +874,10 @@
             "members": {}
         },
         "com.amazonaws.elasticinference#Value": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.elasticinference#ValueStringList": {
             "type": "list",

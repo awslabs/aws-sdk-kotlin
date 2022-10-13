@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -126,7 +126,6 @@
         "com.amazonaws.datasync#BytesPerSecond": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": -1
                 }
@@ -2260,30 +2259,35 @@
                 "EstimatedFilesToTransfer": {
                     "target": "com.amazonaws.datasync#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The expected number of files that is to be transferred over the network. This value is\n      calculated during the PREPARING phase, before the TRANSFERRING phase. This value is the\n      expected number of files to be transferred. It's calculated based on comparing the\n      content of the source and destination locations and finding the delta that needs to be\n      transferred. </p>"
                     }
                 },
                 "EstimatedBytesToTransfer": {
                     "target": "com.amazonaws.datasync#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The estimated physical number of bytes that is to be transferred over the\n      network.</p>"
                     }
                 },
                 "FilesTransferred": {
                     "target": "com.amazonaws.datasync#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The actual number of files that was transferred over the network. This value is\n      calculated and updated on an ongoing basis during the TRANSFERRING phase. It's updated\n      periodically when each file is read from the source and sent over the network. </p>\n         <p>If failures occur during a transfer, this value can be less than\n        <code>EstimatedFilesToTransfer</code>. This value can also be greater than\n        <code>EstimatedFilesTransferred</code> in some cases. This element is\n      implementation-specific for some location types, so don't use it as an indicator for a correct\n      file number or to monitor your task execution.</p>"
                     }
                 },
                 "BytesWritten": {
                     "target": "com.amazonaws.datasync#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of logical bytes written to the destination Amazon Web Services storage resource.</p>"
                     }
                 },
                 "BytesTransferred": {
                     "target": "com.amazonaws.datasync#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The physical number of bytes transferred over the network.</p>"
                     }
                 },
@@ -2426,7 +2430,6 @@
         "com.amazonaws.datasync#Duration": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -2636,21 +2639,6 @@
         },
         "com.amazonaws.datasync#FmrsService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "DataSync",
-                    "arnNamespace": "datasync",
-                    "cloudFormationName": "DataSync",
-                    "cloudTrailEventSource": "datasync.amazonaws.com",
-                    "endpointPrefix": "datasync"
-                },
-                "aws.auth#sigv4": {
-                    "name": "datasync"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<fullname>DataSync</fullname>\n\n         <p>DataSync is a managed data transfer service that makes it simpler for you to\n      automate moving data between on-premises storage and Amazon Simple Storage Service (Amazon S3)\n      or Amazon Elastic File System (Amazon EFS). </p>\n         <p>This API interface reference for DataSync contains documentation for a\n      programming interface that you can use to manage DataSync.</p>",
-                "smithy.api#title": "AWS DataSync"
-            },
             "version": "2018-11-09",
             "operations": [
                 {
@@ -2785,7 +2773,22 @@
                 {
                     "target": "com.amazonaws.datasync#UpdateTaskExecution"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "DataSync",
+                    "arnNamespace": "datasync",
+                    "cloudFormationName": "DataSync",
+                    "cloudTrailEventSource": "datasync.amazonaws.com",
+                    "endpointPrefix": "datasync"
+                },
+                "aws.auth#sigv4": {
+                    "name": "datasync"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<fullname>DataSync</fullname>\n\n         <p>DataSync is a managed data transfer service that makes it simpler for you to\n      automate moving data between on-premises storage and Amazon Simple Storage Service (Amazon S3)\n      or Amazon Elastic File System (Amazon EFS). </p>\n         <p>This API interface reference for DataSync contains documentation for a\n      programming interface that you can use to manage DataSync.</p>",
+                "smithy.api#title": "AWS DataSync"
+            }
         },
         "com.amazonaws.datasync#FsxFilesystemArn": {
             "type": "string",
@@ -2940,7 +2943,6 @@
         "com.amazonaws.datasync#HdfsBlockSize": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1048576,
                     "max": 1073741824
@@ -3006,7 +3008,6 @@
         "com.amazonaws.datasync#HdfsReplicationFactor": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 512
@@ -3049,7 +3050,6 @@
         "com.amazonaws.datasync#HdfsServerPort": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 65536
@@ -3656,7 +3656,6 @@
         "com.amazonaws.datasync#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -3779,7 +3778,6 @@
         "com.amazonaws.datasync#ObjectStorageServerPort": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 65536
@@ -5366,7 +5364,10 @@
             }
         },
         "com.amazonaws.datasync#long": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.datasync#string": {
             "type": "string"

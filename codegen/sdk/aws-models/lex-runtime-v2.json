@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,6 +31,27 @@
     "shapes": {
         "com.amazonaws.lexruntimev2#AWSDeepSenseRunTimeServiceApi2_0": {
             "type": "service",
+            "version": "2020-08-07",
+            "operations": [
+                {
+                    "target": "com.amazonaws.lexruntimev2#DeleteSession"
+                },
+                {
+                    "target": "com.amazonaws.lexruntimev2#GetSession"
+                },
+                {
+                    "target": "com.amazonaws.lexruntimev2#PutSession"
+                },
+                {
+                    "target": "com.amazonaws.lexruntimev2#RecognizeText"
+                },
+                {
+                    "target": "com.amazonaws.lexruntimev2#RecognizeUtterance"
+                },
+                {
+                    "target": "com.amazonaws.lexruntimev2#StartConversation"
+                }
+            ],
             "traits": {
                 "aws.api#service": {
                     "sdkId": "Lex Runtime V2",
@@ -53,28 +74,7 @@
                 },
                 "smithy.api#documentation": "<p></p>",
                 "smithy.api#title": "Amazon Lex Runtime V2"
-            },
-            "version": "2020-08-07",
-            "operations": [
-                {
-                    "target": "com.amazonaws.lexruntimev2#DeleteSession"
-                },
-                {
-                    "target": "com.amazonaws.lexruntimev2#GetSession"
-                },
-                {
-                    "target": "com.amazonaws.lexruntimev2#PutSession"
-                },
-                {
-                    "target": "com.amazonaws.lexruntimev2#RecognizeText"
-                },
-                {
-                    "target": "com.amazonaws.lexruntimev2#RecognizeUtterance"
-                },
-                {
-                    "target": "com.amazonaws.lexruntimev2#StartConversation"
-                }
-            ]
+            }
         },
         "com.amazonaws.lexruntimev2#AccessDeniedException": {
             "type": "structure",
@@ -171,7 +171,6 @@
         "com.amazonaws.lexruntimev2#ActiveContextTimeToLiveInSeconds": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5,
                     "max": 86400
@@ -181,7 +180,6 @@
         "com.amazonaws.lexruntimev2#ActiveContextTurnsToLive": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 20
@@ -246,6 +244,7 @@
                 "clientTimestampMillis": {
                     "target": "com.amazonaws.lexruntimev2#EpochMillis",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A timestamp set by the client of the date and time that the event\n         was sent to Amazon Lex V2.</p>"
                     }
                 }
@@ -303,7 +302,10 @@
             }
         },
         "com.amazonaws.lexruntimev2#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.lexruntimev2#BotAliasIdentifier": {
             "type": "string"
@@ -376,6 +378,7 @@
                 "score": {
                     "target": "com.amazonaws.lexruntimev2#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A score that indicates how confident Amazon Lex V2 is that an intent\n         satisfies the user's intent. Ranges between 0.00 and 1.00. Higher\n         scores indicate higher confidence.</p>"
                     }
                 }
@@ -412,6 +415,7 @@
                 "disablePlayback": {
                     "target": "com.amazonaws.lexruntimev2#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Determines whether Amazon Lex V2 should send audio responses to the client\n         application. \n      </p>\n         <p>Set this field to false when the client is operating in a playback\n         mode where audio responses are played to the user. If the client isn't\n         operating in playback mode, such as a text chat application, set this\n         to true so that Amazon Lex V2 doesn't wait for the prompt to finish playing on\n         the client.</p>"
                     }
                 },
@@ -424,6 +428,7 @@
                 "clientTimestampMillis": {
                     "target": "com.amazonaws.lexruntimev2#EpochMillis",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A timestamp set by the client of the date and time that the event\n         was sent to Amazon Lex V2.</p>"
                     }
                 }
@@ -501,6 +506,7 @@
                 "clientTimestampMillis": {
                     "target": "com.amazonaws.lexruntimev2#EpochMillis",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A timestamp set by the client of the date and time that the event\n         was sent to Amazon Lex V2.</p>"
                     }
                 }
@@ -715,6 +721,7 @@
                 "clientTimestampMillis": {
                     "target": "com.amazonaws.lexruntimev2#EpochMillis",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A timestamp set by the client of the date and time that the event\n         was sent to Amazon Lex V2.</p>"
                     }
                 }
@@ -724,7 +731,10 @@
             }
         },
         "com.amazonaws.lexruntimev2#Double": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.lexruntimev2#ElicitSubSlot": {
             "type": "structure",
@@ -748,7 +758,10 @@
             }
         },
         "com.amazonaws.lexruntimev2#EpochMillis": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.lexruntimev2#EventId": {
             "type": "string",
@@ -1191,6 +1204,7 @@
                 "clientTimestampMillis": {
                     "target": "com.amazonaws.lexruntimev2#EpochMillis",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A timestamp set by the client of the date and time that the event\n         was sent to Amazon Lex V2.</p>"
                     }
                 }
@@ -1391,6 +1405,7 @@
                 "audioStream": {
                     "target": "com.amazonaws.lexruntimev2#BlobStream",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>If the requested content type was audio, the audio version of the\n         message to convey to the user.</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -1645,6 +1660,7 @@
                 "inputStream": {
                     "target": "com.amazonaws.lexruntimev2#BlobStream",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>User input in PCM or Opus audio format or text format as described\n         in the <code>requestContentType</code> parameter.</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -1713,6 +1729,7 @@
                 "audioStream": {
                     "target": "com.amazonaws.lexruntimev2#BlobStream",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>The prompt or statement to send to the user. This is based on the\n         bot configuration and context. For example, if Amazon Lex V2 did not understand\n         the user intent, it sends the <code>clarificationPrompt</code>\n         configured for the bot. If the intent requires confirmation before\n         taking the fulfillment action, it sends the\n            <code>confirmationPrompt</code>. Another example: Suppose that the\n         Lambda function successfully fulfilled the intent, and sent a message\n         to convey to the user. Then Amazon Lex V2 sends that message in the\n         response.</p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -1834,24 +1851,28 @@
                 "positive": {
                     "target": "com.amazonaws.lexruntimev2#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The level of confidence that Amazon Comprehend has in the accuracy\n         of its detection of the <code>POSITIVE</code> sentiment.</p>"
                     }
                 },
                 "negative": {
                     "target": "com.amazonaws.lexruntimev2#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The level of confidence that Amazon Comprehend has in the accuracy\n         of its detection of the <code>NEGATIVE</code> sentiment.</p>"
                     }
                 },
                 "neutral": {
                     "target": "com.amazonaws.lexruntimev2#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The level of confidence that Amazon Comprehend has in the accuracy\n         of its detection of the <code>NEUTRAL</code> sentiment.</p>"
                     }
                 },
                 "mixed": {
                     "target": "com.amazonaws.lexruntimev2#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The level of confidence that Amazon Comprehend has in the accuracy\n         of its detection of the <code>MIXED</code> sentiment.</p>"
                     }
                 }
@@ -2293,6 +2314,7 @@
                 "clientTimestampMillis": {
                     "target": "com.amazonaws.lexruntimev2#EpochMillis",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A timestamp set by the client of the date and time that the event\n         was sent to Amazon Lex V2.</p>"
                     }
                 }

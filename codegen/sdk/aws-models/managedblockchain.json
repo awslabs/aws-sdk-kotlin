@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -656,10 +656,7 @@
             }
         },
         "com.amazonaws.managedblockchain#Enabled": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.managedblockchain#ExceptionMessage": {
             "type": "string"
@@ -1100,10 +1097,7 @@
             }
         },
         "com.amazonaws.managedblockchain#IsOwned": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.managedblockchain#ListInvitations": {
             "type": "operation",
@@ -1932,7 +1926,6 @@
         "com.amazonaws.managedblockchain#MemberListMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 20
@@ -2220,7 +2213,6 @@
         "com.amazonaws.managedblockchain#NetworkListMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10
@@ -2528,7 +2520,6 @@
         "com.amazonaws.managedblockchain#NodeListMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 20
@@ -2795,7 +2786,6 @@
         "com.amazonaws.managedblockchain#ProposalDurationInt": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 168
@@ -2805,7 +2795,6 @@
         "com.amazonaws.managedblockchain#ProposalListMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -3263,7 +3252,6 @@
         "com.amazonaws.managedblockchain#ThresholdPercentageInt": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -3507,10 +3495,7 @@
             }
         },
         "com.amazonaws.managedblockchain#VoteCount": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.managedblockchain#VoteOnProposal": {
             "type": "operation",

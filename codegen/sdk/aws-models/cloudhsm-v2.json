@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -194,7 +194,6 @@
         "com.amazonaws.cloudhsmv2#BackupsMaxSize": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -268,10 +267,7 @@
             }
         },
         "com.amazonaws.cloudhsmv2#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudhsmv2#Cert": {
             "type": "string",
@@ -549,7 +545,6 @@
         "com.amazonaws.cloudhsmv2#ClustersMaxSize": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 25
@@ -1433,7 +1428,6 @@
         "com.amazonaws.cloudhsmv2#MaxSize": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100

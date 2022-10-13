@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.gamesparks#ARN": {
             "type": "string",
@@ -27,6 +27,7 @@
         "com.amazonaws.gamesparks#ByteSize": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -877,6 +878,7 @@
                 "EnableTerminationProtection": {
                     "target": "com.amazonaws.gamesparks#GameTerminationProtection",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Determines if the game can be deleted.</p>"
                     }
                 },
@@ -922,17 +924,6 @@
         },
         "com.amazonaws.gamesparks#GameSparks": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "GameSparks"
-                },
-                "aws.auth#sigv4": {
-                    "name": "gamesparks"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p/>",
-                "smithy.api#title": "GameSparks"
-            },
             "version": "2021-08-17",
             "operations": [
                 {
@@ -1034,7 +1025,18 @@
                 {
                     "target": "com.amazonaws.gamesparks#UpdateStage"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "GameSparks"
+                },
+                "aws.auth#sigv4": {
+                    "name": "gamesparks"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p/>",
+                "smithy.api#title": "GameSparks"
+            }
         },
         "com.amazonaws.gamesparks#GameState": {
             "type": "string",
@@ -1090,7 +1092,10 @@
             }
         },
         "com.amazonaws.gamesparks#GameTerminationProtection": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.gamesparks#GeneratedCodeJobDescription": {
             "type": "string",
@@ -2602,7 +2607,6 @@
         "com.amazonaws.gamesparks#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -2744,6 +2748,7 @@
                 "Size": {
                     "target": "com.amazonaws.gamesparks#ByteSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The size, in bytes, of the section contents.</p>"
                     }
                 },

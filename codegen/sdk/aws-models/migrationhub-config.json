@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -133,6 +133,7 @@
                 "DryRun": {
                     "target": "com.amazonaws.migrationhubconfig#DryRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional Boolean flag to indicate whether any effect should take place. It tests whether\n      the caller has permission to make the call.</p>"
                     }
                 }
@@ -186,7 +187,6 @@
         "com.amazonaws.migrationhubconfig#DescribeHomeRegionControlsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -246,7 +246,10 @@
             }
         },
         "com.amazonaws.migrationhubconfig#DryRun": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.migrationhubconfig#DryRunOperation": {
             "type": "structure",
@@ -389,7 +392,10 @@
             "type": "timestamp"
         },
         "com.amazonaws.migrationhubconfig#RetryAfterSeconds": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.migrationhubconfig#ServiceUnavailableException": {
             "type": "structure",
@@ -457,6 +463,7 @@
                 "RetryAfterSeconds": {
                     "target": "com.amazonaws.migrationhubconfig#RetryAfterSeconds",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of seconds the caller should wait before retrying.</p>",
                         "smithy.api#httpHeader": "Retry-After"
                     }

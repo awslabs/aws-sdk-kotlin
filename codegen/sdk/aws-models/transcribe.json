@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -90,10 +90,7 @@
             }
         },
         "com.amazonaws.transcribe#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.transcribe#CLMLanguageCode": {
             "type": "string",
@@ -404,6 +401,7 @@
                 "ChannelId": {
                     "target": "com.amazonaws.transcribe#ChannelId",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specify the audio channel you want to define.</p>"
                     }
                 },
@@ -433,6 +431,7 @@
         "com.amazonaws.transcribe#ChannelId": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1
@@ -1360,10 +1359,7 @@
             }
         },
         "com.amazonaws.transcribe#DurationInSeconds": {
-            "type": "float",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "float"
         },
         "com.amazonaws.transcribe#FailureReason": {
             "type": "string"
@@ -1832,10 +1828,7 @@
             }
         },
         "com.amazonaws.transcribe#IdentifiedLanguageScore": {
-            "type": "float",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "float"
         },
         "com.amazonaws.transcribe#InputDataConfig": {
             "type": "structure",
@@ -3006,7 +2999,6 @@
         "com.amazonaws.transcribe#MaxAlternatives": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 2,
                     "max": 10
@@ -3016,7 +3008,6 @@
         "com.amazonaws.transcribe#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -3026,7 +3017,6 @@
         "com.amazonaws.transcribe#MaxSpeakers": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 2,
                     "max": 10
@@ -3091,7 +3081,6 @@
         "com.amazonaws.transcribe#MediaSampleRateHertz": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 8000,
                     "max": 48000
@@ -3112,7 +3101,6 @@
         "com.amazonaws.transcribe#MedicalMediaSampleRateHertz": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 16000,
                     "max": 48000
@@ -3525,7 +3513,6 @@
         "com.amazonaws.transcribe#Percentage": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -4293,7 +4280,6 @@
         "com.amazonaws.transcribe#SubtitleOutputStartIndex": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1
@@ -4471,7 +4457,6 @@
         "com.amazonaws.transcribe#TimestampMilliseconds": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 14400000
@@ -4480,21 +4465,6 @@
         },
         "com.amazonaws.transcribe#Transcribe": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Transcribe",
-                    "arnNamespace": "transcribe",
-                    "cloudFormationName": "Transcribe",
-                    "cloudTrailEventSource": "transcribe.amazonaws.com",
-                    "endpointPrefix": "transcribe"
-                },
-                "aws.auth#sigv4": {
-                    "name": "transcribe"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>Amazon Transcribe offers three main types of batch transcription: \n            <b>Standard</b>, <b>Medical</b>, and\n            <b>Call Analytics</b>.</p>\n        <ul>\n            <li>\n                <p>\n                  <b>Standard transcriptions</b> are the most common \n                    option. Refer to  for details.</p>\n            </li>\n            <li>\n                <p>\n                  <b>Medical transcriptions</b> are tailored to medical\n                    professionals and incorporate medical terms. A common use case for this service is \n                    transcribing doctor-patient dialogue into after-visit notes. Refer to \n                     for details.</p>\n            </li>\n            <li>\n                <p>\n                  <b>Call Analytics transcriptions</b> are designed for use \n                    with call center audio on two different channels; if you're looking for insight into customer\n                    service calls, use this option. Refer to  for \n                    details.</p>\n            </li>\n         </ul>",
-                "smithy.api#title": "Amazon Transcribe Service"
-            },
             "version": "2017-10-26",
             "operations": [
                 {
@@ -4614,7 +4584,22 @@
                 {
                     "target": "com.amazonaws.transcribe#UpdateVocabularyFilter"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Transcribe",
+                    "arnNamespace": "transcribe",
+                    "cloudFormationName": "Transcribe",
+                    "cloudTrailEventSource": "transcribe.amazonaws.com",
+                    "endpointPrefix": "transcribe"
+                },
+                "aws.auth#sigv4": {
+                    "name": "transcribe"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<p>Amazon Transcribe offers three main types of batch transcription: \n            <b>Standard</b>, <b>Medical</b>, and\n            <b>Call Analytics</b>.</p>\n        <ul>\n            <li>\n                <p>\n                  <b>Standard transcriptions</b> are the most common \n                    option. Refer to  for details.</p>\n            </li>\n            <li>\n                <p>\n                  <b>Medical transcriptions</b> are tailored to medical\n                    professionals and incorporate medical terms. A common use case for this service is \n                    transcribing doctor-patient dialogue into after-visit notes. Refer to \n                     for details.</p>\n            </li>\n            <li>\n                <p>\n                  <b>Call Analytics transcriptions</b> are designed for use \n                    with call center audio on two different channels; if you're looking for insight into customer\n                    service calls, use this option. Refer to  for \n                    details.</p>\n            </li>\n         </ul>",
+                "smithy.api#title": "Amazon Transcribe Service"
+            }
         },
         "com.amazonaws.transcribe#TranscribeArn": {
             "type": "string",

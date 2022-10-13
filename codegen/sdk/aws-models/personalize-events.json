@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -146,10 +146,7 @@
             }
         },
         "com.amazonaws.personalizeevents#FloatType": {
-            "type": "float",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "float"
         },
         "com.amazonaws.personalizeevents#Impression": {
             "type": "list",
@@ -223,6 +220,9 @@
             "input": {
                 "target": "com.amazonaws.personalizeevents#PutEventsRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.personalizeevents#InvalidInputException"
@@ -274,6 +274,9 @@
             "input": {
                 "target": "com.amazonaws.personalizeevents#PutItemsRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.personalizeevents#InvalidInputException"
@@ -317,6 +320,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.personalizeevents#PutUsersRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {

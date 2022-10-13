@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -99,6 +99,7 @@
                 "Index": {
                     "target": "com.amazonaws.backupstorage#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Chunk index",
                         "smithy.api#required": {}
                     }
@@ -106,6 +107,7 @@
                 "Length": {
                     "target": "com.amazonaws.backupstorage#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Chunk length",
                         "smithy.api#required": {}
                     }
@@ -144,21 +146,6 @@
         },
         "com.amazonaws.backupstorage#CryoStorageFrontendService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "BackupStorage",
-                    "arnNamespace": "backup-storage",
-                    "cloudFormationName": "BackupStorage",
-                    "cloudTrailEventSource": "backupstorage.amazonaws.com",
-                    "endpointPrefix": "backupstorage"
-                },
-                "aws.auth#sigv4": {
-                    "name": "backup-storage"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "The frontend service for Cryo Storage.",
-                "smithy.api#title": "AWS Backup Storage"
-            },
             "version": "2018-04-10",
             "operations": [
                 {
@@ -188,7 +175,22 @@
                 {
                     "target": "com.amazonaws.backupstorage#StartObject"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "BackupStorage",
+                    "arnNamespace": "backup-storage",
+                    "cloudFormationName": "BackupStorage",
+                    "cloudTrailEventSource": "backupstorage.amazonaws.com",
+                    "endpointPrefix": "backupstorage"
+                },
+                "aws.auth#sigv4": {
+                    "name": "backup-storage"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "The frontend service for Cryo Storage.",
+                "smithy.api#title": "AWS Backup Storage"
+            }
         },
         "com.amazonaws.backupstorage#DataAlreadyExistsException": {
             "type": "structure",
@@ -362,6 +364,7 @@
                 "Length": {
                     "target": "com.amazonaws.backupstorage#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Data length",
                         "smithy.api#httpHeader": "x-amz-data-length",
                         "smithy.api#required": {}
@@ -462,6 +465,7 @@
                 "MetadataBlob": {
                     "target": "com.amazonaws.backupstorage#PayloadBlob",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "Metadata blob.",
                         "smithy.api#httpPayload": {}
                     }
@@ -469,6 +473,7 @@
                 "MetadataBlobLength": {
                     "target": "com.amazonaws.backupstorage#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "The size of MetadataBlob.",
                         "smithy.api#httpHeader": "x-amz-data-length"
                     }
@@ -579,6 +584,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.backupstorage#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Maximum number of chunks",
                         "smithy.api#httpQuery": "max-results"
                     }
@@ -686,6 +692,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.backupstorage#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Maximum objects count",
                         "smithy.api#httpQuery": "max-results"
                     }
@@ -734,6 +741,7 @@
         "com.amazonaws.backupstorage#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -851,6 +859,7 @@
                 "MetadataBlob": {
                     "target": "com.amazonaws.backupstorage#PayloadBlob",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "Optional metadata associated with an Object. Maximum length is 4MB.",
                         "smithy.api#httpPayload": {}
                     }
@@ -858,6 +867,7 @@
                 "MetadataBlobLength": {
                     "target": "com.amazonaws.backupstorage#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "The size of MetadataBlob.",
                         "smithy.api#httpQuery": "metadata-blob-length"
                     }
@@ -904,10 +914,7 @@
             }
         },
         "com.amazonaws.backupstorage#OptionalLong": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.backupstorage#PayloadBlob": {
             "type": "blob",
@@ -984,6 +991,7 @@
                 "ChunkIndex": {
                     "target": "com.amazonaws.backupstorage#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Describes this chunk's position relative to the other chunks",
                         "smithy.api#httpLabel": {},
                         "smithy.api#required": {}
@@ -1000,6 +1008,7 @@
                 "Length": {
                     "target": "com.amazonaws.backupstorage#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Data length",
                         "smithy.api#httpQuery": "length",
                         "smithy.api#required": {}
@@ -1118,6 +1127,7 @@
                 "InlineChunk": {
                     "target": "com.amazonaws.backupstorage#PayloadBlob",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "Inline chunk data to be uploaded.",
                         "smithy.api#httpPayload": {}
                     }
@@ -1125,6 +1135,7 @@
                 "InlineChunkLength": {
                     "target": "com.amazonaws.backupstorage#long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "Length of the inline chunk data.",
                         "smithy.api#httpQuery": "length"
                     }
@@ -1160,6 +1171,7 @@
                 "ThrowOnDuplicate": {
                     "target": "com.amazonaws.backupstorage#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "Throw an exception if Object name is already exist.",
                         "smithy.api#httpQuery": "throwOnDuplicate"
                     }
@@ -1319,6 +1331,7 @@
                 "ThrowOnDuplicate": {
                     "target": "com.amazonaws.backupstorage#boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "Throw an exception if Object name is already exist."
                     }
                 }
@@ -1361,10 +1374,16 @@
             }
         },
         "com.amazonaws.backupstorage#boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.backupstorage#long": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.backupstorage#string": {
             "type": "string"

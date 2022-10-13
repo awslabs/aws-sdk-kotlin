@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.licensemanagerusersubscriptions#AccessDeniedException": {
             "type": "structure",
@@ -113,10 +113,7 @@
             }
         },
         "com.amazonaws.licensemanagerusersubscriptions#BoxInteger": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.licensemanagerusersubscriptions#ConflictException": {
             "type": "structure",
@@ -501,6 +498,39 @@
         },
         "com.amazonaws.licensemanagerusersubscriptions#LicenseManagerUserSubscriptions": {
             "type": "service",
+            "version": "2018-05-10",
+            "operations": [
+                {
+                    "target": "com.amazonaws.licensemanagerusersubscriptions#AssociateUser"
+                },
+                {
+                    "target": "com.amazonaws.licensemanagerusersubscriptions#DeregisterIdentityProvider"
+                },
+                {
+                    "target": "com.amazonaws.licensemanagerusersubscriptions#DisassociateUser"
+                },
+                {
+                    "target": "com.amazonaws.licensemanagerusersubscriptions#ListIdentityProviders"
+                },
+                {
+                    "target": "com.amazonaws.licensemanagerusersubscriptions#ListInstances"
+                },
+                {
+                    "target": "com.amazonaws.licensemanagerusersubscriptions#ListProductSubscriptions"
+                },
+                {
+                    "target": "com.amazonaws.licensemanagerusersubscriptions#ListUserAssociations"
+                },
+                {
+                    "target": "com.amazonaws.licensemanagerusersubscriptions#RegisterIdentityProvider"
+                },
+                {
+                    "target": "com.amazonaws.licensemanagerusersubscriptions#StartProductSubscription"
+                },
+                {
+                    "target": "com.amazonaws.licensemanagerusersubscriptions#StopProductSubscription"
+                }
+            ],
             "traits": {
                 "aws.api#service": {
                     "sdkId": "License Manager User Subscriptions",
@@ -536,40 +566,7 @@
                 },
                 "smithy.api#documentation": "<p>With License Manager, you can create user-based subscriptions to utilize licensed software with a per user subscription fee on Amazon EC2 instances.</p>",
                 "smithy.api#title": "AWS License Manager User Subscriptions"
-            },
-            "version": "2018-05-10",
-            "operations": [
-                {
-                    "target": "com.amazonaws.licensemanagerusersubscriptions#AssociateUser"
-                },
-                {
-                    "target": "com.amazonaws.licensemanagerusersubscriptions#DeregisterIdentityProvider"
-                },
-                {
-                    "target": "com.amazonaws.licensemanagerusersubscriptions#DisassociateUser"
-                },
-                {
-                    "target": "com.amazonaws.licensemanagerusersubscriptions#ListIdentityProviders"
-                },
-                {
-                    "target": "com.amazonaws.licensemanagerusersubscriptions#ListInstances"
-                },
-                {
-                    "target": "com.amazonaws.licensemanagerusersubscriptions#ListProductSubscriptions"
-                },
-                {
-                    "target": "com.amazonaws.licensemanagerusersubscriptions#ListUserAssociations"
-                },
-                {
-                    "target": "com.amazonaws.licensemanagerusersubscriptions#RegisterIdentityProvider"
-                },
-                {
-                    "target": "com.amazonaws.licensemanagerusersubscriptions#StartProductSubscription"
-                },
-                {
-                    "target": "com.amazonaws.licensemanagerusersubscriptions#StopProductSubscription"
-                }
-            ]
+            }
         },
         "com.amazonaws.licensemanagerusersubscriptions#ListIdentityProviders": {
             "type": "operation",

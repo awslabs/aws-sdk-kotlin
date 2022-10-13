@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -407,6 +407,7 @@
                 "ReplicationFactor": {
                     "target": "com.amazonaws.dax#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of nodes in the DAX cluster. A replication factor of 1 will\n            create a single-node cluster, without any read replicas. For additional fault tolerance,\n            you can create a multiple node cluster with one or more read replicas. To do this, set\n                <code>ReplicationFactor</code> to a number between 3 (one primary and two read replicas) and 10 (one primary and nine read replicas). \n                 <code>If the AvailabilityZones</code> parameter is provided, its length must equal the <code>ReplicationFactor</code>.</p>\n        <note>\n            <p>AWS recommends that you have at least two read replicas per cluster.</p>\n         </note>",
                         "smithy.api#required": {}
                     }
@@ -656,6 +657,7 @@
                 "NewReplicationFactor": {
                     "target": "com.amazonaws.dax#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The new number of nodes for the DAX cluster.</p>",
                         "smithy.api#required": {}
                     }
@@ -1256,6 +1258,7 @@
                 "Port": {
                     "target": "com.amazonaws.dax#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The port number that applications should use to connect to the endpoint.</p>"
                     }
                 },
@@ -1365,6 +1368,7 @@
                 "NewReplicationFactor": {
                     "target": "com.amazonaws.dax#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The new number of nodes for the DAX cluster.</p>",
                         "smithy.api#required": {}
                     }
@@ -1402,13 +1406,13 @@
             }
         },
         "com.amazonaws.dax#Integer": {
-            "type": "integer"
-        },
-        "com.amazonaws.dax#IntegerOptional": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": 0
             }
+        },
+        "com.amazonaws.dax#IntegerOptional": {
+            "type": "integer"
         },
         "com.amazonaws.dax#InvalidARNFault": {
             "type": "structure",
@@ -2023,10 +2027,7 @@
             }
         },
         "com.amazonaws.dax#SSEEnabled": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.dax#SSESpecification": {
             "type": "structure",

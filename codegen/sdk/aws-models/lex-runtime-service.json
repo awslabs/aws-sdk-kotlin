@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -145,7 +145,6 @@
         "com.amazonaws.lexruntimeservice#ActiveContextTimeToLiveInSeconds": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5,
                     "max": 86400
@@ -155,7 +154,6 @@
         "com.amazonaws.lexruntimeservice#ActiveContextTurnsToLive": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 20
@@ -521,7 +519,10 @@
             }
         },
         "com.amazonaws.lexruntimeservice#Double": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.lexruntimeservice#ErrorMessage": {
             "type": "string"
@@ -694,6 +695,7 @@
                 "score": {
                     "target": "com.amazonaws.lexruntimeservice#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A score that indicates how confident Amazon Lex is that an intent satisfies\n      the user's intent. Ranges between 0.00 and 1.00. Higher scores indicate\n      higher confidence.</p>"
                     }
                 }
@@ -1132,6 +1134,7 @@
                 "audioStream": {
                     "target": "com.amazonaws.lexruntimeservice#BlobStream",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>The prompt (or statement) to convey to the user. This is based on the\n      bot configuration and context. For example, if Amazon Lex did not understand\n      the user intent, it sends the <code>clarificationPrompt</code> configured\n      for the bot. If the intent requires confirmation before taking the\n      fulfillment action, it sends the <code>confirmationPrompt</code>. Another\n      example: Suppose that the Lambda function successfully fulfilled the\n      intent, and sent a message to convey to the user. Then Amazon Lex sends that\n      message in the response. </p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -1546,6 +1549,7 @@
                 "audioStream": {
                     "target": "com.amazonaws.lexruntimeservice#BlobStream",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>The audio version of the message to convey to the user.</p>",
                         "smithy.api#httpPayload": {}
                     }

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -108,13 +108,13 @@
             }
         },
         "com.amazonaws.transcribestreaming#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.transcribestreaming#Confidence": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.transcribestreaming#ConflictException": {
             "type": "structure",
@@ -152,7 +152,10 @@
             }
         },
         "com.amazonaws.transcribestreaming#Double": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.transcribestreaming#Entity": {
             "type": "structure",
@@ -160,12 +163,14 @@
                 "StartTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The start time of speech that was identified as PII.</p>"
                     }
                 },
                 "EndTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The end time of speech that was identified as PII.</p>"
                     }
                 },
@@ -223,12 +228,14 @@
                 "StartTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The offset from the beginning of the audio stream to the beginning of the audio that\n      resulted in the item.</p>"
                     }
                 },
                 "EndTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The offset from the beginning of the audio stream to the end of the audio that resulted in\n      the item.</p>"
                     }
                 },
@@ -247,6 +254,7 @@
                 "VocabularyFilterMatch": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether a word in the item matches a word in the vocabulary filter you've chosen\n      for your media stream. If <code>true</code> then a word in the item matches your\n      vocabulary filter.</p>"
                     }
                 },
@@ -377,6 +385,7 @@
                 "Score": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The confidence score for the associated language code. Confidence scores are values\n      between zero and one; larger values indicate a higher confidence in the identified language.\n     </p>"
                     }
                 }
@@ -420,7 +429,6 @@
         "com.amazonaws.transcribestreaming#MediaSampleRateHertz": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 8000,
                     "max": 48000
@@ -476,12 +484,14 @@
                 "StartTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The start time of the speech that was identified as a medical entity.</p>"
                     }
                 },
                 "EndTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The end time of the speech that was identified as a medical entity.</p>"
                     }
                 },
@@ -520,12 +530,14 @@
                 "StartTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of seconds into an audio stream that indicates the creation time of an\n            item.</p>"
                     }
                 },
                 "EndTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of seconds into an audio stream that indicates the creation time of an\n            item.</p>"
                     }
                 },
@@ -576,18 +588,21 @@
                 "StartTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time, in seconds, from the beginning of the audio stream to the beginning of the\n            result.</p>"
                     }
                 },
                 "EndTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time, in seconds, from the beginning of the audio stream to the end of the\n            result.</p>"
                     }
                 },
                 "IsPartial": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Amazon Transcribe Medical divides the incoming audio stream into segments at natural points in the audio.\n            Transcription results are returned based on these segments.</p>\n        <p>The <code>IsPartial</code> field is <code>true</code> to indicate that Amazon Transcribe Medical has\n            additional transcription data to send. The <code>IsPartial</code> field is\n                <code>false</code> to indicate that this is the last transcription result for the\n            segment.</p>"
                     }
                 },
@@ -685,7 +700,6 @@
         "com.amazonaws.transcribestreaming#NumberOfChannels": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 2
                 }
@@ -735,18 +749,21 @@
                 "StartTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The offset in seconds from the beginning of the audio stream to the beginning of the\n      result.</p>"
                     }
                 },
                 "EndTime": {
                     "target": "com.amazonaws.transcribestreaming#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The offset in seconds from the beginning of the audio stream to the end of the\n      result.</p>"
                     }
                 },
                 "IsPartial": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Amazon Transcribe divides the incoming audio stream into segments at natural points in the audio.\n      Transcription results are returned based on these segments. </p>\n         <p>The <code>IsPartial</code> field is <code>true</code> to indicate that Amazon Transcribe has\n      additional transcription data to send, <code>false</code> to indicate that this is the last\n      transcription result for the segment.</p>"
                     }
                 },
@@ -840,10 +857,7 @@
             }
         },
         "com.amazonaws.transcribestreaming#Stable": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.transcribestreaming#StartMedicalStreamTranscription": {
             "type": "operation",
@@ -932,6 +946,7 @@
                 "ShowSpeakerLabel": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When <code>true</code>, enables speaker identification in your real-time\n            stream.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-show-speaker-label"
                     }
@@ -953,6 +968,7 @@
                 "EnableChannelIdentification": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When <code>true</code>, instructs Amazon Transcribe Medical to process each audio channel separately and\n            then merge the transcription output of each channel into a single transcription.</p>\n        <p>Amazon Transcribe Medical also produces a transcription of each item. An item includes the start time,\n            end time, and any alternative transcriptions.</p>\n        <p>You can't set both <code>ShowSpeakerLabel</code> and\n                <code>EnableChannelIdentification</code> in the same request. If you set both, your\n            request returns a <code>BadRequestException</code>.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-enable-channel-identification"
                     }
@@ -1028,6 +1044,7 @@
                 "ShowSpeakerLabel": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Shows whether speaker identification was enabled in the stream.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-show-speaker-label"
                     }
@@ -1049,6 +1066,7 @@
                 "EnableChannelIdentification": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Shows whether channel identification has been enabled in the stream.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-enable-channel-identification"
                     }
@@ -1168,6 +1186,7 @@
                 "ShowSpeakerLabel": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When <code>true</code>, enables speaker identification in your media stream.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-show-speaker-label"
                     }
@@ -1175,6 +1194,7 @@
                 "EnableChannelIdentification": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When <code>true</code>, instructs Amazon Transcribe to process each audio channel separately,\n      then merges the transcription output of each channel into a single transcription.</p>\n         <p>Amazon Transcribe also produces a transcription of each item. An item includes the start time, end\n      time, and any alternative transcriptions.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-enable-channel-identification"
                     }
@@ -1189,6 +1209,7 @@
                 "EnablePartialResultsStabilization": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When <code>true</code>, instructs Amazon Transcribe to present transcription results that have the\n      partial results stabilized. Normally, any word or phrase from one partial result can change in\n      a subsequent partial result. With partial results stabilization enabled, only the last few\n      words of one partial result can change in another partial result.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-enable-partial-results-stabilization"
                     }
@@ -1231,6 +1252,7 @@
                 "IdentifyLanguage": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Optional. Set this value to <code>true</code> to enable language identification for \n      your media stream.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-identify-language"
                     }
@@ -1334,6 +1356,7 @@
                 "ShowSpeakerLabel": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Shows whether speaker identification was enabled in the transcription.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-show-speaker-label"
                     }
@@ -1341,6 +1364,7 @@
                 "EnableChannelIdentification": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Shows whether channel identification was enabled in the stream.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-enable-channel-identification"
                     }
@@ -1355,6 +1379,7 @@
                 "EnablePartialResultsStabilization": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Shows whether partial results stabilization was enabled in the transcription.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-enable-partial-results-stabilization"
                     }
@@ -1397,6 +1422,7 @@
                 "IdentifyLanguage": {
                     "target": "com.amazonaws.transcribestreaming#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The language code of the language identified in your media stream.</p>",
                         "smithy.api#httpHeader": "x-amzn-transcribe-identify-language"
                     }
@@ -1436,6 +1462,15 @@
         },
         "com.amazonaws.transcribestreaming#Transcribe": {
             "type": "service",
+            "version": "2017-10-26",
+            "operations": [
+                {
+                    "target": "com.amazonaws.transcribestreaming#StartMedicalStreamTranscription"
+                },
+                {
+                    "target": "com.amazonaws.transcribestreaming#StartStreamTranscription"
+                }
+            ],
             "traits": {
                 "aws.api#service": {
                     "sdkId": "Transcribe Streaming",
@@ -1448,21 +1483,17 @@
                     "name": "transcribe"
                 },
                 "aws.protocols#restJson1": {
-                    "http": ["http/1.1", "h2"],
-                    "eventStreamHttp": ["h2"]
+                    "http": [
+                        "http/1.1",
+                        "h2"
+                    ],
+                    "eventStreamHttp": [
+                        "h2"
+                    ]
                 },
                 "smithy.api#documentation": "<p>Operations and objects for transcribing streaming speech to text.</p>",
                 "smithy.api#title": "Amazon Transcribe Streaming Service"
-            },
-            "version": "2017-10-26",
-            "operations": [
-                {
-                    "target": "com.amazonaws.transcribestreaming#StartMedicalStreamTranscription"
-                },
-                {
-                    "target": "com.amazonaws.transcribestreaming#StartStreamTranscription"
-                }
-            ]
+            }
         },
         "com.amazonaws.transcribestreaming#Transcript": {
             "type": "structure",

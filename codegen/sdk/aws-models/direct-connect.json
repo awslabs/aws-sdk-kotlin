@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -30,7 +30,10 @@
     },
     "shapes": {
         "com.amazonaws.directconnect#ASN": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.directconnect#AcceptDirectConnectGatewayAssociationProposal": {
             "type": "operation",
@@ -177,6 +180,7 @@
                 "vlan": {
                     "target": "com.amazonaws.directconnect#VLAN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The dedicated VLAN provisioned to the connection.</p>",
                         "smithy.api#required": {}
                     }
@@ -243,6 +247,7 @@
                 "vlan": {
                     "target": "com.amazonaws.directconnect#VLAN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The dedicated VLAN provisioned to the hosted connection.</p>",
                         "smithy.api#required": {}
                     }
@@ -680,6 +685,7 @@
                 "asn": {
                     "target": "com.amazonaws.directconnect#ASN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>"
                     }
                 },
@@ -801,7 +807,10 @@
             "type": "string"
         },
         "com.amazonaws.directconnect#BooleanFlag": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.directconnect#CIDR": {
             "type": "string"
@@ -1093,6 +1102,7 @@
                 "vlan": {
                     "target": "com.amazonaws.directconnect#VLAN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The ID of the VLAN.</p>"
                     }
                 },
@@ -1252,7 +1262,10 @@
             }
         },
         "com.amazonaws.directconnect#Count": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.directconnect#CreateBGPPeer": {
             "type": "operation",
@@ -1659,6 +1672,7 @@
                 "numberOfConnections": {
                     "target": "com.amazonaws.directconnect#Count",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of physical dedicated connections initially provisioned and bundled by the\n      LAG.</p>",
                         "smithy.api#required": {}
                     }
@@ -1914,6 +1928,7 @@
                 "asn": {
                     "target": "com.amazonaws.directconnect#ASN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>"
                     }
                 },
@@ -2354,6 +2369,9 @@
         },
         "com.amazonaws.directconnect#DescribeCustomerMetadata": {
             "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
             "output": {
                 "target": "com.amazonaws.directconnect#DescribeCustomerMetadataResponse"
             },
@@ -2858,6 +2876,9 @@
         },
         "com.amazonaws.directconnect#DescribeLocations": {
             "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
             "output": {
                 "target": "com.amazonaws.directconnect#Locations"
             },
@@ -2988,6 +3009,9 @@
         },
         "com.amazonaws.directconnect#DescribeVirtualGateways": {
             "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
             "output": {
                 "target": "com.amazonaws.directconnect#VirtualGateways"
             },
@@ -3528,10 +3552,7 @@
             }
         },
         "com.amazonaws.directconnect#EnableSiteLink": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.directconnect#EncryptionMode": {
             "type": "string"
@@ -3742,10 +3763,7 @@
             }
         },
         "com.amazonaws.directconnect#JumboFrameCapable": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.directconnect#Lag": {
             "type": "structure",
@@ -3759,6 +3777,7 @@
                 "numberOfConnections": {
                     "target": "com.amazonaws.directconnect#Count",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of physical dedicated connections bundled by the LAG, up to a maximum of 10.</p>"
                     }
                 },
@@ -3801,6 +3820,7 @@
                 "minimumLinks": {
                     "target": "com.amazonaws.directconnect#Count",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum number of physical dedicated connections that must be operational for the LAG itself to be operational.</p>"
                     }
                 },
@@ -3831,6 +3851,7 @@
                 "allowsHostedConnections": {
                     "target": "com.amazonaws.directconnect#BooleanFlag",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the LAG can host other connections.</p>"
                     }
                 },
@@ -4122,22 +4143,13 @@
             }
         },
         "com.amazonaws.directconnect#LongAsn": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.directconnect#MTU": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.directconnect#MacSecCapable": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.directconnect#MacSecKey": {
             "type": "structure",
@@ -4178,10 +4190,7 @@
             }
         },
         "com.amazonaws.directconnect#MaxResultSetSize": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.directconnect#NewBGPPeer": {
             "type": "structure",
@@ -4189,6 +4198,7 @@
                 "asn": {
                     "target": "com.amazonaws.directconnect#ASN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>"
                     }
                 },
@@ -4234,6 +4244,7 @@
                 "vlan": {
                     "target": "com.amazonaws.directconnect#VLAN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The ID of the VLAN.</p>",
                         "smithy.api#required": {}
                     }
@@ -4241,6 +4252,7 @@
                 "asn": {
                     "target": "com.amazonaws.directconnect#ASN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>\n         <p>The valid values are 1-2147483647.</p>",
                         "smithy.api#required": {}
                     }
@@ -4317,6 +4329,7 @@
                 "vlan": {
                     "target": "com.amazonaws.directconnect#VLAN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The ID of the VLAN.</p>",
                         "smithy.api#required": {}
                     }
@@ -4324,6 +4337,7 @@
                 "asn": {
                     "target": "com.amazonaws.directconnect#ASN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>\n         <p>The valid values are 1-2147483647.</p>",
                         "smithy.api#required": {}
                     }
@@ -4382,6 +4396,7 @@
                 "vlan": {
                     "target": "com.amazonaws.directconnect#VLAN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The ID of the VLAN.</p>",
                         "smithy.api#required": {}
                     }
@@ -4389,6 +4404,7 @@
                 "asn": {
                     "target": "com.amazonaws.directconnect#ASN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>\n         <p>The valid values are 1-2147483647.</p>",
                         "smithy.api#required": {}
                     }
@@ -4447,6 +4463,7 @@
                 "vlan": {
                     "target": "com.amazonaws.directconnect#VLAN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The ID of the VLAN.</p>",
                         "smithy.api#required": {}
                     }
@@ -4454,6 +4471,7 @@
                 "asn": {
                     "target": "com.amazonaws.directconnect#ASN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>\n         <p>The valid values are 1-2147483647.</p>",
                         "smithy.api#required": {}
                     }
@@ -4511,12 +4529,14 @@
                 "vlan": {
                     "target": "com.amazonaws.directconnect#VLAN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The ID of the VLAN.</p>"
                     }
                 },
                 "asn": {
                     "target": "com.amazonaws.directconnect#ASN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>\n         <p>The valid values are 1-2147483647.</p>"
                     }
                 },
@@ -4585,12 +4605,14 @@
                 "vlan": {
                     "target": "com.amazonaws.directconnect#VLAN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The ID of the VLAN.</p>"
                     }
                 },
                 "asn": {
                     "target": "com.amazonaws.directconnect#ASN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>\n         <p>The valid values are 1-2147483647.</p>"
                     }
                 },
@@ -4656,24 +4678,6 @@
         },
         "com.amazonaws.directconnect#OvertureService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Direct Connect",
-                    "arnNamespace": "directconnect",
-                    "cloudFormationName": "DirectConnect",
-                    "cloudTrailEventSource": "directconnect.amazonaws.com",
-                    "endpointPrefix": "directconnect"
-                },
-                "aws.auth#sigv4": {
-                    "name": "directconnect"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>Direct Connect links your internal network to an Direct Connect location over a standard Ethernet fiber-optic cable. \n      One end of the cable is connected to your router, the other to an Direct Connect router. With this connection\n      in place, you can create virtual interfaces directly to the Amazon Web Services Cloud (for example, to Amazon EC2 \n      and Amazon S3) and to Amazon VPC, bypassing Internet service providers in your network path. A \n      connection provides access to all Amazon Web Services Regions except the China (Beijing) and (China) Ningxia Regions. \n      Amazon Web Services resources in the China Regions can only be accessed through locations associated with those Regions.</p>",
-                "smithy.api#title": "AWS Direct Connect",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://directconnect.amazonaws.com/doc/2012-10-25/"
-                }
-            },
             "version": "2012-10-25",
             "operations": [
                 {
@@ -4865,7 +4869,25 @@
                 {
                     "target": "com.amazonaws.directconnect#UpdateVirtualInterfaceAttributes"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Direct Connect",
+                    "arnNamespace": "directconnect",
+                    "cloudFormationName": "DirectConnect",
+                    "cloudTrailEventSource": "directconnect.amazonaws.com",
+                    "endpointPrefix": "directconnect"
+                },
+                "aws.auth#sigv4": {
+                    "name": "directconnect"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<p>Direct Connect links your internal network to an Direct Connect location over a standard Ethernet fiber-optic cable. \n      One end of the cable is connected to your router, the other to an Direct Connect router. With this connection\n      in place, you can create virtual interfaces directly to the Amazon Web Services Cloud (for example, to Amazon EC2 \n      and Amazon S3) and to Amazon VPC, bypassing Internet service providers in your network path. A \n      connection provides access to all Amazon Web Services Regions except the China (Beijing) and (China) Ningxia Regions. \n      Amazon Web Services resources in the China Regions can only be accessed through locations associated with those Regions.</p>",
+                "smithy.api#title": "AWS Direct Connect",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://directconnect.amazonaws.com/doc/2012-10-25/"
+                }
+            }
         },
         "com.amazonaws.directconnect#OwnerAccount": {
             "type": "string"
@@ -4898,10 +4920,7 @@
             "type": "string"
         },
         "com.amazonaws.directconnect#RequestMACSec": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.directconnect#ResourceArn": {
             "type": "string"
@@ -5012,10 +5031,7 @@
             "type": "string"
         },
         "com.amazonaws.directconnect#SiteLinkEnabled": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.directconnect#Software": {
             "type": "string"
@@ -5247,10 +5263,7 @@
             }
         },
         "com.amazonaws.directconnect#TestDuration": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.directconnect#TestId": {
             "type": "string"
@@ -5491,6 +5504,7 @@
                 "minimumLinks": {
                     "target": "com.amazonaws.directconnect#Count",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum number of physical connections that must be operational for the LAG itself to be operational.</p>"
                     }
                 },
@@ -5553,7 +5567,10 @@
             }
         },
         "com.amazonaws.directconnect#VLAN": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.directconnect#Vendor": {
             "type": "string"
@@ -5649,12 +5666,14 @@
                 "vlan": {
                     "target": "com.amazonaws.directconnect#VLAN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The ID of the VLAN.</p>"
                     }
                 },
                 "asn": {
                     "target": "com.amazonaws.directconnect#ASN",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>\n         <p>The valid values are 1-2147483647.</p>"
                     }
                 },

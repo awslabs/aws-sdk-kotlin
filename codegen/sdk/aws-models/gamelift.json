@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -300,10 +300,7 @@
             }
         },
         "com.amazonaws.gamelift#BooleanModel": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.gamelift#Build": {
             "type": "structure",
@@ -4625,13 +4622,13 @@
             "type": "string"
         },
         "com.amazonaws.gamelift#Double": {
-            "type": "double"
-        },
-        "com.amazonaws.gamelift#DoubleObject": {
             "type": "double",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": 0
             }
+        },
+        "com.amazonaws.gamelift#DoubleObject": {
+            "type": "double"
         },
         "com.amazonaws.gamelift#EC2InstanceCounts": {
             "type": "structure",
@@ -5788,31 +5785,16 @@
             }
         },
         "com.amazonaws.gamelift#Float": {
-            "type": "float"
+            "type": "float",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.gamelift#FreeText": {
             "type": "string"
         },
         "com.amazonaws.gamelift#GameLift": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "GameLift",
-                    "arnNamespace": "gamelift",
-                    "cloudFormationName": "GameLift",
-                    "cloudTrailEventSource": "gamelift.amazonaws.com",
-                    "endpointPrefix": "gamelift"
-                },
-                "aws.auth#sigv4": {
-                    "name": "gamelift"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<fullname>GameLift Service</fullname>\n        <p>Amazon Web Services provides solutions for hosting session-based multiplayer game servers in the\n            cloud, including tools for deploying, operating, and scaling game servers. Built on Amazon Web Services\n            global computing infrastructure, GameLift helps you deliver high-performance,\n            high-reliability, low-cost game servers while dynamically scaling your resource usage to\n            meet player demand. </p>\n        <p>\n            <b>About GameLift solutions</b>\n         </p>\n        <p>Get more information on these GameLift solutions in the <a href=\"https://docs.aws.amazon.com/gamelift/latest/developerguide/\">GameLift Developer Guide</a>.</p>        \n        <ul>\n            <li>\n               <p>GameLift managed hosting -- GameLift offers a fully managed service to set up and maintain\n                    computing machines for hosting, manage game session and player session life\n                    cycle, and handle security, storage, and performance tracking. You can use\n                    automatic scaling tools to balance player demand and hosting costs, configure\n                    your game session management to minimize player latency, and add FlexMatch for\n                    matchmaking.</p>\n            </li>\n            <li>\n               <p>Managed hosting with Realtime Servers -- With GameLift Realtime Servers, you can quickly configure and set up\n                    ready-to-go game servers for your game. Realtime Servers provides a game server framework\n                    with core GameLift infrastructure already built in. Then use the full range of\n                    GameLift managed hosting features, including FlexMatch, for your game.</p>\n            </li>\n            <li>\n               <p>GameLift FleetIQ -- Use GameLift FleetIQ as a standalone service while hosting your games using EC2 instances and\n                    Auto Scaling groups. GameLift FleetIQ provides optimizations for game hosting, including\n                    boosting the viability of low-cost Spot Instances gaming. For a complete\n                    solution, pair the GameLift FleetIQ and FlexMatch standalone services.</p>\n            </li>\n            <li>\n                <p>GameLift FlexMatch -- Add matchmaking to your game hosting solution. FlexMatch is a\n                    customizable matchmaking service for multiplayer games. Use FlexMatch as\n                    integrated with GameLift managed hosting or incorporate FlexMatch as a standalone\n                    service into your own hosting solution.</p>\n            </li>\n         </ul>\n        <p>\n            <b>About this API Reference</b>\n         </p>\n        <p>This reference guide describes the low-level service API for Amazon Web Services. With each topic\n            in this guide, you can find links to language-specific SDK guides and the Amazon Web Services CLI\n            reference. Useful links:</p>\n        <ul>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/gamelift/latest/developerguide/reference-awssdk.html\">GameLift API\n                    operations listed by tasks</a>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-components.html\"> GameLift tools\n                    and resources</a>\n               </p>\n            </li>\n         </ul>",
-                "smithy.api#title": "Amazon GameLift",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://gamelift.amazonaws.com/doc/"
-                }
-            },
             "version": "2015-10-01",
             "operations": [
                 {
@@ -6100,7 +6082,25 @@
                 {
                     "target": "com.amazonaws.gamelift#ValidateMatchmakingRuleSet"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "GameLift",
+                    "arnNamespace": "gamelift",
+                    "cloudFormationName": "GameLift",
+                    "cloudTrailEventSource": "gamelift.amazonaws.com",
+                    "endpointPrefix": "gamelift"
+                },
+                "aws.auth#sigv4": {
+                    "name": "gamelift"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<fullname>GameLift Service</fullname>\n        <p>Amazon Web Services provides solutions for hosting session-based multiplayer game servers in the\n            cloud, including tools for deploying, operating, and scaling game servers. Built on Amazon Web Services\n            global computing infrastructure, GameLift helps you deliver high-performance,\n            high-reliability, low-cost game servers while dynamically scaling your resource usage to\n            meet player demand. </p>\n        <p>\n            <b>About GameLift solutions</b>\n         </p>\n        <p>Get more information on these GameLift solutions in the <a href=\"https://docs.aws.amazon.com/gamelift/latest/developerguide/\">GameLift Developer Guide</a>.</p>        \n        <ul>\n            <li>\n               <p>GameLift managed hosting -- GameLift offers a fully managed service to set up and maintain\n                    computing machines for hosting, manage game session and player session life\n                    cycle, and handle security, storage, and performance tracking. You can use\n                    automatic scaling tools to balance player demand and hosting costs, configure\n                    your game session management to minimize player latency, and add FlexMatch for\n                    matchmaking.</p>\n            </li>\n            <li>\n               <p>Managed hosting with Realtime Servers -- With GameLift Realtime Servers, you can quickly configure and set up\n                    ready-to-go game servers for your game. Realtime Servers provides a game server framework\n                    with core GameLift infrastructure already built in. Then use the full range of\n                    GameLift managed hosting features, including FlexMatch, for your game.</p>\n            </li>\n            <li>\n               <p>GameLift FleetIQ -- Use GameLift FleetIQ as a standalone service while hosting your games using EC2 instances and\n                    Auto Scaling groups. GameLift FleetIQ provides optimizations for game hosting, including\n                    boosting the viability of low-cost Spot Instances gaming. For a complete\n                    solution, pair the GameLift FleetIQ and FlexMatch standalone services.</p>\n            </li>\n            <li>\n                <p>GameLift FlexMatch -- Add matchmaking to your game hosting solution. FlexMatch is a\n                    customizable matchmaking service for multiplayer games. Use FlexMatch as\n                    integrated with GameLift managed hosting or incorporate FlexMatch as a standalone\n                    service into your own hosting solution.</p>\n            </li>\n         </ul>\n        <p>\n            <b>About this API Reference</b>\n         </p>\n        <p>This reference guide describes the low-level service API for Amazon Web Services. With each topic\n            in this guide, you can find links to language-specific SDK guides and the Amazon Web Services CLI\n            reference. Useful links:</p>\n        <ul>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/gamelift/latest/developerguide/reference-awssdk.html\">GameLift API\n                    operations listed by tasks</a>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-components.html\"> GameLift tools\n                    and resources</a>\n               </p>\n            </li>\n         </ul>",
+                "smithy.api#title": "Amazon GameLift",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://gamelift.amazonaws.com/doc/"
+                }
+            }
         },
         "com.amazonaws.gamelift#GameProperty": {
             "type": "structure",
@@ -7093,7 +7093,6 @@
         "com.amazonaws.gamelift#GameSessionActivationTimeoutSeconds": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 600
@@ -7837,7 +7836,10 @@
             }
         },
         "com.amazonaws.gamelift#Integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.gamelift#InternalServiceException": {
             "type": "structure",
@@ -8712,7 +8714,6 @@
         "com.amazonaws.gamelift#MatchmakingAcceptanceTimeoutInteger": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 600
@@ -8916,7 +8917,6 @@
         "com.amazonaws.gamelift#MatchmakingRequestTimeoutInteger": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 43200
@@ -9074,7 +9074,6 @@
         "com.amazonaws.gamelift#MaxConcurrentGameSessionActivations": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 2147483647
@@ -9180,7 +9179,6 @@
         "com.amazonaws.gamelift#NonNegativeDouble": {
             "type": "double",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -9353,6 +9351,7 @@
                 "LatencyInMilliseconds": {
                     "target": "com.amazonaws.gamelift#Float",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Amount of time that represents the time lag experienced by the player when\n        connected to the specified Region.</p>"
                     }
                 }
@@ -9547,7 +9546,6 @@
         "com.amazonaws.gamelift#PortNumber": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 60000
@@ -9557,7 +9555,6 @@
         "com.amazonaws.gamelift#PositiveInteger": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -9566,7 +9563,6 @@
         "com.amazonaws.gamelift#PositiveLong": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -9688,6 +9684,7 @@
                 "ScalingAdjustment": {
                     "target": "com.amazonaws.gamelift#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Amount of adjustment to make, based on the scaling adjustment type.</p>"
                     }
                 },
@@ -9700,6 +9697,7 @@
                 "Threshold": {
                     "target": "com.amazonaws.gamelift#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Metric value used to trigger a scaling event.</p>"
                     }
                 },
@@ -10111,7 +10109,6 @@
         "com.amazonaws.gamelift#RuleSetLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10
@@ -10225,6 +10222,7 @@
                 "ScalingAdjustment": {
                     "target": "com.amazonaws.gamelift#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Amount of adjustment to make, based on the scaling adjustment type.</p>"
                     }
                 },
@@ -10243,6 +10241,7 @@
                 "Threshold": {
                     "target": "com.amazonaws.gamelift#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Metric value used to trigger a scaling event.</p>"
                     }
                 },
@@ -11272,6 +11271,7 @@
                 "TargetValue": {
                     "target": "com.amazonaws.gamelift#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Desired value to use with a target-based scaling policy. The value must be relevant\n        for whatever metric the scaling policy is using. For example, in a policy using the\n        metric PercentAvailableGameSessions, the target value should be the preferred size of\n        the fleet's buffer (the percent of capacity that should be idle and ready for new game\n        sessions).</p>",
                         "smithy.api#required": {}
                     }
@@ -12604,7 +12604,6 @@
         "com.amazonaws.gamelift#WholeNumber": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }

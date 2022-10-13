@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,24 +31,6 @@
     "shapes": {
         "com.amazonaws.appsync#AWSDeepdishControlPlaneService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "AppSync",
-                    "arnNamespace": "appsync",
-                    "cloudFormationName": "AppSync",
-                    "cloudTrailEventSource": "appsync.amazonaws.com",
-                    "endpointPrefix": "appsync"
-                },
-                "aws.auth#sigv4": {
-                    "name": "appsync"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>AppSync provides API actions for creating and interacting with data\n         sources using GraphQL from your application.</p>",
-                "smithy.api#title": "AWS AppSync",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://appsync.amazonaws.com"
-                }
-            },
             "version": "2017-07-25",
             "operations": [
                 {
@@ -201,7 +183,25 @@
                 {
                     "target": "com.amazonaws.appsync#UpdateType"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "AppSync",
+                    "arnNamespace": "appsync",
+                    "cloudFormationName": "AppSync",
+                    "cloudTrailEventSource": "appsync.amazonaws.com",
+                    "endpointPrefix": "appsync"
+                },
+                "aws.auth#sigv4": {
+                    "name": "appsync"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>AppSync provides API actions for creating and interacting with data\n         sources using GraphQL from your application.</p>",
+                "smithy.api#title": "AWS AppSync",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://appsync.amazonaws.com"
+                }
+            }
         },
         "com.amazonaws.appsync#AccessDeniedException": {
             "type": "structure",
@@ -292,6 +292,7 @@
                 "ttl": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>TTL in seconds for cache entries.</p>\n         <p>Valid values are 1–3,600 seconds.</p>"
                     }
                 },
@@ -304,12 +305,14 @@
                 "transitEncryptionEnabled": {
                     "target": "com.amazonaws.appsync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Transit encryption flag when connecting to cache. You cannot update this setting after\n         creation.</p>"
                     }
                 },
                 "atRestEncryptionEnabled": {
                     "target": "com.amazonaws.appsync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>At-rest encryption flag for cache. You cannot update this setting after creation.</p>"
                     }
                 },
@@ -457,12 +460,14 @@
                 "expires": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time after which the API key expires. The date is represented as seconds since the\n         epoch, rounded down to the nearest hour.</p>"
                     }
                 },
                 "deletes": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time after which the API key is deleted. The date is represented as seconds since\n         the epoch, rounded down to the nearest hour.</p>"
                     }
                 }
@@ -693,13 +698,13 @@
             "type": "blob"
         },
         "com.amazonaws.appsync#Boolean": {
-            "type": "boolean"
-        },
-        "com.amazonaws.appsync#BooleanValue": {
             "type": "boolean",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": false
             }
+        },
+        "com.amazonaws.appsync#BooleanValue": {
+            "type": "boolean"
         },
         "com.amazonaws.appsync#CachingConfig": {
             "type": "structure",
@@ -707,6 +712,7 @@
                 "ttl": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The TTL in seconds for a resolver that has caching activated.</p>\n         <p>Valid values are 1–3,600 seconds.</p>",
                         "smithy.api#required": {}
                     }
@@ -875,6 +881,7 @@
                 "ttl": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>TTL in seconds for cache entries.</p>\n         <p>Valid values are 1–3,600 seconds.</p>",
                         "smithy.api#required": {}
                     }
@@ -882,12 +889,14 @@
                 "transitEncryptionEnabled": {
                     "target": "com.amazonaws.appsync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Transit encryption flag when connecting to cache. You cannot update this setting after\n         creation.</p>"
                     }
                 },
                 "atRestEncryptionEnabled": {
                     "target": "com.amazonaws.appsync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>At-rest encryption flag for cache. You cannot update this setting after creation.</p>"
                     }
                 },
@@ -984,6 +993,7 @@
                 "expires": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>From the creation time, the time after which the API key expires. The date is\n         represented as seconds since the epoch, rounded down to the nearest hour. The default value\n         for this parameter is 7 days from creation time. For more information, see .</p>"
                     }
                 }
@@ -1271,6 +1281,7 @@
                 "maxBatchSize": {
                     "target": "com.amazonaws.appsync#MaxBatchSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum batching size for a resolver.</p>"
                     }
                 }
@@ -1374,6 +1385,7 @@
                 "xrayEnabled": {
                     "target": "com.amazonaws.appsync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A flag indicating whether to use X-Ray tracing for the\n            <code>GraphqlApi</code>.</p>"
                     }
                 },
@@ -1498,6 +1510,7 @@
                 "maxBatchSize": {
                     "target": "com.amazonaws.appsync#MaxBatchSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum batching size for a resolver.</p>"
                     }
                 }
@@ -2178,6 +2191,7 @@
                 "baseTableTTL": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of minutes that an Item is stored in the data source.</p>"
                     }
                 },
@@ -2190,6 +2204,7 @@
                 "deltaSyncTableTTL": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of minutes that a Delta Sync log entry is stored in the Delta Sync\n         table.</p>"
                     }
                 }
@@ -2333,6 +2348,7 @@
                 "useCallerCredentials": {
                     "target": "com.amazonaws.appsync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to TRUE to use Amazon Cognito credentials with this data source.</p>"
                     }
                 },
@@ -2345,6 +2361,7 @@
                 "versioned": {
                     "target": "com.amazonaws.appsync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to TRUE to use Conflict Detection and Resolution with this data source.</p>"
                     }
                 }
@@ -2599,6 +2616,7 @@
                 "maxBatchSize": {
                     "target": "com.amazonaws.appsync#MaxBatchSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum batching size for a resolver.</p>"
                     }
                 }
@@ -3330,6 +3348,7 @@
                 "xrayEnabled": {
                     "target": "com.amazonaws.appsync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A flag indicating whether to use X-Ray tracing for this\n            <code>GraphqlApi</code>.</p>"
                     }
                 },
@@ -3395,6 +3414,7 @@
                 "authorizerResultTtlInSeconds": {
                     "target": "com.amazonaws.appsync#TTL",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of seconds a response should be cached for. The default is 5 minutes (300\n         seconds). The Lambda function can override this by returning a\n            <code>ttlOverride</code> key in its response. A value of 0 disables caching of\n         responses.</p>"
                     }
                 },
@@ -3510,6 +3530,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.appsync#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results that you want the request to return.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3585,6 +3606,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.appsync#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results that you want the request to return.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3649,6 +3671,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.appsync#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results that you want the request to return.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3724,6 +3747,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.appsync#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results that you want the request to return.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3788,6 +3812,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.appsync#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results that you want the request to return.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3902,6 +3927,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.appsync#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results that you want the request to return.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3954,6 +3980,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.appsync#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results that you want the request to return.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -4101,6 +4128,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.appsync#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results that you want the request to return.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -4144,6 +4172,7 @@
                 "excludeVerboseContent": {
                     "target": "com.amazonaws.appsync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to TRUE to exclude sections that contain information such as headers, context, and\n         evaluated mapping templates, regardless of logging level.</p>"
                     }
                 }
@@ -4153,7 +4182,10 @@
             }
         },
         "com.amazonaws.appsync#Long": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.appsync#MapOfStringToString": {
             "type": "map",
@@ -4177,6 +4209,7 @@
         "com.amazonaws.appsync#MaxBatchSize": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 2000
@@ -4186,6 +4219,7 @@
         "com.amazonaws.appsync#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 25
@@ -4224,12 +4258,14 @@
                 "iatTTL": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of milliseconds that a token is valid after it's issued to a user.</p>"
                     }
                 },
                 "authTTL": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of milliseconds that a token is valid after being authenticated.</p>"
                     }
                 }
@@ -4434,6 +4470,7 @@
                 "maxBatchSize": {
                     "target": "com.amazonaws.appsync#MaxBatchSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum batching size for a resolver.</p>"
                     }
                 }
@@ -4611,6 +4648,7 @@
         "com.amazonaws.appsync#TTL": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 3600
@@ -4920,6 +4958,7 @@
                 "ttl": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>TTL in seconds for cache entries.</p>\n         <p>Valid values are 1–3,600 seconds.</p>",
                         "smithy.api#required": {}
                     }
@@ -5022,6 +5061,7 @@
                 "expires": {
                     "target": "com.amazonaws.appsync#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>From the update time, the time after which the API key expires. The date is represented\n         as seconds since the epoch. For more information, see .</p>"
                     }
                 }
@@ -5318,6 +5358,7 @@
                 "maxBatchSize": {
                     "target": "com.amazonaws.appsync#MaxBatchSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum batching size for a resolver.</p>"
                     }
                 }
@@ -5422,6 +5463,7 @@
                 "xrayEnabled": {
                     "target": "com.amazonaws.appsync#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A flag indicating whether to use X-Ray tracing for the\n            <code>GraphqlApi</code>.</p>"
                     }
                 },
@@ -5547,6 +5589,7 @@
                 "maxBatchSize": {
                     "target": "com.amazonaws.appsync#MaxBatchSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum batching size for a resolver.</p>"
                     }
                 }

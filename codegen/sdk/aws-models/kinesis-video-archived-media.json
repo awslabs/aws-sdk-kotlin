@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,21 +31,6 @@
     "shapes": {
         "com.amazonaws.kinesisvideoarchivedmedia#AWSAcuityReader": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Kinesis Video Archived Media",
-                    "arnNamespace": "kinesisvideo",
-                    "cloudFormationName": "KinesisVideoArchivedMedia",
-                    "cloudTrailEventSource": "kinesisvideoarchivedmedia.amazonaws.com",
-                    "endpointPrefix": "kinesisvideo"
-                },
-                "aws.auth#sigv4": {
-                    "name": "kinesisvideo"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p></p>",
-                "smithy.api#title": "Amazon Kinesis Video Streams Archived Media"
-            },
             "version": "2017-09-30",
             "operations": [
                 {
@@ -66,7 +51,22 @@
                 {
                     "target": "com.amazonaws.kinesisvideoarchivedmedia#ListFragments"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Kinesis Video Archived Media",
+                    "arnNamespace": "kinesisvideo",
+                    "cloudFormationName": "KinesisVideoArchivedMedia",
+                    "cloudTrailEventSource": "kinesisvideoarchivedmedia.amazonaws.com",
+                    "endpointPrefix": "kinesisvideo"
+                },
+                "aws.auth#sigv4": {
+                    "name": "kinesisvideo"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p></p>",
+                "smithy.api#title": "Amazon Kinesis Video Streams Archived Media"
+            }
         },
         "com.amazonaws.kinesisvideoarchivedmedia#ClientLimitExceededException": {
             "type": "structure",
@@ -233,7 +233,6 @@
         "com.amazonaws.kinesisvideoarchivedmedia#DASHMaxResults": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 5000
@@ -288,7 +287,6 @@
         "com.amazonaws.kinesisvideoarchivedmedia#Expires": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 300,
                     "max": 43200
@@ -358,6 +356,7 @@
                 "FragmentSizeInBytes": {
                     "target": "com.amazonaws.kinesisvideoarchivedmedia#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total fragment size, including information about the fragment and contained media\n            data.</p>"
                     }
                 },
@@ -376,6 +375,7 @@
                 "FragmentLengthInMilliseconds": {
                     "target": "com.amazonaws.kinesisvideoarchivedmedia#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The playback duration or other time value associated with the fragment.</p>"
                     }
                 }
@@ -532,6 +532,7 @@
                 "Payload": {
                     "target": "com.amazonaws.kinesisvideoarchivedmedia#Payload",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>Traditional MP4 file that contains the media clip from the specified video stream. The\n            output will contain the first 100 MB or the first 200 fragments from the specified start\n            timestamp. For more information, see <a href=\"https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/limits.html\">Kinesis\n                Video Streams Limits</a>. </p>",
                         "smithy.api#httpPayload": {}
                     }
@@ -874,7 +875,6 @@
         "com.amazonaws.kinesisvideoarchivedmedia#GetImagesMaxResults": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -966,6 +966,7 @@
                 "Payload": {
                     "target": "com.amazonaws.kinesisvideoarchivedmedia#Payload",
                     "traits": {
+                        "smithy.api#default": "",
                         "smithy.api#documentation": "<p>The payload that Kinesis Video Streams returns is a sequence of chunks from the\n            specified stream. For information about the chunks, see <a href=\"http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_dataplane_PutMedia.html\">PutMedia</a>. The chunks that Kinesis Video Streams returns in the\n                <code>GetMediaForFragmentList</code> call also include the following additional\n            Matroska (MKV) tags: </p>\n        <ul>\n            <li>\n                <p>AWS_KINESISVIDEO_FRAGMENT_NUMBER - Fragment number returned in the\n                    chunk.</p>\n            </li>\n            <li>\n                <p>AWS_KINESISVIDEO_SERVER_SIDE_TIMESTAMP - Server-side timestamp of the\n                    fragment.</p>\n            </li>\n            <li>\n                <p>AWS_KINESISVIDEO_PRODUCER_SIDE_TIMESTAMP - Producer-side timestamp of the\n                    fragment.</p>\n            </li>\n         </ul>\n        <p>The following tags will be included if an exception occurs:</p>\n        <ul>\n            <li>\n                <p>AWS_KINESISVIDEO_FRAGMENT_NUMBER - The number of the fragment that threw the\n                    exception</p>\n            </li>\n            <li>\n                <p>AWS_KINESISVIDEO_EXCEPTION_ERROR_CODE - The integer code of the\n                    exception</p>\n            </li>\n            <li>\n                <p>AWS_KINESISVIDEO_EXCEPTION_MESSAGE - A text description of the\n                    exception</p>\n            </li>\n         </ul>",
                         "smithy.api#httpPayload": {}
                     }
@@ -1044,7 +1045,6 @@
         "com.amazonaws.kinesisvideoarchivedmedia#HLSMaxResults": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 5000
@@ -1096,7 +1096,6 @@
         "com.amazonaws.kinesisvideoarchivedmedia#HeightPixels": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 2160
@@ -1282,7 +1281,6 @@
         "com.amazonaws.kinesisvideoarchivedmedia#ListFragmentsMaxResults": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -1307,7 +1305,10 @@
             }
         },
         "com.amazonaws.kinesisvideoarchivedmedia#Long": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.kinesisvideoarchivedmedia#MissingCodecPrivateDataException": {
             "type": "structure",
@@ -1390,7 +1391,6 @@
         "com.amazonaws.kinesisvideoarchivedmedia#SamplingInterval": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 3000,
                     "max": 20000
@@ -1448,7 +1448,6 @@
         "com.amazonaws.kinesisvideoarchivedmedia#WidthPixels": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 3840

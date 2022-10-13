@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -610,6 +610,7 @@
                 "DeleteResource": {
                     "target": "com.amazonaws.chimesdkmessaging#NonNullableBoolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When a processor determines that a message needs to be <code>DENIED</code>, pass this parameter with a value of true.</p>"
                     }
                 },
@@ -642,7 +643,6 @@
         "com.amazonaws.chimesdkmessaging#ChannelFlowExecutionOrder": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 3
@@ -889,6 +889,7 @@
                 "Redacted": {
                     "target": "com.amazonaws.chimesdkmessaging#NonNullableBoolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Hides the content of a message.</p>"
                     }
                 },
@@ -1078,6 +1079,7 @@
                 "Redacted": {
                     "target": "com.amazonaws.chimesdkmessaging#NonNullableBoolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether a message was redacted.</p>"
                     }
                 },
@@ -1295,21 +1297,6 @@
         },
         "com.amazonaws.chimesdkmessaging#ChimeMessagingService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Chime SDK Messaging",
-                    "arnNamespace": "chime",
-                    "cloudFormationName": "ChimeSDKMessaging",
-                    "cloudTrailEventSource": "chimesdkmessaging.amazonaws.com",
-                    "endpointPrefix": "messaging-chime"
-                },
-                "aws.auth#sigv4": {
-                    "name": "chime"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>The Amazon Chime SDK Messaging APIs in this section allow software developers to send\n         and receive messages in custom messaging applications. These APIs depend on the frameworks\n         provided by the Amazon Chime SDK Identity APIs. For more information about the messaging\n         APIs, see <a href=\"https://docs.aws.amazon.com/chime/latest/APIReference/API_Operations_Amazon_Chime_SDK_Messaging.html\">Amazon Chime SDK messaging</a>.</p>",
-                "smithy.api#title": "Amazon Chime SDK Messaging"
-            },
             "version": "2021-05-15",
             "operations": [
                 {
@@ -1453,7 +1440,22 @@
                 {
                     "target": "com.amazonaws.chimesdkmessaging#UpdateChannelReadMarker"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Chime SDK Messaging",
+                    "arnNamespace": "chime",
+                    "cloudFormationName": "ChimeSDKMessaging",
+                    "cloudTrailEventSource": "chimesdkmessaging.amazonaws.com",
+                    "endpointPrefix": "messaging-chime"
+                },
+                "aws.auth#sigv4": {
+                    "name": "chime"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>The Amazon Chime SDK Messaging APIs in this section allow software developers to send\n         and receive messages in custom messaging applications. These APIs depend on the frameworks\n         provided by the Amazon Chime SDK Identity APIs. For more information about the messaging\n         APIs, see <a href=\"https://docs.aws.amazon.com/chime/latest/APIReference/API_Operations_Amazon_Chime_SDK_Messaging.html\">Amazon Chime SDK messaging</a>.</p>",
+                "smithy.api#title": "Amazon Chime SDK Messaging"
+            }
         },
         "com.amazonaws.chimesdkmessaging#ClientRequestToken": {
             "type": "string",
@@ -4591,7 +4593,6 @@
         "com.amazonaws.chimesdkmessaging#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -4601,7 +4602,6 @@
         "com.amazonaws.chimesdkmessaging#MaximumSubChannels": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 2
                 }
@@ -4626,10 +4626,7 @@
             }
         },
         "com.amazonaws.chimesdkmessaging#MembershipCount": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.chimesdkmessaging#MessageAttributeMap": {
             "type": "map",
@@ -4720,7 +4717,6 @@
         "com.amazonaws.chimesdkmessaging#MinimumMembershipPercentage": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 40
@@ -4760,7 +4756,10 @@
             }
         },
         "com.amazonaws.chimesdkmessaging#NonNullableBoolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.chimesdkmessaging#NotFoundException": {
             "type": "structure",
@@ -5697,7 +5696,6 @@
         "com.amazonaws.chimesdkmessaging#TargetMembershipsPerSubChannel": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 2
                 }

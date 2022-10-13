@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -103,24 +103,6 @@
         },
         "com.amazonaws.frauddetector#AWSHawksNestServiceFacade": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "FraudDetector",
-                    "arnNamespace": "frauddetector",
-                    "cloudFormationName": "FraudDetector",
-                    "cloudTrailEventSource": "frauddetector.amazonaws.com",
-                    "endpointPrefix": "frauddetector"
-                },
-                "aws.auth#sigv4": {
-                    "name": "frauddetector"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>This is the Amazon Fraud Detector API Reference. This guide is for developers who need\n            detailed information about Amazon Fraud Detector API actions, data types, and errors. For\n            more information about Amazon Fraud Detector features, see the <a href=\"https://docs.aws.amazon.com/frauddetector/latest/ug/\">Amazon Fraud Detector User Guide</a>.</p>\n        \n        <p>We provide the Query API as well as AWS software development kits (SDK) for Amazon Fraud Detector in Java and Python programming languages.</p>\n        <p>The Amazon Fraud Detector Query API provides HTTPS requests that use the HTTP verb GET or POST and a Query parameter <code>Action</code>. AWS SDK provides libraries, \n            sample code, tutorials, and other resources for software developers who prefer to build applications using language-specific APIs instead of submitting a request over \n            HTTP or HTTPS. These libraries provide basic functions that automatically take care of tasks such as cryptographically signing your requests, retrying requests, and \n            handling error responses, so that it is easier for you to get started. For more information about the AWS SDKs, see <a href=\"https://docs.aws.amazon.com/https:/aws.amazon.com/tools/\">Tools to build on AWS</a>.\n            </p>",
-                "smithy.api#title": "Amazon Fraud Detector",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://hawksnest.amazonaws.com/doc/2019-11-15"
-                }
-            },
             "version": "2019-11-15",
             "operations": [
                 {
@@ -327,7 +309,25 @@
                 {
                     "target": "com.amazonaws.frauddetector#UpdateVariable"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "FraudDetector",
+                    "arnNamespace": "frauddetector",
+                    "cloudFormationName": "FraudDetector",
+                    "cloudTrailEventSource": "frauddetector.amazonaws.com",
+                    "endpointPrefix": "frauddetector"
+                },
+                "aws.auth#sigv4": {
+                    "name": "frauddetector"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<p>This is the Amazon Fraud Detector API Reference. This guide is for developers who need\n            detailed information about Amazon Fraud Detector API actions, data types, and errors. For\n            more information about Amazon Fraud Detector features, see the <a href=\"https://docs.aws.amazon.com/frauddetector/latest/ug/\">Amazon Fraud Detector User Guide</a>.</p>\n        \n        <p>We provide the Query API as well as AWS software development kits (SDK) for Amazon Fraud Detector in Java and Python programming languages.</p>\n        <p>The Amazon Fraud Detector Query API provides HTTPS requests that use the HTTP verb GET or POST and a Query parameter <code>Action</code>. AWS SDK provides libraries, \n            sample code, tutorials, and other resources for software developers who prefer to build applications using language-specific APIs instead of submitting a request over \n            HTTP or HTTPS. These libraries provide basic functions that automatically take care of tasks such as cryptographically signing your requests, retrying requests, and \n            handling error responses, so that it is easier for you to get started. For more information about the AWS SDKs, see <a href=\"https://docs.aws.amazon.com/https:/aws.amazon.com/tools/\">Tools to build on AWS</a>.\n            </p>",
+                "smithy.api#title": "Amazon Fraud Detector",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://hawksnest.amazonaws.com/doc/2019-11-15"
+                }
+            }
         },
         "com.amazonaws.frauddetector#AccessDeniedException": {
             "type": "structure",
@@ -476,6 +476,7 @@
                 "code": {
                     "target": "com.amazonaws.frauddetector#Integer2",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The error code. </p>"
                     }
                 },
@@ -563,6 +564,7 @@
                 "code": {
                     "target": "com.amazonaws.frauddetector#Integer2",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The error code. </p>"
                     }
                 },
@@ -809,10 +811,7 @@
             }
         },
         "com.amazonaws.frauddetector#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.frauddetector#CancelBatchImportJob": {
             "type": "operation",
@@ -1611,10 +1610,7 @@
             }
         },
         "com.amazonaws.frauddetector#DeleteAuditHistory": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.frauddetector#DeleteBatchImportJob": {
             "type": "operation",
@@ -2559,7 +2555,6 @@
         "com.amazonaws.frauddetector#DetectorVersionMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1000,
                     "max": 2500
@@ -2626,7 +2621,6 @@
         "com.amazonaws.frauddetector#DetectorsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5,
                     "max": 10
@@ -2935,7 +2929,6 @@
         "com.amazonaws.frauddetector#EventPredictionsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 50,
                     "max": 100
@@ -3205,7 +3198,6 @@
         "com.amazonaws.frauddetector#ExternalModelsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5,
                     "max": 10
@@ -4867,13 +4859,13 @@
             }
         },
         "com.amazonaws.frauddetector#Integer": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.frauddetector#Integer2": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.frauddetector#InternalServerException": {
             "type": "structure",
@@ -5268,10 +5260,7 @@
             }
         },
         "com.amazonaws.frauddetector#Long": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.frauddetector#MapOfStrings": {
             "type": "map",
@@ -5865,7 +5854,6 @@
         "com.amazonaws.frauddetector#OutcomesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 50,
                     "max": 100
@@ -6542,7 +6530,6 @@
         "com.amazonaws.frauddetector#RulesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 50,
                     "max": 100
@@ -6783,7 +6770,6 @@
         "com.amazonaws.frauddetector#TagsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 50,
                     "max": 50
@@ -7727,10 +7713,7 @@
             "members": {}
         },
         "com.amazonaws.frauddetector#UseEventVariables": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.frauddetector#ValidationException": {
             "type": "structure",
@@ -7915,7 +7898,6 @@
         "com.amazonaws.frauddetector#VariablesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 50,
                     "max": 100
@@ -7944,7 +7926,6 @@
         "com.amazonaws.frauddetector#batchImportsMaxPageSize": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -7954,7 +7935,6 @@
         "com.amazonaws.frauddetector#batchPredictionsMaxPageSize": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -8001,7 +7981,6 @@
         "com.amazonaws.frauddetector#entityTypesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5,
                     "max": 10
@@ -8017,7 +7996,6 @@
         "com.amazonaws.frauddetector#eventTypesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5,
                     "max": 10
@@ -8047,10 +8025,7 @@
             }
         },
         "com.amazonaws.frauddetector#float": {
-            "type": "float",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "float"
         },
         "com.amazonaws.frauddetector#floatVersionString": {
             "type": "string",
@@ -8110,7 +8085,6 @@
         "com.amazonaws.frauddetector#labelsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 10,
                     "max": 50
@@ -8169,7 +8143,6 @@
         "com.amazonaws.frauddetector#modelsMaxPageSize": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10

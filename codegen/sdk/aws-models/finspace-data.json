@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,21 +31,6 @@
     "shapes": {
         "com.amazonaws.finspacedata#AWSHabaneroPublicAPI": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "finspace data",
-                    "arnNamespace": "finspace-api",
-                    "cloudFormationName": "Finspacedata",
-                    "cloudTrailEventSource": "finspacedata.amazonaws.com",
-                    "endpointPrefix": "finspace-api"
-                },
-                "aws.auth#sigv4": {
-                    "name": "finspace-api"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p> The FinSpace APIs let you take actions inside the FinSpace.</p>",
-                "smithy.api#title": "FinSpace Public API"
-            },
             "version": "2020-07-13",
             "operations": [
                 {
@@ -141,7 +126,22 @@
                 {
                     "target": "com.amazonaws.finspacedata#UpdateUser"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "finspace data",
+                    "arnNamespace": "finspace-api",
+                    "cloudFormationName": "Finspacedata",
+                    "cloudTrailEventSource": "finspacedata.amazonaws.com",
+                    "endpointPrefix": "finspace-api"
+                },
+                "aws.auth#sigv4": {
+                    "name": "finspace-api"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p> The FinSpace APIs let you take actions inside the FinSpace.</p>",
+                "smithy.api#title": "FinSpace Public API"
+            }
         },
         "com.amazonaws.finspacedata#AccessDeniedException": {
             "type": "structure",
@@ -303,6 +303,7 @@
                 "statusCode": {
                     "target": "com.amazonaws.finspacedata#StatusCode",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The returned status code of the response.</p>",
                         "smithy.api#httpResponseCode": {}
                     }
@@ -333,6 +334,7 @@
                 "expiration": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The Epoch time when the current credentials expire.</p>"
                     }
                 }
@@ -344,6 +346,7 @@
         "com.amazonaws.finspacedata#Boolean": {
             "type": "boolean",
             "traits": {
+                "smithy.api#default": false,
                 "smithy.api#documentation": "Common Boolean data type"
             }
         },
@@ -454,6 +457,7 @@
                 "createTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The timestamp at which the Changeset was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
@@ -472,14 +476,14 @@
                 "activeUntilTimestamp": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Time until which the Changeset is active. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
                 "activeFromTimestamp": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Beginning time from which the Changeset is active. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
@@ -811,6 +815,7 @@
                 "autoUpdate": {
                     "target": "com.amazonaws.finspacedata#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Flag to indicate Dataview should be updated automatically.</p>"
                     }
                 },
@@ -829,7 +834,7 @@
                 "asOfTimestamp": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Beginning time to use for the Dataview. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
@@ -1325,7 +1330,7 @@
                 "asOfTimestamp": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Time range to use for the Dataview. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
@@ -1362,18 +1367,21 @@
                 "autoUpdate": {
                     "target": "com.amazonaws.finspacedata#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The flag to indicate Dataview should be updated automatically.</p>"
                     }
                 },
                 "createTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The timestamp at which the Dataview was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
                 "lastModifiedTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The last time that a Dataview was modified. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 }
@@ -1424,12 +1432,14 @@
                 "createTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The timestamp at which the Dataset was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
                 "lastModifiedTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The last time that the Dataset was modified. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
@@ -1853,6 +1863,7 @@
                 "statusCode": {
                     "target": "com.amazonaws.finspacedata#StatusCode",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The returned status code of the response.</p>",
                         "smithy.api#httpResponseCode": {}
                     }
@@ -2136,6 +2147,7 @@
                 "createTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The timestamp at which the Changeset was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
@@ -2154,14 +2166,14 @@
                 "activeUntilTimestamp": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Time until which the Changeset is active. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
                 "activeFromTimestamp": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Beginning time from which the Changeset is active. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
@@ -2246,6 +2258,7 @@
                 "autoUpdate": {
                     "target": "com.amazonaws.finspacedata#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Flag to indicate Dataview should be updated automatically.</p>"
                     }
                 },
@@ -2264,7 +2277,7 @@
                 "asOfTimestamp": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Time range to use for the Dataview. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
@@ -2277,12 +2290,14 @@
                 "lastModifiedTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The last time that a Dataview was modified. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
                 "createTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The timestamp at which the Dataview was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
@@ -2410,12 +2425,14 @@
                 "createTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The timestamp at which the Dataset was created in FinSpace. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
                 "lastModifiedTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The last time that the Dataset was modified. The value is determined as epoch time in milliseconds. For example, the value for Monday, November 1, 2021 12:00:00 PM UTC is specified as 1635768000000.</p>"
                     }
                 },
@@ -2606,6 +2623,7 @@
                 "durationInMinutes": {
                     "target": "com.amazonaws.finspacedata#SessionDuration",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time duration in which the credentials remain valid. </p>",
                         "smithy.api#httpQuery": "durationInMinutes"
                     }
@@ -2635,6 +2653,7 @@
                 "durationInMinutes": {
                     "target": "com.amazonaws.finspacedata#SessionDuration",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Returns the duration in which the credentials will remain valid.</p>"
                     }
                 }
@@ -2744,30 +2763,35 @@
                 "createTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The timestamp at which the user account was created in FinSpace. The value is determined as epoch time in milliseconds. </p>"
                     }
                 },
                 "lastEnabledTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Describes the last time the user account was enabled. The value is determined as epoch time in milliseconds.</p>"
                     }
                 },
                 "lastDisabledTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Describes the last time the user account was disabled. The value is determined as epoch time in milliseconds.</p>"
                     }
                 },
                 "lastModifiedTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Describes the last time the user account was updated. The value is determined as epoch time in milliseconds.</p>"
                     }
                 },
                 "lastLoginTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Describes the last time that the user logged into their account. The value is determined as epoch time in milliseconds.</p>"
                     }
                 }
@@ -2969,7 +2993,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3067,7 +3091,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3147,7 +3171,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3269,6 +3293,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults",
                         "smithy.api#required": {}
@@ -3306,6 +3331,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults",
                         "smithy.api#required": {}
@@ -3422,6 +3448,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults",
                         "smithy.api#required": {}
@@ -3459,6 +3486,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults",
                         "smithy.api#required": {}
@@ -3547,12 +3575,14 @@
                 "createTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The timestamp at which the group was created in FinSpace. The value is determined as epoch time in milliseconds.\n    </p>"
                     }
                 },
                 "lastModifiedTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Describes the last time the permission group was updated. The value is determined as epoch time in milliseconds.\n    </p>"
                     }
                 },
@@ -3803,6 +3833,7 @@
         "com.amazonaws.finspacedata#ResultLimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -3918,6 +3949,7 @@
         "com.amazonaws.finspacedata#SessionDuration": {
             "type": "long",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 60,
                     "max": 720
@@ -3957,7 +3989,10 @@
             }
         },
         "com.amazonaws.finspacedata#StatusCode": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.finspacedata#StringMapKey": {
             "type": "string",
@@ -4022,6 +4057,7 @@
         "com.amazonaws.finspacedata#TimestampEpoch": {
             "type": "long",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#documentation": "Milliseconds since UTC epoch"
             }
         },
@@ -4471,30 +4507,35 @@
                 "createTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The timestamp at which the user account was created in FinSpace. The value is determined as epoch time in milliseconds. </p>"
                     }
                 },
                 "lastEnabledTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> Describes the last time the user account was enabled. The value is determined as epoch time in milliseconds.\n    </p>"
                     }
                 },
                 "lastDisabledTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Describes the last time the user account was disabled. The value is determined as epoch time in milliseconds.</p>"
                     }
                 },
                 "lastModifiedTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Describes the last time the user account was updated. The value is determined as epoch time in milliseconds.\n    </p>"
                     }
                 },
                 "lastLoginTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Describes the last time that the user logged into their account. The value is determined as epoch time in milliseconds.\n    </p>"
                     }
                 }

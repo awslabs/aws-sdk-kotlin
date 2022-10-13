@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.snowdevicemanagement#AccessDeniedException": {
             "type": "structure",
@@ -1534,7 +1534,6 @@
         "com.amazonaws.snowdevicemanagement#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -1817,6 +1816,9 @@
             "input": {
                 "target": "com.amazonaws.snowdevicemanagement#TagResourceInput"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.snowdevicemanagement#InternalServerException"
@@ -2030,6 +2032,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.snowdevicemanagement#UntagResourceInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {

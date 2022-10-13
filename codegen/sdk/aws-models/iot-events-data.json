@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -1417,7 +1417,6 @@
         "com.amazonaws.ioteventsdata#EpochMilliTimestamp": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 9223372036854775807
@@ -1502,21 +1501,6 @@
         },
         "com.amazonaws.ioteventsdata#IotColumboDataService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "IoT Events Data",
-                    "arnNamespace": "ioteventsdata",
-                    "cloudFormationName": "IoTEventsData",
-                    "cloudTrailEventSource": "ioteventsdata.amazonaws.com",
-                    "endpointPrefix": "data.iotevents"
-                },
-                "aws.auth#sigv4": {
-                    "name": "ioteventsdata"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>IoT Events monitors your equipment or device fleets for failures or changes in operation, and\n      triggers actions when such events occur. You can use IoT Events Data API commands to send inputs to\n      detectors, list detectors, and view or update a detector's status.</p>\n         <p> For more information, see <a href=\"https://docs.aws.amazon.com/iotevents/latest/developerguide/what-is-iotevents.html\">What is IoT Events?</a> in the\n        <i>IoT Events Developer Guide</i>.</p>",
-                "smithy.api#title": "AWS IoT Events Data"
-            },
             "version": "2018-10-23",
             "operations": [
                 {
@@ -1555,7 +1539,22 @@
                 {
                     "target": "com.amazonaws.ioteventsdata#ListDetectors"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "IoT Events Data",
+                    "arnNamespace": "ioteventsdata",
+                    "cloudFormationName": "IoTEventsData",
+                    "cloudTrailEventSource": "ioteventsdata.amazonaws.com",
+                    "endpointPrefix": "data.iotevents"
+                },
+                "aws.auth#sigv4": {
+                    "name": "ioteventsdata"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>IoT Events monitors your equipment or device fleets for failures or changes in operation, and\n      triggers actions when such events occur. You can use IoT Events Data API commands to send inputs to\n      detectors, list detectors, and view or update a detector's status.</p>\n         <p> For more information, see <a href=\"https://docs.aws.amazon.com/iotevents/latest/developerguide/what-is-iotevents.html\">What is IoT Events?</a> in the\n        <i>IoT Events Developer Guide</i>.</p>",
+                "smithy.api#title": "AWS IoT Events Data"
+            }
         },
         "com.amazonaws.ioteventsdata#KeyValue": {
             "type": "string",
@@ -1733,7 +1732,6 @@
         "com.amazonaws.ioteventsdata#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 250
@@ -1911,10 +1909,7 @@
             }
         },
         "com.amazonaws.ioteventsdata#Seconds": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.ioteventsdata#ServiceUnavailableException": {
             "type": "structure",
@@ -1935,7 +1930,6 @@
         "com.amazonaws.ioteventsdata#Severity": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 2147483647
@@ -2041,10 +2035,7 @@
             }
         },
         "com.amazonaws.ioteventsdata#SnoozeDuration": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.ioteventsdata#StateChangeConfiguration": {
             "type": "structure",

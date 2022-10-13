@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,21 +31,6 @@
     "shapes": {
         "com.amazonaws.lookoutequipment#AWSLookoutEquipmentFrontendService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "LookoutEquipment",
-                    "arnNamespace": "lookoutequipment",
-                    "cloudFormationName": "LookoutEquipment",
-                    "cloudTrailEventSource": "lookoutequipment.amazonaws.com",
-                    "endpointPrefix": "lookoutequipment"
-                },
-                "aws.auth#sigv4": {
-                    "name": "lookoutequipment"
-                },
-                "aws.protocols#awsJson1_0": {},
-                "smithy.api#documentation": "<p>Amazon Lookout for Equipment is a machine learning service that uses advanced analytics to identify\n         anomalies in machines from sensor data for use in predictive maintenance. </p>",
-                "smithy.api#title": "Amazon Lookout for Equipment"
-            },
             "version": "2020-12-15",
             "operations": [
                 {
@@ -147,7 +132,22 @@
                 {
                     "target": "com.amazonaws.lookoutequipment#UpdateLabelGroup"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "LookoutEquipment",
+                    "arnNamespace": "lookoutequipment",
+                    "cloudFormationName": "LookoutEquipment",
+                    "cloudTrailEventSource": "lookoutequipment.amazonaws.com",
+                    "endpointPrefix": "lookoutequipment"
+                },
+                "aws.auth#sigv4": {
+                    "name": "lookoutequipment"
+                },
+                "aws.protocols#awsJson1_0": {},
+                "smithy.api#documentation": "<p>Amazon Lookout for Equipment is a machine learning service that uses advanced analytics to identify\n         anomalies in machines from sensor data for use in predictive maintenance. </p>",
+                "smithy.api#title": "Amazon Lookout for Equipment"
+            }
         },
         "com.amazonaws.lookoutequipment#AccessDeniedException": {
             "type": "structure",
@@ -175,7 +175,10 @@
             }
         },
         "com.amazonaws.lookoutequipment#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.lookoutequipment#BoundedLengthString": {
             "type": "string",
@@ -267,6 +270,7 @@
                 "Percentage": {
                     "target": "com.amazonaws.lookoutequipment#Float",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> Indicates the percentage of occurances of the given statistic. </p>",
                         "smithy.api#required": {}
                     }
@@ -834,7 +838,6 @@
         "com.amazonaws.lookoutequipment#DataDelayOffsetInMinutes": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 60
@@ -945,7 +948,6 @@
         "com.amazonaws.lookoutequipment#DataSizeInBytes": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -2058,7 +2060,6 @@
         "com.amazonaws.lookoutequipment#EventDurationInSeconds": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -2093,7 +2094,10 @@
             }
         },
         "com.amazonaws.lookoutequipment#Float": {
-            "type": "float"
+            "type": "float",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.lookoutequipment#IamRoleArn": {
             "type": "string",
@@ -2616,10 +2620,7 @@
             }
         },
         "com.amazonaws.lookoutequipment#Integer": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.lookoutequipment#InternalServerException": {
             "type": "structure",
@@ -3720,7 +3721,6 @@
         "com.amazonaws.lookoutequipment#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 500
@@ -4048,6 +4048,7 @@
                 "DataExists": {
                     "target": "com.amazonaws.lookoutequipment#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Parameter that indicates whether data exists for the sensor that the statistics belong\n         to. </p>"
                     }
                 },

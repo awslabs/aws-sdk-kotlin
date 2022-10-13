@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.codeguruprofiler#ActionGroup": {
             "type": "string",
@@ -474,7 +474,7 @@
             }
         },
         "com.amazonaws.codeguruprofiler#Channels": {
-            "type": "set",
+            "type": "list",
             "member": {
                 "target": "com.amazonaws.codeguruprofiler#Channel"
             },
@@ -482,7 +482,8 @@
                 "smithy.api#length": {
                     "min": 1,
                     "max": 2
-                }
+                },
+                "smithy.api#uniqueItems": {}
             }
         },
         "com.amazonaws.codeguruprofiler#ClientToken": {
@@ -879,7 +880,7 @@
             }
         },
         "com.amazonaws.codeguruprofiler#EventPublishers": {
-            "type": "set",
+            "type": "list",
             "member": {
                 "target": "com.amazonaws.codeguruprofiler#EventPublisher"
             },
@@ -887,7 +888,8 @@
                 "smithy.api#length": {
                     "min": 1,
                     "max": 1
-                }
+                },
+                "smithy.api#uniqueItems": {}
             }
         },
         "com.amazonaws.codeguruprofiler#FeedbackType": {
@@ -1023,10 +1025,7 @@
             }
         },
         "com.amazonaws.codeguruprofiler#FrameMetricValue": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.codeguruprofiler#FrameMetricValues": {
             "type": "list",
@@ -1917,7 +1916,6 @@
         "com.amazonaws.codeguruprofiler#MaxDepth": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10000
@@ -1927,7 +1925,6 @@
         "com.amazonaws.codeguruprofiler#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -2113,6 +2110,7 @@
                 "thresholdPercent": {
                     "target": "com.amazonaws.codeguruprofiler#Percentage",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>\n            The percentage of time an application spends in one method that triggers \n            a recommendation. The percentage of time is the same as the percentage of \n            the total gathered sample counts during analysis.\n        </p>"
                     }
                 },
@@ -2130,6 +2128,7 @@
         "com.amazonaws.codeguruprofiler#Percentage": {
             "type": "double",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
