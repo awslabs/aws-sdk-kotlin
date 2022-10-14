@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.json.JsonSerialName
+import aws.smithy.kotlin.runtime.serde.json.serialName
 import aws.smithy.kotlin.runtime.time.Instant
 
 /**
@@ -27,6 +28,13 @@ internal sealed class JsonCredentialsResponse {
         val secretAccessKey: String,
         val sessionToken: String,
         val expiration: Instant,
+    ) : JsonCredentialsResponse()
+
+    // Credentials that don't expire
+    data class NonExpiringCredentials(
+        val accessKeyId: String,
+        val secretAccessKey: String,
+        val sessionToken: String,
     ) : JsonCredentialsResponse()
 
     // TODO - add support for static credentials
@@ -127,4 +135,59 @@ internal suspend fun deserializeJsonCredentials(deserializer: Deserializer): Jso
         }
         else -> JsonCredentialsResponse.Error(code, message)
     }
+}
+
+/**
+ * Deserialize credentials coming from process credentials. Used by [ProcessCredentialsProvider].
+ * The difference between this and [deserializeJsonCredentials] is that process credentials _must_ provide a version field,
+ * the session token field is called `SessionToken` instead of `Token`, and the expiration field is optional.
+ */
+internal fun deserializeJsonProcessCredentials(deserializer: Deserializer): JsonCredentialsResponse {
+    val ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccessKeyId"))
+    val SECRET_ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("SecretAccessKey"))
+    val SESSION_TOKEN_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("SessionToken"))
+    val EXPIRATION_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Timestamp, JsonSerialName("Expiration"))
+    val VERSION_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Version"))
+
+    val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+        field(ACCESS_KEY_ID_DESCRIPTOR)
+        field(SECRET_ACCESS_KEY_ID_DESCRIPTOR)
+        field(SESSION_TOKEN_DESCRIPTOR)
+        field(EXPIRATION_DESCRIPTOR)
+        field(VERSION_DESCRIPTOR)
+    }
+
+    var accessKeyId: String? = null
+    var secretAccessKey: String? = null
+    var sessionToken: String? = null
+    var expiration: Instant? = null
+    var version: Int? = null
+
+    try {
+        deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
+            loop@while (true) {
+                when (findNextFieldIndex()) {
+                    ACCESS_KEY_ID_DESCRIPTOR.index -> accessKeyId = deserializeString()
+                    SECRET_ACCESS_KEY_ID_DESCRIPTOR.index -> secretAccessKey = deserializeString()
+                    SESSION_TOKEN_DESCRIPTOR.index -> sessionToken = deserializeString()
+                    EXPIRATION_DESCRIPTOR.index -> expiration = Instant.fromIso8601(deserializeString())
+                    VERSION_DESCRIPTOR.index -> version = deserializeInt()
+
+                    null -> break@loop
+                    else -> skipValue()
+                }
+            }
+        }
+    } catch (ex: DeserializationException) {
+        throw InvalidJsonCredentialsException("invalid JSON credentials response", ex)
+    }
+
+    if (accessKeyId == null) throw InvalidJsonCredentialsException("missing field `${ACCESS_KEY_ID_DESCRIPTOR.serialName}`")
+    if (secretAccessKey == null) throw InvalidJsonCredentialsException("missing field `${SECRET_ACCESS_KEY_ID_DESCRIPTOR.serialName}`")
+    if (sessionToken == null) throw InvalidJsonCredentialsException("missing field `${SESSION_TOKEN_DESCRIPTOR.serialName}`")
+    if (version == null) throw InvalidJsonCredentialsException("missing field `${VERSION_DESCRIPTOR.serialName}`")
+    if (version != 1) throw InvalidJsonCredentialsException("version $version is not supported")
+
+    return if (expiration == null) JsonCredentialsResponse.NonExpiringCredentials(accessKeyId!!, secretAccessKey!!, sessionToken!!)
+    else JsonCredentialsResponse.SessionCredentials(accessKeyId!!, secretAccessKey!!, sessionToken!!, expiration!!)
 }
