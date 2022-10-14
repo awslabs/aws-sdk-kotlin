@@ -10,9 +10,23 @@ import kotlinx.coroutines.withContext
  * @param command the command to execute
  * @return Pair containing the command's exit code and either stdout or stderr
  */
-internal actual suspend fun executeCommand(command: String): Pair<Int, String> {
+internal actual suspend fun executeCommand(command: String, isWindows: Boolean): Pair<Int, String> {
+    val cmd = ArrayList<String>()
+
+    // add the platform's shell
+    if (isWindows) {
+        cmd.add("cmd.exe")
+        cmd.add("/C")
+    } else {
+        cmd.add("sh")
+        cmd.add("-c")
+    }
+
+    // add the user-supplied command
+    cmd.add(command)
+
     val process = withContext(Dispatchers.IO) {
-        Runtime.getRuntime().exec(command)
+        ProcessBuilder().command(cmd).start()
     }
 
     withContext(Dispatchers.IO) {
