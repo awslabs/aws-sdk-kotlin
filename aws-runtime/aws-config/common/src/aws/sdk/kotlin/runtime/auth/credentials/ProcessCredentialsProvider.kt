@@ -35,24 +35,20 @@ public class ProcessCredentialsProvider(private val credentialProcess: String) :
         val deserializer = JsonDeserializer(payload)
 
         return when (val resp = deserializeJsonProcessCredentials(deserializer)) {
-            is JsonCredentialsResponse.SessionCredentials -> {
-                Credentials(
-                    resp.accessKeyId,
-                    resp.secretAccessKey,
-                    resp.sessionToken,
-                    resp.expiration,
-                    PROVIDER_NAME,
-                )
-            }
-            is JsonCredentialsResponse.NonExpiringCredentials -> {
-                Credentials(
-                    resp.accessKeyId,
-                    resp.secretAccessKey,
-                    resp.sessionToken,
-                    Instant.MAX_VALUE,
-                    PROVIDER_NAME,
-                )
-            }
+            is JsonCredentialsResponse.SessionCredentials -> Credentials(
+                resp.accessKeyId,
+                resp.secretAccessKey,
+                resp.sessionToken,
+                resp.expiration,
+                PROVIDER_NAME,
+            )
+            is JsonCredentialsResponse.NonExpiringCredentials -> Credentials(
+                resp.accessKeyId,
+                resp.secretAccessKey,
+                resp.sessionToken,
+                Instant.MAX_VALUE,
+                PROVIDER_NAME,
+            )
             is JsonCredentialsResponse.Error -> {
                 throw CredentialsProviderException("Error parsing credentials from process: code=${resp.code}; ${resp.message}")
             }
