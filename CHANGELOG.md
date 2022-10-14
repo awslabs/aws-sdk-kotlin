@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.17.8-beta] - 10/14/2022
+
+### Features
+* #707 Support static stability for IMDS credentials
+
+### Fixes
+* [#715](https://github.com/awslabs/aws-sdk-kotlin/issues/715) Enable intra-repo links in API ref docs
+
+### Miscellaneous
+* Sync AWS service models
+
 ## [0.17.7-beta] - 10/03/2022
 
 ### Features

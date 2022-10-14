@@ -1,6 +1,0 @@
-{
-  "id": "8c2a1262-90c7-49a1-8c0a-29b269ef0f19",
-  "type": "feature",
-  "description": "Support static stability for IMDS credentials",
-  "issues": ["#707"]
-}
