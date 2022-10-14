@@ -79,6 +79,7 @@ public class ImdsCredentialsProvider(
                     else -> throw CredentialsProviderException("Error retrieving credentials from IMDS: code=${resp.code}; ${resp.message}")
                 }
             }
+            else -> throw CredentialsProviderException("Payload was of unexpected format")
         }
     }
 
