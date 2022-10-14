@@ -67,7 +67,7 @@ public val AwsProfile.maxAttempts: Int?
     }
 
 /**
- * The external command which the SDK will run to generate or retrieve authentication credentials to use.
+ * The command which the SDK will invoke to retrieve credentials
  */
 public val AwsProfile.credentialProcess: String?
     get() = this["credential_process"]
