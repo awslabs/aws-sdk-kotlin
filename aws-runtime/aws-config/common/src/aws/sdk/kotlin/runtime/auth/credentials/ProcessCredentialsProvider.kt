@@ -47,7 +47,7 @@ public class ProcessCredentialsProvider(private val credentialProcess: String) :
                     resp.accessKeyId,
                     resp.secretAccessKey,
                     resp.sessionToken,
-                    Instant.MAX,
+                    Instant.MAX_VALUE,
                     PROVIDER_NAME,
                 )
             }

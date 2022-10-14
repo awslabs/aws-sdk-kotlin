@@ -66,7 +66,7 @@ class ProcessCredentialsProviderTest {
             accessKeyId = "AccessKeyId",
             secretAccessKey = "SecretAccessKey",
             sessionToken = "SessionToken",
-            expiration = Instant.MAX,
+            expiration = Instant.MAX_VALUE,
             providerName = "Process",
         )
 
