@@ -165,7 +165,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
 }
 
 tasks.withType<org.gradle.jvm.tasks.Jar> {
-    if (name == "jar" || name == "javadocJar") {
+    if (name == "jar") {
         println("Disabling $project task '$name' because it conflicts with Kotlin JAR tasks")
         enabled = false
     } else {
