@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -906,21 +906,6 @@
         },
         "com.amazonaws.comprehend#Comprehend_20171127": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Comprehend",
-                    "arnNamespace": "comprehend",
-                    "cloudFormationName": "Comprehend",
-                    "cloudTrailEventSource": "comprehend.amazonaws.com",
-                    "endpointPrefix": "comprehend"
-                },
-                "aws.auth#sigv4": {
-                    "name": "comprehend"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>Amazon Comprehend is an AWS service for gaining insight into the content of documents.\n      Use these actions to determine the topics contained in your documents, the topics they\n      discuss, the predominant sentiment expressed in them, the predominant language used, and\n      more.</p>",
-                "smithy.api#title": "Amazon Comprehend"
-            },
             "version": "2017-11-27",
             "operations": [
                 {
@@ -1142,7 +1127,22 @@
                 {
                     "target": "com.amazonaws.comprehend#UpdateEndpoint"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Comprehend",
+                    "arnNamespace": "comprehend",
+                    "cloudFormationName": "Comprehend",
+                    "cloudTrailEventSource": "comprehend.amazonaws.com",
+                    "endpointPrefix": "comprehend"
+                },
+                "aws.auth#sigv4": {
+                    "name": "comprehend"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<p>Amazon Comprehend is an AWS service for gaining insight into the content of documents.\n      Use these actions to determine the topics contained in your documents, the topics they\n      discuss, the predominant sentiment expressed in them, the predominant language used, and\n      more.</p>",
+                "smithy.api#title": "Amazon Comprehend"
+            }
         },
         "com.amazonaws.comprehend#ConcurrentModificationException": {
             "type": "structure",
@@ -3527,10 +3527,7 @@
             }
         },
         "com.amazonaws.comprehend#Double": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.comprehend#EndpointFilter": {
             "type": "structure",
@@ -4514,10 +4511,7 @@
             }
         },
         "com.amazonaws.comprehend#Float": {
-            "type": "float",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "float"
         },
         "com.amazonaws.comprehend#IamRoleArn": {
             "type": "string",
@@ -4626,7 +4620,6 @@
         "com.amazonaws.comprehend#InferenceUnitsInteger": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -4675,10 +4668,7 @@
             }
         },
         "com.amazonaws.comprehend#Integer": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.comprehend#InternalServerException": {
             "type": "structure",
@@ -6175,7 +6165,6 @@
         "com.amazonaws.comprehend#MaxResultsInteger": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 500
@@ -6237,7 +6226,6 @@
         "com.amazonaws.comprehend#NumberOfTopicsInteger": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100

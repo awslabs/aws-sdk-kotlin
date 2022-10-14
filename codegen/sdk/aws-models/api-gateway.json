@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -117,6 +117,7 @@
                 "enabled": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the API Key can be used by callers.</p>"
                     }
                 },
@@ -361,21 +362,6 @@
         },
         "com.amazonaws.apigateway#BackplaneControlService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "API Gateway",
-                    "arnNamespace": "apigateway",
-                    "cloudFormationName": "ApiGateway",
-                    "cloudTrailEventSource": "apigateway.amazonaws.com",
-                    "endpointPrefix": "apigateway"
-                },
-                "aws.auth#sigv4": {
-                    "name": "apigateway"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<fullname>Amazon API Gateway</fullname>\n        <p>Amazon API Gateway helps developers deliver robust, secure, and scalable mobile and web application back ends. API Gateway allows developers to securely connect mobile and web applications to APIs that run on AWS Lambda, Amazon EC2, or other publicly addressable web services that are hosted outside of AWS.</p>",
-                "smithy.api#title": "Amazon API Gateway"
-            },
             "version": "2015-07-09",
             "operations": [
                 {
@@ -738,7 +724,22 @@
                 {
                     "target": "com.amazonaws.apigateway#UpdateVpcLink"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "API Gateway",
+                    "arnNamespace": "apigateway",
+                    "cloudFormationName": "ApiGateway",
+                    "cloudTrailEventSource": "apigateway.amazonaws.com",
+                    "endpointPrefix": "apigateway"
+                },
+                "aws.auth#sigv4": {
+                    "name": "apigateway"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<fullname>Amazon API Gateway</fullname>\n        <p>Amazon API Gateway helps developers deliver robust, secure, and scalable mobile and web application back ends. API Gateway allows developers to securely connect mobile and web applications to APIs that run on AWS Lambda, Amazon EC2, or other publicly addressable web services that are hosted outside of AWS.</p>",
+                "smithy.api#title": "Amazon API Gateway"
+            }
         },
         "com.amazonaws.apigateway#BadRequestException": {
             "type": "structure",
@@ -805,7 +806,10 @@
             "type": "blob"
         },
         "com.amazonaws.apigateway#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.apigateway#CacheClusterSize": {
             "type": "string",
@@ -881,6 +885,7 @@
                 "percentTraffic": {
                     "target": "com.amazonaws.apigateway#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The percent (0-100) of traffic diverted to a canary deployment.</p>"
                     }
                 },
@@ -899,6 +904,7 @@
                 "useStageCache": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean flag to indicate whether the canary deployment uses the stage cache or not.</p>"
                     }
                 }
@@ -1071,12 +1077,14 @@
                 "enabled": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the ApiKey can be used by callers.</p>"
                     }
                 },
                 "generateDistinctId": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether (<code>true</code>) or not (<code>false</code>) the key identifier is distinct from the created API key value. This parameter is deprecated and should not be used.</p>"
                     }
                 },
@@ -1787,12 +1795,14 @@
                 "validateRequestBody": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean flag to indicate whether to validate request body according to the configured model schema for the method (<code>true</code>) or not (<code>false</code>).</p>"
                     }
                 },
                 "validateRequestParameters": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean flag to indicate whether to validate request parameters, <code>true</code>, or not <code>false</code>.</p>"
                     }
                 }
@@ -1970,6 +1980,7 @@
                 "disableExecuteApiEndpoint": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether clients can invoke your API by using the default <code>execute-api</code> endpoint.\n      By default, clients can invoke your API with the default\n      <code>https://{api_id}.execute-api.{region}.amazonaws.com</code> endpoint. To require that clients use a\n      custom domain name to invoke your API, disable the default endpoint</p>"
                     }
                 }
@@ -2049,6 +2060,7 @@
                 "cacheClusterEnabled": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether cache clustering is enabled for the stage.</p>"
                     }
                 },
@@ -2079,6 +2091,7 @@
                 "tracingEnabled": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether active tracing with X-ray is enabled for the Stage.</p>"
                     }
                 },
@@ -3569,6 +3582,7 @@
                 "percentTraffic": {
                     "target": "com.amazonaws.apigateway#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The percentage (0.0-100.0) of traffic routed to the canary deployment.</p>"
                     }
                 },
@@ -3581,6 +3595,7 @@
                 "useStageCache": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean flag to indicate whether the canary release deployment uses the stage cache or not.</p>"
                     }
                 }
@@ -3987,7 +4002,10 @@
             }
         },
         "com.amazonaws.apigateway#Double": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.apigateway#EndpointConfiguration": {
             "type": "structure",
@@ -4210,6 +4228,7 @@
                 "defaultResponse": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean flag to indicate whether this GatewayResponse is the default gateway response (<code>true</code>) or not (<code>false</code>). A default gateway response is one generated by API Gateway without any customization by an API developer. </p>"
                     }
                 }
@@ -5913,6 +5932,7 @@
                 "flatten": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A query parameter of a Boolean value to resolve (<code>true</code>) all external model references and returns a flattened model schema or not (<code>false</code>) The default is <code>false</code>.</p>",
                         "smithy.api#httpQuery": "flatten"
                     }
@@ -7254,6 +7274,7 @@
                 "failOnWarnings": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A query parameter to indicate whether to rollback ApiKey importation (<code>true</code>) or not (<code>false</code>) when error is encountered.</p>",
                         "smithy.api#httpQuery": "failonwarnings"
                     }
@@ -7321,6 +7342,7 @@
                 "failOnWarnings": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A query parameter to specify whether to rollback the documentation importation (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>",
                         "smithy.api#httpQuery": "failonwarnings"
                     }
@@ -7381,6 +7403,7 @@
                 "failOnWarnings": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A query parameter to indicate whether to rollback the API creation (<code>true</code>) or not (<code>false</code>)\n            when a warning is encountered. The default value is <code>false</code>.</p>",
                         "smithy.api#httpQuery": "failonwarnings"
                     }
@@ -7406,7 +7429,10 @@
             }
         },
         "com.amazonaws.apigateway#Integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.apigateway#Integration": {
             "type": "structure",
@@ -7474,6 +7500,7 @@
                 "timeoutInMillis": {
                     "target": "com.amazonaws.apigateway#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>"
                     }
                 },
@@ -7772,7 +7799,10 @@
             }
         },
         "com.amazonaws.apigateway#Long": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.apigateway#MapOfApiStageThrottleSettings": {
             "type": "map",
@@ -7970,6 +8000,7 @@
                 "metricsEnabled": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether Amazon CloudWatch metrics are enabled for this method. The PATCH path for this setting is <code>/{method_setting_key}/metrics/enabled</code>, and the value is a Boolean.</p>"
                     }
                 },
@@ -7982,42 +8013,49 @@
                 "dataTraceEnabled": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether data trace logging is enabled for this method, which affects the log entries pushed to Amazon CloudWatch Logs. The PATCH path for this setting is <code>/{method_setting_key}/logging/dataTrace</code>, and the value is a Boolean.</p>"
                     }
                 },
                 "throttlingBurstLimit": {
                     "target": "com.amazonaws.apigateway#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the throttling burst limit. The PATCH path for this setting is <code>/{method_setting_key}/throttling/burstLimit</code>, and the value is an integer.</p>"
                     }
                 },
                 "throttlingRateLimit": {
                     "target": "com.amazonaws.apigateway#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the throttling rate limit. The PATCH path for this setting is <code>/{method_setting_key}/throttling/rateLimit</code>, and the value is a double.</p>"
                     }
                 },
                 "cachingEnabled": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether responses should be cached and returned for requests. A cache cluster must be enabled on the stage for responses to be cached. The PATCH path for this setting is <code>/{method_setting_key}/caching/enabled</code>, and the value is a Boolean.</p>"
                     }
                 },
                 "cacheTtlInSeconds": {
                     "target": "com.amazonaws.apigateway#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the time to live (TTL), in seconds, for cached responses. The higher the TTL, the longer the response will be cached. The PATCH path for this setting is <code>/{method_setting_key}/caching/ttlInSeconds</code>, and the value is an integer.</p>"
                     }
                 },
                 "cacheDataEncrypted": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the cached responses are encrypted. The PATCH path for this setting is <code>/{method_setting_key}/caching/dataEncrypted</code>, and the value is a Boolean.</p>"
                     }
                 },
                 "requireAuthorizationForCacheControl": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether authorization is required for a cache invalidation request. The PATCH path for this setting is <code>/{method_setting_key}/caching/requireAuthorizationForCacheControl</code>, and the value is a Boolean.</p>"
                     }
                 },
@@ -8044,6 +8082,7 @@
                 "apiKeyRequired": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the method requires a valid ApiKey.</p>"
                     }
                 }
@@ -8172,16 +8211,10 @@
             }
         },
         "com.amazonaws.apigateway#NullableBoolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.apigateway#NullableInteger": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.apigateway#Op": {
             "type": "string",
@@ -8671,6 +8704,7 @@
                 "apiKeyRequired": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the method required a valid ApiKey.</p>"
                     }
                 },
@@ -8871,6 +8905,7 @@
                 "failOnWarnings": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A query parameter to indicate whether to rollback the API update (<code>true</code>) or not (<code>false</code>)\n            when a warning is encountered. The default value is <code>false</code>.</p>",
                         "smithy.api#httpQuery": "failonwarnings"
                     }
@@ -8920,12 +8955,14 @@
                 "limit": {
                     "target": "com.amazonaws.apigateway#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The target maximum number of requests that can be made in a given time period.</p>"
                     }
                 },
                 "offset": {
                     "target": "com.amazonaws.apigateway#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of requests subtracted from the given limit in the initial time period.</p>"
                     }
                 },
@@ -8958,12 +8995,14 @@
                 "validateRequestBody": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean flag to indicate whether to validate a request body according to the configured Model schema.</p>"
                     }
                 },
                 "validateRequestParameters": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean flag to indicate whether to validate request parameters (<code>true</code>) or not (<code>false</code>).</p>"
                     }
                 }
@@ -9132,6 +9171,7 @@
                 "disableExecuteApiEndpoint": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether clients can invoke your API by using the default <code>execute-api</code> endpoint.\n      By default, clients can invoke your API with the default\n      <code>https://{api_id}.execute-api.{region}.amazonaws.com</code> endpoint. To require that clients use a\n      custom domain name to invoke your API, disable the default endpoint.</p>"
                     }
                 }
@@ -9186,6 +9226,7 @@
                 "required": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A boolean flag of an SdkType configuration property to indicate if the associated SDK configuration property is required (<code>true</code>) or not (<code>false</code>).</p>"
                     }
                 },
@@ -9340,6 +9381,7 @@
                 "cacheClusterEnabled": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether a cache cluster is enabled for the stage.</p>"
                     }
                 },
@@ -9388,6 +9430,7 @@
                 "tracingEnabled": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether active tracing with X-ray is enabled for the Stage.</p>"
                     }
                 },
@@ -9649,6 +9692,7 @@
                 "clientStatus": {
                     "target": "com.amazonaws.apigateway#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The HTTP status code that the client would have received. Value is 0 if the authorizer succeeded.</p>"
                     }
                 },
@@ -9661,6 +9705,7 @@
                 "latency": {
                     "target": "com.amazonaws.apigateway#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The execution latency of the test authorizer request.</p>"
                     }
                 },
@@ -9798,6 +9843,7 @@
                 "status": {
                     "target": "com.amazonaws.apigateway#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The HTTP status code.</p>"
                     }
                 },
@@ -9828,6 +9874,7 @@
                 "latency": {
                     "target": "com.amazonaws.apigateway#Long",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The execution latency of the test invoke request.</p>"
                     }
                 }
@@ -9842,12 +9889,14 @@
                 "burstLimit": {
                     "target": "com.amazonaws.apigateway#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The API target request burst rate limit. This allows more requests through for a period of time than the target rate limit.</p>"
                     }
                 },
                 "rateLimit": {
                     "target": "com.amazonaws.apigateway#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The API target request rate limit.</p>"
                     }
                 }
@@ -9865,6 +9914,7 @@
                 "insecureSkipVerification": {
                     "target": "com.amazonaws.apigateway#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether or not API Gateway skips verification that the certificate for an integration endpoint is\n            issued by a supported certificate authority. This isn’t recommended, but it enables you to\n            use certificates that are signed by private certificate authorities, or certificates\n            that are self-signed. If enabled, API Gateway still performs basic certificate\n            validation, which includes checking the certificate's expiration date, hostname, and\n            presence of a root certificate authority. Supported only for <code>HTTP</code> and\n            <code>HTTP_PROXY</code> integrations.</p>\n         <important>\n            <p>Enabling <code>insecureSkipVerification</code> isn't recommended, especially for integrations with public\n          HTTPS endpoints. If you enable <code>insecureSkipVerification</code>, you increase the risk of man-in-the-middle attacks.</p>\n         </important>"
                     }
                 }

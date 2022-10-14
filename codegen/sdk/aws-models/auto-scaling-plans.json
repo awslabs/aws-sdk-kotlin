@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -108,10 +108,7 @@
             }
         },
         "com.amazonaws.autoscalingplans#Cooldown": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.autoscalingplans#CreateScalingPlan": {
             "type": "operation",
@@ -487,16 +484,10 @@
             }
         },
         "com.amazonaws.autoscalingplans#DisableDynamicScaling": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.autoscalingplans#DisableScaleIn": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.autoscalingplans#ErrorMessage": {
             "type": "string"
@@ -680,10 +671,7 @@
             }
         },
         "com.amazonaws.autoscalingplans#MaxResults": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.autoscalingplans#MetricDimension": {
             "type": "structure",
@@ -726,10 +714,7 @@
             "type": "string"
         },
         "com.amazonaws.autoscalingplans#MetricScale": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.autoscalingplans#MetricStatistic": {
             "type": "string",
@@ -875,10 +860,7 @@
             }
         },
         "com.amazonaws.autoscalingplans#ResourceCapacity": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.autoscalingplans#ResourceIdMaxLen1600": {
             "type": "string",
@@ -1286,10 +1268,7 @@
             }
         },
         "com.amazonaws.autoscalingplans#ScalingPlanVersion": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.autoscalingplans#ScalingPlans": {
             "type": "list",
@@ -1368,7 +1347,6 @@
         "com.amazonaws.autoscalingplans#ScheduledActionBufferTime": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }

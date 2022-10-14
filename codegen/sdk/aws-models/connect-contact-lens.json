@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -119,6 +119,7 @@
         "com.amazonaws.connectcontactlens#CharacterOffset": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -130,6 +131,7 @@
                 "BeginOffsetChar": {
                     "target": "com.amazonaws.connectcontactlens#CharacterOffset",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The beginning of the issue.</p>",
                         "smithy.api#required": {}
                     }
@@ -137,6 +139,7 @@
                 "EndOffsetChar": {
                     "target": "com.amazonaws.connectcontactlens#CharacterOffset",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The end of the issue.</p>",
                         "smithy.api#required": {}
                     }
@@ -278,6 +281,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.connectcontactlens#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximimum number of results to return per page.</p>"
                     }
                 },
@@ -337,6 +341,7 @@
         "com.amazonaws.connectcontactlens#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -359,6 +364,7 @@
         "com.amazonaws.connectcontactlens#OffsetMillis": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -390,6 +396,7 @@
                 "BeginOffsetMillis": {
                     "target": "com.amazonaws.connectcontactlens#OffsetMillis",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The beginning offset in milliseconds where the category rule was detected.</p>",
                         "smithy.api#required": {}
                     }
@@ -397,6 +404,7 @@
                 "EndOffsetMillis": {
                     "target": "com.amazonaws.connectcontactlens#OffsetMillis",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The ending offset in milliseconds where the category rule was detected.</p>",
                         "smithy.api#required": {}
                     }
@@ -532,6 +540,7 @@
                 "BeginOffsetMillis": {
                     "target": "com.amazonaws.connectcontactlens#OffsetMillis",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The beginning offset in the contact for this transcript.</p>",
                         "smithy.api#required": {}
                     }
@@ -539,6 +548,7 @@
                 "EndOffsetMillis": {
                     "target": "com.amazonaws.connectcontactlens#OffsetMillis",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The end offset in the contact for this transcript.</p>",
                         "smithy.api#required": {}
                     }

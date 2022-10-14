@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.cloudcontrol#AlreadyExistsException": {
             "type": "structure",
@@ -88,19 +88,6 @@
         },
         "com.amazonaws.cloudcontrol#CloudApiService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "CloudControl",
-                    "cloudTrailEventSource": "cloudcontrolapi.amazonaws.com",
-                    "endpointPrefix": "cloudcontrolapi"
-                },
-                "aws.auth#sigv4": {
-                    "name": "cloudcontrolapi"
-                },
-                "aws.protocols#awsJson1_0": {},
-                "smithy.api#documentation": "<p>For more information about Amazon Web Services Cloud Control API, see the <a href=\"https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/what-is-cloudcontrolapi.html\">Amazon Web Services Cloud Control API User\n        Guide</a>.</p>",
-                "smithy.api#title": "AWS Cloud Control API"
-            },
             "version": "2021-09-30",
             "operations": [
                 {
@@ -127,7 +114,20 @@
                 {
                     "target": "com.amazonaws.cloudcontrol#UpdateResource"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "CloudControl",
+                    "cloudTrailEventSource": "cloudcontrolapi.amazonaws.com",
+                    "endpointPrefix": "cloudcontrolapi"
+                },
+                "aws.auth#sigv4": {
+                    "name": "cloudcontrolapi"
+                },
+                "aws.protocols#awsJson1_0": {},
+                "smithy.api#documentation": "<p>For more information about Amazon Web Services Cloud Control API, see the <a href=\"https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/what-is-cloudcontrolapi.html\">Amazon Web Services Cloud Control API User\n        Guide</a>.</p>",
+                "smithy.api#title": "AWS Cloud Control API"
+            }
         },
         "com.amazonaws.cloudcontrol#ConcurrentModificationException": {
             "type": "structure",
@@ -976,7 +976,6 @@
         "com.amazonaws.cloudcontrol#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100

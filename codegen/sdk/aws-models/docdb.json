@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -126,24 +126,6 @@
         },
         "com.amazonaws.docdb#AmazonRDSv19": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "DocDB",
-                    "arnNamespace": "rds",
-                    "cloudFormationName": "DocDB",
-                    "cloudTrailEventSource": "docdb.amazonaws.com",
-                    "endpointPrefix": "rds"
-                },
-                "aws.auth#sigv4": {
-                    "name": "rds"
-                },
-                "aws.protocols#awsQuery": {},
-                "smithy.api#documentation": "<p>Amazon DocumentDB API documentation</p>",
-                "smithy.api#title": "Amazon DocumentDB with MongoDB compatibility",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://rds.amazonaws.com/doc/2014-10-31/"
-                }
-            },
             "version": "2014-10-31",
             "operations": [
                 {
@@ -305,7 +287,25 @@
                 {
                     "target": "com.amazonaws.docdb#StopDBCluster"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "DocDB",
+                    "arnNamespace": "rds",
+                    "cloudFormationName": "DocDB",
+                    "cloudTrailEventSource": "docdb.amazonaws.com",
+                    "endpointPrefix": "rds"
+                },
+                "aws.auth#sigv4": {
+                    "name": "rds"
+                },
+                "aws.protocols#awsQuery": {},
+                "smithy.api#documentation": "<p>Amazon DocumentDB API documentation</p>",
+                "smithy.api#title": "Amazon DocumentDB with MongoDB compatibility",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://rds.amazonaws.com/doc/2014-10-31/"
+                }
+            }
         },
         "com.amazonaws.docdb#ApplyMethod": {
             "type": "string",
@@ -441,13 +441,13 @@
             }
         },
         "com.amazonaws.docdb#Boolean": {
-            "type": "boolean"
-        },
-        "com.amazonaws.docdb#BooleanOptional": {
             "type": "boolean",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": false
             }
+        },
+        "com.amazonaws.docdb#BooleanOptional": {
+            "type": "boolean"
         },
         "com.amazonaws.docdb#Certificate": {
             "type": "structure",
@@ -1508,6 +1508,7 @@
                 "MultiAZ": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the cluster has instances in multiple Availability Zones.</p>"
                     }
                 },
@@ -1586,6 +1587,7 @@
                 "StorageEncrypted": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the cluster is encrypted.</p>"
                     }
                 },
@@ -1634,6 +1636,7 @@
                 "DeletionProtection": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is\n            enabled, the cluster cannot be deleted unless it is modified and\n                <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code>\n            protects clusters from being accidentally deleted.</p>"
                     }
                 }
@@ -1680,6 +1683,7 @@
                 "IsClusterWriter": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A value that is <code>true</code> if the cluster member is the primary instance for\n            the cluster and <code>false</code> otherwise.</p>"
                     }
                 },
@@ -1946,6 +1950,7 @@
                 "Port": {
                     "target": "com.amazonaws.docdb#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the port that the cluster was listening on at the time of the\n            snapshot.</p>"
                     }
                 },
@@ -1982,12 +1987,14 @@
                 "PercentProgress": {
                     "target": "com.amazonaws.docdb#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the percentage of the estimated data that has been transferred.</p>"
                     }
                 },
                 "StorageEncrypted": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the cluster snapshot is encrypted.</p>"
                     }
                 },
@@ -2174,6 +2181,7 @@
                 "SupportsLogExportsToCloudwatchLogs": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A value that indicates whether the engine version supports exporting the log types\n            specified by <code>ExportableLogTypes</code> to CloudWatch Logs.</p>"
                     }
                 }
@@ -2259,6 +2267,7 @@
                 "BackupRetentionPeriod": {
                     "target": "com.amazonaws.docdb#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the number of days for which automatic snapshots are retained.</p>"
                     }
                 },
@@ -2307,12 +2316,14 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Does not apply. This parameter does not apply to Amazon DocumentDB. Amazon DocumentDB does not perform minor version upgrades regardless of the value set.</p>"
                     }
                 },
                 "PubliclyAccessible": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Not supported. Amazon DocumentDB does not currently support public endpoints. The value \n          of <code>PubliclyAccessible</code> is always <code>false</code>.</p>"
                     }
                 },
@@ -2331,6 +2342,7 @@
                 "StorageEncrypted": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether or not the instance is encrypted.</p>"
                     }
                 },
@@ -2456,6 +2468,7 @@
                 "Normal": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean value that is <code>true</code> if the instance is operating normally, or\n                <code>false</code> if the instance is in an error state.</p>"
                     }
                 },
@@ -2804,6 +2817,7 @@
                 "SkipFinalSnapshot": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Determines whether a final cluster snapshot is created before the cluster is deleted. If <code>true</code> is specified, no cluster snapshot is created. If <code>false</code> is specified, a cluster snapshot is created before the DB cluster is deleted. </p>\n        <note>\n            <p>If <code>SkipFinalSnapshot</code> is <code>false</code>, you must specify a <code>FinalDBSnapshotIdentifier</code> parameter.</p>\n        </note>\n        <p>Default: <code>false</code>\n        </p>"
                     }
                 },
@@ -3354,12 +3368,14 @@
                 "IncludeShared": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to <code>true</code> to include shared manual cluster snapshots from other Amazon Web Services accounts that this Amazon Web Services account has been given permission to copy or restore, and otherwise <code>false</code>. The default is <code>false</code>.</p>"
                     }
                 },
                 "IncludePublic": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to <code>true</code> to include manual cluster snapshots that are public and can be copied or restored by any Amazon Web Services account, and otherwise <code>false</code>. The default is <code>false</code>.</p>"
                     }
                 }
@@ -3483,6 +3499,7 @@
                 "DefaultOnly": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates that only the default version of the specified engine or engine and major\n            version combination is returned.</p>"
                     }
                 },
@@ -4158,6 +4175,7 @@
                 "Port": {
                     "target": "com.amazonaws.docdb#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the port that the database engine is listening on.</p>"
                     }
                 },
@@ -4357,6 +4375,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean value indicating whether the subscription is enabled. A value of\n                <code>true</code> indicates that the subscription is enabled.</p>"
                     }
                 },
@@ -4653,6 +4672,7 @@
                 "IsWriter": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Specifies whether the Amazon DocumentDB cluster is the primary cluster (that is, has read-write capability) for the Amazon DocumentDB global cluster with which it is associated. </p>"
                     }
                 }
@@ -4790,13 +4810,13 @@
             }
         },
         "com.amazonaws.docdb#Integer": {
-            "type": "integer"
-        },
-        "com.amazonaws.docdb#IntegerOptional": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {}
+                "smithy.api#default": 0
             }
+        },
+        "com.amazonaws.docdb#IntegerOptional": {
+            "type": "integer"
         },
         "com.amazonaws.docdb#InvalidDBClusterSnapshotStateFault": {
             "type": "structure",
@@ -5158,6 +5178,7 @@
                 "ApplyImmediately": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A value that specifies whether the changes in this request and any pending changes are\n            asynchronously applied as soon as possible, regardless of the\n                <code>PreferredMaintenanceWindow</code> setting for the cluster. If this\n            parameter is set to <code>false</code>, changes to the cluster are applied during the\n            next maintenance window.</p>\n        <p>The <code>ApplyImmediately</code> parameter affects only the\n                <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values. If\n            you set this parameter value to <code>false</code>, the changes to the\n                <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values are\n            applied during the next maintenance window. All other changes are applied immediately,\n            regardless of the value of the <code>ApplyImmediately</code> parameter.</p>\n        <p>Default: <code>false</code>\n        </p>"
                     }
                 },
@@ -5413,6 +5434,7 @@
                 "ApplyImmediately": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the modifications in this request and any pending modifications are\n            asynchronously applied as soon as possible, regardless of the\n                <code>PreferredMaintenanceWindow</code> setting for the instance. </p>\n        <p> If this parameter is set to <code>false</code>, changes to the instance are\n            applied during the next maintenance window. Some parameter changes can cause an outage\n            and are applied on the next reboot.</p>\n        <p>Default: <code>false</code>\n        </p>"
                     }
                 },
@@ -5712,6 +5734,7 @@
                 "Vpc": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether an instance is in a virtual private cloud (VPC).</p>"
                     }
                 }
@@ -5797,6 +5820,7 @@
                 "IsModifiable": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Indicates whether (<code>true</code>) or not (<code>false</code>) the parameter can\n            be modified. Some parameters have security or operational implications that prevent them\n            from being changed. </p>"
                     }
                 },
@@ -6265,6 +6289,7 @@
                 "ResetAllParameters": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A value that is set to <code>true</code> to reset all parameters in the cluster\n            parameter group to their default values, and <code>false</code> otherwise. You can't use\n            this parameter if there is a list of parameter names specified for the\n                <code>Parameters</code> parameter.</p>"
                     }
                 },
@@ -6554,6 +6579,7 @@
                 "UseLatestRestorableTime": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A value that is set to <code>true</code> to restore the cluster to the latest\n            restorable backup time, and <code>false</code> otherwise. </p>\n        <p>Default: <code>false</code>\n        </p>\n        <p>Constraints: Cannot be specified if the <code>RestoreToTime</code> parameter is\n            provided.</p>"
                     }
                 },
@@ -7059,12 +7085,14 @@
                 "AutoUpgrade": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A value that indicates whether the target version is applied to any source DB instances that have <code>AutoMinorVersionUpgrade</code> set to <code>true</code>.</p>"
                     }
                 },
                 "IsMajorVersionUpgrade": {
                     "target": "com.amazonaws.docdb#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A value that indicates whether a database engine is upgraded to a major\n            version.</p>"
                     }
                 }

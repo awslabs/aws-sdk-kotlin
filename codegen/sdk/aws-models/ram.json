@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -115,21 +115,6 @@
         },
         "com.amazonaws.ram#AmazonResourceSharing": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "RAM",
-                    "arnNamespace": "ram",
-                    "cloudFormationName": "RAM",
-                    "cloudTrailEventSource": "ram.amazonaws.com",
-                    "endpointPrefix": "ram"
-                },
-                "aws.auth#sigv4": {
-                    "name": "ram"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>This is the <i>Resource Access Manager API Reference</i>. This documentation provides\n            descriptions and syntax for each of the actions and data types in RAM. RAM is a\n            service that helps you securely share your Amazon Web Services resources across Amazon Web Services accounts. If you\n            have multiple Amazon Web Services accounts, you can use RAM to share those resources with other\n            accounts. If you use Organizations to manage your accounts, then you share your resources\n            with your organization or organizational units (OUs). For supported resource types, you\n            can also share resources with individual Identity and Access Management (IAM) roles an users. </p>\n        \n        <p>To learn more about RAM, see the following resources:</p>\n        <ul>\n            <li>\n                <p>\n                    <a href=\"http://aws.amazon.com/ram\">Resource Access Manager product page</a>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/ram/latest/userguide/\">Resource Access Manager User\n                        Guide</a>\n               </p>\n            </li>\n         </ul>",
-                "smithy.api#title": "AWS Resource Access Manager"
-            },
             "version": "2018-01-04",
             "operations": [
                 {
@@ -207,7 +192,22 @@
                 {
                     "target": "com.amazonaws.ram#UpdateResourceShare"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "RAM",
+                    "arnNamespace": "ram",
+                    "cloudFormationName": "RAM",
+                    "cloudTrailEventSource": "ram.amazonaws.com",
+                    "endpointPrefix": "ram"
+                },
+                "aws.auth#sigv4": {
+                    "name": "ram"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>This is the <i>Resource Access Manager API Reference</i>. This documentation provides\n            descriptions and syntax for each of the actions and data types in RAM. RAM is a\n            service that helps you securely share your Amazon Web Services resources across Amazon Web Services accounts. If you\n            have multiple Amazon Web Services accounts, you can use RAM to share those resources with other\n            accounts. If you use Organizations to manage your accounts, then you share your resources\n            with your organization or organizational units (OUs). For supported resource types, you\n            can also share resources with individual Identity and Access Management (IAM) roles an users. </p>\n        \n        <p>To learn more about RAM, see the following resources:</p>\n        <ul>\n            <li>\n                <p>\n                    <a href=\"http://aws.amazon.com/ram\">Resource Access Manager product page</a>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/ram/latest/userguide/\">Resource Access Manager User\n                        Guide</a>\n               </p>\n            </li>\n         </ul>",
+                "smithy.api#title": "AWS Resource Access Manager"
+            }
         },
         "com.amazonaws.ram#AssociateResourceShare": {
             "type": "operation",
@@ -403,10 +403,7 @@
             }
         },
         "com.amazonaws.ram#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.ram#CreateResourceShare": {
             "type": "operation",
@@ -1330,10 +1327,7 @@
             }
         },
         "com.amazonaws.ram#Integer": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.ram#InvalidClientTokenException": {
             "type": "structure",
@@ -2126,7 +2120,6 @@
         "com.amazonaws.ram#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 500

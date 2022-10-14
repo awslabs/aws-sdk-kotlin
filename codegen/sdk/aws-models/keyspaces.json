@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.keyspaces#ARN": {
             "type": "string",
@@ -91,7 +91,6 @@
         "com.amazonaws.keyspaces#CapacityUnits": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -364,7 +363,6 @@
         "com.amazonaws.keyspaces#DefaultTimeToLive": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 630720000
@@ -758,21 +756,6 @@
         },
         "com.amazonaws.keyspaces#KeyspacesService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Keyspaces",
-                    "cloudFormationName": "Cassandra",
-                    "arnNamespace": "cassandra",
-                    "cloudTrailEventSource": "cassandra.amazonaws.com",
-                    "endpointPrefix": "cassandra"
-                },
-                "aws.auth#sigv4": {
-                    "name": "cassandra"
-                },
-                "aws.protocols#awsJson1_0": {},
-                "smithy.api#documentation": "<p>Amazon Keyspaces (for Apache Cassandra) is a scalable,\n        highly available, and managed Apache Cassandra-compatible database service. Amazon Keyspaces makes it easy to migrate,\n        run, and scale Cassandra workloads in the Amazon Web Services Cloud. With just a few clicks on the Amazon Web Services Management Console or a few lines of code, \n        you can create keyspaces and tables in Amazon Keyspaces, without deploying any infrastructure or installing software. </p>\n         <p>In addition to supporting Cassandra Query Language (CQL) requests via open-source Cassandra drivers, \n        Amazon Keyspaces supports data definition language (DDL) operations to manage keyspaces and tables using the Amazon Web Services SDK and CLI. This API reference describes\n        the supported DDL operations in detail.</p>\n         <p>For the list of all supported CQL APIs, see <a href=\"https://docs.aws.amazon.com/keyspaces/latest/devguide/cassandra-apis.html\">Supported Cassandra APIs, operations, and data types \n        in Amazon Keyspaces</a> in the <i>Amazon Keyspaces Developer\n              Guide</i>.</p>\n         <p>To learn how Amazon Keyspaces API actions are recorded with CloudTrail, see <a href=\"https://docs.aws.amazon.com/keyspaces/latest/devguide/logging-using-cloudtrail.html#service-name-info-in-cloudtrail\">Amazon Keyspaces information in CloudTrail</a> in the <i>Amazon Keyspaces Developer\n            Guide</i>.</p>\n         <p>For more information about Amazon Web Services APIs, for example how to implement retry logic or how to sign Amazon Web Services API requests, see <a href=\"https://docs.aws.amazon.com/general/latest/gr/aws-apis.html\">Amazon Web Services APIs</a> in the <i>General Reference</i>.</p>",
-                "smithy.api#title": "Amazon Keyspaces"
-            },
             "version": "2022-02-10",
             "operations": [
                 {
@@ -814,7 +797,22 @@
                 {
                     "target": "com.amazonaws.keyspaces#UpdateTable"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Keyspaces",
+                    "cloudFormationName": "Cassandra",
+                    "arnNamespace": "cassandra",
+                    "cloudTrailEventSource": "cassandra.amazonaws.com",
+                    "endpointPrefix": "cassandra"
+                },
+                "aws.auth#sigv4": {
+                    "name": "cassandra"
+                },
+                "aws.protocols#awsJson1_0": {},
+                "smithy.api#documentation": "<p>Amazon Keyspaces (for Apache Cassandra) is a scalable,\n        highly available, and managed Apache Cassandra-compatible database service. Amazon Keyspaces makes it easy to migrate,\n        run, and scale Cassandra workloads in the Amazon Web Services Cloud. With just a few clicks on the Amazon Web Services Management Console or a few lines of code, \n        you can create keyspaces and tables in Amazon Keyspaces, without deploying any infrastructure or installing software. </p>\n         <p>In addition to supporting Cassandra Query Language (CQL) requests via open-source Cassandra drivers, \n        Amazon Keyspaces supports data definition language (DDL) operations to manage keyspaces and tables using the Amazon Web Services SDK and CLI. This API reference describes\n        the supported DDL operations in detail.</p>\n         <p>For the list of all supported CQL APIs, see <a href=\"https://docs.aws.amazon.com/keyspaces/latest/devguide/cassandra-apis.html\">Supported Cassandra APIs, operations, and data types \n        in Amazon Keyspaces</a> in the <i>Amazon Keyspaces Developer\n              Guide</i>.</p>\n         <p>To learn how Amazon Keyspaces API actions are recorded with CloudTrail, see <a href=\"https://docs.aws.amazon.com/keyspaces/latest/devguide/logging-using-cloudtrail.html#service-name-info-in-cloudtrail\">Amazon Keyspaces information in CloudTrail</a> in the <i>Amazon Keyspaces Developer\n            Guide</i>.</p>\n         <p>For more information about Amazon Web Services APIs, for example how to implement retry logic or how to sign Amazon Web Services API requests, see <a href=\"https://docs.aws.amazon.com/general/latest/gr/aws-apis.html\">Amazon Web Services APIs</a> in the <i>General Reference</i>.</p>",
+                "smithy.api#title": "Amazon Keyspaces"
+            }
         },
         "com.amazonaws.keyspaces#ListKeyspaces": {
             "type": "operation",
@@ -1041,7 +1039,6 @@
         "com.amazonaws.keyspaces#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000

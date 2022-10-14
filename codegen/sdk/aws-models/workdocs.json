@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -181,6 +181,9 @@
             "input": {
                 "target": "com.amazonaws.workdocs#AbortDocumentVersionUploadRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.workdocs#EntityNotExistsException"
@@ -321,6 +324,7 @@
                 "IsIndirectActivity": {
                     "target": "com.amazonaws.workdocs#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether an activity is indirect or direct. An indirect activity results\n            from a direct activity performed on a parent resource. For example, sharing a parent\n            folder (the direct activity) shares all of the subfolders and documents within the\n            parent folder (the indirect activity).</p>"
                     }
                 },
@@ -615,7 +619,10 @@
             }
         },
         "com.amazonaws.workdocs#BooleanType": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.workdocs#Comment": {
             "type": "structure",
@@ -901,6 +908,7 @@
                 "NotifyCollaborators": {
                     "target": "com.amazonaws.workdocs#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set this parameter to TRUE to send an email out to the document collaborators after\n            the comment is created.</p>"
                     }
                 }
@@ -1392,6 +1400,9 @@
             "input": {
                 "target": "com.amazonaws.workdocs#DeactivateUserRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.workdocs#EntityNotExistsException"
@@ -1458,6 +1469,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.workdocs#DeleteCommentRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1599,6 +1613,7 @@
                 "DeleteAll": {
                     "target": "com.amazonaws.workdocs#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Flag to indicate removal of all custom metadata properties from the specified\n            resource.</p>",
                         "smithy.api#httpQuery": "deleteAll"
                     }
@@ -1613,6 +1628,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.workdocs#DeleteDocumentRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1674,6 +1692,9 @@
             "input": {
                 "target": "com.amazonaws.workdocs#DeleteFolderRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.workdocs#ConcurrentModificationException"
@@ -1713,6 +1734,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.workdocs#DeleteFolderContentsRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1848,6 +1872,7 @@
                 "DeleteAll": {
                     "target": "com.amazonaws.workdocs#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Flag to request removal of all labels from the specified resource.</p>",
                         "smithy.api#httpQuery": "deleteAll"
                     }
@@ -1862,6 +1887,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.workdocs#DeleteNotificationSubscriptionRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1911,6 +1939,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.workdocs#DeleteUserRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2047,6 +2078,7 @@
                 "IncludeIndirectActivities": {
                     "target": "com.amazonaws.workdocs#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Includes indirect activities. An indirect activity results from a direct activity\n            performed on a parent resource. For example, sharing a parent folder (the direct\n            activity) shares all of the subfolders and documents within the parent folder (the\n            indirect activity).</p>",
                         "smithy.api#httpQuery": "includeIndirectActivities"
                     }
@@ -3546,6 +3578,7 @@
                 "IncludeCustomMetadata": {
                     "target": "com.amazonaws.workdocs#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set this to <code>TRUE</code> to include custom metadata in the response.</p>",
                         "smithy.api#httpQuery": "includeCustomMetadata"
                     }
@@ -3645,6 +3678,7 @@
                 "IncludeCustomMetadata": {
                     "target": "com.amazonaws.workdocs#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set this to TRUE to include custom metadata in the response.</p>",
                         "smithy.api#httpQuery": "includeCustomMetadata"
                     }
@@ -3815,6 +3849,7 @@
                 "IncludeCustomMetadata": {
                     "target": "com.amazonaws.workdocs#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to TRUE to include custom metadata in the response.</p>",
                         "smithy.api#httpQuery": "includeCustomMetadata"
                     }
@@ -4208,7 +4243,6 @@
         "com.amazonaws.workdocs#LimitType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 999
@@ -4292,6 +4326,7 @@
                 "SendEmail": {
                     "target": "com.amazonaws.workdocs#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Boolean value to indicate an email notification should be sent to the\n            receipients.</p>"
                     }
                 },
@@ -4396,7 +4431,6 @@
         "com.amazonaws.workdocs#PositiveIntegerType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -4405,7 +4439,6 @@
         "com.amazonaws.workdocs#PositiveSizeType": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -4488,6 +4521,9 @@
             "input": {
                 "target": "com.amazonaws.workdocs#RemoveAllResourcePermissionsRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.workdocs#FailedDependencyException"
@@ -4535,6 +4571,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.workdocs#RemoveResourcePermissionRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -4988,10 +5027,7 @@
             }
         },
         "com.amazonaws.workdocs#SizeType": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.workdocs#StorageLimitExceededException": {
             "type": "structure",
@@ -5195,6 +5231,9 @@
             "input": {
                 "target": "com.amazonaws.workdocs#UpdateDocumentRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.workdocs#ConcurrentModificationException"
@@ -5279,6 +5318,9 @@
             "input": {
                 "target": "com.amazonaws.workdocs#UpdateDocumentVersionRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.workdocs#ConcurrentModificationException"
@@ -5352,6 +5394,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.workdocs#UpdateFolderRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {

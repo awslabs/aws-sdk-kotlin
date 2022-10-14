@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -51,24 +51,6 @@
         },
         "com.amazonaws.amplify#Amplify": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Amplify",
-                    "arnNamespace": "amplify",
-                    "cloudFormationName": "Amplify",
-                    "cloudTrailEventSource": "amplify.amazonaws.com",
-                    "endpointPrefix": "amplify"
-                },
-                "aws.auth#sigv4": {
-                    "name": "amplify"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>Amplify enables developers to develop and deploy cloud-powered mobile and web apps.\n            The Amplify Console provides a continuous delivery and hosting service for web\n            applications. For more information, see the <a href=\"https://docs.aws.amazon.com/amplify/latest/userguide/welcome.html\">Amplify Console User Guide</a>. The\n            Amplify Framework is a comprehensive set of SDKs, libraries, tools, and documentation\n            for client app development. For more information, see the <a href=\"https://docs.amplify.aws/\">Amplify Framework.</a>\n         </p>",
-                "smithy.api#title": "AWS Amplify",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://amplify.amazonaws.com"
-                }
-            },
             "version": "2017-07-25",
             "operations": [
                 {
@@ -182,7 +164,25 @@
                 {
                     "target": "com.amazonaws.amplify#UpdateWebhook"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Amplify",
+                    "arnNamespace": "amplify",
+                    "cloudFormationName": "Amplify",
+                    "cloudTrailEventSource": "amplify.amazonaws.com",
+                    "endpointPrefix": "amplify"
+                },
+                "aws.auth#sigv4": {
+                    "name": "amplify"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>Amplify enables developers to develop and deploy cloud-powered mobile and web apps.\n            The Amplify Console provides a continuous delivery and hosting service for web\n            applications. For more information, see the <a href=\"https://docs.aws.amazon.com/amplify/latest/userguide/welcome.html\">Amplify Console User Guide</a>. The\n            Amplify Framework is a comprehensive set of SDKs, libraries, tools, and documentation\n            for client app development. For more information, see the <a href=\"https://docs.amplify.aws/\">Amplify Framework.</a>\n         </p>",
+                "smithy.api#title": "AWS Amplify",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://amplify.amazonaws.com"
+                }
+            }
         },
         "com.amazonaws.amplify#App": {
             "type": "structure",
@@ -2331,58 +2331,31 @@
             }
         },
         "com.amazonaws.amplify#EnableAutoBranchCreation": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.amplify#EnableAutoBuild": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.amplify#EnableAutoSubDomain": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.amplify#EnableBasicAuth": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.amplify#EnableBranchAutoBuild": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.amplify#EnableBranchAutoDeletion": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.amplify#EnableNotification": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.amplify#EnablePerformanceMode": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.amplify#EnablePullRequestPreview": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.amplify#EndTime": {
             "type": "timestamp"
@@ -3290,6 +3263,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.amplify#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The maximum number of records to list in a single response. </p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3388,6 +3362,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.amplify#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The maximum number of records to list in a single response. </p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3474,6 +3449,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.amplify#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The maximum number of records to list in a single response. </p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3553,6 +3529,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.amplify#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The maximum number of records to list in a single response. </p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3632,6 +3609,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.amplify#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The maximum number of records to list in a single response. </p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3722,6 +3700,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.amplify#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The maximum number of records to list in a single response. </p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3862,6 +3841,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.amplify#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p> The maximum number of records to list in a single response. </p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3914,6 +3894,7 @@
         "com.amazonaws.amplify#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -5387,10 +5368,7 @@
             }
         },
         "com.amazonaws.amplify#Verified": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.amplify#Webhook": {
             "type": "structure",

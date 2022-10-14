@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -96,7 +96,10 @@
             }
         },
         "com.amazonaws.cloudhsm#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cloudhsm#Certificate": {
             "type": "string",
@@ -246,6 +249,7 @@
                 "retryable": {
                     "target": "com.amazonaws.cloudhsm#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if the action can be retried.</p>"
                     }
                 }
@@ -286,6 +290,7 @@
                 "retryable": {
                     "target": "com.amazonaws.cloudhsm#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if the action can be retried.</p>"
                     }
                 }
@@ -1185,6 +1190,7 @@
                 "retryable": {
                     "target": "com.amazonaws.cloudhsm#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates if the action can be retried.</p>"
                     }
                 }

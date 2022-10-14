@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -608,7 +608,10 @@
             }
         },
         "com.amazonaws.servicequotas#GlobalQuota": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.servicequotas#IllegalArgumentException": {
             "type": "structure",
@@ -1214,7 +1217,6 @@
         "com.amazonaws.servicequotas#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -1371,10 +1373,7 @@
             }
         },
         "com.amazonaws.servicequotas#PeriodValue": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.servicequotas#PutServiceQuotaIncreaseRequestIntoTemplate": {
             "type": "operation",
@@ -1465,7 +1464,10 @@
             }
         },
         "com.amazonaws.servicequotas#QuotaAdjustable": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.servicequotas#QuotaArn": {
             "type": "string"
@@ -1528,7 +1530,6 @@
         "com.amazonaws.servicequotas#QuotaValue": {
             "type": "double",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 10000000000
@@ -1728,6 +1729,7 @@
                 "GlobalQuota": {
                     "target": "com.amazonaws.servicequotas#GlobalQuota",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the quota is global.</p>"
                     }
                 },
@@ -1864,12 +1866,14 @@
                 "Adjustable": {
                     "target": "com.amazonaws.servicequotas#QuotaAdjustable",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the quota value can be increased.</p>"
                     }
                 },
                 "GlobalQuota": {
                     "target": "com.amazonaws.servicequotas#GlobalQuota",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the quota is global.</p>"
                     }
                 },
@@ -1944,6 +1948,7 @@
                 "GlobalQuota": {
                     "target": "com.amazonaws.servicequotas#GlobalQuota",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the quota is global.</p>"
                     }
                 }

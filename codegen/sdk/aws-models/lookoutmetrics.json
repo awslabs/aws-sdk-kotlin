@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -169,6 +169,7 @@
                 "AlertSensitivityThreshold": {
                     "target": "com.amazonaws.lookoutmetrics#SensitivityThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum severity for an anomaly to trigger the alert.</p>"
                     }
                 },
@@ -286,6 +287,7 @@
                 "AlertSensitivityThreshold": {
                     "target": "com.amazonaws.lookoutmetrics#SensitivityThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum severity for an anomaly to trigger the alert.</p>"
                     }
                 },
@@ -642,6 +644,7 @@
                 "TotalCount": {
                     "target": "com.amazonaws.lookoutmetrics#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of groups found.</p>"
                     }
                 },
@@ -1033,10 +1036,7 @@
             }
         },
         "com.amazonaws.lookoutmetrics#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.lookoutmetrics#CSVFileCompression": {
             "type": "string",
@@ -1207,6 +1207,7 @@
                 "AlertSensitivityThreshold": {
                     "target": "com.amazonaws.lookoutmetrics#SensitivityThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>An integer from 0 to 100 specifying the alert sensitivity threshold.</p>"
                     }
                 },
@@ -1413,7 +1414,7 @@
                 "Offset": {
                     "target": "com.amazonaws.lookoutmetrics#Offset",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>After an interval ends, the amount of seconds that the detector waits before importing data. Offset is only supported for S3, Redshift, Athena and datasources.</p>"
                     }
                 },
@@ -1628,6 +1629,7 @@
         "com.amazonaws.lookoutmetrics#DatabasePort": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 65535
@@ -1925,7 +1927,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.lookoutmetrics#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The number of items to return in the response.</p>"
                     }
                 },
@@ -2153,7 +2155,7 @@
                 "Offset": {
                     "target": "com.amazonaws.lookoutmetrics#Offset",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>After an interval ends, the amount of seconds that the detector waits before importing data. Offset is only supported for S3, Redshift, Athena and datasources.</p>"
                     }
                 },
@@ -2568,10 +2570,7 @@
             }
         },
         "com.amazonaws.lookoutmetrics#Double": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.lookoutmetrics#ErrorMessage": {
             "type": "string",
@@ -2898,7 +2897,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.lookoutmetrics#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return.</p>"
                     }
                 },
@@ -3027,7 +3026,10 @@
             }
         },
         "com.amazonaws.lookoutmetrics#Integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.lookoutmetrics#InterMetricImpactDetails": {
             "type": "structure",
@@ -3095,6 +3097,7 @@
                 "OccurrenceCount": {
                     "target": "com.amazonaws.lookoutmetrics#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of times that the measure appears.</p>"
                     }
                 }
@@ -3233,7 +3236,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.lookoutmetrics#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results that will be displayed by the request.</p>"
                     }
                 }
@@ -3301,7 +3304,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.lookoutmetrics#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return.</p>"
                     }
                 },
@@ -3395,7 +3398,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.lookoutmetrics#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return.</p>"
                     }
                 },
@@ -3476,6 +3479,7 @@
                 "SensitivityThreshold": {
                     "target": "com.amazonaws.lookoutmetrics#SensitivityThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum severity score for inclusion in the output.</p>",
                         "smithy.api#required": {}
                     }
@@ -3483,7 +3487,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.lookoutmetrics#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return.</p>"
                     }
                 },
@@ -3584,7 +3588,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.lookoutmetrics#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return.</p>"
                     }
                 },
@@ -3682,7 +3686,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.lookoutmetrics#MaxResults",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results to return.</p>"
                     }
                 },
@@ -3767,21 +3771,6 @@
         },
         "com.amazonaws.lookoutmetrics#LookoutMetrics": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "LookoutMetrics",
-                    "arnNamespace": "lookoutmetrics",
-                    "cloudFormationName": "LookoutMetrics",
-                    "cloudTrailEventSource": "lookoutmetrics.amazonaws.com",
-                    "endpointPrefix": "lookoutmetrics"
-                },
-                "aws.auth#sigv4": {
-                    "name": "lookoutmetrics"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>This is the <i>Amazon Lookout for Metrics API Reference</i>. For an introduction to the service\n      with tutorials for getting started, visit <a href=\"https://docs.aws.amazon.com/lookoutmetrics/latest/dev\">Amazon\n        Lookout for Metrics Developer Guide</a>.</p>",
-                "smithy.api#title": "Amazon Lookout for Metrics"
-            },
             "version": "2017-07-25",
             "operations": [
                 {
@@ -3874,11 +3863,27 @@
                 {
                     "target": "com.amazonaws.lookoutmetrics#UpdateMetricSet"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "LookoutMetrics",
+                    "arnNamespace": "lookoutmetrics",
+                    "cloudFormationName": "LookoutMetrics",
+                    "cloudTrailEventSource": "lookoutmetrics.amazonaws.com",
+                    "endpointPrefix": "lookoutmetrics"
+                },
+                "aws.auth#sigv4": {
+                    "name": "lookoutmetrics"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>This is the <i>Amazon Lookout for Metrics API Reference</i>. For an introduction to the service\n      with tutorials for getting started, visit <a href=\"https://docs.aws.amazon.com/lookoutmetrics/latest/dev\">Amazon\n        Lookout for Metrics Developer Guide</a>.</p>",
+                "smithy.api#title": "Amazon Lookout for Metrics"
+            }
         },
         "com.amazonaws.lookoutmetrics#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -3919,7 +3924,6 @@
         "com.amazonaws.lookoutmetrics#MetricChangePercentage": {
             "type": "double",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0.0,
                     "max": 100.0
@@ -3938,6 +3942,7 @@
                 "NumTimeSeries": {
                     "target": "com.amazonaws.lookoutmetrics#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of anomalous metrics for the measure.</p>"
                     }
                 },
@@ -4161,10 +4166,7 @@
             }
         },
         "com.amazonaws.lookoutmetrics#MetricValue": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.lookoutmetrics#MetricValueList": {
             "type": "list",
@@ -4204,6 +4206,7 @@
         "com.amazonaws.lookoutmetrics#Offset": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 432000
@@ -4328,7 +4331,7 @@
                 "DatabasePort": {
                     "target": "com.amazonaws.lookoutmetrics#DatabasePort",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The port number where the database can be accessed.</p>"
                     }
                 },
@@ -4405,7 +4408,7 @@
                 "DatabasePort": {
                     "target": "com.amazonaws.lookoutmetrics#DatabasePort",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The port number where the database can be accessed.</p>"
                     }
                 },
@@ -4611,7 +4614,6 @@
         "com.amazonaws.lookoutmetrics#Score": {
             "type": "double",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0.0,
                     "max": 100.0
@@ -4637,6 +4639,7 @@
         "com.amazonaws.lookoutmetrics#SensitivityThreshold": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -5115,6 +5118,7 @@
                 "AlertSensitivityThreshold": {
                     "target": "com.amazonaws.lookoutmetrics#SensitivityThreshold",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>An integer from 0 to 100 specifying the alert sensitivity threshold.</p>"
                     }
                 },
@@ -5280,7 +5284,7 @@
                 "Offset": {
                     "target": "com.amazonaws.lookoutmetrics#Offset",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>After an interval ends, the amount of seconds that the detector waits before importing data. Offset is only supported for S3, Redshift, Athena and datasources.</p>"
                     }
                 },

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -396,11 +396,15 @@
             }
         },
         "com.amazonaws.xray#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.xray#BorrowCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -638,7 +642,10 @@
             }
         },
         "com.amazonaws.xray#Double": {
-            "type": "double"
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.xray#EC2InstanceId": {
             "type": "string",
@@ -1085,6 +1092,7 @@
         "com.amazonaws.xray#FixedRate": {
             "type": "double",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1
@@ -1329,7 +1337,6 @@
         "com.amazonaws.xray#GetInsightEventsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -1537,7 +1544,6 @@
         "com.amazonaws.xray#GetInsightSummariesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -1877,6 +1883,7 @@
                 "ContainsOldGroupVersions": {
                     "target": "com.amazonaws.xray#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A flag indicating whether the group's filter expression has been consistent, or\n      if the returned service graph may show traces from an older version of the group's filter\n      expression.</p>"
                     }
                 },
@@ -1985,6 +1992,7 @@
                 "ContainsOldGroupVersions": {
                     "target": "com.amazonaws.xray#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A flag indicating whether or not a group's filter expression has been consistent, or if a returned\n            aggregation might show statistics from an older version of the group's filter expression.</p>"
                     }
                 },
@@ -2278,12 +2286,14 @@
                 "Value": {
                     "target": "com.amazonaws.xray#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The value of the entry.</p>"
                     }
                 },
                 "Count": {
                     "target": "com.amazonaws.xray#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The prevalence of the entry.</p>"
                     }
                 }
@@ -2716,7 +2726,10 @@
             }
         },
         "com.amazonaws.xray#Integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.xray#InvalidRequestException": {
             "type": "structure",
@@ -2794,32 +2807,21 @@
             }
         },
         "com.amazonaws.xray#NullableBoolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.xray#NullableDouble": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.xray#NullableInteger": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.xray#NullableLong": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.xray#Priority": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 9999
@@ -2990,6 +2992,7 @@
         "com.amazonaws.xray#RequestCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -3024,6 +3027,7 @@
         "com.amazonaws.xray#ReservoirSize": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -3226,6 +3230,7 @@
         "com.amazonaws.xray#SampledCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -3256,6 +3261,7 @@
                 "Priority": {
                     "target": "com.amazonaws.xray#Priority",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The priority of the sampling rule.</p>",
                         "smithy.api#required": {}
                     }
@@ -3263,6 +3269,7 @@
                 "FixedRate": {
                     "target": "com.amazonaws.xray#FixedRate",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The percentage of matching requests to instrument, after the reservoir is\n      exhausted.</p>",
                         "smithy.api#required": {}
                     }
@@ -3270,6 +3277,7 @@
                 "ReservoirSize": {
                     "target": "com.amazonaws.xray#ReservoirSize",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A fixed number of matching requests to instrument per second, prior to applying the\n      fixed rate. The reservoir is not used directly by services, but applies to all services using the rule collectively.</p>",
                         "smithy.api#required": {}
                     }
@@ -3312,6 +3320,7 @@
                 "Version": {
                     "target": "com.amazonaws.xray#Version",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The version of the sampling rule format (<code>1</code>).</p>",
                         "smithy.api#required": {}
                     }
@@ -3457,18 +3466,21 @@
                 "RequestCount": {
                     "target": "com.amazonaws.xray#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of requests that matched the rule.</p>"
                     }
                 },
                 "BorrowCount": {
                     "target": "com.amazonaws.xray#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of requests recorded with borrowed reservoir quota.</p>"
                     }
                 },
                 "SampledCount": {
                     "target": "com.amazonaws.xray#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of requests recorded.</p>"
                     }
                 }
@@ -3510,6 +3522,7 @@
                 "RequestCount": {
                     "target": "com.amazonaws.xray#RequestCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of requests that matched the rule.</p>",
                         "smithy.api#required": {}
                     }
@@ -3517,6 +3530,7 @@
                 "SampledCount": {
                     "target": "com.amazonaws.xray#SampledCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of requests recorded.</p>",
                         "smithy.api#required": {}
                     }
@@ -3524,6 +3538,7 @@
                 "BorrowCount": {
                     "target": "com.amazonaws.xray#BorrowCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of requests recorded with borrowed reservoir quota.</p>"
                     }
                 }
@@ -3591,6 +3606,7 @@
                 "FixedRate": {
                     "target": "com.amazonaws.xray#Double",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The percentage of matching requests to instrument, after the reservoir is\n      exhausted.</p>"
                     }
                 },
@@ -4312,6 +4328,7 @@
                 "Revision": {
                     "target": "com.amazonaws.xray#Integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The revision number of a trace.</p>"
                     }
                 },
@@ -4630,6 +4647,7 @@
         "com.amazonaws.xray#Version": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1
                 }

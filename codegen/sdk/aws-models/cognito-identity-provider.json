@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -34,24 +34,6 @@
         },
         "com.amazonaws.cognitoidentityprovider#AWSCognitoIdentityProviderService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Cognito Identity Provider",
-                    "arnNamespace": "cognito-idp",
-                    "cloudFormationName": "Cognito",
-                    "cloudTrailEventSource": "cognitoidentityprovider.amazonaws.com",
-                    "endpointPrefix": "cognito-idp"
-                },
-                "aws.auth#sigv4": {
-                    "name": "cognito-idp"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>Using the Amazon Cognito user pools API, you can create a user pool to manage directories and\n            users. You can authenticate a user to obtain tokens related to user identity and access\n            policies.</p>\n        <p>This API reference provides information about user pools in Amazon Cognito user pools.</p>\n        <p>For more information, see the <a href=\"https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html\">Amazon Cognito\n                Documentation</a>.</p>",
-                "smithy.api#title": "Amazon Cognito Identity Provider",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://cognito-idp.amazonaws.com/doc/2016-04-18/"
-                }
-            },
             "version": "2016-04-18",
             "operations": [
                 {
@@ -357,12 +339,29 @@
                 {
                     "target": "com.amazonaws.cognitoidentityprovider#VerifyUserAttribute"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Cognito Identity Provider",
+                    "arnNamespace": "cognito-idp",
+                    "cloudFormationName": "Cognito",
+                    "cloudTrailEventSource": "cognitoidentityprovider.amazonaws.com",
+                    "endpointPrefix": "cognito-idp"
+                },
+                "aws.auth#sigv4": {
+                    "name": "cognito-idp"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<p>Using the Amazon Cognito user pools API, you can create a user pool to manage directories and\n            users. You can authenticate a user to obtain tokens related to user identity and access\n            policies.</p>\n        <p>This API reference provides information about user pools in Amazon Cognito user pools.</p>\n        <p>For more information, see the <a href=\"https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html\">Amazon Cognito\n                Documentation</a>.</p>",
+                "smithy.api#title": "Amazon Cognito Identity Provider",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://cognito-idp.amazonaws.com/doc/2016-04-18/"
+                }
+            }
         },
         "com.amazonaws.cognitoidentityprovider#AccessTokenValidityType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 86400
@@ -384,7 +383,10 @@
             }
         },
         "com.amazonaws.cognitoidentityprovider#AccountTakeoverActionNotifyType": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cognitoidentityprovider#AccountTakeoverActionType": {
             "type": "structure",
@@ -392,6 +394,7 @@
                 "Notify": {
                     "target": "com.amazonaws.cognitoidentityprovider#AccountTakeoverActionNotifyType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Flag specifying whether to send a notification.</p>",
                         "smithy.api#required": {}
                     }
@@ -747,12 +750,14 @@
                 "AllowAdminCreateUserOnly": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to <code>True</code> if only the administrator is allowed to create user profiles.\n            Set to <code>False</code> if users can sign themselves up via an app.</p>"
                     }
                 },
                 "UnusedAccountValidityDays": {
                     "target": "com.amazonaws.cognitoidentityprovider#AdminCreateUserUnusedAccountValidityDaysType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The user account expiration limit, in days, after which a new account that hasn't\n            signed in is no longer usable. To reset the account after that time limit, you must call\n                <code>AdminCreateUser</code> again, specifying <code>\"RESEND\"</code> for the\n                <code>MessageAction</code> parameter. The default value for this parameter is 7. </p>\n        <note>\n            <p>If you set a value for <code>TemporaryPasswordValidityDays</code> in\n                    <code>PasswordPolicy</code>, that value will be used, and\n                    <code>UnusedAccountValidityDays</code> will be no longer be an available\n                parameter for that user pool.</p>\n        </note>"
                     }
                 },
@@ -805,6 +810,7 @@
                 "ForceAliasCreation": {
                     "target": "com.amazonaws.cognitoidentityprovider#ForceAliasCreation",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>This parameter is used only if the <code>phone_number_verified</code> or\n                <code>email_verified</code> attribute is set to <code>True</code>. Otherwise, it is\n            ignored.</p>\n        <p>If this parameter is set to <code>True</code> and the phone number or email address\n            specified in the UserAttributes parameter already exists as an alias with a different\n            user, the API call will migrate the alias from the previous user to the newly created\n            user. The previous user will no longer be able to log in using that alias.</p>\n        <p>If this parameter is set to <code>False</code>, the API throws an\n                <code>AliasExistsException</code> error if the alias already exists. The default\n            value is <code>False</code>.</p>"
                     }
                 },
@@ -848,6 +854,7 @@
         "com.amazonaws.cognitoidentityprovider#AdminCreateUserUnusedAccountValidityDaysType": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 365
@@ -1381,6 +1388,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates that the status is <code>enabled</code>.</p>"
                     }
                 },
@@ -2329,6 +2337,7 @@
                 "Permanent": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>\n            <code>True</code> if the password is permanent, <code>False</code> if it is\n            temporary.</p>"
                     }
                 }
@@ -2798,6 +2807,7 @@
                 "UserDataShared": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>If <code>UserDataShared</code> is <code>true</code>, Amazon Cognito includes user data in the\n            events that it publishes to Amazon Pinpoint analytics.</p>"
                     }
                 }
@@ -3111,7 +3121,6 @@
         "com.amazonaws.cognitoidentityprovider#AuthSessionValidityType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 3,
                     "max": 15
@@ -3130,6 +3139,7 @@
                 "ExpiresIn": {
                     "target": "com.amazonaws.cognitoidentityprovider#IntegerType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The expiration period of the authentication result in seconds.</p>"
                     }
                 },
@@ -3175,7 +3185,10 @@
             }
         },
         "com.amazonaws.cognitoidentityprovider#BooleanType": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cognitoidentityprovider#CSSType": {
             "type": "string"
@@ -3691,6 +3704,7 @@
                 "UserConfirmationNecessary": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether the user confirmation must confirm the device response.</p>"
                     }
                 }
@@ -3924,6 +3938,7 @@
                 "ForceAliasCreation": {
                     "target": "com.amazonaws.cognitoidentityprovider#ForceAliasCreation",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Boolean to be specified to force user confirmation irrespective of existing alias. By\n            default set to <code>False</code>. If this parameter is set to <code>True</code> and the\n            phone number/email used for sign up confirmation already exists as an alias with a\n            different user, the API call will migrate the alias from the previous user to the newly\n            created user being confirmed. If set to <code>False</code>, the API will throw an\n                <b>AliasExistsException</b> error.</p>"
                     }
                 },
@@ -4437,12 +4452,14 @@
                 "GenerateSecret": {
                     "target": "com.amazonaws.cognitoidentityprovider#GenerateSecret",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Boolean to specify whether you want to generate a secret for the user pool client\n            being created.</p>"
                     }
                 },
                 "RefreshTokenValidity": {
                     "target": "com.amazonaws.cognitoidentityprovider#RefreshTokenValidityType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The refresh token time limit. After this limit expires, your user can't use \n        their refresh token. To specify the time unit for <code>RefreshTokenValidity</code> as \n        <code>seconds</code>, <code>minutes</code>, <code>hours</code>, or <code>days</code>, \n        set a <code>TokenValidityUnits</code> value in your API request.</p>\n        <p>For example, when you set <code>RefreshTokenValidity</code> as <code>10</code> and\n        <code>TokenValidityUnits</code> as <code>days</code>, your user can refresh their session\n        and retrieve new access and ID tokens for 10 days.</p>\n        <p>The default time unit for <code>RefreshTokenValidity</code> in an API request is days. \n        You can't set <code>RefreshTokenValidity</code> to 0. If you do, Amazon Cognito overrides the \n        value with the default value of 30 days. <i>Valid range</i> is displayed below \n        in seconds.</p>"
                     }
                 },
@@ -4521,6 +4538,7 @@
                 "AllowedOAuthFlowsUserPoolClient": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to true if the client is allowed to follow the OAuth protocol when interacting\n            with Amazon Cognito user pools.</p>"
                     }
                 },
@@ -5796,12 +5814,14 @@
                 "ChallengeRequiredOnNewDevice": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When true, a remembered device can sign in with device authentication instead of SMS\n            and time-based one-time password (TOTP) factors for multi-factor authentication\n            (MFA).</p>\n         <note> \n            <p>Whether or not <code>ChallengeRequiredOnNewDevice</code> is true, users who sign in\n                with devices that have not been confirmed or remembered must still provide a second\n                factor in a user pool that requires MFA.</p>\n         </note>"
                     }
                 },
                 "DeviceOnlyRememberedOnUserPrompt": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When true, Amazon Cognito doesn't automatically remember a user's device when your app sends a\n            <a href=\"https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_ConfirmDevice.html\">\n            ConfirmDevice</a> API request. In your app, create a prompt for\n            your user to choose whether they want to remember their device. Return the user's choice\n            in an <a href=\"https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UpdateDeviceStatus.html\">\n            UpdateDeviceStatus</a> API request.</p>\n        <p>When <code>DeviceOnlyRememberedOnUserPrompt</code> is <code>false</code>, Amazon\n            Cognito immediately remembers devices that you register in a <code>ConfirmDevice</code>\n            API request.</p>"
                     }
                 }
@@ -6421,7 +6441,10 @@
             }
         },
         "com.amazonaws.cognitoidentityprovider#ForceAliasCreation": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cognitoidentityprovider#ForgetDevice": {
             "type": "operation",
@@ -6610,7 +6633,10 @@
             }
         },
         "com.amazonaws.cognitoidentityprovider#GenerateSecret": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cognitoidentityprovider#GetCSVHeader": {
             "type": "operation",
@@ -7431,7 +7457,6 @@
         "com.amazonaws.cognitoidentityprovider#IdTokenValidityType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 86400
@@ -7693,7 +7718,10 @@
             }
         },
         "com.amazonaws.cognitoidentityprovider#IntegerType": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.cognitoidentityprovider#InternalErrorException": {
             "type": "structure",
@@ -8190,7 +8218,6 @@
         "com.amazonaws.cognitoidentityprovider#ListProvidersLimitType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 60
@@ -8235,6 +8262,7 @@
         "com.amazonaws.cognitoidentityprovider#ListResourceServersLimitType": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -8254,6 +8282,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitoidentityprovider#ListResourceServersLimitType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of resource servers to return.</p>"
                     }
                 },
@@ -8377,6 +8406,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitoidentityprovider#PoolQueryLimitType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of import jobs you want the request to return.</p>",
                         "smithy.api#required": {}
                     }
@@ -8460,6 +8490,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitoidentityprovider#QueryLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results you want the request to return when listing the user\n            pool clients.</p>"
                     }
                 },
@@ -8538,6 +8569,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitoidentityprovider#PoolQueryLimitType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results you want the request to return when listing the user\n            pools.</p>",
                         "smithy.api#required": {}
                     }
@@ -8757,7 +8789,10 @@
             }
         },
         "com.amazonaws.cognitoidentityprovider#LongType": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.cognitoidentityprovider#MFAMethodNotFoundException": {
             "type": "structure",
@@ -9025,6 +9060,7 @@
         "com.amazonaws.cognitoidentityprovider#PasswordPolicyMinLengthType": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 6,
                     "max": 99
@@ -9037,36 +9073,42 @@
                 "MinimumLength": {
                     "target": "com.amazonaws.cognitoidentityprovider#PasswordPolicyMinLengthType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum length of the password in the policy that you have set. This value can't\n            be less than 6.</p>"
                     }
                 },
                 "RequireUppercase": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>In the password policy that you have set, refers to whether you have required users to\n            use at least one uppercase letter in their password.</p>"
                     }
                 },
                 "RequireLowercase": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>In the password policy that you have set, refers to whether you have required users to\n            use at least one lowercase letter in their password.</p>"
                     }
                 },
                 "RequireNumbers": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>In the password policy that you have set, refers to whether you have required users to\n            use at least one number in their password.</p>"
                     }
                 },
                 "RequireSymbols": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>In the password policy that you have set, refers to whether you have required users to\n            use at least one symbol in their password.</p>"
                     }
                 },
                 "TemporaryPasswordValidityDays": {
                     "target": "com.amazonaws.cognitoidentityprovider#TemporaryPasswordValidityDaysType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of days a temporary password is valid in the password policy. If the user\n            doesn't sign in during this time, an administrator must reset their password.</p>\n        <note>\n            <p>When you set <code>TemporaryPasswordValidityDays</code> for a user pool, you can\n                no longer set a value for the legacy <code>UnusedAccountValidityDays</code>\n                parameter in that user pool.</p>\n        </note>"
                     }
                 }
@@ -9105,6 +9147,7 @@
         "com.amazonaws.cognitoidentityprovider#PoolQueryLimitType": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 60
@@ -9123,7 +9166,6 @@
         "com.amazonaws.cognitoidentityprovider#PrecedenceType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -9163,6 +9205,7 @@
         "com.amazonaws.cognitoidentityprovider#PriorityType": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 2
@@ -9271,6 +9314,7 @@
         "com.amazonaws.cognitoidentityprovider#QueryLimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 60
@@ -9280,7 +9324,6 @@
         "com.amazonaws.cognitoidentityprovider#QueryLimitType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 60
@@ -9324,6 +9367,7 @@
                 "Priority": {
                     "target": "com.amazonaws.cognitoidentityprovider#PriorityType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A positive integer specifying priority of a method with 1 being the highest\n            priority.</p>",
                         "smithy.api#required": {}
                     }
@@ -9353,6 +9397,7 @@
         "com.amazonaws.cognitoidentityprovider#RefreshTokenValidityType": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 315360000
@@ -9971,12 +10016,14 @@
                 "Enabled": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether SMS text message MFA is activated. If an MFA type is activated for a\n            user, the user will be prompted for MFA during all sign-in attempts, unless device\n            tracking is turned on and the device has been trusted.</p>"
                     }
                 },
                 "PreferredMfa": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether SMS is the preferred MFA method.</p>"
                     }
                 }
@@ -10003,21 +10050,21 @@
                 "DeveloperOnlyAttribute": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<note>\n            <p>You should use <a href=\"https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UserPoolClientType.html#CognitoUserPools-Type-UserPoolClientType-WriteAttributes\">WriteAttributes</a> in the user pool client to control how attributes can\n                be mutated for new use cases instead of using\n                <code>DeveloperOnlyAttribute</code>.</p>\n        </note>\n        <p>Specifies whether the attribute type is developer only. This attribute can only be\n            modified by an administrator. Users won't be able to modify this attribute using their\n            access token. For example, <code>DeveloperOnlyAttribute</code> can be modified using\n            AdminUpdateUserAttributes but can't be updated using UpdateUserAttributes.</p>"
                     }
                 },
                 "Mutable": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Specifies whether the value of the attribute can be changed.</p>\n        <p>For any user pool attribute that is mapped to an IdP attribute, you must set this\n            parameter to <code>true</code>. Amazon Cognito updates mapped attributes when users sign in to\n            your application through an IdP. If an attribute is immutable, Amazon Cognito throws an error\n            when it attempts to update the attribute. For more information, see <a href=\"https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html\">Specifying Identity Provider Attribute Mappings for Your User\n                Pool</a>.</p>"
                     }
                 },
                 "Required": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Specifies whether a user pool attribute is required. If the attribute is required and\n            the user doesn't provide a value, registration or sign-in will fail.</p>"
                     }
                 },
@@ -10642,6 +10689,7 @@
                 "UserConfirmed": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A response from the server indicating that a user registration has been\n            confirmed.</p>",
                         "smithy.api#required": {}
                     }
@@ -10762,6 +10810,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether software token MFA is activated.</p>"
                     }
                 }
@@ -10776,12 +10825,14 @@
                 "Enabled": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether software token MFA is activated. If an MFA type is activated for a\n            user, the user will be prompted for MFA during all sign-in attempts, unless device\n            tracking is turned on and the device has been trusted.</p>"
                     }
                 },
                 "PreferredMfa": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether software token MFA is the preferred MFA method.</p>"
                     }
                 }
@@ -11043,6 +11094,7 @@
         "com.amazonaws.cognitoidentityprovider#TemporaryPasswordValidityDaysType": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 365
@@ -11938,6 +11990,7 @@
                 "RefreshTokenValidity": {
                     "target": "com.amazonaws.cognitoidentityprovider#RefreshTokenValidityType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The refresh token time limit. After this limit expires, your user can't use \n        their refresh token. To specify the time unit for <code>RefreshTokenValidity</code> as \n        <code>seconds</code>, <code>minutes</code>, <code>hours</code>, or <code>days</code>, \n        set a <code>TokenValidityUnits</code> value in your API request.</p>\n        <p>For example, when you set <code>RefreshTokenValidity</code> as <code>10</code> and\n        <code>TokenValidityUnits</code> as <code>days</code>, your user can refresh their session\n        and retrieve new access and ID tokens for 10 days.</p>\n        <p>The default time unit for <code>RefreshTokenValidity</code> in an API request is days. \n        You can't set <code>RefreshTokenValidity</code> to 0. If you do, Amazon Cognito overrides the \n        value with the default value of 30 days. <i>Valid range</i> is displayed below \n        in seconds.</p>"
                     }
                 },
@@ -12016,6 +12069,7 @@
                 "AllowedOAuthFlowsUserPoolClient": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to true if the client is allowed to follow the OAuth protocol when interacting\n            with Amazon Cognito user pools.</p>"
                     }
                 },
@@ -12442,18 +12496,21 @@
                 "ImportedUsers": {
                     "target": "com.amazonaws.cognitoidentityprovider#LongType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of users that were successfully imported.</p>"
                     }
                 },
                 "SkippedUsers": {
                     "target": "com.amazonaws.cognitoidentityprovider#LongType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of users that were skipped.</p>"
                     }
                 },
                 "FailedUsers": {
                     "target": "com.amazonaws.cognitoidentityprovider#LongType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of users that couldn't be imported.</p>"
                     }
                 },
@@ -12636,6 +12693,7 @@
                 "RefreshTokenValidity": {
                     "target": "com.amazonaws.cognitoidentityprovider#RefreshTokenValidityType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The refresh token time limit. After this limit expires, your user can't use \n        their refresh token. To specify the time unit for <code>RefreshTokenValidity</code> as \n        <code>seconds</code>, <code>minutes</code>, <code>hours</code>, or <code>days</code>, \n        set a <code>TokenValidityUnits</code> value in your API request.</p>\n        <p>For example, when you set <code>RefreshTokenValidity</code> as <code>10</code> and\n        <code>TokenValidityUnits</code> as <code>days</code>, your user can refresh their session\n        and retrieve new access and ID tokens for 10 days.</p>\n        <p>The default time unit for <code>RefreshTokenValidity</code> in an API request is days. \n        You can't set <code>RefreshTokenValidity</code> to 0. If you do, Amazon Cognito overrides the \n        value with the default value of 30 days. <i>Valid range</i> is displayed below \n        in seconds.</p>"
                     }
                 },
@@ -12714,7 +12772,7 @@
                 "AllowedOAuthFlowsUserPoolClient": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>Set to true if the client is allowed to follow the OAuth protocol when interacting\n            with Amazon Cognito user pools.</p>"
                     }
                 },
@@ -13004,6 +13062,7 @@
                 "EstimatedNumberOfUsers": {
                     "target": "com.amazonaws.cognitoidentityprovider#IntegerType",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A number estimating the size of the user pool.</p>"
                     }
                 },
@@ -13149,6 +13208,7 @@
                 "Enabled": {
                     "target": "com.amazonaws.cognitoidentityprovider#BooleanType",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies whether the user is enabled.</p>"
                     }
                 },
@@ -13510,10 +13570,7 @@
             }
         },
         "com.amazonaws.cognitoidentityprovider#WrappedBooleanType": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         }
     }
 }

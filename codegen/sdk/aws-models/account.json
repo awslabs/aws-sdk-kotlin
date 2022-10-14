@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.account#AccessDeniedException": {
             "type": "structure",
@@ -19,6 +19,15 @@
         },
         "com.amazonaws.account#Account": {
             "type": "service",
+            "version": "2021-02-01",
+            "resources": [
+                {
+                    "target": "com.amazonaws.account#AlternateContactResource"
+                },
+                {
+                    "target": "com.amazonaws.account#ContactInformationResource"
+                }
+            ],
             "traits": {
                 "aws.api#service": {
                     "sdkId": "Account",
@@ -40,16 +49,7 @@
                     "EventSource"
                 ],
                 "smithy.api#title": "AWS Account"
-            },
-            "version": "2021-02-01",
-            "resources": [
-                {
-                    "target": "com.amazonaws.account#AlternateContactResource"
-                },
-                {
-                    "target": "com.amazonaws.account#ContactInformationResource"
-                }
-            ]
+            }
         },
         "com.amazonaws.account#AccountId": {
             "type": "string",

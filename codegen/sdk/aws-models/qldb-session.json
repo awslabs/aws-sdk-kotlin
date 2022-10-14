@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -270,12 +270,14 @@
                 "ReadIOs": {
                     "target": "com.amazonaws.qldbsession#ReadIOs",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of read I/O requests that the command made.</p>"
                     }
                 },
                 "WriteIOs": {
                     "target": "com.amazonaws.qldbsession#WriteIOs",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of write I/O requests that the command made.</p>"
                     }
                 }
@@ -382,7 +384,10 @@
             }
         },
         "com.amazonaws.qldbsession#ProcessingTimeMilliseconds": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.qldbsession#QLDBSession": {
             "type": "service",
@@ -421,7 +426,10 @@
             }
         },
         "com.amazonaws.qldbsession#ReadIOs": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.qldbsession#SendCommand": {
             "type": "operation",
@@ -648,6 +656,7 @@
                 "ProcessingTimeMilliseconds": {
                     "target": "com.amazonaws.qldbsession#ProcessingTimeMilliseconds",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The amount of time that QLDB spent on processing the command, measured in\n         milliseconds.</p>"
                     }
                 }
@@ -693,7 +702,10 @@
             }
         },
         "com.amazonaws.qldbsession#WriteIOs": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         }
     }
 }

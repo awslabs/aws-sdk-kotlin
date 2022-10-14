@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.workspacesweb#ARN": {
             "type": "string",
@@ -13,21 +13,6 @@
         },
         "com.amazonaws.workspacesweb#AWSErmineControlPlaneService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "WorkSpaces Web",
-                    "arnNamespace": "workspaces-web",
-                    "cloudFormationName": "WorkSpacesWeb",
-                    "cloudTrailEventSource": "workspaces-web.amazonaws.com",
-                    "endpointPrefix": "workspaces-web"
-                },
-                "aws.auth#sigv4": {
-                    "name": "workspaces-web"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>WorkSpaces Web is a low cost, fully managed WorkSpace built specifically to facilitate\n         secure, web-based workloads. WorkSpaces Web makes it easy for customers to safely provide\n         their employees with access to internal websites and SaaS web applications without the\n         administrative burden of appliances or specialized client software. WorkSpaces Web provides\n         simple policy tools tailored for user interactions, while offloading common tasks like\n         capacity management, scaling, and maintaining browser images.</p>",
-                "smithy.api#title": "Amazon WorkSpaces Web"
-            },
             "version": "2020-07-08",
             "operations": [
                 {
@@ -162,7 +147,22 @@
                 {
                     "target": "com.amazonaws.workspacesweb#UpdateUserSettings"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "WorkSpaces Web",
+                    "arnNamespace": "workspaces-web",
+                    "cloudFormationName": "WorkSpacesWeb",
+                    "cloudTrailEventSource": "workspaces-web.amazonaws.com",
+                    "endpointPrefix": "workspaces-web"
+                },
+                "aws.auth#sigv4": {
+                    "name": "workspaces-web"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>WorkSpaces Web is a low cost, fully managed WorkSpace built specifically to facilitate\n         secure, web-based workloads. WorkSpaces Web makes it easy for customers to safely provide\n         their employees with access to internal websites and SaaS web applications without the\n         administrative burden of appliances or specialized client software. WorkSpaces Web provides\n         simple policy tools tailored for user interactions, while offloading common tasks like\n         capacity management, scaling, and maintaining browser images.</p>",
+                "smithy.api#title": "Amazon WorkSpaces Web"
+            }
         },
         "com.amazonaws.workspacesweb#AccessDeniedException": {
             "type": "structure",
@@ -1793,7 +1793,6 @@
         "com.amazonaws.workspacesweb#DisconnectTimeoutInMinutes": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 600
@@ -2456,7 +2455,6 @@
         "com.amazonaws.workspacesweb#IdleDisconnectTimeoutInMinutes": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 60
@@ -2472,6 +2470,7 @@
                 "retryAfterSeconds": {
                     "target": "com.amazonaws.workspacesweb#RetryAfterSeconds",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Advice to clients on when the call can be safely retried.</p>",
                         "smithy.api#httpHeader": "Retry-After"
                     }
@@ -3081,7 +3080,6 @@
         "com.amazonaws.workspacesweb#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -3397,7 +3395,10 @@
             "type": "string"
         },
         "com.amazonaws.workspacesweb#RetryAfterSeconds": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.workspacesweb#SamlMetadata": {
             "type": "string",
@@ -3674,6 +3675,7 @@
                 "retryAfterSeconds": {
                     "target": "com.amazonaws.workspacesweb#RetryAfterSeconds",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Advice to clients on when the call can be safely retried.</p>",
                         "smithy.api#httpHeader": "Retry-After"
                     }

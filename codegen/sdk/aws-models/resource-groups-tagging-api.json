@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -66,10 +66,7 @@
             }
         },
         "com.amazonaws.resourcegroupstaggingapi#ComplianceStatus": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.resourcegroupstaggingapi#ConcurrentModificationException": {
             "type": "structure",
@@ -182,10 +179,7 @@
             }
         },
         "com.amazonaws.resourcegroupstaggingapi#ExcludeCompliantResources": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.resourcegroupstaggingapi#FailedResourcesMap": {
             "type": "map",
@@ -202,6 +196,7 @@
                 "StatusCode": {
                     "target": "com.amazonaws.resourcegroupstaggingapi#StatusCode",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The HTTP status code of the common error.</p>"
                     }
                 },
@@ -571,10 +566,7 @@
             }
         },
         "com.amazonaws.resourcegroupstaggingapi#IncludeComplianceDetails": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.resourcegroupstaggingapi#InternalServiceException": {
             "type": "structure",
@@ -606,7 +598,6 @@
         "com.amazonaws.resourcegroupstaggingapi#MaxResultsGetComplianceSummary": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -614,7 +605,10 @@
             }
         },
         "com.amazonaws.resourcegroupstaggingapi#NonCompliantResources": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.resourcegroupstaggingapi#PaginationToken": {
             "type": "string",
@@ -696,21 +690,6 @@
         },
         "com.amazonaws.resourcegroupstaggingapi#ResourceGroupsTaggingAPI_20170126": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Resource Groups Tagging API",
-                    "arnNamespace": "tagging",
-                    "cloudFormationName": "ResourceGroupsTaggingAPI",
-                    "cloudTrailEventSource": "resourcegroupstaggingapi.amazonaws.com",
-                    "endpointPrefix": "tagging"
-                },
-                "aws.auth#sigv4": {
-                    "name": "tagging"
-                },
-                "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<fullname>Resource Groups Tagging API</fullname>",
-                "smithy.api#title": "AWS Resource Groups Tagging API"
-            },
             "version": "2017-01-26",
             "operations": [
                 {
@@ -737,7 +716,22 @@
                 {
                     "target": "com.amazonaws.resourcegroupstaggingapi#UntagResources"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Resource Groups Tagging API",
+                    "arnNamespace": "tagging",
+                    "cloudFormationName": "ResourceGroupsTaggingAPI",
+                    "cloudTrailEventSource": "resourcegroupstaggingapi.amazonaws.com",
+                    "endpointPrefix": "tagging"
+                },
+                "aws.auth#sigv4": {
+                    "name": "tagging"
+                },
+                "aws.protocols#awsJson1_1": {},
+                "smithy.api#documentation": "<fullname>Resource Groups Tagging API</fullname>",
+                "smithy.api#title": "AWS Resource Groups Tagging API"
+            }
         },
         "com.amazonaws.resourcegroupstaggingapi#ResourceTagMapping": {
             "type": "structure",
@@ -778,10 +772,7 @@
             }
         },
         "com.amazonaws.resourcegroupstaggingapi#ResourcesPerPage": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.resourcegroupstaggingapi#S3Bucket": {
             "type": "string",
@@ -848,7 +839,10 @@
             "type": "string"
         },
         "com.amazonaws.resourcegroupstaggingapi#StatusCode": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.resourcegroupstaggingapi#Summary": {
             "type": "structure",
@@ -886,6 +880,7 @@
                 "NonCompliantResources": {
                     "target": "com.amazonaws.resourcegroupstaggingapi#NonCompliantResources",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The count of noncompliant resources.</p>"
                     }
                 }
@@ -1097,10 +1092,7 @@
             }
         },
         "com.amazonaws.resourcegroupstaggingapi#TagsPerPage": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.resourcegroupstaggingapi#TargetId": {
             "type": "string",

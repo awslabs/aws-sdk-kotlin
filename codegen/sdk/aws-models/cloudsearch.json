@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -430,6 +430,7 @@
                 "Options": {
                     "target": "com.amazonaws.cloudsearch#MultiAZ",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The availability options configured for the domain.</p>",
                         "smithy.api#required": {}
                     }
@@ -461,10 +462,7 @@
             }
         },
         "com.amazonaws.cloudsearch#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cloudsearch#BuildSuggesters": {
             "type": "operation",
@@ -1966,12 +1964,14 @@
                 "SearchPartitionCount": {
                     "target": "com.amazonaws.cloudsearch#PartitionCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of partitions across which the search index is spread.</p>"
                     }
                 },
                 "SearchInstanceCount": {
                     "target": "com.amazonaws.cloudsearch#InstanceCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of search instances that are available to process search requests.</p>"
                     }
                 },
@@ -1993,10 +1993,7 @@
             }
         },
         "com.amazonaws.cloudsearch#Double": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.cloudsearch#DoubleArrayOptions": {
             "type": "structure",
@@ -2396,6 +2393,7 @@
         "com.amazonaws.cloudsearch#InstanceCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -2590,12 +2588,14 @@
                 "MaximumReplicationCount": {
                     "target": "com.amazonaws.cloudsearch#MaximumReplicationCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#required": {}
                     }
                 },
                 "MaximumPartitionCount": {
                     "target": "com.amazonaws.cloudsearch#MaximumPartitionCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#required": {}
                     }
                 }
@@ -2603,6 +2603,9 @@
         },
         "com.amazonaws.cloudsearch#ListDomainNames": {
             "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
             "output": {
                 "target": "com.amazonaws.cloudsearch#ListDomainNamesResponse"
             },
@@ -2709,14 +2712,12 @@
             }
         },
         "com.amazonaws.cloudsearch#Long": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.cloudsearch#MaximumPartitionCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -2725,13 +2726,17 @@
         "com.amazonaws.cloudsearch#MaximumReplicationCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1
                 }
             }
         },
         "com.amazonaws.cloudsearch#MultiAZ": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cloudsearch#OptionState": {
             "type": "string",
@@ -2777,6 +2782,7 @@
                 "UpdateVersion": {
                     "target": "com.amazonaws.cloudsearch#UIntValue",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>A unique integer that indicates when this option was last updated.</p>"
                     }
                 },
@@ -2801,6 +2807,7 @@
         "com.amazonaws.cloudsearch#PartitionCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#documentation": "<p>The number of partitions used to hold the domain's index.</p>",
                 "smithy.api#range": {
                     "min": 1
@@ -2941,12 +2948,14 @@
                 "DesiredReplicationCount": {
                     "target": "com.amazonaws.cloudsearch#UIntValue",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of replicas you want to preconfigure for each index partition.</p>"
                     }
                 },
                 "DesiredPartitionCount": {
                     "target": "com.amazonaws.cloudsearch#UIntValue",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of partitions you want to preconfigure for your domain. Only valid when\n    you select <code>m2.2xlarge</code> as the desired instance type.</p>"
                     }
                 }
@@ -3184,6 +3193,7 @@
         "com.amazonaws.cloudsearch#UIntValue": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -140,12 +140,14 @@
                 "applicationCreationDate": {
                     "target": "com.amazonaws.iotfleethub#Timestamp",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The date (in Unix epoch time) when the web application was created.</p>"
                     }
                 },
                 "applicationLastUpdateDate": {
                     "target": "com.amazonaws.iotfleethub#Timestamp",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The date (in Unix epoch time) when the web application was last updated.</p>"
                     }
                 },
@@ -428,6 +430,7 @@
                 "applicationCreationDate": {
                     "target": "com.amazonaws.iotfleethub#Timestamp",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The date (in Unix epoch time) when the application was created.</p>",
                         "smithy.api#required": {}
                     }
@@ -435,6 +438,7 @@
                 "applicationLastUpdateDate": {
                     "target": "com.amazonaws.iotfleethub#Timestamp",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The date (in Unix epoch time) when the application was last updated.</p>",
                         "smithy.api#required": {}
                     }
@@ -786,7 +790,10 @@
             }
         },
         "com.amazonaws.iotfleethub#Timestamp": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.iotfleethub#UntagResource": {
             "type": "operation",

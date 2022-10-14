@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -179,10 +179,7 @@
             }
         },
         "com.amazonaws.cognitoidentity#ClassicFlow": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.cognitoidentity#CognitoIdentityProvider": {
             "type": "structure",
@@ -202,7 +199,7 @@
                 "ServerSideTokenCheck": {
                     "target": "com.amazonaws.cognitoidentity#CognitoIdentityProviderTokenCheck",
                     "traits": {
-                        "smithy.api#box": {},
+                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>TRUE if server-side token validation is enabled for the identity provider’s\n         token.</p>\n         <p>Once you set <code>ServerSideTokenCheck</code> to TRUE for an identity pool, that\n         identity pool will check with the integrated user pools to make sure that the user has not\n         been globally signed out or deleted before the identity pool provides an OIDC token or AWS\n         credentials for the user.</p>\n         <p>If the user is signed out or deleted, the identity pool will return a 400 Not\n         Authorized error.</p>"
                     }
                 }
@@ -238,7 +235,10 @@
             }
         },
         "com.amazonaws.cognitoidentity#CognitoIdentityProviderTokenCheck": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cognitoidentity#ConcurrentModificationException": {
             "type": "structure",
@@ -301,6 +301,7 @@
                 "AllowUnauthenticatedIdentities": {
                     "target": "com.amazonaws.cognitoidentity#IdentityPoolUnauthenticated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>TRUE if the identity pool supports unauthenticated logins.</p>",
                         "smithy.api#required": {}
                     }
@@ -443,6 +444,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.cognitoidentity#DeleteIdentityPoolInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1132,7 +1136,10 @@
             }
         },
         "com.amazonaws.cognitoidentity#HideDisabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cognitoidentity#IdentitiesList": {
             "type": "list",
@@ -1214,6 +1221,7 @@
                 "AllowUnauthenticatedIdentities": {
                     "target": "com.amazonaws.cognitoidentity#IdentityPoolUnauthenticated",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>TRUE if the identity pool supports unauthenticated logins.</p>",
                         "smithy.api#required": {}
                     }
@@ -1321,7 +1329,10 @@
             }
         },
         "com.amazonaws.cognitoidentity#IdentityPoolUnauthenticated": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.cognitoidentity#IdentityPoolsList": {
             "type": "list",
@@ -1477,6 +1488,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitoidentity#QueryLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of identities to return.</p>",
                         "smithy.api#required": {}
                     }
@@ -1490,6 +1502,7 @@
                 "HideDisabled": {
                     "target": "com.amazonaws.cognitoidentity#HideDisabled",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>An optional boolean parameter that allows you to hide disabled identities. If\n         omitted, the ListIdentities API will include disabled identities in the response.</p>"
                     }
                 }
@@ -1565,6 +1578,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitoidentity#QueryLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of identities to return.</p>",
                         "smithy.api#required": {}
                     }
@@ -1730,6 +1744,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.cognitoidentity#QueryLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of identities to return.</p>"
                     }
                 },
@@ -1994,6 +2009,7 @@
         "com.amazonaws.cognitoidentity#QueryLimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 60
@@ -2145,6 +2161,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.cognitoidentity#SetIdentityPoolRolesInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2366,7 +2385,6 @@
         "com.amazonaws.cognitoidentity#TokenDuration": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 86400
@@ -2393,6 +2411,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.cognitoidentity#UnlinkDeveloperIdentityInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2458,6 +2479,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.cognitoidentity#UnlinkIdentityInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -2640,10 +2664,7 @@
             }
         },
         "com.amazonaws.cognitoidentity#UseDefaults": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         }
     }
 }

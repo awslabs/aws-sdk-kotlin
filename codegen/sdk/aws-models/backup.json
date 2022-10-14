@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -833,6 +833,7 @@
                 "NumberOfRecoveryPoints": {
                     "target": "com.amazonaws.backup#Long2",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of recovery points that are stored in a backup vault.</p>"
                     }
                 },
@@ -872,13 +873,13 @@
             }
         },
         "com.amazonaws.backup#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.backup#Boolean2": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.backup#CalculatedLifecycle": {
             "type": "structure",
@@ -1716,21 +1717,6 @@
         },
         "com.amazonaws.backup#CryoControllerUserManager": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "Backup",
-                    "arnNamespace": "backup",
-                    "cloudFormationName": "Backup",
-                    "cloudTrailEventSource": "backup.amazonaws.com",
-                    "endpointPrefix": "backup"
-                },
-                "aws.auth#sigv4": {
-                    "name": "backup"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<fullname>Backup</fullname>\n         <p>Backup is a unified backup service designed to protect Amazon Web Services\n         services and their associated data. Backup simplifies the creation, migration,\n         restoration, and deletion of backups, while also providing reporting and\n         auditing.</p>",
-                "smithy.api#title": "AWS Backup"
-            },
             "version": "2018-11-15",
             "operations": [
                 {
@@ -1931,7 +1917,22 @@
                 {
                     "target": "com.amazonaws.backup#UpdateReportPlan"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "Backup",
+                    "arnNamespace": "backup",
+                    "cloudFormationName": "Backup",
+                    "cloudTrailEventSource": "backup.amazonaws.com",
+                    "endpointPrefix": "backup"
+                },
+                "aws.auth#sigv4": {
+                    "name": "backup"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<fullname>Backup</fullname>\n         <p>Backup is a unified backup service designed to protect Amazon Web Services\n         services and their associated data. Backup simplifies the creation, migration,\n         restoration, and deletion of backups, while also providing reporting and\n         auditing.</p>",
+                "smithy.api#title": "AWS Backup"
+            }
         },
         "com.amazonaws.backup#DeleteBackupPlan": {
             "type": "operation",
@@ -2681,6 +2682,7 @@
                 "NumberOfRecoveryPoints": {
                     "target": "com.amazonaws.backup#Long2",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of recovery points that are stored in a backup vault.</p>"
                     }
                 },
@@ -3132,6 +3134,7 @@
                 "IsEncrypted": {
                     "target": "com.amazonaws.backup#Boolean2",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean value that is returned as <code>TRUE</code> if the specified recovery point is\n         encrypted, or <code>FALSE</code> if the recovery point is not encrypted.</p>"
                     }
                 },
@@ -3573,6 +3576,7 @@
                 "NumberOfControls": {
                     "target": "com.amazonaws.backup#integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of controls contained by the framework.</p>"
                     }
                 },
@@ -4317,7 +4321,10 @@
             }
         },
         "com.amazonaws.backup#IsEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.backup#Lifecycle": {
             "type": "structure",
@@ -5716,18 +5723,17 @@
             }
         },
         "com.amazonaws.backup#Long": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.backup#Long2": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.backup#MaxFrameworkInputs": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -5737,7 +5743,6 @@
         "com.amazonaws.backup#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -6105,6 +6110,7 @@
                 "IsEncrypted": {
                     "target": "com.amazonaws.backup#Boolean2",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>A Boolean value that is returned as <code>TRUE</code> if the specified recovery point is\n         encrypted, or <code>FALSE</code> if the recovery point is not encrypted.</p>"
                     }
                 },
@@ -6455,6 +6461,7 @@
                 "NumberOfFrameworks": {
                     "target": "com.amazonaws.backup#integer",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of frameworks a report covers.</p>"
                     }
                 }
@@ -7702,13 +7709,13 @@
             }
         },
         "com.amazonaws.backup#WindowMinutes": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.backup#integer": {
-            "type": "integer"
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.backup#string": {
             "type": "string"

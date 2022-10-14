@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -794,13 +794,13 @@
             }
         },
         "com.amazonaws.alexaforbusiness#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.alexaforbusiness#Boolean2": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.alexaforbusiness#BulletPoint": {
             "type": "string"
@@ -1074,7 +1074,6 @@
         "com.amazonaws.alexaforbusiness#CategoryId": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -5366,7 +5365,6 @@
         "com.amazonaws.alexaforbusiness#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -5374,10 +5372,7 @@
             }
         },
         "com.amazonaws.alexaforbusiness#MaxVolumeLimit": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.alexaforbusiness#MeetingRoomConfiguration": {
             "type": "structure",
@@ -5427,10 +5422,7 @@
             }
         },
         "com.amazonaws.alexaforbusiness#Minutes": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.alexaforbusiness#NameInUseException": {
             "type": "structure",
@@ -7541,7 +7533,6 @@
         "com.amazonaws.alexaforbusiness#SkillListMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 10
@@ -7591,6 +7582,7 @@
                 "SupportsLinking": {
                     "target": "com.amazonaws.alexaforbusiness#Boolean2",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Linking support for a skill.</p>"
                     }
                 },
@@ -7704,6 +7696,7 @@
                 "SupportsLinking": {
                     "target": "com.amazonaws.alexaforbusiness#Boolean2",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Linking support for a skill.</p>"
                     }
                 }
@@ -8089,7 +8082,6 @@
         "com.amazonaws.alexaforbusiness#TimeToLiveInSeconds": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 3600
@@ -8106,10 +8098,7 @@
             }
         },
         "com.amazonaws.alexaforbusiness#TotalCount": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.alexaforbusiness#TrustAnchor": {
             "type": "string",

@@ -1612,8 +1612,6 @@
                 "TextType": {
                     "target": "com.amazonaws.polly#TextType",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "text",
                         "smithy.api#documentation": "<p> Specifies whether the input text is plain text or SSML. The\n      default value is plain text. For more information, see <a href=\"https://docs.aws.amazon.com/polly/latest/dg/ssml.html\">Using\n        SSML</a>.</p>"
                     }
                 },

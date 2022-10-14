@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,21 +31,6 @@
     "shapes": {
         "com.amazonaws.finspace#AWSHabaneroManagementService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "finspace",
-                    "arnNamespace": "finspace",
-                    "cloudFormationName": "Finspace",
-                    "cloudTrailEventSource": "finspace.amazonaws.com",
-                    "endpointPrefix": "finspace"
-                },
-                "aws.auth#sigv4": {
-                    "name": "finspace"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>The FinSpace management service provides the APIs for managing FinSpace environments.</p>",
-                "smithy.api#title": "FinSpace User Environment Management service"
-            },
             "version": "2021-03-12",
             "operations": [
                 {
@@ -72,7 +57,22 @@
                 {
                     "target": "com.amazonaws.finspace#UpdateEnvironment"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "finspace",
+                    "arnNamespace": "finspace",
+                    "cloudFormationName": "Finspace",
+                    "cloudTrailEventSource": "finspace.amazonaws.com",
+                    "endpointPrefix": "finspace"
+                },
+                "aws.auth#sigv4": {
+                    "name": "finspace"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>The FinSpace management service provides the APIs for managing FinSpace environments.</p>",
+                "smithy.api#title": "FinSpace User Environment Management service"
+            }
         },
         "com.amazonaws.finspace#AccessDeniedException": {
             "type": "structure",
@@ -679,6 +679,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspace#ResultLimit",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return in this request.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -790,6 +791,7 @@
         "com.amazonaws.finspace#ResultLimit": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100

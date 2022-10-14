@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -145,10 +145,7 @@
             }
         },
         "com.amazonaws.applicationautoscaling#Cooldown": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.applicationautoscaling#CustomizedMetricSpecification": {
             "type": "structure",
@@ -729,10 +726,7 @@
             }
         },
         "com.amazonaws.applicationautoscaling#DisableScaleIn": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.applicationautoscaling#ErrorMessage": {
             "type": "string"
@@ -806,10 +800,7 @@
             }
         },
         "com.amazonaws.applicationautoscaling#MaxResults": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.applicationautoscaling#MetricAggregationType": {
             "type": "string",
@@ -871,10 +862,7 @@
             "type": "string"
         },
         "com.amazonaws.applicationautoscaling#MetricScale": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.applicationautoscaling#MetricStatistic": {
             "type": "string",
@@ -998,10 +986,7 @@
             "type": "string"
         },
         "com.amazonaws.applicationautoscaling#MinAdjustmentMagnitude": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.applicationautoscaling#ObjectNotFoundException": {
             "type": "structure",
@@ -1344,10 +1329,7 @@
             "members": {}
         },
         "com.amazonaws.applicationautoscaling#ResourceCapacity": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.applicationautoscaling#ResourceId": {
             "type": "string",
@@ -1679,10 +1661,7 @@
             }
         },
         "com.amazonaws.applicationautoscaling#ScalingAdjustment": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.applicationautoscaling#ScalingPolicies": {
             "type": "list",
@@ -1766,10 +1745,7 @@
             }
         },
         "com.amazonaws.applicationautoscaling#ScalingSuspended": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.applicationautoscaling#ScheduledAction": {
             "type": "structure",

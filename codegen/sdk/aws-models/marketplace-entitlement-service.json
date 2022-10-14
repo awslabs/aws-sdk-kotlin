@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -54,16 +54,10 @@
             }
         },
         "com.amazonaws.marketplaceentitlementservice#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.marketplaceentitlementservice#Double": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.marketplaceentitlementservice#Entitlement": {
             "type": "structure",
@@ -264,10 +258,7 @@
             }
         },
         "com.amazonaws.marketplaceentitlementservice#Integer": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.marketplaceentitlementservice#InternalServiceErrorException": {
             "type": "structure",

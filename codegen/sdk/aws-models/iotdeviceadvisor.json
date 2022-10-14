@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -592,7 +592,10 @@
             }
         },
         "com.amazonaws.iotdeviceadvisor#IntendedForQualificationBoolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.iotdeviceadvisor#InternalServerException": {
             "type": "structure",
@@ -612,21 +615,6 @@
         },
         "com.amazonaws.iotdeviceadvisor#IotSenateService": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "IotDeviceAdvisor",
-                    "arnNamespace": "iotdeviceadvisor",
-                    "cloudFormationName": "IotDeviceAdvisor",
-                    "cloudTrailEventSource": "iotdeviceadvisor.amazonaws.com",
-                    "endpointPrefix": "api.iotdeviceadvisor"
-                },
-                "aws.auth#sigv4": {
-                    "name": "iotdeviceadvisor"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>Amazon Web Services IoT Core Device Advisor is a cloud-based, fully managed test capability for validating IoT\n            devices during device software development. Device Advisor provides pre-built tests that you\n            can use to validate IoT devices for reliable and secure connectivity with Amazon Web Services IoT Core\n            before deploying devices to production. By using Device Advisor, you can confirm that your\n            devices can connect to Amazon Web Services IoT Core, follow security best practices and, if applicable,\n            receive software updates from IoT Device Management. You can also download signed\n            qualification reports to submit to the Amazon Web Services Partner Network to get your device\n            qualified for the Amazon Web Services Partner Device Catalog without the need to send your device in\n            and wait for it to be tested.</p>",
-                "smithy.api#title": "AWS IoT Core Device Advisor"
-            },
             "version": "2020-09-18",
             "operations": [
                 {
@@ -671,10 +659,28 @@
                 {
                     "target": "com.amazonaws.iotdeviceadvisor#UpdateSuiteDefinition"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "IotDeviceAdvisor",
+                    "arnNamespace": "iotdeviceadvisor",
+                    "cloudFormationName": "IotDeviceAdvisor",
+                    "cloudTrailEventSource": "iotdeviceadvisor.amazonaws.com",
+                    "endpointPrefix": "api.iotdeviceadvisor"
+                },
+                "aws.auth#sigv4": {
+                    "name": "iotdeviceadvisor"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>Amazon Web Services IoT Core Device Advisor is a cloud-based, fully managed test capability for validating IoT\n            devices during device software development. Device Advisor provides pre-built tests that you\n            can use to validate IoT devices for reliable and secure connectivity with Amazon Web Services IoT Core\n            before deploying devices to production. By using Device Advisor, you can confirm that your\n            devices can connect to Amazon Web Services IoT Core, follow security best practices and, if applicable,\n            receive software updates from IoT Device Management. You can also download signed\n            qualification reports to submit to the Amazon Web Services Partner Network to get your device\n            qualified for the Amazon Web Services Partner Device Catalog without the need to send your device in\n            and wait for it to be tested.</p>",
+                "smithy.api#title": "AWS IoT Core Device Advisor"
+            }
         },
         "com.amazonaws.iotdeviceadvisor#IsLongDurationTestBoolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.iotdeviceadvisor#ListSuiteDefinitions": {
             "type": "operation",
@@ -712,6 +718,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.iotdeviceadvisor#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return at once.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -792,6 +799,7 @@
                 "maxResults": {
                     "target": "com.amazonaws.iotdeviceadvisor#MaxResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return at once.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -880,6 +888,7 @@
         "com.amazonaws.iotdeviceadvisor#MaxResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -896,7 +905,10 @@
             }
         },
         "com.amazonaws.iotdeviceadvisor#ParallelRun": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.iotdeviceadvisor#Protocol": {
             "type": "string",
@@ -1167,12 +1179,14 @@
                 "intendedForQualification": {
                     "target": "com.amazonaws.iotdeviceadvisor#IntendedForQualificationBoolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Gets the tests intended for qualification in a suite.</p>"
                     }
                 },
                 "isLongDurationTest": {
                     "target": "com.amazonaws.iotdeviceadvisor#IsLongDurationTestBoolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Verifies if the test suite is a long duration test. </p>"
                     }
                 },
@@ -1223,12 +1237,14 @@
                 "intendedForQualification": {
                     "target": "com.amazonaws.iotdeviceadvisor#IntendedForQualificationBoolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Specifies if the test suite is intended for qualification.</p>"
                     }
                 },
                 "isLongDurationTest": {
                     "target": "com.amazonaws.iotdeviceadvisor#IsLongDurationTestBoolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p> Verifies if the test suite is a long duration test. </p>"
                     }
                 },
@@ -1291,6 +1307,7 @@
                 "parallelRun": {
                     "target": "com.amazonaws.iotdeviceadvisor#ParallelRun",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>TRUE if multiple test suites run in parallel.</p>"
                     }
                 }
@@ -1353,12 +1370,14 @@
                 "passed": {
                     "target": "com.amazonaws.iotdeviceadvisor#SuiteRunResultCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Number of test cases that passed in the suite run.</p>"
                     }
                 },
                 "failed": {
                     "target": "com.amazonaws.iotdeviceadvisor#SuiteRunResultCount",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Number of test cases that failed in the suite run.</p>"
                     }
                 }
@@ -1370,6 +1389,7 @@
         "com.amazonaws.iotdeviceadvisor#SuiteRunResultCount": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 500

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.rum#AccessDeniedException": {
             "type": "structure",
@@ -109,6 +109,7 @@
                 "SessionSampleRate": {
                     "target": "com.amazonaws.rum#SessionSampleRate",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Specifies the percentage of user sessions to use for RUM data collection. Choosing a higher percentage gives you\n      more data but also incurs more costs.</p>\n         <p>The number you specify is the percentage of user sessions that will be used.</p>\n         <p>If you omit this parameter, the default of 10 is used.</p>"
                     }
                 },
@@ -614,6 +615,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.rum#MaxQueryResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return in one operation. </p>"
                     }
                 },
@@ -854,6 +856,7 @@
         "com.amazonaws.rum#MaxQueryResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -993,10 +996,33 @@
             }
         },
         "com.amazonaws.rum#QueryTimestamp": {
-            "type": "long"
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
         },
         "com.amazonaws.rum#RUM": {
             "type": "service",
+            "version": "2018-05-10",
+            "operations": [
+                {
+                    "target": "com.amazonaws.rum#ListTagsForResource"
+                },
+                {
+                    "target": "com.amazonaws.rum#PutRumEvents"
+                },
+                {
+                    "target": "com.amazonaws.rum#TagResource"
+                },
+                {
+                    "target": "com.amazonaws.rum#UntagResource"
+                }
+            ],
+            "resources": [
+                {
+                    "target": "com.amazonaws.rum#AppMonitorResource"
+                }
+            ],
             "traits": {
                 "aws.api#service": {
                     "sdkId": "RUM",
@@ -1034,27 +1060,7 @@
                 },
                 "smithy.api#documentation": "<p>With Amazon CloudWatch RUM, you can perform real-user monitoring to collect client-side data about \n       your web application performance from actual user sessions in real time. The data collected includes page load \n       times, client-side errors, and user behavior. When you view this data, you can see it all aggregated together and \n       also see breakdowns by the browsers and devices that your customers use.</p>\n       \n         <p>You can use the collected data to quickly identify and debug client-side performance issues. CloudWatch \n       RUM helps you visualize anomalies in your application performance and find relevant debugging data such as error \n       messages, stack traces, and user sessions. You can also use RUM to \n       understand the range of end-user impact including the number of users, geolocations, and browsers used.</p>",
                 "smithy.api#title": "CloudWatch RUM"
-            },
-            "version": "2018-05-10",
-            "operations": [
-                {
-                    "target": "com.amazonaws.rum#ListTagsForResource"
-                },
-                {
-                    "target": "com.amazonaws.rum#PutRumEvents"
-                },
-                {
-                    "target": "com.amazonaws.rum#TagResource"
-                },
-                {
-                    "target": "com.amazonaws.rum#UntagResource"
-                }
-            ],
-            "resources": [
-                {
-                    "target": "com.amazonaws.rum#AppMonitorResource"
-                }
-            ]
+            }
         },
         "com.amazonaws.rum#ResourceNotFoundException": {
             "type": "structure",
@@ -1152,6 +1158,7 @@
         "com.amazonaws.rum#SessionSampleRate": {
             "type": "double",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1
@@ -1342,6 +1349,7 @@
                 "After": {
                     "target": "com.amazonaws.rum#QueryTimestamp",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The beginning of the time range to retrieve performance events from.</p>",
                         "smithy.api#required": {}
                     }
@@ -1349,6 +1357,7 @@
                 "Before": {
                     "target": "com.amazonaws.rum#QueryTimestamp",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The end of the time range to retrieve performance events from. If you omit this, the time \n      range extends to the time that this operation is performed.</p>"
                     }
                 }

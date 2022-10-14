@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -719,7 +719,10 @@
             }
         },
         "com.amazonaws.networkmanager#Boolean": {
-            "type": "boolean"
+            "type": "boolean",
+            "traits": {
+                "smithy.api#default": false
+            }
         },
         "com.amazonaws.networkmanager#ChangeAction": {
             "type": "string",
@@ -6976,10 +6979,7 @@
             }
         },
         "com.amazonaws.networkmanager#Integer": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.networkmanager#InternalServerException": {
             "type": "structure",
@@ -7779,15 +7779,11 @@
             }
         },
         "com.amazonaws.networkmanager#Long": {
-            "type": "long",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "long"
         },
         "com.amazonaws.networkmanager#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 500
@@ -7796,21 +7792,6 @@
         },
         "com.amazonaws.networkmanager#NetworkManager": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "NetworkManager",
-                    "arnNamespace": "networkmanager",
-                    "cloudFormationName": "NetworkManager",
-                    "cloudTrailEventSource": "networkmanager.amazonaws.com",
-                    "endpointPrefix": "networkmanager"
-                },
-                "aws.auth#sigv4": {
-                    "name": "networkmanager"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>Amazon Web Services enables you to centrally manage your Amazon Web Services Cloud WAN core network and your Transit Gateway network across Amazon Web Services accounts, Regions, and on-premises locations.</p>",
-                "smithy.api#title": "AWS Network Manager"
-            },
             "version": "2019-07-05",
             "operations": [
                 {
@@ -8068,7 +8049,22 @@
                 {
                     "target": "com.amazonaws.networkmanager#UpdateVpcAttachment"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "NetworkManager",
+                    "arnNamespace": "networkmanager",
+                    "cloudFormationName": "NetworkManager",
+                    "cloudTrailEventSource": "networkmanager.amazonaws.com",
+                    "endpointPrefix": "networkmanager"
+                },
+                "aws.auth#sigv4": {
+                    "name": "networkmanager"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>Amazon Web Services enables you to centrally manage your Amazon Web Services Cloud WAN core network and your Transit Gateway network across Amazon Web Services accounts, Regions, and on-premises locations.</p>",
+                "smithy.api#title": "AWS Network Manager"
+            }
         },
         "com.amazonaws.networkmanager#NetworkResource": {
             "type": "structure",
@@ -8221,6 +8217,7 @@
                 "IsMiddlebox": {
                     "target": "com.amazonaws.networkmanager#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether this is a middlebox appliance.</p>"
                     }
                 }
@@ -9080,10 +9077,7 @@
             }
         },
         "com.amazonaws.networkmanager#RetryAfterSeconds": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.networkmanager#RouteAnalysis": {
             "type": "structure",
@@ -9133,12 +9127,14 @@
                 "IncludeReturnPath": {
                     "target": "com.amazonaws.networkmanager#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether to analyze the return path. The return path is not analyzed if the forward path\n            analysis does not succeed.</p>"
                     }
                 },
                 "UseMiddleboxes": {
                     "target": "com.amazonaws.networkmanager#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether to include the location of middlebox appliances in the route analysis.</p>"
                     }
                 },
@@ -9731,12 +9727,14 @@
                 "IncludeReturnPath": {
                     "target": "com.amazonaws.networkmanager#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether to analyze the return path. The default is <code>false</code>.</p>"
                     }
                 },
                 "UseMiddleboxes": {
                     "target": "com.amazonaws.networkmanager#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether to include the location of middlebox appliances in the route analysis.\n            The default is <code>false</code>.</p>"
                     }
                 }
@@ -11064,6 +11062,7 @@
                 "Ipv6Support": {
                     "target": "com.amazonaws.networkmanager#Boolean",
                     "traits": {
+                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Indicates whether IPv6 is supported.</p>"
                     }
                 }

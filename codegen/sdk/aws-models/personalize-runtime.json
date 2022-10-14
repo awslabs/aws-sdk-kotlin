@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,6 +31,15 @@
     "shapes": {
         "com.amazonaws.personalizeruntime#AmazonPersonalizeRuntime": {
             "type": "service",
+            "version": "2018-05-22",
+            "operations": [
+                {
+                    "target": "com.amazonaws.personalizeruntime#GetPersonalizedRanking"
+                },
+                {
+                    "target": "com.amazonaws.personalizeruntime#GetRecommendations"
+                }
+            ],
             "traits": {
                 "aws.api#service": {
                     "sdkId": "Personalize Runtime",
@@ -45,16 +54,7 @@
                 "aws.protocols#restJson1": {},
                 "smithy.api#documentation": "<p></p>",
                 "smithy.api#title": "Amazon Personalize Runtime"
-            },
-            "version": "2018-05-22",
-            "operations": [
-                {
-                    "target": "com.amazonaws.personalizeruntime#GetPersonalizedRanking"
-                },
-                {
-                    "target": "com.amazonaws.personalizeruntime#GetRecommendations"
-                }
-            ]
+            }
         },
         "com.amazonaws.personalizeruntime#Arn": {
             "type": "string",
@@ -276,6 +276,7 @@
                 "numResults": {
                     "target": "com.amazonaws.personalizeruntime#NumResults",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The number of results to return. The default is 25. The maximum is 500.</p>"
                     }
                 },
@@ -375,6 +376,7 @@
         "com.amazonaws.personalizeruntime#NumResults": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -383,6 +385,7 @@
         "com.amazonaws.personalizeruntime#PercentPromotedItems": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -427,6 +430,7 @@
                 "percentPromotedItems": {
                     "target": "com.amazonaws.personalizeruntime#PercentPromotedItems",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The percentage of recommended items to apply the promotion to.</p>"
                     }
                 },
@@ -476,10 +480,7 @@
             }
         },
         "com.amazonaws.personalizeruntime#Score": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.personalizeruntime#UserID": {
             "type": "string",

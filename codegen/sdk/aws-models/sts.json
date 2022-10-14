@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,24 +31,6 @@
     "shapes": {
         "com.amazonaws.sts#AWSSecurityTokenServiceV20110615": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "STS",
-                    "arnNamespace": "sts",
-                    "cloudFormationName": "STS",
-                    "cloudTrailEventSource": "sts.amazonaws.com",
-                    "endpointPrefix": "sts"
-                },
-                "aws.auth#sigv4": {
-                    "name": "sts"
-                },
-                "aws.protocols#awsQuery": {},
-                "smithy.api#documentation": "<fullname>Security Token Service</fullname>\n         <p>Security Token Service (STS) enables you to request temporary, limited-privilege \n      credentials for Identity and Access Management (IAM) users or for users that you \n      authenticate (federated users). This guide provides descriptions of the STS API. For \n      more information about using this service, see <a href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html\">Temporary Security Credentials</a>.</p>",
-                "smithy.api#title": "AWS Security Token Service",
-                "smithy.api#xmlNamespace": {
-                    "uri": "https://sts.amazonaws.com/doc/2011-06-15/"
-                }
-            },
             "version": "2011-06-15",
             "operations": [
                 {
@@ -75,7 +57,25 @@
                 {
                     "target": "com.amazonaws.sts#GetSessionToken"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "STS",
+                    "arnNamespace": "sts",
+                    "cloudFormationName": "STS",
+                    "cloudTrailEventSource": "sts.amazonaws.com",
+                    "endpointPrefix": "sts"
+                },
+                "aws.auth#sigv4": {
+                    "name": "sts"
+                },
+                "aws.protocols#awsQuery": {},
+                "smithy.api#documentation": "<fullname>Security Token Service</fullname>\n         <p>Security Token Service (STS) enables you to request temporary, limited-privilege \n      credentials for Identity and Access Management (IAM) users or for users that you \n      authenticate (federated users). This guide provides descriptions of the STS API. For \n      more information about using this service, see <a href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html\">Temporary Security Credentials</a>.</p>",
+                "smithy.api#title": "AWS Security Token Service",
+                "smithy.api#xmlNamespace": {
+                    "uri": "https://sts.amazonaws.com/doc/2011-06-15/"
+                }
+            }
         },
         "com.amazonaws.sts#AssumeRole": {
             "type": "operation",
@@ -1070,7 +1070,6 @@
         "com.amazonaws.sts#durationSecondsType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 900,
                     "max": 129600
@@ -1127,7 +1126,6 @@
         "com.amazonaws.sts#nonNegativeIntegerType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -1148,7 +1146,6 @@
         "com.amazonaws.sts#roleDurationSecondsType": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 900,
                     "max": 43200

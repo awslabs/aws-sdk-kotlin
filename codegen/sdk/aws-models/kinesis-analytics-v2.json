@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -1144,7 +1144,6 @@
         "com.amazonaws.kinesisanalyticsv2#ApplicationVersionId": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 999999999
@@ -1214,10 +1213,7 @@
             }
         },
         "com.amazonaws.kinesisanalyticsv2#BooleanObject": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.kinesisanalyticsv2#BucketARN": {
             "type": "string",
@@ -1396,7 +1392,6 @@
         "com.amazonaws.kinesisanalyticsv2#CheckpointInterval": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -1594,7 +1589,6 @@
         "com.amazonaws.kinesisanalyticsv2#CodeSize": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 52428800
@@ -3177,7 +3171,6 @@
         "com.amazonaws.kinesisanalyticsv2#InputParallelismCount": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 64
@@ -3900,7 +3893,6 @@
         "com.amazonaws.kinesisanalyticsv2#ListApplicationVersionsInputLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -3968,7 +3960,6 @@
         "com.amazonaws.kinesisanalyticsv2#ListApplicationsInputLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -4013,7 +4004,6 @@
         "com.amazonaws.kinesisanalyticsv2#ListSnapshotsInputLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -4204,7 +4194,6 @@
         "com.amazonaws.kinesisanalyticsv2#MinPauseBetweenCheckpoints": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -4457,7 +4446,6 @@
         "com.amazonaws.kinesisanalyticsv2#Parallelism": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -4569,7 +4557,6 @@
         "com.amazonaws.kinesisanalyticsv2#ParallelismPerKPU": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -5412,7 +5399,6 @@
         "com.amazonaws.kinesisanalyticsv2#SessionExpirationDurationInSeconds": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1800,
                     "max": 43200

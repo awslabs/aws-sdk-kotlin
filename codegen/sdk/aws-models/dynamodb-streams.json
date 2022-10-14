@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -125,10 +125,7 @@
             }
         },
         "com.amazonaws.dynamodbstreams#BooleanAttributeValue": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.dynamodbstreams#Date": {
             "type": "timestamp"
@@ -196,6 +193,21 @@
         },
         "com.amazonaws.dynamodbstreams#DynamoDBStreams_20120810": {
             "type": "service",
+            "version": "2012-08-10",
+            "operations": [
+                {
+                    "target": "com.amazonaws.dynamodbstreams#DescribeStream"
+                },
+                {
+                    "target": "com.amazonaws.dynamodbstreams#GetRecords"
+                },
+                {
+                    "target": "com.amazonaws.dynamodbstreams#GetShardIterator"
+                },
+                {
+                    "target": "com.amazonaws.dynamodbstreams#ListStreams"
+                }
+            ],
             "traits": {
                 "aws.api#service": {
                     "sdkId": "DynamoDB Streams",
@@ -213,22 +225,7 @@
                 "smithy.api#xmlNamespace": {
                     "uri": "http://dynamodb.amazonaws.com/doc/2012-08-10/"
                 }
-            },
-            "version": "2012-08-10",
-            "operations": [
-                {
-                    "target": "com.amazonaws.dynamodbstreams#DescribeStream"
-                },
-                {
-                    "target": "com.amazonaws.dynamodbstreams#GetRecords"
-                },
-                {
-                    "target": "com.amazonaws.dynamodbstreams#GetShardIterator"
-                },
-                {
-                    "target": "com.amazonaws.dynamodbstreams#ListStreams"
-                }
-            ]
+            }
         },
         "com.amazonaws.dynamodbstreams#ErrorMessage": {
             "type": "string"
@@ -580,10 +577,7 @@
             }
         },
         "com.amazonaws.dynamodbstreams#NullAttributeValue": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.dynamodbstreams#NumberAttributeValue": {
             "type": "string"
@@ -616,7 +610,6 @@
         "com.amazonaws.dynamodbstreams#PositiveIntegerObject": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -625,7 +618,6 @@
         "com.amazonaws.dynamodbstreams#PositiveLongObject": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "shapes": {
         "com.amazonaws.groundstation#AngleUnits": {
             "type": "string",
@@ -1345,7 +1345,6 @@
         "com.amazonaws.groundstation#DurationInSeconds": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 21600
@@ -1971,6 +1970,7 @@
                 "noradSatelliteID": {
                     "target": "com.amazonaws.groundstation#noradSatelliteID",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>NORAD satellite ID number.</p>"
                     }
                 },
@@ -3032,6 +3032,7 @@
                 "noradSatelliteID": {
                     "target": "com.amazonaws.groundstation#noradSatelliteID",
                     "traits": {
+                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>NORAD satellite ID number.</p>"
                     }
                 },
@@ -3527,6 +3528,7 @@
         "com.amazonaws.groundstation#noradSatelliteID": {
             "type": "integer",
             "traits": {
+                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 99999

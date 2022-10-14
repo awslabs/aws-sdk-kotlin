@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -235,10 +235,7 @@
             "type": "blob"
         },
         "com.amazonaws.lexmodelbuildingservice#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.lexmodelbuildingservice#BotAliasMetadata": {
             "type": "structure",
@@ -613,7 +610,6 @@
         "com.amazonaws.lexmodelbuildingservice#ConfidenceThreshold": {
             "type": "double",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 1
@@ -664,7 +660,6 @@
         "com.amazonaws.lexmodelbuildingservice#ContextTimeToLiveInSeconds": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 5,
                     "max": 86400
@@ -674,7 +669,6 @@
         "com.amazonaws.lexmodelbuildingservice#ContextTurnsToLive": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 20
@@ -724,10 +718,7 @@
             }
         },
         "com.amazonaws.lexmodelbuildingservice#Count": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.lexmodelbuildingservice#CreateBotVersion": {
             "type": "operation",
@@ -1197,6 +1188,9 @@
             "input": {
                 "target": "com.amazonaws.lexmodelbuildingservice#DeleteBotRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.lexmodelbuildingservice#BadRequestException"
@@ -1230,6 +1224,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.lexmodelbuildingservice#DeleteBotAliasRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1285,6 +1282,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.lexmodelbuildingservice#DeleteBotChannelAssociationRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1359,6 +1359,9 @@
             "input": {
                 "target": "com.amazonaws.lexmodelbuildingservice#DeleteBotVersionRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.lexmodelbuildingservice#BadRequestException"
@@ -1414,6 +1417,9 @@
             "input": {
                 "target": "com.amazonaws.lexmodelbuildingservice#DeleteIntentRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.lexmodelbuildingservice#BadRequestException"
@@ -1460,6 +1466,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.lexmodelbuildingservice#DeleteIntentVersionRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1516,6 +1525,9 @@
             "input": {
                 "target": "com.amazonaws.lexmodelbuildingservice#DeleteSlotTypeRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.lexmodelbuildingservice#BadRequestException"
@@ -1562,6 +1574,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.lexmodelbuildingservice#DeleteSlotTypeVersionRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -1617,6 +1632,9 @@
             "type": "operation",
             "input": {
                 "target": "com.amazonaws.lexmodelbuildingservice#DeleteUtterancesRequest"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
@@ -3857,7 +3875,6 @@
         "com.amazonaws.lexmodelbuildingservice#GroupNumber": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 5
@@ -4349,7 +4366,6 @@
         "com.amazonaws.lexmodelbuildingservice#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -4739,7 +4755,6 @@
         "com.amazonaws.lexmodelbuildingservice#Priority": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 100
@@ -4792,7 +4807,6 @@
         "com.amazonaws.lexmodelbuildingservice#PromptMaxAttempts": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 5
@@ -5750,7 +5764,6 @@
         "com.amazonaws.lexmodelbuildingservice#SessionTTL": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 60,
                     "max": 86400

@@ -80,8 +80,6 @@
                 "defaultJobTimeoutMinutes": {
                     "target": "com.amazonaws.devicefarm#JobTimeoutMinutes",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": 150,
                         "smithy.api#documentation": "<p>The default number of minutes (at the account level) a test run executes before it times out. The\n            default value is 150 minutes.</p>"
                     }
                 },
@@ -632,8 +630,6 @@
                 "packageCleanup": {
                     "target": "com.amazonaws.devicefarm#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When set to <code>true</code>, Device Farm removes app packages after a test run. The default value is\n                <code>false</code> for private devices.</p>"
                     }
                 },
@@ -646,8 +642,6 @@
                 "rebootAfterUse": {
                     "target": "com.amazonaws.devicefarm#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": true,
                         "smithy.api#documentation": "<p>When set to <code>true</code>, Device Farm reboots the instance after a test run. The default value is\n                <code>true</code>.</p>"
                     }
                 }
@@ -884,8 +878,6 @@
                 "billingMethod": {
                     "target": "com.amazonaws.devicefarm#BillingMethod",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "METERED",
                         "smithy.api#documentation": "<p>The billing method for the remote access session.</p>"
                     }
                 },
@@ -2630,8 +2622,6 @@
                 "videoCapture": {
                     "target": "com.amazonaws.devicefarm#VideoCapture",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": true,
                         "smithy.api#documentation": "<p>Set to true to enable video capture. Otherwise, set to false. The default is true.</p>"
                     }
                 },
@@ -3904,8 +3894,6 @@
                 "packageCleanup": {
                     "target": "com.amazonaws.devicefarm#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>When set to <code>true</code>, Device Farm removes app packages after a test run. The default value is\n                <code>false</code> for private devices.</p>"
                     }
                 },
@@ -3918,8 +3906,6 @@
                 "rebootAfterUse": {
                     "target": "com.amazonaws.devicefarm#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": true,
                         "smithy.api#documentation": "<p>When set to <code>true</code>, Device Farm reboots the instance after a test run. The default value is\n                <code>true</code>.</p>"
                     }
                 },
@@ -6383,8 +6369,6 @@
                 "defaultJobTimeoutMinutes": {
                     "target": "com.amazonaws.devicefarm#JobTimeoutMinutes",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": 150,
                         "smithy.api#documentation": "<p>The default number of minutes (at the project level) a test run executes before it times out. The\n            default value is 150 minutes.</p>"
                     }
                 },
@@ -6656,8 +6640,6 @@
                 "billingMethod": {
                     "target": "com.amazonaws.devicefarm#BillingMethod",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "METERED",
                         "smithy.api#documentation": "<p>The billing method of the remote access session. Possible values include <code>METERED</code> or\n                <code>UNMETERED</code>. For more information about metered devices, see <a href=\"https://docs.aws.amazon.com/devicefarm/latest/developerguide/welcome.html#welcome-terminology\">AWS Device Farm\n                terminology</a>.</p>"
                     }
                 },
@@ -6992,8 +6974,6 @@
                 "billingMethod": {
                     "target": "com.amazonaws.devicefarm#BillingMethod",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "METERED",
                         "smithy.api#documentation": "<p>Specifies the billing method for a test run: <code>metered</code> or\n                <code>unmetered</code>. If the parameter is not specified, the default value is\n                <code>metered</code>.</p>\n        <note>\n            <p>If you have unmetered device slots, you must set this to <code>unmetered</code> to use them.\n                Otherwise, the run is counted toward metered device minutes.</p>\n        </note>"
                     }
                 },
@@ -7338,8 +7318,6 @@
                 "billingMethod": {
                     "target": "com.amazonaws.devicefarm#BillingMethod",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": "METERED",
                         "smithy.api#documentation": "<p>Specifies the billing method for a test run: <code>metered</code> or\n                <code>unmetered</code>. If the parameter is not specified, the default value is\n                <code>metered</code>.</p>\n        <note>\n            <p>If you have purchased unmetered device slots, you must set this parameter to <code>unmetered</code> to\n                make use of them. Otherwise, your run counts against your metered time.</p>\n        </note>"
                     }
                 }
@@ -8767,8 +8745,6 @@
                 "packageCleanup": {
                     "target": "com.amazonaws.devicefarm#Boolean",
                     "traits": {
-                        "smithy.api#addedDefault": {},
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>The updated choice for whether you want to specify package cleanup. The default value\n            is <code>false</code> for private devices.</p>"
                     }
                 },

@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -41,21 +41,6 @@
         },
         "com.amazonaws.iotsitewise#AWSIoTSiteWise": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "IoTSiteWise",
-                    "arnNamespace": "iotsitewise",
-                    "cloudFormationName": "IoTSiteWise",
-                    "cloudTrailEventSource": "iotsitewise.amazonaws.com",
-                    "endpointPrefix": "iotsitewise"
-                },
-                "aws.auth#sigv4": {
-                    "name": "iotsitewise"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>Welcome to the IoT SiteWise API Reference. IoT SiteWise is an Amazon Web Services service that connects <a href=\"https://en.wikipedia.org/wiki/Internet_of_things#Industrial_applications\">Industrial Internet of Things (IIoT)</a> devices to the power of the Amazon Web Services Cloud. For more information, see the\n      <a href=\"https://docs.aws.amazon.com/iot-sitewise/latest/userguide/\">IoT SiteWise User Guide</a>. For information about IoT SiteWise quotas, see <a href=\"https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html\">Quotas</a> in the <i>IoT SiteWise User Guide</i>.</p>",
-                "smithy.api#title": "AWS IoT SiteWise"
-            },
             "version": "2019-12-02",
             "operations": [
                 {
@@ -271,7 +256,22 @@
                 {
                     "target": "com.amazonaws.iotsitewise#UpdateProject"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "IoTSiteWise",
+                    "arnNamespace": "iotsitewise",
+                    "cloudFormationName": "IoTSiteWise",
+                    "cloudTrailEventSource": "iotsitewise.amazonaws.com",
+                    "endpointPrefix": "iotsitewise"
+                },
+                "aws.auth#sigv4": {
+                    "name": "iotsitewise"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>Welcome to the IoT SiteWise API Reference. IoT SiteWise is an Amazon Web Services service that connects <a href=\"https://en.wikipedia.org/wiki/Internet_of_things#Industrial_applications\">Industrial Internet of Things (IIoT)</a> devices to the power of the Amazon Web Services Cloud. For more information, see the\n      <a href=\"https://docs.aws.amazon.com/iot-sitewise/latest/userguide/\">IoT SiteWise User Guide</a>. For information about IoT SiteWise quotas, see <a href=\"https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html\">Quotas</a> in the <i>IoT SiteWise User Guide</i>.</p>",
+                "smithy.api#title": "AWS IoT SiteWise"
+            }
         },
         "com.amazonaws.iotsitewise#AccessPolicySummaries": {
             "type": "list",
@@ -370,10 +370,7 @@
             }
         },
         "com.amazonaws.iotsitewise#AggregatedDoubleValue": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.iotsitewise#AggregatedValue": {
             "type": "structure",
@@ -1874,7 +1871,6 @@
         "com.amazonaws.iotsitewise#BatchGetAssetPropertyAggregatesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -2332,7 +2328,6 @@
         "com.amazonaws.iotsitewise#BatchGetAssetPropertyValueHistoryMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -7313,7 +7308,6 @@
         "com.amazonaws.iotsitewise#IntervalInSeconds": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 320000000
@@ -7323,7 +7317,6 @@
         "com.amazonaws.iotsitewise#IntervalWindowInSeconds": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 320000000
@@ -8672,7 +8665,6 @@
         "com.amazonaws.iotsitewise#MaxInterpolatedResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1
                 }
@@ -8681,7 +8673,6 @@
         "com.amazonaws.iotsitewise#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 250
@@ -8861,7 +8852,6 @@
         "com.amazonaws.iotsitewise#NumberOfDays": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 30
                 }
@@ -8879,7 +8869,6 @@
         "com.amazonaws.iotsitewise#OffsetInNanos": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 0,
                     "max": 999999999
@@ -9272,22 +9261,13 @@
             }
         },
         "com.amazonaws.iotsitewise#PropertyValueBooleanValue": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.iotsitewise#PropertyValueDoubleValue": {
-            "type": "double",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "double"
         },
         "com.amazonaws.iotsitewise#PropertyValueIntegerValue": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "integer"
         },
         "com.amazonaws.iotsitewise#PropertyValueStringValue": {
             "type": "string"
@@ -9921,7 +9901,6 @@
         "com.amazonaws.iotsitewise#TimeInSeconds": {
             "type": "long",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 9223372036854774
@@ -10156,10 +10135,7 @@
             }
         },
         "com.amazonaws.iotsitewise#Unlimited": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.iotsitewise#UntagResource": {
             "type": "operation",

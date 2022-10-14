@@ -1,5 +1,5 @@
 {
-    "smithy": "1.0",
+    "smithy": "2.0",
     "metadata": {
         "suppressions": [
             {
@@ -31,24 +31,6 @@
     "shapes": {
         "com.amazonaws.qldb#AmazonQLDB": {
             "type": "service",
-            "traits": {
-                "aws.api#service": {
-                    "sdkId": "QLDB",
-                    "arnNamespace": "qldb",
-                    "cloudFormationName": "QLDB",
-                    "cloudTrailEventSource": "qldb.amazonaws.com",
-                    "endpointPrefix": "qldb"
-                },
-                "aws.auth#sigv4": {
-                    "name": "qldb"
-                },
-                "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>The control plane for Amazon QLDB</p>",
-                "smithy.api#title": "Amazon QLDB",
-                "smithy.api#xmlNamespace": {
-                    "uri": "http://ledger.amazonaws.com/doc/2019-01-02/"
-                }
-            },
             "version": "2019-01-02",
             "operations": [
                 {
@@ -111,7 +93,25 @@
                 {
                     "target": "com.amazonaws.qldb#UpdateLedgerPermissionsMode"
                 }
-            ]
+            ],
+            "traits": {
+                "aws.api#service": {
+                    "sdkId": "QLDB",
+                    "arnNamespace": "qldb",
+                    "cloudFormationName": "QLDB",
+                    "cloudTrailEventSource": "qldb.amazonaws.com",
+                    "endpointPrefix": "qldb"
+                },
+                "aws.auth#sigv4": {
+                    "name": "qldb"
+                },
+                "aws.protocols#restJson1": {},
+                "smithy.api#documentation": "<p>The control plane for Amazon QLDB</p>",
+                "smithy.api#title": "Amazon QLDB",
+                "smithy.api#xmlNamespace": {
+                    "uri": "http://ledger.amazonaws.com/doc/2019-01-02/"
+                }
+            }
         },
         "com.amazonaws.qldb#Arn": {
             "type": "string",
@@ -123,10 +123,7 @@
             }
         },
         "com.amazonaws.qldb#Boolean": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.qldb#CancelJournalKinesisStream": {
             "type": "operation",
@@ -308,6 +305,9 @@
             "input": {
                 "target": "com.amazonaws.qldb#DeleteLedgerRequest"
             },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
             "errors": [
                 {
                     "target": "com.amazonaws.qldb#InvalidParameterException"
@@ -345,10 +345,7 @@
             }
         },
         "com.amazonaws.qldb#DeletionProtection": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#box": {}
-            }
+            "type": "boolean"
         },
         "com.amazonaws.qldb#DescribeJournalKinesisStream": {
             "type": "operation",
@@ -1553,7 +1550,6 @@
         "com.amazonaws.qldb#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#box": {},
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
