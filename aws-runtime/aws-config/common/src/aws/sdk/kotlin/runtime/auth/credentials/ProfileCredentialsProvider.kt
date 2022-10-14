@@ -148,6 +148,8 @@ public class ProfileCredentialsProvider(
                 httpClientEngine = httpClientEngine,
                 platformProvider = platformProvider,
             )
+
+            is LeafProvider.Process -> ProcessCredentialsProvider(command)
         }
 
     private suspend fun RoleArn.toCredentialsProvider(
@@ -167,5 +169,6 @@ public class ProfileCredentialsProvider(
         is LeafProvider.AccessKey -> "static credentials"
         is LeafProvider.WebIdentityTokenRole -> "web identity token"
         is LeafProvider.Sso -> "single sign-on"
+        is LeafProvider.Process -> "process"
     }
 }
