@@ -13,6 +13,8 @@ private const val PROVIDER_NAME = "Process"
 /**
  * [CredentialsProvider] that invokes a command to retrieve [Credentials] from stdout.
  * If the exit code is non-zero, log and throw an exception including the stderr from the command.
+ *
+ * @param credentialProcess the command to invoke to retrieve credentials
  */
 public class ProcessCredentialsProvider(private val credentialProcess: String) : CredentialsProvider {
     override suspend fun getCredentials(): Credentials {
