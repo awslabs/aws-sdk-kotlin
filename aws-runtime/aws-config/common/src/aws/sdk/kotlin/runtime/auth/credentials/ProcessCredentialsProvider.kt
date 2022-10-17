@@ -51,18 +51,11 @@ public class ProcessCredentialsProvider(
                 resp.accessKeyId,
                 resp.secretAccessKey,
                 resp.sessionToken,
-                resp.expiration,
+                resp.expiration ?: Instant.MAX_VALUE,
                 PROVIDER_NAME,
             )
-            is JsonCredentialsResponse.NonExpiringCredentials -> Credentials(
-                resp.accessKeyId,
-                resp.secretAccessKey,
-                resp.sessionToken,
-                Instant.MAX_VALUE,
-                PROVIDER_NAME,
-            )
-            is JsonCredentialsResponse.Error -> {
-                throw CredentialsProviderException("Error parsing credentials from process: code=${resp.code}; ${resp.message}")
+            else -> {
+                throw CredentialsProviderException("Credentials response was not of expected format")
             }
         }
     }
