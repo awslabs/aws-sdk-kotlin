@@ -5,7 +5,6 @@ import aws.smithy.kotlin.runtime.time.Instant
 import io.mockk.coEvery
 import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -41,7 +40,7 @@ class ProcessCredentialsProviderTest {
         )
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
-        val actualCredentials = runBlocking { processCredentialsProvider.getCredentials() }
+        val actualCredentials = processCredentialsProvider.getCredentials()
         assertEquals(expectedCredentials, actualCredentials)
     }
 
@@ -71,7 +70,7 @@ class ProcessCredentialsProviderTest {
         )
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
-        val actualCredentials = runBlocking { processCredentialsProvider.getCredentials() }
+        val actualCredentials = processCredentialsProvider.getCredentials()
         assertEquals(expectedCredentials, actualCredentials)
     }
 
