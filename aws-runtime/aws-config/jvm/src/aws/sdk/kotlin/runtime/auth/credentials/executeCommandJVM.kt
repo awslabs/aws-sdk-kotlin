@@ -25,17 +25,14 @@ internal actual suspend fun executeCommand(command: String, isWindows: Boolean):
     // add the user-supplied command
     cmd.add(command)
 
-    val process = withContext(Dispatchers.IO) {
-        ProcessBuilder().command(cmd).start()
-    }
-
-    withContext(Dispatchers.IO) {
+    return withContext(Dispatchers.IO) {
+        val process = ProcessBuilder().command(cmd).start()
         process.waitFor()
-    }
 
-    return Pair(
-        process.exitValue(),
-        if (process.exitValue() == 0) process.inputStream.bufferedReader().use { it.readText() }
-        else process.errorStream.bufferedReader().use { it.readText() },
-    )
+        Pair(
+            process.exitValue(),
+            if (process.exitValue() == 0) process.inputStream.bufferedReader().use { it.readText() }
+            else process.errorStream.bufferedReader().use { it.readText() },
+        )
+    }
 }
