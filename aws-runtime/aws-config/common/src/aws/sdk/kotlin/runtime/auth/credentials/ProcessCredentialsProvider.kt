@@ -5,11 +5,10 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.Instant
-import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
-internal expect suspend fun executeCommand(command: String, isWindows: Boolean): Pair<Int, String>
+internal expect suspend fun executeCommand(command: String, platformProvider: PlatformProvider): Pair<Int, String>
 
 private const val PROVIDER_NAME = "Process"
 
@@ -34,7 +33,7 @@ public class ProcessCredentialsProvider(
         val logger = Logger.getLogger<ProcessCredentialsProvider>()
 
         val (exitCode, output) = try {
-            executeCommand(credentialProcess, platformProvider.osInfo().family == OsFamily.Windows)
+            executeCommand(credentialProcess, platformProvider)
         } catch (ex: Exception) {
             throw CredentialsProviderException("Failed to execute command", ex)
         }
