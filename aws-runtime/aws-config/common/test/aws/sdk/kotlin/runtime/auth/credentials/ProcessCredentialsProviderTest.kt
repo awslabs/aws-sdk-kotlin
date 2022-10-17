@@ -131,13 +131,7 @@ class ProcessCredentialsProviderTest {
         coEvery { executeCommand(any(), any()) }.returns(Pair(exitCode, stderr))
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
-        assertFailsWith<CredentialsProviderException> {
-            try {
-                processCredentialsProvider.getCredentials()
-            } catch (ex: Exception) {
-                assertContains(ex.message!!, stderr) // the exception message we throw should contain the program's stderr
-                throw ex // rethrow so assertFailsWith can catch
-            }
-        }
+        val ex = assertFailsWith<CredentialsProviderException> { processCredentialsProvider.getCredentials() }
+        assertContains(ex.message!!, stderr) // the exception message should contain the program's stderr
     }
 }
