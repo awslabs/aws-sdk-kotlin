@@ -96,7 +96,7 @@ public class ImdsCredentialsProvider(
 
         return when (val resp = deserializeJsonCredentials(deserializer)) {
             is JsonCredentialsResponse.SessionCredentials -> {
-                nextRefresh = if (resp.expiration < clock.now()) {
+                nextRefresh = if (resp.expiration != null && resp.expiration < clock.now()) {
                     logger.warn {
                         "Attempting credential expiration extension due to a credential service availability issue. " +
                             "A refresh of these credentials will be attempted again in " +
@@ -123,7 +123,6 @@ public class ImdsCredentialsProvider(
                     else -> throw CredentialsProviderException("Error retrieving credentials from IMDS: code=${resp.code}; ${resp.message}")
                 }
             }
-            else -> throw CredentialsProviderException("Payload was of unexpected format")
         }
     }
 
