@@ -27,14 +27,7 @@ internal sealed class JsonCredentialsResponse {
         val accessKeyId: String,
         val secretAccessKey: String,
         val sessionToken: String,
-        val expiration: Instant,
-    ) : JsonCredentialsResponse()
-
-    // Credentials that don't expire
-    data class NonExpiringCredentials(
-        val accessKeyId: String,
-        val secretAccessKey: String,
-        val sessionToken: String,
+        val expiration: Instant?,
     ) : JsonCredentialsResponse()
 
     // TODO - add support for static credentials
@@ -187,7 +180,5 @@ internal fun deserializeJsonProcessCredentials(deserializer: Deserializer): Json
     if (sessionToken == null) throw InvalidJsonCredentialsException("missing field `${SESSION_TOKEN_DESCRIPTOR.serialName}`")
     if (version == null) throw InvalidJsonCredentialsException("missing field `${VERSION_DESCRIPTOR.serialName}`")
     if (version != 1) throw InvalidJsonCredentialsException("version $version is not supported")
-
-    return if (expiration == null) JsonCredentialsResponse.NonExpiringCredentials(accessKeyId!!, secretAccessKey!!, sessionToken!!)
-    else JsonCredentialsResponse.SessionCredentials(accessKeyId!!, secretAccessKey!!, sessionToken!!, expiration!!)
+    return JsonCredentialsResponse.SessionCredentials(accessKeyId!!, secretAccessKey!!, sessionToken!!, expiration)
 }
