@@ -41,7 +41,7 @@ public class DefaultChainCredentialsProvider constructor(
     private val profileName: String? = null,
     private val platformProvider: PlatformProvider = Platform,
     httpClientEngine: HttpClientEngine? = null,
-    region: String? = null
+    region: String? = null,
 ) : CredentialsProvider, Closeable {
 
     private val manageEngine = httpClientEngine == null
