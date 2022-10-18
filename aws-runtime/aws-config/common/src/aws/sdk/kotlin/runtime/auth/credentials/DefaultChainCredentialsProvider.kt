@@ -41,6 +41,7 @@ public class DefaultChainCredentialsProvider constructor(
     private val profileName: String? = null,
     private val platformProvider: PlatformProvider = Platform,
     httpClientEngine: HttpClientEngine? = null,
+    region: String? = null
 ) : CredentialsProvider, Closeable {
 
     private val manageEngine = httpClientEngine == null
@@ -48,7 +49,7 @@ public class DefaultChainCredentialsProvider constructor(
 
     private val chain = CredentialsProviderChain(
         EnvironmentCredentialsProvider(platformProvider::getenv),
-        ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClientEngine = httpClientEngine),
+        ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClientEngine = httpClientEngine, region = region),
         // STS web identity provider can be constructed from either the profile OR 100% from the environment
         StsWebIdentityProvider(platformProvider = platformProvider, httpClientEngine = httpClientEngine),
         EcsCredentialsProvider(platformProvider, httpClientEngine),
