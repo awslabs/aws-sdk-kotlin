@@ -13,12 +13,10 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.tracing.TraceSpan
-import aws.smithy.kotlin.runtime.tracing.asNestedTracer
-import aws.smithy.kotlin.runtime.tracing.logger
-import aws.smithy.kotlin.runtime.tracing.withChildSpan
+import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -70,48 +68,48 @@ public class StsWebIdentityCredentialsProvider(
         }
     }
 
-    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
-        traceSpan.withChildSpan("StsWebIdentity") { childSpan ->
-            val logger = childSpan.logger<StsAssumeRoleCredentialsProvider>()
-            logger.debug { "retrieving assumed credentials via web identity" }
-            val provider = this
+    override suspend fun getCredentials(): Credentials = coroutineContext.withChildTraceSpan("StsWebIdentity") {
+        val traceSpan = coroutineContext.traceSpan
+        val logger = traceSpan.logger<StsAssumeRoleCredentialsProvider>()
+        logger.debug { "retrieving assumed credentials via web identity" }
+        val provider = this@StsWebIdentityCredentialsProvider
 
-            val token = platformProvider
-                .readFileOrNull(webIdentityTokenFilePath)
-                ?.decodeToString() ?: throw CredentialsProviderException("failed to read webIdentityToken from $webIdentityTokenFilePath")
+        val token = platformProvider
+            .readFileOrNull(webIdentityTokenFilePath)
+            ?.decodeToString() ?: throw CredentialsProviderException("failed to read webIdentityToken from $webIdentityTokenFilePath")
 
-            val client = StsClient {
-                region = provider.region
-                httpClientEngine = provider.httpClientEngine
-                // NOTE: credentials provider not needed for this operation
-                tracer = childSpan.asNestedTracer("STS")
-            }
-
-            val resp = try {
-                client.assumeRoleWithWebIdentity {
-                    roleArn = provider.roleArn
-                    webIdentityToken = token
-                    durationSeconds = provider.duration.inWholeSeconds.toInt()
-                    roleSessionName = provider.roleSessionName ?: defaultSessionName(platformProvider)
-                }
-            } catch (ex: Exception) {
-                logger.debug { "sts refused to grant assumed role credentials from web identity" }
-                throw CredentialsProviderException("STS failed to assume role from web identity", ex)
-            } finally {
-                client.close()
-            }
-
-            val roleCredentials = resp.credentials ?: throw CredentialsProviderException("STS credentials must not be null")
-            logger.debug { "obtained assumed credentials via web identity; expiration=${roleCredentials.expiration?.format(TimestampFormat.ISO_8601)}" }
-
-            Credentials(
-                accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRoleWithWebIdentity response" },
-                secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRoleWithWebIdentity response" },
-                sessionToken = roleCredentials.sessionToken,
-                expiration = roleCredentials.expiration,
-                providerName = PROVIDER_NAME,
-            )
+        val client = StsClient {
+            region = provider.region
+            httpClientEngine = provider.httpClientEngine
+            // NOTE: credentials provider not needed for this operation
+            tracer = traceSpan.asNestedTracer("STS")
         }
+
+        val resp = try {
+            client.assumeRoleWithWebIdentity {
+                roleArn = provider.roleArn
+                webIdentityToken = token
+                durationSeconds = provider.duration.inWholeSeconds.toInt()
+                roleSessionName = provider.roleSessionName ?: defaultSessionName(platformProvider)
+            }
+        } catch (ex: Exception) {
+            logger.debug { "sts refused to grant assumed role credentials from web identity" }
+            throw CredentialsProviderException("STS failed to assume role from web identity", ex)
+        } finally {
+            client.close()
+        }
+
+        val roleCredentials = resp.credentials ?: throw CredentialsProviderException("STS credentials must not be null")
+        logger.debug { "obtained assumed credentials via web identity; expiration=${roleCredentials.expiration?.format(TimestampFormat.ISO_8601)}" }
+
+        Credentials(
+            accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRoleWithWebIdentity response" },
+            secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRoleWithWebIdentity response" },
+            sessionToken = roleCredentials.sessionToken,
+            expiration = roleCredentials.expiration,
+            providerName = PROVIDER_NAME,
+        )
+    }
 }
 
 // convenience function to resolve parameters for fromEnvironment()

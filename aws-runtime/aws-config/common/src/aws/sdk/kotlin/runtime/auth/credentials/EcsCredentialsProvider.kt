@@ -34,12 +34,10 @@ import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.tracing.TraceSpan
-import aws.smithy.kotlin.runtime.tracing.logger
-import aws.smithy.kotlin.runtime.tracing.withChildSpan
-import aws.smithy.kotlin.runtime.tracing.withRootSpan
+import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
+import kotlin.coroutines.coroutineContext
 
 /**
  * The elastic container metadata service endpoint that should be called by the [aws.sdk.kotlin.runtime.auth.credentials.EcsCredentialsProvider]
@@ -82,9 +80,9 @@ public class EcsCredentialsProvider internal constructor(
         Retry<Credentials>(strategy, policy)
     }
 
-    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
-        traceSpan.withChildSpan("ECS") { childSpan ->
-            val logger = childSpan.logger<EcsCredentialsProvider>()
+    override suspend fun getCredentials(): Credentials =
+        coroutineContext.withChildTraceSpan("ECS") {
+            val logger = coroutineContext.getLogger<EcsCredentialsProvider>()
             val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
             val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
             val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)
@@ -110,9 +108,7 @@ public class EcsCredentialsProvider internal constructor(
             logger.debug { "retrieving container credentials" }
             val client = sdkHttpClient(httpClientEngine, manageEngine = false)
             val creds = try {
-                op.context.withRootSpan(childSpan) {
-                    op.roundTrip(client, Unit)
-                }
+                op.roundTrip(client, Unit)
             } catch (ex: Exception) {
                 logger.debug { "failed to obtain credentials from container metadata service" }
                 throw when (ex) {
@@ -125,7 +121,7 @@ public class EcsCredentialsProvider internal constructor(
 
             logger.debug { "obtained credentials from container metadata service; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
 
-            return creds
+            creds
         }
 
     /**

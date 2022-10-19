@@ -12,10 +12,10 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.tracing.TraceSpan
-import aws.smithy.kotlin.runtime.tracing.withChildSpan
+import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlin.coroutines.coroutineContext
 
 /**
  * Default AWS credential provider chain used by most AWS SDKs.
@@ -67,8 +67,9 @@ public class DefaultChainCredentialsProvider constructor(
 
     private val provider = CachedCredentialsProvider(chain)
 
-    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
-        traceSpan.withChildSpan("DefaultChain") { provider.getCredentials(it) }
+    override suspend fun getCredentials(): Credentials = coroutineContext.withChildTraceSpan("DefaultChain") {
+        provider.getCredentials()
+    }
 
     override fun close() {
         provider.close()
@@ -86,8 +87,8 @@ private class StsWebIdentityProvider(
     val platformProvider: PlatformProvider,
     val httpClientEngine: HttpClientEngine? = null,
 ) : CredentialsProvider {
-    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials {
+    override suspend fun getCredentials(): Credentials {
         val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClientEngine = httpClientEngine)
-        return wrapped.getCredentials(traceSpan)
+        return wrapped.getCredentials()
     }
 }

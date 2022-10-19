@@ -7,7 +7,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.tracing.TraceSpan
 
 /**
  * A credentials provider for a fixed set of credentials
@@ -18,7 +17,7 @@ public class StaticCredentialsProvider public constructor(private val credential
 
     private constructor(builder: Builder) : this(Credentials(builder.accessKeyId!!, builder.secretAccessKey!!, builder.sessionToken))
 
-    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials = credentials
+    override suspend fun getCredentials(): Credentials = credentials
 
     public companion object {
         /**

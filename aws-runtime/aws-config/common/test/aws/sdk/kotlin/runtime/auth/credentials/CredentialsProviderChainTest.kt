@@ -7,7 +7,8 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -25,7 +26,7 @@ class CredentialsProviderChainTest {
         }
     }
     data class TestProvider(val credentials: Credentials? = null) : CredentialsProvider {
-        override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
+        override suspend fun getCredentials(): Credentials =
             credentials ?: throw IllegalStateException("no credentials available")
     }
 
@@ -37,7 +38,10 @@ class CredentialsProviderChainTest {
             TestProvider(Credentials("akid2", "secret2")),
         )
 
-        assertEquals(Credentials("akid1", "secret1"), chain.getCredentials())
+        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            chain.getCredentials()
+        }
+        assertEquals(Credentials("akid1", "secret1"), actual)
     }
 
     @Test
@@ -48,7 +52,9 @@ class CredentialsProviderChainTest {
         )
 
         val ex = assertFailsWith<CredentialsProviderException> {
-            chain.getCredentials()
+            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+                chain.getCredentials()
+            }
         }
         ex.message.shouldContain("No credentials could be loaded from the chain: CredentialsProviderChain -> TestProvider -> TestProvider")
 

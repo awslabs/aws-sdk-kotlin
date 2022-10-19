@@ -29,9 +29,6 @@ import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitterOptio
 import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
 import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.time.Clock
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.TraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
@@ -52,10 +49,8 @@ public interface InstanceMetadataProvider : Closeable {
     /**
      * Gets the specified instance metadata value by the given path.
      * @param path The URI path to fetch
-     * @param traceSpan The span to which tracing events should be omitted. Defaults to [NoOpTraceSpan] if none is
-     * specified.
      */
-    public suspend fun get(path: String, traceSpan: TraceSpan = NoOpTraceSpan): String
+    public suspend fun get(path: String): String
 }
 
 /**
@@ -121,7 +116,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
      * val amiId = client.get("/latest/meta-data/ami-id")
      * ```
      */
-    public override suspend fun get(path: String, traceSpan: TraceSpan): String {
+    public override suspend fun get(path: String): String {
         val op = SdkHttpOperation.build<Unit, String> {
             serializer = UnitSerializer
             deserializer = object : HttpDeserialize<String> {
@@ -151,9 +146,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             next.call(req)
         }
 
-        return op.context.withRootSpan(traceSpan) {
-            op.roundTrip(httpClient, Unit)
-        }
+        return op.roundTrip(httpClient, Unit)
     }
 
     override fun close() {

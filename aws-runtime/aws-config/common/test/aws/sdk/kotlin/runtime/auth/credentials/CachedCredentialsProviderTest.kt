@@ -9,7 +9,8 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
-import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -30,7 +31,7 @@ class CachedCredentialsProviderTest {
     ) : CredentialsProvider {
         var callCount = 0
 
-        override suspend fun getCredentials(traceSpan: TraceSpan): Credentials {
+        override suspend fun getCredentials(): Credentials {
             callCount++
             return Credentials(
                 "AKID",
@@ -42,16 +43,18 @@ class CachedCredentialsProviderTest {
 
     @Test
     fun testLoadFirstCall() = runTest {
-        // explicit expiration
-        val source = TestCredentialsProvider(expiration = testExpiration)
-        val provider = CachedCredentialsProvider(source, clock = testClock)
-        val creds = provider.getCredentials()
-        val expected = Credentials("AKID", "secret", expiration = testExpiration)
-        assertEquals(expected, creds)
-        assertEquals(1, source.callCount)
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            // explicit expiration
+            val source = TestCredentialsProvider(expiration = testExpiration)
+            val provider = CachedCredentialsProvider(source, clock = testClock)
+            val creds = provider.getCredentials()
+            val expected = Credentials("AKID", "secret", expiration = testExpiration)
+            assertEquals(expected, creds)
+            assertEquals(1, source.callCount)
 
-        provider.getCredentials()
-        assertEquals(1, source.callCount)
+            provider.getCredentials()
+            assertEquals(1, source.callCount)
+        }
     }
 
     @Test
@@ -59,7 +62,9 @@ class CachedCredentialsProviderTest {
         // expiration should come from the cached provider
         val source = TestCredentialsProvider()
         val provider = CachedCredentialsProvider(source, clock = testClock)
-        val creds = provider.getCredentials()
+        val creds = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            provider.getCredentials()
+        }
         val expectedExpiration = epoch + 15.minutes
         val expected = Credentials("AKID", "secret", expiration = expectedExpiration)
         assertEquals(expected, creds)
@@ -68,45 +73,49 @@ class CachedCredentialsProviderTest {
 
     @Test
     fun testReloadExpiredCredentials() = runTest {
-        val source = TestCredentialsProvider(expiration = testExpiration)
-        val provider = CachedCredentialsProvider(source, clock = testClock)
-        val creds = provider.getCredentials()
-        val expected = Credentials("AKID", "secret", expiration = testExpiration)
-        assertEquals(expected, creds)
-        assertEquals(1, source.callCount)
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            val source = TestCredentialsProvider(expiration = testExpiration)
+            val provider = CachedCredentialsProvider(source, clock = testClock)
+            val creds = provider.getCredentials()
+            val expected = Credentials("AKID", "secret", expiration = testExpiration)
+            assertEquals(expected, creds)
+            assertEquals(1, source.callCount)
 
-        // 1 min past expiration
-        testClock.advance(31.minutes)
-        provider.getCredentials()
-        assertEquals(2, source.callCount)
+            // 1 min past expiration
+            testClock.advance(31.minutes)
+            provider.getCredentials()
+            assertEquals(2, source.callCount)
+        }
     }
 
     @Test
     fun testRefreshBufferWindow() = runTest {
-        val source = TestCredentialsProvider(expiration = testExpiration)
-        val provider = CachedCredentialsProvider(source, clock = testClock)
-        val creds = provider.getCredentials()
-        val expected = Credentials("AKID", "secret", expiration = testExpiration)
-        assertEquals(expected, creds)
-        assertEquals(1, source.callCount)
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            val source = TestCredentialsProvider(expiration = testExpiration)
+            val provider = CachedCredentialsProvider(source, clock = testClock)
+            val creds = provider.getCredentials()
+            val expected = Credentials("AKID", "secret", expiration = testExpiration)
+            assertEquals(expected, creds)
+            assertEquals(1, source.callCount)
 
-        // default buffer window is 10 seconds, advance 29 minutes, 49 seconds
-        testClock.advance((29 * 60 + 49).seconds)
-        provider.getCredentials()
-        // not within window yet
-        assertEquals(1, source.callCount)
+            // default buffer window is 10 seconds, advance 29 minutes, 49 seconds
+            testClock.advance((29 * 60 + 49).seconds)
+            provider.getCredentials()
+            // not within window yet
+            assertEquals(1, source.callCount)
 
-        // now we should be within 10 sec window
-        testClock.advance(1.seconds)
-        provider.getCredentials()
-        assertEquals(2, source.callCount)
+            // now we should be within 10 sec window
+            testClock.advance(1.seconds)
+            provider.getCredentials()
+            assertEquals(2, source.callCount)
+        }
     }
 
     @Test
     fun testLoadFailed() = runTest {
         val source = object : CredentialsProvider {
             private var count = 0
-            override suspend fun getCredentials(traceSpan: TraceSpan): Credentials {
+            override suspend fun getCredentials(): Credentials {
                 if (count <= 0) {
                     count++
                     throw RuntimeException("test error")
@@ -116,11 +125,13 @@ class CachedCredentialsProviderTest {
         }
         val provider = CachedCredentialsProvider(source, clock = testClock)
 
-        assertFailsWith<RuntimeException> {
-            provider.getCredentials()
-        }.message.shouldContain("test error")
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            assertFailsWith<RuntimeException> {
+                provider.getCredentials()
+            }.message.shouldContain("test error")
 
-        // future successful invocations should continue to work
-        provider.getCredentials()
+            // future successful invocations should continue to work
+            provider.getCredentials()
+        }
     }
 }

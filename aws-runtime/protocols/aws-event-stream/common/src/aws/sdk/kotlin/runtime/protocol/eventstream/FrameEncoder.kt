@@ -11,11 +11,14 @@ import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteChannel
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import aws.smithy.kotlin.runtime.io.bytes
+import aws.smithy.kotlin.runtime.tracing.TraceSpanContextElement
+import aws.smithy.kotlin.runtime.tracing.traceSpan
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 /**
  * Transform the stream of messages into a stream of raw bytes. Each
@@ -37,6 +40,7 @@ public fun Flow<Message>.encode(): Flow<ByteArray> = map {
 public suspend fun Flow<ByteArray>.asEventStreamHttpBody(scope: CoroutineScope): HttpBody {
     val encodedMessages = this
     val ch = SdkByteChannel(true)
+    val activeSpan = coroutineContext.traceSpan
 
     return object : HttpBody.Streaming() {
         override val contentLength: Long? = null
@@ -53,7 +57,7 @@ public suspend fun Flow<ByteArray>.asEventStreamHttpBody(scope: CoroutineScope):
             // Although rare, nothing stops downstream consumers from invoking readFrom() more than once.
             // Only launch background collection task on first call
             if (job == null) {
-                job = scope.launch {
+                job = scope.launch(TraceSpanContextElement(activeSpan)) {
                     encodedMessages.collect {
                         ch.writeFully(it)
                     }

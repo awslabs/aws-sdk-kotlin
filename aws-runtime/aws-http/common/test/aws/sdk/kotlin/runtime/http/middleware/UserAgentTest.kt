@@ -21,7 +21,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.TracingContext
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.get
 import io.kotest.matchers.string.shouldContain
@@ -56,13 +56,15 @@ class UserAgentTest {
             val apiMd = ApiMetadata("Test Service", "1.2.3")
             val metadata = loadAwsUserAgentMetadataFromEnvironment(platformProvider, apiMd)
             install(UserAgent(metadata))
-        }.apply { context[TracingContext.TraceSpan] = NoOpTraceSpan }
+        }
 
     @Test
     fun itSetsUAHeaders() = runTest {
         val op = initializeOp()
 
-        op.roundTrip(client, Unit)
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            op.roundTrip(client, Unit)
+        }
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         assertTrue(request.headers.contains(USER_AGENT))
         assertTrue(request.headers.contains(X_AMZ_USER_AGENT))
@@ -77,7 +79,9 @@ class UserAgentTest {
         val op = initializeOp()
         op.context.customUserAgentMetadata.add("foo", "bar")
 
-        op.roundTrip(client, Unit)
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            op.roundTrip(client, Unit)
+        }
         val request = op.context[HttpOperationContext.HttpCallList].last().request
 
         request.headers[USER_AGENT]!!.shouldContain("md/foo/bar")
@@ -86,7 +90,9 @@ class UserAgentTest {
         val op2 = initializeOp()
         op2.context.customUserAgentMetadata.add("baz", "quux")
 
-        op2.roundTrip(client, Unit)
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            op2.roundTrip(client, Unit)
+        }
         val request2 = op2.context[HttpOperationContext.HttpCallList].last().request
 
         request2.headers[USER_AGENT]!!.shouldNotContain("md/foo/bar")
@@ -108,7 +114,9 @@ class UserAgentTest {
             add("blerg", "blarg")
         }
 
-        op.roundTrip(client, Unit)
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            op.roundTrip(client, Unit)
+        }
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val uaString = request.headers[USER_AGENT]!!
 
@@ -129,7 +137,9 @@ class UserAgentTest {
         )
         val op = initializeOp(platform)
 
-        op.roundTrip(client, Unit)
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            op.roundTrip(client, Unit)
+        }
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val uaString = request.headers[USER_AGENT]!!
 

@@ -8,6 +8,8 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.Filesystem
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
@@ -139,7 +141,11 @@ class DefaultChainCredentialsProviderTest {
     fun executeTest(name: String) = runTest {
         val test = makeTest(name)
         val provider = DefaultChainCredentialsProvider(platformProvider = test.testPlatform, httpClientEngine = test.testEngine)
-        val actual = runCatching { provider.getCredentials() }
+        val actual = runCatching {
+            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+                provider.getCredentials()
+            }
+        }
         val expected = test.expected
         when {
             expected is TestResult.Ok && actual.isFailure -> error("expected success, got error: $actual")

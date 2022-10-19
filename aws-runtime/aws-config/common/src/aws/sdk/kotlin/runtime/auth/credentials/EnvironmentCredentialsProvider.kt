@@ -8,10 +8,10 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.tracing.TraceSpan
 import aws.smithy.kotlin.runtime.tracing.trace
-import aws.smithy.kotlin.runtime.tracing.withChildSpan
+import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
 import aws.smithy.kotlin.runtime.util.Platform
+import kotlin.coroutines.coroutineContext
 
 private const val PROVIDER_NAME = "Environment"
 
@@ -29,16 +29,15 @@ public constructor(private val getEnv: (String) -> String?) : CredentialsProvide
     private fun requireEnv(variable: String): String =
         getEnv(variable) ?: throw ProviderConfigurationException("Missing value for environment variable `$variable`")
 
-    override suspend fun getCredentials(traceSpan: TraceSpan): Credentials =
-        traceSpan.withChildSpan("Environment") { childSpan ->
-            childSpan.trace<EnvironmentCredentialsProvider> {
-                "Attempting to load credentials from env vars $ACCESS_KEY_ID/$SECRET_ACCESS_KEY/$SESSION_TOKEN"
-            }
-            Credentials(
-                accessKeyId = requireEnv(ACCESS_KEY_ID),
-                secretAccessKey = requireEnv(SECRET_ACCESS_KEY),
-                sessionToken = getEnv(SESSION_TOKEN),
-                providerName = PROVIDER_NAME,
-            )
+    override suspend fun getCredentials(): Credentials = coroutineContext.withChildTraceSpan("Environment") {
+        coroutineContext.trace<EnvironmentCredentialsProvider> {
+            "Attempting to load credentials from env vars $ACCESS_KEY_ID/$SECRET_ACCESS_KEY/$SESSION_TOKEN"
         }
+        Credentials(
+            accessKeyId = requireEnv(ACCESS_KEY_ID),
+            secretAccessKey = requireEnv(SECRET_ACCESS_KEY),
+            sessionToken = getEnv(SESSION_TOKEN),
+            providerName = PROVIDER_NAME,
+        )
+    }
 }

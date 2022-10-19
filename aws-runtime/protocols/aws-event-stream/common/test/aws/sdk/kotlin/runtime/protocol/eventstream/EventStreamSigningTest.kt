@@ -14,7 +14,8 @@ import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.bytes
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
-import aws.smithy.kotlin.runtime.tracing.TraceSpan
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.encodeToHex
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -26,7 +27,7 @@ import kotlin.test.assertEquals
 @OptIn(ExperimentalCoroutinesApi::class)
 class EventStreamSigningTest {
     private val testCredentialsProvider = object : CredentialsProvider {
-        override suspend fun getCredentials(traceSpan: TraceSpan) = Credentials("fake access key", "fake secret key")
+        override suspend fun getCredentials() = Credentials("fake access key", "fake secret key")
     }
 
     @Test
@@ -50,7 +51,10 @@ class EventStreamSigningTest {
         val buffer = SdkByteBuffer(0U)
         messageToSign.encode(buffer)
         val messagePayload = buffer.bytes()
-        val result = DefaultAwsSigner.signPayload(signingConfig, prevSignature, messagePayload, testClock)
+        val result = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            DefaultAwsSigner.signPayload(signingConfig, prevSignature, messagePayload, testClock)
+        }
+
         assertEquals(":date", result.output.headers[0].name)
 
         val dateHeader = result.output.headers[0].value.expectTimestamp()
@@ -82,7 +86,9 @@ class EventStreamSigningTest {
         context[AwsSigningAttributes.CredentialsProvider] = testCredentialsProvider
 
         val config = context.newEventStreamSigningConfig()
-        val signedEvents = flowOf(messageToSign).sign(context, config).toList()
+        val signedEvents = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            flowOf(messageToSign).sign(context, config).toList()
+        }
         // 1 message + empty signed frame
         assertEquals(2, signedEvents.size)
     }

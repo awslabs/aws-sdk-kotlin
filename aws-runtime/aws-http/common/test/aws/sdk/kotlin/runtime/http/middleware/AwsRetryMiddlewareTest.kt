@@ -18,7 +18,7 @@ import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
 import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -60,7 +60,7 @@ class AwsRetryMiddlewareTest {
 
         op.install(AwsRetryMiddleware(strategy, AwsDefaultRetryPolicy))
 
-        op.context.withRootSpan(NoOpTraceSpan) {
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
             op.roundTrip(client, Unit)
         }
 

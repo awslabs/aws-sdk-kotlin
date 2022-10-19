@@ -14,6 +14,7 @@ import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.http.operation.getLogger
 import aws.smithy.kotlin.runtime.util.get
+import kotlin.coroutines.coroutineContext
 
 /**
  * Http feature for resolving the (AWS) service endpoint.
@@ -47,7 +48,7 @@ public class ResolveAwsEndpoint(
             }
         }
 
-        val logger = req.context.getLogger("ResolveAwsEndpoint")
+        val logger = coroutineContext.getLogger<ResolveAwsEndpoint>()
         logger.trace { "resolved endpoint: $endpoint" }
         return req
     }

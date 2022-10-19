@@ -17,6 +17,8 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -35,7 +37,9 @@ class ImdsCredentialsProviderTest {
         )
         val provider = ImdsCredentialsProvider(platformProvider = platform)
         assertFailsWith<CredentialsNotLoadedException> {
-            provider.getCredentials()
+            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+                provider.getCredentials()
+            }
         }.message.shouldContain("AWS EC2 metadata is explicitly disabled; credentials not loaded")
     }
 
@@ -76,7 +80,9 @@ class ImdsCredentialsProviderTest {
 
         val provider = ImdsCredentialsProvider(client = lazyOf(client))
 
-        val actual = provider.getCredentials()
+        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            provider.getCredentials()
+        }
         val expected = Credentials(
             "ASIARTEST",
             "xjtest",
@@ -121,7 +127,9 @@ class ImdsCredentialsProviderTest {
 
         val provider = ImdsCredentialsProvider(profileOverride = "imds-test-role", client = lazyOf(client))
 
-        val actual = provider.getCredentials()
+        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            provider.getCredentials()
+        }
         val expected = Credentials(
             "ASIARTEST",
             "xjtest",
@@ -151,7 +159,9 @@ class ImdsCredentialsProviderTest {
         val provider = ImdsCredentialsProvider(client = lazyOf(client))
 
         val ex = assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+                provider.getCredentials()
+            }
         }
         ex.message.shouldContain("failed to load instance profile")
         assertIs<EC2MetadataError>(ex.cause)
@@ -197,7 +207,9 @@ class ImdsCredentialsProviderTest {
         val provider = ImdsCredentialsProvider(client = lazyOf(client))
 
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+                provider.getCredentials()
+            }
         }.message.shouldContain("failed to load instance profile")
     }
 }

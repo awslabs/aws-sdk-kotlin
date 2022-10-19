@@ -124,6 +124,7 @@ tasks.test {
         showExceptions = true
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
+    jvmArgs("-Dkotlinx.coroutines.stacktrace.recovery=true")
 }
 
 dependencies {

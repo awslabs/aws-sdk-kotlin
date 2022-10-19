@@ -19,7 +19,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -55,7 +55,7 @@ class ResolveAwsEndpointTest {
         val resolver = AwsEndpointResolver { _, _ -> endpoint }
         op.install(ResolveAwsEndpoint("TestService", resolver))
 
-        op.context.withRootSpan(NoOpTraceSpan) {
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
             op.roundTrip(client, Unit)
         }
 
@@ -86,7 +86,7 @@ class ResolveAwsEndpointTest {
         val resolver = AwsEndpointResolver { _, _ -> endpoint }
         op.install(ResolveAwsEndpoint("TestService", resolver))
 
-        op.context.withRootSpan(NoOpTraceSpan) {
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
             op.roundTrip(client, Unit)
         }
 
@@ -96,7 +96,7 @@ class ResolveAwsEndpointTest {
         assertEquals(Protocol.HTTPS, actual.url.scheme)
         assertEquals("api.test.com", actual.headers["Host"])
 
-        op.context.withRootSpan(NoOpTraceSpan) {
+        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
             op.roundTrip(client, Unit)
         }
 

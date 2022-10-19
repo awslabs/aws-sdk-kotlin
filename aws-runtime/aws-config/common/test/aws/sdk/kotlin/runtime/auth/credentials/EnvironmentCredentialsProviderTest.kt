@@ -7,6 +7,8 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -25,7 +27,10 @@ class EnvironmentCredentialsProviderTest {
             AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def",
             AwsSdkSetting.AwsSessionToken.environmentVariable to "ghi",
         )
-        assertEquals(provider.getCredentials(), Credentials("abc", "def", "ghi", providerName = "Environment"))
+        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            provider.getCredentials()
+        }
+        assertEquals(Credentials("abc", "def", "ghi", providerName = "Environment"), actual)
     }
 
     @Test
@@ -34,20 +39,29 @@ class EnvironmentCredentialsProviderTest {
             AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc",
             AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def",
         )
-        assertEquals(provider.getCredentials(), Credentials("abc", "def", null, providerName = "Environment"))
+        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            provider.getCredentials()
+        }
+        assertEquals(Credentials("abc", "def", null, providerName = "Environment"), actual)
     }
 
     @Test
     fun `it should throw an exception on missing access key`() = runTest {
+        val provider = provider(AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def")
         assertFailsWith<ProviderConfigurationException> {
-            provider(AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def").getCredentials()
+            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+                provider.getCredentials()
+            }
         }.message.shouldContain("Missing value for environment variable `AWS_ACCESS_KEY_ID`")
     }
 
     @Test
     fun `it should throw an exception on missing secret key`() = runTest {
+        val provider = provider(AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc")
         assertFailsWith<ProviderConfigurationException> {
-            provider(AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc").getCredentials()
+            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+                provider.getCredentials()
+            }
         }.message.shouldContain("Missing value for environment variable `AWS_SECRET_ACCESS_KEY`")
     }
 }
