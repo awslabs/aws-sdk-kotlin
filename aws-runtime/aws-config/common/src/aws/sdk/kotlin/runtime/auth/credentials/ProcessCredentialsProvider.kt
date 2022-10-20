@@ -54,9 +54,7 @@ public class ProcessCredentialsProvider(
                 resp.expiration ?: Instant.MAX_VALUE,
                 PROVIDER_NAME,
             )
-            else -> {
-                throw CredentialsProviderException("Credentials response was not of expected format")
-            }
+            else -> throw CredentialsProviderException("Credentials response was not of expected format")
         }
     }
 }
