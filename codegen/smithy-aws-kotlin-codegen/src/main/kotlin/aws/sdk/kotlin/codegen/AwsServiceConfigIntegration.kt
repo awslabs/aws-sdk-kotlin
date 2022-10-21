@@ -25,6 +25,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                     AWS region to make requests to
             """.trimIndent()
             propertyType = ClientConfigPropertyType.Required()
+            order = -100
         }
 
         val CredentialsProviderProp: ClientConfigProperty = ClientConfigProperty {
@@ -38,7 +39,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
             propertyType = ClientConfigPropertyType.Custom(render = { prop, writer ->
                 writer.write(
-                    "public val #1L: #2T = builder.#1L?.borrow() ?: #3T()",
+                    "public val #1L: #2T = builder.#1L?.borrow() ?: #3T(httpClientEngine = httpClientEngine, region = region)",
                     prop.propertyName,
                     prop.symbol,
                     AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,

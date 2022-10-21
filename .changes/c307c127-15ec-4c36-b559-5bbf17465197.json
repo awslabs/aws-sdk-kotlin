@@ -1,0 +1,6 @@
+{
+  "id": "c307c127-15ec-4c36-b559-5bbf17465197",
+  "type": "bugfix",
+  "description": "Pass client configuration's httpClientEngine to the CredentialsProvider and region to ProfileCredentialsProvider",
+  "issues": ["#711"]
+}
