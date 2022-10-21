@@ -35,6 +35,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * @param platformProvider The platform API provider
  * @param httpClientEngine the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
+ * @param region the region to make credentials requests to.
  * @return the newly-constructed credentials provider
  */
 public class DefaultChainCredentialsProvider constructor(
