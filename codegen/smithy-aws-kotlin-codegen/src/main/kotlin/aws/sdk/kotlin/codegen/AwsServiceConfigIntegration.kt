@@ -25,7 +25,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                     AWS region to make requests to
             """.trimIndent()
             propertyType = ClientConfigPropertyType.Required()
-            order = -1
+            order = -100
         }
 
         val CredentialsProviderProp: ClientConfigProperty = ClientConfigProperty {
