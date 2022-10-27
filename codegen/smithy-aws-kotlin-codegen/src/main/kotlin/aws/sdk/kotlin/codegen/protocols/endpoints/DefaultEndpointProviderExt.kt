@@ -6,14 +6,22 @@ package aws.sdk.kotlin.codegen.protocols.endpoints
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.codegen.core.CodegenException
-import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.rendering.endpoints.DefaultEndpointProviderGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.endpoints.ExpressionRenderer
 import software.amazon.smithy.model.node.ObjectNode
-import software.amazon.smithy.rulesengine.language.EndpointRuleSet
 import software.amazon.smithy.rulesengine.language.syntax.expr.Expression
+
+val awsEndpointFunctions = mapOf(
+    "aws.partition" to buildSymbol { name = "partition" }, // the partition function is generated per-service in the same package
+    "aws.parseArn" to AwsRuntimeTypes.Endpoint.Functions.parseArn,
+    "aws.isVirtualHostableS3Bucket" to AwsRuntimeTypes.Endpoint.Functions.isVirtualHostableS3Bucket,
+)
+
+val awsEndpointPropertyRenderers = mapOf(
+    "authSchemes" to ::renderAuthSchemes,
+)
 
 // valid auth scheme names that can appear in a smithy endpoint's properties
 private val validAuthSchemeNames = setOf("sigv4", "sigv4a")
@@ -25,27 +33,7 @@ private fun String.toAuthSchemeClassName(): String =
         else -> throw CodegenException("unrecognized scheme impl $this")
     }
 
-class AwsDefaultEndpointProviderGenerator(
-    writer: KotlinWriter,
-    rules: EndpointRuleSet,
-    providerSymbol: Symbol,
-    paramsSymbol: Symbol,
-): DefaultEndpointProviderGenerator(writer, rules, providerSymbol, paramsSymbol) {
-    override val externalFunctions = mapOf(
-        "aws.partition" to buildSymbol { name = "partition" }, // the partition function is generated per-service in the same package
-        "aws.parseArn" to AwsRuntimeTypes.Endpoint.Functions.parseArn,
-        "aws.isVirtualHostableS3Bucket" to AwsRuntimeTypes.Endpoint.Functions.isVirtualHostableS3Bucket,
-    )
-
-    override val propertyRenderers = mapOf(
-        "authSchemes" to ::renderAuthSchemes,
-    )
-}
-
-// render AWS-specific auth schemes property for signing
-// the contents of this field are validated by the rules engine validator, this generator will fail if any fields
-// therein are invalid/missing
-internal fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, renderExpression: (Expression) -> Unit) {
+private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, expressionRenderer: ExpressionRenderer) {
     writer.withBlock("set(", ")") {
         write("#T,", AwsRuntimeTypes.Endpoint.AuthSchemesAttributeKey)
         withBlock("listOf(", "),") {
@@ -60,12 +48,12 @@ internal fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, re
                     AwsRuntimeTypes.Endpoint.AuthScheme,
                     schemeName.toAuthSchemeClassName(),
                 ) {
-                    // we delegate back to the expression visitor for each of these scalar fields because it's
-                    // possible to encounter template strings throughout
+                    // we delegate back to the expression visitor for each of these fields because it's possible to
+                    // encounter template strings throughout
 
                     writeInline("signingName = ")
                     scheme.getStringMember("signingName").ifPresentOrElse({ node ->
-                        renderExpression(Expression.fromNode(node))
+                        expressionRenderer.renderExpression(Expression.fromNode(node))
                         write(",")
                     }) {
                         writeInline("null,")
@@ -73,15 +61,15 @@ internal fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, re
 
                     writer.writeInline("disableDoubleEncoding = ")
                     scheme.getBooleanMember("disableDoubleEncoding").ifPresentOrElse({ node ->
-                        renderExpression(Expression.fromNode(node))
+                        expressionRenderer.renderExpression(Expression.fromNode(node))
                         write(",")
                     }) {
                         writeInline("false,")
                     }
 
                     when (schemeName) {
-                        "sigv4" -> renderSigV4Fields(writer, scheme, renderExpression)
-                        "sigv4a" -> renderSigV4AFields(writer, scheme, renderExpression)
+                        "sigv4" -> renderSigV4Fields(writer, scheme, expressionRenderer)
+                        "sigv4a" -> renderSigV4AFields(writer, scheme, expressionRenderer)
                     }
                 }
             }
@@ -89,18 +77,18 @@ internal fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, re
     }
 }
 
-private fun renderSigV4Fields(writer: KotlinWriter, scheme: ObjectNode, renderExpression: (Expression) -> Unit) {
+private fun renderSigV4Fields(writer: KotlinWriter, scheme: ObjectNode, expressionRenderer: ExpressionRenderer) {
     writer.writeInline("signingRegion = ")
     scheme.getStringMember("signingRegion").ifPresentOrElse({
-        renderExpression(Expression.fromNode(it))
+        expressionRenderer.renderExpression(Expression.fromNode(it))
         writer.write(",")
     }) {
         writer.write("null,")
     }
 }
 
-private fun renderSigV4AFields(writer: KotlinWriter, scheme: ObjectNode, renderExpression: (Expression) -> Unit) {
+private fun renderSigV4AFields(writer: KotlinWriter, scheme: ObjectNode, expressionRenderer: ExpressionRenderer) {
     writer.writeInline("signingRegionSet = ")
-    renderExpression(Expression.fromNode(scheme.expectArrayMember("signingRegionSet")))
+    expressionRenderer.renderExpression(Expression.fromNode(scheme.expectArrayMember("signingRegionSet")))
     writer.write(",")
 }

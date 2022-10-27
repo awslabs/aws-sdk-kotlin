@@ -6,8 +6,8 @@ package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.protocols.endpoints.AwsDefaultEndpointProviderGenerator
-import aws.sdk.kotlin.codegen.protocols.endpoints.AwsDefaultEndpointProviderTestGenerator
+import aws.sdk.kotlin.codegen.protocols.endpoints.awsEndpointFunctions
+import aws.sdk.kotlin.codegen.protocols.endpoints.awsEndpointPropertyRenderers
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamParserGenerator
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamSerializerGenerator
 import aws.sdk.kotlin.codegen.protocols.middleware.RecursionDetectionMiddleware
@@ -29,6 +29,8 @@ import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerat
 import aws.sdk.kotlin.codegen.protocols.endpoints.PartitionsGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.DefaultEndpointProviderGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.DefaultEndpointProviderTestGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointParametersGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointProviderGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.OperationShape
@@ -154,8 +156,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     }
 
     override fun generateEndpointProvider(ctx: ProtocolGenerator.GenerationContext, rules: EndpointRuleSet) {
-        super.generateEndpointProvider(ctx, rules)
-
         val partitionsData =
             javaClass.classLoader.getResource("aws/sdk/kotlin/codegen/partitions.json")?.readText()
                 ?: throw CodegenException("could not load partitions.json resource")
@@ -165,22 +165,47 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         ctx.delegator.useFileWriter(partitionsSymbol) {
             PartitionsGenerator(it, partitions).render()
         }
+
+        val paramsSymbol = EndpointParametersGenerator.getSymbol(ctx.settings)
+        val providerSymbol = EndpointProviderGenerator.getSymbol(ctx.settings)
+        val defaultProviderSymbol = DefaultEndpointProviderGenerator.getSymbol(ctx.settings)
+
+        ctx.delegator.useFileWriter(paramsSymbol) {
+            EndpointParametersGenerator(it, rules).render()
+        }
+        ctx.delegator.useFileWriter(providerSymbol) {
+            EndpointProviderGenerator(it, paramsSymbol).render()
+        }
+        ctx.delegator.useFileWriter(defaultProviderSymbol) {
+            DefaultEndpointProviderGenerator(
+                it,
+                rules,
+                providerSymbol,
+                paramsSymbol,
+                awsEndpointFunctions,
+                awsEndpointPropertyRenderers,
+            ).render()
+        }
     }
 
-    override fun defaultEndpointProviderGenerator(
-        writer: KotlinWriter,
-        rules: EndpointRuleSet,
-        interfaceSymbol: Symbol,
-        paramsSymbol: Symbol,
-    ): DefaultEndpointProviderGenerator =
-        AwsDefaultEndpointProviderGenerator(writer, rules, interfaceSymbol, paramsSymbol)
-
-    override fun defaultEndpointProviderTestGenerator(
-        writer: KotlinWriter,
-        rules: EndpointRuleSet,
+    override fun generateEndpointProviderTests(
+        ctx: ProtocolGenerator.GenerationContext,
         tests: List<EndpointTestCase>,
-        defaultProviderSymbol: Symbol,
-        paramsSymbol: Symbol,
-    ): DefaultEndpointProviderTestGenerator =
-        AwsDefaultEndpointProviderTestGenerator(writer, rules, tests, defaultProviderSymbol, paramsSymbol)
+        rules: EndpointRuleSet,
+    ) {
+        val paramsSymbol = EndpointParametersGenerator.getSymbol(ctx.settings)
+        val defaultProviderSymbol = DefaultEndpointProviderGenerator.getSymbol(ctx.settings)
+        val testSymbol = DefaultEndpointProviderTestGenerator.getSymbol(ctx.settings)
+
+        ctx.delegator.useTestFileWriter("${testSymbol.name}.kt", testSymbol.namespace) {
+            DefaultEndpointProviderTestGenerator(
+                it,
+                rules,
+                tests,
+                defaultProviderSymbol,
+                paramsSymbol,
+                awsEndpointPropertyRenderers,
+            ).render()
+        }
+    }
 }

@@ -5,8 +5,8 @@
 // This package extends the smithy endpoints standard library with AWS-specific functions.
 package aws.sdk.kotlin.runtime.endpoint.functions
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.endpoints.functions.isValidHostLabel
-import aws.smithy.kotlin.runtime.util.InternalApi
 import aws.smithy.kotlin.runtime.util.net.isIpv4
 import aws.smithy.kotlin.runtime.util.net.isIpv6
 
@@ -16,7 +16,7 @@ private const val ARN_COMPONENT_COUNT = 6
 /**
  * Identifies the partition for the given AWS region.
  */
-@InternalApi
+@InternalSdkApi
 public fun partition(partitions: List<Partition>, region: String?): PartitionConfig? =
     region?.let {
         val explicitMatch = partitions.find { it.regions.contains(region) }
@@ -32,7 +32,7 @@ public fun partition(partitions: List<Partition>, region: String?): PartitionCon
 /**
  * A partition defines a broader set of AWS regions.
  */
-@InternalApi
+@InternalSdkApi
 public data class Partition(
     public val id: String,
     /**
@@ -54,7 +54,7 @@ public data class Partition(
  * The core configuration details for a partition. This is the structure that endpoint providers interface receive as
  * the result of a partition call.
  */
-@InternalApi
+@InternalSdkApi
 public data class PartitionConfig(
     public val name: String? = null,
     public val dnsSuffix: String? = null,
@@ -77,7 +77,7 @@ public data class PartitionConfig(
  *
  * The resource identifier is further split based on the type or scope delimiter present (if any).
  */
-@InternalApi
+@InternalSdkApi
 public fun parseArn(value: String): Arn? {
     val split = value.split(':', limit = ARN_COMPONENT_COUNT)
     if (split[0] != "arn") return null
@@ -96,7 +96,7 @@ public fun parseArn(value: String): Arn? {
 /**
  * Represents a parsed form of an ARN (Amazon Resource Name).
  */
-@InternalApi
+@InternalSdkApi
 public data class Arn(
     public val partition: String,
     public val service: String,
@@ -108,7 +108,7 @@ public data class Arn(
 /**
  * Evaluates whether a string is a DNS-compatible bucket name that can be used with virtual hosted-style addressing.
  */
-@InternalApi
+@InternalSdkApi
 public fun isVirtualHostableS3Bucket(value: String?, allowSubdomains: Boolean): Boolean =
     value?.let {
         if (!isValidHostLabel(value, allowSubdomains)) {
