@@ -55,7 +55,7 @@ private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, exp
                     scheme.getStringMember("signingName").ifPresentOrElse({ node ->
                         expressionRenderer.renderExpression(Expression.fromNode(node))
                         write(",")
-                    }) {
+                    },) {
                         writeInline("null,")
                     }
 
@@ -63,7 +63,7 @@ private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, exp
                     scheme.getBooleanMember("disableDoubleEncoding").ifPresentOrElse({ node ->
                         expressionRenderer.renderExpression(Expression.fromNode(node))
                         write(",")
-                    }) {
+                    },) {
                         writeInline("false,")
                     }
 
@@ -82,7 +82,7 @@ private fun renderSigV4Fields(writer: KotlinWriter, scheme: ObjectNode, expressi
     scheme.getStringMember("signingRegion").ifPresentOrElse({
         expressionRenderer.renderExpression(Expression.fromNode(it))
         writer.write(",")
-    }) {
+    },) {
         writer.write("null,")
     }
 }

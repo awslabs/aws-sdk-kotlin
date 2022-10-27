@@ -8,11 +8,9 @@ import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.node.ObjectNode
 
 /**
@@ -41,7 +39,7 @@ class PartitionsGenerator(
             "internal fun partition(region: #T?): #T? {",
             "}",
             KotlinTypes.String,
-            AwsRuntimeTypes.Endpoint.Functions.PartitionConfig
+            AwsRuntimeTypes.Endpoint.Functions.PartitionConfig,
         ) {
             write("return #T(defaultPartitions, region)", AwsRuntimeTypes.Endpoint.Functions.partitionFn)
         }

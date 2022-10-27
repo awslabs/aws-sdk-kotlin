@@ -6,6 +6,7 @@ package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.protocols.endpoints.PartitionsGenerator
 import aws.sdk.kotlin.codegen.protocols.endpoints.awsEndpointFunctions
 import aws.sdk.kotlin.codegen.protocols.endpoints.awsEndpointPropertyRenderers
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamParserGenerator
@@ -26,7 +27,6 @@ import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
-import aws.sdk.kotlin.codegen.protocols.endpoints.PartitionsGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.DefaultEndpointProviderGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.DefaultEndpointProviderTestGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointParametersGenerator

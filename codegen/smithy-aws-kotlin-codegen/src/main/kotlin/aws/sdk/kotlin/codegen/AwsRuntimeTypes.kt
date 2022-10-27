@@ -33,11 +33,11 @@ object AwsRuntimeTypes {
 
         object Functions {
             val partitionFn = runtimeSymbol("partition", AwsKotlinDependency.AWS_ENDPOINT, "functions")
-            val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_ENDPOINT, "functions" )
-            val PartitionConfig = runtimeSymbol("PartitionConfig", AwsKotlinDependency.AWS_ENDPOINT, "functions" )
-            val parseArn = runtimeSymbol("parseArn", AwsKotlinDependency.AWS_ENDPOINT, "functions" )
-            val Arn = runtimeSymbol("Arn", AwsKotlinDependency.AWS_ENDPOINT, "functions" )
-            val isVirtualHostableS3Bucket = runtimeSymbol("isVirtualHostableS3Bucket", AwsKotlinDependency.AWS_ENDPOINT, "functions" )
+            val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_ENDPOINT, "functions")
+            val PartitionConfig = runtimeSymbol("PartitionConfig", AwsKotlinDependency.AWS_ENDPOINT, "functions")
+            val parseArn = runtimeSymbol("parseArn", AwsKotlinDependency.AWS_ENDPOINT, "functions")
+            val Arn = runtimeSymbol("Arn", AwsKotlinDependency.AWS_ENDPOINT, "functions")
+            val isVirtualHostableS3Bucket = runtimeSymbol("isVirtualHostableS3Bucket", AwsKotlinDependency.AWS_ENDPOINT, "functions")
         }
 
         // TODO: remove after endpoints2
