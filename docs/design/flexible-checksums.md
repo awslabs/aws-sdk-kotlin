@@ -11,11 +11,7 @@ services add an `httpChecksum` trait to their Smithy models.
 
 This document covers the design for supporting flexible checksums in the AWS SDK for Kotlin. 
 
-# Design
-
-## Requirements
-
-
+# Requirements
 
 - Support the Smithy trait `httpChecksum`
 - Implement CRC32C
@@ -113,6 +109,74 @@ We __MUST__ provide a mechanism for customers to verify whether a checksum valid
 It is recommended to do this by setting the response metadata, or storing it in some context object.
 
 We __MUST__ validate only one checksum, even if the service sends many.
+
+# Design
+
+All of the desired behavior can be accomplished by adding new middleware.
+
+## Requests
+
+During an HTTP request, we need to check if the user has opted-in to sending checksums, and if so, calculate the checksum using 
+the algorithm they specified, and inject it into either the [header or trailer](#normal-vs-streaming-requests).
+
+### Validating Input Algorithms
+
+When a user sets the `requestAlgorithmMember` property, they are choosing to opt-in to sending request checksums. 
+
+This comes in as a string, so we need to do some validation. TODO can we create an enum of these algorithm names? From the specification:
+> This opt-in input member MUST target an algorithm enum representing the algorithm name for which checksum value is auto-computed. And the algorithm enum values are fixed to predefined set of supported checksum algorithm names
+
+A middleware will be placed in the [`initialize` stage](https://github.com/awslabs/smithy-kotlin/blob/cfa0fd3a30b4c50b75485786f043d4e2ad803f55/runtime/protocol/http/common/src/aws/smithy/kotlin/runtime/http/operation/SdkOperationExecution.kt#L41-L44)
+which will validate the input string against the possible choices, and throw an exception if the user's specified algorithm is not supported.
+
+```kotlin
+class ValidateChecksumAlgorithmName : KotlinIntegration {
+    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean = model
+        .shapes<OperationShape>()
+        .any { it.hasTrait<HttpChecksumTrait>() }
+
+    override fun customizeMiddleware(
+        ctx: ProtocolGenerator.GenerationContext,
+        resolved: List<ProtocolMiddleware>,
+    ): List<ProtocolMiddleware> {
+        return resolved + ValidateChecksumAlgorithmNameMiddleware()
+    }
+}
+
+private class ValidateChecksumAlgorithmNameMiddleware : ProtocolMiddleware {
+  override val name: String
+    get() = "ValidateChecksumAlgorithmNameMiddleware"
+
+  override val order: Byte = -127
+
+  override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean {
+    return op.input.getOrNull()?.let {
+      ctx.model.shapes<OperationShape>().any {
+        return if (it.hasTrait<HttpChecksumTrait>()) {
+          val algorithmName = it.getTrait<HttpChecksumTrait>()?.requestAlgorithmMember?.getOrNull()
+          algorithmName?.let { name -> return if (isValidAlgorithmName(name)) true else throw Exception("invalid checksum algorithm name $name") }
+            ?: false
+        } else false
+      }
+    } ?: false
+  }
+
+  fun isValidAlgorithmName(algorithmName: String): Boolean =
+    HttpChecksumTrait.CHECKSUM_ALGORITHMS.any { it.equals(name, ignoreCase = true) }
+
+  override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+    writer.addImport(RuntimeTypes.Http.Operation.OperationRequest)
+
+    writer.withBlock("op.execution.initialize.intercept { req, next -> ", "}") {
+      write("next.call(req)")
+    }
+  }
+}
+```
+
+## Computing and Injecting Checksums
+
+After validating the algorithm name, we can compute and inject the checksum. This should be done in the [mutate stage](https://github.com/awslabs/smithy-kotlin/blob/cfa0fd3a30b4c50b75485786f043d4e2ad803f55/runtime/protocol/http/common/src/aws/smithy/kotlin/runtime/http/operation/SdkOperationExecution.kt#L46-L51).
 
 # Appendix
 
