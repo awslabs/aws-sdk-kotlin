@@ -1,8 +1,0 @@
-{
-    "id": "15f645e3-86c1-48c2-8239-fd519fd42b36",
-    "type": "bugfix",
-    "description": "Fix OkHttp engine crashing on Android when coroutine is cancelled while uploading request body",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#733"
-    ]
-}
