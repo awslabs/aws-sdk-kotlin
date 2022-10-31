@@ -123,7 +123,7 @@ the algorithm they specified, and inject it into either the [header or trailer](
 
 When a user sets the `requestAlgorithmMember` property, they are choosing to opt-in to sending request checksums. 
 
-This comes in as a string, so we need to do some validation. TODO can we create an enum of these algorithm names? From the specification:
+This comes in as a string, so we need to do some validation. TODO / QUESTION can we codegen a user-accessible enum of these algorithm names? From the specification:
 > This opt-in input member MUST target an algorithm enum representing the algorithm name for which checksum value is auto-computed. And the algorithm enum values are fixed to predefined set of supported checksum algorithm names
 
 A middleware will be placed in the [`initialize` stage](https://github.com/awslabs/smithy-kotlin/blob/cfa0fd3a30b4c50b75485786f043d4e2ad803f55/runtime/protocol/http/common/src/aws/smithy/kotlin/runtime/http/operation/SdkOperationExecution.kt#L41-L44)
@@ -177,6 +177,16 @@ private class ValidateChecksumAlgorithmNameMiddleware : ProtocolMiddleware {
 ## Computing and Injecting Checksums
 
 After validating the algorithm name, we can compute and inject the checksum. This should be done in the [mutate stage](https://github.com/awslabs/smithy-kotlin/blob/cfa0fd3a30b4c50b75485786f043d4e2ad803f55/runtime/protocol/http/common/src/aws/smithy/kotlin/runtime/http/operation/SdkOperationExecution.kt#L46-L51).
+
+At this point, we can check if the request is a streaming request, and set the checksum in the trailer if so.
+
+## Validating Response Checksums
+
+Services can require validation of responses by setting a non-null `requestValidationModeMember` property.
+The response checksums will always be stored in the header. See [Validation Process](#validation-process) for the full details.
+
+We can create this middleware at the [receive stage](https://github.com/awslabs/smithy-kotlin/blob/cfa0fd3a30b4c50b75485786f043d4e2ad803f55/runtime/protocol/http/common/src/aws/smithy/kotlin/runtime/http/operation/SdkOperationExecution.kt#L59-L62)
+because this is the first opportunity to access the response data before deserialization.
 
 # Appendix
 
