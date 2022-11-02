@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.smithy.kotlin.runtime.http.readAll
-import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -26,9 +25,9 @@ class FrameEncoderTest {
             validMessageNoHeaders(),
         )
 
-        val message1 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageWithAllHeaders()))
-        val message2 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageEmptyPayload()))
-        val message3 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageNoHeaders()))
+        val message1 = Message.decode(sdkBufferOf(validMessageWithAllHeaders()))
+        val message2 = Message.decode(sdkBufferOf(validMessageEmptyPayload()))
+        val message3 = Message.decode(sdkBufferOf(validMessageNoHeaders()))
 
         val messages = flowOf(
             message1,

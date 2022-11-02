@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.hashing.crc32
 import aws.smithy.kotlin.runtime.io.*
 
 internal const val PRELUDE_BYTE_LEN = 8
@@ -28,38 +27,37 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
     /**
      * Encode the prelude + CRC to [dest] buffer
      */
-    public fun encode(dest: MutableBuffer) {
-        val bytes = ByteArray(PRELUDE_BYTE_LEN)
-        val preludeBuf = SdkByteBuffer.of(bytes)
+    public fun encode(dest: SdkBufferedSink) {
+        val sink = CrcSink(dest)
+        val buffer = sink.buffer()
 
-        preludeBuf.writeInt(totalLen)
-        preludeBuf.writeInt(headersLength)
-
-        dest.writeFully(preludeBuf)
-        dest.writeUInt(bytes.crc32())
+        buffer.writeInt(totalLen)
+        buffer.writeInt(headersLength)
+        buffer.emit()
+        dest.writeInt(sink.crc.toInt())
     }
 
     public companion object {
         /**
-         * Read the prelude from [buffer] and validate the prelude CRC
+         * Read the prelude from [source] and validate the prelude CRC
          */
-        public fun decode(buffer: Buffer): Prelude {
-            check(buffer.readRemaining >= PRELUDE_BYTE_LEN_WITH_CRC.toULong()) { "Invalid message prelude" }
-            val crcBuffer = ByteArray(PRELUDE_BYTE_LEN)
-            buffer.readFully(crcBuffer)
-            val expectedCrc = buffer.readUInt()
-            val computedCrc = crcBuffer.crc32()
+        public fun decode(source: SdkBufferedSource): Prelude {
+            check(source.request(PRELUDE_BYTE_LEN_WITH_CRC.toLong())) { "Invalid message prelude" }
+            val crcSource = CrcSource(source)
+            val buffer = SdkBuffer()
+            crcSource.read(buffer, PRELUDE_BYTE_LEN.toLong())
+            val expectedCrc = source.readInt().toUInt()
+            val computedCrc = crcSource.crc
 
-            val preludeBuffer = SdkByteBuffer.of(crcBuffer).apply { advance(PRELUDE_BYTE_LEN.toULong()) }
-            val totalLen = preludeBuffer.readUInt()
-            val headerLen = preludeBuffer.readUInt()
+            val totalLen = buffer.readInt()
+            val headerLen = buffer.readInt()
 
-            check(totalLen <= MAX_MESSAGE_SIZE.toUInt()) { "Invalid Message size: $totalLen" }
-            check(headerLen <= MAX_HEADER_SIZE.toUInt()) { "Invalid Header size: $headerLen" }
+            check(totalLen <= MAX_MESSAGE_SIZE) { "Invalid Message size: $totalLen" }
+            check(headerLen <= MAX_HEADER_SIZE) { "Invalid Header size: $headerLen" }
             check(expectedCrc == computedCrc) {
                 "Prelude checksum mismatch; expected=0x${expectedCrc.toString(16)}; calculated=0x${computedCrc.toString(16)}"
             }
-            return Prelude(totalLen.toInt(), headerLen.toInt())
+            return Prelude(totalLen, headerLen)
         }
     }
 }

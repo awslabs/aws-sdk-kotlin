@@ -5,14 +5,14 @@
 
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
-import aws.smithy.kotlin.runtime.io.SdkByteBuffer
-import aws.smithy.kotlin.runtime.io.bytes
+import aws.smithy.kotlin.runtime.io.EOFException
+import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.Uuid
 import io.kotest.matchers.string.shouldContain
 import kotlin.test.*
 
-fun SdkByteBuffer.Companion.wrapAsReadBuffer(b: ByteArray): SdkByteBuffer = SdkByteBuffer.of(b).apply { advance(b.size.toULong()) }
+fun sdkBufferOf(b: ByteArray): SdkBuffer = SdkBuffer().apply { write(b) }
 
 fun byteArrayFrom(vararg bytes: Any): ByteArray {
     val buf = ByteArray(bytes.size)
@@ -62,7 +62,7 @@ class MessageTest {
             0x36,
         )
 
-        val buffer = SdkByteBuffer.wrapAsReadBuffer(data)
+        val buffer = sdkBufferOf(data)
         val actual = Message.decode(buffer)
         val expectedPayload = """{'foo':'bar'}"""
         assertEquals(expectedPayload, actual.payload.decodeToString())
@@ -80,7 +80,7 @@ class MessageTest {
             0x7d, 0x8D, 0x9C, 0x08, 0xB1,
         )
 
-        val buffer = SdkByteBuffer.wrapAsReadBuffer(data)
+        val buffer = sdkBufferOf(data)
         val actual = Message.decode(buffer)
         val expectedPayload = """{'foo':'bar'}"""
         assertEquals(expectedPayload, actual.payload.decodeToString())
@@ -107,9 +107,11 @@ class MessageTest {
             addHeader("uuid", HeaderValue.Uuid(Uuid(0xb79bc914de214e13u.toLong(), 0xb8b2bc47e85b7f0bu.toLong())))
         }
 
-        val dest = SdkByteBuffer(150u)
+        val dest = SdkBuffer()
         message.encode(dest)
-        assertContentEquals(encoded, dest.bytes())
+        val peek = dest.peek()
+
+        assertContentEquals(encoded, peek.readByteArray())
 
         val result = Message.decode(dest)
         assertContentEquals(message.headers, result.headers)
@@ -131,7 +133,7 @@ class MessageTest {
             0xbc, 0x47, 0xe8, 0x5b, 0x7f, 0x0b, 0x73, 0x6f, 0x6d, 0x65, 0x20, 0x70, 0x61, 0x79, 0x6c, 0x6f,
             0x61, 0x64, 0x01, 0xa0, 0x58, 0x60,
         )
-        val buffer = SdkByteBuffer.wrapAsReadBuffer(encoded)
+        val buffer = sdkBufferOf(encoded)
         assertFailsWith<IllegalStateException> {
             Message.decode(buffer)
         }.message.shouldContain("Invalid HeaderValue; type=STRING, len=65535")
@@ -147,8 +149,8 @@ class MessageTest {
             0x05, 0x62, 0x79, 0x74, 0x65, 0x73, 0x06, 0x00, 0x0a, 0x73, 0x6f, 0x6d, 0x65, 0x20, 0x62, 0x79,
             0x74, 0x65, 0x73, 0x03, 0x73, 0x74, 0x72, 0x07, 0xff, 0x00, 0x00, 0x00, 0x00,
         )
-        val buffer = SdkByteBuffer.wrapAsReadBuffer(encoded)
-        assertFailsWith<IndexOutOfBoundsException> {
+        val buffer = sdkBufferOf(encoded)
+        assertFailsWith<EOFException> {
             Message.decode(buffer)
         }
     }
@@ -167,7 +169,7 @@ class MessageTest {
             0xbc, 0x47, 0xe8, 0x5b, 0x7f, 0x0b, 0x73, 0x6f, 0x6d, 0x65, 0x20, 0x70, 0x61, 0x79, 0x6c, 0x6f,
             0x61, 0x64, 0x01, 0xa0, 0x58, 0x60,
         )
-        val buffer = SdkByteBuffer.wrapAsReadBuffer(encoded)
+        val buffer = sdkBufferOf(encoded)
         assertFailsWith<IllegalArgumentException> {
             Message.decode(buffer)
         }.message.shouldContain("Unknown HeaderType: 96")
@@ -187,7 +189,7 @@ class MessageTest {
             0xbc, 0x47, 0xe8, 0x5b, 0x7f, 0x0b, 0x73, 0x6f, 0x6d, 0x65, 0x20, 0x70, 0x61, 0x79, 0x6c, 0x6f,
             0x61, 0x64, 0x01, 0xa0, 0x58, 0x60,
         )
-        val buffer = SdkByteBuffer.wrapAsReadBuffer(encoded)
+        val buffer = sdkBufferOf(encoded)
         assertFailsWith<IllegalStateException> {
             Message.decode(buffer)
         }.message.shouldContain("Invalid header name length")
@@ -203,10 +205,10 @@ class MessageTest {
             0x05, 0x62, 0x79, 0x74, 0x65, 0x73, 0x06, 0x00, 0x0a, 0x73, 0x6f, 0x6d, 0x65, 0x20, 0x62, 0x79,
             0x74, 0x65, 0x73, 0x03, 0x73, 0x74, 0x72, 0x07, 0xff,
         )
-        val buffer = SdkByteBuffer.wrapAsReadBuffer(encoded)
-        assertFailsWith<IllegalArgumentException> {
+        val buffer = sdkBufferOf(encoded)
+        assertFailsWith<IllegalStateException> {
             Message.decode(buffer)
-        }.message.shouldContain("Not enough bytes to read a ByteArray of size 3")
+        }.message.shouldContain("Not enough bytes to read header name; needed: 3; remaining: 1")
     }
 
     @Test
@@ -223,7 +225,7 @@ class MessageTest {
             0xbc, 0x47, 0xe8, 0x5b, 0x7f, 0x0b, 0x73, 0x6f, 0x6d, 0x65, 0x20, 0x70, 0x61, 0x79, 0x6c, 0x6f,
             0x61, 0x64, 0x01, 0xa0, 0x58, 0x60,
         )
-        val buffer = SdkByteBuffer.wrapAsReadBuffer(encoded)
+        val buffer = sdkBufferOf(encoded)
         assertFailsWith<IllegalStateException> {
             Message.decode(buffer)
         }.message.shouldContain("Prelude checksum mismatch; expected=0xdeadbeef; calculated=0x8bb495fb")
@@ -243,7 +245,7 @@ class MessageTest {
             0xbc, 0x47, 0xe8, 0x5b, 0x7f, 0x0b, 0x73, 0x6f, 0x6d, 0x65, 0x20, 0x70, 0x61, 0x79, 0x6c, 0x6f,
             0x61, 0x64, 0xde, 0xad, 0xbe, 0xef,
         )
-        val buffer = SdkByteBuffer.wrapAsReadBuffer(encoded)
+        val buffer = sdkBufferOf(encoded)
         assertFailsWith<IllegalStateException> {
             Message.decode(buffer)
         }.message.shouldContain("Message checksum mismatch; expected=0xdeadbeef; calculated=0x1a05860")
@@ -261,9 +263,9 @@ class MessageTest {
             0x04, 0x6c, 0x6f, 0x6e, 0x67, 0x05, 0x00, 0x00, 0x5d, 0x0b, 0xa4, 0x3b, 0x74, 0x00, 0x05, 0x62,
             0x79, 0x74, 0x65, 0x73, 0x06, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00,
         )
-        val buffer = SdkByteBuffer.wrapAsReadBuffer(encoded)
-        assertFailsWith<IllegalArgumentException> {
+        val buffer = sdkBufferOf(encoded)
+        assertFailsWith<IllegalStateException> {
             Message.decode(buffer)
-        }.message.shouldContain("Not enough bytes to read a ByteArray of size 102")
+        }.message.shouldContain("Not enough bytes to read header name; needed: 102; remaining: 70")
     }
 }
