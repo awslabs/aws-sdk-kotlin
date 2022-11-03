@@ -1244,8 +1244,8 @@
                             },
                             "params": {
                                 "Region": "ap-south-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1257,8 +1257,8 @@
                             },
                             "params": {
                                 "Region": "ap-south-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1270,8 +1270,8 @@
                             },
                             "params": {
                                 "Region": "ap-south-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1283,8 +1283,8 @@
                             },
                             "params": {
                                 "Region": "ap-south-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1296,8 +1296,8 @@
                             },
                             "params": {
                                 "Region": "ap-south-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1309,8 +1309,8 @@
                             },
                             "params": {
                                 "Region": "ap-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1322,8 +1322,8 @@
                             },
                             "params": {
                                 "Region": "ap-south-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1335,8 +1335,8 @@
                             },
                             "params": {
                                 "Region": "ap-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1348,8 +1348,8 @@
                             },
                             "params": {
                                 "Region": "eu-south-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1361,8 +1361,8 @@
                             },
                             "params": {
                                 "Region": "eu-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1374,8 +1374,8 @@
                             },
                             "params": {
                                 "Region": "eu-south-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1387,8 +1387,8 @@
                             },
                             "params": {
                                 "Region": "eu-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1400,8 +1400,8 @@
                             },
                             "params": {
                                 "Region": "eu-south-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1413,8 +1413,8 @@
                             },
                             "params": {
                                 "Region": "eu-south-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1426,8 +1426,8 @@
                             },
                             "params": {
                                 "Region": "eu-south-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1439,8 +1439,8 @@
                             },
                             "params": {
                                 "Region": "eu-south-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1452,8 +1452,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1465,8 +1465,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1478,8 +1478,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1491,8 +1491,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1504,8 +1504,8 @@
                             },
                             "params": {
                                 "Region": "me-central-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1517,8 +1517,8 @@
                             },
                             "params": {
                                 "Region": "me-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1530,8 +1530,8 @@
                             },
                             "params": {
                                 "Region": "me-central-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1543,8 +1543,8 @@
                             },
                             "params": {
                                 "Region": "me-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1556,8 +1556,8 @@
                             },
                             "params": {
                                 "Region": "ca-central-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1569,8 +1569,8 @@
                             },
                             "params": {
                                 "Region": "ca-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1582,8 +1582,8 @@
                             },
                             "params": {
                                 "Region": "ca-central-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1595,8 +1595,8 @@
                             },
                             "params": {
                                 "Region": "ca-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1608,8 +1608,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1621,8 +1621,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1634,8 +1634,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1647,8 +1647,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1658,8 +1658,8 @@
                             },
                             "params": {
                                 "Region": "us-iso-west-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1671,8 +1671,8 @@
                             },
                             "params": {
                                 "Region": "us-iso-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1682,8 +1682,8 @@
                             },
                             "params": {
                                 "Region": "us-iso-west-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1695,8 +1695,8 @@
                             },
                             "params": {
                                 "Region": "us-iso-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1708,8 +1708,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1721,8 +1721,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1734,8 +1734,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1747,8 +1747,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1760,8 +1760,8 @@
                             },
                             "params": {
                                 "Region": "us-west-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1773,8 +1773,8 @@
                             },
                             "params": {
                                 "Region": "us-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1786,8 +1786,8 @@
                             },
                             "params": {
                                 "Region": "us-west-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1799,8 +1799,8 @@
                             },
                             "params": {
                                 "Region": "us-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1812,8 +1812,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1825,8 +1825,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1838,8 +1838,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1851,8 +1851,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1864,8 +1864,8 @@
                             },
                             "params": {
                                 "Region": "af-south-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1877,8 +1877,8 @@
                             },
                             "params": {
                                 "Region": "af-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1890,8 +1890,8 @@
                             },
                             "params": {
                                 "Region": "af-south-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1903,8 +1903,8 @@
                             },
                             "params": {
                                 "Region": "af-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1916,8 +1916,8 @@
                             },
                             "params": {
                                 "Region": "eu-north-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1929,8 +1929,8 @@
                             },
                             "params": {
                                 "Region": "eu-north-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1942,8 +1942,8 @@
                             },
                             "params": {
                                 "Region": "eu-north-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1955,8 +1955,8 @@
                             },
                             "params": {
                                 "Region": "eu-north-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1968,8 +1968,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-3",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1981,8 +1981,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-3",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1994,8 +1994,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-3",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2007,8 +2007,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-3",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2020,8 +2020,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2033,8 +2033,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2046,8 +2046,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2059,8 +2059,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2072,8 +2072,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2085,8 +2085,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2098,8 +2098,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2111,8 +2111,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2124,8 +2124,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-3",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2137,8 +2137,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-3",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2150,8 +2150,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-3",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2163,8 +2163,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-3",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2176,8 +2176,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2189,8 +2189,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2202,8 +2202,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2215,8 +2215,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2228,8 +2228,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2241,8 +2241,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2254,8 +2254,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2267,8 +2267,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2280,8 +2280,8 @@
                             },
                             "params": {
                                 "Region": "me-south-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2293,8 +2293,8 @@
                             },
                             "params": {
                                 "Region": "me-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2306,8 +2306,8 @@
                             },
                             "params": {
                                 "Region": "me-south-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2319,8 +2319,8 @@
                             },
                             "params": {
                                 "Region": "me-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2332,8 +2332,8 @@
                             },
                             "params": {
                                 "Region": "sa-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2345,8 +2345,8 @@
                             },
                             "params": {
                                 "Region": "sa-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2358,8 +2358,8 @@
                             },
                             "params": {
                                 "Region": "sa-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2371,8 +2371,8 @@
                             },
                             "params": {
                                 "Region": "sa-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2384,8 +2384,8 @@
                             },
                             "params": {
                                 "Region": "ap-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2397,8 +2397,8 @@
                             },
                             "params": {
                                 "Region": "ap-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2410,8 +2410,8 @@
                             },
                             "params": {
                                 "Region": "ap-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2423,8 +2423,8 @@
                             },
                             "params": {
                                 "Region": "ap-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2436,8 +2436,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2449,8 +2449,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2462,8 +2462,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2475,8 +2475,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2488,8 +2488,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-west-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2501,8 +2501,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2514,8 +2514,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-west-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2527,8 +2527,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2540,8 +2540,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2553,8 +2553,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2566,8 +2566,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2579,8 +2579,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2592,8 +2592,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2605,8 +2605,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2618,8 +2618,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2631,8 +2631,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2642,8 +2642,8 @@
                             },
                             "params": {
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2655,8 +2655,8 @@
                             },
                             "params": {
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2666,8 +2666,8 @@
                             },
                             "params": {
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2679,8 +2679,8 @@
                             },
                             "params": {
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2692,8 +2692,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-3",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2705,8 +2705,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-3",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2718,8 +2718,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-3",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2731,8 +2731,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-3",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2744,8 +2744,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-4",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2757,8 +2757,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-4",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2770,8 +2770,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-4",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2783,8 +2783,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-4",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2796,8 +2796,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2809,8 +2809,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2822,8 +2822,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2835,8 +2835,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2848,8 +2848,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2861,8 +2861,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2874,8 +2874,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2887,8 +2887,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2900,8 +2900,8 @@
                             },
                             "params": {
                                 "Region": "cn-northwest-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2913,8 +2913,8 @@
                             },
                             "params": {
                                 "Region": "cn-northwest-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2926,8 +2926,8 @@
                             },
                             "params": {
                                 "Region": "cn-northwest-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2939,8 +2939,8 @@
                             },
                             "params": {
                                 "Region": "cn-northwest-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2950,8 +2950,8 @@
                             },
                             "params": {
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2963,8 +2963,8 @@
                             },
                             "params": {
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -2974,8 +2974,8 @@
                             },
                             "params": {
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -2987,8 +2987,8 @@
                             },
                             "params": {
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -3000,8 +3000,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
                                 "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -3012,8 +3012,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
                                 "UseFIPS": true,
+                                "UseDualStack": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -3024,8 +3024,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
                                 "UseFIPS": false,
+                                "UseDualStack": true,
                                 "Endpoint": "https://example.com"
                             }
                         }
@@ -3673,13 +3673,13 @@
                 "MaxConnectionsPercent": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>The maximum size of the connection pool for each target in a target group. The value is expressed as a percentage of the\n        <code>max_connections</code> setting for the RDS DB instance or Aurora DB cluster used by the target group.</p>\n        <p>Default: 10 for RDS for Microsoft SQL Server, and 100 for all other engines</p>\n        <p>Constraints: Must be between 1 and 100.</p>"
+                        "smithy.api#documentation": "<p>The maximum size of the connection pool for each target in a target group. The value is expressed as a percentage of the\n        <code>max_connections</code> setting for the RDS DB instance or Aurora DB cluster used by the target group.</p>\n        <p>If you specify <code>MaxIdleConnectionsPercent</code>, then you must also include a value for this parameter.</p>\n        <p>Default: 10 for RDS for Microsoft SQL Server, and 100 for all other engines</p>\n        <p>Constraints: Must be between 1 and 100.</p>"
                     }
                 },
                 "MaxIdleConnectionsPercent": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Controls how actively the proxy closes idle database connections in the connection pool.\n        The value is expressed as a percentage of the <code>max_connections</code> setting for the RDS DB instance or Aurora DB cluster used by the target group.\n        With a high value, the proxy leaves a high percentage of idle database connections open. A low value causes the proxy to close more idle connections and return them to the database.</p>\n        <p>Default: The default value is half of the value of <code>MaxConnectionsPercent</code>. For example, if <code>MaxConnectionsPercent</code> is 80, then the default value of \n        <code>MaxIdleConnectionsPercent</code> is 40. If the value of <code>MaxConnectionsPercent</code> isn't specified, then for SQL Server, <code>MaxIdleConnectionsPercent</code> is 5, and \n        for all other engines, the default is 50.</p>\n        <p>Constraints: Must be between 0 and the value of <code>MaxConnectionsPercent</code>.</p>"
+                        "smithy.api#documentation": "<p>Controls how actively the proxy closes idle database connections in the connection pool.\n        The value is expressed as a percentage of the <code>max_connections</code> setting for the RDS DB instance or Aurora DB cluster used by the target group.\n        With a high value, the proxy leaves a high percentage of idle database connections open. A low value causes the proxy to close more idle connections and return them to the database.</p>\n        <p>If you specify this parameter, then you must also include a value for <code>MaxConnectionsPercent</code>.</p>\n        <p>Default: The default value is half of the value of <code>MaxConnectionsPercent</code>. For example, if <code>MaxConnectionsPercent</code> is 80, then the default value of \n        <code>MaxIdleConnectionsPercent</code> is 40. If the value of <code>MaxConnectionsPercent</code> isn't specified, then for SQL Server, <code>MaxIdleConnectionsPercent</code> is 5, and \n        for all other engines, the default is 50.</p>\n        <p>Constraints: Must be between 0 and the value of <code>MaxConnectionsPercent</code>.</p>"
                     }
                 },
                 "ConnectionBorrowTimeout": {
@@ -4556,7 +4556,7 @@
                 "Iops": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated \n            for each DB instance in the Multi-AZ DB cluster.</p>\n        <p>For information about valid <code>Iops</code> values, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS storage to improve performance</a> in the <i>Amazon RDS User Guide</i>.</p>\n        <p>This setting is required to create a Multi-AZ DB cluster.</p>\n        <p>Constraints: Must be a multiple between .5 and 50 of the storage amount for the DB cluster.</p>\n        <p>Valid for: Multi-AZ DB clusters only</p>"
+                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated \n            for each DB instance in the Multi-AZ DB cluster.</p>\n        <p>For information about valid IOPS values, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS storage</a> \n            in the <i>Amazon RDS User Guide</i>.</p>\n        <p>This setting is required to create a Multi-AZ DB cluster.</p>\n        <p>Constraints: Must be a multiple between .5 and 50 of the storage amount for the DB cluster.</p>\n        <p>Valid for: Multi-AZ DB clusters only</p>"
                     }
                 },
                 "PubliclyAccessible": {
@@ -4844,7 +4844,7 @@
                 "AllocatedStorage": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>The amount of storage in gibibytes (GiB) to allocate for the DB instance.</p>\n        <p>Type: Integer</p>\n        <p>\n            <b>Amazon Aurora</b>\n         </p>\n        <p>Not applicable. Aurora cluster volumes automatically grow as the amount of data in your \n          database increases, though you are only charged for the space that you use in an Aurora cluster volume.</p>\n        <p>\n            <b>Amazon RDS Custom</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2): Must be an integer from 40 to 65536 for RDS Custom for Oracle, \n              16384 for RDS Custom for SQL Server.</p>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1): Must be an integer from 40 to 65536 for RDS Custom for Oracle, \n              16384 for RDS Custom for SQL Server.</p>\n            </li>\n         </ul>\n        <p>\n            <b>MySQL</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.</p>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p>\n            </li>\n            <li>\n                <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p>\n            </li>\n         </ul>\n        <p>\n            <b>MariaDB</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.</p>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p>\n            </li>\n            <li>\n                <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p>\n            </li>\n         </ul>\n        <p>\n            <b>PostgreSQL</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.</p>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p>\n            </li>\n            <li>\n                <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p>\n            </li>\n         </ul>\n        <p>\n            <b>Oracle</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.</p>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p>\n            </li>\n            <li>\n                <p>Magnetic storage (standard): Must be an integer from 10 to 3072.</p>\n            </li>\n         </ul>\n        <p>\n            <b>SQL Server</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2):</p>\n                <ul>\n                  <li>\n                        <p>Enterprise and Standard editions: Must be an integer from 20 to 16384.</p>\n                    </li>\n                  <li>\n                        <p>Web and Express editions: Must be an integer from 20 to 16384.</p>\n                    </li>\n               </ul>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1):</p>\n                <ul>\n                  <li>\n                        <p>Enterprise and Standard editions: Must be an integer from 100 to 16384.</p>\n                    </li>\n                  <li>\n                        <p>Web and Express editions: Must be an integer from 100 to 16384.</p>\n                    </li>\n               </ul>\n            </li>\n            <li>\n                <p>Magnetic storage (standard):</p>\n                <ul>\n                  <li>\n                        <p>Enterprise and Standard editions: Must be an integer from 20 to 1024.</p>\n                    </li>\n                  <li>\n                        <p>Web and Express editions: Must be an integer from 20 to 1024.</p>\n                    </li>\n               </ul>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The amount of storage in gibibytes (GiB) to allocate for the DB instance.</p>\n        <p>Type: Integer</p>\n        <p>\n            <b>Amazon Aurora</b>\n         </p>\n        <p>Not applicable. Aurora cluster volumes automatically grow as the amount of data in your \n          database increases, though you are only charged for the space that you use in an Aurora cluster volume.</p>\n        <p>\n            <b>Amazon RDS Custom</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2, gp3): Must be an integer from 40 to 65536 for RDS Custom for Oracle, \n              16384 for RDS Custom for SQL Server.</p>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1): Must be an integer from 40 to 65536 for RDS Custom for Oracle, \n              16384 for RDS Custom for SQL Server.</p>\n            </li>\n         </ul>\n        <p>\n            <b>MySQL</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2, gp3): Must be an integer from 20 to 65536.</p>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p>\n            </li>\n            <li>\n                <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p>\n            </li>\n         </ul>\n        <p>\n            <b>MariaDB</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2, gp3): Must be an integer from 20 to 65536.</p>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p>\n            </li>\n            <li>\n                <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p>\n            </li>\n         </ul>\n        <p>\n            <b>PostgreSQL</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2, gp3): Must be an integer from 20 to 65536.</p>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p>\n            </li>\n            <li>\n                <p>Magnetic storage (standard): Must be an integer from 5 to 3072.</p>\n            </li>\n         </ul>\n        <p>\n            <b>Oracle</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2, gp3): Must be an integer from 20 to 65536.</p>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.</p>\n            </li>\n            <li>\n                <p>Magnetic storage (standard): Must be an integer from 10 to 3072.</p>\n            </li>\n         </ul>\n        <p>\n            <b>SQL Server</b>\n         </p>\n        <p>Constraints to the amount of storage for each storage type are the following:</p>\n        <ul>\n            <li>\n                <p>General Purpose (SSD) storage (gp2, gp3):</p>\n                <ul>\n                  <li>\n                        <p>Enterprise and Standard editions: Must be an integer from 20 to 16384.</p>\n                    </li>\n                  <li>\n                        <p>Web and Express editions: Must be an integer from 20 to 16384.</p>\n                    </li>\n               </ul>\n            </li>\n            <li>\n                <p>Provisioned IOPS storage (io1):</p>\n                <ul>\n                  <li>\n                        <p>Enterprise and Standard editions: Must be an integer from 100 to 16384.</p>\n                    </li>\n                  <li>\n                        <p>Web and Express editions: Must be an integer from 100 to 16384.</p>\n                    </li>\n               </ul>\n            </li>\n            <li>\n                <p>Magnetic storage (standard):</p>\n                <ul>\n                  <li>\n                        <p>Enterprise and Standard editions: Must be an integer from 20 to 1024.</p>\n                    </li>\n                  <li>\n                        <p>Web and Express editions: Must be an integer from 20 to 1024.</p>\n                    </li>\n               </ul>\n            </li>\n         </ul>"
                     }
                 },
                 "DBInstanceClass": {
@@ -4954,7 +4954,7 @@
                 "Iops": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance.\n          For information about valid <code>Iops</code> values, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS storage to improve performance</a> in the <i>Amazon RDS User Guide</i>.</p>\n        <p>Constraints: For MariaDB, MySQL, Oracle, and PostgreSQL DB instances, must be a multiple between .5 and 50 \n          of the storage amount for the DB instance. For SQL Server DB instances, must be a multiple between 1 and 50 \n          of the storage amount for the DB instance.</p>\n        <p>\n            <b>Amazon Aurora</b>\n         </p>\n        <p>Not applicable. Storage is managed by the DB cluster.</p>"
+                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance.\n          For information about valid IOPS values, see \n          <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html\">Amazon RDS DB instance storage</a> \n          in the <i>Amazon RDS User Guide</i>.</p>\n        <p>Constraints: For MariaDB, MySQL, Oracle, and PostgreSQL DB instances, must be a multiple between .5 and 50 \n          of the storage amount for the DB instance. For SQL Server DB instances, must be a multiple between 1 and 50 \n          of the storage amount for the DB instance.</p>\n        <p>\n            <b>Amazon Aurora</b>\n         </p>\n        <p>Not applicable. Storage is managed by the DB cluster.</p>"
                     }
                 },
                 "OptionGroupName": {
@@ -4996,7 +4996,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n        <p>Valid values: <code>standard | gp2 | io1</code>\n         </p>\n        <p>If you specify <code>io1</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n        <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n            is specified, otherwise <code>gp2</code>\n         </p>\n        <p>\n            <b>Amazon Aurora</b>\n         </p>\n        <p>Not applicable. Storage is managed by the DB cluster.</p>"
+                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n        <p>Valid values: <code>gp2 | gp3 | io1 | standard</code>\n         </p>\n        <p>If you specify <code>io1</code> or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n        <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n            is specified, otherwise <code>gp2</code>\n         </p>\n        <p>\n            <b>Amazon Aurora</b>\n         </p>\n        <p>Not applicable. Storage is managed by the DB cluster.</p>"
                     }
                 },
                 "TdeCredentialArn": {
@@ -5135,6 +5135,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The network type of the DB instance.</p>\n        <p>Valid values:</p>\n        <ul>\n            <li>\n                <p>\n                  <code>IPV4</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>DUAL</code>\n               </p>\n            </li>\n         </ul>\n        <p>The network type is determined by the <code>DBSubnetGroup</code> specified for the DB instance. \n            A <code>DBSubnetGroup</code> can support only the IPv4 protocol or the IPv4 and the IPv6 \n            protocols (<code>DUAL</code>).</p>\n        <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html\">\n            Working with a DB instance in a VPC</a> in the \n            <i>Amazon RDS User Guide.</i>\n         </p>"
+                    }
+                },
+                "StorageThroughput": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the storage throughput value for the DB instance.</p>\n        <p>This setting doesn't apply to RDS Custom or Amazon Aurora.</p>"
                     }
                 }
             },
@@ -5305,7 +5311,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the read replica.</p>\n        <p>Valid values: <code>standard | gp2 | io1</code>\n         </p>\n        <p>If you specify <code>io1</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n        <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n            is specified, otherwise <code>gp2</code>\n         </p>"
+                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the read replica.</p>\n        <p>Valid values: <code>gp2 | gp3 | io1 | standard</code>\n         </p>\n        <p>If you specify <code>io1</code> or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n        <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n            is specified, otherwise <code>gp2</code>\n         </p>"
                     }
                 },
                 "CopyTagsToSnapshot": {
@@ -5420,6 +5426,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The network type of the DB instance.</p>\n        <p>Valid values:</p>\n        <ul>\n            <li>\n                <p>\n                  <code>IPV4</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>DUAL</code>\n               </p>\n            </li>\n         </ul>\n        <p>The network type is determined by the <code>DBSubnetGroup</code> specified for read replica. \n            A <code>DBSubnetGroup</code> can support only the IPv4 protocol or the IPv4 and the IPv6 \n            protocols (<code>DUAL</code>).</p>\n        <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html\">\n            Working with a DB instance in a VPC</a> in the \n            <i>Amazon RDS User Guide.</i>\n         </p>"
+                    }
+                },
+                "StorageThroughput": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the storage throughput value for the read replica.</p>\n        <p>This setting doesn't apply to RDS Custom or Amazon Aurora.</p>"
                     }
                 }
             }
@@ -7958,7 +7970,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the storage type associated with DB instance.</p>"
+                        "smithy.api#documentation": "<p>Specifies the storage type associated with the DB instance.</p>"
                     }
                 },
                 "TdeCredentialArn": {
@@ -8202,6 +8214,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The status of the policy state of the activity stream.</p>"
                     }
+                },
+                "StorageThroughput": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the storage throughput for the DB instance.</p>"
+                    }
                 }
             },
             "traits": {
@@ -8287,7 +8305,7 @@
                 "VpcId": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>Provides the VPC ID associated with the DB instance</p>"
+                        "smithy.api#documentation": "<p>Provides the VPC ID associated with the DB instance.</p>"
                     }
                 },
                 "InstanceCreateTime": {
@@ -8392,6 +8410,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>Specifies where automated backups are stored: Amazon Web Services Outposts or the Amazon Web Services Region.</p>"
+                    }
+                },
+                "StorageThroughput": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the storage throughput for the automated backup.</p>"
                     }
                 }
             },
@@ -9823,6 +9847,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>Specifies where manual snapshots are stored: Amazon Web Services Outposts or the Amazon Web Services Region.</p>"
+                    }
+                },
+                "StorageThroughput": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the storage throughput for the DB snapshot.</p>"
                     }
                 }
             },
@@ -11614,7 +11644,7 @@
                 "DBClusterIdentifier": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The user-supplied DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter isn't case-sensitive.</p>\n        <p>Constraints:</p>\n        <ul>\n            <li>\n                <p>If supplied, must match an existing DBClusterIdentifier.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The user-supplied DB cluster identifier or the Amazon Resource Name (ARN) of the DB cluster. If this parameter is specified, \n            information from only the specific DB cluster is returned. This parameter isn't case-sensitive.</p>\n        <p>Constraints:</p>\n        <ul>\n            <li>\n                <p>If supplied, must match an existing DBClusterIdentifier.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "Filters": {
@@ -11958,7 +11988,7 @@
                 "DBInstanceIdentifier": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The user-supplied instance identifier. If this parameter is specified, information from only the specific DB instance is returned. This parameter isn't case-sensitive.</p>\n        <p>Constraints:</p>\n        <ul>\n            <li>\n                <p>If supplied, must match the identifier of an existing DBInstance.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The user-supplied instance identifier or the Amazon Resource Name (ARN) of the DB instance. If this parameter is specified, \n            information from only the specific DB instance is returned. This parameter isn't case-sensitive.</p>\n        <p>Constraints:</p>\n        <ul>\n            <li>\n                <p>If supplied, must match the identifier of an existing DBInstance.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "Filters": {
@@ -12990,7 +13020,7 @@
                 "DBParameterGroupFamily": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the DB parameter group family.</p>\n        <p>Valid Values:</p>\n        <ul>\n            <li>\n                <p>\n                  <code>aurora5.6</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-mysql5.7</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-mysql8.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-postgresql10</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-postgresql11</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-postgresql12</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-postgresql13</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mariadb10.2</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mariadb10.3</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mariadb10.4</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mariadb10.5</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mariadb10.6</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mysql5.7</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mysql8.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>postgres10</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>postgres11</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>postgres12</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>postgres13</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>postgres14</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ee-11.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ee-12.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ee-13.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ee-14.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ee-15.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ex-11.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ex-12.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ex-13.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ex-14.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ex-15.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-se-11.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-se-12.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-se-13.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-se-14.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-se-15.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-web-11.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-web-12.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-web-13.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-web-14.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-web-15.0</code>\n               </p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>The name of the DB parameter group family.</p>\n        <p>Valid Values:</p>\n        <ul>\n            <li>\n                <p>\n                  <code>aurora5.6</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-mysql5.7</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-mysql8.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-postgresql10</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-postgresql11</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-postgresql12</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-postgresql13</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>aurora-postgresql14</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>custom-oracle-ee-19</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mariadb10.2</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mariadb10.3</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mariadb10.4</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mariadb10.5</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mariadb10.6</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mysql5.7</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>mysql8.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>oracle-ee-19</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>oracle-ee-cdb-19</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>oracle-ee-cdb-21</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>oracle-se2-19</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>oracle-se2-cdb-19</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>oracle-se2-cdb-21</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>postgres10</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>postgres11</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>postgres12</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>postgres13</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>postgres14</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ee-11.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ee-12.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ee-13.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ee-14.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ee-15.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ex-11.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ex-12.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ex-13.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ex-14.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-ex-15.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-se-11.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-se-12.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-se-13.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-se-14.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-se-15.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-web-11.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-web-12.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-web-13.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-web-14.0</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>sqlserver-web-15.0</code>\n               </p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
@@ -13246,6 +13276,12 @@
                     "target": "com.amazonaws.rds#MaxRecords",
                     "traits": {
                         "smithy.api#documentation": "<p>The maximum number of records to include in the response. If more records exist than the \n            specified value, a pagination token called a marker is included in the response. \n            You can use the marker in a later <code>DescribeExportTasks</code> request \n            to retrieve the remaining results.</p>\n        <p>Default: 100</p>\n        <p>Constraints: Minimum 20, maximum 100.</p>"
+                    }
+                },
+                "SourceType": {
+                    "target": "com.amazonaws.rds#ExportSourceType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of source for the export.</p>"
                     }
                 }
             }
@@ -14112,7 +14148,7 @@
                 "Marker": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>An optional pagination token provided by a previous           \n            EngineDefaults request.\n            If this parameter is specified, the response includes\n            only records beyond the marker,\n            up to the value specified by <code>MaxRecords</code> .</p>"
+                        "smithy.api#documentation": "<p>An optional pagination token provided by a previous\n            EngineDefaults request.\n            If this parameter is specified, the response includes\n            only records beyond the marker,\n            up to the value specified by <code>MaxRecords</code> .</p>"
                     }
                 },
                 "Parameters": {
@@ -14398,6 +14434,23 @@
         "com.amazonaws.rds#ExceptionMessage": {
             "type": "string"
         },
+        "com.amazonaws.rds#ExportSourceType": {
+            "type": "enum",
+            "members": {
+                "SNAPSHOT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SNAPSHOT"
+                    }
+                },
+                "CLUSTER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CLUSTER"
+                    }
+                }
+            }
+        },
         "com.amazonaws.rds#ExportTask": {
             "type": "structure",
             "members": {
@@ -14491,6 +14544,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>A warning about the snapshot export task.</p>"
+                    }
+                },
+                "SourceType": {
+                    "target": "com.amazonaws.rds#ExportSourceType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of source for the export.</p>"
                     }
                 }
             },
@@ -16209,7 +16268,7 @@
                 "Iops": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated \n            for each DB instance in the Multi-AZ DB cluster.</p>\n        <p>For information about valid Iops values, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS Storage to Improve Performance</a> in the <i>Amazon RDS User Guide</i>.</p>\n        <p>Constraints: Must be a multiple between .5 and 50 of the storage amount for the DB cluster.</p>\n        <p>Valid for: Multi-AZ DB clusters only</p>"
+                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated \n            for each DB instance in the Multi-AZ DB cluster.</p>\n        <p>For information about valid IOPS values, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS storage</a> \n            in the <i>Amazon RDS User Guide</i>.</p>\n        <p>Constraints: Must be a multiple between .5 and 50 of the storage amount for the DB cluster.</p>\n        <p>Valid for: Multi-AZ DB clusters only</p>"
                     }
                 },
                 "AutoMinorVersionUpgrade": {
@@ -16580,7 +16639,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n        <p>If you specify Provisioned IOPS (<code>io1</code>), \n          you must also include a value for the <code>Iops</code> parameter.</p>\n        <p>If you choose to migrate your DB instance from using standard storage to using\n            Provisioned IOPS, or from using Provisioned IOPS to using standard storage, the process\n            can take time. The duration of the migration depends on several factors such as database\n            load, storage size, storage type (standard or Provisioned IOPS), amount of IOPS\n            provisioned (if any), and the number of prior scale storage operations. Typical\n            migration times are under 24 hours, but the process can take up to several days in some\n            cases. During the migration, the DB instance is available for use, but might experience\n            performance degradation. While the migration takes place, nightly backups for the\n            instance are suspended. No other Amazon RDS operations can take place for the instance,\n            including modifying the instance, rebooting the instance, deleting the instance,\n            creating a read replica for the instance, and creating a DB snapshot of the instance.</p>\n        <p>Valid values: <code>standard | gp2 | io1</code>\n         </p>\n        <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n          is specified, otherwise <code>gp2</code>\n         </p>"
+                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n        <p>If you specify Provisioned IOPS (<code>io1</code>), \n          you must also include a value for the <code>Iops</code> parameter.</p>\n        <p>If you choose to migrate your DB instance from using standard storage to using\n            Provisioned IOPS, or from using Provisioned IOPS to using standard storage, the process\n            can take time. The duration of the migration depends on several factors such as database\n            load, storage size, storage type (standard or Provisioned IOPS), amount of IOPS\n            provisioned (if any), and the number of prior scale storage operations. Typical\n            migration times are under 24 hours, but the process can take up to several days in some\n            cases. During the migration, the DB instance is available for use, but might experience\n            performance degradation. While the migration takes place, nightly backups for the\n            instance are suspended. No other Amazon RDS operations can take place for the instance,\n            including modifying the instance, rebooting the instance, deleting the instance,\n            creating a read replica for the instance, and creating a DB snapshot of the instance.</p>\n        <p>Valid values: <code>gp2 | gp3 | io1 | standard</code>\n         </p>\n        <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n          is specified, otherwise <code>gp2</code>\n         </p>"
                     }
                 },
                 "TdeCredentialArn": {
@@ -16743,6 +16802,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The network type of the DB instance.</p>\n        <p>Valid values:</p>\n        <ul>\n            <li>\n                <p>\n                  <code>IPV4</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>DUAL</code>\n               </p>\n            </li>\n         </ul>\n        <p>The network type is determined by the <code>DBSubnetGroup</code> specified for the DB instance. \n            A <code>DBSubnetGroup</code> can support only the IPv4 protocol or the IPv4 and the IPv6 \n            protocols (<code>DUAL</code>).</p>\n        <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html\">\n            Working with a DB instance in a VPC</a> in the \n            <i>Amazon RDS User Guide.</i>\n         </p>"
+                    }
+                },
+                "StorageThroughput": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the storage throughput value for the DB instance.</p>\n        <p>This setting doesn't apply to RDS Custom or Amazon Aurora.</p>"
                     }
                 }
             },
@@ -18247,6 +18312,37 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The network types supported by the DB instance (<code>IPV4</code> or <code>DUAL</code>).</p>\n        <p>A DB instance can support only the IPv4 protocol or the IPv4 and the IPv6 \n            protocols (<code>DUAL</code>).</p>\n        <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html\">\n            Working with a DB instance in a VPC</a> in the \n            <i>Amazon RDS User Guide.</i>\n         </p>"
                     }
+                },
+                "SupportsStorageThroughput": {
+                    "target": "com.amazonaws.rds#Boolean",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>Indicates whether a DB instance supports storage throughput.</p>"
+                    }
+                },
+                "MinStorageThroughputPerDbInstance": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Minimum storage throughput for a DB instance.</p>"
+                    }
+                },
+                "MaxStorageThroughputPerDbInstance": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Maximum storage throughput for a DB instance.</p>"
+                    }
+                },
+                "MinStorageThroughputPerIops": {
+                    "target": "com.amazonaws.rds#DoubleOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Minimum storage throughput to provisioned IOPS ratio for a DB instance.</p>"
+                    }
+                },
+                "MaxStorageThroughputPerIops": {
+                    "target": "com.amazonaws.rds#DoubleOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Maximum storage throughput to provisioned IOPS ratio for a DB instance.</p>"
+                    }
                 }
             },
             "traits": {
@@ -18588,6 +18684,12 @@
                     "target": "com.amazonaws.rds#TStamp",
                     "traits": {
                         "smithy.api#documentation": "<p>The number of minutes to pause the automation. When the time period ends, RDS Custom resumes full automation. \n            The minimum value is 60 (default). The maximum value is 1,440.</p>"
+                    }
+                },
+                "StorageThroughput": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The storage throughput of the DB instance.</p>"
                     }
                 }
             },
@@ -20281,7 +20383,7 @@
                 "Iops": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for \n            each DB instance in the Multi-AZ DB cluster.</p>\n        <p>For information about valid Iops values, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS Storage to Improve Performance</a> in the <i>Amazon RDS User Guide</i>.</p>\n        <p>Constraints: Must be a multiple between .5 and 50 of the storage amount for the DB instance.</p>\n        <p>Valid for: Aurora DB clusters and Multi-AZ DB clusters</p>"
+                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for \n            each DB instance in the Multi-AZ DB cluster.</p>\n        <p>For information about valid IOPS values, \n            see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS storage</a> \n            in the <i>Amazon RDS User Guide</i>.</p>\n        <p>Constraints: Must be a multiple between .5 and 50 of the storage amount for the DB instance.</p>\n        <p>Valid for: Aurora DB clusters and Multi-AZ DB clusters</p>"
                     }
                 },
                 "PubliclyAccessible": {
@@ -20530,7 +20632,7 @@
                 "Iops": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for \n            each DB instance in the Multi-AZ DB cluster.</p>\n        <p>For information about valid <code>Iops</code> values, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS storage to improve performance</a> in the <i>Amazon RDS User Guide</i>.</p>\n        <p>Constraints: Must be a multiple between .5 and 50 of the storage amount for the DB instance.</p>\n        <p>Valid for: Multi-AZ DB clusters only</p>"
+                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for \n            each DB instance in the Multi-AZ DB cluster.</p>\n        <p>For information about valid IOPS values, \n            see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS storage</a> \n            in the <i>Amazon RDS User Guide</i>.</p>\n        <p>Constraints: Must be a multiple between .5 and 50 of the storage amount for the DB instance.</p>\n        <p>Valid for: Multi-AZ DB clusters only</p>"
                     }
                 },
                 "ServerlessV2ScalingConfiguration": {
@@ -20712,7 +20814,7 @@
                 "Iops": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the amount of provisioned IOPS for the DB instance, expressed in I/O operations per second. \n          If this parameter isn't specified, the IOPS value is taken from the backup. \n          If this parameter is set to 0, the new instance is converted to a non-PIOPS instance. \n          The conversion takes additional time, though your DB instance is available for connections before the conversion starts.</p>\n        <p>The provisioned IOPS value must follow the requirements for your database engine.\n          For more information, see \n          <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS Storage to Improve Performance</a> \n          in the <i>Amazon RDS User Guide.</i>\n         </p>\n        <p>Constraints: Must be an integer greater than 1000.</p>"
+                        "smithy.api#documentation": "<p>Specifies the amount of provisioned IOPS for the DB instance, expressed in I/O operations per second. \n          If this parameter isn't specified, the IOPS value is taken from the backup. \n          If this parameter is set to 0, the new instance is converted to a non-PIOPS instance. \n          The conversion takes additional time, though your DB instance is available for connections before the conversion starts.</p>\n        <p>The provisioned IOPS value must follow the requirements for your database engine.\n          For more information, see \n          <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS storage</a> \n          in the <i>Amazon RDS User Guide.</i>\n         </p>\n        <p>Constraints: Must be an integer greater than 1000.</p>"
                     }
                 },
                 "OptionGroupName": {
@@ -20727,7 +20829,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n        <p>Valid values: <code>standard | gp2 | io1</code>\n         </p>\n        <p>If you specify <code>io1</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n        <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n            is specified, otherwise <code>gp2</code>\n         </p>"
+                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n        <p>Valid values: <code>gp2 | gp3 | io1 | standard</code>\n         </p>\n        <p>If you specify <code>io1</code> or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n        <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n            is specified, otherwise <code>gp2</code>\n         </p>"
                     }
                 },
                 "TdeCredentialArn": {
@@ -20824,6 +20926,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The network type of the DB instance.</p>\n        <p>Valid values:</p>\n        <ul>\n            <li>\n                <p>\n                  <code>IPV4</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>DUAL</code>\n               </p>\n            </li>\n         </ul>\n        <p>The network type is determined by the <code>DBSubnetGroup</code> specified for the DB instance. \n            A <code>DBSubnetGroup</code> can support only the IPv4 protocol or the IPv4 and the IPv6 \n            protocols (<code>DUAL</code>).</p>\n        <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html\">\n            Working with a DB instance in a VPC</a> in the \n            <i>Amazon RDS User Guide.</i>\n         </p>"
+                    }
+                },
+                "StorageThroughput": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the storage throughput value for the DB instance.</p>\n        <p>This setting doesn't apply to RDS Custom or Amazon Aurora.</p>"
                     }
                 }
             },
@@ -21036,7 +21144,7 @@
                 "Iops": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) \n            to allocate initially for the DB instance.\n            For information about valid Iops values, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS Storage to Improve Performance</a> \n            in the <i>Amazon RDS User Guide.</i>\n         </p>"
+                        "smithy.api#documentation": "<p>The amount of Provisioned IOPS (input/output operations per second) \n            to allocate initially for the DB instance.\n            For information about valid IOPS values, \n            see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS\">Amazon RDS Provisioned IOPS storage</a> \n            in the <i>Amazon RDS User Guide.</i>\n         </p>"
                     }
                 },
                 "OptionGroupName": {
@@ -21060,7 +21168,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n        <p>Valid values: <code>standard</code> | <code>gp2</code> | <code>io1</code>\n         </p>\n        <p>If you specify <code>io1</code>, \n            you must also include a value for the <code>Iops</code> parameter.</p>\n        <p>Default: <code>io1</code> \n            if the <code>Iops</code> parameter is specified; \n            otherwise <code>gp2</code>\n         </p>"
+                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n        <p>Valid values: <code>gp2 | gp3 | io1 | standard</code>\n         </p>\n        <p>If you specify <code>io1</code> or <code>gp3</code>, \n            you must also include a value for the <code>Iops</code> parameter.</p>\n        <p>Default: <code>io1</code> \n            if the <code>Iops</code> parameter is specified; \n            otherwise <code>gp2</code>\n         </p>"
                     }
                 },
                 "StorageEncrypted": {
@@ -21185,6 +21293,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The network type of the DB instance.</p>\n        <p>Valid values:</p>\n        <ul>\n            <li>\n                <p>\n                  <code>IPV4</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>DUAL</code>\n               </p>\n            </li>\n         </ul>\n        <p>The network type is determined by the <code>DBSubnetGroup</code> specified for the DB instance. \n            A <code>DBSubnetGroup</code> can support only the IPv4 protocol or the IPv4 and the IPv6 \n            protocols (<code>DUAL</code>).</p>\n        <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html\">\n            Working with a DB instance in a VPC</a> in the \n            <i>Amazon RDS User Guide.</i>\n         </p>"
+                    }
+                },
+                "StorageThroughput": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the storage throughput value for the DB instance.</p>\n        <p>This setting doesn't apply to RDS Custom or Amazon Aurora.</p>"
                     }
                 }
             }
@@ -21393,7 +21507,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n        <p>Valid values: <code>standard | gp2 | io1</code>\n         </p>\n        <p>If you specify <code>io1</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n        <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n            is specified, otherwise <code>gp2</code>\n         </p>"
+                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n        <p>Valid values: <code>gp2 | gp3 | io1 | standard</code>\n         </p>\n        <p>If you specify <code>io1</code> or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n        <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n            is specified, otherwise <code>gp2</code>\n         </p>"
                     }
                 },
                 "TdeCredentialArn": {
@@ -21502,6 +21616,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The network type of the DB instance.</p>\n        <p>Valid values:</p>\n        <ul>\n            <li>\n                <p>\n                  <code>IPV4</code>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <code>DUAL</code>\n               </p>\n            </li>\n         </ul>\n        <p>The network type is determined by the <code>DBSubnetGroup</code> specified for the DB instance. \n            A <code>DBSubnetGroup</code> can support only the IPv4 protocol or the IPv4 and the IPv6 \n            protocols (<code>DUAL</code>).</p>\n        <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html\">\n            Working with a DB instance in a VPC</a> in the \n            <i>Amazon RDS User Guide.</i>\n         </p>"
+                    }
+                },
+                "StorageThroughput": {
+                    "target": "com.amazonaws.rds#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the storage throughput value for the DB instance.</p>\n        <p>This setting doesn't apply to RDS Custom or Amazon Aurora.</p>"
                     }
                 }
             },
@@ -22259,6 +22379,9 @@
                 "target": "com.amazonaws.rds#ExportTask"
             },
             "errors": [
+                {
+                    "target": "com.amazonaws.rds#DBClusterNotFoundFault"
+                },
                 {
                     "target": "com.amazonaws.rds#DBClusterSnapshotNotFoundFault"
                 },
@@ -23160,19 +23283,19 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The valid storage types for your DB instance.\n            For example, gp2, io1.</p>"
+                        "smithy.api#documentation": "<p>The valid storage types for your DB instance.\n            For example: gp2, gp3, io1.</p>"
                     }
                 },
                 "StorageSize": {
                     "target": "com.amazonaws.rds#RangeList",
                     "traits": {
-                        "smithy.api#documentation": "<p>The valid range of storage in gibibytes (GiB).\n            For example, 100 to 16384.</p>"
+                        "smithy.api#documentation": "<p>The valid range of storage in gibibytes (GiB).\n            For example, 100 to 16,384.</p>"
                     }
                 },
                 "ProvisionedIops": {
                     "target": "com.amazonaws.rds#RangeList",
                     "traits": {
-                        "smithy.api#documentation": "<p>The valid range of provisioned IOPS.\n            For example, 1000-20000.</p>"
+                        "smithy.api#documentation": "<p>The valid range of provisioned IOPS.\n            For example, 1000-256,000.</p>"
                     }
                 },
                 "IopsToStorageRatio": {
@@ -23186,6 +23309,18 @@
                     "traits": {
                         "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Whether or not Amazon RDS can automatically scale storage for DB instances that use the new instance class.</p>"
+                    }
+                },
+                "ProvisionedStorageThroughput": {
+                    "target": "com.amazonaws.rds#RangeList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The valid range of provisioned storage throughput. For example, \n            500-4,000 mebibytes per second (MiBps).</p>"
+                    }
+                },
+                "StorageThroughputToIopsRatio": {
+                    "target": "com.amazonaws.rds#DoubleRangeList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The valid range of storage throughput to provisioned IOPS ratios. For example, \n        0-0.25.</p>"
                     }
                 }
             },

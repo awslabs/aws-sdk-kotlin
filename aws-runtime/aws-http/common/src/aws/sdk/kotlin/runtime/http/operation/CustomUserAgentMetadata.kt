@@ -18,9 +18,17 @@ private const val CUSTOM_METADATA_PROP_PREFIX = "aws.customMetadata."
  *
  * Access via extension property [ExecutionContext.customUserAgentMetadata]
  */
-public class CustomUserAgentMetadata {
-    internal val extras: MutableMap<String, String> = mutableMapOf()
-    internal val typedExtras: MutableList<TypedUserAgentMetadata> = mutableListOf()
+public class CustomUserAgentMetadata(
+    extras: Map<String, String> = mapOf(),
+    typedExtras: List<TypedUserAgentMetadata> = listOf(),
+) {
+    internal val extras: MutableMap<String, String>
+    internal val typedExtras: MutableList<TypedUserAgentMetadata>
+
+    init {
+        this.extras = extras.toMutableMap()
+        this.typedExtras = typedExtras.toMutableList()
+    }
 
     internal companion object {
         public val ContextKey: AttributeKey<CustomUserAgentMetadata> = AttributeKey("CustomUserAgentMetadata")
@@ -32,8 +40,8 @@ public class CustomUserAgentMetadata {
 
             val envVarMap = provider.getAllEnvVars().findAndStripKeyPrefix(CUSTOM_METADATA_ENV_PREFIX)
             val propMap = provider.getAllProperties().findAndStripKeyPrefix(CUSTOM_METADATA_PROP_PREFIX)
-            val allProps = envVarMap + propMap
-            return CustomUserAgentMetadata().apply { allProps.forEach { (key, value) -> add(key, value) } }
+
+            return CustomUserAgentMetadata(extras = envVarMap + propMap)
         }
     }
 
@@ -48,6 +56,9 @@ public class CustomUserAgentMetadata {
     public fun add(metadata: TypedUserAgentMetadata) {
         typedExtras.add(metadata)
     }
+
+    public operator fun plus(other: CustomUserAgentMetadata): CustomUserAgentMetadata =
+        CustomUserAgentMetadata(extras + other.extras, typedExtras + other.typedExtras)
 }
 
 /**

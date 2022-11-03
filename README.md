@@ -14,6 +14,11 @@ This repo contains the AWS SDK for Kotlin and its [public roadmap](https://githu
 
 ## Getting Started
 
+* [SDK Homepage](https://aws.amazon.com/sdk-for-kotlin/)
+* [Developer Guide](https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/home.html)
+* [API Reference](https://sdk.amazonaws.com/kotlin/api/latest/index.html)
+* [Samples](https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/kotlin)
+
 See the [Getting Started Guide](docs/GettingStarted.md) to learn how to use AWS SDKs in your program.
 
 ## Feedback
@@ -132,18 +137,28 @@ aws.services=-location,-dynamodb
 # Generate all services except those using the restJson1 protocol:
 aws.protocols=-restJson1
 ```
+
+### IntelliJ multiplatform compatibility
+
+Due to an outstanding issue in IntelliJ ([KTIJ-21583](https://youtrack.jetbrains.com/issue/KTIJ-21583)), the IDE will
+sometimes fail to resolve symbols in composite projects like
+[**smithy-kotlin**](https://github.com/awslabs/smithy-kotlin) and
+[**aws-crt-kotlin**](https://github.com/awslabs/aws-crt-kotlin). When using either of these projects in a composite
+build in IntelliJ, you may need to disable hierarchical project support. Add (or modify) a **local.properties** file in
+**smithy-kotlin** and **aws-crt-kotlin** with the following contents:
+
+```
+# FIXME - see https://youtrack.jetbrains.com/issue/KTIJ-21583
+kotlin.mpp.hierarchicalStructureSupport=false
+```
+
+**Note**: These files should be created in the **smithy-kotlin** and **aws-crt-kotlin** projects, not the
+**aws-sdk-kotlin** project.
+
 ### Debugging
 
 See [Debugging](docs/debugging.md)
 
-## Getting Help
-
-Use the following sources for information:
-
-* [Check api and developer guides.](https://docs.aws.amazon.com/sdk-for-kotlin/index.html)
-* Check for similar [issues](https://github.com/awslabs/aws-sdk-kotlin/issues) already opened.
-
-If you still can’t find a solution to your problem open an [issue](https://github.com/awslabs/aws-sdk-kotlin/issues/new/choose) or a [discussion](https://github.com/awslabs/aws-sdk-kotlin/discussions/new)
 
 ## Security
 

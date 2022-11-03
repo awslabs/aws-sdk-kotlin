@@ -64,6 +64,11 @@ structure MessageWithNoHeaderPayloadTraits {
     someString: String,
 }
 
+structure MessageWithUnboundPayloadTraits {
+    @eventHeader header: String,
+    unboundString: String,
+}
+
 @streaming
 union TestStream {
     MessageWithBlob: MessageWithBlob,
@@ -73,5 +78,6 @@ union TestStream {
     MessageWithHeaders: MessageWithHeaders,
     MessageWithHeaderAndPayload: MessageWithHeaderAndPayload,
     MessageWithNoHeaderPayloadTraits: MessageWithNoHeaderPayloadTraits,
+    MessageWithUnboundPayloadTraits: MessageWithUnboundPayloadTraits,
     SomeError: SomeError,
 }

@@ -21,7 +21,7 @@ class StsPresignerTest {
 
     @Test
     fun testGetCallerIdentityPresigner() = runBlocking {
-        val c = StsClient { region = "us-east-2" }
+        val c = StsClient { region = "us-west-2" }
         val req = GetCallerIdentityRequest { }
         val presignedRequest = req.presign(c.config, 60.seconds)
 

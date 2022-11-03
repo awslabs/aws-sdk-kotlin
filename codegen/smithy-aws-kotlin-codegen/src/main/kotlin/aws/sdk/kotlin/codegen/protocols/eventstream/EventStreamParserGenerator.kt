@@ -150,8 +150,14 @@ class EventStreamParserGenerator(
             } else {
                 if (unbound.isNotEmpty()) {
                     // all remaining members are bound to payload (but not explicitly bound via @eventPayload)
-                    // FIXME - this would require us to generate a "partial" deserializer like we do for where the builder is passed in
-                    TODO("support for unbound event stream members is not implemented")
+                    // generate a payload deserializer specific to the unbound members (note this will be a deserializer
+                    // for the overall event shape but only payload members will be considered for deserialization),
+                    // and then assign each deserialized payload member to the current builder instance
+                    val payloadDeserializeFn = sdg.payloadDeserializer(ctx, member, unbound)
+                    writer.write("val tmp = #T(message.payload)", payloadDeserializeFn)
+                    unbound.forEach {
+                        writer.write("eb.#1L = tmp.#1L", it.defaultName())
+                    }
                 }
             }
 

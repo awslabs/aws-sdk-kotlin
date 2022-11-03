@@ -36,7 +36,11 @@ public class UserAgent(
         val customMetadata = req.context.getOrNull(CustomUserAgentMetadata.ContextKey)
 
         // resolve the metadata for the request which is a combination of the static and per/operation metadata
-        val requestMetadata = staticMetadata.copy(customMetadata = customMetadata)
+        val requestMetadata = when {
+            customMetadata == null -> staticMetadata
+            staticMetadata.customMetadata == null -> staticMetadata.copy(customMetadata = customMetadata)
+            else -> staticMetadata.copy(customMetadata = staticMetadata.customMetadata + customMetadata)
+        }
 
         // NOTE: Due to legacy issues with processing the user agent, the original content for
         // x-amz-user-agent and User-Agent is swapped here.  See top note in the

@@ -4,14 +4,8 @@
  */
 package aws.sdk.kotlin.e2etest
 
-import aws.sdk.kotlin.services.s3.S3Client
-import aws.sdk.kotlin.services.s3.completeMultipartUpload
-import aws.sdk.kotlin.services.s3.createMultipartUpload
-import aws.sdk.kotlin.services.s3.listObjects
-import aws.sdk.kotlin.services.s3.model.CompletedPart
-import aws.sdk.kotlin.services.s3.model.GetObjectRequest
-import aws.sdk.kotlin.services.s3.putObject
-import aws.sdk.kotlin.services.s3.uploadPart
+import aws.sdk.kotlin.services.s3.*
+import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.testing.PRINTABLE_CHARS
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.content.ByteStream
@@ -23,6 +17,7 @@ import aws.smithy.kotlin.runtime.hashing.sha256
 import aws.smithy.kotlin.runtime.testing.RandomTempFile
 import aws.smithy.kotlin.runtime.util.encodeToHex
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.toList
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -30,6 +25,7 @@ import java.io.File
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
@@ -39,12 +35,8 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3BucketOpsIntegrationTest {
-    companion object {
-        const val DEFAULT_REGION = "us-east-2"
-    }
-
     private val client = S3Client {
-        region = DEFAULT_REGION
+        region = S3TestUtils.DEFAULT_REGION
     }
 
     private lateinit var testBucket: String
@@ -217,6 +209,60 @@ class S3BucketOpsIntegrationTest {
             assertEquals(expectedSha256, actualSha256)
         }
     }
+
+    @Test
+    fun testSelectObjectEventStream(): Unit = runBlocking {
+        // upload our content to select from
+        val objKey = "developers.csv"
+
+        val content = """
+        Name,PhoneNumber,City,Occupation
+        Sam,(949) 555-6701,Irvine,Solutions Architect
+        Vinod,(949) 555-6702,Los Angeles,Solutions Architect
+        Jeff,(949) 555-6703,Seattle,AWS Evangelist
+        Jane,(949) 555-6704,Chicago,Developer
+        Sean,(949) 555-6705,Indianapolis,Developer
+        Mary,(949) 555-6706,Detroit,Developer
+        Kate,(949) 555-6707,Boston,Solutions Architect
+        """.trimIndent()
+
+        client.putObject {
+            bucket = testBucket
+            key = objKey
+            body = ByteStream.fromString(content)
+        }
+
+        // select content as an event stream
+        val req = SelectObjectContentRequest {
+            bucket = testBucket
+            key = objKey
+            expressionType = ExpressionType.Sql
+            expression = """SELECT * FROM s3object s where s."Name" = 'Jane'"""
+            inputSerialization {
+                csv {
+                    fileHeaderInfo = FileHeaderInfo.Use
+                }
+                compressionType = CompressionType.None
+            }
+            outputSerialization {
+                csv { }
+            }
+        }
+
+        val events = client.selectObjectContent(req) { resp ->
+            // collect flow to list
+            resp.payload!!.toList()
+        }
+
+        assertEquals(3, events.size)
+
+        val records = assertIs<SelectObjectContentEventStream.Records>(events[0])
+        assertIs<SelectObjectContentEventStream.Stats>(events[1])
+        assertIs<SelectObjectContentEventStream.End>(events[2])
+
+        val expectedRecord = "Jane,(949) 555-6704,Chicago,Developer\n"
+        assertEquals(expectedRecord, records.value.payload?.decodeToString())
+    }
 }
 
 // generate sequence of "chunks" where each range defines the inclusive start and end bytes
@@ -228,7 +274,7 @@ private fun File.chunk(partSize: Int): Sequence<LongRange> =
 internal suspend fun s3WithAllEngines(block: suspend (S3Client) -> Unit) {
     withAllEngines { engine ->
         S3Client {
-            region = S3BucketOpsIntegrationTest.DEFAULT_REGION
+            region = S3TestUtils.DEFAULT_REGION
             httpClientEngine = engine
         }.use {
             try {

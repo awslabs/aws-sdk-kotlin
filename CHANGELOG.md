@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.17.9-beta] - 10/27/2022
+
+### Fixes
+* #711 Pass client configuration's httpClientEngine to the CredentialsProvider and region to ProfileCredentialsProvider
+* [#733](https://github.com/awslabs/aws-sdk-kotlin/issues/733) Fix OkHttp engine crashing on Android when coroutine is cancelled while uploading request body
+
+## [0.17.8-beta] - 10/14/2022
+
+### Features
+* #707 Support static stability for IMDS credentials
+
+### Fixes
+* [#715](https://github.com/awslabs/aws-sdk-kotlin/issues/715) Enable intra-repo links in API ref docs
+
+### Miscellaneous
+* Sync AWS service models
+
+## [0.17.7-beta] - 10/03/2022
+
+### Features
+* #486 Enable configurability of the retry strategy through environment variables, system properties, and AWS profiles.
+
+### Fixes
+* [#697](https://github.com/awslabs/aws-sdk-kotlin/issues/697) Correct handling of non-success responses when retrieving credentials on ECS.
+
+### Miscellaneous
+* Upgrade smithy-kotlin version.
+* Update/clarify changelog and add commit instructions in the Contributing Guidelines
+* Upgrade Kotlin version and dependencies in ECS credentials integration test.
+* Sync AWS models and upgrade smithy-kotlin.
+
+## [0.17.6-beta] - 09/19/2022
+
+### Features
+* [#543](https://github.com/awslabs/aws-sdk-kotlin/issues/543) Add support for event streams
+* Mark event stream HTTP body as duplex stream
+
+### Fixes
+* [#694](https://github.com/awslabs/aws-sdk-kotlin/issues/694) Merge per-op custom metadata to avoid clobbering per-client metadata
+
+### Miscellaneous
+* Sync AWS service models
+* Update smithy-kotlin version
+* Add unbound event stream payload deserialization path
+* Use explict CoroutineScope for consuming event stream flow
+
 ## [0.17.5-beta] - 08/18/2022
 
 ### Fixes

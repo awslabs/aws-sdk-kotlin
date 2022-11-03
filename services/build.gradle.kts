@@ -77,15 +77,14 @@ subprojects {
 
         if (project.file("e2eTest").exists()) {
             jvm().compilations {
-                val main by getting
                 val e2eTest by creating {
                     defaultSourceSet {
-                        kotlin.srcDir("e2eTest")
+                        kotlin.srcDir("e2eTest/src")
+                        resources.srcDir("e2eTest/test-resources")
+                        dependsOn(sourceSets.getByName("commonMain"))
+                        dependsOn(sourceSets.getByName("jvmMain"))
 
                         dependencies {
-                            // Compile against the main compilation's compile classpath and outputs:
-                            implementation(main.compileDependencyFiles + main.runtimeDependencyFiles + main.output.classesDirs)
-
                             implementation(kotlin("test"))
                             implementation(kotlin("test-junit5"))
                             implementation(project(":aws-runtime:testing"))

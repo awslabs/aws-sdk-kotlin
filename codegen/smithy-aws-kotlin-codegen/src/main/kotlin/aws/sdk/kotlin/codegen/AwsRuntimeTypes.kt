@@ -58,6 +58,10 @@ object AwsRuntimeTypes {
         object Region {
             val resolveRegion = runtimeSymbol("resolveRegion", AwsKotlinDependency.AWS_CONFIG, "region")
         }
+
+        object Retries {
+            val resolveRetryStrategy = runtimeSymbol("resolveRetryStrategy", AwsKotlinDependency.AWS_CONFIG, "config.retries")
+        }
     }
 
     object Http {

@@ -13,7 +13,7 @@ fun main(): Unit = runBlocking {
         region = "us-east-2"
         credentialsProvider = EcsCredentialsProvider()
     }.use { client ->
-        val resp = client.getCallerIdentity {}
+        val resp = client.getCallerIdentity()
 
         println("Account: ${resp.account}")
         println("UserID: ${resp.userId}")
