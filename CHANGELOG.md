@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.17.10-beta] - 11/03/2022
+
+### Miscellaneous
+* Upgrade smithy to 1.26.1.
+* Sync models and bump smithy-kotlin version for release.
+
 ## [0.17.9-beta] - 10/27/2022
 
 ### Fixes
