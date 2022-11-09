@@ -11,6 +11,7 @@ import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestRequestGenerator
 import software.amazon.smithy.kotlin.codegen.signing.AwsSignatureVersion4
+import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -24,18 +25,14 @@ class AwsHttpProtocolUnitTestRequestGenerator(builder: Builder) :
     HttpProtocolUnitTestRequestGenerator(builder) {
     override fun renderConfigureServiceClient(test: HttpRequestTestCase) {
         super.renderConfigureServiceClient(test)
-        renderConfigureAwsServiceClient(writer, model, serviceShape, operation)
-        test.host.ifPresent { expectedHost ->
-            // add an endpoint resolver
-            writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpoint)
-            writer.addImport(AwsRuntimeTypes.Endpoint.AwsEndpointResolver)
-            writer.write(
-                "endpointResolver = #T { _, _ -> #T(#S) }",
-                AwsRuntimeTypes.Endpoint.AwsEndpointResolver,
-                AwsRuntimeTypes.Endpoint.AwsEndpoint,
-                "https://$expectedHost",
-            )
-        }
+        renderConfigureAwsServiceClient(writer, model, serviceShape, operation, test.host.getOrNull() ?: "hostname")
+        val expectedHost = test.host.getOrNull() ?: "hostname"
+        writer.write(
+            "endpointResolver = #T { #T(#S) }",
+            RuntimeTypes.Http.Endpoints.EndpointResolver,
+            RuntimeTypes.Http.Endpoints.Endpoint,
+            "https://$expectedHost",
+        )
     }
 
     open class Builder : HttpProtocolUnitTestRequestGenerator.Builder() {
@@ -49,6 +46,7 @@ internal fun <T : HttpMessageTestCase> HttpProtocolUnitTestGenerator<T>.renderCo
     model: Model,
     serviceShape: ServiceShape,
     operation: OperationShape,
+    hostname: String = "hostname",
 ) {
     if (AwsSignatureVersion4.hasSigV4AuthScheme(model, serviceShape, operation)) {
         writer.addImport(AwsRuntimeTypes.Config.Credentials.StaticCredentialsProvider)
@@ -59,4 +57,10 @@ internal fun <T : HttpMessageTestCase> HttpProtocolUnitTestGenerator<T>.renderCo
 
     // specify a default region
     writer.write("region = \"us-east-1\"")
+    writer.write(
+        "endpointResolver = #T { #T(#S) }",
+        RuntimeTypes.Http.Endpoints.EndpointResolver,
+        RuntimeTypes.Http.Endpoints.Endpoint,
+        "https://$hostname",
+    )
 }

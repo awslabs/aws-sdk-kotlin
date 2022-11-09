@@ -7,7 +7,6 @@ package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.sdkId
-import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
@@ -18,7 +17,6 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerato
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.signing.AwsSignatureVersion4
 import software.amazon.smithy.model.knowledge.OperationIndex
-import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.OperationShape
 
 /**
@@ -37,9 +35,6 @@ open class AwsHttpProtocolClientGenerator(
         writer.write("public const val SdkVersion: String = #S", ctx.settings.pkg.version)
         writer.write("\n\n")
         super.render(writer)
-
-        // render internal files used by the implementation
-        renderInternals()
     }
 
     override fun renderOperationSetup(writer: KotlinWriter, opIndex: OperationIndex, op: OperationShape) {
@@ -96,11 +91,5 @@ open class AwsHttpProtocolClientGenerator(
             .write("(config.credentialsProvider as? #T)?.close()", RuntimeTypes.IO.Closeable)
             .closeBlock("}")
             .write("")
-    }
-
-    private fun renderInternals() {
-        val endpointsData = javaClass.classLoader.getResource("aws/sdk/kotlin/codegen/endpoints.json")?.readText() ?: throw CodegenException("could not load endpoints.json resource")
-        val endpointData = Node.parse(endpointsData).expectObjectNode()
-        AwsEndpointResolverGenerator(endpointData).render(ctx)
     }
 }

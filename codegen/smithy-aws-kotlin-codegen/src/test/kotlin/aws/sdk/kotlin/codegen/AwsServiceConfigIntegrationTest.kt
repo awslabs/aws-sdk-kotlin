@@ -45,7 +45,6 @@ class AwsServiceConfigIntegrationTest {
         val expectedProps = """
     public val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
     public val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider(httpClientEngine = httpClientEngine, region = region)
-    public val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
 """
         contents.shouldContainOnlyOnceWithDiff(expectedProps)
 
@@ -61,11 +60,6 @@ class AwsServiceConfigIntegrationTest {
          * client will not close it when the client is closed.
          */
         public var credentialsProvider: CredentialsProvider? = null
-        /**
-         * Determines the endpoint (hostname) to make requests to. When not provided a default
-         * resolver is configured automatically. This is an advanced client option.
-         */
-        public var endpointResolver: AwsEndpointResolver? = null
 """
         contents.shouldContainOnlyOnceWithDiff(expectedImpl)
     }

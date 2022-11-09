@@ -6,9 +6,7 @@ package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.protocols.endpoints.PartitionsGenerator
-import aws.sdk.kotlin.codegen.protocols.endpoints.awsEndpointFunctions
-import aws.sdk.kotlin.codegen.protocols.endpoints.awsEndpointPropertyRenderers
+import aws.sdk.kotlin.codegen.protocols.endpoints.*
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamParserGenerator
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamSerializerGenerator
 import aws.sdk.kotlin.codegen.protocols.middleware.RecursionDetectionMiddleware
@@ -25,17 +23,16 @@ import software.amazon.smithy.kotlin.codegen.core.useFileWriter
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
+import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.endpoints.DefaultEndpointProviderGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.endpoints.DefaultEndpointProviderTestGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointParametersGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointProviderGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.endpoints.*
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.rulesengine.language.EndpointRuleSet
+import software.amazon.smithy.rulesengine.language.syntax.parameters.Parameter
 import software.amazon.smithy.rulesengine.traits.EndpointTestCase
 
 /**
@@ -174,7 +171,11 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             EndpointParametersGenerator(it, rules).render()
         }
         ctx.delegator.useFileWriter(providerSymbol) {
-            EndpointProviderGenerator(it, paramsSymbol).render()
+            val generator = EndpointProviderGenerator(it, paramsSymbol)
+
+            generator.render()
+            it.write("")
+            generator.renderAsSigningProviderExt(it, providerSymbol, paramsSymbol)
         }
         ctx.delegator.useFileWriter(defaultProviderSymbol) {
             DefaultEndpointProviderGenerator(
@@ -185,6 +186,14 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 awsEndpointFunctions,
                 awsEndpointPropertyRenderers,
             ).render()
+        }
+
+        val middlewareSymbol = ResolveEndpointMiddlewareGenerator.getSymbol(ctx.settings)
+        ctx.delegator.useFileWriter(middlewareSymbol) {
+            ResolveEndpointMiddlewareGenerator(ctx, it).render()
+
+            val builtins = rules.parameters.toList().filter(Parameter::isBuiltIn)
+            renderBindAwsBuiltins(ctx, it, builtins)
         }
     }
 
