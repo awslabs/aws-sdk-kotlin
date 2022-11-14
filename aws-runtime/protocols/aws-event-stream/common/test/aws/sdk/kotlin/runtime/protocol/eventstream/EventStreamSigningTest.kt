@@ -10,8 +10,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awssigning.*
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.hashing.sha256
-import aws.smithy.kotlin.runtime.io.SdkByteBuffer
-import aws.smithy.kotlin.runtime.io.bytes
+import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.util.encodeToHex
@@ -46,9 +45,9 @@ class EventStreamSigningTest {
 
         val prevSignature = "last message sts".encodeToByteArray().sha256().encodeToHex().encodeToByteArray()
 
-        val buffer = SdkByteBuffer(0U)
+        val buffer = SdkBuffer()
         messageToSign.encode(buffer)
-        val messagePayload = buffer.bytes()
+        val messagePayload = buffer.readByteArray()
         val result = DefaultAwsSigner.signPayload(signingConfig, prevSignature, messagePayload, testClock)
         assertEquals(":date", result.output.headers[0].name)
 

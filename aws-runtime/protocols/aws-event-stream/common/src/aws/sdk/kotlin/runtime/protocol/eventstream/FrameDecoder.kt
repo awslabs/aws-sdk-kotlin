@@ -26,22 +26,23 @@ public suspend fun decodeFrames(chan: SdkByteReadChannel): Flow<Message> = flow 
         // null indicates the channel was closed and that no more messages are coming
         val preludeBytes = readPrelude(chan) ?: return@flow
 
-        val preludeBuf = SdkByteBuffer.of(preludeBytes).apply { advance(preludeBytes.size.toULong()) }
+        val preludeBuf = SdkBuffer().apply { write(preludeBytes) }
         val prelude = Prelude.decode(preludeBuf)
 
-        // get a buffer with one complete message in it, prelude has already been read though, leave room for it
-        val messageBytes = ByteArray(prelude.totalLen)
+        // get a buffer with the rest of the message
+        val messageBytes = ByteArray(prelude.totalLen - PRELUDE_BYTE_LEN_WITH_CRC)
 
         try {
-            chan.readFully(messageBytes, offset = PRELUDE_BYTE_LEN_WITH_CRC)
+            chan.readFully(messageBytes)
         } catch (ex: Exception) {
             throw EventStreamFramingException("failed to read message from channel", ex)
         }
 
-        val messageBuf = SdkByteBuffer.of(messageBytes)
-        messageBuf.writeFully(preludeBytes)
-        val remaining = prelude.totalLen - PRELUDE_BYTE_LEN_WITH_CRC
-        messageBuf.advance(remaining.toULong())
+        // reconstruct the full message so we can decode it
+        val messageBuf = SdkBuffer().apply {
+            write(preludeBytes)
+            write(messageBytes)
+        }
 
         val message = Message.decode(messageBuf)
         emit(message)
