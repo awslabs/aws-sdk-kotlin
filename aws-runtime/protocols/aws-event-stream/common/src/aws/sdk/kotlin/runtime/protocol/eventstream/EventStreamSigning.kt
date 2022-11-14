@@ -7,8 +7,7 @@ package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.smithy.kotlin.runtime.auth.awssigning.*
 import aws.smithy.kotlin.runtime.client.ExecutionContext
-import aws.smithy.kotlin.runtime.io.SdkByteBuffer
-import aws.smithy.kotlin.runtime.io.bytes
+import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.InternalApi
@@ -43,12 +42,11 @@ public fun Flow<Message>.sign(
     val configBuilder = config.toBuilder()
 
     messages.collect { message ->
-        // FIXME - can we get an estimate here on size?
-        val buffer = SdkByteBuffer(0U)
+        val buffer = SdkBuffer()
         message.encode(buffer)
 
         // the entire message is wrapped as the payload of the signed message
-        val result = signer.signPayload(configBuilder, prevSignature, buffer.bytes())
+        val result = signer.signPayload(configBuilder, prevSignature, buffer.readByteArray())
         prevSignature = result.signature
         emit(result.output)
     }

@@ -7,10 +7,9 @@ package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.HttpBody
-import aws.smithy.kotlin.runtime.io.SdkByteBuffer
+import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteChannel
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
-import aws.smithy.kotlin.runtime.io.bytes
 import aws.smithy.kotlin.runtime.tracing.TraceSpanContextElement
 import aws.smithy.kotlin.runtime.tracing.traceSpan
 import kotlinx.coroutines.CoroutineScope
@@ -26,10 +25,9 @@ import kotlin.coroutines.coroutineContext
  */
 @InternalSdkApi
 public fun Flow<Message>.encode(): Flow<ByteArray> = map {
-    // TODO - can we figure out the encoded size and directly get a byte array
-    val buffer = SdkByteBuffer(1024U)
+    val buffer = SdkBuffer()
     it.encode(buffer)
-    buffer.bytes()
+    buffer.readByteArray()
 }
 
 /**

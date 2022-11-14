@@ -68,7 +68,7 @@ public sealed class HeaderValue {
     /**
      * Encode a header value to [dest]
      */
-    public fun encode(dest: MutableBuffer): Unit = when (this) {
+    public fun encode(dest: SdkBufferedSink): Unit = when (this) {
         is Bool -> {
             val type = if (value) HeaderType.TRUE else HeaderType.FALSE
             dest.writeHeader(type)
@@ -92,15 +92,15 @@ public sealed class HeaderValue {
         is ByteArray -> {
             dest.writeHeader(HeaderType.BYTE_ARRAY)
             check(value.size in 0..UShort.MAX_VALUE.toInt()) { "HeaderValue ByteArray too long" }
-            dest.writeUShort(value.size.toUShort())
-            dest.writeFully(value)
+            dest.writeShort(value.size.toShort())
+            dest.write(value)
         }
         is String -> {
             val bytes = value.encodeToByteArray()
             check(bytes.size in 0..UShort.MAX_VALUE.toInt()) { "HeaderValue String too long" }
             dest.writeHeader(HeaderType.STRING)
-            dest.writeUShort(bytes.size.toUShort())
-            dest.writeFully(bytes)
+            dest.writeShort(bytes.size.toShort())
+            dest.write(bytes)
         }
         is Timestamp -> {
             dest.writeHeader(HeaderType.TIMESTAMP)
@@ -114,22 +114,20 @@ public sealed class HeaderValue {
     }
 
     public companion object {
-        public fun decode(buffer: Buffer): HeaderValue {
-            val type = buffer.readByte().let { HeaderType.fromTypeId(it) }
+        public fun decode(source: SdkBufferedSource): HeaderValue {
+            val type = source.readByte().let { HeaderType.fromTypeId(it) }
             return when (type) {
                 HeaderType.TRUE -> HeaderValue.Bool(true)
                 HeaderType.FALSE -> HeaderValue.Bool(false)
-                HeaderType.BYTE -> HeaderValue.Byte(buffer.readByte().toUByte())
-                HeaderType.INT16 -> HeaderValue.Int16(buffer.readShort())
-                HeaderType.INT32 -> HeaderValue.Int32(buffer.readInt())
-                HeaderType.INT64 -> HeaderValue.Int64(buffer.readLong())
+                HeaderType.BYTE -> HeaderValue.Byte(source.readByte().toUByte())
+                HeaderType.INT16 -> HeaderValue.Int16(source.readShort())
+                HeaderType.INT32 -> HeaderValue.Int32(source.readInt())
+                HeaderType.INT64 -> HeaderValue.Int64(source.readLong())
                 HeaderType.BYTE_ARRAY, HeaderType.STRING -> {
-                    val len = buffer.readUShort()
-                    if (buffer.readRemaining < len.toULong()) {
-                        throw IllegalStateException("Invalid HeaderValue; type=$type, len=$len; readRemaining: ${buffer.readRemaining}")
-                    }
+                    val len = source.readShort().toUShort()
+                    check(source.request(len.toLong())) { "Invalid HeaderValue; type=$type, len=$len; readRemaining: ${source.buffer.size}" }
                     val bytes = ByteArray(len.toInt())
-                    buffer.readFully(bytes)
+                    source.read(bytes)
                     when (type) {
                         HeaderType.STRING -> HeaderValue.String(bytes.decodeToString())
                         HeaderType.BYTE_ARRAY -> HeaderValue.ByteArray(bytes)
@@ -137,12 +135,12 @@ public sealed class HeaderValue {
                     }
                 }
                 HeaderType.TIMESTAMP -> {
-                    val epochMilli = buffer.readLong()
+                    val epochMilli = source.readLong()
                     HeaderValue.Timestamp(Instant.fromEpochMilliseconds(epochMilli))
                 }
                 HeaderType.UUID -> {
-                    val high = buffer.readLong()
-                    val low = buffer.readLong()
+                    val high = source.readLong()
+                    val low = source.readLong()
                     HeaderValue.Uuid(Uuid(high, low))
                 }
             }
@@ -150,7 +148,7 @@ public sealed class HeaderValue {
     }
 }
 
-private fun MutableBuffer.writeHeader(headerType: HeaderType) = writeByte(headerType.value)
+private fun SdkBufferedSink.writeHeader(headerType: HeaderType) = writeByte(headerType.value)
 
 public fun HeaderValue.expectBool(): Boolean = checkNotNull((this as? HeaderValue.Bool)?.value) { "expected HeaderValue.Bool, found: $this" }
 public fun HeaderValue.expectByte(): Byte = checkNotNull((this as? HeaderValue.Byte)?.value?.toByte()) { "expected HeaderValue.Byte, found: $this" }
