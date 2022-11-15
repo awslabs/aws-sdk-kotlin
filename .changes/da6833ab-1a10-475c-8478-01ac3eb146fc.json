@@ -1,0 +1,8 @@
+{
+    "id": "da6833ab-1a10-475c-8478-01ac3eb146fc",
+    "type": "bugfix",
+    "description": "Upgrade smithy-kotlin to fix Android crash when OkHttp response body coroutine throws an exception",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#753"
+    ]
+}
