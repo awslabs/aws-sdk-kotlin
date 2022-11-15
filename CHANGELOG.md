@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.17.12-beta] - 11/15/2022
+
+### Fixes
+* [#753](https://github.com/awslabs/aws-sdk-kotlin/issues/753) Upgrade smithy-kotlin to fix Android crash when OkHttp response body coroutine throws an exception
+
+### Miscellaneous
+* Sync AWS models to latest
+
 ## [0.17.11-beta] - 11/10/2022
 
 ### Miscellaneous
