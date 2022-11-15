@@ -19,7 +19,6 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.getLogger
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -95,7 +94,7 @@ public class ProfileCredentialsProvider(
         "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClientEngine),
     )
 
-    override suspend fun getCredentials(): Credentials = coroutineContext.withChildTraceSpan("Profile") {
+    override suspend fun getCredentials(): Credentials {
         val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
         val source = resolveConfigSource(platformProvider, profileName)
         logger.debug { "Loading credentials from profile `${source.profile}`" }
@@ -117,7 +116,7 @@ public class ProfileCredentialsProvider(
         }
 
         logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
-        creds
+        return creds
     }
 
     override fun close() {

@@ -68,11 +68,11 @@ public class StsWebIdentityCredentialsProvider(
         }
     }
 
-    override suspend fun getCredentials(): Credentials = coroutineContext.withChildTraceSpan("StsWebIdentity") {
+    override suspend fun getCredentials(): Credentials {
         val traceSpan = coroutineContext.traceSpan
         val logger = traceSpan.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials via web identity" }
-        val provider = this@StsWebIdentityCredentialsProvider
+        val provider = this
 
         val token = platformProvider
             .readFileOrNull(webIdentityTokenFilePath)
@@ -102,7 +102,7 @@ public class StsWebIdentityCredentialsProvider(
         val roleCredentials = resp.credentials ?: throw CredentialsProviderException("STS credentials must not be null")
         logger.debug { "obtained assumed credentials via web identity; expiration=${roleCredentials.expiration?.format(TimestampFormat.ISO_8601)}" }
 
-        Credentials(
+        return Credentials(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRoleWithWebIdentity response" },
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRoleWithWebIdentity response" },
             sessionToken = roleCredentials.sessionToken,

@@ -52,8 +52,8 @@ class ResolveAwsEndpointTest {
         val endpoint = AwsEndpoint("https://api.test.com")
         val resolver = AwsEndpointResolver { _, _ -> endpoint }
         op.install(ResolveAwsEndpoint("TestService", resolver))
-        op.roundTrip(client, Unit)
 
+        op.roundTrip(client, Unit)
         val actual = op.context[HttpOperationContext.HttpCallList].first().request
 
         assertEquals("api.test.com", actual.url.host)
@@ -80,15 +80,15 @@ class ResolveAwsEndpointTest {
         val endpoint = AwsEndpoint("https://api.test.com", CredentialScope("us-west-2", "foo"))
         val resolver = AwsEndpointResolver { _, _ -> endpoint }
         op.install(ResolveAwsEndpoint("TestService", resolver))
-        op.roundTrip(client, Unit)
 
+        op.roundTrip(client, Unit)
         val actual = op.context[HttpOperationContext.HttpCallList].first().request
 
         assertEquals("api.test.com", actual.url.host)
         assertEquals(Protocol.HTTPS, actual.url.scheme)
         assertEquals("api.test.com", actual.headers["Host"])
-        op.roundTrip(client, Unit)
 
+        op.roundTrip(client, Unit)
         assertEquals("foo", op.context[AwsSigningAttributes.SigningService])
         assertEquals("us-west-2", op.context[AwsSigningAttributes.SigningRegion])
     }

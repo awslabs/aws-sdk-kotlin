@@ -50,7 +50,6 @@ class EventStreamSigningTest {
         messageToSign.encode(buffer)
         val messagePayload = buffer.bytes()
         val result = DefaultAwsSigner.signPayload(signingConfig, prevSignature, messagePayload, testClock)
-
         assertEquals(":date", result.output.headers[0].name)
 
         val dateHeader = result.output.headers[0].value.expectTimestamp()
@@ -83,7 +82,6 @@ class EventStreamSigningTest {
 
         val config = context.newEventStreamSigningConfig()
         val signedEvents = flowOf(messageToSign).sign(context, config).toList()
-
         // 1 message + empty signed frame
         assertEquals(2, signedEvents.size)
     }

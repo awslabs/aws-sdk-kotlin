@@ -17,7 +17,6 @@ import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.*
-import kotlin.coroutines.coroutineContext
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
@@ -43,7 +42,6 @@ class ImdsClientTest {
         }
 
         val client = ImdsClient { engine = connection }
-
         val r1 = client.get("/latest/metadata")
         assertEquals("output 1", r1)
 

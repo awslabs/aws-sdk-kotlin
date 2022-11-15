@@ -24,8 +24,7 @@ class CredentialsProviderChainTest {
         }
     }
     data class TestProvider(val credentials: Credentials? = null) : CredentialsProvider {
-        override suspend fun getCredentials(): Credentials =
-            credentials ?: throw IllegalStateException("no credentials available")
+        override suspend fun getCredentials(): Credentials = credentials ?: throw IllegalStateException("no credentials available")
     }
 
     @Test
@@ -36,8 +35,7 @@ class CredentialsProviderChainTest {
             TestProvider(Credentials("akid2", "secret2")),
         )
 
-        val actual = chain.getCredentials()
-        assertEquals(Credentials("akid1", "secret1"), actual)
+        assertEquals(Credentials("akid1", "secret1"), chain.getCredentials())
     }
 
     @Test

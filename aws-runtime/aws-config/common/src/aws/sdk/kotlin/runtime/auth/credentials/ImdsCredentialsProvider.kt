@@ -17,7 +17,6 @@ import aws.smithy.kotlin.runtime.http.operation.getLogger
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
-import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import kotlinx.coroutines.sync.Mutex
@@ -50,7 +49,7 @@ public class ImdsCredentialsProvider(
 ) : CredentialsProvider, Closeable {
     private val profile = ProfileLoader(profileOverride, client)
 
-    override suspend fun getCredentials(): Credentials = coroutineContext.withChildTraceSpan("Imds") {
+    override suspend fun getCredentials(): Credentials {
         val logger = coroutineContext.getLogger<ImdsCredentialsProvider>()
 
         if (AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true) {
@@ -67,7 +66,7 @@ public class ImdsCredentialsProvider(
         val payload = client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
         val deserializer = JsonDeserializer(payload.encodeToByteArray())
 
-        when (val resp = deserializeJsonCredentials(deserializer)) {
+        return when (val resp = deserializeJsonCredentials(deserializer)) {
             is JsonCredentialsResponse.SessionCredentials -> Credentials(
                 resp.accessKeyId,
                 resp.secretAccessKey,

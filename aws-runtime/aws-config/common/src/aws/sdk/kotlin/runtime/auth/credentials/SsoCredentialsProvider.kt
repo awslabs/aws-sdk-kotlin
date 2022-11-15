@@ -96,7 +96,7 @@ public class SsoCredentialsProvider public constructor(
 
 ) : CredentialsProvider {
 
-    override suspend fun getCredentials(): Credentials = coroutineContext.withChildTraceSpan("SSO") {
+    override suspend fun getCredentials(): Credentials {
         val traceSpan = coroutineContext.traceSpan
         val logger = traceSpan.logger<SsoCredentialsProvider>()
 
@@ -123,7 +123,7 @@ public class SsoCredentialsProvider public constructor(
 
         val roleCredentials = resp.roleCredentials ?: throw CredentialsProviderException("Expected SSO roleCredentials to not be null")
 
-        Credentials(
+        return Credentials(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in SSO roleCredentials response" },
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in SSO roleCredentials response" },
             sessionToken = roleCredentials.sessionToken,

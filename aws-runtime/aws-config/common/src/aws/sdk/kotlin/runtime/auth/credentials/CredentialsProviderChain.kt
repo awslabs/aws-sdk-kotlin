@@ -32,7 +32,7 @@ public open class CredentialsProviderChain(
     override fun toString(): String =
         (listOf(this) + providers).map { it::class.simpleName }.joinToString(" -> ")
 
-    override suspend fun getCredentials(): Credentials = coroutineContext.withChildTraceSpan("Chain") {
+    override suspend fun getCredentials(): Credentials = coroutineContext.withChildTraceSpan("Credentials chain") {
         val logger = coroutineContext.getLogger<CredentialsProviderChain>()
         val provider = this@CredentialsProviderChain
         val chainException = lazy { CredentialsProviderException("No credentials could be loaded from the chain: $provider") }

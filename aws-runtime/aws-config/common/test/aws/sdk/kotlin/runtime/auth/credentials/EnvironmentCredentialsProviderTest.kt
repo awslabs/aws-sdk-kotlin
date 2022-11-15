@@ -25,8 +25,7 @@ class EnvironmentCredentialsProviderTest {
             AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def",
             AwsSdkSetting.AwsSessionToken.environmentVariable to "ghi",
         )
-        val actual = provider.getCredentials()
-        assertEquals(Credentials("abc", "def", "ghi", providerName = "Environment"), actual)
+        assertEquals(provider.getCredentials(), Credentials("abc", "def", "ghi", providerName = "Environment"))
     }
 
     @Test
@@ -35,23 +34,20 @@ class EnvironmentCredentialsProviderTest {
             AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc",
             AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def",
         )
-        val actual = provider.getCredentials()
-        assertEquals(Credentials("abc", "def", null, providerName = "Environment"), actual)
+        assertEquals(provider.getCredentials(), Credentials("abc", "def", null, providerName = "Environment"))
     }
 
     @Test
     fun `it should throw an exception on missing access key`() = runTest {
-        val provider = provider(AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def")
         assertFailsWith<ProviderConfigurationException> {
-            provider.getCredentials()
+            provider(AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def").getCredentials()
         }.message.shouldContain("Missing value for environment variable `AWS_ACCESS_KEY_ID`")
     }
 
     @Test
     fun `it should throw an exception on missing secret key`() = runTest {
-        val provider = provider(AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc")
         assertFailsWith<ProviderConfigurationException> {
-            provider.getCredentials()
+            provider(AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc").getCredentials()
         }.message.shouldContain("Missing value for environment variable `AWS_SECRET_ACCESS_KEY`")
     }
 }

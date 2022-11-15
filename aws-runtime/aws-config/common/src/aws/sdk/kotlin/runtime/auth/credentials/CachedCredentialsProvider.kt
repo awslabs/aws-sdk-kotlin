@@ -12,7 +12,6 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.tracing.trace
-import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -56,16 +55,14 @@ public class CachedCredentialsProvider(
     private val cachedCredentials = CachedValue<Credentials>(null, bufferTime = refreshBufferWindow, clock)
 
     override suspend fun getCredentials(): Credentials = cachedCredentials.getOrLoad {
-        coroutineContext.withChildTraceSpan("Cached") {
-            coroutineContext.trace<CachedCredentialsProvider> { "refreshing credentials cache" }
-            val providerCreds = source.getCredentials()
-            if (providerCreds.expiration != null) {
-                ExpiringValue(providerCreds, providerCreds.expiration!!)
-            } else {
-                val expiration = clock.now() + expireCredentialsAfter
-                val creds = providerCreds.copy(expiration = expiration)
-                ExpiringValue(creds, expiration)
-            }
+        coroutineContext.trace<CachedCredentialsProvider> { "refreshing credentials cache" }
+        val providerCreds = source.getCredentials()
+        if (providerCreds.expiration != null) {
+            ExpiringValue(providerCreds, providerCreds.expiration!!)
+        } else {
+            val expiration = clock.now() + expireCredentialsAfter
+            val creds = providerCreds.copy(expiration = expiration)
+            ExpiringValue(creds, expiration)
         }
     }
 

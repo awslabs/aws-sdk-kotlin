@@ -50,7 +50,6 @@ class ImdsRegionProviderTest {
         }
 
         val provider = ImdsRegionProvider(client = lazyOf(client))
-
         assertEquals("us-east-2", provider.getRegion())
         connection.assertRequests()
 

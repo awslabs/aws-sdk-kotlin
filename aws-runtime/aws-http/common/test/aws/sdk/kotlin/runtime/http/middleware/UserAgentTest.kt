@@ -59,8 +59,8 @@ class UserAgentTest {
     @Test
     fun itSetsUAHeaders() = runTest {
         val op = initializeOp()
-        op.roundTrip(client, Unit)
 
+        op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         assertTrue(request.headers.contains(USER_AGENT))
         assertTrue(request.headers.contains(X_AMZ_USER_AGENT))
@@ -74,8 +74,8 @@ class UserAgentTest {
     fun itAddsPerOperationMetadata() = runTest {
         val op = initializeOp()
         op.context.customUserAgentMetadata.add("foo", "bar")
-        op.roundTrip(client, Unit)
 
+        op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
 
         request.headers[USER_AGENT]!!.shouldContain("md/foo/bar")
@@ -83,8 +83,8 @@ class UserAgentTest {
         // verify per/request metadata is actually per/request
         val op2 = initializeOp()
         op2.context.customUserAgentMetadata.add("baz", "quux")
-        op2.roundTrip(client, Unit)
 
+        op2.roundTrip(client, Unit)
         val request2 = op2.context[HttpOperationContext.HttpCallList].last().request
 
         request2.headers[USER_AGENT]!!.shouldNotContain("md/foo/bar")
@@ -107,7 +107,6 @@ class UserAgentTest {
         }
 
         op.roundTrip(client, Unit)
-
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val uaString = request.headers[USER_AGENT]!!
 
@@ -127,8 +126,8 @@ class UserAgentTest {
             ),
         )
         val op = initializeOp(platform)
-        op.roundTrip(client, Unit)
 
+        op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val uaString = request.headers[USER_AGENT]!!
 

@@ -34,7 +34,6 @@ import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import kotlin.coroutines.coroutineContext
@@ -80,49 +79,48 @@ public class EcsCredentialsProvider internal constructor(
         Retry<Credentials>(strategy, policy)
     }
 
-    override suspend fun getCredentials(): Credentials =
-        coroutineContext.withChildTraceSpan("ECS") {
-            val logger = coroutineContext.getLogger<EcsCredentialsProvider>()
-            val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
-            val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
-            val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)
+    override suspend fun getCredentials(): Credentials {
+        val logger = coroutineContext.getLogger<EcsCredentialsProvider>()
+        val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
+        val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
+        val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)
 
-            val url = when {
-                relativeUri?.isBlank() == false -> validateRelativeUri(relativeUri)
-                fullUri?.isBlank() == false -> validateFullUri(fullUri)
-                else -> throw ProviderConfigurationException("Container credentials URI not set")
-            }
-
-            val op = SdkHttpOperation.build<Unit, Credentials> {
-                serializer = EcsCredentialsSerializer(authToken)
-                deserializer = EcsCredentialsDeserializer()
-                context {
-                    operationName = "EcsCredentialsProvider"
-                    service = "n/a"
-                }
-            }
-
-            op.install(ResolveEndpoint(resolver = { Endpoint(url) }))
-            op.install(retryMiddleware)
-
-            logger.debug { "retrieving container credentials" }
-            val client = sdkHttpClient(httpClientEngine, manageEngine = false)
-            val creds = try {
-                op.roundTrip(client, Unit)
-            } catch (ex: Exception) {
-                logger.debug { "failed to obtain credentials from container metadata service" }
-                throw when (ex) {
-                    is CredentialsProviderException -> ex
-                    else -> CredentialsProviderException("Failed to get credentials from container metadata service", ex)
-                }
-            } finally {
-                client.close()
-            }
-
-            logger.debug { "obtained credentials from container metadata service; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
-
-            creds
+        val url = when {
+            relativeUri?.isBlank() == false -> validateRelativeUri(relativeUri)
+            fullUri?.isBlank() == false -> validateFullUri(fullUri)
+            else -> throw ProviderConfigurationException("Container credentials URI not set")
         }
+
+        val op = SdkHttpOperation.build<Unit, Credentials> {
+            serializer = EcsCredentialsSerializer(authToken)
+            deserializer = EcsCredentialsDeserializer()
+            context {
+                operationName = "EcsCredentialsProvider"
+                service = "n/a"
+            }
+        }
+
+        op.install(ResolveEndpoint(resolver = { Endpoint(url) }))
+        op.install(retryMiddleware)
+
+        logger.debug { "retrieving container credentials" }
+        val client = sdkHttpClient(httpClientEngine, manageEngine = false)
+        val creds = try {
+            op.roundTrip(client, Unit)
+        } catch (ex: Exception) {
+            logger.debug { "failed to obtain credentials from container metadata service" }
+            throw when (ex) {
+                is CredentialsProviderException -> ex
+                else -> CredentialsProviderException("Failed to get credentials from container metadata service", ex)
+            }
+        } finally {
+            client.close()
+        }
+
+        logger.debug { "obtained credentials from container metadata service; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
+
+        return creds
+    }
 
     /**
      * Validate that the [relativeUri] can be combined with the static ECS endpoint to form a valid URL

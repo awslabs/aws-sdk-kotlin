@@ -45,8 +45,8 @@ class AwsJsonProtocolTest {
         val client = sdkHttpClient(mockEngine)
         val m = AwsJsonProtocol("FooService_blah", "1.1")
         op.install(m)
-        op.roundTrip(client, Unit)
 
+        op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
 
         assertEquals("application/x-amz-json-1.1", request.headers["Content-Type"])
@@ -75,8 +75,8 @@ class AwsJsonProtocolTest {
         }
         val client = sdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol("FooService", "1.1"))
-        op.roundTrip(client, Unit)
 
+        op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val actual = request.body.readAll()?.decodeToString()
 
@@ -109,8 +109,8 @@ class AwsJsonProtocolTest {
         }
         val client = sdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol("FooService", "1.1"))
-        op.roundTrip(client, Unit)
 
+        op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val actual = request.body.readAll()?.decodeToString()
         assertEquals("application/xml", request.headers["Content-Type"])
