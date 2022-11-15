@@ -20,9 +20,6 @@ import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.bytes
 import aws.smithy.kotlin.runtime.smithy.test.assertJsonStringsEqual
 import aws.smithy.kotlin.runtime.time.Instant
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
@@ -80,7 +77,7 @@ class EventStreamTests {
     }
 
     @Test
-    fun testSerializeMessageWithBlob() = runTestWithTraceSpan {
+    fun testSerializeMessageWithBlob() = runTest {
         val event = TestStream.MessageWithBlob(MessageWithBlob { data = "hello from Kotlin".encodeToByteArray() })
 
         val message = serializedMessage(event)
@@ -97,7 +94,7 @@ class EventStreamTests {
     }
 
     @Test
-    fun testSerializeMessageWithString() = runTestWithTraceSpan {
+    fun testSerializeMessageWithString() = runTest {
         val event = TestStream.MessageWithString(MessageWithString { data = "hello from Kotlin" })
 
         val message = serializedMessage(event)
@@ -114,7 +111,7 @@ class EventStreamTests {
     }
 
     @Test
-    fun testSerializeMessageWithStruct() = runTestWithTraceSpan {
+    fun testSerializeMessageWithStruct() = runTest {
         val event = TestStream.MessageWithStruct(
             MessageWithStruct {
                 someStruct {
@@ -140,7 +137,7 @@ class EventStreamTests {
     }
 
     @Test
-    fun testSerializeMessageWithUnion() = runTestWithTraceSpan {
+    fun testSerializeMessageWithUnion() = runTest {
         val event = TestStream.MessageWithUnion(
             MessageWithUnion {
                 someUnion = TestUnion.Foo("a lep is a ball")
@@ -163,7 +160,7 @@ class EventStreamTests {
     }
 
     @Test
-    fun testSerializeMessageWithHeaders() = runTestWithTraceSpan {
+    fun testSerializeMessageWithHeaders() = runTest {
         val event = TestStream.MessageWithHeaders(
             MessageWithHeaders {
                 blob = "blobby".encodeToByteArray()
@@ -197,7 +194,7 @@ class EventStreamTests {
     }
 
     @Test
-    fun testSerializeMessageWithHeaderAndPayload() = runTestWithTraceSpan {
+    fun testSerializeMessageWithHeaderAndPayload() = runTest {
         val event = TestStream.MessageWithHeaderAndPayload(
             MessageWithHeaderAndPayload {
                 header = "a korf is a tiger"
@@ -219,7 +216,7 @@ class EventStreamTests {
     }
 
     @Test
-    fun testSerializeMessageWithNoTraits() = runTestWithTraceSpan {
+    fun testSerializeMessageWithNoTraits() = runTest {
         val event = TestStream.MessageWithNoHeaderPayloadTraits(
             MessageWithNoHeaderPayloadTraits {
                 someInt = 2
@@ -242,7 +239,7 @@ class EventStreamTests {
     }
 
     @Test
-    fun testSerializeMessageWithUnboundPayload() = runTestWithTraceSpan {
+    fun testSerializeMessageWithUnboundPayload() = runTest {
         val event = TestStream.MessageWithUnboundPayloadTraits(
             MessageWithUnboundPayloadTraits {
                 header = "a korf is a tiger"
@@ -265,12 +262,5 @@ class EventStreamTests {
         val deserialized = deserializedEvent(message)
         assertIs<TestStream.MessageWithUnboundPayloadTraits>(deserialized)
         assertEquals(event, deserialized)
-    }
-}
-
-@OptIn(ExperimentalCoroutinesApi::class)
-private fun runTestWithTraceSpan(block: suspend CoroutineScope.() -> Unit) = runTest {
-    coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-        block()
     }
 }

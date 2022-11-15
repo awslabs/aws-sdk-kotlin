@@ -17,8 +17,6 @@ import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -111,9 +109,7 @@ class SsoCredentialsProviderTest {
         )
 
         assertFailsWith<ProviderConfigurationException> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                provider.getCredentials()
-            }
+            provider.getCredentials()
         }.message.shouldContain("The SSO session has expired")
     }
 
@@ -153,9 +149,7 @@ class SsoCredentialsProviderTest {
         )
 
         assertFailsWith<CredentialsNotLoadedException> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                provider.getCredentials()
-            }
+            provider.getCredentials()
         }.message.shouldContain("GetRoleCredentials operation failed")
     }
 
@@ -209,9 +203,7 @@ class SsoCredentialsProviderTest {
             clock = testClock,
         )
 
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         val expected = Credentials("AKID", "secret", "session-token", expectedExpiration, "SSO")
         assertEquals(expected, actual)
     }

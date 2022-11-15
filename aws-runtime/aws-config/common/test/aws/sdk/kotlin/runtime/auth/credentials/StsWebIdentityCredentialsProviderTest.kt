@@ -15,8 +15,6 @@ import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -91,9 +89,7 @@ class StsWebIdentityCredentialsProviderTest {
             platformProvider = testPlatform,
         )
 
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         assertEquals(expectedCredentialsBase, actual)
     }
 
@@ -127,9 +123,7 @@ class StsWebIdentityCredentialsProviderTest {
         )
 
         assertFailsWith<CredentialsProviderException> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                provider.getCredentials()
-            }
+            provider.getCredentials()
         }.message.shouldContain("STS failed to assume role from web identity")
     }
 
@@ -148,9 +142,7 @@ class StsWebIdentityCredentialsProviderTest {
         )
 
         assertFailsWith<CredentialsProviderException> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                provider.getCredentials()
-            }
+            provider.getCredentials()
         }.message.shouldContain("failed to read webIdentityToken from token-path")
     }
 

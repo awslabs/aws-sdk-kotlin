@@ -13,8 +13,6 @@ import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.ManualClock
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -46,14 +44,12 @@ class ImdsClientTest {
 
         val client = ImdsClient { engine = connection }
 
-        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            val r1 = client.get("/latest/metadata")
-            assertEquals("output 1", r1)
+        val r1 = client.get("/latest/metadata")
+        assertEquals("output 1", r1)
 
-            val r2 = client.get("/latest/metadata")
-            assertEquals("output 2", r2)
-            connection.assertRequests()
-        }
+        val r2 = client.get("/latest/metadata")
+        assertEquals("output 2", r2)
+        connection.assertRequests()
     }
 
     @Test
@@ -86,15 +82,13 @@ class ImdsClientTest {
             tokenTtl = 600.seconds
         }
 
-        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            val r1 = client.get("/latest/metadata")
-            assertEquals("output 1", r1)
-            testClock.advance(600.seconds)
+        val r1 = client.get("/latest/metadata")
+        assertEquals("output 1", r1)
+        testClock.advance(600.seconds)
 
-            val r2 = client.get("/latest/metadata")
-            assertEquals("output 2", r2)
-            connection.assertRequests()
-        }
+        val r2 = client.get("/latest/metadata")
+        assertEquals("output 2", r2)
+        connection.assertRequests()
     }
 
     @Test
@@ -135,20 +129,18 @@ class ImdsClientTest {
             tokenTtl = 600.seconds
         }
 
-        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            val r1 = client.get("/latest/metadata")
-            assertEquals("output 1", r1)
-            testClock.advance(400.seconds)
+        val r1 = client.get("/latest/metadata")
+        assertEquals("output 1", r1)
+        testClock.advance(400.seconds)
 
-            val r2 = client.get("/latest/metadata")
-            assertEquals("output 2", r2)
+        val r2 = client.get("/latest/metadata")
+        assertEquals("output 2", r2)
 
-            testClock.advance(150.seconds)
-            val r3 = client.get("/latest/metadata")
-            assertEquals("output 3", r3)
+        testClock.advance(150.seconds)
+        val r3 = client.get("/latest/metadata")
+        assertEquals("output 3", r3)
 
-            connection.assertRequests()
-        }
+        connection.assertRequests()
     }
 
     @Test
@@ -169,9 +161,7 @@ class ImdsClientTest {
         }
 
         val client = ImdsClient { engine = connection }
-        val r1 = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            client.get("/latest/metadata")
-        }
+        val r1 = client.get("/latest/metadata")
         assertEquals("output 2", r1)
         connection.assertRequests()
     }
@@ -195,9 +185,7 @@ class ImdsClientTest {
         }
 
         val client = ImdsClient { engine = connection }
-        val r1 = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            client.get("/latest/metadata")
-        }
+        val r1 = client.get("/latest/metadata")
         assertEquals("output 2", r1)
         connection.assertRequests()
     }
@@ -214,9 +202,7 @@ class ImdsClientTest {
 
         val client = ImdsClient { engine = connection }
         val ex = assertFailsWith<EC2MetadataError> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                client.get("/latest/metadata")
-            }
+            client.get("/latest/metadata")
         }
 
         assertEquals(HttpStatusCode.Forbidden.value, ex.statusCode)
@@ -290,9 +276,7 @@ class ImdsClientTest {
             platformProvider = TestPlatformProvider(test.env, fs = test.fs)
         }
 
-        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            client.get("/hello")
-        }
+        client.get("/hello")
         connection.assertRequests()
     }
 }

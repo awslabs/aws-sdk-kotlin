@@ -7,8 +7,6 @@ package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.smithy.kotlin.runtime.http.readAll
 import aws.smithy.kotlin.runtime.io.SdkByteBuffer
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -54,10 +52,8 @@ class FrameEncoderTest {
             "baz",
         ).map { it.encodeToByteArray() }
 
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            val body = messages.asEventStreamHttpBody(this)
-            body.readAll()
-        }
+        val body = messages.asEventStreamHttpBody(this)
+        val actual = body.readAll()
         val expected = "foobarbaz"
         assertEquals(expected, actual?.decodeToString())
     }

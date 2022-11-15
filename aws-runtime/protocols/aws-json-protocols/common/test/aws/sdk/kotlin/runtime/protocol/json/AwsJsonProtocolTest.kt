@@ -15,8 +15,6 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.time.Instant
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -47,10 +45,7 @@ class AwsJsonProtocolTest {
         val client = sdkHttpClient(mockEngine)
         val m = AwsJsonProtocol("FooService_blah", "1.1")
         op.install(m)
-
-        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            op.roundTrip(client, Unit)
-        }
+        op.roundTrip(client, Unit)
 
         val request = op.context[HttpOperationContext.HttpCallList].last().request
 
@@ -80,10 +75,7 @@ class AwsJsonProtocolTest {
         }
         val client = sdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol("FooService", "1.1"))
-
-        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            op.roundTrip(client, Unit)
-        }
+        op.roundTrip(client, Unit)
 
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val actual = request.body.readAll()?.decodeToString()
@@ -117,10 +109,7 @@ class AwsJsonProtocolTest {
         }
         val client = sdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol("FooService", "1.1"))
-
-        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            op.roundTrip(client, Unit)
-        }
+        op.roundTrip(client, Unit)
 
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val actual = request.body.readAll()?.decodeToString()

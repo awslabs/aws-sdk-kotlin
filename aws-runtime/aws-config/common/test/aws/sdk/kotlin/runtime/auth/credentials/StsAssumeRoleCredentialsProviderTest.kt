@@ -11,8 +11,6 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -42,9 +40,7 @@ class StsAssumeRoleCredentialsProviderTest {
             httpClientEngine = testEngine,
         )
 
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)
     }
 
@@ -71,9 +67,7 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         assertFailsWith<CredentialsProviderException> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                provider.getCredentials()
-            }
+            provider.getCredentials()
         }.message.shouldContain("failed to assume role from STS")
     }
 
@@ -101,9 +95,7 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         val ex = assertFailsWith<ProviderConfigurationException> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                provider.getCredentials()
-            }
+            provider.getCredentials()
         }
 
         ex.message.shouldContain("STS is not activated in the requested region (us-west-2). Please check your configuration and activate STS in the target region if necessary")
@@ -122,9 +114,7 @@ class StsAssumeRoleCredentialsProviderTest {
             httpClientEngine = testEngine,
         )
 
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)
         val req = testEngine.requests().first()
         assertEquals("sts.amazonaws.com", req.actual.url.host)
@@ -143,9 +133,7 @@ class StsAssumeRoleCredentialsProviderTest {
             httpClientEngine = testEngine,
         )
 
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)
         val req = testEngine.requests().first()
         assertEquals("sts.us-west-2.amazonaws.com", req.actual.url.host)

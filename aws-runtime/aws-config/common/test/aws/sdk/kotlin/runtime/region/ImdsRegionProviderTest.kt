@@ -10,8 +10,6 @@ import aws.sdk.kotlin.runtime.config.imds.*
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.ManualClock
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -53,12 +51,10 @@ class ImdsRegionProviderTest {
 
         val provider = ImdsRegionProvider(client = lazyOf(client))
 
-        coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            assertEquals("us-east-2", provider.getRegion())
-            connection.assertRequests()
+        assertEquals("us-east-2", provider.getRegion())
+        connection.assertRequests()
 
-            // test that it's cached, test connection would fail if it tries again
-            assertEquals("us-east-2", provider.getRegion())
-        }
+        // test that it's cached, test connection would fail if it tries again
+        assertEquals("us-east-2", provider.getRegion())
     }
 }

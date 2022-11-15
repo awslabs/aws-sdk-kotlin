@@ -22,8 +22,6 @@ import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -99,9 +97,7 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
     }
@@ -121,9 +117,7 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
     }
@@ -139,9 +133,7 @@ class EcsCredentialsProviderTest {
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<ProviderConfigurationException> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                provider.getCredentials()
-            }
+            provider.getCredentials()
         }.message.shouldContain("The container credentials full URI ($uri) has an invalid host. Host can only be one of [127.0.0.1, [::1]].")
     }
 
@@ -160,9 +152,7 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
     }
@@ -174,9 +164,7 @@ class EcsCredentialsProviderTest {
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<ProviderConfigurationException> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                provider.getCredentials()
-            }
+            provider.getCredentials()
         }.message.shouldContain("Container credentials URI not set")
     }
 
@@ -198,9 +186,7 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
     }
@@ -220,9 +206,7 @@ class EcsCredentialsProviderTest {
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<CredentialsProviderException> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                provider.getCredentials()
-            }
+            provider.getCredentials()
         }.message.shouldContain("Error retrieving credentials from container service: code=TestError; message=Test error code response")
 
         engine.assertRequests()

@@ -7,8 +7,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -38,9 +36,7 @@ class CredentialsProviderChainTest {
             TestProvider(Credentials("akid2", "secret2")),
         )
 
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            chain.getCredentials()
-        }
+        val actual = chain.getCredentials()
         assertEquals(Credentials("akid1", "secret1"), actual)
     }
 
@@ -52,9 +48,7 @@ class CredentialsProviderChainTest {
         )
 
         val ex = assertFailsWith<CredentialsProviderException> {
-            coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-                chain.getCredentials()
-            }
+            chain.getCredentials()
         }
         ex.message.shouldContain("No credentials could be loaded from the chain: CredentialsProviderChain -> TestProvider -> TestProvider")
 

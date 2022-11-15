@@ -14,8 +14,6 @@ import aws.smithy.kotlin.runtime.io.SdkByteBuffer
 import aws.smithy.kotlin.runtime.io.bytes
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.encodeToHex
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -51,9 +49,7 @@ class EventStreamSigningTest {
         val buffer = SdkByteBuffer(0U)
         messageToSign.encode(buffer)
         val messagePayload = buffer.bytes()
-        val result = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            DefaultAwsSigner.signPayload(signingConfig, prevSignature, messagePayload, testClock)
-        }
+        val result = DefaultAwsSigner.signPayload(signingConfig, prevSignature, messagePayload, testClock)
 
         assertEquals(":date", result.output.headers[0].name)
 
@@ -86,9 +82,8 @@ class EventStreamSigningTest {
         context[AwsSigningAttributes.CredentialsProvider] = testCredentialsProvider
 
         val config = context.newEventStreamSigningConfig()
-        val signedEvents = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            flowOf(messageToSign).sign(context, config).toList()
-        }
+        val signedEvents = flowOf(messageToSign).sign(context, config).toList()
+
         // 1 message + empty signed frame
         assertEquals(2, signedEvents.size)
     }

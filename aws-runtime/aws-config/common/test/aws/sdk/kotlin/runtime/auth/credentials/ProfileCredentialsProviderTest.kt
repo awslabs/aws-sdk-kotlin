@@ -9,8 +9,6 @@ import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -36,9 +34,7 @@ class ProfileCredentialsProviderTest {
             platformProvider = testProvider,
             httpClientEngine = testEngine,
         )
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         val expected = Credentials("AKID-Default", "Default-Secret")
         assertEquals(expected, actual)
     }
@@ -66,9 +62,7 @@ class ProfileCredentialsProviderTest {
             platformProvider = testProvider,
             httpClientEngine = testEngine,
         )
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         val expected = Credentials("AKID-Profile", "Profile-Secret")
         assertEquals(expected, actual)
     }
@@ -98,9 +92,7 @@ class ProfileCredentialsProviderTest {
             platformProvider = testProvider,
             httpClientEngine = testEngine,
         )
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         val expected = Credentials("AKID-Profile", "Profile-Secret")
         assertEquals(expected, actual)
     }
@@ -136,9 +128,7 @@ class ProfileCredentialsProviderTest {
             platformProvider = testProvider,
             httpClientEngine = testEngine,
         )
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            provider.getCredentials()
-        }
+        val actual = provider.getCredentials()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)
 
         testEngine.assertRequests()
