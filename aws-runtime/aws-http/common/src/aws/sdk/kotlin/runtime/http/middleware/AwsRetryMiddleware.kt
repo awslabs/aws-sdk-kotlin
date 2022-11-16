@@ -34,7 +34,7 @@ public class AwsRetryMiddleware<O>(
 ) : Retry<O>(strategy, policy) {
 
     override suspend fun <H : Handler<SdkHttpRequest, O>> handle(request: SdkHttpRequest, next: H): O {
-        request.subject.header(AMZ_SDK_INVOCATION_ID_HEADER, request.context[HttpOperationContext.SdkRequestId])
+        request.subject.header(AMZ_SDK_INVOCATION_ID_HEADER, request.context.sdkRequestId)
         return super.handle(request, next)
     }
 

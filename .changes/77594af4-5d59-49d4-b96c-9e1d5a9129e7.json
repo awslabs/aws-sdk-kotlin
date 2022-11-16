@@ -1,0 +1,8 @@
+{
+    "id": "77594af4-5d59-49d4-b96c-9e1d5a9129e7",
+    "type": "feature",
+    "description": "Add a new tracing framework for centralized handling of log messages and metric events and providing easy integration points for connecting to downstream tracing systems (e.g., kotlin-logging)",
+    "issues": [
+        "awslabs/smithy-kotlin#677"
+    ]
+}
