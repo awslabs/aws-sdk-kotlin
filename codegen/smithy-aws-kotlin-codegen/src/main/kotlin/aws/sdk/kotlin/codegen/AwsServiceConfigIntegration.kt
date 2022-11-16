@@ -53,7 +53,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             "useFips",
             defaultValue = false,
             documentation = """
-                Whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
+                Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
             """.trimIndent(),
         )
 
@@ -61,7 +61,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             "useDualStack",
             defaultValue = false,
             documentation = """
-                Whether to use dual-stack endpoints when making requests.
+                Flag to toggle whether to use dual-stack endpoints when making requests.
             """.trimIndent(),
         )
 

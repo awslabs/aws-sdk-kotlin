@@ -16,7 +16,7 @@ import software.amazon.smithy.protocoltests.traits.HttpResponseTestCase
 open class AwsHttpProtocolUnitTestResponseGenerator(builder: Builder) : HttpProtocolUnitTestResponseGenerator(builder) {
     override fun renderConfigureServiceClient(test: HttpResponseTestCase) {
         super.renderConfigureServiceClient(test)
-        renderConfigureAwsServiceClient(writer, model, serviceShape, operation)
+        renderConfigureAwsServiceClient(ctx, writer, model, serviceShape, operation)
     }
 
     open class Builder : HttpProtocolUnitTestResponseGenerator.Builder() {
@@ -32,7 +32,7 @@ class AwsHttpProtocolUnitTestErrorGenerator(builder: Builder) : HttpProtocolUnit
 
     override fun renderConfigureServiceClient(test: HttpResponseTestCase) {
         super.renderConfigureServiceClient(test)
-        renderConfigureAwsServiceClient(writer, model, serviceShape, operation)
+        renderConfigureAwsServiceClient(ctx, writer, model, serviceShape, operation)
     }
 
     class Builder : HttpProtocolUnitTestErrorGenerator.Builder() {

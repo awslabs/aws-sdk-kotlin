@@ -28,6 +28,7 @@ object AwsRuntimeTypes {
         val AuthScheme = runtimeSymbol("AuthScheme", AwsKotlinDependency.AWS_ENDPOINT)
         val authSchemeEndpointExt = runtimeSymbol("authScheme", AwsKotlinDependency.AWS_ENDPOINT)
         val asSigningContextAuthSchemeExt = runtimeSymbol("asSigningContext", AwsKotlinDependency.AWS_ENDPOINT)
+        val applyToRequestAuthSchemeExt = runtimeSymbol("applyToRequest", AwsKotlinDependency.AWS_ENDPOINT)
 
         object Functions {
             val partitionFn = runtimeSymbol("partition", AwsKotlinDependency.AWS_ENDPOINT, "functions")

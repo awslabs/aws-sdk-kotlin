@@ -24,6 +24,7 @@ import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
+import software.amazon.smithy.kotlin.codegen.model.getEndpointRules
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.*
@@ -167,33 +168,27 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         val providerSymbol = EndpointProviderGenerator.getSymbol(ctx.settings)
         val defaultProviderSymbol = DefaultEndpointProviderGenerator.getSymbol(ctx.settings)
 
-        ctx.delegator.useFileWriter(paramsSymbol) {
-            EndpointParametersGenerator(it, rules).render()
-        }
         ctx.delegator.useFileWriter(providerSymbol) {
-            val generator = EndpointProviderGenerator(it, paramsSymbol)
-
-            generator.render()
-            it.write("")
-            generator.renderAsSigningProviderExt(it, providerSymbol, paramsSymbol)
+            EndpointProviderGenerator.renderAsSigningProviderExt(ctx.settings, it)
         }
         ctx.delegator.useFileWriter(defaultProviderSymbol) {
-            DefaultEndpointProviderGenerator(
-                it,
-                rules,
-                providerSymbol,
-                paramsSymbol,
-                awsEndpointFunctions,
-                awsEndpointPropertyRenderers,
-            ).render()
+            DefaultEndpointProviderGenerator(it, rules, providerSymbol, paramsSymbol, awsEndpointFunctions, awsEndpointPropertyRenderers).render()
         }
+    }
 
-        val middlewareSymbol = ResolveEndpointMiddlewareGenerator.getSymbol(ctx.settings)
-        ctx.delegator.useFileWriter(middlewareSymbol) {
-            ResolveEndpointMiddlewareGenerator(ctx, it).render()
+    override fun generateEndpointProviderMiddleware(ctx: ProtocolGenerator.GenerationContext) {
+        ctx.delegator.useFileWriter(ResolveEndpointMiddlewareGenerator.getSymbol(ctx.settings)) {
+            ResolveEndpointMiddlewareGenerator(ctx, it) {
+                it.write(
+                    "endpoint.#T?.#T(req)",
+                    AwsRuntimeTypes.Endpoint.authSchemeEndpointExt,
+                    AwsRuntimeTypes.Endpoint.applyToRequestAuthSchemeExt,
+                )
+            }.render()
 
-            val builtins = rules.parameters.toList().filter(Parameter::isBuiltIn)
-            renderBindAwsBuiltins(ctx, it, builtins)
+            val builtins = ctx.service.getEndpointRules()?.parameters?.toList()?.filter(Parameter::isBuiltIn)
+            it.write("")
+            renderBindAwsBuiltins(ctx, it, builtins ?: emptyList())
         }
     }
 

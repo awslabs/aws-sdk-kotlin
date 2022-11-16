@@ -24,7 +24,7 @@ class ClientConfigIntegration : KotlinIntegration {
             "useArnRegion",
             defaultValue = false,
             documentation = """
-            Whether to enforce using a bucket arn with a region matching the client config when making requests with
+            Flag to enforce using a bucket arn with a region matching the client config when making requests with
             [S3 access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points.html).
             """.trimIndent(),
         )

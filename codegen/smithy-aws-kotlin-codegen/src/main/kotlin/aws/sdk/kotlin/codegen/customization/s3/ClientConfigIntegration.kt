@@ -23,7 +23,7 @@ class ClientConfigIntegration : KotlinIntegration {
             "enableAccelerate",
             defaultValue = false,
             documentation = """
-                Whether to support [S3 transfer acceleration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html)
+                Flag to support [S3 transfer acceleration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html)
                 with this client.
             """.trimIndent(),
         )
@@ -32,7 +32,7 @@ class ClientConfigIntegration : KotlinIntegration {
             "forcePathStyle",
             defaultValue = false,
             documentation = """
-                Whether to use legacy path-style addressing when making requests.
+                Flag to use legacy path-style addressing when making requests.
             """.trimIndent(),
         )
 
@@ -40,7 +40,7 @@ class ClientConfigIntegration : KotlinIntegration {
             "useArnRegion",
             defaultValue = false,
             documentation = """
-                Whether to enforce using a bucket arn with a region matching the client config when making requests with
+                Flag to enforce using a bucket arn with a region matching the client config when making requests with
                 [S3 access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points.html).
             """.trimIndent(),
         )
@@ -50,7 +50,7 @@ class ClientConfigIntegration : KotlinIntegration {
             "disableMrap",
             defaultValue = true,
             documentation = """
-                Whether to disable [S3 multi-region access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html).
+                Flag to disable [S3 multi-region access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html).
             """.trimIndent(),
         )
     }

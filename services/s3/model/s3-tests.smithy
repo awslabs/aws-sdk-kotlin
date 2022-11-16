@@ -23,15 +23,13 @@ apply NotFound @httpResponseTests([
     }
 ])
 
-// FIXME - when we implement virtual host addressing as the default will need to change the host and uri
-//         see: https://github.com/awslabs/aws-sdk-kotlin/issues/220
 apply PutObject @httpRequestTests([
     {
         id: "PutObjectDefaultContentType",
         documentation: "This test case validates default content-type behavior when not specified in the request",
         protocol: "aws.protocols#restXml",
         method: "PUT",
-        uri: "/mybucket/mykey",
+        uri: "/mykey",
         host: "s3.us-west-2.amazonaws.com",
         body: "foobar",
         bodyMediaType: "application/octet-stream",
@@ -49,7 +47,7 @@ apply PutObject @httpRequestTests([
         documentation: "This test case validates https://github.com/awslabs/aws-sdk-kotlin/issues/193",
         protocol: "aws.protocols#restXml",
         method: "PUT",
-        uri: "/mybucket/mykey",
+        uri: "/mykey",
         host: "s3.us-west-2.amazonaws.com",
         body: "{\"foo\":\"bar\"}",
         headers: {
@@ -70,7 +68,7 @@ apply CreateBucket @httpRequestTests([
         documentation: "Validates https://github.com/awslabs/aws-sdk-kotlin/issues/567 (empty body)",
         protocol: "aws.protocols#restXml",
         method: "PUT",
-        uri: "/mybucket",
+        uri: "/",
         host: "s3.us-west-2.amazonaws.com",
         body: "",
         forbidHeaders: ["Content-Type", "Content-Length"],
@@ -83,7 +81,7 @@ apply CreateBucket @httpRequestTests([
         documentation: "This test case validates https://github.com/awslabs/aws-sdk-kotlin/issues/567 (non-empty body)",
         protocol: "aws.protocols#restXml",
         method: "PUT",
-        uri: "/mybucket",
+        uri: "/",
         host: "s3.us-west-2.amazonaws.com",
         body: "<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\"><LocationConstraint>us-east-2</LocationConstraint></CreateBucketConfiguration>",
         headers: {

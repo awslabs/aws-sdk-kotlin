@@ -100,7 +100,7 @@ public class EcsCredentialsProvider internal constructor(
             }
         }
 
-        op.install(ResolveEndpoint(resolver = { Endpoint(url) }))
+        op.install(ResolveEndpoint(provider = { Endpoint(url) }, params = null))
         op.install(retryMiddleware)
 
         logger.debug { "retrieving container credentials" }

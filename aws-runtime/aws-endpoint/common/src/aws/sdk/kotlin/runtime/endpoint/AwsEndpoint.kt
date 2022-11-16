@@ -5,8 +5,10 @@
 package aws.sdk.kotlin.runtime.endpoint
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.auth.awssigning.SigningContext
 import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
+import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.util.AttributeKey
 
 /**
@@ -40,8 +42,21 @@ public sealed class AuthScheme {
  * out the sigv4 one if present.
  */
 @InternalSdkApi
-public fun Endpoint.authScheme(): AuthScheme.SigV4? =
-    attributes.getOrNull(AuthSchemesAttributeKey)?.find { it is AuthScheme.SigV4 } as AuthScheme.SigV4?
+public val Endpoint.authScheme: AuthScheme.SigV4? get() =
+    attributes.getOrNull(AuthSchemesAttributeKey)?.find { it is AuthScheme.SigV4 } as? AuthScheme.SigV4
 
 @InternalSdkApi
 public fun AuthScheme.SigV4.asSigningContext(): SigningContext = SigningContext(signingName, signingRegion)
+
+/**
+ * Update a request's signing context properties with the receiving auth scheme.
+ */
+@InternalSdkApi
+public fun AuthScheme.SigV4.applyToRequest(req: SdkHttpRequest) {
+    signingName?.let {
+        if (it.isNotBlank()) req.context[AwsSigningAttributes.SigningService] = it
+    }
+    signingRegion?.let {
+        if (it.isNotBlank()) req.context[AwsSigningAttributes.SigningRegion] = it
+    }
+}

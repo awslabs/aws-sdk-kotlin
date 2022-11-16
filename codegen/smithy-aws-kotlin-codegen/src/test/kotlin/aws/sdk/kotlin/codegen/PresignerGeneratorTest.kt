@@ -275,7 +275,7 @@ class PresignerGeneratorTest {
                      */
                     public var credentialsProvider: CredentialsProvider? = null
                     /**
-                     * Provides the endpoint (hostname) and signing context to make requests to. You MUST pass a provider will resolve to an endpoint for the desired request.
+                     * Provides the endpoint (hostname) and signing context to make requests to.
                      */
                     public var endpointProvider: SigningEndpointProvider? = null
                     /**

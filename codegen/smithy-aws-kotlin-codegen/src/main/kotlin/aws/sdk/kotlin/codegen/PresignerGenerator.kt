@@ -403,7 +403,7 @@ class PresignerGenerator : KotlinIntegration {
                 symbol = RuntimeTypes.Auth.Signing.AwsSigningCommon.SigningEndpointProvider
                 name = "endpointProvider"
                 documentation =
-                    "Provides the endpoint (hostname) and signing context to make requests to. You MUST pass a provider will resolve to an endpoint for the desired request."
+                    "Provides the endpoint (hostname) and signing context to make requests to."
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
                 propertyType = ClientConfigPropertyType.Required()
             },
