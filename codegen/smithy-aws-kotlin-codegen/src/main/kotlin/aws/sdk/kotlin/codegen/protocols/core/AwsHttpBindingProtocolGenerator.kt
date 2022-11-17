@@ -171,8 +171,19 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         ctx.delegator.useFileWriter(providerSymbol) {
             EndpointProviderGenerator.renderAsSigningProviderExt(ctx.settings, it)
         }
+
+        val endpointFunctions = buildMap {
+            putAll(awsEndpointFunctions)
+            put(
+                "aws.partition",
+                buildSymbol {
+                    name = "partition"
+                    namespace = PartitionsGenerator.getSymbol(ctx.settings).namespace
+                },
+            )
+        }
         ctx.delegator.useFileWriter(defaultProviderSymbol) {
-            DefaultEndpointProviderGenerator(it, rules, providerSymbol, paramsSymbol, awsEndpointFunctions, awsEndpointPropertyRenderers).render()
+            DefaultEndpointProviderGenerator(it, rules, providerSymbol, paramsSymbol, endpointFunctions, awsEndpointPropertyRenderers).render()
         }
     }
 

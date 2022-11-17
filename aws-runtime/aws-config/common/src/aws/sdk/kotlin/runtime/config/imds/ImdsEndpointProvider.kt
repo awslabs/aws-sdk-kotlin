@@ -19,12 +19,12 @@ internal const val EC2_METADATA_SERVICE_ENDPOINT_MODE_PROFILE_KEY = "ec2_metadat
 internal class ImdsEndpointProvider(
     private val platformProvider: PlatformProvider,
     private val endpointConfiguration: EndpointConfiguration,
-) : EndpointProvider<Nothing?> {
+) : EndpointProvider<Unit> {
     // cached endpoint and profile
     private val resolvedEndpoint = asyncLazy(::doResolveEndpoint)
     private val activeProfile = asyncLazy { loadActiveAwsProfile(platformProvider) }
 
-    override suspend fun resolveEndpoint(params: Nothing?): Endpoint = resolvedEndpoint.get()
+    override suspend fun resolveEndpoint(params: Unit): Endpoint = resolvedEndpoint.get()
 
     private suspend fun doResolveEndpoint(): Endpoint = when (endpointConfiguration) {
         is EndpointConfiguration.Custom -> endpointConfiguration.endpoint
@@ -60,9 +60,6 @@ internal class ImdsEndpointProvider(
         return profile[EC2_METADATA_SERVICE_ENDPOINT_MODE_PROFILE_KEY]?.let { EndpointMode.fromValue(it) }
     }
 }
-
-internal suspend fun ImdsEndpointProvider.resolveEndpoint(): Endpoint =
-    resolveEndpoint(null)
 
 // Parse a string as a URL and convert to an endpoint
 internal fun String.toEndpoint(): Endpoint = Endpoint(this)

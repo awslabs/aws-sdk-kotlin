@@ -23,13 +23,13 @@ class ResolveAwsEndpointMiddleware(private val ctx: ProtocolGenerator.Generation
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         writer.withBlock(
-            "op.install(#T(config.endpointProvider) { input ->",
+            "op.install(#T(config.endpointProvider) {",
             "})",
             ResolveEndpointMiddlewareGenerator.getSymbol(ctx.settings),
         ) {
             write("#T(config)", bindAwsBuiltinsSymbol(ctx.settings))
             ctx.service.getEndpointRules()?.let { rules ->
-                EndpointParameterBindingGenerator(ctx.model, ctx.service, writer, op, rules, "input.").render()
+                EndpointParameterBindingGenerator(ctx.model, ctx.service, writer, op, rules, "it.").render()
             }
         }
     }

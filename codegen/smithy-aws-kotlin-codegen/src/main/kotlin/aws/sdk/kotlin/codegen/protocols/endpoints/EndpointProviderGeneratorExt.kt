@@ -15,7 +15,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointProvide
 
 fun EndpointProviderGenerator.Companion.renderAsSigningProviderExt(settings: KotlinSettings, writer: KotlinWriter) {
     writer.withBlock(
-        "public fun #1T<#2T>.asSigningProvider(params: #2T): #3T = {",
+        "internal fun #1T<#2T>.asSigningProvider(params: #2T): #3T = {",
         "}",
         RuntimeTypes.Http.Endpoints.EndpointProvider,
         EndpointParametersGenerator.getSymbol(settings),

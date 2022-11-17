@@ -8,13 +8,11 @@ import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.withBlock
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.ExpressionRenderer
 import software.amazon.smithy.model.node.ObjectNode
 import software.amazon.smithy.rulesengine.language.syntax.expr.Expression
 
 val awsEndpointFunctions = mapOf(
-    "aws.partition" to buildSymbol { name = "partition" }, // the partition function is generated per-service in the same package
     "aws.parseArn" to AwsRuntimeTypes.Endpoint.Functions.parseArn,
     "aws.isVirtualHostableS3Bucket" to AwsRuntimeTypes.Endpoint.Functions.isVirtualHostableS3Bucket,
 )
