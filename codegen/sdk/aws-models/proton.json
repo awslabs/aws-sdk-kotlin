@@ -85,15 +85,21 @@
             "type": "structure",
             "members": {
                 "pipelineServiceRoleArn": {
-                    "target": "com.amazonaws.proton#PipelineRoleArn",
+                    "target": "com.amazonaws.proton#RoleArnOrEmptyString",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the service role you want to use for provisioning pipelines. Assumed by Proton for Amazon Web Services-managed provisioning, and by\n      customer-owned automation for self-managed provisioning.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the service role that Proton uses for provisioning pipelines. Proton assumes this role for Amazon Web Services-managed\n      provisioning.</p>"
                     }
                 },
                 "pipelineProvisioningRepository": {
                     "target": "com.amazonaws.proton#RepositoryBranch",
                     "traits": {
                         "smithy.api#documentation": "<p>The linked repository for pipeline provisioning. Required if you have environments configured for self-managed provisioning with services that include\n      pipelines. A linked repository is a repository that has been registered with Proton. For more information, see <a>CreateRepository</a>.</p>"
+                    }
+                },
+                "pipelineCodebuildRoleArn": {
+                    "target": "com.amazonaws.proton#RoleArnOrEmptyString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the service role that Proton uses for provisioning pipelines. Proton assumes this role for CodeBuild-based\n      provisioning.</p>"
                     }
                 }
             },
@@ -116,7 +122,8 @@
                 "smithy.api#length": {
                     "min": 1,
                     "max": 200
-                }
+                },
+                "smithy.api#pattern": "^arn:(aws|aws-cn|aws-us-gov):[a-zA-Z0-9-]+:[a-zA-Z0-9-]*:\\d{12}:([\\w+=,.@-]+[/:])*[\\w+=,.@-]+$"
             }
         },
         "com.amazonaws.proton#AwsAccountId": {
@@ -568,8 +575,8 @@
                             },
                             "params": {
                                 "Region": "ca-central-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -581,8 +588,8 @@
                             },
                             "params": {
                                 "Region": "ca-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -594,8 +601,8 @@
                             },
                             "params": {
                                 "Region": "ca-central-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -607,8 +614,8 @@
                             },
                             "params": {
                                 "Region": "ca-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -620,8 +627,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -633,8 +640,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -646,8 +653,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -659,8 +666,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -672,8 +679,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -685,8 +692,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -698,8 +705,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -711,8 +718,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -724,8 +731,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -737,8 +744,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -750,8 +757,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -763,8 +770,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -776,8 +783,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -789,8 +796,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -802,8 +809,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -815,8 +822,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -828,8 +835,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -841,8 +848,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -854,8 +861,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -867,8 +874,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -880,8 +887,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -893,8 +900,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -906,8 +913,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -919,8 +926,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -932,8 +939,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -945,8 +952,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -958,8 +965,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -971,8 +978,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -984,8 +991,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -997,8 +1004,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1010,8 +1017,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1023,8 +1030,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1036,8 +1043,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1049,8 +1056,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1062,8 +1069,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1075,8 +1082,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1088,8 +1095,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1101,8 +1108,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1114,8 +1121,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1127,8 +1134,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1140,8 +1147,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
                                 "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1152,8 +1159,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
                                 "UseFIPS": true,
+                                "UseDualStack": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1164,8 +1171,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
                                 "UseFIPS": false,
+                                "UseDualStack": true,
                                 "Endpoint": "https://example.com"
                             }
                         }
@@ -1936,7 +1943,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Deploy a new environment. An Proton environment is created from an environment template that defines infrastructure and resources that can be\n      shared across services.</p>\n         <p class=\"title\">\n            <b>You can provision environments using the following methods:</b>\n         </p>\n         <ul>\n            <li>\n               <p>Amazon Web Services-managed provisioning: Proton makes direct calls to provision your resources.</p>\n            </li>\n            <li>\n               <p>Self-managed provisioning: Proton makes pull requests on your repository to provide compiled infrastructure as code (IaC) files that your IaC\n          engine uses to provision resources.</p>\n            </li>\n         </ul>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-environments.html\">Environments</a> and <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-works-prov-methods.html\">Provisioning methods</a> in the <i>Proton User\n        Guide</i>.</p>",
+                "smithy.api#documentation": "<p>Deploy a new environment. An Proton environment is created from an environment template that defines infrastructure and resources that can be\n      shared across services.</p>\n         <p class=\"title\">\n            <b>You can provision environments using the following methods:</b>\n         </p>\n         <ul>\n            <li>\n               <p>\n                  <b>Amazon Web Services-managed provisioning</b> – Proton makes direct calls to provision your resources.</p>\n            </li>\n            <li>\n               <p>\n                  <b>Self-managed provisioning</b> – Proton makes pull requests on your repository to provide compiled\n          infrastructure as code (IaC) files that your IaC engine uses to provision resources.</p>\n            </li>\n            <li>\n               <p>\n                  <b>CodeBuild-based provisioning</b> – Proton uses CodeBuild to run shell commands that you provide. Your commands can\n          read inputs that Proton provides, and are responsible for provisioning or deprovisioning infrastructure and generating output values.</p>\n            </li>\n         </ul>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-environments.html\">Environments</a> and <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-works-prov-methods.html\">Provisioning methods</a> in the <i>Proton User\n        Guide</i>.</p>",
                 "smithy.api#idempotent": {}
             }
         },
@@ -1991,9 +1998,9 @@
                     }
                 },
                 "roleArn": {
-                    "target": "com.amazonaws.proton#Arn",
+                    "target": "com.amazonaws.proton#RoleArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that's created in the environment account. Proton uses this role to provision infrastructure\n      resources in the associated environment account.</p>",
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of an IAM service role in the environment account. Proton uses this role to provision infrastructure resources\n      using Amazon Web Services-managed provisioning and CloudFormation in the associated environment account.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -2011,9 +2018,15 @@
                     }
                 },
                 "componentRoleArn": {
-                    "target": "com.amazonaws.proton#Arn",
+                    "target": "com.amazonaws.proton#RoleArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that Proton uses when provisioning directly defined components in the associated\n      environment account. It determines the scope of infrastructure that a component can provision in the account.</p>\n         <p>You must specify <code>componentRoleArn</code> to allow directly defined components to be associated with any environments running in this\n      account.</p>\n         <p>For more information about components, see\n  <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-components.html\">Proton components</a> in the\n  <i>Proton User Guide</i>.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of an IAM service role in the environment account. Proton uses this role to provision directly defined components\n      in the associated environment account. It determines the scope of infrastructure that a component can provision in the account.</p>\n         <p>You must specify <code>componentRoleArn</code> to allow directly defined components to be associated with any environments running in this\n      account.</p>\n         <p>For more information about components, see\n  <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-components.html\">Proton components</a> in the\n  <i>Proton User Guide</i>.</p>"
+                    }
+                },
+                "codebuildRoleArn": {
+                    "target": "com.amazonaws.proton#RoleArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of an IAM service role in the environment account. Proton uses this role to provision infrastructure resources\n      using CodeBuild-based provisioning in the associated environment account.</p>"
                     }
                 }
             }
@@ -2076,13 +2089,13 @@
                 "protonServiceRoleArn": {
                     "target": "com.amazonaws.proton#Arn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the Proton service role that allows Proton to make calls to other services on your behalf.</p>\n         <p>To use Amazon Web Services-managed provisioning for the environment, specify either the <code>environmentAccountConnectionId</code> or\n        <code>protonServiceRoleArn</code> parameter and omit the <code>provisioningRepository</code> parameter.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that allows Proton to provision infrastructure using Amazon Web Services-managed provisioning and CloudFormation\n      on your behalf.</p>\n         <p>To use Amazon Web Services-managed provisioning for the environment or for any service instance running in the environment, specify either the\n        <code>environmentAccountConnectionId</code> or <code>protonServiceRoleArn</code> parameter.</p>"
                     }
                 },
                 "environmentAccountConnectionId": {
                     "target": "com.amazonaws.proton#EnvironmentAccountConnectionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ID of the environment account connection that you provide if you're provisioning your environment infrastructure resources to an environment\n      account. For more information, see <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-env-account-connections.html\">Environment account\n        connections</a> in the <i>Proton User guide</i>.</p>\n         <p>To use Amazon Web Services-managed provisioning for the environment, specify either the <code>environmentAccountConnectionId</code> or\n        <code>protonServiceRoleArn</code> parameter and omit the <code>provisioningRepository</code> parameter.</p>"
+                        "smithy.api#documentation": "<p>The ID of the environment account connection that you provide if you want Proton to provision infrastructure resources for your environment or for any\n      of the service instances running in it in an environment account. For more information, see <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-env-account-connections.html\">Environment account connections</a> in the <i>Proton User\n      guide</i>.</p>\n         <p>If you specify the <code>environmentAccountConnectionId</code> parameter, don't specify <code>protonServiceRoleArn</code>,\n        <code>codebuildRoleArn</code>, or <code>provisioningRepository</code>.</p>"
                     }
                 },
                 "tags": {
@@ -2094,13 +2107,19 @@
                 "provisioningRepository": {
                     "target": "com.amazonaws.proton#RepositoryBranchInput",
                     "traits": {
-                        "smithy.api#documentation": "<p>The linked repository that you use to host your rendered infrastructure templates for self-managed provisioning. A linked repository is a repository\n      that has been registered with Proton. For more information, see <a>CreateRepository</a>.</p>\n         <p>To use self-managed provisioning for the environment, specify this parameter and omit the <code>environmentAccountConnectionId</code> and\n        <code>protonServiceRoleArn</code> parameters.</p>"
+                        "smithy.api#documentation": "<p>The linked repository that you use to host your rendered infrastructure templates for self-managed provisioning. A linked repository is a repository\n      that has been registered with Proton. For more information, see <a>CreateRepository</a>.</p>\n         <p>To use self-managed provisioning for the environment or for any service instance running in the environment, specify this parameter.</p>"
                     }
                 },
                 "componentRoleArn": {
-                    "target": "com.amazonaws.proton#Arn",
+                    "target": "com.amazonaws.proton#RoleArn",
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that Proton uses when provisioning directly defined components in this environment. It\n      determines the scope of infrastructure that a component can provision.</p>\n         <p>You must specify <code>componentRoleArn</code> to allow directly defined components to be associated with this environment.</p>\n         <p>For more information about components, see\n  <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-components.html\">Proton components</a> in the\n  <i>Proton User Guide</i>.</p>"
+                    }
+                },
+                "codebuildRoleArn": {
+                    "target": "com.amazonaws.proton#RoleArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that allows Proton to provision infrastructure using CodeBuild-based provisioning on your\n      behalf.</p>\n         <p>To use CodeBuild-based provisioning for the environment or for any service instance running in the environment, specify either the\n      <code>environmentAccountConnectionId</code> or <code>codebuildRoleArn</code> parameter.</p>"
                     }
                 }
             }
@@ -3621,13 +3640,13 @@
                 "protonServiceRoleArn": {
                     "target": "com.amazonaws.proton#Arn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the Proton service role that allows Proton to make calls to other services on your behalf.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that allows Proton to provision infrastructure using Amazon Web Services-managed provisioning and CloudFormation\n      on your behalf.</p>"
                     }
                 },
                 "environmentAccountConnectionId": {
                     "target": "com.amazonaws.proton#EnvironmentAccountConnectionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ID of the environment account connection that's used to provision infrastructure resources in an environment account.</p>"
+                        "smithy.api#documentation": "<p>The ID of the environment account connection that Proton uses to provision infrastructure resources in an environment account.</p>"
                     }
                 },
                 "environmentAccountId": {
@@ -3655,9 +3674,15 @@
                     }
                 },
                 "componentRoleArn": {
-                    "target": "com.amazonaws.proton#Arn",
+                    "target": "com.amazonaws.proton#RoleArn",
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that Proton uses when provisioning directly defined components in this environment. It\n      determines the scope of infrastructure that a component can provision.</p>\n         <p>The environment must have a <code>componentRoleArn</code> to allow directly defined components to be associated with the environment.</p>\n         <p>For more information about components, see\n  <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-components.html\">Proton components</a> in the\n  <i>Proton User Guide</i>.</p>"
+                    }
+                },
+                "codebuildRoleArn": {
+                    "target": "com.amazonaws.proton#RoleArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that allows Proton to provision infrastructure using CodeBuild-based provisioning on your\n      behalf.</p>"
                     }
                 }
             },
@@ -3699,7 +3724,7 @@
                 "roleArn": {
                     "target": "com.amazonaws.proton#Arn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The IAM service role that's associated with the environment account connection.</p>",
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of an IAM service role in the environment account. Proton uses this role to provision infrastructure resources\n      using Amazon Web Services-managed provisioning and CloudFormation in the associated environment account.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -3732,9 +3757,15 @@
                     }
                 },
                 "componentRoleArn": {
-                    "target": "com.amazonaws.proton#Arn",
+                    "target": "com.amazonaws.proton#RoleArn",
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that Proton uses when provisioning directly defined components in the associated\n      environment account. It determines the scope of infrastructure that a component can provision in the account.</p>\n         <p>The environment account connection must have a <code>componentRoleArn</code> to allow directly defined components to be associated with any\n      environments running in the account.</p>\n         <p>For more information about components, see\n  <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-components.html\">Proton components</a> in the\n  <i>Proton User Guide</i>.</p>"
+                    }
+                },
+                "codebuildRoleArn": {
+                    "target": "com.amazonaws.proton#RoleArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of an IAM service role in the environment account. Proton uses this role to provision infrastructure resources\n      using CodeBuild-based provisioning in the associated environment account.</p>"
                     }
                 }
             },
@@ -7357,7 +7388,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Notify Proton of status changes to a provisioned resource when you use self-managed provisioning.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-works-prov-methods.html#ag-works-prov-methods-self\">Self-managed provisioning</a> in the <i>Proton User Guide</i>.</p>"
+                "smithy.api#documentation": "<p>Notify Proton of the following information related to a provisioned resource (environment, service instance, or service pipeline):</p>\n         <ul>\n            <li>\n               <p>For <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-works-prov-methods.html#ag-works-prov-methods-codebuild\">CodeBuild-based\n            provisioning</a>, provide your provisioned resource output values to Proton.</p>\n            </li>\n            <li>\n               <p>For <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-works-prov-methods.html#ag-works-prov-methods-self\">self-managed\n            provisioning</a>, notify Proton about the status of your provisioned resource. To disambiguate between different deployments of the same\n          resource, set <code>deploymentId</code> to a unique deployment ID of your choice.</p>\n        \n            </li>\n         </ul>"
             }
         },
         "com.amazonaws.proton#NotifyResourceDeploymentStatusChangeInput": {
@@ -7366,21 +7397,20 @@
                 "resourceArn": {
                     "target": "com.amazonaws.proton#Arn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The provisioned resource Amazon Resource Name (ARN).</p>",
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of your provisioned resource.</p>",
                         "smithy.api#required": {}
                     }
                 },
                 "status": {
                     "target": "com.amazonaws.proton#ResourceDeploymentStatus",
                     "traits": {
-                        "smithy.api#documentation": "<p>The status of your provisioned resource.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The status of your provisioned resource.</p>"
                     }
                 },
                 "outputs": {
                     "target": "com.amazonaws.proton#OutputsList",
                     "traits": {
-                        "smithy.api#documentation": "<p>The provisioned resource state change detail data that's returned by Proton.</p>",
+                        "smithy.api#documentation": "<p>The output values generated by your provisioned resource.</p>",
                         "smithy.api#length": {
                             "min": 0,
                             "max": 50
@@ -7390,7 +7420,7 @@
                 "deploymentId": {
                     "target": "com.amazonaws.proton#DeploymentId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The deployment ID for your provisioned resource.</p>"
+                        "smithy.api#documentation": "<p>The deployment ID for your provisioned resource. Proton uses it to disambiguate different deployments of the resource. Applicable to <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-works-prov-methods.html#ag-works-prov-methods-self\">self-managed provisioning</a>.</p>"
                     }
                 },
                 "statusMessage": {
@@ -7452,16 +7482,6 @@
             "type": "list",
             "member": {
                 "target": "com.amazonaws.proton#Output"
-            }
-        },
-        "com.amazonaws.proton#PipelineRoleArn": {
-            "type": "string",
-            "traits": {
-                "smithy.api#length": {
-                    "min": 0,
-                    "max": 2048
-                },
-                "smithy.api#pattern": "(^$)|(^arn:[a-zA-Z-]+:[a-zA-Z0-9-]+:[a-zA-Z0-9-]*:\\d*:[\\w+=\\/:,\\.@-]*)"
             }
         },
         "com.amazonaws.proton#ProvisionedResource": {
@@ -8184,6 +8204,26 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>Revision detail data for a commit and push that activates a sync attempt</p>"
+            }
+        },
+        "com.amazonaws.proton#RoleArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 2048
+                },
+                "smithy.api#pattern": "^arn:(aws|aws-cn|aws-us-gov):iam::\\d{12}:role/([\\w+=,.@-]{1,512}[/:])*([\\w+=,.@-]{1,64})$"
+            }
+        },
+        "com.amazonaws.proton#RoleArnOrEmptyString": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 2048
+                },
+                "smithy.api#pattern": "(^$)|(^arn:(aws|aws-cn|aws-us-gov):iam::\\d{12}:role/([\\w+=,.@-]{1,512}[/:])*([\\w+=,.@-]{1,64})$)"
             }
         },
         "com.amazonaws.proton#S3Bucket": {
@@ -9740,7 +9780,7 @@
             "type": "structure",
             "members": {
                 "pipelineServiceRoleArn": {
-                    "target": "com.amazonaws.proton#PipelineRoleArn",
+                    "target": "com.amazonaws.proton#RoleArnOrEmptyString",
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the service role you want to use for provisioning pipelines. Assumed by Proton for Amazon Web Services-managed provisioning, and by\n      customer-owned automation for self-managed provisioning.</p>\n         <p>To remove a previously configured ARN, specify an empty string.</p>"
                     }
@@ -9755,6 +9795,12 @@
                     "target": "smithy.api#Boolean",
                     "traits": {
                         "smithy.api#documentation": "<p>Set to <code>true</code> to remove a configured pipeline repository from the account settings. Don't set this field if you are updating the configured\n      pipeline repository.</p>"
+                    }
+                },
+                "pipelineCodebuildRoleArn": {
+                    "target": "com.amazonaws.proton#RoleArnOrEmptyString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the service role you want to use for provisioning pipelines. Proton assumes this role for CodeBuild-based\n      provisioning.</p>"
                     }
                 }
             }
@@ -9903,7 +9949,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Update an environment.</p>\n         <p>If the environment is associated with an environment account connection, <i>don't</i> update or include the\n        <code>protonServiceRoleArn</code> and <code>provisioningRepository</code> parameter to update or connect to an environment account connection.</p>\n         <p>You can only update to a new environment account connection if that connection was created in the same environment account that the current\n      environment account connection was created in. The account connection must also be associated with the current environment.</p>\n         <p>If the environment <i>isn't</i> associated with an environment account connection, <i>don't</i> update or include the\n        <code>environmentAccountConnectionId</code> parameter. You <i>can't</i> update or connect the environment to an environment account\n      connection if it <i>isn't</i> already associated with an environment connection.</p>\n         <p>You can update either the <code>environmentAccountConnectionId</code> or <code>protonServiceRoleArn</code> parameter and value. You can’t update\n      both.</p>\n         <p>If the environment was configured for Amazon Web Services-managed provisioning, omit the <code>provisioningRepository</code> parameter.</p>\n         <p>If the environment was configured for self-managed provisioning, specify the <code>provisioningRepository</code> parameter and omit the\n        <code>protonServiceRoleArn</code> and <code>environmentAccountConnectionId</code> parameters.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-environments.html\">Environments</a> and <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-works-prov-methods.html\">Provisioning methods</a> in the <i>Proton User\n        Guide</i>.</p>\n         <p>There are four modes for updating an environment. The <code>deploymentType</code> field defines the mode.</p>\n         <dl>\n            <dt/>\n            <dd>\n               <p>\n                  <code>NONE</code>\n               </p>\n               <p>In this mode, a deployment <i>doesn't</i> occur. Only the requested metadata parameters are updated.</p>\n            </dd>\n            <dt/>\n            <dd>\n               <p>\n                  <code>CURRENT_VERSION</code>\n               </p>\n               <p>In this mode, the environment is deployed and updated with the new spec that you provide. Only requested parameters are updated.\n              <i>Don’t</i> include minor or major version parameters when you use this <code>deployment-type</code>.</p>\n            </dd>\n            <dt/>\n            <dd>\n               <p>\n                  <code>MINOR_VERSION</code>\n               </p>\n               <p>In this mode, the environment is deployed and updated with the published, recommended (latest) minor version of the current major version in\n            use, by default. You can also specify a different minor version of the current major version in use.</p>\n            </dd>\n            <dt/>\n            <dd>\n               <p>\n                  <code>MAJOR_VERSION</code>\n               </p>\n               <p>In this mode, the environment is deployed and updated with the published, recommended (latest) major and minor version of the current template,\n            by default. You can also specify a different major version that's higher than the major version in use and a minor version.</p>\n            </dd>\n         </dl>"
+                "smithy.api#documentation": "<p>Update an environment.</p>\n         <p>If the environment is associated with an environment account connection, <i>don't</i> update or include the\n        <code>protonServiceRoleArn</code>, <code>codebuildRoleArn</code>, and <code>provisioningRepository</code> parameters.</p>\n         <p>You can only update to a new environment account connection if that connection was created in the same environment account that the current\n      environment account connection was created in. The account connection must also be associated with the current environment.</p>\n         <p>If the environment <i>isn't</i> associated with an environment account connection, <i>don't</i> update or include the\n        <code>environmentAccountConnectionId</code> parameter. You <i>can't</i> update or connect the environment to an environment account\n      connection if it <i>isn't</i> already associated with an environment connection.</p>\n         <p>You can update either <code>environmentAccountConnectionId</code> or one or more of <code>protonServiceRoleArn</code>, <code>codebuildRoleArn</code>,\n      and <code>provisioningRepository</code>.</p>\n         <p>If the environment was configured for Amazon Web Services-managed or CodeBuild-based provisioning, omit the <code>provisioningRepository</code> parameter.</p>\n         <p>If the environment was configured for self-managed provisioning, specify the <code>provisioningRepository</code> parameter and omit the\n        <code>protonServiceRoleArn</code>, <code>codebuildRoleArn</code>, and <code>provisioningRepository</code> parameters.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-environments.html\">Environments</a> and <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-works-prov-methods.html\">Provisioning methods</a> in the <i>Proton User\n        Guide</i>.</p>\n         <p>There are four modes for updating an environment. The <code>deploymentType</code> field defines the mode.</p>\n         <dl>\n            <dt/>\n            <dd>\n               <p>\n                  <code>NONE</code>\n               </p>\n               <p>In this mode, a deployment <i>doesn't</i> occur. Only the requested metadata parameters are updated.</p>\n            </dd>\n            <dt/>\n            <dd>\n               <p>\n                  <code>CURRENT_VERSION</code>\n               </p>\n               <p>In this mode, the environment is deployed and updated with the new spec that you provide. Only requested parameters are updated.\n              <i>Don’t</i> include minor or major version parameters when you use this <code>deployment-type</code>.</p>\n            </dd>\n            <dt/>\n            <dd>\n               <p>\n                  <code>MINOR_VERSION</code>\n               </p>\n               <p>In this mode, the environment is deployed and updated with the published, recommended (latest) minor version of the current major version in\n            use, by default. You can also specify a different minor version of the current major version in use.</p>\n            </dd>\n            <dt/>\n            <dd>\n               <p>\n                  <code>MAJOR_VERSION</code>\n               </p>\n               <p>In this mode, the environment is deployed and updated with the published, recommended (latest) major and minor version of the current template,\n            by default. You can also specify a different major version that's higher than the major version in use and a minor version.</p>\n            </dd>\n         </dl>"
             }
         },
         "com.amazonaws.proton#UpdateEnvironmentAccountConnection": {
@@ -9950,15 +9996,21 @@
                     }
                 },
                 "roleArn": {
-                    "target": "com.amazonaws.proton#Arn",
+                    "target": "com.amazonaws.proton#RoleArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that's associated with the environment account connection to update.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of an IAM service role in the environment account. Proton uses this role to provision infrastructure resources\n      using Amazon Web Services-managed provisioning and CloudFormation in the associated environment account.</p>"
                     }
                 },
                 "componentRoleArn": {
-                    "target": "com.amazonaws.proton#Arn",
+                    "target": "com.amazonaws.proton#RoleArn",
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that Proton uses when provisioning directly defined components in the associated\n      environment account. It determines the scope of infrastructure that a component can provision in the account.</p>\n         <p>The environment account connection must have a <code>componentRoleArn</code> to allow directly defined components to be associated with any\n      environments running in the account.</p>\n         <p>For more information about components, see\n  <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-components.html\">Proton components</a> in the\n  <i>Proton User Guide</i>.</p>"
+                    }
+                },
+                "codebuildRoleArn": {
+                    "target": "com.amazonaws.proton#RoleArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of an IAM service role in the environment account. Proton uses this role to provision infrastructure resources\n      using CodeBuild-based provisioning in the associated environment account.</p>"
                     }
                 }
             },
@@ -10019,7 +10071,7 @@
                 "protonServiceRoleArn": {
                     "target": "com.amazonaws.proton#Arn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the Proton service role that allows Proton to make API calls to other services your behalf.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that allows Proton to provision infrastructure using Amazon Web Services-managed provisioning and CloudFormation\n      on your behalf.</p>"
                     }
                 },
                 "deploymentType": {
@@ -10032,7 +10084,7 @@
                 "environmentAccountConnectionId": {
                     "target": "com.amazonaws.proton#EnvironmentAccountConnectionId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ID of the environment account connection.</p>\n         <p>You can only update to a new environment account connection if it was created in the same environment account that the current environment account\n      connection was created in and is associated with the current environment.</p>"
+                        "smithy.api#documentation": "<p>The ID of the environment account connection that you provide if you want Proton to provision infrastructure resources for your environment or for any\n      of the service instances running in it in an environment account. For more information, see <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-env-account-connections.html\">Environment account connections</a> in the <i>Proton User\n      guide</i>.</p>\n         <p>You can only update to a new environment account connection if it was created in the same environment account that the current environment account\n      connection was created in and is associated with the current environment.</p>"
                     }
                 },
                 "provisioningRepository": {
@@ -10042,9 +10094,15 @@
                     }
                 },
                 "componentRoleArn": {
-                    "target": "com.amazonaws.proton#Arn",
+                    "target": "com.amazonaws.proton#RoleArn",
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that Proton uses when provisioning directly defined components in this environment. It\n      determines the scope of infrastructure that a component can provision.</p>\n         <p>The environment must have a <code>componentRoleArn</code> to allow directly defined components to be associated with the environment.</p>\n         <p>For more information about components, see\n  <a href=\"https://docs.aws.amazon.com/proton/latest/userguide/ag-components.html\">Proton components</a> in the\n  <i>Proton User Guide</i>.</p>"
+                    }
+                },
+                "codebuildRoleArn": {
+                    "target": "com.amazonaws.proton#RoleArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM service role that allows Proton to provision infrastructure using CodeBuild-based provisioning on your\n      behalf.</p>"
                     }
                 }
             },
