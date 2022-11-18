@@ -1,0 +1,5 @@
+{
+    "id": "019ad769-8cf1-48fc-b898-5c325fca6917",
+    "type": "feature",
+    "description": "Add support for (S3 Transfer Acceleration)[https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html]."
+}

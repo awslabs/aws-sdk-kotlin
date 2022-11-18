@@ -1,0 +1,8 @@
+{
+    "id": "64c54161-6b84-4251-a1fc-a7c568424ee6",
+    "type": "feature",
+    "description": "Add support for (S3 Virtual Host Addressing)[https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html] (enabled by default).",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#399"
+    ]
+}
