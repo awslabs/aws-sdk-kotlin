@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.codegen
 
-import aws.sdk.kotlin.codegen.protocols.core.AwsEndpointResolverGenerator
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
@@ -12,9 +11,7 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.boxed
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.rendering.*
-import software.amazon.smithy.model.shapes.ServiceShape
 
 class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
@@ -50,6 +47,31 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 AwsRuntimeTypes.Config.Credentials.borrow,
                 AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
             )
+        }
+
+        val UseFipsProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+            "useFips",
+            defaultValue = false,
+            documentation = """
+                Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
+            """.trimIndent(),
+        )
+
+        val UseDualStackProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+            "useDualStack",
+            defaultValue = false,
+            documentation = """
+                Flag to toggle whether to use dual-stack endpoints when making requests.
+            """.trimIndent(),
+        )
+
+        val EndpointUrlProp = ClientConfigProperty {
+            name = "endpointUrl"
+            symbol = RuntimeTypes.Http.Url.toBuilder().boxed().build()
+            documentation = """
+                A custom endpoint to use when making requests.
+            """.trimIndent()
+            propertyType = ClientConfigPropertyType.SymbolDefault
         }
     }
 
@@ -90,42 +112,17 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         }
     }
 
-    private val overrideServiceConfigObjectWriter = SectionWriter { writer, _ ->
-        val ctx: RenderingContext<ServiceShape> =
-            writer.getContextValue(ServiceGenerator.SectionServiceConfig.RenderingContext)
-
-        // We have to replace the default endpoint resolver with an AwsEndpointResolver
-        val autoDetectedProps = ClientConfigGenerator.detectDefaultProps(ctx)
-            .filter { it.propertyName != KotlinClientRuntimeConfigProperty.EndpointResolver.propertyName }
-            .toTypedArray()
-
-        ClientConfigGenerator(ctx, detectDefaultProps = false, properties = autoDetectedProps).render()
-    }
-
     override val sectionWriters: List<SectionWriterBinding> =
         listOf(
             SectionWriterBinding(ServiceGenerator.SectionServiceCompanionObject, overrideServiceCompanionObjectWriter),
-            SectionWriterBinding(ServiceGenerator.SectionServiceConfig, overrideServiceConfigObjectWriter),
         )
 
-    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> {
-        // we can't construct this without the actual package name due to the generated DefaultEndpointResolver symbol
-        val endpointResolverProperty = ClientConfigProperty {
-            name = "endpointResolver"
-            documentation = """
-                Determines the endpoint (hostname) to make requests to. When not provided a default
-                resolver is configured automatically. This is an advanced client option.
-            """.trimIndent()
-
-            val defaultResolver = buildSymbol {
-                name = AwsEndpointResolverGenerator.typeName
-                namespace = "${ctx.settings.pkg.name}.internal"
-            }
-            symbol = AwsRuntimeTypes.Endpoint.AwsEndpointResolver
-            propertyType = ClientConfigPropertyType.RequiredWithDefault("${defaultResolver.name}()")
-            additionalImports = listOf(defaultResolver)
-        }
-
-        return listOf(RegionProp, CredentialsProviderProp, endpointResolverProperty)
-    }
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> =
+        listOf(
+            RegionProp,
+            CredentialsProviderProp,
+            UseFipsProp,
+            UseDualStackProp,
+            EndpointUrlProp,
+        )
 }

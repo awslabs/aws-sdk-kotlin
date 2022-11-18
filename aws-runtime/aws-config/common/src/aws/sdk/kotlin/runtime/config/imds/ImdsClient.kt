@@ -83,7 +83,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     }
 
     // cached middleware instances
-    private val resolveEndpointMiddleware = ResolveEndpoint(ImdsEndpointResolver(platformProvider, endpointConfiguration))
+    private val resolveEndpointMiddleware = ResolveEndpoint(ImdsEndpointProvider(platformProvider, endpointConfiguration), Unit)
     private val userAgentMiddleware = UserAgent(
         staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown")),
     )

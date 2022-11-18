@@ -78,20 +78,21 @@ public data class PartitionConfig(
  * The resource identifier is further split based on the type or scope delimiter present (if any).
  */
 @InternalSdkApi
-public fun parseArn(value: String): Arn? {
-    val split = value.split(':', limit = ARN_COMPONENT_COUNT)
-    if (split[0] != "arn") return null
-    if (split.size != ARN_COMPONENT_COUNT) return null
-    if (split[5] == "") return null
+public fun parseArn(value: String?): Arn? =
+    value?.let {
+        val split = it.split(':', limit = ARN_COMPONENT_COUNT)
+        if (split[0] != "arn") return null
+        if (split.size != ARN_COMPONENT_COUNT) return null
+        if (split[5] == "") return null
 
-    return Arn(
-        split[1],
-        split[2],
-        split[3],
-        split[4],
-        split[5].split(':', '/'),
-    )
-}
+        return Arn(
+            split[1],
+            split[2],
+            split[3],
+            split[4],
+            split[5].split(':', '/'),
+        )
+    }
 
 /**
  * Represents a parsed form of an ARN (Amazon Resource Name).

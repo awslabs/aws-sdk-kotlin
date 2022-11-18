@@ -24,7 +24,7 @@ class PartitionsGenerator(
         fun getSymbol(settings: KotlinSettings): Symbol =
             buildSymbol {
                 name = "Partitions"
-                namespace = "${settings.pkg.name}.endpoints"
+                namespace = "${settings.pkg.name}.endpoints.internal"
             }
     }
 
