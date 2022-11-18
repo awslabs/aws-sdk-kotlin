@@ -65,7 +65,7 @@ internal class TokenMiddleware(
             }
         }
 
-        val call = httpClient.call(SdkHttpRequest(tokenReq))
+        val call = httpClient.call(tokenReq)
         return try {
             when (call.response.status) {
                 HttpStatusCode.OK -> {
