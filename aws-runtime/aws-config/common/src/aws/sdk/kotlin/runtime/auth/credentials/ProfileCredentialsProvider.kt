@@ -16,13 +16,14 @@ import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
+import aws.smithy.kotlin.runtime.http.operation.getLogger
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
+import kotlin.coroutines.coroutineContext
 
 /**
  * A [CredentialsProvider] that gets credentials from a profile in `~/.aws/config` or the shared credentials
@@ -94,7 +95,7 @@ public class ProfileCredentialsProvider(
     )
 
     override suspend fun getCredentials(): Credentials {
-        val logger = Logger.getLogger<ProfileCredentialsProvider>()
+        val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
         val source = resolveConfigSource(platformProvider, profileName)
         logger.debug { "Loading credentials from profile `${source.profile}`" }
         val profiles = loadAwsProfiles(platformProvider, source)

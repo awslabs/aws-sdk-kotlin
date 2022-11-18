@@ -24,6 +24,7 @@ kotlin {
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:hashing:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:tracing-core:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:aws-http"))
