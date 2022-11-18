@@ -24,10 +24,10 @@ import kotlin.coroutines.coroutineContext
  * element of the resulting flow is the encoded version of the corresponding message
  */
 @InternalSdkApi
-public fun Flow<Message>.encode(): Flow<ByteArray> = map {
+public fun Flow<Message>.encode(): Flow<SdkBuffer> = map {
     val buffer = SdkBuffer()
     it.encode(buffer)
-    buffer.readByteArray()
+    buffer
 }
 
 /**
@@ -35,7 +35,7 @@ public fun Flow<Message>.encode(): Flow<ByteArray> = map {
  * @param scope parent scope to launch a coroutine in that consumes the flow and populates a [SdkByteReadChannel]
  */
 @InternalSdkApi
-public suspend fun Flow<ByteArray>.asEventStreamHttpBody(scope: CoroutineScope): HttpBody {
+public suspend fun Flow<SdkBuffer>.asEventStreamHttpBody(scope: CoroutineScope): HttpBody {
     val encodedMessages = this
     val ch = SdkByteChannel(true)
     val activeSpan = coroutineContext.traceSpan
@@ -57,7 +57,7 @@ public suspend fun Flow<ByteArray>.asEventStreamHttpBody(scope: CoroutineScope):
             if (job == null) {
                 job = scope.launch(TraceSpanContextElement(activeSpan)) {
                     encodedMessages.collect {
-                        ch.writeFully(it)
+                        ch.write(it)
                     }
                 }
 

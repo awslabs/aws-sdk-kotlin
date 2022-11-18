@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.smithy.kotlin.runtime.http.readAll
+import aws.smithy.kotlin.runtime.io.SdkBuffer
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -38,9 +39,9 @@ class FrameEncoderTest {
         val actual = messages.encode().toList()
 
         assertEquals(3, actual.size)
-        assertContentEquals(expected[0], actual[0])
-        assertContentEquals(expected[1], actual[1])
-        assertContentEquals(expected[2], actual[2])
+        assertContentEquals(expected[0], actual[0].readByteArray())
+        assertContentEquals(expected[1], actual[1].readByteArray())
+        assertContentEquals(expected[2], actual[2].readByteArray())
     }
 
     @Test
@@ -49,7 +50,7 @@ class FrameEncoderTest {
             "foo",
             "bar",
             "baz",
-        ).map { it.encodeToByteArray() }
+        ).map { SdkBuffer().apply { writeUtf8(it) } }
 
         val body = messages.asEventStreamHttpBody(this)
         val actual = body.readAll()
