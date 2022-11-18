@@ -5,7 +5,6 @@
 package aws.sdk.kotlin.codegen.protocols.endpoints
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.ExpressionRenderer
@@ -24,11 +23,11 @@ val awsEndpointPropertyRenderers = mapOf(
 // valid auth scheme names that can appear in a smithy endpoint's properties
 private val validAuthSchemeNames = setOf("sigv4", "sigv4a")
 
-private fun String.toAuthSchemeClassName(): String =
+private fun String.toAuthSchemeClassName(): String? =
     when (this) {
         "sigv4" -> "SigV4"
         "sigv4a" -> "SigV4A"
-        else -> throw CodegenException("unrecognized scheme impl $this")
+        else -> null
     }
 
 private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, expressionRenderer: ExpressionRenderer) {
@@ -38,14 +37,9 @@ private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, exp
             authSchemes.toNode().expectArrayNode().forEach {
                 val scheme = it.expectObjectNode()
                 val schemeName = scheme.expectStringMember("name").value
-                require(schemeName in validAuthSchemeNames) { "encountered unexpected authScheme name $schemeName" }
+                val className = schemeName.toAuthSchemeClassName() ?: return@forEach
 
-                withBlock(
-                    "#T.#L(",
-                    "),",
-                    AwsRuntimeTypes.Endpoint.AuthScheme,
-                    schemeName.toAuthSchemeClassName(),
-                ) {
+                withBlock("#T.#L(", "),", AwsRuntimeTypes.Endpoint.AuthScheme, className) {
                     // we delegate back to the expression visitor for each of these fields because it's possible to
                     // encounter template strings throughout
 

@@ -42,8 +42,8 @@ public sealed class AuthScheme {
  * out the sigv4 one if present.
  */
 @InternalSdkApi
-public val Endpoint.authScheme: AuthScheme.SigV4? get() =
-    attributes.getOrNull(AuthSchemesAttributeKey)?.find { it is AuthScheme.SigV4 } as? AuthScheme.SigV4
+public val Endpoint.authScheme: AuthScheme.SigV4?
+    get() = attributes.getOrNull(AuthSchemesAttributeKey)?.find { it is AuthScheme.SigV4 } as? AuthScheme.SigV4
 
 @InternalSdkApi
 public fun AuthScheme.SigV4.asSigningContext(): SigningContext = SigningContext(signingName, signingRegion)
