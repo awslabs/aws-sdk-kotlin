@@ -1,6 +1,9 @@
 package aws.sdk.kotlin.services.polly
 
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
+import aws.sdk.kotlin.services.polly.endpoints.DefaultEndpointProvider
+import aws.sdk.kotlin.services.polly.endpoints.EndpointParameters
+import aws.sdk.kotlin.services.polly.endpoints.asSigningProvider
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
@@ -25,8 +28,12 @@ class PollyPresignerTest {
             text = "hello world"
         }
 
+        val endpointParams = EndpointParameters {
+            region = "us-east-2"
+        }
         val clientConfig = PollyPresignConfig {
             region = "us-east-2"
+            endpointProvider = DefaultEndpointProvider().asSigningProvider(endpointParams)
             credentialsProvider = StaticCredentialsProvider {
                 accessKeyId = "AKID"
                 secretAccessKey = "secret"
