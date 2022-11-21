@@ -36,9 +36,9 @@ public suspend fun Flow<SdkBuffer>.asEventStreamHttpBody(scope: CoroutineScope):
     val encodedMessages = this
     val ch = SdkByteChannel(true)
 
-    return object : HttpBody.Streaming() {
+    return object : HttpBody.ChannelContent() {
         override val contentLength: Long? = null
-        override val isReplayable: Boolean = false
+        override val isOneShot: Boolean = true
         override val isDuplex: Boolean = true
 
         private var job: Job? = null
