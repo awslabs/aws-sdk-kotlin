@@ -1,5 +1,5 @@
 {
     "id": "552c1b75-b19c-49e9-ac05-2f4a88ec2bb9",
     "type": "feature",
-    "description": "**BREAKING** Add smithy-modeled endpoint resolvers for AWS services."
+    "description": "**BREAKING** Add smithy-modeled endpoint resolvers for AWS services. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/761) for more information."
 }
