@@ -57,10 +57,10 @@ class AwsRetryMiddlewareTest {
         val maxAttempts = strategy.options.maxAttempts
 
         op.install(AwsRetryMiddleware(strategy, AwsDefaultRetryPolicy))
-
         op.roundTrip(client, Unit)
+
         val calls = op.context.attributes[HttpOperationContext.HttpCallList]
-        val sdkRequestId = op.context[HttpOperationContext.SdkRequestId]
+        val sdkRequestId = op.context.sdkRequestId
 
         assertTrue(calls.all { it.request.headers[AMZ_SDK_INVOCATION_ID_HEADER] == sdkRequestId })
         calls.forEachIndexed { idx, call ->

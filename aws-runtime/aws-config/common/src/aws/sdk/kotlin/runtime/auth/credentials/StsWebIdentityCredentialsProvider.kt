@@ -12,10 +12,11 @@ import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.time.TimestampFormat
+import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -68,7 +69,8 @@ public class StsWebIdentityCredentialsProvider(
     }
 
     override suspend fun getCredentials(): Credentials {
-        val logger = Logger.getLogger<StsAssumeRoleCredentialsProvider>()
+        val traceSpan = coroutineContext.traceSpan
+        val logger = traceSpan.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials via web identity" }
         val provider = this
 
@@ -80,6 +82,7 @@ public class StsWebIdentityCredentialsProvider(
             region = provider.region
             httpClientEngine = provider.httpClientEngine
             // NOTE: credentials provider not needed for this operation
+            tracer = traceSpan.asNestedTracer("STS-")
         }
 
         val resp = try {
