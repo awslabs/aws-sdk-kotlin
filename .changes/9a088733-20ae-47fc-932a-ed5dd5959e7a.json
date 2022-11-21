@@ -1,0 +1,5 @@
+{
+    "id": "9a088733-20ae-47fc-932a-ed5dd5959e7a",
+    "type": "feature",
+    "description": "Add support for (S3 Object Lambda)[https://aws.amazon.com/s3/features/object-lambda/]."
+}

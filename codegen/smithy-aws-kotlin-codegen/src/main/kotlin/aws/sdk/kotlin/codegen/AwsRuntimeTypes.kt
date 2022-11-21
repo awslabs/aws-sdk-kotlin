@@ -24,15 +24,19 @@ object AwsRuntimeTypes {
     }
 
     object Endpoint {
-        val asSigningEndpointProvider = runtimeSymbol("asSigningEndpointProvider", AwsKotlinDependency.AWS_ENDPOINT)
-        val AwsEndpointResolver = runtimeSymbol("AwsEndpointResolver", AwsKotlinDependency.AWS_ENDPOINT)
-        val AwsEndpoint = runtimeSymbol("AwsEndpoint", AwsKotlinDependency.AWS_ENDPOINT)
-        val CredentialScope = runtimeSymbol("CredentialScope", AwsKotlinDependency.AWS_ENDPOINT)
+        val AuthSchemesAttributeKey = runtimeSymbol("AuthSchemesAttributeKey", AwsKotlinDependency.AWS_ENDPOINT)
+        val AuthScheme = runtimeSymbol("AuthScheme", AwsKotlinDependency.AWS_ENDPOINT)
+        val authSchemeEndpointExt = runtimeSymbol("authScheme", AwsKotlinDependency.AWS_ENDPOINT)
+        val asSigningContextAuthSchemeExt = runtimeSymbol("asSigningContext", AwsKotlinDependency.AWS_ENDPOINT)
+        val applyToRequestAuthSchemeExt = runtimeSymbol("applyToRequest", AwsKotlinDependency.AWS_ENDPOINT)
 
-        object Internal {
-            val EndpointDefinition = runtimeSymbol("EndpointDefinition", AwsKotlinDependency.AWS_ENDPOINT, "internal")
-            val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_ENDPOINT, "internal")
-            val resolveEndpoint = runtimeSymbol("resolveEndpoint", AwsKotlinDependency.AWS_ENDPOINT, "internal")
+        object Functions {
+            val partitionFn = runtimeSymbol("partition", AwsKotlinDependency.AWS_ENDPOINT, "functions")
+            val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_ENDPOINT, "functions")
+            val PartitionConfig = runtimeSymbol("PartitionConfig", AwsKotlinDependency.AWS_ENDPOINT, "functions")
+            val parseArn = runtimeSymbol("parseArn", AwsKotlinDependency.AWS_ENDPOINT, "functions")
+            val Arn = runtimeSymbol("Arn", AwsKotlinDependency.AWS_ENDPOINT, "functions")
+            val isVirtualHostableS3Bucket = runtimeSymbol("isVirtualHostableS3Bucket", AwsKotlinDependency.AWS_ENDPOINT, "functions")
         }
     }
 

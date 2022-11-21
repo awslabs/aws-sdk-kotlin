@@ -1,0 +1,5 @@
+{
+    "id": "82affce8-73dd-42be-ab9e-a737337652c1",
+    "type": "feature",
+    "description": "Add support for [FIPS](https://aws.amazon.com/compliance/fips/) endpoints in client config."
+}

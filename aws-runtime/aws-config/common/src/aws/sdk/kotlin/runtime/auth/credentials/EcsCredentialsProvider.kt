@@ -100,7 +100,7 @@ public class EcsCredentialsProvider internal constructor(
             }
         }
 
-        op.install(ResolveEndpoint(resolver = { Endpoint(url) }))
+        op.install(ResolveEndpoint(provider = { Endpoint(url) }, params = null))
         op.install(retryMiddleware)
 
         logger.debug { "retrieving container credentials" }
@@ -153,9 +153,9 @@ public class EcsCredentialsProvider internal constructor(
 
         // TODO - validate loopback via DNS resolution instead of fixed set. Custom host names (including localhost) that
         //  resolve to loopback won't work until then. ALL resolved addresses MUST resolve to the loopback device
-        val allowedHosts = setOf("127.0.0.1", "[::1]")
+        val allowedHosts = setOf("127.0.0.1", "::1")
 
-        if (url.host !in allowedHosts) {
+        if (url.host.toString() !in allowedHosts) {
             throw ProviderConfigurationException(
                 "The container credentials full URI ($uri) has an invalid host. Host can only be one of [${allowedHosts.joinToString()}].",
             )
