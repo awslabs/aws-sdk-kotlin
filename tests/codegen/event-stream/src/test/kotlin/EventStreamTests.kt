@@ -51,7 +51,7 @@ class EventStreamTests {
         }
 
         val body = serializeTestStreamOpOperationBody(testContext, req)
-        assertIs<HttpBody.Streaming>(body)
+        assertIs<HttpBody.ChannelContent>(body)
 
         // should be the actual message + the empty end frame
         val frames = decodeFrames(body.readFrom()).toList()
