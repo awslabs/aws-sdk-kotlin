@@ -1,5 +1,0 @@
-{
-    "id": "5e992ee9-f624-423c-a388-afec012e39be",
-    "type": "feature",
-    "description": "Add support for (S3 PrivateLink)[https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html]."
-}

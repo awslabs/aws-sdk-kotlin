@@ -1,8 +1,0 @@
-{
-    "id": "20d71413-8e11-4769-bb84-ca93c82bd6fc",
-    "type": "feature",
-    "description": "Add support for (S3 Access Points)[https://aws.amazon.com/s3/features/access-points/].",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#231"
-    ]
-}
