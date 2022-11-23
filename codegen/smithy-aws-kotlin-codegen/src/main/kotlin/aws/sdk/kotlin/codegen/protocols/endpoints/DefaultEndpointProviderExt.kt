@@ -8,8 +8,11 @@ import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.ExpressionRenderer
+import software.amazon.smithy.kotlin.codegen.utils.getOrNull
+import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.node.ObjectNode
 import software.amazon.smithy.rulesengine.language.syntax.expr.Expression
+import java.util.*
 
 val awsEndpointFunctions = mapOf(
     "aws.parseArn" to AwsRuntimeTypes.Endpoint.Functions.parseArn,
@@ -44,20 +47,10 @@ private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, exp
                     // encounter template strings throughout
 
                     writeInline("signingName = ")
-                    scheme.getStringMember("signingName").ifPresentOrElse({ node ->
-                        expressionRenderer.renderExpression(Expression.fromNode(node))
-                        write(",")
-                    },) {
-                        writeInline("null,")
-                    }
+                    renderOrElse(expressionRenderer, scheme.getStringMember("signingName"), "null")
 
-                    writer.writeInline("disableDoubleEncoding = ")
-                    scheme.getBooleanMember("disableDoubleEncoding").ifPresentOrElse({ node ->
-                        expressionRenderer.renderExpression(Expression.fromNode(node))
-                        write(",")
-                    },) {
-                        writeInline("false,")
-                    }
+                    writeInline("disableDoubleEncoding = ")
+                    renderOrElse(expressionRenderer, scheme.getBooleanMember("disableDoubleEncoding"), "false")
 
                     when (schemeName) {
                         "sigv4" -> renderSigV4Fields(writer, scheme, expressionRenderer)
@@ -69,14 +62,22 @@ private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, exp
     }
 }
 
+private fun KotlinWriter.renderOrElse(
+    expressionRenderer: ExpressionRenderer,
+    optionalNode: Optional<out Node>,
+    whenNullValue: String,
+) {
+    val nullableNode = optionalNode.getOrNull()
+    when (nullableNode) {
+        null -> writeInline(whenNullValue)
+        else -> expressionRenderer.renderExpression(Expression.fromNode(nullableNode))
+    }
+    write(",")
+}
+
 private fun renderSigV4Fields(writer: KotlinWriter, scheme: ObjectNode, expressionRenderer: ExpressionRenderer) {
     writer.writeInline("signingRegion = ")
-    scheme.getStringMember("signingRegion").ifPresentOrElse({
-        expressionRenderer.renderExpression(Expression.fromNode(it))
-        writer.write(",")
-    },) {
-        writer.write("null,")
-    }
+    writer.renderOrElse(expressionRenderer, scheme.getStringMember("signingRegion"), "null")
 }
 
 private fun renderSigV4AFields(writer: KotlinWriter, scheme: ObjectNode, expressionRenderer: ExpressionRenderer) {
