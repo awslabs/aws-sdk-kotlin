@@ -6,18 +6,12 @@
 # Abstract
 
 [Flexible checksums](https://aws.amazon.com/blogs/aws/new-additional-checksum-algorithms-for-amazon-s3/) is a feature 
-that allows users and services to configure checksum operations for both HTTP requests and responses. To enable the feature, 
+that allows users and services to configure checksum operations for HTTP requests and responses. To enable the feature, 
 services add an `httpChecksum` trait to their Smithy models.
 
 This document covers the design for supporting flexible checksums in the AWS SDK for Kotlin. 
 
-# Requirements
-
-- Support the Smithy trait `httpChecksum`
-- Implement CRC32C
-- Deprecate `httpChecksumRequired`
-
-## `httpChecksum` Trait
+# `httpChecksum` Trait
 
 Services may use the `httpChecksum` trait in their Smithy models to define flexible checksums behavior.
 There are four properties in this trait:
@@ -28,14 +22,14 @@ There are four properties in this trait:
 
 ### Deprecating `httpChecksumRequired`
 
-The `httpChecksumRequired` Smithy trait is now deprecated. We need to use the `httpChecksum` trait's
+The `httpChecksumRequired` Smithy trait is now deprecated. Instead, the SDK should use the `httpChecksum` trait's
 `requestChecksumRequired` property instead.
 
-Previously, when `httpChecksumRequired` was set to `true`, we would compute the checksum using MD5 and inject it
-into the `Content-MD5` header.
+Previously, when `httpChecksumRequired` was set to `true`, the SDK would compute the MD5 checksum and set the 
+result in the `Content-MD5` header.
 
-If the `requestChecksumRequired` property is set to `true`, and the customer opts-in to using flexible checksums,
-we must give priority to the flexible checksums implementation. Otherwise if not opted-in, we must continue the previous
+If the `requestChecksumRequired` property is set to `true`, and the user opts-in to using flexible checksums,
+the SDK must give priority to the flexible checksums implementation. Otherwise if not opted-in, we must continue the previous
 behavior of injecting the `Content-MD5` header.
 
 ## Checksum Algorithms
@@ -44,14 +38,13 @@ We need to support the following checksum algorithms: CRC32C, CRC32, SHA1, SHA25
 
 All of them are [already implemented for JVM](https://github.com/awslabs/smithy-kotlin/tree/main/runtime/hashing/jvm/src/aws/smithy/kotlin/runtime/hashing)
 __except for CRC32C__. This algorithm is essentially the same as CRC32, but uses a different polynomial under the hood.
-
-We use [java.util.zip to import CRC32](https://docs.oracle.com/javase/8/docs/api/java/util/zip/CRC32.html), but this package 
-only began supporting CRC32C in Java 9. We want to support Java 8 at a minimum, so we will need to implement this 
-ourselves (which is [what the Java SDK does](https://github.com/aws/aws-sdk-java-v2/blob/master/core/sdk-core/src/main/java/software/amazon/awssdk/core/internal/checksums/factory/SdkCrc32C.java)).
+  The SDK uses [java.util.zip's implementation of CRC32](https://docs.oracle.com/javase/8/docs/api/java/util/zip/CRC32.html), but this package 
+only began shipping CRC32C in Java 9. The SDK wants to support Java 8 at a minimum, and will need to implement this 
+ourselves (which is also [what the Java SDK does](https://github.com/aws/aws-sdk-java-v2/blob/master/core/sdk-core/src/main/java/software/amazon/awssdk/core/internal/checksums/factory/SdkCrc32C.java)).
 
 ## Checksum Header Name
 
-The checksum header name will be `x-amz-checksum-<checksum_algorithm_name>`. For example, if the checksum was computed 
+The header name used to provide the checksum value is `x-amz-checksum-<checksum_algorithm_name>`. For example, if the checksum was computed 
 using SHA-256, the header containing the checksum will be `x-amz-checksum-sha256`.
 
 ## Normal vs. Streaming Requests
@@ -71,8 +64,7 @@ and where the request checksum should be placed.
 For all normal requests, the checksum should be injected into the header.
 
 ### Streaming Requests
-For streaming requests which are either authorized with streaming-signing or unsigned, we need to
-place the checksum in the trailer.
+For streaming requests which are either streaming-signing or unsigned, the checksum must be sent as a trailing header.
 
 - The `Content-Encoding` header __MUST__ be set to `aws-chunked`.
 - The `x-amz-trailer` trailing header __MUST__ be set to the [checksum header name](#checksum-header-name).
