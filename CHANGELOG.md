@@ -4,15 +4,15 @@
 
 ### Features
 * Add support for dual-stack endpoints in client config.
-* [#399](https://github.com/awslabs/aws-sdk-kotlin/issues/399) Add support for (S3 Virtual Host Addressing)[https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html] (enabled by default).
-* [#231](https://github.com/awslabs/aws-sdk-kotlin/issues/231) Add support for (S3 Access Points)[https://aws.amazon.com/s3/features/access-points/].
-* Add support for (S3 Object Lambda)[https://aws.amazon.com/s3/features/object-lambda/].
+* [#399](https://github.com/awslabs/aws-sdk-kotlin/issues/399) Add support for [S3 Virtual Host Addressing](https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html) (enabled by default).
+* [#231](https://github.com/awslabs/aws-sdk-kotlin/issues/231) Add support for [S3 Access Points](https://aws.amazon.com/s3/features/access-points/).
+* Add support for [S3 Object Lambda](https://aws.amazon.com/s3/features/object-lambda/).
 * [#677](https://github.com/awslabs/smithy-kotlin/issues/677) Add a new tracing framework for centralized handling of log messages and metric events and providing easy integration points for connecting to downstream tracing systems (e.g., kotlin-logging)
 * **BREAKING** Add smithy-modeled endpoint resolvers for AWS services. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/761) for more information.
-* Add support for (S3 PrivateLink)[https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html].
+* Add support for [S3 PrivateLink](https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html).
 * Add support for [FIPS](https://aws.amazon.com/compliance/fips/) endpoints in client config.
-* Add support for (S3 Transfer Acceleration)[https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html].
-* Add support for (S3 Outposts)[https://aws.amazon.com/s3/outposts/].
+* Add support for [S3 Transfer Acceleration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html).
+* Add support for [S3 Outposts](https://aws.amazon.com/s3/outposts/).
 
 ### Miscellaneous
 * Sync AWS service models
