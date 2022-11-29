@@ -10,8 +10,10 @@ import aws.smithy.kotlin.runtime.hashing.HashFunction
 import aws.smithy.kotlin.runtime.hashing.Sha256
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.toHttpBody
+import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteChannel
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
+import aws.smithy.kotlin.runtime.io.SdkSource
 import aws.smithy.kotlin.runtime.util.encodeToHex
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -44,16 +46,25 @@ class TreeHasherTest {
         assertContentEquals(treeHash, hashes.treeHash)
     }
 
+    private val payloadBytes = "abcdefghijklmnopqrstuvwxyz".encodeToByteArray() // 26 bytes
+    private suspend fun testCalculateHashesWithStream(stream: ByteStream) {
+        val hasher = TreeHasherImpl(megabyte, ::Sha256)
+        val hashes = hasher.calculateHashes(stream.toHttpBody())
+
+        assertEquals("74df7872289a84fa31b6ae4cfdbac34ef911cfe9357e842c600a060da6a899ae", hashes.fullHash.encodeToHex())
+        assertEquals("a1c6d421d75f727ce97e6998ab79e6a1cc08ee9502f541f9c5748b462c4dc83f", hashes.treeHash.encodeToHex())
+    }
+
     @Test
-    fun integrationTestCalculateHashes() = runTest {
-        val byteStream = object : ByteStream.ReplayableStream() {
-            override fun newReader(): SdkByteReadChannel {
+    fun testCalculateHashesWithChannelStream() = runTest {
+        val byteStream = object : ByteStream.ChannelStream() {
+            override fun readFrom(): SdkByteReadChannel {
                 val byteChannel = SdkByteChannel()
-                val payloadBytes = "abcdefghijklmnopqrstuvwxyz".encodeToByteArray() // 26 bytes
                 async {
                     withTimeout(10_000) { // For sanity, bail out after 10s
                         (0 until megabyte).forEach { // This will yield len(payloadBytes) megabytes of content
-                            byteChannel.writeFully(payloadBytes)
+                            val source = SdkBuffer().apply { write(payloadBytes) }
+                            byteChannel.write(source)
                         }
                     }
                     byteChannel.close()
@@ -62,11 +73,36 @@ class TreeHasherTest {
             }
         }
 
-        val hasher = TreeHasherImpl(megabyte, ::Sha256)
-        val hashes = hasher.calculateHashes(byteStream.toHttpBody())
+        testCalculateHashesWithStream(byteStream)
+    }
 
-        assertEquals("74df7872289a84fa31b6ae4cfdbac34ef911cfe9357e842c600a060da6a899ae", hashes.fullHash.encodeToHex())
-        assertEquals("a1c6d421d75f727ce97e6998ab79e6a1cc08ee9502f541f9c5748b462c4dc83f", hashes.treeHash.encodeToHex())
+    @Test
+    fun testCalculateHashesWithSourceStream() = runTest {
+        val source = object : SdkSource {
+            private var count = 0
+            private var buffer = SdkBuffer()
+            override fun close() {}
+            override fun read(sink: SdkBuffer, limit: Long): Long {
+                if (count == megabyte) return -1L
+
+                return if (buffer.size > 0L) {
+                    // had left over from previous read
+                    val rc = minOf(limit, buffer.size)
+                    sink.write(buffer, rc)
+                    rc
+                } else {
+                    // refill
+                    buffer.write(payloadBytes)
+                    val rc = buffer.read(sink, limit)
+                    count++
+                    rc
+                }
+            }
+        }
+        val byteStream = object : ByteStream.SourceStream() {
+            override fun readFrom(): SdkSource = source
+        }
+        testCalculateHashesWithStream(byteStream)
     }
 }
 

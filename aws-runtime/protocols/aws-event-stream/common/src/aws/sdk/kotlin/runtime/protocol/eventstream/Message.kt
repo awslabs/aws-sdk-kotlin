@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.hashing.crc32
 import aws.smithy.kotlin.runtime.io.*
 
 internal const val MESSAGE_CRC_BYTE_LEN = 4
@@ -44,42 +43,43 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
 
     public companion object {
         /**
-         * Read a message from [buffer]
+         * Read a message from [source]
          */
-        public fun decode(buffer: Buffer): Message {
-            val totalLen = buffer.readUInt()
+        public fun decode(source: SdkBufferedSource): Message {
+            val totalLen = source.peek().use { it.readInt().toUInt() }
             check(totalLen <= MAX_MESSAGE_SIZE.toUInt()) { "Invalid Message size: $totalLen" }
 
-            // read into new ByteArray so we can validate the CRC
-            val messageBytes = ByteArray(totalLen.toInt() - MESSAGE_CRC_BYTE_LEN)
-            val messageBuffer = SdkByteBuffer.of(messageBytes)
-            // add back in the totalLen so we can read the prelude
-            messageBuffer.writeUInt(totalLen)
-            buffer.readFully(messageBuffer)
+            // Limiting the amount of data read by SdkBufferedSource is tricky and cause incorrect CRC
+            // if not careful (e.g. creating a buffered source of CrcSource will usually lead to incorrect results
+            // because the entire point SdkBufferedSource (okio.BufferedSource) is to buffer larger chunks internally
+            // to optimize short reads)
+            val messageBuffer = SdkBuffer()
+            val computedCrc = run {
+                val crcSource = CrcSource(source)
+                crcSource.read(messageBuffer, totalLen.toLong() - MESSAGE_CRC_BYTE_LEN.toLong())
+                crcSource.crc
+            }
 
             val prelude = Prelude.decode(messageBuffer)
 
             val remaining = prelude.totalLen - PRELUDE_BYTE_LEN_WITH_CRC - MESSAGE_CRC_BYTE_LEN
-            check(messageBuffer.readRemaining >= remaining.toULong()) { "Invalid buffer, not enough remaining; have: ${messageBuffer.readRemaining}; expected $remaining" }
+            check(messageBuffer.request(remaining.toLong())) { "Invalid buffer, not enough remaining; have: ${messageBuffer.size}; expected $remaining" }
 
             val message = MessageBuilder()
 
             // read headers
-            var headerBytesConsumed = 0UL
-            while (headerBytesConsumed < prelude.headersLength.toULong()) {
-                val start = messageBuffer.readPosition
+            var headerBytesConsumed = 0L
+            while (headerBytesConsumed < prelude.headersLength.toLong()) {
+                val start = messageBuffer.buffer.size
                 val header = Header.decode(messageBuffer)
-                headerBytesConsumed += messageBuffer.readPosition - start
+                headerBytesConsumed += start - messageBuffer.buffer.size
                 message.addHeader(header)
             }
-            check(headerBytesConsumed == prelude.headersLength.toULong()) { "Invalid Message: expected ${prelude.headersLength} header bytes; consumed $headerBytesConsumed" }
+            check(headerBytesConsumed == prelude.headersLength.toLong()) { "Invalid Message: expected ${prelude.headersLength} header bytes; consumed $headerBytesConsumed" }
 
-            val payload = ByteArray(prelude.payloadLen)
-            messageBuffer.readFully(payload)
-            message.payload = payload
+            message.payload = messageBuffer.readByteArray(prelude.payloadLen.toLong())
 
-            val expectedCrc = buffer.readUInt()
-            val computedCrc = messageBytes.crc32()
+            val expectedCrc = source.readInt().toUInt()
             check(computedCrc == expectedCrc) {
                 "Message checksum mismatch; expected=0x${expectedCrc.toString(16)}; calculated=0x${computedCrc.toString(16)}"
             }
@@ -107,27 +107,27 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
     /**
      * Encode a message to the [dest] buffer
      */
-    public fun encode(dest: MutableBuffer) {
-        val encodedHeaders = SdkByteBuffer(16u)
-        headers.forEach { it.encode(encodedHeaders) }
-        val headersLen = encodedHeaders.readRemaining.toInt()
+    public fun encode(dest: SdkBufferedSink) {
+        val headerBuf = SdkBuffer()
+        headers.forEach { it.encode(headerBuf) }
+        val headersLen = headerBuf.size
         val payloadLen = payload.size
 
         val messageLen = PRELUDE_BYTE_LEN_WITH_CRC + headersLen + payloadLen + MESSAGE_CRC_BYTE_LEN
         check(headersLen < MAX_HEADER_SIZE) { "Invalid Headers length: $headersLen" }
         check(messageLen < MAX_MESSAGE_SIZE) { "Invalid Message length: $messageLen" }
 
-        val prelude = Prelude(messageLen, headersLen)
+        val prelude = Prelude(messageLen.toInt(), headersLen.toInt())
 
-        val encodedMessage = ByteArray(messageLen - MESSAGE_CRC_BYTE_LEN)
-        val messageBuf = SdkByteBuffer.of(encodedMessage)
+        val sink = CrcSink(dest)
+        val buffer = sink.buffer()
 
-        prelude.encode(messageBuf)
-        messageBuf.writeFully(encodedHeaders)
-        messageBuf.writeFully(payload)
+        prelude.encode(buffer)
+        buffer.write(headerBuf, headerBuf.size)
+        buffer.write(payload)
 
-        dest.writeFully(encodedMessage)
-        dest.writeInt(encodedMessage.crc32().toInt())
+        buffer.emit()
+        dest.writeInt(sink.crc.toInt())
     }
 }
 

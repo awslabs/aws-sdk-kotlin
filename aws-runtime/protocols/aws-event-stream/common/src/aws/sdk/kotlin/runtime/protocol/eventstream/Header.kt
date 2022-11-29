@@ -32,27 +32,27 @@ private const val MAX_HEADER_NAME_LEN = 255
 public data class Header(val name: String, val value: HeaderValue) {
     public companion object {
         /**
-         * Read an encoded header from the [buffer]
+         * Read an encoded header from the [source]
          */
-        public fun decode(buffer: Buffer): Header {
-            check(buffer.readRemaining >= MIN_HEADER_LEN.toULong()) { "Invalid frame header; require at least $MIN_HEADER_LEN bytes" }
-            val nameLen = buffer.readByte().toInt()
+        public fun decode(source: SdkBufferedSource): Header {
+            check(source.request(MIN_HEADER_LEN.toLong())) { "Invalid frame header; require at least $MIN_HEADER_LEN bytes" }
+            val nameLen = source.readByte().toInt()
             check(nameLen > 0) { "Invalid header name length: $nameLen" }
-            val nameBytes = ByteArray(nameLen)
-            buffer.readFully(nameBytes)
-            val value = HeaderValue.decode(buffer)
-            return Header(nameBytes.decodeToString(), value)
+            check(source.request(nameLen.toLong())) { "Not enough bytes to read header name; needed: $nameLen; remaining: ${source.buffer.size}" }
+            val name = source.readUtf8(nameLen.toLong())
+            val value = HeaderValue.decode(source)
+            return Header(name, value)
         }
     }
 
     /**
      * Encode a header to [dest] buffer
      */
-    public fun encode(dest: MutableBuffer) {
+    public fun encode(dest: SdkBufferedSink) {
         val bytes = name.encodeToByteArray()
         check(bytes.size < MAX_HEADER_NAME_LEN) { "Header name too long" }
         dest.writeByte(bytes.size.toByte())
-        dest.writeFully(bytes)
+        dest.write(bytes)
         value.encode(dest)
     }
 }

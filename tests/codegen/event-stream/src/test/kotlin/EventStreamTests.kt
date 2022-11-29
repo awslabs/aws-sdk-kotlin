@@ -16,8 +16,7 @@ import aws.smithy.kotlin.runtime.auth.awssigning.HashSpecification
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
-import aws.smithy.kotlin.runtime.io.SdkByteBuffer
-import aws.smithy.kotlin.runtime.io.bytes
+import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.smithy.test.assertJsonStringsEqual
 import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -51,21 +50,20 @@ class EventStreamTests {
         }
 
         val body = serializeTestStreamOpOperationBody(testContext, req)
-        assertIs<HttpBody.Streaming>(body)
+        assertIs<HttpBody.ChannelContent>(body)
 
         // should be the actual message + the empty end frame
         val frames = decodeFrames(body.readFrom()).toList()
         assertEquals(2, frames.size)
         val signedMessage = frames[0]
-        val buffer = SdkByteBuffer.of(signedMessage.payload)
-        buffer.advance(signedMessage.payload.size.toULong())
+        val buffer = SdkBuffer().apply { write(signedMessage.payload) }
         return Message.decode(buffer)
     }
 
     private suspend fun deserializedEvent(message: Message): TestStream {
-        val buffer = SdkByteBuffer(0U)
+        val buffer = SdkBuffer()
         message.encode(buffer)
-        val body = ByteArrayContent(buffer.bytes())
+        val body = ByteArrayContent(buffer.readByteArray())
         val builder = TestStreamOpResponse.Builder()
 
         deserializeTestStreamOpOperationBody(builder, body)

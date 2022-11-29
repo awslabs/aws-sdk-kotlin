@@ -8,6 +8,8 @@ package aws.sdk.kotlin.services.glacier.internal
 import aws.smithy.kotlin.runtime.hashing.HashSupplier
 import aws.smithy.kotlin.runtime.hashing.hash
 import aws.smithy.kotlin.runtime.http.HttpBody
+import aws.smithy.kotlin.runtime.io.SdkBuffer
+import aws.smithy.kotlin.runtime.io.buffer
 import kotlinx.coroutines.flow.*
 import kotlin.math.min
 
@@ -80,12 +82,26 @@ internal class TreeHasherImpl(private val chunkSizeBytes: Int, private val hashS
             chunkRanges.asFlow().map(bytes()::sliceArray)
         }
 
-        is HttpBody.Streaming -> flow {
+        is HttpBody.ChannelContent -> flow {
             val channel = readFrom()
+            val sink = SdkBuffer()
             while (!channel.isClosedForRead) {
-                emit(channel.readRemaining(chunkSizeBytes))
+                var remaining = chunkSizeBytes.toLong()
+                while (remaining > 0L) {
+                    val rc = channel.read(sink, remaining)
+                    if (rc == -1L) break // channel closed before a full chunk could be read
+                    remaining -= rc
+                }
+                emit(sink.readByteArray())
             }
-            reset()
+        }
+        is HttpBody.SourceContent -> flow {
+            val source = readFrom().buffer()
+            while (!source.exhausted()) {
+                source.request(chunkSizeBytes.toLong())
+                val limit = minOf(chunkSizeBytes.toLong(), source.buffer.size)
+                emit(source.readByteArray(limit))
+            }
         }
     }
 }

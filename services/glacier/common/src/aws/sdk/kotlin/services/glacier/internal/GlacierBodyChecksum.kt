@@ -8,7 +8,6 @@ package aws.sdk.kotlin.services.glacier.internal
 import aws.sdk.kotlin.services.glacier.model.GlacierException
 import aws.smithy.kotlin.runtime.client.operationName
 import aws.smithy.kotlin.runtime.hashing.Sha256
-import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
@@ -26,7 +25,7 @@ internal class GlacierBodyChecksum(
 
     override suspend fun modifyRequest(req: SdkHttpRequest): SdkHttpRequest {
         val body = req.subject.body
-        if (body is HttpBody.Streaming && !body.isReplayable) {
+        if (body.isOneShot) {
             val opName = req.context.operationName ?: "This operation"
             throw GlacierException("$opName requires a byte array or replayable stream")
         }
