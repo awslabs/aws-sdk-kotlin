@@ -10,6 +10,7 @@ import aws.smithy.kotlin.runtime.hashing.HashFunction
 import aws.smithy.kotlin.runtime.hashing.Sha256
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.toHttpBody
+import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteChannel
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import aws.smithy.kotlin.runtime.util.encodeToHex
@@ -46,14 +47,15 @@ class TreeHasherTest {
 
     @Test
     fun integrationTestCalculateHashes() = runTest {
-        val byteStream = object : ByteStream.ReplayableStream() {
-            override fun newReader(): SdkByteReadChannel {
+        val byteStream = object : ByteStream.ChannelStream() {
+            override fun readFrom(): SdkByteReadChannel {
                 val byteChannel = SdkByteChannel()
                 val payloadBytes = "abcdefghijklmnopqrstuvwxyz".encodeToByteArray() // 26 bytes
                 async {
                     withTimeout(10_000) { // For sanity, bail out after 10s
                         (0 until megabyte).forEach { // This will yield len(payloadBytes) megabytes of content
-                            byteChannel.writeFully(payloadBytes)
+                            val source = SdkBuffer().apply { write(payloadBytes) }
+                            byteChannel.write(source)
                         }
                     }
                     byteChannel.close()
