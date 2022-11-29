@@ -99,7 +99,8 @@ internal class TreeHasherImpl(private val chunkSizeBytes: Int, private val hashS
             val source = readFrom().buffer()
             while (!source.exhausted()) {
                 source.request(chunkSizeBytes.toLong())
-                emit(source.readByteArray())
+                val limit = minOf(chunkSizeBytes.toLong(), source.buffer.size)
+                emit(source.readByteArray(limit))
             }
         }
     }
