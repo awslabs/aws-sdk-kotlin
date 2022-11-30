@@ -50,6 +50,12 @@ publishing {
                     url = "https://github.com/awslabs/aws-sdk-kotlin"
                 }
 
+                if (project.hasProperty("aws.sdk.id")) {
+                    properties = [
+                        "aws.sdk.id": (String) project.property("aws.sdk.id")
+                    ]
+                }
+
                 artifact(tasks["javadocJar"])
             }
         }

@@ -184,6 +184,7 @@ fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File -
         .replace("-", "")
         .toLowerCase()
         .kotlinNamespace()
+    val packageDescription = "The AWS Kotlin client for $sdkId"
 
     when {
         applyFilters && !serviceMembership.isMember(filename, packageName) -> {
@@ -211,7 +212,7 @@ fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File -
                 projectionName = filename,
                 sdkId = sdkId,
                 version = service.version,
-                description = description,
+                description = packageDescription,
             )
         }
     }
