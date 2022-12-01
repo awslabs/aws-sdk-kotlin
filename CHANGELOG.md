@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.19.0-beta] - 12/01/2022
+
+### Miscellaneous
+* Upgrade smithy-kotlin and sync service models and partitions.
+* **BREAKING** Refactor SDK I/O types. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/768) for more information
+
 ## [0.18.0-beta] - 11/23/2022
 
 ### Features
