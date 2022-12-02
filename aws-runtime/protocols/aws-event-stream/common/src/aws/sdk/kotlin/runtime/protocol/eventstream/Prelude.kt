@@ -6,6 +6,9 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.smithy.kotlin.runtime.hashing.Crc32
+import aws.smithy.kotlin.runtime.hashing.HashingSink
+import aws.smithy.kotlin.runtime.hashing.HashingSource
 import aws.smithy.kotlin.runtime.io.*
 
 internal const val PRELUDE_BYTE_LEN = 8
@@ -28,13 +31,13 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
      * Encode the prelude + CRC to [dest] buffer
      */
     public fun encode(dest: SdkBufferedSink) {
-        val sink = CrcSink(dest)
+        val sink = HashingSink(Crc32(), dest)
         val buffer = sink.buffer()
 
         buffer.writeInt(totalLen)
         buffer.writeInt(headersLength)
         buffer.emit()
-        dest.writeInt(sink.crc.toInt())
+        dest.writeInt((sink.hash as Crc32).digestValue().toInt())
     }
 
     public companion object {
@@ -43,11 +46,11 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
          */
         public fun decode(source: SdkBufferedSource): Prelude {
             check(source.request(PRELUDE_BYTE_LEN_WITH_CRC.toLong())) { "Invalid message prelude" }
-            val crcSource = CrcSource(source)
+            val crcSource = HashingSource(Crc32(), source)
             val buffer = SdkBuffer()
             crcSource.read(buffer, PRELUDE_BYTE_LEN.toLong())
             val expectedCrc = source.readInt().toUInt()
-            val computedCrc = crcSource.crc
+            val computedCrc = (crcSource.hash as Crc32).digestValue()
 
             val totalLen = buffer.readInt()
             val headerLen = buffer.readInt()

@@ -6,6 +6,9 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.smithy.kotlin.runtime.hashing.Crc32
+import aws.smithy.kotlin.runtime.hashing.HashingSink
+import aws.smithy.kotlin.runtime.hashing.HashingSource
 import aws.smithy.kotlin.runtime.io.*
 
 internal const val MESSAGE_CRC_BYTE_LEN = 4
@@ -55,9 +58,9 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
             // to optimize short reads)
             val messageBuffer = SdkBuffer()
             val computedCrc = run {
-                val crcSource = CrcSource(source)
+                val crcSource = HashingSource(Crc32(), source)
                 crcSource.read(messageBuffer, totalLen.toLong() - MESSAGE_CRC_BYTE_LEN.toLong())
-                crcSource.crc
+                (crcSource.hash as Crc32).digestValue()
             }
 
             val prelude = Prelude.decode(messageBuffer)
@@ -119,7 +122,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
 
         val prelude = Prelude(messageLen.toInt(), headersLen.toInt())
 
-        val sink = CrcSink(dest)
+        val sink = HashingSink(Crc32(), dest)
         val buffer = sink.buffer()
 
         prelude.encode(buffer)
@@ -127,7 +130,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
         buffer.write(payload)
 
         buffer.emit()
-        dest.writeInt(sink.crc.toInt())
+        dest.writeInt((sink.hash as Crc32).digestValue().toInt())
     }
 }
 
