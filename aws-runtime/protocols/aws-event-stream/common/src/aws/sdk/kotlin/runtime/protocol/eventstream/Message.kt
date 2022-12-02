@@ -60,7 +60,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
             val computedCrc = run {
                 val crcSource = HashingSource(Crc32(), source)
                 crcSource.read(messageBuffer, totalLen.toLong() - MESSAGE_CRC_BYTE_LEN.toLong())
-                (crcSource.hash as Crc32).digestValue()
+                crcSource.digestValue()!!
             }
 
             val prelude = Prelude.decode(messageBuffer)
@@ -130,7 +130,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
         buffer.write(payload)
 
         buffer.emit()
-        dest.writeInt((sink.hash as Crc32).digestValue().toInt())
+        dest.writeInt(sink.digestValue()!!.toInt())
     }
 }
 

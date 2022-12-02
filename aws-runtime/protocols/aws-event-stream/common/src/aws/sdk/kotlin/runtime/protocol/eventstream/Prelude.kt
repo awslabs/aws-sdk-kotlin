@@ -37,7 +37,7 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
         buffer.writeInt(totalLen)
         buffer.writeInt(headersLength)
         buffer.emit()
-        dest.writeInt((sink.hash as Crc32).digestValue().toInt())
+        dest.writeInt(sink.digestValue()!!.toInt())
     }
 
     public companion object {
@@ -50,7 +50,7 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
             val buffer = SdkBuffer()
             crcSource.read(buffer, PRELUDE_BYTE_LEN.toLong())
             val expectedCrc = source.readInt().toUInt()
-            val computedCrc = (crcSource.hash as Crc32).digestValue()
+            val computedCrc = crcSource.digestValue()!!
 
             val totalLen = buffer.readInt()
             val headerLen = buffer.readInt()
