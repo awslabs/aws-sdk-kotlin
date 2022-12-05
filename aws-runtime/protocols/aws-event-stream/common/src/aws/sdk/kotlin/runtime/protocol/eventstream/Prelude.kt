@@ -48,6 +48,7 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
             val buffer = SdkBuffer()
             crcSource.read(buffer, PRELUDE_BYTE_LEN.toLong())
             val expectedCrc = source.readByteArray(4)
+            expectedCrc.reverse()
             val computedCrc = crcSource.digest()
 
             val totalLen = buffer.readInt()
