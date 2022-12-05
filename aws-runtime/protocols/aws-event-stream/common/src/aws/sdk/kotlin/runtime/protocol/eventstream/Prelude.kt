@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.smithy.kotlin.runtime.hashing.Crc32
 import aws.smithy.kotlin.runtime.io.*
 
 internal const val PRELUDE_BYTE_LEN = 8
@@ -28,13 +29,13 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
      * Encode the prelude + CRC to [dest] buffer
      */
     public fun encode(dest: SdkBufferedSink) {
-        val sink = CrcSink(dest)
+        val sink = HashingSink(Crc32(), dest)
         val buffer = sink.buffer()
 
         buffer.writeInt(totalLen)
         buffer.writeInt(headersLength)
         buffer.emit()
-        dest.writeInt(sink.digestValue().toInt())
+        dest.writeInt(sink.digest().toInt())
     }
 
     public companion object {
@@ -43,21 +44,30 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
          */
         public fun decode(source: SdkBufferedSource): Prelude {
             check(source.request(PRELUDE_BYTE_LEN_WITH_CRC.toLong())) { "Invalid message prelude" }
-            val crcSource = CrcSource(source)
+            val crcSource = HashingSource(Crc32(), source)
             val buffer = SdkBuffer()
             crcSource.read(buffer, PRELUDE_BYTE_LEN.toLong())
-            val expectedCrc = source.readInt().toUInt()
-            val computedCrc = crcSource.digestValue()
+            val expectedCrc = source.readByteArray(4)
+            val computedCrc = crcSource.digest()
 
             val totalLen = buffer.readInt()
             val headerLen = buffer.readInt()
 
             check(totalLen <= MAX_MESSAGE_SIZE) { "Invalid Message size: $totalLen" }
             check(headerLen <= MAX_HEADER_SIZE) { "Invalid Header size: $headerLen" }
-            check(expectedCrc == computedCrc) {
-                "Prelude checksum mismatch; expected=0x${expectedCrc.toString(16)}; calculated=0x${computedCrc.toString(16)}"
+            check(expectedCrc.contentEquals(computedCrc)) {
+                "Prelude checksum mismatch; expected=0x${expectedCrc.toInt().toString(16)}; calculated=0x${computedCrc.toInt().toString(16)}"
             }
             return Prelude(totalLen, headerLen)
         }
     }
+}
+
+// converts a big endian ByteArray to an integer
+private fun ByteArray.toInt(): Int {
+    var result = 0
+    for (i in this.indices) {
+        result = result or (this[i].toInt() shl 8 * (this.size - 1 - i))
+    }
+    return result
 }
