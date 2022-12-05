@@ -82,7 +82,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
 
             val expectedCrc = source.readByteArray(4)
             check(computedCrc.contentEquals(expectedCrc)) {
-                "Message checksum mismatch; expected 0x${expectedCrc.toUInt().toInt().toString(16)}; calculated=0x${computedCrc.toUInt().toInt().toString(16)}"
+                "Message checksum mismatch; expected=0x${expectedCrc.toUInt().toInt().toString(16)}; calculated=0x${computedCrc.toUInt().toInt().toString(16)}"
             }
             return message.build()
         }
