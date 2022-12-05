@@ -35,7 +35,7 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
         buffer.writeInt(totalLen)
         buffer.writeInt(headersLength)
         buffer.emit()
-        dest.writeInt(sink.digest().toInt())
+        dest.writeInt(sink.digest().toUInt().toInt())
     }
 
     public companion object {
@@ -56,18 +56,18 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
             check(totalLen <= MAX_MESSAGE_SIZE) { "Invalid Message size: $totalLen" }
             check(headerLen <= MAX_HEADER_SIZE) { "Invalid Header size: $headerLen" }
             check(expectedCrc.contentEquals(computedCrc)) {
-                "Prelude checksum mismatch; expected=0x${expectedCrc.toInt().toString(16)}; calculated=0x${computedCrc.toInt().toString(16)}"
+                "Prelude checksum mismatch; expected=0x${expectedCrc.toUInt().toInt().toString(16)}; calculated=0x${computedCrc.toUInt().toInt().toString(16)}"
             }
             return Prelude(totalLen, headerLen)
         }
     }
 }
 
-// converts a big endian ByteArray to an integer
-private fun ByteArray.toInt(): Int {
-    var result = 0
+// converts a big endian ByteArray to an unsigned integer
+private fun ByteArray.toUInt(): UInt {
+    var result = 0u
     for (i in this.indices) {
-        result = result or (this[i].toInt() shl 8 * (this.size - 1 - i))
+        result = result or ((this[i].toUInt() and 0xFFu) shl 8 * (this.size - 1 - i))
     }
     return result
 }

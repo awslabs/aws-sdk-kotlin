@@ -82,7 +82,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
 
             val expectedCrc = source.readByteArray(4)
             check(computedCrc.contentEquals(expectedCrc)) {
-                "Message checksum mismatch; expected 0x${expectedCrc.toInt().toString(16)}; calculated=0x${computedCrc.toInt().toString(16)}"
+                "Message checksum mismatch; expected 0x${expectedCrc.toUInt().toInt().toString(16)}; calculated=0x${computedCrc.toUInt().toInt().toString(16)}"
             }
             return message.build()
         }
@@ -128,17 +128,17 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
         buffer.write(payload)
 
         buffer.emit()
-        dest.writeInt(sink.digest().toInt())
+        dest.writeInt(sink.digest().toUInt().toInt())
     }
 }
 
 private fun emptyByteArray(): ByteArray = ByteArray(0)
 
-// converts a big-endian ByteArray to an integer
-private fun ByteArray.toInt(): Int {
-    var result = 0
+// converts a big-endian ByteArray to an unsigned integer
+private fun ByteArray.toUInt(): UInt {
+    var result = 0u
     for (i in this.indices) {
-        result = result or (this[i].toInt() shl 8 * (this.size - 1 - i))
+        result = result or ((this[i].toUInt() and 0xFFu) shl 8 * (this.size - 1 - i))
     }
     return result
 }
