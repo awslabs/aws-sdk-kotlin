@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.protocol.eventstream
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.hashing.Crc32
 import aws.smithy.kotlin.runtime.io.*
+import aws.smithy.kotlin.runtime.util.encodeToHex
 
 internal const val PRELUDE_BYTE_LEN = 8
 internal const val PRELUDE_BYTE_LEN_WITH_CRC = PRELUDE_BYTE_LEN + 4
@@ -35,7 +36,7 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
         buffer.writeInt(totalLen)
         buffer.writeInt(headersLength)
         buffer.emit()
-        dest.writeInt(sink.digest().toUInt().toInt())
+        dest.writeInt(sink.digest().toInt())
     }
 
     public companion object {
@@ -47,8 +48,8 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
             val crcSource = HashingSource(Crc32(), source)
             val buffer = SdkBuffer()
             crcSource.read(buffer, PRELUDE_BYTE_LEN.toLong())
+
             val expectedCrc = source.readByteArray(4)
-            expectedCrc.reverse()
             val computedCrc = crcSource.digest()
 
             val totalLen = buffer.readInt()
@@ -57,18 +58,18 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
             check(totalLen <= MAX_MESSAGE_SIZE) { "Invalid Message size: $totalLen" }
             check(headerLen <= MAX_HEADER_SIZE) { "Invalid Header size: $headerLen" }
             check(expectedCrc.contentEquals(computedCrc)) {
-                "Prelude checksum mismatch; expected=0x${expectedCrc.toUInt().toInt().toString(16)}; calculated=0x${computedCrc.toUInt().toInt().toString(16)}"
+                "Prelude checksum mismatch; expected=0x${expectedCrc.encodeToHex()}; calculated=0x${computedCrc.encodeToHex()}"
             }
             return Prelude(totalLen, headerLen)
         }
     }
 }
 
-// converts a big endian ByteArray to an unsigned integer
-private fun ByteArray.toUInt(): UInt {
-    var result = 0u
+// Convert a big-endian ByteArray to an Int
+private fun ByteArray.toInt(): Int {
+    var res = 0
     for (i in this.indices) {
-        result = result or ((this[i].toUInt() and 0xFFu) shl 8 * (this.size - 1 - i))
+        res = res or ((this[i].toInt() and 0xFF) shl (8 * (this.size - 1 - i)))
     }
-    return result
+    return res
 }

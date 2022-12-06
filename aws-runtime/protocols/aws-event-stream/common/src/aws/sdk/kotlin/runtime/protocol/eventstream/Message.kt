@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.protocol.eventstream
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.hashing.Crc32
 import aws.smithy.kotlin.runtime.io.*
+import aws.smithy.kotlin.runtime.util.encodeToHex
 
 internal const val MESSAGE_CRC_BYTE_LEN = 4
 
@@ -81,9 +82,8 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
             message.payload = messageBuffer.readByteArray(prelude.payloadLen.toLong())
 
             val expectedCrc = source.readByteArray(4)
-            expectedCrc.reverse()
             check(computedCrc.contentEquals(expectedCrc)) {
-                "Message checksum mismatch; expected=0x${expectedCrc.toUInt().toInt().toString(16)}; calculated=0x${computedCrc.toUInt().toInt().toString(16)}"
+                "Message checksum mismatch; expected=0x${expectedCrc.encodeToHex()}; calculated=0x${computedCrc.encodeToHex()}"
             }
             return message.build()
         }
@@ -129,19 +129,19 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
         buffer.write(payload)
 
         buffer.emit()
-        dest.writeInt(sink.digest().toUInt().toInt())
+        dest.writeInt(sink.digest().toInt())
     }
 }
 
 private fun emptyByteArray(): ByteArray = ByteArray(0)
 
-// converts a big-endian ByteArray to an unsigned integer
-private fun ByteArray.toUInt(): UInt {
-    var result = 0u
+// Convert a big-endian ByteArray to an Int
+private fun ByteArray.toInt(): Int {
+    var res = 0
     for (i in this.indices) {
-        result = result or ((this[i].toUInt() and 0xFFu) shl 8 * (this.size - 1 - i))
+        res = res or ((this[i].toInt() and 0xFF) shl (8 * (this.size - 1 - i)))
     }
-    return result
+    return res
 }
 
 /**
