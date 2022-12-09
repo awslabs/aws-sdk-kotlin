@@ -129,20 +129,11 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
         buffer.write(payload)
 
         buffer.emit()
-        dest.writeInt(sink.digest().toInt())
+        dest.write(sink.digest())
     }
 }
 
 private fun emptyByteArray(): ByteArray = ByteArray(0)
-
-// Convert a big-endian ByteArray to an Int
-private fun ByteArray.toInt(): Int {
-    var res = 0
-    for (i in this.indices) {
-        res = res or ((this[i].toInt() and 0xFF) shl (8 * (this.size - 1 - i)))
-    }
-    return res
-}
 
 /**
  * Used to constructing a single event stream [Message]

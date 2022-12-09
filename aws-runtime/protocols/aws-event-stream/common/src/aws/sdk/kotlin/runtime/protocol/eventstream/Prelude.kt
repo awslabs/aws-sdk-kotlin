@@ -36,7 +36,7 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
         buffer.writeInt(totalLen)
         buffer.writeInt(headersLength)
         buffer.emit()
-        dest.writeInt(sink.digest().toInt())
+        dest.write(sink.digest())
     }
 
     public companion object {
@@ -63,13 +63,4 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
             return Prelude(totalLen, headerLen)
         }
     }
-}
-
-// Convert a big-endian ByteArray to an Int
-private fun ByteArray.toInt(): Int {
-    var res = 0
-    for (i in this.indices) {
-        res = res or ((this[i].toInt() and 0xFF) shl (8 * (this.size - 1 - i)))
-    }
-    return res
 }
