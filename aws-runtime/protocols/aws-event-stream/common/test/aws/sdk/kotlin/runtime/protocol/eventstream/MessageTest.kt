@@ -248,7 +248,7 @@ class MessageTest {
         val buffer = sdkBufferOf(encoded)
         assertFailsWith<IllegalStateException> {
             Message.decode(buffer)
-        }.message.shouldContain("Message checksum mismatch; expected=0xdeadbeef; calculated=0x1a05860")
+        }.message.shouldContain("Message checksum mismatch; expected=0xdeadbeef; calculated=0x01a05860")
     }
 
     @Test

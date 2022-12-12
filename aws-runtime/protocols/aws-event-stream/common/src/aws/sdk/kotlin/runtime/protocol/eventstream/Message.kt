@@ -6,7 +6,9 @@
 package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.smithy.kotlin.runtime.hashing.Crc32
 import aws.smithy.kotlin.runtime.io.*
+import aws.smithy.kotlin.runtime.util.encodeToHex
 
 internal const val MESSAGE_CRC_BYTE_LEN = 4
 
@@ -50,14 +52,14 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
             check(totalLen <= MAX_MESSAGE_SIZE.toUInt()) { "Invalid Message size: $totalLen" }
 
             // Limiting the amount of data read by SdkBufferedSource is tricky and cause incorrect CRC
-            // if not careful (e.g. creating a buffered source of CrcSource will usually lead to incorrect results
+            // if not careful (e.g. creating a buffered source of a HashingSource will usually lead to incorrect results
             // because the entire point SdkBufferedSource (okio.BufferedSource) is to buffer larger chunks internally
             // to optimize short reads)
             val messageBuffer = SdkBuffer()
             val computedCrc = run {
-                val crcSource = CrcSource(source)
+                val crcSource = HashingSource(Crc32(), source)
                 crcSource.read(messageBuffer, totalLen.toLong() - MESSAGE_CRC_BYTE_LEN.toLong())
-                crcSource.crc
+                crcSource.digest()
             }
 
             val prelude = Prelude.decode(messageBuffer)
@@ -79,9 +81,9 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
 
             message.payload = messageBuffer.readByteArray(prelude.payloadLen.toLong())
 
-            val expectedCrc = source.readInt().toUInt()
-            check(computedCrc == expectedCrc) {
-                "Message checksum mismatch; expected=0x${expectedCrc.toString(16)}; calculated=0x${computedCrc.toString(16)}"
+            val expectedCrc = source.readByteArray(4)
+            check(computedCrc.contentEquals(expectedCrc)) {
+                "Message checksum mismatch; expected=0x${expectedCrc.encodeToHex()}; calculated=0x${computedCrc.encodeToHex()}"
             }
             return message.build()
         }
@@ -119,7 +121,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
 
         val prelude = Prelude(messageLen.toInt(), headersLen.toInt())
 
-        val sink = CrcSink(dest)
+        val sink = HashingSink(Crc32(), dest)
         val buffer = sink.buffer()
 
         prelude.encode(buffer)
@@ -127,7 +129,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
         buffer.write(payload)
 
         buffer.emit()
-        dest.writeInt(sink.crc.toInt())
+        dest.write(sink.digest())
     }
 }
 
