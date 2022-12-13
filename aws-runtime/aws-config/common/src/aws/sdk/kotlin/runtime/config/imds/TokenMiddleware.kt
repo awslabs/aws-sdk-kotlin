@@ -38,7 +38,7 @@ internal class TokenMiddleware(
     private var cachedToken = CachedValue<Token>(null, bufferTime = TOKEN_REFRESH_BUFFER_SECONDS.seconds, clock = clock)
 
     override fun install(op: SdkHttpOperation<*, *>) {
-        op.execution.finalize.register(this)
+        op.execution.onEachAttempt.register(this)
     }
 
     override suspend fun modifyRequest(req: SdkHttpRequest): SdkHttpRequest {
