@@ -20,7 +20,8 @@ internal class GlacierBodyChecksum(
     private val treeHasher: TreeHasher = TreeHasherImpl(defaultChunkSizeBytes, ::Sha256),
 ) : ModifyRequestMiddleware {
     override fun install(op: SdkHttpOperation<*, *>) {
-        op.execution.finalize.register(this)
+        // after signing
+        op.execution.receive.register(this)
     }
 
     override suspend fun modifyRequest(req: SdkHttpRequest): SdkHttpRequest {

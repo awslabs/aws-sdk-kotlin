@@ -17,18 +17,11 @@ import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
-import aws.smithy.kotlin.runtime.http.middleware.Retry
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
-import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
-import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitter
-import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitterOptions
-import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
-import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
@@ -70,15 +63,6 @@ public class EcsCredentialsProvider internal constructor(
 
     private val manageEngine = httpClientEngine == null
     private val httpClientEngine = httpClientEngine ?: DefaultHttpEngine()
-
-    private val retryMiddleware = run {
-        val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
-        val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
-        val strategy = StandardRetryStrategy(StandardRetryStrategyOptions.Default, tokenBucket, delayProvider)
-        val policy = EcsCredentialsRetryPolicy()
-        Retry<Credentials>(strategy, policy)
-    }
-
     override suspend fun getCredentials(): Credentials {
         val logger = coroutineContext.getLogger<EcsCredentialsProvider>()
         val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
@@ -99,9 +83,9 @@ public class EcsCredentialsProvider internal constructor(
                 service = "n/a"
             }
         }
+        op.execution.retryPolicy = EcsCredentialsRetryPolicy()
 
         op.install(ResolveEndpoint(provider = { Endpoint(url) }, params = null))
-        op.install(retryMiddleware)
 
         logger.debug { "retrieving container credentials" }
         val client = sdkHttpClient(httpClientEngine, manageEngine = false)

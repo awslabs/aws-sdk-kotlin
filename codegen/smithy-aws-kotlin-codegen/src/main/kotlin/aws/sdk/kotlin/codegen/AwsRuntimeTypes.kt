@@ -64,7 +64,7 @@ object AwsRuntimeTypes {
             val AwsDefaultRetryPolicy = runtimeSymbol("AwsDefaultRetryPolicy", AwsKotlinDependency.AWS_HTTP, "retries")
         }
         object Middleware {
-            val AwsRetryMiddleware = runtimeSymbol("AwsRetryMiddleware", AwsKotlinDependency.AWS_HTTP, "middleware")
+            val AwsRetryHeaderMiddleware = runtimeSymbol("AwsRetryHeaderMiddleware", AwsKotlinDependency.AWS_HTTP, "middleware")
         }
     }
 
