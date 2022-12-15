@@ -39,6 +39,10 @@ open class AwsHttpProtocolClientGenerator(
 
     override fun renderOperationSetup(writer: KotlinWriter, opIndex: OperationIndex, op: OperationShape) {
         super.renderOperationSetup(writer, opIndex, op)
+
+        // override the default retry policy
+        writer.write("op.execution.retryPolicy = #T", AwsRuntimeTypes.Http.Retries.AwsDefaultRetryPolicy)
+
         writer.write("mergeServiceDefaults(op.context)")
     }
 
