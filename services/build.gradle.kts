@@ -3,9 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka")
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 val platforms = listOf("common", "jvm")
@@ -136,4 +140,26 @@ subprojects {
     }
 
     apply(from = rootProject.file("gradle/publish.gradle"))
+
+    val relocateTask = tasks.register<ConfigureShadowRelocation>("relocateShadowJar") {
+        target = tasks.getByName("shadowJar") as ShadowJar
+        prefix = "aws.sdk.kotlin.shadow"
+    }
+
+    val shadowJarTask = tasks.register<ShadowJar>("shadowJar") {
+        group = "shadow"
+        archiveClassifier.set("")
+        archiveAppendix.set("shaded")
+
+        val jvmMain = kotlin.jvm().compilations["main"]
+        from(jvmMain.output) // Adds .class files
+        configurations += jvmMain.compileDependencyFiles as Configuration
+        configurations += jvmMain.runtimeDependencyFiles as Configuration
+
+        from(kotlin.metadata().compilations["main"].output) // Adds .kotlin_metadata files
+        // TODO anything else here? kotlin.metadata().compilations["main"] has a compileDependencyFiles but it's not
+        // convertable to a Configuration
+
+        dependsOn(relocateTask)
+    }
 }
