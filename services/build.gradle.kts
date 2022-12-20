@@ -141,10 +141,10 @@ subprojects {
 
     apply(from = rootProject.file("gradle/publish.gradle"))
 
-    val relocateTask = tasks.register<ConfigureShadowRelocation>("relocateShadowJar") {
-        target = tasks.getByName("shadowJar") as ShadowJar
-        prefix = "aws.sdk.kotlin.shadow"
-    }
+//    val relocateTask = tasks.register<ConfigureShadowRelocation>("relocateShadowJar") {
+//        target = tasks.getByName("shadowJar") as ShadowJar
+//        prefix = "aws.sdk.kotlin.shadow"
+//    }
 
     val shadowJarTask = tasks.register<ShadowJar>("shadowJar") {
         group = "shadow"
@@ -160,6 +160,6 @@ subprojects {
         // TODO anything else here? kotlin.metadata().compilations["main"] has a compileDependencyFiles but it's not
         // convertable to a Configuration
 
-        dependsOn(relocateTask)
+//        dependsOn(relocateTask)
     }
 }
