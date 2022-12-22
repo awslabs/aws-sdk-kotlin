@@ -208,7 +208,7 @@ AwsChunkedReader(
     private val signer: AwsSigner,
     private val signingConfig: AwsSigningConfig,
     private var previousSignature: ByteArray,
-    private var trailingHeaders: LazyHeaders?
+    private var trailingHeaders: LazyHeaders = LazyHeaders.Empty
 )
 ```
 
