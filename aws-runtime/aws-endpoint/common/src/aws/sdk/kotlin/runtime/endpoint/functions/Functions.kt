@@ -13,6 +13,12 @@ import aws.smithy.kotlin.runtime.util.net.isIpv6
 // the number of top-level components an arn contains (separated by colons)
 private const val ARN_COMPONENT_COUNT = 6
 
+private const val ARN_INDEX_PARTITION = 1
+private const val ARN_INDEX_VENDOR = 2
+private const val ARN_INDEX_REGION = 3
+private const val ARN_INDEX_NAMESPACE = 4
+private const val ARN_INDEX_RELATIVE_ID = 5
+
 /**
  * Identifies the partition for the given AWS region.
  */
@@ -83,14 +89,14 @@ public fun parseArn(value: String?): Arn? =
         val split = it.split(':', limit = ARN_COMPONENT_COUNT)
         if (split[0] != "arn") return null
         if (split.size != ARN_COMPONENT_COUNT) return null
-        if (split[5] == "") return null
+        if (split[ARN_INDEX_PARTITION].isEmpty() || split[ARN_INDEX_VENDOR].isEmpty() || split[ARN_INDEX_RELATIVE_ID].isEmpty()) return null
 
         return Arn(
-            split[1],
-            split[2],
-            split[3],
-            split[4],
-            split[5].split(':', '/'),
+            split[ARN_INDEX_PARTITION],
+            split[ARN_INDEX_VENDOR],
+            split[ARN_INDEX_REGION],
+            split[ARN_INDEX_NAMESPACE],
+            split[ARN_INDEX_RELATIVE_ID].split(':', '/'),
         )
     }
 
