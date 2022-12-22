@@ -1,0 +1,5 @@
+{
+    "id": "a4579c64-4158-47f0-86a2-c62d7d523529",
+    "type": "bugfix",
+    "description": "Correct validation of empty segments in ARN parser"
+}

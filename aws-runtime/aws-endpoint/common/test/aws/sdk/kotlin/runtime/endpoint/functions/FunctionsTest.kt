@@ -59,6 +59,24 @@ class FunctionsTest {
         assertNull(parseArn("arn:aws"))
 
     @Test
+    fun testParseInvalidArnNoPartition() =
+        assertNull(
+            parseArn("arn::service:region:account-id:resource-type/resource-id"),
+        )
+
+    @Test
+    fun testParseInvalidArnNoService() =
+        assertNull(
+            parseArn("arn:partition::region:account-id:resource-type/resource-id"),
+        )
+
+    @Test
+    fun testParseInvalidArnNoResource() =
+        assertNull(
+            parseArn("arn:partition:service:region:account-id:"),
+        )
+
+    @Test
     fun testParseArn() =
         assertEquals(
             Arn(
