@@ -293,8 +293,7 @@ The following request will not run any flexible checksums workflow, because no c
 val putObjectRequest = PutObjectRequest {
     bucket = "bucket"
     key = "key"
-    checksumAlgorithm = ChecksumAlgorithm.SHA1
-    checksumCrc32 = "checksum" // ignored
+    checksumCrc32 = "checksum"
 }
 ```
 
