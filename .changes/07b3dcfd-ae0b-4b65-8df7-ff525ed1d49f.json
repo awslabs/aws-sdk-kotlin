@@ -1,0 +1,5 @@
+{
+    "id": "07b3dcfd-ae0b-4b65-8df7-ff525ed1d49f",
+    "type": "misc",
+    "description": "Upgrade smithy-kotlin and sync AWS models."
+}
