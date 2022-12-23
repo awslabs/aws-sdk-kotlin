@@ -274,14 +274,17 @@ class PresignerGeneratorTest {
                      * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.
                      */
                     public var credentialsProvider: CredentialsProvider? = null
+
                     /**
                      * Provides the endpoint (hostname) and signing context to make requests to.
                      */
                     public var endpointProvider: SigningEndpointProvider? = null
+
                     /**
                      * AWS region to make requests for
                      */
                     public var region: String? = null
+
                     /**
                      * The implementation of AWS signer to use for signing requests
                      */
