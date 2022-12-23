@@ -26,7 +26,8 @@ internal class ResolvePredictEndpoint : InlineMiddleware<PredictRequest, Predict
             next.call(req)
         }
 
-        op.execution.mutate.intercept { req, next ->
+        // has to run after the default endpoint resolver (which currently runs at beforeRetryLoop)
+        op.execution.onEachAttempt.intercept { req, next ->
             // This should've been set by the initialize interceptor
             val endpoint = req.context.predictEndpoint
             requireNotNull(endpoint) { "Predict endpoint wasn't set by middleware." }
