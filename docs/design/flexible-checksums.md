@@ -3,6 +3,8 @@
 * **Type**: Design
 * **Author**: Matas Lauzadis
 
+(*) denotes a design choice with alternatives considered, listed in the appendix.
+
 # Abstract
 
 [Flexible checksums](https://aws.amazon.com/blogs/aws/new-additional-checksum-algorithms-for-amazon-s3/) is a feature 
@@ -38,7 +40,7 @@ the user has not opted-in, the SDK will continue the legacy behavior of injectin
 We need to support the following checksum algorithms: CRC32C, CRC32, SHA1, SHA256
 
 All of them are [already implemented for JVM](https://github.com/awslabs/smithy-kotlin/tree/main/runtime/hashing/jvm/src/aws/smithy/kotlin/runtime/hashing)
-~~**except for CRC32C**~~. This algorithm is essentially the same as CRC32, but uses a different polynomial under the hood.
+~~**except for CRC32C**~~*. This algorithm is essentially the same as CRC32, but uses a different polynomial under the hood.
   The SDK uses [java.util.zip's implementation of CRC32](https://docs.oracle.com/javase/8/docs/api/java/util/zip/CRC32.html), but this package 
 only began shipping CRC32C in Java 9. The SDK wants to support Java 8 at a minimum, and so will need to implement this rather than using a dependency
 (which is also [what the Java SDK does](https://github.com/aws/aws-sdk-java-v2/blob/master/core/sdk-core/src/main/java/software/amazon/awssdk/core/internal/checksums/factory/SdkCrc32C.java)).
@@ -67,9 +69,9 @@ to modify the request before it is sent on the network.
 
 There are many middleware which operate at the `mutate` stage. It is important that this new middleware come before 
 [AwsSigningMiddleware](https://github.com/awslabs/smithy-kotlin/blob/main/runtime/auth/aws-signing-common/common/src/aws/smithy/kotlin/runtime/auth/awssigning/middleware/AwsSigningMiddleware.kt#L26)
-because that middleware is dependent on the header values set in this new middleware.
+because that middleware is dependent on the header values set in this new middleware (specifically `x-amz-trailer`).
 
-The SDK exposes an `order` integer parameter (defaulted to 0) which is used to model dependencies between middleware.
+The SDK exposes an `order` integer parameter which is used to model dependencies between middleware.
 The `order` of AwsSigningMiddleware has already been set to 126, which ensures it will be executed towards the end of the mutate middleware stack,
 after this flexible checksums middleware has run.
 
@@ -92,7 +94,7 @@ For all normal requests, the checksum should be injected into the header.
 ### Streaming Requests
 For streaming requests which are either streaming-signing or unsigned, the checksum must be sent as a trailing header via `aws-chunked` encoding.
 
-To indicate that a trailing header will be sent, the SDK sets the `x-amz-trailer` header to a String of comma-delimited trailing header names.
+To indicate that a trailing header will be sent, the SDK sets the `x-amz-trailer` header to a string of comma-delimited trailing header names.
 The service uses this header to parse the trailing headers that are sent later.
 
 For flexible checksums, we append the [checksum header name](#checksum-header-name) to the `x-amz-trailer` header.
@@ -187,7 +189,7 @@ no knowledge of the HashingSource/HashingByteReadChannel it is reading from.
 
 So, how will the value of the checksum be passed to the AwsChunked body?
 
-### Lazy Headers
+### Lazy Headers (*)
 A concept of deferred, or "lazy" header values is introduced. At initialization, the aws-chunked body needs to know that
 a trailing header *will be sent*, but the value can't be ready until the body has been fully consumed.
 
@@ -236,21 +238,28 @@ For example, if the service returns both SHA256 and CRC32 checksums, the SDK mus
 To run this validation process, a new middleware is inserted at the `receive` stage. During an HTTP request lifecycle,
 this stage represents the first opportunity to access the response prior to deserialization into the operation's Response type.
 
-### Rolling Hash
+### Deferred Hash (*)
 
-It is important to calculate the checksum in a rolling manner. The SDK can't read the entire response body into memory,
-as this may cause users' machines to run out of memory.
+For efficiency, the SDK must compute the hash while the user is consuming the response body. 
 
-### Notifying the User
+The `receive` stage is run prior to the user consuming the body, so while in this stage, the SDK will wrap the response
+body in a hashing body, in a similar manner to the [request middleware](#aws-chunked). The execution context will be updated
+with:
 
-In some cases, a service will not return a checksum even if it is requested.
+- expected checksum: the checksum value from response headers
+- calculated checksum: a LazyAsyncValue containing the calculated checksum, which will only be fetched after the entire response body is consumed
+- checksum header name: the name of the header the SDK will be validating, which allows the user to see if validation 
+occurred and which checksum algorithm was used.
 
-Because of this, the SDK must provide a mechanism for users to verify whether checksum validation occurred, 
+### Notifying the User of Validation
+
+In some cases, a service will not return a checksum even if it is requested. Because of this, the SDK must provide a mechanism for users to verify whether checksum validation occurred, 
 and which checksum algorithm was used for the validation.
 
-// TODO We can store this in the execution context, which can then be read by the user. (how?)
+The SDK will store the checksum header name in the execution context. Users can then check the execution context for that
+variable, and if it's present, will know that validation occurred.
 
-// TODO interceptors?
+Today the SDK does not provide a mechanism for users to observe the execution context, but that will be added as part of Interceptors. 
 
 # Appendix
 
@@ -276,7 +285,7 @@ val putObjectRequest = PutObjectRequest {
 ```
 
 ### SHA1 Checksum with Ignored Precalculated Value
-The following request will have its pre-calculated checksum ignored, since it does not match the checksum algorithm specified.
+The following request will have its pre-calculated checksum ignored, since it does not match the chosen checksum algorithm.
 ```kotlin
 val putObjectRequest = PutObjectRequest {
     bucket = "bucket"
@@ -287,7 +296,7 @@ val putObjectRequest = PutObjectRequest {
 ```
 
 ### Providing only the Precalculated Value is Invalid
-The following request will not run any flexible checksums workflow, because no checksum algorithm was specified.
+The following request will not run any flexible checksums processes, because no checksum algorithm was specified.
 
 ```kotlin
 val putObjectRequest = PutObjectRequest {
@@ -307,6 +316,39 @@ val getObjectRequest = GetObjectRequest {
     checksumMode = ChecksumMode.Enabled
 }
 ```
+
+## Alternative Designs Considered
+
+### Lazy Headers
+
+Instead of LazyAsyncValue, CompletableFuture / Future were evaluated for use as a deferred header value.
+
+LazyAsyncValue was ultimately chosen because:
+- it is already used in other similar places by the SDK
+  - it's better to reuse something that already exists
+- CompletableFuture uses coroutines, which adds unnecessary cognitive load for developers
+
+### Deferred Hash
+
+Instead of calculating the response checksum as the body is consumed by the user, calculation was being done in the middleware.
+The response body was being hashed and validated prior to passing the response on to the user.
+
+There are pros and cons to this design choice, but ultimately checksum calculation in the middleware was decided against.
+
+Pros:
+- The checksum is calculated prior to passing the response to the user
+  - With the accepted design choice, if the checksum is invalid, the user will only know about it after they've consumed
+    the whole response body. If they are sending the response body downstream, for example, they would then have to claw it
+    back since the data is not valid
+  - This proposed design choice would allow the SDK to throw an exception on an invalid checksum *before* giving it to
+    the user
+
+Cons:
+- Double-read of the response body (once to calculate checksum and once by the user)
+- May require buffering in-memory or even in-disk for very large responses
+
+Ultimately, it was decided that because we don't expect invalid checksums to occur often, the design flaw around checksum invalidation
+is less of a worry than other cons such as double-reads of the response body.
 
 # Revision history
 - 10/24/2022 - Created
