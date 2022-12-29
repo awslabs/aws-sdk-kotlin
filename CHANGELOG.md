@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.19.2-beta] - 12/22/2022
+
+### Fixes
+* Correct validation of empty segments in ARN parser
+
+### Miscellaneous
+* Upgrade smithy-kotlin and sync AWS models.
+
+## [0.19.1-beta] - 12/15/2022
+
+### Miscellaneous
+* Sync AWS service models
+
 ## [0.19.0-beta] - 12/01/2022
 
 ### Miscellaneous
