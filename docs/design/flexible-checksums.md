@@ -238,9 +238,9 @@ For example, if the service returns both SHA256 and CRC32 checksums, the SDK mus
 To run this validation process, a new middleware is inserted at the `receive` stage. During an HTTP request lifecycle,
 this stage represents the first opportunity to access the response prior to deserialization into the operation's Response type.
 
-### Deferred Hash (*)
+### Deferred Checksum Validation (*)
 
-For efficiency, the SDK must compute the hash while the user is consuming the response body. 
+For efficiency, it is best for the SDK to compute the checksum as the user is consuming the response body. 
 
 The `receive` stage is run prior to the user consuming the body, so while in this stage, the SDK will wrap the response
 body in a hashing body, in a similar manner to the [request middleware](#aws-chunked). The execution context will be updated
@@ -248,7 +248,7 @@ with:
 
 - expected checksum: the checksum value from response headers
 - calculated checksum: a LazyAsyncValue containing the calculated checksum, which will only be fetched after the entire response body is consumed
-- checksum header name: the name of the header the SDK will be validating, which allows the user to see if validation 
+- checksum header name: the name of the checksum header to be validated, which allows the user to see if validation 
 occurred and which checksum algorithm was used.
 
 ### Notifying the User of Validation
@@ -328,12 +328,13 @@ LazyAsyncValue was ultimately chosen because:
   - it's better to reuse something that already exists
 - CompletableFuture uses coroutines, which adds unnecessary cognitive load for developers
 
-### Deferred Hash
+### Deferred Checksum Validation
 
-Instead of calculating the response checksum as the body is consumed by the user, calculation was being done in the middleware.
+Initially, instead of calculating the response checksum as the body is consumed by the user, 
+calculation was being done in a blocking manner in the middleware.
 The response body was being hashed and validated prior to passing the response on to the user.
 
-There are pros and cons to this design choice, but ultimately checksum calculation in the middleware was decided against.
+There are pros and cons to this design choice, but ultimately it was decided against blocking to calculate the checksum.
 
 Pros:
 - The checksum is calculated prior to passing the response to the user
