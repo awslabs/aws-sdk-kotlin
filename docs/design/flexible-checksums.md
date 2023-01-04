@@ -25,7 +25,7 @@ There are four properties to this trait:
 
 ### Deprecating `httpChecksumRequired`
 
-Before flexible checksums, services used the `httpChecksumRequired` trait to require a checksum in the request. 
+Before flexible checksums, services used the [`httpChecksumRequired` trait](https://smithy.io/2.0/spec/http-bindings.html#httpchecksumrequired-trait) to require a checksum in the request. 
 This is computed using the MD5 algorithm and injected in the request under the `Content-MD5` header. 
 
 This `httpChecksumRequired` trait is now deprecated. AWS services should use the `httpChecksum` trait's
@@ -104,12 +104,12 @@ The user may pre-calculate the checksum and provide it as input. The SDK automat
 and adds it to the request headers. When this header is present, the rest of the flexible checksums request workflow is skipped.
 
 Note: the user must still specify the `ChecksumAlgorithm` even if the checksum itself is supplied as input.
-If the input checksum and checksum algorithm do not match, the input checksum will be ignored and the checksum will be calculated
+If the input checksum's algorithm and the checksum algorithm do not match, the input checksum will be ignored and the checksum will be calculated
 internally. See [the appendix](#sha1-checksum-with-ignored-precalculated-value) for an example.
 
 ## Validating Input Algorithms
 
-When a user sets the `requestAlgorithmMember` property, they are choosing to opt-in to sending request checksums. 
+When a user sets the `requestAlgorithmMember` property, they are opting-in to sending request checksums. 
 
 This property is modeled as an enum value, so validation needs to be done prior to using it. The enum is generated from the service model,
 but the set of possible enum values is constrained by the [`httpChecksum` trait specification](#checksum-algorithms). The following code will match a `String` input to a [`HashFunction`](https://github.com/awslabs/smithy-kotlin/blob/5773afb348c779b9e4aa9689836844f21a571908/runtime/hashing/common/src/aws/smithy/kotlin/runtime/hashing/HashFunction.kt).
@@ -167,8 +167,8 @@ or a `HashingByteReadChannel`, depending on its type. These are new types which 
 respectively, along with a `HashFunction`. These constructs will use the provided hash function 
 to compute the checksum as the data is being read.
 
-Further down the middleware chain, this hashing body will be wrapped once more in an aws-chunked body. This body is used to format the 
-underlying data source into aws-chunked content encoding.
+Further down the middleware chain this hashing body will be wrapped once more, in an `aws-chunked` body. This body is used to format the 
+underlying data source into `aws-chunked` content encoding.
 
 Today the [`AwsChunkedReader`](https://github.com/awslabs/smithy-kotlin/blob/5773afb348c779b9e4aa9689836844f21a571908/runtime/auth/aws-signing-common/common/src/aws/smithy/kotlin/runtime/auth/awssigning/internal/AwsChunkedReader.kt)
 has the following signature:
@@ -204,7 +204,7 @@ Since the `AwsChunkedReader` will only call `get()` on the trailing headers afte
 be computed and ready to retrieve from the `LazyAsyncValue`.
 
 The `aws-chunked` trailing headers implementation is refactored to use a new `LazyHeaders` class, 
-which maps `String` -> `List<LazyAsyncValue&lt;String>>`. Below is the new signature of `AwsChunkedReader`:
+which maps `String` -> `List<LazyAsyncValue<String>>`. Below is the new signature of `AwsChunkedReader`:
 
 ```kotlin
 AwsChunkedReader(
