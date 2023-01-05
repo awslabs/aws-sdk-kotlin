@@ -329,12 +329,28 @@ val getObjectRequest = GetObjectRequest {
 # Appendix: Alternative Designs Considered
 
 ## CompletableFuture Deferred Headers
-Instead of `LazyAsyncValue`, `CompletableFuture` / `Future` were evaluated for use as a deferred header value.
+Instead of `LazyAsyncValue`, `CompletableFuture` and `RunnableFuture` were evaluated for use as a deferred header value.
 
-`LazyAsyncValue` was ultimately chosen because:
-- it is already used in other similar places by the SDK
-  - it's better to reuse something that already exists
-- `CompletableFuture` uses coroutines, which adds unnecessary cognitive load for developers
+### `CompletableFuture`
+
+Pros:
+- concept of "completion"
+Cons:
+- eager execution
+  - the checksum future will be computed immediately, before the checksum is fully calculated
+  - this could be solved by "nesting" `CompletableFuture`s: making the "checksum" future's execution dependent on a different "start" future completing
+- not supported on Android API < 24, if we plan to downgrade `minSdkVersion` to 21
+
+### `RunnableFuture`
+Pros:
+- execution can be delayed until the result is actually needed
+  - fixes the issue with eager execution in `CompletableFuture`
+Cons:
+- there is no concept of completion
+  - calling `.get()` on a `Future` / `RunnableFuture` will block until it's complete. 
+it can throw exceptions if the computation was cancelled, threw an exception, or if the thread was interrupted while blocking
+
+Ultimately, ... was chosen because ...
 
 ## Storing Trailing Headers in `HttpRequest` or `HttpBody` 
 It is useful to allow users to modify the trailing headers at any point before the request is signed.
