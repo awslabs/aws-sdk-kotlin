@@ -243,9 +243,12 @@ For example, if the service returns both `SHA256` and `CRC32` checksums, the SDK
 To run this validation process, a new middleware is inserted at the `receive` stage. During an HTTP request lifecycle,
 this stage represents the first opportunity to access the response prior to deserialization into the operation's response type.
 
+If the request has a non-streaming response, the middleware will compute and validate the response checksum in a blocking
+manner. If there is a checksum mismatch, an exception will be thrown.
+
 #### Deferred Checksum Validation
 
-For efficiency, it is best for the SDK to compute the checksum as the user is consuming the response body. 
+For streaming responses, it is best for the SDK to compute the checksum as the user is consuming the response body. 
 
 The `receive` stage is run prior to the user consuming the body, so while in this stage, the SDK will wrap the response
 body in a hashing body, in a similar manner to the request middleware. The execution context will be updated with:
@@ -255,7 +258,7 @@ body in a hashing body, in a similar manner to the request middleware. The execu
 - checksum header name: the name of the checksum header to be validated, which allows the user to see if validation 
 occurred and which checksum algorithm was used.
 
-The checksum will be validated after the response is fully consumed by the user. If there is a checksum mismatch, an exception will be thrown. 
+The checksum will be validated after the response is fully consumed by the user. 
 
 #### Notifying the User of Validation
 
