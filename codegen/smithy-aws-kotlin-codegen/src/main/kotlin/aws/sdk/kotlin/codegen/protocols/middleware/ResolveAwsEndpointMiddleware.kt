@@ -22,10 +22,12 @@ class ResolveAwsEndpointMiddleware(private val ctx: ProtocolGenerator.Generation
     override val name: String = "ResolveAwsEndpoint"
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+        val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
         writer.withBlock(
-            "op.install(#T(config.endpointProvider) {",
+            "op.interceptors.add(#T<#T>(config.endpointProvider) {",
             "})",
             ResolveEndpointMiddlewareGenerator.getSymbol(ctx.settings),
+            inputSymbol,
         ) {
             write("#T(config)", bindAwsBuiltinsSymbol(ctx.settings))
             ctx.service.getEndpointRules()?.let { rules ->
