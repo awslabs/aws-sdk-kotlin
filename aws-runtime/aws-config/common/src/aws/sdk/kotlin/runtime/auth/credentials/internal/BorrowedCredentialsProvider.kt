@@ -7,11 +7,12 @@ package aws.sdk.kotlin.runtime.auth.credentials.internal
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.io.Closeable
 
 private class BorrowedCredentialsProvider(
     private val borrowed: CredentialsProvider,
-) : CredentialsProvider by borrowed, Closeable {
+) : CredentialsProvider by borrowed {
+    override fun share() { }
+
     override fun close() { }
 }
 

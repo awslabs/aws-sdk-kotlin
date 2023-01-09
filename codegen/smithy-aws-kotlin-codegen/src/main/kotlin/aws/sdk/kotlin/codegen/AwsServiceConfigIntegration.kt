@@ -42,10 +42,12 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
             propertyType = ConfigPropertyType.Custom(render = { prop, writer ->
                 writer.write(
-                    "public val #1L: #2T = builder.#1L?.borrow() ?: #3T(httpClientEngine = httpClientEngine, region = region)",
+                    "public val #1L: #2T = builder.#1L?.#3T() ?: #4T(httpClientEngine = httpClientEngine, region = region).#5T()",
                     prop.propertyName,
                     prop.symbol,
+                    AwsRuntimeTypes.Config.Credentials.borrow,
                     AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
+                    AwsRuntimeTypes.Config.Credentials.manage,
                 )
             })
 

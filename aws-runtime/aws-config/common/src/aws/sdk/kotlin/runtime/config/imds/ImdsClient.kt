@@ -16,6 +16,7 @@ import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
+import aws.smithy.kotlin.runtime.http.engine.internal.borrow
 import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
@@ -67,12 +68,12 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
 
     init {
         require(maxRetries > 0) { "maxRetries must be greater than zero" }
-        val engine = builder.engine ?: DefaultHttpEngine {
+        val engine = builder.engine?.borrow() ?: DefaultHttpEngine {
             connectTimeout = 1.seconds
             socketReadTimeout = 1.seconds
         }
 
-        httpClient = sdkHttpClient(engine, manageEngine = builder.engine == null)
+        httpClient = sdkHttpClient(engine)
     }
 
     // cached middleware instances
