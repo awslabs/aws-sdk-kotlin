@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.codegen
 
-import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
@@ -77,7 +76,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
     private val overrideServiceCompanionObjectWriter = SectionWriter { writer, _ ->
         // override the service client companion object for how a client is constructed
-        val serviceSymbol: Symbol = writer.getContextValue(ServiceGenerator.SectionServiceCompanionObject.ServiceSymbol)
+        val serviceSymbol = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
         writer.withBlock("public companion object {", "}") {
             withBlock(
                 "public operator fun invoke(block: Config.Builder.() -> Unit): #L {",
@@ -114,7 +113,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
     override val sectionWriters: List<SectionWriterBinding> =
         listOf(
-            SectionWriterBinding(ServiceGenerator.SectionServiceCompanionObject, overrideServiceCompanionObjectWriter),
+            SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, overrideServiceCompanionObjectWriter),
         )
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> =

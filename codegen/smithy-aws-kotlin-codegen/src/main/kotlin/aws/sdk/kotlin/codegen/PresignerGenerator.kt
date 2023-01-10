@@ -21,6 +21,7 @@ import software.amazon.smithy.kotlin.codegen.core.defaultName
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionId
+import software.amazon.smithy.kotlin.codegen.integration.SectionKey
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
@@ -66,10 +67,10 @@ class PresignerGenerator : KotlinIntegration {
      * Identifies the [PresignConfigFnSection] section for overriding generated implementation.
      */
     object PresignConfigFnSection : SectionId {
-        const val CodegenContext = "CodegenContext"
-        const val OperationId = "OperationId"
-        const val HttpBindingResolver = "HttpBindingResolver"
-        const val DefaultTimestampFormat = "DefaultTimestampFormat"
+        val CodegenContext: SectionKey<CodegenContext> = SectionKey("CodegenContext")
+        val OperationId: SectionKey<String> = SectionKey("OperationId")
+        val HttpBindingResolver: SectionKey<HttpBindingResolver> = SectionKey("HttpBindingResolver")
+        val DefaultTimestampFormat: SectionKey<TimestampFormatTrait.Format> = SectionKey("DefaultTimestampFormat")
     }
 
     // Symbols which should be imported
@@ -189,7 +190,7 @@ class PresignerGenerator : KotlinIntegration {
             )
 
             // Generate presign config function
-            val contextMap = mapOf(
+            val contextMap: Map<SectionKey<*>, Any> = mapOf(
                 PresignConfigFnSection.OperationId to presignableOp.operationId,
                 PresignConfigFnSection.CodegenContext to ctx,
                 PresignConfigFnSection.HttpBindingResolver to httpBindingResolver,
@@ -284,7 +285,7 @@ class PresignerGenerator : KotlinIntegration {
         presignableOp: PresignableOperation,
         serializerSymbol: Symbol,
         presignConfigFnVisitor: PresignConfigFnVisitor,
-        contextMap: Map<String, Any?>,
+        contextMap: Map<SectionKey<*>, Any?>,
     ) {
         writer.withBlock(
             "private suspend fun $requestConfigFnName(input: $requestTypeName, duration: #T) : #T {",

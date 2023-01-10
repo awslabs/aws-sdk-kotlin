@@ -81,7 +81,6 @@ open class AwsHttpProtocolClientGenerator(
             write("ctx.#T(#T.CredentialsProvider, config.credentialsProvider)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
 
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
-                addImport(RuntimeTypes.Core.IdempotencyTokenProviderExt)
                 write("config.idempotencyTokenProvider?.let { ctx[#T.IdempotencyTokenProvider] = it }", sdkClientOptionSym)
             }
         }
