@@ -36,7 +36,7 @@ class S3SigningConfig : KotlinIntegration {
         val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.service)
 
         return resolved.replace(newValue = S3SigningMiddleware(signingServiceName)) { middleware ->
-            middleware.name == RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningMiddleware.name
+            middleware.name == RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsHttpSigner.name
         }
     }
 }

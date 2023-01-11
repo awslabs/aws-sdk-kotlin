@@ -7,8 +7,8 @@ package aws.sdk.kotlin.runtime.endpoint.functions
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.endpoints.functions.isValidHostLabel
-import aws.smithy.kotlin.runtime.util.net.isIpv4
-import aws.smithy.kotlin.runtime.util.net.isIpv6
+import aws.smithy.kotlin.runtime.net.isIpv4
+import aws.smithy.kotlin.runtime.net.isIpv6
 
 // the number of top-level components an arn contains (separated by colons)
 private const val ARN_COMPONENT_COUNT = 6

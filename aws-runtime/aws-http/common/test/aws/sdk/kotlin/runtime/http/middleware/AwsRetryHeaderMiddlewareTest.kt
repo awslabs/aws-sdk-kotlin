@@ -1,6 +1,5 @@
 package aws.sdk.kotlin.runtime.http.middleware
 
-import aws.sdk.kotlin.runtime.http.retries.AwsDefaultRetryPolicy
 import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
@@ -25,7 +24,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AwsRetryMiddlewareTest {
+class AwsRetryHeaderMiddlewareTest {
 
     private val mockEngine = object : HttpClientEngineBase("test") {
         override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
@@ -56,7 +55,7 @@ class AwsRetryMiddlewareTest {
         )
         val maxAttempts = strategy.options.maxAttempts
 
-        op.install(AwsRetryMiddleware(strategy, AwsDefaultRetryPolicy))
+        op.install(AwsRetryHeaderMiddleware())
         op.roundTrip(client, Unit)
 
         val calls = op.context.attributes[HttpOperationContext.HttpCallList]

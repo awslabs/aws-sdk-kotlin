@@ -1,13 +1,9 @@
 package aws.sdk.kotlin.runtime.http.middleware
 
-import aws.smithy.kotlin.runtime.http.middleware.Retry
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.io.Handler
-import aws.smithy.kotlin.runtime.retries.RetryStrategy
-import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import aws.smithy.kotlin.runtime.util.InternalApi
-import aws.smithy.kotlin.runtime.util.get
 
 /**
  * The per/operation unique client side ID header name. This will match
@@ -21,26 +17,27 @@ internal const val AMZ_SDK_INVOCATION_ID_HEADER = "amz-sdk-invocation-id"
 internal const val AMZ_SDK_REQUEST_HEADER = "amz-sdk-request"
 
 /**
- * Retry requests with the given strategy and policy. This middleware customizes the default [Retry] implementation
- * to add AWS specific retry headers
- *
- * @param strategy the [RetryStrategy] to retry failed requests with
- * @param policy the [RetryPolicy] used to determine when to retry
+ * This middleware adds AWS specific retry headers
  */
 @InternalApi
-public class AwsRetryMiddleware<O>(
-    strategy: RetryStrategy,
-    policy: RetryPolicy<Any?>,
-) : Retry<O>(strategy, policy) {
-
-    override suspend fun <H : Handler<SdkHttpRequest, O>> handle(request: SdkHttpRequest, next: H): O {
-        request.subject.header(AMZ_SDK_INVOCATION_ID_HEADER, request.context.sdkRequestId)
-        return super.handle(request, next)
+public class AwsRetryHeaderMiddleware<O> : MutateMiddleware<O> {
+    private var attempt = 0
+    private var maxAttempts: Int? = null
+    override fun install(op: SdkHttpOperation<*, O>) {
+        maxAttempts = op.execution.retryStrategy.options.maxAttempts
+        op.execution.onEachAttempt.register(this)
     }
 
-    override fun onAttempt(request: SdkHttpRequest, attempt: Int) {
+    override suspend fun <H : Handler<SdkHttpRequest, O>> handle(request: SdkHttpRequest, next: H): O {
+        attempt++
+        request.subject.header(AMZ_SDK_INVOCATION_ID_HEADER, request.context.sdkRequestId)
+        onAttempt(request, attempt)
+        return next.call(request)
+    }
+
+    private fun onAttempt(request: SdkHttpRequest, attempt: Int) {
         // setting ttl would never be accurate, just set what we know which is attempt and maybe max attempt
-        val maxAttempts = strategy.options.maxAttempts?.let { "; max=$it" } ?: ""
-        request.subject.header(AMZ_SDK_REQUEST_HEADER, "attempt=${attempt}$maxAttempts")
+        val formattedMaxAttempts = maxAttempts?.let { "; max=$it" } ?: ""
+        request.subject.header(AMZ_SDK_REQUEST_HEADER, "attempt=${attempt}$formattedMaxAttempts")
     }
 }
