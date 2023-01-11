@@ -4,11 +4,18 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
+import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
-internal expect suspend fun executeCommand(command: String, platformProvider: PlatformProvider): Pair<Int, String>
+internal expect suspend fun executeCommand(
+    command: String,
+    platformProvider: PlatformProvider,
+    maxOutputLengthBytes: Long,
+    timeoutMillis: Long,
+    clock: Clock = Clock.System
+): Pair<Int, String>
 
 private const val PROVIDER_NAME = "Process"
 
@@ -28,12 +35,17 @@ public class ProcessCredentialsProvider(
      * The platform provider
      */
     private val platformProvider: PlatformProvider = Platform,
+
+    private val maxOutputLengthBytes: Long = 64 * 1024,
+
+    private val timeoutMillis: Long = 1000
+
 ) : CredentialsProvider {
     override suspend fun getCredentials(): Credentials {
         val logger = Logger.getLogger<ProcessCredentialsProvider>()
 
         val (exitCode, output) = try {
-            executeCommand("\"$credentialProcess\"", platformProvider)
+            executeCommand("\"$credentialProcess\"", platformProvider, maxOutputLengthBytes, timeoutMillis)
         } catch (ex: Exception) {
             throw CredentialsProviderException("Failed to execute command", ex)
         }

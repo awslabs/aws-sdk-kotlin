@@ -16,7 +16,7 @@ class ProcessCredentialsProviderTest {
     @Test
     fun testSuccessWithExpiringCredentials() = runTest {
         mockkStatic(::executeCommand)
-        coEvery { executeCommand(any(), any()) }.returns(
+        coEvery { executeCommand(any(), any(), any(), any(), any()) }.returns(
             Pair(
                 0,
                 """
@@ -47,7 +47,7 @@ class ProcessCredentialsProviderTest {
     @Test
     fun testSuccessWithNonExpiringCredentials() = runTest {
         mockkStatic(::executeCommand)
-        coEvery { executeCommand(any(), any()) }.returns(
+        coEvery { executeCommand(any(), any(), any(), any(), any()) }.returns(
             Pair(
                 0,
                 """
@@ -77,7 +77,7 @@ class ProcessCredentialsProviderTest {
     @Test
     fun testMissingVersion() = runTest {
         mockkStatic(::executeCommand)
-        coEvery { executeCommand(any(), any()) }.returns(
+        coEvery { executeCommand(any(), any(), any(), any(), any()) }.returns(
             Pair(
                 0,
                 """
@@ -100,7 +100,7 @@ class ProcessCredentialsProviderTest {
     @Test
     fun testUnsupportedVersion() = runTest {
         mockkStatic(::executeCommand)
-        coEvery { executeCommand(any(), any()) }.returns(
+        coEvery { executeCommand(any(), any(), any(), any(), any()) }.returns(
             Pair(
                 0,
                 """
@@ -127,7 +127,7 @@ class ProcessCredentialsProviderTest {
         val stderr = "stderr message!"
 
         mockkStatic(::executeCommand)
-        coEvery { executeCommand(any(), any()) }.returns(Pair(exitCode, stderr))
+        coEvery { executeCommand(any(), any(), any(), any(), any()) }.returns(Pair(exitCode, stderr))
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
         val ex = assertFailsWith<CredentialsProviderException> { processCredentialsProvider.getCredentials() }
