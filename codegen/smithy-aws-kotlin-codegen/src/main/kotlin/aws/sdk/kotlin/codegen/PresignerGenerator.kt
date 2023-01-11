@@ -26,15 +26,15 @@ import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.expectTrait
-import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
-import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointParameterBindingGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointParametersGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointProviderGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
+import software.amazon.smithy.kotlin.codegen.rendering.util.AbstractConfigGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.signing.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.model.shapes.OperationShape
@@ -209,7 +209,7 @@ class PresignerGenerator : KotlinIntegration {
         }
 
         // Generate presign config builder
-        val clientProperties: List<ClientConfigProperty> = getClientProperties(sigv4ServiceName, serviceShape.sdkId)
+        val clientProperties: List<ConfigProperty> = getClientProperties(sigv4ServiceName, serviceShape.sdkId)
         val rc = RenderingContext(writer, serviceShape, ctx.model, ctx.symbolProvider, ctx.settings)
         renderPresignConfigBuilder(writer, presignConfigTypeName, rc, clientProperties)
     }
@@ -218,7 +218,7 @@ class PresignerGenerator : KotlinIntegration {
         writer: KotlinWriter,
         presignConfigTypeName: String,
         renderingContext: RenderingContext<ServiceShape>,
-        clientProperties: List<ClientConfigProperty>,
+        clientProperties: List<ConfigProperty>,
     ) {
         writer.dokka {
             write("Provides a subset of the service client configuration necessary to presign a request.")
@@ -228,13 +228,8 @@ class PresignerGenerator : KotlinIntegration {
         writer.addImport(AwsRuntimeTypes.Core.ClientException)
         writer.putContext("configClass.name", presignConfigTypeName)
 
-        val ccg = ClientConfigGenerator(
-            renderingContext,
-            false,
-            RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig,
-            *clientProperties.toTypedArray(),
-        )
-        ccg.render()
+        val ccg = object : AbstractConfigGenerator() {}
+        ccg.render(renderingContext, clientProperties, renderingContext.writer)
     }
 
     // Captures protocol-specific state needed for presigning requests
@@ -379,36 +374,35 @@ class PresignerGenerator : KotlinIntegration {
     }
 
     // Provide all client properties for a presigner client
-    private fun getClientProperties(sigv4ServiceName: String, serviceId: String): List<ClientConfigProperty> =
+    private fun getClientProperties(sigv4ServiceName: String, serviceId: String): List<ConfigProperty> =
         listOf(
-            ClientConfigProperty {
+            ConfigProperty {
                 symbol = RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigner
                 name = "signer"
                 documentation = "The implementation of AWS signer to use for signing requests"
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultAwsSigner")
+                propertyType = ConfigPropertyType.RequiredWithDefault("DefaultAwsSigner")
                 additionalImports = listOf(
                     RuntimeTypes.Auth.Signing.AwsSigningStandard.DefaultAwsSigner,
                 )
             },
-            ClientConfigProperty {
+            ConfigProperty {
                 symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
                 name = "credentialsProvider"
                 documentation =
                     "The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used."
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                // TODO - we could probably relax this and instead create a default chain in createPresignedRequest on-demand in the runtime and close it when done signing
-                propertyType = ClientConfigPropertyType.Required()
+                propertyType = ConfigPropertyType.Required()
             },
-            ClientConfigProperty {
+            ConfigProperty {
                 symbol = RuntimeTypes.Auth.Signing.AwsSigningCommon.SigningEndpointProvider
                 name = "endpointProvider"
                 documentation =
                     "Provides the endpoint (hostname) and signing context to make requests to."
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.Required()
+                propertyType = ConfigPropertyType.Required()
             },
-            ClientConfigProperty {
+            ConfigProperty {
                 symbol = buildSymbol {
                     name = "String"
                     namespace = "kotlin"
@@ -417,23 +411,23 @@ class PresignerGenerator : KotlinIntegration {
                 name = "region"
                 documentation = "AWS region to make requests for"
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.Required()
+                propertyType = ConfigPropertyType.Required()
             },
-            ClientConfigProperty {
+            ConfigProperty {
                 symbol = KotlinTypes.String
                 name = "signingName"
                 documentation = "Service identifier used to sign requests"
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.ConstantValue(sigv4ServiceName.dq())
+                propertyType = ConfigPropertyType.ConstantValue(sigv4ServiceName.dq())
             },
-            ClientConfigProperty {
+            ConfigProperty {
                 symbol = KotlinTypes.String
                 name = "serviceId"
                 documentation = "Service identifier used to resolve endpoints"
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.ConstantValue(serviceId.dq())
+                propertyType = ConfigPropertyType.ConstantValue(serviceId.dq())
             },
-            ClientConfigProperty {
+            ConfigProperty {
                 symbol = buildSymbol {
                     name = "Boolean"
                     namespace = "kotlin"
@@ -442,9 +436,9 @@ class PresignerGenerator : KotlinIntegration {
                 name = "useDoubleUriEncode"
                 documentation = "Determines if presigner should double encode Uri"
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.ConstantValue(useDoubleUriEncodeValueForService(serviceId))
+                propertyType = ConfigPropertyType.ConstantValue(useDoubleUriEncodeValueForService(serviceId))
             },
-            ClientConfigProperty {
+            ConfigProperty {
                 symbol = buildSymbol {
                     name = "Boolean"
                     namespace = "kotlin"
@@ -453,7 +447,7 @@ class PresignerGenerator : KotlinIntegration {
                 name = "normalizeUriPath"
                 documentation = "Determines if presigned URI path will be normalized"
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.ConstantValue(normalizeUriPathValueForService(serviceId))
+                propertyType = ConfigPropertyType.ConstantValue(normalizeUriPathValueForService(serviceId))
             },
         )
 

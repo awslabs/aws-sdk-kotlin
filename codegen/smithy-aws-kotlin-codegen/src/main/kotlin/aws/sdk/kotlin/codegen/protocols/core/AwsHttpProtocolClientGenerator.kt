@@ -57,7 +57,7 @@ open class AwsHttpProtocolClientGenerator(
         // FIXME - we likely need a way to let customizations modify/override this
         // FIXME - we also need a way to tie in config properties added via integrations that need to influence the context
         writer.addImport(RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
-        writer.addImport(AwsRuntimeTypes.Core.AwsClientOption)
+        writer.addImport(AwsRuntimeTypes.Core.Client.AwsClientOption)
         val putIfAbsentSym = buildSymbol { name = "putIfAbsent"; namespace(KotlinDependency.UTILS) }
         val sdkClientOptionSym = buildSymbol { name = "SdkClientOption"; namespace(KotlinDependency.CORE, "client") }
 
@@ -67,7 +67,7 @@ open class AwsHttpProtocolClientGenerator(
             "}",
             RuntimeTypes.Core.ExecutionContext,
         ) {
-            write("ctx.#T(#T.Region, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.AwsClientOption)
+            write("ctx.#T(#T.Region, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.Client.AwsClientOption)
             write("ctx.#T(#T.ServiceName, serviceName)", putIfAbsentSym, sdkClientOptionSym)
             write("ctx.#T(#T.LogMode, config.sdkLogMode)", putIfAbsentSym, sdkClientOptionSym)
 

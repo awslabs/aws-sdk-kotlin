@@ -266,7 +266,7 @@ class PresignerGeneratorTest {
                 override val signingName: String = "example-signing-name"
                 override val useDoubleUriEncode: Boolean = true
                 public companion object {
-                    public inline operator fun invoke(block: Builder.() -> kotlin.Unit): ServicePresignConfig = Builder().apply(block).build()
+                    public inline operator fun invoke(block: Builder.() -> kotlin.Unit): TestPresignConfig = Builder().apply(block).build()
                 }
             
                 public class Builder {

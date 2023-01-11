@@ -4,7 +4,7 @@ import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.transform.ModelTransformer
@@ -19,7 +19,7 @@ class ClientConfigIntegration : KotlinIntegration {
         model.expectShape<ServiceShape>(settings.service).isS3
 
     companion object {
-        val EnableAccelerateProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+        val EnableAccelerateProp: ConfigProperty = ConfigProperty.Boolean(
             "enableAccelerate",
             defaultValue = false,
             documentation = """
@@ -28,7 +28,7 @@ class ClientConfigIntegration : KotlinIntegration {
             """.trimIndent(),
         )
 
-        val ForcePathStyleProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+        val ForcePathStyleProp: ConfigProperty = ConfigProperty.Boolean(
             "forcePathStyle",
             defaultValue = false,
             documentation = """
@@ -36,7 +36,7 @@ class ClientConfigIntegration : KotlinIntegration {
             """.trimIndent(),
         )
 
-        val UseArnRegionProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+        val UseArnRegionProp: ConfigProperty = ConfigProperty.Boolean(
             "useArnRegion",
             defaultValue = false,
             documentation = """
@@ -46,7 +46,7 @@ class ClientConfigIntegration : KotlinIntegration {
         )
 
         // FUTURE: default signer doesn't yet implement sigv4a, default to mrap OFF until it does
-        val DisableMrapProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+        val DisableMrapProp: ConfigProperty = ConfigProperty.Boolean(
             "disableMrap",
             defaultValue = true,
             documentation = """
@@ -72,7 +72,7 @@ class ClientConfigIntegration : KotlinIntegration {
         }
     }
 
-    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> =
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
         listOf(
             EnableAccelerateProp,
             ForcePathStyleProp,

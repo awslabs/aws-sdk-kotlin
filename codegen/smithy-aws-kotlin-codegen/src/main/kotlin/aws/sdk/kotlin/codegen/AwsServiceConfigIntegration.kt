@@ -10,21 +10,30 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.boxed
+import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.rendering.*
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 
 class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
-        val RegionProp: ClientConfigProperty = ClientConfigProperty {
+        val RegionProp: ConfigProperty = ConfigProperty {
             name = "region"
             symbol = KotlinTypes.String.toBuilder().boxed().build()
+            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            builderBaseClass = buildSymbol {
+                name = "${baseClass!!.name}.Builder<Config>"
+                namespace = baseClass!!.namespace
+            }
+
             documentation = """
                     AWS region to make requests to
             """.trimIndent()
-            propertyType = ClientConfigPropertyType.Required()
+            propertyType = ConfigPropertyType.Required()
             order = -100
         }
 
-        val CredentialsProviderProp: ClientConfigProperty = ClientConfigProperty {
+        val CredentialsProviderProp: ConfigProperty = ConfigProperty {
             symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
             documentation = """
                 The AWS credentials provider to use for authenticating requests. If not provided a
@@ -33,7 +42,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 client will not close it when the client is closed.
             """.trimIndent()
 
-            propertyType = ClientConfigPropertyType.Custom(render = { prop, writer ->
+            propertyType = ConfigPropertyType.Custom(render = { prop, writer ->
                 writer.write(
                     "public val #1L: #2T = builder.#1L?.borrow() ?: #3T(httpClientEngine = httpClientEngine, region = region)",
                     prop.propertyName,
@@ -48,9 +57,9 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             )
         }
 
-        // FIXME - should fips and dual stack props be defined on one of our AWS SDK client config interfaces (e.g. `AwsSdkClientConfig`) if they apply to every AWS SDK Kotlin service client generated?
+        // FIXME - should fips and dual stack props be defined on one of our AWS SDK client config interfaces (e.g. `AwsSdkConfig`) if they apply to every AWS SDK Kotlin service client generated?
 
-        val UseFipsProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+        val UseFipsProp: ConfigProperty = ConfigProperty.Boolean(
             "useFips",
             defaultValue = false,
             documentation = """
@@ -58,7 +67,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             """.trimIndent(),
         )
 
-        val UseDualStackProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+        val UseDualStackProp: ConfigProperty = ConfigProperty.Boolean(
             "useDualStack",
             defaultValue = false,
             documentation = """
@@ -66,13 +75,13 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             """.trimIndent(),
         )
 
-        val EndpointUrlProp = ClientConfigProperty {
+        val EndpointUrlProp = ConfigProperty {
             name = "endpointUrl"
             symbol = RuntimeTypes.Http.Url.toBuilder().boxed().build()
             documentation = """
                 A custom endpoint to use when making requests.
             """.trimIndent()
-            propertyType = ClientConfigPropertyType.SymbolDefault
+            propertyType = ConfigPropertyType.SymbolDefault
         }
     }
 
@@ -94,7 +103,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, overrideServiceCompanionObjectWriter),
         )
 
-    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> =
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
         listOf(
             RegionProp,
             CredentialsProviderProp,
