@@ -24,22 +24,16 @@ private const val PROVIDER_NAME = "Process"
  * If the exit code is non-zero, log and throw an exception including the stderr from the command.
  *
  * @param credentialProcess the command to invoke to retrieve credentials
+ * @param platformProvider the platform provider
+ * @param maxOutputLengthBytes the maximum output of the process in bytes
+ * @param timeoutMillis the timeout of the process
+ * @throws RuntimeException if the process returns larger than [maxOutputLengthBytes] or takes longer than [timeoutMillis] to return [Credentials]
  */
 public class ProcessCredentialsProvider(
-    /**
-     * The command to invoke to retrieve credentials
-     */
     private val credentialProcess: String,
-
-    /**
-     * The platform provider
-     */
     private val platformProvider: PlatformProvider = Platform,
-
     private val maxOutputLengthBytes: Long = 64 * 1024,
-
     private val timeoutMillis: Long = 1000
-
 ) : CredentialsProvider {
     override suspend fun getCredentials(): Credentials {
         val logger = Logger.getLogger<ProcessCredentialsProvider>()
