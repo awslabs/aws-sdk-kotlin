@@ -11,6 +11,7 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.net.Host
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -117,7 +118,7 @@ class StsAssumeRoleCredentialsProviderTest {
         val actual = provider.getCredentials()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)
         val req = testEngine.requests().first()
-        assertEquals("sts.amazonaws.com", req.actual.url.host)
+        assertEquals(Host.Domain("sts.amazonaws.com"), req.actual.url.host)
     }
 
     @Test
@@ -136,6 +137,6 @@ class StsAssumeRoleCredentialsProviderTest {
         val actual = provider.getCredentials()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)
         val req = testEngine.requests().first()
-        assertEquals("sts.us-west-2.amazonaws.com", req.actual.url.host)
+        assertEquals(Host.Domain("sts.us-west-2.amazonaws.com"), req.actual.url.host)
     }
 }

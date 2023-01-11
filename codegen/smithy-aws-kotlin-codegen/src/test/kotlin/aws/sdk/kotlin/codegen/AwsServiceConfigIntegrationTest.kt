@@ -43,13 +43,17 @@ class AwsServiceConfigIntegrationTest {
         val contents = writer.toString()
 
         val expectedProps = """
-    public val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider()
-    public val endpointResolver: AwsEndpointResolver = builder.endpointResolver ?: DefaultEndpointResolver()
     public val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
+    public val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider(httpClientEngine = httpClientEngine, region = region)
 """
         contents.shouldContainOnlyOnceWithDiff(expectedProps)
 
         val expectedImpl = """
+        /**
+         * AWS region to make requests to
+         */
+        public var region: String? = null
+
         /**
          * The AWS credentials provider to use for authenticating requests. If not provided a
          * [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.
@@ -57,15 +61,6 @@ class AwsServiceConfigIntegrationTest {
          * client will not close it when the client is closed.
          */
         public var credentialsProvider: CredentialsProvider? = null
-        /**
-         * Determines the endpoint (hostname) to make requests to. When not provided a default
-         * resolver is configured automatically. This is an advanced client option.
-         */
-        public var endpointResolver: AwsEndpointResolver? = null
-        /**
-         * AWS region to make requests to
-         */
-        public var region: String? = null
 """
         contents.shouldContainOnlyOnceWithDiff(expectedImpl)
     }

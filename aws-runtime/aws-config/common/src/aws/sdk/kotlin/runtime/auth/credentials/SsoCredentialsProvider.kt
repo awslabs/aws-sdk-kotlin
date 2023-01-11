@@ -17,7 +17,9 @@ import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.fromEpochMilliseconds
+import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.*
+import kotlin.coroutines.coroutineContext
 
 private const val PROVIDER_NAME = "SSO"
 
@@ -95,11 +97,16 @@ public class SsoCredentialsProvider public constructor(
 ) : CredentialsProvider {
 
     override suspend fun getCredentials(): Credentials {
+        val traceSpan = coroutineContext.traceSpan
+        val logger = traceSpan.logger<SsoCredentialsProvider>()
+
+        logger.trace { "Attempting to load token file" }
         val token = loadTokenFile()
 
         val client = SsoClient {
             region = ssoRegion
             httpClientEngine = this@SsoCredentialsProvider.httpClientEngine
+            tracer = traceSpan.asNestedTracer("SSO-")
         }
 
         val resp = try {

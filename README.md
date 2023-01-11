@@ -14,6 +14,11 @@ This repo contains the AWS SDK for Kotlin and its [public roadmap](https://githu
 
 ## Getting Started
 
+* [SDK Homepage](https://aws.amazon.com/sdk-for-kotlin/)
+* [Developer Guide](https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/home.html)
+* [API Reference](https://sdk.amazonaws.com/kotlin/api/latest/index.html)
+* [Samples](https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/kotlin)
+
 See the [Getting Started Guide](docs/GettingStarted.md) to learn how to use AWS SDKs in your program.
 
 ## Feedback
@@ -154,14 +159,6 @@ kotlin.mpp.hierarchicalStructureSupport=false
 
 See [Debugging](docs/debugging.md)
 
-## Getting Help
-
-Use the following sources for information:
-
-* [Check api and developer guides.](https://docs.aws.amazon.com/sdk-for-kotlin/index.html)
-* Check for similar [issues](https://github.com/awslabs/aws-sdk-kotlin/issues) already opened.
-
-If you still can’t find a solution to your problem open an [issue](https://github.com/awslabs/aws-sdk-kotlin/issues/new/choose) or a [discussion](https://github.com/awslabs/aws-sdk-kotlin/discussions/new)
 
 ## Security
 

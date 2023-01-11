@@ -17,17 +17,10 @@ import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
-import aws.smithy.kotlin.runtime.http.middleware.Retry
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.middleware.Phase
-import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
-import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
-import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitter
-import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitterOptions
-import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
-import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -83,17 +76,10 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     }
 
     // cached middleware instances
-    private val resolveEndpointMiddleware = ResolveEndpoint(ImdsEndpointResolver(platformProvider, endpointConfiguration))
+    private val resolveEndpointMiddleware = ResolveEndpoint(ImdsEndpointProvider(platformProvider, endpointConfiguration), Unit)
     private val userAgentMiddleware = UserAgent(
         staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown")),
     )
-    private val retryMiddleware = run {
-        val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
-        val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
-        val strategy = StandardRetryStrategy(StandardRetryStrategyOptions.Default, tokenBucket, delayProvider)
-        val policy = ImdsRetryPolicy()
-        Retry<String>(strategy, policy)
-    }
     private val tokenMiddleware = TokenMiddleware(httpClient, tokenTtl, clock)
 
     public companion object {
@@ -131,13 +117,15 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             context {
                 operationName = path
                 service = SERVICE
+
                 // artifact of re-using ServiceEndpointResolver middleware
                 set(SdkClientOption.LogMode, sdkLogMode)
             }
         }
+        op.execution.retryPolicy = ImdsRetryPolicy()
+
         op.install(resolveEndpointMiddleware)
         op.install(userAgentMiddleware)
-        op.install(retryMiddleware)
         op.install(tokenMiddleware)
         op.execution.mutate.intercept(Phase.Order.Before) { req, next ->
             req.subject.url.path = path

@@ -20,7 +20,7 @@ class FrameDecoderTest {
     @Test
     fun testFrameStreamSingleMessage() = runTest {
         val encoded = validMessageWithAllHeaders()
-        val expected = Message.decode(SdkByteBuffer.wrapAsReadBuffer(encoded))
+        val expected = Message.decode(sdkBufferOf(encoded))
         val chan = SdkByteReadChannel(encoded)
 
         val frames = decodeFrames(chan)
@@ -32,15 +32,15 @@ class FrameDecoderTest {
 
     @Test
     fun testFrameStreamMultipleMessagesChunked() = runTest {
-        val encoded = SdkByteBuffer(0u).apply {
-            writeFully(validMessageWithAllHeaders())
-            writeFully(validMessageEmptyPayload())
-            writeFully(validMessageNoHeaders())
-        }.bytes()
+        val encoded = SdkBuffer().apply {
+            write(validMessageWithAllHeaders())
+            write(validMessageEmptyPayload())
+            write(validMessageNoHeaders())
+        }.readByteArray()
 
-        val expected1 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageWithAllHeaders()))
-        val expected2 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageEmptyPayload()))
-        val expected3 = Message.decode(SdkByteBuffer.wrapAsReadBuffer(validMessageNoHeaders()))
+        val expected1 = Message.decode(sdkBufferOf(validMessageWithAllHeaders()))
+        val expected2 = Message.decode(sdkBufferOf(validMessageEmptyPayload()))
+        val expected3 = Message.decode(sdkBufferOf(validMessageNoHeaders()))
 
         val chan = SdkByteReadChannel(encoded)
         val frames = decodeFrames(chan)

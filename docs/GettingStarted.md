@@ -23,7 +23,7 @@ Consult the [stability guide](stability.md) for more information on SDK stabilit
     # file: my-project/build.gradle.kts
 
     dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
         
         // The following line adds a dependency on the dynamodb client.
         implementation("aws.sdk.kotlin:dynamodb:0.+")
@@ -37,9 +37,10 @@ Consult the [stability guide](stability.md) for more information on SDK stabilit
     ```kotlin
     import kotlinx.coroutines.runBlocking
     import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
+    import aws.sdk.kotlin.services.dynamodb.listTables
 
     fun main() = runBlocking {
-        val client = DynamoDbClient { region = "us-east-2" }
+        val client = DynamoDbClient.fromEnvironment()
         val resp = client.listTables { limit = 10 }
 
         println("Current DynamoDB tables: ")
@@ -54,6 +55,6 @@ Consult the [stability guide](stability.md) for more information on SDK stabilit
 ## Additional Resources
 
 * [Additional examples](https://github.com/awslabs/aws-sdk-kotlin/tree/main/examples)
-* [Giving feedback and contributing](https://github.com/awslabs/aws-sdk-kotlin#feedback)
+* [Getting started](https://github.com/awslabs/aws-sdk-kotlin#getting-started)
 * [Debugging](debugging.md)
 * [Android support](targets.md#android)

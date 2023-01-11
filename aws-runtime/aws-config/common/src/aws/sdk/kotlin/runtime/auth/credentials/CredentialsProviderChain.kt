@@ -7,8 +7,10 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.http.operation.getLogger
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.tracing.*
+import kotlin.coroutines.coroutineContext
 
 // TODO - support caching the provider that actually resolved credentials such that future calls don't involve going through the full chain
 
@@ -23,8 +25,6 @@ import aws.smithy.kotlin.runtime.logging.Logger
 public open class CredentialsProviderChain(
     protected vararg val providers: CredentialsProvider,
 ) : CredentialsProvider, Closeable {
-    private val logger = Logger.getLogger<CredentialsProviderChain>()
-
     init {
         require(providers.isNotEmpty()) { "at least one provider must be in the chain" }
     }
@@ -32,11 +32,14 @@ public open class CredentialsProviderChain(
     override fun toString(): String =
         (listOf(this) + providers).map { it::class.simpleName }.joinToString(" -> ")
 
-    override suspend fun getCredentials(): Credentials {
-        val chainException = lazy { CredentialsProviderException("No credentials could be loaded from the chain: $this") }
+    override suspend fun getCredentials(): Credentials = coroutineContext.withChildTraceSpan("Credentials chain") {
+        val logger = coroutineContext.getLogger<CredentialsProviderChain>()
+        val provider = this@CredentialsProviderChain
+        val chainException = lazy { CredentialsProviderException("No credentials could be loaded from the chain: $provider") }
         for (provider in providers) {
+            logger.trace { "Attempting to load credentials from $provider" }
             try {
-                return provider.getCredentials()
+                return@withChildTraceSpan provider.getCredentials()
             } catch (ex: Exception) {
                 logger.debug { "unable to load credentials from $provider: ${ex.message}" }
                 chainException.value.addSuppressed(ex)

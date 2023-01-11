@@ -1,7 +1,8 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
-import aws.sdk.kotlin.codegen.protocols.core.AwsEndpointResolverGenerator
+import aws.sdk.kotlin.codegen.protocols.endpoints.bindAwsBuiltinsSymbol
+import aws.sdk.kotlin.codegen.protocols.endpoints.getAsSigningProviderExtSymbol
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
@@ -27,6 +28,9 @@ import software.amazon.smithy.kotlin.codegen.model.expectTrait
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigPropertyType
+import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointParameterBindingGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointParametersGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointProviderGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
@@ -37,6 +41,8 @@ import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.traits.TimestampFormatTrait
+import software.amazon.smithy.rulesengine.language.EndpointRuleSet
+import software.amazon.smithy.rulesengine.traits.EndpointRuleSetTrait
 
 /**
  * Represents a presignable operation.
@@ -140,11 +146,8 @@ class PresignerGenerator : KotlinIntegration {
         defaultTimestampFormat: TimestampFormatTrait.Format,
     ) {
         val serviceShape = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
+        val rules = EndpointRuleSet.fromNode(serviceShape.expectTrait<EndpointRuleSetTrait>().ruleSet)
         val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
-        val defaultEndpointResolverSymbol = buildSymbol {
-            namespace = "${ctx.settings.pkg.name}.internal"
-            name = AwsEndpointResolverGenerator.typeName
-        }
         val clientName = clientName(ctx.settings.sdkId)
         val presignConfigTypeName = "${clientName}PresignConfig"
 
@@ -153,7 +156,6 @@ class PresignerGenerator : KotlinIntegration {
 
         // import generated SDK types
         writer.addImport(serviceSymbol)
-        writer.addImport(defaultEndpointResolverSymbol)
 
         // Iterate over each presignable operation and generate presign functions
         presignOperations.forEach { presignableOp ->
@@ -176,11 +178,14 @@ class PresignerGenerator : KotlinIntegration {
 
             // Generate input presign extension function for service client
             renderPresignFromClientFn(
+                ctx,
                 writer,
                 request.defaultName(serviceShape),
                 requestConfigFnName,
                 serviceSymbol.name,
                 presignConfigTypeName,
+                op,
+                rules,
             )
 
             // Generate presign config function
@@ -305,11 +310,14 @@ class PresignerGenerator : KotlinIntegration {
     }
 
     private fun renderPresignFromClientFn(
+        ctx: CodegenContext,
         writer: KotlinWriter,
         requestTypeName: String,
         requestConfigFnName: String,
         serviceClientTypeName: String,
         presignConfigTypeName: String,
+        op: OperationShape,
+        rules: EndpointRuleSet,
     ) {
         writer.dokka {
             write("Presign a [$requestTypeName] using a [$serviceClientTypeName].")
@@ -318,6 +326,7 @@ class PresignerGenerator : KotlinIntegration {
             write("@return The [HttpRequest] that can be invoked within the specified time window.")
         }
 
+        val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
         writer
             .addImport(KotlinTypes.Time.Duration)
             .withBlock(
@@ -328,8 +337,20 @@ class PresignerGenerator : KotlinIntegration {
                 KotlinTypes.Time.Duration,
             ) {
                 withBlock("val presignConfig = $presignConfigTypeName {", "}") {
+                    withBlock("val params = #T {", "}", EndpointParametersGenerator.getSymbol(ctx.settings)) {
+                        write("#T(config)", bindAwsBuiltinsSymbol(ctx.settings))
+                        EndpointParameterBindingGenerator(
+                            ctx.model,
+                            service,
+                            writer,
+                            op,
+                            rules,
+                            "this@presign.",
+                        ).render()
+                    }
+
                     write("credentialsProvider = config.credentialsProvider")
-                    write("endpointProvider = config.endpointResolver.asSigningEndpointProvider()")
+                    write("endpointProvider = config.endpointProvider.#T(params)", EndpointProviderGenerator.getAsSigningProviderExtSymbol(ctx.settings))
                     write("region = config.region")
                 }
                 write("return createPresignedRequest(presignConfig, $requestConfigFnName(this, duration))")
@@ -382,12 +403,9 @@ class PresignerGenerator : KotlinIntegration {
                 symbol = RuntimeTypes.Auth.Signing.AwsSigningCommon.SigningEndpointProvider
                 name = "endpointProvider"
                 documentation =
-                    "Provides the endpoint (hostname) and signing context to make requests to. When not provided a default resolver is configured automatically. This is an advanced client option."
+                    "Provides the endpoint (hostname) and signing context to make requests to."
                 baseClass = RuntimeTypes.Auth.Signing.AwsSigningCommon.ServicePresignConfig
-                propertyType = ClientConfigPropertyType.RequiredWithDefault("DefaultEndpointResolver().asSigningEndpointProvider()")
-                additionalImports = listOf(
-                    AwsRuntimeTypes.Endpoint.asSigningEndpointProvider,
-                )
+                propertyType = ClientConfigPropertyType.Required()
             },
             ClientConfigProperty {
                 symbol = buildSymbol {

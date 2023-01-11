@@ -16,6 +16,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.time.Clock
+import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -37,7 +38,7 @@ internal class TokenMiddleware(
     private var cachedToken = CachedValue<Token>(null, bufferTime = TOKEN_REFRESH_BUFFER_SECONDS.seconds, clock = clock)
 
     override fun install(op: SdkHttpOperation<*, *>) {
-        op.execution.finalize.register(this)
+        op.execution.onEachAttempt.register(this)
     }
 
     override suspend fun modifyRequest(req: SdkHttpRequest): SdkHttpRequest {
@@ -47,7 +48,7 @@ internal class TokenMiddleware(
     }
 
     private suspend fun getToken(clock: Clock, req: SdkHttpRequest): Token {
-        val logger = req.context.getLogger("TokenMiddleware")
+        val logger = coroutineContext.getLogger<TokenMiddleware>()
         logger.trace { "refreshing IMDS token" }
 
         val tokenReq = HttpRequestBuilder().apply {

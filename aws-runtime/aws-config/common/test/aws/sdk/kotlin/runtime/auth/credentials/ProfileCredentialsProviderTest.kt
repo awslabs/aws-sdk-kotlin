@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.net.Host
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -134,6 +135,6 @@ class ProfileCredentialsProviderTest {
         testEngine.assertRequests()
         val req = testEngine.requests().first()
         // region is overridden from the environment which should take precedence
-        assertEquals("sts.us-west-2.amazonaws.com", req.actual.url.host)
+        assertEquals(Host.Domain("sts.us-west-2.amazonaws.com"), req.actual.url.host)
     }
 }

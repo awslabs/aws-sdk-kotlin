@@ -14,6 +14,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
+                implementation("aws.smithy.kotlin:tracing-core:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:hashing:$smithyKotlinVersion")
                 // exposes Buffer/MutableBuffer and SdkByteReadChannel
                 api("aws.smithy.kotlin:io:$smithyKotlinVersion")

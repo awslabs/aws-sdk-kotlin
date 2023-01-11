@@ -17,19 +17,11 @@ import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
-import aws.smithy.kotlin.runtime.http.middleware.Retry
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.logging.Logger
-import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
-import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
-import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitter
-import aws.smithy.kotlin.runtime.retries.delay.ExponentialBackoffWithJitterOptions
-import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
-import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
@@ -37,6 +29,7 @@ import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
+import kotlin.coroutines.coroutineContext
 
 /**
  * The elastic container metadata service endpoint that should be called by the [aws.sdk.kotlin.runtime.auth.credentials.EcsCredentialsProvider]
@@ -70,17 +63,8 @@ public class EcsCredentialsProvider internal constructor(
 
     private val manageEngine = httpClientEngine == null
     private val httpClientEngine = httpClientEngine ?: DefaultHttpEngine()
-
-    private val retryMiddleware = run {
-        val tokenBucket = StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default)
-        val delayProvider = ExponentialBackoffWithJitter(ExponentialBackoffWithJitterOptions.Default)
-        val strategy = StandardRetryStrategy(StandardRetryStrategyOptions.Default, tokenBucket, delayProvider)
-        val policy = EcsCredentialsRetryPolicy()
-        Retry<Credentials>(strategy, policy)
-    }
-
     override suspend fun getCredentials(): Credentials {
-        val logger = Logger.getLogger<EcsCredentialsProvider>()
+        val logger = coroutineContext.getLogger<EcsCredentialsProvider>()
         val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
         val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
         val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)
@@ -99,9 +83,9 @@ public class EcsCredentialsProvider internal constructor(
                 service = "n/a"
             }
         }
+        op.execution.retryPolicy = EcsCredentialsRetryPolicy()
 
-        op.install(ResolveEndpoint(resolver = { Endpoint(url) }))
-        op.install(retryMiddleware)
+        op.install(ResolveEndpoint(provider = { Endpoint(url) }, params = null))
 
         logger.debug { "retrieving container credentials" }
         val client = sdkHttpClient(httpClientEngine, manageEngine = false)
@@ -153,9 +137,9 @@ public class EcsCredentialsProvider internal constructor(
 
         // TODO - validate loopback via DNS resolution instead of fixed set. Custom host names (including localhost) that
         //  resolve to loopback won't work until then. ALL resolved addresses MUST resolve to the loopback device
-        val allowedHosts = setOf("127.0.0.1", "[::1]")
+        val allowedHosts = setOf("127.0.0.1", "::1")
 
-        if (url.host !in allowedHosts) {
+        if (url.host.toString() !in allowedHosts) {
             throw ProviderConfigurationException(
                 "The container credentials full URI ($uri) has an invalid host. Host can only be one of [${allowedHosts.joinToString()}].",
             )

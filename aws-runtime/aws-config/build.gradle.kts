@@ -24,6 +24,7 @@ kotlin {
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:hashing:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:tracing-core:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:aws-http"))
@@ -165,7 +166,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
 }
 
 tasks.withType<org.gradle.jvm.tasks.Jar> {
-    if (name == "jar" || name == "javadocJar") {
+    if (name == "jar") {
         println("Disabling $project task '$name' because it conflicts with Kotlin JAR tasks")
         enabled = false
     } else {

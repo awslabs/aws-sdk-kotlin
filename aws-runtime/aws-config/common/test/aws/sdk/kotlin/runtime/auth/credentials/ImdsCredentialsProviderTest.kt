@@ -22,6 +22,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
@@ -503,7 +504,7 @@ class ImdsCredentialsProviderTest {
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 if (successfulCallCount >= 2) {
                     return HttpCall(
-                        HttpRequest(HttpMethod.GET, Url(Protocol.HTTP, "test", Protocol.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
+                        HttpRequest(HttpMethod.GET, Url(Protocol.HTTP, Host.parse("test"), Protocol.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
                         HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
                         testClock.now(),
                         testClock.now(),
@@ -578,7 +579,7 @@ class ImdsCredentialsProviderTest {
         val internalServerErrorEngine = object : HttpClientEngineBase("internalServerError") {
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 return HttpCall(
-                    HttpRequest(HttpMethod.GET, Url(Protocol.HTTP, "test", Protocol.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
+                    HttpRequest(HttpMethod.GET, Url(Protocol.HTTP, Host.parse("test"), Protocol.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
                     HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
                     testClock.now(),
                     testClock.now(),

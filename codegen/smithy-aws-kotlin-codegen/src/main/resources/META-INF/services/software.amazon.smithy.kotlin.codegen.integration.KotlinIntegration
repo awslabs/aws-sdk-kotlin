@@ -1,5 +1,5 @@
 aws.sdk.kotlin.codegen.SdkProtocolGeneratorSupplier
-aws.sdk.kotlin.codegen.AwsDefaultRetryIntegration
+aws.sdk.kotlin.codegen.AwsRetryHeaderIntegration
 aws.sdk.kotlin.codegen.customization.s3.S3GeneratorSupplier
 aws.sdk.kotlin.codegen.GradleGenerator
 aws.sdk.kotlin.codegen.AwsServiceConfigIntegration
@@ -20,3 +20,7 @@ aws.sdk.kotlin.codegen.customization.BackfillOptionalAuth
 aws.sdk.kotlin.codegen.customization.RemoveEventStreamOperations
 aws.sdk.kotlin.codegen.customization.RemoveChecksumSelectionFields
 aws.sdk.kotlin.codegen.customization.route53.TrimResourcePrefix
+aws.sdk.kotlin.codegen.customization.s3.ClientConfigIntegration
+aws.sdk.kotlin.codegen.customization.s3.HttpPathFilter
+aws.sdk.kotlin.codegen.customization.s3control.HostPrefixFilter
+aws.sdk.kotlin.codegen.customization.s3control.ClientConfigIntegration

@@ -7,26 +7,27 @@ package aws.sdk.kotlin.runtime.protocol.eventstream
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.HttpBody
-import aws.smithy.kotlin.runtime.io.SdkByteBuffer
+import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteChannel
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
-import aws.smithy.kotlin.runtime.io.bytes
+import aws.smithy.kotlin.runtime.tracing.TraceSpanContextElement
+import aws.smithy.kotlin.runtime.tracing.traceSpan
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 /**
  * Transform the stream of messages into a stream of raw bytes. Each
  * element of the resulting flow is the encoded version of the corresponding message
  */
 @InternalSdkApi
-public fun Flow<Message>.encode(): Flow<ByteArray> = map {
-    // TODO - can we figure out the encoded size and directly get a byte array
-    val buffer = SdkByteBuffer(1024U)
+public fun Flow<Message>.encode(): Flow<SdkBuffer> = map {
+    val buffer = SdkBuffer()
     it.encode(buffer)
-    buffer.bytes()
+    buffer
 }
 
 /**
@@ -34,13 +35,14 @@ public fun Flow<Message>.encode(): Flow<ByteArray> = map {
  * @param scope parent scope to launch a coroutine in that consumes the flow and populates a [SdkByteReadChannel]
  */
 @InternalSdkApi
-public suspend fun Flow<ByteArray>.asEventStreamHttpBody(scope: CoroutineScope): HttpBody {
+public suspend fun Flow<SdkBuffer>.asEventStreamHttpBody(scope: CoroutineScope): HttpBody {
     val encodedMessages = this
     val ch = SdkByteChannel(true)
+    val activeSpan = coroutineContext.traceSpan
 
-    return object : HttpBody.Streaming() {
+    return object : HttpBody.ChannelContent() {
         override val contentLength: Long? = null
-        override val isReplayable: Boolean = false
+        override val isOneShot: Boolean = true
         override val isDuplex: Boolean = true
 
         private var job: Job? = null
@@ -53,9 +55,9 @@ public suspend fun Flow<ByteArray>.asEventStreamHttpBody(scope: CoroutineScope):
             // Although rare, nothing stops downstream consumers from invoking readFrom() more than once.
             // Only launch background collection task on first call
             if (job == null) {
-                job = scope.launch {
+                job = scope.launch(TraceSpanContextElement(activeSpan)) {
                     encodedMessages.collect {
-                        ch.writeFully(it)
+                        ch.write(it)
                     }
                 }
 

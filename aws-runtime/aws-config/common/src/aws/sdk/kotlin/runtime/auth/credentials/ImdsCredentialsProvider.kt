@@ -14,15 +14,17 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.tracing.info
+import aws.smithy.kotlin.runtime.tracing.warn
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration.Companion.seconds
 
 private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/security-credentials"
@@ -52,7 +54,6 @@ public class ImdsCredentialsProvider(
     private val platformProvider: PlatformEnvironProvider = Platform,
     private val clock: Clock = Clock.System,
 ) : CredentialsProvider, Closeable {
-    private val logger = Logger.getLogger<ImdsCredentialsProvider>()
     private var previousCredentials: Credentials? = null
 
     // the time to refresh the Credentials. If set, it will take precedence over the Credentials' expiration time
@@ -97,7 +98,9 @@ public class ImdsCredentialsProvider(
         return when (val resp = deserializeJsonCredentials(deserializer)) {
             is JsonCredentialsResponse.SessionCredentials -> {
                 nextRefresh = if (resp.expiration != null && resp.expiration < clock.now()) {
-                    logger.warn {
+                    coroutineContext.warn<ImdsCredentialsProvider> {
+                nextRefresh = if (resp.expiration < clock.now()) {
+                    coroutineContext.warn<ImdsCredentialsProvider> {
                         "Attempting credential expiration extension due to a credential service availability issue. " +
                             "A refresh of these credentials will be attempted again in " +
                             "${ DEFAULT_CREDENTIALS_REFRESH_SECONDS / 60 } minutes."
@@ -137,7 +140,10 @@ public class ImdsCredentialsProvider(
             client.value.get(CREDENTIALS_BASE_PATH)
         } catch (ex: EC2MetadataError) {
             if (ex.statusCode == HttpStatusCode.NotFound.value) {
-                logger.info { "Received 404 from IMDS when loading profile information. Hint: This instance may not have an IAM role associated." }
+                coroutineContext.info<ImdsCredentialsProvider> {
+                    "Received 404 from IMDS when loading profile information. Hint: This instance may not have an " +
+                        "IAM role associated."
+                }
             }
             throw ex
         }

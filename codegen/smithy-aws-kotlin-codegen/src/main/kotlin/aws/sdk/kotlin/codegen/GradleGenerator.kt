@@ -42,6 +42,9 @@ class GradleGenerator : KotlinIntegration {
             writer.write("description = #S", ctx.settings.pkg.description)
         }
 
+        writer.write("project.ext.set(#S, #S)", "aws.sdk.id", ctx.settings.sdkId)
+        writer.write("")
+
         writer.write("val kotlinVersion: String by project")
 
         val allDependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
