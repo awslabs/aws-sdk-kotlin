@@ -6,10 +6,10 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.client.AwsSdkClient
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
 
 /**
@@ -19,8 +19,8 @@ import aws.smithy.kotlin.runtime.client.SdkClientFactory
 public abstract class AbstractAwsSdkClientFactory<
     TConfig : AwsSdkClientConfig,
     TConfigBuilder : AwsSdkClientConfig.Builder<TConfig>,
-    TClient : AwsSdkClient,
-    TClientBuilder : AwsSdkClient.Builder<TConfig, TConfigBuilder, TClient>,
+    TClient : SdkClient,
+    TClientBuilder : SdkClient.Builder<TConfig, TConfigBuilder, TClient>,
     > : SdkClientFactory<TConfig, TConfigBuilder, TClient, TClientBuilder> {
 
     /**

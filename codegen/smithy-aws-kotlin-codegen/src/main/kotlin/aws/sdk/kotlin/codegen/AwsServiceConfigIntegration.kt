@@ -48,6 +48,8 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             )
         }
 
+        // FIXME - should fips and dual stack props be defined on one of our AWS SDK client config interfaces (e.g. `AwsSdkClientConfig`) if they apply to every AWS SDK Kotlin service client generated?
+
         val UseFipsProp: ClientConfigProperty = ClientConfigProperty.Boolean(
             "useFips",
             defaultValue = false,
@@ -77,37 +79,13 @@ class AwsServiceConfigIntegration : KotlinIntegration {
     private val overrideServiceCompanionObjectWriter = SectionWriter { writer, _ ->
         // override the service client companion object for how a client is constructed
         val serviceSymbol = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
-        writer.withBlock("public companion object {", "}") {
-            withBlock(
-                "public operator fun invoke(block: Config.Builder.() -> Unit): #L {",
-                "}",
-                serviceSymbol.name,
-            ) {
-                write("val config = Config.Builder().apply(block).build()")
-                write("return Default${serviceSymbol.name}(config)")
-            }
-
-            write("")
-            write("public operator fun invoke(config: Config): ${serviceSymbol.name} = Default${serviceSymbol.name}(config)")
-
-            // generate a convenience init to resolve a client from the current environment
-            write("")
-            dokka {
-                write("Construct a [${serviceSymbol.name}] by resolving the configuration from the current environment.")
-            }
-            writer.withBlock(
-                "public suspend fun fromEnvironment(block: (Config.Builder.() -> Unit)? = null): #T {",
-                "}",
-                serviceSymbol,
-            ) {
-                write("val builder = Config.Builder()")
-                write("if (block != null) builder.apply(block)")
-
-                addImport(AwsRuntimeTypes.Config.Region.resolveRegion)
-                write("builder.region = builder.region ?: #T()", AwsRuntimeTypes.Config.Region.resolveRegion)
-                write("builder.retryStrategy = builder.retryStrategy ?: #T()", AwsRuntimeTypes.Config.Retries.resolveRetryStrategy)
-                write("return Default${serviceSymbol.name}(builder.build())")
-            }
+        writer.withBlock(
+            "public companion object : #T<Config, Config.Builder, #T, Builder>() {",
+            "}",
+            AwsRuntimeTypes.Config.AbstractAwsSdkClientFactory,
+            serviceSymbol,
+        ) {
+            write("override fun builder(): Builder = Builder()")
         }
     }
 

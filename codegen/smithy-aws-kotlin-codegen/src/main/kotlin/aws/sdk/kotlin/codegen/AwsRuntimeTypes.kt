@@ -41,6 +41,8 @@ object AwsRuntimeTypes {
     }
 
     object Config {
+        val AbstractAwsSdkClientFactory = runtimeSymbol("AbstractAwsSdkClientFactory", AwsKotlinDependency.AWS_CONFIG, "config")
+
         object Credentials {
             val DefaultChainCredentialsProvider = runtimeSymbol("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_CONFIG, "auth.credentials")
             val StaticCredentialsProvider = runtimeSymbol("StaticCredentialsProvider", AwsKotlinDependency.AWS_CONFIG, "auth.credentials")
