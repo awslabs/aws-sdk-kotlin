@@ -20,7 +20,7 @@ internal actual suspend fun executeCommand(
     platformProvider: PlatformProvider,
     maxOutputLengthBytes: Long,
     timeoutMillis: Long,
-    clock: Clock
+    clock: Clock,
 ): Pair<Int, String> {
     val cmd = ArrayList<String>()
 

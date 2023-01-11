@@ -14,7 +14,7 @@ internal expect suspend fun executeCommand(
     platformProvider: PlatformProvider,
     maxOutputLengthBytes: Long,
     timeoutMillis: Long,
-    clock: Clock = Clock.System
+    clock: Clock = Clock.System,
 ): Pair<Int, String>
 
 private const val PROVIDER_NAME = "Process"
@@ -33,7 +33,7 @@ public class ProcessCredentialsProvider(
     private val credentialProcess: String,
     private val platformProvider: PlatformProvider = Platform,
     private val maxOutputLengthBytes: Long = 64 * 1024,
-    private val timeoutMillis: Long = 1000
+    private val timeoutMillis: Long = 1000,
 ) : CredentialsProvider {
     override suspend fun getCredentials(): Credentials {
         val logger = Logger.getLogger<ProcessCredentialsProvider>()
