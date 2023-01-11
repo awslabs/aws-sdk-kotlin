@@ -262,10 +262,10 @@ the response into the modeled response object.
 For streaming responses, it is more efficient for the SDK to compute the checksum while the user is consuming the response body. 
 
 The `receive` stage is run prior to the user consuming the body, so while in this stage, the SDK will wrap the response
-body in a hashing body, in a similar manner to the request middleware. The execution context will be updated with the following keys:
+body in a hashing and completing body, in a similar manner to the request middleware. The execution context will be updated with the following keys:
 
 - `ExpectedResponseChecksum`: the checksum value from response headers
-- `ResponseChecksum`: a `LazyAsyncValue` containing the calculated checksum, which will only be fetched after the entire response body is consumed
+- `ResponseChecksum`: a `Deferred` containing the calculated checksum, which will only be completed after the entire response body is consumed
 - `ChecksumHeaderValidated`: the name of the checksum header which was validated, which allows the user to see if validation 
 occurred and which checksum algorithm was used.
 
