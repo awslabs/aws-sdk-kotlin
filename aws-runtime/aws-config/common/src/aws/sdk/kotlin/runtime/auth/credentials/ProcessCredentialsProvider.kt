@@ -33,7 +33,7 @@ public class ProcessCredentialsProvider(
         val logger = Logger.getLogger<ProcessCredentialsProvider>()
 
         val (exitCode, output) = try {
-            executeCommand(credentialProcess, platformProvider)
+            executeCommand("\"$credentialProcess\"", platformProvider)
         } catch (ex: Exception) {
             throw CredentialsProviderException("Failed to execute command", ex)
         }
