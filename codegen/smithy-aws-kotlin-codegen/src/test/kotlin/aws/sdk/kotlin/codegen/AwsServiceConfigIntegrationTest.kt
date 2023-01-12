@@ -50,7 +50,9 @@ class AwsServiceConfigIntegrationTest {
 
         val expectedImpl = """
         /**
-         * AWS region to make requests to
+         * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
+         * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
+         * information
          */
         override var region: String? = null
 

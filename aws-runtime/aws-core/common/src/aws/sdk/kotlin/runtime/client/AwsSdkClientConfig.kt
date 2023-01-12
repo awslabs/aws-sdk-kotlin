@@ -13,14 +13,15 @@ import aws.smithy.kotlin.runtime.client.SdkClientConfig
 public interface AwsSdkClientConfig : SdkClientConfig {
 
     /**
-     * The AWS region to make requests to
+     * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
+     * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
+     * information
      */
     public val region: String
 
-    public interface Builder<TConfig : SdkClientConfig> : SdkClientConfig.Builder<TConfig> {
-
+    public interface Builder {
         /**
-         * Configure the AWS region (e.g. `us-west-2`) to make requests to. See about AWS
+         * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
          * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
          * information
          */

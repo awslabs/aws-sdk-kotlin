@@ -10,7 +10,6 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.boxed
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.rendering.*
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
@@ -21,18 +20,17 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             name = "region"
             symbol = KotlinTypes.String.toBuilder().boxed().build()
             baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
-            builderBaseClass = buildSymbol {
-                name = "${baseClass!!.name}.Builder<Config>"
-                namespace = baseClass!!.namespace
-            }
-
+            useNestedBuilderBaseClass()
             documentation = """
-                    AWS region to make requests to
+                The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
+                [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
+                information
             """.trimIndent()
             propertyType = ConfigPropertyType.Required()
             order = -100
         }
 
+        // FIXME - this should be registered based on auth scheme in model
         val CredentialsProviderProp: ConfigProperty = ConfigProperty {
             symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
             documentation = """
@@ -94,7 +92,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             AwsRuntimeTypes.Config.AbstractAwsSdkClientFactory,
             serviceSymbol,
         ) {
-            write("@JvmStatic")
+            write("@#T", KotlinTypes.Jvm.JvmStatic)
             write("override fun builder(): Builder = Builder()")
         }
     }
