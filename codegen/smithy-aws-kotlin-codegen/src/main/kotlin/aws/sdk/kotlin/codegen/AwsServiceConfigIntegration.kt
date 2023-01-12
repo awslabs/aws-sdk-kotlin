@@ -94,6 +94,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             AwsRuntimeTypes.Config.AbstractAwsSdkClientFactory,
             serviceSymbol,
         ) {
+            write("@JvmStatic")
             write("override fun builder(): Builder = Builder()")
         }
     }
