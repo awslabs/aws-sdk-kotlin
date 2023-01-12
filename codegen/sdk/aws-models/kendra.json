@@ -9252,7 +9252,7 @@
             "type": "float",
             "traits": {
                 "smithy.api#range": {
-                    "min": 1.0E-6,
+                    "min": 0.000001,
                     "max": 50
                 }
             }
