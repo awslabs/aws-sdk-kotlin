@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.19.3-beta] - 01/12/2023
+
+### Features
+* [#122](https://github.com/awslabs/smithy-kotlin/issues/122) Add capability to intercept SDK operations
+
+### Miscellaneous
+* Sync AWS service models
+
 ## [0.19.2-beta] - 12/22/2022
 
 ### Fixes
