@@ -1,6 +1,7 @@
 [*.{kt,kts}]
 # ktlint rules to disable
-disabled_rules=no-wildcard-imports,filename
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_filename = disabled
 
 # enable trailing commas per JetBrains recommendation
 # (https://kotlinlang.org/docs/coding-conventions.html#trailing-commas)
