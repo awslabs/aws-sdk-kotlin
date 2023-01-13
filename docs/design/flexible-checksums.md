@@ -34,14 +34,13 @@ If a checksum is required, and the user does not opt-in to using flexible checks
 of injecting the `Content-MD5` header.
 ## Checksum Algorithms
 
-The SDK needs to support the following checksum algorithms: CRC32C, CRC32, SHA-1, SHA-256
-
+The SDK needs to support the following checksum algorithms: CRC32C, CRC32, SHA-1, SHA-256.
 All of them are [already implemented for JVM](https://github.com/awslabs/smithy-kotlin/tree/5773afb348c779b9e4aa9689836844f21a571908/runtime/hashing/jvm/src/aws/smithy/kotlin/runtime/hashing).
 
 As part of this feature, CRC32C was implemented in **smithy-kotlin** [PR#724](https://github.com/awslabs/smithy-kotlin/pull/724). 
 This algorithm is essentially the same as CRC32, but uses a different polynomial under the hood. 
 The SDK uses [`java.util.zip`'s implementation of CRC32](https://docs.oracle.com/javase/8/docs/api/java/util/zip/CRC32.html), 
-but this package only began shipping CRC32C in Java 9. The SDK wants to support Java 8 at a minimum, so this was implemented
+but this package only began shipping CRC32C in Java 9. The SDK requires Java 8, so this was implemented
 rather than imported as a dependency (which is also [what the Java SDK did](https://github.com/aws/aws-sdk-java-v2/blob/ecc12b43a4aedc433c39742a2ae1361bd8d17991/core/sdk-core/src/main/java/software/amazon/awssdk/core/internal/checksums/factory/SdkCrc32C.java)).
 
 ### Header Name
@@ -60,11 +59,8 @@ During an HTTP request, the SDK first needs to check if the user has opted-in to
 but the operation has the `requestChecksumRequired` property set, the SDK will fall back to the legacy behavior of computing the MD5 checksum.
 
 ### Middleware
-A new middleware is introduced at the `mutate` stage. This stage of the HTTP request lifecycle represents the last chance
-to modify the request before it is sent on the network.
-
-There are many middleware which operate at the `mutate` stage. It is important that this new middleware come before 
-[`AwsSigningMiddleware`](https://github.com/awslabs/smithy-kotlin/blob/5773afb348c779b9e4aa9689836844f21a571908/runtime/auth/aws-signing-common/common/src/aws/smithy/kotlin/runtime/auth/awssigning/middleware/AwsSigningMiddleware.kt#L26)
+A new middleware is introduced at the `mutate` stage. There are many middleware which operate at this stage. 
+It is important that this new middleware come before [`AwsSigningMiddleware`](https://github.com/awslabs/smithy-kotlin/blob/5773afb348c779b9e4aa9689836844f21a571908/runtime/auth/aws-signing-common/common/src/aws/smithy/kotlin/runtime/auth/awssigning/middleware/AwsSigningMiddleware.kt#L26)
 because it is dependent on the header values set in this new middleware (specifically `x-amz-trailer`).
 
 The SDK exposes an `order` integer parameter which is used to model dependencies between middleware.
@@ -135,8 +131,8 @@ An exception will be thrown if the algorithm can't be parsed or if it's not supp
 Note that because users select an algorithm from a code-generated enum, accidentally selecting an unsupported algorithm is unlikely.
 
 ### Computing and Injecting Checksums
-Next the SDK will compute and inject the checksum. If the body is smaller than the `aws-chunked` threshold ([1MB today](https://github.com/awslabs/smithy-kotlin/blob/9b9297c690d9a01777447f437f0e91562e146bf9/runtime/auth/aws-signing-common/common/src/aws/smithy/kotlin/runtime/auth/awssigning/middleware/AwsSigningMiddleware.kt#L38)), 
-the checksum will be immediately computed and injected under the appropriate header name.
+Next the SDK will compute and inject the checksum. If the body is smaller than the `aws-chunked` threshold ([1MB today](https://github.com/awslabs/smithy-kotlin/blob/9b9297c690d9a01777447f437f0e91562e146bf9/runtime/auth/aws-signing-common/common/src/aws/smithy/kotlin/runtime/auth/awssigning/middleware/AwsSigningMiddleware.kt#L38)) 
+and replayable, the checksum will be immediately computed and injected under the appropriate header name.
 
 Otherwise, if the request body is large enough to be uploaded with `aws-chunked`, the SDK will append the checksum header name to the `x-amz-trailer` header.
 
@@ -191,23 +187,24 @@ AwsChunkedReader(
 )
 ```
 
-#### CompletingBody
+#### Completing Sources and Channels
 
 When using `CompletableDeferred`, the `.complete()` method must be called to mark the deferred value as complete.
 
-Because the checksum computation [is done while the request body is being sent](#computing-and-injecting-checksums),
-a new type of `Source`/`ByteReadChannel` is introduced, called `CompletingSource` and `CompletingByteReadChannel` respectively
+Because the checksum computation [is done while the request body is being sent](#computing-and-injecting-checksums), 
+new types of `Source`/`ByteReadChannel` are introduced, called `CompletingSource` and `CompletingByteReadChannel` respectively.
 
 Below is the signature of `CompletingSource`:
 ```kotlin
 CompletingSource(
-  private val deferredChecksum: CompletableDeferred<String>,
-  private val source: HashingSource
+    private val deferredChecksum: CompletableDeferred<String>,
+    private val source: HashingSource
 )
 ```
 
 This will be used to wrap the `HashingSource`. When the source is fully exhausted, 
-the calculated checksum will be digested and used to `.complete()` the `completableDeferred`. The same will be done for HashingByteReadChannels using a `CompletingByteReadChannel`.
+the calculated checksum will be digested and used to `.complete()` the `CompletableDeferred`. 
+The same will be done for `HashingByteReadChannel` using a `CompletingByteReadChannel`.
 
 #### Mutating Trailing Headers
 
@@ -345,24 +342,23 @@ Instead of `CompletableFuture`, `LazyAsyncValue` and `RunnableFuture` were evalu
 ### `LazyAsyncValue`
 
 Pros:
-- already exists in the SDK
-- lazy execution
-  - the checksum future can be computed only when it is ready / needed
+- Already exists in the SDK
+- Lazy execution
+  - The checksum future can be computed only when it is ready / needed
 
 Cons:
-- no concept of "completion"
-  - there is no way to indicate that the lazy value is ready for consumption. the underlying code block will be executed 
+- No concept of "completion"
+  - There is no way to indicate that the lazy value is ready for consumption. The underlying code block will be executed 
 when `.get()` is called, which could happen earlier than intended
   
 
 ### `RunnableFuture`
 Pros:
-- execution can be delayed until the result is actually needed
-  - fixes the issue with eager execution in `CompletableFuture`
+- Execution can be delayed until the result is actually needed
+  - Fixes the issue with eager execution in `CompletableFuture`
 Cons:
-- there is no concept of completion
-  - calling `.get()` on a `Future` / `RunnableFuture` will block until it's complete. 
-it can throw exceptions if the computation was cancelled, threw an exception, or if the thread was interrupted while blocking
+- There is no concept of completion
+  - Calling `.get()` on a `Future` / `RunnableFuture` will block until it's complete
 
 Ultimately, `CompletableFuture` was chosen because it provides a way to model completion and the value can be set in a non-blocking manner.
 
