@@ -11,7 +11,6 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.http.engine.internal.borrow
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -46,19 +45,20 @@ public class DefaultChainCredentialsProvider constructor(
     region: String? = null,
 ) : CredentialsProvider {
 
-    private val httpClientEngine = httpClientEngine?.borrow() ?: DefaultHttpEngine()
+    private val manageEngine = httpClientEngine == null
+    private val engine = httpClientEngine ?: DefaultHttpEngine()
 
     private val chain = CredentialsProviderChain(
         EnvironmentCredentialsProvider(platformProvider::getenv),
-        ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClientEngine = this.httpClientEngine, region = region),
+        ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClientEngine = engine, region = region),
         // STS web identity provider can be constructed from either the profile OR 100% from the environment
-        StsWebIdentityProvider(platformProvider = platformProvider, httpClientEngine = this.httpClientEngine),
-        EcsCredentialsProvider(platformProvider, this.httpClientEngine),
+        StsWebIdentityProvider(platformProvider = platformProvider, httpClientEngine = engine),
+        EcsCredentialsProvider(platformProvider, engine),
         ImdsCredentialsProvider(
             client = lazy {
                 ImdsClient {
                     platformProvider = this@DefaultChainCredentialsProvider.platformProvider
-                    engine = this@DefaultChainCredentialsProvider.httpClientEngine
+                    engine = this@DefaultChainCredentialsProvider.engine
                 }
             },
             platformProvider = platformProvider,
@@ -71,7 +71,9 @@ public class DefaultChainCredentialsProvider constructor(
 
     override fun close() {
         provider.close()
-        httpClientEngine.close()
+        if (manageEngine) {
+            engine.close()
+        }
     }
 }
 

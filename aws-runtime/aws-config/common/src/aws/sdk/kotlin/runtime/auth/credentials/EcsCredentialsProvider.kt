@@ -98,7 +98,9 @@ public class EcsCredentialsProvider internal constructor(
                 else -> CredentialsProviderException("Failed to get credentials from container metadata service", ex)
             }
         } finally {
-            client.close()
+            if (manageEngine) {
+                client.close()
+            }
         }
 
         logger.debug { "obtained credentials from container metadata service; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }

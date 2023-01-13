@@ -16,7 +16,6 @@ import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.http.engine.internal.borrow
 import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
@@ -65,10 +64,11 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     private val platformProvider: PlatformProvider = builder.platformProvider
     private val sdkLogMode: SdkLogMode = builder.sdkLogMode
     private val httpClient: SdkHttpClient
+    private val manageEngine: Boolean = builder.engine == null
 
     init {
         require(maxRetries > 0) { "maxRetries must be greater than zero" }
-        val engine = builder.engine?.borrow() ?: DefaultHttpEngine {
+        val engine = builder.engine ?: DefaultHttpEngine {
             connectTimeout = 1.seconds
             socketReadTimeout = 1.seconds
         }
@@ -137,7 +137,9 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     }
 
     override fun close() {
-        httpClient.close()
+        if (manageEngine) {
+            httpClient.close()
+        }
     }
 
     public class Builder {

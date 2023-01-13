@@ -87,14 +87,13 @@ open class AwsHttpProtocolClientGenerator(
     }
 
     override fun renderAdditionalInit(writer: KotlinWriter) {
-        writer.withBlock("if (config.credentialsProvider.#T()) {", "}", AwsRuntimeTypes.Config.Credentials.isManaged) {
+        writer.withBlock("if (config.credentialsProvider is #T) {", "}", AwsRuntimeTypes.Config.Credentials.ManagedCredentialsProvider) {
             write("config.credentialsProvider.share()")
         }
     }
 
-    override fun renderClose(writer: KotlinWriter) {
-        writer.withBlock("override fun close() {", "}") {
-            write("client.close()")
+    override fun renderAdditionalClose(writer: KotlinWriter) {
+        writer.withBlock("if (config.credentialsProvider is #T) {", "}", AwsRuntimeTypes.Config.Credentials.ManagedCredentialsProvider) {
             write("config.credentialsProvider.close()")
         }
     }
