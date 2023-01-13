@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.19.4-beta] - 01/13/2023
+
+### Miscellaneous
+* Sync AWS models
+
 ## [0.19.3-beta] - 01/12/2023
 **NOTE**: Do not use. Prefer 0.19.4-beta or later.
 
