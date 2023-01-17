@@ -88,7 +88,7 @@ public class EcsCredentialsProvider internal constructor(
         op.install(ResolveEndpoint(provider = { Endpoint(url) }, params = null))
 
         logger.debug { "retrieving container credentials" }
-        val client = sdkHttpClient(httpClientEngine)
+        val client = SdkHttpClient(httpClientEngine)
         val creds = try {
             op.roundTrip(client, Unit)
         } catch (ex: Exception) {
@@ -99,7 +99,7 @@ public class EcsCredentialsProvider internal constructor(
             }
         } finally {
             if (manageEngine) {
-                client.close()
+                client.engine.close()
             }
         }
 

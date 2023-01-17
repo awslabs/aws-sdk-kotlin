@@ -37,6 +37,13 @@ open class AwsHttpProtocolClientGenerator(
         super.render(writer)
     }
 
+    override fun renderInit(writer: KotlinWriter) {
+        writer.withBlock("init {", "}") {
+            write("managedResources.#T(config.httpClientEngine)", RuntimeTypes.IO.addIfManaged)
+            write("managedResources.#T(config.credentialsProvider)", RuntimeTypes.IO.addIfManaged)
+        }
+    }
+
     override fun renderOperationSetup(writer: KotlinWriter, opIndex: OperationIndex, op: OperationShape) {
         super.renderOperationSetup(writer, opIndex, op)
 
@@ -83,18 +90,6 @@ open class AwsHttpProtocolClientGenerator(
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
                 write("config.idempotencyTokenProvider?.let { ctx[#T.IdempotencyTokenProvider] = it }", sdkClientOptionSym)
             }
-        }
-    }
-
-    override fun renderAdditionalInit(writer: KotlinWriter) {
-        writer.withBlock("if (config.credentialsProvider is #T) {", "}", AwsRuntimeTypes.Config.Credentials.ManagedCredentialsProvider) {
-            write("config.credentialsProvider.share()")
-        }
-    }
-
-    override fun renderAdditionalClose(writer: KotlinWriter) {
-        writer.withBlock("if (config.credentialsProvider is #T) {", "}", AwsRuntimeTypes.Config.Credentials.ManagedCredentialsProvider) {
-            write("config.credentialsProvider.close()")
         }
     }
 }

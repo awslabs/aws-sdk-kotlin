@@ -3,8 +3,8 @@ package aws.sdk.kotlin.services.sts
 import aws.sdk.kotlin.services.sts.model.GetCallerIdentityRequest
 import aws.sdk.kotlin.services.sts.presigners.presign
 import aws.sdk.kotlin.testing.withAllEngines
+import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.response.complete
-import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.TestInstance
@@ -26,7 +26,7 @@ class StsPresignerTest {
         val presignedRequest = req.presign(c.config, 60.seconds)
 
         withAllEngines { engine ->
-            val httpClient = sdkHttpClient(engine)
+            val httpClient = SdkHttpClient(engine)
 
             val call = httpClient.call(presignedRequest)
             call.complete()

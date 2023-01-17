@@ -42,7 +42,7 @@ class AwsJsonProtocolTest {
                 operationName = "Bar"
             }
         }
-        val client = sdkHttpClient(mockEngine)
+        val client = SdkHttpClient(mockEngine)
         val m = AwsJsonProtocol("FooService_blah", "1.1")
         op.install(m)
 
@@ -73,7 +73,7 @@ class AwsJsonProtocolTest {
                 operationName = "Bar"
             }
         }
-        val client = sdkHttpClient(mockEngine)
+        val client = SdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol("FooService", "1.1"))
 
         op.roundTrip(client, Unit)
@@ -107,7 +107,7 @@ class AwsJsonProtocolTest {
                 operationName = "Bar"
             }
         }
-        val client = sdkHttpClient(mockEngine)
+        val client = SdkHttpClient(mockEngine)
         op.install(AwsJsonProtocol("FooService", "1.1"))
 
         op.roundTrip(client, Unit)

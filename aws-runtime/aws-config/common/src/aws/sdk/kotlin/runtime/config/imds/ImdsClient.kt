@@ -73,7 +73,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             socketReadTimeout = 1.seconds
         }
 
-        httpClient = sdkHttpClient(engine)
+        httpClient = SdkHttpClient(engine)
     }
 
     // cached middleware instances
@@ -138,7 +138,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
 
     override fun close() {
         if (manageEngine) {
-            httpClient.close()
+            httpClient.engine.close()
         }
     }
 
