@@ -95,4 +95,18 @@ class CachedValueTest {
         yield()
         assertEquals(2, count)
     }
+
+    @Test
+    fun testClose() = runTest {
+        val epoch = Instant.fromEpochSeconds(0)
+        val expiresAt = epoch + 100.seconds
+
+        val clock = ManualClock(epoch)
+
+        val value = CachedValue("foo", expiresAt, bufferTime = 30.seconds, clock = clock)
+
+        assertNotNull(value.get())
+        value.close()
+        assertNull(value.get())
+    }
 }
