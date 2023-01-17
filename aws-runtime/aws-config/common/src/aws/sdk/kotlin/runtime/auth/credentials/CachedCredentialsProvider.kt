@@ -53,8 +53,9 @@ public class CachedCredentialsProvider(
 ) : CredentialsProvider, Closeable {
 
     private val cachedCredentials = CachedValue<Credentials>(null, bufferTime = refreshBufferWindow, clock)
+    private var isClosed: Boolean = false
 
-    override suspend fun getCredentials(): Credentials = cachedCredentials.getOrLoad {
+    override suspend fun getCredentials(): Credentials = if (!isClosed) cachedCredentials.getOrLoad {
         coroutineContext.trace<CachedCredentialsProvider> { "refreshing credentials cache" }
         val providerCreds = source.getCredentials()
         if (providerCreds.expiration != null) {
@@ -65,9 +66,10 @@ public class CachedCredentialsProvider(
             val creds = providerCreds.copy(expiration = expiration)
             ExpiringValue(creds, expiration)
         }
-    }
+    } else throw IllegalStateException("Credentials provider is closed")
 
     override fun close() {
+        isClosed = true
         cachedCredentials.close()
         (source as? Closeable)?.close()
     }
