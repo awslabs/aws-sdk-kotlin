@@ -122,4 +122,21 @@ class CachedCredentialsProviderTest {
         // future successful invocations should continue to work
         provider.getCredentials()
     }
+
+    @Test
+    fun testItThrowsOnGetCredentialsAfterClose() = runTest {
+        val source = TestCredentialsProvider(expiration = testExpiration)
+        val provider = CachedCredentialsProvider(source, clock = testClock)
+        val creds = provider.getCredentials()
+        val expected = Credentials("AKID", "secret", expiration = testExpiration)
+        assertEquals(expected, creds)
+        assertEquals(1, source.callCount)
+
+        provider.close()
+
+        assertFailsWith<IllegalStateException> {
+            provider.getCredentials()
+        }
+        assertEquals(1, source.callCount)
+    }
 }
