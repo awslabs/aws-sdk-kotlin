@@ -68,6 +68,7 @@ public class CachedCredentialsProvider(
     }
 
     override fun close() {
+        cachedCredentials.close()
         (source as? Closeable)?.close()
     }
 }
