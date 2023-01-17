@@ -30,7 +30,7 @@ internal class CachedValue<T> (
     private var value: ExpiringValue<T>? = null,
     private val bufferTime: Duration = Duration.ZERO,
     private val clock: Clock = Clock.System,
-): Closeable {
+) : Closeable {
     constructor(value: T, expiresAt: Instant, bufferTime: Duration = Duration.ZERO, clock: Clock = Clock.System) : this(ExpiringValue(value, expiresAt), bufferTime, clock)
     private val mu = Mutex()
 
@@ -62,5 +62,4 @@ internal class CachedValue<T> (
     }
 
     override fun close() { value = null }
-
 }
