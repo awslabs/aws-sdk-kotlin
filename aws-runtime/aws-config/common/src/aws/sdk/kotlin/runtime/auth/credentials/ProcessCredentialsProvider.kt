@@ -22,6 +22,12 @@ private const val PROVIDER_NAME = "Process"
 /**
  * [CredentialsProvider] that invokes a command to retrieve [Credentials] from stdout.
  * If the exit code is non-zero, log and throw an exception including the stderr from the command.
+ * 
+ * WARNING: This [CredentialsProvider] sources credentials from an external process.
+ * This can potentially be dangerous, so proceed with caution. Other credential providers should be preferred if at all possible.
+ * If using this option, you should make sure that the config file and any process or script files are as locked down as possible using
+ * security best practices for your operating system.
+ * @see <a href="https://docs.aws.amazon.com/sdkref/latest/guide/feature-process-credentials.html">Process Credentials</a>
  *
  * @param credentialProcess the command to invoke to retrieve credentials
  * @param platformProvider the platform provider
