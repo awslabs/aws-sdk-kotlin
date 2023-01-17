@@ -47,10 +47,11 @@ internal actual suspend fun executeCommand(
         val start = clock.now().epochMilliseconds
 
         while (process.isAlive && clock.now().epochMilliseconds - start < timeoutMillis) {
+            reader.readLine()?.let { output.append(it) }
+
             if (output.length > maxOutputLengthBytes) {
                 throw RuntimeException("Process output exceeded limit of $maxOutputLengthBytes bytes")
             }
-            reader.readLine()?.let { output.append(it) }
         }
 
         if (process.isAlive) {
