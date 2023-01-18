@@ -89,4 +89,6 @@ private class StsWebIdentityProvider(
         val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClientEngine = httpClientEngine)
         return wrapped.getCredentials()
     }
+
+    override fun close() { }
 }

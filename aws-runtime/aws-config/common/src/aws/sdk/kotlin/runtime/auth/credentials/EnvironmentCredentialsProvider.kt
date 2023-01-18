@@ -39,4 +39,6 @@ public constructor(private val getEnv: (String) -> String?) : CredentialsProvide
             providerName = PROVIDER_NAME,
         )
     }
+
+    override fun close() { }
 }

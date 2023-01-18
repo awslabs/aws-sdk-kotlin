@@ -37,6 +37,8 @@ class CachedCredentialsProviderTest {
                 expiration = this@TestCredentialsProvider.expiration,
             )
         }
+
+        override fun close() { }
     }
 
     @Test
@@ -112,6 +114,7 @@ class CachedCredentialsProviderTest {
                 }
                 return Credentials("AKID", "secret")
             }
+            override fun close() { }
         }
         val provider = CachedCredentialsProvider(source, clock = testClock)
 

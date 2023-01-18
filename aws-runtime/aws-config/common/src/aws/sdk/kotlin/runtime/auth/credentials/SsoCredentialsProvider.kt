@@ -132,6 +132,8 @@ public class SsoCredentialsProvider public constructor(
         )
     }
 
+    override fun close() { }
+
     private suspend fun loadTokenFile(): SsoToken {
         val key = getCacheFilename(startUrl)
         val bytes = with(platformProvider) {

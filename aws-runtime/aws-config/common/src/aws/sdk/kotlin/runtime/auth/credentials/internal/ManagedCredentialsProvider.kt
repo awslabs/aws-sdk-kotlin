@@ -8,8 +8,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.SdkManagedCloseable
 
-@InternalSdkApi
-public class ManagedCredentialsProvider(
+private class ManagedCredentialsProvider(
     private val delegate: CredentialsProvider,
 ) : SdkManagedCloseable(delegate), CredentialsProvider by delegate
 

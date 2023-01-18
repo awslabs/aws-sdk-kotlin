@@ -19,6 +19,8 @@ public class StaticCredentialsProvider public constructor(private val credential
 
     override suspend fun getCredentials(): Credentials = credentials
 
+    override fun close() { }
+
     public companion object {
         /**
          * Construct a new [StaticCredentialsProvider] using the given [block]

@@ -110,6 +110,8 @@ public class StsWebIdentityCredentialsProvider(
             providerName = PROVIDER_NAME,
         )
     }
+
+    override fun close() { }
 }
 
 // convenience function to resolve parameters for fromEnvironment()

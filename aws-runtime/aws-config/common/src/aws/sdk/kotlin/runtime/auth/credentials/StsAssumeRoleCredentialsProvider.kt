@@ -100,6 +100,8 @@ public class StsAssumeRoleCredentialsProvider(
             providerName = PROVIDER_NAME,
         )
     }
+
+    override fun close() { }
 }
 
 // role session name must be provided to assume a role, when the user doesn't provide one we choose a name for them
