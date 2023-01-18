@@ -87,7 +87,9 @@ private interface TestClient : SdkClient {
 
 private class DefaultTestClient(
     override val config: TestClient.Config,
-) : TestClient
+) : TestClient {
+    override fun close() { }
+}
 
 // some non standard retry strategy used as a marker
 private class TestRetryStrategy : RetryStrategy {
