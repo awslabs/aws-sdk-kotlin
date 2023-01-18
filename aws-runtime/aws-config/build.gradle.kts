@@ -15,6 +15,7 @@ extra["moduleName"] = "aws.sdk.kotlin.runtime.config"
 val smithyKotlinVersion: String by project
 val kotestVersion: String by project
 val coroutinesVersion: String by project
+val atomicFuVersion: String by project
 
 kotlin {
     sourceSets {
@@ -32,7 +33,6 @@ kotlin {
                 // parsing common JSON credentials responses
                 implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
 
-
                 // additional dependencies required by generated sts provider
                 implementation("aws.smithy.kotlin:serde-form-url:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
@@ -43,6 +43,9 @@ kotlin {
 
                 // additional dependencies required by generated sso provider
                 implementation(project(":aws-runtime:protocols:aws-json-protocols"))
+
+                // atomics
+                implementation("org.jetbrains.kotlinx:atomicfu:$atomicFuVersion")
             }
         }
         commonTest {
