@@ -21,7 +21,6 @@ import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
@@ -57,7 +56,7 @@ private const val PROVIDER_NAME = "EcsContainer"
 public class EcsCredentialsProvider internal constructor(
     private val platformProvider: PlatformEnvironProvider,
     httpClientEngine: HttpClientEngine? = null,
-) : CredentialsProvider, Closeable {
+) : CredentialsProvider {
 
     public constructor() : this(Platform)
 
@@ -96,10 +95,6 @@ public class EcsCredentialsProvider internal constructor(
             throw when (ex) {
                 is CredentialsProviderException -> ex
                 else -> CredentialsProviderException("Failed to get credentials from container metadata service", ex)
-            }
-        } finally {
-            if (manageEngine) {
-                client.engine.close()
             }
         }
 
