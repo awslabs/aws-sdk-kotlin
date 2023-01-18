@@ -1,11 +1,11 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.time.Clock
-import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 
 /**
  * Execute a command and return a pair containing the exit code and contents of either stdout or stderr.
@@ -44,19 +44,24 @@ internal actual suspend fun executeCommand(
         val reader = process.inputStream.bufferedReader()
 
         val output = StringBuilder()
-        val start = clock.now().epochMilliseconds
+        val buffer = CharArray(1024)
 
-        while (process.isAlive && clock.now().epochMilliseconds - start < timeoutMillis) {
-            reader.readLine()?.let { output.append(it) }
+        withTimeout(timeoutMillis) {
+            while (true) {
+                val rc = reader.read(buffer)
+                if (rc == -1) break
 
-            if (output.length > maxOutputLengthBytes) {
-                throw RuntimeException("Process output exceeded limit of $maxOutputLengthBytes bytes")
+                output.append(buffer)
+                if (output.length > maxOutputLengthBytes) {
+                    throw RuntimeException("Process output exceeded limit of $maxOutputLengthBytes bytes")
+                }
+            }
+
+            withContext(Dispatchers.IO) {
+                process.waitFor()
             }
         }
-
-        if (process.isAlive) {
-            throw RuntimeException("Timed out while waiting $timeoutMillis milliseconds for the command to execute")
-        }
+        reader.close()
 
         Pair(
             process.exitValue(),
