@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.runtime.config
 
-import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.sync.Mutex
@@ -30,7 +29,7 @@ internal class CachedValue<T> (
     private var value: ExpiringValue<T>? = null,
     private val bufferTime: Duration = Duration.ZERO,
     private val clock: Clock = Clock.System,
-) : Closeable {
+) {
     constructor(value: T, expiresAt: Instant, bufferTime: Duration = Duration.ZERO, clock: Clock = Clock.System) : this(ExpiringValue(value, expiresAt), bufferTime, clock)
     private val mu = Mutex()
 
@@ -61,5 +60,8 @@ internal class CachedValue<T> (
         return refreshed.value
     }
 
-    override fun close() { value = null }
+    /**
+     * Evict the [value] from the cache
+     */
+    fun evict() { value = null }
 }
