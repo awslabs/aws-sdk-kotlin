@@ -14,6 +14,11 @@ import aws.smithy.kotlin.runtime.client.SdkClientFactory
 
 /**
  * Abstract base class all AWS client companion objects inherit from
+ *
+ * @param TConfig the type of the service client configuration
+ * @param TConfigBuilder the type of builder that creates [TConfig] instances
+ * @param TClient the type of service client
+ * @param TClientBuilder the type of builder that creates [TClient] instances
  */
 public abstract class AbstractAwsSdkClientFactory<
     TConfig,

@@ -76,7 +76,7 @@ private interface TestClient : SdkClient {
         override val region: String = builder.region ?: error("region is required")
 
         // new: inherits builder equivalents for Config base classes
-        class Builder : AwsSdkClientConfig.Builder<Config> {
+        class Builder : AwsSdkClientConfig.Builder, SdkClientConfig.Builder<Config> {
             override var region: String? = null
             override var retryStrategy: RetryStrategy? = null
             override var sdkLogMode: SdkLogMode = SdkLogMode.Default
