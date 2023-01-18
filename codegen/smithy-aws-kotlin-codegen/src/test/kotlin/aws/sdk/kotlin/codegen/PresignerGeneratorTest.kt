@@ -256,7 +256,7 @@ class PresignerGeneratorTest {
              * This type can be used to presign requests in cases where an existing service client
              * instance is not available.
              */
-            public class TestPresignConfig private constructor(builder: Builder): ServicePresignConfig {
+            public class TestPresignConfig private constructor(builder: Builder) : ServicePresignConfig {
                 override val credentialsProvider: CredentialsProvider = requireNotNull(builder.credentialsProvider) { "credentialsProvider is a required configuration property" }
                 override val endpointProvider: SigningEndpointProvider = requireNotNull(builder.endpointProvider) { "endpointProvider is a required configuration property" }
                 override val normalizeUriPath: Boolean = true
