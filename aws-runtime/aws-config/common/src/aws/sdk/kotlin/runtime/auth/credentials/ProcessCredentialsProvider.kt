@@ -44,7 +44,7 @@ public class ProcessCredentialsProvider(
         val logger = Logger.getLogger<ProcessCredentialsProvider>()
 
         val (exitCode, output) = try {
-            executeCommand("\"$credentialProcess\"", platformProvider, maxOutputLengthBytes, timeoutMillis)
+            executeCommand(credentialProcess, platformProvider, maxOutputLengthBytes, timeoutMillis)
         } catch (ex: Exception) {
             throw CredentialsProviderException("Failed to execute command", ex)
         }
