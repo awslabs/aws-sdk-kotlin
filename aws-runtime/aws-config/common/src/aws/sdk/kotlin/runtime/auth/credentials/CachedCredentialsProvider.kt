@@ -15,6 +15,7 @@ import aws.smithy.kotlin.runtime.tracing.trace
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.atomicfu.atomic
 
 private const val DEFAULT_CREDENTIALS_REFRESH_BUFFER_SECONDS = 10
 
@@ -53,24 +54,28 @@ public class CachedCredentialsProvider(
 ) : CredentialsProvider, Closeable {
 
     private val cachedCredentials = CachedValue<Credentials>(null, bufferTime = refreshBufferWindow, clock)
-    private var isClosed: Boolean = false
+    private val closed = atomic(false)
 
-    override suspend fun getCredentials(): Credentials = if (!isClosed) cachedCredentials.getOrLoad {
-        coroutineContext.trace<CachedCredentialsProvider> { "refreshing credentials cache" }
-        val providerCreds = source.getCredentials()
-        if (providerCreds.expiration != null) {
-            val expiration = minOf(providerCreds.expiration!!, (clock.now() + expireCredentialsAfter))
-            ExpiringValue(providerCreds, expiration)
-        } else {
-            val expiration = clock.now() + expireCredentialsAfter
-            val creds = providerCreds.copy(expiration = expiration)
-            ExpiringValue(creds, expiration)
+    override suspend fun getCredentials(): Credentials {
+        check(!closed.value) { "Credentials provider is closed" }
+
+        return cachedCredentials.getOrLoad {
+            coroutineContext.trace<CachedCredentialsProvider> { "refreshing credentials cache" }
+            val providerCreds = source.getCredentials()
+            if (providerCreds.expiration != null) {
+                val expiration = minOf(providerCreds.expiration!!, (clock.now() + expireCredentialsAfter))
+                ExpiringValue(providerCreds, expiration)
+            } else {
+                val expiration = clock.now() + expireCredentialsAfter
+                val creds = providerCreds.copy(expiration = expiration)
+                ExpiringValue(creds, expiration)
+            }
         }
-    } else throw IllegalStateException("Credentials provider is closed")
+    }
 
     override fun close() {
-        isClosed = true
-        cachedCredentials.close()
+        if (!closed.compareAndSet(false, true)) return
+        cachedCredentials.evict()
         (source as? Closeable)?.close()
     }
 }
