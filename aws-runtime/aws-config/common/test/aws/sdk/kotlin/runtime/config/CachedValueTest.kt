@@ -105,7 +105,7 @@ class CachedValueTest {
 
         assertNotNull(value.get())
         value.close()
-        assertNull(value.get())
+        assertFailsWith<IllegalStateException> { value.get() }
     }
 
     @Test
