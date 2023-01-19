@@ -45,10 +45,11 @@ internal class CachedValue<T> (
     /**
      * Check if the value is expired or not as compared to the time now
      */
-    fun isExpired(): Boolean {
-        check(!closed.value) { "value is closed" }
-        return ref?.let { isExpired(it) } ?: true
-    }
+    val isExpired: Boolean
+        get() {
+            check(!closed.value) { "value is closed" }
+            return ref?.let { isExpired(it) } ?: true
+        }
 
     private fun isExpired(value: ExpiringValue<T>): Boolean = clock.now() >= (value.expiresAt - bufferTime)
 
@@ -57,11 +58,9 @@ internal class CachedValue<T> (
      */
     fun get(): T? {
         check(!closed.value) { "value is closed" }
+        val curr = ref ?: return null
 
-        if (ref == null || isExpired(ref!!)) {
-            return null
-        }
-        return ref!!.value
+        return if (isExpired(curr)) null else curr.value
     }
 
     /**

@@ -22,7 +22,7 @@ class CachedValueTest {
         val clock = ManualClock(epoch)
         val value = CachedValue<String>(null, clock = clock)
 
-        assertTrue(value.isExpired())
+        assertTrue(value.isExpired)
         assertNull(value.get())
     }
 
@@ -34,11 +34,11 @@ class CachedValueTest {
 
         val value = CachedValue("foo", expiresAt, clock = clock)
 
-        assertFalse(value.isExpired())
+        assertFalse(value.isExpired)
         assertEquals("foo", value.get())
 
         clock.advance(10.seconds)
-        assertTrue(value.isExpired())
+        assertTrue(value.isExpired)
         assertNull(value.get())
     }
 
@@ -50,11 +50,11 @@ class CachedValueTest {
 
         val value = CachedValue("foo", expiresAt, bufferTime = 30.seconds, clock = clock)
 
-        assertFalse(value.isExpired())
+        assertFalse(value.isExpired)
         assertEquals("foo", value.get())
 
         clock.advance(70.seconds)
-        assertTrue(value.isExpired())
+        assertTrue(value.isExpired)
         assertNull(value.get())
     }
 
@@ -73,14 +73,14 @@ class CachedValueTest {
             ExpiringValue("bar", expiresAt + count.seconds * 100)
         }
 
-        assertFalse(value.isExpired())
+        assertFalse(value.isExpired)
         assertEquals("foo", value.getOrLoad(initializer))
         assertEquals(0, count)
 
         // t = 90
         clock.advance(90.seconds)
         assertEquals("bar", value.getOrLoad(initializer))
-        assertFalse(value.isExpired())
+        assertFalse(value.isExpired)
         assertEquals(1, count)
 
         // t = 180
