@@ -75,7 +75,7 @@ public class CachedCredentialsProvider(
 
     override fun close() {
         if (!closed.compareAndSet(false, true)) return
-        cachedCredentials.evict()
+        cachedCredentials.close()
         (source as? Closeable)?.close()
     }
 }

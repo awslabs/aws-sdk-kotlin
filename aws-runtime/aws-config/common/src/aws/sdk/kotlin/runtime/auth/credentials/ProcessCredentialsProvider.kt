@@ -26,6 +26,8 @@ private const val PROVIDER_NAME = "Process"
  * WARNING: This [CredentialsProvider] sources credentials from an external process.
  * This can potentially be dangerous, so proceed with caution. Other credential providers should be preferred if possible.
  * If using this option, secure the config file and any process/script files using security best practices for your operating system.
+ * Additionally, make sure to follow command-line conventions such as surrounding filenames / paths with quotes if they contain spaces.
+ * See the public documentation for a full list of expected conventions.
  * @see <a href="https://docs.aws.amazon.com/sdkref/latest/guide/feature-process-credentials.html">Process Credentials</a>
  *
  * @param credentialProcess the command to invoke to retrieve credentials

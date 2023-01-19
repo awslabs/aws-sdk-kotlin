@@ -5,10 +5,14 @@
 
 package aws.sdk.kotlin.runtime.config
 
+import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.atomicfu.AtomicRef
+import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlin.time.Duration
 
 /**
@@ -29,39 +33,58 @@ internal class CachedValue<T> (
     private var value: ExpiringValue<T>? = null,
     private val bufferTime: Duration = Duration.ZERO,
     private val clock: Clock = Clock.System,
-) {
+) : Closeable {
     constructor(value: T, expiresAt: Instant, bufferTime: Duration = Duration.ZERO, clock: Clock = Clock.System) : this(ExpiringValue(value, expiresAt), bufferTime, clock)
-    private val mu = Mutex()
+
+    private val gate = Semaphore(1)
+    private val _ref: AtomicRef<ExpiringValue<T>?> = atomic(value)
+    private val ref: ExpiringValue<T>?
+        get() = _ref.value
+    private val closed = atomic(false)
 
     /**
-     * Check if the value is expired or not as compared to the time [now]
+     * Check if the value is expired or not as compared to the time now
      */
-    suspend fun isExpired(): Boolean = mu.withLock { isExpiredUnlocked() }
-
-    private fun isExpiredUnlocked(): Boolean {
-        val curr = value ?: return true
-        return clock.now() >= (curr.expiresAt - bufferTime)
+    fun isExpired(): Boolean {
+        check(!closed.value) { "value is closed" }
+        return ref?.let { isExpired(it) } ?: true
     }
+
+    private fun isExpired(value: ExpiringValue<T>): Boolean = clock.now() >= (value.expiresAt - bufferTime)
 
     /**
      * Get the value if it has not expired yet. Returns null if the value has expired
      */
-    suspend fun get(): T? = mu.withLock {
-        if (!isExpiredUnlocked()) return value!!.value else null
+    fun get(): T? {
+        check(!closed.value) { "value is closed" }
+
+        if (ref == null || isExpired(ref!!)) {
+            return null
+        }
+        return ref!!.value
     }
 
     /**
      * Attempt to get the value or refresh it with [initializer] if it is expired
      */
-    suspend fun getOrLoad(initializer: suspend () -> ExpiringValue<T>): T = mu.withLock {
-        if (!isExpiredUnlocked()) return@withLock value!!.value
+    suspend fun getOrLoad(initializer: suspend () -> ExpiringValue<T>): T = gate.withPermit {
+        check(!closed.value) { "value is closed" }
 
-        val refreshed = initializer().also { value = it }
-        return refreshed.value
+        val curr = ref
+        if (curr != null && !isExpired(curr)) {
+            return curr.value
+        }
+
+        val next = initializer()
+
+        check(!closed.value) { "value is closed" }
+        check(_ref.compareAndSet(curr, next)) { "value changed during getOrLoad" }
+
+        return next.value
     }
 
-    /**
-     * Evict the [value] from the cache
-     */
-    fun evict() { value = null }
+    override fun close() {
+        if (!closed.compareAndSet(false, true)) { return }
+        _ref.update { null }
+    }
 }
