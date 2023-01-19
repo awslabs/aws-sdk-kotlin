@@ -12,10 +12,10 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.tracing.trace
+import kotlinx.atomicfu.atomic
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
-import kotlinx.atomicfu.atomic
 
 private const val DEFAULT_CREDENTIALS_REFRESH_BUFFER_SECONDS = 10
 
