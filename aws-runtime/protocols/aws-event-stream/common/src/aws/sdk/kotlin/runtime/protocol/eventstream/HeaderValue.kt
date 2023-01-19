@@ -22,7 +22,8 @@ internal enum class HeaderType(val value: Byte) {
     BYTE_ARRAY(6),
     STRING(7),
     TIMESTAMP(8),
-    UUID(9);
+    UUID(9),
+    ;
 
     companion object {
         /**

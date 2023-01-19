@@ -67,7 +67,9 @@ private class Ec2QuerySerdeFormUrlDescriptorGenerator(
             ?: member.getTrait<XmlNameTrait>()?.value?.replaceFirstChar(Char::uppercaseChar)
             ?: if (member.memberName.firstOrNull()?.isUpperCase() == false) {
                 member.memberName.replaceFirstChar(Char::uppercaseChar)
-            } else null
+            } else {
+                null
+            }
 
     override fun isMemberFlattened(member: MemberShape, targetShape: Shape): Boolean =
         targetShape.type == ShapeType.LIST

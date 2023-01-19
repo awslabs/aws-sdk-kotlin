@@ -104,7 +104,9 @@ public class ImdsCredentialsProvider(
                             "${ DEFAULT_CREDENTIALS_REFRESH_SECONDS / 60 } minutes."
                     }
                     clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds
-                } else null
+                } else {
+                    null
+                }
 
                 val creds = Credentials(
                     resp.accessKeyId,
