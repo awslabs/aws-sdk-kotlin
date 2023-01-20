@@ -129,6 +129,8 @@ private const val SSO_REGION = "sso_region"
 private const val SSO_ACCOUNT_ID = "sso_account_id"
 private const val SSO_ROLE_NAME = "sso_role_name"
 
+private const val CREDENTIAL_PROCESS = "credential_process"
+
 private fun AwsProfile.roleArnOrNull(): RoleArn? {
     // web identity tokens are leaf providers, not chained roles
     if (contains(WEB_IDENTITY_TOKEN_FILE)) return null
@@ -210,6 +212,18 @@ private fun AwsProfile.ssoCreds(): LeafProviderResult? {
 }
 
 /**
+ * Attempt to load [LeafProvider.Process] from the current profile or `null` if the current profile does not contain
+ * a credentials process command to execute
+ */
+private fun AwsProfile.processCreds(): LeafProviderResult? {
+    if (!contains(CREDENTIAL_PROCESS)) return null
+
+    val credentialProcess = get(CREDENTIAL_PROCESS) ?: return LeafProviderResult.Err("profile ($name) missing `$CREDENTIAL_PROCESS`")
+
+    return LeafProviderResult.Ok(LeafProvider.Process(credentialProcess))
+}
+
+/**
  * Load [LeafProvider.AccessKey] from the current profile or throw an exception if the profile does not contain
  * credentials
  */
@@ -274,6 +288,7 @@ private fun AwsProfile.leafProvider(): LeafProvider {
     // non-null LeafProviderResult we encounter
     return webIdentityTokenCreds()
         .orElse(::ssoCreds)
+        .orElse(::processCreds)
         .unwrapOrElse(::staticCreds)
         .unwrap()
 }
