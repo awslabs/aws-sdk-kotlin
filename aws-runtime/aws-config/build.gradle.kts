@@ -17,6 +17,19 @@ val kotestVersion: String by project
 val coroutinesVersion: String by project
 val atomicFuVersion: String by project
 
+buildscript {
+    val atomicFuVersion: String by project
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:$atomicFuVersion")
+    }
+}
+apply(plugin = "kotlinx-atomicfu")
+
 kotlin {
     sourceSets {
         commonMain {
