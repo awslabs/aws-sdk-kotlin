@@ -53,7 +53,7 @@ internal actual suspend fun executeCommand(
 
                 output.append(buffer)
                 if (output.length > maxOutputLengthBytes) {
-                    throw RuntimeException("Process output exceeded limit of $maxOutputLengthBytes bytes")
+                    throw CredentialsProviderException("Process output exceeded limit of $maxOutputLengthBytes bytes")
                 }
             }
 
