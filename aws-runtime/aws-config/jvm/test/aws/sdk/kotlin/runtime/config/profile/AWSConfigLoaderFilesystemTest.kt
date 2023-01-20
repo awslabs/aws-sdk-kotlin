@@ -36,7 +36,6 @@ class AWSConfigLoaderFilesystemTest {
 
     @Test
     fun itLoadsConfigFileFromFilesystem() = runTest {
-        requireNotNull(tempDir)
         val configFile = tempDir!!.resolve("config")
         val credentialsFile = tempDir!!.resolve("credentials")
 
@@ -63,7 +62,6 @@ class AWSConfigLoaderFilesystemTest {
 
     @Test
     fun itLoadsConfigAndCredsFileFromFilesystem() = runTest {
-        requireNotNull(tempDir)
         val configFile = tempDir!!.resolve("config")
         val credentialsFile = tempDir!!.resolve("credentials")
 
