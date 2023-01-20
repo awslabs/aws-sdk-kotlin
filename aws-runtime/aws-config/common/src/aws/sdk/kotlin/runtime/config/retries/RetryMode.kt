@@ -23,5 +23,5 @@ public enum class RetryMode {
     /**
      * Not implemented yet. https://github.com/awslabs/aws-sdk-kotlin/issues/701
      */
-    ADAPTIVE;
+    ADAPTIVE,
 }

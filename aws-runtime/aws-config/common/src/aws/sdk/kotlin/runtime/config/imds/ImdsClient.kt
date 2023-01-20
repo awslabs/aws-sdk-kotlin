@@ -205,7 +205,8 @@ public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
      * IPv6 mode
      * e.g. `http://[fd00:ec2::254]`
      */
-    IPv6(Endpoint("http://[fd00:ec2::254]"));
+    IPv6(Endpoint("http://[fd00:ec2::254]")),
+    ;
 
     public companion object {
         public fun fromValue(value: String): EndpointMode = when (value.lowercase()) {

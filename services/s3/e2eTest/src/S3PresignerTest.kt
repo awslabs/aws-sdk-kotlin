@@ -29,12 +29,12 @@ class S3PresignerTest {
     private lateinit var testBucket: String
 
     @BeforeAll
-    private fun createResources(): Unit = runBlocking {
+    fun createResources(): Unit = runBlocking {
         testBucket = S3TestUtils.getTestBucket(client)
     }
 
     @AfterAll
-    private fun cleanup(): Unit = runBlocking {
+    fun cleanup(): Unit = runBlocking {
         S3TestUtils.deleteBucketAndAllContents(client, testBucket)
         client.close()
     }

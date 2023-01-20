@@ -50,7 +50,9 @@ object S3TestUtils {
             }
 
             client.waitUntilBucketExists { bucket = testBucket }
-        } else println("Using existing S3 bucket: $testBucket")
+        } else {
+            println("Using existing S3 bucket: $testBucket")
+        }
 
         client.putBucketLifecycleConfiguration {
             bucket = testBucket
