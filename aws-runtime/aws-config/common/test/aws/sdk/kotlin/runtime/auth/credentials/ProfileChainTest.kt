@@ -394,6 +394,26 @@ class ProfileChainTest {
             """,
             TestOutput.Error("profile (A) missing `sso_role_name`"),
         ),
+        TestCase(
+            "process credentials with absolute path",
+            """
+            [profile A]
+            credential_process = /home/ec2-user/credential_provider.o
+            """,
+            chain(
+                LeafProvider.Process("/home/ec2-user/credential_provider.o"),
+            ),
+        ),
+        TestCase(
+            "process credentials resolved from PATH with additional arguments",
+            """
+            [profile A]
+            credential_process = credential_provider --flag true
+            """,
+            chain(
+                LeafProvider.Process("credential_provider --flag true"),
+            ),
+        ),
     )
 
     @Test

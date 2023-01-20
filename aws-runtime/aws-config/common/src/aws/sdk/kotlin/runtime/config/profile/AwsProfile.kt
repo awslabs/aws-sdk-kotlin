@@ -67,6 +67,12 @@ public val AwsProfile.maxAttempts: Int?
     }
 
 /**
+ * The command which the SDK will invoke to retrieve credentials
+ */
+public val AwsProfile.credentialProcess: String?
+    get() = this["credential_process"]
+
+/**
  * Which [RetryMode] to use for the default RetryPolicy, when one is not specified at the client level.
  */
 public val AwsProfile.retryMode: RetryMode?
