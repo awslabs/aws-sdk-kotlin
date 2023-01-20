@@ -34,7 +34,7 @@ class S3PresignerTest {
     }
 
     @AfterAll
-    private fun cleanup(): Unit = runBlocking {
+    fun cleanup(): Unit = runBlocking {
         S3TestUtils.deleteBucketAndAllContents(client, testBucket)
         client.close()
     }
