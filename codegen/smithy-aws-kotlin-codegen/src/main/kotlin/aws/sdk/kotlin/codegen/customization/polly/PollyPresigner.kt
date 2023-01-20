@@ -3,10 +3,7 @@ package aws.sdk.kotlin.codegen.customization.polly
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.PresignerGenerator
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.CodegenContext
-import software.amazon.smithy.kotlin.codegen.core.KotlinDelegator
-import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
@@ -16,7 +13,6 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpStringValues
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
-import software.amazon.smithy.model.traits.TimestampFormatTrait
 
 /**
  * Override the PresignedRequestConfig instance generation for Polly based on customization SEP
@@ -35,10 +31,10 @@ class PollyPresigner : KotlinIntegration {
     }
 
     private val addPollyPresignConfigFnWriter = SectionWriter { writer, _ ->
-        val ctx = writer.getContext(PresignerGenerator.PresignConfigFnSection.CodegenContext) as CodegenContext
-        val operation = ctx.model.expectShape<OperationShape>(writer.getContext(PresignerGenerator.PresignConfigFnSection.OperationId) as String)
-        val resolver = writer.getContext(PresignerGenerator.PresignConfigFnSection.HttpBindingResolver) as HttpBindingResolver
-        val defaultTimestampFormat = writer.getContext(PresignerGenerator.PresignConfigFnSection.DefaultTimestampFormat) as TimestampFormatTrait.Format
+        val ctx = writer.getContextValue(PresignerGenerator.PresignConfigFnSection.CodegenContext)
+        val operation = ctx.model.expectShape<OperationShape>(writer.getContextValue(PresignerGenerator.PresignConfigFnSection.OperationId))
+        val resolver = writer.getContextValue(PresignerGenerator.PresignConfigFnSection.HttpBindingResolver)
+        val defaultTimestampFormat = writer.getContextValue(PresignerGenerator.PresignConfigFnSection.DefaultTimestampFormat)
 
         writer.addImport(RuntimeTypes.Http.QueryParametersBuilder)
         writer.addImport(RuntimeTypes.Http.HttpMethod)

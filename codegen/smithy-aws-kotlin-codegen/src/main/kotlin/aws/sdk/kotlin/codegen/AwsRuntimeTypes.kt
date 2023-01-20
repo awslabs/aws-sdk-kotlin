@@ -5,104 +5,92 @@
 
 package aws.sdk.kotlin.codegen
 
-import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.core.KotlinDependency
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.namespace
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypePackage
 
 /**
  * Commonly used AWS runtime types. Provides a single definition of a runtime symbol such that codegen isn't littered
- * with inline symbol creation which makes refactoring of the runtime more difficult and error prone.
- *
- * NOTE: Not all symbols need be added here but it doesn't hurt to define runtime symbols once.
+ * with inline symbol creation which makes refactoring of the runtime more difficult and error-prone.
  */
 object AwsRuntimeTypes {
-    object Core {
-        val AwsClientOption = runtimeSymbol("AwsClientOption", AwsKotlinDependency.AWS_CORE, "client")
-        val AwsErrorMetadata = runtimeSymbol("AwsErrorMetadata", AwsKotlinDependency.AWS_CORE)
-        val ClientException = runtimeSymbol("ClientException", AwsKotlinDependency.AWS_CORE)
-    }
+    object Core : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE) {
+        val AwsErrorMetadata = symbol("AwsErrorMetadata")
+        val ClientException = symbol("ClientException")
 
-    object Endpoint {
-        val AuthSchemesAttributeKey = runtimeSymbol("AuthSchemesAttributeKey", AwsKotlinDependency.AWS_ENDPOINT)
-        val AuthScheme = runtimeSymbol("AuthScheme", AwsKotlinDependency.AWS_ENDPOINT)
-        val authSchemeEndpointExt = runtimeSymbol("authScheme", AwsKotlinDependency.AWS_ENDPOINT)
-        val asSigningContextAuthSchemeExt = runtimeSymbol("asSigningContext", AwsKotlinDependency.AWS_ENDPOINT)
-        val applyToRequestAuthSchemeExt = runtimeSymbol("applyToRequest", AwsKotlinDependency.AWS_ENDPOINT)
-
-        object Functions {
-            val partitionFn = runtimeSymbol("partition", AwsKotlinDependency.AWS_ENDPOINT, "functions")
-            val Partition = runtimeSymbol("Partition", AwsKotlinDependency.AWS_ENDPOINT, "functions")
-            val PartitionConfig = runtimeSymbol("PartitionConfig", AwsKotlinDependency.AWS_ENDPOINT, "functions")
-            val parseArn = runtimeSymbol("parseArn", AwsKotlinDependency.AWS_ENDPOINT, "functions")
-            val Arn = runtimeSymbol("Arn", AwsKotlinDependency.AWS_ENDPOINT, "functions")
-            val isVirtualHostableS3Bucket = runtimeSymbol("isVirtualHostableS3Bucket", AwsKotlinDependency.AWS_ENDPOINT, "functions")
+        object Client : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE, "client") {
+            val AwsClientOption = symbol("AwsClientOption")
+            val AwsSdkClientConfig = symbol("AwsSdkClientConfig")
         }
     }
 
-    object Config {
-        object Credentials {
-            val DefaultChainCredentialsProvider = runtimeSymbol("DefaultChainCredentialsProvider", AwsKotlinDependency.AWS_CONFIG, "auth.credentials")
-            val StaticCredentialsProvider = runtimeSymbol("StaticCredentialsProvider", AwsKotlinDependency.AWS_CONFIG, "auth.credentials")
-            val borrow = runtimeSymbol("borrow", AwsKotlinDependency.AWS_CONFIG, "auth.credentials.internal")
-        }
+    object Endpoint : RuntimeTypePackage(AwsKotlinDependency.AWS_ENDPOINT) {
+        val AuthSchemesAttributeKey = symbol("AuthSchemesAttributeKey")
+        val AuthScheme = symbol("AuthScheme")
+        val authSchemeEndpointExt = symbol("authScheme")
+        val asSigningContextAuthSchemeExt = symbol("asSigningContext")
+        val applyToRequestAuthSchemeExt = symbol("applyToRequest")
 
-        object Region {
-            val resolveRegion = runtimeSymbol("resolveRegion", AwsKotlinDependency.AWS_CONFIG, "region")
+        object Functions : RuntimeTypePackage(AwsKotlinDependency.AWS_ENDPOINT, "functions") {
+            val partitionFn = symbol("partition")
+            val Partition = symbol("Partition")
+            val PartitionConfig = symbol("PartitionConfig")
+            val parseArn = symbol("parseArn")
+            val Arn = symbol("Arn")
+            val isVirtualHostableS3Bucket = symbol("isVirtualHostableS3Bucket")
         }
+    }
+
+    object Config : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG) {
+        val AbstractAwsSdkClientFactory = symbol("AbstractAwsSdkClientFactory", "config")
+
+        object Credentials : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG, "auth.credentials") {
+            val DefaultChainCredentialsProvider = symbol("DefaultChainCredentialsProvider")
+            val StaticCredentialsProvider = symbol("StaticCredentialsProvider")
+            val borrow = symbol("borrow", "auth.credentials.internal")
+        }
+    }
+
+    object Http : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP) {
+        val withPayload = symbol("withPayload")
+        val setAseErrorMetadata = symbol("setAseErrorMetadata")
 
         object Retries {
-            val resolveRetryStrategy = runtimeSymbol("resolveRetryStrategy", AwsKotlinDependency.AWS_CONFIG, "config.retries")
-        }
-    }
-
-    object Http {
-        val withPayload = runtimeSymbol("withPayload", AwsKotlinDependency.AWS_HTTP)
-        val setAseErrorMetadata = runtimeSymbol("setAseErrorMetadata", AwsKotlinDependency.AWS_HTTP)
-
-        object Retries {
-            val AwsDefaultRetryPolicy = runtimeSymbol("AwsDefaultRetryPolicy", AwsKotlinDependency.AWS_HTTP, "retries")
+            val AwsDefaultRetryPolicy = symbol("AwsDefaultRetryPolicy", "retries")
         }
         object Middleware {
-            val AwsRetryHeaderMiddleware = runtimeSymbol("AwsRetryHeaderMiddleware", AwsKotlinDependency.AWS_HTTP, "middleware")
+            val AwsRetryHeaderMiddleware = symbol("AwsRetryHeaderMiddleware", "middleware")
         }
     }
 
-    object JsonProtocols {
-        val RestJsonErrorDeserializer = runtimeSymbol("RestJsonErrorDeserializer", AwsKotlinDependency.AWS_JSON_PROTOCOLS)
+    object JsonProtocols : RuntimeTypePackage(AwsKotlinDependency.AWS_JSON_PROTOCOLS) {
+        val RestJsonErrorDeserializer = symbol("RestJsonErrorDeserializer")
     }
 
-    object XmlProtocols {
-        val parseRestXmlErrorResponse = runtimeSymbol("parseRestXmlErrorResponse", AwsKotlinDependency.AWS_XML_PROTOCOLS)
-        val parseEc2QueryErrorResponse = runtimeSymbol("parseEc2QueryErrorResponse", AwsKotlinDependency.AWS_XML_PROTOCOLS)
+    object XmlProtocols : RuntimeTypePackage(AwsKotlinDependency.AWS_XML_PROTOCOLS) {
+        val parseRestXmlErrorResponse = symbol("parseRestXmlErrorResponse")
+        val parseEc2QueryErrorResponse = symbol("parseEc2QueryErrorResponse")
     }
 
-    object AwsEventStream {
-        val HeaderValue = runtimeSymbol("HeaderValue", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val Message = runtimeSymbol("Message", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val MessageType = runtimeSymbol("MessageType", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val MessageTypeExt = runtimeSymbol("type", AwsKotlinDependency.AWS_EVENT_STREAM)
+    object AwsEventStream : RuntimeTypePackage(AwsKotlinDependency.AWS_EVENT_STREAM) {
+        val HeaderValue = symbol("HeaderValue")
+        val Message = symbol("Message")
+        val MessageType = symbol("MessageType")
+        val MessageTypeExt = symbol("type")
 
-        val asEventStreamHttpBody = runtimeSymbol("asEventStreamHttpBody", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val buildMessage = runtimeSymbol("buildMessage", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val decodeFrames = runtimeSymbol("decodeFrames", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val encode = runtimeSymbol("encode", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val asEventStreamHttpBody = symbol("asEventStreamHttpBody")
+        val buildMessage = symbol("buildMessage")
+        val decodeFrames = symbol("decodeFrames")
+        val encode = symbol("encode")
 
-        val expectBool = runtimeSymbol("expectBool", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val expectByte = runtimeSymbol("expectByte", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val expectByteArray = runtimeSymbol("expectByteArray", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val expectInt16 = runtimeSymbol("expectInt16", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val expectInt32 = runtimeSymbol("expectInt32", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val expectInt64 = runtimeSymbol("expectInt64", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val expectTimestamp = runtimeSymbol("expectTimestamp", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val expectString = runtimeSymbol("expectString", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val expectBool = symbol("expectBool")
+        val expectByte = symbol("expectByte")
+        val expectByteArray = symbol("expectByteArray")
+        val expectInt16 = symbol("expectInt16")
+        val expectInt32 = symbol("expectInt32")
+        val expectInt64 = symbol("expectInt64")
+        val expectTimestamp = symbol("expectTimestamp")
+        val expectString = symbol("expectString")
 
-        val sign = runtimeSymbol("sign", AwsKotlinDependency.AWS_EVENT_STREAM)
-        val newEventStreamSigningConfig = runtimeSymbol("newEventStreamSigningConfig", AwsKotlinDependency.AWS_EVENT_STREAM)
+        val sign = symbol("sign")
+        val newEventStreamSigningConfig = symbol("newEventStreamSigningConfig")
     }
-}
-
-private fun runtimeSymbol(name: String, dependency: KotlinDependency, subpackage: String = ""): Symbol = buildSymbol {
-    this.name = name
-    namespace(dependency, subpackage)
 }

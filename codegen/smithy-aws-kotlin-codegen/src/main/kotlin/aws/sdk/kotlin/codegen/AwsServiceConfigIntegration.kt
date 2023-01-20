@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.codegen
 
-import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
@@ -12,20 +11,27 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.boxed
 import software.amazon.smithy.kotlin.codegen.rendering.*
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 
 class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
-        val RegionProp: ClientConfigProperty = ClientConfigProperty {
+        val RegionProp: ConfigProperty = ConfigProperty {
             name = "region"
             symbol = KotlinTypes.String.toBuilder().boxed().build()
+            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            useNestedBuilderBaseClass()
             documentation = """
-                    AWS region to make requests to
+                The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
+                [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
+                information
             """.trimIndent()
-            propertyType = ClientConfigPropertyType.Required()
+            propertyType = ConfigPropertyType.Required()
             order = -100
         }
 
-        val CredentialsProviderProp: ClientConfigProperty = ClientConfigProperty {
+        // FIXME - this should be registered based on auth scheme in model
+        val CredentialsProviderProp: ConfigProperty = ConfigProperty {
             symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
             documentation = """
                 The AWS credentials provider to use for authenticating requests. If not provided a
@@ -34,7 +40,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 client will not close it when the client is closed.
             """.trimIndent()
 
-            propertyType = ClientConfigPropertyType.Custom(render = { prop, writer ->
+            propertyType = ConfigPropertyType.Custom(render = { prop, writer ->
                 writer.write(
                     "public val #1L: #2T = builder.#1L?.borrow() ?: #3T(httpClientEngine = httpClientEngine, region = region)",
                     prop.propertyName,
@@ -49,7 +55,9 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             )
         }
 
-        val UseFipsProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+        // FIXME - should fips and dual stack props be defined on one of our AWS SDK client config interfaces (e.g. `AwsSdkConfig`) if they apply to every AWS SDK Kotlin service client generated?
+
+        val UseFipsProp: ConfigProperty = ConfigProperty.Boolean(
             "useFips",
             defaultValue = false,
             documentation = """
@@ -57,7 +65,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             """.trimIndent(),
         )
 
-        val UseDualStackProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+        val UseDualStackProp: ConfigProperty = ConfigProperty.Boolean(
             "useDualStack",
             defaultValue = false,
             documentation = """
@@ -65,59 +73,36 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             """.trimIndent(),
         )
 
-        val EndpointUrlProp = ClientConfigProperty {
+        val EndpointUrlProp = ConfigProperty {
             name = "endpointUrl"
             symbol = RuntimeTypes.Http.Url.toBuilder().boxed().build()
             documentation = """
                 A custom endpoint to use when making requests.
             """.trimIndent()
-            propertyType = ClientConfigPropertyType.SymbolDefault
+            propertyType = ConfigPropertyType.SymbolDefault
         }
     }
 
     private val overrideServiceCompanionObjectWriter = SectionWriter { writer, _ ->
         // override the service client companion object for how a client is constructed
-        val serviceSymbol: Symbol = writer.getContextValue(ServiceGenerator.SectionServiceCompanionObject.ServiceSymbol)
-        writer.withBlock("public companion object {", "}") {
-            withBlock(
-                "public operator fun invoke(block: Config.Builder.() -> Unit): #L {",
-                "}",
-                serviceSymbol.name,
-            ) {
-                write("val config = Config.Builder().apply(block).build()")
-                write("return Default${serviceSymbol.name}(config)")
-            }
-
-            write("")
-            write("public operator fun invoke(config: Config): ${serviceSymbol.name} = Default${serviceSymbol.name}(config)")
-
-            // generate a convenience init to resolve a client from the current environment
-            write("")
-            dokka {
-                write("Construct a [${serviceSymbol.name}] by resolving the configuration from the current environment.")
-            }
-            writer.withBlock(
-                "public suspend fun fromEnvironment(block: (Config.Builder.() -> Unit)? = null): #T {",
-                "}",
-                serviceSymbol,
-            ) {
-                write("val builder = Config.Builder()")
-                write("if (block != null) builder.apply(block)")
-
-                addImport(AwsRuntimeTypes.Config.Region.resolveRegion)
-                write("builder.region = builder.region ?: #T()", AwsRuntimeTypes.Config.Region.resolveRegion)
-                write("builder.retryStrategy = builder.retryStrategy ?: #T()", AwsRuntimeTypes.Config.Retries.resolveRetryStrategy)
-                write("return Default${serviceSymbol.name}(builder.build())")
-            }
+        val serviceSymbol = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
+        writer.withBlock(
+            "public companion object : #T<Config, Config.Builder, #T, Builder>() {",
+            "}",
+            AwsRuntimeTypes.Config.AbstractAwsSdkClientFactory,
+            serviceSymbol,
+        ) {
+            write("@#T", KotlinTypes.Jvm.JvmStatic)
+            write("override fun builder(): Builder = Builder()")
         }
     }
 
     override val sectionWriters: List<SectionWriterBinding> =
         listOf(
-            SectionWriterBinding(ServiceGenerator.SectionServiceCompanionObject, overrideServiceCompanionObjectWriter),
+            SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, overrideServiceCompanionObjectWriter),
         )
 
-    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> =
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
         listOf(
             RegionProp,
             CredentialsProviderProp,

@@ -8,7 +8,7 @@ package aws.sdk.kotlin.codegen
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientConfigGenerator
 import software.amazon.smithy.kotlin.codegen.test.*
 import software.amazon.smithy.model.shapes.ServiceShape
 
@@ -39,20 +39,22 @@ class AwsServiceConfigIntegrationTest {
         val renderingCtx = testCtx.toRenderingContext(writer, serviceShape)
             .copy(integrations = listOf(AwsServiceConfigIntegration()))
 
-        ClientConfigGenerator(renderingCtx, detectDefaultProps = false).render()
+        ServiceClientConfigGenerator(serviceShape, detectDefaultProps = false).render(renderingCtx, renderingCtx.writer)
         val contents = writer.toString()
 
         val expectedProps = """
-    public val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
+    override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
     public val credentialsProvider: CredentialsProvider = builder.credentialsProvider?.borrow() ?: DefaultChainCredentialsProvider(httpClientEngine = httpClientEngine, region = region)
 """
         contents.shouldContainOnlyOnceWithDiff(expectedProps)
 
         val expectedImpl = """
         /**
-         * AWS region to make requests to
+         * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
+         * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
+         * information
          */
-        public var region: String? = null
+        override var region: String? = null
 
         /**
          * The AWS credentials provider to use for authenticating requests. If not provided a

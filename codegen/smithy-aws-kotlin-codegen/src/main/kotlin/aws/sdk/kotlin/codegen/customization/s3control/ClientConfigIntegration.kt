@@ -5,7 +5,7 @@ import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.rendering.ClientConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.transform.ModelTransformer
@@ -20,7 +20,7 @@ class ClientConfigIntegration : KotlinIntegration {
         model.expectShape<ServiceShape>(settings.service).isS3Control
 
     companion object {
-        val UseArnRegionProp: ClientConfigProperty = ClientConfigProperty.Boolean(
+        val UseArnRegionProp: ConfigProperty = ConfigProperty.Boolean(
             "useArnRegion",
             defaultValue = false,
             documentation = """
@@ -44,7 +44,7 @@ class ClientConfigIntegration : KotlinIntegration {
         }
     }
 
-    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ClientConfigProperty> =
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
         listOf(
             UseArnRegionProp,
         )
