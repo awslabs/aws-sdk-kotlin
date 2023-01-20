@@ -29,7 +29,7 @@ class S3PresignerTest {
     private lateinit var testBucket: String
 
     @BeforeAll
-    private fun createResources(): Unit = runBlocking {
+    fun createResources(): Unit = runBlocking {
         testBucket = S3TestUtils.getTestBucket(client)
     }
 
