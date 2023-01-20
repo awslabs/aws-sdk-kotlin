@@ -1,0 +1,5 @@
+{
+    "id": "07860a56-6515-4545-8c04-4bbabaca7d36",
+    "type": "misc",
+    "description": "Refactor the way service client configuration is generated"
+}
