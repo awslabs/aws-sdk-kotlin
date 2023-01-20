@@ -1,8 +1,0 @@
-{
-    "id": "4501b4f5-9a4d-48cc-b6a9-b69d5ba771a1",
-    "type": "feature",
-    "description": "Add capability to intercept SDK operations",
-    "issues": [
-        "awslabs/smithy-kotlin#122"
-    ]
-}

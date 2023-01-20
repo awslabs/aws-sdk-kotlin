@@ -7,12 +7,10 @@ package aws.sdk.kotlin.runtime.config
 
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.yield
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 
@@ -24,7 +22,7 @@ class CachedValueTest {
         val clock = ManualClock(epoch)
         val value = CachedValue<String>(null, clock = clock)
 
-        assertTrue(value.isExpired())
+        assertTrue(value.isExpired)
         assertNull(value.get())
     }
 
@@ -36,11 +34,11 @@ class CachedValueTest {
 
         val value = CachedValue("foo", expiresAt, clock = clock)
 
-        assertFalse(value.isExpired())
+        assertFalse(value.isExpired)
         assertEquals("foo", value.get())
 
         clock.advance(10.seconds)
-        assertTrue(value.isExpired())
+        assertTrue(value.isExpired)
         assertNull(value.get())
     }
 
@@ -52,11 +50,11 @@ class CachedValueTest {
 
         val value = CachedValue("foo", expiresAt, bufferTime = 30.seconds, clock = clock)
 
-        assertFalse(value.isExpired())
+        assertFalse(value.isExpired)
         assertEquals("foo", value.get())
 
         clock.advance(70.seconds)
-        assertTrue(value.isExpired())
+        assertTrue(value.isExpired)
         assertNull(value.get())
     }
 
@@ -75,14 +73,14 @@ class CachedValueTest {
             ExpiringValue("bar", expiresAt + count.seconds * 100)
         }
 
-        assertFalse(value.isExpired())
+        assertFalse(value.isExpired)
         assertEquals("foo", value.getOrLoad(initializer))
         assertEquals(0, count)
 
         // t = 90
         clock.advance(90.seconds)
         assertEquals("bar", value.getOrLoad(initializer))
-        assertFalse(value.isExpired())
+        assertFalse(value.isExpired)
         assertEquals(1, count)
 
         // t = 180
@@ -94,5 +92,39 @@ class CachedValueTest {
         }
         yield()
         assertEquals(2, count)
+    }
+
+    @Test
+    fun testClose() = runTest {
+        val epoch = Instant.fromEpochSeconds(0)
+        val expiresAt = epoch + 100.seconds
+
+        val clock = ManualClock(epoch)
+
+        val value = CachedValue("foo", expiresAt, bufferTime = 30.seconds, clock = clock)
+
+        assertNotNull(value.get())
+        value.close()
+        assertFailsWith<IllegalStateException> { value.get() }
+    }
+
+    @Test
+    fun throwsAfterCloseDuringGetOrLoad() = runTest {
+        val epoch = Instant.fromEpochSeconds(0)
+        val expiresAt = epoch + 100.seconds
+
+        val value: CachedValue<String> = CachedValue()
+
+        launch {
+            assertFailsWith<IllegalStateException> {
+                value.getOrLoad {
+                    delay(5000)
+                    ExpiringValue("bar", expiresAt)
+                }
+            }
+        }
+
+        delay(1000)
+        value.close()
     }
 }

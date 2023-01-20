@@ -66,4 +66,9 @@ internal sealed class LeafProvider {
         val ssoAccountId: String,
         val ssoRoleName: String,
     ) : LeafProvider()
+
+    /**
+     * A provider that invokes a command and reads its standard output to parse credentials.
+     */
+    data class Process(val command: String) : LeafProvider()
 }

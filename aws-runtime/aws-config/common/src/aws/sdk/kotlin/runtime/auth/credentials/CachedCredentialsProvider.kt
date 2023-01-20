@@ -12,6 +12,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.tracing.trace
+import kotlinx.atomicfu.atomic
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -53,21 +54,28 @@ public class CachedCredentialsProvider(
 ) : CredentialsProvider, Closeable {
 
     private val cachedCredentials = CachedValue<Credentials>(null, bufferTime = refreshBufferWindow, clock)
+    private val closed = atomic(false)
 
-    override suspend fun getCredentials(): Credentials = cachedCredentials.getOrLoad {
-        coroutineContext.trace<CachedCredentialsProvider> { "refreshing credentials cache" }
-        val providerCreds = source.getCredentials()
-        if (providerCreds.expiration != null) {
-            val expiration = minOf(providerCreds.expiration!!, (clock.now() + expireCredentialsAfter))
-            ExpiringValue(providerCreds, expiration)
-        } else {
-            val expiration = clock.now() + expireCredentialsAfter
-            val creds = providerCreds.copy(expiration = expiration)
-            ExpiringValue(creds, expiration)
+    override suspend fun getCredentials(): Credentials {
+        check(!closed.value) { "Credentials provider is closed" }
+
+        return cachedCredentials.getOrLoad {
+            coroutineContext.trace<CachedCredentialsProvider> { "refreshing credentials cache" }
+            val providerCreds = source.getCredentials()
+            if (providerCreds.expiration != null) {
+                val expiration = minOf(providerCreds.expiration!!, (clock.now() + expireCredentialsAfter))
+                ExpiringValue(providerCreds, expiration)
+            } else {
+                val expiration = clock.now() + expireCredentialsAfter
+                val creds = providerCreds.copy(expiration = expiration)
+                ExpiringValue(creds, expiration)
+            }
         }
     }
 
     override fun close() {
+        if (!closed.compareAndSet(false, true)) return
+        cachedCredentials.close()
         (source as? Closeable)?.close()
     }
 }
