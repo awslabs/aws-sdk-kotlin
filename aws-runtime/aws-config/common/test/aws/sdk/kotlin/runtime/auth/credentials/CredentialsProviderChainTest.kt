@@ -25,8 +25,6 @@ class CredentialsProviderChainTest {
     }
     data class TestProvider(val credentials: Credentials? = null) : CredentialsProvider {
         override suspend fun getCredentials(): Credentials = credentials ?: throw IllegalStateException("no credentials available")
-
-        override fun close() { }
     }
 
     @Test
