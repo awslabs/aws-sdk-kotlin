@@ -47,7 +47,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                     prop.symbol,
                     AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
                 )
-            },)
+            })
 
             additionalImports = listOf(
                 AwsRuntimeTypes.Config.Credentials.borrow,

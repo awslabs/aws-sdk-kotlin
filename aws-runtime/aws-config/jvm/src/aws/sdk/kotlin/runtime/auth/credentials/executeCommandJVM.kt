@@ -63,10 +63,11 @@ internal actual suspend fun executeCommand(
         }
         reader.close()
 
-        Pair(
-            process.exitValue(),
-            if (process.exitValue() == 0) output.toString()
-            else process.errorStream.bufferedReader().use { it.readText() },
-        )
+        val commandOutput = when {
+            process.exitValue() == 0 -> output.toString()
+            else -> process.errorStream.bufferedReader().use { it.readText() }
+        }
+
+        process.exitValue() to commandOutput
     }
 }

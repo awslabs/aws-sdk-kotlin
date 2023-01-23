@@ -90,7 +90,8 @@ internal enum class FileType(
         AwsSdkSetting.AwsSharedCredentialsFile,
         listOf(::credentialProfile, ::property, ::unmatchedLine),
         listOf("~", ".aws", "credentials"),
-    );
+    ),
+    ;
 
     /**
      * Determine the absolute path of the configuration file based on environment and policy
