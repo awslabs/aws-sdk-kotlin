@@ -40,9 +40,7 @@ class FlexibleChecksumsResponse : KotlinIntegration {
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
-
             val interceptorSymbol = RuntimeTypes.Http.Interceptors.FlexibleChecksumsResponseInterceptor
-            writer.addImport(interceptorSymbol)
 
             val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
             val requestValidationModeMember = ctx.model.expectShape<StructureShape>(op.input.get())
@@ -55,7 +53,7 @@ class FlexibleChecksumsResponse : KotlinIntegration {
                 interceptorSymbol,
                 inputSymbol,
             ) {
-                writer.write("it.#L?.value", requestValidationModeMember.defaultName())
+                writer.write("it.#L?.value == \"ENABLED\"", requestValidationModeMember.defaultName())
             }
         }
     }
