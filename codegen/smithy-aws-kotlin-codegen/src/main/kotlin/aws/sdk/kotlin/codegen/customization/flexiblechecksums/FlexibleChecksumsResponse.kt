@@ -39,16 +39,23 @@ class FlexibleChecksumsResponse : KotlinIntegration {
         }
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            val middlewareSymbol = RuntimeTypes.Http.Middlware.FlexibleChecksumsResponseMiddleware
-            writer.addImport(middlewareSymbol)
+            val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
+
+            val interceptorSymbol = RuntimeTypes.Http.Interceptors.FlexibleChecksumsResponseInterceptor
+            writer.addImport(interceptorSymbol)
 
             val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
             val requestValidationModeMember = ctx.model.expectShape<StructureShape>(op.input.get())
                 .members()
                 .first { it.memberName == httpChecksumTrait.requestValidationModeMember.get() }
 
-            writer.withBlock("input.#L?.let {", "}", requestValidationModeMember.defaultName()) {
-                writer.write("op.install(#T())", middlewareSymbol)
+            writer.withBlock(
+                "op.interceptors.add(#T<#T> {",
+                "})",
+                interceptorSymbol,
+                inputSymbol,
+            ) {
+                writer.write("it.#L?.value", requestValidationModeMember.defaultName())
             }
         }
     }
