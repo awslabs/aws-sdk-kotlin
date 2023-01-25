@@ -13,6 +13,7 @@ import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.profile.loadAwsProfiles
 import aws.sdk.kotlin.runtime.config.profile.resolveConfigSource
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
@@ -78,7 +79,7 @@ public class ProfileCredentialsProvider(
     private val region: String? = null,
     private val platformProvider: PlatformProvider = Platform,
     private val httpClientEngine: HttpClientEngine? = null,
-) : CredentialsProvider, Closeable {
+) : CloseableCredentialsProvider {
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
         "Ec2InstanceMetadata" to ImdsCredentialsProvider(

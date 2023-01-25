@@ -7,11 +7,12 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
@@ -43,22 +44,22 @@ public class DefaultChainCredentialsProvider constructor(
     private val platformProvider: PlatformProvider = Platform,
     httpClientEngine: HttpClientEngine? = null,
     region: String? = null,
-) : CredentialsProvider, Closeable {
+) : CloseableCredentialsProvider {
 
     private val manageEngine = httpClientEngine == null
-    private val httpClientEngine = httpClientEngine ?: DefaultHttpEngine()
+    private val engine = httpClientEngine ?: DefaultHttpEngine()
 
     private val chain = CredentialsProviderChain(
         EnvironmentCredentialsProvider(platformProvider::getenv),
-        ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClientEngine = httpClientEngine, region = region),
+        ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClientEngine = engine, region = region),
         // STS web identity provider can be constructed from either the profile OR 100% from the environment
-        StsWebIdentityProvider(platformProvider = platformProvider, httpClientEngine = httpClientEngine),
-        EcsCredentialsProvider(platformProvider, httpClientEngine),
+        StsWebIdentityProvider(platformProvider = platformProvider, httpClientEngine = engine),
+        EcsCredentialsProvider(platformProvider, engine),
         ImdsCredentialsProvider(
             client = lazy {
                 ImdsClient {
                     platformProvider = this@DefaultChainCredentialsProvider.platformProvider
-                    engine = httpClientEngine
+                    engine = this@DefaultChainCredentialsProvider.engine
                 }
             },
             platformProvider = platformProvider,
@@ -72,7 +73,7 @@ public class DefaultChainCredentialsProvider constructor(
     override fun close() {
         provider.close()
         if (manageEngine) {
-            httpClientEngine.close()
+            engine.closeIfCloseable()
         }
     }
 }
@@ -84,9 +85,11 @@ public class DefaultChainCredentialsProvider constructor(
 private class StsWebIdentityProvider(
     val platformProvider: PlatformProvider,
     val httpClientEngine: HttpClientEngine? = null,
-) : CredentialsProvider {
+) : CloseableCredentialsProvider {
     override suspend fun getCredentials(): Credentials {
         val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClientEngine = httpClientEngine)
         return wrapped.getCredentials()
     }
+
+    override fun close() { }
 }

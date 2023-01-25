@@ -268,7 +268,14 @@ class PresignerGeneratorTest {
                 public companion object {
                     public inline operator fun invoke(block: Builder.() -> kotlin.Unit): TestPresignConfig = Builder().apply(block).build()
                 }
-            
+
+                public fun toBuilder(): Builder = Builder().apply {
+                    credentialsProvider = this@TestPresignConfig.credentialsProvider
+                    endpointProvider = this@TestPresignConfig.endpointProvider
+                    region = this@TestPresignConfig.region
+                    signer = this@TestPresignConfig.signer
+                }
+
                 public class Builder {
                     /**
                      * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.

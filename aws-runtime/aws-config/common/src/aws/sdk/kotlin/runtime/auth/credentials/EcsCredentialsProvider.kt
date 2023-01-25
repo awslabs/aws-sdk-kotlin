@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsContainerCredentialsRelativeUri
 import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.ErrorMetadata
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.client.ExecutionContext
@@ -21,7 +22,7 @@ import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
@@ -57,7 +58,7 @@ private const val PROVIDER_NAME = "EcsContainer"
 public class EcsCredentialsProvider internal constructor(
     private val platformProvider: PlatformEnvironProvider,
     httpClientEngine: HttpClientEngine? = null,
-) : CredentialsProvider, Closeable {
+) : CloseableCredentialsProvider {
 
     public constructor() : this(Platform)
 
@@ -88,7 +89,7 @@ public class EcsCredentialsProvider internal constructor(
         op.install(ResolveEndpoint(provider = { Endpoint(url) }, params = null))
 
         logger.debug { "retrieving container credentials" }
-        val client = sdkHttpClient(httpClientEngine, manageEngine = false)
+        val client = SdkHttpClient(httpClientEngine)
         val creds = try {
             op.roundTrip(client, Unit)
         } catch (ex: Exception) {
@@ -97,8 +98,6 @@ public class EcsCredentialsProvider internal constructor(
                 is CredentialsProviderException -> ex
                 else -> CredentialsProviderException("Failed to get credentials from container metadata service", ex)
             }
-        } finally {
-            client.close()
         }
 
         logger.debug { "obtained credentials from container metadata service; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
@@ -149,7 +148,7 @@ public class EcsCredentialsProvider internal constructor(
 
     override fun close() {
         if (manageEngine) {
-            httpClientEngine.close()
+            httpClientEngine.closeIfCloseable()
         }
     }
 }

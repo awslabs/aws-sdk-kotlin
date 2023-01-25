@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.SsoClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
 import aws.sdk.kotlin.runtime.config.profile.normalizePath
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.hashing.sha1
@@ -94,7 +95,7 @@ public class SsoCredentialsProvider public constructor(
      */
     private val clock: Clock = Clock.System,
 
-) : CredentialsProvider {
+) : CloseableCredentialsProvider {
 
     override suspend fun getCredentials(): Credentials {
         val traceSpan = coroutineContext.traceSpan
@@ -131,6 +132,8 @@ public class SsoCredentialsProvider public constructor(
             PROVIDER_NAME,
         )
     }
+
+    override fun close() { }
 
     private suspend fun loadTokenFile(): SsoToken {
         val key = getCacheFilename(startUrl)

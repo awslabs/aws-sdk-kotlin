@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRoleWithWebIdentity
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.resolve
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
@@ -44,7 +45,7 @@ public class StsWebIdentityCredentialsProvider(
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val platformProvider: PlatformProvider = Platform,
     private val httpClientEngine: HttpClientEngine? = null,
-) : CredentialsProvider {
+) : CloseableCredentialsProvider {
 
     public companion object {
         /**
@@ -110,6 +111,8 @@ public class StsWebIdentityCredentialsProvider(
             providerName = PROVIDER_NAME,
         )
     }
+
+    override fun close() { }
 }
 
 // convenience function to resolve parameters for fromEnvironment()

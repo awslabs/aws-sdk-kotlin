@@ -7,9 +7,10 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.CachedValue
 import aws.sdk.kotlin.runtime.config.ExpiringValue
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.tracing.trace
 import kotlinx.atomicfu.atomic
@@ -51,7 +52,7 @@ public class CachedCredentialsProvider(
     private val expireCredentialsAfter: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     refreshBufferWindow: Duration = DEFAULT_CREDENTIALS_REFRESH_BUFFER_SECONDS.seconds,
     private val clock: Clock = Clock.System,
-) : CredentialsProvider, Closeable {
+) : CloseableCredentialsProvider {
 
     private val cachedCredentials = CachedValue<Credentials>(null, bufferTime = refreshBufferWindow, clock)
     private val closed = atomic(false)
@@ -76,6 +77,6 @@ public class CachedCredentialsProvider(
     override fun close() {
         if (!closed.compareAndSet(false, true)) return
         cachedCredentials.close()
-        (source as? Closeable)?.close()
+        source.closeIfCloseable()
     }
 }
