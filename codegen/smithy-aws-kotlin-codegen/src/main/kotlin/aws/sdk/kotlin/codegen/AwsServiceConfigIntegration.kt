@@ -42,17 +42,13 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
             propertyType = ConfigPropertyType.Custom(render = { prop, writer ->
                 writer.write(
-                    "public val #1L: #2T = builder.#1L?.borrow() ?: #3T(httpClientEngine = httpClientEngine, region = region)",
+                    "public val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine, region = region).#4T()",
                     prop.propertyName,
                     prop.symbol,
                     AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
+                    AwsRuntimeTypes.Config.Credentials.manage,
                 )
             })
-
-            additionalImports = listOf(
-                AwsRuntimeTypes.Config.Credentials.borrow,
-                AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
-            )
         }
 
         // FIXME - should fips and dual stack props be defined on one of our AWS SDK client config interfaces (e.g. `AwsSdkConfig`) if they apply to every AWS SDK Kotlin service client generated?

@@ -5,8 +5,8 @@ import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
 import aws.sdk.kotlin.services.polly.presigners.presign
 import aws.sdk.kotlin.testing.withAllEngines
+import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.response.complete
-import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
@@ -31,7 +31,7 @@ class PollyPresignerTest {
         val presignedRequest = request.presign(client.config, 10.seconds)
 
         withAllEngines { engine ->
-            val httpClient = sdkHttpClient(engine)
+            val httpClient = SdkHttpClient(engine)
 
             val call = httpClient.call(presignedRequest)
             call.complete()

@@ -10,6 +10,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRole
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.RegionDisabledException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.resolve
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
@@ -53,7 +54,7 @@ public class StsAssumeRoleCredentialsProvider(
     private val externalId: String? = null,
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val httpClientEngine: HttpClientEngine? = null,
-) : CredentialsProvider {
+) : CloseableCredentialsProvider {
 
     override suspend fun getCredentials(): Credentials {
         val traceSpan = coroutineContext.traceSpan
@@ -100,6 +101,8 @@ public class StsAssumeRoleCredentialsProvider(
             providerName = PROVIDER_NAME,
         )
     }
+
+    override fun close() { }
 }
 
 // role session name must be provided to assume a role, when the user doesn't provide one we choose a name for them

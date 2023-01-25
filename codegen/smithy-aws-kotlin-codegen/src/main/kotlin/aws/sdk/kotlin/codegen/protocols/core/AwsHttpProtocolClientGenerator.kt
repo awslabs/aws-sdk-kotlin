@@ -37,6 +37,13 @@ open class AwsHttpProtocolClientGenerator(
         super.render(writer)
     }
 
+    override fun renderInit(writer: KotlinWriter) {
+        writer.withBlock("init {", "}") {
+            write("managedResources.#T(config.httpClientEngine)", RuntimeTypes.IO.addIfManaged)
+            write("managedResources.#T(config.credentialsProvider)", RuntimeTypes.IO.addIfManaged)
+        }
+    }
+
     override fun renderOperationSetup(writer: KotlinWriter, opIndex: OperationIndex, op: OperationShape) {
         super.renderOperationSetup(writer, opIndex, op)
 
@@ -84,15 +91,5 @@ open class AwsHttpProtocolClientGenerator(
                 write("config.idempotencyTokenProvider?.let { ctx[#T.IdempotencyTokenProvider] = it }", sdkClientOptionSym)
             }
         }
-    }
-
-    override fun renderClose(writer: KotlinWriter) {
-        writer.addImport(RuntimeTypes.IO.Closeable)
-        writer.write("")
-            .openBlock("override fun close() {")
-            .write("client.close()")
-            .write("(config.credentialsProvider as? #T)?.close()", RuntimeTypes.IO.Closeable)
-            .closeBlock("}")
-            .write("")
     }
 }

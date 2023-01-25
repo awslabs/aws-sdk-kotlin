@@ -7,8 +7,8 @@ import aws.sdk.kotlin.services.s3.presigners.presign
 import aws.sdk.kotlin.testing.PRINTABLE_CHARS
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.content.decodeToString
+import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.response.complete
-import aws.smithy.kotlin.runtime.http.sdkHttpClient
 import aws.smithy.kotlin.runtime.http.toByteStream
 import kotlinx.coroutines.*
 import org.junit.jupiter.api.AfterAll
@@ -45,7 +45,7 @@ class S3PresignerTest {
         val keyName = "foo$PRINTABLE_CHARS"
 
         withAllEngines { engine ->
-            val httpClient = sdkHttpClient(engine)
+            val httpClient = SdkHttpClient(engine)
 
             val presignedPutRequest = PutObjectRequest {
                 bucket = testBucket

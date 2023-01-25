@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.operation.getLogger
@@ -24,7 +25,7 @@ import kotlin.coroutines.coroutineContext
  */
 public open class CredentialsProviderChain(
     protected vararg val providers: CredentialsProvider,
-) : CredentialsProvider, Closeable {
+) : CloseableCredentialsProvider {
     init {
         require(providers.isNotEmpty()) { "at least one provider must be in the chain" }
     }
