@@ -12,7 +12,7 @@ import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -22,7 +22,7 @@ object StsTestUtils {
         "AKIDTest",
         "test-secret",
         "test-token",
-        epoch + Duration.minutes(15),
+        epoch + 15.minutes,
         "AssumeRoleProvider",
     )
 
