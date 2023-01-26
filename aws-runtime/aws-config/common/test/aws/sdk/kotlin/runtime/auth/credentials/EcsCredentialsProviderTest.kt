@@ -28,13 +28,13 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 class EcsCredentialsProviderTest {
     private val epoch = Instant.fromIso8601("2020-10-16T03:56:00Z")
-    private val expectedExpiration = epoch + Duration.Companion.minutes(15)
+    private val expectedExpiration = epoch + 15.minutes
     private val expectedCredentials = Credentials(
         "AKID",
         "test-secret",

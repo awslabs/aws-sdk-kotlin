@@ -20,7 +20,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -31,7 +31,7 @@ class StsWebIdentityCredentialsProviderTest {
         "AKIDTest",
         "test-secret",
         "test-token",
-        epoch + Duration.minutes(15),
+        epoch + 15.minutes,
         "WebIdentityToken",
     )
 
