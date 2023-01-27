@@ -138,27 +138,9 @@ aws.services=-location,-dynamodb
 aws.protocols=-restJson1
 ```
 
-### IntelliJ multiplatform compatibility
-
-Due to an outstanding issue in IntelliJ ([KTIJ-21583](https://youtrack.jetbrains.com/issue/KTIJ-21583)), the IDE will
-sometimes fail to resolve symbols in composite projects like
-[**smithy-kotlin**](https://github.com/awslabs/smithy-kotlin) and
-[**aws-crt-kotlin**](https://github.com/awslabs/aws-crt-kotlin). When using either of these projects in a composite
-build in IntelliJ, you may need to disable hierarchical project support. Add (or modify) a **local.properties** file in
-**smithy-kotlin** and **aws-crt-kotlin** with the following contents:
-
-```
-# FIXME - see https://youtrack.jetbrains.com/issue/KTIJ-21583
-kotlin.mpp.hierarchicalStructureSupport=false
-```
-
-**Note**: These files should be created in the **smithy-kotlin** and **aws-crt-kotlin** projects, not the
-**aws-sdk-kotlin** project.
-
 ### Debugging
 
 See [Debugging](docs/debugging.md)
-
 
 ## Security
 
