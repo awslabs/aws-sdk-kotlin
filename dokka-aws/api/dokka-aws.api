@@ -1,0 +1,16 @@
+public final class aws/sdk/kotlin/dokka/AwsDokkaPlugin : org/jetbrains/dokka/plugability/DokkaPlugin {
+	public fun <init> ()V
+	public final fun getDokkaBase ()Lorg/jetbrains/dokka/base/DokkaBase;
+	public final fun getFilterInternalApis ()Lorg/jetbrains/dokka/plugability/Extension;
+}
+
+public final class aws/sdk/kotlin/dokka/transformers/FilterInternalApis : org/jetbrains/dokka/base/transformers/documentables/SuppressedByConditionDocumentableFilterTransformer {
+	public fun <init> (Lorg/jetbrains/dokka/plugability/DokkaContext;)V
+	public fun shouldBeSuppressed (Lorg/jetbrains/dokka/model/Documentable;)Z
+}
+
+public final class aws/sdk/kotlin/dokka/transformers/FilterInternalApisKt {
+	public static final fun getInternalAnnotation (Lorg/jetbrains/dokka/model/properties/WithExtraProperties;)Lorg/jetbrains/dokka/model/Annotations$Annotation;
+	public static final fun isInternalSdk (Lorg/jetbrains/dokka/model/properties/WithExtraProperties;)Z
+}
+

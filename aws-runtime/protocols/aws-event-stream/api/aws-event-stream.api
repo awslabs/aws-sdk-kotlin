@@ -1,0 +1,271 @@
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/EventStreamFramingException : aws/sdk/kotlin/runtime/ClientException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/EventStreamSigningKt {
+	public static final fun newEventStreamSigningConfig (Laws/smithy/kotlin/runtime/client/ExecutionContext;)Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigningConfig;
+	public static final fun sign (Lkotlinx/coroutines/flow/Flow;Laws/smithy/kotlin/runtime/client/ExecutionContext;Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigningConfig;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/FrameDecoderKt {
+	public static final fun decodeFrames (Laws/smithy/kotlin/runtime/io/SdkByteReadChannel;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/FrameEncoderKt {
+	public static final fun asEventStreamHttpBody (Lkotlinx/coroutines/flow/Flow;Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun encode (Lkotlinx/coroutines/flow/Flow;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/Header {
+	public static final field Companion Laws/sdk/kotlin/runtime/protocol/eventstream/Header$Companion;
+	public fun <init> (Ljava/lang/String;Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;
+	public final fun copy (Ljava/lang/String;Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)Laws/sdk/kotlin/runtime/protocol/eventstream/Header;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/Header;Ljava/lang/String;Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/Header;
+	public final fun encode (Laws/smithy/kotlin/runtime/io/SdkBufferedSink;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getValue ()Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/Header$Companion {
+	public final fun decode (Laws/smithy/kotlin/runtime/io/SdkBufferedSource;)Laws/sdk/kotlin/runtime/protocol/eventstream/Header;
+}
+
+public abstract class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue {
+	public static final field Companion Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Companion;
+	public final fun encode (Laws/smithy/kotlin/runtime/io/SdkBufferedSink;)V
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Bool : aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue {
+	public fun <init> (Z)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Bool;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Bool;ZILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Bool;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Byte : aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue {
+	public synthetic fun <init> (BLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-w2LRezQ ()B
+	public final fun copy-7apg3OU (B)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Byte;
+	public static synthetic fun copy-7apg3OU$default (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Byte;BILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Byte;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue-w2LRezQ ()B
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$ByteArray : aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue {
+	public fun <init> ([B)V
+	public final fun component1 ()[B
+	public final fun copy ([B)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$ByteArray;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$ByteArray;[BILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$ByteArray;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()[B
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Companion {
+	public final fun decode (Laws/smithy/kotlin/runtime/io/SdkBufferedSource;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int16 : aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue {
+	public fun <init> (S)V
+	public final fun component1 ()S
+	public final fun copy (S)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int16;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int16;SILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int16;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()S
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int32 : aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int32;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int32;IILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int32;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int64 : aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue {
+	public fun <init> (J)V
+	public final fun component1 ()J
+	public final fun copy (J)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int64;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int64;JILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Int64;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$String : aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$String;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$String;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Timestamp : aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue {
+	public fun <init> (Laws/smithy/kotlin/runtime/time/Instant;)V
+	public final fun component1 ()Laws/smithy/kotlin/runtime/time/Instant;
+	public final fun copy (Laws/smithy/kotlin/runtime/time/Instant;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Timestamp;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Timestamp;Laws/smithy/kotlin/runtime/time/Instant;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Timestamp;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Laws/smithy/kotlin/runtime/time/Instant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Uuid : aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue {
+	public fun <init> (Laws/smithy/kotlin/runtime/util/Uuid;)V
+	public final fun component1 ()Laws/smithy/kotlin/runtime/util/Uuid;
+	public final fun copy (Laws/smithy/kotlin/runtime/util/Uuid;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Uuid;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Uuid;Laws/smithy/kotlin/runtime/util/Uuid;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue$Uuid;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Laws/smithy/kotlin/runtime/util/Uuid;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/HeaderValueKt {
+	public static final fun expectBool (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)Z
+	public static final fun expectByte (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)B
+	public static final fun expectByteArray (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)[B
+	public static final fun expectInt16 (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)S
+	public static final fun expectInt32 (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)I
+	public static final fun expectInt64 (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)J
+	public static final fun expectString (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)Ljava/lang/String;
+	public static final fun expectTimestamp (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)Laws/smithy/kotlin/runtime/time/Instant;
+	public static final fun expectUuid (Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)Laws/smithy/kotlin/runtime/util/Uuid;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/Message {
+	public static final field Companion Laws/sdk/kotlin/runtime/protocol/eventstream/Message$Companion;
+	public fun <init> (Ljava/util/List;[B)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()[B
+	public final fun copy (Ljava/util/List;[B)Laws/sdk/kotlin/runtime/protocol/eventstream/Message;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/Message;Ljava/util/List;[BILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/Message;
+	public final fun encode (Laws/smithy/kotlin/runtime/io/SdkBufferedSink;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeaders ()Ljava/util/List;
+	public final fun getPayload ()[B
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/Message$Companion {
+	public final fun decode (Laws/smithy/kotlin/runtime/io/SdkBufferedSource;)Laws/sdk/kotlin/runtime/protocol/eventstream/Message;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/MessageBuilder {
+	public fun <init> ()V
+	public final fun addHeader (Laws/sdk/kotlin/runtime/protocol/eventstream/Header;)V
+	public final fun addHeader (Ljava/lang/String;Laws/sdk/kotlin/runtime/protocol/eventstream/HeaderValue;)V
+	public final fun build ()Laws/sdk/kotlin/runtime/protocol/eventstream/Message;
+	public final fun getHeaders ()Ljava/util/List;
+	public final fun getPayload ()[B
+	public final fun setPayload ([B)V
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/MessageKt {
+	public static final fun buildMessage (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/protocol/eventstream/Message;
+}
+
+public abstract class aws/sdk/kotlin/runtime/protocol/eventstream/MessageType {
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Error : aws/sdk/kotlin/runtime/protocol/eventstream/MessageType {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Error;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Error;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getErrorCode ()Ljava/lang/String;
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Event : aws/sdk/kotlin/runtime/protocol/eventstream/MessageType {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Event;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Event;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Event;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContentType ()Ljava/lang/String;
+	public final fun getShapeType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Exception : aws/sdk/kotlin/runtime/protocol/eventstream/MessageType {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Exception;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Exception;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$Exception;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContentType ()Ljava/lang/String;
+	public final fun getShapeType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/MessageType$SdkUnknown : aws/sdk/kotlin/runtime/protocol/eventstream/MessageType {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$SdkUnknown;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$SdkUnknown;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType$SdkUnknown;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessageType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/Prelude {
+	public static final field Companion Laws/sdk/kotlin/runtime/protocol/eventstream/Prelude$Companion;
+	public fun <init> (II)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun copy (II)Laws/sdk/kotlin/runtime/protocol/eventstream/Prelude;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/protocol/eventstream/Prelude;IIILjava/lang/Object;)Laws/sdk/kotlin/runtime/protocol/eventstream/Prelude;
+	public final fun encode (Laws/smithy/kotlin/runtime/io/SdkBufferedSink;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeadersLength ()I
+	public final fun getPayloadLen ()I
+	public final fun getTotalLen ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/Prelude$Companion {
+	public final fun decode (Laws/smithy/kotlin/runtime/io/SdkBufferedSource;)Laws/sdk/kotlin/runtime/protocol/eventstream/Prelude;
+}
+
+public final class aws/sdk/kotlin/runtime/protocol/eventstream/ResponseHeadersKt {
+	public static final fun type (Laws/sdk/kotlin/runtime/protocol/eventstream/Message;)Laws/sdk/kotlin/runtime/protocol/eventstream/MessageType;
+}
+

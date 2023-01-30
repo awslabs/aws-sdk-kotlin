@@ -1,0 +1,56 @@
+public class aws/sdk/kotlin/runtime/AwsErrorMetadata : aws/smithy/kotlin/runtime/ServiceErrorMetadata {
+	public static final field Companion Laws/sdk/kotlin/runtime/AwsErrorMetadata$Companion;
+	public fun <init> ()V
+	public final fun getErrorMessage ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/AwsErrorMetadata$Companion {
+	public final fun getErrorMessage ()Laws/smithy/kotlin/runtime/util/AttributeKey;
+}
+
+public class aws/sdk/kotlin/runtime/AwsServiceException : aws/smithy/kotlin/runtime/ServiceException {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public fun <init> (Ljava/lang/Throwable;)V
+	public fun getSdkErrorMetadata ()Laws/sdk/kotlin/runtime/AwsErrorMetadata;
+	public synthetic fun getSdkErrorMetadata ()Laws/smithy/kotlin/runtime/ErrorMetadata;
+	public synthetic fun getSdkErrorMetadata ()Laws/smithy/kotlin/runtime/ServiceErrorMetadata;
+}
+
+public class aws/sdk/kotlin/runtime/ClientException : aws/smithy/kotlin/runtime/ClientException {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public fun <init> (Ljava/lang/Throwable;)V
+}
+
+public class aws/sdk/kotlin/runtime/ConfigurationException : aws/sdk/kotlin/runtime/ClientException {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public fun <init> (Ljava/lang/Throwable;)V
+}
+
+public abstract interface annotation class aws/sdk/kotlin/runtime/InternalSdkApi : java/lang/annotation/Annotation {
+}
+
+public final class aws/sdk/kotlin/runtime/client/AwsClientOption {
+	public static final field INSTANCE Laws/sdk/kotlin/runtime/client/AwsClientOption;
+	public final fun getEndpointDiscoveryEnabled ()Laws/smithy/kotlin/runtime/util/AttributeKey;
+	public final fun getRegion ()Laws/smithy/kotlin/runtime/util/AttributeKey;
+}
+
+public abstract interface class aws/sdk/kotlin/runtime/client/AwsSdkClientConfig : aws/smithy/kotlin/runtime/client/SdkClientConfig {
+	public abstract fun getRegion ()Ljava/lang/String;
+}
+
+public abstract interface class aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder {
+	public abstract fun getRegion ()Ljava/lang/String;
+	public abstract fun setRegion (Ljava/lang/String;)V
+}
+
+public final class aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$DefaultImpls {
+	public static fun getSdkLogMode (Laws/sdk/kotlin/runtime/client/AwsSdkClientConfig;)Laws/smithy/kotlin/runtime/client/SdkLogMode;
+}
+
