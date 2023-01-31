@@ -88,7 +88,6 @@ subprojects {
                             implementation(kotlin("test"))
                             implementation(kotlin("test-junit5"))
                             implementation(project(":aws-runtime:testing"))
-                            implementation("aws.smithy.kotlin:hashing:$smithyKotlinVersion")
                             implementation(project(":tests:e2e-test-util"))
                         }
                     }
