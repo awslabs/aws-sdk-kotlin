@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.20.0-beta] - 01/31/2023
+
+### Features
+* add ProcessCredentialsProvider which invokes a user-specified command to retrieve credentials
+* Allow config override for one or more operations with an existing service client.
+
+### Miscellaneous
+* **Breaking** Remove `Closeable` supertype from `HttpClientEngine` interface. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/818) for more information.
+* Refactor the way service client configuration is generated
+* Upgrade Kotlin version to 1.8.0
+* Update to latest AWS service models.
+* Upgrade dependencies
+
 ## [0.19.5-beta] - 01/19/2023
 
 ### Miscellaneous
