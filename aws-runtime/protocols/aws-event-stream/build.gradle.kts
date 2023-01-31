@@ -15,7 +15,6 @@ kotlin {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
                 implementation("aws.smithy.kotlin:tracing-core:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:hashing:$smithyKotlinVersion")
                 // exposes Buffer/MutableBuffer and SdkByteReadChannel
                 api("aws.smithy.kotlin:io:$smithyKotlinVersion")
                 // exposes Flow<T>
@@ -35,7 +34,7 @@ kotlin {
         }
 
         all {
-            languageSettings.optIn("aws.smithy.kotlin.runtime.util.InternalApi")
+            languageSettings.optIn("aws.smithy.kotlin.runtime.InternalApi")
             languageSettings.optIn("aws.sdk.kotlin.runtime.InternalSdkApi")
         }
     }

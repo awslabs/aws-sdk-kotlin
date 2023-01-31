@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.http
 
-import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 // JVM language metadata extras, load these once
 private val jvmMetadataExtras = lazy {
@@ -15,7 +15,7 @@ private val jvmMetadataExtras = lazy {
         "jvmVersion" to getSystemProperty("java.vm.version"),
     )
 
-    if (Platform.isAndroid) {
+    if (PlatformProvider.System.isAndroid) {
         // https://developer.android.com/reference/android/os/Build.VERSION
         val buildVersionCls = Class.forName("android.os.Build\$VERSION")
         val sdkIntField = buildVersionCls.getDeclaredField("SDK_INT")

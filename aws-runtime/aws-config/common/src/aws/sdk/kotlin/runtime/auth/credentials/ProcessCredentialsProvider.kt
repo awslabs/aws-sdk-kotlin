@@ -6,7 +6,6 @@ import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 internal expect suspend fun executeCommand(
@@ -38,7 +37,7 @@ private const val PROVIDER_NAME = "Process"
  */
 public class ProcessCredentialsProvider(
     private val credentialProcess: String,
-    private val platformProvider: PlatformProvider = Platform,
+    private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val maxOutputLengthBytes: Long = 64 * 1024,
     private val timeoutMillis: Long = 60_000,
 ) : CredentialsProvider {

@@ -67,7 +67,7 @@ codegen {
                     generateFullProject = false
                     generateDefaultBuildFiles = false
                     optInAnnotations = listOf(
-                        "aws.smithy.kotlin.runtime.util.InternalApi",
+                        "aws.smithy.kotlin.runtime.InternalApi",
                         "aws.sdk.kotlin.runtime.InternalSdkApi"
                     )
                 }
@@ -95,7 +95,7 @@ val generateProjectionsTask = tasks.named<SmithyBuild>("generateSmithyProjection
 
 val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
-    "aws.smithy.kotlin.runtime.util.InternalApi",
+    "aws.smithy.kotlin.runtime.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi",
 )
 kotlin.sourceSets.all {

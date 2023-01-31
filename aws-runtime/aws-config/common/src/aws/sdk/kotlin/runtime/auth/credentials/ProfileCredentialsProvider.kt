@@ -21,7 +21,6 @@ import aws.smithy.kotlin.runtime.http.operation.getLogger
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
 import kotlin.coroutines.coroutineContext
@@ -77,7 +76,7 @@ import kotlin.coroutines.coroutineContext
 public class ProfileCredentialsProvider(
     private val profileName: String? = null,
     private val region: String? = null,
-    private val platformProvider: PlatformProvider = Platform,
+    private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val httpClientEngine: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
     private val namedProviders = mapOf(

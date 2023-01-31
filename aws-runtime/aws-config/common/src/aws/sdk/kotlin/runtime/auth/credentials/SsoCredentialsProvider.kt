@@ -88,7 +88,7 @@ public class SsoCredentialsProvider public constructor(
     /**
      * The platform provider
      */
-    private val platformProvider: PlatformProvider = Platform,
+    private val platformProvider: PlatformProvider = PlatformProvider.System,
 
     /**
      * The source of time for the provider

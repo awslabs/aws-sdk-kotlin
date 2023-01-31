@@ -15,7 +15,6 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.tracing.*
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
@@ -43,7 +42,7 @@ public class StsWebIdentityCredentialsProvider(
     private val region: String,
     private val roleSessionName: String? = null,
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
-    private val platformProvider: PlatformProvider = Platform,
+    private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val httpClientEngine: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
@@ -59,7 +58,7 @@ public class StsWebIdentityCredentialsProvider(
             region: String? = null,
             roleSessionName: String? = null,
             duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
-            platformProvider: PlatformProvider = Platform,
+            platformProvider: PlatformProvider = PlatformProvider.System,
             httpClientEngine: HttpClientEngine? = null,
         ): StsWebIdentityCredentialsProvider {
             val resolvedRoleArn = platformProvider.resolve(roleArn, AwsSdkSetting.AwsRoleArn, "roleArn")

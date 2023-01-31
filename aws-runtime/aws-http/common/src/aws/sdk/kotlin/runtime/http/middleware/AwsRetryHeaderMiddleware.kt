@@ -1,9 +1,9 @@
 package aws.sdk.kotlin.runtime.http.middleware
 
+import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.io.Handler
-import aws.smithy.kotlin.runtime.util.InternalApi
 
 /**
  * The per/operation unique client side ID header name. This will match

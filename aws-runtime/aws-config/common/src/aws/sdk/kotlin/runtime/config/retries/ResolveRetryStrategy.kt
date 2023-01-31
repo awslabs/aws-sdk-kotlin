@@ -15,7 +15,6 @@ import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.retries.RetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
 
@@ -24,7 +23,7 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
  * we only support the legacy and standard retry modes.
  */
 @InternalSdkApi
-public suspend fun resolveRetryStrategy(platformProvider: PlatformProvider = Platform): RetryStrategy {
+public suspend fun resolveRetryStrategy(platformProvider: PlatformProvider = PlatformProvider.System): RetryStrategy {
     val profile = asyncLazy { loadActiveAwsProfile(platformProvider) }
 
     val maxAttempts = AwsSdkSetting.AwsMaxAttempts.resolve(platformProvider)

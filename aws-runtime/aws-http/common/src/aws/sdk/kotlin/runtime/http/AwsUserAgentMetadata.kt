@@ -38,7 +38,7 @@ public data class AwsUserAgentMetadata(
          */
         public fun fromEnvironment(
             apiMeta: ApiMetadata,
-        ): AwsUserAgentMetadata = loadAwsUserAgentMetadataFromEnvironment(Platform, apiMeta)
+        ): AwsUserAgentMetadata = loadAwsUserAgentMetadataFromEnvironment(PlatformProvider.System, apiMeta)
     }
 
     /**

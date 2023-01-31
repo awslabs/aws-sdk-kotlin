@@ -8,7 +8,6 @@ package aws.sdk.kotlin.runtime.region
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.io.use
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
@@ -17,7 +16,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  */
 @InternalSdkApi
 public suspend fun resolveRegion(
-    platformProvider: PlatformProvider = Platform,
+    platformProvider: PlatformProvider = PlatformProvider.System,
 ): String =
     DefaultRegionProviderChain(platformProvider).use { providerChain ->
         providerChain.getRegion() ?: throw ConfigurationException("unable to auto detect AWS region, tried: $providerChain")

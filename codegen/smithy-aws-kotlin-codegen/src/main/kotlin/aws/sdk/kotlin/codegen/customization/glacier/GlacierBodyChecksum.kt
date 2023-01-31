@@ -40,7 +40,7 @@ public class GlacierBodyChecksum : KotlinIntegration {
         }
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            writer.addImport(RuntimeTypes.Hashing.Sha256)
+            writer.addImport(RuntimeTypes.Core.Hashing.Sha256)
             val middleware = glacierSymbol("GlacierBodyChecksum")
             writer.addImport(middleware)
             writer.write("op.install(#T())", middleware)
