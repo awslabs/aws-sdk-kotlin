@@ -39,8 +39,8 @@ open class AwsHttpProtocolClientGenerator(
 
     override fun renderInit(writer: KotlinWriter) {
         writer.withBlock("init {", "}") {
-            write("managedResources.#T(config.httpClientEngine)", RuntimeTypes.IO.addIfManaged)
-            write("managedResources.#T(config.credentialsProvider)", RuntimeTypes.IO.addIfManaged)
+            write("managedResources.#T(config.httpClientEngine)", RuntimeTypes.Core.IO.addIfManaged)
+            write("managedResources.#T(config.credentialsProvider)", RuntimeTypes.Core.IO.addIfManaged)
         }
     }
 
@@ -65,7 +65,7 @@ open class AwsHttpProtocolClientGenerator(
         // FIXME - we also need a way to tie in config properties added via integrations that need to influence the context
         writer.addImport(RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
         writer.addImport(AwsRuntimeTypes.Core.Client.AwsClientOption)
-        val putIfAbsentSym = buildSymbol { name = "putIfAbsent"; namespace(KotlinDependency.UTILS) }
+        val putIfAbsentSym = buildSymbol { name = "putIfAbsent"; namespace(KotlinDependency.CORE, "util") }
         val sdkClientOptionSym = buildSymbol { name = "SdkClientOption"; namespace(KotlinDependency.CORE, "client") }
 
         writer.dokka("merge the defaults configured for the service into the execution context before firing off a request")

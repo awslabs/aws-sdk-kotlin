@@ -18,8 +18,8 @@ import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.tracing.*
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -106,5 +106,5 @@ public class StsAssumeRoleCredentialsProvider(
 }
 
 // role session name must be provided to assume a role, when the user doesn't provide one we choose a name for them
-internal fun defaultSessionName(platformEnvironProvider: PlatformEnvironProvider = Platform): String =
+internal fun defaultSessionName(platformEnvironProvider: PlatformEnvironProvider = PlatformProvider.System): String =
     AwsSdkSetting.AwsRoleSessionName.resolve(platformEnvironProvider) ?: "aws-sdk-kotlin-${Instant.now().epochMilliseconds}"

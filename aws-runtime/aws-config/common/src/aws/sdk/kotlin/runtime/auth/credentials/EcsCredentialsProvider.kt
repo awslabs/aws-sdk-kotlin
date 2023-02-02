@@ -28,8 +28,8 @@ import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -60,7 +60,7 @@ public class EcsCredentialsProvider internal constructor(
     httpClientEngine: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
-    public constructor() : this(Platform)
+    public constructor() : this(PlatformProvider.System)
 
     private val manageEngine = httpClientEngine == null
     private val httpClientEngine = httpClientEngine ?: DefaultHttpEngine()

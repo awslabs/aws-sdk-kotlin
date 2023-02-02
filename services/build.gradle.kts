@@ -17,7 +17,7 @@ val coroutinesVersion: String by project
 val kotestVersion: String by project
 
 val optinAnnotations = listOf(
-    "aws.smithy.kotlin.runtime.util.InternalApi",
+    "aws.smithy.kotlin.runtime.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi",
     "kotlin.RequiresOptIn",
 )
@@ -88,7 +88,6 @@ subprojects {
                             implementation(kotlin("test"))
                             implementation(kotlin("test-junit5"))
                             implementation(project(":aws-runtime:testing"))
-                            implementation("aws.smithy.kotlin:hashing:$smithyKotlinVersion")
                             implementation(project(":tests:e2e-test-util"))
                         }
                     }

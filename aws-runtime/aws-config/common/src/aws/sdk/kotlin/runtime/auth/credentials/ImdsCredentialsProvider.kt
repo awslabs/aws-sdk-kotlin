@@ -19,8 +19,8 @@ import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.tracing.info
 import aws.smithy.kotlin.runtime.tracing.warn
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -51,7 +51,7 @@ internal expect class SdkIOException : Exception // FIXME move this to the prope
 public class ImdsCredentialsProvider(
     private val profileOverride: String? = null,
     private val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
-    private val platformProvider: PlatformEnvironProvider = Platform,
+    private val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
     private val clock: Clock = Clock.System,
 ) : CloseableCredentialsProvider {
     private var previousCredentials: Credentials? = null

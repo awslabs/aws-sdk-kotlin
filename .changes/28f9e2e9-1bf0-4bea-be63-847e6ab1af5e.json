@@ -1,5 +1,0 @@
-{
-  "id": "28f9e2e9-1bf0-4bea-be63-847e6ab1af5e",
-  "type": "feature",
-  "description": "add ProcessCredentialsProvider which invokes a user-specified command to retrieve credentials"
-}

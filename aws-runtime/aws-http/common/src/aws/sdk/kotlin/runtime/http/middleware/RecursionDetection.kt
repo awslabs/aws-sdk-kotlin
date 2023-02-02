@@ -9,7 +9,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.util.EnvironmentProvider
-import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.text.percentEncodeTo
 
 internal const val ENV_FUNCTION_NAME = "AWS_LAMBDA_FUNCTION_NAME"
@@ -21,7 +21,7 @@ internal const val HEADER_TRACE_ID = "X-Amzn-Trace-Id"
  */
 @InternalSdkApi
 public class RecursionDetection(
-    private val env: EnvironmentProvider = Platform,
+    private val env: EnvironmentProvider = PlatformProvider.System,
 ) : ModifyRequestMiddleware {
     override suspend fun modifyRequest(req: SdkHttpRequest): SdkHttpRequest {
         if (req.subject.headers.contains(HEADER_TRACE_ID)) return req

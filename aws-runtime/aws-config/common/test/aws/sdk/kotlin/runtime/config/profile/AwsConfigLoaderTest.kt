@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.config.profile
 
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
-import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -62,7 +62,7 @@ class AwsConfigLoaderTest {
 
     @Test
     fun configurationLoadingDoesNotThrowErrors() = runTest {
-        val activeProfile = loadActiveAwsProfile(Platform)
+        val activeProfile = loadActiveAwsProfile(PlatformProvider.System)
 
         assertTrue(activeProfile.name.isNotBlank())
     }
@@ -75,8 +75,8 @@ class AwsConfigLoaderTest {
         awsSharedCredentialsFileEnv: String? = null,
         homeProp: String? = null,
         os: OperatingSystem,
-    ): Platform {
-        val testPlatform = mockk<Platform>()
+    ): PlatformProvider {
+        val testPlatform = mockk<PlatformProvider>()
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
         val readFileParam = slot<String>()
@@ -101,8 +101,8 @@ class AwsConfigLoaderTest {
         return testPlatform
     }
 
-    private fun mockPlatform(testCase: TestCase): Platform {
-        val testPlatform = mockk<Platform>()
+    private fun mockPlatform(testCase: TestCase): PlatformProvider {
+        val testPlatform = mockk<PlatformProvider>()
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
 

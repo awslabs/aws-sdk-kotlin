@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.config.profile
 
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
-import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -57,7 +57,7 @@ class AwsProfileParserTest {
     @Test
     fun itCanBeUsedInTests() = runTest {
         // NOTE: This is the minimal mock of the Platform type needed to support aws configuration loading of a specific kvp.
-        val testPlatform = mockk<Platform>()
+        val testPlatform = mockk<PlatformProvider>()
         val propKeyParam = slot<String>()
         val filePath = slot<String>()
 
@@ -75,7 +75,7 @@ class AwsProfileParserTest {
     /**
      * Example function that reads the active provide and returns true if a key "boo" exists.
      */
-    private suspend fun fnThatLoadsConfiguration(platform: Platform): String? {
+    private suspend fun fnThatLoadsConfiguration(platform: PlatformProvider): String? {
         val profile = loadActiveAwsProfile(platform)
 
         return profile["boo"]
