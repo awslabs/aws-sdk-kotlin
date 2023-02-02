@@ -197,3 +197,14 @@ tasks.register("showRepos") {
         println(repositories.map { it.name })
     }
 }
+
+apiValidation {
+    nonPublicMarkers.add("aws.sdk.kotlin.runtime.InternalSdkApi")
+
+    ignoredProjects += setOf(
+        "testing",
+        "protocol-tests",
+        "dokka-aws",
+        "tests",
+    )
+}
