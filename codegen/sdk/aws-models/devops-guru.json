@@ -137,7 +137,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p> Adds a notification channel to DevOps Guru. A notification channel is used to notify you\n\t\t\tabout important DevOps Guru events, such as when an insight is generated. </p>\n\t\t       <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission \n\t\t\t\tto it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. DevOps Guru only supports standard SNS topics. \n\t\t\t\tFor more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-required-permissions.html\">Permissions \n\t\t\t\tfor cross account Amazon SNS topics</a>.</p>\n\t\t\t\t     <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission to it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. For more information, see Permissions for cross account Amazon SNS topics.</p>\n\t\t\t\t     <p>If you use an Amazon SNS topic that is encrypted by an Amazon Web Services Key Management Service customer-managed key (CMK), then you must add permissions \n\t\t\t\tto the CMK. For more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-kms-permissions.html\">Permissions for \n\t\t\t\tAmazon Web Services KMS–encrypted Amazon SNS topics</a>.</p>",
+                "smithy.api#documentation": "<p> Adds a notification channel to DevOps Guru. A notification channel is used to notify you\n\t\t\tabout important DevOps Guru events, such as when an insight is generated. </p>\n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission \n\t\t\t\tto it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. DevOps Guru only supports standard SNS topics. \n\t\t\t\tFor more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-required-permissions.html\">Permissions \n\t\t\t\tfor cross account Amazon SNS topics</a>.</p>\n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission to it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. For more information, see Permissions for cross account Amazon SNS topics.</p>\n         <p>If you use an Amazon SNS topic that is encrypted by an Amazon Web Services Key Management Service customer-managed key (CMK), then you must add permissions \n\t\t\t\tto the CMK. For more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-kms-permissions.html\">Permissions for \n\t\t\t\tAmazon Web Services KMS–encrypted Amazon SNS topics</a>.</p>",
                 "smithy.api#http": {
                     "method": "PUT",
                     "uri": "/channels",
@@ -560,7 +560,7 @@
                     "name": "devops-guru"
                 },
                 "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p> Amazon DevOps Guru is a fully managed service that helps you identify anomalous behavior in\n\t\t\tbusiness critical operational applications. You specify the Amazon Web Services resources that you\n\t\t\twant DevOps Guru to cover, then the Amazon CloudWatch metrics and Amazon Web Services CloudTrail events related to those\n\t\t\tresources are analyzed. When anomalous behavior is detected, DevOps Guru creates an\n\t\t\t\t<i>insight</i> that includes recommendations, related events, and\n\t\t\trelated metrics that can help you improve your operational applications. For more\n\t\t\tinformation, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/welcome.html\">What is Amazon DevOps Guru</a>. </p>\n\n\t\t       <p> You can specify 1 or 2 Amazon Simple Notification Service topics so you are notified every time a new insight\n\t\t\tis created. You can also enable DevOps Guru to generate an OpsItem in Amazon Web Services Systems Manager for each\n\t\t\tinsight to help you manage and track your work addressing insights. </p>\n\n\t\t       <p> To learn about the DevOps Guru workflow, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/welcome.html#how-it-works\">How DevOps Guru works</a>. To\n\t\t\tlearn about DevOps Guru concepts, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/concepts.html\">Concepts in DevOps Guru</a>. </p>",
+                "smithy.api#documentation": "<p> Amazon DevOps Guru is a fully managed service that helps you identify anomalous behavior in\n\t\t\tbusiness critical operational applications. You specify the Amazon Web Services resources that you\n\t\t\twant DevOps Guru to cover, then the Amazon CloudWatch metrics and Amazon Web Services CloudTrail events related to those\n\t\t\tresources are analyzed. When anomalous behavior is detected, DevOps Guru creates an\n\t\t\t\t<i>insight</i> that includes recommendations, related events, and\n\t\t\trelated metrics that can help you improve your operational applications. For more\n\t\t\tinformation, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/welcome.html\">What is Amazon DevOps Guru</a>. </p>\n         <p> You can specify 1 or 2 Amazon Simple Notification Service topics so you are notified every time a new insight\n\t\t\tis created. You can also enable DevOps Guru to generate an OpsItem in Amazon Web Services Systems Manager for each\n\t\t\tinsight to help you manage and track your work addressing insights. </p>\n         <p> To learn about the DevOps Guru workflow, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/welcome.html#how-it-works\">How DevOps Guru works</a>. To\n\t\t\tlearn about DevOps Guru concepts, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/concepts.html\">Concepts in DevOps Guru</a>. </p>",
                 "smithy.api#title": "Amazon DevOps Guru",
                 "smithy.rules#endpointRuleSet": {
                     "version": "1.0",
@@ -729,18 +729,12 @@
                                             "rules": [
                                                 {
                                                     "conditions": [],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [],
-                                                            "endpoint": {
-                                                                "url": "https://devops-guru-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
-                                                                "properties": {},
-                                                                "headers": {}
-                                                            },
-                                                            "type": "endpoint"
-                                                        }
-                                                    ]
+                                                    "endpoint": {
+                                                        "url": "https://devops-guru-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                        "properties": {},
+                                                        "headers": {}
+                                                    },
+                                                    "type": "endpoint"
                                                 }
                                             ]
                                         },
@@ -845,18 +839,12 @@
                                             "rules": [
                                                 {
                                                     "conditions": [],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [],
-                                                            "endpoint": {
-                                                                "url": "https://devops-guru.{Region}.{PartitionResult#dualStackDnsSuffix}",
-                                                                "properties": {},
-                                                                "headers": {}
-                                                            },
-                                                            "type": "endpoint"
-                                                        }
-                                                    ]
+                                                    "endpoint": {
+                                                        "url": "https://devops-guru.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                        "properties": {},
+                                                        "headers": {}
+                                                    },
+                                                    "type": "endpoint"
                                                 }
                                             ]
                                         },
@@ -869,18 +857,12 @@
                                 },
                                 {
                                     "conditions": [],
-                                    "type": "tree",
-                                    "rules": [
-                                        {
-                                            "conditions": [],
-                                            "endpoint": {
-                                                "url": "https://devops-guru.{Region}.{PartitionResult#dnsSuffix}",
-                                                "properties": {},
-                                                "headers": {}
-                                            },
-                                            "type": "endpoint"
-                                        }
-                                    ]
+                                    "endpoint": {
+                                        "url": "https://devops-guru.{Region}.{PartitionResult#dnsSuffix}",
+                                        "properties": {},
+                                        "headers": {}
+                                    },
+                                    "type": "endpoint"
                                 }
                             ]
                         }
@@ -889,55 +871,146 @@
                 "smithy.rules#endpointTests": {
                     "testCases": [
                         {
-                            "documentation": "For region us-east-1 with FIPS disabled and DualStack disabled",
+                            "documentation": "For region ap-south-1 with FIPS enabled and DualStack enabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru.us-east-1.amazonaws.com"
+                                    "url": "https://devops-guru-fips.ap-south-1.api.aws"
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "us-east-1"
+                                "UseDualStack": true,
+                                "Region": "ap-south-1",
+                                "UseFIPS": true
                             }
                         },
                         {
-                            "documentation": "For region us-east-1 with FIPS enabled and DualStack disabled",
+                            "documentation": "For region ap-south-1 with FIPS enabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru-fips.us-east-1.amazonaws.com"
+                                    "url": "https://devops-guru-fips.ap-south-1.amazonaws.com"
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
                                 "UseDualStack": false,
-                                "Region": "us-east-1"
+                                "Region": "ap-south-1",
+                                "UseFIPS": true
                             }
                         },
                         {
-                            "documentation": "For region us-east-2 with FIPS disabled and DualStack disabled",
+                            "documentation": "For region ap-south-1 with FIPS disabled and DualStack enabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru.us-east-2.amazonaws.com"
+                                    "url": "https://devops-guru.ap-south-1.api.aws"
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "us-east-2"
+                                "UseDualStack": true,
+                                "Region": "ap-south-1",
+                                "UseFIPS": false
                             }
                         },
                         {
-                            "documentation": "For region us-east-2 with FIPS enabled and DualStack disabled",
+                            "documentation": "For region ap-south-1 with FIPS disabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru-fips.us-east-2.amazonaws.com"
+                                    "url": "https://devops-guru.ap-south-1.amazonaws.com"
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
                                 "UseDualStack": false,
-                                "Region": "us-east-2"
+                                "Region": "ap-south-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ca-central-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ca-central-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "ca-central-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ca-central-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ca-central-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "ca-central-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ca-central-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ca-central-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "ca-central-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ca-central-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ca-central-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "ca-central-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-central-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-central-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "eu-central-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-central-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-central-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "eu-central-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-central-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-central-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "eu-central-1",
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -948,87 +1021,74 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
                                 "UseDualStack": false,
-                                "Region": "eu-central-1"
+                                "Region": "eu-central-1",
+                                "UseFIPS": false
                             }
                         },
                         {
-                            "documentation": "For region eu-west-1 with FIPS disabled and DualStack disabled",
+                            "documentation": "For region us-west-1 with FIPS enabled and DualStack enabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru.eu-west-1.amazonaws.com"
+                                    "url": "https://devops-guru-fips.us-west-1.api.aws"
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "eu-west-1"
+                                "UseDualStack": true,
+                                "Region": "us-west-1",
+                                "UseFIPS": true
                             }
                         },
                         {
-                            "documentation": "For region ap-southeast-1 with FIPS disabled and DualStack disabled",
+                            "documentation": "For region us-west-1 with FIPS enabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru.ap-southeast-1.amazonaws.com"
+                                    "url": "https://devops-guru-fips.us-west-1.amazonaws.com"
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
                                 "UseDualStack": false,
-                                "Region": "ap-southeast-1"
+                                "Region": "us-west-1",
+                                "UseFIPS": true
                             }
                         },
                         {
-                            "documentation": "For region ap-southeast-2 with FIPS disabled and DualStack disabled",
+                            "documentation": "For region us-west-1 with FIPS disabled and DualStack enabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru.ap-southeast-2.amazonaws.com"
+                                    "url": "https://devops-guru.us-west-1.api.aws"
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "ap-southeast-2"
+                                "UseDualStack": true,
+                                "Region": "us-west-1",
+                                "UseFIPS": false
                             }
                         },
                         {
-                            "documentation": "For region eu-north-1 with FIPS disabled and DualStack disabled",
+                            "documentation": "For region us-west-1 with FIPS disabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru.eu-north-1.amazonaws.com"
+                                    "url": "https://devops-guru.us-west-1.amazonaws.com"
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
                                 "UseDualStack": false,
-                                "Region": "eu-north-1"
+                                "Region": "us-west-1",
+                                "UseFIPS": false
                             }
                         },
                         {
-                            "documentation": "For region ap-northeast-1 with FIPS disabled and DualStack disabled",
+                            "documentation": "For region us-west-2 with FIPS enabled and DualStack enabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru.ap-northeast-1.amazonaws.com"
+                                    "url": "https://devops-guru-fips.us-west-2.api.aws"
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "ap-northeast-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-west-2 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://devops-guru.us-west-2.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "us-west-2"
+                                "UseDualStack": true,
+                                "Region": "us-west-2",
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -1039,9 +1099,503 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
                                 "UseDualStack": false,
-                                "Region": "us-west-2"
+                                "Region": "us-west-2",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-2 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.us-west-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "us-west-2",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.us-west-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "us-west-2",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-north-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-north-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "eu-north-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-north-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-north-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "eu-north-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-north-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-north-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "eu-north-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-north-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-north-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "eu-north-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-3 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-3.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "eu-west-3",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-3 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-3.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "eu-west-3",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-3 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-3.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "eu-west-3",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-3 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-3.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "eu-west-3",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-2 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "eu-west-2",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-2 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "eu-west-2",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-2 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "eu-west-2",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "eu-west-2",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "eu-west-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.eu-west-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "eu-west-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "eu-west-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.eu-west-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "eu-west-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-2 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-northeast-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "ap-northeast-2",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-2 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-northeast-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "ap-northeast-2",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-2 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-northeast-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "ap-northeast-2",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-northeast-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "ap-northeast-2",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-northeast-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "ap-northeast-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-northeast-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "ap-northeast-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-northeast-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "ap-northeast-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-northeast-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-northeast-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "ap-northeast-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region sa-east-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.sa-east-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "sa-east-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region sa-east-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.sa-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "sa-east-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region sa-east-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.sa-east-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "sa-east-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region sa-east-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.sa-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "sa-east-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-southeast-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "ap-southeast-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-southeast-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "ap-southeast-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-southeast-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "ap-southeast-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-southeast-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "ap-southeast-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-2 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-southeast-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "ap-southeast-2",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-2 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.ap-southeast-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "ap-southeast-2",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-2 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-southeast-2.api.aws"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": true,
+                                "Region": "ap-southeast-2",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region ap-southeast-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru.ap-southeast-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "ap-southeast-2",
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -1052,9 +1606,22 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
                                 "UseDualStack": true,
-                                "Region": "us-east-1"
+                                "Region": "us-east-1",
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.us-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "Region": "us-east-1",
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -1065,165 +1632,74 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
                                 "UseDualStack": true,
-                                "Region": "us-east-1"
+                                "Region": "us-east-1",
+                                "UseFIPS": false
                             }
                         },
                         {
-                            "documentation": "For region us-gov-east-1 with FIPS enabled and DualStack enabled",
+                            "documentation": "For region us-east-1 with FIPS disabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru-fips.us-gov-east-1.api.aws"
+                                    "url": "https://devops-guru.us-east-1.amazonaws.com"
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": false,
+                                "Region": "us-east-1",
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-2 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://devops-guru-fips.us-east-2.api.aws"
+                                }
+                            },
+                            "params": {
                                 "UseDualStack": true,
-                                "Region": "us-gov-east-1"
+                                "Region": "us-east-2",
+                                "UseFIPS": true
                             }
                         },
                         {
-                            "documentation": "For region us-gov-east-1 with FIPS enabled and DualStack disabled",
+                            "documentation": "For region us-east-2 with FIPS enabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru-fips.us-gov-east-1.amazonaws.com"
+                                    "url": "https://devops-guru-fips.us-east-2.amazonaws.com"
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
                                 "UseDualStack": false,
-                                "Region": "us-gov-east-1"
+                                "Region": "us-east-2",
+                                "UseFIPS": true
                             }
                         },
                         {
-                            "documentation": "For region us-gov-east-1 with FIPS disabled and DualStack enabled",
+                            "documentation": "For region us-east-2 with FIPS disabled and DualStack enabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru.us-gov-east-1.api.aws"
+                                    "url": "https://devops-guru.us-east-2.api.aws"
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
                                 "UseDualStack": true,
-                                "Region": "us-gov-east-1"
+                                "Region": "us-east-2",
+                                "UseFIPS": false
                             }
                         },
                         {
-                            "documentation": "For region us-gov-east-1 with FIPS disabled and DualStack disabled",
+                            "documentation": "For region us-east-2 with FIPS disabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
-                                    "url": "https://devops-guru.us-gov-east-1.amazonaws.com"
+                                    "url": "https://devops-guru.us-east-2.amazonaws.com"
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
                                 "UseDualStack": false,
-                                "Region": "us-gov-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://devops-guru-fips.us-isob-east-1.sc2s.sgov.gov"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": true,
-                                "UseDualStack": false,
-                                "Region": "us-isob-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-isob-east-1 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://devops-guru.us-isob-east-1.sc2s.sgov.gov"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "us-isob-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region cn-north-1 with FIPS enabled and DualStack enabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://devops-guru-fips.cn-north-1.api.amazonwebservices.com.cn"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": true,
-                                "UseDualStack": true,
-                                "Region": "cn-north-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region cn-north-1 with FIPS enabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://devops-guru-fips.cn-north-1.amazonaws.com.cn"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": true,
-                                "UseDualStack": false,
-                                "Region": "cn-north-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region cn-north-1 with FIPS disabled and DualStack enabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://devops-guru.cn-north-1.api.amazonwebservices.com.cn"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": true,
-                                "Region": "cn-north-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region cn-north-1 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://devops-guru.cn-north-1.amazonaws.com.cn"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "cn-north-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-iso-east-1 with FIPS enabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://devops-guru-fips.us-iso-east-1.c2s.ic.gov"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": true,
-                                "UseDualStack": false,
-                                "Region": "us-iso-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-iso-east-1 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://devops-guru.us-iso-east-1.c2s.ic.gov"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "us-iso-east-1"
+                                "Region": "us-east-2",
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -1234,9 +1710,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
                                 "UseDualStack": false,
                                 "Region": "us-east-1",
+                                "UseFIPS": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1246,9 +1722,9 @@
                                 "error": "Invalid Configuration: FIPS and custom endpoint are not supported"
                             },
                             "params": {
-                                "UseFIPS": true,
                                 "UseDualStack": false,
                                 "Region": "us-east-1",
+                                "UseFIPS": true,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1258,9 +1734,9 @@
                                 "error": "Invalid Configuration: Dualstack and custom endpoint are not supported"
                             },
                             "params": {
-                                "UseFIPS": false,
                                 "UseDualStack": true,
                                 "Region": "us-east-1",
+                                "UseFIPS": false,
                                 "Endpoint": "https://example.com"
                             }
                         }
@@ -1607,7 +2083,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#TagCostEstimationResourceCollectionFilters",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services tags used to filter the resource collection that is used for a cost\n\t\t\testimate.</p> \n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>The Amazon Web Services tags used to filter the resource collection that is used for a cost\n\t\t\testimate.</p>\n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n         <p>Each Amazon Web Services tag has two parts. </p>\n         <ul>\n            <li>\n               <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n            </li>\n            <li>\n               <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n            </li>\n         </ul>\n         <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>"
                     }
                 }
             },
@@ -2415,7 +2891,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#TagHealths",
                     "traits": {
-                        "smithy.api#documentation": "<p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n         <p>Each Amazon Web Services tag has two parts. </p>\n         <ul>\n            <li>\n               <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n            </li>\n            <li>\n               <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n            </li>\n         </ul>\n         <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>"
                     }
                 }
             }
@@ -2499,7 +2975,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#TagHealths",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services tags that are used by resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>The Amazon Web Services tags that are used by resources in the resource collection.</p>\n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n         <p>Each Amazon Web Services tag has two parts. </p>\n         <ul>\n            <li>\n               <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n            </li>\n            <li>\n               <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n            </li>\n         </ul>\n         <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>"
                     }
                 }
             }
@@ -3277,6 +3753,17 @@
                 }
             }
         },
+        "com.amazonaws.devopsguru#ListAnomaliesForInsightFilters": {
+            "type": "structure",
+            "members": {
+                "ServiceCollection": {
+                    "target": "com.amazonaws.devopsguru#ServiceCollection"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>\n\t\t\tSpecifies one or more service names that are used to list anomalies. \n\t\t</p>"
+            }
+        },
         "com.amazonaws.devopsguru#ListAnomaliesForInsightMaxResults": {
             "type": "integer",
             "traits": {
@@ -3319,6 +3806,12 @@
                     "target": "com.amazonaws.devopsguru#AwsAccountId",
                     "traits": {
                         "smithy.api#documentation": "<p>The ID of the Amazon Web Services account. </p>"
+                    }
+                },
+                "Filters": {
+                    "target": "com.amazonaws.devopsguru#ListAnomaliesForInsightFilters",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n\t\t\tSpecifies one or more service names that are used to list anomalies. \n\t\t</p>"
                     }
                 }
             }
@@ -4485,7 +4978,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p> Information about a notification channel. A notification channel is used to notify\n\t\t\tyou when DevOps Guru creates an insight. The one \n      \tsupported notification channel is Amazon Simple Notification Service (Amazon SNS). </p>\n\t\t       <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission \n\t\t\t\tto it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. DevOps Guru only supports standard SNS topics. \n\t\t\t\tFor more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-required-permissions.html\">Permissions \n\t\t\t\tfor cross account Amazon SNS topics</a>.</p>\n\t\t\t\t     <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission to it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. For more information, see Permissions for cross account Amazon SNS topics.</p>\n\t\t\t\t     <p>If you use an Amazon SNS topic that is encrypted by an Amazon Web Services Key Management Service customer-managed key (CMK), then you must add permissions \n\t\t\t\tto the CMK. For more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-kms-permissions.html\">Permissions for \n\t\t\t\tAmazon Web Services KMS–encrypted Amazon SNS topics</a>.</p>"
+                "smithy.api#documentation": "<p> Information about a notification channel. A notification channel is used to notify\n\t\t\tyou when DevOps Guru creates an insight. The one \n      \tsupported notification channel is Amazon Simple Notification Service (Amazon SNS). </p>\n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission \n\t\t\t\tto it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. DevOps Guru only supports standard SNS topics. \n\t\t\t\tFor more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-required-permissions.html\">Permissions \n\t\t\t\tfor cross account Amazon SNS topics</a>.</p>\n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission to it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. For more information, see Permissions for cross account Amazon SNS topics.</p>\n         <p>If you use an Amazon SNS topic that is encrypted by an Amazon Web Services Key Management Service customer-managed key (CMK), then you must add permissions \n\t\t\t\tto the CMK. For more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-kms-permissions.html\">Permissions for \n\t\t\t\tAmazon Web Services KMS–encrypted Amazon SNS topics</a>.</p>"
             }
         },
         "com.amazonaws.devopsguru#NotificationChannelConfig": {
@@ -4494,7 +4987,7 @@
                 "Sns": {
                     "target": "com.amazonaws.devopsguru#SnsChannelConfig",
                     "traits": {
-                        "smithy.api#documentation": "<p> Information about a notification channel configured in DevOps Guru to send notifications\n\t\t\twhen insights are created. </p> \n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission \n\t\t\t\tto it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. DevOps Guru only supports standard SNS topics. \n\t\t\t\tFor more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-required-permissions.html\">Permissions \n\t\t\t\tfor cross account Amazon SNS topics</a>.</p>\n\t\t\t\t     <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission to it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. For more information, see Permissions for cross account Amazon SNS topics.</p>\n\t\t\t\t     <p>If you use an Amazon SNS topic that is encrypted by an Amazon Web Services Key Management Service customer-managed key (CMK), then you must add permissions \n\t\t\t\tto the CMK. For more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-kms-permissions.html\">Permissions for \n\t\t\t\tAmazon Web Services KMS–encrypted Amazon SNS topics</a>.</p>",
+                        "smithy.api#documentation": "<p> Information about a notification channel configured in DevOps Guru to send notifications\n\t\t\twhen insights are created. </p>\n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission \n\t\t\t\tto it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. DevOps Guru only supports standard SNS topics. \n\t\t\t\tFor more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-required-permissions.html\">Permissions \n\t\t\t\tfor cross account Amazon SNS topics</a>.</p>\n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission to it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. For more information, see Permissions for cross account Amazon SNS topics.</p>\n         <p>If you use an Amazon SNS topic that is encrypted by an Amazon Web Services Key Management Service customer-managed key (CMK), then you must add permissions \n\t\t\t\tto the CMK. For more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-kms-permissions.html\">Permissions for \n\t\t\t\tAmazon Web Services KMS–encrypted Amazon SNS topics</a>.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -4745,13 +5238,13 @@
                 "Group": {
                     "target": "com.amazonaws.devopsguru#PerformanceInsightsMetricGroup",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the dimension group. Its valid values are:</p>\n\n\t\t       <ul>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db</code> - The name of the database to which the client is connected\n\t\t\t\t\t(only Aurora PostgreSQL, Amazon RDS PostgreSQL, Aurora MySQL, Amazon RDS MySQL, and MariaDB)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.application</code> - The name of the application that is connected to\n\t\t\t\t\tthe database (only Aurora PostgreSQL and RDS PostgreSQL)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.host</code> - The host name of the connected client (all\n\t\t\t\t\tengines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.session_type</code> - The type of the current session (only Aurora PostgreSQL\n\t\t\t\t\tand RDS PostgreSQL)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.sql</code> - The SQL that is currently executing (all engines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.sql_tokenized</code> - The SQL digest (all engines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.wait_event</code> - The event for which the database backend is waiting\n\t\t\t\t\t(all engines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.wait_event_type</code> - The type of event for which the database\n\t\t\t\t\tbackend is waiting (all engines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.user</code> - The user logged in to the database (all engines)</p>\n\t\t\t         </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The name of the dimension group. Its valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>db</code> - The name of the database to which the client is connected\n\t\t\t\t\t(only Aurora PostgreSQL, Amazon RDS PostgreSQL, Aurora MySQL, Amazon RDS MySQL, and MariaDB)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.application</code> - The name of the application that is connected to\n\t\t\t\t\tthe database (only Aurora PostgreSQL and RDS PostgreSQL)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.host</code> - The host name of the connected client (all\n\t\t\t\t\tengines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.session_type</code> - The type of the current session (only Aurora PostgreSQL\n\t\t\t\t\tand RDS PostgreSQL)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.sql</code> - The SQL that is currently executing (all engines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.sql_tokenized</code> - The SQL digest (all engines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.wait_event</code> - The event for which the database backend is waiting\n\t\t\t\t\t(all engines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.wait_event_type</code> - The type of event for which the database\n\t\t\t\t\tbackend is waiting (all engines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.user</code> - The user logged in to the database (all engines)</p>\n            </li>\n         </ul>"
                     }
                 },
                 "Dimensions": {
                     "target": "com.amazonaws.devopsguru#PerformanceInsightsMetricDimensions",
                     "traits": {
-                        "smithy.api#documentation": "<p>A list of specific dimensions from a dimension group. If this parameter is not\n\t\t\tpresent, then it signifies that all of the dimensions in the group were requested or are\n\t\t\tpresent in the response.</p>\n\t\t       <p>Valid values for elements in the <code>Dimensions</code> array are:</p>\n\n\t\t       <ul>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.application.name</code> - The name of the application that is connected\n\t\t\t\t\tto the database (only Aurora PostgreSQL and RDS PostgreSQL)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.host.id</code> - The host ID of the connected client (all\n\t\t\t\t\tengines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.host.name</code> - The host name of the connected client (all\n\t\t\t\t\tengines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.name</code> - The name of the database to which the client is connected\n\t\t\t\t\t(only Aurora PostgreSQL, Amazon RDS PostgreSQL, Aurora MySQL, Amazon RDS MySQL, and MariaDB)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.session_type.name</code> - The type of the current session (only Aurora\n\t\t\t\t\tPostgreSQL and RDS PostgreSQL)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.sql.id</code> - The SQL ID generated by Performance Insights (all engines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.sql.db_id</code> - The SQL ID generated by the database (all\n\t\t\t\t\tengines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.sql.statement</code> - The SQL text that is being executed (all\n\t\t\t\t\tengines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.sql.tokenized_id</code>\n\t\t\t\t           </p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.sql_tokenized.id</code> - The SQL digest ID generated by Performance Insights (all\n\t\t\t\t\tengines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.sql_tokenized.db_id</code> - SQL digest ID generated by the database\n\t\t\t\t\t(all engines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.sql_tokenized.statement</code> - The SQL digest text (all\n\t\t\t\t\tengines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.user.id</code> - The ID of the user logged in to the database (all\n\t\t\t\t\tengines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.user.name</code> - The name of the user logged in to the database (all\n\t\t\t\t\tengines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.wait_event.name</code> - The event for which the backend is waiting\n\t\t\t\t\t(all engines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.wait_event.type</code> - The type of event for which the backend is\n\t\t\t\t\twaiting (all engines)</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.wait_event_type.name</code> - The name of the event type for which the\n\t\t\t\t\tbackend is waiting (all engines)</p>\n\t\t\t         </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>A list of specific dimensions from a dimension group. If this parameter is not\n\t\t\tpresent, then it signifies that all of the dimensions in the group were requested or are\n\t\t\tpresent in the response.</p>\n         <p>Valid values for elements in the <code>Dimensions</code> array are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>db.application.name</code> - The name of the application that is connected\n\t\t\t\t\tto the database (only Aurora PostgreSQL and RDS PostgreSQL)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.host.id</code> - The host ID of the connected client (all\n\t\t\t\t\tengines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.host.name</code> - The host name of the connected client (all\n\t\t\t\t\tengines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.name</code> - The name of the database to which the client is connected\n\t\t\t\t\t(only Aurora PostgreSQL, Amazon RDS PostgreSQL, Aurora MySQL, Amazon RDS MySQL, and MariaDB)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.session_type.name</code> - The type of the current session (only Aurora\n\t\t\t\t\tPostgreSQL and RDS PostgreSQL)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.sql.id</code> - The SQL ID generated by Performance Insights (all engines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.sql.db_id</code> - The SQL ID generated by the database (all\n\t\t\t\t\tengines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.sql.statement</code> - The SQL text that is being executed (all\n\t\t\t\t\tengines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.sql.tokenized_id</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>db.sql_tokenized.id</code> - The SQL digest ID generated by Performance Insights (all\n\t\t\t\t\tengines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.sql_tokenized.db_id</code> - SQL digest ID generated by the database\n\t\t\t\t\t(all engines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.sql_tokenized.statement</code> - The SQL digest text (all\n\t\t\t\t\tengines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.user.id</code> - The ID of the user logged in to the database (all\n\t\t\t\t\tengines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.user.name</code> - The name of the user logged in to the database (all\n\t\t\t\t\tengines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.wait_event.name</code> - The event for which the backend is waiting\n\t\t\t\t\t(all engines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.wait_event.type</code> - The type of event for which the backend is\n\t\t\t\t\twaiting (all engines)</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.wait_event_type.name</code> - The name of the event type for which the\n\t\t\t\t\tbackend is waiting (all engines)</p>\n            </li>\n         </ul>"
                     }
                 },
                 "Limit": {
@@ -4762,7 +5255,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A logical grouping of Performance Insights metrics for a related subject area. For example, the\n\t\t\t\t<code>db.sql</code> dimension group consists of the following dimensions:\n\t\t\t\t<code>db.sql.id</code>, <code>db.sql.db_id</code>, <code>db.sql.statement</code>,\n\t\t\tand <code>db.sql.tokenized_id</code>.</p>\n\t\t       <note>\n\t\t\t         <p>Each response element returns a maximum of 500 bytes. For larger elements, such as\n\t\t\t\tSQL statements, only the first 500 bytes are returned.</p>\n\t\t       </note> \n         <p>Amazon RDS Performance Insights enables you to monitor and explore different \n   \t\tdimensions of database load based on data captured from a running DB instance. \n   \t\tDB load is measured as average active sessions. Performance Insights provides the \n   \t\tdata to API consumers as a two-dimensional time-series dataset. The time dimension \n   \t\tprovides DB load data for each time point in the queried time range. Each time point \n   \t\tdecomposes overall load in relation to the requested dimensions, measured at that \n   \t\ttime point. Examples include SQL, Wait event, User, and Host. </p>\n   \t\n   \t     <ul>\n            <li>\n   \t\t\t         <p>To learn more about Performance Insights and Amazon Aurora DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_PerfInsights.html\"> Amazon Aurora User Guide</a>.\n   \t\t\t</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>To learn more about Performance Insights and Amazon RDS DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html\"> Amazon RDS User Guide</a>.\n   \t\t\t</p>\n   \t\t       </li>\n         </ul>"
+                "smithy.api#documentation": "<p>A logical grouping of Performance Insights metrics for a related subject area. For example, the\n\t\t\t\t<code>db.sql</code> dimension group consists of the following dimensions:\n\t\t\t\t<code>db.sql.id</code>, <code>db.sql.db_id</code>, <code>db.sql.statement</code>,\n\t\t\tand <code>db.sql.tokenized_id</code>.</p>\n         <note>\n            <p>Each response element returns a maximum of 500 bytes. For larger elements, such as\n\t\t\t\tSQL statements, only the first 500 bytes are returned.</p>\n         </note>\n         <p>Amazon RDS Performance Insights enables you to monitor and explore different \n   \t\tdimensions of database load based on data captured from a running DB instance. \n   \t\tDB load is measured as average active sessions. Performance Insights provides the \n   \t\tdata to API consumers as a two-dimensional time-series dataset. The time dimension \n   \t\tprovides DB load data for each time point in the queried time range. Each time point \n   \t\tdecomposes overall load in relation to the requested dimensions, measured at that \n   \t\ttime point. Examples include SQL, Wait event, User, and Host. </p>\n         <ul>\n            <li>\n               <p>To learn more about Performance Insights and Amazon Aurora DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_PerfInsights.html\"> Amazon Aurora User Guide</a>.\n   \t\t\t</p>\n            </li>\n            <li>\n               <p>To learn more about Performance Insights and Amazon RDS DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html\"> Amazon RDS User Guide</a>.\n   \t\t\t</p>\n            </li>\n         </ul>"
             }
         },
         "com.amazonaws.devopsguru#PerformanceInsightsMetricDimensions": {
@@ -4810,7 +5303,7 @@
                 "Metric": {
                     "target": "com.amazonaws.devopsguru#PerformanceInsightsMetricName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the meteric used used when querying an Performance Insights\n\t\t\t\t<code>GetResourceMetrics</code> API for anomaly metrics.</p>\n\n\t\t       <p>Valid values for <code>Metric</code> are:</p>\n\n\t\t       <ul>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.load.avg</code> - a scaled representation of the number of active sessions for the\n\t\t\t\t\tdatabase engine.</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>\n\t\t\t\t\t             <code>db.sampledload.avg</code> - the raw number of active sessions for the database\n\t\t\t\t\tengine.</p>\n\t\t\t         </li>\n         </ul>\n\t\t       <p>If the number of active sessions is less than an internal Performance Insights threshold,\n\t\t\t\t<code>db.load.avg</code> and <code>db.sampledload.avg</code> are the same value. If\n\t\t\tthe number of active sessions is greater than the internal threshold, Performance Insights samples the active sessions, with\n\t\t\t\t<code>db.load.avg</code> showing the scaled values, <code>db.sampledload.avg</code>\n\t\t\tshowing the raw values, and <code>db.sampledload.avg</code> less than\n\t\t\t\t<code>db.load.avg</code>. For most use cases, you can query <code>db.load.avg</code>\n\t\t\tonly. </p>"
+                        "smithy.api#documentation": "<p>The name of the meteric used used when querying an Performance Insights\n\t\t\t\t<code>GetResourceMetrics</code> API for anomaly metrics.</p>\n         <p>Valid values for <code>Metric</code> are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>db.load.avg</code> - a scaled representation of the number of active sessions for the\n\t\t\t\t\tdatabase engine.</p>\n            </li>\n            <li>\n               <p>\n                  <code>db.sampledload.avg</code> - the raw number of active sessions for the database\n\t\t\t\t\tengine.</p>\n            </li>\n         </ul>\n         <p>If the number of active sessions is less than an internal Performance Insights threshold,\n\t\t\t\t<code>db.load.avg</code> and <code>db.sampledload.avg</code> are the same value. If\n\t\t\tthe number of active sessions is greater than the internal threshold, Performance Insights samples the active sessions, with\n\t\t\t\t<code>db.load.avg</code> showing the scaled values, <code>db.sampledload.avg</code>\n\t\t\tshowing the raw values, and <code>db.sampledload.avg</code> less than\n\t\t\t\t<code>db.load.avg</code>. For most use cases, you can query <code>db.load.avg</code>\n\t\t\tonly. </p>"
                     }
                 },
                 "GroupBy": {
@@ -4822,12 +5315,12 @@
                 "Filter": {
                     "target": "com.amazonaws.devopsguru#PerformanceInsightsMetricFilterMap",
                     "traits": {
-                        "smithy.api#documentation": "<p>One or more filters to apply to a Performance Insights <code>GetResourceMetrics</code> API query.\n\t\t\tRestrictions:</p>\n\t\t       <ul>\n            <li>\n\t\t\t\t           <p>Any number of filters by the same dimension, as specified in the\n\t\t\t\t\t\t<code>GroupBy</code> parameter.</p>\n\t\t\t         </li>\n            <li>\n\t\t\t\t           <p>A single filter for any other dimension in this dimension group.</p>\n\t\t\t         </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>One or more filters to apply to a Performance Insights <code>GetResourceMetrics</code> API query.\n\t\t\tRestrictions:</p>\n         <ul>\n            <li>\n               <p>Any number of filters by the same dimension, as specified in the\n\t\t\t\t\t\t<code>GroupBy</code> parameter.</p>\n            </li>\n            <li>\n               <p>A single filter for any other dimension in this dimension group.</p>\n            </li>\n         </ul>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A single query to be processed. Use these parameters to query the Performance Insights\n\t\t\t\t<code>GetResourceMetrics</code> API to retrieve the metrics for an anomaly. For more\n\t\t\tinformation, see <code>\n               <a href=\"https://docs.aws.amazon.com/performance-insights/latest/APIReference/API_GetResourceMetrics.html\">GetResourceMetrics</a>\n            </code> in the <i>Amazon RDS Performance Insights API\n\t\t\t\tReference</i>.</p> \n         <p>Amazon RDS Performance Insights enables you to monitor and explore different \n   \t\tdimensions of database load based on data captured from a running DB instance. \n   \t\tDB load is measured as average active sessions. Performance Insights provides the \n   \t\tdata to API consumers as a two-dimensional time-series dataset. The time dimension \n   \t\tprovides DB load data for each time point in the queried time range. Each time point \n   \t\tdecomposes overall load in relation to the requested dimensions, measured at that \n   \t\ttime point. Examples include SQL, Wait event, User, and Host. </p>\n   \t\n   \t     <ul>\n            <li>\n   \t\t\t         <p>To learn more about Performance Insights and Amazon Aurora DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_PerfInsights.html\"> Amazon Aurora User Guide</a>.\n   \t\t\t</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>To learn more about Performance Insights and Amazon RDS DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html\"> Amazon RDS User Guide</a>.\n   \t\t\t</p>\n   \t\t       </li>\n         </ul>"
+                "smithy.api#documentation": "<p>A single query to be processed. Use these parameters to query the Performance Insights\n\t\t\t\t<code>GetResourceMetrics</code> API to retrieve the metrics for an anomaly. For more\n\t\t\tinformation, see <code>\n               <a href=\"https://docs.aws.amazon.com/performance-insights/latest/APIReference/API_GetResourceMetrics.html\">GetResourceMetrics</a>\n            </code> in the <i>Amazon RDS Performance Insights API\n\t\t\t\tReference</i>.</p>\n         <p>Amazon RDS Performance Insights enables you to monitor and explore different \n   \t\tdimensions of database load based on data captured from a running DB instance. \n   \t\tDB load is measured as average active sessions. Performance Insights provides the \n   \t\tdata to API consumers as a two-dimensional time-series dataset. The time dimension \n   \t\tprovides DB load data for each time point in the queried time range. Each time point \n   \t\tdecomposes overall load in relation to the requested dimensions, measured at that \n   \t\ttime point. Examples include SQL, Wait event, User, and Host. </p>\n         <ul>\n            <li>\n               <p>To learn more about Performance Insights and Amazon Aurora DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_PerfInsights.html\"> Amazon Aurora User Guide</a>.\n   \t\t\t</p>\n            </li>\n            <li>\n               <p>To learn more about Performance Insights and Amazon RDS DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html\"> Amazon RDS User Guide</a>.\n   \t\t\t</p>\n            </li>\n         </ul>"
             }
         },
         "com.amazonaws.devopsguru#PerformanceInsightsMetricUnit": {
@@ -4874,7 +5367,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Details about Performance Insights metrics.</p> \n         <p>Amazon RDS Performance Insights enables you to monitor and explore different \n   \t\tdimensions of database load based on data captured from a running DB instance. \n   \t\tDB load is measured as average active sessions. Performance Insights provides the \n   \t\tdata to API consumers as a two-dimensional time-series dataset. The time dimension \n   \t\tprovides DB load data for each time point in the queried time range. Each time point \n   \t\tdecomposes overall load in relation to the requested dimensions, measured at that \n   \t\ttime point. Examples include SQL, Wait event, User, and Host. </p>\n   \t\n   \t     <ul>\n            <li>\n   \t\t\t         <p>To learn more about Performance Insights and Amazon Aurora DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_PerfInsights.html\"> Amazon Aurora User Guide</a>.\n   \t\t\t</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>To learn more about Performance Insights and Amazon RDS DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html\"> Amazon RDS User Guide</a>.\n   \t\t\t</p>\n   \t\t       </li>\n         </ul>"
+                "smithy.api#documentation": "<p>Details about Performance Insights metrics.</p>\n         <p>Amazon RDS Performance Insights enables you to monitor and explore different \n   \t\tdimensions of database load based on data captured from a running DB instance. \n   \t\tDB load is measured as average active sessions. Performance Insights provides the \n   \t\tdata to API consumers as a two-dimensional time-series dataset. The time dimension \n   \t\tprovides DB load data for each time point in the queried time range. Each time point \n   \t\tdecomposes overall load in relation to the requested dimensions, measured at that \n   \t\ttime point. Examples include SQL, Wait event, User, and Host. </p>\n         <ul>\n            <li>\n               <p>To learn more about Performance Insights and Amazon Aurora DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_PerfInsights.html\"> Amazon Aurora User Guide</a>.\n   \t\t\t</p>\n            </li>\n            <li>\n               <p>To learn more about Performance Insights and Amazon RDS DB instances, go to the <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html\"> Amazon RDS User Guide</a>.\n   \t\t\t</p>\n            </li>\n         </ul>"
             }
         },
         "com.amazonaws.devopsguru#PerformanceInsightsMetricsDetails": {
@@ -5453,7 +5946,7 @@
                 "Type": {
                     "target": "com.amazonaws.devopsguru#AnomalyType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of the reactive anomaly. It can be one of the following types.</p>\n\t        <ul>\n            <li>\n\t   \t          <p>\n\t   \t\t            <code>CAUSAL</code> - the anomaly can cause a new insight.</p>\n\t           </li>\n            <li>\n\t   \t          <p>\n\t   \t\t            <code>CONTEXTUAL</code> - the anomaly contains additional information about an insight or its causal anomaly.</p>\n\t           </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The type of the reactive anomaly. It can be one of the following types.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>CAUSAL</code> - the anomaly can cause a new insight.</p>\n            </li>\n            <li>\n               <p>\n                  <code>CONTEXTUAL</code> - the anomaly contains additional information about an insight or its causal anomaly.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "Name": {
@@ -5533,7 +6026,7 @@
                 "Type": {
                     "target": "com.amazonaws.devopsguru#AnomalyType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of the reactive anomaly. It can be one of the following types.</p>\n\t        <ul>\n            <li>\n\t   \t          <p>\n\t   \t\t            <code>CAUSAL</code> - the anomaly can cause a new insight.</p>\n\t           </li>\n            <li>\n\t   \t          <p>\n\t   \t\t            <code>CONTEXTUAL</code> - the anomaly contains additional information about an insight or its causal anomaly.</p>\n\t           </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The type of the reactive anomaly. It can be one of the following types.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>CAUSAL</code> - the anomaly can cause a new insight.</p>\n            </li>\n            <li>\n               <p>\n                  <code>CONTEXTUAL</code> - the anomaly contains additional information about an insight or its causal anomaly.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "Name": {
@@ -6059,7 +6552,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#TagCollections",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services tags that are used by resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>The Amazon Web Services tags that are used by resources in the resource collection.</p>\n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n         <p>Each Amazon Web Services tag has two parts. </p>\n         <ul>\n            <li>\n               <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n            </li>\n            <li>\n               <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n            </li>\n         </ul>\n         <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>"
                     }
                 }
             },
@@ -6079,7 +6572,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#TagCollectionFilters",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services tags used to filter the resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>The Amazon Web Services tags used to filter the resources in the resource collection.</p>\n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n         <p>Each Amazon Web Services tag has two parts. </p>\n         <ul>\n            <li>\n               <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n            </li>\n            <li>\n               <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n            </li>\n         </ul>\n         <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>"
                     }
                 }
             },
@@ -6381,7 +6874,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p> Returns a list of insights in your Amazon Web Services account. You can specify which insights are\n\t\t\treturned by their start time, one or more statuses (<code>ONGOING</code> or <code>CLOSED</code>), one or more severities\n\t\t\t\t(<code>LOW</code>, <code>MEDIUM</code>, and <code>HIGH</code>), and type\n\t\t\t\t(<code>REACTIVE</code> or <code>PROACTIVE</code>). </p>\n\t\t       <p> Use the <code>Filters</code> parameter to specify status and severity search\n\t\t\tparameters. Use the <code>Type</code> parameter to specify <code>REACTIVE</code> or\n\t\t\t\t<code>PROACTIVE</code> in your search. </p>",
+                "smithy.api#documentation": "<p> Returns a list of insights in your Amazon Web Services account. You can specify which insights are\n\t\t\treturned by their start time, one or more statuses (<code>ONGOING</code> or <code>CLOSED</code>), one or more severities\n\t\t\t\t(<code>LOW</code>, <code>MEDIUM</code>, and <code>HIGH</code>), and type\n\t\t\t\t(<code>REACTIVE</code> or <code>PROACTIVE</code>). </p>\n         <p> Use the <code>Filters</code> parameter to specify status and severity search\n\t\t\tparameters. Use the <code>Type</code> parameter to specify <code>REACTIVE</code> or\n\t\t\t\t<code>PROACTIVE</code> in your search. </p>",
                 "smithy.api#http": {
                     "method": "POST",
                     "uri": "/insights/search",
@@ -6527,7 +7020,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p> Returns a list of insights in your organization. You can specify which insights are\n\t\t\treturned by their start time, one or more statuses (<code>ONGOING</code>,\n\t\t\t\t<code>CLOSED</code>, and <code>CLOSED</code>), one or more severities\n\t\t\t\t(<code>LOW</code>, <code>MEDIUM</code>, and <code>HIGH</code>), and type\n\t\t\t\t(<code>REACTIVE</code> or <code>PROACTIVE</code>). </p>\n\t\t       <p> Use the <code>Filters</code> parameter to specify status and severity search\n\t\t\tparameters. Use the <code>Type</code> parameter to specify <code>REACTIVE</code> or\n\t\t\t\t<code>PROACTIVE</code> in your search. </p>",
+                "smithy.api#documentation": "<p> Returns a list of insights in your organization. You can specify which insights are\n\t\t\treturned by their start time, one or more statuses (<code>ONGOING</code>,\n\t\t\t\t<code>CLOSED</code>, and <code>CLOSED</code>), one or more severities\n\t\t\t\t(<code>LOW</code>, <code>MEDIUM</code>, and <code>HIGH</code>), and type\n\t\t\t\t(<code>REACTIVE</code> or <code>PROACTIVE</code>). </p>\n         <p> Use the <code>Filters</code> parameter to specify status and severity search\n\t\t\tparameters. Use the <code>Type</code> parameter to specify <code>REACTIVE</code> or\n\t\t\t\t<code>PROACTIVE</code> in your search. </p>",
                 "smithy.api#http": {
                     "method": "POST",
                     "uri": "/organization/insights/search",
@@ -6961,7 +7454,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p> Contains the Amazon Resource Name (ARN) of an Amazon Simple Notification Service topic. </p> \n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission \n\t\t\t\tto it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. DevOps Guru only supports standard SNS topics. \n\t\t\t\tFor more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-required-permissions.html\">Permissions \n\t\t\t\tfor cross account Amazon SNS topics</a>.</p>\n\t\t\t\t     <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission to it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. For more information, see Permissions for cross account Amazon SNS topics.</p>\n\t\t\t\t     <p>If you use an Amazon SNS topic that is encrypted by an Amazon Web Services Key Management Service customer-managed key (CMK), then you must add permissions \n\t\t\t\tto the CMK. For more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-kms-permissions.html\">Permissions for \n\t\t\t\tAmazon Web Services KMS–encrypted Amazon SNS topics</a>.</p>"
+                "smithy.api#documentation": "<p> Contains the Amazon Resource Name (ARN) of an Amazon Simple Notification Service topic. </p>\n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission \n\t\t\t\tto it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. DevOps Guru only supports standard SNS topics. \n\t\t\t\tFor more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-required-permissions.html\">Permissions \n\t\t\t\tfor cross account Amazon SNS topics</a>.</p>\n         <p>If you use an Amazon SNS topic in another account, you must attach a policy to it that grants DevOps Guru permission to it notifications. DevOps Guru adds the required policy on your behalf to send notifications using Amazon SNS in your account. For more information, see Permissions for cross account Amazon SNS topics.</p>\n         <p>If you use an Amazon SNS topic that is encrypted by an Amazon Web Services Key Management Service customer-managed key (CMK), then you must add permissions \n\t\t\t\tto the CMK. For more information, see <a href=\"https://docs.aws.amazon.com/devops-guru/latest/userguide/sns-kms-permissions.html\">Permissions for \n\t\t\t\tAmazon Web Services KMS–encrypted Amazon SNS topics</a>.</p>"
             }
         },
         "com.amazonaws.devopsguru#SsmOpsItemId": {
@@ -7076,20 +7569,20 @@
                 "AppBoundaryKey": {
                     "target": "com.amazonaws.devopsguru#AppBoundaryKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
+                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>",
                         "smithy.api#required": {}
                     }
                 },
                 "TagValues": {
                     "target": "com.amazonaws.devopsguru#TagValues",
                     "traits": {
-                        "smithy.api#documentation": "<p>The values in an Amazon Web Services tag collection.</p> \n         <p>The tag's <i>value</i> is an optional field used to associate a string with \n\t\t\t\t\tthe tag <i>key</i> (for example, <code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). The <i>key</i> and <i>value</i> are the tag's <i>key</i> pair. \n   \t\t\t\tOmitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive. You can specify a maximum of 256 characters for a tag value.</p>",
+                        "smithy.api#documentation": "<p>The values in an Amazon Web Services tag collection.</p>\n         <p>The tag's <i>value</i> is an optional field used to associate a string with \n\t\t\t\t\tthe tag <i>key</i> (for example, <code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). The <i>key</i> and <i>value</i> are the tag's <i>key</i> pair. \n   \t\t\t\tOmitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive. You can specify a maximum of 256 characters for a tag value.</p>",
                         "smithy.api#required": {}
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A collection of Amazon Web Services tags.</p> \n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                "smithy.api#documentation": "<p>A collection of Amazon Web Services tags.</p>\n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n         <p>Each Amazon Web Services tag has two parts. </p>\n         <ul>\n            <li>\n               <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n            </li>\n            <li>\n               <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n            </li>\n         </ul>\n         <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>"
             }
         },
         "com.amazonaws.devopsguru#TagCollectionFilter": {
@@ -7098,14 +7591,14 @@
                 "AppBoundaryKey": {
                     "target": "com.amazonaws.devopsguru#AppBoundaryKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
+                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>",
                         "smithy.api#required": {}
                     }
                 },
                 "TagValues": {
                     "target": "com.amazonaws.devopsguru#TagValues",
                     "traits": {
-                        "smithy.api#documentation": "<p>The values in an Amazon Web Services tag collection.</p> \n         <p>The tag's <i>value</i> is an optional field used to associate a string with \n\t\t\t\t\tthe tag <i>key</i> (for example, <code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). The <i>key</i> and <i>value</i> are the tag's <i>key</i> pair. \n   \t\t\t\tOmitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive. You can specify a maximum of 256 characters for a tag value.</p>",
+                        "smithy.api#documentation": "<p>The values in an Amazon Web Services tag collection.</p>\n         <p>The tag's <i>value</i> is an optional field used to associate a string with \n\t\t\t\t\tthe tag <i>key</i> (for example, <code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). The <i>key</i> and <i>value</i> are the tag's <i>key</i> pair. \n   \t\t\t\tOmitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive. You can specify a maximum of 256 characters for a tag value.</p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -7132,14 +7625,14 @@
                 "AppBoundaryKey": {
                     "target": "com.amazonaws.devopsguru#AppBoundaryKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
+                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>",
                         "smithy.api#required": {}
                     }
                 },
                 "TagValues": {
                     "target": "com.amazonaws.devopsguru#CostEstimationTagValues",
                     "traits": {
-                        "smithy.api#documentation": "<p>The values in an Amazon Web Services tag collection.</p> \n         <p>The tag's <i>value</i> is an optional field used to associate a string with \n\t\t\t\t\tthe tag <i>key</i> (for example, <code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). The <i>key</i> and <i>value</i> are the tag's <i>key</i> pair. \n   \t\t\t\tOmitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive. You can specify a maximum of 256 characters for a tag value.</p>",
+                        "smithy.api#documentation": "<p>The values in an Amazon Web Services tag collection.</p>\n         <p>The tag's <i>value</i> is an optional field used to associate a string with \n\t\t\t\t\tthe tag <i>key</i> (for example, <code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). The <i>key</i> and <i>value</i> are the tag's <i>key</i> pair. \n   \t\t\t\tOmitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive. You can specify a maximum of 256 characters for a tag value.</p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -7160,13 +7653,13 @@
                 "AppBoundaryKey": {
                     "target": "com.amazonaws.devopsguru#AppBoundaryKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>"
                     }
                 },
                 "TagValue": {
                     "target": "com.amazonaws.devopsguru#TagValue",
                     "traits": {
-                        "smithy.api#documentation": "<p>The value in an Amazon Web Services tag.</p> \n         <p>The tag's <i>value</i> is an optional field used to associate a string with \n\t\t\t\t\tthe tag <i>key</i> (for example, <code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). The <i>key</i> and <i>value</i> are the tag's <i>key</i> pair. \n   \t\t\t\tOmitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive. You can specify a maximum of 256 characters for a tag value.</p>"
+                        "smithy.api#documentation": "<p>The value in an Amazon Web Services tag.</p>\n         <p>The tag's <i>value</i> is an optional field used to associate a string with \n\t\t\t\t\tthe tag <i>key</i> (for example, <code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). The <i>key</i> and <i>value</i> are the tag's <i>key</i> pair. \n   \t\t\t\tOmitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive. You can specify a maximum of 256 characters for a tag value.</p>"
                     }
                 },
                 "Insight": {
@@ -7406,7 +7899,7 @@
                 "Tags": {
                     "target": "com.amazonaws.devopsguru#UpdateTagCollectionFilters",
                     "traits": {
-                        "smithy.api#documentation": "<p>The updated Amazon Web Services tags used to filter the resources in the resource collection.</p>\n\t\t       <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n   \t     <p>Each Amazon Web Services tag has two parts. </p>\n   \t     <ul>\n            <li>\n   \t\t\t         <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n   \t\t       </li>\n            <li>\n   \t\t\t         <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n   \t\t       </li>\n         </ul>\n   \t     <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n   \t     <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>"
+                        "smithy.api#documentation": "<p>The updated Amazon Web Services tags used to filter the resources in the resource collection.</p>\n         <p>Tags help you identify and organize your Amazon Web Services resources. Many Amazon Web Services services support\n   \t\ttagging, so you can assign the same tag to resources from different services to indicate\n   \t\tthat the resources are related. For example, you can assign the same tag to an Amazon DynamoDB\n   \t\ttable resource that you assign to an Lambda function. For more information about\n   \t\tusing tags, see the <a href=\"https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf\">Tagging\n   \t\t\tbest practices</a> whitepaper. </p>\n         <p>Each Amazon Web Services tag has two parts. </p>\n         <ul>\n            <li>\n               <p>A tag <i>key</i> (for example, <code>CostCenter</code>,\n   \t\t\t\t<code>Environment</code>, <code>Project</code>, or <code>Secret</code>). Tag\n   \t\t\t\t<i>keys</i> are case-sensitive.</p>\n            </li>\n            <li>\n               <p>An optional field known as a tag <i>value</i> (for example,\n   \t\t\t\t<code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). Omitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive.</p>\n            </li>\n         </ul>\n         <p>Together these are known as <i>key</i>-<i>value</i> pairs.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>"
                     }
                 }
             },
@@ -7521,14 +8014,14 @@
                 "AppBoundaryKey": {
                     "target": "com.amazonaws.devopsguru#AppBoundaryKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n\t\t          <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n\t        </important>",
+                        "smithy.api#documentation": "<p>An Amazon Web Services tag <i>key</i> that is used to identify the Amazon Web Services resources that \n      \tDevOps Guru analyzes. All Amazon Web Services resources in your account and Region tagged with this <i>key</i> make \n      up your DevOps Guru application and analysis boundary.</p>\n         <important>\n            <p>The string used for a <i>key</i> in a tag that you use to define your resource coverage must begin with the\n\t\t\tprefix <code>Devops-guru-</code>. The tag <i>key</i> might be\n\t\t\t<code>DevOps-Guru-deployment-application</code> or\n\t\t\t<code>devops-guru-rds-application</code>. When you create a <i>key</i>, the case of characters in the <i>key</i> can be whatever you choose. After you create a <i>key</i>, it is case-sensitive.\n\t\t\t For example, DevOps Guru works with a\n\t\t\t<i>key</i> named <code>devops-guru-rds</code> and a <i>key</i> named\n\t\t\t<code>DevOps-Guru-RDS</code>, and these act as two different <i>keys</i>. Possible <i>key</i>/<i>value</i> pairs in your\n\t\t\tapplication might be <code>Devops-Guru-production-application/RDS</code> or\n\t\t\t<code>Devops-Guru-production-application/containers</code>.</p>\n         </important>",
                         "smithy.api#required": {}
                     }
                 },
                 "TagValues": {
                     "target": "com.amazonaws.devopsguru#UpdateTagValues",
                     "traits": {
-                        "smithy.api#documentation": "<p>The values in an Amazon Web Services tag collection.</p> \n         <p>The tag's <i>value</i> is an optional field used to associate a string with \n\t\t\t\t\tthe tag <i>key</i> (for example, <code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). The <i>key</i> and <i>value</i> are the tag's <i>key</i> pair. \n   \t\t\t\tOmitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive. You can specify a maximum of 256 characters for a tag value.</p>",
+                        "smithy.api#documentation": "<p>The values in an Amazon Web Services tag collection.</p>\n         <p>The tag's <i>value</i> is an optional field used to associate a string with \n\t\t\t\t\tthe tag <i>key</i> (for example, <code>111122223333</code>, <code>Production</code>, or a team\n   \t\t\t\tname). The <i>key</i> and <i>value</i> are the tag's <i>key</i> pair. \n   \t\t\t\tOmitting the tag <i>value</i> is the same as using an empty\n   \t\t\t\tstring. Like tag <i>keys</i>, tag <i>values</i> are\n   \t\t\t\tcase-sensitive. You can specify a maximum of 256 characters for a tag value.</p>",
                         "smithy.api#required": {}
                     }
                 }
