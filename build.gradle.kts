@@ -205,6 +205,7 @@ apiValidation {
         "testing",
         "protocol-tests",
         "dokka-aws",
-        "tests",
+        "e2e-test-util",
+        "event-stream",
     )
 }
