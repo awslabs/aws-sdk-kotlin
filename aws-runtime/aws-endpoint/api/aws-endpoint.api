@@ -1,6 +1,3 @@
-public abstract class aws/sdk/kotlin/runtime/endpoint/AuthScheme {
-}
-
 public final class aws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4 : aws/sdk/kotlin/runtime/endpoint/AuthScheme {
 	public fun <init> (Ljava/lang/String;ZLjava/lang/String;)V
 	public final fun component1 ()Ljava/lang/String;
@@ -32,73 +29,8 @@ public final class aws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4A : aws/sdk/k
 }
 
 public final class aws/sdk/kotlin/runtime/endpoint/AuthSchemeKt {
-	public static final fun applyToRequest (Laws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4;Laws/smithy/kotlin/runtime/http/operation/OperationRequest;)V
-	public static final fun asSigningContext (Laws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4;)Laws/smithy/kotlin/runtime/auth/awssigning/SigningContext;
-	public static final fun getAuthScheme (Laws/smithy/kotlin/runtime/http/endpoints/Endpoint;)Laws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4;
-	public static final fun getAuthSchemesAttributeKey ()Laws/smithy/kotlin/runtime/util/AttributeKey;
-}
-
-public final class aws/sdk/kotlin/runtime/endpoint/functions/Arn {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/util/List;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Laws/sdk/kotlin/runtime/endpoint/functions/Arn;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/endpoint/functions/Arn;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/endpoint/functions/Arn;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAccountId ()Ljava/lang/String;
-	public final fun getPartition ()Ljava/lang/String;
-	public final fun getRegion ()Ljava/lang/String;
-	public final fun getResourceId ()Ljava/util/List;
-	public final fun getService ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/endpoint/functions/FunctionsKt {
-	public static final fun isVirtualHostableS3Bucket (Ljava/lang/String;Z)Z
-	public static final fun parseArn (Ljava/lang/String;)Laws/sdk/kotlin/runtime/endpoint/functions/Arn;
-	public static final fun partition (Ljava/util/List;Ljava/lang/String;)Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;
-}
-
-public final class aws/sdk/kotlin/runtime/endpoint/functions/Partition {
-	public fun <init> (Ljava/lang/String;Ljava/util/Map;Lkotlin/text/Regex;Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/util/Map;
-	public final fun component3 ()Lkotlin/text/Regex;
-	public final fun component4 ()Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;
-	public final fun copy (Ljava/lang/String;Ljava/util/Map;Lkotlin/text/Regex;Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;)Laws/sdk/kotlin/runtime/endpoint/functions/Partition;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/endpoint/functions/Partition;Ljava/lang/String;Ljava/util/Map;Lkotlin/text/Regex;Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/endpoint/functions/Partition;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getBaseConfig ()Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;
-	public final fun getId ()Ljava/lang/String;
-	public final fun getRegionRegex ()Lkotlin/text/Regex;
-	public final fun getRegions ()Ljava/util/Map;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig {
-	public fun <init> ()V
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/Boolean;
-	public final fun component5 ()Ljava/lang/Boolean;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;)Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDnsSuffix ()Ljava/lang/String;
-	public final fun getDualStackDnsSuffix ()Ljava/lang/String;
-	public final fun getName ()Ljava/lang/String;
-	public final fun getSupportsDualStack ()Ljava/lang/Boolean;
-	public final fun getSupportsFIPS ()Ljava/lang/Boolean;
-	public fun hashCode ()I
-	public final fun mergeWith (Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;)Laws/sdk/kotlin/runtime/endpoint/functions/PartitionConfig;
-	public fun toString ()Ljava/lang/String;
 }
 

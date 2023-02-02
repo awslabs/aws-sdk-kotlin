@@ -1,8 +1,6 @@
 public final class aws/sdk/kotlin/runtime/protocol/xml/Ec2QueryErrorDeserializerKt {
-	public static final fun parseEc2QueryErrorResponse ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/protocol/xml/RestXmlErrorDeserializerKt {
-	public static final fun parseRestXmlErrorResponse ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
