@@ -19,7 +19,6 @@ kotlin {
                 implementation(project(":aws-runtime:aws-http"))
                 implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
             }
         }
 
@@ -31,7 +30,7 @@ kotlin {
         }
 
         all {
-            languageSettings.optIn("aws.smithy.kotlin.runtime.util.InternalApi")
+            languageSettings.optIn("aws.smithy.kotlin.runtime.InternalApi")
             languageSettings.optIn("aws.sdk.kotlin.runtime.InternalSdkApi")
         }
     }

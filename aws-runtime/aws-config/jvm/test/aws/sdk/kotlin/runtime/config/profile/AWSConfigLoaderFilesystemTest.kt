@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.config.profile
 
 import aws.smithy.kotlin.runtime.util.OperatingSystem
-import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import io.kotest.matchers.maps.shouldContainAll
 import io.mockk.coEvery
 import io.mockk.every
@@ -42,12 +42,12 @@ class AWSConfigLoaderFilesystemTest {
         configFile.writeText("[profile foo]\nname = value")
 
         val testPlatform = mockPlatform(
-            pathSegment = Platform.filePathSeparator, // Use actual value from Platform in mock
+            pathSegment = PlatformProvider.System.filePathSeparator, // Use actual value from Platform in mock
             awsProfileEnv = "foo",
             homeEnv = "/home/user",
             awsConfigFileEnv = configFile.absolutePathString(),
             awsSharedCredentialsFileEnv = credentialsFile.absolutePathString(),
-            os = Platform.osInfo(), // Actual value
+            os = PlatformProvider.System.osInfo(), // Actual value
         )
 
         val actual = loadActiveAwsProfile(testPlatform)
@@ -69,11 +69,11 @@ class AWSConfigLoaderFilesystemTest {
         credentialsFile.writeText("[default]\nsecret=foo")
 
         val testPlatform = mockPlatform(
-            pathSegment = Platform.filePathSeparator, // Use actual value from Platform in mock
+            pathSegment = PlatformProvider.System.filePathSeparator, // Use actual value from Platform in mock
             homeEnv = "/home/user",
             awsConfigFileEnv = configFile.absolutePathString(),
             awsSharedCredentialsFileEnv = credentialsFile.absolutePathString(),
-            os = Platform.osInfo(), // Actual value
+            os = PlatformProvider.System.osInfo(), // Actual value
         )
 
         val actual = loadActiveAwsProfile(testPlatform)
@@ -100,8 +100,8 @@ class AWSConfigLoaderFilesystemTest {
         awsSharedCredentialsFileEnv: String? = null,
         homeProp: String? = null,
         os: OperatingSystem,
-    ): Platform {
-        val testPlatform = mockk<Platform>()
+    ): PlatformProvider {
+        val testPlatform = mockk<PlatformProvider>()
         val envKeyParam = slot<String>()
         val propKeyParam = slot<String>()
         val filePath = slot<String>()

@@ -10,7 +10,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvide
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.tracing.trace
-import aws.smithy.kotlin.runtime.util.Platform
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
 
 private const val PROVIDER_NAME = "Environment"
@@ -24,7 +24,7 @@ private val SESSION_TOKEN = AwsSdkSetting.AwsSessionToken.environmentVariable
  */
 public class EnvironmentCredentialsProvider
 public constructor(private val getEnv: (String) -> String?) : CloseableCredentialsProvider {
-    public constructor() : this(Platform::getenv)
+    public constructor() : this(PlatformProvider.System::getenv)
 
     private fun requireEnv(variable: String): String =
         getEnv(variable) ?: throw ProviderConfigurationException("Missing value for environment variable `$variable`")

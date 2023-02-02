@@ -26,7 +26,7 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         delegator.useFileWriter("S3ErrorMetadata.kt", "${ctx.settings.pkg.name}.model") { writer ->
             writer.addImport(AwsRuntimeTypes.Core.AwsErrorMetadata)
-            writer.addImport(RuntimeTypes.Utils.AttributeKey)
+            writer.addImport(RuntimeTypes.Core.Utils.AttributeKey)
 
             writer.withBlock("public class S3ErrorMetadata : AwsErrorMetadata() {", "}") {
                 writer.withBlock("public companion object {", "}") {

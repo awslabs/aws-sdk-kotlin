@@ -10,8 +10,8 @@ import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.imds.InstanceMetadataProvider
 import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
 
 private const val REGION_PATH: String = "/latest/meta-data/placement/region"
@@ -24,7 +24,7 @@ private const val REGION_PATH: String = "/latest/meta-data/placement/region"
  */
 internal class ImdsRegionProvider(
     private val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
-    private val platformProvider: PlatformEnvironProvider = Platform,
+    private val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
 ) : RegionProvider, Closeable {
     private val resolvedRegion = asyncLazy(::loadRegion)
 

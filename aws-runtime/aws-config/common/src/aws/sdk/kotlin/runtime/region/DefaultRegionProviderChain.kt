@@ -8,7 +8,6 @@ package aws.sdk.kotlin.runtime.region
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.imds.InstanceMetadataProvider
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
@@ -19,6 +18,6 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  *  4. If running on EC2, check the EC2 metadata service for region
  */
 internal expect class DefaultRegionProviderChain constructor(
-    platformProvider: PlatformProvider = Platform,
+    platformProvider: PlatformProvider = PlatformProvider.System,
     imdsClient: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
 ) : RegionProvider, Closeable

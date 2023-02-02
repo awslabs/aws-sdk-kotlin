@@ -13,7 +13,6 @@ import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
@@ -41,7 +40,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  */
 public class DefaultChainCredentialsProvider constructor(
     private val profileName: String? = null,
-    private val platformProvider: PlatformProvider = Platform,
+    private val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClientEngine: HttpClientEngine? = null,
     region: String? = null,
 ) : CloseableCredentialsProvider {

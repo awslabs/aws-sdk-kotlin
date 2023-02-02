@@ -19,7 +19,6 @@ kotlin {
                 implementation(project(":aws-runtime:aws-http"))
                 implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
             }
         }
 

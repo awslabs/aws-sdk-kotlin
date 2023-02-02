@@ -60,7 +60,7 @@ codegen {
                 buildSettings {
                     generateFullProject = true
                     optInAnnotations = listOf(
-                        "aws.smithy.kotlin.runtime.util.InternalApi",
+                        "aws.smithy.kotlin.runtime.InternalApi",
                         "aws.sdk.kotlin.runtime.InternalSdkApi"
                     )
                 }

@@ -67,7 +67,7 @@ codegen {
                     generateFullProject = false
                     generateDefaultBuildFiles = false
                     optInAnnotations = listOf(
-                        "aws.smithy.kotlin.runtime.util.InternalApi",
+                        "aws.smithy.kotlin.runtime.InternalApi",
                         "aws.sdk.kotlin.runtime.InternalSdkApi"
                     )
                 }
@@ -95,7 +95,7 @@ val generateProjectionsTask = tasks.named<SmithyBuild>("generateSmithyProjection
 
 val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
-    "aws.smithy.kotlin.runtime.util.InternalApi",
+    "aws.smithy.kotlin.runtime.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi",
 )
 kotlin.sourceSets.all {
@@ -151,10 +151,8 @@ dependencies {
     implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:io:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:utils:$smithyKotlinVersion")
     api(project(":aws-runtime:aws-config"))
     api(project(":aws-runtime:aws-core"))
     api(project(":aws-runtime:aws-endpoint"))

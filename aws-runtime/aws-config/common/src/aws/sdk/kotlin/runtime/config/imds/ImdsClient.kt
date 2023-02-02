@@ -23,7 +23,6 @@ import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.io.middleware.Phase
 import aws.smithy.kotlin.runtime.time.Clock
-import aws.smithy.kotlin.runtime.util.Platform
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -178,7 +177,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         /**
          * The platform provider. This is here to facilitate testing and can otherwise be ignored
          */
-        internal var platformProvider: PlatformProvider = Platform
+        internal var platformProvider: PlatformProvider = PlatformProvider.System
     }
 }
 
