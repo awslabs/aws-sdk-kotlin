@@ -269,20 +269,6 @@ public final class aws/sdk/kotlin/codegen/customization/PresignableModelIntegrat
 	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
 }
 
-public final class aws/sdk/kotlin/codegen/customization/RemoveChecksumSelectionFields : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
-	public fun <init> ()V
-	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
-	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
-	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
-	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
-	public fun getOrder ()B
-	public fun getProtocolGenerators ()Ljava/util/List;
-	public fun getSectionWriters ()Ljava/util/List;
-	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
-	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
-	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
-}
-
 public final class aws/sdk/kotlin/codegen/customization/RemoveEventStreamOperations : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
 	public fun <init> ()V
 	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
@@ -298,6 +284,34 @@ public final class aws/sdk/kotlin/codegen/customization/RemoveEventStreamOperati
 }
 
 public final class aws/sdk/kotlin/codegen/customization/apigateway/ApiGatewayAddAcceptHeader : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/flexiblechecksums/FlexibleChecksumsRequest : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/flexiblechecksums/FlexibleChecksumsResponse : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
 	public fun <init> ()V
 	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
 	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
