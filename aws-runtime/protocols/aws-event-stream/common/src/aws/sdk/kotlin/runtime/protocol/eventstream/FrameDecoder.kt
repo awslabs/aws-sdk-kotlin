@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.protocol.eventstream
 import aws.sdk.kotlin.runtime.ClientException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.io.*
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -30,6 +31,8 @@ public suspend fun decodeFrames(chan: SdkByteReadChannel): Flow<Message> = flow 
 
         try {
             chan.readFully(messageBuf, limit.toLong())
+        } catch (ex: CancellationException) {
+            throw ex
         } catch (ex: Exception) {
             throw EventStreamFramingException("failed to read message from channel", ex)
         }

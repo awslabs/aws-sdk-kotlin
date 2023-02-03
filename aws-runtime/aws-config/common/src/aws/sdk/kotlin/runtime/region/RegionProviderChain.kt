@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.region
 
 import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.util.asyncLazy
+import kotlinx.coroutines.CancellationException
 
 /**
  * Composite [RegionProvider] that delegates to a chain of providers.
@@ -39,6 +40,8 @@ public open class RegionProviderChain(
                     return region
                 }
                 logger.debug { "failed to resolve region from $provider" }
+            } catch (ex: CancellationException) {
+                throw ex
             } catch (ex: Exception) {
                 logger.debug { "unable to load region from $provider: ${ex.message}" }
             }

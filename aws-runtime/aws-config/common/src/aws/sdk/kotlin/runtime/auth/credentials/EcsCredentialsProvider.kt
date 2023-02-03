@@ -30,6 +30,7 @@ import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlinx.coroutines.CancellationException
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -92,6 +93,8 @@ public class EcsCredentialsProvider internal constructor(
         val client = SdkHttpClient(httpClientEngine)
         val creds = try {
             op.roundTrip(client, Unit)
+        } catch (ex: CancellationException) {
+            throw ex
         } catch (ex: Exception) {
             logger.debug { "failed to obtain credentials from container metadata service" }
             throw when (ex) {
@@ -110,6 +113,8 @@ public class EcsCredentialsProvider internal constructor(
      */
     private fun validateRelativeUri(relativeUri: String): Url = try {
         Url.parse("${AWS_CONTAINER_SERVICE_ENDPOINT}$relativeUri")
+    } catch (ex: CancellationException) {
+        throw ex
     } catch (ex: Exception) {
         throw ProviderConfigurationException("Invalid relativeUri `$relativeUri`", ex)
     }
@@ -128,6 +133,8 @@ public class EcsCredentialsProvider internal constructor(
         // full URI requires verification either https OR that the host resolves to loopback device
         val url = try {
             Url.parse(uri)
+        } catch (ex: CancellationException) {
+            throw ex
         } catch (ex: Exception) {
             throw ProviderConfigurationException("Invalid fullUri `$uri`", ex)
         }

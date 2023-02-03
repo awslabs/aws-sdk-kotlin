@@ -16,6 +16,7 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlinx.coroutines.CancellationException
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -92,6 +93,8 @@ public class StsWebIdentityCredentialsProvider(
                 durationSeconds = provider.duration.inWholeSeconds.toInt()
                 roleSessionName = provider.roleSessionName ?: defaultSessionName(platformProvider)
             }
+        } catch (ex: CancellationException) {
+            throw ex
         } catch (ex: Exception) {
             logger.debug { "sts refused to grant assumed role credentials from web identity" }
             throw CredentialsProviderException("STS failed to assume role from web identity", ex)
