@@ -17,7 +17,7 @@ fun EndpointProviderGenerator.Companion.renderAsSigningProviderExt(settings: Kot
     writer.withBlock(
         "internal fun #1T<#2T>.asSigningProvider(params: #2T): #3T = {",
         "}",
-        RuntimeTypes.Http.Endpoints.EndpointProvider,
+        RuntimeTypes.HttpClient.Endpoints.EndpointProvider,
         EndpointParametersGenerator.getSymbol(settings),
         RuntimeTypes.Auth.Signing.AwsSigningCommon.SigningEndpointProvider,
     ) {

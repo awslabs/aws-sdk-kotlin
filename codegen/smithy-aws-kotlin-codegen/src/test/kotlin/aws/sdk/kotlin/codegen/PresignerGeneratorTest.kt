@@ -110,9 +110,9 @@ class PresignerGeneratorTest {
             import aws.smithy.kotlin.runtime.auth.awssigning.ServicePresignConfig
             import aws.smithy.kotlin.runtime.auth.awssigning.SigningEndpointProvider
             import aws.smithy.kotlin.runtime.auth.awssigning.createPresignedRequest
-            import aws.smithy.kotlin.runtime.client.ExecutionContext
-            import aws.smithy.kotlin.runtime.http.QueryParameters
             import aws.smithy.kotlin.runtime.http.request.HttpRequest
+            import aws.smithy.kotlin.runtime.net.QueryParameters
+            import aws.smithy.kotlin.runtime.operation.ExecutionContext
             import kotlin.time.Duration
             import smithy.kotlin.traits.TestClient
             import smithy.kotlin.traits.endpoints.EndpointParameters

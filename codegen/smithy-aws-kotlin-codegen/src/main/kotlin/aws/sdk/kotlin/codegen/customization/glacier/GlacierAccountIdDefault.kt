@@ -45,12 +45,12 @@ private class GlacierAccountIdMiddleware : ProtocolMiddleware {
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         val accountId = ctx.model.expectShape<StructureShape>(op.input.get()).members().first { it.memberName.lowercase() == "accountid" }
-        writer.addImport(RuntimeTypes.Http.Operation.OperationRequest)
+        writer.addImport(RuntimeTypes.HttpClient.Operation.OperationRequest)
 
         writer.withBlock("op.execution.initialize.intercept { req, next -> ", "}") {
             openBlock("if (req.subject.#L.isNullOrEmpty()) {", accountId.defaultName())
                 .write("val updated = req.subject.copy { #L = #S }", accountId.defaultName(), "-")
-                .write("next.call(#T(req.context, updated))", RuntimeTypes.Http.Operation.OperationRequest)
+                .write("next.call(#T(req.context, updated))", RuntimeTypes.HttpClient.Operation.OperationRequest)
                 .closeAndOpenBlock("} else {")
                 .write("next.call(req)")
                 .closeBlock("}")

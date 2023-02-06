@@ -23,9 +23,9 @@ class MutateHeadersMiddleware(
     override val name: String = "MutateHeaders"
     override val order: Byte = 10
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-        writer.addImport(RuntimeTypes.Http.Middleware.MutateHeadersMiddleware)
+        writer.addImport(RuntimeTypes.HttpClient.Middleware.MutateHeadersMiddleware)
             .withBlock("op.install(", ")") {
-                withBlock("#T().apply {", "}", RuntimeTypes.Http.Middleware.MutateHeadersMiddleware) {
+                withBlock("#T().apply {", "}", RuntimeTypes.HttpClient.Middleware.MutateHeadersMiddleware) {
                     overrideHeaders.forEach {
                         writer.write("set(#S, #S)", it.key, it.value)
                     }
