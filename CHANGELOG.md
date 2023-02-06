@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.20.1-beta] - 02/06/2023
+
+### Features
+* Sync to latest AWS service models
+* [#446](https://github.com/awslabs/smithy-kotlin/issues/446) Implement flexible checksums customization
+
+### Miscellaneous
+* Update to latest **smithy-kotlin** version
+* Upgrade to Kotlin 1.8.10
+* Refactor: track upstream module refactoring
+
 ## [0.20.0-beta] - 01/31/2023
 
 ### Features
