@@ -17,10 +17,4 @@ public object AwsClientOption {
      * the case of global services like IAM
      */
     public val Region: ClientOption<String> = ClientOption("AwsRegion")
-
-    // FIXME - endpoints are whitelabel material as well. Should we have an `SdkClientOption` object in whitelabel for some of these
-    /**
-     * Whether or not endpoint discovery is enabled or not. Default is true
-     */
-    public val EndpointDiscoveryEnabled: ClientOption<Boolean> = ClientOption("EndpointDiscoveryEnabled")
 }
