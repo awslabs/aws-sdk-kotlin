@@ -16,8 +16,6 @@ class AwsDefaultRetryPolicyTest {
     fun testErrorsByErrorCode() {
         AwsDefaultRetryPolicy.knownErrorTypes.forEach { (errorCode, errorType) ->
             val ex = ServiceException()
-            ex.sdkErrorMetadata.attributes[ServiceErrorMetadata.ErrorType] = ServiceException.ErrorType.Server
-            ex.sdkErrorMetadata.attributes[ErrorMetadata.Retryable] = true
             ex.sdkErrorMetadata.attributes[ServiceErrorMetadata.ErrorCode] = errorCode
             val result = AwsDefaultRetryPolicy.evaluate(Result.failure(ex))
             assertEquals(RetryDirective.RetryError(errorType), result)
@@ -30,8 +28,6 @@ class AwsDefaultRetryPolicyTest {
             val modeledStatusCode = HttpStatusCode.fromValue(statusCode)
             val response = HttpResponse(modeledStatusCode, Headers.Empty, HttpBody.Empty)
             val ex = ServiceException()
-            ex.sdkErrorMetadata.attributes[ServiceErrorMetadata.ErrorType] = ServiceException.ErrorType.Server
-            ex.sdkErrorMetadata.attributes[ErrorMetadata.Retryable] = true
             ex.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
             val result = AwsDefaultRetryPolicy.evaluate(Result.failure(ex))
             assertEquals(RetryDirective.RetryError(errorType), result)
