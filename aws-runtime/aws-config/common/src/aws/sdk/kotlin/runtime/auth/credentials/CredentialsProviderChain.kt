@@ -11,7 +11,6 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.operation.getLogger
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.tracing.*
-import kotlinx.coroutines.CancellationException
 import kotlin.coroutines.coroutineContext
 
 // TODO - support caching the provider that actually resolved credentials such that future calls don't involve going through the full chain
@@ -42,8 +41,6 @@ public open class CredentialsProviderChain(
             logger.trace { "Attempting to load credentials from $provider" }
             try {
                 return@withChildTraceSpan provider.getCredentials()
-            } catch (ex: CancellationException) {
-                throw ex
             } catch (ex: Exception) {
                 logger.debug { "unable to load credentials from $provider: ${ex.message}" }
                 chainException.value.addSuppressed(ex)
@@ -58,8 +55,6 @@ public open class CredentialsProviderChain(
             try {
                 (it as? Closeable)?.close()
                 null
-            } catch (ex: CancellationException) {
-                throw ex
             } catch (ex: Exception) {
                 ex
             }

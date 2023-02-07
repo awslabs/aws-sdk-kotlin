@@ -20,7 +20,6 @@ import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.fromEpochMilliseconds
 import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.*
-import kotlinx.coroutines.CancellationException
 import kotlin.coroutines.coroutineContext
 
 private const val PROVIDER_NAME = "SSO"
@@ -117,8 +116,6 @@ public class SsoCredentialsProvider public constructor(
                 roleName = this@SsoCredentialsProvider.roleName
                 accessToken = token.accessToken
             }
-        } catch (ex: CancellationException) {
-            throw ex
         } catch (ex: Exception) {
             throw CredentialsNotLoadedException("GetRoleCredentials operation failed", ex)
         } finally {
@@ -190,8 +187,6 @@ internal fun deserializeSsoToken(json: ByteArray): SsoToken {
                 else -> error("expected either key or end of object")
             }
         }
-    } catch (ex: CancellationException) {
-        throw ex
     } catch (ex: Exception) {
         throw InvalidSsoTokenException("invalid cached SSO token", ex)
     }

@@ -7,7 +7,6 @@ import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.PlatformProvider
-import kotlinx.coroutines.CancellationException
 
 internal expect suspend fun executeCommand(
     command: String,
@@ -47,8 +46,6 @@ public class ProcessCredentialsProvider(
 
         val (exitCode, output) = try {
             executeCommand(credentialProcess, platformProvider, maxOutputLengthBytes, timeoutMillis)
-        } catch (ex: CancellationException) {
-            throw ex
         } catch (ex: Exception) {
             throw CredentialsProviderException("Failed to execute command", ex)
         }

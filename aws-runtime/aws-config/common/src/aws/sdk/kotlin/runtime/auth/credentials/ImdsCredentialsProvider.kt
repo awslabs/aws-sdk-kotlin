@@ -22,7 +22,6 @@ import aws.smithy.kotlin.runtime.tracing.warn
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.coroutineContext
@@ -84,16 +83,12 @@ public class ImdsCredentialsProvider(
 
         val profileName = try {
             profile.get()
-        } catch (ex: CancellationException) {
-            throw ex
         } catch (ex: Exception) {
             return useCachedCredentials(ex) ?: throw CredentialsProviderException("failed to load instance profile", ex)
         }
 
         val payload = try {
             client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
-        } catch (ex: CancellationException) {
-            throw ex
         } catch (ex: Exception) {
             return useCachedCredentials(ex) ?: throw CredentialsProviderException("failed to load credentials", ex)
         }

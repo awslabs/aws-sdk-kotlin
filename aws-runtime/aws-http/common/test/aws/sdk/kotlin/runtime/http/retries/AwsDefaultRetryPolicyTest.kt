@@ -1,6 +1,5 @@
 package aws.sdk.kotlin.runtime.http.retries
 
-import aws.smithy.kotlin.runtime.ErrorMetadata
 import aws.smithy.kotlin.runtime.ServiceErrorMetadata
 import aws.smithy.kotlin.runtime.ServiceException
 import aws.smithy.kotlin.runtime.http.Headers

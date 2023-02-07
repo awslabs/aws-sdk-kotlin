@@ -20,7 +20,6 @@ import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
-import kotlinx.coroutines.CancellationException
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -78,8 +77,6 @@ public class StsAssumeRoleCredentialsProvider(
                 roleSessionName = provider.roleSessionName ?: defaultSessionName()
                 durationSeconds = provider.duration.inWholeSeconds.toInt()
             }
-        } catch (ex: CancellationException) {
-            throw ex
         } catch (ex: Exception) {
             logger.debug { "sts refused to grant assumed role credentials" }
             when (ex) {
