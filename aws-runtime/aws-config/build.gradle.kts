@@ -45,6 +45,7 @@ kotlin {
                 implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
 
                 // additional dependencies required by generated sts provider
+                implementation("aws.smithy.kotlin:http-client:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:serde-form-url:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:protocols:aws-xml-protocols"))

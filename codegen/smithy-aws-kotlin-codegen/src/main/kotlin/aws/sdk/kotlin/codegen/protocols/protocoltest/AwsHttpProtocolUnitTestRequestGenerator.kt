@@ -61,7 +61,7 @@ internal fun <T : HttpMessageTestCase> HttpProtocolUnitTestGenerator<T>.renderCo
         writer.write(
             "endpointProvider = #T { #T(#S) }",
             EndpointProviderGenerator.getSymbol(ctx.settings),
-            RuntimeTypes.Http.Endpoints.Endpoint,
+            RuntimeTypes.HttpClient.Endpoints.Endpoint,
             "https://$hostname",
         )
     }

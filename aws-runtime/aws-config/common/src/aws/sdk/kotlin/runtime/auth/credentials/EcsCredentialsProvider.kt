@@ -12,7 +12,6 @@ import aws.smithy.kotlin.runtime.ErrorMetadata
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
@@ -23,6 +22,9 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
+import aws.smithy.kotlin.runtime.net.Scheme
+import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
@@ -132,7 +134,7 @@ public class EcsCredentialsProvider internal constructor(
             throw ProviderConfigurationException("Invalid fullUri `$uri`", ex)
         }
 
-        if (url.scheme == Protocol.HTTPS) return url
+        if (url.scheme == Scheme.HTTPS) return url
 
         // TODO - validate loopback via DNS resolution instead of fixed set. Custom host names (including localhost) that
         //  resolve to loopback won't work until then. ALL resolved addresses MUST resolve to the loopback device

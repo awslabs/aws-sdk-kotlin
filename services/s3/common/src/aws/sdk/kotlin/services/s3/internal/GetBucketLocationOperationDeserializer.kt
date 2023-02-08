@@ -2,10 +2,10 @@ package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.GetBucketLocationResponse
-import aws.smithy.kotlin.runtime.client.ExecutionContext
 import aws.smithy.kotlin.runtime.http.operation.HttpDeserialize
 import aws.smithy.kotlin.runtime.http.readAll
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.serde.xml.dom.parseDom
 import aws.smithy.kotlin.runtime.serde.xml.xmlStreamReader
 
