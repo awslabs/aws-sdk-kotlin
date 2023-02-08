@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
+import aws.sdk.kotlin.runtime.http.retries.AwsDefaultRetryPolicy
 import aws.smithy.kotlin.runtime.client.AbstractSdkClientBuilder
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
@@ -72,12 +73,14 @@ private interface TestClient : SdkClient {
     }
 
     class Config private constructor(builder: Config.Builder) : SdkClientConfig, AwsSdkClientConfig {
+        override val retryPolicy: RetryPolicy<Any?> = builder.retryPolicy ?: AwsDefaultRetryPolicy
         override val retryStrategy: RetryStrategy = builder.retryStrategy ?: TestRetryStrategy()
         override val region: String = builder.region ?: error("region is required")
 
         // new: inherits builder equivalents for Config base classes
         class Builder : AwsSdkClientConfig.Builder, SdkClientConfig.Builder<Config> {
             override var region: String? = null
+            override var retryPolicy: RetryPolicy<Any?>? = null
             override var retryStrategy: RetryStrategy? = null
             override var sdkLogMode: SdkLogMode = SdkLogMode.Default
             override fun build(): Config = Config(this)
