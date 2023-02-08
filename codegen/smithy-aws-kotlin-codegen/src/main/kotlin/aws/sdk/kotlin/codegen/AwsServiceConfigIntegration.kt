@@ -71,7 +71,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         val EndpointUrlProp = ConfigProperty {
             name = "endpointUrl"
-            symbol = RuntimeTypes.Http.Url.toBuilder().boxed().build()
+            symbol = RuntimeTypes.Core.Net.Url.toBuilder().boxed().build()
             documentation = """
                 A custom endpoint to use when making requests.
             """.trimIndent()

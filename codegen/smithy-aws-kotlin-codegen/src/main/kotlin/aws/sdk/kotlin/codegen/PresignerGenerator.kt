@@ -249,7 +249,7 @@ class PresignerGenerator : KotlinIntegration {
                     }
 
                     override fun renderQueryParameters(writer: KotlinWriter) {
-                        writer.addImport(RuntimeTypes.Http.QueryParameters)
+                        writer.addImport(RuntimeTypes.Core.Net.QueryParameters)
                         writer.write("httpRequestBuilder.url.parameters.build(),")
                     }
                 }
@@ -262,10 +262,10 @@ class PresignerGenerator : KotlinIntegration {
                     }
 
                     override fun renderQueryParameters(writer: KotlinWriter) {
-                        writer.addImport(RuntimeTypes.Http.QueryParameters)
+                        writer.addImport(RuntimeTypes.Core.Net.QueryParameters)
                         writer.addImport(RuntimeTypes.Http.toByteStream)
                         writer.addImport(RuntimeTypes.Core.Content.decodeToString)
-                        writer.addImport(RuntimeTypes.Http.Util.splitAsQueryParameters)
+                        writer.addImport(RuntimeTypes.Core.Net.splitAsQueryParameters)
                         writer.write("""httpRequestBuilder.body.toByteStream()?.decodeToString()?.splitAsQueryParameters() ?: QueryParameters.Empty,""")
                     }
                 }

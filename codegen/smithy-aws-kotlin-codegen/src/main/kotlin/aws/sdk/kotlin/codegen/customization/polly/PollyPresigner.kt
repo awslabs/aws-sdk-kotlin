@@ -36,7 +36,7 @@ class PollyPresigner : KotlinIntegration {
         val resolver = writer.getContextValue(PresignerGenerator.PresignConfigFnSection.HttpBindingResolver)
         val defaultTimestampFormat = writer.getContextValue(PresignerGenerator.PresignConfigFnSection.DefaultTimestampFormat)
 
-        writer.addImport(RuntimeTypes.Http.QueryParametersBuilder)
+        writer.addImport(RuntimeTypes.Core.Net.QueryParametersBuilder)
         writer.addImport(RuntimeTypes.Http.HttpMethod)
         writer.write(
             """            

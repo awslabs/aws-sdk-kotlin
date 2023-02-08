@@ -51,7 +51,7 @@ private class TrimResourcePrefixMiddleware : ProtocolMiddleware {
                     pathMember,
                     pathMember,
                 )
-                write("next.call(#T(req.context, updated))", RuntimeTypes.Http.Operation.OperationRequest)
+                write("next.call(#T(req.context, updated))", RuntimeTypes.HttpClient.Operation.OperationRequest)
             }
             withBlock("else {", "}") {
                 write("next.call(req)")

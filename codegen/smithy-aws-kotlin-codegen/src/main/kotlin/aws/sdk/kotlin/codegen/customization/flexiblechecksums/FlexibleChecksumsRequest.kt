@@ -40,7 +40,7 @@ class FlexibleChecksumsRequest : KotlinIntegration {
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
-            val interceptorSymbol = RuntimeTypes.Http.Interceptors.FlexibleChecksumsRequestInterceptor
+            val interceptorSymbol = RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsRequestInterceptor
 
             val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
 
