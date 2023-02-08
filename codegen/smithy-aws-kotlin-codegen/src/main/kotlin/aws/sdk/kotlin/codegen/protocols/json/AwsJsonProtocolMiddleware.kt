@@ -5,10 +5,8 @@
 
 package aws.sdk.kotlin.codegen.protocols.json
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.namespace
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.model.shapes.OperationShape
@@ -26,12 +24,6 @@ class AwsJsonProtocolMiddleware(
     override val order: Byte = 10
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-        val awsJsonProtocolSymbol = buildSymbol {
-            name = "AwsJsonProtocol"
-            namespace(AwsKotlinDependency.AWS_JSON_PROTOCOLS)
-        }
-
-        writer.addImport(awsJsonProtocolSymbol)
-        writer.write("op.install(#T(#S, #S))", awsJsonProtocolSymbol, serviceShapeId.name, protocolVersion)
+        writer.write("op.install(#T(#S, #S))", RuntimeTypes.AwsJsonProtocols.AwsJsonProtocol, serviceShapeId.name, protocolVersion)
     }
 }

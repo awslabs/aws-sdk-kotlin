@@ -48,13 +48,14 @@ kotlin {
                 implementation("aws.smithy.kotlin:http-client:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:serde-form-url:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
-                implementation(project(":aws-runtime:protocols:aws-xml-protocols"))
+                implementation("aws.smithy.kotlin:aws-xml-protocols:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:aws-protocol-core:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:aws-endpoint"))
                 implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
 
                 // additional dependencies required by generated sso provider
-                implementation(project(":aws-runtime:protocols:aws-json-protocols"))
+                implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
 
                 // atomics
                 implementation("org.jetbrains.kotlinx:atomicfu:$atomicFuVersion")

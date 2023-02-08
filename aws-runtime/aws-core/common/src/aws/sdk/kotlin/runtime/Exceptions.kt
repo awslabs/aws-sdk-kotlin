@@ -5,22 +5,10 @@
 package aws.sdk.kotlin.runtime
 
 import aws.smithy.kotlin.runtime.ServiceErrorMetadata
-import aws.smithy.kotlin.runtime.util.AttributeKey
 import aws.smithy.kotlin.runtime.ClientException as SmithyClientException
 import aws.smithy.kotlin.runtime.ServiceException as SmithyServiceException
 
-public open class AwsErrorMetadata : ServiceErrorMetadata() {
-    public companion object {
-        public val ErrorMessage: AttributeKey<String> = AttributeKey("AwsErrorMessage")
-    }
-
-    /**
-     * Returns the human readable error message. For errors with a `message` field as part of the model
-     * this will match the `message` property of the exception.
-     */
-    public val errorMessage: String?
-        get() = attributes.getOrNull(ErrorMessage)
-}
+public open class AwsErrorMetadata : ServiceErrorMetadata()
 
 /**
  * Base class for all AWS modeled service exceptions

@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.protocols.RestXml
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
@@ -62,7 +61,7 @@ class S3Generator : RestXml() {
         }
 
         writer.write("val payload = response.body.#T()", RuntimeTypes.Http.readAll)
-            .write("val wrappedResponse = response.#T(payload)", AwsRuntimeTypes.Http.withPayload)
+            .write("val wrappedResponse = response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
             .write("")
             .write("val errorDetails = try {")
             .indent()

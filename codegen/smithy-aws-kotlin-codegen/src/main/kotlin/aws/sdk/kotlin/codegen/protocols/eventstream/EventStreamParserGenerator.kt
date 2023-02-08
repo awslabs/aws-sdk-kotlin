@@ -63,14 +63,14 @@ class EventStreamParserGenerator(
         // TODO - handle RPC bound protocol bindings where the initial response is bound to an event stream document
         //        possibly by decoding the first Message
 
-        val messageTypeSymbol = AwsRuntimeTypes.AwsEventStream.MessageType
+        val messageTypeSymbol = RuntimeTypes.AwsEventStream.MessageType
         val baseExceptionSymbol = ExceptionBaseClassGenerator.baseExceptionSymbol(ctx.settings)
 
         writer.write("val chan = body.#T() ?: return", RuntimeTypes.Http.toSdkByteReadChannel)
-        writer.write("val events = #T(chan)", AwsRuntimeTypes.AwsEventStream.decodeFrames)
+        writer.write("val events = #T(chan)", RuntimeTypes.AwsEventStream.decodeFrames)
             .indent()
             .withBlock(".#T { message ->", "}", RuntimeTypes.KotlinxCoroutines.Flow.map) {
-                withBlock("when(val mt = message.#T()) {", "}", AwsRuntimeTypes.AwsEventStream.MessageTypeExt) {
+                withBlock("when(val mt = message.#T()) {", "}", RuntimeTypes.AwsEventStream.MessageTypeExt) {
                     withBlock("is #T.Event -> when(mt.shapeType) {", "}", messageTypeSymbol) {
                         streamShape.filterEventStreamErrors(ctx.model).forEach { member ->
                             withBlock("#S -> {", "}", member.memberName) {
@@ -126,14 +126,14 @@ class EventStreamParserGenerator(
 
                 // :test(boolean, byte, short, integer, long, blob, string, timestamp))
                 val conversionFn = when (target.type) {
-                    ShapeType.BOOLEAN -> AwsRuntimeTypes.AwsEventStream.expectBool
-                    ShapeType.BYTE -> AwsRuntimeTypes.AwsEventStream.expectByte
-                    ShapeType.SHORT -> AwsRuntimeTypes.AwsEventStream.expectInt16
-                    ShapeType.INTEGER -> AwsRuntimeTypes.AwsEventStream.expectInt32
-                    ShapeType.LONG -> AwsRuntimeTypes.AwsEventStream.expectInt64
-                    ShapeType.BLOB -> AwsRuntimeTypes.AwsEventStream.expectByteArray
-                    ShapeType.STRING -> AwsRuntimeTypes.AwsEventStream.expectString
-                    ShapeType.TIMESTAMP -> AwsRuntimeTypes.AwsEventStream.expectTimestamp
+                    ShapeType.BOOLEAN -> RuntimeTypes.AwsEventStream.expectBool
+                    ShapeType.BYTE -> RuntimeTypes.AwsEventStream.expectByte
+                    ShapeType.SHORT -> RuntimeTypes.AwsEventStream.expectInt16
+                    ShapeType.INTEGER -> RuntimeTypes.AwsEventStream.expectInt32
+                    ShapeType.LONG -> RuntimeTypes.AwsEventStream.expectInt64
+                    ShapeType.BLOB -> RuntimeTypes.AwsEventStream.expectByteArray
+                    ShapeType.STRING -> RuntimeTypes.AwsEventStream.expectString
+                    ShapeType.TIMESTAMP -> RuntimeTypes.AwsEventStream.expectTimestamp
                     else -> throw CodegenException("unsupported eventHeader shape: member=$hdrBinding; targetShape=$target")
                 }
 

@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.codegen.protocols.eventstream
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
@@ -62,7 +61,7 @@ class EventStreamSerializerGenerator(
         val streamShape = ctx.model.expectShape<UnionShape>(streamingMember.target)
 
         writer.write("val stream = input.#L ?: return #T.Empty", streamingMember.defaultName(), RuntimeTypes.Http.HttpBody)
-        writer.write("val signingConfig = context.#T()", AwsRuntimeTypes.AwsEventStream.newEventStreamSigningConfig)
+        writer.write("val signingConfig = context.#T()", RuntimeTypes.AwsEventStream.newEventStreamSigningConfig)
 
         // initial HTTP request should use an empty body hash since the actual body is the event stream
         writer.write("context[#T.HashSpecification] = #T.EmptyBody", RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes, RuntimeTypes.Auth.Signing.AwsSigningCommon.HashSpecification)
@@ -70,12 +69,12 @@ class EventStreamSerializerGenerator(
         val encodeFn = encodeEventStreamMessage(ctx, op, streamShape)
         writer.withBlock("val messages = stream", "") {
             write(".#T(::#T)", RuntimeTypes.KotlinxCoroutines.Flow.map, encodeFn)
-            write(".#T(context, signingConfig)", AwsRuntimeTypes.AwsEventStream.sign)
-            write(".#T()", AwsRuntimeTypes.AwsEventStream.encode)
+            write(".#T(context, signingConfig)", RuntimeTypes.AwsEventStream.sign)
+            write(".#T()", RuntimeTypes.AwsEventStream.encode)
         }
 
         writer.write("")
-        writer.write("return messages.#T(context)", AwsRuntimeTypes.AwsEventStream.asEventStreamHttpBody)
+        writer.write("return messages.#T(context)", RuntimeTypes.AwsEventStream.asEventStreamHttpBody)
     }
 
     private fun encodeEventStreamMessage(
@@ -97,8 +96,8 @@ class EventStreamSerializerGenerator(
                 "}",
                 fnName,
                 streamSymbol,
-                AwsRuntimeTypes.AwsEventStream.Message,
-                AwsRuntimeTypes.AwsEventStream.buildMessage,
+                RuntimeTypes.AwsEventStream.Message,
+                RuntimeTypes.AwsEventStream.buildMessage,
             ) {
                 addStringHeader(":message-type", "event")
 
@@ -156,7 +155,7 @@ class EventStreamSerializerGenerator(
             "input.value.#L?.let { addHeader(#S, #T.#L(it$conversion)) }",
             member.defaultName(),
             member.memberName,
-            AwsRuntimeTypes.AwsEventStream.HeaderValue,
+            RuntimeTypes.AwsEventStream.HeaderValue,
             headerValue,
         )
     }
@@ -185,6 +184,6 @@ class EventStreamSerializerGenerator(
     }
 
     private fun KotlinWriter.addStringHeader(name: String, value: String) {
-        write("addHeader(#S, #T.String(#S))", name, AwsRuntimeTypes.AwsEventStream.HeaderValue, value)
+        write("addHeader(#S, #T.String(#S))", name, RuntimeTypes.AwsEventStream.HeaderValue, value)
     }
 }
