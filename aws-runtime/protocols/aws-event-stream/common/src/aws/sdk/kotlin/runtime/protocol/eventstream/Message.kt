@@ -20,7 +20,7 @@ internal const val MAX_HEADER_SIZE = 128 * 1024
 
 /*
     Message Wire Format
-    See also: https://docs.aws.amazon.com/transcribe/latest/dg/event-stream.html
+    See also: https://docs.aws.amazon.com/transcribe/latest/dg/event-stream-med.html
 
     +--------------------------------------------------------------------+   --
     |                            Total Len (32)                          |     |
