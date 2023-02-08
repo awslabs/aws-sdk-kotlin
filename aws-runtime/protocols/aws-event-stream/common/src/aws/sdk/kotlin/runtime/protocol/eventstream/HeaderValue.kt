@@ -128,7 +128,10 @@ public sealed class HeaderValue {
                     val len = source.readShort().toUShort()
                     check(source.request(len.toLong())) { "Invalid HeaderValue; type=$type, len=$len; readRemaining: ${source.buffer.size}" }
                     val bytes = ByteArray(len.toInt())
-                    source.read(bytes)
+                    var rc = 0
+                    while (rc != len.toInt()) {
+                        rc += source.read(bytes, rc)
+                    }
                     when (type) {
                         HeaderType.STRING -> HeaderValue.String(bytes.decodeToString())
                         HeaderType.BYTE_ARRAY -> HeaderValue.ByteArray(bytes)
