@@ -15,6 +15,7 @@ description = "Event stream codegen integration test suite"
 val smithyVersion: String by project
 dependencies {
     implementation(project(":codegen:smithy-aws-kotlin-codegen"))
+    implementation("software.amazon.smithy:smithy-cli:$smithyVersion")
 }
 
 data class EventStreamTest(
