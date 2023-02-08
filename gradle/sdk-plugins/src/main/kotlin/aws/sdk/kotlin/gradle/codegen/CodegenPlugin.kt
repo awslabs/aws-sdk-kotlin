@@ -9,6 +9,7 @@ import aws.sdk.kotlin.gradle.codegen.tasks.createSmithyCliConfiguration
 import aws.sdk.kotlin.gradle.codegen.tasks.registerCodegenTasks
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import software.amazon.smithy.gradle.tasks.Validate as SmithyValidate
 
 const val CODEGEN_EXTENSION_NAME = "codegen"
 
@@ -25,10 +26,18 @@ class CodegenPlugin : Plugin<Project> {
     }
 
     private fun Project.configurePlugins() {
-        createSmithyCliConfiguration()
+        val smithyCliConfig = createSmithyCliConfiguration()
         // unfortunately all of the tasks provided by smithy rely on the plugin extension, so it also needs applied
         // see https://github.com/awslabs/smithy-gradle-plugin/issues/45
         plugins.apply("software.amazon.smithy")
+
+        // Explicitly configure the classpath for the smithyValidate task. Otherwise, the classpath won't necessarily
+        // include smithy-cli but it _will_ contain smithy-client which is enough to confuse Smithy into not
+        // reconfiguring the classpath appropriately.
+        tasks.named("smithyValidate", SmithyValidate::class.java) {
+            classpath = smithyCliConfig
+        }
+
         tasks.getByName("smithyBuildJar").enabled = false
     }
 
