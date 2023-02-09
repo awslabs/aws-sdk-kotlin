@@ -44,7 +44,7 @@ class AwsHttpProtocolClientGeneratorTest {
         val contents = writer.toString()
         val expected = """
         op.execution.retryStrategy = config.retryStrategy
-        op.execution.retryPolicy = AwsDefaultRetryPolicy
+        op.execution.retryPolicy = config.retryPolicy
         """
         contents.shouldContainOnlyOnceWithDiff(expected)
     }

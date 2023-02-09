@@ -13,6 +13,7 @@ import software.amazon.smithy.kotlin.codegen.model.boxed
 import software.amazon.smithy.kotlin.codegen.rendering.*
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
+import software.amazon.smithy.kotlin.codegen.rendering.util.RuntimeConfigProperty
 
 class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
@@ -77,6 +78,15 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             """.trimIndent()
             propertyType = ConfigPropertyType.SymbolDefault
         }
+
+        val AwsRetryPolicy = RuntimeConfigProperty
+            .RetryPolicy
+            .toBuilder()
+            .apply {
+                propertyType = ConfigPropertyType.RequiredWithDefault("AwsDefaultRetryPolicy")
+                additionalImports = listOf(AwsRuntimeTypes.Http.Retries.AwsDefaultRetryPolicy)
+            }
+            .build()
     }
 
     private val overrideServiceCompanionObjectWriter = SectionWriter { writer, _ ->
@@ -105,5 +115,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             UseFipsProp,
             UseDualStackProp,
             EndpointUrlProp,
+            AwsRetryPolicy,
         )
 }
