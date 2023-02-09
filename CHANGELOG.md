@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.20.2-beta] - 02/09/2023
+
+### Features
+* Add configuration for retry policy on clients
+
+### Fixes
+* [#836](https://github.com/awslabs/aws-sdk-kotlin/issues/836) Fix bug caused by reading too few bytes when parsing header values in event streams
+
+### Miscellaneous
+* Sync AWS service models
+* Refactor: track upstream module changes
+* Refactor: track upstream HTTP module changes
+
 ## [0.20.1-beta] - 02/06/2023
 
 ### Features
