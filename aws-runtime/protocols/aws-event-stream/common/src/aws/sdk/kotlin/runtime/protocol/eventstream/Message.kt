@@ -20,7 +20,7 @@ internal const val MAX_HEADER_SIZE = 128 * 1024
 
 /*
     Message Wire Format
-    See also: https://docs.aws.amazon.com/transcribe/latest/dg/event-stream.html
+    See also: https://docs.aws.amazon.com/transcribe/latest/dg/event-stream-med.html
 
     +--------------------------------------------------------------------+   --
     |                            Total Len (32)                          |     |
@@ -58,7 +58,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
             val messageBuffer = SdkBuffer()
             val computedCrc = run {
                 val crcSource = HashingSource(Crc32(), source)
-                crcSource.read(messageBuffer, totalLen.toLong() - MESSAGE_CRC_BYTE_LEN.toLong())
+                crcSource.readFully(messageBuffer, totalLen.toLong() - MESSAGE_CRC_BYTE_LEN.toLong())
                 crcSource.digest()
             }
 

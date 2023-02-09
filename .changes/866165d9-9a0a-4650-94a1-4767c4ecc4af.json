@@ -1,0 +1,8 @@
+{
+    "id": "866165d9-9a0a-4650-94a1-4767c4ecc4af",
+    "type": "bugfix",
+    "description": "Fix bug caused by reading too few bytes when parsing header values in event streams",
+    "issues": [
+        "https://github.com/awslabs/aws-sdk-kotlin/issues/836"
+    ]
+}
