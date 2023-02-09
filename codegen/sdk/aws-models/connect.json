@@ -998,7 +998,7 @@
                     "parameters": {
                         "Region": {
                             "builtIn": "AWS::Region",
-                            "required": true,
+                            "required": false,
                             "documentation": "The AWS region used to dispatch the request.",
                             "type": "String"
                         },
@@ -1027,15 +1027,67 @@
                         {
                             "conditions": [
                                 {
-                                    "fn": "aws.partition",
+                                    "fn": "isSet",
                                     "argv": [
                                         {
-                                            "ref": "Region"
+                                            "ref": "Endpoint"
                                         }
-                                    ],
-                                    "assign": "PartitionResult"
+                                    ]
                                 }
                             ],
+                            "type": "tree",
+                            "rules": [
+                                {
+                                    "conditions": [
+                                        {
+                                            "fn": "booleanEquals",
+                                            "argv": [
+                                                {
+                                                    "ref": "UseFIPS"
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    ],
+                                    "error": "Invalid Configuration: FIPS and custom endpoint are not supported",
+                                    "type": "error"
+                                },
+                                {
+                                    "conditions": [],
+                                    "type": "tree",
+                                    "rules": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseDualStack"
+                                                        },
+                                                        true
+                                                    ]
+                                                }
+                                            ],
+                                            "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
+                                            "type": "error"
+                                        },
+                                        {
+                                            "conditions": [],
+                                            "endpoint": {
+                                                "url": {
+                                                    "ref": "Endpoint"
+                                                },
+                                                "properties": {},
+                                                "headers": {}
+                                            },
+                                            "type": "endpoint"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "conditions": [],
                             "type": "tree",
                             "rules": [
                                 {
@@ -1044,7 +1096,7 @@
                                             "fn": "isSet",
                                             "argv": [
                                                 {
-                                                    "ref": "Endpoint"
+                                                    "ref": "Region"
                                                 }
                                             ]
                                         }
@@ -1054,22 +1106,182 @@
                                         {
                                             "conditions": [
                                                 {
-                                                    "fn": "booleanEquals",
+                                                    "fn": "aws.partition",
                                                     "argv": [
                                                         {
-                                                            "ref": "UseFIPS"
-                                                        },
-                                                        true
-                                                    ]
+                                                            "ref": "Region"
+                                                        }
+                                                    ],
+                                                    "assign": "PartitionResult"
                                                 }
                                             ],
-                                            "error": "Invalid Configuration: FIPS and custom endpoint are not supported",
-                                            "type": "error"
-                                        },
-                                        {
-                                            "conditions": [],
                                             "type": "tree",
                                             "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                {
+                                                                    "ref": "UseFIPS"
+                                                                },
+                                                                true
+                                                            ]
+                                                        },
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                {
+                                                                    "ref": "UseDualStack"
+                                                                },
+                                                                true
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [
+                                                                {
+                                                                    "fn": "booleanEquals",
+                                                                    "argv": [
+                                                                        true,
+                                                                        {
+                                                                            "fn": "getAttr",
+                                                                            "argv": [
+                                                                                {
+                                                                                    "ref": "PartitionResult"
+                                                                                },
+                                                                                "supportsFIPS"
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "fn": "booleanEquals",
+                                                                    "argv": [
+                                                                        true,
+                                                                        {
+                                                                            "fn": "getAttr",
+                                                                            "argv": [
+                                                                                {
+                                                                                    "ref": "PartitionResult"
+                                                                                },
+                                                                                "supportsDualStack"
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ],
+                                                            "type": "tree",
+                                                            "rules": [
+                                                                {
+                                                                    "conditions": [],
+                                                                    "type": "tree",
+                                                                    "rules": [
+                                                                        {
+                                                                            "conditions": [],
+                                                                            "endpoint": {
+                                                                                "url": "https://connect-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                                                "properties": {},
+                                                                                "headers": {}
+                                                                            },
+                                                                            "type": "endpoint"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "conditions": [],
+                                                            "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
+                                                            "type": "error"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                {
+                                                                    "ref": "UseFIPS"
+                                                                },
+                                                                true
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [
+                                                                {
+                                                                    "fn": "booleanEquals",
+                                                                    "argv": [
+                                                                        true,
+                                                                        {
+                                                                            "fn": "getAttr",
+                                                                            "argv": [
+                                                                                {
+                                                                                    "ref": "PartitionResult"
+                                                                                },
+                                                                                "supportsFIPS"
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ],
+                                                            "type": "tree",
+                                                            "rules": [
+                                                                {
+                                                                    "conditions": [],
+                                                                    "type": "tree",
+                                                                    "rules": [
+                                                                        {
+                                                                            "conditions": [
+                                                                                {
+                                                                                    "fn": "stringEquals",
+                                                                                    "argv": [
+                                                                                        "aws-us-gov",
+                                                                                        {
+                                                                                            "fn": "getAttr",
+                                                                                            "argv": [
+                                                                                                {
+                                                                                                    "ref": "PartitionResult"
+                                                                                                },
+                                                                                                "name"
+                                                                                            ]
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ],
+                                                                            "endpoint": {
+                                                                                "url": "https://connect.{Region}.amazonaws.com",
+                                                                                "properties": {},
+                                                                                "headers": {}
+                                                                            },
+                                                                            "type": "endpoint"
+                                                                        },
+                                                                        {
+                                                                            "conditions": [],
+                                                                            "endpoint": {
+                                                                                "url": "https://connect-fips.{Region}.{PartitionResult#dnsSuffix}",
+                                                                                "properties": {},
+                                                                                "headers": {}
+                                                                            },
+                                                                            "type": "endpoint"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "conditions": [],
+                                                            "error": "FIPS is enabled but this partition does not support FIPS",
+                                                            "type": "error"
+                                                        }
+                                                    ]
+                                                },
                                                 {
                                                     "conditions": [
                                                         {
@@ -1082,223 +1294,52 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
-                                                    "type": "error"
-                                                },
-                                                {
-                                                    "conditions": [],
-                                                    "endpoint": {
-                                                        "url": {
-                                                            "ref": "Endpoint"
-                                                        },
-                                                        "properties": {},
-                                                        "headers": {}
-                                                    },
-                                                    "type": "endpoint"
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "conditions": [
-                                        {
-                                            "fn": "booleanEquals",
-                                            "argv": [
-                                                {
-                                                    "ref": "UseFIPS"
-                                                },
-                                                true
-                                            ]
-                                        },
-                                        {
-                                            "fn": "booleanEquals",
-                                            "argv": [
-                                                {
-                                                    "ref": "UseDualStack"
-                                                },
-                                                true
-                                            ]
-                                        }
-                                    ],
-                                    "type": "tree",
-                                    "rules": [
-                                        {
-                                            "conditions": [
-                                                {
-                                                    "fn": "booleanEquals",
-                                                    "argv": [
-                                                        true,
-                                                        {
-                                                            "fn": "getAttr",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "PartitionResult"
-                                                                },
-                                                                "supportsFIPS"
-                                                            ]
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "fn": "booleanEquals",
-                                                    "argv": [
-                                                        true,
-                                                        {
-                                                            "fn": "getAttr",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "PartitionResult"
-                                                                },
-                                                                "supportsDualStack"
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            "type": "tree",
-                                            "rules": [
-                                                {
-                                                    "conditions": [],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [],
-                                                            "endpoint": {
-                                                                "url": "https://connect-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
-                                                                "properties": {},
-                                                                "headers": {}
-                                                            },
-                                                            "type": "endpoint"
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "conditions": [],
-                                            "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
-                                            "type": "error"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "conditions": [
-                                        {
-                                            "fn": "booleanEquals",
-                                            "argv": [
-                                                {
-                                                    "ref": "UseFIPS"
-                                                },
-                                                true
-                                            ]
-                                        }
-                                    ],
-                                    "type": "tree",
-                                    "rules": [
-                                        {
-                                            "conditions": [
-                                                {
-                                                    "fn": "booleanEquals",
-                                                    "argv": [
-                                                        true,
-                                                        {
-                                                            "fn": "getAttr",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "PartitionResult"
-                                                                },
-                                                                "supportsFIPS"
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            "type": "tree",
-                                            "rules": [
-                                                {
-                                                    "conditions": [],
                                                     "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [
                                                                 {
-                                                                    "fn": "stringEquals",
+                                                                    "fn": "booleanEquals",
                                                                     "argv": [
-                                                                        "aws-us-gov",
+                                                                        true,
                                                                         {
                                                                             "fn": "getAttr",
                                                                             "argv": [
                                                                                 {
                                                                                     "ref": "PartitionResult"
                                                                                 },
-                                                                                "name"
+                                                                                "supportsDualStack"
                                                                             ]
                                                                         }
                                                                     ]
                                                                 }
                                                             ],
-                                                            "endpoint": {
-                                                                "url": "https://connect.{Region}.amazonaws.com",
-                                                                "properties": {},
-                                                                "headers": {}
-                                                            },
-                                                            "type": "endpoint"
+                                                            "type": "tree",
+                                                            "rules": [
+                                                                {
+                                                                    "conditions": [],
+                                                                    "type": "tree",
+                                                                    "rules": [
+                                                                        {
+                                                                            "conditions": [],
+                                                                            "endpoint": {
+                                                                                "url": "https://connect.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                                                "properties": {},
+                                                                                "headers": {}
+                                                                            },
+                                                                            "type": "endpoint"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
                                                         },
                                                         {
                                                             "conditions": [],
-                                                            "endpoint": {
-                                                                "url": "https://connect-fips.{Region}.{PartitionResult#dnsSuffix}",
-                                                                "properties": {},
-                                                                "headers": {}
-                                                            },
-                                                            "type": "endpoint"
+                                                            "error": "DualStack is enabled but this partition does not support DualStack",
+                                                            "type": "error"
                                                         }
                                                     ]
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "conditions": [],
-                                            "error": "FIPS is enabled but this partition does not support FIPS",
-                                            "type": "error"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "conditions": [
-                                        {
-                                            "fn": "booleanEquals",
-                                            "argv": [
-                                                {
-                                                    "ref": "UseDualStack"
                                                 },
-                                                true
-                                            ]
-                                        }
-                                    ],
-                                    "type": "tree",
-                                    "rules": [
-                                        {
-                                            "conditions": [
-                                                {
-                                                    "fn": "booleanEquals",
-                                                    "argv": [
-                                                        true,
-                                                        {
-                                                            "fn": "getAttr",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "PartitionResult"
-                                                                },
-                                                                "supportsDualStack"
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            "type": "tree",
-                                            "rules": [
                                                 {
                                                     "conditions": [],
                                                     "type": "tree",
@@ -1306,7 +1347,7 @@
                                                         {
                                                             "conditions": [],
                                                             "endpoint": {
-                                                                "url": "https://connect.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                                "url": "https://connect.{Region}.{PartitionResult#dnsSuffix}",
                                                                 "properties": {},
                                                                 "headers": {}
                                                             },
@@ -1315,28 +1356,13 @@
                                                     ]
                                                 }
                                             ]
-                                        },
-                                        {
-                                            "conditions": [],
-                                            "error": "DualStack is enabled but this partition does not support DualStack",
-                                            "type": "error"
                                         }
                                     ]
                                 },
                                 {
                                     "conditions": [],
-                                    "type": "tree",
-                                    "rules": [
-                                        {
-                                            "conditions": [],
-                                            "endpoint": {
-                                                "url": "https://connect.{Region}.{PartitionResult#dnsSuffix}",
-                                                "properties": {},
-                                                "headers": {}
-                                            },
-                                            "type": "endpoint"
-                                        }
-                                    ]
+                                    "error": "Invalid Configuration: Missing Region",
+                                    "type": "error"
                                 }
                             ]
                         }
@@ -1345,6 +1371,19 @@
                 "smithy.rules#endpointTests": {
                     "testCases": [
                         {
+                            "documentation": "For region af-south-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.af-south-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "af-south-1",
+                                "UseDualStack": false,
+                                "UseFIPS": false
+                            }
+                        },
+                        {
                             "documentation": "For region ap-northeast-1 with FIPS disabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
@@ -1352,9 +1391,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "Region": "ap-northeast-1",
                                 "UseDualStack": false,
-                                "Region": "ap-northeast-1"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -1365,22 +1404,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "Region": "ap-northeast-2",
                                 "UseDualStack": false,
-                                "Region": "ap-northeast-2"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-west-2 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.us-west-2.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "us-west-2"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -1391,9 +1417,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "Region": "ap-southeast-1",
                                 "UseDualStack": false,
-                                "Region": "ap-southeast-1"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -1404,61 +1430,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "Region": "ap-southeast-2",
                                 "UseDualStack": false,
-                                "Region": "ap-southeast-2"
-                            }
-                        },
-                        {
-                            "documentation": "For region eu-central-1 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.eu-central-1.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "eu-central-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region eu-west-2 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.eu-west-2.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "eu-west-2"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-east-1 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.us-east-1.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "us-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region af-south-1 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.af-south-1.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "af-south-1"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -1469,9 +1443,61 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "Region": "ca-central-1",
                                 "UseDualStack": false,
-                                "Region": "ca-central-1"
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-central-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.eu-central-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "eu-central-1",
+                                "UseDualStack": false,
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region eu-west-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.eu-west-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "eu-west-2",
+                                "UseDualStack": false,
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-east-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.us-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-east-1",
+                                "UseDualStack": false,
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-west-2 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.us-west-2.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-west-2",
+                                "UseDualStack": false,
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -1482,9 +1508,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "Region": "us-east-1",
                                 "UseDualStack": true,
-                                "Region": "us-east-1"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -1495,9 +1521,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "Region": "us-east-1",
                                 "UseDualStack": false,
-                                "Region": "us-east-1"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -1508,113 +1534,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "Region": "us-east-1",
                                 "UseDualStack": true,
-                                "Region": "us-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-gov-west-1 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.us-gov-west-1.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "us-gov-west-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-gov-west-1 with FIPS enabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.us-gov-west-1.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": true,
-                                "UseDualStack": false,
-                                "Region": "us-gov-west-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-gov-east-1 with FIPS enabled and DualStack enabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect-fips.us-gov-east-1.api.aws"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": true,
-                                "UseDualStack": true,
-                                "Region": "us-gov-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-gov-east-1 with FIPS enabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.us-gov-east-1.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": true,
-                                "UseDualStack": false,
-                                "Region": "us-gov-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-gov-east-1 with FIPS disabled and DualStack enabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.us-gov-east-1.api.aws"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": true,
-                                "Region": "us-gov-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-gov-east-1 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.us-gov-east-1.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "us-gov-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect-fips.us-isob-east-1.sc2s.sgov.gov"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": true,
-                                "UseDualStack": false,
-                                "Region": "us-isob-east-1"
-                            }
-                        },
-                        {
-                            "documentation": "For region us-isob-east-1 with FIPS disabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://connect.us-isob-east-1.sc2s.sgov.gov"
-                                }
-                            },
-                            "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
-                                "Region": "us-isob-east-1"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -1625,9 +1547,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "Region": "cn-north-1",
                                 "UseDualStack": true,
-                                "Region": "cn-north-1"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -1638,9 +1560,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "Region": "cn-north-1"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -1651,9 +1573,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "Region": "cn-north-1",
                                 "UseDualStack": true,
-                                "Region": "cn-north-1"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -1664,9 +1586,87 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "Region": "cn-north-1"
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-gov-west-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.us-gov-west-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-west-1",
+                                "UseDualStack": false,
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-gov-west-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.us-gov-west-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-west-1",
+                                "UseDualStack": false,
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-gov-east-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect-fips.us-gov-east-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-east-1",
+                                "UseDualStack": true,
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-gov-east-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.us-gov-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-east-1",
+                                "UseDualStack": false,
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-gov-east-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.us-gov-east-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-east-1",
+                                "UseDualStack": true,
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-gov-east-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.us-gov-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-east-1",
+                                "UseDualStack": false,
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -1677,9 +1677,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "Region": "us-iso-east-1",
                                 "UseDualStack": false,
-                                "Region": "us-iso-east-1"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -1690,22 +1690,61 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "Region": "us-iso-east-1",
                                 "UseDualStack": false,
-                                "Region": "us-iso-east-1"
+                                "UseFIPS": false
                             }
                         },
                         {
-                            "documentation": "For custom endpoint with fips disabled and dualstack disabled",
+                            "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect-fips.us-isob-east-1.sc2s.sgov.gov"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-isob-east-1",
+                                "UseDualStack": false,
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-isob-east-1 with FIPS disabled and DualStack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://connect.us-isob-east-1.sc2s.sgov.gov"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-isob-east-1",
+                                "UseDualStack": false,
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "For custom endpoint with region set and fips disabled and dualstack disabled",
                             "expect": {
                                 "endpoint": {
                                     "url": "https://example.com"
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": false,
                                 "Region": "us-east-1",
+                                "UseDualStack": false,
+                                "UseFIPS": false,
+                                "Endpoint": "https://example.com"
+                            }
+                        },
+                        {
+                            "documentation": "For custom endpoint with region not set and fips disabled and dualstack disabled",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://example.com"
+                                }
+                            },
+                            "params": {
+                                "UseDualStack": false,
+                                "UseFIPS": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1715,9 +1754,9 @@
                                 "error": "Invalid Configuration: FIPS and custom endpoint are not supported"
                             },
                             "params": {
-                                "UseFIPS": true,
-                                "UseDualStack": false,
                                 "Region": "us-east-1",
+                                "UseDualStack": false,
+                                "UseFIPS": true,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1727,9 +1766,9 @@
                                 "error": "Invalid Configuration: Dualstack and custom endpoint are not supported"
                             },
                             "params": {
-                                "UseFIPS": false,
-                                "UseDualStack": true,
                                 "Region": "us-east-1",
+                                "UseDualStack": true,
+                                "UseFIPS": false,
                                 "Endpoint": "https://example.com"
                             }
                         }
@@ -1828,6 +1867,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#AssociateBot": {
@@ -1890,6 +1932,9 @@
                         "smithy.api#documentation": "<p>The Amazon Lex V2 bot to associate with the instance.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#AssociateDefaultVocabulary": {
@@ -1951,11 +1996,17 @@
                         "smithy.api#documentation": "<p>The identifier of the custom vocabulary. If this is empty, the default is set to none.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#AssociateDefaultVocabularyResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#AssociateInstanceStorageConfig": {
             "type": "operation",
@@ -2019,6 +2070,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#AssociateInstanceStorageConfigResponse": {
@@ -2030,6 +2084,9 @@
                         "smithy.api#documentation": "<p>The existing association identifier that uniquely identifies the resource type and storage config for the given instance ID.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#AssociateLambdaFunction": {
@@ -2090,6 +2147,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#AssociateLexBot": {
@@ -2150,6 +2210,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#AssociatePhoneNumberContactFlow": {
@@ -2211,6 +2274,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#AssociateQueueQuickConnects": {
@@ -2276,6 +2342,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#AssociateRoutingProfileQueues": {
@@ -2338,6 +2407,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#AssociateSecurityKey": {
@@ -2398,6 +2470,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#AssociateSecurityKeyResponse": {
@@ -2409,6 +2484,9 @@
                         "smithy.api#documentation": "<p>The existing association identifier that uniquely identifies the resource type and storage config for the given instance ID.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#AssociationId": {
@@ -2785,6 +2863,9 @@
                         "smithy.api#idempotencyToken": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ClaimPhoneNumberResponse": {
@@ -2802,6 +2883,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the phone number.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ClaimedPhoneNumberSummary": {
@@ -3687,6 +3771,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateAgentStatusResponse": {
@@ -3704,6 +3791,9 @@
                         "smithy.api#documentation": "<p>The identifier of the agent status.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateContactFlow": {
@@ -3842,6 +3932,9 @@
                         "smithy.api#idempotencyToken": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateContactFlowModuleResponse": {
@@ -3859,6 +3952,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the flow module.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateContactFlowRequest": {
@@ -3905,6 +4001,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateContactFlowResponse": {
@@ -3922,6 +4021,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the flow.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateHoursOfOperation": {
@@ -4008,6 +4110,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateHoursOfOperationResponse": {
@@ -4025,6 +4130,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) for the hours of operation.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateInstance": {
@@ -4103,6 +4211,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateInstanceResponse": {
@@ -4120,6 +4231,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the instance.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateIntegrationAssociation": {
@@ -4205,6 +4319,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateIntegrationAssociationResponse": {
@@ -4222,6 +4339,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) for the association.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateQueue": {
@@ -4320,6 +4440,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateQueueResponse": {
@@ -4337,6 +4460,9 @@
                         "smithy.api#documentation": "<p>The identifier for the queue.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateQuickConnect": {
@@ -4416,6 +4542,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateQuickConnectResponse": {
@@ -4433,6 +4562,9 @@
                         "smithy.api#documentation": "<p>The identifier for the quick connect. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateRoutingProfile": {
@@ -4526,6 +4658,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateRoutingProfileResponse": {
@@ -4543,6 +4678,9 @@
                         "smithy.api#documentation": "<p>The identifier of the routing profile.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateRule": {
@@ -4638,6 +4776,9 @@
                         "smithy.api#idempotencyToken": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateRuleResponse": {
@@ -4657,6 +4798,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateSecurityProfile": {
@@ -4757,6 +4901,9 @@
                         "smithy.api#documentation": "<p>The list of resources that a security profile applies tag restrictions to in Amazon Connect. Following are acceptable ResourceNames: <code>User</code> |\n    <code>SecurityProfile</code> | <code>Queue</code> | <code>RoutingProfile</code>\n         </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateSecurityProfileResponse": {
@@ -4774,6 +4921,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) for the security profile.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateTaskTemplate": {
@@ -4875,6 +5025,9 @@
                         "smithy.api#idempotencyToken": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateTaskTemplateResponse": {
@@ -4894,6 +5047,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateTrafficDistributionGroup": {
@@ -4975,6 +5131,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateTrafficDistributionGroupResponse": {
@@ -4992,6 +5151,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the traffic distribution group.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateUseCase": {
@@ -5060,6 +5222,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateUseCaseResponse": {
@@ -5077,6 +5242,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) for the use case.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateUser": {
@@ -5189,6 +5357,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateUserHierarchyGroupResponse": {
@@ -5206,6 +5377,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the hierarchy group. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateUserRequest": {
@@ -5277,6 +5451,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateUserResponse": {
@@ -5294,6 +5471,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the user account.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#CreateVocabulary": {
@@ -5381,6 +5561,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#CreateVocabularyResponse": {
@@ -5407,6 +5590,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#Credentials": {
@@ -5799,11 +5985,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteContactFlowModuleResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#DeleteContactFlowRequest": {
             "type": "structure",
@@ -5824,11 +6016,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteContactFlowResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#DeleteHoursOfOperation": {
             "type": "operation",
@@ -5883,6 +6081,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteInstance": {
@@ -5924,6 +6125,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteIntegrationAssociation": {
@@ -5976,6 +6180,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteQuickConnect": {
@@ -6031,6 +6238,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteRule": {
@@ -6086,6 +6296,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteSecurityProfile": {
@@ -6147,6 +6360,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteTaskTemplate": {
@@ -6202,11 +6418,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteTaskTemplateResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#DeleteTrafficDistributionGroup": {
             "type": "operation",
@@ -6253,11 +6475,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteTrafficDistributionGroupResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#DeleteUseCase": {
             "type": "operation",
@@ -6317,6 +6545,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteUser": {
@@ -6409,6 +6640,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteUserRequest": {
@@ -6430,6 +6664,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteVocabulary": {
@@ -6488,6 +6725,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DeleteVocabularyResponse": {
@@ -6514,6 +6754,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeAgentStatus": {
@@ -6569,6 +6812,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeAgentStatusResponse": {
@@ -6580,6 +6826,9 @@
                         "smithy.api#documentation": "<p>The agent status.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeContact": {
@@ -6709,6 +6958,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeContactFlowModuleResponse": {
@@ -6720,6 +6972,9 @@
                         "smithy.api#documentation": "<p>Information about the flow module.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeContactFlowRequest": {
@@ -6741,6 +6996,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeContactFlowResponse": {
@@ -6752,6 +7010,9 @@
                         "smithy.api#documentation": "<p>Information about the flow.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeContactRequest": {
@@ -6773,6 +7034,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeContactResponse": {
@@ -6784,6 +7048,9 @@
                         "smithy.api#documentation": "<p>Information about the contact.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeHoursOfOperation": {
@@ -6839,6 +7106,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeHoursOfOperationResponse": {
@@ -6850,6 +7120,9 @@
                         "smithy.api#documentation": "<p>The hours of operation.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeInstance": {
@@ -6933,6 +7206,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeInstanceAttributeResponse": {
@@ -6944,6 +7220,9 @@
                         "smithy.api#documentation": "<p>The\n   type\n   of attribute.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeInstanceRequest": {
@@ -6957,6 +7236,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeInstanceResponse": {
@@ -6968,6 +7250,9 @@
                         "smithy.api#documentation": "<p>The name of the instance.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeInstanceStorageConfig": {
@@ -7031,6 +7316,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeInstanceStorageConfigResponse": {
@@ -7042,6 +7330,9 @@
                         "smithy.api#documentation": "<p>A valid storage type.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribePhoneNumber": {
@@ -7089,6 +7380,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribePhoneNumberResponse": {
@@ -7100,6 +7394,9 @@
                         "smithy.api#documentation": "<p>Information about a phone number that's been claimed to your Amazon Connect instance or\n   traffic distribution group.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeQueue": {
@@ -7155,6 +7452,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeQueueResponse": {
@@ -7166,6 +7466,9 @@
                         "smithy.api#documentation": "<p>The name of the queue.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeQuickConnect": {
@@ -7221,6 +7524,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeQuickConnectResponse": {
@@ -7232,6 +7538,9 @@
                         "smithy.api#documentation": "<p>Information about the quick connect.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeRoutingProfile": {
@@ -7287,6 +7596,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeRoutingProfileResponse": {
@@ -7298,6 +7610,9 @@
                         "smithy.api#documentation": "<p>The routing profile.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeRule": {
@@ -7353,6 +7668,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeRuleResponse": {
@@ -7365,6 +7683,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeSecurityProfile": {
@@ -7420,6 +7741,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeSecurityProfileResponse": {
@@ -7431,6 +7755,9 @@
                         "smithy.api#documentation": "<p>The security profile.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeTrafficDistributionGroup": {
@@ -7478,6 +7805,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeTrafficDistributionGroupResponse": {
@@ -7489,6 +7819,9 @@
                         "smithy.api#documentation": "<p>Information about the traffic distribution group.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeUser": {
@@ -7578,6 +7911,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeUserHierarchyGroupResponse": {
@@ -7589,6 +7925,9 @@
                         "smithy.api#documentation": "<p>Information about the hierarchy group.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeUserHierarchyStructure": {
@@ -7636,6 +7975,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeUserHierarchyStructureResponse": {
@@ -7647,6 +7989,9 @@
                         "smithy.api#documentation": "<p>Information about the hierarchy structure.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeUserRequest": {
@@ -7668,6 +8013,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeUserResponse": {
@@ -7679,6 +8027,9 @@
                         "smithy.api#documentation": "<p>Information about the user account and configuration settings.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#DescribeVocabulary": {
@@ -7734,6 +8085,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DescribeVocabularyResponse": {
@@ -7746,6 +8100,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#Description": {
@@ -7910,6 +8267,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DisassociateBot": {
@@ -7963,6 +8323,9 @@
                         "smithy.api#documentation": "<p>The Amazon Lex V2 bot to disassociate from the instance.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DisassociateInstanceStorageConfig": {
@@ -8026,6 +8389,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DisassociateLambdaFunction": {
@@ -8081,6 +8447,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DisassociateLexBot": {
@@ -8144,6 +8513,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DisassociatePhoneNumberContactFlow": {
@@ -8199,6 +8571,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DisassociateQueueQuickConnects": {
@@ -8261,6 +8636,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DisassociateRoutingProfileQueues": {
@@ -8323,6 +8701,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DisassociateSecurityKey": {
@@ -8378,6 +8759,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DismissUserContact": {
@@ -8443,11 +8827,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#DismissUserContactResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#DisplayName": {
             "type": "string",
@@ -8709,6 +9099,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#GetContactAttributesResponse": {
@@ -8720,6 +9113,9 @@
                         "smithy.api#documentation": "<p>Information about the attributes.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#GetCurrentMetricData": {
@@ -8811,6 +9207,9 @@
                         "smithy.api#documentation": "<p>The way to sort the resulting response based on metrics. You can enter one sort criteria. By\n   default resources are sorted based on <code>AGENTS_ONLINE</code>, <code>DESCENDING</code>. The\n   metric collection is sorted based on the input metrics.</p>\n         <p>Note the following:</p>\n         <ul>\n            <li>\n               <p>Sorting on <code>SLOTS_ACTIVE</code> and <code>SLOTS_AVAILABLE</code> is not\n     supported.</p>\n            </li>\n         </ul>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#GetCurrentMetricDataResponse": {
@@ -8840,6 +9239,9 @@
                         "smithy.api#documentation": "<p>The total count of the result, regardless of the current page size. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#GetCurrentUserData": {
@@ -8912,6 +9314,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return per page.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#GetCurrentUserDataResponse": {
@@ -8935,6 +9340,9 @@
                         "smithy.api#documentation": "<p>The total count of the result, regardless of the current page size.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#GetFederationToken": {
@@ -8985,6 +9393,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#GetFederationTokenResponse": {
@@ -9014,6 +9425,9 @@
                         "smithy.api#documentation": "<p>The identifier for the user.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#GetMetricData": {
@@ -9113,6 +9527,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return per page.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#GetMetricDataResponse": {
@@ -9130,6 +9547,9 @@
                         "smithy.api#documentation": "<p>Information about the historical metrics.</p>\n         <p>If no grouping is specified, a summary of metric data is returned.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#GetTaskTemplate": {
@@ -9192,6 +9612,9 @@
                         "smithy.api#httpQuery": "snapshotVersion"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#GetTaskTemplateResponse": {
@@ -9278,6 +9701,9 @@
                         "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#GetTrafficDistribution": {
@@ -9325,6 +9751,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#GetTrafficDistributionResponse": {
@@ -9348,6 +9777,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the traffic distribution group.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#Grouping": {
@@ -11023,6 +11455,9 @@
                         "smithy.api#httpQuery": "AgentStatusTypes"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListAgentStatusResponse": {
@@ -11040,6 +11475,9 @@
                         "smithy.api#documentation": "<p>A summary of agent statuses.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListAgentStatuses": {
@@ -11148,6 +11586,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListApprovedOriginsResponse": {
@@ -11165,6 +11606,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListBots": {
@@ -11238,6 +11682,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListBotsResponse": {
@@ -11255,6 +11702,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListContactFlowModules": {
@@ -11333,6 +11783,9 @@
                         "smithy.api#httpQuery": "state"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListContactFlowModulesResponse": {
@@ -11350,6 +11803,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListContactFlows": {
@@ -11425,6 +11881,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListContactFlowsResponse": {
@@ -11442,6 +11901,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListContactReferences": {
@@ -11517,6 +11979,9 @@
                         "smithy.api#httpQuery": "nextToken"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListContactReferencesResponse": {
@@ -11534,6 +11999,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>\n         <important>\n            <p>This is always returned as null in the response.</p>\n         </important>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListDefaultVocabularies": {
@@ -11603,6 +12071,9 @@
                         "smithy.api#documentation": "<p>The token for the next set of results. Use the value returned in the previous \nresponse in the next request to retrieve the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListDefaultVocabulariesResponse": {
@@ -11621,6 +12092,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListHoursOfOperations": {
@@ -11689,6 +12163,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListHoursOfOperationsResponse": {
@@ -11706,6 +12183,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListInstanceAttributes": {
@@ -11774,6 +12254,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListInstanceAttributesResponse": {
@@ -11791,6 +12274,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListInstanceStorageConfigs": {
@@ -11867,6 +12353,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListInstanceStorageConfigsResponse": {
@@ -11884,6 +12373,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListInstances": {
@@ -11935,6 +12427,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListInstancesResponse": {
@@ -11952,6 +12447,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListIntegrationAssociations": {
@@ -12024,6 +12522,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListIntegrationAssociationsResponse": {
@@ -12041,6 +12542,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListLambdaFunctions": {
@@ -12109,6 +12613,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListLambdaFunctionsResponse": {
@@ -12126,6 +12633,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListLexBots": {
@@ -12194,6 +12704,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListLexBotsResponse": {
@@ -12211,6 +12724,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListPhoneNumbers": {
@@ -12293,6 +12809,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListPhoneNumbersResponse": {
@@ -12310,6 +12829,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListPhoneNumbersSummary": {
@@ -12442,6 +12964,9 @@
                         "smithy.api#documentation": "<p>The prefix of the phone number. If provided, it must contain <code>+</code> as part of the country code.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListPhoneNumbersV2Response": {
@@ -12459,6 +12984,9 @@
                         "smithy.api#documentation": "<p>Information about phone numbers that have been claimed to your Amazon Connect instances\n   or traffic distribution groups.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListPrompts": {
@@ -12527,6 +13055,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListPromptsResponse": {
@@ -12544,6 +13075,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListQueueQuickConnects": {
@@ -12620,6 +13154,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListQueueQuickConnectsResponse": {
@@ -12637,6 +13174,9 @@
                         "smithy.api#documentation": "<p>Information about the quick connects.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListQueues": {
@@ -12712,6 +13252,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListQueuesResponse": {
@@ -12729,6 +13272,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListQuickConnects": {
@@ -12804,6 +13350,9 @@
                         "smithy.api#httpQuery": "QuickConnectTypes"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListQuickConnectsResponse": {
@@ -12821,6 +13370,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListRoutingProfileQueues": {
@@ -12897,6 +13449,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListRoutingProfileQueuesResponse": {
@@ -12914,6 +13469,9 @@
                         "smithy.api#documentation": "<p>Information about the routing profiles.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListRoutingProfiles": {
@@ -12982,6 +13540,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListRoutingProfilesResponse": {
@@ -12999,6 +13560,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListRules": {
@@ -13081,6 +13645,9 @@
                         "smithy.api#httpQuery": "nextToken"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListRulesResponse": {
@@ -13099,6 +13666,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListSecurityKeys": {
@@ -13167,6 +13737,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListSecurityKeysResponse": {
@@ -13184,6 +13757,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListSecurityProfilePermissions": {
@@ -13260,6 +13836,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListSecurityProfilePermissionsResponse": {
@@ -13277,6 +13856,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListSecurityProfiles": {
@@ -13345,6 +13927,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListSecurityProfilesResponse": {
@@ -13362,6 +13947,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListTagsForResource": {
@@ -13409,6 +13997,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListTagsForResourceResponse": {
@@ -13420,6 +14011,9 @@
                         "smithy.api#documentation": "<p>Information about the tags.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListTaskTemplates": {
@@ -13502,6 +14096,9 @@
                         "smithy.api#httpQuery": "name"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListTaskTemplatesResponse": {
@@ -13519,6 +14116,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>\n         <important>\n            <p>This is always returned as a null in the response.</p>\n         </important>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListTrafficDistributionGroups": {
@@ -13583,6 +14183,9 @@
                         "smithy.api#httpQuery": "instanceId"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListTrafficDistributionGroupsResponse": {
@@ -13600,6 +14203,9 @@
                         "smithy.api#documentation": "<p>A list of traffic distribution groups.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListUseCases": {
@@ -13675,7 +14281,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Provides summary information about the use cases for the specified integration\n   association.</p>"
+                "smithy.api#documentation": "<p>Provides summary information about the use cases for the specified integration\n   association.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListUseCasesResponse": {
@@ -13693,6 +14300,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListUserHierarchyGroups": {
@@ -13761,6 +14371,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListUserHierarchyGroupsResponse": {
@@ -13778,6 +14391,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#ListUsers": {
@@ -13846,6 +14462,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ListUsersResponse": {
@@ -13863,6 +14482,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#Long": {
@@ -14074,6 +14696,9 @@
                         "smithy.api#idempotencyToken": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#MonitorContactResponse": {
@@ -14091,6 +14716,9 @@
                         "smithy.api#documentation": "<p>The ARN of the contact.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#Name": {
@@ -16331,11 +16959,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#PutUserStatusResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#Queue": {
             "type": "structure",
@@ -17079,6 +17713,9 @@
                         "smithy.api#idempotencyToken": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ReplicateInstance": {
@@ -17156,6 +17793,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ReplicateInstanceResponse": {
@@ -17173,6 +17813,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the replicated instance.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#RequiredFieldInfo": {
@@ -17361,11 +18004,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#ResumeContactRecordingResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#RoutingProfile": {
             "type": "structure",
@@ -18062,6 +18711,9 @@
                         "smithy.api#documentation": "<p>The token for the next set of results. Use the value returned in the previous \nresponse in the next request to retrieve the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#SearchAvailablePhoneNumbersResponse": {
@@ -18079,6 +18731,9 @@
                         "smithy.api#documentation": "<p>A list of available phone numbers that you can claim to your Amazon Connect instance or traffic distribution group.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#SearchQueues": {
@@ -18156,6 +18811,9 @@
                         "smithy.api#documentation": "<p>The search criteria to be used to return queues.</p>\n         <note>\n            <p>The <code>name</code> and <code>description</code> fields support \"contains\" queries with\n    a minimum of 2 characters and a maximum of 25 characters. Any queries with character lengths\n    outside of this range will throw invalid results. </p>\n         </note>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#SearchQueuesResponse": {
@@ -18179,6 +18837,9 @@
                         "smithy.api#documentation": "<p>The total number of queues which matched your search query.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#SearchRoutingProfiles": {
@@ -18256,6 +18917,9 @@
                         "smithy.api#documentation": "<p>The search criteria to be used to return routing profiles.</p>\n         <note>\n            <p>The <code>name</code> and <code>description</code> fields support \"contains\" queries with\n    a minimum of 2 characters and a maximum of 25 characters. Any queries with character lengths\n    outside of this range will throw invalid results. </p>\n         </note>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#SearchRoutingProfilesResponse": {
@@ -18279,6 +18943,9 @@
                         "smithy.api#documentation": "<p>The total number of routing profiles which matched your search query.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#SearchSecurityProfiles": {
@@ -18356,6 +19023,9 @@
                         "smithy.api#documentation": "<p>Filters to be applied to search results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#SearchSecurityProfilesResponse": {
@@ -18379,6 +19049,9 @@
                         "smithy.api#documentation": "<p>The total number of security profiles which matched your search query.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#SearchUsers": {
@@ -18452,6 +19125,9 @@
                 "SearchCriteria": {
                     "target": "com.amazonaws.connect#UserSearchCriteria"
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#SearchUsersResponse": {
@@ -18475,6 +19151,9 @@
                         "smithy.api#documentation": "<p>The total number of users who matched your search query.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#SearchVocabularies": {
@@ -18556,6 +19235,9 @@
                         "smithy.api#documentation": "<p>The language code of the vocabulary entries. For a list of languages and their corresponding language codes, see \n<a href=\"https://docs.aws.amazon.com/transcribe/latest/dg/transcribe-whatis.html\">What is Amazon Transcribe?</a>\n         </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#SearchVocabulariesResponse": {
@@ -18573,6 +19255,9 @@
                         "smithy.api#documentation": "<p>If there are additional results, this is the token for the next set of results.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#SearchableQueueType": {
@@ -19059,6 +19744,9 @@
                         "smithy.api#documentation": "<p>Enable persistent chats. For more\n   information about enabling persistent chat, and for example use cases and how to configure for them, see \n   <a href=\"https://docs.aws.amazon.com/connect/latest/adminguide/chat-persistence.html\">Enable persistent chat</a>.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#StartChatContactResponse": {
@@ -19088,6 +19776,9 @@
                         "smithy.api#documentation": "<p>The contactId from which a persistent chat session is started. This field is populated only\n   for persistent chats.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#StartContactRecording": {
@@ -19152,11 +19843,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#StartContactRecordingResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#StartContactStreaming": {
             "type": "operation",
@@ -19224,6 +19921,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#StartContactStreamingResponse": {
@@ -19236,6 +19936,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#StartOutboundVoiceContact": {
@@ -19345,6 +20048,9 @@
                         "smithy.api#documentation": "<p>Denotes the class of traffic. Calls with different traffic types are handled differently by\n    Amazon Connect. The default value is <code>GENERAL</code>. Use <code>CAMPAIGN</code> if\n    <code>EnableAnswerMachineDetection</code> is set to <code>true</code>. For all other cases, use\n    <code>GENERAL</code>. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#StartOutboundVoiceContactResponse": {
@@ -19356,6 +20062,9 @@
                         "smithy.api#documentation": "<p>The identifier of this contact within the Amazon Connect instance.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#StartTaskContact": {
@@ -19467,6 +20176,9 @@
                         "smithy.api#documentation": "<p>The identifier for the quick connect.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#StartTaskContactResponse": {
@@ -19478,6 +20190,9 @@
                         "smithy.api#documentation": "<p>The identifier of this contact within the Amazon Connect instance.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#Statistic": {
@@ -19589,11 +20304,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#StopContactRecordingResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#StopContactRequest": {
             "type": "structure",
@@ -19612,11 +20333,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#StopContactResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#StopContactStreaming": {
             "type": "operation",
@@ -19673,11 +20400,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#StopContactStreamingResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#StorageType": {
             "type": "enum",
@@ -19865,11 +20598,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#SuspendContactRecordingResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#TagAndConditionList": {
             "type": "list",
@@ -19992,6 +20731,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#TagRestrictedResourceList": {
@@ -20754,6 +21496,9 @@
                         "smithy.api#idempotencyToken": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#TransferContactResponse": {
@@ -20771,6 +21516,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the contact.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#URI": {
@@ -20858,6 +21606,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateAgentStatus": {
@@ -20959,6 +21710,9 @@
                         "smithy.api#documentation": "<p>A number indicating the reset order of the agent status.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateContact": {
@@ -21050,11 +21804,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateContactAttributesResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#UpdateContactFlowContent": {
             "type": "operation",
@@ -21119,11 +21879,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateContactFlowContentResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#UpdateContactFlowMetadata": {
             "type": "operation",
@@ -21199,11 +21965,17 @@
                         "smithy.api#documentation": "<p>The state of flow.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateContactFlowMetadataResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#UpdateContactFlowModuleContent": {
             "type": "operation",
@@ -21268,11 +22040,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateContactFlowModuleContentResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#UpdateContactFlowModuleMetadata": {
             "type": "operation",
@@ -21351,11 +22129,17 @@
                         "smithy.api#documentation": "<p>The state of flow module.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateContactFlowModuleMetadataResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#UpdateContactFlowName": {
             "type": "operation",
@@ -21425,11 +22209,17 @@
                         "smithy.api#documentation": "<p>The description of the flow.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateContactFlowNameResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#UpdateContactRequest": {
             "type": "structure",
@@ -21468,11 +22258,17 @@
                         "smithy.api#documentation": "<p>Well-formed data on contact, shown to agents on Contact Control Panel (CCP).</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateContactResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#UpdateContactSchedule": {
             "type": "operation",
@@ -21535,11 +22331,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateContactScheduleResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#UpdateHoursOfOperation": {
             "type": "operation",
@@ -21630,6 +22432,9 @@
                         "smithy.api#documentation": "<p>Configuration information of the hours of operation.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateInstanceAttribute": {
@@ -21692,6 +22497,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateInstanceStorageConfig": {
@@ -21761,6 +22569,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateParticipantRoleConfig": {
@@ -21840,11 +22651,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateParticipantRoleConfigResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#UpdatePhoneNumber": {
             "type": "operation",
@@ -21911,6 +22728,9 @@
                         "smithy.api#idempotencyToken": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdatePhoneNumberResponse": {
@@ -21928,6 +22748,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the phone number.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#UpdateQueueHoursOfOperation": {
@@ -21990,6 +22813,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateQueueMaxContacts": {
@@ -22052,6 +22878,9 @@
                         "smithy.api#documentation": "<p>The maximum number of contacts that can be in the queue before it is considered full.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateQueueName": {
@@ -22122,6 +22951,9 @@
                         "smithy.api#documentation": "<p>The description of the queue.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateQueueOutboundCallerConfig": {
@@ -22184,6 +23016,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateQueueStatus": {
@@ -22246,6 +23081,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateQuickConnectConfig": {
@@ -22308,6 +23146,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateQuickConnectDescription": {
@@ -22384,6 +23225,9 @@
                         "smithy.api#documentation": "<p>The description of the quick connect.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateRoutingProfileConcurrency": {
@@ -22446,6 +23290,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateRoutingProfileDefaultOutboundQueue": {
@@ -22508,6 +23355,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateRoutingProfileName": {
@@ -22578,6 +23428,9 @@
                         "smithy.api#documentation": "<p>The description of the routing profile. Must not be more than 250 characters.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateRoutingProfileQueues": {
@@ -22640,6 +23493,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateRule": {
@@ -22726,6 +23582,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateSecurityProfile": {
@@ -22805,6 +23664,9 @@
                         "smithy.api#documentation": "<p>The list of resources that a security profile applies tag restrictions to in Amazon Connect.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateTaskTemplate": {
@@ -22905,6 +23767,9 @@
                         "smithy.api#documentation": "<p>Fields that are part of the template.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateTaskTemplateResponse": {
@@ -22982,6 +23847,9 @@
                         "smithy.api#documentation": "<p>The timestamp when the task template was created.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.connect#UpdateTrafficDistribution": {
@@ -23038,11 +23906,17 @@
                         "smithy.api#documentation": "<p>The distribution of traffic between the instance and its replica(s).</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateTrafficDistributionResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.connect#UpdateUserHierarchy": {
             "type": "operation",
@@ -23141,6 +24015,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateUserHierarchyRequest": {
@@ -23168,6 +24045,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateUserHierarchyStructure": {
@@ -23225,6 +24105,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateUserIdentityInfo": {
@@ -23287,6 +24170,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateUserPhoneConfig": {
@@ -23349,6 +24235,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateUserRoutingProfile": {
@@ -23411,6 +24300,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#UpdateUserSecurityProfiles": {
@@ -23473,6 +24365,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.connect#Url": {
