@@ -58,7 +58,7 @@ public data class Message(val headers: List<Header>, val payload: ByteArray) {
             val messageBuffer = SdkBuffer()
             val computedCrc = run {
                 val crcSource = HashingSource(Crc32(), source)
-                check(crcSource.readFully(messageBuffer, totalLen.toLong() - MESSAGE_CRC_BYTE_LEN.toLong())) { "Unable to fully read CRC32 checksum" }
+                crcSource.readFully(messageBuffer, totalLen.toLong() - MESSAGE_CRC_BYTE_LEN.toLong())
                 crcSource.digest()
             }
 
