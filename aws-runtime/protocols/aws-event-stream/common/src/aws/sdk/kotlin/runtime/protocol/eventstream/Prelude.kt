@@ -47,7 +47,7 @@ public data class Prelude(val totalLen: Int, val headersLength: Int) {
             check(source.request(PRELUDE_BYTE_LEN_WITH_CRC.toLong())) { "Invalid message prelude" }
             val crcSource = HashingSource(Crc32(), source)
             val buffer = SdkBuffer()
-            crcSource.read(buffer, PRELUDE_BYTE_LEN.toLong())
+            check(crcSource.readFully(buffer, PRELUDE_BYTE_LEN.toLong())) { "Unable to fully read prelude to compute checksum" }
 
             val expectedCrc = source.readByteArray(4)
             val computedCrc = crcSource.digest()
