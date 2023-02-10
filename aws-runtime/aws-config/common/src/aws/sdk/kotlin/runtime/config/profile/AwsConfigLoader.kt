@@ -42,7 +42,7 @@ public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile 
  *
  * @return A map of all profiles, which each are a map of key/value pairs.
  */
-internal suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): Map<String, Map<String, String>> {
+internal suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): Map<String, Map<String, AwsConfigValue>> {
     // merged AWS configuration based on optional configuration and credential file contents
     return mergeProfiles(
         parse(FileType.CONFIGURATION, platform.readFileOrNull(source.configPath)?.decodeToString()),
@@ -51,7 +51,7 @@ internal suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConf
 }
 
 // Merge contents of profile maps
-internal fun mergeProfiles(vararg maps: ProfileMap) = buildMap<String, Map<String, String>> {
+internal fun mergeProfiles(vararg maps: ProfileMap) = buildMap<String, Map<String, AwsConfigValue>> {
     maps.forEach { map ->
         map.entries.forEach { entry ->
             put(entry.key, (get(entry.key) ?: emptyMap()) + entry.value)
@@ -119,3 +119,5 @@ private fun resolveHomeDir(platform: PlatformProvider): String? =
                     ?: getProperty("user.home")
         }
     }
+
+internal fun Pair<String?, String?>.concatOrNull() = if (first != null && second != null) first + second else null

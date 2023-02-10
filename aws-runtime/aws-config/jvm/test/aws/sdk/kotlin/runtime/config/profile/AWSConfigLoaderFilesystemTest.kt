@@ -54,7 +54,7 @@ class AWSConfigLoaderFilesystemTest {
 
         assertEquals("foo", actual.name)
         assertTrue(actual.containsKey("name"))
-        assertEquals("value", actual["name"])
+        assertEquals("value", actual["name"]?.asStringOrNull())
 
         configFile.deleteIfExists()
         credentialsFile.deleteIfExists()
@@ -82,9 +82,9 @@ class AWSConfigLoaderFilesystemTest {
         assertEquals(3, actual.size)
         actual.shouldContainAll(
             mapOf(
-                "name" to "value",
-                "name3" to "value3",
-                "secret" to "foo",
+                "name" to AwsConfigValue.String("value"),
+                "name3" to AwsConfigValue.String("value3"),
+                "secret" to AwsConfigValue.String("foo"),
             ),
         )
 

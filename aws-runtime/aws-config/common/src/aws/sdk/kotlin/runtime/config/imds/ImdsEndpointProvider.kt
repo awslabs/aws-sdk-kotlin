@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
+import aws.sdk.kotlin.runtime.config.profile.asStringOrNull
 import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
 import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
@@ -49,7 +50,7 @@ internal class ImdsEndpointProvider(
 
     private suspend fun loadEndpointFromProfile(): Endpoint? {
         val profile = activeProfile.get()
-        return profile[EC2_METADATA_SERVICE_ENDPOINT_PROFILE_KEY]?.toEndpoint()
+        return profile[EC2_METADATA_SERVICE_ENDPOINT_PROFILE_KEY]?.asStringOrNull()?.toEndpoint()
     }
 
     private fun loadEndpointModeFromEnv(): EndpointMode? =
@@ -57,7 +58,7 @@ internal class ImdsEndpointProvider(
 
     private suspend fun loadEndpointModeFromProfile(): EndpointMode? {
         val profile = activeProfile.get()
-        return profile[EC2_METADATA_SERVICE_ENDPOINT_MODE_PROFILE_KEY]?.let { EndpointMode.fromValue(it) }
+        return profile[EC2_METADATA_SERVICE_ENDPOINT_MODE_PROFILE_KEY]?.asStringOrNull()?.let { EndpointMode.fromValue(it) }
     }
 }
 
