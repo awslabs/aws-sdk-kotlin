@@ -3,16 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-import aws.sdk.kotlin.runtime.protocol.eventstream.*
 import aws.sdk.kotlin.test.eventstream.restjson1.model.*
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.deserializeTestStreamOpOperationBody
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.serializeTestStreamOpOperationBody
+import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.auth.awssigning.DefaultAwsSigner
 import aws.smithy.kotlin.runtime.auth.awssigning.HashSpecification
+import aws.smithy.kotlin.runtime.awsprotocol.eventstream.*
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.io.SdkBuffer
@@ -32,7 +32,7 @@ import kotlin.test.assertIs
  * Integration test suite that checks the generated event stream serialization and deserialization codegen
  * works as expected.
  */
-@OptIn(ExperimentalCoroutinesApi::class, InternalSdkApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, InternalApi::class)
 class EventStreamTests {
     private suspend fun serializedMessage(event: TestStream): Message {
         val req = TestStreamOpRequest {

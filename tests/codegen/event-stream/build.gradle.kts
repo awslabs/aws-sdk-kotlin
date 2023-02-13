@@ -146,6 +146,7 @@ dependencies {
     implementation("aws.smithy.kotlin:aws-credentials:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:aws-event-stream:$smithyKotlinVersion")
     implementation(project(":aws-runtime:aws-http"))
+    implementation("aws.smithy.kotlin:aws-protocol-core:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
