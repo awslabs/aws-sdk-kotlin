@@ -1,0 +1,8 @@
+{
+    "id": "54a6847c-98ff-4bdd-a81a-d67324fd5c8e",
+    "type": "feature",
+    "description": "Add `Expect: 100-continue` header to S3 PUT requestsover 2MB",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#839"
+    ]
+}

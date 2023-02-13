@@ -1,0 +1,70 @@
+package aws.sdk.kotlin.codegen.customization.s3
+
+import software.amazon.smithy.kotlin.codegen.KotlinSettings
+import software.amazon.smithy.kotlin.codegen.core.CodegenContext
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
+import software.amazon.smithy.kotlin.codegen.model.*
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
+import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.model.shapes.ServiceShape
+import software.amazon.smithy.model.traits.HttpTrait
+
+private const val continueProp = "continueHeaderThresholdBytes"
+
+private val enableContinueProp = ConfigProperty {
+    name = continueProp
+    symbol = KotlinTypes.Long.asNullable()
+    documentation = """
+        The minimum content length threshold (in bytes) for which to send `Expect: 100-continue` HTTP headers. PUT
+        requests with bodies at or above this length will include this header, as will PUT requests with a null content
+        length. Defaults to 2 megabytes.
+        
+        This property may be set to `null` to disable sending the header regardless of content length.
+    """.trimIndent()
+
+    // Need a custom property type because property is nullable but has a non-null default
+    propertyType = ConfigPropertyType.Custom(
+        render = { _, writer ->
+            writer.write("public val $continueProp: Long? = builder.$continueProp")
+        },
+        renderBuilder = { prop, writer ->
+            prop.documentation?.let(writer::dokka)
+            writer.write("public var $continueProp: Long? = 2 * 1024 * 1024 // 2MB")
+        },
+    )
+}
+
+class ContinueIntegration : KotlinIntegration {
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> = listOf(
+        enableContinueProp,
+    )
+
+    override fun customizeMiddleware(
+        ctx: ProtocolGenerator.GenerationContext,
+        resolved: List<ProtocolMiddleware>,
+    ): List<ProtocolMiddleware> = resolved + ContinueMiddleware
+
+    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
+        model.expectShape<ServiceShape>(settings.service).isS3
+}
+
+internal object ContinueMiddleware : ProtocolMiddleware {
+    override val name: String = "ContinueHeader"
+
+    override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
+        op.getTrait<HttpTrait>()?.method == "PUT"
+
+    override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+        writer.withBlock("config.$continueProp?.let { threshold ->", "}") {
+            writer.write("op.interceptors.add(#T(threshold))", RuntimeTypes.HttpClient.Interceptors.ContinueInterceptor)
+        }
+    }
+}
