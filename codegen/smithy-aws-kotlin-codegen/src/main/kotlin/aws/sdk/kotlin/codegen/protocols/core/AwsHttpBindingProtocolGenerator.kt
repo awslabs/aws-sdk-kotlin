@@ -121,7 +121,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     ) {
         val exceptionBaseSymbol = ExceptionBaseClassGenerator.baseExceptionSymbol(ctx.settings)
         writer.write("val payload = response.body.#T()", RuntimeTypes.Http.readAll)
-            .write("val wrappedResponse = response.#T(payload)", AwsRuntimeTypes.Http.withPayload)
+            .write("val wrappedResponse = response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
             .write("")
             .write("val errorDetails = try {")
             .indent()
@@ -131,7 +131,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             .dedent()
             .withBlock("} catch (ex: Exception) {", "}") {
                 withBlock("""throw #T("Failed to parse response as '${ctx.protocol.name}' error", ex).also {""", "}", exceptionBaseSymbol) {
-                    write("#T(it, wrappedResponse, null)", AwsRuntimeTypes.Http.setAseErrorMetadata)
+                    write("#T(it, wrappedResponse, null)", RuntimeTypes.AwsProtocolCore.setAseErrorMetadata)
                 }
             }
             .write("")
@@ -149,7 +149,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         }
 
         writer.write("")
-        writer.write("#T(ex, wrappedResponse, errorDetails)", AwsRuntimeTypes.Http.setAseErrorMetadata)
+        writer.write("#T(ex, wrappedResponse, errorDetails)", RuntimeTypes.AwsProtocolCore.setAseErrorMetadata)
         writer.write("throw ex")
     }
 

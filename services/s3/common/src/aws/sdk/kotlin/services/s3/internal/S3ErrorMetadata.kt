@@ -4,11 +4,13 @@
  */
 package aws.sdk.kotlin.services.s3.internal
 
-import aws.sdk.kotlin.runtime.*
+import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.runtime.http.*
 import aws.sdk.kotlin.services.s3.model.S3ErrorMetadata
 import aws.sdk.kotlin.services.s3.model.S3Exception
 import aws.smithy.kotlin.runtime.ServiceErrorMetadata
+import aws.smithy.kotlin.runtime.awsprotocol.AwsErrorDetails
+import aws.smithy.kotlin.runtime.awsprotocol.setAseErrorMetadata
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer

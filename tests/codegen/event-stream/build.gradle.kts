@@ -144,9 +144,10 @@ dependencies {
     // this set of dependencies manually
     // <-- BEGIN GENERATED DEPENDENCY LIST -->
     implementation("aws.smithy.kotlin:aws-credentials:$smithyKotlinVersion")
-    implementation(project(":aws-runtime:protocols:aws-event-stream"))
+    implementation("aws.smithy.kotlin:aws-event-stream:$smithyKotlinVersion")
     implementation(project(":aws-runtime:aws-http"))
-    implementation(project(":aws-runtime:protocols:aws-json-protocols"))
+    implementation("aws.smithy.kotlin:aws-protocol-core:$smithyKotlinVersion")
+    implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")

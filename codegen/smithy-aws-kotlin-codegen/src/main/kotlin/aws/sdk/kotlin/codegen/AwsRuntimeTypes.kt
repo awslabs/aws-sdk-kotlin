@@ -50,47 +50,11 @@ object AwsRuntimeTypes {
     }
 
     object Http : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP) {
-        val withPayload = symbol("withPayload")
-        val setAseErrorMetadata = symbol("setAseErrorMetadata")
-
         object Retries {
             val AwsDefaultRetryPolicy = symbol("AwsDefaultRetryPolicy", "retries")
         }
         object Middleware {
             val AwsRetryHeaderMiddleware = symbol("AwsRetryHeaderMiddleware", "middleware")
         }
-    }
-
-    object JsonProtocols : RuntimeTypePackage(AwsKotlinDependency.AWS_JSON_PROTOCOLS) {
-        val RestJsonErrorDeserializer = symbol("RestJsonErrorDeserializer")
-    }
-
-    object XmlProtocols : RuntimeTypePackage(AwsKotlinDependency.AWS_XML_PROTOCOLS) {
-        val parseRestXmlErrorResponse = symbol("parseRestXmlErrorResponse")
-        val parseEc2QueryErrorResponse = symbol("parseEc2QueryErrorResponse")
-    }
-
-    object AwsEventStream : RuntimeTypePackage(AwsKotlinDependency.AWS_EVENT_STREAM) {
-        val HeaderValue = symbol("HeaderValue")
-        val Message = symbol("Message")
-        val MessageType = symbol("MessageType")
-        val MessageTypeExt = symbol("type")
-
-        val asEventStreamHttpBody = symbol("asEventStreamHttpBody")
-        val buildMessage = symbol("buildMessage")
-        val decodeFrames = symbol("decodeFrames")
-        val encode = symbol("encode")
-
-        val expectBool = symbol("expectBool")
-        val expectByte = symbol("expectByte")
-        val expectByteArray = symbol("expectByteArray")
-        val expectInt16 = symbol("expectInt16")
-        val expectInt32 = symbol("expectInt32")
-        val expectInt64 = symbol("expectInt64")
-        val expectTimestamp = symbol("expectTimestamp")
-        val expectString = symbol("expectString")
-
-        val sign = symbol("sign")
-        val newEventStreamSigningConfig = symbol("newEventStreamSigningConfig")
     }
 }
