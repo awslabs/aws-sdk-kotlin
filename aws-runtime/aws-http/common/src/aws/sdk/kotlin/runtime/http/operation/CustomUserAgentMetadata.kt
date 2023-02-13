@@ -33,7 +33,10 @@ public class CustomUserAgentMetadata(
     internal companion object {
         public val ContextKey: AttributeKey<CustomUserAgentMetadata> = AttributeKey("CustomUserAgentMetadata")
 
-        internal fun fromEnvironment(provider: PlatformEnvironProvider): CustomUserAgentMetadata {
+        internal fun fromEnvironment(
+            provider: PlatformEnvironProvider,
+            extraMetadata: Map<String, String> = mapOf(),
+        ): CustomUserAgentMetadata {
             fun Map<String, String>.findAndStripKeyPrefix(prefix: String) = this
                 .filterKeys { it.startsWith(prefix) }
                 .mapKeys { (key, _) -> key.substring(prefix.length) }
@@ -41,7 +44,7 @@ public class CustomUserAgentMetadata(
             val envVarMap = provider.getAllEnvVars().findAndStripKeyPrefix(CUSTOM_METADATA_ENV_PREFIX)
             val propMap = provider.getAllProperties().findAndStripKeyPrefix(CUSTOM_METADATA_PROP_PREFIX)
 
-            return CustomUserAgentMetadata(extras = envVarMap + propMap)
+            return CustomUserAgentMetadata(extras = envVarMap + propMap + extraMetadata)
         }
     }
 

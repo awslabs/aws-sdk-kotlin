@@ -38,7 +38,9 @@ public data class AwsUserAgentMetadata(
          */
         public fun fromEnvironment(
             apiMeta: ApiMetadata,
-        ): AwsUserAgentMetadata = loadAwsUserAgentMetadataFromEnvironment(PlatformProvider.System, apiMeta)
+            extraMetadata: Map<String, String> = mapOf(),
+        ): AwsUserAgentMetadata =
+            loadAwsUserAgentMetadataFromEnvironment(PlatformProvider.System, apiMeta, extraMetadata)
     }
 
     /**
@@ -100,7 +102,11 @@ public data class AwsUserAgentMetadata(
         get() = "$sdkMetadata"
 }
 
-internal fun loadAwsUserAgentMetadataFromEnvironment(platform: PlatformProvider, apiMeta: ApiMetadata): AwsUserAgentMetadata {
+internal fun loadAwsUserAgentMetadataFromEnvironment(
+    platform: PlatformProvider,
+    apiMeta: ApiMetadata,
+    extraMetadata: Map<String, String> = mapOf(),
+): AwsUserAgentMetadata {
     val sdkMeta = SdkMetadata("kotlin", apiMeta.version)
     val osInfo = platform.osInfo()
     val osMetadata = OsMetadata(osInfo.family, osInfo.version)
@@ -108,7 +114,7 @@ internal fun loadAwsUserAgentMetadataFromEnvironment(platform: PlatformProvider,
     val appId = platform.getProperty(AWS_APP_ID_PROP) ?: platform.getenv(AWS_APP_ID_ENV)
 
     val frameworkMetadata = FrameworkMetadata.fromEnvironment(platform)
-    val customMetadata = CustomUserAgentMetadata.fromEnvironment(platform)
+    val customMetadata = CustomUserAgentMetadata.fromEnvironment(platform, extraMetadata)
 
     return AwsUserAgentMetadata(
         sdkMeta,

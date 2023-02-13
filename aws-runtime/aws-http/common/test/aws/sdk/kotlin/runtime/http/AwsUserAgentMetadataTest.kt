@@ -12,23 +12,23 @@ import io.kotest.matchers.string.shouldNotContain
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class AwsUserAgentMetadataTest {
+private val apiMetadata = ApiMetadata("Test Service", "1.2.3")
 
+class AwsUserAgentMetadataTest {
     @Test
     fun testUserAgent() {
         val provider = TestPlatformProvider()
-        val ua = loadAwsUserAgentMetadataFromEnvironment(provider, ApiMetadata("Test Service", "1.2.3"))
+        val ua = loadAwsUserAgentMetadataFromEnvironment(provider, apiMetadata)
         assertEquals("aws-sdk-kotlin/1.2.3", ua.userAgent)
     }
 
     @Test
     fun testXAmzUserAgent() {
-        val apiMeta = ApiMetadata("Test Service", "1.2.3")
-        val sdkMeta = SdkMetadata("kotlin", apiMeta.version)
+        val sdkMeta = SdkMetadata("kotlin", apiMetadata.version)
         val osMetadata = OsMetadata(OsFamily.Linux, "ubuntu-20.04")
         val langMeta = LanguageMetadata("1.4.31", mapOf("jvmVersion" to "1.11"))
         val custom = CustomUserAgentMetadata(extras = mapOf("foo" to "bar"))
-        val ua = AwsUserAgentMetadata(sdkMeta, apiMeta, osMetadata, langMeta, customMetadata = custom)
+        val ua = AwsUserAgentMetadata(sdkMeta, apiMetadata, osMetadata, langMeta, customMetadata = custom)
         // FIXME re-enable once user agent strings can be longer
         val expected = listOf(
             "aws-sdk-kotlin/1.2.3",
@@ -87,11 +87,20 @@ class AwsUserAgentMetadataTest {
             ),
         )
         testEnvironments.forEach { test ->
-            val actual = loadAwsUserAgentMetadataFromEnvironment(test.provider, ApiMetadata("Test Service", "1.2.3"))
+            val actual = loadAwsUserAgentMetadataFromEnvironment(test.provider, apiMetadata)
 
             // FIXME re-enable once user agent strings can be longer
             // actual.xAmzUserAgent.shouldContain(test.expected)
             actual.xAmzUserAgent.shouldNotContain(test.expected)
         }
+    }
+
+    @Test
+    fun testExtraMetadata() {
+        val provider = TestPlatformProvider()
+        val extraMetadata = mapOf("foo" to "bar")
+        val actual = loadAwsUserAgentMetadataFromEnvironment(provider, apiMetadata, extraMetadata)
+
+        assertEquals("bar", actual.customMetadata?.extras?.get("foo"))
     }
 }
