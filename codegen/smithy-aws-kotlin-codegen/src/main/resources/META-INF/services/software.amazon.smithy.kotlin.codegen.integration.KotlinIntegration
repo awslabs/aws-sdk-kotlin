@@ -1,4 +1,5 @@
 aws.sdk.kotlin.codegen.SdkProtocolGeneratorSupplier
+aws.sdk.kotlin.codegen.AddUserAgentMetadataIntegration
 aws.sdk.kotlin.codegen.AwsRetryHeaderIntegration
 aws.sdk.kotlin.codegen.customization.s3.S3GeneratorSupplier
 aws.sdk.kotlin.codegen.GradleGenerator

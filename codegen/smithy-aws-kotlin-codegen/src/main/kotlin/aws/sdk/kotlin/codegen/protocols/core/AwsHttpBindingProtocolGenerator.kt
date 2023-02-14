@@ -23,6 +23,7 @@ import software.amazon.smithy.kotlin.codegen.core.useFileWriter
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
+import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.getEndpointRules
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
@@ -57,9 +58,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 it is ResolveEndpointMiddleware
             }.toMutableList()
 
-        generateExtraMetadata(ctx)
-        middleware.add(UserAgentMiddleware(ctx))
-
+        middleware.add(UserAgentMiddleware())
         middleware.add(RecursionDetectionMiddleware())
         return middleware
     }
@@ -222,18 +221,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 paramsSymbol,
                 awsEndpointPropertyRenderers,
             ).render()
-        }
-    }
-
-    private fun generateExtraMetadata(ctx: ProtocolGenerator.GenerationContext) {
-        val metadataText =
-            javaClass.classLoader.getResource("aws/sdk/kotlin/codegen/extra-metadata.json")?.readText()
-                ?: throw CodegenException("could not load extra-metadata.json resource")
-        val metadataNode = Node.parse(metadataText).expectObjectNode()
-        val metadataSymbol = ExtraMetadataGenerator.getSymbol(ctx.settings)
-
-        ctx.delegator.useFileWriter(metadataSymbol) {
-            ExtraMetadataGenerator(it, metadataNode).render()
         }
     }
 }

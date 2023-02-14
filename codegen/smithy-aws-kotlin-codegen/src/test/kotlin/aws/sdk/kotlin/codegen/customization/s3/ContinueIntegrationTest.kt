@@ -1,5 +1,6 @@
 package aws.sdk.kotlin.codegen.customization.s3
 
+import aws.sdk.kotlin.codegen.testutil.lines
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
@@ -119,17 +120,4 @@ object FooMiddleware : ProtocolMiddleware {
     override val name: String = "FooMiddleware"
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) =
         fail("Unexpected call to `FooMiddleware.render")
-}
-
-private fun String.lines(fromLine: String, toLine: String): String {
-    val allLines = lines()
-
-    val fromIdx = allLines.indexOf(fromLine)
-    assertNotEquals(-1, fromIdx, """Could not find from line "$fromLine" in all lines""")
-
-    val toIdxOffset = allLines.drop(fromIdx + 1).indexOf(toLine)
-    assertNotEquals(-1, toIdxOffset, """Could not find to line "$toLine" in all lines""")
-
-    val toIdx = toIdxOffset + fromIdx + 1
-    return allLines.subList(fromIdx, toIdx + 1).joinToString("\n")
 }

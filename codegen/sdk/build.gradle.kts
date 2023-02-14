@@ -9,6 +9,7 @@
 import aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection
 import aws.sdk.kotlin.gradle.codegen.dsl.projectionRootDir
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
+import software.amazon.smithy.gradle.tasks.SmithyBuild
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.util.*
@@ -297,10 +298,18 @@ val AwsService.modelExtrasDir: String
 val AwsService.transformsDir: String
     get() = rootProject.file("${destinationDir}/transforms").absolutePath
 
+val generateSmithyProjections = tasks.named<SmithyBuild>("generateSmithyProjections") {
+    doFirst {
+        getProperty("aws.user_agent.add_metadata")?.let {
+            System.setProperty("aws.user_agent.add_metadata", it)
+        }
+    }
+}
+
 val stageSdks = tasks.register("stageSdks") {
     group = "codegen"
     description = "relocate generated SDK(s) from build directory to services/ dir"
-    dependsOn(tasks.named("generateSmithyProjections"))
+    dependsOn(generateSmithyProjections)
     doLast {
         println("discoveredServices = ${discoveredServices.joinToString { it.sdkId }}")
         discoveredServices.forEach {
@@ -322,7 +331,7 @@ tasks.register("bootstrap") {
     group = "codegen"
     description = "Generate AWS SDK's and register them with the build"
 
-    dependsOn(tasks.named("generateSmithyProjections"))
+    dependsOn(generateSmithyProjections)
     finalizedBy(stageSdks)
 }
 
