@@ -9,6 +9,7 @@
 import aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection
 import aws.sdk.kotlin.gradle.codegen.dsl.projectionRootDir
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
+import software.amazon.smithy.gradle.tasks.SmithyBuild
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.util.*
@@ -296,6 +297,18 @@ val AwsService.modelExtrasDir: String
  */
 val AwsService.transformsDir: String
     get() = rootProject.file("${destinationDir}/transforms").absolutePath
+
+fun forwardProperty(name: String) {
+    getProperty(name)?.let {
+        System.setProperty(name, it)
+    }
+}
+
+val generateSmithyProjections = tasks.named<SmithyBuild>("generateSmithyProjections") {
+    doFirst {
+        forwardProperty("aws.partitions_file")
+    }
+}
 
 val stageSdks = tasks.register("stageSdks") {
     group = "codegen"
