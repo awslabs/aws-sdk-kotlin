@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.20.3-beta] - 02/16/2023
+
+### Features
+* [#839](https://github.com/awslabs/aws-sdk-kotlin/issues/839) Add `Expect: 100-continue` header to S3 PUT requests over 2MB
+
+### Miscellaneous
+* Upgrade smithy-kotlin and sync latest service models.
+
 ## [0.20.2-beta] - 02/09/2023
 
 ### Features
