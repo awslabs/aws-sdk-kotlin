@@ -1692,6 +1692,9 @@
                         "smithy.api#documentation": "<p>Metadata to assign to the application. Tags help organize and categorize your AppConfig resources. Each tag consists of a key and an optional value, both of which\n         you define.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#CreateConfigurationProfile": {
@@ -1777,6 +1780,9 @@
                         "smithy.api#documentation": "<p>The type of configurations contained in the profile. AppConfig supports\n            <code>feature flags</code> and <code>freeform</code> configurations. We recommend you\n         create feature flag configurations to enable or disable new features and freeform\n         configurations to distribute configurations to an application. When calling this API, enter\n         one of the following values for <code>Type</code>:</p>\n         <p>\n            <code>AWS.AppConfig.FeatureFlags</code>\n         </p>\n         <p>\n            <code>AWS.Freeform</code>\n         </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#CreateDeploymentStrategy": {
@@ -1861,6 +1867,9 @@
                         "smithy.api#documentation": "<p>Metadata to assign to the deployment strategy. Tags help organize and categorize your\n            AppConfig resources. Each tag consists of a key and an optional value, both of\n         which you define.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#CreateEnvironment": {
@@ -1927,6 +1936,9 @@
                         "smithy.api#documentation": "<p>Metadata to assign to the environment. Tags help organize and categorize your AppConfig resources. Each tag consists of a key and an optional value, both of which\n         you define.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#CreateExtension": {
@@ -2027,6 +2039,9 @@
                         "smithy.api#documentation": "<p>Adds one or more tags for the specified extension association. Tags are metadata that\n         help you categorize resources in different ways, for example, by purpose, owner, or\n         environment. Each tag consists of a key and an optional value, both of which you define.\n      </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#CreateExtensionRequest": {
@@ -2072,6 +2087,9 @@
                         "smithy.api#httpHeader": "Latest-Version-Number"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#CreateHostedConfigurationVersion": {
@@ -2160,7 +2178,17 @@
                         "smithy.api#documentation": "<p>An optional locking token used to prevent race conditions from overwriting configuration\n         updates when creating a new version. To ensure your data is not overwritten when creating\n         multiple hosted configuration versions in rapid succession, specify the version number of\n         the latest hosted configuration version.</p>",
                         "smithy.api#httpHeader": "Latest-Version-Number"
                     }
+                },
+                "VersionLabel": {
+                    "target": "com.amazonaws.appconfig#VersionLabel",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An optional, user-defined label for the AppConfig hosted configuration version. This value must contain at least one non-numeric character. For example, \"v2.2.0\".</p>",
+                        "smithy.api#httpHeader": "VersionLabel"
+                    }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#DeleteApplication": {
@@ -2202,6 +2230,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#DeleteConfigurationProfile": {
@@ -2254,6 +2285,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#DeleteDeploymentStrategy": {
@@ -2295,6 +2329,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#DeleteEnvironment": {
@@ -2347,6 +2384,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#DeleteExtension": {
@@ -2416,6 +2456,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#DeleteExtensionRequest": {
@@ -2437,6 +2480,9 @@
                         "smithy.api#httpQuery": "version"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#DeleteHostedConfigurationVersion": {
@@ -2495,6 +2541,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#Deployment": {
@@ -3294,6 +3343,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#GetConfiguration": {
@@ -3374,6 +3426,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#GetConfigurationRequest": {
@@ -3418,6 +3473,9 @@
                         "smithy.api#httpQuery": "client_configuration_version"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#GetDeployment": {
@@ -3476,6 +3534,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#GetDeploymentStrategy": {
@@ -3517,6 +3578,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#GetEnvironment": {
@@ -3566,6 +3630,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#GetExtension": {
@@ -3635,6 +3702,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#GetExtensionRequest": {
@@ -3656,6 +3726,9 @@
                         "smithy.api#httpQuery": "version_number"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#GetHostedConfigurationVersion": {
@@ -3714,6 +3787,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#GrowthFactor": {
@@ -3788,6 +3864,13 @@
                         "smithy.api#documentation": "<p>A standard MIME type describing the format of the configuration content. For more\n         information, see <a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17\">Content-Type</a>.</p>",
                         "smithy.api#httpHeader": "Content-Type"
                     }
+                },
+                "VersionLabel": {
+                    "target": "com.amazonaws.appconfig#VersionLabel",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A user-defined label for an AppConfig hosted configuration version.</p>",
+                        "smithy.api#httpHeader": "VersionLabel"
+                    }
                 }
             }
         },
@@ -3823,6 +3906,12 @@
                     "target": "com.amazonaws.appconfig#StringWithLengthBetween1And255",
                     "traits": {
                         "smithy.api#documentation": "<p>A standard MIME type describing the format of the configuration content. For more\n         information, see <a href=\"https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17\">Content-Type</a>.</p>"
+                    }
+                },
+                "VersionLabel": {
+                    "target": "com.amazonaws.appconfig#VersionLabel",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A user-defined label for an AppConfig hosted configuration version.</p>"
                     }
                 }
             },
@@ -3985,6 +4074,9 @@
                         "smithy.api#httpQuery": "next_token"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#ListConfigurationProfiles": {
@@ -4053,6 +4145,9 @@
                         "smithy.api#httpQuery": "type"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#ListDeploymentStrategies": {
@@ -4103,6 +4198,9 @@
                         "smithy.api#httpQuery": "next_token"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#ListDeployments": {
@@ -4172,6 +4270,9 @@
                         "smithy.api#httpQuery": "next_token"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#ListEnvironments": {
@@ -4233,6 +4334,9 @@
                         "smithy.api#httpQuery": "next_token"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#ListExtensionAssociations": {
@@ -4305,6 +4409,9 @@
                         "smithy.api#httpQuery": "next_token"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#ListExtensions": {
@@ -4362,6 +4469,9 @@
                         "smithy.api#httpQuery": "name"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#ListHostedConfigurationVersions": {
@@ -4430,7 +4540,17 @@
                         "smithy.api#documentation": "<p>A token to start the list. Use this token to get the next set of results. </p>",
                         "smithy.api#httpQuery": "next_token"
                     }
+                },
+                "VersionLabel": {
+                    "target": "com.amazonaws.appconfig#QueryName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An optional filter that can be used to specify the version label of an AppConfig hosted configuration version. This parameter supports filtering by prefix using a wildcard, for example \"v2*\". If you don't specify an asterisk at the end of the value, only an exact match is returned.</p>",
+                        "smithy.api#httpQuery": "version_label"
+                    }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#ListTagsForResource": {
@@ -4472,6 +4592,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#LongName": {
@@ -4786,7 +4909,7 @@
                 "ConfigurationVersion": {
                     "target": "com.amazonaws.appconfig#Version",
                     "traits": {
-                        "smithy.api#documentation": "<p>The configuration version to deploy.</p>",
+                        "smithy.api#documentation": "<p>The configuration version to deploy. If deploying an AppConfig hosted configuration version, you can specify either the version number or version label.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -4808,6 +4931,9 @@
                         "smithy.api#documentation": "<p>The KMS key identifier (key ID, key alias, or key ARN). AppConfig uses this ID to encrypt the configuration data using a customer managed key. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#StopDeployment": {
@@ -4866,6 +4992,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#String": {
@@ -4990,6 +5119,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#TagValue": {
@@ -5077,6 +5209,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#UpdateApplication": {
@@ -5130,6 +5265,9 @@
                         "smithy.api#documentation": "<p>A description of the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#UpdateConfigurationProfile": {
@@ -5203,6 +5341,9 @@
                         "smithy.api#documentation": "<p>A list of methods for validating the configuration.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#UpdateDeploymentStrategy": {
@@ -5277,6 +5418,9 @@
                         "smithy.api#documentation": "<p>The algorithm used to define how percentage grows over time. AppConfig\n         supports the following growth types:</p>\n         <p>\n            <b>Linear</b>: For this type, AppConfig processes\n         the deployment by increments of the growth factor evenly distributed over the deployment\n         time. For example, a linear deployment that uses a growth factor of 20 initially makes the\n         configuration available to 20 percent of the targets. After 1/5th of the deployment time\n         has passed, the system updates the percentage to 40 percent. This continues until 100% of\n         the targets are set to receive the deployed configuration.</p>\n         <p>\n            <b>Exponential</b>: For this type, AppConfig\n         processes the deployment exponentially using the following formula: <code>G*(2^N)</code>.\n         In this formula, <code>G</code> is the growth factor specified by the user and\n            <code>N</code> is the number of steps until the configuration is deployed to all\n         targets. For example, if you specify a growth factor of 2, then the system rolls out the\n         configuration as follows:</p>\n         <p>\n            <code>2*(2^0)</code>\n         </p>\n         <p>\n            <code>2*(2^1)</code>\n         </p>\n         <p>\n            <code>2*(2^2)</code>\n         </p>\n         <p>Expressed numerically, the deployment rolls out as follows: 2% of the targets, 4% of the\n         targets, 8% of the targets, and continues until the configuration has been deployed to all\n         targets.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#UpdateEnvironment": {
@@ -5344,6 +5488,9 @@
                         "smithy.api#documentation": "<p>Amazon CloudWatch alarms to monitor during the deployment process.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#UpdateExtension": {
@@ -5422,6 +5569,9 @@
                         "smithy.api#documentation": "<p>The parameter names and values defined in the extension.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#UpdateExtensionRequest": {
@@ -5460,6 +5610,9 @@
                         "smithy.api#documentation": "<p>The extension version number.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#Uri": {
@@ -5526,6 +5679,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.appconfig#Validator": {
@@ -5598,6 +5754,16 @@
                     "min": 1,
                     "max": 1024
                 }
+            }
+        },
+        "com.amazonaws.appconfig#VersionLabel": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 64
+                },
+                "smithy.api#pattern": "[^0-9]"
             }
         }
     }

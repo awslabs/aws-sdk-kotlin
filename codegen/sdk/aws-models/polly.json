@@ -3309,6 +3309,18 @@
                     "traits": {
                         "smithy.api#enumValue": "Stephen"
                     }
+                },
+                "Kazuha": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Kazuha"
+                    }
+                },
+                "Tomoko": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Tomoko"
+                    }
                 }
             }
         },
