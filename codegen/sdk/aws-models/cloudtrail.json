@@ -7653,6 +7653,9 @@
                     "target": "com.amazonaws.cloudtrail#InactiveEventDataStoreException"
                 },
                 {
+                    "target": "com.amazonaws.cloudtrail#InsufficientEncryptionPolicyException"
+                },
+                {
                     "target": "com.amazonaws.cloudtrail#InvalidEventDataStoreCategoryException"
                 },
                 {
