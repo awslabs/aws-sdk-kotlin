@@ -23,7 +23,6 @@ import software.amazon.smithy.kotlin.codegen.core.useFileWriter
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.getEndpointRules
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
@@ -35,6 +34,11 @@ import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.rulesengine.language.EndpointRuleSet
 import software.amazon.smithy.rulesengine.language.syntax.parameters.Parameter
 import software.amazon.smithy.rulesengine.traits.EndpointTestCase
+import java.io.File
+
+internal const val PARTITIONS_JSON_ENV_VAR = "PARTITIONS_FILE"
+internal const val PARTITIONS_JSON_SYS_PROP = "aws.partitions_file"
+private const val PARTITIONS_RESOURCE = "aws/sdk/kotlin/codegen/partitions.json"
 
 /**
  * Base class for all AWS HTTP protocol generators
@@ -154,9 +158,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     }
 
     override fun generateEndpointProvider(ctx: ProtocolGenerator.GenerationContext, rules: EndpointRuleSet) {
-        val partitionsData =
-            javaClass.classLoader.getResource("aws/sdk/kotlin/codegen/partitions.json")?.readText()
-                ?: throw CodegenException("could not load partitions.json resource")
+        val partitionsData = getPartitionsJson()
         val partitions = Node.parse(partitionsData).expectObjectNode()
         val partitionsSymbol = PartitionsGenerator.getSymbol(ctx.settings)
 
@@ -186,6 +188,12 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             DefaultEndpointProviderGenerator(it, rules, providerSymbol, paramsSymbol, endpointFunctions, awsEndpointPropertyRenderers).render()
         }
     }
+
+    private fun getPartitionsJson(): String =
+        System.getProperty(PARTITIONS_JSON_SYS_PROP)?.let { File(it).readText() }
+            ?: System.getenv(PARTITIONS_JSON_ENV_VAR)?.let { File(it).readText() }
+            ?: javaClass.classLoader.getResource(PARTITIONS_RESOURCE)?.readText()
+            ?: throw CodegenException("could not load partitions.json resource")
 
     override fun generateEndpointProviderMiddleware(ctx: ProtocolGenerator.GenerationContext) {
         ctx.delegator.useFileWriter(ResolveEndpointMiddlewareGenerator.getSymbol(ctx.settings)) {

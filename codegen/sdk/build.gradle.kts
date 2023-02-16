@@ -298,11 +298,16 @@ val AwsService.modelExtrasDir: String
 val AwsService.transformsDir: String
     get() = rootProject.file("${destinationDir}/transforms").absolutePath
 
+fun forwardProperty(name: String) {
+    getProperty(name)?.let {
+        System.setProperty(name, it)
+    }
+}
+
 val generateSmithyProjections = tasks.named<SmithyBuild>("generateSmithyProjections") {
     doFirst {
-        getProperty("aws.user_agent.add_metadata")?.let {
-            System.setProperty("aws.user_agent.add_metadata", it)
-        }
+        forwardProperty("aws.partitions_file")
+        forwardProperty("aws.user_agent.add_metadata")
     }
 }
 
