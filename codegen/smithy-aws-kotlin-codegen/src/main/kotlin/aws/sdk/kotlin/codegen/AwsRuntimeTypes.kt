@@ -50,9 +50,14 @@ object AwsRuntimeTypes {
     }
 
     object Http : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP) {
+        object Interceptors : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP, "interceptors") {
+            val AddUserAgentMetadataInterceptor = symbol("AddUserAgentMetadataInterceptor")
+        }
+
         object Retries {
             val AwsDefaultRetryPolicy = symbol("AwsDefaultRetryPolicy", "retries")
         }
+
         object Middleware {
             val AwsRetryHeaderMiddleware = symbol("AwsRetryHeaderMiddleware", "middleware")
         }

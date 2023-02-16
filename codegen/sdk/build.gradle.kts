@@ -307,13 +307,14 @@ fun forwardProperty(name: String) {
 val generateSmithyProjections = tasks.named<SmithyBuild>("generateSmithyProjections") {
     doFirst {
         forwardProperty("aws.partitions_file")
+        forwardProperty("aws.user_agent.add_metadata")
     }
 }
 
 val stageSdks = tasks.register("stageSdks") {
     group = "codegen"
     description = "relocate generated SDK(s) from build directory to services/ dir"
-    dependsOn(tasks.named("generateSmithyProjections"))
+    dependsOn(generateSmithyProjections)
     doLast {
         println("discoveredServices = ${discoveredServices.joinToString { it.sdkId }}")
         discoveredServices.forEach {
@@ -335,7 +336,7 @@ tasks.register("bootstrap") {
     group = "codegen"
     description = "Generate AWS SDK's and register them with the build"
 
-    dependsOn(tasks.named("generateSmithyProjections"))
+    dependsOn(generateSmithyProjections)
     finalizedBy(stageSdks)
 }
 
