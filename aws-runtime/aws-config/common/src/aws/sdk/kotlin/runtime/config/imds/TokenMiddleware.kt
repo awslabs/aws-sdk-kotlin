@@ -5,8 +5,6 @@
 
 package aws.sdk.kotlin.runtime.config.imds
 
-import aws.sdk.kotlin.runtime.config.CachedValue
-import aws.sdk.kotlin.runtime.config.ExpiringValue
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
@@ -16,6 +14,8 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.complete
 import aws.smithy.kotlin.runtime.time.Clock
+import aws.smithy.kotlin.runtime.util.CachedValue
+import aws.smithy.kotlin.runtime.util.ExpiringValue
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
