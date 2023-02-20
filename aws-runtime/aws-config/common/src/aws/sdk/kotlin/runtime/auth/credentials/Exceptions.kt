@@ -18,5 +18,3 @@ public class CredentialsNotLoadedException(message: String?, cause: Throwable? =
  * The [CredentialsProvider] was given an invalid configuration (e.g. invalid aws configuration file, invalid IMDS endpoint, etc)
  */
 public class ProviderConfigurationException(message: String, cause: Throwable? = null) : ConfigurationException(message, cause)
-
-public typealias CredentialsProviderException = aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
