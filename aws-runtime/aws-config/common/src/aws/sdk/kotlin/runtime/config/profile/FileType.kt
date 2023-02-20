@@ -62,6 +62,7 @@ internal enum class FileType(
      *
      * The consumer of the result should fail parsing immediately if a null token is encountered.
      */
-    fun tokenOf(input: FileLine, currentProfile: Token.Profile?, lastProperty: Token.Property?): Token? =
+    fun tokenOf(input: FileLine, currentProfile: Token.Profile?, lastProperty: Token.Property?): Token =
         lineParsers.firstNotNullOfOrNull { parseFunction -> parseFunction(input, currentProfile, lastProperty) }
+            ?: throw AwsConfigParseException("Encountered unexpected token", input.lineNumber)
 }

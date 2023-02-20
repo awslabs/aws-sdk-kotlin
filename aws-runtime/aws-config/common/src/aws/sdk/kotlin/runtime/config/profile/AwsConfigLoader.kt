@@ -8,8 +8,11 @@ package aws.sdk.kotlin.runtime.config.profile
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.resolve
+import aws.smithy.kotlin.runtime.tracing.traceSpan
+import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlin.coroutines.coroutineContext
 
 /**
  * Load the properties of the specified or default AWS configuration profile.  This
@@ -31,7 +34,11 @@ public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile 
     val allProfiles = loadAwsProfiles(platform, source)
 
     // Return the active profile
-    return AwsProfile(source.profile, allProfiles[source.profile] ?: emptyMap())
+    return if (allProfiles.containsKey(source.profile)) {
+        allProfiles[source.profile]!!
+    } else {
+        AwsProfile(source.profile, emptyMap())
+    }
 }
 
 /**
@@ -42,16 +49,18 @@ public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile 
  *
  * @return A map of all profiles, which each are a map of key/value pairs.
  */
-internal suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): Map<String, Map<String, AwsConfigValue>> {
-    // merged AWS configuration based on optional configuration and credential file contents
-    return mergeProfiles(
-        parse(FileType.CONFIGURATION, platform.readFileOrNull(source.configPath)?.decodeToString()),
-        parse(FileType.CREDENTIAL, platform.readFileOrNull(source.credentialsPath)?.decodeToString()),
-    )
-}
+@InternalSdkApi
+public suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): AwsProfiles =
+    coroutineContext.withChildTraceSpan("loadAwsProfiles") {
+        // merged AWS configuration based on optional configuration and credential file contents
+        mergeProfiles(
+            parse(coroutineContext.traceSpan, FileType.CONFIGURATION, platform.readFileOrNull(source.configPath)?.decodeToString()),
+            parse(coroutineContext.traceSpan, FileType.CREDENTIAL, platform.readFileOrNull(source.credentialsPath)?.decodeToString()),
+        ).toProfileMap()
+    }
 
 // Merge contents of profile maps
-internal fun mergeProfiles(vararg maps: ProfileMap) = buildMap<String, Map<String, AwsConfigValue>> {
+internal fun mergeProfiles(vararg maps: RawProfileMap) = buildMap<String, Map<String, AwsConfigValue>> {
     maps.forEach { map ->
         map.entries.forEach { entry ->
             put(entry.key, (get(entry.key) ?: emptyMap()) + entry.value)
@@ -59,8 +68,11 @@ internal fun mergeProfiles(vararg maps: ProfileMap) = buildMap<String, Map<Strin
     }
 }
 
-// Specifies the active profile and configured (may not actually exist) locations of configuration files.
-internal data class AwsConfigurationSource(val profile: String, val configPath: String, val credentialsPath: String)
+/**
+ * Specifies the active profile and configured (may not actually exist) locations of configuration files.
+ */
+@InternalSdkApi
+public data class AwsConfigurationSource(val profile: String, val configPath: String, val credentialsPath: String)
 
 /**
  * Determine the source of AWS configuration
@@ -120,4 +132,4 @@ private fun resolveHomeDir(platform: PlatformProvider): String? =
         }
     }
 
-internal fun Pair<String?, String?>.concatOrNull() = if (first != null && second != null) first + second else null
+private fun Pair<String?, String?>.concatOrNull() = if (first != null && second != null) first + second else null

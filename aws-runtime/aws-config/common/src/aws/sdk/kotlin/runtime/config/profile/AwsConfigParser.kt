@@ -6,21 +6,31 @@
 package aws.sdk.kotlin.runtime.config.profile
 
 import aws.sdk.kotlin.runtime.ConfigurationException
-import aws.smithy.kotlin.runtime.logging.Logger
-import aws.smithy.kotlin.runtime.logging.warn
-
-internal val logger = Logger.getLogger("AwsConfigParser")
+import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.smithy.kotlin.runtime.tracing.*
 
 /**
- * Profiles are represented as a map of maps.  Each top-level key is a profile.  Its associated
+ * Maps a set of loaded profiles (keyed by name) to their respective [AwsProfile]s.
+ */
+@InternalSdkApi
+public typealias AwsProfiles = Map<String, AwsProfile>
+
+/**
+ * Profiles are represented as a map of maps while parsing.  Each top-level key is a profile.  Its associated
  * entries are the property key-value pairs for that profile.
  */
-internal typealias ProfileMap = Map<String, Map<String, AwsConfigValue>>
+internal typealias RawProfileMap = Map<String, Map<String, AwsConfigValue>>
+
+internal fun RawProfileMap.toProfileMap(): AwsProfiles = buildMap {
+    this@toProfileMap.entries.forEach { (k, v) ->
+        put(k, AwsProfile(k, v))
+    }
+}
 
 /**
  * Base exception for AWS config file parser errors.
  */
-public open class AwsConfigParseException(message: String, lineNumber: Int) : ConfigurationException(contextMessage(message, lineNumber))
+public class AwsConfigParseException(message: String, lineNumber: Int) : ConfigurationException(contextMessage(message, lineNumber))
 
 /**
  * Parse an AWS configuration file
@@ -28,13 +38,13 @@ public open class AwsConfigParseException(message: String, lineNumber: Int) : Co
  * @param type The type of file to parse
  * @param input The payload to parse
  */
-internal fun parse(type: FileType, input: String?): ProfileMap {
+internal fun parse(traceSpan: TraceSpan, type: FileType, input: String?): RawProfileMap {
     // Inaccessible File: If a file is not found or cannot be opened in the configured location, the implementation must
     // treat it as an empty file, and must not attempt to fall back to any other location.
     if (input.isNullOrBlank()) return emptyMap()
 
     val tokens = tokenize(type, input)
-    val profiles = tokens.toProfileMap()
+    val profiles = tokens.toProfileMap(traceSpan)
     return mergeProfiles(profiles)
 }
 
@@ -54,7 +64,6 @@ internal fun tokenize(type: FileType, input: String): List<Token> = buildList {
     var lastProperty: Token.Property? = null
     for (line in lines) {
         val token = type.tokenOf(line, currentProfile, lastProperty)
-            ?: throw AwsConfigParseException("Encountered unexpected token", line.lineNumber)
 
         if (token is Token.Profile) {
             currentProfile = token
@@ -70,7 +79,7 @@ internal fun tokenize(type: FileType, input: String): List<Token> = buildList {
 /**
  * Convert the contents of a token list into a profile mapping.
  */
-internal fun List<Token>.toProfileMap(): Map<Token.Profile, MutableMap<String, AwsConfigValue>> = buildMap {
+internal fun List<Token>.toProfileMap(traceSpan: TraceSpan): Map<Token.Profile, MutableMap<String, AwsConfigValue>> = buildMap {
     var currentProfile: Token.Profile? = null
     var currentProperty: Token.Property? = null
     var currentParentMap: MutableMap<String, String>? = null
@@ -82,10 +91,8 @@ internal fun List<Token>.toProfileMap(): Map<Token.Profile, MutableMap<String, A
                 currentProperty = null
 
                 if (containsKey(token)) continue
-                if (!token.isValidForm) {
-                    logger.warn {
-                        contextMessage("Ignoring invalid profile '${token.name}'.")
-                    }
+                if (!token.isValid) {
+                    traceSpan.warnParse("Ignoring invalid profile '${token.name}'.")
                     continue
                 }
 
@@ -96,25 +103,22 @@ internal fun List<Token>.toProfileMap(): Map<Token.Profile, MutableMap<String, A
                 currentProperty = token
 
                 if (!token.isValid) {
-                    logger.warn {
-                        contextMessage("Ignoring invalid property '${token.key}'.")
-                    }
+                    traceSpan.warnParse("Ignoring invalid property '${token.key}'.")
                     continue
                 }
-                if (!currentProfile.isValidForm) {
-                    logger.warn {
-                        contextMessage("Ignoring property under invalid profile '${currentProfile.name}'.")
-                    }
+                if (!currentProfile.isValid) {
+                    traceSpan.warnParse("Ignoring property under invalid profile '${currentProfile.name}'.")
                     continue
                 }
 
                 val profile = this[currentProfile]!!
                 if (profile.containsKey(token.key)) {
-                    logger.warn {
-                        contextMessage("'${token.key}' defined multiple times in profile '${currentProfile.name}.'")
-                    }
+                    traceSpan.warnParse("'${token.key}' defined multiple times in profile '${currentProfile.name}.'")
                 }
 
+                if (profile.containsKey(token.key)) {
+                    traceSpan.warnParse("Overwriting previously-defined property '${token.key}'.")
+                }
                 profile[token.key] = AwsConfigValue.String(token.value)
             }
             is Token.Continuation -> {
@@ -130,14 +134,16 @@ internal fun List<Token>.toProfileMap(): Map<Token.Profile, MutableMap<String, A
                 currentProperty as Token.Property
 
                 if (!token.isValid) {
-                    logger.warn {
-                        contextMessage("Ignoring invalid sub-property '${token.key}'.")
-                    }
+                    traceSpan.warnParse("Ignoring invalid sub-property '${token.key}'.")
                     continue
                 }
 
                 val profile = this[currentProfile]!!
-                if (profile[currentProperty.key] is AwsConfigValue.String) { // convert newly recognized parent to map
+                val property = profile[currentProperty.key]
+                if (property is AwsConfigValue.String) { // convert newly recognized parent to map
+                    if (property.value.isNotEmpty()) {
+                        traceSpan.warnParse("Overwriting previously-defined property '${token.key}'.")
+                    }
                     currentParentMap = mutableMapOf()
                     profile[currentProperty.key] = AwsConfigValue.Map(currentParentMap)
                 }
@@ -158,7 +164,7 @@ internal fun List<Token>.toProfileMap(): Map<Token.Profile, MutableMap<String, A
  * If both [profile foo] and [foo] are specified in the configuration file, [profile foo]'s properties are used.
  * Properties duplicated within the same file and profile use the later property in the file.
  */
-private fun mergeProfiles(tokenIndexMap: Map<Token.Profile, Map<String, AwsConfigValue>>): ProfileMap =
+private fun mergeProfiles(tokenIndexMap: Map<Token.Profile, Map<String, AwsConfigValue>>): RawProfileMap =
     tokenIndexMap
         .filter { entry ->
             when (entry.key.profilePrefix) {
@@ -170,3 +176,6 @@ private fun mergeProfiles(tokenIndexMap: Map<Token.Profile, Map<String, AwsConfi
             }
         }
         .mapKeys { entry -> entry.key.name }
+
+private fun TraceSpan.warnParse(message: String) =
+    warn("AwsConfigParse", content = { contextMessage(message) })

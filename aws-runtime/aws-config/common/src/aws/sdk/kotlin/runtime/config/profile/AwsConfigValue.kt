@@ -21,9 +21,3 @@ public sealed class AwsConfigValue {
         override fun toString(): kotlin.String = value.toString()
     }
 }
-
-@InternalSdkApi
-public fun AwsConfigValue.asStringOrNull(): String? = (this as? AwsConfigValue.String)?.value
-
-@InternalSdkApi
-public fun AwsConfigValue.asMapOrNull(): Map<String, String>? = this as? AwsConfigValue.Map

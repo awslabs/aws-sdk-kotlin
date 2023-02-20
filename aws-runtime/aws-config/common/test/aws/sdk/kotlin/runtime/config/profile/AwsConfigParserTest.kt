@@ -5,6 +5,8 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -16,6 +18,7 @@ import io.mockk.slot
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.*
+import kotlin.coroutines.coroutineContext
 import kotlin.test.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -34,12 +37,12 @@ class AwsProfileParserTest {
             .forEachIndexed { index, testCase ->
                 when (testCase) {
                     is TestCase.MatchConfigOutputCase -> {
-                        val actual = parse(FileType.CONFIGURATION, testCase.configInput).toJsonElement()
+                        val actual = parse(NoOpTraceSpan, FileType.CONFIGURATION, testCase.configInput).toJsonElement()
                         val expectedJson = Json.parseToJsonElement(testCase.expectedOutput)
                         assertEquals(expectedJson, actual, message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchCredentialOutputCase -> {
-                        val actual = parse(FileType.CREDENTIAL, testCase.credentialInput).toJsonElement()
+                        val actual = parse(NoOpTraceSpan, FileType.CREDENTIAL, testCase.credentialInput).toJsonElement()
                         assertEquals(testCase.expectedOutput, actual.toString(), message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchConfigAndCredentialOutputCase -> {
@@ -47,7 +50,7 @@ class AwsProfileParserTest {
                         assertEquals(testCase.expectedOutput, actual.toString(), message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchErrorCase -> {
-                        val ex = assertFailsWith<AwsConfigParseException>("[idx=$index]: $testCase") { parse(FileType.CONFIGURATION, testCase.input) }
+                        val ex = assertFailsWith<AwsConfigParseException>("[idx=$index]: $testCase") { parse(NoOpTraceSpan, FileType.CONFIGURATION, testCase.input) }
                         ex.message.shouldContain(testCase.expectedErrorMessage)
                     }
                 }
@@ -76,9 +79,11 @@ class AwsProfileParserTest {
      * Example function that reads the active provide and returns true if a key "boo" exists.
      */
     private suspend fun fnThatLoadsConfiguration(platform: PlatformProvider): String? {
-        val profile = loadActiveAwsProfile(platform)
+        val profile = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            loadActiveAwsProfile(platform)
+        }
 
-        return profile["boo"]?.asStringOrNull()
+        return profile.getOrNull("boo")
     }
 
     @Test
@@ -190,10 +195,10 @@ class AwsProfileParserTest {
      * @param credentialsFn a function that will retrieve a configuration file as a UTF-8 string.
      * @return A map containing all specified profiles defined in configuration and credential files.
      */
-    private fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): ProfileMap =
+    private fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): RawProfileMap =
         mergeProfiles(
-            parse(FileType.CONFIGURATION, configurationFn()),
-            parse(FileType.CREDENTIAL, credentialsFn()),
+            parse(NoOpTraceSpan, FileType.CONFIGURATION, configurationFn()),
+            parse(NoOpTraceSpan, FileType.CREDENTIAL, credentialsFn()),
         )
 }
 

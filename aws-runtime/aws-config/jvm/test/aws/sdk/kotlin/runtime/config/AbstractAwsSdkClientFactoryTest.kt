@@ -60,7 +60,7 @@ private interface TestClient : SdkClient {
     override val config: Config
 
     // refactored: mostly in an abstract base now
-    companion object : AbstractAwsSdkClientFactory<Config, Config.Builder, TestClient, Builder>() {
+    companion object : AbstractAwsSdkClientFactory<Config, Config.Builder, TestClient, Builder>("test") {
         override fun builder(): Builder = Builder()
     }
 

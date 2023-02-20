@@ -26,7 +26,7 @@ internal fun contextMessage(message: String, lineNumber: Int? = null): String = 
 
 // what constitutes a "valid" profile/property identifier is not explicitly stated in the SEP (nor is it consistent
 // across SDKs) but the one universally rejected component is whitespace
-internal fun String.isValidIdentifier(): Boolean = !any { it.isWhitespace() }
+internal fun String.isValidIdentifier(): Boolean = none { it.isWhitespace() }
 
 internal fun String.splitProperty(): Pair<String, String> {
     val kv = split(Literals.PROPERTY_SPLITTER, limit = 2)
