@@ -9,7 +9,7 @@ import aws.sdk.kotlin.services.machinelearning.model.MachineLearningException
 import aws.sdk.kotlin.services.machinelearning.model.PredictRequest
 import aws.sdk.kotlin.services.machinelearning.model.PredictResponse
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
-import aws.smithy.kotlin.runtime.http.endpoints.setResolvedEndpoint
+import aws.smithy.kotlin.runtime.http.middleware.setResolvedEndpoint
 import aws.smithy.kotlin.runtime.http.operation.InlineMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 
