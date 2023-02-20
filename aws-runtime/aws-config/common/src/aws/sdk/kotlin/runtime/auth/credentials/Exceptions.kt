@@ -19,7 +19,4 @@ public class CredentialsNotLoadedException(message: String?, cause: Throwable? =
  */
 public class ProviderConfigurationException(message: String, cause: Throwable? = null) : ConfigurationException(message, cause)
 
-/**
- * The [CredentialsProvider] experienced an error during credentials resolution
- */
-public class CredentialsProviderException(message: String, cause: Throwable? = null) : ClientException(message, cause)
+public typealias CredentialsProviderException = aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException

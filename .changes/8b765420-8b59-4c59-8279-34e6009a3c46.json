@@ -1,0 +1,5 @@
+{
+    "id": "8b765420-8b59-4c59-8279-34e6009a3c46",
+    "type": "misc",
+    "description": "Refactor: move CachedCredentialsProvider and CredentialsProviderChain to smithy-kotlin under aws.smithy.kotlin.runtime.auth.awscredentials package"
+}
