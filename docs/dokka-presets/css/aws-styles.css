@@ -7,3 +7,22 @@
 :root {
     --color-dark: #232f3e;
 }
+
+#leftToggler {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+#pages-search {
+    margin: 0;
+    padding-top: 10px;
+}
+
+#pages-search:focus {
+    outline: revert;
+}
+
+#pages-search-label {
+    display: none;
+}

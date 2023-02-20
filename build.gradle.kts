@@ -35,7 +35,8 @@ allprojects {
                         "${rootProject.file("docs/dokka-presets/assets/aws_logo_white_59x35.png")}"
                     ],
                     "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved.",
-                    "separateInheritedMembers" : true
+                    "separateInheritedMembers" : true,
+                    "templatesDir": "${rootProject.file("docs/dokka-presets/templates")}"
                 }
             """
         )
