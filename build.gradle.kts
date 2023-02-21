@@ -10,6 +10,7 @@ plugins {
     kotlin("jvm") version "1.8.10" apply false
     id("org.jetbrains.dokka")
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.12.1"
 }
 
 allprojects {
@@ -196,4 +197,16 @@ tasks.register("showRepos") {
         println("All repos:")
         println(repositories.map { it.name })
     }
+}
+
+apiValidation {
+    nonPublicMarkers.add("aws.sdk.kotlin.runtime.InternalSdkApi")
+
+    ignoredProjects += setOf(
+        "testing",
+        "protocol-tests",
+        "dokka-aws",
+        "e2e-test-util",
+        "event-stream",
+    )
 }
