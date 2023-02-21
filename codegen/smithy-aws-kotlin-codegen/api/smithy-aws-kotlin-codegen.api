@@ -1,0 +1,837 @@
+public final class aws/sdk/kotlin/codegen/AddUserAgentMetadataIntegration : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/AwsKotlinDependency {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsKotlinDependency;
+	public final fun getAWS_CONFIG ()Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDependency;
+	public final fun getAWS_CORE ()Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDependency;
+	public final fun getAWS_ENDPOINT ()Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDependency;
+	public final fun getAWS_HTTP ()Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDependency;
+	public final fun getAWS_TESTING ()Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDependency;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsKotlinDependencyKt {
+	public static final field AWS_CLIENT_RT_GROUP Ljava/lang/String;
+	public static final field AWS_CLIENT_RT_ROOT_NS Ljava/lang/String;
+	public static final fun getAWS_CLIENT_RT_VERSION ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRetryHeaderIntegration : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes$Config : software/amazon/smithy/kotlin/codegen/core/RuntimeTypePackage {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes$Config;
+	public final fun getAbstractAwsSdkClientFactory ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes$Config$Credentials : software/amazon/smithy/kotlin/codegen/core/RuntimeTypePackage {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes$Config$Credentials;
+	public final fun getDefaultChainCredentialsProvider ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getManage ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getStaticCredentialsProvider ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes$Core : software/amazon/smithy/kotlin/codegen/core/RuntimeTypePackage {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes$Core;
+	public final fun getAwsErrorMetadata ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getClientException ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes$Core$Client : software/amazon/smithy/kotlin/codegen/core/RuntimeTypePackage {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes$Core$Client;
+	public final fun getAwsClientOption ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getAwsSdkClientConfig ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes$Endpoint : software/amazon/smithy/kotlin/codegen/core/RuntimeTypePackage {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes$Endpoint;
+	public final fun getApplyToRequestAuthSchemeExt ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getAsSigningContextAuthSchemeExt ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getAuthScheme ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getAuthSchemeEndpointExt ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getAuthSchemesAttributeKey ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes$Endpoint$Functions : software/amazon/smithy/kotlin/codegen/core/RuntimeTypePackage {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes$Endpoint$Functions;
+	public final fun getArn ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getParseArn ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getPartition ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getPartitionConfig ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun getPartitionFn ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public final fun isVirtualHostableS3Bucket ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes$Http : software/amazon/smithy/kotlin/codegen/core/RuntimeTypePackage {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes$Http;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes$Http$Interceptors : software/amazon/smithy/kotlin/codegen/core/RuntimeTypePackage {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes$Http$Interceptors;
+	public final fun getAddUserAgentMetadataInterceptor ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes$Http$Middleware {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes$Http$Middleware;
+	public final fun getAwsRetryHeaderMiddleware ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsRuntimeTypes$Http$Retries {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/AwsRuntimeTypes$Http$Retries;
+	public final fun getAwsDefaultRetryPolicy ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsServiceConfigIntegration : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public static final field Companion Laws/sdk/kotlin/codegen/AwsServiceConfigIntegration$Companion;
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/AwsServiceConfigIntegration$Companion {
+	public final fun getAwsRetryPolicy ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+	public final fun getCredentialsProviderProp ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+	public final fun getEndpointUrlProp ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+	public final fun getRegionProp ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+	public final fun getUseDualStackProp ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+	public final fun getUseFipsProp ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+}
+
+public final class aws/sdk/kotlin/codegen/AwsServiceUtilsKt {
+	public static final fun getArnNamespace (Lsoftware/amazon/smithy/model/shapes/ServiceShape;)Ljava/lang/String;
+	public static final fun getEndpointPrefix (Lsoftware/amazon/smithy/model/shapes/ServiceShape;)Ljava/lang/String;
+	public static final fun getSdkId (Lsoftware/amazon/smithy/model/shapes/ServiceShape;)Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/codegen/GradleGenerator : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/PresignableOperation {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Z)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Z)Laws/sdk/kotlin/codegen/PresignableOperation;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/codegen/PresignableOperation;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Laws/sdk/kotlin/codegen/PresignableOperation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getOperationId ()Ljava/lang/String;
+	public final fun getServiceId ()Ljava/lang/String;
+	public final fun getSignBody ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/codegen/PresignerGenerator : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/PresignerGenerator$PresignConfigFnSection : software/amazon/smithy/kotlin/codegen/integration/SectionId {
+	public static final field INSTANCE Laws/sdk/kotlin/codegen/PresignerGenerator$PresignConfigFnSection;
+	public final fun getCodegenContext ()Lsoftware/amazon/smithy/kotlin/codegen/integration/SectionKey;
+	public final fun getDefaultTimestampFormat ()Lsoftware/amazon/smithy/kotlin/codegen/integration/SectionKey;
+	public final fun getHttpBindingResolver ()Lsoftware/amazon/smithy/kotlin/codegen/integration/SectionKey;
+	public final fun getOperationId ()Lsoftware/amazon/smithy/kotlin/codegen/integration/SectionKey;
+}
+
+public abstract interface class aws/sdk/kotlin/codegen/PresignerGenerator$PresignConfigFnVisitor {
+	public abstract fun renderHttpMethod (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	public abstract fun renderQueryParameters (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+}
+
+public final class aws/sdk/kotlin/codegen/SdkProtocolGeneratorSupplier : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/BackfillOptionalAuth : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/BoxServices : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/PresignableModelIntegration : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/RemoveEventStreamOperations : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/apigateway/ApiGatewayAddAcceptHeader : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/flexiblechecksums/FlexibleChecksumsRequest : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/flexiblechecksums/FlexibleChecksumsResponse : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/glacier/GlacierAccountIdDefault : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/glacier/GlacierAddVersionHeader : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/glacier/GlacierBodyChecksum : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/machinelearning/MachineLearningEndpointCustomization : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/polly/PollyPresigner : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/route53/TrimResourcePrefix : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/ClientConfigIntegration : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public static final field Companion Laws/sdk/kotlin/codegen/customization/s3/ClientConfigIntegration$Companion;
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/ClientConfigIntegration$Companion {
+	public final fun getDisableMrapProp ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+	public final fun getEnableAccelerateProp ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+	public final fun getForcePathStyleProp ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+	public final fun getUseArnRegionProp ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/ContinueIntegration : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/GetBucketLocationDeserializerIntegration : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public static final field Companion Laws/sdk/kotlin/codegen/customization/s3/GetBucketLocationDeserializerIntegration$Companion;
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/GetBucketLocationDeserializerIntegration$Companion {
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/HttpPathFilter : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/S3ErrorMetadataIntegration : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/S3Generator : aws/sdk/kotlin/codegen/protocols/RestXml {
+	public fun <init> ()V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/S3GeneratorSupplier : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/S3ModelUtilsKt {
+	public static final fun isS3 (Lsoftware/amazon/smithy/model/shapes/ServiceShape;)Z
+	public static final fun isS3Control (Lsoftware/amazon/smithy/model/shapes/ServiceShape;)Z
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3/S3SigningConfig : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3control/ClientConfigIntegration : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public static final field Companion Laws/sdk/kotlin/codegen/customization/s3control/ClientConfigIntegration$Companion;
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3control/ClientConfigIntegration$Companion {
+	public final fun getUseArnRegionProp ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/util/ConfigProperty;
+}
+
+public final class aws/sdk/kotlin/codegen/customization/s3control/HostPrefixFilter : software/amazon/smithy/kotlin/codegen/integration/KotlinIntegration {
+	public fun <init> ()V
+	public fun additionalServiceConfigProps (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;)Ljava/util/List;
+	public fun customizeMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;)Ljava/util/List;
+	public fun decorateSymbolProvider (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;)Lsoftware/amazon/smithy/codegen/core/SymbolProvider;
+	public fun enabledForService (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Z
+	public fun getOrder ()B
+	public fun getProtocolGenerators ()Ljava/util/List;
+	public fun getSectionWriters ()Ljava/util/List;
+	public fun onShapeWriterUse (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/codegen/core/SymbolProvider;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/shapes/Shape;)V
+	public fun preprocessModel (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/model/Model;
+	public fun writeAdditionalFiles (Lsoftware/amazon/smithy/kotlin/codegen/core/CodegenContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinDelegator;)V
+}
+
+public final class aws/sdk/kotlin/codegen/model/traits/Presignable : software/amazon/smithy/model/traits/AnnotationTrait {
+	public static final field Companion Laws/sdk/kotlin/codegen/model/traits/Presignable$Companion;
+	public fun <init> ()V
+	public fun <init> (Lsoftware/amazon/smithy/model/node/ObjectNode;)V
+}
+
+public final class aws/sdk/kotlin/codegen/model/traits/Presignable$Companion {
+	public final fun getID ()Lsoftware/amazon/smithy/model/shapes/ShapeId;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/AwsJson1_0 : aws/sdk/kotlin/codegen/protocols/json/JsonHttpBindingProtocolGenerator {
+	public fun <init> ()V
+	public fun getProtocol ()Lsoftware/amazon/smithy/model/shapes/ShapeId;
+	public fun getProtocolHttpBindingResolver (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/model/shapes/ServiceShape;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/HttpBindingResolver;
+	public fun getSupportsJsonNameTrait ()Z
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/AwsJson1_1 : aws/sdk/kotlin/codegen/protocols/json/JsonHttpBindingProtocolGenerator {
+	public fun <init> ()V
+	public fun getProtocol ()Lsoftware/amazon/smithy/model/shapes/ShapeId;
+	public fun getProtocolHttpBindingResolver (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/model/shapes/ServiceShape;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/HttpBindingResolver;
+	public fun getSupportsJsonNameTrait ()Z
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/AwsQuery : aws/sdk/kotlin/codegen/protocols/core/QueryHttpBindingProtocolGenerator {
+	public fun <init> ()V
+	public fun getProtocol ()Lsoftware/amazon/smithy/model/shapes/ShapeId;
+	public fun renderDeserializeErrorDetails (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	public fun structuredDataParser (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataParserGenerator;
+	public fun structuredDataSerializer (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataSerializerGenerator;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/Ec2Query : aws/sdk/kotlin/codegen/protocols/core/QueryHttpBindingProtocolGenerator {
+	public fun <init> ()V
+	public fun getProtocol ()Lsoftware/amazon/smithy/model/shapes/ShapeId;
+	public fun renderDeserializeErrorDetails (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	public fun structuredDataParser (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataParserGenerator;
+	public fun structuredDataSerializer (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataSerializerGenerator;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/RestJson1 : aws/sdk/kotlin/codegen/protocols/json/JsonHttpBindingProtocolGenerator {
+	public fun <init> ()V
+	public fun getProtocol ()Lsoftware/amazon/smithy/model/shapes/ShapeId;
+	public fun getProtocolHttpBindingResolver (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/model/shapes/ServiceShape;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/HttpBindingResolver;
+}
+
+public class aws/sdk/kotlin/codegen/protocols/RestXml : aws/sdk/kotlin/codegen/protocols/core/AwsHttpBindingProtocolGenerator {
+	public fun <init> ()V
+	public fun getDefaultTimestampFormat ()Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;
+	public fun getProtocol ()Lsoftware/amazon/smithy/model/shapes/ShapeId;
+	public fun getProtocolHttpBindingResolver (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/model/shapes/ServiceShape;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/HttpBindingResolver;
+	public fun renderDeserializeErrorDetails (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	public fun structuredDataParser (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataParserGenerator;
+	public fun structuredDataSerializer (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataSerializerGenerator;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/RestXmlParserGenerator : software/amazon/smithy/kotlin/codegen/rendering/serde/XmlParserGenerator {
+	public fun <init> (Laws/sdk/kotlin/codegen/protocols/RestXml;Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;)V
+	public fun descriptorGenerator (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/Shape;Ljava/util/List;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/XmlSerdeDescriptorGenerator;
+	public fun payloadDeserializer (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/Shape;Ljava/util/Collection;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/RestXmlSerializerGenerator : software/amazon/smithy/kotlin/codegen/rendering/serde/XmlSerializerGenerator {
+	public fun <init> (Laws/sdk/kotlin/codegen/protocols/RestXml;Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;)V
+	public fun descriptorGenerator (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/Shape;Ljava/util/List;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/XmlSerdeDescriptorGenerator;
+	public fun payloadSerializer (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/Shape;Ljava/util/Collection;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public abstract class aws/sdk/kotlin/codegen/protocols/core/AbstractQueryFormUrlSerializerGenerator : software/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataSerializerGenerator {
+	public fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator;Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;)V
+	public abstract fun descriptorGenerator (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/Shape;Ljava/util/List;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/FormUrlSerdeDescriptorGenerator;
+	public fun operationSerializer (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Ljava/util/List;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public fun payloadSerializer (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/Shape;Ljava/util/Collection;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public abstract class aws/sdk/kotlin/codegen/protocols/core/AwsHttpBindingProtocolGenerator : software/amazon/smithy/kotlin/codegen/rendering/protocol/HttpBindingProtocolGenerator {
+	public fun <init> ()V
+	public fun eventStreamRequestHandler (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public fun eventStreamResponseHandler (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public fun generateEndpointProvider (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/rulesengine/language/EndpointRuleSet;)V
+	public fun generateEndpointProviderMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)V
+	public fun generateEndpointProviderTests (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;Lsoftware/amazon/smithy/rulesengine/language/EndpointRuleSet;)V
+	public fun generateProtocolUnitTests (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)V
+	protected fun getDefaultHttpMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Ljava/util/List;
+	protected fun getErrorCode (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/ShapeId;)Ljava/lang/String;
+	public fun getExceptionBaseClassSymbol ()Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public fun getHttpProtocolClientGenerator (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolClientGenerator;
+	public fun operationErrorHandler (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public abstract fun renderDeserializeErrorDetails (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	protected fun renderThrowOperationError (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+}
+
+public class aws/sdk/kotlin/codegen/protocols/core/AwsHttpProtocolClientGenerator : software/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolClientGenerator {
+	public fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Ljava/util/List;Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/HttpBindingResolver;)V
+	public fun render (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	protected fun renderAdditionalMethods (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	protected fun renderInit (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	protected fun renderOperationSetup (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/knowledge/OperationIndex;Lsoftware/amazon/smithy/model/shapes/OperationShape;)V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/core/QueryBindingResolver : aws/sdk/kotlin/codegen/protocols/core/StaticHttpBindingResolver {
+	public static final field Companion Laws/sdk/kotlin/codegen/protocols/core/QueryBindingResolver$Companion;
+	public fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)V
+	public fun <init> (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/model/shapes/ServiceShape;)V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/core/QueryBindingResolver$Companion {
+	public final fun getQueryHttpTrait ()Lsoftware/amazon/smithy/model/traits/HttpTrait;
+}
+
+public abstract class aws/sdk/kotlin/codegen/protocols/core/QueryHttpBindingProtocolGenerator : aws/sdk/kotlin/codegen/protocols/core/AwsHttpBindingProtocolGenerator {
+	public fun <init> ()V
+	protected fun getDefaultHttpMiddleware (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Ljava/util/List;
+	public fun getDefaultTimestampFormat ()Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;
+	public fun getProtocolHttpBindingResolver (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/model/shapes/ServiceShape;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/HttpBindingResolver;
+	protected fun renderSerializeHttpBody (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+}
+
+public class aws/sdk/kotlin/codegen/protocols/core/StaticHttpBindingResolver : software/amazon/smithy/kotlin/codegen/rendering/protocol/HttpBindingResolver {
+	public fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/traits/HttpTrait;Ljava/lang/String;Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;)V
+	public fun <init> (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/model/shapes/ServiceShape;Lsoftware/amazon/smithy/model/traits/HttpTrait;Ljava/lang/String;Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;)V
+	public fun bindingOperations ()Ljava/util/List;
+	public fun determineRequestContentType (Lsoftware/amazon/smithy/model/shapes/OperationShape;)Ljava/lang/String;
+	public fun determineTimestampFormat (Lsoftware/amazon/smithy/model/shapes/ToShapeId;Lsoftware/amazon/smithy/model/knowledge/HttpBinding$Location;Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;)Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;
+	protected final fun getDefaultContentType ()Ljava/lang/String;
+	protected final fun getDefaultTimestampFormat ()Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;
+	protected final fun getHttpTrait ()Lsoftware/amazon/smithy/model/traits/HttpTrait;
+	protected final fun getModel ()Lsoftware/amazon/smithy/model/Model;
+	protected final fun getService ()Lsoftware/amazon/smithy/model/shapes/ServiceShape;
+	protected final fun getTopDownIndex ()Lsoftware/amazon/smithy/model/knowledge/TopDownIndex;
+	public fun httpTrait (Lsoftware/amazon/smithy/model/shapes/OperationShape;)Lsoftware/amazon/smithy/model/traits/HttpTrait;
+	public fun requestBindings (Lsoftware/amazon/smithy/model/shapes/OperationShape;)Ljava/util/List;
+	public fun responseBindings (Lsoftware/amazon/smithy/model/shapes/Shape;)Ljava/util/List;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/endpoints/DefaultEndpointProviderExtKt {
+	public static final fun getAwsEndpointFunctions ()Ljava/util/Map;
+	public static final fun getAwsEndpointPropertyRenderers ()Ljava/util/Map;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/endpoints/EndpointBuiltinsKt {
+	public static final fun bindAwsBuiltinsSymbol (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public static final fun renderBindAwsBuiltins (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Ljava/util/List;)V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/endpoints/EndpointProviderGeneratorExtKt {
+	public static final fun getAsSigningProviderExtSymbol (Lsoftware/amazon/smithy/kotlin/codegen/rendering/endpoints/EndpointProviderGenerator$Companion;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+	public static final fun renderAsSigningProviderExt (Lsoftware/amazon/smithy/kotlin/codegen/rendering/endpoints/EndpointProviderGenerator$Companion;Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/endpoints/PartitionsGenerator {
+	public static final field Companion Laws/sdk/kotlin/codegen/protocols/endpoints/PartitionsGenerator$Companion;
+	public fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;Lsoftware/amazon/smithy/model/node/ObjectNode;)V
+	public final fun render ()V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/endpoints/PartitionsGenerator$Companion {
+	public final fun getSymbol (Lsoftware/amazon/smithy/kotlin/codegen/KotlinSettings;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/eventstream/EventStreamParserGenerator {
+	public fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataParserGenerator;)V
+	public final fun responseHandler (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/eventstream/EventStreamSerializerGenerator {
+	public fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataSerializerGenerator;Ljava/lang/String;)V
+	public final fun requestHandler (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;)Lsoftware/amazon/smithy/codegen/core/Symbol;
+}
+
+public abstract class aws/sdk/kotlin/codegen/protocols/formurl/QuerySerdeFormUrlDescriptorGenerator : software/amazon/smithy/kotlin/codegen/rendering/serde/FormUrlSerdeDescriptorGenerator {
+	public fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/core/RenderingContext;Ljava/util/List;)V
+	public synthetic fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/core/RenderingContext;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	protected fun getObjectDescriptorTraits ()Ljava/util/List;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/json/AwsJsonHttpBindingResolver : aws/sdk/kotlin/codegen/protocols/core/StaticHttpBindingResolver {
+	public static final field Companion Laws/sdk/kotlin/codegen/protocols/json/AwsJsonHttpBindingResolver$Companion;
+	public fun <init> (Lsoftware/amazon/smithy/model/Model;Lsoftware/amazon/smithy/model/shapes/ServiceShape;Ljava/lang/String;)V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/json/AwsJsonHttpBindingResolver$Companion {
+	public final fun getAwsJsonHttpTrait ()Lsoftware/amazon/smithy/model/traits/HttpTrait;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/json/AwsJsonProtocolMiddleware : software/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolMiddleware {
+	public fun <init> (Lsoftware/amazon/smithy/model/shapes/ShapeId;Ljava/lang/String;)V
+	public fun getName ()Ljava/lang/String;
+	public fun getOrder ()B
+	public fun isEnabledFor (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;)Z
+	public fun render (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	public fun renderProperties (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+}
+
+public abstract class aws/sdk/kotlin/codegen/protocols/json/JsonHttpBindingProtocolGenerator : aws/sdk/kotlin/codegen/protocols/core/AwsHttpBindingProtocolGenerator {
+	public fun <init> ()V
+	public fun getDefaultTimestampFormat ()Lsoftware/amazon/smithy/model/traits/TimestampFormatTrait$Format;
+	public fun getSupportsJsonNameTrait ()Z
+	public fun renderDeserializeErrorDetails (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	public fun structuredDataParser (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataParserGenerator;
+	public fun structuredDataSerializer (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)Lsoftware/amazon/smithy/kotlin/codegen/rendering/serde/StructuredDataSerializerGenerator;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/middleware/MutateHeadersMiddleware : software/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolMiddleware {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAddMissingHeaders ()Ljava/util/Map;
+	public final fun getExtraHeaders ()Ljava/util/Map;
+	public fun getName ()Ljava/lang/String;
+	public fun getOrder ()B
+	public final fun getOverrideHeaders ()Ljava/util/Map;
+	public fun isEnabledFor (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;)Z
+	public fun render (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	public fun renderProperties (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/middleware/RecursionDetectionMiddleware : software/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolMiddleware {
+	public fun <init> ()V
+	public fun getName ()Ljava/lang/String;
+	public fun getOrder ()B
+	public fun isEnabledFor (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;)Z
+	public fun render (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	public fun renderProperties (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/middleware/ResolveAwsEndpointMiddleware : software/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolMiddleware {
+	public fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;)V
+	public fun getName ()Ljava/lang/String;
+	public fun getOrder ()B
+	public fun isEnabledFor (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;)Z
+	public fun render (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	public fun renderProperties (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/middleware/UserAgentMiddleware : software/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolMiddleware {
+	public fun <init> ()V
+	public fun getName ()Ljava/lang/String;
+	public fun getOrder ()B
+	public fun isEnabledFor (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;)Z
+	public fun render (Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/ProtocolGenerator$GenerationContext;Lsoftware/amazon/smithy/model/shapes/OperationShape;Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+	public fun renderProperties (Lsoftware/amazon/smithy/kotlin/codegen/core/KotlinWriter;)V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/protocoltest/AwsHttpProtocolUnitTestErrorGenerator : software/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolUnitTestErrorGenerator {
+	public fun <init> (Laws/sdk/kotlin/codegen/protocols/protocoltest/AwsHttpProtocolUnitTestErrorGenerator$Builder;)V
+	public fun renderConfigureServiceClient (Lsoftware/amazon/smithy/protocoltests/traits/HttpResponseTestCase;)V
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/protocoltest/AwsHttpProtocolUnitTestErrorGenerator$Builder : software/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolUnitTestErrorGenerator$Builder {
+	public fun <init> ()V
+	public fun build ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolUnitTestGenerator;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/protocoltest/AwsHttpProtocolUnitTestRequestGenerator : software/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolUnitTestRequestGenerator {
+	public fun <init> (Laws/sdk/kotlin/codegen/protocols/protocoltest/AwsHttpProtocolUnitTestRequestGenerator$Builder;)V
+	public fun renderConfigureServiceClient (Lsoftware/amazon/smithy/protocoltests/traits/HttpRequestTestCase;)V
+}
+
+public class aws/sdk/kotlin/codegen/protocols/protocoltest/AwsHttpProtocolUnitTestRequestGenerator$Builder : software/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolUnitTestRequestGenerator$Builder {
+	public fun <init> ()V
+	public fun build ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolUnitTestGenerator;
+}
+
+public class aws/sdk/kotlin/codegen/protocols/protocoltest/AwsHttpProtocolUnitTestResponseGenerator : software/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolUnitTestResponseGenerator {
+	public fun <init> (Laws/sdk/kotlin/codegen/protocols/protocoltest/AwsHttpProtocolUnitTestResponseGenerator$Builder;)V
+	public fun renderConfigureServiceClient (Lsoftware/amazon/smithy/protocoltests/traits/HttpResponseTestCase;)V
+}
+
+public class aws/sdk/kotlin/codegen/protocols/protocoltest/AwsHttpProtocolUnitTestResponseGenerator$Builder : software/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolUnitTestResponseGenerator$Builder {
+	public fun <init> ()V
+	public fun build ()Lsoftware/amazon/smithy/kotlin/codegen/rendering/protocol/HttpProtocolUnitTestGenerator;
+}
+
+public final class aws/sdk/kotlin/codegen/protocols/xml/RestXmlSerdeDescriptorGenerator : software/amazon/smithy/kotlin/codegen/rendering/serde/XmlSerdeDescriptorGenerator {
+	public fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/core/RenderingContext;Ljava/util/List;)V
+	public synthetic fun <init> (Lsoftware/amazon/smithy/kotlin/codegen/core/RenderingContext;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class aws/sdk/kotlin/codegen/transforms/IncludeOperations : software/amazon/smithy/build/transforms/ConfigurableProjectionTransformer {
+	public fun <init> ()V
+	public fun getConfigType ()Ljava/lang/Class;
+	public fun getName ()Ljava/lang/String;
+	public synthetic fun transformWithConfig (Lsoftware/amazon/smithy/build/TransformContext;Ljava/lang/Object;)Lsoftware/amazon/smithy/model/Model;
+}
+
+public final class aws/sdk/kotlin/codegen/transforms/IncludeOperations$Config {
+	public fun <init> ()V
+	public final fun getOperations ()Ljava/util/Set;
+	public final fun setOperations (Ljava/util/Set;)V
+}
+
