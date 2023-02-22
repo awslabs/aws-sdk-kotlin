@@ -1,28 +1,4 @@
-public final class aws/sdk/kotlin/runtime/auth/credentials/CachedCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
-	public synthetic fun <init> (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;JJLaws/smithy/kotlin/runtime/time/Clock;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;JJLaws/smithy/kotlin/runtime/time/Clock;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun close ()V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/CachedCredentialsProviderKt {
-	public static final field DEFAULT_CREDENTIALS_REFRESH_SECONDS I
-}
-
 public final class aws/sdk/kotlin/runtime/auth/credentials/CredentialsNotLoadedException : aws/sdk/kotlin/runtime/ClientException {
-	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-}
-
-public class aws/sdk/kotlin/runtime/auth/credentials/CredentialsProviderChain : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
-	public fun <init> ([Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
-	public fun close ()V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	protected final fun getProviders ()[Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/CredentialsProviderException : aws/sdk/kotlin/runtime/ClientException {
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
