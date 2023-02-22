@@ -43,6 +43,16 @@ allprojects {
         )
         pluginsMapConfiguration.set(pluginConfigMap)
     }
+
+    // FIXME: This is a workaround to disable API validation of bootstrapped service clients under `services`
+    // until ignoring subprojects is supported in the binary-compatibility-validator plugin
+    // https://github.com/Kotlin/binary-compatibility-validator/issues/3
+    tasks.withType<kotlinx.validation.KotlinApiCompareTask>().configureEach {
+        if (project.parent?.name == "services") {
+            this.enabled = false
+            this.actions = listOf()
+        }
+    }
 }
 
 subprojects {
