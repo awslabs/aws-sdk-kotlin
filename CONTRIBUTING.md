@@ -189,7 +189,7 @@ This check enforces the changelog requirements [described above](#Changelog).
 
 #### Binary Compatibility Validation
 This repository uses [Kotlin's binary compatibility validator plugin](https://github.com/Kotlin/binary-compatibility-validator)
-to help protect backwards compatibility across releases.
+to help preserve backwards compatibility across releases.
 
 The plugin will automatically run during a build with no extra steps needed from the developer.
 If a backwards incompatible change is introduced, the build will fail.
