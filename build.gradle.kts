@@ -10,7 +10,6 @@ plugins {
     kotlin("jvm") version "1.8.10" apply false
     id("org.jetbrains.dokka")
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.12.1"
 }
 
 allprojects {
@@ -42,16 +41,6 @@ allprojects {
             """
         )
         pluginsMapConfiguration.set(pluginConfigMap)
-    }
-
-    // FIXME: This is a workaround to disable API validation of bootstrapped service clients under `services`
-    // until ignoring subprojects is supported in the binary-compatibility-validator plugin
-    // https://github.com/Kotlin/binary-compatibility-validator/issues/3
-    tasks.withType<kotlinx.validation.KotlinApiCompareTask>().configureEach {
-        if (project.parent?.name == "services") {
-            this.enabled = false
-            this.actions = listOf()
-        }
     }
 }
 
@@ -207,17 +196,4 @@ tasks.register("showRepos") {
         println("All repos:")
         println(repositories.map { it.name })
     }
-}
-
-apiValidation {
-    nonPublicMarkers.add("aws.sdk.kotlin.runtime.InternalSdkApi")
-
-    ignoredProjects += setOf(
-        "testing",
-        "protocol-tests",
-        "smithy-aws-kotlin-codegen",
-        "dokka-aws",
-        "e2e-test-util",
-        "event-stream",
-    )
 }

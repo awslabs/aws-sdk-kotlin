@@ -8,6 +8,7 @@ description = "AWS client runtime support for generated service clients"
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka")
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.12.1"
     jacoco
 }
 
@@ -105,4 +106,12 @@ task<org.jetbrains.kotlin.gradle.testing.internal.KotlinTestReport>("rootAllTest
             rootAllTest.maybeOverrideReporting(this)
         }
     }
+}
+
+apiValidation {
+    nonPublicMarkers.add("aws.sdk.kotlin.runtime.InternalSdkApi")
+
+    ignoredProjects += setOf(
+        "testing"
+    )
 }
