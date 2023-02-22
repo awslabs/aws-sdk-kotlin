@@ -1,0 +1,56 @@
+public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata {
+	public static final field Companion Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion;
+	public fun <init> (Laws/sdk/kotlin/runtime/http/SdkMetadata;Laws/sdk/kotlin/runtime/http/ApiMetadata;Laws/sdk/kotlin/runtime/http/OsMetadata;Laws/sdk/kotlin/runtime/http/LanguageMetadata;Laws/sdk/kotlin/runtime/http/ExecutionEnvMetadata;Laws/sdk/kotlin/runtime/http/FrameworkMetadata;Ljava/lang/String;Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;)V
+	public synthetic fun <init> (Laws/sdk/kotlin/runtime/http/SdkMetadata;Laws/sdk/kotlin/runtime/http/ApiMetadata;Laws/sdk/kotlin/runtime/http/OsMetadata;Laws/sdk/kotlin/runtime/http/LanguageMetadata;Laws/sdk/kotlin/runtime/http/ExecutionEnvMetadata;Laws/sdk/kotlin/runtime/http/FrameworkMetadata;Ljava/lang/String;Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Laws/sdk/kotlin/runtime/http/SdkMetadata;
+	public final fun component2 ()Laws/sdk/kotlin/runtime/http/ApiMetadata;
+	public final fun component3 ()Laws/sdk/kotlin/runtime/http/OsMetadata;
+	public final fun component4 ()Laws/sdk/kotlin/runtime/http/LanguageMetadata;
+	public final fun component5 ()Laws/sdk/kotlin/runtime/http/ExecutionEnvMetadata;
+	public final fun component6 ()Laws/sdk/kotlin/runtime/http/FrameworkMetadata;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;
+	public final fun copy (Laws/sdk/kotlin/runtime/http/SdkMetadata;Laws/sdk/kotlin/runtime/http/ApiMetadata;Laws/sdk/kotlin/runtime/http/OsMetadata;Laws/sdk/kotlin/runtime/http/LanguageMetadata;Laws/sdk/kotlin/runtime/http/ExecutionEnvMetadata;Laws/sdk/kotlin/runtime/http/FrameworkMetadata;Ljava/lang/String;Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;)Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;Laws/sdk/kotlin/runtime/http/SdkMetadata;Laws/sdk/kotlin/runtime/http/ApiMetadata;Laws/sdk/kotlin/runtime/http/OsMetadata;Laws/sdk/kotlin/runtime/http/LanguageMetadata;Laws/sdk/kotlin/runtime/http/ExecutionEnvMetadata;Laws/sdk/kotlin/runtime/http/FrameworkMetadata;Ljava/lang/String;Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getApiMetadata ()Laws/sdk/kotlin/runtime/http/ApiMetadata;
+	public final fun getAppId ()Ljava/lang/String;
+	public final fun getCustomMetadata ()Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;
+	public final fun getExecEnvMetadata ()Laws/sdk/kotlin/runtime/http/ExecutionEnvMetadata;
+	public final fun getFrameworkMetadata ()Laws/sdk/kotlin/runtime/http/FrameworkMetadata;
+	public final fun getLanguageMetadata ()Laws/sdk/kotlin/runtime/http/LanguageMetadata;
+	public final fun getOsMetadata ()Laws/sdk/kotlin/runtime/http/OsMetadata;
+	public final fun getSdkMetadata ()Laws/sdk/kotlin/runtime/http/SdkMetadata;
+	public final fun getUserAgent ()Ljava/lang/String;
+	public final fun getXAmzUserAgent ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion {
+	public final fun fromEnvironment (Laws/sdk/kotlin/runtime/http/ApiMetadata;)Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;
+}
+
+public final class aws/sdk/kotlin/runtime/http/middleware/AwsRetryHeaderMiddleware : aws/smithy/kotlin/runtime/http/operation/MutateMiddleware {
+	public fun <init> ()V
+	public fun handle (Laws/smithy/kotlin/runtime/http/operation/OperationRequest;Laws/smithy/kotlin/runtime/io/Handler;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Ljava/lang/Object;Laws/smithy/kotlin/runtime/io/Handler;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun install (Laws/smithy/kotlin/runtime/http/operation/SdkHttpOperation;)V
+}
+
+public final class aws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/Map;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun add (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun plus (Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;)Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;
+}
+
+public final class aws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadataKt {
+	public static final fun getCustomUserAgentMetadata (Laws/smithy/kotlin/runtime/operation/ExecutionContext;)Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;
+}
+
+public final class aws/sdk/kotlin/runtime/http/retries/AwsDefaultRetryPolicy : aws/smithy/kotlin/runtime/retries/policy/StandardRetryPolicy {
+	public static final field INSTANCE Laws/sdk/kotlin/runtime/http/retries/AwsDefaultRetryPolicy;
+}
+
