@@ -49,7 +49,7 @@ class ImdsRegionProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsRegionProvider(client = lazyOf(client))
+        val provider = ImdsRegionProvider(client = lazyOf(client), platformProvider = TestPlatformProvider())
         assertEquals("us-east-2", provider.getRegion())
         connection.assertRequests()
 
