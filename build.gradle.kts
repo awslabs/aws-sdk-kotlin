@@ -205,6 +205,7 @@ apiValidation {
     ignoredProjects += setOf(
         "testing",
         "protocol-tests",
+        "smithy-aws-kotlin-codegen",
         "dokka-aws",
         "e2e-test-util",
         "event-stream",
