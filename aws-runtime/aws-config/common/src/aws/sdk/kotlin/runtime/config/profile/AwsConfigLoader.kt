@@ -42,13 +42,12 @@ public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile 
  *
  * @return A map of all profiles, which each are a map of key/value pairs.
  */
-internal suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): Map<String, Map<String, String>> {
+internal suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource) =
     // merged AWS configuration based on optional configuration and credential file contents
-    return mergeProfiles(
+    mergeProfiles(
         parse(FileType.CONFIGURATION, platform.readFileOrNull(source.configPath)?.decodeToString()),
         parse(FileType.CREDENTIAL, platform.readFileOrNull(source.credentialsPath)?.decodeToString()),
     )
-}
 
 // Merge contents of profile maps
 internal fun mergeProfiles(vararg maps: ProfileMap) = buildMap<String, Map<String, String>> {

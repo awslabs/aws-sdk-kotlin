@@ -66,10 +66,7 @@ private interface TestClient : SdkClient {
 
     class Builder internal constructor() : AbstractSdkClientBuilder<Config, Config.Builder, TestClient>() {
         override val config: Config.Builder = Config.Builder()
-
-        override fun newClient(config: Config): TestClient {
-            return DefaultTestClient(config)
-        }
+        override fun newClient(config: Config): TestClient = DefaultTestClient(config)
     }
 
     class Config private constructor(builder: Config.Builder) : SdkClientConfig, AwsSdkClientConfig {

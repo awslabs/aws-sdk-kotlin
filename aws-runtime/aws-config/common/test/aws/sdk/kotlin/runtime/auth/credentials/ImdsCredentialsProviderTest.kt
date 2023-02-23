@@ -578,14 +578,12 @@ class ImdsCredentialsProviderTest {
 
         // this engine just returns 500 errors
         val internalServerErrorEngine = object : HttpClientEngineBase("internalServerError") {
-            override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
-                return HttpCall(
-                    HttpRequest(HttpMethod.GET, Url(Scheme.HTTP, Host.parse("test"), Scheme.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
-                    HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
-                    testClock.now(),
-                    testClock.now(),
-                )
-            }
+            override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest) = HttpCall(
+                HttpRequest(HttpMethod.GET, Url(Scheme.HTTP, Host.parse("test"), Scheme.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
+                HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
+                testClock.now(),
+                testClock.now(),
+            )
         }
 
         val client = ImdsClient {

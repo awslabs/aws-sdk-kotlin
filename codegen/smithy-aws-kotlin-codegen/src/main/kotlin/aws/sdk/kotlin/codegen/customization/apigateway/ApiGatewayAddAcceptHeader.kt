@@ -28,7 +28,5 @@ class ApiGatewayAddAcceptHeader : KotlinIntegration {
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
         resolved: List<ProtocolMiddleware>,
-    ): List<ProtocolMiddleware> {
-        return resolved + addAcceptHeaderMiddleware
-    }
+    ): List<ProtocolMiddleware> = resolved + addAcceptHeaderMiddleware
 }

@@ -137,18 +137,16 @@ public class ImdsCredentialsProvider(
         }
     }
 
-    private suspend fun loadProfile(): String {
-        return try {
-            client.value.get(CREDENTIALS_BASE_PATH)
-        } catch (ex: EC2MetadataError) {
-            if (ex.statusCode == HttpStatusCode.NotFound.value) {
-                coroutineContext.info<ImdsCredentialsProvider> {
-                    "Received 404 from IMDS when loading profile information. Hint: This instance may not have an " +
-                        "IAM role associated."
-                }
+    private suspend fun loadProfile() = try {
+        client.value.get(CREDENTIALS_BASE_PATH)
+    } catch (ex: EC2MetadataError) {
+        if (ex.statusCode == HttpStatusCode.NotFound.value) {
+            coroutineContext.info<ImdsCredentialsProvider> {
+                "Received 404 from IMDS when loading profile information. Hint: This instance may not have an " +
+                    "IAM role associated."
             }
-            throw ex
         }
+        throw ex
     }
 
     private suspend fun useCachedCredentials(ex: Exception): Credentials? = when {
