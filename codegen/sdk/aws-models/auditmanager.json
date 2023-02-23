@@ -72,7 +72,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p> An Amazon Web Service such as Amazon S3 or CloudTrail.\n      </p>"
+                "smithy.api#documentation": "<p> An Amazon Web Service such as Amazon S3 or CloudTrail.\n      </p>\n         <p>For an example of how to find an Amazon Web Service name and how to define it in\n         your assessment scope, see the following:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/audit-manager/latest/APIReference/API_GetServicesInScope.html#API_GetServicesInScope_Example_2\">Finding an Amazon Web Service name to use in your assessment scope</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/audit-manager/latest/APIReference/API_GetServicesInScope.html#API_GetServicesInScope_Example_3\">Defining an Amazon Web Service name in your assessment scope</a>\n               </p>\n            </li>\n         </ul>"
             }
         },
         "com.amazonaws.auditmanager#AWSServiceName": {
@@ -1201,11 +1201,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#AssociateAssessmentReportEvidenceFolderResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.auditmanager#AuditManagerArn": {
             "type": "string",
@@ -1273,6 +1279,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#BatchAssociateAssessmentReportEvidenceResponse": {
@@ -1290,6 +1299,9 @@
                         "smithy.api#documentation": "<p> A list of errors that the <code>BatchAssociateAssessmentReportEvidence</code> API\n         returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#BatchCreateDelegationByAssessment": {
@@ -1373,6 +1385,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#BatchCreateDelegationByAssessmentResponse": {
@@ -1390,6 +1405,9 @@
                         "smithy.api#documentation": "<p> A list of errors that the <code>BatchCreateDelegationByAssessment</code> API returned.\n      </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#BatchDeleteDelegationByAssessment": {
@@ -1473,6 +1491,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#BatchDeleteDelegationByAssessmentResponse": {
@@ -1484,6 +1505,9 @@
                         "smithy.api#documentation": "<p> A list of errors that the <code>BatchDeleteDelegationByAssessment</code> API returned.\n      </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#BatchDisassociateAssessmentReportEvidence": {
@@ -1542,6 +1566,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#BatchDisassociateAssessmentReportEvidenceResponse": {
@@ -1559,6 +1586,9 @@
                         "smithy.api#documentation": "<p> A list of errors that the <code>BatchDisassociateAssessmentReportEvidence</code> API\n         returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#BatchImportEvidenceToAssessmentControl": {
@@ -1658,6 +1688,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#BatchImportEvidenceToAssessmentControlResponse": {
@@ -1669,6 +1702,9 @@
                         "smithy.api#documentation": "<p> A list of errors that the <code>BatchImportEvidenceToAssessmentControl</code> API\n         returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#BedrockAssessmentManagerLambda": {
@@ -2665,7 +2701,7 @@
                 "createdBy": {
                     "target": "com.amazonaws.auditmanager#IamArn",
                     "traits": {
-                        "smithy.api#documentation": "<p> The IAM user or role that performed the action. </p>"
+                        "smithy.api#documentation": "<p> The user or role that performed the action. </p>"
                     }
                 }
             },
@@ -2777,13 +2813,13 @@
                 "createdBy": {
                     "target": "com.amazonaws.auditmanager#CreatedBy",
                     "traits": {
-                        "smithy.api#documentation": "<p> The IAM user or role that created the control. </p>"
+                        "smithy.api#documentation": "<p> The user or role that created the control. </p>"
                     }
                 },
                 "lastUpdatedBy": {
                     "target": "com.amazonaws.auditmanager#LastUpdatedBy",
                     "traits": {
-                        "smithy.api#documentation": "<p> The IAM user or role that most recently updated the control. </p>"
+                        "smithy.api#documentation": "<p> The user or role that most recently updated the control. </p>"
                     }
                 },
                 "tags": {
@@ -3448,6 +3484,9 @@
                         "smithy.api#documentation": "<p> The tags that are associated with the framework. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#CreateAssessmentFrameworkResponse": {
@@ -3459,6 +3498,9 @@
                         "smithy.api#documentation": "<p> The name of the new framework that the <code>CreateAssessmentFramework</code> API\n         returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#CreateAssessmentReport": {
@@ -3522,6 +3564,9 @@
                         "smithy.api#documentation": "<p>A SQL statement that represents an evidence finder query.</p>\n         <p>Provide this parameter when you want to generate an assessment report from the results\n         of an evidence finder search query. When you use this parameter, Audit Manager\n         generates a one-time report using only the evidence from the query output. This report does\n         not include any assessment evidence that was manually <a href=\"https://docs.aws.amazon.com/audit-manager/latest/userguide/generate-assessment-report.html#generate-assessment-report-include-evidence\">added to a report using the console</a>, or <a href=\"https://docs.aws.amazon.com/audit-manager/latest/APIReference/API_BatchAssociateAssessmentReportEvidence.html\">associated with a report using the API</a>. </p>\n         <p>To use this parameter, the <a href=\"https://docs.aws.amazon.com/audit-manager/latest/APIReference/API_EvidenceFinderEnablement.html#auditmanager-Type-EvidenceFinderEnablement-enablementStatus\">enablementStatus</a> of evidence finder must be <code>ENABLED</code>. </p>\n         <p> For examples and help resolving <code>queryStatement</code> validation exceptions, see\n            <a href=\"https://docs.aws.amazon.com/audit-manager/latest/userguide/evidence-finder-issues.html#querystatement-exceptions\">Troubleshooting evidence finder issues</a> in the\n               <i>Audit Manager User Guide.</i>\n         </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#CreateAssessmentReportResponse": {
@@ -3533,6 +3578,9 @@
                         "smithy.api#documentation": "<p> The new assessment report that the <code>CreateAssessmentReport</code> API returned.\n      </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#CreateAssessmentRequest": {
@@ -3584,6 +3632,9 @@
                         "smithy.api#documentation": "<p> The tags that are associated with the assessment. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#CreateAssessmentResponse": {
@@ -3592,6 +3643,9 @@
                 "assessment": {
                     "target": "com.amazonaws.auditmanager#Assessment"
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#CreateControl": {
@@ -3733,6 +3787,9 @@
                         "smithy.api#documentation": "<p> The tags that are associated with the control. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#CreateControlResponse": {
@@ -3744,6 +3801,9 @@
                         "smithy.api#documentation": "<p> The new control that the <code>CreateControl</code> API returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#CreateDelegationRequest": {
@@ -3866,7 +3926,7 @@
                 "createdBy": {
                     "target": "com.amazonaws.auditmanager#CreatedBy",
                     "traits": {
-                        "smithy.api#documentation": "<p> The IAM user or role that created the delegation. </p>"
+                        "smithy.api#documentation": "<p> The user or role that created the delegation. </p>"
                     }
                 }
             },
@@ -4054,11 +4114,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#DeleteAssessmentFrameworkResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.auditmanager#DeleteAssessmentFrameworkShare": {
             "type": "operation",
@@ -4110,11 +4176,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#DeleteAssessmentFrameworkShareResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.auditmanager#DeleteAssessmentReport": {
             "type": "operation",
@@ -4166,11 +4238,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#DeleteAssessmentReportResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.auditmanager#DeleteAssessmentRequest": {
             "type": "structure",
@@ -4183,11 +4261,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#DeleteAssessmentResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.auditmanager#DeleteControl": {
             "type": "operation",
@@ -4231,11 +4315,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#DeleteControlResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.auditmanager#DeleteResources": {
             "type": "enum",
@@ -4287,7 +4377,10 @@
         },
         "com.amazonaws.auditmanager#DeregisterAccountRequest": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
         },
         "com.amazonaws.auditmanager#DeregisterAccountResponse": {
             "type": "structure",
@@ -4298,6 +4391,9 @@
                         "smithy.api#documentation": "<p> The registration status of the account. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#DeregisterOrganizationAdminAccount": {
@@ -4340,11 +4436,17 @@
                         "smithy.api#documentation": "<p> The identifier for the administrator account. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#DeregisterOrganizationAdminAccountResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.auditmanager#DeregistrationPolicy": {
             "type": "structure",
@@ -4409,11 +4511,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#DisassociateAssessmentReportEvidenceFolderResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.auditmanager#EmailAddress": {
             "type": "string",
@@ -4509,7 +4617,7 @@
                 "iamId": {
                     "target": "com.amazonaws.auditmanager#IamArn",
                     "traits": {
-                        "smithy.api#documentation": "<p> The unique identifier for the IAM user or role that's associated with\n         the evidence. </p>"
+                        "smithy.api#documentation": "<p> The unique identifier for the user or role that's associated with\n         the evidence. </p>"
                     }
                 },
                 "complianceCheck": {
@@ -4798,13 +4906,13 @@
                 "createdBy": {
                     "target": "com.amazonaws.auditmanager#CreatedBy",
                     "traits": {
-                        "smithy.api#documentation": "<p> The IAM user or role that created the framework. </p>"
+                        "smithy.api#documentation": "<p> The user or role that created the framework. </p>"
                     }
                 },
                 "lastUpdatedBy": {
                     "target": "com.amazonaws.auditmanager#LastUpdatedBy",
                     "traits": {
-                        "smithy.api#documentation": "<p> The IAM user or role that most recently updated the framework. </p>"
+                        "smithy.api#documentation": "<p> The user or role that most recently updated the framework. </p>"
                     }
                 },
                 "tags": {
@@ -4927,7 +5035,10 @@
         },
         "com.amazonaws.auditmanager#GetAccountStatusRequest": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
         },
         "com.amazonaws.auditmanager#GetAccountStatusResponse": {
             "type": "structure",
@@ -4938,6 +5049,9 @@
                         "smithy.api#documentation": "<p> The status of the Amazon Web Services account. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetAssessment": {
@@ -5013,6 +5127,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetAssessmentFrameworkResponse": {
@@ -5024,6 +5141,9 @@
                         "smithy.api#documentation": "<p> The framework that the <code>GetAssessmentFramework</code> API returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetAssessmentReportUrl": {
@@ -5076,6 +5196,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetAssessmentReportUrlResponse": {
@@ -5084,6 +5207,9 @@
                 "preSignedUrl": {
                     "target": "com.amazonaws.auditmanager#URL"
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetAssessmentRequest": {
@@ -5097,6 +5223,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetAssessmentResponse": {
@@ -5108,6 +5237,9 @@
                 "userRole": {
                     "target": "com.amazonaws.auditmanager#Role"
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetChangeLogs": {
@@ -5185,6 +5317,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetChangeLogsResponse": {
@@ -5202,6 +5337,9 @@
                         "smithy.api#documentation": "<p>The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetControl": {
@@ -5246,6 +5384,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetControlResponse": {
@@ -5257,6 +5398,9 @@
                         "smithy.api#documentation": "<p> The name of the control that the <code>GetControl</code> API returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetDelegations": {
@@ -5309,6 +5453,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetDelegationsResponse": {
@@ -5326,6 +5473,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetEvidence": {
@@ -5436,6 +5586,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetEvidenceByEvidenceFolderResponse": {
@@ -5453,6 +5606,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetEvidenceFolder": {
@@ -5513,6 +5669,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetEvidenceFolderResponse": {
@@ -5524,6 +5683,9 @@
                         "smithy.api#documentation": "<p> The folder that the evidence is stored in. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetEvidenceFoldersByAssessment": {
@@ -5639,6 +5801,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetEvidenceFoldersByAssessmentControlResponse": {
@@ -5656,6 +5821,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetEvidenceFoldersByAssessmentRequest": {
@@ -5683,6 +5851,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetEvidenceFoldersByAssessmentResponse": {
@@ -5700,6 +5871,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetEvidenceRequest": {
@@ -5737,6 +5911,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetEvidenceResponse": {
@@ -5748,6 +5925,9 @@
                         "smithy.api#documentation": "<p> The evidence that the <code>GetEvidence</code> API returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetInsights": {
@@ -5817,6 +5997,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetInsightsByAssessmentResponse": {
@@ -5828,11 +6011,17 @@
                         "smithy.api#documentation": "<p> The assessment analytics data that the <code>GetInsightsByAssessment</code> API\n         returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetInsightsRequest": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
         },
         "com.amazonaws.auditmanager#GetInsightsResponse": {
             "type": "structure",
@@ -5843,6 +6032,9 @@
                         "smithy.api#documentation": "<p>The analytics data that the <code>GetInsights</code> API returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetOrganizationAdminAccount": {
@@ -5878,7 +6070,10 @@
         },
         "com.amazonaws.auditmanager#GetOrganizationAdminAccountRequest": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
         },
         "com.amazonaws.auditmanager#GetOrganizationAdminAccountResponse": {
             "type": "structure",
@@ -5895,6 +6090,9 @@
                         "smithy.api#documentation": "<p> The identifier for the organization. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetServicesInScope": {
@@ -5927,7 +6125,10 @@
         },
         "com.amazonaws.auditmanager#GetServicesInScopeRequest": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
         },
         "com.amazonaws.auditmanager#GetServicesInScopeResponse": {
             "type": "structure",
@@ -5938,6 +6139,9 @@
                         "smithy.api#documentation": "<p> The metadata that's associated with the Amazon Web Service. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#GetSettings": {
@@ -5976,6 +6180,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#GetSettingsResponse": {
@@ -5987,6 +6194,9 @@
                         "smithy.api#documentation": "<p> The settings object that holds all supported Audit Manager settings. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#HyperlinkName": {
@@ -6241,6 +6451,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListAssessmentControlInsightsByControlDomainResponse": {
@@ -6258,6 +6471,9 @@
                         "smithy.api#documentation": "<p>The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListAssessmentFrameworkShareRequests": {
@@ -6318,6 +6534,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListAssessmentFrameworkShareRequestsResponse": {
@@ -6335,6 +6554,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListAssessmentFrameworks": {
@@ -6395,6 +6617,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListAssessmentFrameworksResponse": {
@@ -6412,6 +6637,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListAssessmentMetadata": {
@@ -6470,6 +6698,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListAssessmentReportsResponse": {
@@ -6487,6 +6718,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListAssessments": {
@@ -6546,6 +6780,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListAssessmentsResponse": {
@@ -6563,6 +6800,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListControlDomainInsights": {
@@ -6662,6 +6902,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListControlDomainInsightsByAssessmentResponse": {
@@ -6679,6 +6922,9 @@
                         "smithy.api#documentation": "<p>The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListControlDomainInsightsRequest": {
@@ -6698,6 +6944,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListControlDomainInsightsResponse": {
@@ -6715,6 +6964,9 @@
                         "smithy.api#documentation": "<p>The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListControlInsightsByControlDomain": {
@@ -6778,6 +7030,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListControlInsightsByControlDomainResponse": {
@@ -6795,6 +7050,9 @@
                         "smithy.api#documentation": "<p>The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListControls": {
@@ -6855,6 +7113,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListControlsResponse": {
@@ -6872,6 +7133,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListKeywordsForDataSource": {
@@ -6932,6 +7196,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListKeywordsForDataSourceResponse": {
@@ -6949,6 +7216,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListNotifications": {
@@ -7001,6 +7271,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListNotificationsResponse": {
@@ -7018,6 +7291,9 @@
                         "smithy.api#documentation": "<p> The pagination token that's used to fetch the next set of results. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ListTagsForResource": {
@@ -7059,6 +7335,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ListTagsForResourceResponse": {
@@ -7070,6 +7349,9 @@
                         "smithy.api#documentation": "<p> The list of tags that the <code>ListTagsForResource</code> API returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ManualEvidence": {
@@ -7283,6 +7565,9 @@
                         "smithy.api#documentation": "<p> The delegated administrator account for Audit Manager. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#RegisterAccountResponse": {
@@ -7294,6 +7579,9 @@
                         "smithy.api#documentation": "<p> The status of the account registration request. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#RegisterOrganizationAdminAccount": {
@@ -7337,6 +7625,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#RegisterOrganizationAdminAccountResponse": {
@@ -7354,6 +7645,9 @@
                         "smithy.api#documentation": "<p> The identifier for the organization. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#Resource": {
@@ -7943,6 +8237,9 @@
                         "smithy.api#documentation": "<p> An optional comment from the sender about the share request. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#StartAssessmentFrameworkShareResponse": {
@@ -7954,6 +8251,9 @@
                         "smithy.api#documentation": "<p> The share request that's created by the <code>StartAssessmentFrameworkShare</code> API.\n      </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#String": {
@@ -8049,11 +8349,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#TagResourceResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.auditmanager#TagValue": {
             "type": "string",
@@ -8201,11 +8507,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#UntagResourceResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.auditmanager#UpdateAssessment": {
             "type": "operation",
@@ -8308,6 +8620,9 @@
                         "smithy.api#documentation": "<p> The comment body text for the control. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentControlResponse": {
@@ -8319,6 +8634,9 @@
                         "smithy.api#documentation": "<p> The name of the updated control set that the <code>UpdateAssessmentControl</code> API\n         returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentControlSetStatus": {
@@ -8385,6 +8703,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentControlSetStatusResponse": {
@@ -8396,6 +8717,9 @@
                         "smithy.api#documentation": "<p> The name of the updated control set that the\n            <code>UpdateAssessmentControlSetStatus</code> API returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentFramework": {
@@ -8505,6 +8829,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentFrameworkResponse": {
@@ -8516,6 +8843,9 @@
                         "smithy.api#documentation": "<p> The name of the framework. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentFrameworkShare": {
@@ -8535,6 +8865,9 @@
                 },
                 {
                     "target": "com.amazonaws.auditmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.auditmanager#ServiceQuotaExceededException"
                 },
                 {
                     "target": "com.amazonaws.auditmanager#ValidationException"
@@ -8574,6 +8907,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentFrameworkShareResponse": {
@@ -8585,6 +8921,9 @@
                         "smithy.api#documentation": "<p> The updated share request that's returned by the\n            <code>UpdateAssessmentFrameworkShare</code> operation. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentRequest": {
@@ -8629,6 +8968,9 @@
                         "smithy.api#documentation": "<p> The list of roles for the assessment. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentResponse": {
@@ -8640,6 +8982,9 @@
                         "smithy.api#documentation": "<p> The response object for the <code>UpdateAssessment</code> API. This is the name of the\n         updated assessment.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentStatus": {
@@ -8694,6 +9039,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateAssessmentStatusResponse": {
@@ -8705,6 +9053,9 @@
                         "smithy.api#documentation": "<p> The name of the updated assessment that the <code>UpdateAssessmentStatus</code> API\n         returned. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateControl": {
@@ -8787,6 +9138,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateControlResponse": {
@@ -8798,6 +9152,9 @@
                         "smithy.api#documentation": "<p> The name of the updated control set that the <code>UpdateControl</code> API returned.\n      </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateSettings": {
@@ -8820,7 +9177,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p> Updates Audit Manager settings for the current user account. </p>",
+                "smithy.api#documentation": "<p> Updates Audit Manager settings for the current account. </p>",
                 "smithy.api#http": {
                     "method": "PUT",
                     "uri": "/settings",
@@ -8867,6 +9224,9 @@
                         "smithy.api#documentation": "<p>The deregistration policy for your Audit Manager data. You can\n         use this attribute to determine how your data is handled when you deregister Audit Manager.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#UpdateSettingsResponse": {
@@ -8878,6 +9238,9 @@
                         "smithy.api#documentation": "<p> The current list of settings. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#UrlLink": {
@@ -8941,6 +9304,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.auditmanager#ValidateAssessmentReportIntegrityResponse": {
@@ -8976,6 +9342,9 @@
                         "smithy.api#documentation": "<p> Represents any errors that occurred when validating the assessment report. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.auditmanager#ValidationErrors": {
