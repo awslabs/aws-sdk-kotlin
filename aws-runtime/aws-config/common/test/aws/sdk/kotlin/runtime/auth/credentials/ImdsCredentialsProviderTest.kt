@@ -40,14 +40,17 @@ import kotlin.test.assertIs
 import kotlin.test.assertNotEquals
 import kotlin.time.Duration.Companion.minutes
 
+private val ec2MetadataDisabledPlatform = TestPlatformProvider(
+    env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true"),
+)
+private val ec2MetadataEnabledPlatform = TestPlatformProvider()
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class ImdsCredentialsProviderTest {
 
     @Test
     fun testImdsDisabled() = runTest {
-        val platform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true"),
-        )
+        val platform = ec2MetadataDisabledPlatform
         val provider = ImdsCredentialsProvider(platformProvider = platform)
         assertFailsWith<CredentialsNotLoadedException> {
             provider.getCredentials()
@@ -91,7 +94,11 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsCredentialsProvider(client = lazyOf(client), clock = testClock)
+        val provider = ImdsCredentialsProvider(
+            client = lazyOf(client),
+            clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
+        )
 
         val actual = provider.getCredentials()
         val expected = Credentials(
@@ -138,7 +145,12 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsCredentialsProvider(profileOverride = "imds-test-role", client = lazyOf(client), clock = testClock)
+        val provider = ImdsCredentialsProvider(
+            profileOverride = "imds-test-role",
+            client = lazyOf(client),
+            clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
+        )
 
         val actual = provider.getCredentials()
         val expected = Credentials(
@@ -167,7 +179,11 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsCredentialsProvider(client = lazyOf(client), clock = testClock)
+        val provider = ImdsCredentialsProvider(
+            client = lazyOf(client),
+            clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
+        )
 
         val ex = assertFailsWith<CredentialsProviderException> {
             provider.getCredentials()
@@ -213,7 +229,11 @@ class ImdsCredentialsProviderTest {
             clock = testClock
         }
 
-        val provider = ImdsCredentialsProvider(client = lazyOf(client), clock = testClock)
+        val provider = ImdsCredentialsProvider(
+            client = lazyOf(client),
+            clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
+        )
 
         assertFailsWith<CredentialsProviderException> {
             provider.getCredentials()
@@ -258,6 +278,7 @@ class ImdsCredentialsProviderTest {
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
         )
 
         val actual = provider.getCredentials()
@@ -312,6 +333,7 @@ class ImdsCredentialsProviderTest {
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
         )
 
         // call getCredentials 3 times
@@ -379,6 +401,7 @@ class ImdsCredentialsProviderTest {
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
         )
 
         val first = provider.getCredentials()
@@ -454,6 +477,7 @@ class ImdsCredentialsProviderTest {
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
         )
 
         // call the engine the first time to get a proper credentials response from IMDS
@@ -486,6 +510,7 @@ class ImdsCredentialsProviderTest {
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
         )
 
         // a read timeout should cause an exception to be thrown, because we have no previous credentials to re-serve
@@ -559,6 +584,7 @@ class ImdsCredentialsProviderTest {
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
         )
 
         // call the engine the first time to get a proper credentials response from IMDS
@@ -597,6 +623,7 @@ class ImdsCredentialsProviderTest {
             profileOverride = "imds-test-role",
             client = lazyOf(client),
             clock = testClock,
+            platformProvider = ec2MetadataEnabledPlatform,
         )
 
         assertFailsWith<CredentialsProviderException> {
