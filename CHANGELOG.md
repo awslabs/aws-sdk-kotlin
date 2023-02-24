@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.21.0-beta] - 02/24/2023
+
+### Features
+* Sync AWS service models and **smithy-kotlin** version
+
+### Miscellaneous
+* Refactor: move CachedCredentialsProvider and CredentialsProviderChain to smithy-kotlin under aws.smithy.kotlin.runtime.auth.awscredentials package
+
 ## [0.20.3-beta] - 02/16/2023
 
 ### Features
