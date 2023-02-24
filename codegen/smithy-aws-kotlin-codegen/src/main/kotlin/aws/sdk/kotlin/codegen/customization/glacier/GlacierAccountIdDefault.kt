@@ -27,9 +27,7 @@ class GlacierAccountIdDefault : KotlinIntegration {
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
         resolved: List<ProtocolMiddleware>,
-    ): List<ProtocolMiddleware> {
-        return resolved + GlacierAccountIdMiddleware()
-    }
+    ): List<ProtocolMiddleware> = resolved + GlacierAccountIdMiddleware()
 }
 
 private class GlacierAccountIdMiddleware : ProtocolMiddleware {

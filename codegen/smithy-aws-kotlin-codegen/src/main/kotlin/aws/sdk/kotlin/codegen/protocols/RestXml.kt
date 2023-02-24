@@ -16,6 +16,8 @@ import software.amazon.smithy.kotlin.codegen.rendering.serde.*
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 /**
  * Handles generating the aws.protocols#restJson1 protocol for services.
@@ -60,18 +62,16 @@ class RestXmlParserGenerator(
         writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
+    @OptIn(ExperimentalContracts::class)
     override fun payloadDeserializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: Collection<MemberShape>?,
-    ): Symbol {
-        return if (shape.hasTrait<XmlNameTrait>() && shape is MemberShape) {
-            // can't delegate, have to generate a dedicated deserializer because the member xml name is different
-            // from the name of the target shape
-            explicitBoundStructureDeserializer(ctx, shape)
-        } else {
-            super.payloadDeserializer(ctx, shape, members)
-        }
+    ): Symbol = when {
+        // can't delegate, have to generate a dedicated deserializer because the member xml name is different
+        // from the name of the target shape
+        isXmlNamedMemberShape(shape) -> explicitBoundStructureDeserializer(ctx, shape)
+        else -> super.payloadDeserializer(ctx, shape, members)
     }
 
     private fun explicitBoundStructureDeserializer(
@@ -118,18 +118,16 @@ class RestXmlSerializerGenerator(
         writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
+    @OptIn(ExperimentalContracts::class)
     override fun payloadSerializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
         members: Collection<MemberShape>?,
-    ): Symbol {
-        return if (shape.hasTrait<XmlNameTrait>() && shape is MemberShape) {
-            // can't delegate, have to generate a dedicated serializer because the member xml name is different
-            // from the name of the target shape
-            explicitBoundStructureSerializer(ctx, shape)
-        } else {
-            super.payloadSerializer(ctx, shape, members)
-        }
+    ): Symbol = when {
+        // can't delegate, have to generate a dedicated serializer because the member xml name is different
+        // from the name of the target shape
+        isXmlNamedMemberShape(shape) -> explicitBoundStructureSerializer(ctx, shape)
+        else -> super.payloadSerializer(ctx, shape, members)
     }
 
     private fun explicitBoundStructureSerializer(
@@ -164,4 +162,12 @@ class RestXmlSerializerGenerator(
             }
         }
     }
+}
+
+@ExperimentalContracts
+private fun isXmlNamedMemberShape(shape: Shape): Boolean {
+    contract {
+        returns(true) implies (shape is MemberShape)
+    }
+    return shape.hasTrait<XmlNameTrait>() && shape is MemberShape
 }
