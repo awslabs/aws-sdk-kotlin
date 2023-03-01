@@ -271,6 +271,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#AwsAccountNumberList": {
@@ -490,7 +493,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A cache policy.</p>\n         <p>When it's attached to a cache behavior, the cache policy determines the\n\t\t\tfollowing:</p>\n         <ul>\n            <li>\n               <p>The values that CloudFront includes in the cache key. These values can include HTTP\n\t\t\t\t\theaders, cookies, and URL query strings. CloudFront uses the cache key to find an\n\t\t\t\t\tobject in its cache that it can return to the viewer.</p>\n            </li>\n            <li>\n               <p>The default, minimum, and maximum time to live (TTL) values that you want\n\t\t\t\t\tobjects to stay in the CloudFront cache.</p>\n            </li>\n         </ul>\n         <p>The headers, cookies, and query strings that are included in the cache key are\n\t\t\tautomatically included in requests that CloudFront sends to the origin. CloudFront sends a request\n\t\t\twhen it can't find a valid object in its cache that matches the request's cache key. If\n\t\t\tyou want to send values to the origin but <i>not</i> include them in the\n\t\t\tcache key, use <code>OriginRequestPolicy</code>.</p>"
+                "smithy.api#documentation": "<p>A cache policy.</p>\n         <p>When it's attached to a cache behavior, the cache policy determines the\n\t\t\tfollowing:</p>\n         <ul>\n            <li>\n               <p>The values that CloudFront includes in the cache key. These values can include HTTP\n\t\t\t\t\theaders, cookies, and URL query strings. CloudFront uses the cache key to find an\n\t\t\t\t\tobject in its cache that it can return to the viewer.</p>\n            </li>\n            <li>\n               <p>The default, minimum, and maximum time to live (TTL) values that you want\n\t\t\t\t\tobjects to stay in the CloudFront cache.</p>\n            </li>\n         </ul>\n         <p>The headers, cookies, and query strings that are included in the cache key are also included\n\t\t\tin requests that CloudFront sends to the origin. CloudFront sends a request when it can't find a\n\t\t\tvalid object in its cache that matches the request's cache key. If you want to send\n\t\t\tvalues to the origin but <i>not</i> include them in the cache key, use\n\t\t\t<code>OriginRequestPolicy</code>.</p>"
             }
         },
         "com.amazonaws.cloudfront#CachePolicyAlreadyExists": {
@@ -544,12 +547,12 @@
                 "ParametersInCacheKeyAndForwardedToOrigin": {
                     "target": "com.amazonaws.cloudfront#ParametersInCacheKeyAndForwardedToOrigin",
                     "traits": {
-                        "smithy.api#documentation": "<p>The HTTP headers, cookies, and URL query strings to include in the cache key. The\n\t\t\tvalues included in the cache key are automatically included in requests that CloudFront sends\n\t\t\tto the origin.</p>"
+                        "smithy.api#documentation": "<p>The HTTP headers, cookies, and URL query strings to include in the cache key. The values\n\t\t\tincluded in the cache key are also included in requests that CloudFront sends to the\n\t\t\torigin.</p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A cache policy configuration.</p>\n         <p>This configuration determines the following:</p>\n         <ul>\n            <li>\n               <p>The values that CloudFront includes in the cache key. These values can include HTTP\n\t\t\t\t\theaders, cookies, and URL query strings. CloudFront uses the cache key to find an\n\t\t\t\t\tobject in its cache that it can return to the viewer.</p>\n            </li>\n            <li>\n               <p>The default, minimum, and maximum time to live (TTL) values that you want\n\t\t\t\t\tobjects to stay in the CloudFront cache.</p>\n            </li>\n         </ul>\n         <p>The headers, cookies, and query strings that are included in the cache key are\n\t\t\tautomatically included in requests that CloudFront sends to the origin. CloudFront sends a request\n\t\t\twhen it can't find a valid object in its cache that matches the request's cache key. If\n\t\t\tyou want to send values to the origin but <i>not</i> include them in the\n\t\t\tcache key, use <code>OriginRequestPolicy</code>.</p>"
+                "smithy.api#documentation": "<p>A cache policy configuration.</p>\n         <p>This configuration determines the following:</p>\n         <ul>\n            <li>\n               <p>The values that CloudFront includes in the cache key. These values can include HTTP\n\t\t\t\t\theaders, cookies, and URL query strings. CloudFront uses the cache key to find an\n\t\t\t\t\tobject in its cache that it can return to the viewer.</p>\n            </li>\n            <li>\n               <p>The default, minimum, and maximum time to live (TTL) values that you want\n\t\t\t\t\tobjects to stay in the CloudFront cache.</p>\n            </li>\n         </ul>\n         <p>The headers, cookies, and query strings that are included in the cache key are also included\n\t\t\tin requests that CloudFront sends to the origin. CloudFront sends a request when it can't find a\n\t\t\tvalid object in its cache that matches the request's cache key. If you want to send\n\t\t\tvalues to the origin but <i>not</i> include them in the cache key, use\n\t\t\t<code>OriginRequestPolicy</code>.</p>"
             }
         },
         "com.amazonaws.cloudfront#CachePolicyCookieBehavior": {
@@ -587,7 +590,7 @@
                 "CookieBehavior": {
                     "target": "com.amazonaws.cloudfront#CachePolicyCookieBehavior",
                     "traits": {
-                        "smithy.api#documentation": "<p>Determines whether any cookies in viewer requests are included in the cache key and\n\t\t\tautomatically included in requests that CloudFront sends to the origin. Valid values\n\t\t\tare:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – Cookies in viewer requests are not included in the cache\n\t\t\t\t\tkey and are not automatically included in requests that CloudFront sends to the\n\t\t\t\t\torigin. Even when this field is set to <code>none</code>, any cookies that are\n\t\t\t\t\tlisted in an <code>OriginRequestPolicy</code>\n                  <i>are</i> included in origin requests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – The cookies in viewer requests that are listed in the\n\t\t\t\t\t\t<code>CookieNames</code> type are included in the cache key and\n\t\t\t\t\tautomatically included in requests that CloudFront sends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allExcept</code> – All cookies in viewer requests that are\n\t\t\t\t\t\t\t<i>\n                     <b>not</b>\n                  </i> listed in the\n\t\t\t\t\t\t<code>CookieNames</code> type are included in the cache key and\n\t\t\t\t\tautomatically included in requests that CloudFront sends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>all</code> – All cookies in viewer requests are included in the cache\n\t\t\t\t\tkey and are automatically included in requests that CloudFront sends to the\n\t\t\t\t\torigin.</p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>Determines whether any cookies in viewer requests are included in the cache key and in\n\t\t\trequests that CloudFront sends to the origin. Valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – No cookies in viewer requests are included in the cache key or in\n\t\t\t\t\trequests that CloudFront sends to the origin. Even when this field is set to\n\t\t\t\t\t<code>none</code>, any cookies that are listed in an\n\t\t\t\t\t<code>OriginRequestPolicy</code>\n                  <i>are</i> included in origin\n\t\t\t\t\trequests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – Only the cookies in viewer requests that are listed in the\n\t\t\t\t\t<code>CookieNames</code> type are included in the cache key and in requests that\n\t\t\t\t\tCloudFront sends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allExcept</code> – All cookies in viewer requests are included in the cache key and\n\t\t\t\t\tin requests that CloudFront sends to the origin, <i>\n                     <b>except</b>\n                  </i> for those that are listed in the\n\t\t\t\t\t<code>CookieNames</code> type, which are not included.</p>\n            </li>\n            <li>\n               <p>\n                  <code>all</code> – All cookies in viewer requests are included in the cache key and in\n\t\t\t\t\trequests that CloudFront sends to the origin.</p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
@@ -596,7 +599,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>An object that determines whether any cookies in viewer requests (and if so, which\n\t\t\tcookies) are included in the cache key and automatically included in requests that CloudFront\n\t\t\tsends to the origin.</p>"
+                "smithy.api#documentation": "<p>An object that determines whether any cookies in viewer requests (and if so, which cookies)\n\t\t\tare included in the cache key and in requests that CloudFront sends to the origin.</p>"
             }
         },
         "com.amazonaws.cloudfront#CachePolicyHeaderBehavior": {
@@ -622,7 +625,7 @@
                 "HeaderBehavior": {
                     "target": "com.amazonaws.cloudfront#CachePolicyHeaderBehavior",
                     "traits": {
-                        "smithy.api#documentation": "<p>Determines whether any HTTP headers are included in the cache key and automatically\n\t\t\tincluded in requests that CloudFront sends to the origin. Valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – HTTP headers are not included in the cache key and are not\n\t\t\t\t\tautomatically included in requests that CloudFront sends to the origin. Even when this\n\t\t\t\t\tfield is set to <code>none</code>, any headers that are listed in an\n\t\t\t\t\t\t<code>OriginRequestPolicy</code>\n                  <i>are</i> included in origin requests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – The HTTP headers that are listed in the\n\t\t\t\t\t\t<code>Headers</code> type are included in the cache key and are\n\t\t\t\t\tautomatically included in requests that CloudFront sends to the origin.</p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>Determines whether any HTTP headers are included in the cache key and in requests that CloudFront\n\t\t\tsends to the origin. Valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – No HTTP headers are included in the cache key or in requests that CloudFront\n\t\t\t\t\tsends to the origin. Even when this field is set to <code>none</code>, any\n\t\t\t\t\theaders that are listed in an <code>OriginRequestPolicy</code>\n                  <i>are</i> included in origin requests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – Only the HTTP headers that are listed in the <code>Headers</code>\n\t\t\t\t\ttype are included in the cache key and in requests that CloudFront sends to the\n\t\t\t\t\torigin.</p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
@@ -631,7 +634,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>An object that determines whether any HTTP headers (and if so, which headers) are\n\t\t\tincluded in the cache key and automatically included in requests that CloudFront sends to the\n\t\t\torigin.</p>"
+                "smithy.api#documentation": "<p>An object that determines whether any HTTP headers (and if so, which headers) are included\n\t\t\tin the cache key and in requests that CloudFront sends to the origin.</p>"
             }
         },
         "com.amazonaws.cloudfront#CachePolicyInUse": {
@@ -716,19 +719,19 @@
                 "QueryStringBehavior": {
                     "target": "com.amazonaws.cloudfront#CachePolicyQueryStringBehavior",
                     "traits": {
-                        "smithy.api#documentation": "<p>Determines whether any URL query strings in viewer requests are included in the cache\n\t\t\tkey and automatically included in requests that CloudFront sends to the origin. Valid values\n\t\t\tare:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – Query strings in viewer requests are not included in the\n\t\t\t\t\tcache key and are not automatically included in requests that CloudFront sends to the\n\t\t\t\t\torigin. Even when this field is set to <code>none</code>, any query strings that\n\t\t\t\t\tare listed in an <code>OriginRequestPolicy</code>\n                  <i>are</i> included in origin requests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – The query strings in viewer requests that are listed\n\t\t\t\t\tin the <code>QueryStringNames</code> type are included in the cache key and\n\t\t\t\t\tautomatically included in requests that CloudFront sends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allExcept</code> – All query strings in viewer requests that are\n\t\t\t\t\t\t\t<i>\n                     <b>not</b>\n                  </i> listed in the\n\t\t\t\t\t\t<code>QueryStringNames</code> type are included in the cache key and\n\t\t\t\t\tautomatically included in requests that CloudFront sends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>all</code> – All query strings in viewer requests are included in the\n\t\t\t\t\tcache key and are automatically included in requests that CloudFront sends to the\n\t\t\t\t\torigin.</p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>Determines whether any URL query strings in viewer requests are included in the cache key\n\t\t\tand in requests that CloudFront sends to the origin. Valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – No query strings in viewer requests are included in the cache key or\n\t\t\t\t\tin requests that CloudFront sends to the origin. Even when this field is set to\n\t\t\t\t\t<code>none</code>, any query strings that are listed in an\n\t\t\t\t\t<code>OriginRequestPolicy</code>\n                  <i>are</i> included in origin\n\t\t\t\t\trequests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – Only the query strings in viewer requests that are listed in the\n\t\t\t\t\t<code>QueryStringNames</code> type are included in the cache key and in requests\n\t\t\t\t\tthat CloudFront sends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allExcept</code> – All query strings in viewer requests are included in the cache\n\t\t\t\t\tkey and in requests that CloudFront sends to the origin, <i>\n                     <b>except</b>\n                  </i> those that are listed in the\n\t\t\t\t\t<code>QueryStringNames</code> type, which are not included.</p>\n            </li>\n            <li>\n               <p>\n                  <code>all</code> – All query strings in viewer requests are included in the cache key and\n\t\t\t\t\tin requests that CloudFront sends to the origin.</p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
                 "QueryStrings": {
                     "target": "com.amazonaws.cloudfront#QueryStringNames",
                     "traits": {
-                        "smithy.api#documentation": "<p>Contains the specific query strings in viewer requests that either <i>\n               <b>are</b>\n            </i> or <i>\n               <b>are\n\t\t\t\t\tnot</b>\n            </i> included in the cache key and automatically included\n\t\t\tin requests that CloudFront sends to the origin. The behavior depends on whether the\n\t\t\t\t<code>QueryStringBehavior</code> field in the\n\t\t\t\t<code>CachePolicyQueryStringsConfig</code> type is set to <code>whitelist</code>\n\t\t\t(the listed query strings <i>\n               <b>are</b>\n            </i>\n\t\t\tincluded) or <code>allExcept</code> (the listed query strings <i>\n               <b>are not</b>\n            </i> included, but all other query strings\n\t\t\tare).</p>"
+                        "smithy.api#documentation": "<p>Contains the specific query strings in viewer requests that either <i>\n               <b>are</b>\n            </i> or <i>\n               <b>are\n\t\t\tnot</b>\n            </i> included in the cache key and in requests that CloudFront sends to\n\t\t\tthe origin. The behavior depends on whether the <code>QueryStringBehavior</code> field\n\t\t\tin the <code>CachePolicyQueryStringsConfig</code> type is set to <code>whitelist</code>\n\t\t\t(the listed query strings <i>\n               <b>are</b>\n            </i>\n\t\t\tincluded) or <code>allExcept</code> (the listed query strings <i>\n               <b>are not</b>\n            </i> included, but all other query strings\n\t\t\tare).</p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>An object that determines whether any URL query strings in viewer requests (and if so,\n\t\t\twhich query strings) are included in the cache key and automatically included in\n\t\t\trequests that CloudFront sends to the origin.</p>"
+                "smithy.api#documentation": "<p>An object that determines whether any URL query strings in viewer requests (and if so, which\n\t\t\tquery strings) are included in the cache key and in requests that CloudFront sends to the\n\t\t\torigin.</p>"
             }
         },
         "com.amazonaws.cloudfront#CachePolicySummary": {
@@ -3215,6 +3218,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CopyDistributionResult": {
@@ -3277,7 +3283,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Creates a cache policy.</p>\n         <p>After you create a cache policy, you can attach it to one or more cache behaviors.\n\t\t\tWhen it's attached to a cache behavior, the cache policy determines the\n\t\t\tfollowing:</p>\n         <ul>\n            <li>\n               <p>The values that CloudFront includes in the <i>cache key</i>. These\n\t\t\t\t\tvalues can include HTTP headers, cookies, and URL query strings. CloudFront uses the\n\t\t\t\t\tcache key to find an object in its cache that it can return to the\n\t\t\t\t\tviewer.</p>\n            </li>\n            <li>\n               <p>The default, minimum, and maximum time to live (TTL) values that you want\n\t\t\t\t\tobjects to stay in the CloudFront cache.</p>\n            </li>\n         </ul>\n         <p>The headers, cookies, and query strings that are included in the cache key are\n\t\t\tautomatically included in requests that CloudFront sends to the origin. CloudFront sends a request\n\t\t\twhen it can't find an object in its cache that matches the request's cache key. If you\n\t\t\twant to send values to the origin but <i>not</i> include them in the cache\n\t\t\tkey, use <code>OriginRequestPolicy</code>.</p>\n         <p>For more information about cache policies, see <a href=\"https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html\">Controlling the cache key</a> in the\n\t\t\t\t<i>Amazon CloudFront Developer Guide</i>.</p>",
+                "smithy.api#documentation": "<p>Creates a cache policy.</p>\n         <p>After you create a cache policy, you can attach it to one or more cache behaviors.\n\t\t\tWhen it's attached to a cache behavior, the cache policy determines the\n\t\t\tfollowing:</p>\n         <ul>\n            <li>\n               <p>The values that CloudFront includes in the <i>cache key</i>. These\n\t\t\t\t\tvalues can include HTTP headers, cookies, and URL query strings. CloudFront uses the\n\t\t\t\t\tcache key to find an object in its cache that it can return to the\n\t\t\t\t\tviewer.</p>\n            </li>\n            <li>\n               <p>The default, minimum, and maximum time to live (TTL) values that you want\n\t\t\t\t\tobjects to stay in the CloudFront cache.</p>\n            </li>\n         </ul>\n         <p>The headers, cookies, and query strings that are included in the cache key are also included\n\t\t\tin requests that CloudFront sends to the origin. CloudFront sends a request when it can't find an\n\t\t\tobject in its cache that matches the request's cache key. If you want to send values to\n\t\t\tthe origin but <i>not</i> include them in the cache key, use\n\t\t\t<code>OriginRequestPolicy</code>.</p>\n         <p>For more information about cache policies, see <a href=\"https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html\">Controlling the cache key</a> in the\n\t\t\t\t<i>Amazon CloudFront Developer Guide</i>.</p>",
                 "smithy.api#http": {
                     "method": "POST",
                     "uri": "/2020-05-31/cache-policy",
@@ -3297,6 +3303,9 @@
                         "smithy.api#xmlName": "CachePolicyConfig"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateCachePolicyResult": {
@@ -3373,7 +3382,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to create a new origin access identity (OAI). An origin access identity is\n\t\t\ta special CloudFront user that you can associate with Amazon S3 origins, so that you can secure all\n\t\t\tor just some of your Amazon S3 content. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html\"> Restricting Access to Amazon S3 Content by Using an Origin Access Identity</a> in\n\t\t\tthe <i>Amazon CloudFront Developer Guide</i>.</p>"
+                "smithy.api#documentation": "<p>The request to create a new origin access identity (OAI). An origin access identity is\n\t\t\ta special CloudFront user that you can associate with Amazon S3 origins, so that you can secure all\n\t\t\tor just some of your Amazon S3 content. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html\"> Restricting Access to Amazon S3 Content by Using an Origin Access Identity</a> in\n\t\t\tthe <i>Amazon CloudFront Developer Guide</i>.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateCloudFrontOriginAccessIdentityResult": {
@@ -3454,6 +3464,9 @@
                         "smithy.api#xmlName": "ContinuousDeploymentPolicyConfig"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateContinuousDeploymentPolicyResult": {
@@ -3710,7 +3723,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to create a new distribution.</p>"
+                "smithy.api#documentation": "<p>The request to create a new distribution.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateDistributionResult": {
@@ -3967,7 +3981,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to create a new distribution with tags.</p>"
+                "smithy.api#documentation": "<p>The request to create a new distribution with tags.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateDistributionWithTagsResult": {
@@ -4054,6 +4069,9 @@
                         "smithy.api#xmlName": "FieldLevelEncryptionConfig"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateFieldLevelEncryptionConfigResult": {
@@ -4137,6 +4155,9 @@
                         "smithy.api#xmlName": "FieldLevelEncryptionProfileConfig"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateFieldLevelEncryptionProfileResult": {
@@ -4223,6 +4244,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateFunctionResult": {
@@ -4313,7 +4337,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to create an invalidation.</p>"
+                "smithy.api#documentation": "<p>The request to create an invalidation.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateInvalidationResult": {
@@ -4381,6 +4406,9 @@
                         "smithy.api#xmlName": "KeyGroupConfig"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateKeyGroupResult": {
@@ -4460,6 +4488,9 @@
                         "smithy.api#xmlName": "MonitoringSubscription"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateMonitoringSubscriptionResult": {
@@ -4514,6 +4545,9 @@
                         "smithy.api#xmlName": "OriginAccessControlConfig"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateOriginAccessControlResult": {
@@ -4597,6 +4631,9 @@
                         "smithy.api#xmlName": "OriginRequestPolicyConfig"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateOriginRequestPolicyResult": {
@@ -4665,6 +4702,9 @@
                         "smithy.api#xmlName": "PublicKeyConfig"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreatePublicKeyResult": {
@@ -4755,6 +4795,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateRealtimeLogConfigResult": {
@@ -4823,6 +4866,9 @@
                         "smithy.api#xmlName": "ResponseHeadersPolicyConfig"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateResponseHeadersPolicyResult": {
@@ -4923,7 +4969,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to create a new streaming distribution.</p>"
+                "smithy.api#documentation": "<p>The request to create a new streaming distribution.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateStreamingDistributionResult": {
@@ -5030,7 +5077,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to create a new streaming distribution with tags.</p>"
+                "smithy.api#documentation": "<p>The request to create a new streaming distribution with tags.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#CreateStreamingDistributionWithTagsResult": {
@@ -5367,6 +5415,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteCloudFrontOriginAccessIdentity": {
@@ -5423,7 +5474,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Deletes a origin access identity.</p>"
+                "smithy.api#documentation": "<p>Deletes a origin access identity.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteContinuousDeploymentPolicy": {
@@ -5481,6 +5533,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteDistribution": {
@@ -5537,7 +5592,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>This action deletes a web distribution. To delete a web distribution using the CloudFront\n\t\t\tAPI, perform the following steps.</p>\n         <p>\n            <b>To delete a web distribution using the CloudFront API:</b>\n         </p>\n         <ol>\n            <li>\n               <p>Disable the web distribution</p>\n            </li>\n            <li>\n               <p>Submit a <code>GET Distribution Config</code> request to get the current\n\t\t\t\t\tconfiguration and the <code>Etag</code> header for the distribution.</p>\n            </li>\n            <li>\n               <p>Update the XML document that was returned in the response to your <code>GET\n\t\t\t\t\t\tDistribution Config</code> request to change the value of\n\t\t\t\t\t\t<code>Enabled</code> to <code>false</code>.</p>\n            </li>\n            <li>\n               <p>Submit a <code>PUT Distribution Config</code> request to update the\n\t\t\t\t\tconfiguration for your distribution. In the request body, include the XML\n\t\t\t\t\tdocument that you updated in Step 3. Set the value of the HTTP\n\t\t\t\t\t\t<code>If-Match</code> header to the value of the <code>ETag</code> header\n\t\t\t\t\tthat CloudFront returned when you submitted the <code>GET Distribution Config</code>\n\t\t\t\t\trequest in Step 2.</p>\n            </li>\n            <li>\n               <p>Review the response to the <code>PUT Distribution Config</code> request to\n\t\t\t\t\tconfirm that the distribution was successfully disabled.</p>\n            </li>\n            <li>\n               <p>Submit a <code>GET Distribution</code> request to confirm that your changes\n\t\t\t\t\thave propagated. When propagation is complete, the value of <code>Status</code>\n\t\t\t\t\tis <code>Deployed</code>.</p>\n            </li>\n            <li>\n               <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP\n\t\t\t\t\t\t<code>If-Match</code> header to the value of the <code>ETag</code> header\n\t\t\t\t\tthat CloudFront returned when you submitted the <code>GET Distribution Config</code>\n\t\t\t\t\trequest in Step 6.</p>\n            </li>\n            <li>\n               <p>Review the response to your <code>DELETE Distribution</code> request to\n\t\t\t\t\tconfirm that the distribution was successfully deleted.</p>\n            </li>\n         </ol>\n         <p>For information about deleting a distribution using the CloudFront console, see <a href=\"https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html\">Deleting a\n\t\t\t\tDistribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"
+                "smithy.api#documentation": "<p>This action deletes a web distribution. To delete a web distribution using the CloudFront\n\t\t\tAPI, perform the following steps.</p>\n         <p>\n            <b>To delete a web distribution using the CloudFront API:</b>\n         </p>\n         <ol>\n            <li>\n               <p>Disable the web distribution</p>\n            </li>\n            <li>\n               <p>Submit a <code>GET Distribution Config</code> request to get the current\n\t\t\t\t\tconfiguration and the <code>Etag</code> header for the distribution.</p>\n            </li>\n            <li>\n               <p>Update the XML document that was returned in the response to your <code>GET\n\t\t\t\t\t\tDistribution Config</code> request to change the value of\n\t\t\t\t\t\t<code>Enabled</code> to <code>false</code>.</p>\n            </li>\n            <li>\n               <p>Submit a <code>PUT Distribution Config</code> request to update the\n\t\t\t\t\tconfiguration for your distribution. In the request body, include the XML\n\t\t\t\t\tdocument that you updated in Step 3. Set the value of the HTTP\n\t\t\t\t\t\t<code>If-Match</code> header to the value of the <code>ETag</code> header\n\t\t\t\t\tthat CloudFront returned when you submitted the <code>GET Distribution Config</code>\n\t\t\t\t\trequest in Step 2.</p>\n            </li>\n            <li>\n               <p>Review the response to the <code>PUT Distribution Config</code> request to\n\t\t\t\t\tconfirm that the distribution was successfully disabled.</p>\n            </li>\n            <li>\n               <p>Submit a <code>GET Distribution</code> request to confirm that your changes\n\t\t\t\t\thave propagated. When propagation is complete, the value of <code>Status</code>\n\t\t\t\t\tis <code>Deployed</code>.</p>\n            </li>\n            <li>\n               <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP\n\t\t\t\t\t\t<code>If-Match</code> header to the value of the <code>ETag</code> header\n\t\t\t\t\tthat CloudFront returned when you submitted the <code>GET Distribution Config</code>\n\t\t\t\t\trequest in Step 6.</p>\n            </li>\n            <li>\n               <p>Review the response to your <code>DELETE Distribution</code> request to\n\t\t\t\t\tconfirm that the distribution was successfully deleted.</p>\n            </li>\n         </ol>\n         <p>For information about deleting a distribution using the CloudFront console, see <a href=\"https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html\">Deleting a\n\t\t\t\tDistribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteFieldLevelEncryptionConfig": {
@@ -5592,6 +5648,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteFieldLevelEncryptionProfile": {
@@ -5646,6 +5705,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteFunction": {
@@ -5701,6 +5763,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteKeyGroup": {
@@ -5752,6 +5817,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteMonitoringSubscription": {
@@ -5796,6 +5864,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteMonitoringSubscriptionResult": {
@@ -5854,6 +5925,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteOriginRequestPolicy": {
@@ -5911,6 +5985,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeletePublicKey": {
@@ -5965,6 +6042,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteRealtimeLogConfig": {
@@ -6013,6 +6093,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the real-time log configuration to delete.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteResponseHeadersPolicy": {
@@ -6070,6 +6153,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DeleteStreamingDistribution": {
@@ -6126,7 +6212,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to delete a streaming distribution.</p>"
+                "smithy.api#documentation": "<p>The request to delete a streaming distribution.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DescribeFunction": {
@@ -6172,6 +6259,9 @@
                         "smithy.api#httpQuery": "Stage"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#DescribeFunctionResult": {
@@ -7699,6 +7789,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetCachePolicyConfigResult": {
@@ -7731,6 +7824,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetCachePolicyResult": {
@@ -7815,7 +7911,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The origin access identity's configuration information. For more information, see\n\t\t\t\t<a href=\"https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CloudFrontOriginAccessIdentityConfig.html\">CloudFrontOriginAccessIdentityConfig</a>.</p>"
+                "smithy.api#documentation": "<p>The origin access identity's configuration information. For more information, see\n\t\t\t\t<a href=\"https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CloudFrontOriginAccessIdentityConfig.html\">CloudFrontOriginAccessIdentityConfig</a>.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetCloudFrontOriginAccessIdentityConfigResult": {
@@ -7853,7 +7950,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to get an origin access identity's information.</p>"
+                "smithy.api#documentation": "<p>The request to get an origin access identity's information.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetCloudFrontOriginAccessIdentityResult": {
@@ -7939,6 +8037,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetContinuousDeploymentPolicyConfigResult": {
@@ -7970,6 +8071,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetContinuousDeploymentPolicyResult": {
@@ -8072,7 +8176,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to get a distribution configuration.</p>"
+                "smithy.api#documentation": "<p>The request to get a distribution configuration.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetDistributionConfigResult": {
@@ -8110,7 +8215,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to get a distribution's information.</p>"
+                "smithy.api#documentation": "<p>The request to get a distribution's information.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetDistributionResult": {
@@ -8196,6 +8302,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetFieldLevelEncryptionConfigResult": {
@@ -8278,6 +8387,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetFieldLevelEncryptionProfileConfigResult": {
@@ -8310,6 +8422,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetFieldLevelEncryptionProfileResult": {
@@ -8342,6 +8457,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetFieldLevelEncryptionResult": {
@@ -8406,6 +8524,9 @@
                         "smithy.api#httpQuery": "Stage"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetFunctionResult": {
@@ -8501,7 +8622,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to get an invalidation's information.</p>"
+                "smithy.api#documentation": "<p>The request to get an invalidation's information.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetInvalidationResult": {
@@ -8574,6 +8696,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetKeyGroupConfigResult": {
@@ -8606,6 +8731,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetKeyGroupResult": {
@@ -8669,6 +8797,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetMonitoringSubscriptionResult": {
@@ -8744,6 +8875,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetOriginAccessControlConfigResult": {
@@ -8776,6 +8910,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetOriginAccessControlResult": {
@@ -8858,6 +8995,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetOriginRequestPolicyConfigResult": {
@@ -8890,6 +9030,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetOriginRequestPolicyResult": {
@@ -8972,6 +9115,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetPublicKeyConfigResult": {
@@ -9004,6 +9150,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetPublicKeyResult": {
@@ -9068,6 +9217,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the real-time log configuration to get.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetRealtimeLogConfigResult": {
@@ -9142,6 +9294,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetResponseHeadersPolicyConfigResult": {
@@ -9174,6 +9329,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetResponseHeadersPolicyResult": {
@@ -9276,7 +9434,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>To request to get a streaming distribution configuration.</p>"
+                "smithy.api#documentation": "<p>To request to get a streaming distribution configuration.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetStreamingDistributionConfigResult": {
@@ -9314,7 +9473,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to get a streaming distribution's information.</p>"
+                "smithy.api#documentation": "<p>The request to get a streaming distribution's information.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#GetStreamingDistributionResult": {
@@ -10310,6 +10470,9 @@
                         "smithy.api#httpQuery": "MaxItems"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListCachePoliciesResult": {
@@ -10371,7 +10534,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to list origin access identities.</p>"
+                "smithy.api#documentation": "<p>The request to list origin access identities.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListCloudFrontOriginAccessIdentitiesResult": {
@@ -10447,6 +10611,9 @@
                         "smithy.api#httpQuery": "MaxItems"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListConflictingAliasesResult": {
@@ -10506,6 +10673,9 @@
                         "smithy.api#httpQuery": "MaxItems"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListContinuousDeploymentPoliciesResult": {
@@ -10601,6 +10771,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListDistributionsByCachePolicyIdResult": {
@@ -10665,6 +10838,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListDistributionsByKeyGroupResult": {
@@ -10731,6 +10907,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListDistributionsByOriginRequestPolicyIdResult": {
@@ -10794,6 +10973,9 @@
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the real-time log configuration whose associated\n\t\t\tdistributions you want to list.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListDistributionsByRealtimeLogConfigResult": {
@@ -10860,6 +11042,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListDistributionsByResponseHeadersPolicyIdResult": {
@@ -10925,7 +11110,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to list distributions that are associated with a specified WAF web\n\t\t\tACL.</p>"
+                "smithy.api#documentation": "<p>The request to list distributions that are associated with a specified WAF web\n\t\t\tACL.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListDistributionsByWebACLIdResult": {
@@ -10962,7 +11148,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to list your distributions.</p>"
+                "smithy.api#documentation": "<p>The request to list your distributions.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListDistributionsResult": {
@@ -11019,6 +11206,9 @@
                         "smithy.api#httpQuery": "MaxItems"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListFieldLevelEncryptionConfigsResult": {
@@ -11072,6 +11262,9 @@
                         "smithy.api#httpQuery": "MaxItems"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListFieldLevelEncryptionProfilesResult": {
@@ -11135,6 +11328,9 @@
                         "smithy.api#httpQuery": "Stage"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListFunctionsResult": {
@@ -11210,7 +11406,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to list invalidations.</p>"
+                "smithy.api#documentation": "<p>The request to list invalidations.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListInvalidationsResult": {
@@ -11267,6 +11464,9 @@
                         "smithy.api#httpQuery": "MaxItems"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListKeyGroupsResult": {
@@ -11320,6 +11520,9 @@
                         "smithy.api#httpQuery": "MaxItems"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListOriginAccessControlsResult": {
@@ -11386,6 +11589,9 @@
                         "smithy.api#httpQuery": "MaxItems"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListOriginRequestPoliciesResult": {
@@ -11439,6 +11645,9 @@
                         "smithy.api#httpQuery": "MaxItems"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListPublicKeysResult": {
@@ -11498,6 +11707,9 @@
                         "smithy.api#httpQuery": "Marker"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListRealtimeLogConfigsResult": {
@@ -11564,6 +11776,9 @@
                         "smithy.api#httpQuery": "MaxItems"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListResponseHeadersPoliciesResult": {
@@ -11625,7 +11840,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to list your streaming distributions.</p>"
+                "smithy.api#documentation": "<p>The request to list your streaming distributions.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListStreamingDistributionsResult": {
@@ -11687,7 +11903,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to list tags for a CloudFront resource.</p>"
+                "smithy.api#documentation": "<p>The request to list tags for a CloudFront resource.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#ListTagsForResourceResult": {
@@ -12734,6 +12951,12 @@
                     "traits": {
                         "smithy.api#enumValue": "all"
                     }
+                },
+                "allExcept": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "allExcept"
+                    }
                 }
             }
         },
@@ -12743,7 +12966,7 @@
                 "CookieBehavior": {
                     "target": "com.amazonaws.cloudfront#OriginRequestPolicyCookieBehavior",
                     "traits": {
-                        "smithy.api#documentation": "<p>Determines whether cookies in viewer requests are included in requests that CloudFront sends\n\t\t\tto the origin. Valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – Cookies in viewer requests are not included in requests\n\t\t\t\t\tthat CloudFront sends to the origin. Even when this field is set to <code>none</code>,\n\t\t\t\t\tany cookies that are listed in a <code>CachePolicy</code>\n                  <i>are</i> included in origin requests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – The cookies in viewer requests that are listed in the\n\t\t\t\t\t\t<code>CookieNames</code> type are included in requests that CloudFront sends to\n\t\t\t\t\tthe origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>all</code> – All cookies in viewer requests are included in requests\n\t\t\t\t\tthat CloudFront sends to the origin.</p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>Determines whether cookies in viewer requests are included in requests that CloudFront sends\n\t\t\tto the origin. Valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – No cookies in viewer requests are included in requests that CloudFront sends\n\t\t\t\t\tto the origin. Even when this field is set to <code>none</code>, any cookies\n\t\t\t\t\tthat are listed in a <code>CachePolicy</code>\n                  <i>are</i> included\n\t\t\t\t\tin origin requests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – Only the cookies in viewer requests that are listed in the\n\t\t\t\t\t<code>CookieNames</code> type are included in requests that CloudFront sends to the\n\t\t\t\t\torigin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>all</code> – All cookies in viewer requests are included in requests\n\t\t\t\t\tthat CloudFront sends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allExcept</code> – All cookies in viewer requests are included in\n\t\t\t\t\trequests that CloudFront sends to the origin, <i>\n                     <b>except</b>\n                  </i> for those listed in the <code>CookieNames</code>\n\t\t\t\t\ttype, which are not included.</p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
@@ -12781,6 +13004,12 @@
                     "traits": {
                         "smithy.api#enumValue": "allViewerAndWhitelistCloudFront"
                     }
+                },
+                "allExcept": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "allExcept"
+                    }
                 }
             }
         },
@@ -12790,7 +13019,7 @@
                 "HeaderBehavior": {
                     "target": "com.amazonaws.cloudfront#OriginRequestPolicyHeaderBehavior",
                     "traits": {
-                        "smithy.api#documentation": "<p>Determines whether any HTTP headers are included in requests that CloudFront sends to the\n\t\t\torigin. Valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – HTTP headers are not included in requests that CloudFront sends\n\t\t\t\t\tto the origin. Even when this field is set to <code>none</code>, any headers\n\t\t\t\t\tthat are listed in a <code>CachePolicy</code>\n                  <i>are</i> included in origin requests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – The HTTP headers that are listed in the\n\t\t\t\t\t\t<code>Headers</code> type are included in requests that CloudFront sends to the\n\t\t\t\t\torigin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allViewer</code> – All HTTP headers in viewer requests are included in\n\t\t\t\t\trequests that CloudFront sends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allViewerAndWhitelistCloudFront</code> – All HTTP headers in viewer\n\t\t\t\t\trequests and the additional CloudFront headers that are listed in the\n\t\t\t\t\t\t<code>Headers</code> type are included in requests that CloudFront sends to the\n\t\t\t\t\torigin. The additional headers are added by CloudFront.</p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>Determines whether any HTTP headers are included in requests that CloudFront sends to the\n\t\t\torigin. Valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – No HTTP headers in viewer requests are included in requests that CloudFront\n\t\t\t\t\tsends to the origin. Even when this field is set to <code>none</code>, any\n\t\t\t\t\theaders that are listed in a <code>CachePolicy</code>\n                  <i>are</i>\n\t\t\t\t\tincluded in origin requests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – Only the HTTP headers that are listed in the <code>Headers</code>\n\t\t\t\t\ttype are included in requests that CloudFront sends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allViewer</code> – All HTTP headers in viewer requests are included in\n\t\t\t\t\trequests that CloudFront sends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allViewerAndWhitelistCloudFront</code> – All HTTP headers in viewer\n\t\t\t\t\trequests and the additional CloudFront headers that are listed in the\n\t\t\t\t\t\t<code>Headers</code> type are included in requests that CloudFront sends to the\n\t\t\t\t\torigin. The additional headers are added by CloudFront.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allExcept</code> – All HTTP headers in viewer requests are included in\n\t\t\t\t\trequests that CloudFront sends to the origin, <i>\n                     <b>except</b>\n                  </i> for those listed in the <code>Headers</code> type,\n\t\t\t\t\twhich are not included.</p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
@@ -12869,6 +13098,12 @@
                     "traits": {
                         "smithy.api#enumValue": "all"
                     }
+                },
+                "allExcept": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "allExcept"
+                    }
                 }
             }
         },
@@ -12878,14 +13113,14 @@
                 "QueryStringBehavior": {
                     "target": "com.amazonaws.cloudfront#OriginRequestPolicyQueryStringBehavior",
                     "traits": {
-                        "smithy.api#documentation": "<p>Determines whether any URL query strings in viewer requests are included in requests\n\t\t\tthat CloudFront sends to the origin. Valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – Query strings in viewer requests are not included in\n\t\t\t\t\trequests that CloudFront sends to the origin. Even when this field is set to\n\t\t\t\t\t\t<code>none</code>, any query strings that are listed in a\n\t\t\t\t\t\t<code>CachePolicy</code>\n                  <i>are</i> included in origin requests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – The query strings in viewer requests that are listed\n\t\t\t\t\tin the <code>QueryStringNames</code> type are included in requests that CloudFront\n\t\t\t\t\tsends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>all</code> – All query strings in viewer requests are included in\n\t\t\t\t\trequests that CloudFront sends to the origin.</p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>Determines whether any URL query strings in viewer requests are included in requests\n\t\t\tthat CloudFront sends to the origin. Valid values are:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>none</code> – No query strings in viewer requests are included in requests that CloudFront\n\t\t\t\t\tsends to the origin. Even when this field is set to <code>none</code>, any query\n\t\t\t\t\tstrings that are listed in a <code>CachePolicy</code>\n                  <i>are</i>\n\t\t\t\t\tincluded in origin requests.</p>\n            </li>\n            <li>\n               <p>\n                  <code>whitelist</code> – Only the query strings in viewer requests that are listed in the\n\t\t\t\t\t<code>QueryStringNames</code> type are included in requests that CloudFront sends to\n\t\t\t\t\tthe origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>all</code> – All query strings in viewer requests are included in requests that CloudFront\n\t\t\t\t\tsends to the origin.</p>\n            </li>\n            <li>\n               <p>\n                  <code>allExcept</code> – All query strings in viewer requests are included in\n\t\t\t\t\trequests that CloudFront sends to the origin, <i>\n                     <b>except</b>\n                  </i> for those listed in the\n\t\t\t\t\t<code>QueryStringNames</code> type, which are not included.</p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
                 "QueryStrings": {
                     "target": "com.amazonaws.cloudfront#QueryStringNames",
                     "traits": {
-                        "smithy.api#documentation": "<p>Contains a list of the query strings in viewer requests that are included in requests\n\t\t\tthat CloudFront sends to the origin.</p>"
+                        "smithy.api#documentation": "<p>Contains the specific query strings in viewer requests that either <i>\n               <b>are</b>\n            </i> or <i>\n               <b>are\n\t\t\tnot</b>\n            </i> included in requests that CloudFront sends to the origin. The\n\t\t\tbehavior depends on whether the <code>QueryStringBehavior</code> field in the\n\t\t\t<code>OriginRequestPolicyQueryStringsConfig</code> type is set to <code>whitelist</code>\n\t\t\t(the listed query strings <i>\n               <b>are</b>\n            </i>\n\t\t\tincluded) or <code>allExcept</code> (the listed query strings <i>\n               <b>are not</b>\n            </i> included, but all other query strings\n\t\t\tare).</p>"
                     }
                 }
             },
@@ -13035,27 +13270,27 @@
                 "HeadersConfig": {
                     "target": "com.amazonaws.cloudfront#CachePolicyHeadersConfig",
                     "traits": {
-                        "smithy.api#documentation": "<p>An object that determines whether any HTTP headers (and if so, which headers) are\n\t\t\tincluded in the cache key and automatically included in requests that CloudFront sends to the\n\t\t\torigin.</p>",
+                        "smithy.api#documentation": "<p>An object that determines whether any HTTP headers (and if so, which headers) are included\n\t\t\tin the cache key and in requests that CloudFront sends to the origin.</p>",
                         "smithy.api#required": {}
                     }
                 },
                 "CookiesConfig": {
                     "target": "com.amazonaws.cloudfront#CachePolicyCookiesConfig",
                     "traits": {
-                        "smithy.api#documentation": "<p>An object that determines whether any cookies in viewer requests (and if so, which\n\t\t\tcookies) are included in the cache key and automatically included in requests that CloudFront\n\t\t\tsends to the origin.</p>",
+                        "smithy.api#documentation": "<p>An object that determines whether any cookies in viewer requests (and if so, which cookies)\n\t\t\tare included in the cache key and in requests that CloudFront sends to the origin.</p>",
                         "smithy.api#required": {}
                     }
                 },
                 "QueryStringsConfig": {
                     "target": "com.amazonaws.cloudfront#CachePolicyQueryStringsConfig",
                     "traits": {
-                        "smithy.api#documentation": "<p>An object that determines whether any URL query strings in viewer requests (and if so,\n\t\t\twhich query strings) are included in the cache key and automatically included in\n\t\t\trequests that CloudFront sends to the origin.</p>",
+                        "smithy.api#documentation": "<p>An object that determines whether any URL query strings in viewer requests (and if so, which\n\t\t\tquery strings) are included in the cache key and in requests that CloudFront sends to the\n\t\t\torigin.</p>",
                         "smithy.api#required": {}
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>This object determines the values that CloudFront includes in the cache key. These values\n\t\t\tcan include HTTP headers, cookies, and URL query strings. CloudFront uses the cache key to\n\t\t\tfind an object in its cache that it can return to the viewer.</p>\n         <p>The headers, cookies, and query strings that are included in the cache key are\n\t\t\tautomatically included in requests that CloudFront sends to the origin. CloudFront sends a request\n\t\t\twhen it can't find an object in its cache that matches the request's cache key. If you\n\t\t\twant to send values to the origin but <i>not</i> include them in the cache\n\t\t\tkey, use <code>OriginRequestPolicy</code>.</p>"
+                "smithy.api#documentation": "<p>This object determines the values that CloudFront includes in the cache key. These values\n\t\t\tcan include HTTP headers, cookies, and URL query strings. CloudFront uses the cache key to\n\t\t\tfind an object in its cache that it can return to the viewer.</p>\n         <p>The headers, cookies, and query strings that are included in the cache key are also included\n\t\t\tin requests that CloudFront sends to the origin. CloudFront sends a request when it can't find an\n\t\t\tobject in its cache that matches the request's cache key. If you want to send values to\n\t\t\tthe origin but <i>not</i> include them in the cache key, use\n\t\t\t<code>OriginRequestPolicy</code>.</p>"
             }
         },
         "com.amazonaws.cloudfront#PathList": {
@@ -13361,6 +13596,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#PublishFunctionResult": {
@@ -15161,7 +15399,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to add tags to a CloudFront resource.</p>"
+                "smithy.api#documentation": "<p>The request to add tags to a CloudFront resource.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#TagValue": {
@@ -15267,6 +15506,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#TestFunctionResult": {
@@ -16179,7 +16421,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to remove tags from a CloudFront resource.</p>"
+                "smithy.api#documentation": "<p>The request to remove tags from a CloudFront resource.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateCachePolicy": {
@@ -16261,6 +16504,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateCachePolicyResult": {
@@ -16354,7 +16600,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to update an origin access identity.</p>"
+                "smithy.api#documentation": "<p>The request to update an origin access identity.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateCloudFrontOriginAccessIdentityResult": {
@@ -16446,6 +16693,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateContinuousDeploymentPolicyResult": {
@@ -16710,7 +16960,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to update a distribution.</p>"
+                "smithy.api#documentation": "<p>The request to update a distribution.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateDistributionResult": {
@@ -16959,6 +17210,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateDistributionWithStagingConfigResult": {
@@ -17058,6 +17312,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateFieldLevelEncryptionConfigResult": {
@@ -17161,6 +17418,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateFieldLevelEncryptionProfileResult": {
@@ -17252,6 +17512,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateFunctionResult": {
@@ -17337,6 +17600,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateKeyGroupResult": {
@@ -17425,6 +17691,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateOriginAccessControlResult": {
@@ -17525,6 +17794,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateOriginRequestPolicyResult": {
@@ -17613,6 +17885,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdatePublicKeyResult": {
@@ -17695,6 +17970,9 @@
                         "smithy.api#documentation": "<p>The sampling rate for this real-time log configuration. The sampling rate determines\n\t\t\tthe percentage of viewer requests that are represented in the real-time log data. You\n\t\t\tmust provide an integer between 1 and 100, inclusive.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateRealtimeLogConfigResult": {
@@ -17787,6 +18065,9 @@
                         "smithy.api#httpHeader": "If-Match"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateResponseHeadersPolicyResult": {
@@ -17898,7 +18179,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request to update a streaming distribution.</p>"
+                "smithy.api#documentation": "<p>The request to update a streaming distribution.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.cloudfront#UpdateStreamingDistributionResult": {

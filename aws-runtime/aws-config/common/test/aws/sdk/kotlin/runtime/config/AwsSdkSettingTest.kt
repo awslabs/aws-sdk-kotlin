@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.config.retries.RetryMode
@@ -70,12 +74,11 @@ class AwsSdkSettingTest {
         assertEquals(expected, actual)
     }
 
-    private fun mockPlatform(env: Map<String, String>, jvmProps: Map<String, String>): PlatformEnvironProvider {
-        return object : PlatformEnvironProvider {
+    private fun mockPlatform(env: Map<String, String>, jvmProps: Map<String, String>) =
+        object : PlatformEnvironProvider {
             override fun getAllEnvVars(): Map<String, String> = env
             override fun getenv(key: String): String? = env[key]
             override fun getAllProperties(): Map<String, String> = jvmProps
             override fun getProperty(key: String): String? = jvmProps[key]
         }
-    }
 }

@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.endpoint.functions
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.http.endpoints.functions.isValidHostLabel
+import aws.smithy.kotlin.runtime.client.endpoints.functions.isValidHostLabel
 import aws.smithy.kotlin.runtime.net.isIpv4
 import aws.smithy.kotlin.runtime.net.isIpv6
 

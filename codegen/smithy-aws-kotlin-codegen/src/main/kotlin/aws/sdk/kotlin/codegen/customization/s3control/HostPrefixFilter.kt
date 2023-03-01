@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.codegen.customization.s3control
 
 import aws.sdk.kotlin.codegen.customization.s3.isS3Control

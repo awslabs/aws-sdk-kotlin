@@ -41,7 +41,6 @@ class CodegenPlugin : Plugin<Project> {
         tasks.getByName("smithyBuildJar").enabled = false
     }
 
-    private fun Project.installExtension(): CodegenExtension {
-        return extensions.create(CODEGEN_EXTENSION_NAME, CodegenExtension::class.java, project)
-    }
+    private fun Project.installExtension() =
+        extensions.create(CODEGEN_EXTENSION_NAME, CodegenExtension::class.java, project)
 }

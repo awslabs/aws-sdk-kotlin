@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.endpoint
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.auth.awssigning.SigningContext
-import aws.smithy.kotlin.runtime.http.endpoints.Endpoint
+import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.util.AttributeKey
 

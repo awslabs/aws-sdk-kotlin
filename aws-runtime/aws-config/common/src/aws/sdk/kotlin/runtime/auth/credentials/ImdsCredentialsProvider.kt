@@ -13,6 +13,8 @@ import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
+import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH_SECONDS
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.Clock
@@ -135,18 +137,16 @@ public class ImdsCredentialsProvider(
         }
     }
 
-    private suspend fun loadProfile(): String {
-        return try {
-            client.value.get(CREDENTIALS_BASE_PATH)
-        } catch (ex: EC2MetadataError) {
-            if (ex.statusCode == HttpStatusCode.NotFound.value) {
-                coroutineContext.info<ImdsCredentialsProvider> {
-                    "Received 404 from IMDS when loading profile information. Hint: This instance may not have an " +
-                        "IAM role associated."
-                }
+    private suspend fun loadProfile() = try {
+        client.value.get(CREDENTIALS_BASE_PATH)
+    } catch (ex: EC2MetadataError) {
+        if (ex.statusCode == HttpStatusCode.NotFound.value) {
+            coroutineContext.info<ImdsCredentialsProvider> {
+                "Received 404 from IMDS when loading profile information. Hint: This instance may not have an " +
+                    "IAM role associated."
             }
-            throw ex
         }
+        throw ex
     }
 
     private suspend fun useCachedCredentials(ex: Exception): Credentials? = when {
