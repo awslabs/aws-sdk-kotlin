@@ -61,7 +61,6 @@ class EventStreamSerializerGenerator(
         val streamShape = ctx.model.expectShape<UnionShape>(streamingMember.target)
 
         writer.write("val stream = input.#L ?: return #T.Empty", streamingMember.defaultName(), RuntimeTypes.Http.HttpBody)
-        writer.write("val signingConfig = context.#T()", RuntimeTypes.AwsEventStream.newEventStreamSigningConfig)
 
         // initial HTTP request should use an empty body hash since the actual body is the event stream
         writer.write("context[#T.HashSpecification] = #T.EmptyBody", RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes, RuntimeTypes.Auth.Signing.AwsSigningCommon.HashSpecification)
@@ -69,7 +68,7 @@ class EventStreamSerializerGenerator(
         val encodeFn = encodeEventStreamMessage(ctx, op, streamShape)
         writer.withBlock("val messages = stream", "") {
             write(".#T(::#T)", RuntimeTypes.KotlinxCoroutines.Flow.map, encodeFn)
-            write(".#T(context, signingConfig)", RuntimeTypes.AwsEventStream.sign)
+            write(".#T(context)", RuntimeTypes.AwsEventStream.sign)
             write(".#T()", RuntimeTypes.AwsEventStream.encode)
         }
 
