@@ -42,6 +42,18 @@
                 "smithy.api#httpError": 403
             }
         },
+        "com.amazonaws.s3outposts#AwsAccountId": {
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^\\d{12}$"
+            }
+        },
+        "com.amazonaws.s3outposts#CapacityInBytes": {
+            "type": "long",
+            "traits": {
+                "smithy.api#default": 0
+            }
+        },
         "com.amazonaws.s3outposts#CidrBlock": {
             "type": "string"
         },
@@ -80,11 +92,14 @@
                     "target": "com.amazonaws.s3outposts#ResourceNotFoundException"
                 },
                 {
+                    "target": "com.amazonaws.s3outposts#ThrottlingException"
+                },
+                {
                     "target": "com.amazonaws.s3outposts#ValidationException"
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Creates an endpoint and associates it with the specified Outpost.</p>\n        <note>\n            <p>It can take up to 5 minutes for this action to finish.</p> \n         </note>\n        <p></p>\n        <p>Related actions include:</p>\n        <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_DeleteEndpoint.html\">DeleteEndpoint</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_ListEndpoints.html\">ListEndpoints</a>\n               </p>\n            </li>\n         </ul>",
+                "smithy.api#documentation": "<p>Creates an endpoint and associates it with the specified Outpost.</p>\n         <note>\n            <p>It can take up to 5 minutes for this action to finish.</p>\n         </note>\n         <p></p>\n         <p>Related actions include:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_DeleteEndpoint.html\">DeleteEndpoint</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_ListEndpoints.html\">ListEndpoints</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
                     "method": "POST",
                     "uri": "/S3Outposts/CreateEndpoint",
@@ -119,7 +134,7 @@
                 "AccessType": {
                     "target": "com.amazonaws.s3outposts#EndpointAccessType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of access for the network connectivity for the Amazon S3 on Outposts endpoint. To use\n            the Amazon Web Services VPC, choose <code>Private</code>. To use the endpoint with an on-premises\n            network, choose <code>CustomerOwnedIp</code>.  If you choose\n                <code>CustomerOwnedIp</code>, you must also provide the customer-owned IP address\n            pool (CoIP pool).</p>\n        <note>\n            <p>\n               <code>Private</code> is the default access type value.</p>\n         </note>"
+                        "smithy.api#documentation": "<p>The type of access for the network connectivity for the Amazon S3 on Outposts endpoint. To use\n            the Amazon Web Services VPC, choose <code>Private</code>. To use the endpoint with an on-premises\n            network, choose <code>CustomerOwnedIp</code>.  If you choose\n                <code>CustomerOwnedIp</code>, you must also provide the customer-owned IP address\n            pool (CoIP pool).</p>\n         <note>\n            <p>\n               <code>Private</code> is the default access type value.</p>\n         </note>"
                     }
                 },
                 "CustomerOwnedIpv4Pool": {
@@ -128,6 +143,9 @@
                         "smithy.api#documentation": "<p>The ID of the customer-owned IPv4 address pool (CoIP pool) for the endpoint. IP addresses\n            are allocated from this pool for the endpoint.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.s3outposts#CreateEndpointResult": {
@@ -169,11 +187,14 @@
                     "target": "com.amazonaws.s3outposts#ResourceNotFoundException"
                 },
                 {
+                    "target": "com.amazonaws.s3outposts#ThrottlingException"
+                },
+                {
                     "target": "com.amazonaws.s3outposts#ValidationException"
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Deletes an endpoint.</p>\n            <note>\n            <p>It can take up to 5 minutes for this action to finish.</p> \n         </note>\n        <p></p>\n        <p>Related actions include:</p>\n        <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_CreateEndpoint.html\">CreateEndpoint</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_ListEndpoints.html\">ListEndpoints</a>\n               </p>\n            </li>\n         </ul>",
+                "smithy.api#documentation": "<p>Deletes an endpoint.</p>\n         <note>\n            <p>It can take up to 5 minutes for this action to finish.</p>\n         </note>\n         <p></p>\n         <p>Related actions include:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_CreateEndpoint.html\">CreateEndpoint</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_ListEndpoints.html\">ListEndpoints</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
                     "method": "DELETE",
                     "uri": "/S3Outposts/DeleteEndpoint",
@@ -200,6 +221,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.s3outposts#Endpoint": {
@@ -277,18 +301,20 @@
             }
         },
         "com.amazonaws.s3outposts#EndpointAccessType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "Private",
-                        "name": "PRIVATE"
-                    },
-                    {
-                        "value": "CustomerOwnedIp",
-                        "name": "CUSTOMER_OWNED_IP"
+            "type": "enum",
+            "members": {
+                "PRIVATE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Private"
                     }
-                ]
+                },
+                "CUSTOMER_OWNED_IP": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CustomerOwnedIp"
+                    }
+                }
             }
         },
         "com.amazonaws.s3outposts#EndpointArn": {
@@ -304,22 +330,26 @@
             }
         },
         "com.amazonaws.s3outposts#EndpointStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "Pending",
-                        "name": "PENDING"
-                    },
-                    {
-                        "value": "Available",
-                        "name": "AVAILABLE"
-                    },
-                    {
-                        "value": "Deleting",
-                        "name": "DELETING"
+            "type": "enum",
+            "members": {
+                "PENDING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Pending"
                     }
-                ]
+                },
+                "AVAILABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Available"
+                    }
+                },
+                "DELETING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Deleting"
+                    }
+                }
             }
         },
         "com.amazonaws.s3outposts#Endpoints": {
@@ -363,11 +393,14 @@
                     "target": "com.amazonaws.s3outposts#ResourceNotFoundException"
                 },
                 {
+                    "target": "com.amazonaws.s3outposts#ThrottlingException"
+                },
+                {
                     "target": "com.amazonaws.s3outposts#ValidationException"
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Lists endpoints associated with the specified Outpost. </p>\n        <p>Related actions include:</p>\n        <ul>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_CreateEndpoint.html\">CreateEndpoint</a>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_DeleteEndpoint.html\">DeleteEndpoint</a>\n               </p>\n            </li>\n         </ul>",
+                "smithy.api#documentation": "<p>Lists endpoints associated with the specified Outpost. </p>\n         <p>Related actions include:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_CreateEndpoint.html\">CreateEndpoint</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_DeleteEndpoint.html\">DeleteEndpoint</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
                     "method": "GET",
                     "uri": "/S3Outposts/ListEndpoints",
@@ -399,6 +432,9 @@
                         "smithy.api#httpQuery": "maxResults"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.s3outposts#ListEndpointsResult": {
@@ -414,6 +450,83 @@
                     "target": "com.amazonaws.s3outposts#NextToken",
                     "traits": {
                         "smithy.api#documentation": "<p>If the number of endpoints associated with the specified Outpost exceeds <code>MaxResults</code>, \n            you can include this value in subsequent calls to this operation to retrieve more results.</p>"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.s3outposts#ListOutpostsWithS3": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.s3outposts#ListOutpostsWithS3Request"
+            },
+            "output": {
+                "target": "com.amazonaws.s3outposts#ListOutpostsWithS3Result"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.s3outposts#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.s3outposts#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.s3outposts#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.s3outposts#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Lists the Outposts with S3 on Outposts capacity for your Amazon Web Services account.\n            Includes S3 on Outposts that you have access to as the Outposts owner, or as a shared user\n            from Resource Access Manager (RAM). </p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/S3Outposts/ListOutpostsWithS3",
+                    "code": 200
+                },
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "items": "Outposts",
+                    "pageSize": "MaxResults"
+                }
+            }
+        },
+        "com.amazonaws.s3outposts#ListOutpostsWithS3Request": {
+            "type": "structure",
+            "members": {
+                "NextToken": {
+                    "target": "com.amazonaws.s3outposts#NextToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>When you can get additional results from the <code>ListOutpostsWithS3</code> call, a\n                <code>NextToken</code> parameter is returned in the output. You can then pass in a\n            subsequent command to the <code>NextToken</code> parameter to continue listing\n            additional Outposts.</p>",
+                        "smithy.api#httpQuery": "nextToken"
+                    }
+                },
+                "MaxResults": {
+                    "target": "com.amazonaws.s3outposts#MaxResults",
+                    "traits": {
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The maximum number of Outposts to return. The limit is 100.</p>",
+                        "smithy.api#httpQuery": "maxResults"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.s3outposts#ListOutpostsWithS3Result": {
+            "type": "structure",
+            "members": {
+                "Outposts": {
+                    "target": "com.amazonaws.s3outposts#Outposts",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Returns the list of Outposts that have the following characteristics:</p>\n         <ul>\n            <li>\n               <p>outposts that have S3 provisioned</p>\n            </li>\n            <li>\n               <p>outposts that are <code>Active</code> (not pending any provisioning nor decommissioned)</p>\n            </li>\n            <li>\n               <p>outposts to which the the calling Amazon Web Services account has access</p>\n            </li>\n         </ul>"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.s3outposts#NextToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Returns a token that you can use to call <code>ListOutpostsWithS3</code> again and receive additional results, if there are any.</p>"
                     }
                 }
             }
@@ -437,11 +550,14 @@
                     "target": "com.amazonaws.s3outposts#ResourceNotFoundException"
                 },
                 {
+                    "target": "com.amazonaws.s3outposts#ThrottlingException"
+                },
+                {
                     "target": "com.amazonaws.s3outposts#ValidationException"
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Lists all endpoints associated with an Outpost that has been shared by Amazon Web Services Resource Access Manager (RAM).</p>\n        <p>Related actions include:</p>\n        <ul>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_CreateEndpoint.html\">CreateEndpoint</a>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_DeleteEndpoint.html\">DeleteEndpoint</a>\n               </p>\n            </li>\n         </ul>",
+                "smithy.api#documentation": "<p>Lists all endpoints associated with an Outpost that has been shared by Amazon Web Services Resource Access Manager (RAM).</p>\n         <p>Related actions include:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_CreateEndpoint.html\">CreateEndpoint</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_s3outposts_DeleteEndpoint.html\">DeleteEndpoint</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
                     "method": "GET",
                     "uri": "/S3Outposts/ListSharedEndpoints",
@@ -481,6 +597,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.s3outposts#ListSharedEndpointsResult": {
@@ -543,10 +662,55 @@
                 "smithy.api#pattern": "^[A-Za-z0-9\\+\\:\\/\\=\\?\\#-_]+$"
             }
         },
+        "com.amazonaws.s3outposts#Outpost": {
+            "type": "structure",
+            "members": {
+                "OutpostArn": {
+                    "target": "com.amazonaws.s3outposts#OutpostArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the unique Amazon Resource Name (ARN) for the outpost.</p>"
+                    }
+                },
+                "OutpostId": {
+                    "target": "com.amazonaws.s3outposts#OutpostId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the unique identifier for the outpost.</p>"
+                    }
+                },
+                "OwnerId": {
+                    "target": "com.amazonaws.s3outposts#AwsAccountId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Returns the Amazon Web Services account ID of the outpost owner. Useful for comparing owned versus shared outposts.</p>"
+                    }
+                },
+                "CapacityInBytes": {
+                    "target": "com.amazonaws.s3outposts#CapacityInBytes",
+                    "traits": {
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The Amazon S3 capacity of the outpost in bytes.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains the details for the Outpost object.</p>"
+            }
+        },
+        "com.amazonaws.s3outposts#OutpostArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):outposts:[a-z\\-0-9]*:[0-9]{12}:outpost/(op-[a-f0-9]{17}|ec2)$"
+            }
+        },
         "com.amazonaws.s3outposts#OutpostId": {
             "type": "string",
             "traits": {
                 "smithy.api#pattern": "^(op-[a-f0-9]{17}|\\d{12}|ec2)$"
+            }
+        },
+        "com.amazonaws.s3outposts#Outposts": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.s3outposts#Outpost"
             }
         },
         "com.amazonaws.s3outposts#ResourceNotFoundException": {
@@ -574,6 +738,9 @@
                 },
                 {
                     "target": "com.amazonaws.s3outposts#ListEndpoints"
+                },
+                {
+                    "target": "com.amazonaws.s3outposts#ListOutpostsWithS3"
                 },
                 {
                     "target": "com.amazonaws.s3outposts#ListSharedEndpoints"
@@ -953,9 +1120,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "af-south-1"
                             }
                         },
                         {
@@ -966,9 +1133,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "ap-east-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "ap-east-1"
                             }
                         },
                         {
@@ -979,9 +1146,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "ap-northeast-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "ap-northeast-1"
                             }
                         },
                         {
@@ -992,9 +1159,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "ap-northeast-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "ap-northeast-2"
                             }
                         },
                         {
@@ -1005,9 +1172,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "ap-northeast-3",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "ap-northeast-3"
                             }
                         },
                         {
@@ -1018,9 +1185,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "ap-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "ap-south-1"
                             }
                         },
                         {
@@ -1031,9 +1198,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "ap-southeast-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "ap-southeast-1"
                             }
                         },
                         {
@@ -1044,9 +1211,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "ap-southeast-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "ap-southeast-2"
                             }
                         },
                         {
@@ -1057,9 +1224,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "ca-central-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "ca-central-1"
                             }
                         },
                         {
@@ -1070,9 +1237,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "eu-central-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "eu-central-1"
                             }
                         },
                         {
@@ -1083,9 +1250,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "eu-north-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "eu-north-1"
                             }
                         },
                         {
@@ -1096,9 +1263,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "eu-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "eu-south-1"
                             }
                         },
                         {
@@ -1109,9 +1276,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "eu-west-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "eu-west-1"
                             }
                         },
                         {
@@ -1122,9 +1289,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "eu-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "eu-west-2"
                             }
                         },
                         {
@@ -1135,9 +1302,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "eu-west-3",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "eu-west-3"
                             }
                         },
                         {
@@ -1148,9 +1315,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "me-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "me-south-1"
                             }
                         },
                         {
@@ -1161,9 +1328,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "sa-east-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "sa-east-1"
                             }
                         },
                         {
@@ -1174,9 +1341,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-east-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "us-east-1"
                             }
                         },
                         {
@@ -1187,9 +1354,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-east-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "us-east-2"
                             }
                         },
                         {
@@ -1200,9 +1367,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-west-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "us-west-1"
                             }
                         },
                         {
@@ -1213,9 +1380,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "us-west-2"
                             }
                         },
                         {
@@ -1226,9 +1393,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-east-1",
                                 "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "Region": "us-east-1"
                             }
                         },
                         {
@@ -1239,9 +1406,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-east-1",
                                 "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "Region": "us-east-1"
                             }
                         },
                         {
@@ -1252,9 +1419,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-east-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "us-east-1"
                             }
                         },
                         {
@@ -1265,9 +1432,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "cn-north-1",
                                 "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "Region": "cn-north-1"
                             }
                         },
                         {
@@ -1278,9 +1445,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "Region": "cn-north-1"
                             }
                         },
                         {
@@ -1291,9 +1458,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "cn-north-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "cn-north-1"
                             }
                         },
                         {
@@ -1304,9 +1471,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "cn-north-1"
                             }
                         },
                         {
@@ -1317,9 +1484,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-gov-east-1",
                                 "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "Region": "us-gov-east-1"
                             }
                         },
                         {
@@ -1330,9 +1497,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-gov-east-1",
                                 "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "Region": "us-gov-east-1"
                             }
                         },
                         {
@@ -1343,9 +1510,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-gov-east-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "us-gov-east-1"
                             }
                         },
                         {
@@ -1356,9 +1523,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-gov-east-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "us-gov-east-1"
                             }
                         },
                         {
@@ -1369,9 +1536,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-iso-east-1",
                                 "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "Region": "us-iso-east-1"
                             }
                         },
                         {
@@ -1382,9 +1549,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-iso-east-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "us-iso-east-1"
                             }
                         },
                         {
@@ -1395,9 +1562,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-isob-east-1",
                                 "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "Region": "us-isob-east-1"
                             }
                         },
                         {
@@ -1408,9 +1575,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-isob-east-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "Region": "us-isob-east-1"
                             }
                         },
                         {
@@ -1421,9 +1588,9 @@
                                 }
                             },
                             "params": {
-                                "Region": "us-east-1",
                                 "UseDualStack": false,
                                 "UseFIPS": false,
+                                "Region": "us-east-1",
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1446,9 +1613,9 @@
                                 "error": "Invalid Configuration: FIPS and custom endpoint are not supported"
                             },
                             "params": {
-                                "Region": "us-east-1",
                                 "UseDualStack": false,
                                 "UseFIPS": true,
+                                "Region": "us-east-1",
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1458,9 +1625,9 @@
                                 "error": "Invalid Configuration: Dualstack and custom endpoint are not supported"
                             },
                             "params": {
-                                "Region": "us-east-1",
                                 "UseDualStack": true,
                                 "UseFIPS": false,
+                                "Region": "us-east-1",
                                 "Endpoint": "https://example.com"
                             }
                         }
@@ -1479,6 +1646,19 @@
             "type": "string",
             "traits": {
                 "smithy.api#pattern": "^subnet-([0-9a-f]{8}|[0-9a-f]{17})$"
+            }
+        },
+        "com.amazonaws.s3outposts#ThrottlingException": {
+            "type": "structure",
+            "members": {
+                "Message": {
+                    "target": "com.amazonaws.s3outposts#ErrorMessage"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The request was denied due to request throttling.</p>",
+                "smithy.api#error": "client",
+                "smithy.api#httpError": 429
             }
         },
         "com.amazonaws.s3outposts#ValidationException": {
