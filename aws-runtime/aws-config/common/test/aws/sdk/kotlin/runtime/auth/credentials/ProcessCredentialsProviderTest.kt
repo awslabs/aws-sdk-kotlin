@@ -45,7 +45,7 @@ class ProcessCredentialsProviderTest {
         )
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
-        val actualCredentials = processCredentialsProvider.getCredentials()
+        val actualCredentials = processCredentialsProvider.resolve()
         assertEquals(expectedCredentials, actualCredentials)
     }
 
@@ -75,7 +75,7 @@ class ProcessCredentialsProviderTest {
         )
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
-        val actualCredentials = processCredentialsProvider.getCredentials()
+        val actualCredentials = processCredentialsProvider.resolve()
         assertEquals(expectedCredentials, actualCredentials)
     }
 
@@ -98,7 +98,7 @@ class ProcessCredentialsProviderTest {
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
         assertFailsWith<InvalidJsonCredentialsException> {
-            processCredentialsProvider.getCredentials()
+            processCredentialsProvider.resolve()
         }
     }
 
@@ -122,7 +122,7 @@ class ProcessCredentialsProviderTest {
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
         assertFailsWith<InvalidJsonCredentialsException> {
-            processCredentialsProvider.getCredentials()
+            processCredentialsProvider.resolve()
         }
     }
 
@@ -135,7 +135,7 @@ class ProcessCredentialsProviderTest {
         coEvery { executeCommand(any(), any(), any(), any(), any()) }.returns(Pair(exitCode, stderr))
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
-        val ex = assertFailsWith<CredentialsProviderException> { processCredentialsProvider.getCredentials() }
+        val ex = assertFailsWith<CredentialsProviderException> { processCredentialsProvider.resolve() }
         assertContains(ex.message!!, stderr) // the exception message should contain the program's stderr
     }
 }

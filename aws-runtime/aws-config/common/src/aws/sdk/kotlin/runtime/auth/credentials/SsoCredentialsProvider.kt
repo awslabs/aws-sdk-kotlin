@@ -98,7 +98,7 @@ public class SsoCredentialsProvider public constructor(
 
 ) : CloseableCredentialsProvider {
 
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(): Credentials {
         val traceSpan = coroutineContext.traceSpan
         val logger = traceSpan.logger<SsoCredentialsProvider>()
 

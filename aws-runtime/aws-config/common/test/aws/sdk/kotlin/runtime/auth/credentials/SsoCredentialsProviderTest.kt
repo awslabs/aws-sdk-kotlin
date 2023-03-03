@@ -109,7 +109,7 @@ class SsoCredentialsProviderTest {
         )
 
         assertFailsWith<ProviderConfigurationException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("The SSO session has expired")
     }
 
@@ -149,7 +149,7 @@ class SsoCredentialsProviderTest {
         )
 
         assertFailsWith<CredentialsNotLoadedException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("GetRoleCredentials operation failed")
     }
 
@@ -203,7 +203,7 @@ class SsoCredentialsProviderTest {
             clock = testClock,
         )
 
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
         val expected = Credentials("AKID", "secret", "session-token", expectedExpiration, "SSO")
         assertEquals(expected, actual)
     }
