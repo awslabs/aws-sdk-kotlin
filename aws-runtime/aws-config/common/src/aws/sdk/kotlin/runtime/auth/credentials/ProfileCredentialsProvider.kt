@@ -94,7 +94,7 @@ public class ProfileCredentialsProvider(
         "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClientEngine),
     )
 
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(): Credentials {
         val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
         val source = resolveConfigSource(platformProvider, profileName)
         logger.debug { "Loading credentials from profile `${source.profile}`" }
@@ -107,12 +107,12 @@ public class ProfileCredentialsProvider(
 
         val leaf = chain.leaf.toCredentialsProvider(region)
         logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
-        var creds = leaf.getCredentials()
+        var creds = leaf.resolve()
 
         chain.roles.forEach { roleArn ->
             logger.debug { "Assuming role `${roleArn.roleArn}`" }
             val assumeProvider = roleArn.toCredentialsProvider(creds, region)
-            creds = assumeProvider.getCredentials()
+            creds = assumeProvider.resolve()
         }
 
         logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }

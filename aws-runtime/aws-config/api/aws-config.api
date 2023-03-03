@@ -8,20 +8,20 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/DefaultChainCredentia
 	public fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/EcsCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
 	public fun <init> ()V
 	public fun close ()V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/EnvironmentCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
 	public fun <init> ()V
 	public fun <init> (Lkotlin/jvm/functions/Function1;)V
 	public fun close ()V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/ImdsCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
@@ -29,7 +29,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/ImdsCredentialsProvid
 	public fun <init> (Ljava/lang/String;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;Laws/smithy/kotlin/runtime/time/Clock;)V
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;Laws/smithy/kotlin/runtime/time/Clock;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/InvalidJsonCredentialsException : aws/sdk/kotlin/runtime/ClientException {
@@ -45,7 +45,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/InvalidSsoTokenExcept
 public final class aws/sdk/kotlin/runtime/auth/credentials/ProcessCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
 	public fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;JJ)V
 	public synthetic fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;JJILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/ProfileCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
@@ -53,7 +53,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/ProfileCredentialsPro
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/ProviderConfigurationException : aws/sdk/kotlin/runtime/ConfigurationException {
@@ -66,10 +66,10 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/SsoCredentialsProvide
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/time/Clock;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
 	public final fun getAccountId ()Ljava/lang/String;
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getRoleName ()Ljava/lang/String;
 	public final fun getSsoRegion ()Ljava/lang/String;
 	public final fun getStartUrl ()Ljava/lang/String;
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
@@ -77,7 +77,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProv
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProvider$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun <init> (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;)V
 	public fun close ()V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProvider$Builder {
@@ -99,7 +99,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StsAssumeRoleCredenti
 	public synthetic fun <init> (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLaws/smithy/kotlin/runtime/http/engine/HttpClientEngine;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun <init> (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLaws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
@@ -107,7 +107,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredent
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLaws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLaws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
-	public fun getCredentials (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredentialsProvider$Companion {

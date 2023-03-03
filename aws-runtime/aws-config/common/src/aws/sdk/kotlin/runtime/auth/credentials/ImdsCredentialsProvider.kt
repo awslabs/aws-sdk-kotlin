@@ -63,7 +63,7 @@ public class ImdsCredentialsProvider(
     // protects previousCredentials and nextRefresh
     private val mu = Mutex()
 
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(): Credentials {
         if (AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true) {
             throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
         }

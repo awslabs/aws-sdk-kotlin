@@ -145,7 +145,7 @@ class DefaultChainCredentialsProviderTest {
     fun executeTest(name: String) = runTest {
         val test = makeTest(name)
         val provider = DefaultChainCredentialsProvider(platformProvider = test.testPlatform, httpClientEngine = test.testEngine)
-        val actual = runCatching { provider.getCredentials() }
+        val actual = runCatching { provider.resolve() }
         val expected = test.expected
         when {
             expected is TestResult.Ok && actual.isFailure -> error("expected success, got error: $actual")

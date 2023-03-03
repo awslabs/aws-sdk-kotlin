@@ -29,7 +29,7 @@ public constructor(private val getEnv: (String) -> String?) : CloseableCredentia
     private fun requireEnv(variable: String): String =
         getEnv(variable) ?: throw ProviderConfigurationException("Missing value for environment variable `$variable`")
 
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(): Credentials {
         coroutineContext.trace<EnvironmentCredentialsProvider> {
             "Attempting to load credentials from env vars $ACCESS_KEY_ID/$SECRET_ACCESS_KEY/$SESSION_TOKEN"
         }

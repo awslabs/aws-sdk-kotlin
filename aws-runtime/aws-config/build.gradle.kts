@@ -54,6 +54,7 @@ kotlin {
                 implementation(project(":aws-runtime:aws-endpoint"))
                 implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
 
                 // additional dependencies required by generated sso provider
                 implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")

@@ -149,6 +149,7 @@ dependencies {
     implementation("aws.smithy.kotlin:aws-protocol-core:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
+    implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")

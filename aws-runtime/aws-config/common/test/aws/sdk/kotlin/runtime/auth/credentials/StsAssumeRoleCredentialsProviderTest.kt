@@ -42,7 +42,7 @@ class StsAssumeRoleCredentialsProviderTest {
             httpClientEngine = testEngine,
         )
 
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)
     }
 
@@ -69,7 +69,7 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("failed to assume role from STS")
     }
 
@@ -97,7 +97,7 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         val ex = assertFailsWith<ProviderConfigurationException> {
-            provider.getCredentials()
+            provider.resolve()
         }
 
         ex.message.shouldContain("STS is not activated in the requested region (us-west-2). Please check your configuration and activate STS in the target region if necessary")
@@ -116,7 +116,7 @@ class StsAssumeRoleCredentialsProviderTest {
             httpClientEngine = testEngine,
         )
 
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)
         val req = testEngine.requests().first()
         assertEquals(Host.Domain("sts.amazonaws.com"), req.actual.url.host)
@@ -135,7 +135,7 @@ class StsAssumeRoleCredentialsProviderTest {
             httpClientEngine = testEngine,
         )
 
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)
         val req = testEngine.requests().first()
         assertEquals(Host.Domain("sts.us-west-2.amazonaws.com"), req.actual.url.host)

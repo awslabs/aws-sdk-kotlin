@@ -46,7 +46,7 @@ public class ProcessCredentialsProvider(
     private val maxOutputLengthBytes: Long = 64 * 1024,
     private val timeoutMillis: Long = 60_000,
 ) : CredentialsProvider {
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(): Credentials {
         val logger = Logger.getLogger<ProcessCredentialsProvider>()
 
         val (exitCode, output) = try {
