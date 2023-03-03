@@ -1,0 +1,23 @@
+name: API Check
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!main'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  PACKAGE_NAME: aws-sdk-kotlin
+
+jobs:
+  ktlint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v2
+    - name: ${{ env.PACKAGE_NAME }} API Check
+      run: |
+        ./gradlew apiCheck
