@@ -12,6 +12,8 @@ import aws.smithy.kotlin.runtime.tracing.traceSpan
 import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -34,11 +36,7 @@ public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile 
     val allProfiles = loadAwsProfiles(platform, source)
 
     // Return the active profile
-    return if (allProfiles.containsKey(source.profile)) {
-        allProfiles[source.profile]!!
-    } else {
-        AwsProfile(source.profile, emptyMap())
-    }
+    return allProfiles[source.profile] ?: AwsProfile(source.profile, emptyMap())
 }
 
 /**
@@ -51,16 +49,26 @@ public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile 
  */
 @InternalSdkApi
 public suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): AwsProfiles =
-    coroutineContext.withChildTraceSpan("loadAwsProfiles") {
+    coroutineContext.withChildTraceSpan("Load AWS profiles") {
         // merged AWS configuration based on optional configuration and credential file contents
-        mergeProfiles(
-            parse(coroutineContext.traceSpan, FileType.CONFIGURATION, platform.readFileOrNull(source.configPath)?.decodeToString()),
-            parse(coroutineContext.traceSpan, FileType.CREDENTIAL, platform.readFileOrNull(source.credentialsPath)?.decodeToString()),
-        ).toProfileMap()
+        withContext(Dispatchers.IO) {
+            mergeProfiles(
+                parse(
+                    coroutineContext.traceSpan,
+                    FileType.CONFIGURATION,
+                    platform.readFileOrNull(source.configPath)?.decodeToString()
+                ),
+                parse(
+                    coroutineContext.traceSpan,
+                    FileType.CREDENTIAL,
+                    platform.readFileOrNull(source.credentialsPath)?.decodeToString()
+                ),
+            ).toProfileMap()
+        }
     }
 
 // Merge contents of profile maps
-internal fun mergeProfiles(vararg maps: RawProfileMap) = buildMap<String, Map<String, AwsConfigValue>> {
+internal fun mergeProfiles(vararg maps: RawProfileMap): RawProfileMap = buildMap {
     maps.forEach { map ->
         map.entries.forEach { entry ->
             put(entry.key, (get(entry.key) ?: emptyMap()) + entry.value)

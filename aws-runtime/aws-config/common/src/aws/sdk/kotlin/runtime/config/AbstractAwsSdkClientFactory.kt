@@ -27,7 +27,7 @@ public abstract class AbstractAwsSdkClientFactory<
     TConfigBuilder,
     TClient : SdkClient,
     TClientBuilder : SdkClient.Builder<TConfig, TConfigBuilder, TClient>,
-    >(private val clientName: String) : SdkClientFactory<TConfig, TConfigBuilder, TClient, TClientBuilder>
+    > : SdkClientFactory<TConfig, TConfigBuilder, TClient, TClientBuilder>
     where TConfig : SdkClientConfig,
           TConfig : AwsSdkClientConfig,
           TConfigBuilder : SdkClientConfig.Builder<TConfig>,
@@ -40,22 +40,18 @@ public abstract class AbstractAwsSdkClientFactory<
         if (block != null) builder.config.apply(block)
 
         val tracer = if (builder is TracingClientConfig.Builder) {
-            if (builder.tracer == null) builder.tracer = defaultTracer()
+            if (builder.tracer == null) builder.tracer = defaultTracer(builder.config.clientName)
             builder.tracer!!
         } else {
-            defaultTracer()
+            defaultTracer(builder.config.clientName)
         }
 
-        coroutineContext.withRootTraceSpan(tracer.createRootSpan("fromEnvironment")) {
-            coroutineContext.withChildTraceSpan("resolveRegion") {
-                builder.config.region = builder.config.region ?: resolveRegion()
-            }
-            coroutineContext.withChildTraceSpan("resolveRetryStrategy") {
-                builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy()
-            }
+        coroutineContext.withRootTraceSpan(tracer.createRootSpan("From environment")) {
+            builder.config.region = builder.config.region ?: resolveRegion()
+            builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy()
         }
         return builder.build()
     }
 
-    private fun defaultTracer(): Tracer = DefaultTracer(LoggingTraceProbe, clientName)
+    private fun defaultTracer(clientName: String): Tracer = DefaultTracer(LoggingTraceProbe, clientName)
 }

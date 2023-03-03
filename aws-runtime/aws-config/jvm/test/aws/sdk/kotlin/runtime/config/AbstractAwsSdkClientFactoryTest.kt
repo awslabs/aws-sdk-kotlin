@@ -60,7 +60,7 @@ private interface TestClient : SdkClient {
     override val config: Config
 
     // refactored: mostly in an abstract base now
-    companion object : AbstractAwsSdkClientFactory<Config, Config.Builder, TestClient, Builder>("test") {
+    companion object : AbstractAwsSdkClientFactory<Config, Config.Builder, TestClient, Builder>() {
         override fun builder(): Builder = Builder()
     }
 
@@ -70,12 +70,14 @@ private interface TestClient : SdkClient {
     }
 
     class Config private constructor(builder: Config.Builder) : SdkClientConfig, AwsSdkClientConfig {
+        override val clientName: String = builder.clientName
         override val retryPolicy: RetryPolicy<Any?> = builder.retryPolicy ?: AwsDefaultRetryPolicy
         override val retryStrategy: RetryStrategy = builder.retryStrategy ?: TestRetryStrategy()
         override val region: String = builder.region ?: error("region is required")
 
         // new: inherits builder equivalents for Config base classes
         class Builder : AwsSdkClientConfig.Builder, SdkClientConfig.Builder<Config> {
+            override var clientName: String = "Test"
             override var region: String? = null
             override var retryPolicy: RetryPolicy<Any?>? = null
             override var retryStrategy: RetryStrategy? = null

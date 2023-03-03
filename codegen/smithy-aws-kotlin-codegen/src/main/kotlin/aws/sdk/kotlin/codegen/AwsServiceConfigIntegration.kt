@@ -93,15 +93,12 @@ class AwsServiceConfigIntegration : KotlinIntegration {
     private val overrideServiceCompanionObjectWriter = SectionWriter { writer, _ ->
         // override the service client companion object for how a client is constructed
         val serviceSymbol = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
-        val serviceName = writer.getContext("service.name")?.toString()
-            ?: throw CodegenException("The service.name context must be set for client config generation")
 
         writer.withBlock(
-            "public companion object : #T<Config, Config.Builder, #T, Builder>(#S) {",
+            "public companion object : #T<Config, Config.Builder, #T, Builder>() {",
             "}",
             AwsRuntimeTypes.Config.AbstractAwsSdkClientFactory,
             serviceSymbol,
-            serviceName,
         ) {
             write("@#T", KotlinTypes.Jvm.JvmStatic)
             write("override fun builder(): Builder = Builder()")
