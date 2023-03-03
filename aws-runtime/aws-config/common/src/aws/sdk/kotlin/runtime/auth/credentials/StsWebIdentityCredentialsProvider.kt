@@ -70,7 +70,7 @@ public class StsWebIdentityCredentialsProvider(
         }
     }
 
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(): Credentials {
         val traceSpan = coroutineContext.traceSpan
         val logger = traceSpan.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials via web identity" }

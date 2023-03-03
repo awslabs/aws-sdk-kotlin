@@ -58,7 +58,7 @@ public class StsAssumeRoleCredentialsProvider(
     private val httpClientEngine: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(): Credentials {
         val traceSpan = coroutineContext.traceSpan
         val logger = traceSpan.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials" }

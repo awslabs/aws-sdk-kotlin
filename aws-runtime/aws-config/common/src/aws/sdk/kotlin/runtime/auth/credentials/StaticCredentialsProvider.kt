@@ -18,7 +18,7 @@ public class StaticCredentialsProvider public constructor(private val credential
 
     private constructor(builder: Builder) : this(Credentials(builder.accessKeyId!!, builder.secretAccessKey!!, builder.sessionToken))
 
-    override suspend fun getCredentials(): Credentials = credentials
+    override suspend fun resolve(): Credentials = credentials
 
     override fun close() { }
 

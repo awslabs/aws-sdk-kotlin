@@ -17,13 +17,13 @@ class StaticCredentialsProviderTest {
     fun testStaticProvider() = runTest {
         val expected = Credentials("access_key_id", "secret_access_key", "session_token")
         val provider = StaticCredentialsProvider(expected)
-        assertEquals(expected, provider.getCredentials())
+        assertEquals(expected, provider.resolve())
 
         val provider2 = StaticCredentialsProvider {
             accessKeyId = expected.accessKeyId
             secretAccessKey = expected.secretAccessKey
             sessionToken = expected.sessionToken
         }
-        assertEquals(expected, provider2.getCredentials())
+        assertEquals(expected, provider2.resolve())
     }
 }

@@ -69,7 +69,7 @@ public class DefaultChainCredentialsProvider constructor(
 
     private val provider = CachedCredentialsProvider(chain)
 
-    override suspend fun getCredentials(): Credentials = provider.getCredentials()
+    override suspend fun resolve(): Credentials = provider.resolve()
 
     override fun close() {
         provider.close()
@@ -80,16 +80,16 @@ public class DefaultChainCredentialsProvider constructor(
 }
 
 /**
- * Wrapper around [StsWebIdentityCredentialsProvider] that delays any exceptions until [getCredentials] is invoked.
+ * Wrapper around [StsWebIdentityCredentialsProvider] that delays any exceptions until [resolve] is invoked.
  * This allows it to be part of the default chain and any failures result in the chain to move onto the next provider.
  */
 private class StsWebIdentityProvider(
     val platformProvider: PlatformProvider,
     val httpClientEngine: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(): Credentials {
         val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClientEngine = httpClientEngine)
-        return wrapped.getCredentials()
+        return wrapped.resolve()
     }
 
     override fun close() { }

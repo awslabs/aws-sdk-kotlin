@@ -95,7 +95,7 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
     }
@@ -115,7 +115,7 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
     }
@@ -131,7 +131,7 @@ class EcsCredentialsProviderTest {
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<ProviderConfigurationException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("The container credentials full URI ($uri) has an invalid host. Host can only be one of [127.0.0.1, ::1].")
     }
 
@@ -150,7 +150,7 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
     }
@@ -162,7 +162,7 @@ class EcsCredentialsProviderTest {
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<ProviderConfigurationException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("Container credentials URI not set")
     }
 
@@ -184,7 +184,7 @@ class EcsCredentialsProviderTest {
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
     }
@@ -204,7 +204,7 @@ class EcsCredentialsProviderTest {
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("Error retrieving credentials from container service: HTTP 400: Bad Request")
 
         engine.assertRequests()
@@ -227,7 +227,7 @@ class EcsCredentialsProviderTest {
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("Error retrieving credentials from container service: HTTP 429: Too Many Requests")
 
         engine.assertRequests()
@@ -257,7 +257,7 @@ class EcsCredentialsProviderTest {
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("Error retrieving credentials from container service: code=failed; message=request was malformed")
 
         engine.assertRequests()
@@ -289,7 +289,7 @@ class EcsCredentialsProviderTest {
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("Error retrieving credentials from container service: code=failed; message=too many requests")
 
         engine.assertRequests()
@@ -314,7 +314,7 @@ class EcsCredentialsProviderTest {
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("Error retrieving credentials from container service: HTTP 502: Bad Gateway")
 
         engine.assertRequests()

@@ -90,7 +90,7 @@ class StsWebIdentityCredentialsProviderTest {
             platformProvider = testPlatform,
         )
 
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
         assertEquals(expectedCredentialsBase, actual)
     }
 
@@ -124,7 +124,7 @@ class StsWebIdentityCredentialsProviderTest {
         )
 
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("STS failed to assume role from web identity")
     }
 
@@ -143,7 +143,7 @@ class StsWebIdentityCredentialsProviderTest {
         )
 
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("failed to read webIdentityToken from token-path")
     }
 
