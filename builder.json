@@ -18,6 +18,7 @@
             "!env": {},
             "!test_steps": [
                 "{gradlew} publishToMavenLocal",
+                "{gradlew} apiCheck",
                 "{gradlew} test allTests",
                 "systeminfo",
                 "{gradlew} --status",
@@ -34,8 +35,11 @@
     "build_steps": [
         "{gradlew} assemble --parallel"
     ],
+    "post_build_steps": [
+        "{gradlew} publishToMavenLocal"
+    ],
     "test_steps": [
-        "{gradlew} publishToMavenLocal",
+        "{gradlew} apiCheck",
         "{gradlew} test allTests",
         "{gradlew} testAllProtocols"
     ],
