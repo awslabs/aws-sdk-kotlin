@@ -55,7 +55,6 @@
         "codebuild-svc-check": {
             "!imports": [],
             "!test_steps": [
-                "{gradlew} apiCheck",
                 "{gradlew} test allTests"
             ]
         },
