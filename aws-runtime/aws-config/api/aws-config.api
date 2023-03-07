@@ -157,8 +157,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public fun getSdkLogMode ()Laws/smithy/kotlin/runtime/client/SdkLogMode;
 	public final fun getSigner ()Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigner;
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
-	public final fun getUseDualStack ()Z
-	public final fun getUseFips ()Z
+	public fun getUseDualStack ()Z
+	public fun getUseFips ()Z
 	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder;
 }
 
@@ -178,8 +178,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public fun getSdkLogMode ()Laws/smithy/kotlin/runtime/client/SdkLogMode;
 	public final fun getSigner ()Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigner;
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
-	public final fun getUseDualStack ()Z
-	public final fun getUseFips ()Z
+	public fun getUseDualStack ()Ljava/lang/Boolean;
+	public fun getUseFips ()Ljava/lang/Boolean;
 	public fun setClientName (Ljava/lang/String;)V
 	public final fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
 	public final fun setEndpointProvider (Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;)V
@@ -192,8 +192,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public fun setSdkLogMode (Laws/smithy/kotlin/runtime/client/SdkLogMode;)V
 	public final fun setSigner (Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigner;)V
 	public fun setTracer (Laws/smithy/kotlin/runtime/tracing/Tracer;)V
-	public final fun setUseDualStack (Z)V
-	public final fun setUseFips (Z)V
+	public fun setUseDualStack (Ljava/lang/Boolean;)V
+	public fun setUseFips (Ljava/lang/Boolean;)V
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Companion {
@@ -466,8 +466,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public fun getSdkLogMode ()Laws/smithy/kotlin/runtime/client/SdkLogMode;
 	public final fun getSigner ()Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigner;
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
-	public final fun getUseDualStack ()Z
-	public final fun getUseFips ()Z
+	public fun getUseDualStack ()Z
+	public fun getUseFips ()Z
 	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder;
 }
 
@@ -487,8 +487,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public fun getSdkLogMode ()Laws/smithy/kotlin/runtime/client/SdkLogMode;
 	public final fun getSigner ()Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigner;
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
-	public final fun getUseDualStack ()Z
-	public final fun getUseFips ()Z
+	public fun getUseDualStack ()Ljava/lang/Boolean;
+	public fun getUseFips ()Ljava/lang/Boolean;
 	public fun setClientName (Ljava/lang/String;)V
 	public final fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
 	public final fun setEndpointProvider (Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;)V
@@ -501,8 +501,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public fun setSdkLogMode (Laws/smithy/kotlin/runtime/client/SdkLogMode;)V
 	public final fun setSigner (Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigner;)V
 	public fun setTracer (Laws/smithy/kotlin/runtime/tracing/Tracer;)V
-	public final fun setUseDualStack (Z)V
-	public final fun setUseFips (Z)V
+	public fun setUseDualStack (Ljava/lang/Boolean;)V
+	public fun setUseFips (Ljava/lang/Boolean;)V
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Companion {
@@ -1003,6 +1003,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Ta
 
 public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory : aws/smithy/kotlin/runtime/client/SdkClientFactory {
 	public fun <init> ()V
+	protected fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun fromEnvironment (Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun fromEnvironment$default (Laws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public fun invoke (Lkotlin/jvm/functions/Function1;)Laws/smithy/kotlin/runtime/client/SdkClient;
@@ -1080,8 +1081,19 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsSharedCredenti
 	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsSharedCredentialsFile;
 }
 
+public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsUseDualStackEndpoint : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
+	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsUseDualStackEndpoint;
+}
+
+public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsUseFipsEndpoint : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
+	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsUseFipsEndpoint;
+}
+
 public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsWebIdentityTokenFile : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
 	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsWebIdentityTokenFile;
+}
+
+public final class aws/sdk/kotlin/runtime/config/endpoints/EndpointsKt {
 }
 
 public final class aws/sdk/kotlin/runtime/config/imds/EC2MetadataError : aws/sdk/kotlin/runtime/AwsServiceException {
@@ -1229,12 +1241,16 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 	public static final fun getAwsAccessKeyId (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
 	public static final fun getAwsSecretAccessKey (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
 	public static final fun getAwsSessionToken (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
+	public static final fun getBooleanStrictOrNull (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Boolean;
+	public static synthetic fun getBooleanStrictOrNull$default (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/Boolean;
 	public static final fun getCredentialProcess (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
 	public static final fun getMaxAttempts (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/Integer;
 	public static final fun getRegion (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
 	public static final fun getRetryMode (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Laws/sdk/kotlin/runtime/config/retries/RetryMode;
 	public static final fun getRoleArn (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
 	public static final fun getSourceProfile (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
+	public static final fun getUseDualStack (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/Boolean;
+	public static final fun getUseFips (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/Boolean;
 }
 
 public final class aws/sdk/kotlin/runtime/config/retries/ResolveRetryStrategyKt {

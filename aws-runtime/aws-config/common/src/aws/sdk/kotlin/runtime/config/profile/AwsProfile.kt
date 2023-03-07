@@ -95,3 +95,33 @@ public val AwsProfile.retryMode: RetryMode?
         RetryMode.values().firstOrNull { it.name.equals(this, ignoreCase = true) }
             ?: throw ConfigurationException("Retry mode $this is not supported, should be one of: ${RetryMode.values().joinToString(", ")}")
     }
+
+/**
+ * Whether service clients should make requests to the FIPS endpoint variant.
+ */
+public val AwsProfile.useFips: Boolean?
+    get() = getBooleanStrictOrNull("use_fips_endpoint")
+
+/**
+ * Whether service clients should make requests to the dual-stack endpoint variant.
+ */
+public val AwsProfile.useDualStack: Boolean?
+    get() = getBooleanStrictOrNull("use_dualstack_endpoint")
+
+/**
+ * Parse a config value as a boolean. Will accept any variety of casing, but only if the lowercase form of the value
+ * is a strict boolean keyword.
+ */
+public fun AwsProfile.getBooleanStrictOrNull(key: String, subKey: String? = null): Boolean? =
+    when (getOrNull(key, subKey)?.lowercase()) {
+        "true" -> true
+        "false" -> false
+        null -> null
+        else -> throw ConfigurationException(
+            buildString {
+                append("Failed to parse config property $key")
+                subKey?.let { append(".$it") }
+                append(" as a boolean")
+            },
+        )
+    }

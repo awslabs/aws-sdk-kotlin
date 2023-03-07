@@ -143,6 +143,16 @@ public sealed class AwsSdkSetting<T>(
      * Which RetryMode to use for the default RetryPolicy, when one is not specified at the client level.
      */
     public object AwsRetryMode : AwsSdkSetting<RetryMode>("AWS_RETRY_MODE", "aws.retryMode")
+
+    /**
+     * Whether to use FIPS endpoints when making requests.
+     */
+    public object AwsUseFipsEndpoint : AwsSdkSetting<Boolean>("AWS_USE_FIPS_ENDPOINT", "aws.useFipsEndpoint")
+
+    /**
+     * Whether to use dual-stack endpoints when making requests.
+     */
+    public object AwsUseDualStackEndpoint : AwsSdkSetting<Boolean>("AWS_USE_DUALSTACK_ENDPOINT", "aws.useDualstackEndpoint")
 }
 
 /**

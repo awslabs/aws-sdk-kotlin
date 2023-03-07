@@ -7,8 +7,12 @@ package aws.sdk.kotlin.runtime.region
 
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.imds.InstanceMetadataProvider
+import aws.sdk.kotlin.runtime.config.profile.AwsProfile
+import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
 import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import aws.smithy.kotlin.runtime.util.asyncLazy
 
 /**
  * [RegionProvider] that looks for region in this order:
@@ -20,4 +24,5 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 internal expect class DefaultRegionProviderChain constructor(
     platformProvider: PlatformProvider = PlatformProvider.System,
     imdsClient: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
+    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadActiveAwsProfile(platformProvider) },
 ) : RegionProvider, Closeable

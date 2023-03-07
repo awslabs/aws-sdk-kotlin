@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.config.retries
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
+import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
 import aws.sdk.kotlin.runtime.config.profile.maxAttempts
 import aws.sdk.kotlin.runtime.config.profile.retryMode
@@ -15,6 +16,7 @@ import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.retries.RetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
+import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
 
@@ -25,9 +27,8 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
 @InternalSdkApi
 public suspend fun resolveRetryStrategy(
     platformProvider: PlatformProvider = PlatformProvider.System,
+    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadActiveAwsProfile(platformProvider) },
 ): RetryStrategy {
-    val profile = asyncLazy { loadActiveAwsProfile(platformProvider) }
-
     val maxAttempts = AwsSdkSetting.AwsMaxAttempts.resolve(platformProvider)
         ?: profile.get().maxAttempts
         ?: StandardRetryStrategyOptions.Default.maxAttempts

@@ -6,12 +6,19 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
+import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
+import aws.sdk.kotlin.runtime.config.endpoints.resolveUseFips
+import aws.sdk.kotlin.runtime.config.profile.AwsProfile
+import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
 import aws.smithy.kotlin.runtime.tracing.*
+import aws.smithy.kotlin.runtime.util.LazyAsyncValue
+import aws.smithy.kotlin.runtime.util.PlatformProvider
+import aws.smithy.kotlin.runtime.util.asyncLazy
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -47,11 +54,22 @@ public abstract class AbstractAwsSdkClientFactory<
         }
 
         coroutineContext.withRootTraceSpan(tracer.createRootSpan("Config resolution")) {
-            builder.config.region = builder.config.region ?: resolveRegion()
-            builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy()
+            val profile = asyncLazy { loadActiveAwsProfile(PlatformProvider.System) }
+
+            builder.config.region = builder.config.region ?: resolveRegion(profile = profile)
+            builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy(profile = profile)
+            builder.config.useFips = builder.config.useFips ?: resolveUseFips(profile = profile)
+            builder.config.useDualStack = builder.config.useDualStack ?: resolveUseDualStack(profile = profile)
+
+            finalizeConfig(builder, profile)
         }
         return builder.build()
     }
+
+    /**
+     * Inject any client-specific config.
+     */
+    protected open suspend fun finalizeConfig(builder: TClientBuilder, profile: LazyAsyncValue<AwsProfile>) { }
 
     private fun defaultTracer(clientName: String): Tracer = DefaultTracer(LoggingTraceProbe, clientName)
 }
