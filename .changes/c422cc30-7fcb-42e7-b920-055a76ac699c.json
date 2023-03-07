@@ -1,5 +1,8 @@
 {
     "id": "c422cc30-7fcb-42e7-b920-055a76ac699c",
     "type": "feature",
-    "description": "Add support for loading S3 accelerate and addressing settings from shared config."
+    "description": "Add support for loading S3 accelerate and addressing settings from shared config.",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#206"
+    ]
 }
