@@ -54,9 +54,6 @@ class AbstractAwsSdkClientFactoryTest {
 }
 
 private interface TestClient : SdkClient {
-    override val serviceName: String
-        get() = "test"
-
     override val config: Config
 
     // refactored: mostly in an abstract base now

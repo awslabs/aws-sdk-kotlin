@@ -56,12 +56,12 @@ public suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfig
                 parse(
                     coroutineContext.traceSpan,
                     FileType.CONFIGURATION,
-                    platform.readFileOrNull(source.configPath)?.decodeToString()
+                    platform.readFileOrNull(source.configPath)?.decodeToString(),
                 ),
                 parse(
                     coroutineContext.traceSpan,
                     FileType.CREDENTIAL,
-                    platform.readFileOrNull(source.credentialsPath)?.decodeToString()
+                    platform.readFileOrNull(source.credentialsPath)?.decodeToString(),
                 ),
             ).toProfileMap()
         }

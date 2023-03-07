@@ -84,7 +84,6 @@ public class EcsCredentialsProvider internal constructor(
             deserializer = EcsCredentialsDeserializer()
             context {
                 operationName = "EcsCredentialsProvider"
-                service = "n/a"
             }
         }
         op.execution.retryPolicy = EcsCredentialsRetryPolicy()

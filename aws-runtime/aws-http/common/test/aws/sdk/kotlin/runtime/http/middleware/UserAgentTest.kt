@@ -47,7 +47,6 @@ class UserAgentTest {
             serializer = UnitSerializer
             deserializer = IdentityDeserializer
             context {
-                service = "Test Service"
                 operationName = "testOperation"
             }
         }.apply {

@@ -47,7 +47,6 @@ class AwsRetryHeaderMiddlewareTest {
             context {
                 // required operation context
                 operationName = "TestOperation"
-                service = "TestService"
             }
         }
 
