@@ -49,7 +49,7 @@ internal class ImdsEndpointProvider(
 
     private suspend fun loadEndpointFromProfile(): Endpoint? {
         val profile = activeProfile.get()
-        return profile[EC2_METADATA_SERVICE_ENDPOINT_PROFILE_KEY]?.toEndpoint()
+        return profile.getOrNull(EC2_METADATA_SERVICE_ENDPOINT_PROFILE_KEY)?.toEndpoint()
     }
 
     private fun loadEndpointModeFromEnv(): EndpointMode? =
@@ -57,7 +57,7 @@ internal class ImdsEndpointProvider(
 
     private suspend fun loadEndpointModeFromProfile(): EndpointMode? {
         val profile = activeProfile.get()
-        return profile[EC2_METADATA_SERVICE_ENDPOINT_MODE_PROFILE_KEY]?.let { EndpointMode.fromValue(it) }
+        return profile.getOrNull(EC2_METADATA_SERVICE_ENDPOINT_MODE_PROFILE_KEY)?.let { EndpointMode.fromValue(it) }
     }
 }
 

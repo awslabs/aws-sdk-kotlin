@@ -5,9 +5,10 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.PlatformProvider
-import io.kotest.matchers.maps.shouldContainAll
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -22,7 +23,6 @@ import kotlin.io.path.absolutePathString
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.writeText
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 /**
  * Tests that exercise logic associated with the filesystem
@@ -50,11 +50,12 @@ class AWSConfigLoaderFilesystemTest {
             os = PlatformProvider.System.osInfo(), // Actual value
         )
 
-        val actual = loadActiveAwsProfile(testPlatform)
+        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            loadActiveAwsProfile(testPlatform)
+        }
 
         assertEquals("foo", actual.name)
-        assertTrue(actual.containsKey("name"))
-        assertEquals("value", actual["name"])
+        assertEquals("value", actual.getOrNull("name"))
 
         configFile.deleteIfExists()
         credentialsFile.deleteIfExists()
@@ -76,17 +77,14 @@ class AWSConfigLoaderFilesystemTest {
             os = PlatformProvider.System.osInfo(), // Actual value
         )
 
-        val actual = loadActiveAwsProfile(testPlatform)
+        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            loadActiveAwsProfile(testPlatform)
+        }
 
         assertEquals("default", actual.name)
-        assertEquals(3, actual.size)
-        actual.shouldContainAll(
-            mapOf(
-                "name" to "value",
-                "name3" to "value3",
-                "secret" to "foo",
-            ),
-        )
+        assertEquals("value", actual.getOrNull("name"))
+        assertEquals("value3", actual.getOrNull("name3"))
+        assertEquals("foo", actual.getOrNull("secret"))
 
         configFile.deleteIfExists()
         credentialsFile.deleteIfExists()

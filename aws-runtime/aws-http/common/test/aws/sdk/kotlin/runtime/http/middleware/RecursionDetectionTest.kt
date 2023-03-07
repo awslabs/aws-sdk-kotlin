@@ -56,7 +56,6 @@ class RecursionDetectionTest {
             serializer = if (existingTraceHeader != null) TraceHeaderSerializer(existingTraceHeader) else UnitSerializer
             deserializer = IdentityDeserializer
             context {
-                service = "Test Service"
                 operationName = "testOperation"
             }
         }

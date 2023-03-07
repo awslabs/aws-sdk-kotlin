@@ -103,7 +103,7 @@ public class ProfileCredentialsProvider(
 
         // if profile is overridden for this provider, attempt to resolve it from there first
         val profileOverride = profileName?.let { profiles[it] }
-        val region = asyncLazy { region ?: profileOverride?.get("region") ?: resolveRegion(platformProvider) }
+        val region = asyncLazy { region ?: profileOverride?.getOrNull("region") ?: resolveRegion(platformProvider) }
 
         val leaf = chain.leaf.toCredentialsProvider(region)
         logger.debug { "Resolving credentials from ${chain.leaf.description()}" }

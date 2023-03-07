@@ -42,7 +42,7 @@ internal const val parserTestSuiteJson = """
         "configFile": "[profile foo"
       },
       "output": {
-        "errorContaining": "Profile definition must end with ']'"
+        "errorContaining": "Encountered unexpected token"
       }
     },
     {
@@ -73,7 +73,7 @@ internal const val parserTestSuiteJson = """
         "configFile": "name = value"
       },
       "output": {
-        "errorContaining": "Expected a profile definition"
+        "errorContaining": "Encountered unexpected token"
       }
     },
     {
@@ -143,20 +143,6 @@ internal const val parserTestSuiteJson = """
       }
     },
     {
-      "name": "Profiles can contain multiple properties.",
-      "input": {
-        "configFile": "[profile foo]\nname = value\nname2 = value2"
-      },
-      "output": {
-        "profiles": {
-          "foo": {
-            "name": "value",
-            "name2": "value2"
-          }
-        }
-      }
-    },
-    {
       "name": "Property keys and values are trimmed.",
       "input": {
         "configFile": "[profile foo]\nname \t=  \tvalue \t"
@@ -188,7 +174,7 @@ internal const val parserTestSuiteJson = """
         "configFile": "[profile foo]\n= value"
       },
       "output": {
-        "errorContaining": "Property did not have a name"
+        "errorContaining": "Encountered unexpected token"
       }
     },
     {
@@ -197,7 +183,7 @@ internal const val parserTestSuiteJson = """
         "configFile": "[profile foo]\nkey : value"
       },
       "output": {
-        "errorContaining": "Expected an '=' sign defining a property"
+        "errorContaining": "Encountered unexpected token"
       }
     },
     {
@@ -391,7 +377,7 @@ internal const val parserTestSuiteJson = """
         "configFile": " -continued"
       },
       "output": {
-        "errorContaining": "Expected a profile definition"
+        "errorContaining": "Encountered unexpected token"
       }
     },
     {
@@ -400,7 +386,7 @@ internal const val parserTestSuiteJson = """
         "configFile": "[profile foo]\n -continued"
       },
       "output": {
-        "errorContaining": "Expected a property definition"
+        "errorContaining": "Encountered unexpected token"
       }
     },
     {
@@ -409,7 +395,7 @@ internal const val parserTestSuiteJson = """
         "configFile": "[profile foo]\nname = value\n[profile foo]\n -continued"
       },
       "output": {
-        "errorContaining": "Expected a property definition"
+        "errorContaining": "Encountered unexpected token"
       }
     },
     {
@@ -531,7 +517,9 @@ internal const val parserTestSuiteJson = """
       "output": {
         "profiles": {
           "foo": {
-            "s3": "\nname = value"
+            "s3": {
+              "name": "value"
+            }
           }
         }
       }
@@ -542,7 +530,7 @@ internal const val parserTestSuiteJson = """
         "configFile": "[profile foo]\ns3 =\n invalid"
       },
       "output": {
-        "errorContaining": "Expected an '=' sign defining a sub-property"
+        "errorContaining": "Encountered unexpected token"
       }
     },
     {
@@ -553,7 +541,9 @@ internal const val parserTestSuiteJson = """
       "output": {
         "profiles": {
           "foo": {
-            "s3": "\nname ="
+            "s3": {
+              "name": ""
+            }
           }
         }
       }
@@ -564,18 +554,20 @@ internal const val parserTestSuiteJson = """
         "configFile": "[profile foo]\ns3 =\n = value"
       },
       "output": {
-        "errorContaining": "Sub-property did not have a name"
+        "errorContaining": "Encountered unexpected token"
       }
     },
     {
-      "name": "Sub-property definitions can have an invalid name.",
+      "name": "Sub-property definitions ignore invalid name.",
       "input": {
-        "configFile": "[profile foo]\ns3 =\n in valid = value"
+        "configFile": "[profile foo]\ns3 =\n in valid = value\n valid = value"
       },
       "output": {
         "profiles": {
           "foo": {
-            "s3": "\nin valid = value"
+            "s3": {
+              "valid": "value"
+            }
           }
         }
       }
@@ -588,7 +580,10 @@ internal const val parserTestSuiteJson = """
       "output": {
         "profiles": {
           "foo": {
-            "s3": "\nname = value\nname2 = value2"
+            "s3": {
+              "name": "value",
+              "name2": "value2"
+            }
           }
         }
       }
@@ -684,15 +679,6 @@ internal const val parserTestSuiteJson = """
       }
     },
     {
-      "name": "Invalid continuation",
-      "input": {
-        "configFile": "[profile foo]\nname = value\n[profile foo]\n -continued"
-      },
-      "output": {
-        "errorContaining": "Expected a property definition, found continuation"
-      }
-    },
-    {
       "name": "sneaky profile name",
       "input": {
         "configFile": "[profilefoo]\nname = value\n[profile bar]"
@@ -726,6 +712,23 @@ internal const val parserTestSuiteJson = """
       },
       "output": {
         "profiles": { "foo": {"name":  "value"} }
+      }
+    },
+    {
+      "name": "handles different sequences of continuations and sub-properties",
+      "input": {
+        "configFile": "[default]\nname = value1\n value2 = 12 \n value3\nname2 = value2\nname3 =\n name3_0 = 1"
+      },
+      "output": {
+        "profiles": {
+          "default": {
+            "name": "value1\nvalue2 = 12\nvalue3",
+            "name2": "value2",
+            "name3": {
+              "name3_0": "1"
+            }
+          }
+        }
       }
     }
   ]

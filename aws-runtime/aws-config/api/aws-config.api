@@ -129,7 +129,6 @@ public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal
 	public static fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Builder;
 	public abstract fun getConfig ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config;
 	public abstract fun getRoleCredentials (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun getServiceName ()Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Builder : aws/smithy/kotlin/runtime/client/AbstractSdkClientBuilder {
@@ -146,6 +145,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
 	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Companion;
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getClientName ()Ljava/lang/String;
 	public final fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getEndpointProvider ()Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
@@ -166,6 +166,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public fun <init> ()V
 	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config;
 	public synthetic fun build ()Ljava/lang/Object;
+	public fun getClientName ()Ljava/lang/String;
 	public final fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getEndpointProvider ()Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
@@ -179,6 +180,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
 	public final fun getUseDualStack ()Z
 	public final fun getUseFips ()Z
+	public fun setClientName (Ljava/lang/String;)V
 	public final fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
 	public final fun setEndpointProvider (Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;)V
 	public final fun setEndpointUrl (Laws/smithy/kotlin/runtime/net/Url;)V
@@ -196,10 +198,6 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Companion {
 	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$DefaultImpls {
-	public static fun getServiceName (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient;)Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClientKt {
@@ -440,7 +438,6 @@ public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal
 	public abstract fun assumeRoleWithWebIdentity (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Builder;
 	public abstract fun getConfig ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config;
-	public abstract fun getServiceName ()Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Builder : aws/smithy/kotlin/runtime/client/AbstractSdkClientBuilder {
@@ -457,6 +454,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
 	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Companion;
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getClientName ()Ljava/lang/String;
 	public final fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getEndpointProvider ()Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
@@ -477,6 +475,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public fun <init> ()V
 	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config;
 	public synthetic fun build ()Ljava/lang/Object;
+	public fun getClientName ()Ljava/lang/String;
 	public final fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getEndpointProvider ()Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
@@ -490,6 +489,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
 	public final fun getUseDualStack ()Z
 	public final fun getUseFips ()Z
+	public fun setClientName (Ljava/lang/String;)V
 	public final fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
 	public final fun setEndpointProvider (Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;)V
 	public final fun setEndpointUrl (Laws/smithy/kotlin/runtime/net/Url;)V
@@ -507,10 +507,6 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Companion {
 	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$DefaultImpls {
-	public static fun getServiceName (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient;)Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClientKt {
@@ -1165,14 +1161,14 @@ public abstract interface class aws/sdk/kotlin/runtime/config/imds/InstanceMetad
 public final class aws/sdk/kotlin/runtime/config/profile/AwsConfigLoaderKt {
 }
 
-public class aws/sdk/kotlin/runtime/config/profile/AwsConfigParseException : aws/sdk/kotlin/runtime/ConfigurationException {
-	public fun <init> (Ljava/lang/String;)V
+public final class aws/sdk/kotlin/runtime/config/profile/AwsConfigParseException : aws/sdk/kotlin/runtime/ConfigurationException {
+	public fun <init> (Ljava/lang/String;I)V
 }
 
-public final class aws/sdk/kotlin/runtime/config/profile/AwsProfile : java/util/Map, kotlin/jvm/internal/markers/KMappedMarker {
-	public fun <init> (Ljava/lang/String;Ljava/util/Map;)V
+public final class aws/sdk/kotlin/runtime/config/profile/AwsConfigValue$Map : aws/sdk/kotlin/runtime/config/profile/AwsConfigValue, java/util/Map, kotlin/jvm/internal/markers/KMappedMarker {
+	public fun <init> (Ljava/util/Map;)V
 	public fun clear ()V
-	public final fun component1 ()Ljava/lang/String;
+	public final fun component1 ()Ljava/util/Map;
 	public synthetic fun compute (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
 	public fun compute (Ljava/lang/String;Ljava/util/function/BiFunction;)Ljava/lang/String;
 	public synthetic fun computeIfAbsent (Ljava/lang/Object;Ljava/util/function/Function;)Ljava/lang/Object;
@@ -1183,8 +1179,8 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfile : java/util/
 	public fun containsKey (Ljava/lang/String;)Z
 	public final fun containsValue (Ljava/lang/Object;)Z
 	public fun containsValue (Ljava/lang/String;)Z
-	public final fun copy (Ljava/lang/String;Ljava/util/Map;)Laws/sdk/kotlin/runtime/config/profile/AwsProfile;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/config/profile/AwsProfile;
+	public final fun copy (Ljava/util/Map;)Laws/sdk/kotlin/runtime/config/profile/AwsConfigValue$Map;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/config/profile/AwsConfigValue$Map;Ljava/util/Map;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/config/profile/AwsConfigValue$Map;
 	public final fun entrySet ()Ljava/util/Set;
 	public fun equals (Ljava/lang/Object;)Z
 	public final synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
@@ -1192,8 +1188,8 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfile : java/util/
 	public fun get (Ljava/lang/String;)Ljava/lang/String;
 	public fun getEntries ()Ljava/util/Set;
 	public fun getKeys ()Ljava/util/Set;
-	public final fun getName ()Ljava/lang/String;
 	public fun getSize ()I
+	public final fun getValue ()Ljava/util/Map;
 	public fun getValues ()Ljava/util/Collection;
 	public fun hashCode ()I
 	public fun isEmpty ()Z
@@ -1216,6 +1212,17 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfile : java/util/
 	public final fun size ()I
 	public fun toString ()Ljava/lang/String;
 	public final fun values ()Ljava/util/Collection;
+}
+
+public final class aws/sdk/kotlin/runtime/config/profile/AwsConfigValue$String : aws/sdk/kotlin/runtime/config/profile/AwsConfigValue {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Laws/sdk/kotlin/runtime/config/profile/AwsConfigValue$String;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/config/profile/AwsConfigValue$String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/config/profile/AwsConfigValue$String;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {

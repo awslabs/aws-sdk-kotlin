@@ -75,7 +75,7 @@ open class AwsHttpProtocolClientGenerator(
             RuntimeTypes.Core.ExecutionContext,
         ) {
             write("ctx.#T(#T.Region, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.Client.AwsClientOption)
-            write("ctx.#T(#T.ServiceName, serviceName)", putIfAbsentSym, sdkClientOptionSym)
+            write("ctx.#T(#T.ClientName, config.clientName)", putIfAbsentSym, sdkClientOptionSym)
             write("ctx.#T(#T.LogMode, config.sdkLogMode)", putIfAbsentSym, sdkClientOptionSym)
 
             // fill in auth/signing attributes

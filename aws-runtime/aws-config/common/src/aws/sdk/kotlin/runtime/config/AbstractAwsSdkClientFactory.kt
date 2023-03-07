@@ -11,6 +11,8 @@ import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
+import aws.smithy.kotlin.runtime.tracing.*
+import kotlin.coroutines.coroutineContext
 
 /**
  * Abstract base class all AWS client companion objects inherit from
@@ -37,8 +39,19 @@ public abstract class AbstractAwsSdkClientFactory<
         val builder = builder()
         if (block != null) builder.config.apply(block)
 
-        builder.config.region = builder.config.region ?: resolveRegion()
-        builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy()
+        val tracer = if (builder is TracingClientConfig.Builder) {
+            if (builder.tracer == null) builder.tracer = defaultTracer(builder.config.clientName)
+            builder.tracer!!
+        } else {
+            defaultTracer(builder.config.clientName)
+        }
+
+        coroutineContext.withRootTraceSpan(tracer.createRootSpan("Config resolution")) {
+            builder.config.region = builder.config.region ?: resolveRegion()
+            builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy()
+        }
         return builder.build()
     }
+
+    private fun defaultTracer(clientName: String): Tracer = DefaultTracer(LoggingTraceProbe, clientName)
 }

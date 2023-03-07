@@ -92,6 +92,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
     private val overrideServiceCompanionObjectWriter = SectionWriter { writer, _ ->
         // override the service client companion object for how a client is constructed
         val serviceSymbol = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
+
         writer.withBlock(
             "public companion object : #T<Config, Config.Builder, #T, Builder>() {",
             "}",

@@ -5,9 +5,12 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import io.kotest.matchers.string.shouldContain
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -15,9 +18,8 @@ import io.mockk.slot
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.*
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
+import kotlin.coroutines.coroutineContext
+import kotlin.test.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AwsProfileParserTest {
@@ -35,12 +37,12 @@ class AwsProfileParserTest {
             .forEachIndexed { index, testCase ->
                 when (testCase) {
                     is TestCase.MatchConfigOutputCase -> {
-                        val actual = parse(FileType.CONFIGURATION, testCase.configInput).toJsonElement()
+                        val actual = parse(NoOpTraceSpan, FileType.CONFIGURATION, testCase.configInput).toJsonElement()
                         val expectedJson = Json.parseToJsonElement(testCase.expectedOutput)
                         assertEquals(expectedJson, actual, message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchCredentialOutputCase -> {
-                        val actual = parse(FileType.CREDENTIAL, testCase.credentialInput).toJsonElement()
+                        val actual = parse(NoOpTraceSpan, FileType.CREDENTIAL, testCase.credentialInput).toJsonElement()
                         assertEquals(testCase.expectedOutput, actual.toString(), message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchConfigAndCredentialOutputCase -> {
@@ -48,7 +50,8 @@ class AwsProfileParserTest {
                         assertEquals(testCase.expectedOutput, actual.toString(), message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchErrorCase -> {
-                        assertFails { parse(FileType.CONFIGURATION, testCase.input) }
+                        val ex = assertFailsWith<AwsConfigParseException>("[idx=$index]: $testCase") { parse(NoOpTraceSpan, FileType.CONFIGURATION, testCase.input) }
+                        ex.message.shouldContain(testCase.expectedErrorMessage)
                     }
                 }
             }
@@ -76,23 +79,25 @@ class AwsProfileParserTest {
      * Example function that reads the active provide and returns true if a key "boo" exists.
      */
     private suspend fun fnThatLoadsConfiguration(platform: PlatformProvider): String? {
-        val profile = loadActiveAwsProfile(platform)
+        val profile = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
+            loadActiveAwsProfile(platform)
+        }
 
-        return profile["boo"]
+        return profile.getOrNull("boo")
     }
 
     @Test
     fun itCanMergeUniqueProfiles() {
         val m1 = mapOf(
-            "a" to mapOf("x" to "1"),
+            "a" to mapOf("x" to AwsConfigValue.String("1")),
         )
         val m2 = mapOf(
-            "b" to mapOf("y" to "1"),
+            "b" to mapOf("y" to AwsConfigValue.String("1")),
         )
 
         val expected = mapOf(
-            "a" to mapOf("x" to "1"),
-            "b" to mapOf("y" to "1"),
+            "a" to mapOf("x" to AwsConfigValue.String("1")),
+            "b" to mapOf("y" to AwsConfigValue.String("1")),
         )
 
         val actual = mergeProfiles(m1, m2)
@@ -103,19 +108,19 @@ class AwsProfileParserTest {
     @Test
     fun itCanMergeOverlappingProfiles() {
         val m1 = mapOf(
-            "a" to mapOf("x" to "1"),
+            "a" to mapOf("x" to AwsConfigValue.String("1")),
         )
         val m2 = mapOf(
-            "a" to mapOf("z" to "1"),
-            "b" to mapOf("y" to "1"),
+            "a" to mapOf("z" to AwsConfigValue.String("1")),
+            "b" to mapOf("y" to AwsConfigValue.String("1")),
         )
 
         val expected = mapOf(
             "a" to mapOf(
-                "x" to "1",
-                "z" to "1",
+                "x" to AwsConfigValue.String("1"),
+                "z" to AwsConfigValue.String("1"),
             ),
-            "b" to mapOf("y" to "1"),
+            "b" to mapOf("y" to AwsConfigValue.String("1")),
         )
 
         val actual = mergeProfiles(m1, m2)
@@ -126,14 +131,14 @@ class AwsProfileParserTest {
     @Test
     fun lastMapWinsMergingInProfiles() {
         val m1 = mapOf(
-            "a" to mapOf("x" to "1"),
+            "a" to mapOf("x" to AwsConfigValue.String("1")),
         )
         val m2 = mapOf(
-            "a" to mapOf("x" to "2"),
+            "a" to mapOf("x" to AwsConfigValue.String("2")),
         )
 
         val expected = mapOf(
-            "a" to mapOf("x" to "2"),
+            "a" to mapOf("x" to AwsConfigValue.String("2")),
         )
 
         val actual = mergeProfiles(m1, m2)
@@ -190,10 +195,10 @@ class AwsProfileParserTest {
      * @param credentialsFn a function that will retrieve a configuration file as a UTF-8 string.
      * @return A map containing all specified profiles defined in configuration and credential files.
      */
-    private fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): ProfileMap =
+    private fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): RawProfileMap =
         mergeProfiles(
-            parse(FileType.CONFIGURATION, configurationFn()),
-            parse(FileType.CREDENTIAL, credentialsFn()),
+            parse(NoOpTraceSpan, FileType.CONFIGURATION, configurationFn()),
+            parse(NoOpTraceSpan, FileType.CREDENTIAL, credentialsFn()),
         )
 }
 
@@ -209,6 +214,7 @@ private fun Map<*, *>.toJsonElement(): JsonElement {
             is Number -> map[key] = JsonPrimitive(value)
             is String -> map[key] = JsonPrimitive(value)
             is Enum<*> -> map[key] = JsonPrimitive(value.toString())
+            is AwsConfigValue.String -> map[key] = JsonPrimitive(value.value)
             else -> throw IllegalStateException("Can't serialize unknown type: $value")
         }
     }

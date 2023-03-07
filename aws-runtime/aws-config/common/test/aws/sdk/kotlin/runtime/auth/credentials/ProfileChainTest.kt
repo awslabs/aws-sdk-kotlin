@@ -10,7 +10,9 @@ import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
 import aws.sdk.kotlin.runtime.config.profile.FileType
 import aws.sdk.kotlin.runtime.config.profile.parse
+import aws.sdk.kotlin.runtime.config.profile.toProfileMap
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
@@ -419,8 +421,8 @@ class ProfileChainTest {
     @Test
     fun testProfileChainResolution() {
         tests.forEachIndexed { idx, test ->
-            val profiles = parse(FileType.CONFIGURATION, test.profile.trimIndent())
-            val result = runCatching { ProfileChain.resolve(profiles, test.activeProfile) }
+            val profiles = parse(NoOpTraceSpan, FileType.CONFIGURATION, test.profile.trimIndent())
+            val result = runCatching { ProfileChain.resolve(profiles.toProfileMap(), test.activeProfile) }
 
             when {
                 result.isFailure && test.output is TestOutput.Chain -> fail("[idx=$idx, desc=${test.description}]: expected success but chain failed to resolve: $result")
