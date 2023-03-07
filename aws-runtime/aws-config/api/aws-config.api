@@ -129,7 +129,6 @@ public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal
 	public static fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Builder;
 	public abstract fun getConfig ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config;
 	public abstract fun getRoleCredentials (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun getServiceName ()Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Builder : aws/smithy/kotlin/runtime/client/AbstractSdkClientBuilder {
@@ -443,7 +442,6 @@ public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal
 	public abstract fun assumeRoleWithWebIdentity (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Builder;
 	public abstract fun getConfig ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config;
-	public abstract fun getServiceName ()Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Builder : aws/smithy/kotlin/runtime/client/AbstractSdkClientBuilder {
