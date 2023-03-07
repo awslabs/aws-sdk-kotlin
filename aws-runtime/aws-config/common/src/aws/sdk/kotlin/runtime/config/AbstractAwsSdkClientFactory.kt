@@ -46,7 +46,7 @@ public abstract class AbstractAwsSdkClientFactory<
             defaultTracer(builder.config.clientName)
         }
 
-        coroutineContext.withRootTraceSpan(tracer.createRootSpan("From environment")) {
+        coroutineContext.withRootTraceSpan(tracer.createRootSpan("Config resolution")) {
             builder.config.region = builder.config.region ?: resolveRegion()
             builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy()
         }
