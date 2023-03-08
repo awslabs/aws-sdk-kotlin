@@ -11,7 +11,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
  * Overrides the service client companion object for how a client is constructed, with the ability to extend inside the
  * declaration itself.
  */
-class CompanionObjectWriter(private val extend: (KotlinWriter.() -> Unit)? = null) : SectionWriter {
+class ServiceClientCompanionObjectWriter(private val extend: (KotlinWriter.() -> Unit)? = null) : SectionWriter {
     override fun write(writer: KotlinWriter, previousValue: String?) {
         val serviceSymbol = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
 

@@ -21,12 +21,14 @@ public interface AwsSdkClientConfig : SdkClientConfig {
 
     /**
      * Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
+     * Disabled by default.
      */
     public val useFips: Boolean
 
     /**
      * Flag to toggle whether to use dual-stack endpoints when making requests.
      * See [https://docs.aws.amazon.com/sdkref/latest/guide/feature-endpoints.html] for more information.
+     * Disabled by default.
      */
     public val useDualStack: Boolean
 
@@ -40,12 +42,14 @@ public interface AwsSdkClientConfig : SdkClientConfig {
 
         /**
          * Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
+         * Disabled by default.
          */
         public var useFips: Boolean?
 
         /**
          * Flag to toggle whether to use dual-stack endpoints when making requests.
          * See [https://docs.aws.amazon.com/sdkref/latest/guide/feature-endpoints.html] for more information.
+         * Disabled by default.
          */
         public var useDualStack: Boolean?
     }

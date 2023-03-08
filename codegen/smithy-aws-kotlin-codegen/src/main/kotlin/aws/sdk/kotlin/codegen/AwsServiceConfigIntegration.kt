@@ -53,27 +53,25 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         val UseFipsProp: ConfigProperty = ConfigProperty {
             name = "useFips"
-            useSymbolWithNullableBuilder(KotlinTypes.Boolean)
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             documentation = """
                 Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
+     `          Disabled by default.
             """.trimIndent()
             baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
             useNestedBuilderBaseClass()
-
-            propertyType = ConfigPropertyType.RequiredWithDefault("false")
         }
 
         val UseDualStackProp: ConfigProperty = ConfigProperty {
             name = "useDualStack"
-            useSymbolWithNullableBuilder(KotlinTypes.Boolean)
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             documentation = """
                 Flag to toggle whether to use dual-stack endpoints when making requests.
                 See [https://docs.aws.amazon.com/sdkref/latest/guide/feature-endpoints.html] for more information.
+     `          Disabled by default.
             """.trimIndent()
             baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
             useNestedBuilderBaseClass()
-
-            propertyType = ConfigPropertyType.RequiredWithDefault("false")
         }
 
         val EndpointUrlProp = ConfigProperty {
@@ -97,7 +95,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
     override val sectionWriters: List<SectionWriterBinding> =
         listOf(
-            SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, CompanionObjectWriter()),
+            SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, ServiceClientCompanionObjectWriter()),
         )
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =

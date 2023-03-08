@@ -109,15 +109,11 @@ public val AwsProfile.useDualStack: Boolean?
     get() = getBooleanStrictOrNull("use_dualstack_endpoint")
 
 /**
- * Parse a config value as a boolean. Will accept any variety of casing, but only if the lowercase form of the value
- * is a strict boolean keyword.
+ * Parse a config value as a strict boolean.
  */
 public fun AwsProfile.getBooleanStrictOrNull(key: String, subKey: String? = null): Boolean? =
-    when (getOrNull(key, subKey)?.lowercase()) {
-        "true" -> true
-        "false" -> false
-        null -> null
-        else -> throw ConfigurationException(
+    getOrNull(key, subKey)?.let {
+        it.toBooleanStrictOrNull() ?: throw ConfigurationException(
             buildString {
                 append("Failed to parse config property $key")
                 subKey?.let { append(".$it") }
