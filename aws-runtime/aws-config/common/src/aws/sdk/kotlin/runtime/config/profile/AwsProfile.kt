@@ -100,19 +100,19 @@ public val AwsProfile.retryMode: RetryMode?
  * Whether service clients should make requests to the FIPS endpoint variant.
  */
 public val AwsProfile.useFips: Boolean?
-    get() = getBooleanStrictOrNull("use_fips_endpoint")
+    get() = getBooleanOrNull("use_fips_endpoint")
 
 /**
  * Whether service clients should make requests to the dual-stack endpoint variant.
  */
 public val AwsProfile.useDualStack: Boolean?
-    get() = getBooleanStrictOrNull("use_dualstack_endpoint")
+    get() = getBooleanOrNull("use_dualstack_endpoint")
 
 /**
- * Parse a config value as a strict boolean.
+ * Parse a config value as a boolean, ignoring case.
  */
-public fun AwsProfile.getBooleanStrictOrNull(key: String, subKey: String? = null): Boolean? =
-    getOrNull(key, subKey)?.let {
+public fun AwsProfile.getBooleanOrNull(key: String, subKey: String? = null): Boolean? =
+    getOrNull(key, subKey)?.lowercase()?.let {
         it.toBooleanStrictOrNull() ?: throw ConfigurationException(
             buildString {
                 append("Failed to parse config property $key")

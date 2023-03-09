@@ -6,7 +6,7 @@ package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
-import aws.sdk.kotlin.runtime.config.profile.getBooleanStrictOrNull
+import aws.sdk.kotlin.runtime.config.profile.getBooleanOrNull
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 
@@ -18,7 +18,7 @@ internal suspend fun finalizeConfigImpl(builder: S3Client.Builder, profile: Lazy
 }
 
 private val AwsProfile.forcePathStyle: Boolean?
-    get() = getOrNull("s3", "addressing_style")?.let {
+    get() = getOrNull("s3", "addressing_style")?.lowercase()?.let {
         when (it) {
             "virtual", "auto" -> false
             "path" -> true
@@ -27,4 +27,4 @@ private val AwsProfile.forcePathStyle: Boolean?
     }
 
 private val AwsProfile.enableAccelerate: Boolean?
-    get() = getBooleanStrictOrNull("s3", "use_accelerate_endpoint")
+    get() = getBooleanOrNull("s3", "use_accelerate_endpoint")
