@@ -1241,8 +1241,8 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 	public static final fun getAwsAccessKeyId (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
 	public static final fun getAwsSecretAccessKey (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
 	public static final fun getAwsSessionToken (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
-	public static final fun getBooleanStrictOrNull (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Boolean;
-	public static synthetic fun getBooleanStrictOrNull$default (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/Boolean;
+	public static final fun getBooleanOrNull (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Boolean;
+	public static synthetic fun getBooleanOrNull$default (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/Boolean;
 	public static final fun getCredentialProcess (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
 	public static final fun getMaxAttempts (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/Integer;
 	public static final fun getRegion (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
