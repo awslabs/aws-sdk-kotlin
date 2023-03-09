@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.21.2-beta] - 03/09/2023
+
+### Features
+* Add sub-property support for AWS config.
+
+### Miscellaneous
+* Sync AWS models and bump smithy-kotlin version
+
 ## [0.21.1-beta] - 03/02/2023
 
 ### Miscellaneous
