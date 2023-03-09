@@ -20,7 +20,7 @@ internal actual class DefaultRegionProviderChain actual constructor(
     RegionProviderChain(
         JvmSystemPropRegionProvider(platformProvider),
         EnvironmentRegionProvider(platformProvider),
-        ProfileRegionProvider(platformProvider, profile = profile),
+        ProfileRegionProvider(profile),
         ImdsRegionProvider(client = imdsClient, platformProvider = platformProvider),
     ) {
 
