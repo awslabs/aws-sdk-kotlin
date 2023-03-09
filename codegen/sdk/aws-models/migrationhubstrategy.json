@@ -1791,6 +1791,10 @@
                     {
                         "value": "MPA",
                         "name": "MPA"
+                    },
+                    {
+                        "value": "Import",
+                        "name": "IMPORT"
                     }
                 ]
             }
@@ -2602,6 +2606,10 @@
                     {
                         "value": "ExternalId",
                         "name": "EXTERNAL_ID"
+                    },
+                    {
+                        "value": "ExternalSourceType",
+                        "name": "EXTERNAL_SOURCE_TYPE"
                     }
                 ]
             }
