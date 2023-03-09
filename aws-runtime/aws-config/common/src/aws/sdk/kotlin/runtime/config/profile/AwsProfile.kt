@@ -112,8 +112,8 @@ public val AwsProfile.useDualStack: Boolean?
  * Parse a config value as a boolean, ignoring case.
  */
 public fun AwsProfile.getBooleanOrNull(key: String, subKey: String? = null): Boolean? =
-    getOrNull(key, subKey)?.lowercase()?.let {
-        it.toBooleanStrictOrNull() ?: throw ConfigurationException(
+    getOrNull(key, subKey)?.let {
+        it.lowercase().toBooleanStrictOrNull() ?: throw ConfigurationException(
             buildString {
                 append("Failed to parse config property $key")
                 subKey?.let { append(".$it") }
