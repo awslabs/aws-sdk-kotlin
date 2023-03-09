@@ -63,7 +63,7 @@ class PollyPresignerTest {
                 val endpoint = DefaultEndpointProvider().resolveEndpoint(
                     EndpointParameters.invoke {
                         region = it.region
-                    }
+                    },
                 )
                 SigningContextualizedEndpoint(endpoint, it)
             }
