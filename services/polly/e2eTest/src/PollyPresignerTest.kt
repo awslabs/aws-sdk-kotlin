@@ -77,7 +77,6 @@ class PollyPresignerTest {
 
             val call = httpClient.call(presignedRequest)
             call.complete()
-            println(call.response)
 
             assertEquals(200, call.response.status.value, "presigned polly request failed for engine: $engine")
         }
