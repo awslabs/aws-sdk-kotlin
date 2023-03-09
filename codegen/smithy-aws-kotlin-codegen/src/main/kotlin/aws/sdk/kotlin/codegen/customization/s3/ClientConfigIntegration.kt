@@ -4,10 +4,17 @@
  */
 package aws.sdk.kotlin.codegen.customization.s3
 
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.ServiceClientCompanionObjectWriter
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
+import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
+import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
+import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -23,22 +30,22 @@ class ClientConfigIntegration : KotlinIntegration {
         model.expectShape<ServiceShape>(settings.service).isS3
 
     companion object {
-        val EnableAccelerateProp: ConfigProperty = ConfigProperty.Boolean(
-            "enableAccelerate",
-            defaultValue = false,
+        val EnableAccelerateProp: ConfigProperty = ConfigProperty {
+            name = "enableAccelerate"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             documentation = """
                 Flag to support [S3 transfer acceleration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html)
                 with this client.
-            """.trimIndent(),
-        )
+            """.trimIndent()
+        }
 
-        val ForcePathStyleProp: ConfigProperty = ConfigProperty.Boolean(
-            "forcePathStyle",
-            defaultValue = false,
+        val ForcePathStyleProp: ConfigProperty = ConfigProperty {
+            name = "forcePathStyle"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             documentation = """
                 Flag to use legacy path-style addressing when making requests.
-            """.trimIndent(),
-        )
+            """.trimIndent()
+        }
 
         val UseArnRegionProp: ConfigProperty = ConfigProperty.Boolean(
             "useArnRegion",
@@ -83,4 +90,23 @@ class ClientConfigIntegration : KotlinIntegration {
             UseArnRegionProp,
             DisableMrapProp,
         )
+
+    override val sectionWriters: List<SectionWriterBinding>
+        get() = listOf(
+            SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, serviceClientCompanionObjectWriter),
+        )
+
+    // inject env loading of S3-specific config
+    private val serviceClientCompanionObjectWriter = ServiceClientCompanionObjectWriter {
+        val finalizeConfigImplSymbol = buildSymbol {
+            name = "finalizeConfigImpl"
+            namespace = "aws.sdk.kotlin.services.s3.internal"
+        }
+        write(
+            "override suspend fun finalizeConfig(builder: Builder, profile: #T<#T>): Unit = #T(builder, profile)",
+            RuntimeTypes.Core.Utils.LazyAsyncValue,
+            AwsRuntimeTypes.Config.Profile.AwsProfile,
+            finalizeConfigImplSymbol,
+        )
+    }
 }

@@ -6,18 +6,21 @@
 package aws.sdk.kotlin.runtime.region
 
 import aws.sdk.kotlin.runtime.config.imds.InstanceMetadataProvider
+import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 internal actual class DefaultRegionProviderChain actual constructor(
     platformProvider: PlatformProvider,
     imdsClient: Lazy<InstanceMetadataProvider>,
+    profile: LazyAsyncValue<AwsProfile>,
 ) : RegionProvider,
     Closeable,
     RegionProviderChain(
         JvmSystemPropRegionProvider(platformProvider),
         EnvironmentRegionProvider(platformProvider),
-        ProfileRegionProvider(platformProvider),
+        ProfileRegionProvider(profile),
         ImdsRegionProvider(client = imdsClient, platformProvider = platformProvider),
     ) {
 

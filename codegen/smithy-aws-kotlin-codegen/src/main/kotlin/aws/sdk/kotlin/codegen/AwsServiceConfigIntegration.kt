@@ -6,7 +6,6 @@ package aws.sdk.kotlin.codegen
 
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.boxed
@@ -52,23 +51,28 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             })
         }
 
-        // FIXME - should fips and dual stack props be defined on one of our AWS SDK client config interfaces (e.g. `AwsSdkConfig`) if they apply to every AWS SDK Kotlin service client generated?
-
-        val UseFipsProp: ConfigProperty = ConfigProperty.Boolean(
-            "useFips",
-            defaultValue = false,
+        val UseFipsProp: ConfigProperty = ConfigProperty {
+            name = "useFips"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             documentation = """
                 Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
-            """.trimIndent(),
-        )
+     `          Disabled by default.
+            """.trimIndent()
+            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            useNestedBuilderBaseClass()
+        }
 
-        val UseDualStackProp: ConfigProperty = ConfigProperty.Boolean(
-            "useDualStack",
-            defaultValue = false,
+        val UseDualStackProp: ConfigProperty = ConfigProperty {
+            name = "useDualStack"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             documentation = """
                 Flag to toggle whether to use dual-stack endpoints when making requests.
-            """.trimIndent(),
-        )
+                See [https://docs.aws.amazon.com/sdkref/latest/guide/feature-endpoints.html] for more information.
+     `          Disabled by default.
+            """.trimIndent()
+            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            useNestedBuilderBaseClass()
+        }
 
         val EndpointUrlProp = ConfigProperty {
             name = "endpointUrl"
@@ -89,24 +93,9 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             .build()
     }
 
-    private val overrideServiceCompanionObjectWriter = SectionWriter { writer, _ ->
-        // override the service client companion object for how a client is constructed
-        val serviceSymbol = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
-
-        writer.withBlock(
-            "public companion object : #T<Config, Config.Builder, #T, Builder>() {",
-            "}",
-            AwsRuntimeTypes.Config.AbstractAwsSdkClientFactory,
-            serviceSymbol,
-        ) {
-            write("@#T", KotlinTypes.Jvm.JvmStatic)
-            write("override fun builder(): Builder = Builder()")
-        }
-    }
-
     override val sectionWriters: List<SectionWriterBinding> =
         listOf(
-            SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, overrideServiceCompanionObjectWriter),
+            SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, ServiceClientCompanionObjectWriter()),
         )
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
