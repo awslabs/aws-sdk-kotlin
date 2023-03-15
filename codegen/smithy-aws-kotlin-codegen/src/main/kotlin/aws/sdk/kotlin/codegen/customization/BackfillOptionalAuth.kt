@@ -35,6 +35,7 @@ class BackfillOptionalAuth : KotlinIntegration {
         ),
         // https://docs.aws.amazon.com/cognito/latest/developerguide/security_iam_service-with-iam.html
         "com.amazonaws.cognitoidentityprovider#AWSCognitoIdentityProviderService" to setOf(
+            "com.amazonaws.cognitoidentityprovider#AssociateSoftwareToken",
             "com.amazonaws.cognitoidentityprovider#ConfirmDevice",
             "com.amazonaws.cognitoidentityprovider#ForgetDevice",
             "com.amazonaws.cognitoidentityprovider#GetDevice",
