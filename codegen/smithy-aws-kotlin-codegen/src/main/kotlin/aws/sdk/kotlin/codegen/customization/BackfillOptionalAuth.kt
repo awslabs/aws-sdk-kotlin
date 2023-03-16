@@ -8,6 +8,7 @@ package aws.sdk.kotlin.codegen.customization
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.traits.OptionalAuthTrait
@@ -35,13 +36,32 @@ class BackfillOptionalAuth : KotlinIntegration {
         ),
         // https://docs.aws.amazon.com/cognito/latest/developerguide/security_iam_service-with-iam.html
         "com.amazonaws.cognitoidentityprovider#AWSCognitoIdentityProviderService" to setOf(
+            "com.amazonaws.cognitoidentityprovider#AssociateSoftwareToken",
+            "com.amazonaws.cognitoidentityprovider#ChangePassword",
             "com.amazonaws.cognitoidentityprovider#ConfirmDevice",
+            "com.amazonaws.cognitoidentityprovider#ConfirmForgotPassword",
+            "com.amazonaws.cognitoidentityprovider#ConfirmSignUp",
+            "com.amazonaws.cognitoidentityprovider#DeleteUser",
+            "com.amazonaws.cognitoidentityprovider#DeleteUserAttributes",
             "com.amazonaws.cognitoidentityprovider#ForgetDevice",
+            "com.amazonaws.cognitoidentityprovider#ForgotPassword",
             "com.amazonaws.cognitoidentityprovider#GetDevice",
+            "com.amazonaws.cognitoidentityprovider#GetUser",
+            "com.amazonaws.cognitoidentityprovider#GetUserAttributeVerificationCode",
             "com.amazonaws.cognitoidentityprovider#GlobalSignOut",
+            "com.amazonaws.cognitoidentityprovider#InitiateAuth",
             "com.amazonaws.cognitoidentityprovider#ListDevices",
+            "com.amazonaws.cognitoidentityprovider#ResendConfirmationCode",
+            "com.amazonaws.cognitoidentityprovider#RespondToAuthChallenge",
             "com.amazonaws.cognitoidentityprovider#RevokeToken",
+            "com.amazonaws.cognitoidentityprovider#SetUserMFAPreference",
+            "com.amazonaws.cognitoidentityprovider#SetUserSettings",
+            "com.amazonaws.cognitoidentityprovider#SignUp",
+            "com.amazonaws.cognitoidentityprovider#UpdateAuthEventFeedback",
             "com.amazonaws.cognitoidentityprovider#UpdateDeviceStatus",
+            "com.amazonaws.cognitoidentityprovider#UpdateUserAttributes",
+            "com.amazonaws.cognitoidentityprovider#VerifySoftwareToken",
+            "com.amazonaws.cognitoidentityprovider#VerifyUserAttribute",
         ),
     )
 
@@ -58,7 +78,7 @@ class BackfillOptionalAuth : KotlinIntegration {
         val optionalAuthOperations = disabledAuthOperationsByService[serviceId] ?: throw CodegenException("expected $serviceId in disabled operations map")
         return ModelTransformer.create()
             .mapShapes(model) {
-                if (optionalAuthOperations.contains(it.id.toString()) && it is OperationShape) {
+                if (optionalAuthOperations.contains(it.id.toString()) && it is OperationShape && !it.hasTrait<OptionalAuthTrait>()) {
                     it.toBuilder().addTrait(OptionalAuthTrait()).build()
                 } else {
                     it
