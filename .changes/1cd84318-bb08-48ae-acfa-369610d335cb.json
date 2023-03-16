@@ -1,8 +1,0 @@
-{
-    "id": "1cd84318-bb08-48ae-acfa-369610d335cb",
-    "type": "feature",
-    "description": "Add support for loading FIPS and dual-stack endpoint settings from env, system properties, and shared config.",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#206"
-    ]
-}

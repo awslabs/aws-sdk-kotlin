@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.21.3-beta] - 03/16/2023
+
+### Features
+* [#206](https://github.com/awslabs/aws-sdk-kotlin/issues/206) Add support for loading FIPS and dual-stack endpoint settings from env, system properties, and shared config.
+* [#206](https://github.com/awslabs/aws-sdk-kotlin/issues/206) Add support for loading S3 accelerate and addressing settings from shared config.
+
+### Fixes
+* [#874](https://github.com/awslabs/aws-sdk-kotlin/issues/874) Ensure all unsigned operations are accessible without credentials in CognitoIdentityProvider.
+
+### Miscellaneous
+* Update smithy-kotlin version and sync service models.
+
 ## [0.21.2-beta] - 03/09/2023
 
 ### Features
