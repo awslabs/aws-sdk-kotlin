@@ -1,7 +1,7 @@
 {
     "id": "6e070bba-66c4-4f36-abab-8fce291db3cc",
     "type": "bugfix",
-    "description": "CognitoIdentityProvider: remove signing requirement on AssociateSoftwareToken.",
+    "description": "Ensure all unsigned operations are accessible without credentials in CognitoIdentityProvider.",
     "issues": [
         "awslabs/aws-sdk-kotlin#874"
     ]
