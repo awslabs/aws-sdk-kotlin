@@ -31,7 +31,8 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             order = -100
         }
 
-        // FIXME - this should be registered based on auth scheme in model
+        // override the credentials provider prop registered by the Sigv4AuthSchemeIntegration, updates the
+        // documentation and sets a default value for AWS SDK to the default chain.
         val CredentialsProviderProp: ConfigProperty = ConfigProperty {
             symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
             documentation = """
