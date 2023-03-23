@@ -79,13 +79,13 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             name = "endpointUrl"
             symbol = RuntimeTypes.Core.Net.Url.asNullable()
             documentation = """
-                A custom endpoint to use when making requests. **This is an advanced config option.**
+                A custom endpoint to route requests to. The endpoint set here is passed to the configured
+                [endpointProvider], which may inspect and modify it as needed.
 
-                The value set here is passed to the client's [endpointProvider], which may inspect and modify it as
-                needed to determine the final endpoint for the request.
+                Setting a custom endpointUrl should generally be preferred to overriding the [endpointProvider] and is
+                the recommended way to route requests to development or preview instances of a service.
 
-                In practice, this will most likely be used to point your client at a development or preview instance of
-                a service.
+                **This is an advanced config option.**
             """.trimIndent()
             propertyType = ConfigPropertyType.SymbolDefault
         }
