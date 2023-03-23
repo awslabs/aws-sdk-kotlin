@@ -8,6 +8,7 @@ import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
+import software.amazon.smithy.kotlin.codegen.model.asNullable
 import software.amazon.smithy.kotlin.codegen.model.boxed
 import software.amazon.smithy.kotlin.codegen.rendering.*
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
@@ -76,9 +77,15 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         val EndpointUrlProp = ConfigProperty {
             name = "endpointUrl"
-            symbol = RuntimeTypes.Core.Net.Url.toBuilder().boxed().build()
+            symbol = RuntimeTypes.Core.Net.Url.asNullable()
             documentation = """
-                A custom endpoint to use when making requests.
+                A custom endpoint to use when making requests. **This is an advanced config option.**
+
+                The value set here is passed to the client's [endpointProvider], which may inspect and modify it as
+                needed to determine the final endpoint for the request.
+
+                In practice, this will most likely be used to point your client at a development or preview instance of
+                a service.
             """.trimIndent()
             propertyType = ConfigPropertyType.SymbolDefault
         }
