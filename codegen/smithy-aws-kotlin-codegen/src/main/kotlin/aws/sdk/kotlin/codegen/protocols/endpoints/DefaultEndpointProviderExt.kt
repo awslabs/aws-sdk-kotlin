@@ -34,28 +34,26 @@ private fun String.toAuthSchemeClassName(): String? =
     }
 
 private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, expressionRenderer: ExpressionRenderer) {
-    writer.withBlock("set(", ")") {
-        write("#T,", AwsRuntimeTypes.Endpoint.AuthSchemesAttributeKey)
-        withBlock("listOf(", "),") {
-            authSchemes.toNode().expectArrayNode().forEach {
-                val scheme = it.expectObjectNode()
-                val schemeName = scheme.expectStringMember("name").value
-                val className = schemeName.toAuthSchemeClassName() ?: return@forEach
+    writer.writeInline("#T to ", AwsRuntimeTypes.Endpoint.AuthSchemesAttributeKey)
+    writer.withBlock("listOf(", ")") {
+        authSchemes.toNode().expectArrayNode().forEach {
+            val scheme = it.expectObjectNode()
+            val schemeName = scheme.expectStringMember("name").value
+            val className = schemeName.toAuthSchemeClassName() ?: return@forEach
 
-                withBlock("#T.#L(", "),", AwsRuntimeTypes.Endpoint.AuthScheme, className) {
-                    // we delegate back to the expression visitor for each of these fields because it's possible to
-                    // encounter template strings throughout
+            withBlock("#T.#L(", "),", AwsRuntimeTypes.Endpoint.AuthScheme, className) {
+                // we delegate back to the expression visitor for each of these fields because it's possible to
+                // encounter template strings throughout
 
-                    writeInline("signingName = ")
-                    renderOrElse(expressionRenderer, scheme.getStringMember("signingName"), "null")
+                writeInline("signingName = ")
+                renderOrElse(expressionRenderer, scheme.getStringMember("signingName"), "null")
 
-                    writeInline("disableDoubleEncoding = ")
-                    renderOrElse(expressionRenderer, scheme.getBooleanMember("disableDoubleEncoding"), "false")
+                writeInline("disableDoubleEncoding = ")
+                renderOrElse(expressionRenderer, scheme.getBooleanMember("disableDoubleEncoding"), "false")
 
-                    when (schemeName) {
-                        "sigv4" -> renderSigV4Fields(writer, scheme, expressionRenderer)
-                        "sigv4a" -> renderSigV4AFields(writer, scheme, expressionRenderer)
-                    }
+                when (schemeName) {
+                    "sigv4" -> renderSigV4Fields(writer, scheme, expressionRenderer)
+                    "sigv4a" -> renderSigV4AFields(writer, scheme, expressionRenderer)
                 }
             }
         }
