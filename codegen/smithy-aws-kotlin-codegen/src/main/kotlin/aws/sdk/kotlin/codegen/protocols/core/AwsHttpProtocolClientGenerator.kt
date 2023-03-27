@@ -76,6 +76,8 @@ open class AwsHttpProtocolClientGenerator(
             write("ctx.#T(#T.Region, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.Client.AwsClientOption)
             write("ctx.#T(#T.ServiceName, serviceName)", putIfAbsentSym, sdkClientOptionSym)
             write("ctx.#T(#T.LogMode, config.sdkLogMode)", putIfAbsentSym, sdkClientOptionSym)
+            // default signing context
+            write("ctx.#T(#T.SigningRegion, config.region)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
             write("ctx.#T(#T.CredentialsProvider, config.credentialsProvider)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
 
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
