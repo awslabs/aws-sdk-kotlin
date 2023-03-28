@@ -217,11 +217,16 @@ def main():
     # Generate code for HEAD
     print(f"Creating temporary branch with generated code for the HEAD revision {head_sha}")
     run(f"git checkout {head_sha} -b {HEAD_BRANCH_NAME}")
+    # abuse crt builder to get correct version of upstream dependencies
+    run("./builder.pyz build -p aws-sdk-kotlin --variant codegen-preview")
     generate_and_commit_generated_code(head_sha, opts.bootstrap)
 
     # Generate code for base
     print(f"Creating temporary branch with generated code for the base revision {opts.base_sha}")
     run(f"git checkout {opts.base_sha} -b {BASE_BRANCH_NAME}")
+
+    # reset and rebuild upstream dependencies using base sha
+    run("./builder.pyz build -p aws-sdk-kotlin --variant codegen-preview")
     generate_and_commit_generated_code(opts.base_sha, opts.bootstrap)
 
     bot_message = make_diffs(opts.base_sha, head_sha)

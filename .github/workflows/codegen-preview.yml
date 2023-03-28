@@ -66,21 +66,9 @@ jobs:
           npm install -g diff2html-cli@${{ env.DIFF2HTML_VERSION }}
           python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
           chmod a+x builder.pyz
-          ./builder.pyz build -p ${{ env.PACKAGE_NAME }} --variant codegen-preview
       - name: Generate diff
         id: generate-diff
         run: |
-          # codegen-diff-revisions requires a clean index, set-upstream-versions.py can modify local repo state
-          # we don't push these branches/commits anywhere so just commit it if necessary and move on
-          if ! git diff --quiet gradle.properties
-          then
-            echo "gradle.properties is dirty, committing before generating diffs"
-            git add gradle.properties
-            PRE_COMMIT_ALLOW_NO_CONFIG=1 git \
-            -c "user.name=GitHub Action (generated code preview)" \
-            -c "user.email=generated-code-action@github.com" \
-            commit -m "codegen diff autocommit" --allow-empty
-          fi
           .github/scripts/codegen-diff-revisions.py \
             --bootstrap ${{ env.PREVIEW_SERVICES }} \
             --head-sha ${{ github.event.pull_request.head.sha }} \
