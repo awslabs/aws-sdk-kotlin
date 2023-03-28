@@ -239,7 +239,6 @@
                 }
             ],
             "traits": {
-                "aws.protocols#awsQueryCompatible": {},
                 "aws.api#service": {
                     "sdkId": "Proton",
                     "endpointPrefix": "proton"
