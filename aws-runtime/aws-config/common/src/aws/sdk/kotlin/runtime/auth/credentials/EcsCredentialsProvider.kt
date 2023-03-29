@@ -31,6 +31,7 @@ import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.TimestampFormat
+import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
@@ -67,7 +68,7 @@ public class EcsCredentialsProvider internal constructor(
 
     private val manageEngine = httpClientEngine == null
     private val httpClientEngine = httpClientEngine ?: DefaultHttpEngine()
-    override suspend fun resolve(): Credentials {
+    override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.getLogger<EcsCredentialsProvider>()
         val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
         val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)

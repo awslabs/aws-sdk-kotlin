@@ -21,6 +21,7 @@ import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.tracing.info
 import aws.smithy.kotlin.runtime.tracing.warn
+import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlinx.coroutines.sync.Mutex
@@ -63,7 +64,7 @@ public class ImdsCredentialsProvider(
     // protects previousCredentials and nextRefresh
     private val mu = Mutex()
 
-    override suspend fun resolve(): Credentials {
+    override suspend fun resolve(attributes: Attributes): Credentials {
         if (AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true) {
             throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
         }

@@ -10,6 +10,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvide
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.tracing.trace
+import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
 
@@ -29,7 +30,7 @@ public constructor(private val getEnv: (String) -> String?) : CloseableCredentia
     private fun requireEnv(variable: String): String =
         getEnv(variable) ?: throw ProviderConfigurationException("Missing value for environment variable `$variable`")
 
-    override suspend fun resolve(): Credentials {
+    override suspend fun resolve(attributes: Attributes): Credentials {
         coroutineContext.trace<EnvironmentCredentialsProvider> {
             "Attempting to load credentials from env vars $ACCESS_KEY_ID/$SECRET_ACCESS_KEY/$SESSION_TOKEN"
         }
