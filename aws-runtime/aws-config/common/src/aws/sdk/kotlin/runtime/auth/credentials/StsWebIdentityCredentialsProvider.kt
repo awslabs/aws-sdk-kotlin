@@ -17,6 +17,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.tracing.*
+import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
@@ -70,7 +71,7 @@ public class StsWebIdentityCredentialsProvider(
         }
     }
 
-    override suspend fun resolve(): Credentials {
+    override suspend fun resolve(attributes: Attributes): Credentials {
         val traceSpan = coroutineContext.traceSpan
         val logger = traceSpan.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials via web identity" }

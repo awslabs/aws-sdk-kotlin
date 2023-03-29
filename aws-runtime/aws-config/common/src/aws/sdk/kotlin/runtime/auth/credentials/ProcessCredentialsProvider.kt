@@ -11,6 +11,7 @@ import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 internal expect suspend fun executeCommand(
@@ -46,7 +47,7 @@ public class ProcessCredentialsProvider(
     private val maxOutputLengthBytes: Long = 64 * 1024,
     private val timeoutMillis: Long = 60_000,
 ) : CredentialsProvider {
-    override suspend fun resolve(): Credentials {
+    override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = Logger.getLogger<ProcessCredentialsProvider>()
 
         val (exitCode, output) = try {

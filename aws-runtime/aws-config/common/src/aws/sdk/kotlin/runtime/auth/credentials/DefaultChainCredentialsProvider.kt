@@ -15,6 +15,7 @@ import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
+import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
@@ -69,7 +70,7 @@ public class DefaultChainCredentialsProvider constructor(
 
     private val provider = CachedCredentialsProvider(chain)
 
-    override suspend fun resolve(): Credentials = provider.resolve()
+    override suspend fun resolve(attributes: Attributes): Credentials = provider.resolve(attributes)
 
     override fun close() {
         provider.close()
@@ -87,9 +88,9 @@ private class StsWebIdentityProvider(
     val platformProvider: PlatformProvider,
     val httpClientEngine: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
-    override suspend fun resolve(): Credentials {
+    override suspend fun resolve(attributes: Attributes): Credentials {
         val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClientEngine = httpClientEngine)
-        return wrapped.resolve()
+        return wrapped.resolve(attributes)
     }
 
     override fun close() { }
