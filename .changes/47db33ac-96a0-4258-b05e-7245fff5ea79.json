@@ -1,0 +1,5 @@
+{
+    "id": "47db33ac-96a0-4258-b05e-7245fff5ea79",
+    "type": "feature",
+    "description": "Add support for awsQuery-compatible error responses."
+}
