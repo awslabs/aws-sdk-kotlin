@@ -23,7 +23,6 @@ import aws.smithy.kotlin.runtime.tracing.info
 import aws.smithy.kotlin.runtime.tracing.warn
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
-import aws.smithy.kotlin.runtime.util.asyncLazy
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.coroutineContext
@@ -64,11 +63,6 @@ public class ImdsCredentialsProvider(
     // protects previousCredentials and nextRefresh
     private val mu = Mutex()
 
-    private val profile = asyncLazy {
-        if (profileOverride != null) return@asyncLazy profileOverride
-        loadProfile()
-    }
-
     override suspend fun getCredentials(): Credentials {
         if (AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true) {
             throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
@@ -84,7 +78,7 @@ public class ImdsCredentialsProvider(
         }
 
         val profileName = try {
-            profile.get()
+            profileOverride ?: loadProfile()
         } catch (ex: Exception) {
             return useCachedCredentials(ex) ?: throw CredentialsProviderException("failed to load instance profile", ex)
         }

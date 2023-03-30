@@ -39,6 +39,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNotEquals
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 private val ec2MetadataDisabledPlatform = TestPlatformProvider(
     env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true"),
@@ -59,8 +60,9 @@ class ImdsCredentialsProviderTest {
 
     @Test
     fun testSuccess() = runTest {
-        val testClock = ManualClock()
-        val expiration = Instant.fromEpochMilliseconds(testClock.now().epochMilliseconds)
+        val testClock = ManualClock(Instant.fromEpochMilliseconds(Instant.now().epochMilliseconds))
+        val expiration0 = Instant.fromEpochMilliseconds(testClock.now().epochMilliseconds)
+        val expiration1 = expiration0 + 2.seconds
 
         val connection = buildTestConnection {
             expect(
@@ -79,10 +81,32 @@ class ImdsCredentialsProviderTest {
                         "Code" : "Success",
                         "LastUpdated" : "2021-09-17T20:57:08Z",
                         "Type" : "AWS-HMAC",
-                        "AccessKeyId" : "ASIARTEST",
-                        "SecretAccessKey" : "xjtest",
-                        "Token" : "IQote///test",
-                        "Expiration" : "$expiration"
+                        "AccessKeyId" : "ASIARTEST0",
+                        "SecretAccessKey" : "xjtest0",
+                        "Token" : "IQote///test0",
+                        "Expiration" : "$expiration0"
+                    }
+                """,
+                ),
+            )
+
+            // verify that profile is re-retrieved after credentials expiration
+            expect(
+                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials", "TOKEN_A"),
+                imdsResponse("imds-test-role-2"),
+            )
+            expect(
+                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role-2", "TOKEN_A"),
+                imdsResponse(
+                    """
+                    {
+                        "Code" : "Success",
+                        "LastUpdated" : "2021-09-17T20:57:08Z",
+                        "Type" : "AWS-HMAC",
+                        "AccessKeyId" : "ASIARTEST1",
+                        "SecretAccessKey" : "xjtest1",
+                        "Token" : "IQote///test1",
+                        "Expiration" : "$expiration1"
                     }
                 """,
                 ),
@@ -100,15 +124,27 @@ class ImdsCredentialsProviderTest {
             platformProvider = ec2MetadataEnabledPlatform,
         )
 
-        val actual = provider.getCredentials()
-        val expected = Credentials(
-            "ASIARTEST",
-            "xjtest",
-            "IQote///test",
-            expiration,
+        val actual0 = provider.getCredentials()
+        val expected0 = Credentials(
+            "ASIARTEST0",
+            "xjtest0",
+            "IQote///test0",
+            expiration0,
             "IMDSv2",
         )
-        assertEquals(expected, actual)
+        assertEquals(expected0, actual0)
+
+        testClock.advance(1.seconds)
+
+        val actual1 = provider.getCredentials()
+        val expected1 = Credentials(
+            "ASIARTEST1",
+            "xjtest1",
+            "IQote///test1",
+            expiration1,
+            "IMDSv2",
+        )
+        assertEquals(expected1, actual1)
     }
 
     @Test
