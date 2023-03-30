@@ -60,8 +60,8 @@ class ImdsCredentialsProviderTest {
 
     @Test
     fun testSuccess() = runTest {
-        val testClock = ManualClock()
-        val expiration0 = testClock.now()
+        val testClock = ManualClock(Instant.fromEpochMilliseconds(Instant.now().epochMilliseconds))
+        val expiration0 = Instant.fromEpochMilliseconds(testClock.now().epochMilliseconds)
         val expiration1 = expiration0 + 2.seconds
 
         val connection = buildTestConnection {
