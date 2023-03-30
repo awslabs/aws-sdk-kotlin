@@ -35,6 +35,8 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         // documentation and sets a default value for AWS SDK to the default chain.
         val CredentialsProviderProp: ConfigProperty = ConfigProperty {
             symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
+            baseClass = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProviderConfig
+            useNestedBuilderBaseClass()
             documentation = """
                 The AWS credentials provider to use for authenticating requests. If not provided a
                 [${AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider}] instance will be used.
@@ -44,7 +46,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
             propertyType = ConfigPropertyType.Custom(render = { prop, writer ->
                 writer.write(
-                    "public val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine, region = region).#4T()",
+                    "override val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine, region = region).#4T()",
                     prop.propertyName,
                     prop.symbol,
                     AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
