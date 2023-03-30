@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.21.4-beta] - 03/30/2023
+
+### Features
+* Add support for awsQuery-compatible error responses.
+
+### Miscellaneous
+* add clarifying docs for endpointUrl
+* Sync latest AWS models
+
 ## [0.21.3-beta] - 03/16/2023
 
 ### Features
