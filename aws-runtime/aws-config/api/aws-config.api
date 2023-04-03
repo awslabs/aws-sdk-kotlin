@@ -200,10 +200,6 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$DefaultImpls {
-	public static fun getServiceName (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient;)Ljava/lang/String;
-}
-
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClientKt {
 	public static final fun getRoleCredentials (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun withConfig (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient;Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient;
@@ -511,10 +507,6 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Companion {
 	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$DefaultImpls {
-	public static fun getServiceName (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient;)Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClientKt {
