@@ -15,7 +15,6 @@ import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
@@ -78,7 +77,6 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     }
 
     // cached middleware instances
-    private val resolveEndpointMiddleware = ResolveEndpoint(ImdsEndpointProvider(platformProvider, endpointConfiguration), Unit)
     private val userAgentMiddleware = UserAgent(
         staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown")),
     )
@@ -122,10 +120,11 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
                 // artifact of re-using ServiceEndpointResolver middleware
                 set(SdkClientOption.LogMode, sdkLogMode)
             }
+
+            execution.endpointResolver = ImdsEndpointProvider(platformProvider, endpointConfiguration)
         }
         op.execution.retryPolicy = ImdsRetryPolicy()
 
-        op.install(resolveEndpointMiddleware)
         op.install(userAgentMiddleware)
         op.install(tokenMiddleware)
         op.execution.mutate.intercept(Phase.Order.Before) { req, next ->

@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.protocols.endpoints.bindAwsBuiltinsSymbol
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
@@ -51,6 +52,10 @@ open class AwsHttpProtocolClientGenerator(
         writer.write("op.execution.retryPolicy = config.retryPolicy")
 
         writer.write("mergeServiceDefaults(op.context)")
+    }
+
+    override fun renderBuiltinEndpointProviderBindings(writer: KotlinWriter, op: OperationShape) {
+        writer.write("#T(config)", bindAwsBuiltinsSymbol(ctx.settings))
     }
 
     override fun renderAdditionalMethods(writer: KotlinWriter) {
