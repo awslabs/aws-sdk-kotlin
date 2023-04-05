@@ -9,12 +9,10 @@ import aws.sdk.kotlin.codegen.protocols.endpoints.*
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.kotlin.codegen.core.useFileWriter
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.getEndpointRules
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.*
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.rulesengine.language.EndpointRuleSet
-import software.amazon.smithy.rulesengine.language.syntax.parameters.Parameter
 import software.amazon.smithy.rulesengine.traits.EndpointTestCase
 import java.io.File
 
@@ -45,8 +43,6 @@ class AwsEndpointDelegator : EndpointDelegator {
 
         ctx.delegator.useFileWriter(providerSymbol) {
             EndpointProviderGenerator(it, paramsSymbol).render()
-            it.write("")
-            EndpointProviderGenerator.renderAsSigningProviderExt(ctx.settings, it)
         }
 
         val endpointFunctions = buildMap {
@@ -75,10 +71,6 @@ class AwsEndpointDelegator : EndpointDelegator {
                     AwsRuntimeTypes.Endpoint.setSigningContext,
                 )
             }.render()
-
-            val builtins = ctx.service.getEndpointRules()?.parameters?.toList()?.filter(Parameter::isBuiltIn)
-            it.write("")
-            renderBindAwsBuiltins(ctx, it, builtins ?: emptyList())
         }
     }
 

@@ -80,7 +80,9 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     private val userAgentMiddleware = UserAgent(
         staticMetadata = AwsUserAgentMetadata.fromEnvironment(ApiMetadata(SERVICE, "unknown")),
     )
-    private val tokenMiddleware = TokenMiddleware(httpClient, tokenTtl, clock)
+
+    private val imdsEndpointProvider = ImdsEndpointProvider(platformProvider, endpointConfiguration)
+    private val tokenMiddleware = TokenMiddleware(httpClient, imdsEndpointProvider, tokenTtl, clock)
 
     public companion object {
         public operator fun invoke(block: Builder.() -> Unit): ImdsClient = ImdsClient(Builder().apply(block))
@@ -121,7 +123,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
                 set(SdkClientOption.LogMode, sdkLogMode)
             }
 
-            execution.endpointResolver = ImdsEndpointProvider(platformProvider, endpointConfiguration)
+            execution.endpointResolver = imdsEndpointProvider
         }
         op.execution.retryPolicy = ImdsRetryPolicy()
 

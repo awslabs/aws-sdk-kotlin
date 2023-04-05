@@ -25,7 +25,8 @@ internal class ImdsEndpointProvider(
     private val resolvedEndpoint = asyncLazy(::doResolveEndpoint)
     private val activeProfile = asyncLazy { loadActiveAwsProfile(platformProvider) }
 
-    override suspend fun resolve(request: ResolveEndpointRequest): Endpoint = resolvedEndpoint.get()
+    override suspend fun resolve(request: ResolveEndpointRequest): Endpoint = resolveImdsEndpoint()
+    internal suspend fun resolveImdsEndpoint(): Endpoint = resolvedEndpoint.get()
 
     private suspend fun doResolveEndpoint(): Endpoint = when (endpointConfiguration) {
         is EndpointConfiguration.Custom -> endpointConfiguration.endpoint
