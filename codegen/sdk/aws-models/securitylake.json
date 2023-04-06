@@ -3249,9 +3249,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": true,
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": true
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -3262,9 +3262,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": false,
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": false
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -3275,9 +3275,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "UseDualStack": true,
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": true
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -3288,9 +3288,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": false
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -3301,9 +3301,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": true,
                                 "Region": "cn-north-1",
-                                "UseDualStack": true
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -3314,9 +3314,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": false,
                                 "Region": "cn-north-1",
-                                "UseDualStack": false
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -3327,9 +3327,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "UseDualStack": true,
                                 "Region": "cn-north-1",
-                                "UseDualStack": true
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -3340,9 +3340,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Region": "cn-north-1",
-                                "UseDualStack": false
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -3351,9 +3351,9 @@
                                 "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": true,
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": true
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -3364,9 +3364,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": false,
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": false
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -3375,9 +3375,9 @@
                                 "error": "DualStack is enabled but this partition does not support DualStack"
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "UseDualStack": true,
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": true
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -3388,9 +3388,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": false
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -3401,9 +3401,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": true,
                                 "Region": "us-east-1",
-                                "UseDualStack": true
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -3414,9 +3414,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": false,
                                 "Region": "us-east-1",
-                                "UseDualStack": false
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -3427,9 +3427,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "UseDualStack": true,
                                 "Region": "us-east-1",
-                                "UseDualStack": true
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -3440,9 +3440,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Region": "us-east-1",
-                                "UseDualStack": false
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -3451,9 +3451,9 @@
                                 "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": true,
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": true
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -3464,9 +3464,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": true,
+                                "UseDualStack": false,
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": false
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -3475,9 +3475,9 @@
                                 "error": "DualStack is enabled but this partition does not support DualStack"
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "UseDualStack": true,
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": true
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -3488,9 +3488,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": false
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -3501,9 +3501,9 @@
                                 }
                             },
                             "params": {
-                                "UseFIPS": false,
-                                "Region": "us-east-1",
                                 "UseDualStack": false,
+                                "Region": "us-east-1",
+                                "UseFIPS": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -3513,9 +3513,9 @@
                                 "error": "Invalid Configuration: FIPS and custom endpoint are not supported"
                             },
                             "params": {
-                                "UseFIPS": true,
-                                "Region": "us-east-1",
                                 "UseDualStack": false,
+                                "Region": "us-east-1",
+                                "UseFIPS": true,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -3525,9 +3525,9 @@
                                 "error": "Invalid Configuration: Dualstack and custom endpoint are not supported"
                             },
                             "params": {
-                                "UseFIPS": false,
-                                "Region": "us-east-1",
                                 "UseDualStack": true,
+                                "Region": "us-east-1",
+                                "UseFIPS": false,
                                 "Endpoint": "https://example.com"
                             }
                         }

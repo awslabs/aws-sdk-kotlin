@@ -151,7 +151,10 @@
                     "name": "sms"
                 },
                 "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<important>\n            <p>\n               <b>Product update</b>\n            </p>\n            <p>We recommend <a href=\"http://aws.amazon.com/application-migration-service\">Amazon Web Services Application Migration Service</a> (Amazon Web Services\n                MGN) as the primary migration service for lift-and-shift migrations. If Amazon Web Services MGN is\n                unavailable in a specific Amazon Web Services Region, you can use the Server Migration Service APIs through March\n                2023.</p>\n         </important>\n            \n        <p>Server Migration Service (Server Migration Service) makes it easier and faster for you to migrate your\n            on-premises workloads to Amazon Web Services. To learn more about Server Migration Service, see the following \n            resources:</p>\n        <ul>\n            <li>\n                <p>\n                  <a href=\"http://aws.amazon.com/server-migration-service/\">Server Migration Service\n                    product page</a>\n               </p>\n            </li>\n            <li>\n                <p>\n                  <a href=\"https://docs.aws.amazon.com/server-migration-service/latest/userguide/\">Server Migration Service User Guide</a>\n               </p>\n            </li>\n         </ul>",
+                "smithy.api#deprecated": {
+                    "message": "AWS Server Migration Service is Deprecated."
+                },
+                "smithy.api#documentation": "<important>\n            <p>\n               <b>Product update</b>\n            </p>\n            <p>We recommend <a href=\"http://aws.amazon.com/application-migration-service\">Amazon Web Services Application Migration Service</a> (Amazon Web Services\n                MGN) as the primary migration service for lift-and-shift migrations. If Amazon Web Services MGN is\n                unavailable in a specific Amazon Web Services Region, you can use the Server Migration Service APIs through March\n                2023.</p>\n         </important>\n         <p>Server Migration Service (Server Migration Service) makes it easier and faster for you to migrate your\n            on-premises workloads to Amazon Web Services. To learn more about Server Migration Service, see the following \n            resources:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"http://aws.amazon.com/server-migration-service/\">Server Migration Service\n                    product page</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/server-migration-service/latest/userguide/\">Server Migration Service User Guide</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#title": "AWS Server Migration Service",
                 "smithy.api#xmlNamespace": {
                     "uri": "http://ec2.amazon.com/servermigration/2016-10-24/"
@@ -517,8 +520,8 @@
                             },
                             "params": {
                                 "Region": "af-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -530,8 +533,8 @@
                             },
                             "params": {
                                 "Region": "ap-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -543,8 +546,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -556,8 +559,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -569,8 +572,8 @@
                             },
                             "params": {
                                 "Region": "ap-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -582,8 +585,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -595,8 +598,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -608,8 +611,8 @@
                             },
                             "params": {
                                 "Region": "ca-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -621,8 +624,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -634,8 +637,8 @@
                             },
                             "params": {
                                 "Region": "eu-north-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -647,8 +650,8 @@
                             },
                             "params": {
                                 "Region": "eu-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -660,8 +663,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -673,8 +676,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -686,8 +689,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-3",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -699,8 +702,8 @@
                             },
                             "params": {
                                 "Region": "me-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -712,8 +715,8 @@
                             },
                             "params": {
                                 "Region": "sa-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -725,8 +728,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -738,8 +741,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -751,8 +754,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -764,8 +767,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -777,8 +780,8 @@
                             },
                             "params": {
                                 "Region": "us-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -790,8 +793,8 @@
                             },
                             "params": {
                                 "Region": "us-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -803,8 +806,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -816,8 +819,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -829,8 +832,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -842,8 +845,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -855,8 +858,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -868,8 +871,8 @@
                             },
                             "params": {
                                 "Region": "cn-northwest-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -881,8 +884,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -894,8 +897,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -907,8 +910,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -920,8 +923,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -933,8 +936,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -946,8 +949,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -959,8 +962,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -972,8 +975,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -985,8 +988,19 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-iso-east-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
+                            },
+                            "params": {
+                                "Region": "us-iso-east-1",
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -998,8 +1012,19 @@
                             },
                             "params": {
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-iso-east-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "error": "DualStack is enabled but this partition does not support DualStack"
+                            },
+                            "params": {
+                                "Region": "us-iso-east-1",
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1011,8 +1036,19 @@
                             },
                             "params": {
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
+                            },
+                            "params": {
+                                "Region": "us-isob-east-1",
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1024,8 +1060,19 @@
                             },
                             "params": {
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-isob-east-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "error": "DualStack is enabled but this partition does not support DualStack"
+                            },
+                            "params": {
+                                "Region": "us-isob-east-1",
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1037,8 +1084,8 @@
                             },
                             "params": {
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1050,8 +1097,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
                                 "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1063,8 +1110,8 @@
                                 }
                             },
                             "params": {
-                                "UseDualStack": false,
                                 "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1075,8 +1122,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
                                 "UseFIPS": true,
+                                "UseDualStack": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1087,9 +1134,15 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
                                 "UseFIPS": false,
+                                "UseDualStack": true,
                                 "Endpoint": "https://example.com"
+                            }
+                        },
+                        {
+                            "documentation": "Missing region",
+                            "expect": {
+                                "error": "Invalid Configuration: Missing Region"
                             }
                         }
                     ],
@@ -1119,85 +1172,115 @@
             }
         },
         "com.amazonaws.sms#AppLaunchConfigurationStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "NOT_CONFIGURED",
-                        "name": "NotConfigured"
-                    },
-                    {
-                        "value": "CONFIGURED",
-                        "name": "Configured"
+            "type": "enum",
+            "members": {
+                "NotConfigured": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NOT_CONFIGURED"
                     }
-                ]
+                },
+                "Configured": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CONFIGURED"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#AppLaunchStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "READY_FOR_CONFIGURATION",
-                        "name": "ReadyForConfiguration"
-                    },
-                    {
-                        "value": "CONFIGURATION_IN_PROGRESS",
-                        "name": "ConfigurationInProgress"
-                    },
-                    {
-                        "value": "CONFIGURATION_INVALID",
-                        "name": "ConfigurationInvalid"
-                    },
-                    {
-                        "value": "READY_FOR_LAUNCH",
-                        "name": "ReadyForLaunch"
-                    },
-                    {
-                        "value": "VALIDATION_IN_PROGRESS",
-                        "name": "ValidationInProgress"
-                    },
-                    {
-                        "value": "LAUNCH_PENDING",
-                        "name": "LaunchPending"
-                    },
-                    {
-                        "value": "LAUNCH_IN_PROGRESS",
-                        "name": "LaunchInProgress"
-                    },
-                    {
-                        "value": "LAUNCHED",
-                        "name": "Launched"
-                    },
-                    {
-                        "value": "PARTIALLY_LAUNCHED",
-                        "name": "PartiallyLaunched"
-                    },
-                    {
-                        "value": "DELTA_LAUNCH_IN_PROGRESS",
-                        "name": "DeltaLaunchInProgress"
-                    },
-                    {
-                        "value": "DELTA_LAUNCH_FAILED",
-                        "name": "DeltaLaunchFailed"
-                    },
-                    {
-                        "value": "LAUNCH_FAILED",
-                        "name": "LaunchFailed"
-                    },
-                    {
-                        "value": "TERMINATE_IN_PROGRESS",
-                        "name": "TerminateInProgress"
-                    },
-                    {
-                        "value": "TERMINATE_FAILED",
-                        "name": "TerminateFailed"
-                    },
-                    {
-                        "value": "TERMINATED",
-                        "name": "Terminated"
+            "type": "enum",
+            "members": {
+                "ReadyForConfiguration": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "READY_FOR_CONFIGURATION"
                     }
-                ]
+                },
+                "ConfigurationInProgress": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CONFIGURATION_IN_PROGRESS"
+                    }
+                },
+                "ConfigurationInvalid": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CONFIGURATION_INVALID"
+                    }
+                },
+                "ReadyForLaunch": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "READY_FOR_LAUNCH"
+                    }
+                },
+                "ValidationInProgress": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "VALIDATION_IN_PROGRESS"
+                    }
+                },
+                "LaunchPending": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LAUNCH_PENDING"
+                    }
+                },
+                "LaunchInProgress": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LAUNCH_IN_PROGRESS"
+                    }
+                },
+                "Launched": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LAUNCHED"
+                    }
+                },
+                "PartiallyLaunched": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PARTIALLY_LAUNCHED"
+                    }
+                },
+                "DeltaLaunchInProgress": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELTA_LAUNCH_IN_PROGRESS"
+                    }
+                },
+                "DeltaLaunchFailed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELTA_LAUNCH_FAILED"
+                    }
+                },
+                "LaunchFailed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LAUNCH_FAILED"
+                    }
+                },
+                "TerminateInProgress": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "TERMINATE_IN_PROGRESS"
+                    }
+                },
+                "TerminateFailed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "TERMINATE_FAILED"
+                    }
+                },
+                "Terminated": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "TERMINATED"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#AppLaunchStatusMessage": {
@@ -1207,123 +1290,165 @@
             "type": "string"
         },
         "com.amazonaws.sms#AppReplicationConfigurationStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "NOT_CONFIGURED",
-                        "name": "NotConfigured"
-                    },
-                    {
-                        "value": "CONFIGURED",
-                        "name": "Configured"
+            "type": "enum",
+            "members": {
+                "NotConfigured": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NOT_CONFIGURED"
                     }
-                ]
+                },
+                "Configured": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CONFIGURED"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#AppReplicationStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "READY_FOR_CONFIGURATION",
-                        "name": "ReadyForConfiguration"
-                    },
-                    {
-                        "value": "CONFIGURATION_IN_PROGRESS",
-                        "name": "ConfigurationInProgress"
-                    },
-                    {
-                        "value": "CONFIGURATION_INVALID",
-                        "name": "ConfigurationInvalid"
-                    },
-                    {
-                        "value": "READY_FOR_REPLICATION",
-                        "name": "ReadyForReplication"
-                    },
-                    {
-                        "value": "VALIDATION_IN_PROGRESS",
-                        "name": "ValidationInProgress"
-                    },
-                    {
-                        "value": "REPLICATION_PENDING",
-                        "name": "ReplicationPending"
-                    },
-                    {
-                        "value": "REPLICATION_IN_PROGRESS",
-                        "name": "ReplicationInProgress"
-                    },
-                    {
-                        "value": "REPLICATED",
-                        "name": "Replicated"
-                    },
-                    {
-                        "value": "PARTIALLY_REPLICATED",
-                        "name": "PartiallyReplicated"
-                    },
-                    {
-                        "value": "DELTA_REPLICATION_IN_PROGRESS",
-                        "name": "DeltaReplicationInProgress"
-                    },
-                    {
-                        "value": "DELTA_REPLICATED",
-                        "name": "DeltaReplicated"
-                    },
-                    {
-                        "value": "DELTA_REPLICATION_FAILED",
-                        "name": "DeltaReplicationFailed"
-                    },
-                    {
-                        "value": "REPLICATION_FAILED",
-                        "name": "ReplicationFailed"
-                    },
-                    {
-                        "value": "REPLICATION_STOPPING",
-                        "name": "ReplicationStopping"
-                    },
-                    {
-                        "value": "REPLICATION_STOP_FAILED",
-                        "name": "ReplicationStopFailed"
-                    },
-                    {
-                        "value": "REPLICATION_STOPPED",
-                        "name": "ReplicationStopped"
+            "type": "enum",
+            "members": {
+                "ReadyForConfiguration": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "READY_FOR_CONFIGURATION"
                     }
-                ]
+                },
+                "ConfigurationInProgress": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CONFIGURATION_IN_PROGRESS"
+                    }
+                },
+                "ConfigurationInvalid": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CONFIGURATION_INVALID"
+                    }
+                },
+                "ReadyForReplication": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "READY_FOR_REPLICATION"
+                    }
+                },
+                "ValidationInProgress": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "VALIDATION_IN_PROGRESS"
+                    }
+                },
+                "ReplicationPending": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REPLICATION_PENDING"
+                    }
+                },
+                "ReplicationInProgress": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REPLICATION_IN_PROGRESS"
+                    }
+                },
+                "Replicated": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REPLICATED"
+                    }
+                },
+                "PartiallyReplicated": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PARTIALLY_REPLICATED"
+                    }
+                },
+                "DeltaReplicationInProgress": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELTA_REPLICATION_IN_PROGRESS"
+                    }
+                },
+                "DeltaReplicated": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELTA_REPLICATED"
+                    }
+                },
+                "DeltaReplicationFailed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELTA_REPLICATION_FAILED"
+                    }
+                },
+                "ReplicationFailed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REPLICATION_FAILED"
+                    }
+                },
+                "ReplicationStopping": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REPLICATION_STOPPING"
+                    }
+                },
+                "ReplicationStopFailed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REPLICATION_STOP_FAILED"
+                    }
+                },
+                "ReplicationStopped": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REPLICATION_STOPPED"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#AppReplicationStatusMessage": {
             "type": "string"
         },
         "com.amazonaws.sms#AppStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "CREATING",
-                        "name": "Creating"
-                    },
-                    {
-                        "value": "ACTIVE",
-                        "name": "Active"
-                    },
-                    {
-                        "value": "UPDATING",
-                        "name": "Updating"
-                    },
-                    {
-                        "value": "DELETING",
-                        "name": "Deleting"
-                    },
-                    {
-                        "value": "DELETED",
-                        "name": "Deleted"
-                    },
-                    {
-                        "value": "DELETE_FAILED",
-                        "name": "DELETE_FAILED"
+            "type": "enum",
+            "members": {
+                "Creating": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CREATING"
                     }
-                ]
+                },
+                "Active": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ACTIVE"
+                    }
+                },
+                "Updating": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "UPDATING"
+                    }
+                },
+                "Deleting": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELETING"
+                    }
+                },
+                "Deleted": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELETED"
+                    }
+                },
+                "DELETE_FAILED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELETE_FAILED"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#AppStatusMessage": {
@@ -1504,14 +1629,14 @@
             }
         },
         "com.amazonaws.sms#AppValidationStrategy": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "SSM",
-                        "name": "SSM"
+            "type": "enum",
+            "members": {
+                "SSM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SSM"
                     }
-                ]
+                }
             }
         },
         "com.amazonaws.sms#Apps": {
@@ -1610,30 +1735,38 @@
             }
         },
         "com.amazonaws.sms#ConnectorCapability": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "VSPHERE",
-                        "name": "vSphere"
-                    },
-                    {
-                        "value": "SCVMM",
-                        "name": "scvmm"
-                    },
-                    {
-                        "value": "HYPERV-MANAGER",
-                        "name": "hyperVManager"
-                    },
-                    {
-                        "value": "SNAPSHOT_BATCHING",
-                        "name": "snapshotBatching"
-                    },
-                    {
-                        "value": "SMS_OPTIMIZED",
-                        "name": "smsOptimized"
+            "type": "enum",
+            "members": {
+                "vSphere": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "VSPHERE"
                     }
-                ]
+                },
+                "scvmm": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SCVMM"
+                    }
+                },
+                "hyperVManager": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HYPERV-MANAGER"
+                    }
+                },
+                "snapshotBatching": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SNAPSHOT_BATCHING"
+                    }
+                },
+                "smsOptimized": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SMS_OPTIMIZED"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#ConnectorCapabilityList": {
@@ -1658,18 +1791,20 @@
             }
         },
         "com.amazonaws.sms#ConnectorStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "HEALTHY",
-                        "name": "Healthy"
-                    },
-                    {
-                        "value": "UNHEALTHY",
-                        "name": "Unhealthy"
+            "type": "enum",
+            "members": {
+                "Healthy": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HEALTHY"
                     }
-                ]
+                },
+                "Unhealthy": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "UNHEALTHY"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#ConnectorVersion": {
@@ -1743,6 +1878,9 @@
                         "smithy.api#documentation": "<p>The tags to be associated with the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#CreateAppResponse": {
@@ -1766,6 +1904,9 @@
                         "smithy.api#documentation": "<p>The tags associated with the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#CreateReplicationJob": {
@@ -1871,9 +2012,12 @@
                 "kmsKeyId": {
                     "target": "com.amazonaws.sms#KmsKeyId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ID of the KMS key for replication jobs that produce encrypted AMIs. \n            This value can be any of the following:</p>\n        <ul>\n            <li>\n                <p>KMS key ID</p>\n            </li>\n            <li>\n                <p>KMS key alias</p>\n            </li>\n            <li>\n                <p>ARN referring to the KMS key ID</p>\n            </li>\n            <li>\n                <p>ARN referring to the KMS key alias</p>\n            </li>\n         </ul>\n        <p> If encrypted is <i>true</i> but a KMS key ID is not specified, the\n            customer's default KMS key for Amazon EBS is used. </p>"
+                        "smithy.api#documentation": "<p>The ID of the KMS key for replication jobs that produce encrypted AMIs. \n            This value can be any of the following:</p>\n         <ul>\n            <li>\n               <p>KMS key ID</p>\n            </li>\n            <li>\n               <p>KMS key alias</p>\n            </li>\n            <li>\n               <p>ARN referring to the KMS key ID</p>\n            </li>\n            <li>\n               <p>ARN referring to the KMS key alias</p>\n            </li>\n         </ul>\n         <p> If encrypted is <i>true</i> but a KMS key ID is not specified, the\n            customer's default KMS key for Amazon EBS is used. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#CreateReplicationJobResponse": {
@@ -1885,6 +2029,9 @@
                         "smithy.api#documentation": "<p>The unique identifier of the replication job.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#DeleteApp": {
@@ -1954,11 +2101,17 @@
                         "smithy.api#documentation": "<p>The ID of the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#DeleteAppLaunchConfigurationResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#DeleteAppReplicationConfiguration": {
             "type": "operation",
@@ -1998,11 +2151,17 @@
                         "smithy.api#documentation": "<p>The ID of the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#DeleteAppReplicationConfigurationResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#DeleteAppRequest": {
             "type": "structure",
@@ -2025,11 +2184,17 @@
                         "smithy.api#documentation": "<p>Indicates whether to terminate the stack corresponding to the\n            application while deleting the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#DeleteAppResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#DeleteAppValidationConfiguration": {
             "type": "operation",
@@ -2070,11 +2235,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#DeleteAppValidationConfigurationResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#DeleteReplicationJob": {
             "type": "operation",
@@ -2102,7 +2273,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Deletes the specified replication job.</p>\n        <p>After you delete a replication job, there are no further replication runs. Amazon Web Services\n            deletes the contents of the Amazon S3 bucket used to store Server Migration Service artifacts. The AMIs created\n            by the replication runs are not deleted.</p>"
+                "smithy.api#documentation": "<p>Deletes the specified replication job.</p>\n         <p>After you delete a replication job, there are no further replication runs. Amazon Web Services\n            deletes the contents of the Amazon S3 bucket used to store Server Migration Service artifacts. The AMIs created\n            by the replication runs are not deleted.</p>"
             }
         },
         "com.amazonaws.sms#DeleteReplicationJobRequest": {
@@ -2115,11 +2286,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#DeleteReplicationJobResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#DeleteServerCatalog": {
             "type": "operation",
@@ -2149,11 +2326,17 @@
         },
         "com.amazonaws.sms#DeleteServerCatalogRequest": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
         },
         "com.amazonaws.sms#DeleteServerCatalogResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#Description": {
             "type": "string"
@@ -2181,7 +2364,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Disassociates the specified connector from Server Migration Service.</p>\n        <p>After you disassociate a connector, it is no longer available to support\n            replication jobs.</p>"
+                "smithy.api#documentation": "<p>Disassociates the specified connector from Server Migration Service.</p>\n         <p>After you disassociate a connector, it is no longer available to support\n            replication jobs.</p>"
             }
         },
         "com.amazonaws.sms#DisassociateConnectorRequest": {
@@ -2194,11 +2377,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#DisassociateConnectorResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#DryRunOperationException": {
             "type": "structure",
@@ -2289,6 +2478,9 @@
                         "smithy.api#documentation": "<p>The format for the change set.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GenerateChangeSetResponse": {
@@ -2300,6 +2492,9 @@
                         "smithy.api#documentation": "<p>The location of the Amazon S3 object.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#GenerateTemplate": {
@@ -2346,6 +2541,9 @@
                         "smithy.api#documentation": "<p>The format for generating the CloudFormation template.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GenerateTemplateResponse": {
@@ -2357,6 +2555,9 @@
                         "smithy.api#documentation": "<p>The location of the Amazon S3 object.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#GetApp": {
@@ -2426,6 +2627,9 @@
                         "smithy.api#documentation": "<p>The ID of the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GetAppLaunchConfigurationResponse": {
@@ -2455,6 +2659,9 @@
                         "smithy.api#documentation": "<p>The launch configurations for server groups in this application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#GetAppReplicationConfiguration": {
@@ -2495,6 +2702,9 @@
                         "smithy.api#documentation": "<p>The ID of the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GetAppReplicationConfigurationResponse": {
@@ -2506,6 +2716,9 @@
                         "smithy.api#documentation": "<p>The replication configurations associated with server groups in this application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#GetAppRequest": {
@@ -2517,6 +2730,9 @@
                         "smithy.api#documentation": "<p>The ID of the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GetAppResponse": {
@@ -2540,6 +2756,9 @@
                         "smithy.api#documentation": "<p>The tags associated with the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#GetAppValidationConfiguration": {
@@ -2581,6 +2800,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GetAppValidationConfigurationResponse": {
@@ -2598,6 +2820,9 @@
                         "smithy.api#documentation": "<p>The configuration for instance validation.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#GetAppValidationOutput": {
@@ -2639,6 +2864,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GetAppValidationOutputResponse": {
@@ -2650,6 +2878,9 @@
                         "smithy.api#documentation": "<p>The validation output.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#GetConnectors": {
@@ -2690,6 +2921,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return in a single call. The default value is 50.\n            To retrieve the remaining results, make another call with the returned\n                <code>NextToken</code> value.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GetConnectorsResponse": {
@@ -2707,6 +2941,9 @@
                         "smithy.api#documentation": "<p>The token required to retrieve the next set of results. This value is null when\n            there are no more results to return.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#GetReplicationJobs": {
@@ -2759,6 +2996,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return in a single call. The default value is 50.\n            To retrieve the remaining results, make another call with the returned\n                <code>NextToken</code> value.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GetReplicationJobsResponse": {
@@ -2776,6 +3016,9 @@
                         "smithy.api#documentation": "<p>The token required to retrieve the next set of results. This value is null when\n            there are no more results to return.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#GetReplicationRuns": {
@@ -2829,6 +3072,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return in a single call. The default value is 50.\n            To retrieve the remaining results, make another call with the returned\n                <code>NextToken</code> value.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GetReplicationRunsResponse": {
@@ -2852,6 +3098,9 @@
                         "smithy.api#documentation": "<p>The token required to retrieve the next set of results. This value is null when\n            there are no more results to return.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#GetServers": {
@@ -2877,7 +3126,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Describes the servers in your server catalog.</p>\n        <p>Before you can describe your servers, you must import them using <a>ImportServerCatalog</a>.</p>",
+                "smithy.api#documentation": "<p>Describes the servers in your server catalog.</p>\n         <p>Before you can describe your servers, you must import them using <a>ImportServerCatalog</a>.</p>",
                 "smithy.api#paginated": {
                     "inputToken": "nextToken",
                     "outputToken": "nextToken",
@@ -2907,6 +3156,9 @@
                         "smithy.api#documentation": "<p>The server addresses.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#GetServersResponse": {
@@ -2936,6 +3188,9 @@
                         "smithy.api#documentation": "<p>The token required to retrieve the next set of results. This value is null when\n            there are no more results to return.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#ImportAppCatalog": {
@@ -2976,11 +3231,17 @@
                         "smithy.api#documentation": "<p>The name of the service role. If you omit this parameter, we create a service-linked role\n            for Migration Hub in your account. Otherwise, the role that you provide must have the <a href=\"https://docs.aws.amazon.com/migrationhub/latest/ug/new-customer-setup.html#sms-managed\">policy\n                and trust policy</a> described in the <i>Migration Hub User Guide</i>.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#ImportAppCatalogResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#ImportServerCatalog": {
             "type": "operation",
@@ -3008,16 +3269,22 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Gathers a complete list of on-premises servers. Connectors must be installed and\n            monitoring all servers to import.</p>\n        <p>This call returns immediately, but might take additional time to retrieve all the\n            servers.</p>"
+                "smithy.api#documentation": "<p>Gathers a complete list of on-premises servers. Connectors must be installed and\n            monitoring all servers to import.</p>\n         <p>This call returns immediately, but might take additional time to retrieve all the\n            servers.</p>"
             }
         },
         "com.amazonaws.sms#ImportServerCatalogRequest": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
         },
         "com.amazonaws.sms#ImportServerCatalogResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#ImportedAppId": {
             "type": "string"
@@ -3109,11 +3376,17 @@
                         "smithy.api#documentation": "<p>The ID of the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#LaunchAppResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#LaunchDetails": {
             "type": "structure",
@@ -3145,18 +3418,20 @@
             "type": "integer"
         },
         "com.amazonaws.sms#LicenseType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "AWS",
-                        "name": "AWS"
-                    },
-                    {
-                        "value": "BYOL",
-                        "name": "BYOL"
+            "type": "enum",
+            "members": {
+                "AWS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS"
                     }
-                ]
+                },
+                "BYOL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "BYOL"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#ListApps": {
@@ -3209,6 +3484,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return in a single call. The default value is 100. To\n            retrieve the remaining results, make another call with the returned\n                <code>NextToken</code> value. </p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#ListAppsResponse": {
@@ -3226,6 +3504,9 @@
                         "smithy.api#documentation": "<p>The token required to retrieve the next set of results. This value is null when there\n            are no more results to return.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#LogicalId": {
@@ -3355,11 +3636,17 @@
                         "smithy.api#documentation": "<p>The notification information.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#NotifyAppValidationOutputResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#NumberOfRecentAmisToKeep": {
             "type": "integer"
@@ -3382,18 +3669,20 @@
             }
         },
         "com.amazonaws.sms#OutputFormat": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "JSON",
-                        "name": "JSON"
-                    },
-                    {
-                        "value": "YAML",
-                        "name": "YAML"
+            "type": "enum",
+            "members": {
+                "JSON": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "JSON"
                     }
-                ]
+                },
+                "YAML": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "YAML"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#PutAppLaunchConfiguration": {
@@ -3452,11 +3741,17 @@
                         "smithy.api#documentation": "<p>Information about the launch configurations for server groups in the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#PutAppLaunchConfigurationResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#PutAppReplicationConfiguration": {
             "type": "operation",
@@ -3502,11 +3797,17 @@
                         "smithy.api#documentation": "<p>Information about the replication configurations for server groups in the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#PutAppReplicationConfigurationResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#PutAppValidationConfiguration": {
             "type": "operation",
@@ -3559,11 +3860,17 @@
                         "smithy.api#documentation": "<p>The configuration for instance validation.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#PutAppValidationConfigurationResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#ReplicationJob": {
             "type": "structure",
@@ -3667,7 +3974,7 @@
                 "kmsKeyId": {
                     "target": "com.amazonaws.sms#KmsKeyId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ID of the KMS key for replication jobs that produce encrypted AMIs. \n            This value can be any of the following: </p>\n        <ul>\n            <li>\n                <p>KMS key ID</p>\n            </li>\n            <li>\n                <p>KMS key alias</p>\n            </li>\n            <li>\n                <p>ARN referring to the KMS key ID</p>\n            </li>\n            <li>\n                <p>ARN referring to the KMS key alias</p>\n            </li>\n         </ul>\n        <p>If encrypted is enabled but a KMS key ID is not specified, the\n            customer's default KMS key for Amazon EBS is used.</p>"
+                        "smithy.api#documentation": "<p>The ID of the KMS key for replication jobs that produce encrypted AMIs. \n            This value can be any of the following: </p>\n         <ul>\n            <li>\n               <p>KMS key ID</p>\n            </li>\n            <li>\n               <p>KMS key alias</p>\n            </li>\n            <li>\n               <p>ARN referring to the KMS key ID</p>\n            </li>\n            <li>\n               <p>ARN referring to the KMS key alias</p>\n            </li>\n         </ul>\n         <p>If encrypted is enabled but a KMS key ID is not specified, the\n            customer's default KMS key for Amazon EBS is used.</p>"
                     }
                 },
                 "replicationRunList": {
@@ -3728,42 +4035,56 @@
             }
         },
         "com.amazonaws.sms#ReplicationJobState": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "PENDING",
-                        "name": "Pending"
-                    },
-                    {
-                        "value": "ACTIVE",
-                        "name": "Active"
-                    },
-                    {
-                        "value": "FAILED",
-                        "name": "Failed"
-                    },
-                    {
-                        "value": "DELETING",
-                        "name": "Deleting"
-                    },
-                    {
-                        "value": "DELETED",
-                        "name": "Deleted"
-                    },
-                    {
-                        "value": "COMPLETED",
-                        "name": "Completed"
-                    },
-                    {
-                        "value": "PAUSED_ON_FAILURE",
-                        "name": "PausedOnFailure"
-                    },
-                    {
-                        "value": "FAILING",
-                        "name": "Failing"
+            "type": "enum",
+            "members": {
+                "Pending": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PENDING"
                     }
-                ]
+                },
+                "Active": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ACTIVE"
+                    }
+                },
+                "Failed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FAILED"
+                    }
+                },
+                "Deleting": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELETING"
+                    }
+                },
+                "Deleted": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELETED"
+                    }
+                },
+                "Completed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "COMPLETED"
+                    }
+                },
+                "PausedOnFailure": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PAUSED_ON_FAILURE"
+                    }
+                },
+                "Failing": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FAILING"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#ReplicationJobStatusMessage": {
@@ -3838,7 +4159,7 @@
                 "kmsKeyId": {
                     "target": "com.amazonaws.sms#KmsKeyId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ID of the KMS key for replication jobs that produce encrypted AMIs. \n            This value can be any of the following:</p>\n        <ul>\n            <li>\n                <p>KMS key ID</p>\n            </li>\n            <li>\n                <p>KMS key alias</p>\n            </li>\n            <li>\n                <p>ARN referring to the KMS key ID</p>\n            </li>\n            <li>\n                <p>ARN referring to the KMS key alias</p>\n            </li>\n         </ul>\n        <p> If encrypted is <i>true</i> but a KMS key ID is not specified, the\n            customer's default KMS key for Amazon EBS is used. </p>"
+                        "smithy.api#documentation": "<p>The ID of the KMS key for replication jobs that produce encrypted AMIs. \n            This value can be any of the following:</p>\n         <ul>\n            <li>\n               <p>KMS key ID</p>\n            </li>\n            <li>\n               <p>KMS key alias</p>\n            </li>\n            <li>\n               <p>ARN referring to the KMS key ID</p>\n            </li>\n            <li>\n               <p>ARN referring to the KMS key alias</p>\n            </li>\n         </ul>\n         <p> If encrypted is <i>true</i> but a KMS key ID is not specified, the\n            customer's default KMS key for Amazon EBS is used. </p>"
                     }
                 }
             },
@@ -3902,56 +4223,70 @@
             "type": "string"
         },
         "com.amazonaws.sms#ReplicationRunState": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "PENDING",
-                        "name": "Pending"
-                    },
-                    {
-                        "value": "MISSED",
-                        "name": "Missed"
-                    },
-                    {
-                        "value": "ACTIVE",
-                        "name": "Active"
-                    },
-                    {
-                        "value": "FAILED",
-                        "name": "Failed"
-                    },
-                    {
-                        "value": "COMPLETED",
-                        "name": "Completed"
-                    },
-                    {
-                        "value": "DELETING",
-                        "name": "Deleting"
-                    },
-                    {
-                        "value": "DELETED",
-                        "name": "Deleted"
+            "type": "enum",
+            "members": {
+                "Pending": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PENDING"
                     }
-                ]
+                },
+                "Missed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MISSED"
+                    }
+                },
+                "Active": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ACTIVE"
+                    }
+                },
+                "Failed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FAILED"
+                    }
+                },
+                "Completed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "COMPLETED"
+                    }
+                },
+                "Deleting": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELETING"
+                    }
+                },
+                "Deleted": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELETED"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#ReplicationRunStatusMessage": {
             "type": "string"
         },
         "com.amazonaws.sms#ReplicationRunType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "ON_DEMAND",
-                        "name": "OnDemand"
-                    },
-                    {
-                        "value": "AUTOMATIC",
-                        "name": "Automatic"
+            "type": "enum",
+            "members": {
+                "OnDemand": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ON_DEMAND"
                     }
-                ]
+                },
+                "Automatic": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AUTOMATIC"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#RoleName": {
@@ -4055,18 +4390,20 @@
             }
         },
         "com.amazonaws.sms#ScriptType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "SHELL_SCRIPT",
-                        "name": "SHELL_SCRIPT"
-                    },
-                    {
-                        "value": "POWERSHELL_SCRIPT",
-                        "name": "POWERSHELL_SCRIPT"
+            "type": "enum",
+            "members": {
+                "SHELL_SCRIPT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SHELL_SCRIPT"
                     }
-                ]
+                },
+                "POWERSHELL_SCRIPT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "POWERSHELL_SCRIPT"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#SecurityGroup": {
@@ -4128,30 +4465,38 @@
             }
         },
         "com.amazonaws.sms#ServerCatalogStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "NOT_IMPORTED",
-                        "name": "NotImported"
-                    },
-                    {
-                        "value": "IMPORTING",
-                        "name": "Importing"
-                    },
-                    {
-                        "value": "AVAILABLE",
-                        "name": "Available"
-                    },
-                    {
-                        "value": "DELETED",
-                        "name": "Deleted"
-                    },
-                    {
-                        "value": "EXPIRED",
-                        "name": "Expired"
+            "type": "enum",
+            "members": {
+                "NotImported": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NOT_IMPORTED"
                     }
-                ]
+                },
+                "Importing": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IMPORTING"
+                    }
+                },
+                "Available": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AVAILABLE"
+                    }
+                },
+                "Deleted": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DELETED"
+                    }
+                },
+                "Expired": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "EXPIRED"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#ServerGroup": {
@@ -4439,7 +4784,7 @@
                 "kmsKeyId": {
                     "target": "com.amazonaws.sms#KmsKeyId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ID of the KMS key for replication jobs that produce encrypted AMIs. \n            This value can be any of the following:</p>\n        <ul>\n            <li>\n                <p>KMS key ID</p>\n            </li>\n            <li>\n                <p>KMS key alias</p>\n            </li>\n            <li>\n                <p>ARN referring to the KMS key ID</p>\n            </li>\n            <li>\n                <p>ARN referring to the KMS key alias</p>\n            </li>\n         </ul>\n        <p>If encrypted is enabled but a KMS key ID is not specified, the\n            customer's default KMS key for Amazon EBS is used.</p>"
+                        "smithy.api#documentation": "<p>The ID of the KMS key for replication jobs that produce encrypted AMIs. \n            This value can be any of the following:</p>\n         <ul>\n            <li>\n               <p>KMS key ID</p>\n            </li>\n            <li>\n               <p>KMS key alias</p>\n            </li>\n            <li>\n               <p>ARN referring to the KMS key ID</p>\n            </li>\n            <li>\n               <p>ARN referring to the KMS key alias</p>\n            </li>\n         </ul>\n         <p>If encrypted is enabled but a KMS key ID is not specified, the\n            customer's default KMS key for Amazon EBS is used.</p>"
                     }
                 }
             },
@@ -4448,14 +4793,14 @@
             }
         },
         "com.amazonaws.sms#ServerType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "VIRTUAL_MACHINE",
-                        "name": "VirtualMachine"
+            "type": "enum",
+            "members": {
+                "VirtualMachine": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "VIRTUAL_MACHINE"
                     }
-                ]
+                }
             }
         },
         "com.amazonaws.sms#ServerValidationConfiguration": {
@@ -4511,14 +4856,14 @@
             }
         },
         "com.amazonaws.sms#ServerValidationStrategy": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "USERDATA",
-                        "name": "USERDATA"
+            "type": "enum",
+            "members": {
+                "USERDATA": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "USERDATA"
                     }
-                ]
+                }
             }
         },
         "com.amazonaws.sms#Source": {
@@ -4576,11 +4921,17 @@
                         "smithy.api#documentation": "<p>The ID of the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#StartAppReplicationResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#StartOnDemandAppReplication": {
             "type": "operation",
@@ -4627,11 +4978,17 @@
                         "smithy.api#documentation": "<p>The description of the replication run.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#StartOnDemandAppReplicationResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#StartOnDemandReplicationRun": {
             "type": "operation",
@@ -4662,7 +5019,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Starts an on-demand replication run for the specified replication job. This\n            replication run starts immediately. This replication run is in addition to the ones\n            already scheduled.</p>\n        <p>There is a limit on the number of on-demand replications runs that you can request\n            in a 24-hour period.</p>"
+                "smithy.api#documentation": "<p>Starts an on-demand replication run for the specified replication job. This\n            replication run starts immediately. This replication run is in addition to the ones\n            already scheduled.</p>\n         <p>There is a limit on the number of on-demand replications runs that you can request\n            in a 24-hour period.</p>"
             }
         },
         "com.amazonaws.sms#StartOnDemandReplicationRunRequest": {
@@ -4681,6 +5038,9 @@
                         "smithy.api#documentation": "<p>The description of the replication run.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#StartOnDemandReplicationRunResponse": {
@@ -4692,6 +5052,9 @@
                         "smithy.api#documentation": "<p>The ID of the replication run.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#StopAppReplication": {
@@ -4732,11 +5095,17 @@
                         "smithy.api#documentation": "<p>The ID of the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#StopAppReplicationResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#Subnet": {
             "type": "string"
@@ -4824,11 +5193,17 @@
                         "smithy.api#documentation": "<p>The ID of the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#TerminateAppResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#Timestamp": {
             "type": "timestamp"
@@ -4924,6 +5299,9 @@
                         "smithy.api#documentation": "<p>The tags to associate with the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#UpdateAppResponse": {
@@ -4947,6 +5325,9 @@
                         "smithy.api#documentation": "<p>The tags associated with the application.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.sms#UpdateReplicationJob": {
@@ -5042,14 +5423,20 @@
                 "kmsKeyId": {
                     "target": "com.amazonaws.sms#KmsKeyId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ID of the KMS key for replication jobs that produce encrypted AMIs. \n            This value can be any of the following:</p>\n        <ul>\n            <li>\n                <p>KMS key ID</p>\n            </li>\n            <li>\n                <p>KMS key alias</p>\n            </li>\n            <li>\n                <p>ARN referring to the KMS key ID</p>\n            </li>\n            <li>\n                <p>ARN referring to the KMS key alias</p>\n            </li>\n         </ul>\n        <p>If encrypted is enabled but a KMS key ID is not specified, the\n            customer's default KMS key for Amazon EBS is used.</p>"
+                        "smithy.api#documentation": "<p>The ID of the KMS key for replication jobs that produce encrypted AMIs. \n            This value can be any of the following:</p>\n         <ul>\n            <li>\n               <p>KMS key ID</p>\n            </li>\n            <li>\n               <p>KMS key alias</p>\n            </li>\n            <li>\n               <p>ARN referring to the KMS key ID</p>\n            </li>\n            <li>\n               <p>ARN referring to the KMS key alias</p>\n            </li>\n         </ul>\n         <p>If encrypted is enabled but a KMS key ID is not specified, the\n            customer's default KMS key for Amazon EBS is used.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.sms#UpdateReplicationJobResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.sms#UserData": {
             "type": "structure",
@@ -5151,30 +5538,38 @@
             }
         },
         "com.amazonaws.sms#ValidationStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "READY_FOR_VALIDATION",
-                        "name": "ReadyForValidation"
-                    },
-                    {
-                        "value": "PENDING",
-                        "name": "Pending"
-                    },
-                    {
-                        "value": "IN_PROGRESS",
-                        "name": "InProgress"
-                    },
-                    {
-                        "value": "SUCCEEDED",
-                        "name": "Succeeded"
-                    },
-                    {
-                        "value": "FAILED",
-                        "name": "Failed"
+            "type": "enum",
+            "members": {
+                "ReadyForValidation": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "READY_FOR_VALIDATION"
                     }
-                ]
+                },
+                "Pending": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PENDING"
+                    }
+                },
+                "InProgress": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IN_PROGRESS"
+                    }
+                },
+                "Succeeded": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SUCCEEDED"
+                    }
+                },
+                "Failed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FAILED"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#ValidationStatusMessage": {
@@ -5196,22 +5591,26 @@
             "type": "string"
         },
         "com.amazonaws.sms#VmManagerType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "VSPHERE",
-                        "name": "vSphere"
-                    },
-                    {
-                        "value": "SCVMM",
-                        "name": "scvmm"
-                    },
-                    {
-                        "value": "HYPERV-MANAGER",
-                        "name": "hyperVManager"
+            "type": "enum",
+            "members": {
+                "vSphere": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "VSPHERE"
                     }
-                ]
+                },
+                "scvmm": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SCVMM"
+                    }
+                },
+                "hyperVManager": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HYPERV-MANAGER"
+                    }
+                }
             }
         },
         "com.amazonaws.sms#VmName": {
