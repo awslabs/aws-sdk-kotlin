@@ -1,8 +1,0 @@
-{
-    "id": "dcf0c420-a134-4a51-b6d1-c6de5409c2ee",
-    "type": "bugfix",
-    "description": "Don't use potentially stale profile when retrieving credentials via IMDS.",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#492"
-    ]
-}

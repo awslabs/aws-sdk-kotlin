@@ -1,5 +1,0 @@
-{
-    "id": "658003dd-8984-4eb2-a249-81ccfe4854e0",
-    "type": "misc",
-    "description": "Upgrade smithy to pull in protocol tests for intEnum support."
-}

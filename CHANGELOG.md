@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.21.5-beta] - 04/06/2023
+
+### Fixes
+* [#492](https://github.com/awslabs/aws-sdk-kotlin/issues/492) Don't use potentially stale profile when retrieving credentials via IMDS.
+
+### Miscellaneous
+* Upgrade **smithy-kotlin** to 0.16.6
+* Sync AWS models to latest versions
+* Upgrade smithy to pull in protocol tests for intEnum support.
+
 ## [0.21.4-beta] - 03/30/2023
 
 ### Features
