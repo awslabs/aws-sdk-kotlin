@@ -1036,6 +1036,17 @@
                             }
                         },
                         {
+                            "documentation": "For region us-iso-east-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
+                            },
+                            "params": {
+                                "Region": "us-iso-east-1",
+                                "UseFIPS": true,
+                                "UseDualStack": true
+                            }
+                        },
+                        {
                             "documentation": "For region us-iso-east-1 with FIPS enabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
@@ -1046,6 +1057,17 @@
                                 "Region": "us-iso-east-1",
                                 "UseFIPS": true,
                                 "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-iso-east-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "error": "DualStack is enabled but this partition does not support DualStack"
+                            },
+                            "params": {
+                                "Region": "us-iso-east-1",
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1062,6 +1084,17 @@
                             }
                         },
                         {
+                            "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
+                            },
+                            "params": {
+                                "Region": "us-isob-east-1",
+                                "UseFIPS": true,
+                                "UseDualStack": true
+                            }
+                        },
+                        {
                             "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
@@ -1072,6 +1105,17 @@
                                 "Region": "us-isob-east-1",
                                 "UseFIPS": true,
                                 "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-isob-east-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "error": "DualStack is enabled but this partition does not support DualStack"
+                            },
+                            "params": {
+                                "Region": "us-isob-east-1",
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1136,6 +1180,12 @@
                                 "UseFIPS": false,
                                 "UseDualStack": true,
                                 "Endpoint": "https://example.com"
+                            }
+                        },
+                        {
+                            "documentation": "Missing region",
+                            "expect": {
+                                "error": "Invalid Configuration: Missing Region"
                             }
                         }
                     ],
@@ -2812,7 +2862,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A specified entity does not exist</p>",
+                "smithy.api#documentation": "<p>A specified entity does not exist.</p>",
                 "smithy.api#error": "client"
             }
         },
@@ -5627,6 +5677,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The identifier for the role that registers the resource.</p>"
                     }
+                },
+                "WithFederation": {
+                    "target": "com.amazonaws.lakeformation#NullableBoolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Whether or not the resource is a federated resource.</p>"
+                    }
                 }
             },
             "traits": {
@@ -5800,6 +5856,12 @@
                     "target": "com.amazonaws.lakeformation#LastModifiedTimestamp",
                     "traits": {
                         "smithy.api#documentation": "<p>The date and time the resource was last modified.</p>"
+                    }
+                },
+                "WithFederation": {
+                    "target": "com.amazonaws.lakeformation#NullableBoolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Whether or not the resource is a federated resource.</p>"
                     }
                 }
             },
@@ -7043,6 +7105,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The resource ARN.</p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "WithFederation": {
+                    "target": "com.amazonaws.lakeformation#NullableBoolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Whether or not the resource is a federated resource.</p>"
                     }
                 }
             },

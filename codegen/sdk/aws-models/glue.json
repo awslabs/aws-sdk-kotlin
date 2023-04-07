@@ -1015,8 +1015,8 @@
                             },
                             "params": {
                                 "Region": "af-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1028,8 +1028,8 @@
                             },
                             "params": {
                                 "Region": "ap-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1041,8 +1041,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1054,8 +1054,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1067,8 +1067,8 @@
                             },
                             "params": {
                                 "Region": "ap-northeast-3",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1080,8 +1080,8 @@
                             },
                             "params": {
                                 "Region": "ap-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1093,8 +1093,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1106,8 +1106,8 @@
                             },
                             "params": {
                                 "Region": "ap-southeast-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1119,8 +1119,8 @@
                             },
                             "params": {
                                 "Region": "ca-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1132,8 +1132,8 @@
                             },
                             "params": {
                                 "Region": "eu-central-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1145,8 +1145,8 @@
                             },
                             "params": {
                                 "Region": "eu-north-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1158,8 +1158,8 @@
                             },
                             "params": {
                                 "Region": "eu-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1171,8 +1171,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1184,8 +1184,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1197,8 +1197,8 @@
                             },
                             "params": {
                                 "Region": "eu-west-3",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1210,8 +1210,8 @@
                             },
                             "params": {
                                 "Region": "me-south-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1223,8 +1223,8 @@
                             },
                             "params": {
                                 "Region": "sa-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1236,8 +1236,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1249,8 +1249,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1262,8 +1262,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1275,8 +1275,8 @@
                             },
                             "params": {
                                 "Region": "us-east-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1288,8 +1288,8 @@
                             },
                             "params": {
                                 "Region": "us-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1301,8 +1301,8 @@
                             },
                             "params": {
                                 "Region": "us-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1314,8 +1314,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1327,8 +1327,8 @@
                             },
                             "params": {
                                 "Region": "us-west-2",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1340,8 +1340,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1353,8 +1353,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1366,8 +1366,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1379,8 +1379,8 @@
                             },
                             "params": {
                                 "Region": "cn-northwest-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1392,8 +1392,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1405,8 +1405,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1418,8 +1418,8 @@
                             },
                             "params": {
                                 "Region": "cn-north-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1431,8 +1431,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1444,8 +1444,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1457,8 +1457,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1470,8 +1470,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-west-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1483,8 +1483,8 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1496,8 +1496,19 @@
                             },
                             "params": {
                                 "Region": "us-gov-east-1",
-                                "UseDualStack": true,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": true
+                            }
+                        },
+                        {
+                            "documentation": "For region us-iso-east-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
+                            },
+                            "params": {
+                                "Region": "us-iso-east-1",
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1509,8 +1520,19 @@
                             },
                             "params": {
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-iso-east-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "error": "DualStack is enabled but this partition does not support DualStack"
+                            },
+                            "params": {
+                                "Region": "us-iso-east-1",
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1522,8 +1544,19 @@
                             },
                             "params": {
                                 "Region": "us-iso-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack enabled",
+                            "expect": {
+                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
+                            },
+                            "params": {
+                                "Region": "us-isob-east-1",
+                                "UseFIPS": true,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1535,8 +1568,19 @@
                             },
                             "params": {
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": true
+                                "UseFIPS": true,
+                                "UseDualStack": false
+                            }
+                        },
+                        {
+                            "documentation": "For region us-isob-east-1 with FIPS disabled and DualStack enabled",
+                            "expect": {
+                                "error": "DualStack is enabled but this partition does not support DualStack"
+                            },
+                            "params": {
+                                "Region": "us-isob-east-1",
+                                "UseFIPS": false,
+                                "UseDualStack": true
                             }
                         },
                         {
@@ -1548,8 +1592,8 @@
                             },
                             "params": {
                                 "Region": "us-isob-east-1",
-                                "UseDualStack": false,
-                                "UseFIPS": false
+                                "UseFIPS": false,
+                                "UseDualStack": false
                             }
                         },
                         {
@@ -1561,8 +1605,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
                                 "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1574,8 +1618,8 @@
                                 }
                             },
                             "params": {
-                                "UseDualStack": false,
                                 "UseFIPS": false,
+                                "UseDualStack": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1586,8 +1630,8 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": false,
                                 "UseFIPS": true,
+                                "UseDualStack": false,
                                 "Endpoint": "https://example.com"
                             }
                         },
@@ -1598,9 +1642,15 @@
                             },
                             "params": {
                                 "Region": "us-east-1",
-                                "UseDualStack": true,
                                 "UseFIPS": false,
+                                "UseDualStack": true,
                                 "Endpoint": "https://example.com"
+                            }
+                        },
+                        {
+                            "documentation": "Missing region",
+                            "expect": {
+                                "error": "Invalid Configuration: Missing Region"
                             }
                         }
                     ],
@@ -1982,7 +2032,7 @@
                 "AdditionalAuditContext": {
                     "target": "com.amazonaws.glue#AuditContextString",
                     "traits": {
-                        "smithy.api#documentation": "<p>The context for the audit..</p>"
+                        "smithy.api#documentation": "<p>A string containing the additional audit context information.</p>"
                     }
                 },
                 "RequestedColumns": {
@@ -1999,7 +2049,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A structure containing information for audit.</p>"
+                "smithy.api#documentation": "<p>A structure containing the Lake Formation audit context.</p>"
             }
         },
         "com.amazonaws.glue#AuditContextString": {
@@ -2919,6 +2969,12 @@
             "errors": [
                 {
                     "target": "com.amazonaws.glue#EntityNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceRetryableException"
                 },
                 {
                     "target": "com.amazonaws.glue#GlueEncryptionException"
@@ -5290,7 +5346,7 @@
                 "DecimalColumnStatisticsData": {
                     "target": "com.amazonaws.glue#DecimalColumnStatisticsData",
                     "traits": {
-                        "smithy.api#documentation": "<p>Decimal column statistics data.</p>"
+                        "smithy.api#documentation": "<p>\n        Decimal column statistics data. UnscaledValues within are Base64-encoded\n        binary objects storing big-endian, two's complement representations of\n        the decimal's unscaled value.\n    </p>"
                     }
                 },
                 "DoubleColumnStatisticsData": {
@@ -7278,6 +7334,9 @@
                     "target": "com.amazonaws.glue#ConcurrentModificationException"
                 },
                 {
+                    "target": "com.amazonaws.glue#FederatedResourceAlreadyExistsException"
+                },
+                {
                     "target": "com.amazonaws.glue#GlueEncryptionException"
                 },
                 {
@@ -8625,13 +8684,13 @@
                 "Timeout": {
                     "target": "com.amazonaws.glue#Timeout",
                     "traits": {
-                        "smithy.api#documentation": "<p>The number of seconds before request times out. </p>"
+                        "smithy.api#documentation": "<p>\n        The number of minutes before session times out. Default for Spark ETL\n        jobs is 48 hours (2880 minutes), the maximum session lifetime for this job type.\n        Consult the documentation for other job types.\n    </p>"
                     }
                 },
                 "IdleTimeout": {
                     "target": "com.amazonaws.glue#Timeout",
                     "traits": {
-                        "smithy.api#documentation": "<p>The number of seconds when idle before request times out. </p>"
+                        "smithy.api#documentation": "<p>\n        The number of minutes when idle before session times out. Default for\n        Spark ETL jobs is value of Timeout. Consult the documentation\n        for other job types.\n    </p>"
                     }
                 },
                 "DefaultArguments": {
@@ -10118,6 +10177,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The ID of the Data Catalog in which the database resides.</p>"
                     }
+                },
+                "FederatedDatabase": {
+                    "target": "com.amazonaws.glue#FederatedDatabase",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A <code>FederatedDatabase</code> structure that references an entity outside the Glue Data Catalog.</p>"
+                    }
                 }
             },
             "traits": {
@@ -10182,6 +10247,12 @@
                     "target": "com.amazonaws.glue#DatabaseIdentifier",
                     "traits": {
                         "smithy.api#documentation": "<p>A <code>DatabaseIdentifier</code> structure that describes a target database for resource linking.</p>"
+                    }
+                },
+                "FederatedDatabase": {
+                    "target": "com.amazonaws.glue#FederatedDatabase",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A <code>FederatedDatabase</code> structure that references an entity outside the Glue Data Catalog.</p>"
                     }
                 }
             },
@@ -12651,6 +12722,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>A message describing the problem.</p>"
                     }
+                },
+                "FromFederationSource": {
+                    "target": "com.amazonaws.glue#NullableBoolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates whether or not the exception relates to a federated source.</p>"
+                    }
                 }
             },
             "traits": {
@@ -12894,6 +12971,150 @@
             "type": "string",
             "traits": {
                 "smithy.api#pattern": "^[\\s\\S]*$"
+            }
+        },
+        "com.amazonaws.glue#FederatedDatabase": {
+            "type": "structure",
+            "members": {
+                "Identifier": {
+                    "target": "com.amazonaws.glue#FederationIdentifier",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A unique identifier for the federated database.</p>"
+                    }
+                },
+                "ConnectionName": {
+                    "target": "com.amazonaws.glue#NameString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the connection to the external metastore.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A database that points to an entity outside the Glue Data Catalog.</p>"
+            }
+        },
+        "com.amazonaws.glue#FederatedResourceAlreadyExistsException": {
+            "type": "structure",
+            "members": {
+                "Message": {
+                    "target": "com.amazonaws.glue#MessageString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The message describing the problem.</p>"
+                    }
+                },
+                "AssociatedGlueResource": {
+                    "target": "com.amazonaws.glue#GlueResourceArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The associated Glue resource already exists.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A federated resource already exists.</p>",
+                "smithy.api#error": "client"
+            }
+        },
+        "com.amazonaws.glue#FederatedTable": {
+            "type": "structure",
+            "members": {
+                "Identifier": {
+                    "target": "com.amazonaws.glue#FederationIdentifier",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A unique identifier for the federated table.</p>"
+                    }
+                },
+                "DatabaseIdentifier": {
+                    "target": "com.amazonaws.glue#FederationIdentifier",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A unique identifier for the federated database.</p>"
+                    }
+                },
+                "ConnectionName": {
+                    "target": "com.amazonaws.glue#NameString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the connection to the external metastore.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A table that points to an entity outside the Glue Data Catalog.</p>"
+            }
+        },
+        "com.amazonaws.glue#FederationIdentifier": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 512
+                },
+                "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\t]*$"
+            }
+        },
+        "com.amazonaws.glue#FederationSourceErrorCode": {
+            "type": "enum",
+            "members": {
+                "InvalidResponseException": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "InvalidResponseException"
+                    }
+                },
+                "OperationTimeoutException": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "OperationTimeoutException"
+                    }
+                },
+                "OperationNotSupportedException": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "OperationNotSupportedException"
+                    }
+                },
+                "InternalServiceException": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "InternalServiceException"
+                    }
+                },
+                "ThrottlingException": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ThrottlingException"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.glue#FederationSourceException": {
+            "type": "structure",
+            "members": {
+                "FederationSourceErrorCode": {
+                    "target": "com.amazonaws.glue#FederationSourceErrorCode",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The error code of the problem.</p>"
+                    }
+                },
+                "Message": {
+                    "target": "com.amazonaws.glue#MessageString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The message describing the problem.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A federation source failed.</p>",
+                "smithy.api#error": "client"
+            }
+        },
+        "com.amazonaws.glue#FederationSourceRetryableException": {
+            "type": "structure",
+            "members": {
+                "Message": {
+                    "target": "com.amazonaws.glue#MessageString"
+                }
+            },
+            "traits": {
+                "smithy.api#error": "client"
             }
         },
         "com.amazonaws.glue#FieldName": {
@@ -13883,7 +14104,7 @@
                 "ColumnStatisticsList": {
                     "target": "com.amazonaws.glue#ColumnStatisticsList",
                     "traits": {
-                        "smithy.api#documentation": "<p>List of ColumnStatistics that failed to be retrieved.</p>"
+                        "smithy.api#documentation": "<p>List of ColumnStatistics.</p>"
                     }
                 },
                 "Errors": {
@@ -14856,6 +15077,9 @@
                     "target": "com.amazonaws.glue#EntityNotFoundException"
                 },
                 {
+                    "target": "com.amazonaws.glue#FederationSourceException"
+                },
+                {
                     "target": "com.amazonaws.glue#GlueEncryptionException"
                 },
                 {
@@ -14962,7 +15186,7 @@
                 "ResourceShareType": {
                     "target": "com.amazonaws.glue#ResourceShareType",
                     "traits": {
-                        "smithy.api#documentation": "<p>Allows you to specify that you want to list the databases shared with your account. The allowable values are <code>FOREIGN</code> or <code>ALL</code>. </p>\n         <ul>\n            <li>\n               <p>If set to <code>FOREIGN</code>, will list the databases shared with your account. </p>\n            </li>\n            <li>\n               <p>If set to <code>ALL</code>, will list the databases shared with your account, as well as the databases in yor local account. </p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Allows you to specify that you want to list the databases shared with your account. The allowable values are <code>FEDERATED</code>, <code>FOREIGN</code> or <code>ALL</code>. </p>\n         <ul>\n            <li>\n               <p>If set to <code>FEDERATED</code>, will list the federated databases (referencing an external entity) shared with your account.</p>\n            </li>\n            <li>\n               <p>If set to <code>FOREIGN</code>, will list the databases shared with your account. </p>\n            </li>\n            <li>\n               <p>If set to <code>ALL</code>, will list the databases shared with your account, as well as the databases in yor local account. </p>\n            </li>\n         </ul>"
                     }
                 }
             },
@@ -16047,6 +16271,12 @@
                     "target": "com.amazonaws.glue#EntityNotFoundException"
                 },
                 {
+                    "target": "com.amazonaws.glue#FederationSourceException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceRetryableException"
+                },
+                {
                     "target": "com.amazonaws.glue#GlueEncryptionException"
                 },
                 {
@@ -16211,6 +16441,12 @@
             "errors": [
                 {
                     "target": "com.amazonaws.glue#EntityNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceRetryableException"
                 },
                 {
                     "target": "com.amazonaws.glue#GlueEncryptionException"
@@ -17328,6 +17564,12 @@
                     "target": "com.amazonaws.glue#EntityNotFoundException"
                 },
                 {
+                    "target": "com.amazonaws.glue#FederationSourceException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceRetryableException"
+                },
+                {
                     "target": "com.amazonaws.glue#GlueEncryptionException"
                 },
                 {
@@ -17589,6 +17831,12 @@
             "errors": [
                 {
                     "target": "com.amazonaws.glue#EntityNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceRetryableException"
                 },
                 {
                     "target": "com.amazonaws.glue#GlueEncryptionException"
@@ -17883,6 +18131,12 @@
                     "target": "com.amazonaws.glue#EntityNotFoundException"
                 },
                 {
+                    "target": "com.amazonaws.glue#FederationSourceException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceRetryableException"
+                },
+                {
                     "target": "com.amazonaws.glue#GlueEncryptionException"
                 },
                 {
@@ -17989,6 +18243,12 @@
             "errors": [
                 {
                     "target": "com.amazonaws.glue#EntityNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceRetryableException"
                 },
                 {
                     "target": "com.amazonaws.glue#GlueEncryptionException"
@@ -18112,6 +18372,12 @@
             "errors": [
                 {
                     "target": "com.amazonaws.glue#EntityNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceException"
+                },
+                {
+                    "target": "com.amazonaws.glue#FederationSourceRetryableException"
                 },
                 {
                     "target": "com.amazonaws.glue#GlueEncryptionException"
@@ -19278,6 +19544,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>A message describing the problem.</p>"
                     }
+                },
+                "FromFederationSource": {
+                    "target": "com.amazonaws.glue#NullableBoolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates whether or not the exception relates to a federated source.</p>"
+                    }
                 }
             },
             "traits": {
@@ -19917,7 +20189,7 @@
                 "MaxCapacity": {
                     "target": "com.amazonaws.glue#NullableDouble",
                     "traits": {
-                        "smithy.api#documentation": "<p>For Glue version 1.0 or earlier jobs, using the standard worker type, the number of Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure\n      of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory.\n      For more information, see the <a href=\"https://aws.amazon.com/glue/pricing/\">Glue\n      pricing page</a>.</p>\n         <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p>\n         <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are\n      running a Python shell job, an Apache Spark ETL job, or an Apache Spark streaming ETL\n      job:</p>\n         <ul>\n            <li>\n               <p>When you specify a Python shell job (<code>JobCommand.Name</code>=\"pythonshell\"), you can\n          allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p>\n            </li>\n            <li>\n               <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=\"glueetl\") or Apache \n            Spark streaming ETL job (<code>JobCommand.Name</code>=\"gluestreaming\"), you can allocate a minimum of 2 DPUs. \n            The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p>\n            </li>\n         </ul>\n         <p>For Glue version 2.0 jobs, you cannot instead specify a <code>Maximum capacity</code>. Instead, you should specify a <code>Worker type</code> and the <code>Number of workers</code>.</p>"
+                        "smithy.api#documentation": "<p>For Glue version 1.0 or earlier jobs, using the standard worker type, the number of Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure\n      of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory.\n      For more information, see the <a href=\"https://aws.amazon.com/glue/pricing/\">Glue\n      pricing page</a>.</p>\n         <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p>\n         <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are\n      running a Python shell job, an Apache Spark ETL job, or an Apache Spark streaming ETL\n      job:</p>\n         <ul>\n            <li>\n               <p>When you specify a Python shell job (<code>JobCommand.Name</code>=\"pythonshell\"), you can\n          allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p>\n            </li>\n            <li>\n               <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=\"glueetl\") or Apache \n            Spark streaming ETL job (<code>JobCommand.Name</code>=\"gluestreaming\"), you can allocate from 2 to 100 DPUs. \n            The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p>\n            </li>\n         </ul>\n         <p>For Glue version 2.0 jobs, you cannot instead specify a <code>Maximum capacity</code>. Instead, you should specify a <code>Worker type</code> and the <code>Number of workers</code>.</p>"
                     }
                 },
                 "WorkerType": {
@@ -24330,10 +24602,14 @@
             "type": "structure",
             "members": {
                 "Message": {
-                    "target": "com.amazonaws.glue#MessageString"
+                    "target": "com.amazonaws.glue#MessageString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>There is a mismatch between the SupportedPermissionType used in the query request\n          and the permissions defined on the target table.</p>"
+                    }
                 }
             },
             "traits": {
+                "smithy.api#documentation": "<p>The operation timed out.</p>",
                 "smithy.api#error": "client"
             }
         },
@@ -25691,6 +25967,12 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "ALL"
+                    }
+                },
+                "FEDERATED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FEDERATED"
                     }
                 }
             }
@@ -29957,6 +30239,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The ID of the table version.</p>"
                     }
+                },
+                "FederatedTable": {
+                    "target": "com.amazonaws.glue#FederatedTable",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A <code>FederatedTable</code> structure that references an entity outside the Glue Data Catalog.</p>"
+                    }
                 }
             },
             "traits": {
@@ -32010,12 +32298,6 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The name of the data quality ruleset.</p>",
                         "smithy.api#required": {}
-                    }
-                },
-                "UpdatedName": {
-                    "target": "com.amazonaws.glue#NameString",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The new name of the ruleset, if you are renaming it.</p>"
                     }
                 },
                 "Description": {
