@@ -15,6 +15,7 @@ import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
+import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
@@ -69,7 +70,7 @@ public class DefaultChainCredentialsProvider constructor(
 
     private val provider = CachedCredentialsProvider(chain)
 
-    override suspend fun getCredentials(): Credentials = provider.getCredentials()
+    override suspend fun resolve(attributes: Attributes): Credentials = provider.resolve(attributes)
 
     override fun close() {
         provider.close()
@@ -80,16 +81,16 @@ public class DefaultChainCredentialsProvider constructor(
 }
 
 /**
- * Wrapper around [StsWebIdentityCredentialsProvider] that delays any exceptions until [getCredentials] is invoked.
+ * Wrapper around [StsWebIdentityCredentialsProvider] that delays any exceptions until [resolve] is invoked.
  * This allows it to be part of the default chain and any failures result in the chain to move onto the next provider.
  */
 private class StsWebIdentityProvider(
     val platformProvider: PlatformProvider,
     val httpClientEngine: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(attributes: Attributes): Credentials {
         val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClientEngine = httpClientEngine)
-        return wrapped.getCredentials()
+        return wrapped.resolve(attributes)
     }
 
     override fun close() { }

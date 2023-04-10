@@ -44,7 +44,7 @@ class AwsServiceConfigIntegrationTest {
 
         val expectedProps = """
     override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
-    public val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider(httpClientEngine = httpClientEngine, region = region).manage()
+    override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider(httpClientEngine = httpClientEngine, region = region).manage()
 """
         contents.shouldContainOnlyOnceWithDiff(expectedProps)
 
@@ -62,7 +62,7 @@ class AwsServiceConfigIntegrationTest {
          * NOTE: The caller is responsible for managing the lifetime of the provider when set. The SDK
          * client will not close it when the client is closed.
          */
-        public var credentialsProvider: CredentialsProvider? = null
+        override var credentialsProvider: CredentialsProvider? = null
 """
         contents.shouldContainOnlyOnceWithDiff(expectedImpl)
     }

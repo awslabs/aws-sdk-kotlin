@@ -54,7 +54,7 @@ class ImdsCredentialsProviderTest {
         val platform = ec2MetadataDisabledPlatform
         val provider = ImdsCredentialsProvider(platformProvider = platform)
         assertFailsWith<CredentialsNotLoadedException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("AWS EC2 metadata is explicitly disabled; credentials not loaded")
     }
 
@@ -124,7 +124,7 @@ class ImdsCredentialsProviderTest {
             platformProvider = ec2MetadataEnabledPlatform,
         )
 
-        val actual0 = provider.getCredentials()
+        val actual0 = provider.resolve()
         val expected0 = Credentials(
             "ASIARTEST0",
             "xjtest0",
@@ -136,7 +136,7 @@ class ImdsCredentialsProviderTest {
 
         testClock.advance(1.seconds)
 
-        val actual1 = provider.getCredentials()
+        val actual1 = provider.resolve()
         val expected1 = Credentials(
             "ASIARTEST1",
             "xjtest1",
@@ -188,7 +188,7 @@ class ImdsCredentialsProviderTest {
             platformProvider = ec2MetadataEnabledPlatform,
         )
 
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
         val expected = Credentials(
             "ASIARTEST",
             "xjtest",
@@ -222,7 +222,7 @@ class ImdsCredentialsProviderTest {
         )
 
         val ex = assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }
         ex.message.shouldContain("failed to load instance profile")
         assertIs<EC2MetadataError>(ex.cause)
@@ -272,7 +272,7 @@ class ImdsCredentialsProviderTest {
         )
 
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }.message.shouldContain("failed to load instance profile")
     }
 
@@ -317,7 +317,7 @@ class ImdsCredentialsProviderTest {
             platformProvider = ec2MetadataEnabledPlatform,
         )
 
-        val actual = provider.getCredentials()
+        val actual = provider.resolve()
 
         val expected = Credentials(
             accessKeyId = "ASIARTEST",
@@ -372,9 +372,9 @@ class ImdsCredentialsProviderTest {
             platformProvider = ec2MetadataEnabledPlatform,
         )
 
-        // call getCredentials 3 times
+        // call resolve 3 times
         repeat(3) {
-            provider.getCredentials()
+            provider.resolve()
         }
 
         // make sure ImdsClient only gets called once
@@ -440,9 +440,9 @@ class ImdsCredentialsProviderTest {
             platformProvider = ec2MetadataEnabledPlatform,
         )
 
-        val first = provider.getCredentials()
+        val first = provider.resolve()
         testClock.advance(20.minutes) // 20 minutes later, we should try to refresh the expired credentials
-        val second = provider.getCredentials()
+        val second = provider.resolve()
 
         coVerify(exactly = 2) {
             client.get(any())
@@ -517,11 +517,11 @@ class ImdsCredentialsProviderTest {
         )
 
         // call the engine the first time to get a proper credentials response from IMDS
-        val credentials = provider.getCredentials()
+        val credentials = provider.resolve()
         assertEquals(credentials, previousCredentials)
 
         // call it again and get a read timeout exception from the engine
-        val newCredentials = provider.getCredentials()
+        val newCredentials = provider.resolve()
 
         // should cause provider to return the previously-served credentials
         assertEquals(newCredentials, previousCredentials)
@@ -551,7 +551,7 @@ class ImdsCredentialsProviderTest {
 
         // a read timeout should cause an exception to be thrown, because we have no previous credentials to re-serve
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }
     }
 
@@ -624,11 +624,11 @@ class ImdsCredentialsProviderTest {
         )
 
         // call the engine the first time to get a proper credentials response from IMDS
-        val credentials = provider.getCredentials()
+        val credentials = provider.resolve()
         assertEquals(previousCredentials, credentials)
 
         // call it again and get a 500 error from the engine
-        val newCredentials = provider.getCredentials()
+        val newCredentials = provider.resolve()
 
         // should cause provider to return the previously-served credentials
         assertEquals(newCredentials, previousCredentials)
@@ -661,7 +661,7 @@ class ImdsCredentialsProviderTest {
         )
 
         assertFailsWith<CredentialsProviderException> {
-            provider.getCredentials()
+            provider.resolve()
         }
     }
 }

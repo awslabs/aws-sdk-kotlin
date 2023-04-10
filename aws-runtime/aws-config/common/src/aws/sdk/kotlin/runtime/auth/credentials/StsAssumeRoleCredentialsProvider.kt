@@ -20,6 +20,7 @@ import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.tracing.*
+import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
@@ -58,7 +59,7 @@ public class StsAssumeRoleCredentialsProvider(
     private val httpClientEngine: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(attributes: Attributes): Credentials {
         val traceSpan = coroutineContext.traceSpan
         val logger = traceSpan.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials" }

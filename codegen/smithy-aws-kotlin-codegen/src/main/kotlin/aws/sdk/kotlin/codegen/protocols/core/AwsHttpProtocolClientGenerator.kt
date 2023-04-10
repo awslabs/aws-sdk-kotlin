@@ -10,12 +10,12 @@ import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
+import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
-import software.amazon.smithy.kotlin.codegen.signing.AwsSignatureVersion4
 import software.amazon.smithy.model.knowledge.OperationIndex
 import software.amazon.smithy.model.shapes.OperationShape
 
@@ -63,8 +63,6 @@ open class AwsHttpProtocolClientGenerator(
     private fun renderMergeServiceDefaults(writer: KotlinWriter) {
         // FIXME - we likely need a way to let customizations modify/override this
         // FIXME - we also need a way to tie in config properties added via integrations that need to influence the context
-        writer.addImport(RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
-        writer.addImport(AwsRuntimeTypes.Core.Client.AwsClientOption)
         val putIfAbsentSym = buildSymbol { name = "putIfAbsent"; namespace(KotlinDependency.CORE, "util") }
         val sdkClientOptionSym = buildSymbol { name = "SdkClientOption"; namespace(KotlinDependency.CORE, "client") }
 
@@ -77,15 +75,14 @@ open class AwsHttpProtocolClientGenerator(
             write("ctx.#T(#T.Region, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.Client.AwsClientOption)
             write("ctx.#T(#T.ClientName, config.clientName)", putIfAbsentSym, sdkClientOptionSym)
             write("ctx.#T(#T.LogMode, config.sdkLogMode)", putIfAbsentSym, sdkClientOptionSym)
-
             // fill in auth/signing attributes
             if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
+                // default signing context (most of this has been moved to auth schemes but some things like event streams still depend on this)
                 val signingServiceName = AwsSignatureVersion4.signingServiceName(ctx.service)
                 write("ctx.#T(#T.SigningService, #S)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes, signingServiceName)
-                write("ctx.#T(#T.Signer, config.signer)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
+                write("ctx.#T(#T.SigningRegion, config.region)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
+                write("ctx.#T(#T.CredentialsProvider, config.credentialsProvider)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
             }
-            write("ctx.#T(#T.SigningRegion, config.region)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
-            write("ctx.#T(#T.CredentialsProvider, config.credentialsProvider)", putIfAbsentSym, RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes)
 
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
                 write("config.idempotencyTokenProvider?.let { ctx[#T.IdempotencyTokenProvider] = it }", sdkClientOptionSym)

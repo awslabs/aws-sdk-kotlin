@@ -20,6 +20,7 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.getLogger
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.time.TimestampFormat
+import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
@@ -94,7 +95,7 @@ public class ProfileCredentialsProvider(
         "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClientEngine),
     )
 
-    override suspend fun getCredentials(): Credentials {
+    override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
         val source = resolveConfigSource(platformProvider, profileName)
         logger.debug { "Loading credentials from profile `${source.profile}`" }
@@ -107,12 +108,12 @@ public class ProfileCredentialsProvider(
 
         val leaf = chain.leaf.toCredentialsProvider(region)
         logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
-        var creds = leaf.getCredentials()
+        var creds = leaf.resolve(attributes)
 
         chain.roles.forEach { roleArn ->
             logger.debug { "Assuming role `${roleArn.roleArn}`" }
             val assumeProvider = roleArn.toCredentialsProvider(creds, region)
-            creds = assumeProvider.getCredentials()
+            creds = assumeProvider.resolve(attributes)
         }
 
         logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }

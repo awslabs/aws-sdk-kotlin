@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.util.Attributes
 
 /**
  * A credentials provider for a fixed set of credentials
@@ -18,7 +19,7 @@ public class StaticCredentialsProvider public constructor(private val credential
 
     private constructor(builder: Builder) : this(Credentials(builder.accessKeyId!!, builder.secretAccessKey!!, builder.sessionToken))
 
-    override suspend fun getCredentials(): Credentials = credentials
+    override suspend fun resolve(attributes: Attributes): Credentials = credentials
 
     override fun close() { }
 
