@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.config.profile
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.retries.RetryMode
+import aws.smithy.kotlin.runtime.client.SdkLogMode
 
 /**
  * Represents an AWS config profile.
@@ -107,6 +108,15 @@ public val AwsProfile.useFips: Boolean?
  */
 public val AwsProfile.useDualStack: Boolean?
     get() = getBooleanOrNull("use_dualstack_endpoint")
+
+/**
+ * Which [SdkLogMode] to use for logging requests and responses, when one is not specified at the client level.
+ */
+public val AwsProfile.sdkLogMode: SdkLogMode?
+    get() = getOrNull("sdk_log_mode")?.run {
+        SdkLogMode.allModes().firstOrNull { it.toString().equals(this, ignoreCase = true) }
+            ?: throw ConfigurationException("SDK log mode $this is not supported, should be one of: ${SdkLogMode.allModes().joinToString(", ")}")
+    }
 
 /**
  * Parse a config value as a boolean, ignoring case.

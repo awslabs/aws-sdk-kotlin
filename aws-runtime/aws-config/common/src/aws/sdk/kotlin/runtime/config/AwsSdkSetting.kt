@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.config
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.retries.RetryMode
+import aws.smithy.kotlin.runtime.client.SdkLogMode
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 
 // NOTE: The JVM property names MUST match the ones defined in the Java SDK for any setting added.
@@ -153,6 +154,11 @@ public sealed class AwsSdkSetting<T>(
      * Whether to use dual-stack endpoints when making requests.
      */
     public object AwsUseDualStackEndpoint : AwsSdkSetting<Boolean>("AWS_USE_DUALSTACK_ENDPOINT", "aws.useDualstackEndpoint")
+
+    /**
+     * Which [SdkLogMode] to use for logging requests and responses, when one is not specified at the client level.
+     */
+    public object SdkLogMode : AwsSdkSetting<aws.smithy.kotlin.runtime.client.SdkLogMode>("AWS_SDK_LOG_MODE", "aws.sdkLogMode")
 }
 
 /**
@@ -173,6 +179,8 @@ public inline fun <reified T> AwsSdkSetting<T>.resolve(platform: PlatformEnviron
             Boolean::class -> strValue.toBoolean()
             RetryMode::class -> RetryMode.values().firstOrNull { it.name.equals(strValue, ignoreCase = true) }
                 ?: throw ConfigurationException("Retry mode $strValue is not supported, should be one of: ${RetryMode.values().joinToString(", ")}")
+            SdkLogMode::class -> SdkLogMode.allModes().firstOrNull { it.toString().equals(strValue, ignoreCase = true) }
+                ?: throw ConfigurationException("SDK log mode $strValue is not supported, should be one of: ${SdkLogMode.allModes().joinToString(", ")}")
             else -> error("conversion to ${T::class} not implemented for AwsSdkSetting")
         }
         return typed as? T
