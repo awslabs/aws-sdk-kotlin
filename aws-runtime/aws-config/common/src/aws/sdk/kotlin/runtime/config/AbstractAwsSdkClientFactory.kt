@@ -60,7 +60,7 @@ public abstract class AbstractAwsSdkClientFactory<
             builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy(profile = profile)
             builder.config.useFips = builder.config.useFips ?: resolveUseFips(profile = profile)
             builder.config.useDualStack = builder.config.useDualStack ?: resolveUseDualStack(profile = profile)
-            builder.config.sdkLogMode = builder.config.sdkLogMode ?: resolveSdkLogMode(profile = profile)
+            builder.config.sdkLogMode = builder.config.sdkLogMode ?: resolveSdkLogMode()
 
             finalizeConfig(builder, profile)
         }

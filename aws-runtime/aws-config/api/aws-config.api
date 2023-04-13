@@ -1255,7 +1255,6 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 	public static final fun getRegion (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
 	public static final fun getRetryMode (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Laws/sdk/kotlin/runtime/config/retries/RetryMode;
 	public static final fun getRoleArn (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
-	public static final fun getSdkLogMode (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Laws/smithy/kotlin/runtime/client/SdkLogMode;
 	public static final fun getSourceProfile (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
 	public static final fun getUseDualStack (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/Boolean;
 	public static final fun getUseFips (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/Boolean;
