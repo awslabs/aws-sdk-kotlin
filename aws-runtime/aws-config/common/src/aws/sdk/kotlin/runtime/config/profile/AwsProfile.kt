@@ -110,15 +110,6 @@ public val AwsProfile.useDualStack: Boolean?
     get() = getBooleanOrNull("use_dualstack_endpoint")
 
 /**
- * Which [SdkLogMode] to use for logging requests and responses, when one is not specified at the client level.
- */
-public val AwsProfile.sdkLogMode: SdkLogMode?
-    get() = getOrNull("sdk_log_mode")?.run {
-        SdkLogMode.fromString(this)
-            ?: throw ConfigurationException("SDK log mode $this is not supported, should be one of: ${SdkLogMode.allModes().joinToString(", ")}")
-    }
-
-/**
  * Parse a config value as a boolean, ignoring case.
  */
 public fun AwsProfile.getBooleanOrNull(key: String, subKey: String? = null): Boolean? =

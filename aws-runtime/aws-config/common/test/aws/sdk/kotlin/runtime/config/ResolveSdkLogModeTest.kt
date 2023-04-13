@@ -39,23 +39,6 @@ class ResolveSdkLogModeTest {
     }
 
     @Test
-    fun itResolvesSdkLogModeFromProfile() = runTest {
-        val expectedSdkLogMode = SdkLogMode.LogResponse
-
-        val platform = TestPlatformProvider(
-            env = mapOf("AWS_CONFIG_FILE" to "config"),
-            fs = mapOf(
-                "config" to """
-                [default]
-                sdk_log_mode=$expectedSdkLogMode
-                """.trimIndent(),
-            ),
-        )
-
-        assertEquals(expectedSdkLogMode, resolveSdkLogMode(platform))
-    }
-
-    @Test
     fun itThrowsOnInvalidSdkLogModeFromEnvironmentVariable() = runTest {
         val platform = TestPlatformProvider(
             env = mapOf(AwsSdkSetting.SdkLogMode.environmentVariable to "InvalidSdkLogMode"),
@@ -67,20 +50,6 @@ class ResolveSdkLogModeTest {
     fun itThrowsOnInvalidSdkLogModeFromSystemProperty() = runTest {
         val platform = TestPlatformProvider(
             props = mapOf(AwsSdkSetting.SdkLogMode.jvmProperty to "InvalidSdkLogMode"),
-        )
-        assertFailsWith<ConfigurationException> { resolveSdkLogMode(platform) }
-    }
-
-    @Test
-    fun itThrowsOnInvalidSdkLogModeFromProfile() = runTest {
-        val platform = TestPlatformProvider(
-            env = mapOf("AWS_CONFIG_FILE" to "config"),
-            fs = mapOf(
-                "config" to """
-                [default]
-                sdk_log_mode=InvalidSdkLogMode
-                """.trimIndent(),
-            ),
         )
         assertFailsWith<ConfigurationException> { resolveSdkLogMode(platform) }
     }
@@ -105,59 +74,28 @@ class ResolveSdkLogModeTest {
         val nonLowercaseSdkLogMode = "LOGREQUest|logReSponSe|logREQUESTwithBODY|LoGrEsPoNsEWitHBoDY"
 
         val platform = TestPlatformProvider(
-            env = mapOf(
-                "AWS_CONFIG_FILE" to "config",
-            ),
-            fs = mapOf(
-                "config" to """
-                [default]
-                sdk_log_mode=$nonLowercaseSdkLogMode
-                """.trimIndent(),
-            ),
+            props = mapOf(
+                AwsSdkSetting.SdkLogMode.jvmProperty to nonLowercaseSdkLogMode
+            )
         )
 
         assertEquals(expectedSdkLogMode, resolveSdkLogMode(platform))
     }
 
-    @Test
-    fun itResolvesNonLowercaseSdkLogModesFromProfile() = runTest {
-        val expectedSdkLogMode = SdkLogMode.LogRequest + SdkLogMode.LogResponse
-        val nonLowercaseSdkLogMode = "logREQUEST|logRESPONSe"
-
-        val platform = TestPlatformProvider(
-            env = mapOf(
-                "AWS_CONFIG_FILE" to "config",
-            ),
-            fs = mapOf(
-                "config" to """
-                [default]
-                sdk_log_mode=$nonLowercaseSdkLogMode
-                """.trimIndent(),
-            ),
-        )
-
-        assertEquals(expectedSdkLogMode, resolveSdkLogMode(platform))
-    }
 
     @Test
     fun itResolvesWithEnvironmentVariablePriority() = runTest {
-        // set the profile and environment variable. resolution should prioritize environment variables
-        val expectedSdkLogMode = SdkLogMode.LogRequest
-
+        // set the system property and environment variable. resolution should prioritize system property
         val platform = TestPlatformProvider(
             env = mapOf(
-                "AWS_CONFIG_FILE" to "config",
-                AwsSdkSetting.SdkLogMode.environmentVariable to expectedSdkLogMode.toString(),
+                AwsSdkSetting.SdkLogMode.environmentVariable to "invalid-sdk-log-mode-should-be-ignored",
             ),
-            fs = mapOf(
-                "config" to """
-                [default]
-                sdk_log_mode=invalid-sdk-log-mode-should-be-ignored
-                """.trimIndent(),
-            ),
+            props = mapOf(
+                AwsSdkSetting.SdkLogMode.jvmProperty to "LogRequest"
+            )
         )
 
-        assertEquals(expectedSdkLogMode, resolveSdkLogMode(platform))
+        assertEquals(SdkLogMode.LogRequest, resolveSdkLogMode(platform))
     }
 
     @Test
