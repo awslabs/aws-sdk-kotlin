@@ -75,13 +75,12 @@ class ResolveSdkLogModeTest {
 
         val platform = TestPlatformProvider(
             props = mapOf(
-                AwsSdkSetting.SdkLogMode.jvmProperty to nonLowercaseSdkLogMode
-            )
+                AwsSdkSetting.SdkLogMode.jvmProperty to nonLowercaseSdkLogMode,
+            ),
         )
 
         assertEquals(expectedSdkLogMode, resolveSdkLogMode(platform))
     }
-
 
     @Test
     fun itResolvesWithEnvironmentVariablePriority() = runTest {
@@ -91,8 +90,8 @@ class ResolveSdkLogModeTest {
                 AwsSdkSetting.SdkLogMode.environmentVariable to "invalid-sdk-log-mode-should-be-ignored",
             ),
             props = mapOf(
-                AwsSdkSetting.SdkLogMode.jvmProperty to "LogRequest"
-            )
+                AwsSdkSetting.SdkLogMode.jvmProperty to "LogRequest",
+            ),
         )
 
         assertEquals(SdkLogMode.LogRequest, resolveSdkLogMode(platform))

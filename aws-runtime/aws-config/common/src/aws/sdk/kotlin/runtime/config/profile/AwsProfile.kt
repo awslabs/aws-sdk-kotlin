@@ -8,7 +8,6 @@ package aws.sdk.kotlin.runtime.config.profile
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.retries.RetryMode
-import aws.smithy.kotlin.runtime.client.SdkLogMode
 
 /**
  * Represents an AWS config profile.
