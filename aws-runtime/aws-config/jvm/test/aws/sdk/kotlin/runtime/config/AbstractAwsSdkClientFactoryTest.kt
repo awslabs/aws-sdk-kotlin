@@ -80,7 +80,7 @@ private interface TestClient : SdkClient {
             override var region: String? = null
             override var retryPolicy: RetryPolicy<Any?>? = null
             override var retryStrategy: RetryStrategy? = null
-            override var sdkLogMode: SdkLogMode = SdkLogMode.Default
+            override var sdkLogMode: SdkLogMode? = null
             override var useFips: Boolean? = null
             override var useDualStack: Boolean? = null
             override fun build(): Config = Config(this)
