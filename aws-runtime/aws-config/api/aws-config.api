@@ -1097,6 +1097,9 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$SdkLogMode : aws/
 	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$SdkLogMode;
 }
 
+public final class aws/sdk/kotlin/runtime/config/ResolveSdkLogModeKt {
+}
+
 public final class aws/sdk/kotlin/runtime/config/endpoints/EndpointsKt {
 }
 
