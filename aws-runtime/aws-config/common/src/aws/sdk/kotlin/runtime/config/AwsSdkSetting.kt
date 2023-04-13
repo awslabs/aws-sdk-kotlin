@@ -158,7 +158,7 @@ public sealed class AwsSdkSetting<T>(
     /**
      * Which [SdkLogMode] to use for logging requests and responses, when one is not specified at the client level.
      */
-    public object SdkLogMode : AwsSdkSetting<aws.smithy.kotlin.runtime.client.SdkLogMode>("AWS_SDK_LOG_MODE", "aws.sdkLogMode")
+    public object SdkLogMode : AwsSdkSetting<aws.smithy.kotlin.runtime.client.SdkLogMode>("AWS_SDK_KOTLIN_SDK_LOG_MODE", "aws.sdk.kotlin.sdkLogMode")
 }
 
 /**
