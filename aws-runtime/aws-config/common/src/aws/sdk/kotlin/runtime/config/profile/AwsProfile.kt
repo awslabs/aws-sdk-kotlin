@@ -114,7 +114,7 @@ public val AwsProfile.useDualStack: Boolean?
  */
 public val AwsProfile.sdkLogMode: SdkLogMode?
     get() = getOrNull("sdk_log_mode")?.run {
-        SdkLogMode.allModes().firstOrNull { it.toString().equals(this, ignoreCase = true) }
+        SdkLogMode.fromString(this)
             ?: throw ConfigurationException("SDK log mode $this is not supported, should be one of: ${SdkLogMode.allModes().joinToString(", ")}")
     }
 

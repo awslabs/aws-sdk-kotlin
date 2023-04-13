@@ -179,7 +179,7 @@ public inline fun <reified T> AwsSdkSetting<T>.resolve(platform: PlatformEnviron
             Boolean::class -> strValue.toBoolean()
             RetryMode::class -> RetryMode.values().firstOrNull { it.name.equals(strValue, ignoreCase = true) }
                 ?: throw ConfigurationException("Retry mode $strValue is not supported, should be one of: ${RetryMode.values().joinToString(", ")}")
-            SdkLogMode::class -> SdkLogMode.allModes().firstOrNull { it.toString().equals(strValue, ignoreCase = true) }
+            SdkLogMode::class -> SdkLogMode.fromString(strValue)
                 ?: throw ConfigurationException("SDK log mode $strValue is not supported, should be one of: ${SdkLogMode.allModes().joinToString(", ")}")
             else -> error("conversion to ${T::class} not implemented for AwsSdkSetting")
         }
