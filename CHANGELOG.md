@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.22.0-beta] - 04/14/2023
+
+### Miscellaneous
+* Refactor identity and authentication APIs
+* Upgrade smithy-kotlin and sync AWS service models.
+
 ## [0.21.5-beta] - 04/06/2023
 
 ### Fixes
