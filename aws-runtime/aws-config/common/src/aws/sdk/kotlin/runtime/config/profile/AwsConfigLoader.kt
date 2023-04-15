@@ -10,7 +10,7 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.io.internal.SdkDispatchers
 import aws.smithy.kotlin.runtime.tracing.traceSpan
-import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
+import aws.smithy.kotlin.runtime.tracing.withSpan
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlinx.coroutines.withContext
@@ -49,7 +49,7 @@ public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile 
  */
 @InternalSdkApi
 public suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): AwsProfiles =
-    coroutineContext.withChildTraceSpan("Load AWS profiles") {
+    withSpan("Load AWS profiles") {
         // merged AWS configuration based on optional configuration and credential file contents
         withContext(SdkDispatchers.IO) {
             mergeProfiles(

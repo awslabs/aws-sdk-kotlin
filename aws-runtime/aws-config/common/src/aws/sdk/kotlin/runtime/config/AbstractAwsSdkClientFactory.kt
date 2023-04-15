@@ -19,7 +19,6 @@ import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
-import kotlin.coroutines.coroutineContext
 
 /**
  * Abstract base class all AWS client companion objects inherit from
@@ -53,7 +52,7 @@ public abstract class AbstractAwsSdkClientFactory<
             defaultTracer(builder.config.clientName)
         }
 
-        coroutineContext.withRootTraceSpan(tracer.createRootSpan("Config resolution")) {
+        tracer.withSpan("Config resolution") {
             val profile = asyncLazy { loadActiveAwsProfile(PlatformProvider.System) }
 
             builder.config.region = builder.config.region ?: resolveRegion(profile = profile)
