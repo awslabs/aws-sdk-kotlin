@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.runtime.config
 
-import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
+import aws.smithy.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.client.SdkLogMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -43,7 +43,7 @@ class ResolveSdkLogModeTest {
         val platform = TestPlatformProvider(
             env = mapOf(AwsSdkSetting.SdkLogMode.environmentVariable to "InvalidSdkLogMode"),
         )
-        assertFailsWith<ConfigurationException> { resolveSdkLogMode(platform) }
+        assertFailsWith<ClientException> { resolveSdkLogMode(platform) }
     }
 
     @Test
@@ -51,7 +51,7 @@ class ResolveSdkLogModeTest {
         val platform = TestPlatformProvider(
             props = mapOf(AwsSdkSetting.SdkLogMode.jvmProperty to "InvalidSdkLogMode"),
         )
-        assertFailsWith<ConfigurationException> { resolveSdkLogMode(platform) }
+        assertFailsWith<ClientException> { resolveSdkLogMode(platform) }
     }
 
     @Test

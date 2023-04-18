@@ -158,7 +158,7 @@ public sealed class AwsSdkSetting<T>(
     /**
      * Which [SdkLogMode] to use for logging requests and responses, when one is not specified at the client level.
      */
-    public object SdkLogMode : AwsSdkSetting<aws.smithy.kotlin.runtime.client.SdkLogMode>("AWS_SDK_KOTLIN_SDK_LOG_MODE", "aws.sdk.kotlin.sdkLogMode")
+    public object SdkLogMode : AwsSdkSetting<aws.smithy.kotlin.runtime.client.SdkLogMode>("AWS_SDK_KOTLIN_SDK_LOG_MODE", "aws.sdk.kotlin.sdkLogMode", aws.smithy.kotlin.runtime.client.SdkLogMode.Default)
 }
 
 /**
@@ -180,7 +180,6 @@ public inline fun <reified T> AwsSdkSetting<T>.resolve(platform: PlatformEnviron
             RetryMode::class -> RetryMode.values().firstOrNull { it.name.equals(strValue, ignoreCase = true) }
                 ?: throw ConfigurationException("Retry mode $strValue is not supported, should be one of: ${RetryMode.values().joinToString(", ")}")
             SdkLogMode::class -> SdkLogMode.fromString(strValue)
-                ?: throw ConfigurationException("SDK log mode $strValue is not supported, should be one of: ${SdkLogMode.allModes().joinToString(", ")}")
             else -> error("conversion to ${T::class} not implemented for AwsSdkSetting")
         }
         return typed as? T

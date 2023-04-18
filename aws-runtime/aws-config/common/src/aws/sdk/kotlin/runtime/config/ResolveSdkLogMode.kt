@@ -15,4 +15,4 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 @InternalSdkApi
 public fun resolveSdkLogMode(
     platformProvider: PlatformProvider = PlatformProvider.System,
-): SdkLogMode = AwsSdkSetting.SdkLogMode.resolve(platformProvider) ?: SdkLogMode.Default
+): SdkLogMode = AwsSdkSetting.SdkLogMode.resolve(platformProvider)!!
