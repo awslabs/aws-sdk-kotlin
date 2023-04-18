@@ -108,7 +108,6 @@ public class SsoCredentialsProvider public constructor(
         val client = SsoClient {
             region = ssoRegion
             httpClientEngine = this@SsoCredentialsProvider.httpClientEngine
-            tracer = traceSpan.asNestedTracer("SSO-")
         }
 
         val resp = try {

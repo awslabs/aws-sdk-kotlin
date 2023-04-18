@@ -85,7 +85,6 @@ public class StsWebIdentityCredentialsProvider(
             region = provider.region
             httpClientEngine = provider.httpClientEngine
             // NOTE: credentials provider not needed for this operation
-            tracer = traceSpan.asNestedTracer("STS-")
         }
 
         val resp = try {

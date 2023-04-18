@@ -45,14 +45,15 @@ public abstract class AbstractAwsSdkClientFactory<
         val builder = builder()
         if (block != null) builder.config.apply(block)
 
-        val tracer = if (builder is TracingClientConfig.Builder) {
-            if (builder.tracer == null) builder.tracer = defaultTracer(builder.config.clientName)
+        val tracer = if (builder is TracingClientConfig.Builder && builder.tracer != null) {
             builder.tracer!!
         } else {
-            defaultTracer(builder.config.clientName)
+            DefaultTracer(LoggingTraceProbe)
         }
 
-        tracer.withSpan("Config resolution") {
+        tracer.withSpan("Config resolution") { span ->
+            span.attributes[TraceSpanAttributes.ClientName] = builder.config.clientName
+
             val profile = asyncLazy { loadActiveAwsProfile(PlatformProvider.System) }
 
             builder.config.region = builder.config.region ?: resolveRegion(profile = profile)
@@ -69,6 +70,4 @@ public abstract class AbstractAwsSdkClientFactory<
      * Inject any client-specific config.
      */
     protected open suspend fun finalizeConfig(builder: TClientBuilder, profile: LazyAsyncValue<AwsProfile>) { }
-
-    private fun defaultTracer(clientName: String): Tracer = DefaultTracer(LoggingTraceProbe, clientName)
 }

@@ -70,7 +70,6 @@ public class StsAssumeRoleCredentialsProvider(
             region = provider.region ?: GLOBAL_STS_PARTITION_ENDPOINT
             credentialsProvider = provider.credentialsProvider
             httpClientEngine = provider.httpClientEngine
-            tracer = traceSpan.asNestedTracer("STS-")
         }
 
         val resp = try {

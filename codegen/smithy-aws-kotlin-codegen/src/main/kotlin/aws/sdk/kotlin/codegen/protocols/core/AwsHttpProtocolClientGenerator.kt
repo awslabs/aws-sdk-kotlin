@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
@@ -30,9 +29,7 @@ open class AwsHttpProtocolClientGenerator(
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
-        writer.write("public const val ServiceId: String = #S", ctx.service.sdkId)
         writer.write("public const val ServiceApiVersion: String = #S", ctx.service.version)
-        writer.write("public const val SdkVersion: String = #S", ctx.settings.pkg.version)
         writer.write("\n\n")
         super.render(writer)
     }
