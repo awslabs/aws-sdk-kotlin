@@ -16,15 +16,15 @@ public object AwsDefaultRetryPolicy : StandardRetryPolicy() {
     internal val knownErrorTypes = mapOf(
         "BandwidthLimitExceeded" to Throttling,
         "EC2ThrottledException" to Throttling,
-        "IDPCommunicationError" to Timeout,
+        "IDPCommunicationError" to Transient,
         "LimitExceededException" to Throttling,
         "PriorRequestNotComplete" to Throttling,
         "ProvisionedThroughputExceededException" to Throttling,
         "RequestLimitExceeded" to Throttling,
         "RequestThrottled" to Throttling,
         "RequestThrottledException" to Throttling,
-        "RequestTimeout" to Timeout,
-        "RequestTimeoutException" to Timeout,
+        "RequestTimeout" to Transient,
+        "RequestTimeoutException" to Transient,
         "SlowDown" to Throttling,
         "ThrottledException" to Throttling,
         "Throttling" to Throttling,
@@ -34,10 +34,10 @@ public object AwsDefaultRetryPolicy : StandardRetryPolicy() {
     )
 
     internal val knownStatusCodes = mapOf(
-        500 to Timeout,
-        502 to Timeout,
-        503 to Timeout,
-        504 to Timeout,
+        500 to Transient,
+        502 to Transient,
+        503 to Transient,
+        504 to Transient,
     )
 
     override fun evaluateSpecificExceptions(ex: Throwable): RetryDirective? = when (ex) {
