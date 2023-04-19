@@ -17,7 +17,6 @@ import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.http.middleware.ResolveEndpoint
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
@@ -86,10 +85,10 @@ public class EcsCredentialsProvider internal constructor(
             context {
                 operationName = "EcsCredentialsProvider"
             }
+            execution.endpointResolver = EndpointResolver { Endpoint(url) }
         }
-        op.execution.retryPolicy = EcsCredentialsRetryPolicy()
 
-        op.install(ResolveEndpoint(provider = { Endpoint(url) }, params = null))
+        op.execution.retryPolicy = EcsCredentialsRetryPolicy()
 
         logger.debug { "retrieving container credentials" }
         val client = SdkHttpClient(httpClientEngine)

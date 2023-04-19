@@ -8,7 +8,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.auth.awssigning.SigningContext
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
-import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
+import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.util.AttributeKey
 
 /**
@@ -52,11 +52,11 @@ public fun AuthScheme.SigV4.asSigningContext(): SigningContext = SigningContext(
  * Update a request's signing context properties with the receiving auth scheme.
  */
 @InternalSdkApi
-public fun AuthScheme.SigV4.applyToRequest(req: SdkHttpRequest) {
+public fun AuthScheme.SigV4.setSigningContext(context: ExecutionContext) {
     signingName?.let {
-        if (it.isNotBlank()) req.context[AwsSigningAttributes.SigningService] = it
+        if (it.isNotBlank()) context[AwsSigningAttributes.SigningService] = it
     }
     signingRegion?.let {
-        if (it.isNotBlank()) req.context[AwsSigningAttributes.SigningRegion] = it
+        if (it.isNotBlank()) context[AwsSigningAttributes.SigningRegion] = it
     }
 }

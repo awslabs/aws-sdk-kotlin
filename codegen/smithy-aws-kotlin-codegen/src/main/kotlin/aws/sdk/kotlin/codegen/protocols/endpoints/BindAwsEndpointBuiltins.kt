@@ -6,16 +6,32 @@ package aws.sdk.kotlin.codegen.protocols.endpoints
 
 import aws.sdk.kotlin.codegen.AwsServiceConfigIntegration
 import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.defaultName
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointParametersGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointResolverAdapterGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.rulesengine.language.EndpointRuleSet
 import software.amazon.smithy.rulesengine.language.syntax.parameters.Parameter
 import aws.sdk.kotlin.codegen.customization.s3.ClientConfigIntegration as S3ClientConfigIntegration
 import aws.sdk.kotlin.codegen.customization.s3control.ClientConfigIntegration as S3ControlClientConfigIntegration
+
+/**
+ * Integration that renders binding AWS builtin endpoint parameters
+ */
+class BindAwsEndpointBuiltins : KotlinIntegration {
+    override fun renderBindEndpointBuiltins(
+        ctx: ProtocolGenerator.GenerationContext,
+        rules: EndpointRuleSet,
+        writer: KotlinWriter,
+    ) {
+        val builtins = rules.parameters?.toList()?.filter(Parameter::isBuiltIn) ?: return
+        writer.write("#T(config)", bindAwsBuiltinsSymbol(ctx, builtins))
+    }
+}
 
 /**
  * Render binding of AWS SDK endpoint parameter builtins. In practice, all of these values are sourced from the client
@@ -23,7 +39,7 @@ import aws.sdk.kotlin.codegen.customization.s3control.ClientConfigIntegration as
  */
 fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: KotlinWriter, builtinParams: List<Parameter>) {
     writer.withBlock(
-        "internal fun #T.Builder.bindAwsBuiltins(config: #T.Config) {",
+        "private fun #T.Builder.bindAwsBuiltins(config: #T.Config) {",
         "}",
         EndpointParametersGenerator.getSymbol(ctx.settings),
         ctx.symbolProvider.toSymbol(ctx.service),
@@ -51,10 +67,14 @@ fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: Kotl
     }
 }
 
-fun bindAwsBuiltinsSymbol(settings: KotlinSettings): Symbol =
+fun bindAwsBuiltinsSymbol(ctx: ProtocolGenerator.GenerationContext, builtinParams: List<Parameter>): Symbol =
     buildSymbol {
         name = "bindAwsBuiltins"
-        namespace = "${settings.pkg.name}.endpoints.internal"
+        namespace = "${ctx.settings.pkg.name}.endpoints.internal"
+        definitionFile = EndpointResolverAdapterGenerator.getSymbol(ctx.settings).definitionFile
+        renderBy = { writer ->
+            renderBindAwsBuiltins(ctx, writer, builtinParams)
+        }
     }
 
 private fun renderBasicConfigBinding(writer: KotlinWriter, param: Parameter, configMember: String) {

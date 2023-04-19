@@ -7,33 +7,24 @@ package aws.sdk.kotlin.services.machinelearning.internal
 
 import aws.sdk.kotlin.services.machinelearning.model.MachineLearningException
 import aws.sdk.kotlin.services.machinelearning.model.PredictRequest
-import aws.sdk.kotlin.services.machinelearning.model.PredictResponse
+import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
-import aws.smithy.kotlin.runtime.http.middleware.setResolvedEndpoint
-import aws.smithy.kotlin.runtime.http.operation.InlineMiddleware
-import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
+import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
+import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
+import aws.smithy.kotlin.runtime.http.operation.setResolvedEndpoint
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.http.request.toBuilder
 
-internal class ResolvePredictEndpoint : InlineMiddleware<PredictRequest, PredictResponse> {
-    override fun install(op: SdkHttpOperation<PredictRequest, PredictResponse>) {
-        op.execution.initialize.intercept { req, next ->
-            val input = req.subject
-            if (input.predictEndpoint == null || input.predictEndpoint.isBlank()) {
-                throw MachineLearningException("Predict requires predictEndpoint to be set to a non-empty value")
-            }
-            // Stash the endpoint for later use by the mutate interceptor
-            req.context.predictEndpoint = Endpoint(input.predictEndpoint)
-
-            next.call(req)
+internal class ResolvePredictEndpoint : HttpInterceptor {
+    override suspend fun modifyBeforeSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>): HttpRequest {
+        @Suppress("UNCHECKED_CAST")
+        val input = context.request as PredictRequest
+        if (input.predictEndpoint.isNullOrBlank()) {
+            throw MachineLearningException("Predict requires predictEndpoint to be set to a non-empty value")
         }
-
-        // has to run after the default endpoint resolver (which currently runs at beforeRetryLoop)
-        op.execution.onEachAttempt.intercept { req, next ->
-            // This should've been set by the initialize interceptor
-            val endpoint = req.context.predictEndpoint
-            requireNotNull(endpoint) { "Predict endpoint wasn't set by middleware." }
-            setResolvedEndpoint(req, endpoint)
-
-            next.call(req)
-        }
+        val endpoint = Endpoint(input.predictEndpoint)
+        val req = SdkHttpRequest(context.executionContext, context.protocolRequest.toBuilder())
+        setResolvedEndpoint(req, endpoint)
+        return req.subject.build()
     }
 }
