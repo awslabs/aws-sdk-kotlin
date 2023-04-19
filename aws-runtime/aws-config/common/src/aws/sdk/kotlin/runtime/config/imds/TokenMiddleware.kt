@@ -10,6 +10,7 @@ import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.http.operation.getLogger
+import aws.smithy.kotlin.runtime.http.operation.setResolvedEndpoint
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.complete
@@ -32,6 +33,7 @@ internal const val X_AWS_EC2_METADATA_TOKEN = "x-aws-ec2-metadata-token"
 
 internal class TokenMiddleware(
     private val httpClient: SdkHttpClient,
+    private val endpointProvider: ImdsEndpointProvider,
     private val ttl: Duration = DEFAULT_TOKEN_TTL_SECONDS.seconds,
     private val clock: Clock = Clock.System,
 ) : ModifyRequestMiddleware {
@@ -56,14 +58,13 @@ internal class TokenMiddleware(
             headers.append(X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS, ttl.inWholeSeconds.toString())
             req.subject.headers["User-Agent"]?.let { headers.append("User-Agent", it) }
             url {
-                // take endpoint info from original request
-                scheme = req.subject.url.scheme
-                host = req.subject.url.host
-                port = req.subject.url.port
-
                 path = "/latest/api/token"
             }
         }
+
+        // endpoint resolution for the request happens right before signing, need to resolve the endpoint ourselves
+        val endpoint = endpointProvider.resolveImdsEndpoint()
+        setResolvedEndpoint(SdkHttpRequest(tokenReq), endpoint)
 
         val call = httpClient.call(tokenReq)
         return try {

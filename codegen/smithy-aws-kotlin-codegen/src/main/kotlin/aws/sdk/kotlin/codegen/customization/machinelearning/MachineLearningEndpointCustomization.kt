@@ -17,8 +17,8 @@ import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
 class MachineLearningEndpointCustomization : KotlinIntegration {
-    // the default resolver middleware will still be present in the operation's execution stack, we just
-    // need to ensure that the custom resolver runs _after_ the default
+    // the default endpoint resolver middleware will still execute first, we just
+    // need to ensure that the custom resolver runs _after_ the default (i.e. `modifyBeforeSigning`)
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
         resolved: List<ProtocolMiddleware>,
@@ -32,8 +32,7 @@ class MachineLearningEndpointCustomization : KotlinIntegration {
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             val symbol = machineLearningSymbol("ResolvePredictEndpoint")
-            writer.addImport(symbol)
-            writer.write("op.install(#T())", symbol)
+            writer.write("op.interceptors.add(#T())", symbol)
         }
 
         private fun machineLearningSymbol(name: String) = buildSymbol {

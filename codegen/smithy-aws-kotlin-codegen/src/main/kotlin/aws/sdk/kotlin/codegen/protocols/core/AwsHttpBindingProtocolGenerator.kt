@@ -4,40 +4,27 @@
  */
 package aws.sdk.kotlin.codegen.protocols.core
 
+import aws.sdk.kotlin.codegen.AwsEndpointDelegator
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.protocols.endpoints.*
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamParserGenerator
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamSerializerGenerator
 import aws.sdk.kotlin.codegen.protocols.middleware.RecursionDetectionMiddleware
-import aws.sdk.kotlin.codegen.protocols.middleware.ResolveAwsEndpointMiddleware
 import aws.sdk.kotlin.codegen.protocols.middleware.UserAgentMiddleware
 import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestErrorGenerator
 import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestRequestGenerator
 import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestResponseGenerator
 import software.amazon.smithy.aws.traits.protocols.AwsQueryCompatibleTrait
-import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.getEndpointRules
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.endpoints.*
+import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointDelegator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
-import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ShapeId
-import software.amazon.smithy.rulesengine.language.EndpointRuleSet
-import software.amazon.smithy.rulesengine.language.syntax.parameters.Parameter
-import software.amazon.smithy.rulesengine.traits.EndpointTestCase
-import java.io.File
-
-internal const val PARTITIONS_JSON_ENV_VAR = "PARTITIONS_FILE"
-internal const val PARTITIONS_JSON_SYS_PROP = "aws.partitions_file"
-private const val PARTITIONS_RESOURCE = "aws/sdk/kotlin/codegen/partitions.json"
 
 /**
  * Base class for all AWS HTTP protocol generators
@@ -55,12 +42,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     }
 
     override fun getDefaultHttpMiddleware(ctx: ProtocolGenerator.GenerationContext): List<ProtocolMiddleware> {
-        val middleware = super.getDefaultHttpMiddleware(ctx)
-            // endpoint resolver is customized for AWS services - need to replace the default one from smithy-kotlin
-            .replace(ResolveAwsEndpointMiddleware(ctx)) {
-                it is ResolveEndpointMiddleware
-            }.toMutableList()
-
+        val middleware = super.getDefaultHttpMiddleware(ctx).toMutableList()
         middleware.add(UserAgentMiddleware())
         middleware.add(RecursionDetectionMiddleware())
         return middleware
@@ -174,78 +156,5 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         writer.write("throw ex")
     }
 
-    override fun generateEndpointProvider(ctx: ProtocolGenerator.GenerationContext, rules: EndpointRuleSet) {
-        val partitionsData = getPartitionsJson()
-        val partitions = Node.parse(partitionsData).expectObjectNode()
-        val partitionsSymbol = PartitionsGenerator.getSymbol(ctx.settings)
-
-        ctx.delegator.useFileWriter(partitionsSymbol) {
-            PartitionsGenerator(it, partitions).render()
-        }
-
-        val paramsSymbol = EndpointParametersGenerator.getSymbol(ctx.settings)
-        val providerSymbol = EndpointProviderGenerator.getSymbol(ctx.settings)
-        val defaultProviderSymbol = DefaultEndpointProviderGenerator.getSymbol(ctx.settings)
-
-        ctx.delegator.useFileWriter(providerSymbol) {
-            EndpointProviderGenerator.renderAsSigningProviderExt(ctx.settings, it)
-        }
-
-        val endpointFunctions = buildMap {
-            putAll(awsEndpointFunctions)
-            put(
-                "aws.partition",
-                buildSymbol {
-                    name = "partition"
-                    namespace = PartitionsGenerator.getSymbol(ctx.settings).namespace
-                },
-            )
-        }
-        ctx.delegator.useFileWriter(defaultProviderSymbol) {
-            DefaultEndpointProviderGenerator(it, rules, providerSymbol, paramsSymbol, endpointFunctions, awsEndpointPropertyRenderers).render()
-        }
-    }
-
-    private fun getPartitionsJson(): String =
-        System.getProperty(PARTITIONS_JSON_SYS_PROP)?.let { File(it).readText() }
-            ?: System.getenv(PARTITIONS_JSON_ENV_VAR)?.let { File(it).readText() }
-            ?: javaClass.classLoader.getResource(PARTITIONS_RESOURCE)?.readText()
-            ?: throw CodegenException("could not load partitions.json resource")
-
-    override fun generateEndpointProviderMiddleware(ctx: ProtocolGenerator.GenerationContext) {
-        ctx.delegator.useFileWriter(ResolveEndpointMiddlewareGenerator.getSymbol(ctx.settings)) {
-            ResolveEndpointMiddlewareGenerator(ctx, it) {
-                it.write(
-                    "endpoint.#T?.#T(req)",
-                    AwsRuntimeTypes.Endpoint.authSchemeEndpointExt,
-                    AwsRuntimeTypes.Endpoint.applyToRequestAuthSchemeExt,
-                )
-            }.render()
-
-            val builtins = ctx.service.getEndpointRules()?.parameters?.toList()?.filter(Parameter::isBuiltIn)
-            it.write("")
-            renderBindAwsBuiltins(ctx, it, builtins ?: emptyList())
-        }
-    }
-
-    override fun generateEndpointProviderTests(
-        ctx: ProtocolGenerator.GenerationContext,
-        tests: List<EndpointTestCase>,
-        rules: EndpointRuleSet,
-    ) {
-        val paramsSymbol = EndpointParametersGenerator.getSymbol(ctx.settings)
-        val defaultProviderSymbol = DefaultEndpointProviderGenerator.getSymbol(ctx.settings)
-        val testSymbol = DefaultEndpointProviderTestGenerator.getSymbol(ctx.settings)
-
-        ctx.delegator.useTestFileWriter("${testSymbol.name}.kt", testSymbol.namespace) {
-            DefaultEndpointProviderTestGenerator(
-                it,
-                rules,
-                tests,
-                defaultProviderSymbol,
-                paramsSymbol,
-                awsEndpointPropertyRenderers,
-            ).render()
-        }
-    }
+    override fun endpointDelegator(ctx: ProtocolGenerator.GenerationContext): EndpointDelegator = AwsEndpointDelegator()
 }
