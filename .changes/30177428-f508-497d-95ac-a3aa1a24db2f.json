@@ -1,0 +1,5 @@
+{
+    "id": "30177428-f508-497d-95ac-a3aa1a24db2f",
+    "type": "misc",
+    "description": "Sync AWS models and bump smithy-kotlin version"
+}
