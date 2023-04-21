@@ -1,5 +1,0 @@
-{
-    "id": "68fbe8a4-1cc2-4f47-b219-60ef0d377f20",
-    "type": "feature",
-    "description": "BREAKING: Add support for retrying certain transient HTTP errors. `RetryErrorType.Timeout` was renamed to `RetryErrorType.Transient`."
-}

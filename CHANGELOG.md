@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.22.1-beta] - 04/21/2023
+
+### Features
+* BREAKING: Add support for retrying certain transient HTTP errors. `RetryErrorType.Timeout` was renamed to `RetryErrorType.Transient`.
+
+### Miscellaneous
+* Refactor internal endpoint resolver execution to track upstream changes.
+* Sync AWS models and bump smithy-kotlin version
+
 ## [0.22.0-beta] - 04/14/2023
 
 ### Miscellaneous
