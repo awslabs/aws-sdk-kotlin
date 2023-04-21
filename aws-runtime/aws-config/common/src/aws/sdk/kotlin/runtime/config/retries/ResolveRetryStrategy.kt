@@ -12,7 +12,8 @@ import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
 import aws.sdk.kotlin.runtime.config.profile.maxAttempts
 import aws.sdk.kotlin.runtime.config.profile.retryMode
-import aws.sdk.kotlin.runtime.config.resolve
+import aws.smithy.kotlin.runtime.client.config.RetryMode
+import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.retries.RetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions

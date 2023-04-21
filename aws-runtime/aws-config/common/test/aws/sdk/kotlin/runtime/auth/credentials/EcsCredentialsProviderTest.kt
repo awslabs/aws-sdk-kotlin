@@ -91,7 +91,7 @@ class EcsCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative?foo=bar"),
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative?foo=bar"),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -111,7 +111,7 @@ class EcsCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.environmentVariable to uri),
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -126,7 +126,7 @@ class EcsCredentialsProviderTest {
         val engine = TestConnection()
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.environmentVariable to uri),
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -146,7 +146,7 @@ class EcsCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.environmentVariable to uri),
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -178,8 +178,8 @@ class EcsCredentialsProviderTest {
 
         val testPlatform = TestPlatformProvider(
             env = mapOf(
-                AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative",
-                AwsSdkSetting.AwsContainerAuthorizationToken.environmentVariable to token,
+                AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative",
+                AwsSdkSetting.AwsContainerAuthorizationToken.envVar to token,
             ),
         )
 
@@ -199,7 +199,7 @@ class EcsCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative"),
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative"),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -222,7 +222,7 @@ class EcsCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative"),
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative"),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -252,7 +252,7 @@ class EcsCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative"),
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative"),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -284,7 +284,7 @@ class EcsCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative"),
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative"),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
@@ -309,7 +309,7 @@ class EcsCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.environmentVariable to "/relative"),
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative"),
         )
 
         val provider = EcsCredentialsProvider(testPlatform, engine)
