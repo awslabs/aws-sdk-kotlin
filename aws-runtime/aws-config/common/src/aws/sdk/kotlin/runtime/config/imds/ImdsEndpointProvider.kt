@@ -9,7 +9,8 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
 import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
-import aws.smithy.kotlin.runtime.client.endpoints.EndpointProvider
+import aws.smithy.kotlin.runtime.http.operation.EndpointResolver
+import aws.smithy.kotlin.runtime.http.operation.ResolveEndpointRequest
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
 
@@ -19,12 +20,13 @@ internal const val EC2_METADATA_SERVICE_ENDPOINT_MODE_PROFILE_KEY = "ec2_metadat
 internal class ImdsEndpointProvider(
     private val platformProvider: PlatformProvider,
     private val endpointConfiguration: EndpointConfiguration,
-) : EndpointProvider<Unit> {
+) : EndpointResolver {
     // cached endpoint and profile
     private val resolvedEndpoint = asyncLazy(::doResolveEndpoint)
     private val activeProfile = asyncLazy { loadActiveAwsProfile(platformProvider) }
 
-    override suspend fun resolveEndpoint(params: Unit): Endpoint = resolvedEndpoint.get()
+    override suspend fun resolve(request: ResolveEndpointRequest): Endpoint = resolveImdsEndpoint()
+    internal suspend fun resolveImdsEndpoint(): Endpoint = resolvedEndpoint.get()
 
     private suspend fun doResolveEndpoint(): Endpoint = when (endpointConfiguration) {
         is EndpointConfiguration.Custom -> endpointConfiguration.endpoint

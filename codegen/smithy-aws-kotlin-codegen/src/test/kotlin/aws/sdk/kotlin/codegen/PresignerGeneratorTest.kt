@@ -106,22 +106,28 @@ class PresignerGeneratorTest {
             
             import aws.sdk.kotlin.runtime.ClientException
             import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
+            import aws.sdk.kotlin.runtime.endpoint.asSigningContext
+            import aws.sdk.kotlin.runtime.endpoint.authScheme
             import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
             import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigner
             import aws.smithy.kotlin.runtime.auth.awssigning.DefaultAwsSigner
             import aws.smithy.kotlin.runtime.auth.awssigning.PresignedRequestConfig
             import aws.smithy.kotlin.runtime.auth.awssigning.PresigningLocation
             import aws.smithy.kotlin.runtime.auth.awssigning.ServicePresignConfig
+            import aws.smithy.kotlin.runtime.auth.awssigning.SigningContextualizedEndpoint
             import aws.smithy.kotlin.runtime.auth.awssigning.SigningEndpointProvider
             import aws.smithy.kotlin.runtime.auth.awssigning.createPresignedRequest
+            import aws.smithy.kotlin.runtime.client.SdkClientOption
+            import aws.smithy.kotlin.runtime.http.auth.AnonymousIdentity
+            import aws.smithy.kotlin.runtime.http.operation.HttpOperationContext
+            import aws.smithy.kotlin.runtime.http.operation.ResolveEndpointRequest
             import aws.smithy.kotlin.runtime.http.request.HttpRequest
+            import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
             import aws.smithy.kotlin.runtime.net.QueryParameters
             import aws.smithy.kotlin.runtime.operation.ExecutionContext
             import kotlin.time.Duration
             import smithy.kotlin.traits.TestClient
-            import smithy.kotlin.traits.endpoints.EndpointParameters
-            import smithy.kotlin.traits.endpoints.asSigningProvider
-            import smithy.kotlin.traits.endpoints.internal.bindAwsBuiltins
+            import smithy.kotlin.traits.endpoints.internal.EndpointResolverAdapter
             import smithy.kotlin.traits.model.GetFooRequest
             import smithy.kotlin.traits.model.PostFooRequest
             import smithy.kotlin.traits.model.PutFooRequest
@@ -147,11 +153,8 @@ class PresignerGeneratorTest {
              */
             public suspend fun GetFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
-                    val params = EndpointParameters {
-                        bindAwsBuiltins(config)
-                    }
                     credentialsProvider = config.credentialsProvider
-                    endpointProvider = config.endpointProvider.asSigningProvider(params)
+                    endpointProvider = EndpointResolverAdapter(config).asSigningProvider(this@presign, "GetFoo")
                     region = config.region
                 }
                 return createPresignedRequest(presignConfig, getFooPresignConfig(this, duration))
@@ -189,11 +192,8 @@ class PresignerGeneratorTest {
              */
             public suspend fun PostFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
-                    val params = EndpointParameters {
-                        bindAwsBuiltins(config)
-                    }
                     credentialsProvider = config.credentialsProvider
-                    endpointProvider = config.endpointProvider.asSigningProvider(params)
+                    endpointProvider = EndpointResolverAdapter(config).asSigningProvider(this@presign, "PostFoo")
                     region = config.region
                 }
                 return createPresignedRequest(presignConfig, postFooPresignConfig(this, duration))
@@ -231,11 +231,8 @@ class PresignerGeneratorTest {
              */
             public suspend fun PutFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
                 val presignConfig = TestPresignConfig {
-                    val params = EndpointParameters {
-                        bindAwsBuiltins(config)
-                    }
                     credentialsProvider = config.credentialsProvider
-                    endpointProvider = config.endpointProvider.asSigningProvider(params)
+                    endpointProvider = EndpointResolverAdapter(config).asSigningProvider(this@presign, "PutFoo")
                     region = config.region
                 }
                 return createPresignedRequest(presignConfig, putFooPresignConfig(this, duration))
@@ -304,6 +301,17 @@ class PresignerGeneratorTest {
                     @PublishedApi
                     internal fun build(): TestPresignConfig = TestPresignConfig(this)
                 }
+            }
+
+            internal fun EndpointResolverAdapter.asSigningProvider(input: Any, operationName: String): SigningEndpointProvider = {
+                val execContext = ExecutionContext().apply {
+                    set(SdkClientOption.OperationName, operationName)
+                    set(HttpOperationContext.OperationInput, input)
+                }
+                val httpReq = HttpRequestBuilder().build()
+                val request = ResolveEndpointRequest(execContext, httpReq, AnonymousIdentity)
+                val endpoint = resolve(request)
+                SigningContextualizedEndpoint(endpoint, endpoint.authScheme?.asSigningContext())
             }
         """.trimIndent()
 
