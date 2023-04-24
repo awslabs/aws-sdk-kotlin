@@ -22,7 +22,7 @@ class ImdsRegionProviderTest {
     @Test
     fun testImdsDisabled() = runTest {
         val platform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true"),
+            env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.envVar to "true"),
         )
 
         val provider = ImdsRegionProvider(platformProvider = platform)

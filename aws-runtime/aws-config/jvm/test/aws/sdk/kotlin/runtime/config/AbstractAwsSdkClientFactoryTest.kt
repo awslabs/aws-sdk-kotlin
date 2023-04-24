@@ -42,8 +42,8 @@ class AbstractAwsSdkClientFactoryTest {
     fun testFromEnvironmentResolvesDefaults() = runTest {
         withSystemProperties(
             mapOf(
-                AwsSdkSetting.AwsRegion.jvmProperty to "resolved-region",
-                AwsSdkSetting.AwsRetryMode.jvmProperty to "standard",
+                AwsSdkSetting.AwsRegion.sysProp to "resolved-region",
+                AwsSdkSetting.AwsRetryMode.sysProp to "standard",
             ),
         ) {
             val client = TestClient.fromEnvironment()

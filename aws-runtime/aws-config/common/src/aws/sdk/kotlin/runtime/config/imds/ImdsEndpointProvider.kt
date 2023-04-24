@@ -7,8 +7,8 @@ package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
-import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
+import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.operation.EndpointResolver
 import aws.smithy.kotlin.runtime.http.operation.ResolveEndpointRequest
 import aws.smithy.kotlin.runtime.util.PlatformProvider

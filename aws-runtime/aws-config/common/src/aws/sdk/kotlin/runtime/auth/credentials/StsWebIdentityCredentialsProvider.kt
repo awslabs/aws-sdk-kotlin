@@ -8,12 +8,13 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRoleWithWebIdentity
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH_SECONDS
+import aws.smithy.kotlin.runtime.config.EnvironmentSetting
+import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.tracing.*
@@ -118,9 +119,9 @@ public class StsWebIdentityCredentialsProvider(
 }
 
 // convenience function to resolve parameters for fromEnvironment()
-private inline fun <reified T> PlatformProvider.resolve(explicit: T?, setting: AwsSdkSetting<T>, name: String): T =
+private inline fun <reified T> PlatformProvider.resolve(explicit: T?, setting: EnvironmentSetting<T>, name: String): T =
     explicit
         ?: setting.resolve(this)
         ?: throw ProviderConfigurationException(
-            "Required field `$name` could not be automatically inferred for StsWebIdentityCredentialsProvider. Either explicitly pass a value, set the environment variable `${setting.environmentVariable}`, or set the JVM system property `${setting.jvmProperty}`",
+            "Required field `$name` could not be automatically inferred for StsWebIdentityCredentialsProvider. Either explicitly pass a value, set the environment variable `${setting.envVar}`, or set the JVM system property `${setting.sysProp}`",
         )

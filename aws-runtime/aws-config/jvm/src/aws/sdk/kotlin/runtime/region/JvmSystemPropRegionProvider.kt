@@ -14,5 +14,5 @@ import aws.smithy.kotlin.runtime.util.PropertyProvider
 internal class JvmSystemPropRegionProvider(
     private val propertyProvider: PropertyProvider,
 ) : RegionProvider {
-    override suspend fun getRegion(): String? = propertyProvider.getProperty(AwsSdkSetting.AwsRegion.jvmProperty)
+    override suspend fun getRegion(): String? = propertyProvider.getProperty(AwsSdkSetting.AwsRegion.sysProp)
 }

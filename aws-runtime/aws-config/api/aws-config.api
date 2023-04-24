@@ -1009,90 +1009,6 @@ public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory 
 	public fun invoke (Lkotlin/jvm/functions/Function1;)Laws/smithy/kotlin/runtime/client/SdkClient;
 }
 
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsAccessKeyId : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsAccessKeyId;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsConfigFile : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsConfigFile;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsContainerAuthorizationToken : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsContainerAuthorizationToken;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsContainerCredentialsFullUri : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsContainerCredentialsFullUri;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsContainerCredentialsRelativeUri : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsContainerCredentialsRelativeUri;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsEc2MetadataDisabled : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsEc2MetadataDisabled;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsEc2MetadataServiceEndpoint : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsEc2MetadataServiceEndpoint;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsEc2MetadataServiceEndpointMode : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsEc2MetadataServiceEndpointMode;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsExecutionEnv : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsExecutionEnv;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsMaxAttempts : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsMaxAttempts;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsProfile : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsProfile;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsRegion : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsRegion;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsRetryMode : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsRetryMode;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsRoleArn : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsRoleArn;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsRoleSessionName : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsRoleSessionName;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsSecretAccessKey : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsSecretAccessKey;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsSessionToken : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsSessionToken;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsSharedCredentialsFile : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsSharedCredentialsFile;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsUseDualStackEndpoint : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsUseDualStackEndpoint;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsUseFipsEndpoint : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsUseFipsEndpoint;
-}
-
-public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsWebIdentityTokenFile : aws/sdk/kotlin/runtime/config/AwsSdkSetting {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting$AwsWebIdentityTokenFile;
-}
-
 public final class aws/sdk/kotlin/runtime/config/endpoints/EndpointsKt {
 }
 
@@ -1238,30 +1154,9 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsConfigValue$String :
 }
 
 public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
-	public static final fun getAwsAccessKeyId (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
-	public static final fun getAwsSecretAccessKey (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
-	public static final fun getAwsSessionToken (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
-	public static final fun getBooleanOrNull (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Boolean;
-	public static synthetic fun getBooleanOrNull$default (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/Boolean;
-	public static final fun getCredentialProcess (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
-	public static final fun getMaxAttempts (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/Integer;
-	public static final fun getRegion (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
-	public static final fun getRetryMode (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Laws/sdk/kotlin/runtime/config/retries/RetryMode;
-	public static final fun getRoleArn (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
-	public static final fun getSourceProfile (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/String;
-	public static final fun getUseDualStack (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/Boolean;
-	public static final fun getUseFips (Laws/sdk/kotlin/runtime/config/profile/AwsProfile;)Ljava/lang/Boolean;
 }
 
 public final class aws/sdk/kotlin/runtime/config/retries/ResolveRetryStrategyKt {
-}
-
-public final class aws/sdk/kotlin/runtime/config/retries/RetryMode : java/lang/Enum {
-	public static final field ADAPTIVE Laws/sdk/kotlin/runtime/config/retries/RetryMode;
-	public static final field LEGACY Laws/sdk/kotlin/runtime/config/retries/RetryMode;
-	public static final field STANDARD Laws/sdk/kotlin/runtime/config/retries/RetryMode;
-	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/config/retries/RetryMode;
-	public static fun values ()[Laws/sdk/kotlin/runtime/config/retries/RetryMode;
 }
 
 public abstract interface class aws/sdk/kotlin/runtime/region/RegionProvider {

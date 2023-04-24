@@ -9,12 +9,12 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRole
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.RegionDisabledException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH_SECONDS
+import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat

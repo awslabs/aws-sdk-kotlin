@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.config.retries
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
+import aws.smithy.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -23,7 +24,7 @@ class ResolveRetryStrategyTest {
         val expectedMaxAttempts = 50
 
         val platform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsMaxAttempts.environmentVariable to expectedMaxAttempts.toString()),
+            env = mapOf(AwsSdkSetting.AwsMaxAttempts.envVar to expectedMaxAttempts.toString()),
         )
 
         assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).options.maxAttempts)
@@ -33,7 +34,7 @@ class ResolveRetryStrategyTest {
     fun itResolvesMaxAttemptsFromSystemProperties() = runTest {
         val expectedMaxAttempts = 10
         val platform = TestPlatformProvider(
-            props = mapOf(AwsSdkSetting.AwsMaxAttempts.jvmProperty to expectedMaxAttempts.toString()),
+            props = mapOf(AwsSdkSetting.AwsMaxAttempts.sysProp to expectedMaxAttempts.toString()),
         )
 
         assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).options.maxAttempts)
@@ -62,7 +63,7 @@ class ResolveRetryStrategyTest {
 
         for (invalidMaxAttempts in invalidMaxAttemptsValues) {
             val platform = TestPlatformProvider(
-                env = mapOf(AwsSdkSetting.AwsMaxAttempts.environmentVariable to invalidMaxAttempts.toString()),
+                env = mapOf(AwsSdkSetting.AwsMaxAttempts.envVar to invalidMaxAttempts.toString()),
             )
 
             assertFailsWith<ConfigurationException> { resolveRetryStrategy(platform) }
@@ -74,10 +75,10 @@ class ResolveRetryStrategyTest {
         val retryMode = "unsupported-retry-mode"
 
         val platform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsRetryMode.environmentVariable to retryMode),
+            env = mapOf(AwsSdkSetting.AwsRetryMode.envVar to retryMode),
         )
 
-        assertFailsWith<ConfigurationException> { resolveRetryStrategy(platform) }
+        assertFailsWith<ClientException> { resolveRetryStrategy(platform) }
     }
 
     @Test
@@ -105,7 +106,7 @@ class ResolveRetryStrategyTest {
         val adaptiveRetryMode = "adaptive"
 
         val platform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.AwsRetryMode.environmentVariable to adaptiveRetryMode),
+            env = mapOf(AwsSdkSetting.AwsRetryMode.envVar to adaptiveRetryMode),
         )
 
         assertFailsWith<NotImplementedError> { resolveRetryStrategy(platform) }
@@ -118,8 +119,8 @@ class ResolveRetryStrategyTest {
 
         val platform = TestPlatformProvider(
             env = mapOf(
-                AwsSdkSetting.AwsMaxAttempts.environmentVariable to expectedMaxAttempts.toString(),
-                AwsSdkSetting.AwsRetryMode.environmentVariable to retryMode,
+                AwsSdkSetting.AwsMaxAttempts.envVar to expectedMaxAttempts.toString(),
+                AwsSdkSetting.AwsRetryMode.envVar to retryMode,
             ),
         )
 
@@ -154,8 +155,8 @@ class ResolveRetryStrategyTest {
 
         val platform = TestPlatformProvider(
             env = mapOf(
-                AwsSdkSetting.AwsMaxAttempts.environmentVariable to expectedMaxAttempts.toString(),
-                AwsSdkSetting.AwsRetryMode.environmentVariable to retryMode,
+                AwsSdkSetting.AwsMaxAttempts.envVar to expectedMaxAttempts.toString(),
+                AwsSdkSetting.AwsRetryMode.envVar to retryMode,
             ),
         )
 
@@ -169,10 +170,10 @@ class ResolveRetryStrategyTest {
 
         val platform = TestPlatformProvider(
             env = mapOf(
-                AwsSdkSetting.AwsRetryMode.environmentVariable to retryMode,
+                AwsSdkSetting.AwsRetryMode.envVar to retryMode,
             ),
             props = mapOf(
-                AwsSdkSetting.AwsMaxAttempts.jvmProperty to expectedMaxAttempts.toString(),
+                AwsSdkSetting.AwsMaxAttempts.sysProp to expectedMaxAttempts.toString(),
             ),
         )
 
@@ -187,7 +188,7 @@ class ResolveRetryStrategyTest {
         val platform = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
-                AwsSdkSetting.AwsRetryMode.environmentVariable to retryMode,
+                AwsSdkSetting.AwsRetryMode.envVar to retryMode,
             ),
             fs = mapOf(
                 "config" to """
@@ -210,8 +211,8 @@ class ResolveRetryStrategyTest {
         val platform = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
-                AwsSdkSetting.AwsRetryMode.environmentVariable to retryMode,
-                AwsSdkSetting.AwsMaxAttempts.environmentVariable to expectedMaxAttempts.toString(),
+                AwsSdkSetting.AwsRetryMode.envVar to retryMode,
+                AwsSdkSetting.AwsMaxAttempts.envVar to expectedMaxAttempts.toString(),
             ),
             fs = mapOf(
                 "config" to """
