@@ -52,7 +52,7 @@ public abstract class AbstractAwsSdkClientFactory<
         }
 
         tracer.withSpan("Config resolution") { span ->
-            span.attributes[TraceSpanAttributes.ClientName] = builder.config.clientName
+            span.setAttr(TraceSpanAttributes.ClientName.name, builder.config.clientName)
 
             val profile = asyncLazy { loadActiveAwsProfile(PlatformProvider.System) }
 
