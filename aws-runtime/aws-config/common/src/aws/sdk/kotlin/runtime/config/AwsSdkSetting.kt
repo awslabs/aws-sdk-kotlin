@@ -154,9 +154,4 @@ public object AwsSdkSetting {
      */
     public val AwsUseDualStackEndpoint: EnvironmentSetting<Boolean> =
         boolEnvSetting("aws.useDualstackEndpoint", "AWS_USE_DUALSTACK_ENDPOINT")
-
-    /**
-     * Which [LogMode] to use for logging requests and responses, when one is not specified at the client level.
-     */
-    public object LogMode : AwsSdkSetting<aws.smithy.kotlin.runtime.client.LogMode>("AWS_SDK_KOTLIN_LOG_MODE", "aws.sdk.kotlin.logMode", aws.smithy.kotlin.runtime.client.LogMode.Default)
 }
