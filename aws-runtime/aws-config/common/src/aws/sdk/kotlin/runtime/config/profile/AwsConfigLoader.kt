@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.config.profile
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.config.resolve
+import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.io.internal.SdkDispatchers
 import aws.smithy.kotlin.runtime.tracing.traceSpan
 import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan

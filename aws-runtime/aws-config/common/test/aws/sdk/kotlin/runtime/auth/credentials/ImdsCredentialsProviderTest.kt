@@ -42,7 +42,7 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 private val ec2MetadataDisabledPlatform = TestPlatformProvider(
-    env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.environmentVariable to "true"),
+    env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.envVar to "true"),
 )
 private val ec2MetadataEnabledPlatform = TestPlatformProvider()
 

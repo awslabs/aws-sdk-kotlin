@@ -10,7 +10,7 @@ import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
 import aws.sdk.kotlin.runtime.config.profile.useDualStack
 import aws.sdk.kotlin.runtime.config.profile.useFips
-import aws.sdk.kotlin.runtime.config.resolve
+import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy

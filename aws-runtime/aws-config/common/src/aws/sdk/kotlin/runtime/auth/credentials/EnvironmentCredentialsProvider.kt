@@ -16,9 +16,9 @@ import kotlin.coroutines.coroutineContext
 
 private const val PROVIDER_NAME = "Environment"
 
-private val ACCESS_KEY_ID = AwsSdkSetting.AwsAccessKeyId.environmentVariable
-private val SECRET_ACCESS_KEY = AwsSdkSetting.AwsSecretAccessKey.environmentVariable
-private val SESSION_TOKEN = AwsSdkSetting.AwsSessionToken.environmentVariable
+private val ACCESS_KEY_ID = AwsSdkSetting.AwsAccessKeyId.envVar
+private val SECRET_ACCESS_KEY = AwsSdkSetting.AwsSecretAccessKey.envVar
+private val SESSION_TOKEN = AwsSdkSetting.AwsSessionToken.envVar
 
 /**
  * A [CredentialsProvider] which reads from `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN`.

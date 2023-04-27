@@ -21,9 +21,9 @@ class EnvironmentCredentialsProviderTest {
     @Test
     fun `it should read from environment variables (incl session token)`() = runTest {
         val provider = provider(
-            AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc",
-            AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def",
-            AwsSdkSetting.AwsSessionToken.environmentVariable to "ghi",
+            AwsSdkSetting.AwsAccessKeyId.envVar to "abc",
+            AwsSdkSetting.AwsSecretAccessKey.envVar to "def",
+            AwsSdkSetting.AwsSessionToken.envVar to "ghi",
         )
         assertEquals(provider.resolve(), Credentials("abc", "def", "ghi", providerName = "Environment"))
     }
@@ -31,8 +31,8 @@ class EnvironmentCredentialsProviderTest {
     @Test
     fun `it should read from environment variables (excl session token)`() = runTest {
         val provider = provider(
-            AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc",
-            AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def",
+            AwsSdkSetting.AwsAccessKeyId.envVar to "abc",
+            AwsSdkSetting.AwsSecretAccessKey.envVar to "def",
         )
         assertEquals(provider.resolve(), Credentials("abc", "def", null, providerName = "Environment"))
     }
@@ -40,14 +40,14 @@ class EnvironmentCredentialsProviderTest {
     @Test
     fun `it should throw an exception on missing access key`() = runTest {
         assertFailsWith<ProviderConfigurationException> {
-            provider(AwsSdkSetting.AwsSecretAccessKey.environmentVariable to "def").resolve()
+            provider(AwsSdkSetting.AwsSecretAccessKey.envVar to "def").resolve()
         }.message.shouldContain("Missing value for environment variable `AWS_ACCESS_KEY_ID`")
     }
 
     @Test
     fun `it should throw an exception on missing secret key`() = runTest {
         assertFailsWith<ProviderConfigurationException> {
-            provider(AwsSdkSetting.AwsAccessKeyId.environmentVariable to "abc").resolve()
+            provider(AwsSdkSetting.AwsAccessKeyId.envVar to "abc").resolve()
         }.message.shouldContain("Missing value for environment variable `AWS_SECRET_ACCESS_KEY`")
     }
 }

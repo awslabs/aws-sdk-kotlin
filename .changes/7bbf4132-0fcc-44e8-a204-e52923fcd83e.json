@@ -1,5 +1,0 @@
-{
-    "id": "7bbf4132-0fcc-44e8-a204-e52923fcd83e",
-    "type": "misc",
-    "description": "Refactor internal endpoint resolver execution to track upstream changes."
-}

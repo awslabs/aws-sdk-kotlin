@@ -5,7 +5,8 @@
 package aws.sdk.kotlin.runtime.config.profile
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.config.resolve
+import aws.smithy.kotlin.runtime.config.EnvironmentSetting
+import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
@@ -23,7 +24,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * Credentials	    ~/.aws/credentials	            AWS_SHARED_CREDENTIALS_FILE
  */
 internal enum class FileType(
-    private val setting: AwsSdkSetting<String>,
+    private val setting: EnvironmentSetting<String>,
     private val lineParsers: List<ParseFn>,
     private val pathSegments: List<String>,
 ) {
