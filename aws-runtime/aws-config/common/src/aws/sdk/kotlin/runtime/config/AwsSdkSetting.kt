@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.client.SdkLogMode
+import aws.smithy.kotlin.runtime.client.LogMode
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.client.config.RetryMode
 import aws.smithy.kotlin.runtime.config.*
@@ -156,7 +156,7 @@ public object AwsSdkSetting {
         boolEnvSetting("aws.useDualstackEndpoint", "AWS_USE_DUALSTACK_ENDPOINT")
 
     /**
-     * Which [SdkLogMode] to use for logging requests and responses, when one is not specified at the client level.
+     * Which [LogMode] to use for logging requests and responses, when one is not specified at the client level.
      */
-    public object SdkLogMode : AwsSdkSetting<aws.smithy.kotlin.runtime.client.SdkLogMode>("AWS_SDK_KOTLIN_LOG_MODE", "aws.sdk.kotlin.logMode", aws.smithy.kotlin.runtime.client.SdkLogMode.Default)
+    public object LogMode : AwsSdkSetting<aws.smithy.kotlin.runtime.client.LogMode>("AWS_SDK_KOTLIN_LOG_MODE", "aws.sdk.kotlin.logMode", aws.smithy.kotlin.runtime.client.LogMode.Default)
 }

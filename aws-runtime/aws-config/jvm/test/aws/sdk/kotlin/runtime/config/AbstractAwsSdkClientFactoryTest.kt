@@ -10,7 +10,7 @@ import aws.sdk.kotlin.runtime.http.retries.AwsDefaultRetryPolicy
 import aws.smithy.kotlin.runtime.client.AbstractSdkClientBuilder
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
-import aws.smithy.kotlin.runtime.client.SdkLogMode
+import aws.smithy.kotlin.runtime.client.LogMode
 import aws.smithy.kotlin.runtime.retries.Outcome
 import aws.smithy.kotlin.runtime.retries.RetryOptions
 import aws.smithy.kotlin.runtime.retries.RetryStrategy
@@ -80,7 +80,7 @@ private interface TestClient : SdkClient {
             override var region: String? = null
             override var retryPolicy: RetryPolicy<Any?>? = null
             override var retryStrategy: RetryStrategy? = null
-            override var sdkLogMode: SdkLogMode? = null
+            override var logMode: LogMode? = null
             override var useFips: Boolean? = null
             override var useDualStack: Boolean? = null
             override fun build(): Config = Config(this)

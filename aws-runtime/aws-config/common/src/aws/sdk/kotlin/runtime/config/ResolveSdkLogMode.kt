@@ -6,13 +6,13 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.client.SdkLogMode
+import aws.smithy.kotlin.runtime.client.LogMode
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
  * Attempt to resolve the SDK log mode used to make requests
  */
 @InternalSdkApi
-public fun resolveSdkLogMode(
+public fun resolveLogMode(
     platformProvider: PlatformProvider = PlatformProvider.System,
-): SdkLogMode = AwsSdkSetting.SdkLogMode.resolve(platformProvider)!!
+): LogMode = AwsSdkSetting.LogMode.resolve(platformProvider)!!

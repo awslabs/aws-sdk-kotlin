@@ -10,7 +10,7 @@ import aws.sdk.kotlin.runtime.http.ApiMetadata
 import aws.sdk.kotlin.runtime.http.AwsUserAgentMetadata
 import aws.sdk.kotlin.runtime.http.middleware.UserAgent
 import aws.smithy.kotlin.runtime.client.SdkClientOption
-import aws.smithy.kotlin.runtime.client.SdkLogMode
+import aws.smithy.kotlin.runtime.client.LogMode
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
@@ -61,7 +61,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     private val tokenTtl: Duration = builder.tokenTtl
     private val clock: Clock = builder.clock
     private val platformProvider: PlatformProvider = builder.platformProvider
-    private val sdkLogMode: SdkLogMode = builder.sdkLogMode
+    private val logMode: LogMode = builder.LogMode
     private val engine: HttpClientEngine
     private val httpClient: SdkHttpClient
     private val manageEngine: Boolean = builder.engine == null
@@ -120,7 +120,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
                 operationName = path
 
                 // artifact of re-using ServiceEndpointResolver middleware
-                set(SdkClientOption.LogMode, sdkLogMode)
+                set(SdkClientOption.LogMode, logMode)
             }
 
             execution.endpointResolver = imdsEndpointProvider
@@ -160,9 +160,9 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         public var tokenTtl: Duration = DEFAULT_TOKEN_TTL_SECONDS.seconds
 
         /**
-         * Configure the [SdkLogMode] used by the client
+         * Configure the [LogMode] used by the client
          */
-        public var sdkLogMode: SdkLogMode = SdkLogMode.Default
+        public var logMode: LogMode = LogMode.Default
 
         /**
          * The HTTP engine to use to make requests with. This is here to facilitate testing and can otherwise be ignored

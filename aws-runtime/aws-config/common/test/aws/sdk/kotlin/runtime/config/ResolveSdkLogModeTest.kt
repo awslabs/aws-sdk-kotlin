@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.smithy.kotlin.runtime.ClientException
-import aws.smithy.kotlin.runtime.client.SdkLogMode
+import aws.smithy.kotlin.runtime.client.LogMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -15,71 +15,71 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ResolveSdkLogModeTest {
+class ResolveLogModeTest {
 
     @Test
-    fun itResolvesSdkLogModeFromEnvironmentVariables() = runTest {
-        val expectedSdkLogMode = SdkLogMode.LogRequest
+    fun itResolvesLogModeFromEnvironmentVariables() = runTest {
+        val expectedLogMode = LogMode.LogRequest
 
         val platform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.SdkLogMode.environmentVariable to expectedSdkLogMode.toString()),
+            env = mapOf(AwsSdkSetting.LogMode.environmentVariable to expectedLogMode.toString()),
         )
 
-        assertEquals(expectedSdkLogMode, resolveSdkLogMode(platform))
+        assertEquals(expectedLogMode, resolveLogMode(platform))
     }
 
     @Test
-    fun itResolvesSdkLogModeFromSystemProperties() = runTest {
-        val expectedSdkLogMode = SdkLogMode.LogRequestWithBody + SdkLogMode.LogResponseWithBody
+    fun itResolvesLogModeFromSystemProperties() = runTest {
+        val expectedLogMode = LogMode.LogRequestWithBody + LogMode.LogResponseWithBody
         val platform = TestPlatformProvider(
-            props = mapOf(AwsSdkSetting.SdkLogMode.jvmProperty to "LogRequestWithBody|LogResponseWithBody"),
+            props = mapOf(AwsSdkSetting.LogMode.jvmProperty to "LogRequestWithBody|LogResponseWithBody"),
         )
 
-        assertEquals(expectedSdkLogMode, resolveSdkLogMode(platform))
+        assertEquals(expectedLogMode, resolveLogMode(platform))
     }
 
     @Test
-    fun itThrowsOnInvalidSdkLogModeFromEnvironmentVariable() = runTest {
+    fun itThrowsOnInvalidLogModeFromEnvironmentVariable() = runTest {
         val platform = TestPlatformProvider(
-            env = mapOf(AwsSdkSetting.SdkLogMode.environmentVariable to "InvalidSdkLogMode"),
+            env = mapOf(AwsSdkSetting.LogMode.environmentVariable to "InvalidLogMode"),
         )
-        assertFailsWith<ClientException> { resolveSdkLogMode(platform) }
+        assertFailsWith<ClientException> { resolveLogMode(platform) }
     }
 
     @Test
-    fun itThrowsOnInvalidSdkLogModeFromSystemProperty() = runTest {
+    fun itThrowsOnInvalidLogModeFromSystemProperty() = runTest {
         val platform = TestPlatformProvider(
-            props = mapOf(AwsSdkSetting.SdkLogMode.jvmProperty to "InvalidSdkLogMode"),
+            props = mapOf(AwsSdkSetting.LogMode.jvmProperty to "InvalidLogMode"),
         )
-        assertFailsWith<ClientException> { resolveSdkLogMode(platform) }
+        assertFailsWith<ClientException> { resolveLogMode(platform) }
     }
 
     @Test
-    fun itResolvesNonLowercaseSdkLogModesFromEnvironmentVariables() = runTest {
-        val expectedSdkLogMode = SdkLogMode.LogRequest
-        val nonLowercaseSdkLogMode = "lOgReQUEST"
+    fun itResolvesNonLowercaseLogModesFromEnvironmentVariables() = runTest {
+        val expectedLogMode = LogMode.LogRequest
+        val nonLowercaseLogMode = "lOgReQUEST"
 
         val platform = TestPlatformProvider(
             env = mapOf(
-                AwsSdkSetting.SdkLogMode.environmentVariable to nonLowercaseSdkLogMode,
+                AwsSdkSetting.LogMode.environmentVariable to nonLowercaseLogMode,
             ),
         )
 
-        assertEquals(expectedSdkLogMode, resolveSdkLogMode(platform))
+        assertEquals(expectedLogMode, resolveLogMode(platform))
     }
 
     @Test
-    fun itResolvesNonLowercaseSdkLogModesFromSystemProperty() = runTest {
-        val expectedSdkLogMode = SdkLogMode.allModes().reduce { acc, sdkLogMode -> acc + sdkLogMode }
-        val nonLowercaseSdkLogMode = "LOGREQUest|logReSponSe|logREQUESTwithBODY|LoGrEsPoNsEWitHBoDY"
+    fun itResolvesNonLowercaseLogModesFromSystemProperty() = runTest {
+        val expectedLogMode = LogMode.allModes().reduce { acc, logMode -> acc + logMode }
+        val nonLowercaseLogMode = "LOGREQUest|logReSponSe|logREQUESTwithBODY|LoGrEsPoNsEWitHBoDY"
 
         val platform = TestPlatformProvider(
             props = mapOf(
-                AwsSdkSetting.SdkLogMode.jvmProperty to nonLowercaseSdkLogMode,
+                AwsSdkSetting.LogMode.jvmProperty to nonLowercaseLogMode,
             ),
         )
 
-        assertEquals(expectedSdkLogMode, resolveSdkLogMode(platform))
+        assertEquals(expectedLogMode, resolveLogMode(platform))
     }
 
     @Test
@@ -87,22 +87,22 @@ class ResolveSdkLogModeTest {
         // set the system property and environment variable. resolution should prioritize system property
         val platform = TestPlatformProvider(
             env = mapOf(
-                AwsSdkSetting.SdkLogMode.environmentVariable to "invalid-sdk-log-mode-should-be-ignored",
+                AwsSdkSetting.LogMode.environmentVariable to "invalid-sdk-log-mode-should-be-ignored",
             ),
             props = mapOf(
-                AwsSdkSetting.SdkLogMode.jvmProperty to "LogRequest",
+                AwsSdkSetting.LogMode.jvmProperty to "LogRequest",
             ),
         )
 
-        assertEquals(SdkLogMode.LogRequest, resolveSdkLogMode(platform))
+        assertEquals(LogMode.LogRequest, resolveLogMode(platform))
     }
 
     @Test
-    fun itUsesDefaultSdkLogModeWhenNoneAreConfigured() = runTest {
-        val expectedSdkLogMode = SdkLogMode.Default
+    fun itUsesDefaultLogModeWhenNoneAreConfigured() = runTest {
+        val expectedLogMode = LogMode.Default
 
         val platform = TestPlatformProvider() // no environment variables / system properties / profile
 
-        assertEquals(expectedSdkLogMode, resolveSdkLogMode(platform))
+        assertEquals(expectedLogMode, resolveLogMode(platform))
     }
 }
