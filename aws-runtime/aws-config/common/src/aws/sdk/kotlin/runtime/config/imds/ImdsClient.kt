@@ -61,7 +61,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
     private val tokenTtl: Duration = builder.tokenTtl
     private val clock: Clock = builder.clock
     private val platformProvider: PlatformProvider = builder.platformProvider
-    private val logMode: LogMode = builder.LogMode
+    private val logMode: LogMode = builder.logMode
     private val engine: HttpClientEngine
     private val httpClient: SdkHttpClient
     private val manageEngine: Boolean = builder.engine == null

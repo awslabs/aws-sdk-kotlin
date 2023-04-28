@@ -50,6 +50,6 @@ public abstract interface class aws/sdk/kotlin/runtime/client/AwsSdkClientConfig
 }
 
 public final class aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$DefaultImpls {
-	public static fun getSdkLogMode (Laws/sdk/kotlin/runtime/client/AwsSdkClientConfig;)Laws/smithy/kotlin/runtime/client/SdkLogMode;
+	public static fun getLogMode (Laws/sdk/kotlin/runtime/client/AwsSdkClientConfig;)Laws/smithy/kotlin/runtime/client/LogMode;
 }
 
