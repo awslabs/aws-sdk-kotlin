@@ -70,7 +70,6 @@ subprojects {
 
                 dependencies {
                     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-                    implementation(project(":aws-runtime:testing"))
                 }
             }
         }
@@ -87,7 +86,6 @@ subprojects {
                         dependencies {
                             implementation(kotlin("test"))
                             implementation(kotlin("test-junit5"))
-                            implementation(project(":aws-runtime:testing"))
                             implementation(project(":tests:e2e-test-util"))
                         }
                     }

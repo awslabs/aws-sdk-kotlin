@@ -21,7 +21,6 @@ kotlin {
         }
         commonTest {
             dependencies {
-                implementation(project(":aws-runtime:testing"))
             }
         }
 
