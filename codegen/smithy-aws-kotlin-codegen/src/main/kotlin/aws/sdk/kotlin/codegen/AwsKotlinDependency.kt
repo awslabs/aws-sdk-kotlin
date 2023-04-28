@@ -49,7 +49,6 @@ private val sameProjectDeps: Map<KotlinDependency, String> by lazy {
         AwsKotlinDependency.AWS_CONFIG to """project(":aws-runtime:aws-config")""",
         AwsKotlinDependency.AWS_ENDPOINT to """project(":aws-runtime:aws-endpoint")""",
         AwsKotlinDependency.AWS_HTTP to """project(":aws-runtime:aws-http")""",
-        AwsKotlinDependency.AWS_TESTING to """project(":aws-runtime:testing")""",
     )
 }
 

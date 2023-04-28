@@ -8,9 +8,9 @@ package aws.sdk.kotlin.runtime.config
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.sdk.kotlin.runtime.http.retries.AwsDefaultRetryPolicy
 import aws.smithy.kotlin.runtime.client.AbstractSdkClientBuilder
+import aws.smithy.kotlin.runtime.client.LogMode
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
-import aws.smithy.kotlin.runtime.client.LogMode
 import aws.smithy.kotlin.runtime.retries.Outcome
 import aws.smithy.kotlin.runtime.retries.RetryOptions
 import aws.smithy.kotlin.runtime.retries.RetryStrategy
