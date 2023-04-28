@@ -51,8 +51,8 @@ public abstract class AbstractAwsSdkClientFactory<
             DefaultTracer(LoggingTraceProbe)
         }
 
-        tracer.withSpan("Config resolution") { span ->
-            span.setAttr(TraceSpanAttributes.ClientName.name, builder.config.clientName)
+        tracer.withSpan("fromEnvironment") { span ->
+            span.setAttr(TraceSpanAttributes.ClientName, builder.config.clientName)
 
             val profile = asyncLazy { loadActiveAwsProfile(PlatformProvider.System) }
 
