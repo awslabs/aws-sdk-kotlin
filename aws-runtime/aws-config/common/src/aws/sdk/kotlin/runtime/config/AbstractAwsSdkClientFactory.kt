@@ -15,6 +15,8 @@ import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
+import aws.smithy.kotlin.runtime.client.config.ClientSettings
+import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -56,6 +58,7 @@ public abstract class AbstractAwsSdkClientFactory<
         coroutineContext.withRootTraceSpan(tracer.createRootSpan("Config resolution")) {
             val profile = asyncLazy { loadActiveAwsProfile(PlatformProvider.System) }
 
+            builder.config.logMode = builder.config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
             builder.config.region = builder.config.region ?: resolveRegion(profile = profile)
             builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy(profile = profile)
             builder.config.useFips = builder.config.useFips ?: resolveUseFips(profile = profile)

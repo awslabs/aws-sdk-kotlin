@@ -68,6 +68,7 @@ private interface TestClient : SdkClient {
 
     class Config private constructor(builder: Config.Builder) : SdkClientConfig, AwsSdkClientConfig {
         override val clientName: String = builder.clientName
+        override val logMode: LogMode = builder.logMode ?: LogMode.Default
         override val retryPolicy: RetryPolicy<Any?> = builder.retryPolicy ?: AwsDefaultRetryPolicy
         override val retryStrategy: RetryStrategy = builder.retryStrategy ?: TestRetryStrategy()
         override val region: String = builder.region ?: error("region is required")
@@ -77,10 +78,10 @@ private interface TestClient : SdkClient {
         // new: inherits builder equivalents for Config base classes
         class Builder : AwsSdkClientConfig.Builder, SdkClientConfig.Builder<Config> {
             override var clientName: String = "Test"
+            override var logMode: LogMode? = LogMode.Default
             override var region: String? = null
             override var retryPolicy: RetryPolicy<Any?>? = null
             override var retryStrategy: RetryStrategy? = null
-            override var logMode: LogMode? = null
             override var useFips: Boolean? = null
             override var useDualStack: Boolean? = null
             override fun build(): Config = Config(this)
