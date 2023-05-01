@@ -19,10 +19,6 @@ kotlin {
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
             }
         }
-        commonTest {
-            dependencies {
-            }
-        }
 
         all {
             languageSettings.optIn("aws.smithy.kotlin.runtime.InternalApi")
