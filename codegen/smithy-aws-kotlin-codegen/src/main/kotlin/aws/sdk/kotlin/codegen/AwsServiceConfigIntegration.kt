@@ -10,6 +10,7 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.asNullable
 import software.amazon.smithy.kotlin.codegen.model.boxed
+import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.rendering.*
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
@@ -108,13 +109,16 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, ServiceClientCompanionObjectWriter()),
         )
 
-    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
-        listOf(
-            RegionProp,
-            CredentialsProviderProp,
-            UseFipsProp,
-            UseDualStackProp,
-            EndpointUrlProp,
-            AwsRetryPolicy,
-        )
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> = buildList {
+        add(RegionProp)
+        if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.settings.getService(ctx.model))) {
+            add(CredentialsProviderProp)
+        }
+
+        // TODO - add (conditional) override for bearer token provider to use TBD default token provider chain
+        add(UseFipsProp)
+        add(UseDualStackProp)
+        add(EndpointUrlProp)
+        add(AwsRetryPolicy)
+    }
 }
