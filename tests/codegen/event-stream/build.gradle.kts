@@ -21,17 +21,17 @@ data class EventStreamTest(
     val protocolName: String,
 ) {
     val model: File
-        get() = buildDir.resolve("${projectionName}/model.smithy")
+        get() = buildDir.resolve("$projectionName/model.smithy")
 }
 
 val tests = listOf(
-    EventStreamTest("restJson1", "restJson1")
+    EventStreamTest("restJson1", "restJson1"),
 )
 
 fun fillInModel(output: File, protocolName: String) {
     val template = file("event-stream-model-template.smithy")
     val input = template.readText()
-    val opTraits = when(protocolName) {
+    val opTraits = when (protocolName) {
         "restJson1", "restXml" -> """@http(method: "POST", uri: "/test-eventstream", code: 200)"""
         else -> ""
     }
@@ -55,7 +55,7 @@ codegen {
                     "services": ["$testServiceShapeId"]
                   }
                 }
-                """
+                """,
             )
 
             smithyKotlinPlugin {
@@ -67,7 +67,7 @@ codegen {
                     generateDefaultBuildFiles = false
                     optInAnnotations = listOf(
                         "aws.smithy.kotlin.runtime.InternalApi",
-                        "aws.sdk.kotlin.runtime.InternalSdkApi"
+                        "aws.sdk.kotlin.runtime.InternalSdkApi",
                     )
                 }
             }
@@ -91,7 +91,6 @@ val generateProjectionsTask = tasks.named<SmithyBuild>("generateSmithyProjection
     }
 }
 
-
 val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
     "aws.smithy.kotlin.runtime.InternalApi",
@@ -108,7 +107,7 @@ kotlin.sourceSets.getByName("test") {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>{
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     dependsOn(generateProjectionsTask)
     // generated clients have quite a few warnings
     kotlinOptions.allWarningsAsErrors = false

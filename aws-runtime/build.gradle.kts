@@ -20,7 +20,7 @@ val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
 )
 
-fun projectNeedsPlatform(project: Project, platform: String ): Boolean {
+fun projectNeedsPlatform(project: Project, platform: String): Boolean {
     val files = project.projectDir.listFiles()
     val hasPosix = files.any { it.name == "posix" }
     val hasDarwin = files.any { it.name == "darwin" }
@@ -29,7 +29,7 @@ fun projectNeedsPlatform(project: Project, platform: String ): Boolean {
     if (hasDarwin && platform == "posix") return false
     if (!hasPosix && !hasDarwin && platform == "darwin") return false
     // add implicit JVM target if it has a common module
-    return files.any{ it.name == platform || (it.name == "common" && platform == "jvm")}
+    return files.any { it.name == platform || (it.name == "common" && platform == "jvm") }
 }
 
 kotlin {
@@ -55,9 +55,9 @@ subprojects {
     // subproject.
     platforms.forEach { platform ->
         if (projectNeedsPlatform(project, platform)) {
-            configure(listOf(project)){
+            configure(listOf(project)) {
                 logger.info("${project.name} needs platform: $platform")
-                apply(from = rootProject.file("gradle/${platform}.gradle"))
+                apply(from = rootProject.file("gradle/$platform.gradle"))
             }
         }
     }
@@ -68,7 +68,7 @@ subprojects {
         sourceSets {
             all {
                 val srcDir = if (name.endsWith("Main")) "src" else "test"
-                val resourcesPrefix = if (name.endsWith("Test")) "test-" else  ""
+                val resourcesPrefix = if (name.endsWith("Test")) "test-" else ""
                 // the name is always the platform followed by a suffix of either "Main" or "Test" (e.g. jvmMain, commonTest, etc)
                 val platform = name.substring(0, name.length - 4)
                 kotlin.srcDir("$platform/$srcDir")
@@ -86,7 +86,7 @@ subprojects {
     }
 }
 
-task<org.jetbrains.kotlin.gradle.testing.internal.KotlinTestReport>("rootAllTest"){
+task<org.jetbrains.kotlin.gradle.testing.internal.KotlinTestReport>("rootAllTest") {
     destinationDir = File(project.buildDir, "reports/tests/rootAllTest")
     val rootAllTest = this
     subprojects {

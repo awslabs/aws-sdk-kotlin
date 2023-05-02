@@ -12,8 +12,8 @@ import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
-import java.util.*
 import java.nio.file.Paths
+import java.util.*
 import kotlin.streams.toList
 
 description = "AWS SDK codegen tasks"
@@ -94,12 +94,11 @@ data class AwsService(
 
 )
 
-
 val disabledServices = setOf(
     // timestream requires endpoint discovery
     // https://github.com/awslabs/smithy-kotlin/issues/146
     "timestream-write",
-    "timestream-query"
+    "timestream-query",
 )
 
 // Manually create the projections rather than using the extension to avoid unnecessary configuration evaluation.
@@ -112,7 +111,7 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
         it.map { service ->
             SmithyProjection(
                 service.projectionName,
-                project.projectionRootDir(service.projectionName)
+                project.projectionRootDir(service.projectionName),
             ).apply {
                 val importPaths = mutableListOf(service.modelFile.absolutePath)
                 if (file(service.modelExtrasDir).exists()) {
@@ -238,7 +237,7 @@ fun ServiceShape.protocol(): String =
         "aws.protocols#awsQuery",
         "aws.protocols#ec2Query",
         "aws.protocols#restJson1",
-        "aws.protocols#restXml"
+        "aws.protocols#restXml",
     ).first { protocol -> findTrait(protocol).isPresent }.split("#")[1]
 
 // Class and functions for service and protocol membership for SDK generation
@@ -281,22 +280,22 @@ fun String.kotlinNamespace(): String = split(".")
  * NOTE: this will also be the artifact name in the GAV coordinates
  */
 val AwsService.destinationDir: String
-    get(){
+    get() {
         val sanitizedName = sdkId.replace(" ", "").replace("-", "").toLowerCase()
-        return rootProject.file("services/${sanitizedName}").absolutePath
+        return rootProject.file("services/$sanitizedName").absolutePath
     }
 
 /**
  * Service specific model extras
  */
 val AwsService.modelExtrasDir: String
-    get() = rootProject.file("${destinationDir}/model").absolutePath
+    get() = rootProject.file("$destinationDir/model").absolutePath
 
 /**
  * Defines where service-specific transforms are located
  */
 val AwsService.transformsDir: String
-    get() = rootProject.file("${destinationDir}/transforms").absolutePath
+    get() = rootProject.file("$destinationDir/transforms").absolutePath
 
 fun forwardProperty(name: String) {
     getProperty(name)?.let {
@@ -340,7 +339,6 @@ tasks.register("bootstrap") {
     finalizedBy(stageSdks)
 }
 
-
 /**
  * Represents a type for a model that is sourced from aws-models
  */
@@ -356,7 +354,7 @@ data class SourceModel(
     /**
      * The service version from the model
      */
-    val version: String
+    val version: String,
 ) {
     /**
      * The model filename in aws-sdk-kotlin
@@ -374,7 +372,6 @@ fun discoverSourceModels(repoPath: String): List<SourceModel> {
         ?.map { Paths.get(it.absolutePath, "smithy", "model.json").toFile() }
         ?.filter { it.exists() } ?: error("no models found in $root")
 
-
     return models.map { file ->
         val model = Model.assembler().addImport(file.absolutePath).assemble().result.get()
         val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
@@ -386,7 +383,6 @@ fun discoverSourceModels(repoPath: String): List<SourceModel> {
         SourceModel(file.absolutePath, serviceApi.sdkId, service.version)
     }
 }
-
 
 fun discoverAwsModelsRepoPath(): String? {
     val discovered = rootProject.file("../aws-models")
@@ -422,7 +418,7 @@ tasks.register("syncAwsModels") {
 
         // sync known existing models
         val pairs = existingModelsBySdkId.values.mapNotNull { existing ->
-            sourceModelsBySdkId[existing.sdkId]?.let { source ->  Pair(source, existing)}
+            sourceModelsBySdkId[existing.sdkId]?.let { source -> Pair(source, existing) }
         }
 
         val modelsDir = project.file("aws-models")
@@ -453,7 +449,6 @@ tasks.register("syncAwsModels") {
                 rename { source.destFilename }
             }
         }
-
 
         // generate warnings at the end so they are more visible
         if (orphaned.isNotEmpty() || newSources.isNotEmpty()) {

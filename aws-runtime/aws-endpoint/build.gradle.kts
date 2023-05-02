@@ -11,7 +11,7 @@ val smithyKotlinVersion: String by project
 
 kotlin {
     sourceSets {
-        commonMain{
+        commonMain {
             dependencies {
                 implementation(project(":aws-runtime:aws-core"))
                 // exposes Endpoint
