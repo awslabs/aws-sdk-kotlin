@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.codegen.customization.polly
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.PresignerGenerator
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
