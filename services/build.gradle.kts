@@ -49,7 +49,7 @@ subprojects {
         sourceSets {
             all {
                 val srcDir = if (name.endsWith("Main")) "src" else "test"
-                val resourcesPrefix = if (name.endsWith("Test")) "test-" else  ""
+                val resourcesPrefix = if (name.endsWith("Test")) "test-" else ""
                 // the name is always the platform followed by a suffix of either "Main" or "Test" (e.g. jvmMain, commonTest, etc)
                 val platform = name.substring(0, name.length - 4)
                 kotlin.srcDir("$platform/$srcDir")

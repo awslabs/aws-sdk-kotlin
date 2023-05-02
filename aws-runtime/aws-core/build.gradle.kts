@@ -7,7 +7,6 @@ description = "AWS client runtime core"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: Client Runtime"
 extra["moduleName"] = "aws.sdk.kotlin.runtime"
 
-
 val smithyKotlinVersion: String by project
 
 kotlin {

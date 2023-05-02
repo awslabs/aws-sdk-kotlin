@@ -32,6 +32,6 @@ application {
 
 tasks.jar {
     manifest {
-       attributes["Main-Class"] = "aws.sdk.kotlin.test.MainKt"
+        attributes["Main-Class"] = "aws.sdk.kotlin.test.MainKt"
     }
 }

@@ -20,7 +20,6 @@ data class ProtocolTest(val projectionName: String, val serviceShapeId: String, 
     val packageName: String = projectionName.toLowerCase().filter { it.isLetterOrDigit() }
 }
 
-
 // The following section exposes Smithy protocol test suites as gradle test targets
 // for the configured protocols in [enabledProtocols].
 val enabledProtocols = listOf(
@@ -49,7 +48,7 @@ codegen {
                     "services": ["${test.serviceShapeId}"]
                   }
                 }
-                """
+                """,
             )
 
             smithyKotlinPlugin {
@@ -61,7 +60,7 @@ codegen {
                     generateFullProject = true
                     optInAnnotations = listOf(
                         "aws.smithy.kotlin.runtime.InternalApi",
-                        "aws.sdk.kotlin.runtime.InternalSdkApi"
+                        "aws.sdk.kotlin.runtime.InternalSdkApi",
                     )
                 }
             }
@@ -88,7 +87,6 @@ open class ProtocolTestTask : DefaultTask() {
      */
     @get:Input
     var projection: aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection? = null
-
 
     @TaskAction
     fun runTests() {

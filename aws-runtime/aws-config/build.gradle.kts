@@ -98,12 +98,12 @@ codegen {
         // generate an sts client
         create("sts-credentials-provider") {
             imports = listOf(
-                awsModelFile("sts.json")
+                awsModelFile("sts.json"),
             )
 
             smithyKotlinPlugin {
                 serviceShapeId = "com.amazonaws.sts#AWSSecurityTokenServiceV20110615"
-                packageName = "${basePackage}.sts"
+                packageName = "$basePackage.sts"
                 packageVersion = project.version.toString()
                 packageDescription = "Internal STS credentials provider"
                 sdkId = "STS"
@@ -116,29 +116,29 @@ codegen {
             // TODO - could we add a trait such that we change visibility to `internal` or a build setting...?
             transforms = listOf(
                 """
-            {
-                "name": "awsSdkKotlinIncludeOperations",
-                "args": {
-                    "operations": [
-                        "com.amazonaws.sts#AssumeRole",
-                        "com.amazonaws.sts#AssumeRoleWithWebIdentity"
-                    ]
+                {
+                    "name": "awsSdkKotlinIncludeOperations",
+                    "args": {
+                        "operations": [
+                            "com.amazonaws.sts#AssumeRole",
+                            "com.amazonaws.sts#AssumeRoleWithWebIdentity"
+                        ]
+                    }
                 }
-            }
-            """
+                """,
             )
         }
 
         // generate an sso client
         create("sso-credentials-provider") {
             imports = listOf(
-                awsModelFile("sso.json")
+                awsModelFile("sso.json"),
             )
 
             val serviceShape = "com.amazonaws.sso#SWBPortalService"
             smithyKotlinPlugin {
                 serviceShapeId = serviceShape
-                packageName = "${basePackage}.sso"
+                packageName = "$basePackage.sso"
                 packageVersion = project.version.toString()
                 packageDescription = "Internal SSO credentials provider"
                 sdkId = "SSO"
@@ -149,16 +149,16 @@ codegen {
             }
 
             transforms = listOf(
-            """
-            {
-                "name": "awsSdkKotlinIncludeOperations",
-                "args": {
-                    "operations": [
-                        "com.amazonaws.sso#GetRoleCredentials"
-                    ]
+                """
+                {
+                    "name": "awsSdkKotlinIncludeOperations",
+                    "args": {
+                        "operations": [
+                            "com.amazonaws.sso#GetRoleCredentials"
+                        ]
+                    }
                 }
-            }
-            """
+                """,
             )
         }
     }
@@ -210,7 +210,6 @@ listOf("apiElements", "runtimeElements").forEach {
         isCanBeConsumed = false
     }
 }
-
 
 // suppress internal generated clients
 tasks.named<DokkaTaskPartial>("dokkaHtmlPartial") {

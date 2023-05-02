@@ -2,9 +2,9 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-import java.util.Properties
 import java.net.URL
 import java.time.Duration
+import java.util.Properties
 
 plugins {
     kotlin("jvm") version "1.8.10" apply false
@@ -38,7 +38,7 @@ allprojects {
                     "separateInheritedMembers" : true,
                     "templatesDir": "${rootProject.file("docs/dokka-presets/templates")}"
                 }
-            """
+            """,
         )
         pluginsMapConfiguration.set(pluginConfigMap)
     }
@@ -118,7 +118,7 @@ project.afterEvaluate {
         )
 
         val excludeFromDocumentation = listOf(
-            project(":aws-runtime:testing")
+            project(":aws-runtime:testing"),
         )
         removeChildTasks(excludeFromDocumentation)
     }
@@ -162,14 +162,9 @@ dependencies {
 }
 
 val lintPaths = listOf(
-    "codegen/smithy-aws-kotlin-codegen/**/*.kt",
-    "aws-runtime/**/*.kt",
-    "examples/**/*.kt",
-    "dokka-aws/**/*.kt",
-    "gradle/sdk-plugins/src/**/*.kt",
-    "services/**/*.kt",
-    "!services/*/generated-src/**/*.kt",
-    "tests/**/*.kt"
+    "**/*.{kt,kts}",
+    "!**/generated-src/**",
+    "!**/smithyprojections/**",
 )
 
 tasks.register<JavaExec>("ktlint") {
@@ -178,6 +173,7 @@ tasks.register<JavaExec>("ktlint") {
     classpath = configurations.getByName("ktlint")
     main = "com.pinterest.ktlint.Main"
     args = lintPaths
+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
 tasks.register<JavaExec>("ktlintFormat") {
@@ -186,6 +182,7 @@ tasks.register<JavaExec>("ktlintFormat") {
     classpath = configurations.getByName("ktlint")
     main = "com.pinterest.ktlint.Main"
     args = listOf("-F") + lintPaths
+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
 // configure coverage for the entire project
