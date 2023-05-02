@@ -74,7 +74,7 @@ open class AwsHttpProtocolClientGenerator(
         ) {
             write("ctx.#T(#T.Region, config.region)", putIfAbsentSym, AwsRuntimeTypes.Core.Client.AwsClientOption)
             write("ctx.#T(#T.ClientName, config.clientName)", putIfAbsentSym, sdkClientOptionSym)
-            write("ctx.#T(#T.LogMode, config.sdkLogMode)", putIfAbsentSym, sdkClientOptionSym)
+            write("ctx.#T(#T.LogMode, config.logMode)", putIfAbsentSym, sdkClientOptionSym)
             // fill in auth/signing attributes
             if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.service)) {
                 // default signing context (most of this has been moved to auth schemes but some things like event streams still depend on this)

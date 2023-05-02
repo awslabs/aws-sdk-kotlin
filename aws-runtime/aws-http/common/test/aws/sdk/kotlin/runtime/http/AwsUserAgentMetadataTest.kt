@@ -6,8 +6,8 @@
 package aws.sdk.kotlin.runtime.http
 
 import aws.sdk.kotlin.runtime.http.operation.CustomUserAgentMetadata
-import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.smithy.kotlin.runtime.util.OsFamily
+import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import io.kotest.matchers.string.shouldNotContain
 import kotlin.test.Test
 import kotlin.test.assertEquals

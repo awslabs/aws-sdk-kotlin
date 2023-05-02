@@ -70,7 +70,6 @@ subprojects {
 
                 dependencies {
                     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-                    implementation(project(":aws-runtime:testing"))
                 }
             }
         }
@@ -85,9 +84,9 @@ subprojects {
                         dependsOn(sourceSets.getByName("jvmMain"))
 
                         dependencies {
+                            api("aws.smithy.kotlin:testing:$smithyKotlinVersion")
                             implementation(kotlin("test"))
                             implementation(kotlin("test-junit5"))
-                            implementation(project(":aws-runtime:testing"))
                             implementation(project(":tests:e2e-test-util"))
                         }
                     }

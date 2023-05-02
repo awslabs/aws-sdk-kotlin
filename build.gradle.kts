@@ -116,11 +116,6 @@ project.afterEvaluate {
             // NOTE: these get concatenated
             rootProject.file("docs/dokka-presets/README.md"),
         )
-
-        val excludeFromDocumentation = listOf(
-            project(":aws-runtime:testing")
-        )
-        removeChildTasks(excludeFromDocumentation)
     }
 }
 

@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.codegen.customization.polly
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.PresignerGenerator
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
@@ -31,7 +30,6 @@ class PollyPresigner : KotlinIntegration {
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         delegator.runtimeDependencies.addAll(KotlinDependency.KOTLIN_TEST.dependencies)
-        delegator.runtimeDependencies.addAll(AwsKotlinDependency.AWS_TESTING.dependencies)
     }
 
     private val addPollyPresignConfigFnWriter = SectionWriter { writer, _ ->

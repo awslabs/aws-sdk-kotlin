@@ -38,7 +38,6 @@ object AwsKotlinDependency {
     val AWS_CONFIG = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-config", AWS_CLIENT_RT_VERSION)
     val AWS_ENDPOINT = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.endpoint", AWS_CLIENT_RT_GROUP, "aws-endpoint", AWS_CLIENT_RT_VERSION)
     val AWS_HTTP = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http", AWS_CLIENT_RT_GROUP, "aws-http", AWS_CLIENT_RT_VERSION)
-    val AWS_TESTING = KotlinDependency(GradleConfiguration.TestImplementation, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "testing", AWS_CLIENT_RT_VERSION)
 }
 
 // remap aws-sdk-kotlin dependencies to project notation
@@ -49,7 +48,6 @@ private val sameProjectDeps: Map<KotlinDependency, String> by lazy {
         AwsKotlinDependency.AWS_CONFIG to """project(":aws-runtime:aws-config")""",
         AwsKotlinDependency.AWS_ENDPOINT to """project(":aws-runtime:aws-endpoint")""",
         AwsKotlinDependency.AWS_HTTP to """project(":aws-runtime:aws-http")""",
-        AwsKotlinDependency.AWS_TESTING to """project(":aws-runtime:testing")""",
     )
 }
 
