@@ -69,6 +69,7 @@ subprojects {
                 kotlin.srcDir("generated-src/test")
 
                 dependencies {
+                    api("aws.smithy.kotlin:testing:$smithyKotlinVersion")
                     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 }
             }
@@ -84,6 +85,7 @@ subprojects {
                         dependsOn(sourceSets.getByName("jvmMain"))
 
                         dependencies {
+                            api("aws.smithy.kotlin:testing:$smithyKotlinVersion")
                             implementation(kotlin("test"))
                             implementation(kotlin("test-junit5"))
                             implementation(project(":tests:e2e-test-util"))
