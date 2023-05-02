@@ -110,8 +110,4 @@ task<org.jetbrains.kotlin.gradle.testing.internal.KotlinTestReport>("rootAllTest
 
 apiValidation {
     nonPublicMarkers.add("aws.sdk.kotlin.runtime.InternalSdkApi")
-
-    ignoredProjects += setOf(
-        "testing",
-    )
 }

@@ -49,7 +49,3 @@ public abstract interface class aws/sdk/kotlin/runtime/client/AwsSdkClientConfig
 	public abstract fun setUseFips (Ljava/lang/Boolean;)V
 }
 
-public final class aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$DefaultImpls {
-	public static fun getSdkLogMode (Laws/sdk/kotlin/runtime/client/AwsSdkClientConfig;)Laws/smithy/kotlin/runtime/client/SdkLogMode;
-}
-

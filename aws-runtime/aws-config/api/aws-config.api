@@ -152,10 +152,10 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
 	public fun getHttpClientEngine ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public fun getInterceptors ()Ljava/util/List;
+	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public fun getRegion ()Ljava/lang/String;
 	public fun getRetryPolicy ()Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;
 	public fun getRetryStrategy ()Laws/smithy/kotlin/runtime/retries/RetryStrategy;
-	public fun getSdkLogMode ()Laws/smithy/kotlin/runtime/client/SdkLogMode;
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
 	public fun getUseDualStack ()Z
 	public fun getUseFips ()Z
@@ -173,10 +173,10 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
 	public fun getHttpClientEngine ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public fun getInterceptors ()Ljava/util/List;
+	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public fun getRegion ()Ljava/lang/String;
 	public fun getRetryPolicy ()Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;
 	public fun getRetryStrategy ()Laws/smithy/kotlin/runtime/retries/RetryStrategy;
-	public fun getSdkLogMode ()Laws/smithy/kotlin/runtime/client/SdkLogMode;
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
 	public fun getUseDualStack ()Ljava/lang/Boolean;
 	public fun getUseFips ()Ljava/lang/Boolean;
@@ -187,10 +187,10 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public final fun setEndpointUrl (Laws/smithy/kotlin/runtime/net/Url;)V
 	public fun setHttpClientEngine (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
 	public fun setInterceptors (Ljava/util/List;)V
+	public fun setLogMode (Laws/smithy/kotlin/runtime/client/LogMode;)V
 	public fun setRegion (Ljava/lang/String;)V
 	public fun setRetryPolicy (Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;)V
 	public fun setRetryStrategy (Laws/smithy/kotlin/runtime/retries/RetryStrategy;)V
-	public fun setSdkLogMode (Laws/smithy/kotlin/runtime/client/SdkLogMode;)V
 	public fun setTracer (Laws/smithy/kotlin/runtime/tracing/Tracer;)V
 	public fun setUseDualStack (Ljava/lang/Boolean;)V
 	public fun setUseFips (Ljava/lang/Boolean;)V
@@ -461,10 +461,10 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
 	public fun getHttpClientEngine ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public fun getInterceptors ()Ljava/util/List;
+	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public fun getRegion ()Ljava/lang/String;
 	public fun getRetryPolicy ()Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;
 	public fun getRetryStrategy ()Laws/smithy/kotlin/runtime/retries/RetryStrategy;
-	public fun getSdkLogMode ()Laws/smithy/kotlin/runtime/client/SdkLogMode;
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
 	public fun getUseDualStack ()Z
 	public fun getUseFips ()Z
@@ -482,10 +482,10 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
 	public fun getHttpClientEngine ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public fun getInterceptors ()Ljava/util/List;
+	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public fun getRegion ()Ljava/lang/String;
 	public fun getRetryPolicy ()Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;
 	public fun getRetryStrategy ()Laws/smithy/kotlin/runtime/retries/RetryStrategy;
-	public fun getSdkLogMode ()Laws/smithy/kotlin/runtime/client/SdkLogMode;
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
 	public fun getUseDualStack ()Ljava/lang/Boolean;
 	public fun getUseFips ()Ljava/lang/Boolean;
@@ -496,10 +496,10 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public final fun setEndpointUrl (Laws/smithy/kotlin/runtime/net/Url;)V
 	public fun setHttpClientEngine (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
 	public fun setInterceptors (Ljava/util/List;)V
+	public fun setLogMode (Laws/smithy/kotlin/runtime/client/LogMode;)V
 	public fun setRegion (Ljava/lang/String;)V
 	public fun setRetryPolicy (Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;)V
 	public fun setRetryStrategy (Laws/smithy/kotlin/runtime/retries/RetryStrategy;)V
-	public fun setSdkLogMode (Laws/smithy/kotlin/runtime/client/SdkLogMode;)V
 	public fun setTracer (Laws/smithy/kotlin/runtime/tracing/Tracer;)V
 	public fun setUseDualStack (Ljava/lang/Boolean;)V
 	public fun setUseFips (Ljava/lang/Boolean;)V
@@ -1069,12 +1069,12 @@ public final class aws/sdk/kotlin/runtime/config/imds/ImdsClient : aws/sdk/kotli
 public final class aws/sdk/kotlin/runtime/config/imds/ImdsClient$Builder {
 	public fun <init> ()V
 	public final fun getEndpointConfiguration ()Laws/sdk/kotlin/runtime/config/imds/EndpointConfiguration;
+	public final fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public final fun getMaxRetries ()I
-	public final fun getSdkLogMode ()Laws/smithy/kotlin/runtime/client/SdkLogMode;
 	public final fun getTokenTtl-UwyO8pc ()J
 	public final fun setEndpointConfiguration (Laws/sdk/kotlin/runtime/config/imds/EndpointConfiguration;)V
+	public final fun setLogMode (Laws/smithy/kotlin/runtime/client/LogMode;)V
 	public final fun setMaxRetries (I)V
-	public final fun setSdkLogMode (Laws/smithy/kotlin/runtime/client/SdkLogMode;)V
 	public final fun setTokenTtl-LRDsOJo (J)V
 }
 

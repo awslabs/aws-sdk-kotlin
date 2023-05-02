@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
@@ -45,7 +44,6 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
             }
 
             writer.dependencies.addAll(KotlinDependency.KOTLIN_TEST.dependencies)
-            writer.dependencies.addAll(AwsKotlinDependency.AWS_TESTING.dependencies)
             writer.dependencies.addAll(KotlinDependency.AWS_PROTOCOL_CORE.dependencies)
         }
     }
