@@ -31,7 +31,6 @@ class PollyPresigner : KotlinIntegration {
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         delegator.runtimeDependencies.addAll(KotlinDependency.KOTLIN_TEST.dependencies)
-        delegator.runtimeDependencies.addAll(AwsKotlinDependency.AWS_TESTING.dependencies)
     }
 
     private val addPollyPresignConfigFnWriter = SectionWriter { writer, _ ->

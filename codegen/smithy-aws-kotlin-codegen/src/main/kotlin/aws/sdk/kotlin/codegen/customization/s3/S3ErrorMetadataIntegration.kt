@@ -45,7 +45,6 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
             }
 
             writer.dependencies.addAll(KotlinDependency.KOTLIN_TEST.dependencies)
-            writer.dependencies.addAll(AwsKotlinDependency.AWS_TESTING.dependencies)
             writer.dependencies.addAll(KotlinDependency.AWS_PROTOCOL_CORE.dependencies)
         }
     }
