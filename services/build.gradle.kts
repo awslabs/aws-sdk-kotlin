@@ -69,7 +69,6 @@ subprojects {
                 kotlin.srcDir("generated-src/test")
 
                 dependencies {
-                    api("aws.smithy.kotlin:testing:$smithyKotlinVersion")
                     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 }
             }
