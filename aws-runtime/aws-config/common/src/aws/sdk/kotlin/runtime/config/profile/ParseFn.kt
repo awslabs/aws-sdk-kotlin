@@ -11,13 +11,13 @@ package aws.sdk.kotlin.runtime.config.profile
  * example, a valid property definition line will not be recognized if a valid profile line has not been encountered
  * first.
  */
-internal typealias ParseFn = (input: FileLine, currentProfile: Token.Profile?, lastProperty: Token.Property?) -> Token?
+internal typealias ParseFn = (input: FileLine, currentSection: Token.Section?, lastProperty: Token.Property?) -> Token?
 
 /**
- * Format (Configuration Files): [ Whitespace? profile Whitespace Identifier Whitespace? ] Whitespace? CommentLine?
+ * Format (Configuration Files): [ Whitespace? [profile|sso-session] Whitespace Identifier Whitespace? ] Whitespace? CommentLine?
  */
-internal fun configurationProfile(input: FileLine, currentProfile: Token.Profile?, lastProperty: Token.Property?): Token.Profile? {
-    if (!input.isProfile()) return null
+internal fun configurationSection(input: FileLine, currentSection: Token.Section?, lastProperty: Token.Property?): Token.Section? {
+    if (!input.isSection()) return null
 
     val parts = input.content
         .stripInlineComments()
@@ -26,15 +26,22 @@ internal fun configurationProfile(input: FileLine, currentProfile: Token.Profile
         .dropLast(1)
         .splitWhitespace(limit = 2)
 
-    val isValid = parts.size == 1 && parts[0] == Literals.DEFAULT_PROFILE ||
-        parts.size == 2 && parts[0] == Literals.PROFILE_KEYWORD && parts[1].isValidIdentifier()
-    return Token.Profile(parts.firstOrNull() == Literals.PROFILE_KEYWORD, parts.lastOrNull() ?: "", isValid)
+    val hasSectionPrefix = parts.firstOrNull() in setOf(Literals.PROFILE_KEYWORD, Literals.SSO_SESSION)
+    val sectionType = if (parts[0] == Literals.SSO_SESSION) ConfigSectionType.SSO_SESSION else ConfigSectionType.PROFILE
+
+    // sso-session name is required, only default profile can omit name
+    val name = parts.lastOrNull() ?: ""
+
+    val isValid = (parts.size == 1 && parts[0] == Literals.DEFAULT_PROFILE) ||
+        (parts.size == 2 && name.isNotEmpty() && (parts[0] == Literals.PROFILE_KEYWORD || parts[0] == Literals.SSO_SESSION) && parts[1].isValidIdentifier())
+
+    return Token.Section(name, sectionType, hasSectionPrefix, isValid)
 }
 
 /**
  * Format (Credentials Files): [ Whitespace? Identifier Whitespace? ] Whitespace? CommentLine?
  */
-internal fun credentialProfile(input: FileLine, currentProfile: Token.Profile?, lastProperty: Token.Property?): Token.Profile? {
+internal fun credentialProfile(input: FileLine, currentSection: Token.Section?, lastProperty: Token.Property?): Token.Section? {
     if (!input.isProfile()) return null
 
     val name = input.content
@@ -44,7 +51,7 @@ internal fun credentialProfile(input: FileLine, currentProfile: Token.Profile?, 
         .dropLast(1)
         .trim()
 
-    return Token.Profile(false, name, name.isValidIdentifier())
+    return Token.Section(name, ConfigSectionType.PROFILE, false, name.isValidIdentifier())
 }
 
 /**
@@ -52,9 +59,9 @@ internal fun credentialProfile(input: FileLine, currentProfile: Token.Profile?, 
  *
  * Defines a top-level property as part of a profile. Property values MAY be empty.
  */
-internal fun property(input: FileLine, currentProfile: Token.Profile?, lastProperty: Token.Property?): Token.Property? {
+internal fun property(input: FileLine, currentSection: Token.Section?, lastProperty: Token.Property?): Token.Property? {
     if (!input.isProperty()) return null
-    if (currentProfile == null) return null
+    if (currentSection == null) return null
 
     val (key, value) = input.content.splitProperty()
     return Token.Property(key, value.stripInlineComments())
@@ -65,7 +72,7 @@ internal fun property(input: FileLine, currentProfile: Token.Profile?, lastPrope
  *
  * Appends to a previously-defined (non-empty) property.
  */
-internal fun continuation(input: FileLine, currentProfile: Token.Profile?, lastProperty: Token.Property?): Token.Continuation? {
+internal fun continuation(input: FileLine, currentSection: Token.Section?, lastProperty: Token.Property?): Token.Continuation? {
     if (!input.isContinuation()) return null
     if (lastProperty == null || lastProperty.value.isEmpty()) return null
 
@@ -81,7 +88,7 @@ internal fun continuation(input: FileLine, currentProfile: Token.Profile?, lastP
  *
  * Parsed like a normal property definition, except any attempt at an inline comment is treated as part of the value.
  */
-internal fun subProperty(input: FileLine, currentProfile: Token.Profile?, lastProperty: Token.Property?): Token.SubProperty? {
+internal fun subProperty(input: FileLine, currentSection: Token.Section?, lastProperty: Token.Property?): Token.SubProperty? {
     if (!input.isSubProperty()) return null
     if (lastProperty == null || lastProperty.value.isNotEmpty()) return null
 

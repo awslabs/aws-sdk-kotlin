@@ -5,8 +5,6 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import io.mockk.coEvery
@@ -50,9 +48,7 @@ class AWSConfigLoaderFilesystemTest {
             os = PlatformProvider.System.osInfo(), // Actual value
         )
 
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            loadActiveAwsProfile(testPlatform)
-        }
+        val actual = loadAwsSharedConfig(testPlatform).activeProfile
 
         assertEquals("foo", actual.name)
         assertEquals("value", actual.getOrNull("name"))
@@ -77,9 +73,7 @@ class AWSConfigLoaderFilesystemTest {
             os = PlatformProvider.System.osInfo(), // Actual value
         )
 
-        val actual = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            loadActiveAwsProfile(testPlatform)
-        }
+        val actual = loadAwsSharedConfig(testPlatform).activeProfile
 
         assertEquals("default", actual.name)
         assertEquals("value", actual.getOrNull("name"))

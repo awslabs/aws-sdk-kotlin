@@ -7,12 +7,13 @@ package aws.sdk.kotlin.runtime.config.profile
 internal object Literals {
     const val DEFAULT_PROFILE = "default"
     const val PROFILE_KEYWORD = "profile"
+    const val SSO_SESSION = "sso-session"
     const val COMMENT_1 = "#"
     const val COMMENT_2 = ";"
     const val INLINE_COMMENT_1 = " $COMMENT_1"
     const val INLINE_COMMENT_2 = " $COMMENT_2"
-    const val PROFILE_PREFIX = '['
-    const val PROFILE_SUFFIX = ']'
+    const val SECTION_PREFIX = '['
+    const val SECTION_SUFFIX = ']'
     const val PROPERTY_SPLITTER = '='
 }
 

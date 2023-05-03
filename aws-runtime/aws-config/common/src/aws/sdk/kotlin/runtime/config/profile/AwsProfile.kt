@@ -11,28 +11,9 @@ import aws.smithy.kotlin.runtime.client.config.RetryMode
 
 /**
  * Represents an AWS config profile.
- * @property name name of profile
  */
 @InternalSdkApi
-public data class AwsProfile(
-    public val name: String,
-    private val properties: Map<String, AwsConfigValue>,
-) {
-    public fun contains(key: String): Boolean = properties.containsKey(key)
-
-    public fun getOrNull(key: String, subKey: String? = null): String? = properties[key]?.let {
-        when (it) {
-            is AwsConfigValue.String -> {
-                require(subKey == null) { "property '$key' is a string, but caller specified a sub-key" }
-                it.value
-            }
-            is AwsConfigValue.Map -> {
-                require(subKey != null) { "property '$key' has sub-properties, caller must specify a sub-key" }
-                it[subKey]
-            }
-        }
-    }
-}
+public typealias AwsProfile = ConfigSection
 
 // Standard cross-SDK properties
 

@@ -17,8 +17,22 @@ internal data class FileLine(val lineNumber: Int, val content: String)
  * - `[profile f oo]`    (recognized profile declaration, but omitted in the final config)
  * - `[foo]`             (recognized profile declaration, may be omitted depending on file type)
  */
-internal fun FileLine.isProfile() = content.stripComments().trim().let {
-    it.startsWith(Literals.PROFILE_PREFIX) && it.endsWith(Literals.PROFILE_SUFFIX)
+internal fun FileLine.isProfile(): Boolean = isSection() && !isSsoSession()
+
+/**
+ * Matches a sso-session declaration line, e.g.:
+ * - `[sso-session mysession]`
+ */
+internal fun FileLine.isSsoSession(): Boolean = isSection() && content.contains(Literals.SSO_SESSION)
+
+/**
+ * Matches a section declaration line, e.g.:
+ * - `[profile foo]`
+ * - `[default]`
+ * - `[sso-session my-session]`
+ */
+internal fun FileLine.isSection(): Boolean = content.stripComments().trim().let {
+    it.startsWith(Literals.SECTION_PREFIX) && it.endsWith(Literals.SECTION_SUFFIX)
 }
 
 /**
@@ -50,7 +64,7 @@ internal fun FileLine.isContinuation() = content.first().isWhitespace() && conte
  * - `child_ident=val`
  * - `child_ident = val ; failed comment attempt ` (value is "val ; failed comment attempt")
  */
-internal fun FileLine.isSubProperty() = content.first().isWhitespace() && content.trimStart().isProperty()
+internal fun FileLine.isSubProperty(): Boolean = content.first().isWhitespace() && content.trimStart().isProperty()
 
 private fun String.isProperty() =
     contains(Literals.PROPERTY_SPLITTER) &&

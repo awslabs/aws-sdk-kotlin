@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials.profile
 import aws.sdk.kotlin.runtime.auth.credentials.ProviderConfigurationException
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProviderResult.Err
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
-import aws.sdk.kotlin.runtime.config.profile.AwsProfiles
+import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 
 /**
@@ -33,14 +33,14 @@ internal data class ProfileChain(
     val roles: List<RoleArn>,
 ) {
     companion object {
-        internal fun resolve(profiles: AwsProfiles, profileName: String): ProfileChain {
+        internal fun resolve(config: AwsSharedConfig): ProfileChain {
             val visited = mutableSetOf<String>()
             val chain = mutableListOf<RoleArn>()
-            var sourceProfileName = profileName
+            var sourceProfileName = config.activeProfile.name
             var leaf: LeafProvider?
 
             loop@while (true) {
-                val profile = profiles.getOrThrow(sourceProfileName) {
+                val profile = config.profiles.getOrThrow(sourceProfileName) {
                     if (visited.isEmpty()) {
                         "could not find source profile $sourceProfileName"
                     } else {
@@ -86,7 +86,7 @@ internal data class ProfileChain(
     }
 }
 
-private inline fun AwsProfiles.getOrThrow(name: String, lazyMessage: () -> String): AwsProfile =
+private inline fun Map<String, AwsProfile>.getOrThrow(name: String, lazyMessage: () -> String): AwsProfile =
     get(name) ?: throw ProviderConfigurationException(lazyMessage())
 
 /**
@@ -193,6 +193,7 @@ private fun AwsProfile.webIdentityTokenCreds(): LeafProviderResult? {
     }
 }
 
+// FIXME - update to handle sso-session sections
 /**
  * Attempt to load [LeafProvider.Sso] from the current profile or `null` if the current profile does not contain
  * an SSO provider

@@ -10,8 +10,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
-import aws.sdk.kotlin.runtime.config.profile.loadAwsProfiles
-import aws.sdk.kotlin.runtime.config.profile.resolveConfigSource
+import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
@@ -97,13 +96,12 @@ public class ProfileCredentialsProvider(
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
-        val source = resolveConfigSource(platformProvider, profileName)
-        logger.debug { "Loading credentials from profile `${source.profile}`" }
-        val profiles = loadAwsProfiles(platformProvider, source)
-        val chain = ProfileChain.resolve(profiles, source.profile)
+        val sharedConfig = loadAwsSharedConfig(platformProvider, profileName)
+        logger.debug { "Loading credentials from profile `${sharedConfig.activeProfile}`" }
+        val chain = ProfileChain.resolve(sharedConfig)
 
         // if profile is overridden for this provider, attempt to resolve it from there first
-        val profileOverride = profileName?.let { profiles[it] }
+        val profileOverride = profileName?.let { sharedConfig.profiles[it] }
         val region = asyncLazy { region ?: profileOverride?.getOrNull("region") ?: resolveRegion(platformProvider) }
 
         val leaf = chain.leaf.toCredentialsProvider(region)

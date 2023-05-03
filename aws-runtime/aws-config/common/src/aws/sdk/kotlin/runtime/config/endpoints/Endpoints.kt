@@ -6,10 +6,7 @@ package aws.sdk.kotlin.runtime.config.endpoints
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.config.profile.AwsProfile
-import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
-import aws.sdk.kotlin.runtime.config.profile.useDualStack
-import aws.sdk.kotlin.runtime.config.profile.useFips
+import aws.sdk.kotlin.runtime.config.profile.*
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -21,7 +18,7 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
 @InternalSdkApi
 public suspend fun resolveUseFips(
     provider: PlatformProvider = PlatformProvider.System,
-    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadActiveAwsProfile(provider) },
+    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadAwsSharedConfig(provider).activeProfile },
 ): Boolean? =
     AwsSdkSetting.AwsUseFipsEndpoint.resolve(provider)
         ?: profile.get().useFips
@@ -32,7 +29,7 @@ public suspend fun resolveUseFips(
 @InternalSdkApi
 public suspend fun resolveUseDualStack(
     provider: PlatformProvider = PlatformProvider.System,
-    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadActiveAwsProfile(provider) },
+    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadAwsSharedConfig(provider).activeProfile },
 ): Boolean? =
     AwsSdkSetting.AwsUseDualStackEndpoint.resolve(provider)
         ?: profile.get().useDualStack
