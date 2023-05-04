@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.23.0-beta] - 05/04/2023
+
+### Features
+* [#432](https://github.com/awslabs/aws-sdk-kotlin/issues/432) Enable resolving `LogMode` from environment
+
+### Miscellaneous
+* Sync AWS models and **smithy-kotlin** to the latest versions
+* Refactor environment settings and retry modes into smithy-kotlin
+* Sync AWS models and bump smithy-kotlin version
+
 ## [0.22.1-beta] - 04/21/2023
 
 ### Features

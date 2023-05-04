@@ -1,5 +1,0 @@
-{
-    "id": "7ae5cc7e-7731-4761-9216-22f8aaf8dc9c",
-    "type": "misc",
-    "description": "Refactor environment settings and retry modes into smithy-kotlin"
-}
