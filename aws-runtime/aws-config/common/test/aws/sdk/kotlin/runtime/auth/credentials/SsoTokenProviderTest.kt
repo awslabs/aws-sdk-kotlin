@@ -56,7 +56,7 @@ class SsoTokenProviderTest {
     }
 
     @Test
-    fun testCacheLoadingAndRefresh() = runTest {
+    fun testCacheLoadingAndRefreshTestSuite() = runTest {
         // these tests are from the SEP
         val testList = Json.parseToJsonElement(ssoTokenCacheBehaviorTestSuite).jsonObject["cases"]!!.jsonArray
 
@@ -69,9 +69,6 @@ class SsoTokenProviderTest {
                 }
             }.getOrThrow()
         }
-            // .filter {
-            //     it.name == "Minimal expired cached token"
-            // }
             .forEachIndexed { idx, testCase ->
                 val sessionName = "test-session"
                 val key = getCacheFilename(sessionName)

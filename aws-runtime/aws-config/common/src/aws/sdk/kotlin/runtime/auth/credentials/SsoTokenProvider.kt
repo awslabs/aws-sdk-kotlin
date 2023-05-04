@@ -50,7 +50,14 @@ public class SsoTokenProvider(
     private val clock: Clock = Clock.System,
 ) : TokenProvider {
 
-    override suspend fun resolve(attributes: Attributes): Token {
+    // debounce concurrent requests for a token
+    private val sfg = SingleFlightGroup<SsoToken>()
+
+    override suspend fun resolve(attributes: Attributes): Token = sfg.singleFlight {
+        getToken(attributes)
+    }
+
+    private suspend fun getToken(attributes: Attributes): SsoToken {
         val token = readTokenFromCache(ssoSessionName, platformProvider)
         if (clock.now() < (token.expiresAt - refreshBufferWindow)) {
             coroutineContext.traceSpan.debug<SsoTokenProvider> { "using cashed token for sso-session: $ssoSessionName" }
@@ -66,7 +73,6 @@ public class SsoTokenProvider(
         return token.takeIf { clock.now() < it.expiresAt } ?: throwTokenExpired()
     }
     private suspend fun attemptRefresh(oldToken: SsoToken): SsoToken {
-        // FIXME - debounce
         coroutineContext.traceSpan.debug<SsoTokenProvider> { "attempting to refresh token for sso-session: $ssoSessionName" }
         val result = runCatching { refreshToken(oldToken) }
         return result
