@@ -39,6 +39,10 @@ class DefaultChainCredentialsProviderTest {
                 null
             }
         }
+
+        override suspend fun writeFile(path: String, data: ByteArray) {
+            error("not needed for test")
+        }
     }
 
     class DefaultChainPlatformProvider(

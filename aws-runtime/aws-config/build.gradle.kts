@@ -56,7 +56,7 @@ kotlin {
                 implementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
 
-                // additional dependencies required by generated sso provider
+                // additional dependencies required by generated sso provider(s)
                 implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
 
                 // atomics
@@ -160,6 +160,40 @@ codegen {
                 """,
             )
         }
+
+
+        create("sso-oidc-provider") {
+            imports = listOf(
+                awsModelFile("sso-oidc.json")
+            )
+
+            val serviceShape = "com.amazonaws.ssooidc#AWSSSOOIDCService"
+            smithyKotlinPlugin {
+                serviceShapeId = serviceShape
+                packageName = "${basePackage}.ssooidc"
+                packageVersion = project.version.toString()
+                packageDescription = "Internal SSO OIDC credentials provider"
+                sdkId = "SSO OIDC"
+                buildSettings {
+                    generateDefaultBuildFiles = false
+                    generateFullProject = false
+                }
+            }
+
+            transforms = listOf(
+            """
+            {
+                "name": "awsSdkKotlinIncludeOperations",
+                "args": {
+                    "operations": [
+                        "com.amazonaws.ssooidc#CreateToken"
+                    ]
+                }
+            }
+            """
+            )
+        }
+
     }
 }
 
