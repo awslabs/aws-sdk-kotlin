@@ -102,22 +102,22 @@ public class SsoTokenProvider(
     }
 
     private suspend fun refreshToken(oldToken: SsoToken): SsoToken {
-        val client = SsoOidcClient {
+        SsoOidcClient {
             region = ssoRegion
             httpClientEngine = this@SsoTokenProvider.httpClientEngine
             // FIXME - create an anonymous credential provider to explicitly avoid default chain creation
             // FIXME - technically it shouldn't need a cred provider because the only operation uses anonymous auth, investigate why
             // we are still pulling that integration in.
-        }
+        }.use { client ->
+            val resp = client.createToken {
+                clientId = oldToken.clientId
+                clientSecret = oldToken.clientSecret
+                refreshToken = oldToken.refreshToken
+                grantType = OIDC_GRANT_TYPE_REFRESH
+            }
 
-        val resp = client.createToken {
-            clientId = oldToken.clientId
-            clientSecret = oldToken.clientSecret
-            refreshToken = oldToken.refreshToken
-            grantType = OIDC_GRANT_TYPE_REFRESH
+            return resp.toSsoToken(oldToken, clock)
         }
-
-        return resp.toSsoToken(oldToken, clock)
     }
 }
 
