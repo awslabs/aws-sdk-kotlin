@@ -14,6 +14,7 @@ import aws.smithy.kotlin.runtime.hashing.sha1
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.identity.Token
 import aws.smithy.kotlin.runtime.identity.TokenProvider
+import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
