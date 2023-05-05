@@ -1,0 +1,8 @@
+{
+    "id": "e870f9be-e1e5-4c94-a628-36eea94f2ce8",
+    "type": "feature",
+    "description": "Add support for IAM Identity Center authentication and sso-session support in shared config",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#806"
+    ]
+}
