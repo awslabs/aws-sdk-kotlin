@@ -48,7 +48,7 @@ private const val PROVIDER_NAME = "SSO"
  * // Wrap the provider with a caching provider to cache the credentials until their expiration time
  * val ssoProvider = CachedCredentialsProvider(source)
  * ```
- * It is important that you wrap the provider with [CachedCredentialsProvider] if you are programatically constructing
+ * It is important that you wrap the provider with [CachedCredentialsProvider] if you are programmatically constructing
  * the provider directly. This prevents your application from accessing the cached access token and requesting new
  * credentials each time the provider is used to source credentials.
  *
@@ -58,8 +58,6 @@ private const val PROVIDER_NAME = "SSO"
  * * [AWS Single Sign-On User Guide](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html)
  */
 public class SsoCredentialsProvider public constructor(
-    // FIXME - needs to take either legacy config OR token provider
-    // TODO - update tests to handle both legacy and new token provider
     /**
      * The AWS account ID that temporary AWS credentials will be resolved for
      */
@@ -81,6 +79,12 @@ public class SsoCredentialsProvider public constructor(
     public val ssoRegion: String,
 
     /**
+     * The SSO Session name from the profile. If a session name is given an [SsoTokenProvider]
+     * will be used to fetch tokens.
+     */
+    public val ssoSessionName: String? = null,
+
+    /**
      * The [HttpClientEngine] to use when making requests to the AWS SSO service
      */
     private val httpClientEngine: HttpClientEngine? = null,
@@ -97,13 +101,21 @@ public class SsoCredentialsProvider public constructor(
 
 ) : CloseableCredentialsProvider {
 
+    private val ssoTokenProvider = ssoSessionName?.let { sessName ->
+        SsoTokenProvider(sessName, startUrl, ssoRegion, httpClientEngine = httpClientEngine, platformProvider = platformProvider, clock = clock)
+    }
+
     override suspend fun resolve(attributes: Attributes): Credentials {
         val traceSpan = coroutineContext.traceSpan
         val logger = traceSpan.logger<SsoCredentialsProvider>()
 
-        logger.trace { "Attempting to load token from file using legacy format" }
-        val token = legacyLoadTokenFile()
-        // FIXME - if active profile uses an sso-session then use the SsoTokenProvider
+        val token = if (ssoTokenProvider != null) {
+            logger.trace { "Attempting to load token using token provider for sso-session: `$ssoSessionName`" }
+            ssoTokenProvider.resolve(attributes)
+        } else {
+            logger.trace { "Attempting to load token from file using legacy format" }
+            legacyLoadTokenFile()
+        }
 
         val client = SsoClient {
             region = ssoRegion
@@ -116,7 +128,7 @@ public class SsoCredentialsProvider public constructor(
             client.getRoleCredentials {
                 accountId = this@SsoCredentialsProvider.accountId
                 roleName = this@SsoCredentialsProvider.roleName
-                accessToken = token.accessToken
+                accessToken = token.token
             }
         } catch (ex: Exception) {
             throw CredentialsNotLoadedException("GetRoleCredentials operation failed", ex)
@@ -135,7 +147,7 @@ public class SsoCredentialsProvider public constructor(
         )
     }
 
-    override fun close() { }
+    override fun close() {}
 
     // non sso-session legacy token flow
     private suspend fun legacyLoadTokenFile(): SsoToken {

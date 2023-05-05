@@ -140,7 +140,17 @@ public class ProfileCredentialsProvider(
                 httpClientEngine = httpClientEngine,
             )
 
-            is LeafProvider.Sso -> SsoCredentialsProvider(
+            is LeafProvider.SsoSession -> SsoCredentialsProvider(
+                accountId = ssoAccountId,
+                roleName = ssoRoleName,
+                startUrl = ssoStartUrl,
+                ssoRegion = ssoRegion,
+                ssoSessionName = ssoSessionName,
+                httpClientEngine = httpClientEngine,
+                platformProvider = platformProvider,
+            )
+
+            is LeafProvider.LegacySso -> SsoCredentialsProvider(
                 accountId = ssoAccountId,
                 roleName = ssoRoleName,
                 startUrl = ssoStartUrl,
@@ -168,7 +178,8 @@ public class ProfileCredentialsProvider(
         is LeafProvider.NamedSource -> "named source $name"
         is LeafProvider.AccessKey -> "static credentials"
         is LeafProvider.WebIdentityTokenRole -> "web identity token"
-        is LeafProvider.Sso -> "single sign-on"
+        is LeafProvider.SsoSession -> "single sign-on (session)"
+        is LeafProvider.LegacySso -> "single sign-on (legacy)"
         is LeafProvider.Process -> "process"
     }
 }

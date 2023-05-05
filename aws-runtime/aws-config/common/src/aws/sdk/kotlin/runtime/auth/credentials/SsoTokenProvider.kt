@@ -28,7 +28,24 @@ import kotlin.time.Duration.Companion.seconds
 private const val DEFAULT_SSO_TOKEN_REFRESH_BUFFER_SECONDS = 60 * 5
 private const val OIDC_GRANT_TYPE_REFRESH = "refresh_token"
 
+// FIXME - token provider needs to be created independent of SsoCredentialsProvider. In particular it should work
+// for caws and default token provider chain should be able to construct a token provider from a profile without
+// going through LeafProvider
+
 /**
+ * SsoTokenProvider provides a utility for refreshing SSO AccessTokens for Bearer Authentication.
+ * The provider can only be used to refresh already cached SSO Tokens. This utility cannot
+ * perform the initial SSO create token flow.
+ *
+ * The initial SSO create token flow should be preformed with the AWS CLI before the application
+ * using the provider will need to retrieve the SSO token. If the AWS CLI has not created the token
+ * cache file, this provider will return an error when attempting to retrieve the cached token.
+ *
+ * This provider will attempt to refresh the cached SSO token periodically if needed when [resolve] is
+ * called and a refresh token is available.
+ *
+ * A utility such as the AWS CLI must be used to initially create the SSO session and cached token file.
+ * See [Configure SSO](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
  *
  * @param ssoSessionName the name of the SSO Session from the shared config file to load tokens for
  * @param startUrl the start URL (also known as the "User Portal URL") provided by the SSO service

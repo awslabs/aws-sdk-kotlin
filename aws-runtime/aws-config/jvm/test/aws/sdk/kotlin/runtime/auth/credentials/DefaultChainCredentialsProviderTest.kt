@@ -253,7 +253,10 @@ class DefaultChainCredentialsProviderTest {
     fun testWebIdentityTokenSourceProfile() = executeTest("web_identity_token_source_profile")
 
     @Test
-    fun testSsoRole() = executeTest("sso_role")
+    fun testLegacySsoRole() = executeTest("legacy_sso_role")
+
+    @Test
+    fun testSsoSession() = executeTest("sso_session")
 
     @Test
     fun testStsRetryOnError() = executeTest("retry_on_error")
