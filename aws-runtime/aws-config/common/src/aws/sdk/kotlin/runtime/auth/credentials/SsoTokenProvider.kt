@@ -88,7 +88,9 @@ public class SsoTokenProvider(
             return attemptRefresh(token)
         }
 
-        return token.takeIf { clock.now() < it.expiresAt } ?: throwTokenExpired()
+        return token.takeIf { clock.now() < it.expiresAt }?.also {
+            coroutineContext.traceSpan.debug<SsoTokenProvider> { "cached token is not refreshable but still valid until ${it.expiresAt} for sso-session: $ssoSessionName" }
+        } ?: throwTokenExpired()
     }
     private suspend fun attemptRefresh(oldToken: SsoToken): SsoToken {
         coroutineContext.traceSpan.debug<SsoTokenProvider> { "attempting to refresh token for sso-session: $ssoSessionName" }
