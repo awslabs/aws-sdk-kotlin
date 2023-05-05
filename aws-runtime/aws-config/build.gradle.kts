@@ -161,16 +161,15 @@ codegen {
             )
         }
 
-
         create("sso-oidc-provider") {
             imports = listOf(
-                awsModelFile("sso-oidc.json")
+                awsModelFile("sso-oidc.json"),
             )
 
             val serviceShape = "com.amazonaws.ssooidc#AWSSSOOIDCService"
             smithyKotlinPlugin {
                 serviceShapeId = serviceShape
-                packageName = "${basePackage}.ssooidc"
+                packageName = "$basePackage.ssooidc"
                 packageVersion = project.version.toString()
                 packageDescription = "Internal SSO OIDC credentials provider"
                 sdkId = "SSO OIDC"
@@ -181,7 +180,7 @@ codegen {
             }
 
             transforms = listOf(
-            """
+                """
             {
                 "name": "awsSdkKotlinIncludeOperations",
                 "args": {
@@ -190,10 +189,9 @@ codegen {
                     ]
                 }
             }
-            """
+            """,
             )
         }
-
     }
 }
 

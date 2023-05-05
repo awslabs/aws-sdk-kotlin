@@ -121,7 +121,7 @@ public class SsoCredentialsProvider public constructor(
             region = ssoRegion
             httpClientEngine = this@SsoCredentialsProvider.httpClientEngine
             tracer = traceSpan.asNestedTracer("SSO-")
-            // FIXME - create an anonymous credential provider to explicitly avoid default chain creation
+            // FIXME - create an anonymous credential provider to explicitly avoid default chain creation (technically the transform should remove need for sigv4 cred provider since it's all anon auth)
         }
 
         val resp = try {
@@ -153,7 +153,6 @@ public class SsoCredentialsProvider public constructor(
     private suspend fun legacyLoadTokenFile(): SsoToken {
         val token = readTokenFromCache(startUrl, platformProvider)
         val now = clock.now()
-        // TODO - introduce a buffer window
         if (now > token.expiresAt) throw ProviderConfigurationException("The SSO session has expired. To refresh this SSO session run `aws sso login` with the corresponding profile.")
 
         return token

@@ -23,7 +23,7 @@ internal fun FileLine.isProfile(): Boolean = isSection() && !isSsoSession()
  * Matches a sso-session declaration line, e.g.:
  * - `[sso-session mysession]`
  */
-internal fun FileLine.isSsoSession(): Boolean = isSection() && content.contains(Literals.SSO_SESSION)
+internal fun FileLine.isSsoSession(): Boolean = isSection() && content.contains(Literals.SSO_SESSION_KEYWORD)
 
 /**
  * Matches a section declaration line, e.g.:

@@ -26,14 +26,14 @@ internal fun configurationSection(input: FileLine, currentSection: Token.Section
         .dropLast(1)
         .splitWhitespace(limit = 2)
 
-    val hasSectionPrefix = parts.firstOrNull() in setOf(Literals.PROFILE_KEYWORD, Literals.SSO_SESSION)
-    val sectionType = if (parts[0] == Literals.SSO_SESSION) ConfigSectionType.SSO_SESSION else ConfigSectionType.PROFILE
+    val hasSectionPrefix = parts.firstOrNull() in setOf(Literals.PROFILE_KEYWORD, Literals.SSO_SESSION_KEYWORD)
+    val sectionType = if (parts[0] == Literals.SSO_SESSION_KEYWORD) ConfigSectionType.SSO_SESSION else ConfigSectionType.PROFILE
 
     // sso-session name is required, only default profile can omit name
     val name = parts.lastOrNull() ?: ""
 
     val isValid = (parts.size == 1 && parts[0] == Literals.DEFAULT_PROFILE) ||
-        (parts.size == 2 && name.isNotEmpty() && (parts[0] == Literals.PROFILE_KEYWORD || parts[0] == Literals.SSO_SESSION) && parts[1].isValidIdentifier())
+        (parts.size == 2 && name.isNotEmpty() && (parts[0] == Literals.PROFILE_KEYWORD || parts[0] == Literals.SSO_SESSION_KEYWORD) && parts[1].isValidIdentifier())
 
     return Token.Section(name, sectionType, hasSectionPrefix, isValid)
 }

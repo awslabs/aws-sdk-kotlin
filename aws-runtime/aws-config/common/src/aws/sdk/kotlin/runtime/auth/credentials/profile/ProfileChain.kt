@@ -111,7 +111,6 @@ internal data class RoleArn(
     val externalId: String? = null,
 )
 
-// FIXME - group into literals/tokens object
 internal const val ROLE_ARN = "role_arn"
 internal const val EXTERNAL_ID = "external_id"
 internal const val ROLE_SESSION_NAME = "role_session_name"

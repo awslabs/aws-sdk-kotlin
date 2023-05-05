@@ -29,10 +29,6 @@ import kotlin.time.Duration.Companion.seconds
 private const val DEFAULT_SSO_TOKEN_REFRESH_BUFFER_SECONDS = 60 * 5
 private const val OIDC_GRANT_TYPE_REFRESH = "refresh_token"
 
-// FIXME - token provider needs to be created independent of SsoCredentialsProvider. In particular it should work
-// for caws and default token provider chain should be able to construct a token provider from a profile without
-// going through LeafProvider
-
 /**
  * SsoTokenProvider provides a utility for refreshing SSO AccessTokens for Bearer Authentication.
  * The provider can only be used to refresh already cached SSO Tokens. This utility cannot
@@ -84,7 +80,6 @@ public class SsoTokenProvider(
 
         // token is within expiry window
         if (token.canRefresh) {
-            // TODO - async refresh in background (configurable?)
             return attemptRefresh(token)
         }
 
@@ -125,9 +120,6 @@ public class SsoTokenProvider(
         SsoOidcClient {
             region = ssoRegion
             httpClientEngine = this@SsoTokenProvider.httpClientEngine
-            // FIXME - create an anonymous credential provider to explicitly avoid default chain creation
-            // FIXME - technically it shouldn't need a cred provider because the only operation uses anonymous auth, investigate why
-            // we are still pulling that integration in.
         }.use { client ->
             val resp = client.createToken {
                 clientId = oldToken.clientId

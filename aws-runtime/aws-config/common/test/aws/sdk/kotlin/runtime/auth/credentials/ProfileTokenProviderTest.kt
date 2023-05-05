@@ -5,10 +5,10 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.testing.TestPlatformProvider
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
+import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
