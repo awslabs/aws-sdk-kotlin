@@ -13,6 +13,7 @@ import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.httptest.TestEngine
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
@@ -29,14 +30,7 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AwsRetryHeaderMiddlewareTest {
-
-    private val mockEngine = object : HttpClientEngineBase("test") {
-        override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
-            val resp = HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.Empty)
-            return HttpCall(request, resp, Instant.now(), Instant.now())
-        }
-    }
-    private val client = SdkHttpClient(mockEngine)
+    private val client = SdkHttpClient(TestEngine())
 
     @Test
     fun testItSetsRetryHeaders() = runTest {

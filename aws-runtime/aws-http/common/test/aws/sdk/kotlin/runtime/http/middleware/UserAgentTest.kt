@@ -17,6 +17,7 @@ import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.httptest.TestEngine
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -32,15 +33,7 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserAgentTest {
-    private val mockEngine = object : HttpClientEngineBase("test") {
-        override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
-            val resp = HttpResponse(HttpStatusCode.fromValue(200), Headers.Empty, HttpBody.Empty)
-            val now = Instant.now()
-            return HttpCall(request, resp, now, now)
-        }
-    }
-
-    private val client = SdkHttpClient(mockEngine)
+    private val client = SdkHttpClient(TestEngine())
 
     private fun initializeOp(platformProvider: PlatformProvider = TestPlatformProvider()) =
         SdkHttpOperation.build<Unit, HttpResponse> {

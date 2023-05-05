@@ -15,9 +15,11 @@ import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.httptest.TestEngine
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.net.Scheme
@@ -461,6 +463,8 @@ class ImdsCredentialsProviderTest {
         val readTimeoutEngine = object : HttpClientEngineBase("readTimeout") {
             var successfulCallCount = 0
 
+            override val config: HttpClientEngineConfig = HttpClientEngineConfig.Default
+
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 if (successfulCallCount >= 2) {
                     throw SdkIOException()
@@ -529,12 +533,7 @@ class ImdsCredentialsProviderTest {
 
     @Test
     fun testThrowsExceptionOnReadTimeoutWhenMissingPreviousCredentials() = runTest {
-        val readTimeoutEngine = object : HttpClientEngineBase("readTimeout") {
-            override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
-                throw SdkIOException()
-            }
-        }
-
+        val readTimeoutEngine = TestEngine { _, _ -> throw SdkIOException() }
         val testClock = ManualClock()
 
         val client = ImdsClient {
@@ -562,6 +561,8 @@ class ImdsCredentialsProviderTest {
         // this engine returns 500 errors for any requests after the initial one (i.e allow 1 TTL token and 1 credentials request)
         val internalServerErrorEngine = object : HttpClientEngineBase("internalServerError") {
             var successfulCallCount = 0
+
+            override val config: HttpClientEngineConfig = HttpClientEngineConfig.Default
 
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 if (successfulCallCount >= 2) {
@@ -639,8 +640,8 @@ class ImdsCredentialsProviderTest {
         val testClock = ManualClock()
 
         // this engine just returns 500 errors
-        val internalServerErrorEngine = object : HttpClientEngineBase("internalServerError") {
-            override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest) = HttpCall(
+        val internalServerErrorEngine = TestEngine { _, _ ->
+            HttpCall(
                 HttpRequest(HttpMethod.GET, Url(Scheme.HTTP, Host.parse("test"), Scheme.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
                 HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
                 testClock.now(),
