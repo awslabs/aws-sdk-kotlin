@@ -97,7 +97,7 @@ public class ProfileCredentialsProvider(
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
         val sharedConfig = loadAwsSharedConfig(platformProvider, profileName)
-        logger.debug { "Loading credentials from profile `${sharedConfig.activeProfile}`" }
+        logger.debug { "Loading credentials from profile `${sharedConfig.activeProfile.name}`" }
         val chain = ProfileChain.resolve(sharedConfig)
 
         // if profile is overridden for this provider, attempt to resolve it from there first
