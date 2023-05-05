@@ -15,6 +15,8 @@ import software.amazon.smithy.kotlin.codegen.rendering.*
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.rendering.util.RuntimeConfigProperty
+import software.amazon.smithy.model.knowledge.ServiceIndex
+import software.amazon.smithy.model.traits.HttpBearerAuthTrait
 
 class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
@@ -45,15 +47,17 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 client will not close it when the client is closed.
             """.trimIndent()
 
-            propertyType = ConfigPropertyType.Custom(render = { prop, writer ->
-                writer.write(
-                    "override val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine, region = region).#4T()",
-                    prop.propertyName,
-                    prop.symbol,
-                    AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
-                    AwsRuntimeTypes.Config.Credentials.manage,
-                )
-            })
+            propertyType = ConfigPropertyType.Custom(
+                render = { prop, writer ->
+                    writer.write(
+                        "override val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine, region = region).#4T()",
+                        prop.propertyName,
+                        prop.symbol,
+                        AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
+                        AwsRuntimeTypes.Config.Credentials.manage,
+                    )
+                },
+            )
         }
 
         val UseFipsProp: ConfigProperty = ConfigProperty {
@@ -102,6 +106,35 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 additionalImports = listOf(AwsRuntimeTypes.Http.Retries.AwsDefaultRetryPolicy)
             }
             .build()
+
+        // override the bearer token provider registered by BearerTokenAuthSchemeIntegration, updates documentation
+        // and configures the default to be the DefaultBearerTokenProviderChain
+        val BearerTokenProviderProp = ConfigProperty {
+            name = "bearerTokenProvider"
+            symbol = RuntimeTypes.Auth.Identity.TokenProvider
+            baseClass = RuntimeTypes.Auth.HttpAuth.BearerTokenProviderConfig
+            useNestedBuilderBaseClass()
+            documentation = """
+                The token provider to use for authenticating requests when using [${RuntimeTypes.Auth.HttpAuth.BearerTokenAuthScheme.fullName}].
+                If not provided a [${AwsRuntimeTypes.Config.Credentials.DefaultChainBearerTokenProvider}] instance will be used.
+                NOTE: The caller is responsible for managing the lifetime of the provider when set. The SDK
+                client will not close it when the client is closed.
+                
+            """.trimIndent()
+
+            propertyType = ConfigPropertyType.Custom(
+                render = { prop, writer ->
+                    writer.write(
+                        "override val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine)",
+                        prop.propertyName,
+                        prop.symbol,
+                        AwsRuntimeTypes.Config.Credentials.DefaultChainBearerTokenProvider,
+                        // FIXME - figure out if we need a managed equivalent like credentials provider
+                        // AwsRuntimeTypes.Config.Credentials.manage,
+                    )
+                },
+            )
+        }
     }
 
     override val sectionWriters: List<SectionWriterBinding> =
@@ -115,7 +148,14 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             add(CredentialsProviderProp)
         }
 
-        // TODO - add (conditional) override for bearer token provider to use TBD default token provider chain
+        val serviceIndex = ServiceIndex.of(ctx.model)
+        val hasBearerTokenAuth = serviceIndex
+            .getAuthSchemes(ctx.settings.service)
+            .containsKey(HttpBearerAuthTrait.ID)
+        if (hasBearerTokenAuth) {
+            add(BearerTokenProviderProp)
+        }
+
         add(UseFipsProp)
         add(UseDualStackProp)
         add(EndpointUrlProp)

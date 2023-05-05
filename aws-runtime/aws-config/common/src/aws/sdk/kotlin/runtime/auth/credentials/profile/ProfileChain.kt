@@ -111,24 +111,25 @@ internal data class RoleArn(
     val externalId: String? = null,
 )
 
-private const val ROLE_ARN = "role_arn"
-private const val EXTERNAL_ID = "external_id"
-private const val ROLE_SESSION_NAME = "role_session_name"
-private const val CREDENTIAL_SOURCE = "credential_source"
-private const val SOURCE_PROFILE = "source_profile"
+// FIXME - group into literals/tokens object
+internal const val ROLE_ARN = "role_arn"
+internal const val EXTERNAL_ID = "external_id"
+internal const val ROLE_SESSION_NAME = "role_session_name"
+internal const val CREDENTIAL_SOURCE = "credential_source"
+internal const val SOURCE_PROFILE = "source_profile"
 
-private const val WEB_IDENTITY_TOKEN_FILE = "web_identity_token_file"
-private const val AWS_ACCESS_KEY_ID = "aws_access_key_id"
-private const val AWS_SECRET_ACCESS_KEY = "aws_secret_access_key"
-private const val AWS_SESSION_TOKEN = "aws_session_token"
+internal const val WEB_IDENTITY_TOKEN_FILE = "web_identity_token_file"
+internal const val AWS_ACCESS_KEY_ID = "aws_access_key_id"
+internal const val AWS_SECRET_ACCESS_KEY = "aws_secret_access_key"
+internal const val AWS_SESSION_TOKEN = "aws_session_token"
 
-private const val SSO_START_URL = "sso_start_url"
-private const val SSO_REGION = "sso_region"
-private const val SSO_ACCOUNT_ID = "sso_account_id"
-private const val SSO_ROLE_NAME = "sso_role_name"
-private const val SSO_SESSION = "sso_session"
+internal const val SSO_START_URL = "sso_start_url"
+internal const val SSO_REGION = "sso_region"
+internal const val SSO_ACCOUNT_ID = "sso_account_id"
+internal const val SSO_ROLE_NAME = "sso_role_name"
+internal const val SSO_SESSION = "sso_session"
 
-private const val CREDENTIAL_PROCESS = "credential_process"
+internal const val CREDENTIAL_PROCESS = "credential_process"
 
 private fun AwsProfile.roleArnOrNull(): RoleArn? {
     // web identity tokens are leaf providers, not chained roles
