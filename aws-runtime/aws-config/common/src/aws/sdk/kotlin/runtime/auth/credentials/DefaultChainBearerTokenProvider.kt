@@ -7,8 +7,8 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
+import aws.smithy.kotlin.runtime.identity.CloseableTokenProvider
 import aws.smithy.kotlin.runtime.identity.Token
-import aws.smithy.kotlin.runtime.identity.TokenProvider
 import aws.smithy.kotlin.runtime.identity.TokenProviderChain
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.Attributes
@@ -33,7 +33,7 @@ public class DefaultChainBearerTokenProvider(
     private val profileName: String? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClientEngine: HttpClientEngine? = null,
-) : TokenProvider, Closeable {
+) : CloseableTokenProvider, Closeable {
 
     private val chain = TokenProviderChain(
         ProfileTokenProvider(profileName, platformProvider, httpClientEngine),

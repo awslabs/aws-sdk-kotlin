@@ -17,7 +17,9 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClie
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.model.knowledge.OperationIndex
+import software.amazon.smithy.model.knowledge.ServiceIndex
 import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.model.traits.HttpBearerAuthTrait
 
 /**
  * Override for generating concrete (AWS) HTTP service clients
@@ -43,6 +45,14 @@ open class AwsHttpProtocolClientGenerator(
 
             if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.settings.getService(ctx.model))) {
                 write("managedResources.#T(config.credentialsProvider)", RuntimeTypes.Core.IO.addIfManaged)
+            }
+
+            val serviceIndex = ServiceIndex.of(ctx.model)
+            val hasBearerTokenAuth = serviceIndex
+                .getAuthSchemes(ctx.settings.service)
+                .containsKey(HttpBearerAuthTrait.ID)
+            if (hasBearerTokenAuth) {
+                write("managedResources.#T(config.bearerTokenProvider)", RuntimeTypes.Core.IO.addIfManaged)
             }
         }
     }

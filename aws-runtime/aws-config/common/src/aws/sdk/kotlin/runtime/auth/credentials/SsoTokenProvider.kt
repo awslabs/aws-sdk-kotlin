@@ -20,6 +20,7 @@ import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.tracing.debug
+import aws.smithy.kotlin.runtime.tracing.error
 import aws.smithy.kotlin.runtime.tracing.traceSpan
 import aws.smithy.kotlin.runtime.util.*
 import kotlin.coroutines.coroutineContext
@@ -94,6 +95,7 @@ public class SsoTokenProvider(
             .onSuccess { refreshed -> writeToken(refreshed) }
             .getOrElse { cause ->
                 if (clock.now() >= oldToken.expiresAt) {
+                    coroutineContext.traceSpan.error<SsoTokenProvider>(cause) { "token refresh failed" }
                     throwTokenExpired(cause)
                 }
                 coroutineContext.traceSpan.debug<SsoTokenProvider> { "refresh token failed, original token is still valid until ${oldToken.expiresAt} for sso-session: $ssoSessionName, re-using" }

@@ -125,12 +125,11 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             propertyType = ConfigPropertyType.Custom(
                 render = { prop, writer ->
                     writer.write(
-                        "override val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine)",
+                        "override val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine).#4T()",
                         prop.propertyName,
                         prop.symbol,
                         AwsRuntimeTypes.Config.Credentials.DefaultChainBearerTokenProvider,
-                        // FIXME - figure out if we need a managed equivalent like credentials provider
-                        // AwsRuntimeTypes.Config.Credentials.manage,
+                        AwsRuntimeTypes.Config.Credentials.manage,
                     )
                 },
             )
