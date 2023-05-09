@@ -12,8 +12,7 @@ import aws.smithy.kotlin.runtime.io.SdkManagedCloseable
 
 private class ManagedTokenProvider(
     private val delegate: CloseableTokenProvider,
-): SdkManagedCloseable(delegate), CloseableTokenProvider by delegate
-
+) : SdkManagedCloseable(delegate), CloseableTokenProvider by delegate
 
 /**
  * Wraps a [TokenProvider] for internal runtime management by the SDK.

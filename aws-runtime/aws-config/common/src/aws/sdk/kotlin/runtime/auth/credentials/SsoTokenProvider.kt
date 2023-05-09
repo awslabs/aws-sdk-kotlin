@@ -21,7 +21,6 @@ import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.tracing.debug
 import aws.smithy.kotlin.runtime.tracing.error
-import aws.smithy.kotlin.runtime.tracing.traceSpan
 import aws.smithy.kotlin.runtime.util.*
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
@@ -35,22 +34,21 @@ private const val OIDC_GRANT_TYPE_REFRESH = "refresh_token"
  * The provider can only be used to refresh already cached SSO Tokens. This utility cannot
  * perform the initial SSO create token flow.
  *
- * The initial SSO create token flow should be preformed with the AWS CLI before the application
- * using the provider will need to retrieve the SSO token. If the AWS CLI has not created the token
- * cache file, this provider will return an error when attempting to retrieve the cached token.
+ * A utility such as the AWS CLI must be used to initially create the SSO session and cached token file  before the
+ * application using the provider will need to retrieve the SSO token. If the token has not been cached already,
+ * this provider will return an error when attempting to retrieve the token.
+ * See [Configure SSO](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
+ *
  *
  * This provider will attempt to refresh the cached SSO token periodically if needed when [resolve] is
  * called and a refresh token is available.
- *
- * A utility such as the AWS CLI must be used to initially create the SSO session and cached token file.
- * See [Configure SSO](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
  *
  * @param ssoSessionName the name of the SSO Session from the shared config file to load tokens for
  * @param startUrl the start URL (also known as the "User Portal URL") provided by the SSO service
  * @param ssoRegion the AWS region where the SSO directory for the given [startUrl] is hosted.
  * @param refreshBufferWindow amount of time before the actual credential expiration time when credentials are
  * considered expired. For example, if credentials are expiring in 15 minutes, and the buffer time is 10 seconds,
- * then any requests made after 14 minutes and 50 seconds will load new credentials. Defaults to 10 seconds.
+ * then any requests made after 14 minutes and 50 seconds will load new credentials. Defaults to 5 minutes.
  * @param httpClientEngine the [HttpClientEngine] to use when making requests to the AWS SSO service
  * @param platformProvider the platform provider to use
  * @param clock the source of time for the provider
@@ -74,8 +72,8 @@ public class SsoTokenProvider(
 
     private suspend fun getToken(attributes: Attributes): SsoToken {
         val token = readTokenFromCache(ssoSessionName, platformProvider)
-        if (clock.now() < (token.expiresAt - refreshBufferWindow)) {
-            coroutineContext.traceSpan.debug<SsoTokenProvider> { "using cashed token for sso-session: $ssoSessionName" }
+        if (clock.now() < (token.expiration - refreshBufferWindow)) {
+            coroutineContext.debug<SsoTokenProvider> { "using cached token for sso-session: $ssoSessionName" }
             return token
         }
 
@@ -84,21 +82,21 @@ public class SsoTokenProvider(
             return attemptRefresh(token)
         }
 
-        return token.takeIf { clock.now() < it.expiresAt }?.also {
-            coroutineContext.traceSpan.debug<SsoTokenProvider> { "cached token is not refreshable but still valid until ${it.expiresAt} for sso-session: $ssoSessionName" }
+        return token.takeIf { clock.now() < it.expiration }?.also {
+            coroutineContext.debug<SsoTokenProvider> { "cached token is not refreshable but still valid until ${it.expiration} for sso-session: $ssoSessionName" }
         } ?: throwTokenExpired()
     }
     private suspend fun attemptRefresh(oldToken: SsoToken): SsoToken {
-        coroutineContext.traceSpan.debug<SsoTokenProvider> { "attempting to refresh token for sso-session: $ssoSessionName" }
+        coroutineContext.debug<SsoTokenProvider> { "attempting to refresh token for sso-session: $ssoSessionName" }
         val result = runCatching { refreshToken(oldToken) }
         return result
             .onSuccess { refreshed -> writeToken(refreshed) }
             .getOrElse { cause ->
-                if (clock.now() >= oldToken.expiresAt) {
-                    coroutineContext.traceSpan.error<SsoTokenProvider>(cause) { "token refresh failed" }
+                if (clock.now() >= oldToken.expiration) {
+                    coroutineContext.error<SsoTokenProvider>(cause) { "token refresh failed" }
                     throwTokenExpired(cause)
                 }
-                coroutineContext.traceSpan.debug<SsoTokenProvider> { "refresh token failed, original token is still valid until ${oldToken.expiresAt} for sso-session: $ssoSessionName, re-using" }
+                coroutineContext.debug<SsoTokenProvider> { "refresh token failed, original token is still valid until ${oldToken.expiration} for sso-session: $ssoSessionName, re-using" }
                 oldToken
             }
     }
@@ -110,7 +108,7 @@ public class SsoTokenProvider(
             val contents = serializeSsoToken(refreshed)
             platformProvider.writeFile(filepath, contents)
         } catch (ex: Exception) {
-            coroutineContext.traceSpan.debug<SsoTokenProvider>(ex) { "failed to write refreshed token back to disk at $filepath" }
+            coroutineContext.debug<SsoTokenProvider>(ex) { "failed to write refreshed token back to disk at $filepath" }
         }
     }
 
@@ -150,8 +148,8 @@ internal fun getCacheFilename(cacheKey: String): String {
 }
 
 internal data class SsoToken(
-    val accessToken: String,
-    val expiresAt: Instant,
+    override val token: String,
+    override val expiration: Instant,
     val refreshToken: String? = null,
     val clientId: String? = null,
     val clientSecret: String? = null,
@@ -159,19 +157,13 @@ internal data class SsoToken(
     val region: String? = null,
     val startUrl: String? = null,
 ) : Token {
-
     override val attributes: Attributes = emptyAttributes()
-    override val token: String
-        get() = accessToken
-
-    override val expiration: Instant
-        get() = expiresAt
 }
 
 private fun CreateTokenResponse.toSsoToken(oldToken: SsoToken, clock: Clock): SsoToken {
     val token = checkNotNull(accessToken) { "missing accessToken from CreateTokenResponse" }
     val expiresAt = clock.now() + expiresIn.seconds
-    return oldToken.copy(accessToken = token, expiresAt = expiresAt, refreshToken = refreshToken)
+    return oldToken.copy(token = token, expiration = expiresAt, refreshToken = refreshToken)
 }
 
 /**
@@ -234,9 +226,9 @@ internal fun serializeSsoToken(token: SsoToken): ByteArray =
     jsonStreamWriter(pretty = true).apply {
         beginObject()
         writeName("accessToken")
-        writeValue(token.accessToken)
+        writeValue(token.token)
         writeName("expiresAt")
-        writeValue(token.expiresAt.format(TimestampFormat.ISO_8601))
+        writeValue(token.expiration.format(TimestampFormat.ISO_8601))
         writeNotNull("refreshToken", token.refreshToken)
         writeNotNull("clientId", token.clientId)
         writeNotNull("clientSecret", token.clientSecret)

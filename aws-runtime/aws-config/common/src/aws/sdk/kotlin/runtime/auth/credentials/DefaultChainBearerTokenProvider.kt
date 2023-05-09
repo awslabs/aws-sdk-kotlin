@@ -33,7 +33,7 @@ public class DefaultChainBearerTokenProvider(
     private val profileName: String? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClientEngine: HttpClientEngine? = null,
-) : CloseableTokenProvider, Closeable {
+) : CloseableTokenProvider {
 
     private val chain = TokenProviderChain(
         ProfileTokenProvider(profileName, platformProvider, httpClientEngine),
