@@ -84,7 +84,7 @@ public class SsoCredentialsProvider public constructor(
     /**
      * The [HttpClientEngine] to use when making requests to the AWS SSO service
      */
-    private val httpClientEngine: HttpClientEngine? = null,
+    private val httpClient: HttpClientEngine? = null,
 
     /**
      * The platform provider
@@ -107,7 +107,7 @@ public class SsoCredentialsProvider public constructor(
 
         val client = SsoClient {
             region = ssoRegion
-            httpClientEngine = this@SsoCredentialsProvider.httpClientEngine
+            httpClient = this@SsoCredentialsProvider.httpClient
             tracer = traceSpan.asNestedTracer("SSO-")
         }
 

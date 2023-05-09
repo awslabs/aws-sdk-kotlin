@@ -39,7 +39,7 @@ open class AwsHttpProtocolClientGenerator(
 
     override fun renderInit(writer: KotlinWriter) {
         writer.withBlock("init {", "}") {
-            write("managedResources.#T(config.httpClientEngine)", RuntimeTypes.Core.IO.addIfManaged)
+            write("managedResources.#T(config.httpClient)", RuntimeTypes.Core.IO.addIfManaged)
             write("managedResources.#T(config.credentialsProvider)", RuntimeTypes.Core.IO.addIfManaged)
         }
     }

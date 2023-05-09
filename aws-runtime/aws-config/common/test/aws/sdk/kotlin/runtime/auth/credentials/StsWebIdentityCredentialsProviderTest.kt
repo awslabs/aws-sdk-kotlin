@@ -86,7 +86,7 @@ class StsWebIdentityCredentialsProviderTest {
             roleArn = testArn,
             webIdentityTokenFilePath = "token-path",
             region = "us-east-2",
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
             platformProvider = testPlatform,
         )
 
@@ -119,7 +119,7 @@ class StsWebIdentityCredentialsProviderTest {
             roleArn = testArn,
             webIdentityTokenFilePath = "token-path",
             region = "us-east-2",
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
             platformProvider = testPlatform,
         )
 
@@ -138,7 +138,7 @@ class StsWebIdentityCredentialsProviderTest {
             roleArn = testArn,
             webIdentityTokenFilePath = "token-path",
             region = "us-east-2",
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
             platformProvider = testPlatform,
         )
 

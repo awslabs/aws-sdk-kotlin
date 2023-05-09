@@ -38,7 +38,7 @@ private const val PROVIDER_NAME = "WebIdentityToken"
  * in the ARN of the assumed role principal.
  * @param duration The expiry duration of the credentials. Defaults to 15 minutes if not set.
  * @param platformProvider The platform API provider
- * @param httpClientEngine The [HttpClientEngine] to use when making requests to the STS service
+ * @param httpClient The [HttpClientEngine] to use when making requests to the STS service
  */
 public class StsWebIdentityCredentialsProvider(
     private val roleArn: String,
@@ -47,7 +47,7 @@ public class StsWebIdentityCredentialsProvider(
     private val roleSessionName: String? = null,
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
-    private val httpClientEngine: HttpClientEngine? = null,
+    private val httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
     public companion object {
@@ -63,12 +63,12 @@ public class StsWebIdentityCredentialsProvider(
             roleSessionName: String? = null,
             duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
             platformProvider: PlatformProvider = PlatformProvider.System,
-            httpClientEngine: HttpClientEngine? = null,
+            httpClient: HttpClientEngine? = null,
         ): StsWebIdentityCredentialsProvider {
             val resolvedRoleArn = platformProvider.resolve(roleArn, AwsSdkSetting.AwsRoleArn, "roleArn")
             val resolvedTokenFilePath = platformProvider.resolve(webIdentityTokenFilePath, AwsSdkSetting.AwsWebIdentityTokenFile, "webIdentityTokenFilePath")
             val resolvedRegion = platformProvider.resolve(region, AwsSdkSetting.AwsRegion, "region")
-            return StsWebIdentityCredentialsProvider(resolvedRoleArn, resolvedTokenFilePath, resolvedRegion, roleSessionName, duration, platformProvider, httpClientEngine)
+            return StsWebIdentityCredentialsProvider(resolvedRoleArn, resolvedTokenFilePath, resolvedRegion, roleSessionName, duration, platformProvider, httpClient)
         }
     }
 
@@ -84,7 +84,7 @@ public class StsWebIdentityCredentialsProvider(
 
         val client = StsClient {
             region = provider.region
-            httpClientEngine = provider.httpClientEngine
+            httpClient = provider.httpClient
             // NOTE: credentials provider not needed for this operation
             tracer = traceSpan.asNestedTracer("STS-")
         }

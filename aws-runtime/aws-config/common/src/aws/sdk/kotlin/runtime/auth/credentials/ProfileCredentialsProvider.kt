@@ -71,14 +71,14 @@ import kotlin.coroutines.coroutineContext
  * via environment (see [AwsSdkSetting.AwsProfile]) or defaulted to `default` if not configured.
  * @param region The AWS region to use, this will be resolved internally if not provided.
  * @param platformProvider The platform API provider
- * @param httpClientEngine the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+ * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class ProfileCredentialsProvider(
     private val profileName: String? = null,
     private val region: String? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
-    private val httpClientEngine: HttpClientEngine? = null,
+    private val httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
@@ -87,12 +87,12 @@ public class ProfileCredentialsProvider(
             client = lazy {
                 ImdsClient {
                     platformProvider = this@ProfileCredentialsProvider.platformProvider
-                    engine = httpClientEngine
+                    engine = httpClient
                 }
             },
             platformProvider = platformProvider,
         ),
-        "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClientEngine),
+        "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClient),
     )
 
     override suspend fun resolve(attributes: Attributes): Credentials {
@@ -139,7 +139,7 @@ public class ProfileCredentialsProvider(
                 region = region.get(),
                 roleSessionName = sessionName,
                 platformProvider = platformProvider,
-                httpClientEngine = httpClientEngine,
+                httpClient = httpClient,
             )
 
             is LeafProvider.Sso -> SsoCredentialsProvider(
@@ -147,7 +147,7 @@ public class ProfileCredentialsProvider(
                 roleName = ssoRoleName,
                 startUrl = ssoStartUrl,
                 ssoRegion = ssoRegion,
-                httpClientEngine = httpClientEngine,
+                httpClient = httpClient,
                 platformProvider = platformProvider,
             )
 
@@ -163,7 +163,7 @@ public class ProfileCredentialsProvider(
         region = region.get(),
         roleSessionName = sessionName,
         externalId = externalId,
-        httpClientEngine = httpClientEngine,
+        httpClient = httpClient,
     )
 
     private fun LeafProvider.description(): String = when (this) {

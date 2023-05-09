@@ -33,7 +33,7 @@ class ProfileCredentialsProviderTest {
 
         val provider = ProfileCredentialsProvider(
             platformProvider = testProvider,
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
         )
         val actual = provider.resolve()
         val expected = Credentials("AKID-Default", "Default-Secret")
@@ -61,7 +61,7 @@ class ProfileCredentialsProviderTest {
         val provider = ProfileCredentialsProvider(
             profileName = "my-profile",
             platformProvider = testProvider,
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
         )
         val actual = provider.resolve()
         val expected = Credentials("AKID-Profile", "Profile-Secret")
@@ -91,7 +91,7 @@ class ProfileCredentialsProviderTest {
 
         val provider = ProfileCredentialsProvider(
             platformProvider = testProvider,
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
         )
         val actual = provider.resolve()
         val expected = Credentials("AKID-Profile", "Profile-Secret")
@@ -127,7 +127,7 @@ class ProfileCredentialsProviderTest {
 
         val provider = ProfileCredentialsProvider(
             platformProvider = testProvider,
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
         )
         val actual = provider.resolve()
         assertEquals(StsTestUtils.expectedCredentialsBase, actual)

@@ -48,7 +48,7 @@ class StsAuthTests {
         val client = StsClient {
             region = "us-east-2"
             credentialsProvider = StaticCredentialsProvider(credentials)
-            httpClientEngine = mockEngine
+            httpClient = mockEngine
         }
 
         runCatching { client.assumeRole { } }
@@ -61,7 +61,7 @@ class StsAuthTests {
         val client = StsClient {
             region = "us-east-2"
             credentialsProvider = StaticCredentialsProvider(credentials)
-            httpClientEngine = mockEngine
+            httpClient = mockEngine
         }
 
         runCatching { client.assumeRoleWithWebIdentity { } }
@@ -74,7 +74,7 @@ class StsAuthTests {
         val client = StsClient {
             region = "us-east-2"
             credentialsProvider = StaticCredentialsProvider(credentials)
-            httpClientEngine = mockEngine
+            httpClient = mockEngine
         }
 
         runCatching { client.assumeRoleWithSaml { } }
