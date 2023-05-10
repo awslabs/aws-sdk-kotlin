@@ -11,6 +11,7 @@ import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
 import aws.smithy.kotlin.runtime.http.engine.callContext
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpCall
@@ -32,6 +33,8 @@ class StsAuthTests {
 
     private val mockEngine = object : HttpClientEngineBase("mock-engine") {
         var capturedRequest: HttpRequest? = null
+
+        override val config: HttpClientEngineConfig = HttpClientEngineConfig.Default
 
         override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
             capturedRequest = request
