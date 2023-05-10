@@ -3,7 +3,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/CredentialsNotLoadedE
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/DefaultChainBearerTokenProvider : aws/smithy/kotlin/runtime/identity/CloseableTokenProvider, java/io/Closeable {
+public final class aws/sdk/kotlin/runtime/auth/credentials/DefaultChainBearerTokenProvider : aws/smithy/kotlin/runtime/identity/CloseableTokenProvider {
 	public fun <init> ()V
 	public fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
 	public synthetic fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
