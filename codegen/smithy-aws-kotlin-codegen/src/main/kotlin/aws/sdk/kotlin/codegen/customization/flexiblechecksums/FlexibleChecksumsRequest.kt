@@ -58,7 +58,7 @@ class FlexibleChecksumsRequest : KotlinIntegration {
                 interceptorSymbol,
                 inputSymbol,
             ) {
-                writer.write("it.#L?.value.lowercase()", requestAlgorithmMember.defaultName())
+                writer.write("it.#L?.value?.lowercase()", requestAlgorithmMember.defaultName())
             }
         }
     }
