@@ -25,6 +25,7 @@ import java.io.File
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertIs
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
@@ -262,6 +263,52 @@ class S3BucketOpsIntegrationTest {
 
         val expectedRecord = "Jane,(949) 555-6704,Chicago,Developer\n"
         assertEquals(expectedRecord, records.value.payload?.decodeToString())
+    }
+
+    @Test
+    fun testPutObjectWithChecksum(): Unit = runBlocking {
+        val contents = "AAAAAAAAAA"
+        val keyName = "put-obj-with-checksum.txt"
+
+        val resp = client.putObject {
+            bucket = testBucket
+            key = keyName
+            body = ByteStream.fromString(contents)
+            checksumAlgorithm = ChecksumAlgorithm.Sha256
+        }
+
+        val req = GetObjectRequest {
+            bucket = testBucket
+            key = keyName
+            checksumMode = ChecksumMode.Enabled
+        }
+
+        val roundTrippedContents = client.getObject(req) {
+            assertEquals(resp.checksumSha256, it.checksumSha256)
+            it.body?.decodeToString()
+        }
+
+        assertEquals(contents, roundTrippedContents)
+    }
+
+    @Test
+    fun testPutObjectWithIncorrectChecksum(): Unit = runBlocking {
+        val contents = "AAAAAAAAAA"
+
+        val keyName = "put-obj-with-checksum.txt"
+
+        val ex = assertFails {
+            client.putObject {
+                bucket = testBucket
+                key = keyName
+                body = ByteStream.fromString(contents)
+                checksumAlgorithm = ChecksumAlgorithm.Sha256
+                checksumSha256 = "blerg"
+            }
+        }
+        ex.message?.let {
+            assert(it.contains("Value for x-amz-checksum-sha256 header is invalid."))
+        }
     }
 }
 
