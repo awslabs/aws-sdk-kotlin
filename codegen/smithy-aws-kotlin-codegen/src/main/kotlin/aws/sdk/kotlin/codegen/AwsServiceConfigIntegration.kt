@@ -111,7 +111,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         // and configures the default to be the DefaultBearerTokenProviderChain
         val BearerTokenProviderProp = ConfigProperty {
             name = "bearerTokenProvider"
-            symbol = RuntimeTypes.Auth.Identity.TokenProvider
+            symbol = RuntimeTypes.Auth.HttpAuth.BearerTokenProvider
             baseClass = RuntimeTypes.Auth.HttpAuth.BearerTokenProviderConfig
             useNestedBuilderBaseClass()
             documentation = """

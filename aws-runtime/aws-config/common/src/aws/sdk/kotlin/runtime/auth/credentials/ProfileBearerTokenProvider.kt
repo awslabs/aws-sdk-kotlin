@@ -11,10 +11,10 @@ import aws.sdk.kotlin.runtime.auth.credentials.profile.SSO_START_URL
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
+import aws.smithy.kotlin.runtime.http.auth.BearerToken
+import aws.smithy.kotlin.runtime.http.auth.BearerTokenProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.getLogger
-import aws.smithy.kotlin.runtime.identity.Token
-import aws.smithy.kotlin.runtime.identity.TokenProvider
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -22,7 +22,7 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
 import kotlin.coroutines.coroutineContext
 
 /**
- * A [TokenProvider] that gets tokens from a profile in `~/.aws/config`. The locations of these files are configurable
+ * A [BearerTokenProvider] that gets tokens from a profile in `~/.aws/config`. The locations of these files are configurable
  * via environment or system property on the JVM (see [AwsSdkSetting.AwsConfigFile] and [AwsSdkSetting.AwsSharedCredentialsFile]).
  *
  * This provider is part of the [DefaultChainBearerTokenProvider] and usually consumed through that provider. However,
@@ -54,17 +54,17 @@ import kotlin.coroutines.coroutineContext
  * are NOT managed by the provider. Caller is responsible for closing.
  * @param clock the source of time for the provider
  */
-internal class ProfileTokenProvider(
+internal class ProfileBearerTokenProvider(
     private val profileName: String? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val httpClientEngine: HttpClientEngine? = null,
     private val clock: Clock = Clock.System,
-) : TokenProvider {
+) : BearerTokenProvider {
     // TODO - re-evaluate how often shared config is parsed and passed down through credential/token chains
     private val sharedConfig = asyncLazy { loadAwsSharedConfig(platformProvider, profileName) }
 
-    override suspend fun resolve(attributes: Attributes): Token {
-        val logger = coroutineContext.getLogger<ProfileTokenProvider>()
+    override suspend fun resolve(attributes: Attributes): BearerToken {
+        val logger = coroutineContext.getLogger<ProfileBearerTokenProvider>()
         val config = sharedConfig.get()
         logger.debug { "Loading bearer token from profile `${config.activeProfile.name}`" }
 
@@ -72,7 +72,7 @@ internal class ProfileTokenProvider(
         return provider.resolve(attributes)
     }
 
-    private fun AwsSharedConfig.resolveTokenProviderOrThrow(): TokenProvider {
+    private fun AwsSharedConfig.resolveTokenProviderOrThrow(): BearerTokenProvider {
         val sessionName = activeProfile.getOrNull(SSO_SESSION) ?: throw ProviderConfigurationException("no bearer token providers available for profile `${activeProfile.name}`")
         val session = ssoSessions[sessionName] ?: throw ProviderConfigurationException("profile (${activeProfile.name}) references non-existing sso_session = `$sessionName`")
 

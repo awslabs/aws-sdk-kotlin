@@ -6,10 +6,10 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
+import aws.smithy.kotlin.runtime.http.auth.BearerToken
+import aws.smithy.kotlin.runtime.http.auth.BearerTokenProviderChain
+import aws.smithy.kotlin.runtime.http.auth.CloseableBearerTokenProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.identity.CloseableTokenProvider
-import aws.smithy.kotlin.runtime.identity.Token
-import aws.smithy.kotlin.runtime.identity.TokenProviderChain
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -19,7 +19,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  *
  * Resolution order:
  *
- * 1. Profile ([ProfileTokenProvider]
+ * 1. Profile ([ProfileBearerTokenProvider]
  *
  * Closing the chain will close all child providers that implement [Closeable].
  *
@@ -33,13 +33,13 @@ public class DefaultChainBearerTokenProvider(
     private val profileName: String? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClientEngine: HttpClientEngine? = null,
-) : CloseableTokenProvider {
+) : CloseableBearerTokenProvider {
 
-    private val chain = TokenProviderChain(
-        ProfileTokenProvider(profileName, platformProvider, httpClientEngine),
+    private val chain = BearerTokenProviderChain(
+        ProfileBearerTokenProvider(profileName, platformProvider, httpClientEngine),
     )
 
-    override suspend fun resolve(attributes: Attributes): Token = chain.resolve(attributes)
+    override suspend fun resolve(attributes: Attributes): BearerToken = chain.resolve(attributes)
 
     override fun close() {
         chain.close()

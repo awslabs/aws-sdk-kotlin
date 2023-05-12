@@ -16,7 +16,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.time.Duration.Companion.minutes
 
-class ProfileTokenProviderTest {
+class ProfileBearerTokenProviderTest {
     @Test
     fun testDefaultProfile() = runTest {
         val sessionName = "my-session"
@@ -49,7 +49,7 @@ class ProfileTokenProviderTest {
         )
         val testEngine = TestConnection()
 
-        val provider = ProfileTokenProvider(
+        val provider = ProfileBearerTokenProvider(
             platformProvider = testProvider,
             httpClientEngine = testEngine,
             clock = clock,
@@ -82,7 +82,7 @@ class ProfileTokenProviderTest {
         )
         val testEngine = TestConnection()
 
-        val provider = ProfileTokenProvider(
+        val provider = ProfileBearerTokenProvider(
             platformProvider = testProvider,
             httpClientEngine = testEngine,
             clock = clock,
@@ -114,7 +114,7 @@ class ProfileTokenProviderTest {
         )
         val testEngine = TestConnection()
 
-        val provider = ProfileTokenProvider(
+        val provider = ProfileBearerTokenProvider(
             platformProvider = testProvider,
             httpClientEngine = testEngine,
             clock = clock,
@@ -143,7 +143,7 @@ class ProfileTokenProviderTest {
         )
         val testEngine = TestConnection()
 
-        val provider = ProfileTokenProvider(
+        val provider = ProfileBearerTokenProvider(
             platformProvider = testProvider,
             httpClientEngine = testEngine,
             clock = clock,

@@ -11,9 +11,9 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.ssooidc.createToken
 import aws.sdk.kotlin.runtime.auth.credentials.internal.ssooidc.model.CreateTokenResponse
 import aws.sdk.kotlin.runtime.config.profile.normalizePath
 import aws.smithy.kotlin.runtime.hashing.sha1
+import aws.smithy.kotlin.runtime.http.auth.BearerToken
+import aws.smithy.kotlin.runtime.http.auth.BearerTokenProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.identity.Token
-import aws.smithy.kotlin.runtime.identity.TokenProvider
 import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.time.Clock
@@ -61,12 +61,12 @@ public class SsoTokenProvider(
     private val httpClientEngine: HttpClientEngine? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val clock: Clock = Clock.System,
-) : TokenProvider {
+) : BearerTokenProvider {
 
     // debounce concurrent requests for a token
     private val sfg = SingleFlightGroup<SsoToken>()
 
-    override suspend fun resolve(attributes: Attributes): Token = sfg.singleFlight {
+    override suspend fun resolve(attributes: Attributes): BearerToken = sfg.singleFlight {
         getToken(attributes)
     }
 
@@ -156,7 +156,7 @@ internal data class SsoToken(
     val registrationExpiresAt: Instant? = null,
     val region: String? = null,
     val startUrl: String? = null,
-) : Token {
+) : BearerToken {
     override val attributes: Attributes = emptyAttributes()
 }
 
