@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.24.0-beta] - 05/12/2023
+
+### Features
+* [#806](https://github.com/awslabs/aws-sdk-kotlin/issues/806) Add support for IAM Identity Center authentication and sso-session support in shared config
+
+### Miscellaneous
+* **BREAKING**: Refactor `SsoCredentialsProvider` to take an `SsoSession` parameter.
+* Sync smithy-kotlin and service models.
+
 ## [0.23.0-beta] - 05/04/2023
 
 ### Features
