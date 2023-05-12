@@ -17,17 +17,14 @@ internal sealed interface Token {
         get() = true
 
     /**
-     * A profile definition line declares that the attributes that follow (until another profile definition is encountered)
+     * A section definition line declares that the attributes that follow (until another section definition is encountered)
      * are part of a named collection of attributes.
-     * @property profilePrefix true if section used 'profile' prefix.
-     * @property name name of profile
-     * @property isValidForm whether the profile declaration is well-formed within the context of the file type from
-     * from where it was parsed
+     * @property name name of the section
+     * @param type the type of section
+     * @param hasSectionPrefix true if there was a section prefix (e.g. `profile`, `sso-session`)
+     * @property isValid the section declaration is well-formed within the context of the file type from where it was parsed
      */
-    data class Profile(val profilePrefix: Boolean, val name: String, val isValidForm: Boolean = true) : Token {
-        override val isValid: Boolean
-            get() = isValidForm
-    }
+    data class Section(val name: String, val type: ConfigSectionType, val hasSectionPrefix: Boolean, override val isValid: Boolean = true) : Token
 
     /**
      * Represents a property definition line in an AWS configuration file.

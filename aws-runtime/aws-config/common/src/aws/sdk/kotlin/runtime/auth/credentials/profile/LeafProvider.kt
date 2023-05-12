@@ -48,7 +48,7 @@ internal sealed class LeafProvider {
     ) : LeafProvider()
 
     /**
-     * A provider that uses AWS SSO
+     * A provider that uses legacy AWS SSO profile
      *
      * Example
      * ```ini
@@ -60,7 +60,31 @@ internal sealed class LeafProvider {
      * region = us-west-2
      * ```
      */
-    data class Sso(
+    data class LegacySso(
+        val ssoStartUrl: String,
+        val ssoRegion: String,
+        val ssoAccountId: String,
+        val ssoRoleName: String,
+    ) : LeafProvider()
+
+    /**
+     * A provider that uses AWS SSO token provider
+     *
+     * Example
+     * ```ini
+     * [profile W]
+     * region = us-west-2
+     * sso_session = my-session
+     * sso_account_id = 123456789011
+     * sso_role_name = readOnly
+     *
+     * [sso-session my-session]
+     * sso_start_url = https://my-sso-portal.awsapps.com/start
+     * sso_region = us-east-1
+     * ```
+     */
+    data class SsoSession(
+        val ssoSessionName: String,
         val ssoStartUrl: String,
         val ssoRegion: String,
         val ssoAccountId: String,

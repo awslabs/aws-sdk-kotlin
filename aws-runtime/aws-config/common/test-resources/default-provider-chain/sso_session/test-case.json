@@ -1,6 +1,6 @@
 {
-  "name": "sso-role",
-  "docs": "load creds from SSO role",
+  "name": "sso-session",
+  "docs": "Load creds from SSO role using sso-session",
   "result": {
     "Ok": {
       "access_key_id": "ASIARCORRECT",

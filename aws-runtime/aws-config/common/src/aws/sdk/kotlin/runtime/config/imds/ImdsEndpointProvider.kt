@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.config.imds
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
+import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.operation.EndpointResolver
@@ -23,7 +23,7 @@ internal class ImdsEndpointProvider(
 ) : EndpointResolver {
     // cached endpoint and profile
     private val resolvedEndpoint = asyncLazy(::doResolveEndpoint)
-    private val activeProfile = asyncLazy { loadActiveAwsProfile(platformProvider) }
+    private val activeProfile = asyncLazy { loadAwsSharedConfig(platformProvider).activeProfile }
 
     override suspend fun resolve(request: ResolveEndpointRequest): Endpoint = resolveImdsEndpoint()
     internal suspend fun resolveImdsEndpoint(): Endpoint = resolvedEndpoint.get()

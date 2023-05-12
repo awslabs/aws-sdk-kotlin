@@ -38,6 +38,7 @@ kotlin {
                 api("aws.smithy.kotlin:aws-credentials:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:http-auth:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:tracing-core:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:aws-http"))
@@ -56,7 +57,7 @@ kotlin {
                 implementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
 
-                // additional dependencies required by generated sso provider
+                // additional dependencies required by generated sso provider(s)
                 implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
 
                 // atomics
@@ -158,6 +159,38 @@ codegen {
                     }
                 }
                 """,
+            )
+        }
+
+        create("sso-oidc-provider") {
+            imports = listOf(
+                awsModelFile("sso-oidc.json"),
+            )
+
+            val serviceShape = "com.amazonaws.ssooidc#AWSSSOOIDCService"
+            smithyKotlinPlugin {
+                serviceShapeId = serviceShape
+                packageName = "$basePackage.ssooidc"
+                packageVersion = project.version.toString()
+                packageDescription = "Internal SSO OIDC credentials provider"
+                sdkId = "SSO OIDC"
+                buildSettings {
+                    generateDefaultBuildFiles = false
+                    generateFullProject = false
+                }
+            }
+
+            transforms = listOf(
+                """
+            {
+                "name": "awsSdkKotlinIncludeOperations",
+                "args": {
+                    "operations": [
+                        "com.amazonaws.ssooidc#CreateToken"
+                    ]
+                }
+            }
+            """,
             )
         }
     }

@@ -9,7 +9,7 @@ import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseFips
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
-import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
+import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.client.SdkClient
@@ -56,7 +56,7 @@ public abstract class AbstractAwsSdkClientFactory<
         }
 
         coroutineContext.withRootTraceSpan(tracer.createRootSpan("Config resolution")) {
-            val profile = asyncLazy { loadActiveAwsProfile(PlatformProvider.System) }
+            val profile = asyncLazy { loadAwsSharedConfig(PlatformProvider.System).activeProfile }
 
             builder.config.logMode = builder.config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
             builder.config.region = builder.config.region ?: resolveRegion(profile = profile)

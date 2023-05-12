@@ -10,10 +10,13 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.asNullable
 import software.amazon.smithy.kotlin.codegen.model.boxed
+import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.rendering.*
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.rendering.util.RuntimeConfigProperty
+import software.amazon.smithy.model.knowledge.ServiceIndex
+import software.amazon.smithy.model.traits.HttpBearerAuthTrait
 
 class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
@@ -44,15 +47,17 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 client will not close it when the client is closed.
             """.trimIndent()
 
-            propertyType = ConfigPropertyType.Custom(render = { prop, writer ->
-                writer.write(
-                    "override val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine, region = region).#4T()",
-                    prop.propertyName,
-                    prop.symbol,
-                    AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
-                    AwsRuntimeTypes.Config.Credentials.manage,
-                )
-            })
+            propertyType = ConfigPropertyType.Custom(
+                render = { prop, writer ->
+                    writer.write(
+                        "override val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine, region = region).#4T()",
+                        prop.propertyName,
+                        prop.symbol,
+                        AwsRuntimeTypes.Config.Credentials.DefaultChainCredentialsProvider,
+                        AwsRuntimeTypes.Config.Credentials.manage,
+                    )
+                },
+            )
         }
 
         val UseFipsProp: ConfigProperty = ConfigProperty {
@@ -101,6 +106,34 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 additionalImports = listOf(AwsRuntimeTypes.Http.Retries.AwsDefaultRetryPolicy)
             }
             .build()
+
+        // override the bearer token provider registered by BearerTokenAuthSchemeIntegration, updates documentation
+        // and configures the default to be the DefaultBearerTokenProviderChain
+        val BearerTokenProviderProp = ConfigProperty {
+            name = "bearerTokenProvider"
+            symbol = RuntimeTypes.Auth.HttpAuth.BearerTokenProvider
+            baseClass = RuntimeTypes.Auth.HttpAuth.BearerTokenProviderConfig
+            useNestedBuilderBaseClass()
+            documentation = """
+                The token provider to use for authenticating requests when using [${RuntimeTypes.Auth.HttpAuth.BearerTokenAuthScheme.fullName}].
+                If not provided a [${AwsRuntimeTypes.Config.Credentials.DefaultChainBearerTokenProvider}] instance will be used.
+                NOTE: The caller is responsible for managing the lifetime of the provider when set. The SDK
+                client will not close it when the client is closed.
+                
+            """.trimIndent()
+
+            propertyType = ConfigPropertyType.Custom(
+                render = { prop, writer ->
+                    writer.write(
+                        "override val #1L: #2T = builder.#1L ?: #3T(httpClientEngine = httpClientEngine).#4T()",
+                        prop.propertyName,
+                        prop.symbol,
+                        AwsRuntimeTypes.Config.Credentials.DefaultChainBearerTokenProvider,
+                        AwsRuntimeTypes.Config.Credentials.manage,
+                    )
+                },
+            )
+        }
     }
 
     override val sectionWriters: List<SectionWriterBinding> =
@@ -108,13 +141,23 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, ServiceClientCompanionObjectWriter()),
         )
 
-    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
-        listOf(
-            RegionProp,
-            CredentialsProviderProp,
-            UseFipsProp,
-            UseDualStackProp,
-            EndpointUrlProp,
-            AwsRetryPolicy,
-        )
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> = buildList {
+        add(RegionProp)
+        if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.settings.getService(ctx.model))) {
+            add(CredentialsProviderProp)
+        }
+
+        val serviceIndex = ServiceIndex.of(ctx.model)
+        val hasBearerTokenAuth = serviceIndex
+            .getAuthSchemes(ctx.settings.service)
+            .containsKey(HttpBearerAuthTrait.ID)
+        if (hasBearerTokenAuth) {
+            add(BearerTokenProviderProp)
+        }
+
+        add(UseFipsProp)
+        add(UseDualStackProp)
+        add(EndpointUrlProp)
+        add(AwsRetryPolicy)
+    }
 }

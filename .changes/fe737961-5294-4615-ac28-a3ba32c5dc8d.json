@@ -1,0 +1,5 @@
+{
+    "id": "fe737961-5294-4615-ac28-a3ba32c5dc8d",
+    "type": "misc",
+    "description": "**BREAKING**: Refactor `SsoCredentialsProvider` to take an `SsoSession` parameter."
+}

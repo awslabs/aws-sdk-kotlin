@@ -10,8 +10,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
-import aws.sdk.kotlin.runtime.config.profile.loadAwsProfiles
-import aws.sdk.kotlin.runtime.config.profile.resolveConfigSource
+import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
@@ -97,13 +96,12 @@ public class ProfileCredentialsProvider(
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
-        val source = resolveConfigSource(platformProvider, profileName)
-        logger.debug { "Loading credentials from profile `${source.profile}`" }
-        val profiles = loadAwsProfiles(platformProvider, source)
-        val chain = ProfileChain.resolve(profiles, source.profile)
+        val sharedConfig = loadAwsSharedConfig(platformProvider, profileName)
+        logger.debug { "Loading credentials from profile `${sharedConfig.activeProfile.name}`" }
+        val chain = ProfileChain.resolve(sharedConfig)
 
         // if profile is overridden for this provider, attempt to resolve it from there first
-        val profileOverride = profileName?.let { profiles[it] }
+        val profileOverride = profileName?.let { sharedConfig.profiles[it] }
         val region = asyncLazy { region ?: profileOverride?.getOrNull("region") ?: resolveRegion(platformProvider) }
 
         val leaf = chain.leaf.toCredentialsProvider(region)
@@ -142,7 +140,17 @@ public class ProfileCredentialsProvider(
                 httpClientEngine = httpClientEngine,
             )
 
-            is LeafProvider.Sso -> SsoCredentialsProvider(
+            is LeafProvider.SsoSession -> SsoCredentialsProvider(
+                accountId = ssoAccountId,
+                roleName = ssoRoleName,
+                startUrl = ssoStartUrl,
+                ssoRegion = ssoRegion,
+                ssoSessionName = ssoSessionName,
+                httpClientEngine = httpClientEngine,
+                platformProvider = platformProvider,
+            )
+
+            is LeafProvider.LegacySso -> SsoCredentialsProvider(
                 accountId = ssoAccountId,
                 roleName = ssoRoleName,
                 startUrl = ssoStartUrl,
@@ -170,7 +178,8 @@ public class ProfileCredentialsProvider(
         is LeafProvider.NamedSource -> "named source $name"
         is LeafProvider.AccessKey -> "static credentials"
         is LeafProvider.WebIdentityTokenRole -> "web identity token"
-        is LeafProvider.Sso -> "single sign-on"
+        is LeafProvider.SsoSession -> "single sign-on (session)"
+        is LeafProvider.LegacySso -> "single sign-on (legacy)"
         is LeafProvider.Process -> "process"
     }
 }

@@ -5,8 +5,6 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -56,18 +54,15 @@ class AwsConfigLoaderTest {
             os = OperatingSystem(OsFamily.Linux, null),
         )
 
-        val config = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            loadActiveAwsProfile(testPlatform)
-        }
-
-        assertEquals("bob", config.name)
+        val config = loadAwsSharedConfig(testPlatform)
+        val activeProfile = config.activeProfile
+        assertEquals("bob", activeProfile.name)
     }
 
     @Test
     fun configurationLoadingDoesNotThrowErrors() = runTest {
-        val activeProfile = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            loadActiveAwsProfile(PlatformProvider.System)
-        }
+        val config = loadAwsSharedConfig(PlatformProvider.System)
+        val activeProfile = config.activeProfile
 
         assertTrue(activeProfile.name.isNotBlank())
     }

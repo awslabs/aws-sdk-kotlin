@@ -8,9 +8,10 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProvider
 import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
+import aws.sdk.kotlin.runtime.config.profile.AwsConfigurationSource
 import aws.sdk.kotlin.runtime.config.profile.FileType
 import aws.sdk.kotlin.runtime.config.profile.parse
-import aws.sdk.kotlin.runtime.config.profile.toProfileMap
+import aws.sdk.kotlin.runtime.config.profile.toSharedConfig
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
 import kotlin.test.Test
@@ -334,7 +335,7 @@ class ProfileChainTest {
             sso_role_name = RoleA
             """,
             chain(
-                LeafProvider.Sso("https://d-92671207e4.awsapps.com/start", "us-east-2", "1234567", "RoleA"),
+                LeafProvider.LegacySso("https://d-92671207e4.awsapps.com/start", "us-east-2", "1234567", "RoleA"),
             ),
         ),
         TestCase(
@@ -352,7 +353,7 @@ class ProfileChainTest {
             sso_role_name = RoleA
             """,
             chain(
-                LeafProvider.Sso("https://d-92671207e4.awsapps.com/start", "us-east-2", "1234567", "RoleA"),
+                LeafProvider.LegacySso("https://d-92671207e4.awsapps.com/start", "us-east-2", "1234567", "RoleA"),
                 RoleArn("arn:aws:iam::123456789:role/RoleA"),
             ),
         ),
@@ -416,13 +417,93 @@ class ProfileChainTest {
                 LeafProvider.Process("credential_provider --flag true"),
             ),
         ),
+        TestCase(
+            "sso-session as source profile",
+            """
+            [profile A]
+            role_arn = arn:aws:iam::123456789:role/RoleA
+            region = us-west-1
+            source_profile = B
+            
+            [profile B]
+            sso_role_name = RoleA
+            sso_account_id = 1234567
+            sso_session = my-session
+            
+            [sso-session my-session]
+            sso_region = us-east-2
+            sso_start_url = https://d-92671207e4.awsapps.com/start
+            """,
+            chain(
+                LeafProvider.SsoSession("my-session", "https://d-92671207e4.awsapps.com/start", "us-east-2", "1234567", "RoleA"),
+                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+            ),
+        ),
+        TestCase(
+            "sso-session missing start url",
+            """
+            [profile A]
+            sso_account_id = 1234567
+            sso_role_name = RoleA
+            sso_session = my-session
+            
+            [sso-session my-session]
+            sso_region = us-east-2
+            """,
+            TestOutput.Error("sso-session (my-session) missing `sso_start_url`"),
+        ),
+        TestCase(
+            "sso-session missing sso_region",
+            """
+            [profile A]
+            sso_account_id = 1234567
+            sso_role_name = RoleA
+            sso_session = my-session
+            
+            [sso-session my-session]
+            sso_start_url = https://d-92671207e4.awsapps.com/start
+            """,
+            TestOutput.Error("sso-session (my-session) missing `sso_region`"),
+        ),
+        TestCase(
+            "sso-session and profile define differing sso_region",
+            """
+            [profile A]
+            sso_account_id = 1234567
+            sso_role_name = RoleA
+            sso_region = us-east-1
+            sso_session = my-session
+            
+            [sso-session my-session]
+            sso_start_url = https://d-92671207e4.awsapps.com/start
+            sso_region = us-west-2
+            """,
+            TestOutput.Error("sso-session (my-session) sso_region = `us-west-2` does not match profile (A) sso_region = `us-east-1`"),
+        ),
+        TestCase(
+            "sso-session and profile define differing sso_start_url",
+            """
+            [profile A]
+            sso_account_id = 1234567
+            sso_role_name = RoleA
+            sso_start_url = https://d-1
+            sso_session = my-session
+            
+            [sso-session my-session]
+            sso_start_url = https://d-2
+            sso_region = us-west-2
+            """,
+            TestOutput.Error("sso-session (my-session) sso_start_url = `https://d-2` does not match profile (A) sso_start_url = `https://d-1`"),
+        ),
     )
 
     @Test
     fun testProfileChainResolution() {
         tests.forEachIndexed { idx, test ->
             val profiles = parse(NoOpTraceSpan, FileType.CONFIGURATION, test.profile.trimIndent())
-            val result = runCatching { ProfileChain.resolve(profiles.toProfileMap(), test.activeProfile) }
+            val source = AwsConfigurationSource(test.activeProfile, "not-needed", "not-needed")
+            val config = profiles.toSharedConfig(source)
+            val result = runCatching { ProfileChain.resolve(config) }
 
             when {
                 result.isFailure && test.output is TestOutput.Chain -> fail("[idx=$idx, desc=${test.description}]: expected success but chain failed to resolve: $result")

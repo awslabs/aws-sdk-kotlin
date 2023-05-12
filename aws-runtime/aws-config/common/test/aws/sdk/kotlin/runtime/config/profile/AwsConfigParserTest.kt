@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.config.profile
 
 import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
-import aws.smithy.kotlin.runtime.tracing.withRootTraceSpan
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -18,7 +17,6 @@ import io.mockk.slot
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.*
-import kotlin.coroutines.coroutineContext
 import kotlin.test.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -31,8 +29,7 @@ class AwsProfileParserTest {
         testList
             .map { TestCase.fromJson(it.jsonObject) }
             // .filter { testCase ->
-            // testCase is TestCase.MatchConfigOutputCase &&
-            // testCase.name == "Property values can be continued on the next line."
+            //     testCase.name == "SSO Session in credentials file is invalid"
             // }
             .forEachIndexed { index, testCase ->
                 when (testCase) {
@@ -50,7 +47,9 @@ class AwsProfileParserTest {
                         assertEquals(testCase.expectedOutput, actual.toString(), message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchErrorCase -> {
-                        val ex = assertFailsWith<AwsConfigParseException>("[idx=$index]: $testCase") { parse(NoOpTraceSpan, FileType.CONFIGURATION, testCase.input) }
+                        val ex = assertFailsWith<AwsConfigParseException>("[idx=$index]: $testCase") {
+                            loadConfiguration({ testCase.configInput }, { testCase.credentialInput })
+                        }
                         ex.message.shouldContain(testCase.expectedErrorMessage)
                     }
                 }
@@ -76,115 +75,53 @@ class AwsProfileParserTest {
     }
 
     /**
-     * Example function that reads the active provide and returns true if a key "boo" exists.
+     * Example function that reads the active profile and returns true if a key "boo" exists.
      */
     private suspend fun fnThatLoadsConfiguration(platform: PlatformProvider): String? {
-        val profile = coroutineContext.withRootTraceSpan(NoOpTraceSpan) {
-            loadActiveAwsProfile(platform)
-        }
-
+        val profile = loadAwsSharedConfig(platform).activeProfile
         return profile.getOrNull("boo")
     }
 
-    @Test
-    fun itCanMergeUniqueProfiles() {
-        val m1 = mapOf(
-            "a" to mapOf("x" to AwsConfigValue.String("1")),
-        )
-        val m2 = mapOf(
-            "b" to mapOf("y" to AwsConfigValue.String("1")),
-        )
-
-        val expected = mapOf(
-            "a" to mapOf("x" to AwsConfigValue.String("1")),
-            "b" to mapOf("y" to AwsConfigValue.String("1")),
-        )
-
-        val actual = mergeProfiles(m1, m2)
-
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun itCanMergeOverlappingProfiles() {
-        val m1 = mapOf(
-            "a" to mapOf("x" to AwsConfigValue.String("1")),
-        )
-        val m2 = mapOf(
-            "a" to mapOf("z" to AwsConfigValue.String("1")),
-            "b" to mapOf("y" to AwsConfigValue.String("1")),
-        )
-
-        val expected = mapOf(
-            "a" to mapOf(
-                "x" to AwsConfigValue.String("1"),
-                "z" to AwsConfigValue.String("1"),
-            ),
-            "b" to mapOf("y" to AwsConfigValue.String("1")),
-        )
-
-        val actual = mergeProfiles(m1, m2)
-
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun lastMapWinsMergingInProfiles() {
-        val m1 = mapOf(
-            "a" to mapOf("x" to AwsConfigValue.String("1")),
-        )
-        val m2 = mapOf(
-            "a" to mapOf("x" to AwsConfigValue.String("2")),
-        )
-
-        val expected = mapOf(
-            "a" to mapOf("x" to AwsConfigValue.String("2")),
-        )
-
-        val actual = mergeProfiles(m1, m2)
-
-        assertEquals(expected, actual)
-    }
-
     private sealed class TestCase {
+        abstract val name: String
         companion object {
             fun fromJson(json: JsonObject): TestCase {
                 val name = (json["name"] as JsonPrimitive).content
                 val configIn = (json["input"]!!.jsonObject["configFile"] as JsonPrimitive?)?.content
                 val credentialIn = (json["input"]!!.jsonObject["credentialsFile"] as JsonPrimitive?)?.content
-                val expected = json["output"]!!.jsonObject["profiles"]?.toString()
+                val expected = json["output"]!!.toString()
                 val errorContaining = (json["output"]!!.jsonObject["errorContaining"] as JsonPrimitive?)?.content
 
-                check(expected != null || errorContaining != null) { "Unexpected output: $json" }
                 check(configIn != null || credentialIn != null) { "Unexpected output: $json" }
 
-                val isErrorCase = expected == null && errorContaining != null
+                val isErrorCase = errorContaining != null
 
                 return if (!isErrorCase) {
                     when {
-                        configIn != null && credentialIn != null -> MatchConfigAndCredentialOutputCase(name, configIn, credentialIn, expected!!)
-                        configIn != null -> MatchConfigOutputCase(name, configIn, expected!!)
-                        credentialIn != null -> MatchCredentialOutputCase(name, credentialIn, expected!!)
+                        configIn != null && credentialIn != null -> MatchConfigAndCredentialOutputCase(name, configIn, credentialIn, expected)
+                        configIn != null -> MatchConfigOutputCase(name, configIn, expected)
+                        credentialIn != null -> MatchCredentialOutputCase(name, credentialIn, expected)
                         else -> error("Unexpected branch from $json")
                     }
                 } else {
-                    MatchErrorCase(name, configIn!!, errorContaining!!)
+                    MatchErrorCase(name, configIn, credentialIn, errorContaining!!)
                 }
             }
         }
 
-        data class MatchConfigOutputCase(val name: String, val configInput: String, val expectedOutput: String) :
+        data class MatchConfigOutputCase(override val name: String, val configInput: String, val expectedOutput: String) :
             TestCase()
 
-        data class MatchCredentialOutputCase(val name: String, val credentialInput: String, val expectedOutput: String) :
+        data class MatchCredentialOutputCase(override val name: String, val credentialInput: String, val expectedOutput: String) :
             TestCase()
 
-        data class MatchConfigAndCredentialOutputCase(val name: String, val configInput: String, val credentialInput: String, val expectedOutput: String) :
+        data class MatchConfigAndCredentialOutputCase(override val name: String, val configInput: String, val credentialInput: String, val expectedOutput: String) :
             TestCase()
 
         data class MatchErrorCase(
-            val name: String,
-            val input: String,
+            override val name: String,
+            val configInput: String?,
+            val credentialInput: String?,
             val expectedErrorMessage: String,
         ) : TestCase()
     }
@@ -195,27 +132,42 @@ class AwsProfileParserTest {
      * @param credentialsFn a function that will retrieve a configuration file as a UTF-8 string.
      * @return A map containing all specified profiles defined in configuration and credential files.
      */
-    private fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): RawProfileMap =
-        mergeProfiles(
+    private fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): TypedSectionMap =
+        mergeFiles(
             parse(NoOpTraceSpan, FileType.CONFIGURATION, configurationFn()),
             parse(NoOpTraceSpan, FileType.CREDENTIAL, credentialsFn()),
         )
 }
 
 // See https://youtrack.jetbrains.com/issue/KTOR-3063
-private fun Map<*, *>.toJsonElement(): JsonElement {
+private fun TypedSectionMap.toJsonElement(): JsonElement {
     val map: MutableMap<String, JsonElement> = mutableMapOf()
     this.forEach { (key, value) ->
-        key as String
+        val sectionKey = when (key) {
+            ConfigSectionType.PROFILE -> "profiles"
+            ConfigSectionType.SSO_SESSION -> "sso-sessions"
+        }
+        if (value.isNotEmpty()) {
+            map[sectionKey] = sectionMapToJsonElement(value)
+        }
+    }
+    return JsonObject(map)
+}
+
+private fun sectionMapToJsonElement(sectionMap: SectionMap): JsonElement {
+    val map: MutableMap<String, JsonElement> = mutableMapOf()
+    sectionMap.forEach { (key, value) ->
+        map[key] = configValuesToJsonElement(value.properties)
+    }
+    return JsonObject(map)
+}
+
+private fun configValuesToJsonElement(values: Map<String, AwsConfigValue>): JsonElement {
+    val map: MutableMap<String, JsonElement> = mutableMapOf()
+    values.forEach { (key, value) ->
         when (value) {
-            null -> map[key] = JsonNull
-            is Map<*, *> -> map[key] = value.toJsonElement()
-            is Boolean -> map[key] = JsonPrimitive(value)
-            is Number -> map[key] = JsonPrimitive(value)
-            is String -> map[key] = JsonPrimitive(value)
-            is Enum<*> -> map[key] = JsonPrimitive(value.toString())
             is AwsConfigValue.String -> map[key] = JsonPrimitive(value.value)
-            else -> throw IllegalStateException("Can't serialize unknown type: $value")
+            is AwsConfigValue.Map -> map[key] = JsonObject(value.value.mapValues { JsonPrimitive(it.value) })
         }
     }
     return JsonObject(map)
