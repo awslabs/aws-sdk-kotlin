@@ -50,14 +50,14 @@ import kotlin.coroutines.coroutineContext
  * @param profileName Override the profile name to use. If not provided it will be resolved internally
  * via environment (see [AwsSdkSetting.AwsProfile]) or defaulted to `default` if not configured.
  * @param platformProvider The platform API provider
- * @param httpClientEngine the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+ * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
  * @param clock the source of time for the provider
  */
 internal class ProfileBearerTokenProvider(
     private val profileName: String? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
-    private val httpClientEngine: HttpClientEngine? = null,
+    private val httpClient: HttpClientEngine? = null,
     private val clock: Clock = Clock.System,
 ) : BearerTokenProvider {
     // TODO - re-evaluate how often shared config is parsed and passed down through credential/token chains
@@ -85,7 +85,7 @@ internal class ProfileBearerTokenProvider(
             startUrl,
             ssoRegion,
             platformProvider = platformProvider,
-            httpClientEngine = httpClientEngine,
+            httpClient = httpClient,
             clock = clock,
         )
     }

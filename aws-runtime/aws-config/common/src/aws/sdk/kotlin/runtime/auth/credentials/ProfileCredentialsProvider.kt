@@ -146,7 +146,7 @@ public class ProfileCredentialsProvider(
                 startUrl = ssoStartUrl,
                 ssoRegion = ssoRegion,
                 ssoSessionName = ssoSessionName,
-                httpClientEngine = httpClientEngine,
+                httpClient = httpClient,
                 platformProvider = platformProvider,
             )
 

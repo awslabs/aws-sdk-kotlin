@@ -102,7 +102,7 @@ public class SsoCredentialsProvider public constructor(
 ) : CloseableCredentialsProvider {
 
     private val ssoTokenProvider = ssoSessionName?.let { sessName ->
-        SsoTokenProvider(sessName, startUrl, ssoRegion, httpClientEngine = httpClientEngine, platformProvider = platformProvider, clock = clock)
+        SsoTokenProvider(sessName, startUrl, ssoRegion, httpClient = httpClient, platformProvider = platformProvider, clock = clock)
     }
 
     override suspend fun resolve(attributes: Attributes): Credentials {

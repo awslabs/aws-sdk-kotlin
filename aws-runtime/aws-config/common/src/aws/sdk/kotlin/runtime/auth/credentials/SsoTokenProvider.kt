@@ -49,7 +49,7 @@ private const val OIDC_GRANT_TYPE_REFRESH = "refresh_token"
  * @param refreshBufferWindow amount of time before the actual credential expiration time when credentials are
  * considered expired. For example, if credentials are expiring in 15 minutes, and the buffer time is 10 seconds,
  * then any requests made after 14 minutes and 50 seconds will load new credentials. Defaults to 5 minutes.
- * @param httpClientEngine the [HttpClientEngine] to use when making requests to the AWS SSO service
+ * @param httpClient the [HttpClientEngine] to use when making requests to the AWS SSO service
  * @param platformProvider the platform provider to use
  * @param clock the source of time for the provider
  */
@@ -58,7 +58,7 @@ public class SsoTokenProvider(
     public val startUrl: String,
     public val ssoRegion: String,
     public val refreshBufferWindow: Duration = DEFAULT_SSO_TOKEN_REFRESH_BUFFER_SECONDS.seconds,
-    private val httpClientEngine: HttpClientEngine? = null,
+    private val httpClient: HttpClientEngine? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val clock: Clock = Clock.System,
 ) : BearerTokenProvider {
@@ -119,7 +119,7 @@ public class SsoTokenProvider(
     private suspend fun refreshToken(oldToken: SsoToken): SsoToken {
         SsoOidcClient {
             region = ssoRegion
-            httpClientEngine = this@SsoTokenProvider.httpClientEngine
+            httpClient = this@SsoTokenProvider.httpClient
         }.use { client ->
             val resp = client.createToken {
                 clientId = oldToken.clientId
