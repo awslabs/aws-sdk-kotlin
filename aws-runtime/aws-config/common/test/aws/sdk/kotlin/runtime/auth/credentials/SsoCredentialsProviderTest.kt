@@ -55,7 +55,7 @@ class SsoCredentialsProviderTest {
         }
         """.encodeToByteArray()
         assertEquals(
-            SsoToken("a-token", ts, "us-west-2", "https://start-url"),
+            SsoToken("a-token", ts, region = "us-west-2", startUrl = "https://start-url"),
             deserializeSsoToken(t2),
         )
 

@@ -17,42 +17,26 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.coroutineContext
 
 /**
- * Load the properties of the specified or default AWS configuration profile.  This
- * function will return the properties of the profile specified by the local environment
- * or the default profile if none is defined.
+ * Load the shared AWS configuration specified in local configuration files.
  *
  * This function performs no caching. File I/O will be performed with each call.
  *
- * @param platform used for unit testing
- *
- * @return an [AwsProfile] regardless if local configuration files are available
+ * @param platform Platform from which to resolve configuration environment
+ * @param profileNameOverride Optional profile name to use as the active profile
+ * @return A [AwsSharedConfig] instance
  */
 @InternalSdkApi
-public suspend fun loadActiveAwsProfile(platform: PlatformProvider): AwsProfile {
-    // Determine active profile and location of configuration files
-    val source = resolveConfigSource(platform)
+public suspend fun loadAwsSharedConfig(
+    platform: PlatformProvider,
+    profileNameOverride: String? = null,
+): AwsSharedConfig =
+    coroutineContext.withChildTraceSpan("loadAwsSharedConfig") {
+        // Determine active profile and location of configuration files
+        val source = resolveConfigSource(platform, profileNameOverride)
 
-    // Read all profiles from local system
-    val allProfiles = loadAwsProfiles(platform, source)
-
-    // Return the active profile
-    return allProfiles[source.profile] ?: AwsProfile(source.profile, emptyMap())
-}
-
-/**
- * Load all profiles specified in local configuration files.
- *
- * @param platform Platform from which to resolve configuration data
- * @param source Specifies the location of the configuration files
- *
- * @return A map of all profiles, which each are a map of key/value pairs.
- */
-@InternalSdkApi
-public suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfigurationSource): AwsProfiles =
-    coroutineContext.withChildTraceSpan("Load AWS profiles") {
         // merged AWS configuration based on optional configuration and credential file contents
         withContext(SdkDispatchers.IO) {
-            mergeProfiles(
+            mergeFiles(
                 parse(
                     coroutineContext.traceSpan,
                     FileType.CONFIGURATION,
@@ -63,15 +47,25 @@ public suspend fun loadAwsProfiles(platform: PlatformProvider, source: AwsConfig
                     FileType.CREDENTIAL,
                     platform.readFileOrNull(source.credentialsPath)?.decodeToString(),
                 ),
-            ).toProfileMap()
+            ).toSharedConfig(source)
         }
     }
 
-// Merge contents of profile maps
-internal fun mergeProfiles(vararg maps: RawProfileMap): RawProfileMap = buildMap {
+// Merge multiple independently parsed section maps
+internal fun mergeFiles(vararg maps: TypedSectionMap): TypedSectionMap = buildMap {
+    ConfigSectionType.values().forEach { sectionType ->
+        val sectionMaps = maps.mapNotNull { map -> map[sectionType] }
+        val merged = mergeSectionMaps(sectionMaps)
+        put(sectionType, merged)
+    }
+}
+
+private fun mergeSectionMaps(maps: List<SectionMap>): SectionMap = buildMap {
     maps.forEach { map ->
         map.entries.forEach { entry ->
-            put(entry.key, (get(entry.key) ?: emptyMap()) + entry.value)
+            val existingProps = get(entry.key)?.properties ?: emptyMap()
+            val section = ConfigSection(entry.key, existingProps + entry.value.properties, entry.value.sectionType)
+            put(section.name, section)
         }
     }
 }

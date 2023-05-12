@@ -20,8 +20,10 @@ class AwsServiceConfigIntegrationTest {
 
             use aws.protocols#awsJson1_1
             use aws.api#service
+            use aws.auth#sigv4
 
             @service(sdkId: "service with overrides", endpointPrefix: "service-with-overrides")
+            @sigv4(name: "example")
             @awsJson1_1
             service Example {
                 version: "1.0.0",

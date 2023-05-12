@@ -30,7 +30,7 @@ internal enum class FileType(
 ) {
     CONFIGURATION(
         AwsSdkSetting.AwsConfigFile,
-        listOf(::configurationProfile, ::property, ::continuation, ::subProperty),
+        listOf(::configurationSection, ::property, ::continuation, ::subProperty),
         listOf("~", ".aws", "config"),
     ),
     CREDENTIAL(
@@ -63,7 +63,7 @@ internal enum class FileType(
      *
      * The consumer of the result should fail parsing immediately if a null token is encountered.
      */
-    fun tokenOf(input: FileLine, currentProfile: Token.Profile?, lastProperty: Token.Property?): Token =
-        lineParsers.firstNotNullOfOrNull { parseFunction -> parseFunction(input, currentProfile, lastProperty) }
+    fun tokenOf(input: FileLine, currentSection: Token.Section?, lastProperty: Token.Property?): Token =
+        lineParsers.firstNotNullOfOrNull { parseFunction -> parseFunction(input, currentSection, lastProperty) }
             ?: throw AwsConfigParseException("Encountered unexpected token", input.lineNumber)
 }

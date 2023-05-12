@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.region
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
-import aws.sdk.kotlin.runtime.config.profile.loadActiveAwsProfile
+import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -21,7 +21,7 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
 @InternalSdkApi
 public suspend fun resolveRegion(
     platformProvider: PlatformProvider = PlatformProvider.System,
-    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadActiveAwsProfile(platformProvider) },
+    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadAwsSharedConfig(platformProvider).activeProfile },
 ): String =
     DefaultRegionProviderChain(platformProvider, profile = profile).use { providerChain ->
         providerChain.getRegion() ?: throw ConfigurationException("unable to auto detect AWS region, tried: $providerChain")

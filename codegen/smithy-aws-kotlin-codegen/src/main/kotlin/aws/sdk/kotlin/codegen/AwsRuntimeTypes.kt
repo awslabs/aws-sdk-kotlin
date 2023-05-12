@@ -48,6 +48,7 @@ object AwsRuntimeTypes {
 
         object Credentials : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG, "auth.credentials") {
             val DefaultChainCredentialsProvider = symbol("DefaultChainCredentialsProvider")
+            val DefaultChainBearerTokenProvider = symbol("DefaultChainBearerTokenProvider")
             val StaticCredentialsProvider = symbol("StaticCredentialsProvider")
             val manage = symbol("manage", "auth.credentials.internal", isExtension = true)
         }

@@ -5,15 +5,12 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.SsoClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
-import aws.sdk.kotlin.runtime.config.profile.normalizePath
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
-import aws.smithy.kotlin.runtime.hashing.sha1
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.time.Clock
@@ -51,7 +48,7 @@ private const val PROVIDER_NAME = "SSO"
  * // Wrap the provider with a caching provider to cache the credentials until their expiration time
  * val ssoProvider = CachedCredentialsProvider(source)
  * ```
- * It is important that you wrap the provider with [CachedCredentialsProvider] if you are programatically constructing
+ * It is important that you wrap the provider with [CachedCredentialsProvider] if you are programmatically constructing
  * the provider directly. This prevents your application from accessing the cached access token and requesting new
  * credentials each time the provider is used to source credentials.
  *
@@ -82,6 +79,12 @@ public class SsoCredentialsProvider public constructor(
     public val ssoRegion: String,
 
     /**
+     * The SSO Session name from the profile. If a session name is given an [SsoTokenProvider]
+     * will be used to fetch tokens.
+     */
+    public val ssoSessionName: String? = null,
+
+    /**
      * The [HttpClientEngine] to use when making requests to the AWS SSO service
      */
     private val httpClient: HttpClientEngine? = null,
@@ -98,24 +101,34 @@ public class SsoCredentialsProvider public constructor(
 
 ) : CloseableCredentialsProvider {
 
+    private val ssoTokenProvider = ssoSessionName?.let { sessName ->
+        SsoTokenProvider(sessName, startUrl, ssoRegion, httpClientEngine = httpClientEngine, platformProvider = platformProvider, clock = clock)
+    }
+
     override suspend fun resolve(attributes: Attributes): Credentials {
         val traceSpan = coroutineContext.traceSpan
         val logger = traceSpan.logger<SsoCredentialsProvider>()
 
-        logger.trace { "Attempting to load token file" }
-        val token = loadTokenFile()
+        val token = if (ssoTokenProvider != null) {
+            logger.trace { "Attempting to load token using token provider for sso-session: `$ssoSessionName`" }
+            ssoTokenProvider.resolve(attributes)
+        } else {
+            logger.trace { "Attempting to load token from file using legacy format" }
+            legacyLoadTokenFile()
+        }
 
         val client = SsoClient {
             region = ssoRegion
             httpClient = this@SsoCredentialsProvider.httpClient
             tracer = traceSpan.asNestedTracer("SSO-")
+            // FIXME - create an anonymous credential provider to explicitly avoid default chain creation (technically the transform should remove need for sigv4 cred provider since it's all anon auth)
         }
 
         val resp = try {
             client.getRoleCredentials {
                 accountId = this@SsoCredentialsProvider.accountId
                 roleName = this@SsoCredentialsProvider.roleName
-                accessToken = token.accessToken
+                accessToken = token.token
             }
         } catch (ex: Exception) {
             throw CredentialsNotLoadedException("GetRoleCredentials operation failed", ex)
@@ -134,76 +147,14 @@ public class SsoCredentialsProvider public constructor(
         )
     }
 
-    override fun close() { }
+    override fun close() {}
 
-    private suspend fun loadTokenFile(): SsoToken {
-        val key = getCacheFilename(startUrl)
-        val bytes = with(platformProvider) {
-            val defaultCacheLocation = normalizePath(filepath("~", ".aws", "sso", "cache"), this)
-            readFileOrNull(filepath(defaultCacheLocation, key))
-        } ?: throw ProviderConfigurationException("Invalid or missing SSO session cache. Run `aws sso login` to initiate a new SSO session")
-
-        val token = deserializeSsoToken(bytes)
+    // non sso-session legacy token flow
+    private suspend fun legacyLoadTokenFile(): SsoToken {
+        val token = readTokenFromCache(startUrl, platformProvider)
         val now = clock.now()
-        if (now > token.expiresAt) throw ProviderConfigurationException("The SSO session has expired. To refresh this SSO session run `aws sso login` with the corresponding profile.")
+        if (now > token.expiration) throw ProviderConfigurationException("The SSO session has expired. To refresh this SSO session run `aws sso login` with the corresponding profile.")
 
         return token
     }
 }
-
-internal fun PlatformProvider.filepath(vararg parts: String): String = parts.joinToString(separator = filePathSeparator)
-
-internal fun getCacheFilename(url: String): String {
-    val sha1HexDigest = url.encodeToByteArray().sha1().encodeToHex()
-    return "$sha1HexDigest.json"
-}
-
-internal data class SsoToken(
-    val accessToken: String,
-    val expiresAt: Instant,
-    val region: String? = null,
-    val startUrl: String? = null,
-)
-
-internal fun deserializeSsoToken(json: ByteArray): SsoToken {
-    val lexer = jsonStreamReader(json)
-
-    var accessToken: String? = null
-    var expiresAtRfc3339: String? = null
-    var region: String? = null
-    var startUrl: String? = null
-
-    try {
-        lexer.nextTokenOf<JsonToken.BeginObject>()
-        loop@while (true) {
-            when (val token = lexer.nextToken()) {
-                is JsonToken.EndObject -> break@loop
-                is JsonToken.Name -> when (token.value) {
-                    "accessToken" -> accessToken = lexer.nextTokenOf<JsonToken.String>().value
-                    "expiresAt" -> expiresAtRfc3339 = lexer.nextTokenOf<JsonToken.String>().value
-                    "region" -> region = lexer.nextTokenOf<JsonToken.String>().value
-                    "startUrl" -> startUrl = lexer.nextTokenOf<JsonToken.String>().value
-                    else -> lexer.skipNext()
-                }
-                else -> error("expected either key or end of object")
-            }
-        }
-    } catch (ex: Exception) {
-        throw InvalidSsoTokenException("invalid cached SSO token", ex)
-    }
-
-    if (accessToken == null) throw InvalidSsoTokenException("missing `accessToken`")
-    val expiresAt = expiresAtRfc3339?.let { Instant.fromIso8601(it) } ?: throw InvalidSsoTokenException("missing `expiresAt`")
-
-    return SsoToken(
-        accessToken,
-        expiresAt,
-        region,
-        startUrl,
-    )
-}
-
-/**
- * An error associated with a cached SSO token from `~/.aws/sso/cache/`
- */
-public class InvalidSsoTokenException(message: String, cause: Throwable? = null) : ConfigurationException(message, cause)

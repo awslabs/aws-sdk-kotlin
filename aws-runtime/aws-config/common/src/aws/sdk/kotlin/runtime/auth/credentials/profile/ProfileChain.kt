@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials.profile
 import aws.sdk.kotlin.runtime.auth.credentials.ProviderConfigurationException
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProviderResult.Err
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
-import aws.sdk.kotlin.runtime.config.profile.AwsProfiles
+import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 
 /**
@@ -33,14 +33,14 @@ internal data class ProfileChain(
     val roles: List<RoleArn>,
 ) {
     companion object {
-        internal fun resolve(profiles: AwsProfiles, profileName: String): ProfileChain {
+        internal fun resolve(config: AwsSharedConfig): ProfileChain {
             val visited = mutableSetOf<String>()
             val chain = mutableListOf<RoleArn>()
-            var sourceProfileName = profileName
+            var sourceProfileName = config.activeProfile.name
             var leaf: LeafProvider?
 
             loop@while (true) {
-                val profile = profiles.getOrThrow(sourceProfileName) {
+                val profile = config.profiles.getOrThrow(sourceProfileName) {
                     if (visited.isEmpty()) {
                         "could not find source profile $sourceProfileName"
                     } else {
@@ -65,7 +65,7 @@ internal data class ProfileChain(
                     chain.add(roleArn)
                 } else {
                     // have to find a leaf provider or error
-                    leaf = profile.leafProvider()
+                    leaf = profile.leafProvider(config)
                     break@loop
                 }
 
@@ -73,7 +73,7 @@ internal data class ProfileChain(
                 when (val nextProfile = profile.chainProvider()) {
                     is NextProfile.SelfReference -> {
                         // self-referential profile, attempt to load as a leaf provider (credential source)
-                        leaf = profile.leafProvider()
+                        leaf = profile.leafProvider(config)
                         break@loop
                     }
                     is NextProfile.Named -> sourceProfileName = nextProfile.name
@@ -86,7 +86,7 @@ internal data class ProfileChain(
     }
 }
 
-private inline fun AwsProfiles.getOrThrow(name: String, lazyMessage: () -> String): AwsProfile =
+private inline fun Map<String, AwsProfile>.getOrThrow(name: String, lazyMessage: () -> String): AwsProfile =
     get(name) ?: throw ProviderConfigurationException(lazyMessage())
 
 /**
@@ -111,23 +111,24 @@ internal data class RoleArn(
     val externalId: String? = null,
 )
 
-private const val ROLE_ARN = "role_arn"
-private const val EXTERNAL_ID = "external_id"
-private const val ROLE_SESSION_NAME = "role_session_name"
-private const val CREDENTIAL_SOURCE = "credential_source"
-private const val SOURCE_PROFILE = "source_profile"
+internal const val ROLE_ARN = "role_arn"
+internal const val EXTERNAL_ID = "external_id"
+internal const val ROLE_SESSION_NAME = "role_session_name"
+internal const val CREDENTIAL_SOURCE = "credential_source"
+internal const val SOURCE_PROFILE = "source_profile"
 
-private const val WEB_IDENTITY_TOKEN_FILE = "web_identity_token_file"
-private const val AWS_ACCESS_KEY_ID = "aws_access_key_id"
-private const val AWS_SECRET_ACCESS_KEY = "aws_secret_access_key"
-private const val AWS_SESSION_TOKEN = "aws_session_token"
+internal const val WEB_IDENTITY_TOKEN_FILE = "web_identity_token_file"
+internal const val AWS_ACCESS_KEY_ID = "aws_access_key_id"
+internal const val AWS_SECRET_ACCESS_KEY = "aws_secret_access_key"
+internal const val AWS_SESSION_TOKEN = "aws_session_token"
 
-private const val SSO_START_URL = "sso_start_url"
-private const val SSO_REGION = "sso_region"
-private const val SSO_ACCOUNT_ID = "sso_account_id"
-private const val SSO_ROLE_NAME = "sso_role_name"
+internal const val SSO_START_URL = "sso_start_url"
+internal const val SSO_REGION = "sso_region"
+internal const val SSO_ACCOUNT_ID = "sso_account_id"
+internal const val SSO_ROLE_NAME = "sso_role_name"
+internal const val SSO_SESSION = "sso_session"
 
-private const val CREDENTIAL_PROCESS = "credential_process"
+internal const val CREDENTIAL_PROCESS = "credential_process"
 
 private fun AwsProfile.roleArnOrNull(): RoleArn? {
     // web identity tokens are leaf providers, not chained roles
@@ -194,11 +195,11 @@ private fun AwsProfile.webIdentityTokenCreds(): LeafProviderResult? {
 }
 
 /**
- * Attempt to load [LeafProvider.Sso] from the current profile or `null` if the current profile does not contain
- * an SSO provider
+ * Attempt to load [LeafProvider.LegacySso] from the current profile or `null` if the current profile does not contain
+ * a legacy SSO provider
  */
-private fun AwsProfile.ssoCreds(): LeafProviderResult? {
-    if (!contains(SSO_START_URL) && !contains(SSO_REGION) && !contains(SSO_ACCOUNT_ID) && !contains(SSO_ROLE_NAME)) return null
+private fun AwsProfile.legacySsoCreds(): LeafProviderResult? {
+    if (!contains(SSO_ACCOUNT_ID) && !contains(SSO_ROLE_NAME)) return null
 
     // if one or more of the above configuration values is present the profile MUST be resolved by the SSO credential provider.
     val startUrl = getOrNull(SSO_START_URL) ?: return LeafProviderResult.Err("profile ($name) missing `$SSO_START_URL`")
@@ -206,7 +207,32 @@ private fun AwsProfile.ssoCreds(): LeafProviderResult? {
     val accountId = getOrNull(SSO_ACCOUNT_ID) ?: return LeafProviderResult.Err("profile ($name) missing `$SSO_ACCOUNT_ID`")
     val roleName = getOrNull(SSO_ROLE_NAME) ?: return LeafProviderResult.Err("profile ($name) missing `$SSO_ROLE_NAME`")
 
-    return LeafProviderResult.Ok(LeafProvider.Sso(startUrl, ssoRegion, accountId, roleName))
+    return LeafProviderResult.Ok(LeafProvider.LegacySso(startUrl, ssoRegion, accountId, roleName))
+}
+
+private fun AwsProfile.ssoSessionCreds(config: AwsSharedConfig): LeafProviderResult? {
+    val sessionName = getOrNull(SSO_SESSION) ?: return null
+    val session = config.ssoSessions[sessionName] ?: return LeafProviderResult.Err("profile ($name) references non-existing sso_session = `$sessionName`")
+
+    // if session is defined the profile MUST be resolved by the SSO credential provider
+    val startUrl = session.getOrNull(SSO_START_URL) ?: return LeafProviderResult.Err("sso-session ($sessionName) missing `$SSO_START_URL`")
+    val ssoRegion = session.getOrNull(SSO_REGION) ?: return LeafProviderResult.Err("sso-session ($sessionName) missing `$SSO_REGION`")
+    val accountId = getOrNull(SSO_ACCOUNT_ID) ?: return LeafProviderResult.Err("profile ($name) missing `$SSO_ACCOUNT_ID`")
+    val roleName = getOrNull(SSO_ROLE_NAME) ?: return LeafProviderResult.Err("profile ($name) missing `$SSO_ROLE_NAME`")
+
+    val sessionSsoRegion = session.getOrNull(SSO_REGION)
+    val profileSsoRegion = getOrNull(SSO_REGION)
+    if (sessionSsoRegion != null && profileSsoRegion != null && sessionSsoRegion != profileSsoRegion) {
+        return LeafProviderResult.Err("sso-session ($sessionName) $SSO_REGION = `$sessionSsoRegion` does not match profile ($name) $SSO_REGION = `$profileSsoRegion`")
+    }
+
+    val sessionStartUrl = session.getOrNull(SSO_START_URL)
+    val profileStartUrl = getOrNull(SSO_START_URL)
+    if (sessionStartUrl != null && profileStartUrl != null && sessionStartUrl != profileStartUrl) {
+        return LeafProviderResult.Err("sso-session ($sessionName) $SSO_START_URL = `$sessionStartUrl` does not match profile ($name) $SSO_START_URL = `$profileStartUrl`")
+    }
+
+    return LeafProviderResult.Ok(LeafProvider.SsoSession(sessionName, startUrl, ssoRegion, accountId, roleName))
 }
 
 /**
@@ -277,7 +303,7 @@ private fun AwsProfile.chainProvider(): NextProfile {
 /**
  * Get a terminal leaf provider for the current profile or throw an exception
  */
-private fun AwsProfile.leafProvider(): LeafProvider {
+private fun AwsProfile.leafProvider(config: AwsSharedConfig): LeafProvider {
     // profile must define either `credential_source` or explicit access keys
     val credSource = getOrNull(CREDENTIAL_SOURCE)
     if (credSource != null) return LeafProvider.NamedSource(credSource)
@@ -285,7 +311,8 @@ private fun AwsProfile.leafProvider(): LeafProvider {
     // we want to stop on errors in earlier providers to get the right exception message, thus we take the first
     // non-null LeafProviderResult we encounter
     return webIdentityTokenCreds()
-        .orElse(::ssoCreds)
+        .orElse { ssoSessionCreds(config) }
+        .orElse(::legacySsoCreds)
         .orElse(::processCreds)
         .unwrapOrElse(::staticCreds)
         .unwrap()

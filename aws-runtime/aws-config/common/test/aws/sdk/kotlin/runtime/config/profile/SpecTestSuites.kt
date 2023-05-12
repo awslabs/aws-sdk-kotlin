@@ -21,9 +21,7 @@ internal const val parserTestSuiteJson = """
       "input": {
         "configFile": ""
       },
-      "output": {
-        "profiles": {}
-      }
+      "output": {}
     },
     {
       "name": "Empty profiles have no properties.",
@@ -470,9 +468,7 @@ internal const val parserTestSuiteJson = """
         "configFile": "[profile in valid]\nname = value",
         "credentialsFile": "[in valid 2]\nname2 = value2"
       },
-      "output": {
-        "profiles": {}
-      }
+      "output": {}
     },
     {
       "name": "Invalid property names are ignored.",
@@ -652,18 +648,14 @@ internal const val parserTestSuiteJson = """
       "input": {
         "configFile": "[foo]\nname = value"
       },
-      "output": {
-        "profiles": {}
-      }
+      "output": {}
     },
     {
       "name": "Credentials profiles with prefix are ignored.",
       "input": {
         "credentialsFile": "[profile foo]\nname = value"
       },
-      "output": {
-        "profiles": {}
-      }
+      "output": {}
     },
 
     {
@@ -730,6 +722,63 @@ internal const val parserTestSuiteJson = """
           }
         }
       }
+    },
+    {
+      "name": "SSO Session in credentials file is invalid",
+      "input": {
+        "credentialsFile": "[sso-session my-session]\nname = value1"
+      },
+      "output": { 
+        "errorContaining": "Encountered unexpected token"
+      }
+    },
+    {
+      "name": "SSO Session in config file is parsed",
+      "input": {
+        "configFile": "[sso-session my-session]\nname = value1"
+      },
+      "output": {
+        "sso-sessions": {
+            "my-session": {
+                "name": "value1"
+            }
+        }
+      }
+    },
+    {
+      "name": "SSO Session in config file with same name as profile",
+      "input": {
+        "configFile": "[sso-session foo]\nname = value1\n[profile foo]\nname2 = value2\n"
+      },
+      "output": {
+        "profiles": {
+            "foo": {
+                "name2": "value2"
+            }
+        },
+        "sso-sessions": {
+            "foo": {
+                "name": "value1"
+            }
+        }
+      }
+    },
+    {
+      "name": "SSO session name with extra whitespace",
+      "input": {
+        "configFile": "[   sso-session foo    ]\nname = value\n[profile bar]"
+      },
+      "output": {
+        "profiles": { "bar":  {} },
+        "sso-sessions": { "foo": {"name":  "value"} }
+      }
+    },
+    {
+      "name": "Default SSO session is ignored",
+      "input": {
+        "configFile": "[sso-session]\nname = value\n"
+      },
+      "output": {}
     }
   ]
 }

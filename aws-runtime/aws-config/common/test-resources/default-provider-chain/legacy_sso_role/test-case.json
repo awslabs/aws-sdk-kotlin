@@ -1,0 +1,12 @@
+{
+  "name": "legacy-sso-role",
+  "docs": "load creds from SSO role using legacy format",
+  "result": {
+    "Ok": {
+      "access_key_id": "ASIARCORRECT",
+      "secret_access_key": "secretkeycorrect",
+      "session_token": "tokencorrect",
+      "expiry": 1641240833
+    }
+  }
+}
