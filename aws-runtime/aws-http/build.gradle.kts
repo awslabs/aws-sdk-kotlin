@@ -26,6 +26,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation("aws.smithy.kotlin:tracing-core:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
             }
         }
 

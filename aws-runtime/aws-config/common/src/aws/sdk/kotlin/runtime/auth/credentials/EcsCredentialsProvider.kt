@@ -54,19 +54,19 @@ private const val PROVIDER_NAME = "EcsContainer"
  * For more information on configuring ECS credentials see [IAM Roles for tasks](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html)
  *
  * @param platformProvider the platform provider
- * @param httpClientEngine the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+ * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
  *
  */
 public class EcsCredentialsProvider internal constructor(
     private val platformProvider: PlatformEnvironProvider,
-    httpClientEngine: HttpClientEngine? = null,
+    httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
     public constructor() : this(PlatformProvider.System)
 
-    private val manageEngine = httpClientEngine == null
-    private val httpClientEngine = httpClientEngine ?: DefaultHttpEngine()
+    private val manageEngine = httpClient == null
+    private val httpClient = httpClient ?: DefaultHttpEngine()
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.getLogger<EcsCredentialsProvider>()
         val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
@@ -91,7 +91,7 @@ public class EcsCredentialsProvider internal constructor(
         op.execution.retryPolicy = EcsCredentialsRetryPolicy()
 
         logger.debug { "retrieving container credentials" }
-        val client = SdkHttpClient(httpClientEngine)
+        val client = SdkHttpClient(httpClient)
         val creds = try {
             op.roundTrip(client, Unit)
         } catch (ex: Exception) {
@@ -150,7 +150,7 @@ public class EcsCredentialsProvider internal constructor(
 
     override fun close() {
         if (manageEngine) {
-            httpClientEngine.closeIfCloseable()
+            httpClient.closeIfCloseable()
         }
     }
 }

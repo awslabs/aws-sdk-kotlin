@@ -26,17 +26,17 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * @param profileName Override the profile name to use. If not provided it will be resolved internally
  * via environment (see [AwsSdkSetting.AwsProfile]) or defaulted to `default` if not configured.
  * @param platformProvider The platform API provider
- * @param httpClientEngine the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+ * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class DefaultChainBearerTokenProvider(
     private val profileName: String? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
-    httpClientEngine: HttpClientEngine? = null,
+    httpClient: HttpClientEngine? = null,
 ) : CloseableBearerTokenProvider {
 
     private val chain = BearerTokenProviderChain(
-        ProfileBearerTokenProvider(profileName, platformProvider, httpClientEngine),
+        ProfileBearerTokenProvider(profileName, platformProvider, httpClient),
     )
 
     override suspend fun resolve(attributes: Attributes): BearerToken = chain.resolve(attributes)

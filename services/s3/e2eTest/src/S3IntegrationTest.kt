@@ -322,7 +322,7 @@ internal suspend fun s3WithAllEngines(block: suspend (S3Client) -> Unit) {
     withAllEngines { engine ->
         S3Client {
             region = S3TestUtils.DEFAULT_REGION
-            httpClientEngine = engine
+            httpClient = engine
         }.use {
             try {
                 block(it)

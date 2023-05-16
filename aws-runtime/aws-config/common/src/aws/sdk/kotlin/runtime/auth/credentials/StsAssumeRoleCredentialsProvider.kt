@@ -47,7 +47,7 @@ private const val PROVIDER_NAME = "AssumeRoleProvider"
  * administrator of the account to which the role belongs provided you with an external ID, then provide that value
  * in this parameter.
  * @param duration The expiry duration of the STS credentials. Defaults to 15 minutes if not set.
- * @param httpClientEngine The [HttpClientEngine] to use when making requests to the STS service
+ * @param httpClient The [HttpClientEngine] to use when making requests to the STS service
  */
 public class StsAssumeRoleCredentialsProvider(
     private val credentialsProvider: CredentialsProvider,
@@ -56,7 +56,7 @@ public class StsAssumeRoleCredentialsProvider(
     private val roleSessionName: String? = null,
     private val externalId: String? = null,
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
-    private val httpClientEngine: HttpClientEngine? = null,
+    private val httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
     override suspend fun resolve(attributes: Attributes): Credentials {
@@ -69,7 +69,7 @@ public class StsAssumeRoleCredentialsProvider(
         val client = StsClient {
             region = provider.region ?: GLOBAL_STS_PARTITION_ENDPOINT
             credentialsProvider = provider.credentialsProvider
-            httpClientEngine = provider.httpClientEngine
+            httpClient = provider.httpClient
             tracer = traceSpan.asNestedTracer("STS-")
         }
 

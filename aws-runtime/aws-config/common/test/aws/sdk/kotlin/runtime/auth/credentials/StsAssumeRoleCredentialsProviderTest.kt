@@ -39,7 +39,7 @@ class StsAssumeRoleCredentialsProviderTest {
         val provider = StsAssumeRoleCredentialsProvider(
             credentialsProvider = sourceProvider,
             roleArn = testArn,
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
         )
 
         val actual = provider.resolve()
@@ -65,7 +65,7 @@ class StsAssumeRoleCredentialsProviderTest {
         val provider = StsAssumeRoleCredentialsProvider(
             credentialsProvider = sourceProvider,
             roleArn = testArn,
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
         )
 
         assertFailsWith<CredentialsProviderException> {
@@ -93,7 +93,7 @@ class StsAssumeRoleCredentialsProviderTest {
             credentialsProvider = sourceProvider,
             roleArn = testArn,
             region = "us-west-2",
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
         )
 
         val ex = assertFailsWith<ProviderConfigurationException> {
@@ -113,7 +113,7 @@ class StsAssumeRoleCredentialsProviderTest {
         val provider = StsAssumeRoleCredentialsProvider(
             credentialsProvider = sourceProvider,
             roleArn = testArn,
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
         )
 
         val actual = provider.resolve()
@@ -132,7 +132,7 @@ class StsAssumeRoleCredentialsProviderTest {
             credentialsProvider = sourceProvider,
             roleArn = testArn,
             region = "us-west-2",
-            httpClientEngine = testEngine,
+            httpClient = testEngine,
         )
 
         val actual = provider.resolve()

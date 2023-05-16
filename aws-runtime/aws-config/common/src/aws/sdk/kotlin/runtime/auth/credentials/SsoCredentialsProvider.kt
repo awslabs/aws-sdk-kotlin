@@ -87,7 +87,7 @@ public class SsoCredentialsProvider public constructor(
     /**
      * The [HttpClientEngine] to use when making requests to the AWS SSO service
      */
-    private val httpClientEngine: HttpClientEngine? = null,
+    private val httpClient: HttpClientEngine? = null,
 
     /**
      * The platform provider
@@ -102,7 +102,7 @@ public class SsoCredentialsProvider public constructor(
 ) : CloseableCredentialsProvider {
 
     private val ssoTokenProvider = ssoSessionName?.let { sessName ->
-        SsoTokenProvider(sessName, startUrl, ssoRegion, httpClientEngine = httpClientEngine, platformProvider = platformProvider, clock = clock)
+        SsoTokenProvider(sessName, startUrl, ssoRegion, httpClient = httpClient, platformProvider = platformProvider, clock = clock)
     }
 
     override suspend fun resolve(attributes: Attributes): Credentials {
@@ -119,7 +119,7 @@ public class SsoCredentialsProvider public constructor(
 
         val client = SsoClient {
             region = ssoRegion
-            httpClientEngine = this@SsoCredentialsProvider.httpClientEngine
+            httpClient = this@SsoCredentialsProvider.httpClient
             tracer = traceSpan.asNestedTracer("SSO-")
             // FIXME - create an anonymous credential provider to explicitly avoid default chain creation (technically the transform should remove need for sigv4 cred provider since it's all anon auth)
         }

@@ -103,7 +103,7 @@ class SsoCredentialsProviderTest {
             roleName = "TestRole",
             startUrl = "https://expired-token",
             ssoRegion = "us-east-2",
-            httpClientEngine = engine,
+            httpClient = engine,
             platformProvider = testPlatform,
             clock = testClock,
         )
@@ -143,7 +143,7 @@ class SsoCredentialsProviderTest {
             roleName = "TestRole",
             startUrl = "https://error-response",
             ssoRegion = "us-east-2",
-            httpClientEngine = engine,
+            httpClient = engine,
             platformProvider = testPlatform,
             clock = testClock,
         )
@@ -198,7 +198,7 @@ class SsoCredentialsProviderTest {
             roleName = "TestRole",
             startUrl = "https://success-response",
             ssoRegion = "us-east-2",
-            httpClientEngine = engine,
+            httpClient = engine,
             platformProvider = testPlatform,
             clock = testClock,
         )

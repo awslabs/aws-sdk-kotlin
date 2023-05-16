@@ -165,7 +165,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
 	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Companion;
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getAuthSchemes ()Ljava/util/List;
@@ -173,7 +173,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getEndpointProvider ()Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClientEngine ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
+	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public fun getInterceptors ()Ljava/util/List;
 	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public fun getRegion ()Ljava/lang/String;
@@ -185,16 +185,17 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
 	public fun <init> ()V
 	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config;
 	public synthetic fun build ()Ljava/lang/Object;
+	public fun buildHttpEngineConfig ()Laws/smithy/kotlin/runtime/http/config/HttpEngineConfig;
 	public fun getAuthSchemes ()Ljava/util/List;
 	public fun getClientName ()Ljava/lang/String;
 	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getEndpointProvider ()Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClientEngine ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
+	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public fun getInterceptors ()Ljava/util/List;
 	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public fun getRegion ()Ljava/lang/String;
@@ -203,12 +204,14 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
 	public fun getUseDualStack ()Ljava/lang/Boolean;
 	public fun getUseFips ()Ljava/lang/Boolean;
+	public fun httpClient (Laws/smithy/kotlin/runtime/http/config/EngineFactory;Lkotlin/jvm/functions/Function1;)V
+	public fun httpClient (Lkotlin/jvm/functions/Function1;)V
 	public fun setAuthSchemes (Ljava/util/List;)V
 	public fun setClientName (Ljava/lang/String;)V
 	public fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
 	public final fun setEndpointProvider (Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;)V
 	public final fun setEndpointUrl (Laws/smithy/kotlin/runtime/net/Url;)V
-	public fun setHttpClientEngine (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
+	public fun setHttpClient (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
 	public fun setInterceptors (Ljava/util/List;)V
 	public fun setLogMode (Laws/smithy/kotlin/runtime/client/LogMode;)V
 	public fun setRegion (Ljava/lang/String;)V
@@ -473,7 +476,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoO
 	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
 	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Companion;
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getAuthSchemes ()Ljava/util/List;
@@ -481,7 +484,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoO
 	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getEndpointProvider ()Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClientEngine ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
+	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public fun getInterceptors ()Ljava/util/List;
 	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public fun getRegion ()Ljava/lang/String;
@@ -493,16 +496,17 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoO
 	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
 	public fun <init> ()V
 	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config;
 	public synthetic fun build ()Ljava/lang/Object;
+	public fun buildHttpEngineConfig ()Laws/smithy/kotlin/runtime/http/config/HttpEngineConfig;
 	public fun getAuthSchemes ()Ljava/util/List;
 	public fun getClientName ()Ljava/lang/String;
 	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getEndpointProvider ()Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClientEngine ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
+	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public fun getInterceptors ()Ljava/util/List;
 	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public fun getRegion ()Ljava/lang/String;
@@ -511,12 +515,14 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoO
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
 	public fun getUseDualStack ()Ljava/lang/Boolean;
 	public fun getUseFips ()Ljava/lang/Boolean;
+	public fun httpClient (Laws/smithy/kotlin/runtime/http/config/EngineFactory;Lkotlin/jvm/functions/Function1;)V
+	public fun httpClient (Lkotlin/jvm/functions/Function1;)V
 	public fun setAuthSchemes (Ljava/util/List;)V
 	public fun setClientName (Ljava/lang/String;)V
 	public fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
 	public final fun setEndpointProvider (Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;)V
 	public final fun setEndpointUrl (Laws/smithy/kotlin/runtime/net/Url;)V
-	public fun setHttpClientEngine (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
+	public fun setHttpClient (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
 	public fun setInterceptors (Ljava/util/List;)V
 	public fun setLogMode (Laws/smithy/kotlin/runtime/client/LogMode;)V
 	public fun setRegion (Ljava/lang/String;)V
@@ -970,7 +976,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
 	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Companion;
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getAuthSchemes ()Ljava/util/List;
@@ -978,7 +984,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getEndpointProvider ()Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClientEngine ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
+	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public fun getInterceptors ()Ljava/util/List;
 	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public fun getRegion ()Ljava/lang/String;
@@ -990,16 +996,17 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
 	public fun <init> ()V
 	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config;
 	public synthetic fun build ()Ljava/lang/Object;
+	public fun buildHttpEngineConfig ()Laws/smithy/kotlin/runtime/http/config/HttpEngineConfig;
 	public fun getAuthSchemes ()Ljava/util/List;
 	public fun getClientName ()Ljava/lang/String;
 	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getEndpointProvider ()Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;
 	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClientEngine ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
+	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public fun getInterceptors ()Ljava/util/List;
 	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
 	public fun getRegion ()Ljava/lang/String;
@@ -1008,12 +1015,14 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public fun getTracer ()Laws/smithy/kotlin/runtime/tracing/Tracer;
 	public fun getUseDualStack ()Ljava/lang/Boolean;
 	public fun getUseFips ()Ljava/lang/Boolean;
+	public fun httpClient (Laws/smithy/kotlin/runtime/http/config/EngineFactory;Lkotlin/jvm/functions/Function1;)V
+	public fun httpClient (Lkotlin/jvm/functions/Function1;)V
 	public fun setAuthSchemes (Ljava/util/List;)V
 	public fun setClientName (Ljava/lang/String;)V
 	public fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
 	public final fun setEndpointProvider (Laws/smithy/kotlin/runtime/client/endpoints/EndpointProvider;)V
 	public final fun setEndpointUrl (Laws/smithy/kotlin/runtime/net/Url;)V
-	public fun setHttpClientEngine (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
+	public fun setHttpClient (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
 	public fun setInterceptors (Ljava/util/List;)V
 	public fun setLogMode (Laws/smithy/kotlin/runtime/client/LogMode;)V
 	public fun setRegion (Ljava/lang/String;)V

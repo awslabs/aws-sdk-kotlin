@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.smithy.kotlin.runtime.httptest.TestConnection
+import aws.smithy.kotlin.runtime.httptest.TestEngine
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
@@ -47,11 +47,10 @@ class ProfileBearerTokenProviderTest {
                 """.trimIndent(),
             ),
         )
-        val testEngine = TestConnection()
 
         val provider = ProfileBearerTokenProvider(
             platformProvider = testProvider,
-            httpClientEngine = testEngine,
+            httpClient = TestEngine(),
             clock = clock,
         )
         val actual = provider.resolve()
@@ -80,11 +79,10 @@ class ProfileBearerTokenProviderTest {
                 """.trimIndent(),
             ),
         )
-        val testEngine = TestConnection()
 
         val provider = ProfileBearerTokenProvider(
             platformProvider = testProvider,
-            httpClientEngine = testEngine,
+            httpClient = TestEngine(),
             clock = clock,
         )
         val ex = assertFailsWith<ProviderConfigurationException> { provider.resolve() }
@@ -112,11 +110,10 @@ class ProfileBearerTokenProviderTest {
                 """.trimIndent(),
             ),
         )
-        val testEngine = TestConnection()
 
         val provider = ProfileBearerTokenProvider(
             platformProvider = testProvider,
-            httpClientEngine = testEngine,
+            httpClient = TestEngine(),
             clock = clock,
         )
         val ex = assertFailsWith<ProviderConfigurationException> { provider.resolve() }
@@ -141,11 +138,10 @@ class ProfileBearerTokenProviderTest {
                 """.trimIndent(),
             ),
         )
-        val testEngine = TestConnection()
 
         val provider = ProfileBearerTokenProvider(
             platformProvider = testProvider,
-            httpClientEngine = testEngine,
+            httpClient = TestEngine(),
             clock = clock,
         )
         val ex = assertFailsWith<ProviderConfigurationException> { provider.resolve() }
