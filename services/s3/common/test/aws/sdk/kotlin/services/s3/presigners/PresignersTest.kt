@@ -9,6 +9,7 @@ import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.ObjectCannedAcl
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
 import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.http.engine.NoHttpEngine
 import aws.smithy.kotlin.runtime.util.text.urlDecodeComponent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -26,14 +27,17 @@ class PresignersTest {
             key = "bar"
             acl = ObjectCannedAcl.BucketOwnerFullControl
         }
-        val config = S3Client.Config {
+
+        val presigned = S3Client {
             region = "us-west-2"
             credentialsProvider = StaticCredentialsProvider {
                 accessKeyId = "AKID"
                 secretAccessKey = "secret"
             }
+            httpClient(NoHttpEngine)
+        }.use { s3 ->
+            s3.presignPutObjectRequest(req, 1.days)
         }
-        val presigned = req.presign(config, 1.days)
 
         val aclHeader = presigned.headers["x-amz-acl"]
         assertNotNull(aclHeader, "Expected x-amz-acl header to be included in presigned request")
