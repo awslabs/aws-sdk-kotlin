@@ -68,8 +68,8 @@ class AwsEndpointDelegator : EndpointDelegator {
             EndpointResolverAdapterGenerator(ctx, it) {
                 it.write(
                     "endpoint.#T?.#T(request.context)",
-                    RuntimeTypes.SmithyClient.Endpoints.authSchemeEndpointExt,
-                    RuntimeTypes.Auth.Signing.AwsSigningCommon.setSigningContext,
+                    RuntimeTypes.SmithyClient.Endpoints.signingContext,
+                    RuntimeTypes.Auth.Signing.AwsSigningCommon.mergeInto,
                 )
             }.render()
         }

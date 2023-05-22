@@ -10,7 +10,11 @@ import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
 import aws.sdk.kotlin.services.polly.presigners.presignSynthesizeSpeechRequest
 import aws.smithy.kotlin.runtime.http.HttpMethod
-import aws.smithy.kotlin.runtime.http.engine.NoHttpEngine
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.http.response.HttpCall
+import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -34,7 +38,7 @@ class PollyPresignerTest {
                 accessKeyId = "AKID"
                 secretAccessKey = "secret"
             }
-            httpClient(NoHttpEngine)
+            httpClient = NoHttpEngine
         }.use { polly ->
             polly.presignSynthesizeSpeechRequest(request, 10.seconds)
         }
@@ -46,4 +50,11 @@ class PollyPresignerTest {
         val expectedQueryParameters = setOf("OutputFormat", "Text", "VoiceId", "X-Amz-Algorithm", "X-Amz-Credential", "X-Amz-Date", "X-Amz-SignedHeaders", "X-Amz-Expires", "X-Amz-Signature")
         assertEquals(expectedQueryParameters, presignedRequest.url.parameters.entries().map { it.key }.toSet())
     }
+}
+
+object NoHttpEngine : HttpClientEngineBase("no-http") {
+    override val config: HttpClientEngineConfig = HttpClientEngineConfig.Default
+
+    override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall =
+        error("Should not need HTTP round trip")
 }

@@ -27,7 +27,7 @@ val awsEndpointPropertyRenderers = mapOf(
 // valid auth scheme names that can appear in a smithy endpoint's properties
 private val validAuthSchemeNames = setOf("sigv4", "sigv4a")
 
-private fun String.toAuthSchemeClassName(): String? =
+private fun String.toSigningContextClassName(): String? =
     when (this) {
         "sigv4" -> "SigV4"
         "sigv4a" -> "SigV4A"
@@ -35,14 +35,14 @@ private fun String.toAuthSchemeClassName(): String? =
     }
 
 private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, expressionRenderer: ExpressionRenderer) {
-    writer.writeInline("#T to ", RuntimeTypes.SmithyClient.Endpoints.AuthSchemesAttributeKey)
+    writer.writeInline("#T to ", RuntimeTypes.SmithyClient.Endpoints.SigningContextAttributeKey)
     writer.withBlock("listOf(", ")") {
         authSchemes.toNode().expectArrayNode().forEach {
             val scheme = it.expectObjectNode()
             val schemeName = scheme.expectStringMember("name").value
-            val className = schemeName.toAuthSchemeClassName() ?: return@forEach
+            val className = schemeName.toSigningContextClassName() ?: return@forEach
 
-            withBlock("#T.#L(", "),", RuntimeTypes.SmithyClient.Endpoints.AuthScheme, className) {
+            withBlock("#T.#L(", "),", RuntimeTypes.SmithyClient.Endpoints.SigningContext, className) {
                 // we delegate back to the expression visitor for each of these fields because it's possible to
                 // encounter template strings throughout
 
