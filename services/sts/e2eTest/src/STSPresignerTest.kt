@@ -5,7 +5,7 @@
 package aws.sdk.kotlin.services.sts
 
 import aws.sdk.kotlin.services.sts.model.GetCallerIdentityRequest
-import aws.sdk.kotlin.services.sts.presigners.presignGetCallerIdentityRequest
+import aws.sdk.kotlin.services.sts.presigners.presignGetCallerIdentity
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.http.SdkHttpClient
@@ -27,7 +27,7 @@ class StsPresignerTest {
         val req = GetCallerIdentityRequest { }
 
         val presignedRequest = StsClient { region = "us-west-2" }.use { sts ->
-            sts.presignGetCallerIdentityRequest(req, 60.seconds)
+            sts.presignGetCallerIdentity(req, 60.seconds)
         }
 
         withAllEngines { engine ->

@@ -40,7 +40,7 @@ class PresignersTest {
             }
             httpClient = NoHttpEngine
         }.use { s3 ->
-            s3.presignPutObjectRequest(req, 1.days)
+            s3.presignPutObject(req, 1.days)
         }
 
         val aclHeader = presigned.headers["x-amz-acl"]

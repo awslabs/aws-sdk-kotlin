@@ -134,7 +134,7 @@ class PresignerGenerator : KotlinIntegration {
             if (index != 0) writer.write("")
 
             // Generate the shorthand convenience presign extension function for service client
-            renderShorthandPresignFn(writer, requestSymbol, serviceSymbol)
+            renderShorthandPresignFn(writer, serviceSymbol, presignableOp, requestSymbol)
 
             // Generate the full presign extension function for service client
             renderFullPresignFn(
@@ -151,7 +151,12 @@ class PresignerGenerator : KotlinIntegration {
         }
     }
 
-    private fun renderShorthandPresignFn(writer: KotlinWriter, requestSymbol: Symbol, serviceSymbol: Symbol) {
+    private fun renderShorthandPresignFn(
+        writer: KotlinWriter,
+        serviceSymbol: Symbol,
+        presignableOp: PresignableOperation,
+        requestSymbol: Symbol,
+    ) {
         writer.dokka {
             write("Presign a [#T] using the configuration of this [#T].", requestSymbol, serviceSymbol)
             write("@param input The [#T] to presign", requestSymbol)
@@ -167,12 +172,12 @@ class PresignerGenerator : KotlinIntegration {
                 "public suspend fun #T.presign#L(input: #T, duration: #T): #T =",
                 "",
                 serviceSymbol,
-                requestSymbol.name,
+                presignableOp.shape.id.name,
                 requestSymbol,
                 KotlinTypes.Time.Duration,
                 RuntimeTypes.Http.Request.HttpRequest,
             ) {
-                write("presign#L(input) { expiresAfter = duration }", requestSymbol.name)
+                write("presign#L(input) { expiresAfter = duration }", presignableOp.shape.id.name)
             }
     }
 
@@ -202,7 +207,7 @@ class PresignerGenerator : KotlinIntegration {
             )
         }
 
-        openBlock("public suspend fun #T.presign#L(", serviceSymbol, requestSymbol.name)
+        openBlock("public suspend fun #T.presign#L(", serviceSymbol, presignableOp.shape.id.name)
         write("input: #T,", requestSymbol)
         write(
             "signer: #T = #T,",

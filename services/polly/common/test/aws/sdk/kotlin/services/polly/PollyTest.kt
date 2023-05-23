@@ -8,7 +8,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
-import aws.sdk.kotlin.services.polly.presigners.presignSynthesizeSpeechRequest
+import aws.sdk.kotlin.services.polly.presigners.presignSynthesizeSpeech
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
@@ -40,7 +40,7 @@ class PollyPresignerTest {
             }
             httpClient = NoHttpEngine
         }.use { polly ->
-            polly.presignSynthesizeSpeechRequest(request, 10.seconds)
+            polly.presignSynthesizeSpeech(request, 10.seconds)
         }
 
         assertEquals(HttpMethod.GET, presignedRequest.method)

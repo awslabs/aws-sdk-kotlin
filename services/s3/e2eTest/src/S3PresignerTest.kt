@@ -7,8 +7,8 @@ package aws.sdk.kotlin.e2etest
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
-import aws.sdk.kotlin.services.s3.presigners.presignGetObjectRequest
-import aws.sdk.kotlin.services.s3.presigners.presignPutObjectRequest
+import aws.sdk.kotlin.services.s3.presigners.presignGetObject
+import aws.sdk.kotlin.services.s3.presigners.presignPutObject
 import aws.sdk.kotlin.testing.PRINTABLE_CHARS
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.content.decodeToString
@@ -54,7 +54,7 @@ class S3PresignerTest {
                 bucket = testBucket
                 key = keyName
             }
-            val presignedPutRequest = client.presignPutObjectRequest(unsignedPutRequest, 60.seconds)
+            val presignedPutRequest = client.presignPutObject(unsignedPutRequest, 60.seconds)
 
             S3TestUtils.responseCodeFromPut(presignedPutRequest, contents)
 
@@ -62,7 +62,7 @@ class S3PresignerTest {
                 bucket = testBucket
                 key = keyName
             }
-            val presignedGetRequest = client.presignGetObjectRequest(unsignedGetRequest, 60.seconds)
+            val presignedGetRequest = client.presignGetObject(unsignedGetRequest, 60.seconds)
 
             val call = httpClient.call(presignedGetRequest)
             val body = call.response.body.toByteStream()?.decodeToString()

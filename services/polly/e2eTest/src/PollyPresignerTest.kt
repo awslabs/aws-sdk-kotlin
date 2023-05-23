@@ -7,7 +7,7 @@ package aws.sdk.kotlin.services.polly
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
-import aws.sdk.kotlin.services.polly.presigners.presignSynthesizeSpeechRequest
+import aws.sdk.kotlin.services.polly.presigners.presignSynthesizeSpeech
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.response.complete
@@ -31,7 +31,7 @@ class PollyPresignerTest {
         }
 
         val client = PollyClient { region = "us-east-1" }
-        val presignedRequest = client.presignSynthesizeSpeechRequest(unsignedRequest, 10.seconds)
+        val presignedRequest = client.presignSynthesizeSpeech(unsignedRequest, 10.seconds)
 
         withAllEngines { engine ->
             val httpClient = SdkHttpClient(engine)

@@ -99,8 +99,8 @@ class PresignerGeneratorTest {
              * @param duration The amount of time from signing for which the request is valid
              * @return An [HttpRequest] which can be invoked within the specified time window
              */
-            public suspend fun TestClient.presignGetFooRequest(input: GetFooRequest, duration: Duration): HttpRequest =
-                presignGetFooRequest(input) { expiresAfter = duration }
+            public suspend fun TestClient.presignGetFoo(input: GetFooRequest, duration: Duration): HttpRequest =
+                presignGetFoo(input) { expiresAfter = duration }
         
             /**
              * Presign a [GetFooRequest] using the configuration of this [TestClient].
@@ -110,7 +110,7 @@ class PresignerGeneratorTest {
              * [expiresAfter] field must be set.
              * @return An [HttpRequest] which can be invoked within the specified time window
              */
-            public suspend fun TestClient.presignGetFooRequest(
+            public suspend fun TestClient.presignGetFoo(
                 input: GetFooRequest,
                 signer: AwsSigner = DefaultAwsSigner,
                 configBlock: AwsSigningConfig.Builder.() -> Unit,
@@ -135,8 +135,8 @@ class PresignerGeneratorTest {
              * @param duration The amount of time from signing for which the request is valid
              * @return An [HttpRequest] which can be invoked within the specified time window
              */
-            public suspend fun TestClient.presignPostFooRequest(input: PostFooRequest, duration: Duration): HttpRequest =
-                presignPostFooRequest(input) { expiresAfter = duration }
+            public suspend fun TestClient.presignPostFoo(input: PostFooRequest, duration: Duration): HttpRequest =
+                presignPostFoo(input) { expiresAfter = duration }
         
             /**
              * Presign a [PostFooRequest] using the configuration of this [TestClient].
@@ -146,7 +146,7 @@ class PresignerGeneratorTest {
              * [expiresAfter] field must be set.
              * @return An [HttpRequest] which can be invoked within the specified time window
              */
-            public suspend fun TestClient.presignPostFooRequest(
+            public suspend fun TestClient.presignPostFoo(
                 input: PostFooRequest,
                 signer: AwsSigner = DefaultAwsSigner,
                 configBlock: AwsSigningConfig.Builder.() -> Unit,
@@ -171,8 +171,8 @@ class PresignerGeneratorTest {
              * @param duration The amount of time from signing for which the request is valid
              * @return An [HttpRequest] which can be invoked within the specified time window
              */
-            public suspend fun TestClient.presignPutFooRequest(input: PutFooRequest, duration: Duration): HttpRequest =
-                presignPutFooRequest(input) { expiresAfter = duration }
+            public suspend fun TestClient.presignPutFoo(input: PutFooRequest, duration: Duration): HttpRequest =
+                presignPutFoo(input) { expiresAfter = duration }
         
             /**
              * Presign a [PutFooRequest] using the configuration of this [TestClient].
@@ -182,7 +182,7 @@ class PresignerGeneratorTest {
              * [expiresAfter] field must be set.
              * @return An [HttpRequest] which can be invoked within the specified time window
              */
-            public suspend fun TestClient.presignPutFooRequest(
+            public suspend fun TestClient.presignPutFoo(
                 input: PutFooRequest,
                 signer: AwsSigner = DefaultAwsSigner,
                 configBlock: AwsSigningConfig.Builder.() -> Unit,
@@ -201,7 +201,6 @@ class PresignerGeneratorTest {
                 }
             }
         """.trimIndent()
-
         actual.shouldContainOnlyOnceWithDiff(expected)
     }
 
@@ -263,7 +262,7 @@ class PresignerGeneratorTest {
              * [expiresAfter] field must be set.
              * @return An [HttpRequest] which can be invoked within the specified time window
              */
-            public suspend fun TestClient.presignGetFooRequest(
+            public suspend fun TestClient.presignGetFoo(
                 input: GetFooRequest,
                 signer: AwsSigner = DefaultAwsSigner,
                 configBlock: AwsSigningConfig.Builder.() -> Unit,
