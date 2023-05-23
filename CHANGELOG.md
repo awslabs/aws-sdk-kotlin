@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.25.0-beta] - 05/19/2023
+
+### Features
+* **Breaking**: Make HTTP engines configurable in client config during initialization and during `withCopy`. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/new?category=announcements) for more information.
+
+### Miscellaneous
+* Sync smithy-kotlin and AWS service models.
+
 ## [0.24.0-beta] - 05/12/2023
 
 ### Features
