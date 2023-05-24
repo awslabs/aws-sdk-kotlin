@@ -7,7 +7,8 @@ package aws.sdk.kotlin.e2etest
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
-import aws.sdk.kotlin.services.s3.presigners.presign
+import aws.sdk.kotlin.services.s3.presigners.presignGetObject
+import aws.sdk.kotlin.services.s3.presigners.presignPutObject
 import aws.sdk.kotlin.testing.PRINTABLE_CHARS
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.content.decodeToString
@@ -22,10 +23,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3PresignerTest {
-
     private val client = S3Client {
         region = S3TestUtils.DEFAULT_REGION
     }
@@ -51,17 +50,19 @@ class S3PresignerTest {
         withAllEngines { engine ->
             val httpClient = SdkHttpClient(engine)
 
-            val presignedPutRequest = PutObjectRequest {
+            val unsignedPutRequest = PutObjectRequest {
                 bucket = testBucket
                 key = keyName
-            }.presign(client.config, 60.seconds)
+            }
+            val presignedPutRequest = client.presignPutObject(unsignedPutRequest, 60.seconds)
 
             S3TestUtils.responseCodeFromPut(presignedPutRequest, contents)
 
-            val presignedGetRequest = GetObjectRequest {
+            val unsignedGetRequest = GetObjectRequest {
                 bucket = testBucket
                 key = keyName
-            }.presign(client.config, 60.seconds)
+            }
+            val presignedGetRequest = client.presignGetObject(unsignedGetRequest, 60.seconds)
 
             val call = httpClient.call(presignedGetRequest)
             val body = call.response.body.toByteStream()?.decodeToString()

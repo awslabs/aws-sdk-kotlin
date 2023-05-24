@@ -7,6 +7,7 @@ package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.protocols.endpoints.*
 import software.amazon.smithy.codegen.core.CodegenException
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.useFileWriter
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.*
@@ -67,8 +68,8 @@ class AwsEndpointDelegator : EndpointDelegator {
             EndpointResolverAdapterGenerator(ctx, it) {
                 it.write(
                     "endpoint.#T?.#T(request.context)",
-                    AwsRuntimeTypes.Endpoint.authSchemeEndpointExt,
-                    AwsRuntimeTypes.Endpoint.setSigningContext,
+                    RuntimeTypes.SmithyClient.Endpoints.signingContext,
+                    RuntimeTypes.Auth.Signing.AwsSigningCommon.mergeInto,
                 )
             }.render()
         }

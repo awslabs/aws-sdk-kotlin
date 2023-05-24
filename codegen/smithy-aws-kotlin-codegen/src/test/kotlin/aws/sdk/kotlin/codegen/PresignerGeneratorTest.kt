@@ -12,6 +12,7 @@ import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.test.TestContext
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.shouldContainOnlyOnceWithDiff
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
@@ -73,248 +74,228 @@ class PresignerGeneratorTest {
 
             structure GetFooInput {
                 payload: String
-            }            
+            }
         """.toSmithyModel()
     private val testContext = testModel.newTestContext("Example", "smithy.kotlin.traits")
-
-    private val codegenContext = object : CodegenContext {
-        override val model: Model = testContext.generationCtx.model
-        override val symbolProvider: SymbolProvider = testContext.generationCtx.symbolProvider
-        override val settings: KotlinSettings = testContext.generationCtx.settings
-        override val protocolGenerator: ProtocolGenerator? = testContext.generator
-        override val integrations: List<KotlinIntegration> = testContext.generationCtx.integrations
-    }
 
     @Test
     fun testCustomTraitOnModel() {
         assertTrue(testModel.expectShape<OperationShape>("smithy.kotlin.traits#GetFoo").hasTrait(Presignable.ID))
     }
 
-    // TODO ~ exercise both awsQuery and restXml protocols
     @Test
-    fun testPresignerCodegenNoBody() {
+    fun testPresignerCodegen() {
         val unit = PresignerGenerator()
-
-        unit.writeAdditionalFiles(codegenContext, testContext.generationCtx.delegator)
+        unit.writeAdditionalFiles(testContext.toCodegenContext(), testContext.generationCtx.delegator)
 
         testContext.generationCtx.delegator.flushWriters()
         val testManifest = testContext.generationCtx.delegator.fileManifest as MockManifest
         val actual = testManifest.expectFileString("src/main/kotlin/smithy/kotlin/traits/presigners/Presigners.kt")
 
         val expected = """
-            package smithy.kotlin.traits.presigners
-            
-            import aws.sdk.kotlin.runtime.ClientException
-            import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
-            import aws.sdk.kotlin.runtime.endpoint.asSigningContext
-            import aws.sdk.kotlin.runtime.endpoint.authScheme
-            import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-            import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigner
-            import aws.smithy.kotlin.runtime.auth.awssigning.DefaultAwsSigner
-            import aws.smithy.kotlin.runtime.auth.awssigning.PresignedRequestConfig
-            import aws.smithy.kotlin.runtime.auth.awssigning.PresigningLocation
-            import aws.smithy.kotlin.runtime.auth.awssigning.ServicePresignConfig
-            import aws.smithy.kotlin.runtime.auth.awssigning.SigningContextualizedEndpoint
-            import aws.smithy.kotlin.runtime.auth.awssigning.SigningEndpointProvider
-            import aws.smithy.kotlin.runtime.auth.awssigning.createPresignedRequest
-            import aws.smithy.kotlin.runtime.client.SdkClientOption
-            import aws.smithy.kotlin.runtime.http.auth.AnonymousIdentity
-            import aws.smithy.kotlin.runtime.http.operation.HttpOperationContext
-            import aws.smithy.kotlin.runtime.http.operation.ResolveEndpointRequest
-            import aws.smithy.kotlin.runtime.http.request.HttpRequest
-            import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
-            import aws.smithy.kotlin.runtime.net.QueryParameters
-            import aws.smithy.kotlin.runtime.operation.ExecutionContext
-            import kotlin.time.Duration
-            import smithy.kotlin.traits.TestClient
-            import smithy.kotlin.traits.endpoints.internal.EndpointResolverAdapter
-            import smithy.kotlin.traits.model.GetFooRequest
-            import smithy.kotlin.traits.model.PostFooRequest
-            import smithy.kotlin.traits.model.PutFooRequest
-            import smithy.kotlin.traits.transform.GetFooOperationSerializer
-            import smithy.kotlin.traits.transform.PostFooOperationSerializer
-            import smithy.kotlin.traits.transform.PutFooOperationSerializer
-            
             /**
-             * Presign a [GetFooRequest] using a [ServicePresignConfig].
-             * @param presignConfig the configuration used to generate the presigned request
-             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [HttpRequest] that can be invoked within the specified time window.
+             * Presign a [GetFooRequest] using the configuration of this [TestClient].
+             * @param input The [GetFooRequest] to presign
+             * @param duration The amount of time from signing for which the request is valid
+             * @return An [HttpRequest] which can be invoked within the specified time window
              */
-            public suspend fun GetFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
-                return createPresignedRequest(presignConfig, getFooPresignConfig(this, duration))
-            }
-            
+            public suspend fun TestClient.presignGetFoo(input: GetFooRequest, duration: Duration): HttpRequest =
+                presignGetFoo(input) { expiresAfter = duration }
+        
             /**
-             * Presign a [GetFooRequest] using a [TestClient].
-             * @param config the client configuration used to generate the presigned request.
-             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [HttpRequest] that can be invoked within the specified time window.
+             * Presign a [GetFooRequest] using the configuration of this [TestClient].
+             * @param input The [GetFooRequest] to presign
+             * @param signer The specific implementation of AWS signer to use. Defaults to DefaultAwsSigner.
+             * @param configBlock A builder block for setting custom signing parameters. At a minimum the
+             * [expiresAfter] field must be set.
+             * @return An [HttpRequest] which can be invoked within the specified time window
              */
-            public suspend fun GetFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
-                val presignConfig = TestPresignConfig {
-                    credentialsProvider = config.credentialsProvider
-                    endpointProvider = EndpointResolverAdapter(config).asSigningProvider(this@presign, "GetFoo")
-                    region = config.region
-                }
-                return createPresignedRequest(presignConfig, getFooPresignConfig(this, duration))
-            }
-            
-            private suspend fun getFooPresignConfig(input: GetFooRequest, duration: Duration) : PresignedRequestConfig {
-                require(duration.isPositive()) { "duration must be greater than zero" }
-                val httpRequestBuilder = GetFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
-                return PresignedRequestConfig(
-                    httpRequestBuilder.method,
-                    httpRequestBuilder.url.path,
-                    httpRequestBuilder.url.parameters.build(),
-                    duration,
-                    false,
-                    PresigningLocation.QUERY_STRING,
-                    httpRequestBuilder.headers.build(),
-                )
-            }
-            
-            /**
-             * Presign a [PostFooRequest] using a [ServicePresignConfig].
-             * @param presignConfig the configuration used to generate the presigned request
-             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [HttpRequest] that can be invoked within the specified time window.
-             */
-            public suspend fun PostFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
-                return createPresignedRequest(presignConfig, postFooPresignConfig(this, duration))
-            }
-            
-            /**
-             * Presign a [PostFooRequest] using a [TestClient].
-             * @param config the client configuration used to generate the presigned request.
-             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [HttpRequest] that can be invoked within the specified time window.
-             */
-            public suspend fun PostFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
-                val presignConfig = TestPresignConfig {
-                    credentialsProvider = config.credentialsProvider
-                    endpointProvider = EndpointResolverAdapter(config).asSigningProvider(this@presign, "PostFoo")
-                    region = config.region
-                }
-                return createPresignedRequest(presignConfig, postFooPresignConfig(this, duration))
-            }
-            
-            private suspend fun postFooPresignConfig(input: PostFooRequest, duration: Duration) : PresignedRequestConfig {
-                require(duration.isPositive()) { "duration must be greater than zero" }
-                val httpRequestBuilder = PostFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
-                return PresignedRequestConfig(
-                    httpRequestBuilder.method,
-                    httpRequestBuilder.url.path,
-                    httpRequestBuilder.url.parameters.build(),
-                    duration,
-                    false,
-                    PresigningLocation.QUERY_STRING,
-                    httpRequestBuilder.headers.build(),
-                )
-            }
-            
-            /**
-             * Presign a [PutFooRequest] using a [ServicePresignConfig].
-             * @param presignConfig the configuration used to generate the presigned request
-             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [HttpRequest] that can be invoked within the specified time window.
-             */
-            public suspend fun PutFooRequest.presign(presignConfig: ServicePresignConfig, duration: Duration): HttpRequest {
-                return createPresignedRequest(presignConfig, putFooPresignConfig(this, duration))
-            }
-            
-            /**
-             * Presign a [PutFooRequest] using a [TestClient].
-             * @param config the client configuration used to generate the presigned request.
-             * @param duration the amount of time from signing for which the request is valid, with seconds granularity.
-             * @return The [HttpRequest] that can be invoked within the specified time window.
-             */
-            public suspend fun PutFooRequest.presign(config: TestClient.Config, duration: Duration): HttpRequest {
-                val presignConfig = TestPresignConfig {
-                    credentialsProvider = config.credentialsProvider
-                    endpointProvider = EndpointResolverAdapter(config).asSigningProvider(this@presign, "PutFoo")
-                    region = config.region
-                }
-                return createPresignedRequest(presignConfig, putFooPresignConfig(this, duration))
-            }
-            
-            private suspend fun putFooPresignConfig(input: PutFooRequest, duration: Duration) : PresignedRequestConfig {
-                require(duration.isPositive()) { "duration must be greater than zero" }
-                val httpRequestBuilder = PutFooOperationSerializer().serialize(ExecutionContext.build {  }, input)
-                return PresignedRequestConfig(
-                    httpRequestBuilder.method,
-                    httpRequestBuilder.url.path,
-                    httpRequestBuilder.url.parameters.build(),
-                    duration,
-                    false,
-                    PresigningLocation.QUERY_STRING,
-                    httpRequestBuilder.headers.build(),
-                )
-            }
-            
-            /**
-             * Provides a subset of the service client configuration necessary to presign a request.
-             * This type can be used to presign requests in cases where an existing service client
-             * instance is not available.
-             */
-            public class TestPresignConfig private constructor(builder: Builder) : ServicePresignConfig {
-                override val credentialsProvider: CredentialsProvider = requireNotNull(builder.credentialsProvider) { "credentialsProvider is a required configuration property" }
-                override val endpointProvider: SigningEndpointProvider = requireNotNull(builder.endpointProvider) { "endpointProvider is a required configuration property" }
-                override val normalizeUriPath: Boolean = true
-                override val region: String = requireNotNull(builder.region) { "region is a required configuration property" }
-                override val serviceId: String = "example"
-                override val signer: AwsSigner = builder.signer ?: DefaultAwsSigner
-                override val signingName: String = "example-signing-name"
-                override val useDoubleUriEncode: Boolean = true
-                public companion object {
-                    public inline operator fun invoke(block: Builder.() -> kotlin.Unit): TestPresignConfig = Builder().apply(block).build()
-                }
-
-                public fun toBuilder(): Builder = Builder().apply {
-                    credentialsProvider = this@TestPresignConfig.credentialsProvider
-                    endpointProvider = this@TestPresignConfig.endpointProvider
-                    region = this@TestPresignConfig.region
-                    signer = this@TestPresignConfig.signer
-                }
-
-                public class Builder {
-                    /**
-                     * The AWS credentials provider to use for authenticating requests. If not provided a [aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider] instance will be used.
-                     */
-                    public var credentialsProvider: CredentialsProvider? = null
-
-                    /**
-                     * Provides the endpoint (hostname) and signing context to make requests to.
-                     */
-                    public var endpointProvider: SigningEndpointProvider? = null
-
-                    /**
-                     * AWS region to make requests for
-                     */
-                    public var region: String? = null
-
-                    /**
-                     * The implementation of AWS signer to use for signing requests
-                     */
-                    public var signer: AwsSigner? = null
-            
-                    @PublishedApi
-                    internal fun build(): TestPresignConfig = TestPresignConfig(this)
-                }
-            }
-
-            internal fun EndpointResolverAdapter.asSigningProvider(input: Any, operationName: String): SigningEndpointProvider = {
-                val execContext = ExecutionContext().apply {
-                    set(SdkClientOption.OperationName, operationName)
+            public suspend fun TestClient.presignGetFoo(
+                input: GetFooRequest,
+                signer: AwsSigner = DefaultAwsSigner,
+                configBlock: AwsSigningConfig.Builder.() -> Unit,
+            ): HttpRequest {
+                val ctx = ExecutionContext().apply {
+                    set(SdkClientOption.OperationName, "GetFoo")
                     set(HttpOperationContext.OperationInput, input)
                 }
-                val httpReq = HttpRequestBuilder().build()
-                val request = ResolveEndpointRequest(execContext, httpReq, AnonymousIdentity)
-                val endpoint = resolve(request)
-                SigningContextualizedEndpoint(endpoint, endpoint.authScheme?.asSigningContext())
+                val unsignedRequest = GetFooOperationSerializer().serialize(ctx, input)
+                val endpointResolver = EndpointResolverAdapter(config)
+        
+                return presignRequest(unsignedRequest, ctx, config.credentialsProvider, endpointResolver, signer) {
+                    if (service == null) service = "example-signing-name"
+                    if (region == null) region = config.region
+                    configBlock()
+                }
+            }
+        
+            /**
+             * Presign a [PostFooRequest] using the configuration of this [TestClient].
+             * @param input The [PostFooRequest] to presign
+             * @param duration The amount of time from signing for which the request is valid
+             * @return An [HttpRequest] which can be invoked within the specified time window
+             */
+            public suspend fun TestClient.presignPostFoo(input: PostFooRequest, duration: Duration): HttpRequest =
+                presignPostFoo(input) { expiresAfter = duration }
+        
+            /**
+             * Presign a [PostFooRequest] using the configuration of this [TestClient].
+             * @param input The [PostFooRequest] to presign
+             * @param signer The specific implementation of AWS signer to use. Defaults to DefaultAwsSigner.
+             * @param configBlock A builder block for setting custom signing parameters. At a minimum the
+             * [expiresAfter] field must be set.
+             * @return An [HttpRequest] which can be invoked within the specified time window
+             */
+            public suspend fun TestClient.presignPostFoo(
+                input: PostFooRequest,
+                signer: AwsSigner = DefaultAwsSigner,
+                configBlock: AwsSigningConfig.Builder.() -> Unit,
+            ): HttpRequest {
+                val ctx = ExecutionContext().apply {
+                    set(SdkClientOption.OperationName, "PostFoo")
+                    set(HttpOperationContext.OperationInput, input)
+                }
+                val unsignedRequest = PostFooOperationSerializer().serialize(ctx, input)
+                val endpointResolver = EndpointResolverAdapter(config)
+        
+                return presignRequest(unsignedRequest, ctx, config.credentialsProvider, endpointResolver, signer) {
+                    if (service == null) service = "example-signing-name"
+                    if (region == null) region = config.region
+                    configBlock()
+                }
+            }
+        
+            /**
+             * Presign a [PutFooRequest] using the configuration of this [TestClient].
+             * @param input The [PutFooRequest] to presign
+             * @param duration The amount of time from signing for which the request is valid
+             * @return An [HttpRequest] which can be invoked within the specified time window
+             */
+            public suspend fun TestClient.presignPutFoo(input: PutFooRequest, duration: Duration): HttpRequest =
+                presignPutFoo(input) { expiresAfter = duration }
+        
+            /**
+             * Presign a [PutFooRequest] using the configuration of this [TestClient].
+             * @param input The [PutFooRequest] to presign
+             * @param signer The specific implementation of AWS signer to use. Defaults to DefaultAwsSigner.
+             * @param configBlock A builder block for setting custom signing parameters. At a minimum the
+             * [expiresAfter] field must be set.
+             * @return An [HttpRequest] which can be invoked within the specified time window
+             */
+            public suspend fun TestClient.presignPutFoo(
+                input: PutFooRequest,
+                signer: AwsSigner = DefaultAwsSigner,
+                configBlock: AwsSigningConfig.Builder.() -> Unit,
+            ): HttpRequest {
+                val ctx = ExecutionContext().apply {
+                    set(SdkClientOption.OperationName, "PutFoo")
+                    set(HttpOperationContext.OperationInput, input)
+                }
+                val unsignedRequest = PutFooOperationSerializer().serialize(ctx, input)
+                val endpointResolver = EndpointResolverAdapter(config)
+        
+                return presignRequest(unsignedRequest, ctx, config.credentialsProvider, endpointResolver, signer) {
+                    if (service == null) service = "example-signing-name"
+                    if (region == null) region = config.region
+                    configBlock()
+                }
+            }
+        """.trimIndent()
+        actual.shouldContainOnlyOnceWithDiff(expected)
+    }
+
+    @Test
+    fun testPresignerCodegenAwsQuery() {
+        val awsQueryModel = """
+            namespace smithy.kotlin.traits
+
+            use aws.protocols#awsQuery
+            use aws.auth#sigv4
+            use aws.api#service
+            use smithy.rules#endpointRuleSet
+
+            @trait(selector: "*")
+            structure presignable { }
+            
+            @awsQuery
+            @xmlNamespace(uri: "http://foo.com")
+            @sigv4(name: "example-signing-name")
+            @service(sdkId: "example")
+            @endpointRuleSet(
+                version: "1.0",
+                parameters: {},
+                rules: [
+                    {
+                        "type": "endpoint",
+                        "conditions": [],
+                        "endpoint": {
+                            "url": "https://static.endpoint.test"
+                        }
+                    }
+                ]
+            )
+            service Example {
+                version: "1.0.0",
+                operations: [GetFoo]
+            }
+            
+            @presignable
+            @readonly
+            @http(method: "GET", uri: "/foo")
+            operation GetFoo { }
+        """.toSmithyModel()
+        val awsQueryContext = awsQueryModel.newTestContext("Example", "smithy.kotlin.traits")
+
+        val unit = PresignerGenerator()
+        unit.writeAdditionalFiles(awsQueryContext.toCodegenContext(), awsQueryContext.generationCtx.delegator)
+
+        awsQueryContext.generationCtx.delegator.flushWriters()
+        val awsQueryManifest = awsQueryContext.generationCtx.delegator.fileManifest as MockManifest
+        val actual = awsQueryManifest.expectFileString("src/main/kotlin/smithy/kotlin/traits/presigners/Presigners.kt")
+
+        val expected = """
+            /**
+             * Presign a [GetFooRequest] using the configuration of this [TestClient].
+             * @param input The [GetFooRequest] to presign
+             * @param signer The specific implementation of AWS signer to use. Defaults to DefaultAwsSigner.
+             * @param configBlock A builder block for setting custom signing parameters. At a minimum the
+             * [expiresAfter] field must be set.
+             * @return An [HttpRequest] which can be invoked within the specified time window
+             */
+            public suspend fun TestClient.presignGetFoo(
+                input: GetFooRequest,
+                signer: AwsSigner = DefaultAwsSigner,
+                configBlock: AwsSigningConfig.Builder.() -> Unit,
+            ): HttpRequest {
+                val ctx = ExecutionContext().apply {
+                    set(SdkClientOption.OperationName, "GetFoo")
+                    set(HttpOperationContext.OperationInput, input)
+                }
+                val unsignedRequest = GetFooOperationSerializer().serialize(ctx, input)
+                unsignedRequest.method = HttpMethod.GET
+                unsignedRequest.body.toByteStream()?.decodeToString()?.splitAsQueryParameters()?.let { bodyParams ->
+                    unsignedRequest.url.parameters.appendAll(bodyParams)
+                }
+            
+                val endpointResolver = EndpointResolverAdapter(config)
+        
+                return presignRequest(unsignedRequest, ctx, config.credentialsProvider, endpointResolver, signer) {
+                    if (service == null) service = "example-signing-name"
+                    if (region == null) region = config.region
+                    hashSpecification = HashSpecification.CalculateFromPayload
+                    configBlock()
+                }
             }
         """.trimIndent()
 
         actual.shouldContainOnlyOnceWithDiff(expected)
     }
+}
+
+private fun TestContext.toCodegenContext() = object : CodegenContext {
+    override val model: Model = generationCtx.model
+    override val symbolProvider: SymbolProvider = generationCtx.symbolProvider
+    override val settings: KotlinSettings = generationCtx.settings
+    override val protocolGenerator: ProtocolGenerator = generator
+    override val integrations: List<KotlinIntegration> = generationCtx.integrations
 }

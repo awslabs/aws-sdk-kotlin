@@ -4,16 +4,11 @@
  */
 package aws.sdk.kotlin.services.polly
 
-import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
-import aws.sdk.kotlin.services.polly.endpoints.DefaultEndpointProvider
-import aws.sdk.kotlin.services.polly.endpoints.EndpointParameters
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
-import aws.sdk.kotlin.services.polly.presigners.PollyPresignConfig
-import aws.sdk.kotlin.services.polly.presigners.presign
+import aws.sdk.kotlin.services.polly.presigners.presignSynthesizeSpeech
 import aws.sdk.kotlin.testing.withAllEngines
-import aws.smithy.kotlin.runtime.auth.awssigning.SigningContextualizedEndpoint
 import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.response.complete
 import kotlinx.coroutines.runBlocking
@@ -27,50 +22,16 @@ import kotlin.time.Duration.Companion.seconds
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PollyPresignerTest {
-
     @Test
     fun clientBasedPresign() = runBlocking {
-        val request = SynthesizeSpeechRequest {
+        val unsignedRequest = SynthesizeSpeechRequest {
             voiceId = VoiceId.Salli
             outputFormat = OutputFormat.Pcm
             text = "hello world"
         }
 
         val client = PollyClient { region = "us-east-1" }
-        val presignedRequest = request.presign(client.config, 10.seconds)
-
-        withAllEngines { engine ->
-            val httpClient = SdkHttpClient(engine)
-
-            val call = httpClient.call(presignedRequest)
-            call.complete()
-
-            assertEquals(200, call.response.status.value, "presigned polly request failed for engine: $engine")
-        }
-    }
-
-    @Test
-    fun presignConfigBasedPresign() = runBlocking {
-        val request = SynthesizeSpeechRequest {
-            voiceId = VoiceId.Salli
-            outputFormat = OutputFormat.Pcm
-            text = "hello world"
-        }
-
-        val presignConfig = PollyPresignConfig {
-            credentialsProvider = DefaultChainCredentialsProvider()
-            endpointProvider = {
-                val endpoint = DefaultEndpointProvider().resolveEndpoint(
-                    EndpointParameters.invoke {
-                        region = it.region
-                    },
-                )
-                SigningContextualizedEndpoint(endpoint, it)
-            }
-            region = "us-east-1"
-        }
-
-        val presignedRequest = request.presign(presignConfig, 10.seconds)
+        val presignedRequest = client.presignSynthesizeSpeech(unsignedRequest, 10.seconds)
 
         withAllEngines { engine ->
             val httpClient = SdkHttpClient(engine)
