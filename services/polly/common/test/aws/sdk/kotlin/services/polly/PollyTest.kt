@@ -5,15 +5,16 @@
 package aws.sdk.kotlin.services.polly
 
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-import aws.sdk.kotlin.services.polly.endpoints.DefaultEndpointProvider
-import aws.sdk.kotlin.services.polly.endpoints.EndpointParameters
 import aws.sdk.kotlin.services.polly.model.OutputFormat
 import aws.sdk.kotlin.services.polly.model.SynthesizeSpeechRequest
 import aws.sdk.kotlin.services.polly.model.VoiceId
-import aws.sdk.kotlin.services.polly.presigners.PollyPresignConfig
-import aws.sdk.kotlin.services.polly.presigners.presign
-import aws.smithy.kotlin.runtime.auth.awssigning.SigningContextualizedEndpoint
+import aws.sdk.kotlin.services.polly.presigners.presignSynthesizeSpeech
 import aws.smithy.kotlin.runtime.http.HttpMethod
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.http.response.HttpCall
+import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -23,7 +24,6 @@ import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PollyPresignerTest {
-
     @Test
     fun itProducesExpectedUrlComponents() = runTest {
         val request = SynthesizeSpeechRequest {
@@ -32,28 +32,29 @@ class PollyPresignerTest {
             text = "hello world"
         }
 
-        val clientConfig = PollyPresignConfig {
+        val presignedRequest = PollyClient {
             region = "us-east-2"
-            endpointProvider = { signingCtx ->
-                val endpointParams = EndpointParameters {
-                    region = "us-east-2"
-                }
-                val endpoint = DefaultEndpointProvider().resolveEndpoint(endpointParams)
-                SigningContextualizedEndpoint(endpoint, signingCtx)
-            }
             credentialsProvider = StaticCredentialsProvider {
                 accessKeyId = "AKID"
                 secretAccessKey = "secret"
             }
+            httpClient = NoHttpEngine
+        }.use { polly ->
+            polly.presignSynthesizeSpeech(request, 10.seconds)
         }
 
-        val presignedRequest = request.presign(clientConfig, 10.seconds)
-
         assertEquals(HttpMethod.GET, presignedRequest.method)
-        assertTrue(presignedRequest.headers.entries().size == 1)
+        assertTrue("Host".equals(presignedRequest.headers.entries().single().key, ignoreCase = true))
         assertEquals("polly.us-east-2.amazonaws.com", presignedRequest.headers["Host"])
         assertEquals("/v1/speech", presignedRequest.url.path)
         val expectedQueryParameters = setOf("OutputFormat", "Text", "VoiceId", "X-Amz-Algorithm", "X-Amz-Credential", "X-Amz-Date", "X-Amz-SignedHeaders", "X-Amz-Expires", "X-Amz-Signature")
         assertEquals(expectedQueryParameters, presignedRequest.url.parameters.entries().map { it.key }.toSet())
     }
+}
+
+object NoHttpEngine : HttpClientEngineBase("no-http") {
+    override val config: HttpClientEngineConfig = HttpClientEngineConfig.Default
+
+    override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall =
+        error("Should not need HTTP round trip")
 }

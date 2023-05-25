@@ -80,7 +80,7 @@ class ContinueIntegrationTest {
     fun testRenderInterceptor() {
         val model = model("S3")
         val ctx = model.newTestContext("S3", integrations = listOf(ContinueIntegration()))
-        val generator = MockHttpProtocolGenerator()
+        val generator = MockHttpProtocolGenerator(model)
         generator.generateProtocolClient(ctx.generationCtx)
 
         ctx.generationCtx.delegator.finalize()

@@ -39,7 +39,7 @@ class AddUserAgentMetadataIntegrationTest {
     fun testRenderProperty() {
         withSysProp {
             val ctx = model.newTestContext(integrations = listOf(AddUserAgentMetadataIntegration()))
-            val generator = MockHttpProtocolGenerator()
+            val generator = MockHttpProtocolGenerator(model)
             generator.generateProtocolClient(ctx.generationCtx)
 
             ctx.generationCtx.delegator.finalize()
@@ -59,7 +59,7 @@ class AddUserAgentMetadataIntegrationTest {
     fun testRenderInterceptor() {
         withSysProp {
             val ctx = model.newTestContext(integrations = listOf(AddUserAgentMetadataIntegration()))
-            val generator = MockHttpProtocolGenerator()
+            val generator = MockHttpProtocolGenerator(model)
             generator.generateProtocolClient(ctx.generationCtx)
 
             ctx.generationCtx.delegator.finalize()

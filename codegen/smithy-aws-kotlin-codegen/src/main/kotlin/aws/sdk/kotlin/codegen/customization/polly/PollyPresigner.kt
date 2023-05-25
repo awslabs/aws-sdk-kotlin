@@ -11,61 +11,50 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpStringValuesMapSerializer
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
- * Override the PresignedRequestConfig instance generation for Polly based on customization SEP
+ * Override the presigner generation for Polly based on customization SEP by lifting HTTP headers/body into URL query
+ * parameters and setting the request method to `GET` (vs `POST`).
  */
 class PollyPresigner : KotlinIntegration {
-
     override fun enabledForService(model: Model, settings: KotlinSettings) =
         model.expectShape<ServiceShape>(settings.service).id.toString() == "com.amazonaws.polly#Parrot_v1"
 
     override val sectionWriters: List<SectionWriterBinding>
-        get() = listOf(SectionWriterBinding(PresignerGenerator.PresignConfigFnSection, addPollyPresignConfigFnWriter))
+        get() = listOf(
+            SectionWriterBinding(PresignerGenerator.UnsignedRequestCustomizationSection, customizeUnsignedRequest),
+            SectionWriterBinding(PresignerGenerator.SigningConfigCustomizationSection, customizeAwsSigningConfig),
+        )
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         delegator.runtimeDependencies.addAll(KotlinDependency.KOTLIN_TEST.dependencies)
     }
 
-    private val addPollyPresignConfigFnWriter = SectionWriter { writer, _ ->
-        val ctx = writer.getContextValue(PresignerGenerator.PresignConfigFnSection.CodegenContext)
-        val operation = ctx.model.expectShape<OperationShape>(writer.getContextValue(PresignerGenerator.PresignConfigFnSection.OperationId))
-        val resolver = writer.getContextValue(PresignerGenerator.PresignConfigFnSection.HttpBindingResolver)
-        val defaultTimestampFormat = writer.getContextValue(PresignerGenerator.PresignConfigFnSection.DefaultTimestampFormat)
+    private val customizeUnsignedRequest = SectionWriter { writer, _ ->
+        val ctx = writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.CodegenContext)
+        val operation = ctx.model.expectShape<OperationShape>(writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.OperationId))
+        val resolver = writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.HttpBindingResolver)
+        val defaultTimestampFormat = writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.DefaultTimestampFormat)
 
-        writer.addImport(RuntimeTypes.Core.Net.QueryParametersBuilder)
-        writer.addImport(RuntimeTypes.Http.HttpMethod)
-        writer.write(
-            """            
-            require(duration.isPositive()) { "duration must be greater than zero" }
-            val httpRequestBuilder = SynthesizeSpeechOperationSerializer().serialize(ExecutionContext.build { }, input)
-            val queryStringBuilder = QueryParametersBuilder()
-            """.trimIndent(),
-        )
-
-        writer.openBlock("with(queryStringBuilder) {", "}") {
+        writer.write("unsignedRequest.method = #T.GET", RuntimeTypes.Http.HttpMethod)
+        writer.withBlock("unsignedRequest.url.#T {", "}", RuntimeTypes.Core.Net.parameters) {
             val bindings = resolver.requestBindings(operation)
             HttpStringValuesMapSerializer(ctx.model, ctx.symbolProvider, bindings, resolver, defaultTimestampFormat).render(writer)
         }
 
+        // Remove the headers that were created by the default HTTP operation serializer
+        writer.write("unsignedRequest.headers.clear()")
+        writer.write("")
+    }
+
+    private val customizeAwsSigningConfig = SectionWriter { writer, _ ->
         writer.write(
-            """
-            return #T(
-                HttpMethod.GET,
-                httpRequestBuilder.url.path,
-                queryStringBuilder.build(),
-                duration,
-                true,
-                #T.QUERY_STRING,
-            )
-            """.trimIndent(),
-            RuntimeTypes.Auth.Signing.AwsSigningCommon.PresignedRequestConfig,
-            RuntimeTypes.Auth.Signing.AwsSigningCommon.PresigningLocation,
+            "hashSpecification = #T.CalculateFromPayload",
+            RuntimeTypes.Auth.Signing.AwsSigningCommon.HashSpecification,
         )
     }
 }

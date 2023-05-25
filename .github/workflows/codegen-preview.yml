@@ -85,9 +85,11 @@ jobs:
             --bootstrap ${{ env.PREVIEW_SERVICES }} \
             --head-sha ${{ github.event.pull_request.head.sha }} \
             . ${{ github.event.pull_request.base.sha }}
-          echo ::set-output name=codegen-diff-msg::"$(cat ./tmp-codegen-diff/bot-message)"
+          echo "codegen-diff-msg<<EOF" >> $GITHUB_OUTPUT
+          cat ./tmp-codegen-diff/bot-message) >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2

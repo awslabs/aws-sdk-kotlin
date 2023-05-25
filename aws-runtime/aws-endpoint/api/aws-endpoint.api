@@ -1,36 +1,3 @@
-public final class aws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4 : aws/sdk/kotlin/runtime/endpoint/AuthScheme {
-	public fun <init> (Ljava/lang/String;ZLjava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Z
-	public final fun component3 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;ZLjava/lang/String;)Laws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4;Ljava/lang/String;ZLjava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDisableDoubleEncoding ()Z
-	public final fun getSigningName ()Ljava/lang/String;
-	public final fun getSigningRegion ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4A : aws/sdk/kotlin/runtime/endpoint/AuthScheme {
-	public fun <init> (Ljava/lang/String;ZLjava/util/List;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Z
-	public final fun component3 ()Ljava/util/List;
-	public final fun copy (Ljava/lang/String;ZLjava/util/List;)Laws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4A;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4A;Ljava/lang/String;ZLjava/util/List;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/endpoint/AuthScheme$SigV4A;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDisableDoubleEncoding ()Z
-	public final fun getSigningName ()Ljava/lang/String;
-	public final fun getSigningRegionSet ()Ljava/util/List;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/endpoint/AuthSchemeKt {
-}
-
 public final class aws/sdk/kotlin/runtime/endpoint/functions/FunctionsKt {
 }
 

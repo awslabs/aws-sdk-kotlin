@@ -9,6 +9,11 @@ import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.ObjectCannedAcl
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
 import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
+import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.http.response.HttpCall
+import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.util.text.urlDecodeComponent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -26,14 +31,17 @@ class PresignersTest {
             key = "bar"
             acl = ObjectCannedAcl.BucketOwnerFullControl
         }
-        val config = S3Client.Config {
+
+        val presigned = S3Client {
             region = "us-west-2"
             credentialsProvider = StaticCredentialsProvider {
                 accessKeyId = "AKID"
                 secretAccessKey = "secret"
             }
+            httpClient = NoHttpEngine
+        }.use { s3 ->
+            s3.presignPutObject(req, 1.days)
         }
-        val presigned = req.presign(config, 1.days)
 
         val aclHeader = presigned.headers["x-amz-acl"]
         assertNotNull(aclHeader, "Expected x-amz-acl header to be included in presigned request")
@@ -45,4 +53,11 @@ class PresignersTest {
         val signedHeaders = signedHeadersString.urlDecodeComponent().split(';')
         assertTrue(signedHeaders.contains("x-amz-acl"), "Expected x-amz-acl to be signed but only found $signedHeaders")
     }
+}
+
+object NoHttpEngine : HttpClientEngineBase("no-http") {
+    override val config: HttpClientEngineConfig = HttpClientEngineConfig.Default
+
+    override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall =
+        error("Should not need HTTP round trip")
 }

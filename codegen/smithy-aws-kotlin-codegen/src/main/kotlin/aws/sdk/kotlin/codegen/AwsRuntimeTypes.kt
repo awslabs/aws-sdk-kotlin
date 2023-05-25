@@ -23,12 +23,6 @@ object AwsRuntimeTypes {
     }
 
     object Endpoint : RuntimeTypePackage(AwsKotlinDependency.AWS_ENDPOINT) {
-        val AuthSchemesAttributeKey = symbol("AuthSchemesAttributeKey")
-        val AuthScheme = symbol("AuthScheme")
-        val authSchemeEndpointExt = symbol("authScheme")
-        val asSigningContextAuthSchemeExt = symbol("asSigningContext")
-        val setSigningContext = symbol("setSigningContext")
-
         object Functions : RuntimeTypePackage(AwsKotlinDependency.AWS_ENDPOINT, "functions") {
             val partitionFn = symbol("partition")
             val Partition = symbol("Partition")
