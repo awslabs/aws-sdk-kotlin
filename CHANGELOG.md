@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.26.0-beta] - 05/25/2023
+
+### Features
+* [#755](https://github.com/awslabs/smithy-kotlin/issues/755) **Breaking**: Refresh presigning APIs to simplify usage and add new capabilities. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/925) for more information.
+
+### Miscellaneous
+* Sync the latest versions of AWS service models and **smithy-kotlin**
+
 ## [0.25.0-beta] - 05/19/2023
 
 ### Features
