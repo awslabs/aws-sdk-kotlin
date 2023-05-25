@@ -7,11 +7,10 @@ import software.amazon.smithy.kotlin.codegen.model.traits.PaginationTruncationMe
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.MemberShape
 import software.amazon.smithy.model.shapes.ServiceShape
-import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.transform.ModelTransformer
 
-private val TRUNCATABLE_PAGINATION_OPS = mapOf(
-    "com.amazonaws.s3#ListParts" to "IsTruncated",
+private val TRUNCATION_MEMBER_IDS = setOf(
+    "com.amazonaws.s3#ListPartsOutput\$IsTruncated",
 )
 
 /**
@@ -22,23 +21,15 @@ class TruncatablePaginationIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
         model.expectShape<ServiceShape>(settings.service).isS3
 
-    override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
-        val truncatableTargets = model
-            .operationShapes
-            .mapNotNull { op ->
-                TRUNCATABLE_PAGINATION_OPS[op.id.toString()]?.let { member ->
-                    model.expectShape<StructureShape>(op.outputShape).allMembers.getValue(member)
+    override fun preprocessModel(model: Model, settings: KotlinSettings): Model = ModelTransformer
+        .create()
+        .mapShapes(model) { shape ->
+            when {
+                shape.id.toString() in TRUNCATION_MEMBER_IDS -> {
+                    check(shape is MemberShape) { "Cannot apply PaginationTruncationMember to non-member shape" }
+                    shape.toBuilder().addTrait(PaginationTruncationMember()).build()
                 }
-            }
-            .toSet()
-
-        return ModelTransformer.create().mapShapes(model) { shape ->
-            if (shape in truncatableTargets) {
-                check(shape is MemberShape) { "Cannot apply PaginationTruncationMember to non-member shape" }
-                shape.toBuilder().addTrait(PaginationTruncationMember()).build()
-            } else {
-                shape
+                else -> shape
             }
         }
-    }
 }
