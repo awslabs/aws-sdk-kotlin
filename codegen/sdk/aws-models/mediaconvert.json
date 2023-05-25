@@ -110,7 +110,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "The Coding mode that you specify determines the number of audio channels and the audio channel layout metadata in your AAC output. Valid coding modes depend on the Rate control mode and Profile that you select. The following list shows the number of audio channels and channel layout for each coding mode. * 1.0 Audio Description (Receiver Mix): One channel, C. Includes audio description data from your stereo input. For more information see ETSI TS 101 154 Annex E. * 1.0 Mono: One channel, C. * 2.0 Stereo: Two channels, L, R. * 5.1 Surround: Five channels, C, L, R, Ls, Rs, LFE."
+                "smithy.api#documentation": "The Coding mode that you specify determines the number of audio channels and the audio channel layout metadata in your AAC output. Valid coding modes depend on the Rate control mode and Profile that you select. The following list shows the number of audio channels and channel layout for each coding mode. * 1.0 Audio Description (Receiver Mix): One channel, C. Includes audio description data from your stereo input. For more information see ETSI TS 101 154 Annex E. * 1.0 Mono: One channel, C. * 2.0 Stereo: Two channels, L, R. * 5.1 Surround: Six channels, C, L, R, Ls, Rs, LFE."
             }
         },
         "com.amazonaws.mediaconvert#AacRateControlMode": {
@@ -180,7 +180,7 @@
                 "CodingMode": {
                     "target": "com.amazonaws.mediaconvert#AacCodingMode",
                     "traits": {
-                        "smithy.api#documentation": "The Coding mode that you specify determines the number of audio channels and the audio channel layout metadata in your AAC output. Valid coding modes depend on the Rate control mode and Profile that you select. The following list shows the number of audio channels and channel layout for each coding mode. * 1.0 Audio Description (Receiver Mix): One channel, C. Includes audio description data from your stereo input. For more information see ETSI TS 101 154 Annex E. * 1.0 Mono: One channel, C. * 2.0 Stereo: Two channels, L, R. * 5.1 Surround: Five channels, C, L, R, Ls, Rs, LFE.",
+                        "smithy.api#documentation": "The Coding mode that you specify determines the number of audio channels and the audio channel layout metadata in your AAC output. Valid coding modes depend on the Rate control mode and Profile that you select. The following list shows the number of audio channels and channel layout for each coding mode. * 1.0 Audio Description (Receiver Mix): One channel, C. Includes audio description data from your stereo input. For more information see ETSI TS 101 154 Annex E. * 1.0 Mono: One channel, C. * 2.0 Stereo: Two channels, L, R. * 5.1 Surround: Six channels, C, L, R, Ls, Rs, LFE.",
                         "smithy.api#jsonName": "codingMode"
                     }
                 },
@@ -681,7 +681,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "Use to remove noise, blocking, blurriness, or ringing from your input as a pre-filter step before encoding. The Advanced input filter removes more types of compression artifacts and is an improvement when compared to basic Deblock and Denoise filters. To remove video compression artifacts from your input and improve the video quality: Choose Enabled. Additionally, this filter can help increase the video quality of your output relative to its bitrate, since noisy inputs are more complex and require more bits to encode. To help restore loss of detail after applying the filter, you can optionally add texture or sharpening as an additional step.Jobs that use this feature incur pro-tier pricing. To not apply advanced input filtering: Choose Disabled. Note that you can still apply basic filtering with Deblock and Denoise."
+                "smithy.api#documentation": "Use to remove noise, blocking, blurriness, or ringing from your input as a pre-filter step before encoding. The Advanced input filter removes more types of compression artifacts and is an improvement when compared to basic Deblock and Denoise filters. To remove video compression artifacts from your input and improve the video quality: Choose Enabled. Additionally, this filter can help increase the video quality of your output relative to its bitrate, since noisy inputs are more complex and require more bits to encode. To help restore loss of detail after applying the filter, you can optionally add texture or sharpening as an additional step. Jobs that use this feature incur pro-tier pricing. To not apply advanced input filtering: Choose Disabled. Note that you can still apply basic filtering with Deblock and Denoise."
             }
         },
         "com.amazonaws.mediaconvert#AdvancedInputFilterAddTexture": {
@@ -11843,7 +11843,7 @@
                 "SegmentsPerSubdirectory": {
                     "target": "com.amazonaws.mediaconvert#__integerMin1Max2147483647",
                     "traits": {
-                        "smithy.api#documentation": "Number of segments to write to a subdirectory before starting a new one. directoryStructure must be SINGLE_DIRECTORY for this setting to have an effect.",
+                        "smithy.api#documentation": "Specify the number of segments to write to a subdirectory before starting a new one. You  must also set Directory structure to Subdirectory per stream for this setting to have an effect.",
                         "smithy.api#jsonName": "segmentsPerSubdirectory"
                     }
                 },
@@ -12482,7 +12482,7 @@
                 "AdvancedInputFilter": {
                     "target": "com.amazonaws.mediaconvert#AdvancedInputFilter",
                     "traits": {
-                        "smithy.api#documentation": "Use to remove noise, blocking, blurriness, or ringing from your input as a pre-filter step before encoding. The Advanced input filter removes more types of compression artifacts and is an improvement when compared to basic Deblock and Denoise filters. To remove video compression artifacts from your input and improve the video quality: Choose Enabled. Additionally, this filter can help increase the video quality of your output relative to its bitrate, since noisy inputs are more complex and require more bits to encode. To help restore loss of detail after applying the filter, you can optionally add texture or sharpening as an additional step.Jobs that use this feature incur pro-tier pricing. To not apply advanced input filtering: Choose Disabled. Note that you can still apply basic filtering with Deblock and Denoise.",
+                        "smithy.api#documentation": "Use to remove noise, blocking, blurriness, or ringing from your input as a pre-filter step before encoding. The Advanced input filter removes more types of compression artifacts and is an improvement when compared to basic Deblock and Denoise filters. To remove video compression artifacts from your input and improve the video quality: Choose Enabled. Additionally, this filter can help increase the video quality of your output relative to its bitrate, since noisy inputs are more complex and require more bits to encode. To help restore loss of detail after applying the filter, you can optionally add texture or sharpening as an additional step. Jobs that use this feature incur pro-tier pricing. To not apply advanced input filtering: Choose Disabled. Note that you can still apply basic filtering with Deblock and Denoise.",
                         "smithy.api#jsonName": "advancedInputFilter"
                     }
                 },
@@ -12906,7 +12906,7 @@
                 "AdvancedInputFilter": {
                     "target": "com.amazonaws.mediaconvert#AdvancedInputFilter",
                     "traits": {
-                        "smithy.api#documentation": "Use to remove noise, blocking, blurriness, or ringing from your input as a pre-filter step before encoding. The Advanced input filter removes more types of compression artifacts and is an improvement when compared to basic Deblock and Denoise filters. To remove video compression artifacts from your input and improve the video quality: Choose Enabled. Additionally, this filter can help increase the video quality of your output relative to its bitrate, since noisy inputs are more complex and require more bits to encode. To help restore loss of detail after applying the filter, you can optionally add texture or sharpening as an additional step.Jobs that use this feature incur pro-tier pricing. To not apply advanced input filtering: Choose Disabled. Note that you can still apply basic filtering with Deblock and Denoise.",
+                        "smithy.api#documentation": "Use to remove noise, blocking, blurriness, or ringing from your input as a pre-filter step before encoding. The Advanced input filter removes more types of compression artifacts and is an improvement when compared to basic Deblock and Denoise filters. To remove video compression artifacts from your input and improve the video quality: Choose Enabled. Additionally, this filter can help increase the video quality of your output relative to its bitrate, since noisy inputs are more complex and require more bits to encode. To help restore loss of detail after applying the filter, you can optionally add texture or sharpening as an additional step. Jobs that use this feature incur pro-tier pricing. To not apply advanced input filtering: Choose Disabled. Note that you can still apply basic filtering with Deblock and Denoise.",
                         "smithy.api#jsonName": "advancedInputFilter"
                     }
                 },
@@ -13825,7 +13825,7 @@
                     }
                 },
                 "KantarServerUrl": {
-                    "target": "com.amazonaws.mediaconvert#__stringPatternHttpsKantarmediaComFr",
+                    "target": "com.amazonaws.mediaconvert#__stringPatternHttpsKantarmedia",
                     "traits": {
                         "smithy.api#documentation": "Provide the HTTPS endpoint to the Kantar server. You should get this endpoint from Kantar.",
                         "smithy.api#jsonName": "kantarServerUrl"
@@ -19190,6 +19190,12 @@
                     "traits": {
                         "smithy.api#enumValue": "XAVC"
                     }
+                },
+                "XDCAM_RDD9": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "XDCAM_RDD9"
+                    }
                 }
             },
             "traits": {
@@ -22889,7 +22895,7 @@
                 "Height": {
                     "target": "com.amazonaws.mediaconvert#__integerMin32Max8192",
                     "traits": {
-                        "smithy.api#documentation": "Use the Height (Height) setting to define the video resolution height for this output. Specify in pixels. If you don't provide a value here, the service will use the input height.",
+                        "smithy.api#documentation": "Use Height to define the video resolution height, in pixels, for this output. To use the same resolution as your input: Leave both Width and Height blank. To evenly scale from your input resolution: Leave Height blank and enter a value for Width. For example, if your input is 1920x1080 and you set Width to 1280, your output will be 1280x720.",
                         "smithy.api#jsonName": "height"
                     }
                 },
@@ -22938,7 +22944,7 @@
                 "Width": {
                     "target": "com.amazonaws.mediaconvert#__integerMin32Max8192",
                     "traits": {
-                        "smithy.api#documentation": "Use Width (Width) to define the video resolution width, in pixels, for this output. If you don't provide a value here, the service will use the input width.",
+                        "smithy.api#documentation": "Use Width to define the video resolution width, in pixels, for this output. To use the same resolution as your input: Leave both Width and Height blank. To evenly scale from your input resolution: Leave Width blank and enter a value for Height. For example, if your input is 1920x1080 and you set Height to 720, your output will be 1280x720.",
                         "smithy.api#jsonName": "width"
                     }
                 }
@@ -26078,10 +26084,10 @@
                 "smithy.api#pattern": "^https:\\/\\/$"
             }
         },
-        "com.amazonaws.mediaconvert#__stringPatternHttpsKantarmediaComFr": {
+        "com.amazonaws.mediaconvert#__stringPatternHttpsKantarmedia": {
             "type": "string",
             "traits": {
-                "smithy.api#pattern": "^https:\\/\\/.*.kantarmedia.(com|fr)$"
+                "smithy.api#pattern": "^https:\\/\\/.*.kantarmedia.*$"
             }
         },
         "com.amazonaws.mediaconvert#__stringPatternIdentityAZaZ26AZaZ09163": {
