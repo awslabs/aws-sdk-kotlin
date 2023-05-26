@@ -33,11 +33,12 @@ echo "Build id $BUILD_ID"
 
 BUILD_STATUS="IN_PROGRESS"
 while [ "$BUILD_STATUS" == "IN_PROGRESS" ]; do
-  echo "Checking build status."
+  sleep 10
+
   BUILD=$(aws codebuild batch-get-build-batches --ids ${BUILD_ID})
   BUILD_STATUS=$(echo $BUILD | jq '.buildBatches[0].buildBatchStatus' -r)
 
-  JOBS=$(echo $BUILD | jq '.buildBatches[0].buildGroups | [.[] | {identifier: .identifier, status: .currentBuildSummary.buildStatus} | select(.identifier | startswith("JOB"))]')
+  JOBS=$(echo $BUILD | jq '.buildBatches[0].buildGroups | [.[] | { identifier: .identifier, status: .currentBuildSummary.buildStatus } ]')
   TOTAL_JOBS=$(echo $JOBS | jq 'length')
 
   SUCCEEDED_CNT=$(echo $JOBS | jq '[.[] | select(.status == "SUCCEEDED")] | length')
@@ -47,9 +48,7 @@ while [ "$BUILD_STATUS" == "IN_PROGRESS" ]; do
 
   if [ "$BUILD_STATUS" == "IN_PROGRESS" ]; then
     echo "Build is still in progress (failed=$FAILED_CNT; in_progress=$IN_PROGRESS_CNT; succeeded=$SUCCEEDED_CNT; total=$TOTAL_JOBS), waiting..."
-
   fi
-  sleep 10
 done
 
 if [ "$BUILD_STATUS" != "SUCCEEDED" ]; then
