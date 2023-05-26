@@ -24,6 +24,7 @@ aws.sdk.kotlin.codegen.customization.route53.TrimResourcePrefix
 aws.sdk.kotlin.codegen.customization.s3.ClientConfigIntegration
 aws.sdk.kotlin.codegen.customization.s3.ContinueIntegration
 aws.sdk.kotlin.codegen.customization.s3.HttpPathFilter
+aws.sdk.kotlin.codegen.customization.s3.TruncatablePaginationIntegration
 aws.sdk.kotlin.codegen.customization.s3control.HostPrefixFilter
 aws.sdk.kotlin.codegen.customization.s3control.ClientConfigIntegration
 aws.sdk.kotlin.codegen.protocols.endpoints.BindAwsEndpointBuiltins
