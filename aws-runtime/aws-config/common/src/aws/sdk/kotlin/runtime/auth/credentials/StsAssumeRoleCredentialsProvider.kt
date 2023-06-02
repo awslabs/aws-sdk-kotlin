@@ -9,7 +9,6 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRole
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.RegionDisabledException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException

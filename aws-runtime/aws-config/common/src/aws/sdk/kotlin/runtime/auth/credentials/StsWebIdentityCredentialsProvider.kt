@@ -8,7 +8,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRoleWithWebIdentity
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
@@ -16,7 +15,6 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH
 import aws.smithy.kotlin.runtime.config.EnvironmentSetting
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.Attributes
