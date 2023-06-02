@@ -24,7 +24,7 @@ private val SESSION_TOKEN = AwsSdkSetting.AwsSessionToken.envVar
  * A [CredentialsProvider] which reads from `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN`.
  */
 public class EnvironmentCredentialsProvider
-public constructor(private val getEnv: (String) -> String?) : CloseableCredentialsProvider {
+public constructor(private val getEnv: (String) -> String?) : CredentialsProvider {
     public constructor() : this(PlatformProvider.System::getenv)
 
     private fun requireEnv(variable: String): String =
@@ -41,6 +41,4 @@ public constructor(private val getEnv: (String) -> String?) : CloseableCredentia
             providerName = PROVIDER_NAME,
         )
     }
-
-    override fun close() { }
 }

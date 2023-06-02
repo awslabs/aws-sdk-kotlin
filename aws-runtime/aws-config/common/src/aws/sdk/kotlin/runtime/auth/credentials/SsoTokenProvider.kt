@@ -49,7 +49,8 @@ private const val OIDC_GRANT_TYPE_REFRESH = "refresh_token"
  * @param refreshBufferWindow amount of time before the actual credential expiration time when credentials are
  * considered expired. For example, if credentials are expiring in 15 minutes, and the buffer time is 10 seconds,
  * then any requests made after 14 minutes and 50 seconds will load new credentials. Defaults to 5 minutes.
- * @param httpClient the [HttpClientEngine] to use when making requests to the AWS SSO service
+ * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+ * are NOT managed by the provider. Caller is responsible for closing.
  * @param platformProvider the platform provider to use
  * @param clock the source of time for the provider
  */
