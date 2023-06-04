@@ -200,7 +200,7 @@ The `.api` files can be updated by running `./gradlew apiDump`.
 The binary compatibility validator can also be run manually using `./gradlew apiCheck`.
 
 ## Finding contributions to work on
-Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels ((enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any ['help wanted'](https://github.com/aws-samples/aws-sdk-kotlin/labels/help%20wanted) issues is a great place to start. 
+Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels ((enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any ['good first issue'](https://github.com/awslabs/aws-sdk-kotlin/labels/good%20first%20issue) issues is a great place to start.
 
 
 ## Code of Conduct
