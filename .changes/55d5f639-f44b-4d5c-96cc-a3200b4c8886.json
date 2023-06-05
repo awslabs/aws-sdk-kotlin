@@ -1,5 +1,0 @@
-{
-    "id": "55d5f639-f44b-4d5c-96cc-a3200b4c8886",
-    "type": "bugfix",
-    "description": "Fix infinite pagination in S3 `ListParts`"
-}

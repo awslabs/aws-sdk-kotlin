@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.26.1-beta] - 06/01/2023
+
+### Fixes
+* Fix infinite pagination in S3 `ListParts`
+
+### Miscellaneous
+* Sync AWS models and bump smithy-kotlin
+
 ## [0.26.0-beta] - 05/25/2023
 
 ### Features
