@@ -9,8 +9,10 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.http.auth.BearerToken
 import aws.smithy.kotlin.runtime.http.auth.BearerTokenProviderChain
 import aws.smithy.kotlin.runtime.http.auth.CloseableBearerTokenProvider
+import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
@@ -34,14 +36,19 @@ public class DefaultChainBearerTokenProvider(
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
 ) : CloseableBearerTokenProvider {
+    private val manageEngine = httpClient == null
+    private val engine = httpClient ?: DefaultHttpEngine()
 
     private val chain = BearerTokenProviderChain(
-        ProfileBearerTokenProvider(profileName, platformProvider, httpClient),
+        ProfileBearerTokenProvider(profileName, platformProvider, engine),
     )
 
     override suspend fun resolve(attributes: Attributes): BearerToken = chain.resolve(attributes)
 
     override fun close() {
         chain.close()
+        if (manageEngine) {
+            engine.closeIfCloseable()
+        }
     }
 }
