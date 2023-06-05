@@ -12,10 +12,13 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.getLogger
+import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
@@ -76,7 +79,9 @@ public class ProfileCredentialsProvider(
     private val region: String? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val httpClient: HttpClientEngine? = null,
-) : CredentialsProvider {
+) : CloseableCredentialsProvider {
+    private val manageEngine = httpClient == null
+    private val engine = httpClient ?: DefaultHttpEngine()
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
         "Ec2InstanceMetadata" to ImdsCredentialsProvider(
@@ -91,6 +96,12 @@ public class ProfileCredentialsProvider(
         ),
         "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClient),
     )
+
+    override fun close() {
+        if (manageEngine) {
+            engine.closeIfCloseable()
+        }
+    }
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
@@ -129,7 +140,7 @@ public class ProfileCredentialsProvider(
                 region = region.get(),
                 roleSessionName = sessionName,
                 platformProvider = platformProvider,
-                httpClient = httpClient,
+                httpClient = engine,
             )
 
             is LeafProvider.SsoSession -> SsoCredentialsProvider(
@@ -138,7 +149,7 @@ public class ProfileCredentialsProvider(
                 startUrl = ssoStartUrl,
                 ssoRegion = ssoRegion,
                 ssoSessionName = ssoSessionName,
-                httpClient = httpClient,
+                httpClient = engine,
                 platformProvider = platformProvider,
             )
 
@@ -147,7 +158,7 @@ public class ProfileCredentialsProvider(
                 roleName = ssoRoleName,
                 startUrl = ssoStartUrl,
                 ssoRegion = ssoRegion,
-                httpClient = httpClient,
+                httpClient = engine,
                 platformProvider = platformProvider,
             )
 
