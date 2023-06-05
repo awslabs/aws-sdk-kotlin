@@ -78,7 +78,7 @@ public class ProfileCredentialsProvider(
     private val region: String? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val httpClient: HttpClientEngine? = null,
-) : CloseableCredentialsProvider {
+) : CredentialsProvider {
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
         "Ec2InstanceMetadata" to ImdsCredentialsProvider(
@@ -116,12 +116,6 @@ public class ProfileCredentialsProvider(
 
         logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
         return creds
-    }
-
-    override fun close() {
-        namedProviders.forEach { entry ->
-            entry.value.closeIfCloseable()
-        }
     }
 
     private suspend fun LeafProvider.toCredentialsProvider(region: LazyAsyncValue<String>): CredentialsProvider =
