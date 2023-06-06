@@ -38,7 +38,7 @@ public class DefaultChainBearerTokenProvider(
 ) : CloseableBearerTokenProvider {
 
     private val chain = BearerTokenProviderChain(
-        ProfileBearerTokenProvider(profileName, platformProvider, engine),
+        ProfileBearerTokenProvider(profileName, platformProvider, httpClient),
     )
 
     override suspend fun resolve(attributes: Attributes): BearerToken = chain.resolve(attributes)

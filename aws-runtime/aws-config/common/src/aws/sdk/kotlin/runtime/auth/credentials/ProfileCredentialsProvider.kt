@@ -138,7 +138,7 @@ public class ProfileCredentialsProvider(
                 region = region.get(),
                 roleSessionName = sessionName,
                 platformProvider = platformProvider,
-                httpClient = engine,
+                httpClient = httpClient,
             )
 
             is LeafProvider.SsoSession -> SsoCredentialsProvider(
@@ -147,7 +147,7 @@ public class ProfileCredentialsProvider(
                 startUrl = ssoStartUrl,
                 ssoRegion = ssoRegion,
                 ssoSessionName = ssoSessionName,
-                httpClient = engine,
+                httpClient = httpClient,
                 platformProvider = platformProvider,
             )
 
@@ -156,7 +156,7 @@ public class ProfileCredentialsProvider(
                 roleName = ssoRoleName,
                 startUrl = ssoStartUrl,
                 ssoRegion = ssoRegion,
-                httpClient = engine,
+                httpClient = httpClient,
                 platformProvider = platformProvider,
             )
 
