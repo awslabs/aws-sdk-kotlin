@@ -36,8 +36,6 @@ public class DefaultChainBearerTokenProvider(
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
 ) : CloseableBearerTokenProvider {
-    private val manageEngine = httpClient == null
-    private val engine = httpClient ?: DefaultHttpEngine()
 
     private val chain = BearerTokenProviderChain(
         ProfileBearerTokenProvider(profileName, platformProvider, engine),
@@ -47,8 +45,5 @@ public class DefaultChainBearerTokenProvider(
 
     override fun close() {
         chain.close()
-        if (manageEngine) {
-            engine.closeIfCloseable()
-        }
     }
 }
