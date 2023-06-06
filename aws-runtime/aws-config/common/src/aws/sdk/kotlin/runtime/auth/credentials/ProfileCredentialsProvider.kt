@@ -80,8 +80,6 @@ public class ProfileCredentialsProvider(
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
-    private val manageEngine = httpClient == null
-    private val engine = httpClient ?: DefaultHttpEngine()
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
         "Ec2InstanceMetadata" to ImdsCredentialsProvider(
@@ -96,12 +94,6 @@ public class ProfileCredentialsProvider(
         ),
         "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClient),
     )
-
-    override fun close() {
-        if (manageEngine) {
-            engine.closeIfCloseable()
-        }
-    }
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
@@ -125,6 +117,12 @@ public class ProfileCredentialsProvider(
 
         logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
         return creds
+    }
+
+    override fun close() {
+        namedProviders.forEach { entry ->
+            entry.value.closeIfCloseable()
+        }
     }
 
     private suspend fun LeafProvider.toCredentialsProvider(region: LazyAsyncValue<String>): CredentialsProvider =
