@@ -9,7 +9,6 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRole
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.RegionDisabledException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
@@ -47,7 +46,8 @@ private const val PROVIDER_NAME = "AssumeRoleProvider"
  * administrator of the account to which the role belongs provided you with an external ID, then provide that value
  * in this parameter.
  * @param duration The expiry duration of the STS credentials. Defaults to 15 minutes if not set.
- * @param httpClient The [HttpClientEngine] to use when making requests to the STS service
+ * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+ * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class StsAssumeRoleCredentialsProvider(
     private val credentialsProvider: CredentialsProvider,
@@ -57,7 +57,7 @@ public class StsAssumeRoleCredentialsProvider(
     private val externalId: String? = null,
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val httpClient: HttpClientEngine? = null,
-) : CloseableCredentialsProvider {
+) : CredentialsProvider {
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val traceSpan = coroutineContext.traceSpan
@@ -104,8 +104,6 @@ public class StsAssumeRoleCredentialsProvider(
             providerName = PROVIDER_NAME,
         )
     }
-
-    override fun close() { }
 }
 
 // role session name must be provided to assume a role, when the user doesn't provide one we choose a name for them

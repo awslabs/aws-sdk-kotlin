@@ -7,7 +7,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.SsoClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
@@ -85,7 +84,8 @@ public class SsoCredentialsProvider public constructor(
     public val ssoSessionName: String? = null,
 
     /**
-     * The [HttpClientEngine] to use when making requests to the AWS SSO service
+     * The [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+     * are NOT managed by the provider. Caller is responsible for closing.
      */
     private val httpClient: HttpClientEngine? = null,
 
@@ -99,7 +99,7 @@ public class SsoCredentialsProvider public constructor(
      */
     private val clock: Clock = Clock.System,
 
-) : CloseableCredentialsProvider {
+) : CredentialsProvider {
 
     private val ssoTokenProvider = ssoSessionName?.let { sessName ->
         SsoTokenProvider(sessName, startUrl, ssoRegion, httpClient = httpClient, platformProvider = platformProvider, clock = clock)
@@ -146,8 +146,6 @@ public class SsoCredentialsProvider public constructor(
             PROVIDER_NAME,
         )
     }
-
-    override fun close() {}
 
     // non sso-session legacy token flow
     private suspend fun legacyLoadTokenFile(): SsoToken {

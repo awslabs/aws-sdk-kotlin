@@ -17,7 +17,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.getLogger
-import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
@@ -120,7 +120,7 @@ public class ProfileCredentialsProvider(
 
     override fun close() {
         namedProviders.forEach { entry ->
-            (entry.value as? Closeable)?.close()
+            entry.value.closeIfCloseable()
         }
     }
 

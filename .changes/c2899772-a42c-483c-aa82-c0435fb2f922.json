@@ -1,0 +1,8 @@
+{
+    "id": "c2899772-a42c-483c-aa82-c0435fb2f922",
+    "type": "misc",
+    "description": "**BREAKING:** Update closeability of various types of CredentialsProvider",
+    "issues": [
+        "https://github.com/awslabs/aws-sdk-kotlin/issues/824"
+    ]
+}
