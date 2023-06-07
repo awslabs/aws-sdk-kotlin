@@ -33,6 +33,10 @@ This is the preferred mechanism to give feedback so that other users can engage 
 
 If you are interested in contributing to the AWS SDK for Kotlin, please take a look at [CONTRIBUTING](CONTRIBUTING.md)
 
+## Versioning
+
+See our [VERSIONING](VERSIONING.md) policy for how the SDK is versioned.
+
 ## Development
 
 ### Generate SDK(s)
