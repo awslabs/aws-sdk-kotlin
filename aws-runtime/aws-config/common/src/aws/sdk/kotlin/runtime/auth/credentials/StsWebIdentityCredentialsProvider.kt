@@ -8,7 +8,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRoleWithWebIdentity
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
@@ -38,7 +37,8 @@ private const val PROVIDER_NAME = "WebIdentityToken"
  * in the ARN of the assumed role principal.
  * @param duration The expiry duration of the credentials. Defaults to 15 minutes if not set.
  * @param platformProvider The platform API provider
- * @param httpClient The [HttpClientEngine] to use when making requests to the STS service
+ * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+ * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class StsWebIdentityCredentialsProvider(
     private val roleArn: String,
@@ -48,7 +48,7 @@ public class StsWebIdentityCredentialsProvider(
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val httpClient: HttpClientEngine? = null,
-) : CloseableCredentialsProvider {
+) : CredentialsProvider {
 
     public companion object {
         /**
@@ -114,8 +114,6 @@ public class StsWebIdentityCredentialsProvider(
             providerName = PROVIDER_NAME,
         )
     }
-
-    override fun close() { }
 }
 
 // convenience function to resolve parameters for fromEnvironment()

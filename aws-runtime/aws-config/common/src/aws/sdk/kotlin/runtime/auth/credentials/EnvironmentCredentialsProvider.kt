@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.tracing.trace
@@ -24,7 +23,7 @@ private val SESSION_TOKEN = AwsSdkSetting.AwsSessionToken.envVar
  * A [CredentialsProvider] which reads from `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN`.
  */
 public class EnvironmentCredentialsProvider
-public constructor(private val getEnv: (String) -> String?) : CloseableCredentialsProvider {
+public constructor(private val getEnv: (String) -> String?) : CredentialsProvider {
     public constructor() : this(PlatformProvider.System::getenv)
 
     private fun requireEnv(variable: String): String =
@@ -41,6 +40,4 @@ public constructor(private val getEnv: (String) -> String?) : CloseableCredentia
             providerName = PROVIDER_NAME,
         )
     }
-
-    override fun close() { }
 }
