@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.27.0-beta] - 06/09/2023
+
+### Miscellaneous
+* Upgrade smithy-kotlin and sync service models.
+* [#824](https://github.com/awslabs/aws-sdk-kotlin/issues/824) **BREAKING:** Update closeability of various types of CredentialsProvider
+
 ## [0.26.1-beta] - 06/01/2023
 
 ### Fixes
