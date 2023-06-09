@@ -31,7 +31,6 @@ class CustomUserAgentMetadataTest {
 
         val actual = metadata.copy(customMetadata = customMetadata).xAmzUserAgent
 
-        // FIXME re-enable once user agent strings can be longer
         listOf(
             "md/foo#bar",
             "md/truthy",

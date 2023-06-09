@@ -64,13 +64,13 @@ public data class AwsUserAgentMetadata(
         get() = buildList {
             add(sdkMetadata)
             customMetadata?.extras?.takeIf { it.containsKey("internal") }?.let { add("md/internal") }
-            add("ua/2.0") // User agent specification version 2.0
+            add(uaPair("ua", "2.0")) // User agent specification version 2.0
             add(apiMetadata)
             add(osMetadata)
             add(languageMetadata)
             execEnvMetadata?.let(::add)
             customMetadata?.typedExtras?.filterIsInstance<ConfigMetadata>()?.forEach(::add)
-            appId?.let { add("app/${it.encodeUaToken()}") }
+            appId?.let { add(uaPair("app", it)) }
             customMetadata?.typedExtras?.filterIsInstance<FeatureMetadata>()?.forEach(::add)
             frameworkMetadata?.let(::add)
 
