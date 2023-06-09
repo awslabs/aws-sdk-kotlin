@@ -6,7 +6,9 @@
 package aws.sdk.kotlin.runtime.http
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.http.operation.ConfigMetadata
 import aws.sdk.kotlin.runtime.http.operation.CustomUserAgentMetadata
+import aws.sdk.kotlin.runtime.http.operation.FeatureMetadata
 import aws.smithy.kotlin.runtime.util.*
 import kotlin.jvm.JvmInline
 
@@ -31,7 +33,6 @@ public data class AwsUserAgentMetadata(
     val appId: String? = null,
     val customMetadata: CustomUserAgentMetadata? = null,
 ) {
-
     public companion object {
         /**
          * Load user agent configuration data from the current environment
@@ -45,53 +46,39 @@ public data class AwsUserAgentMetadata(
      * New-style user agent header value for `x-amz-user-agent`
      */
     val xAmzUserAgent: String
-        get() {
-            /*
-               ABNF for the user agent:
-               ua-string =
-                   [internal-metadata RWS]
-                   sdk-metadata RWS
-                   [api-metadata RWS]
-                   os-metadata RWS
-                   language-metadata RWS
-                   [env-metadata RWS]
-                   *(feat-metadata RWS)
-                   *(config-metadata RWS)
-                   *(framework-metadata RWS)
-                   [appId]
-             */
-            val ua = mutableListOf<String>()
-
-            val isInternal = customMetadata?.extras?.remove("internal")
-            if (isInternal != null) {
-                ua.add("md/internal")
-            }
-
-            // FIXME user agent strings are now too long so commenting out several metadata below.
-            // Re-enable once user agent strings can be longer.
-
-            ua.add("$sdkMetadata")
-            // ua.add("$apiMetadata")
-            ua.add("$osMetadata")
-            ua.add("$languageMetadata")
-            // execEnvMetadata?.let { ua.add("$it") }
-
-            // val features = customMetadata?.typedExtras?.filterIsInstance<FeatureMetadata>()
-            // features?.forEach { ua.add("$it") }
-
-            // val config = customMetadata?.typedExtras?.filterIsInstance<ConfigMetadata>()
-            // config?.forEach { ua.add("$it") }
-
-            frameworkMetadata?.let { ua.add("$it") }
-            // appId?.let { ua.add("app/$it") }
+        /* ABNF for the user agent:
+            ua-string:
+              sdk-metadata RWS
+              [internal-metadata RWS]
+              ua-metadata
+              [api-metadata RWS]
+              os-metadata RWS
+              language-metadata RWS
+              [env-metadata RWS]
+                     ; ordering is not strictly required in the following section
+              *(config-metadata RWS)
+              [appId]
+              *(feat-metadata RWS)
+              *(framework-metadata RWS)
+         */
+        get() = buildList {
+            add(sdkMetadata)
+            customMetadata?.extras?.takeIf { it.containsKey("internal") }?.let { add("md/internal") }
+            add("ua/2.0") // User agent specification version 2.0
+            add(apiMetadata)
+            add(osMetadata)
+            add(languageMetadata)
+            execEnvMetadata?.let(::add)
+            customMetadata?.typedExtras?.filterIsInstance<ConfigMetadata>()?.forEach(::add)
+            appId?.let { add("app/${it.encodeUaToken()}") }
+            customMetadata?.typedExtras?.filterIsInstance<FeatureMetadata>()?.forEach(::add)
+            frameworkMetadata?.let(::add)
 
             customMetadata?.extras?.let {
-                val wrapper = AdditionalMetadata(it)
-                ua.add("$wrapper")
+                val wrapper = AdditionalMetadata(it.filterKeys { it != "internal" })
+                add("$wrapper")
             }
-
-            return ua.joinToString(separator = " ")
-        }
+        }.joinToString(separator = " ")
 
     /**
      * Legacy user agent header value for `UserAgent`
@@ -128,10 +115,7 @@ internal fun loadAwsUserAgentMetadataFromEnvironment(platform: PlatformProvider,
 @JvmInline
 internal value class AdditionalMetadata(private val extras: Map<String, String>) {
     override fun toString(): String = extras.entries.joinToString(separator = " ") { entry ->
-        when (entry.value.lowercase()) {
-            "true" -> "md/${entry.key}"
-            else -> "md/${entry.key.encodeUaToken()}/${entry.value.encodeUaToken()}"
-        }
+        uaPair("md", entry.key, entry.value.takeUnless { it.equals("true", ignoreCase = true) })
     }
 }
 
@@ -142,7 +126,7 @@ internal value class AdditionalMetadata(private val extras: Map<String, String>)
  */
 @InternalSdkApi
 public data class SdkMetadata(val name: String, val version: String) {
-    override fun toString(): String = "aws-sdk-$name/$version"
+    override fun toString(): String = uaPair("aws-sdk-$name", version)
 }
 
 /**
@@ -155,7 +139,7 @@ public data class SdkMetadata(val name: String, val version: String) {
 public data class ApiMetadata(val serviceId: String, val version: String) {
     override fun toString(): String {
         val formattedServiceId = serviceId.replace(" ", "-").lowercase()
-        return "api/$formattedServiceId/${version.encodeUaToken()}"
+        return uaPair("api", formattedServiceId, version)
     }
 }
 
@@ -170,7 +154,7 @@ public data class OsMetadata(val family: OsFamily, val version: String? = null) 
             OsFamily.Unknown -> "other"
             else -> family.toString()
         }
-        return if (version != null) "os/$familyStr/${version.encodeUaToken()}" else "os/$familyStr"
+        return uaPair("os", familyStr, version)
     }
 }
 
@@ -186,13 +170,11 @@ public data class LanguageMetadata(
     val extras: Map<String, String> = emptyMap(),
 ) {
     override fun toString(): String = buildString {
-        append("lang/kotlin/$version")
-        /* FIXME re-enable once user agent strings can be longer
+        append(uaPair("lang", "kotlin", version))
         if (extras.isNotEmpty()) {
             val wrapper = AdditionalMetadata(extras)
             append(" $wrapper")
         }
-         */
     }
 }
 
@@ -205,7 +187,7 @@ internal expect fun platformLanguageMetadata(): LanguageMetadata
  */
 @InternalSdkApi
 public data class ExecutionEnvMetadata(val name: String) {
-    override fun toString(): String = "exec-env/${name.encodeUaToken()}"
+    override fun toString(): String = uaPair("exec-env", name)
 }
 
 /**
@@ -214,10 +196,7 @@ public data class ExecutionEnvMetadata(val name: String) {
  * @property version The framework version
  */
 @InternalSdkApi
-public data class FrameworkMetadata(
-    val name: String,
-    val version: String,
-) {
+public data class FrameworkMetadata(val name: String, val version: String) {
     internal companion object {
         internal fun fromEnvironment(provider: PlatformEnvironProvider): FrameworkMetadata? {
             val kvPair = provider.getProperty(FRAMEWORK_METADATA_PROP) ?: provider.getenv(FRAMEWORK_METADATA_ENV)
@@ -229,7 +208,7 @@ public data class FrameworkMetadata(
         }
     }
 
-    override fun toString(): String = "lib/$name/$version"
+    override fun toString(): String = uaPair("lib", name, version)
 }
 
 private fun detectExecEnv(platform: PlatformEnvironProvider): ExecutionEnvMetadata? =
@@ -237,15 +216,17 @@ private fun detectExecEnv(platform: PlatformEnvironProvider): ExecutionEnvMetada
         ExecutionEnvMetadata(it)
     }
 
-// ua-value = token
-// token = 1*tchar
-// tchar = "!" / "#" / "$" / "%" / "&" / "'" / "*" / "+" / "-" / "." /
-//         "^" / "_" / "`" / "|" / "~" / DIGIT / ALPHA
-private val VALID_TCHAR = setOf(
-    '!', '#', '$', '%', '&',
-    '\'', '*', '+', '-', '.',
-    '^', '_', '`', '|', '~',
-)
+// token_no_hash = 1*tchar_no_hash
+// tchar_no_hash = "!" / "$" / "%" / "&" / "'" / "*" / "+" / "-" / "." /
+//                 "^" / "_" / "`" / "|" / "~" / DIGIT / ALPHA
+private val VALID_TCHAR_NO_HASH = setOf('!', '$', '%', '&', '\'', '*', '+', '-', '.', '^', '_', '`', '|', '~')
+
+internal fun uaPair(category: String, key: String, value: String? = null): String =
+    if (value == null) {
+        "${category.encodeUaToken()}/${key.encodeUaToken()}"
+    } else {
+        "${category.encodeUaToken()}/${key.encodeUaToken()}#${value.encodeUaToken()}"
+    }
 
 private fun String.encodeUaToken(): String {
     val str = this
@@ -253,7 +234,7 @@ private fun String.encodeUaToken(): String {
         for (chr in str) {
             when (chr) {
                 ' ' -> append("_")
-                in 'a'..'z', in 'A'..'Z', in '0'..'9', in VALID_TCHAR -> append(chr)
+                in 'a'..'z', in 'A'..'Z', in '0'..'9', in VALID_TCHAR_NO_HASH -> append(chr)
                 else -> continue
             }
         }
