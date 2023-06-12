@@ -8,12 +8,16 @@ import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.testing.PRINTABLE_CHARS
 import aws.sdk.kotlin.testing.withAllEngines
+import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.asByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.content.fromFile
 import aws.smithy.kotlin.runtime.content.toByteArray
 import aws.smithy.kotlin.runtime.hashing.sha256
+import aws.smithy.kotlin.runtime.http.HttpException
+import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.testing.RandomTempFile
 import aws.smithy.kotlin.runtime.util.encodeToHex
 import kotlinx.coroutines.*
@@ -24,8 +28,10 @@ import org.junit.jupiter.api.TestInstance
 import java.io.File
 import java.util.UUID
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
@@ -308,6 +314,30 @@ class S3BucketOpsIntegrationTest {
         }
         ex.message?.let {
             assert(it.contains("Value for x-amz-checksum-sha256 header is invalid."))
+        }
+    }
+
+    @Test
+    fun testWriteGetObjectResponse(): Unit = runBlocking {
+        // Interceptor which validates the `Host` header against an `expectedHost`
+        class WriteGetObjectResponseHostInterceptor(val expectedHost: String) : HttpInterceptor {
+            override fun readAfterSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
+                val req = context.protocolRequest
+                assertEquals(expectedHost, req.headers["Host"])
+            }
+        }
+
+        val expectedHost = "s3-object-lambda.${client.config.region}.amazonaws.com"
+
+        client.withConfig {
+            interceptors = mutableListOf(WriteGetObjectResponseHostInterceptor(expectedHost))
+        }.use {
+            // The request is expected to fail because we don't have the proper infrastructure set up for the request
+            // (S3 Access Point, Lambda Function, etc.)
+            val ex = assertFailsWith<HttpException> {
+                it.writeGetObjectResponse {}
+            }
+            assertContains(ex.message!!, "$expectedHost")
         }
     }
 }
