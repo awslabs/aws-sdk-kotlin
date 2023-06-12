@@ -320,22 +320,24 @@ class S3BucketOpsIntegrationTest {
     @Test
     fun testWriteGetObjectResponse(): Unit = runBlocking {
         // Interceptor which validates the `Host` header against an `expectedHostHeader`
-        class WriteGetObjectResponseHostInterceptor(val expectedHostHeader: String) : HttpInterceptor {
+        class WriteGetObjectResponseHostInterceptor(val expectedHost: String) : HttpInterceptor {
             override fun readAfterSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
                 val req = context.protocolRequest
-                assertEquals(expectedHostHeader, req.headers["Host"])
+                assertEquals(expectedHost, req.headers["Host"])
             }
         }
 
+        val expectedHost = "s3-object-lambda.${client.config.region}.amazonaws.com"
+
         client.withConfig {
-            interceptors = mutableListOf(WriteGetObjectResponseHostInterceptor("s3-object-lambda.us-west-2.amazonaws.com"))
+            interceptors = mutableListOf(WriteGetObjectResponseHostInterceptor(expectedHost))
         }.use {
             // The request is expected to fail because we don't have the proper infrastructure set up for the request
             // (S3 Access Point, Lambda Function, etc.)
             val ex = assertFailsWith<HttpException> {
                 it.writeGetObjectResponse {}
             }
-            assertContains(ex.message!!, "s3-object-lambda.${it.config.region}.amazonaws.com: nodename nor servname provided, or not known")
+            assertContains(ex.message!!, "$expectedHost: nodename nor servname provided, or not known")
         }
     }
 }
