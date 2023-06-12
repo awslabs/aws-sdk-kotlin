@@ -319,7 +319,7 @@ class S3BucketOpsIntegrationTest {
 
     @Test
     fun testWriteGetObjectResponse(): Unit = runBlocking {
-        // Interceptor which validates the `Host` header against an `expectedHostHeader`
+        // Interceptor which validates the `Host` header against an `expectedHost`
         class WriteGetObjectResponseHostInterceptor(val expectedHost: String) : HttpInterceptor {
             override fun readAfterSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
                 val req = context.protocolRequest
