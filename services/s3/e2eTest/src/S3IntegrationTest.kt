@@ -331,7 +331,7 @@ class S3BucketOpsIntegrationTest {
             interceptors = mutableListOf(WriteGetObjectResponseHostInterceptor("s3-object-lambda.us-west-2.amazonaws.com"))
         }.use {
             // The request is expected to fail because we don't have the proper infrastructure set up for the request
-            // (S3 Object Access Point, Lambda Function, etc.)
+            // (S3 Access Point, Lambda Function, etc.)
             val ex = assertFailsWith<HttpException> {
                 it.writeGetObjectResponse {}
             }
