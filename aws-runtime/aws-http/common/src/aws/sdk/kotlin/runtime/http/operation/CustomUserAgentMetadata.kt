@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.http.operation
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.http.uaPair
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.util.AttributeKey
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
@@ -31,7 +32,7 @@ public class CustomUserAgentMetadata(
     }
 
     internal companion object {
-        public val ContextKey: AttributeKey<CustomUserAgentMetadata> = AttributeKey("CustomUserAgentMetadata")
+        val ContextKey: AttributeKey<CustomUserAgentMetadata> = AttributeKey("CustomUserAgentMetadata")
 
         internal fun fromEnvironment(provider: PlatformEnvironProvider): CustomUserAgentMetadata {
             fun Map<String, String>.findAndStripKeyPrefix(prefix: String) = this
@@ -46,7 +47,7 @@ public class CustomUserAgentMetadata(
     }
 
     /**
-     * Add additional key-value pairs of metadata to the request. These will show up as `md/key/value` when sent.
+     * Add additional key-value pairs of metadata to the request. These will show up as `md/key#value` when sent.
      */
     public fun add(key: String, value: String) {
         extras[key] = value
@@ -80,7 +81,7 @@ public sealed interface TypedUserAgentMetadata
  */
 @InternalSdkApi
 public data class FeatureMetadata(val name: String, val version: String? = null) : TypedUserAgentMetadata {
-    override fun toString(): String = if (version != null) "ft/$name/$version" else "ft/$name"
+    override fun toString(): String = uaPair("ft", name, version)
 }
 
 /**
@@ -90,8 +91,5 @@ public data class FeatureMetadata(val name: String, val version: String? = null)
  */
 @InternalSdkApi
 public data class ConfigMetadata(val name: String, val value: String) : TypedUserAgentMetadata {
-    override fun toString(): String = when (value.lowercase()) {
-        "true" -> "cfg/$name"
-        else -> "cfg/$name/$value"
-    }
+    override fun toString(): String = uaPair("cfg", name, value.takeUnless { it.equals("true", ignoreCase = true) })
 }

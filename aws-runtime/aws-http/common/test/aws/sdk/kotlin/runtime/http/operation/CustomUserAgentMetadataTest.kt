@@ -31,14 +31,13 @@ class CustomUserAgentMetadataTest {
 
         val actual = metadata.copy(customMetadata = customMetadata).xAmzUserAgent
 
-        // FIXME re-enable once user agent strings can be longer
         listOf(
-            "md/foo/bar",
+            "md/foo#bar",
             "md/truthy",
-            "md/falsey/false",
-            // "cfg/retry-mode/standard",
-            // "ft/s3-transfer/1.2.3",
-            // "ft/waiter",
+            "md/falsey#false",
+            "cfg/retry-mode#standard",
+            "ft/s3-transfer#1.2.3",
+            "ft/waiter",
         ).forEach { partial ->
             actual.shouldContain(partial)
         }
