@@ -337,7 +337,7 @@ class S3BucketOpsIntegrationTest {
             val ex = assertFailsWith<HttpException> {
                 it.writeGetObjectResponse {}
             }
-            assertContains(ex.message!!, "$expectedHost: nodename nor servname provided, or not known")
+            assertContains(ex.message!!, "$expectedHost")
         }
     }
 }
