@@ -10,7 +10,7 @@
 
 This repo contains the AWS SDK for Kotlin and its [public roadmap](https://github.com/awslabs/aws-sdk-kotlin/projects/2)
 
-**The AWS SDK for Kotlin is currently in developer preview and is intended strictly for feedback purposes only. Do not use this SDK for production workloads. Refer to the SDK [stability](docs/stability.md) guidelines**
+**The AWS SDK for Kotlin is currently in developer preview and is intended strictly for feedback purposes only. Do not use this SDK for production workloads. Refer to the SDK [stability](VERSIONING.md#stability-of-the-aws-sdk-for-kotlin) guidelines**
 
 ## Getting Started
 
