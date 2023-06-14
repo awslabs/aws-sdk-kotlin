@@ -1,6 +1,5 @@
 # Versioning Policy
 
-
 The AWS SDK for Kotlin uses a versioning scheme which follows the format: `MAJOR.MINOR.PATCH[-QUALIFIER]`. Revisions to different version components communicate the risk associated with changes when upgrading to newer versions of the SDK:
 
 * `MAJOR` - Huge changes, expect API incompatibilities and other breaking changes.
@@ -10,6 +9,14 @@ The AWS SDK for Kotlin uses a versioning scheme which follows the format: `MAJOR
 
 
 The AWS SDK for Kotlin does NOT follow strict [semantic versioning](https://semver.org/). Patch releases may contain new features in addition to bug fixes. See the FAQ for rationale.
+
+## Stability of the AWS SDK for Kotlin
+
+For information about maintenance and support of SDK major versions and their underlying dependencies, see the
+following in the AWS SDKs and Tools Shared Configuration and Credentials Reference Guide:
+
+* [AWS SDKs and Tools Maintenance Policy](https://docs.aws.amazon.com/credref/latest/refdocs/maint-policy.html)
+* [AWS SDKs and Tools Version Support Matrix](https://docs.aws.amazon.com/credref/latest/refdocs/version-support-matrix.html)
 
 ## Component Versioning
 
@@ -25,6 +32,24 @@ NOTE: Upgrading the version of Kotlin the SDK is compiled with does not necessar
 
 Any API marked with either `@InternalSdkApi` or `@InternalApi` is not subject to any backwards compatibility guarantee. These are meant to be consumed only by the SDK and may be changed or removed without notice. The SDK MAY bump the `MINOR` version when making such a change.
 
+## Qualifiers
+
+Qualifiers for published artifacts
+
+**`-alpha`** indicates:
+
+* The SDK is not meant for production workloads. It is released solely for the purpose of getting feedback.
+* The SDK is not yet feature complete. It may contain bugs and performance issues.
+* Expect migration issues as APIs/types change.
+
+**`-beta`** indicates:
+
+* The SDK is not meant for production workloads. 
+* The SDK is feature complete. It may still contain bugs and performance issues.
+* The APIs/types are mostly stabilized. It is still possible that future releases may cause migration issues.
+
+NOTE: This corresponds to the "Developer Preview" phase of the maintenance policy linked above.
+
 ## FAQ
 
 **Why does the SDK not follow semantic versioning (semver)?**
@@ -32,3 +57,4 @@ Any API marked with either `@InternalSdkApi` or `@InternalApi` is not subject to
 Under semver we’d NEVER use the `PATCH` component. The SDK does *daily* releases containing updates to AWS service models. These changes go out with bug fixes every day. That means for us and customers the `PATCH` version would just be useless, it would always be zero. The intention behind this versioning scheme is to allow customers to weigh the relative risk and/or cost associated with updating to a newer SDK version.
 
 Additionally this follows the existing AWS SDK for Java v2 versioning scheme that many customers coming to the AWS SDK for Kotlin are used to. 
+
