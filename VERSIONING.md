@@ -1,7 +1,7 @@
 # Versioning Policy
 
-The AWS SDK for Kotlin uses the following versioning scheme to communicate risk associated with changes when  upgrading to newer versions of the SDK:
 
+The AWS SDK for Kotlin uses a versioning scheme which follows the format: `MAJOR.MINOR.PATCH[-QUALIFIER]`. Revisions to different version components communicate the risk associated with changes when upgrading to newer versions of the SDK:
 
 * `MAJOR` - Huge changes, expect API incompatibilities and other breaking changes.
 * `MINOR` - Medium risk changes. Upgrading SHOULD usually just work but check the release notes. Example changes might include incrementing the Kotlin version, deprecating APIs, or significant changes to core runtime components. Changes to `MINOR` version MAY contain backwards incompatible changes under certain scenarios.
@@ -23,7 +23,7 @@ NOTE: Upgrading the version of Kotlin the SDK is compiled with does not necessar
 
 ## Internal APIs
 
-Any API marked with either `@InternalSdkApi` or `@InternalApi` is not subject to any backwards compatibility guarantee. These are meant to be consumed only by the SDK and may be changed or removed without notice. The SDK will bump the `MINOR` version when making such a change.
+Any API marked with either `@InternalSdkApi` or `@InternalApi` is not subject to any backwards compatibility guarantee. These are meant to be consumed only by the SDK and may be changed or removed without notice. The SDK MAY bump the `MINOR` version when making such a change.
 
 ## FAQ
 
