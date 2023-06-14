@@ -18,21 +18,8 @@ following in the AWS SDKs and Tools Shared Configuration and Credentials Referen
 * [AWS SDKs and Tools Maintenance Policy](https://docs.aws.amazon.com/credref/latest/refdocs/maint-policy.html)
 * [AWS SDKs and Tools Version Support Matrix](https://docs.aws.amazon.com/credref/latest/refdocs/version-support-matrix.html)
 
-## Component Versioning
 
-The SDK versions all service clients (e.g. `S3`, `EC2`, `DynamoDb`, etc) and the runtime (e.g. `aws-config`) together under a single version. This allows customers to easily upgrade multiple SDK clients at once and keep dependencies, such as the core runtime, compatible. The SDK may in the future consider versioning service clients separately from one another.
-
-## Kotlin Versions
-
-The SDK is tested with and provides support for the latest version of Kotlin available (including Kotlin major versions). It MAY work with previous versions of Kotlin but no support or guarantees are provided. The SDK will increment the `MINOR` version whenever a new Kotlin version is adopted. The release notes will clearly state the new version usage and that this may not be a backwards compatible change for customers (e.g. a Gradle plugin that uses the SDK only has whatever version of Kotlin is bundled with that version of Gradle available to it).
-
-NOTE: Upgrading the version of Kotlin the SDK is compiled with does not necessarily mean that new language features or other backwards incompatible language changes are immediately adopted by the SDK.
-
-## Internal APIs
-
-Any API marked with either `@InternalSdkApi` or `@InternalApi` is not subject to any backwards compatibility guarantee. These are meant to be consumed only by the SDK and may be changed or removed without notice. The SDK MAY bump the `MINOR` version when making such a change.
-
-## Qualifiers
+### Qualifiers
 
 Qualifiers for published artifacts
 
@@ -49,6 +36,21 @@ Qualifiers for published artifacts
 * The APIs/types are mostly stabilized. It is still possible that future releases may cause migration issues.
 
 NOTE: This corresponds to the "Developer Preview" phase of the maintenance policy linked above.
+
+
+## Component Versioning
+
+The SDK versions all service clients (e.g. `S3`, `EC2`, `DynamoDb`, etc) and the runtime (e.g. `aws-config`) together under a single version. This allows customers to easily upgrade multiple SDK clients at once and keep dependencies, such as the core runtime, compatible. The SDK may in the future consider versioning service clients separately from one another.
+
+## Kotlin Versions
+
+The SDK is tested with and provides support for the latest version of Kotlin available (including Kotlin major versions). It MAY work with previous versions of Kotlin but no support or guarantees are provided. The SDK will increment the `MINOR` version whenever a new Kotlin version is adopted. The release notes will clearly state the new version usage and that this may not be a backwards compatible change for customers (e.g. a Gradle plugin that uses the SDK only has whatever version of Kotlin is bundled with that version of Gradle available to it).
+
+NOTE: Upgrading the version of Kotlin the SDK is compiled with does not necessarily mean that new language features or other backwards incompatible language changes are immediately adopted by the SDK.
+
+## Internal APIs
+
+Any API marked with either `@InternalSdkApi` or `@InternalApi` is not subject to any backwards compatibility guarantee. These are meant to be consumed only by the SDK and may be changed or removed without notice. The SDK MAY bump the `MINOR` version when making such a change.
 
 ## FAQ
 
