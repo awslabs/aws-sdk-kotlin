@@ -137,7 +137,7 @@ class EventStreamParserGenerator(
                     else -> throw CodegenException("unsupported eventHeader shape: member=$hdrBinding; targetShape=$target")
                 }
 
-                val defaultValuePostfix = if (targetSymbol.isNotBoxed && targetSymbol.defaultValue() != null) {
+                val defaultValuePostfix = if (targetSymbol.isNotNullable && targetSymbol.defaultValue() != null) {
                     " ?: ${targetSymbol.defaultValue()}"
                 } else {
                     ""

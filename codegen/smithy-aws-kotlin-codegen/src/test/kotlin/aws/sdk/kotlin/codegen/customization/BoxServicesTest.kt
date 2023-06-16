@@ -40,7 +40,7 @@ class BoxServicesTest {
             structure Other {}
             
             integer NotBoxedField
-        """.prependNamespaceAndService(operations = listOf("Foo")).toSmithyModel()
+        """.prependNamespaceAndService(version = "1", operations = listOf("Foo")).toSmithyModel()
 
         val ctx = model.newTestContext()
         val transformed = BoxServices().preprocessModel(model, ctx.generationCtx.settings)
