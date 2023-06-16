@@ -5,10 +5,10 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
+import aws.smithy.kotlin.runtime.telemetry.logging.Logger
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
-import aws.smithy.kotlin.runtime.telemetry.logging.Logger
 import io.kotest.matchers.string.shouldContain
 import io.mockk.coEvery
 import io.mockk.every

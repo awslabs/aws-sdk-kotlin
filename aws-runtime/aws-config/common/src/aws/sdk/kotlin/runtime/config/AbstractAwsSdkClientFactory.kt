@@ -17,13 +17,12 @@ import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
 import aws.smithy.kotlin.runtime.client.config.ClientSettings
 import aws.smithy.kotlin.runtime.config.resolve
-import aws.smithy.kotlin.runtime.util.LazyAsyncValue
-import aws.smithy.kotlin.runtime.util.PlatformProvider
-import aws.smithy.kotlin.runtime.util.asyncLazy
 import aws.smithy.kotlin.runtime.telemetry.TelemetryConfig
 import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
 import aws.smithy.kotlin.runtime.telemetry.trace.withSpan
-import kotlin.coroutines.coroutineContext
+import aws.smithy.kotlin.runtime.util.LazyAsyncValue
+import aws.smithy.kotlin.runtime.util.PlatformProvider
+import aws.smithy.kotlin.runtime.util.asyncLazy
 
 /**
  * Abstract base class all AWS client companion objects inherit from
@@ -58,7 +57,7 @@ public abstract class AbstractAwsSdkClientFactory<
         }
         val tracer = telemetryProvider.tracerProvider.getOrCreateTracer("AwsSdkClientFactory")
 
-        tracer.withSpan("fromEnvironment"){
+        tracer.withSpan("fromEnvironment") {
             val profile = asyncLazy { loadAwsSharedConfig(PlatformProvider.System).activeProfile }
 
             builder.config.logMode = builder.config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)

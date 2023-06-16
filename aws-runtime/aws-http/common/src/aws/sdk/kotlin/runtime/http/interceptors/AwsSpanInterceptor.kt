@@ -10,9 +10,9 @@ import aws.smithy.kotlin.runtime.client.ResponseInterceptorContext
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.telemetry.trace.traceSpan
 import aws.smithy.kotlin.runtime.telemetry.trace.TraceSpan
 import aws.smithy.kotlin.runtime.telemetry.trace.setAttribute
+import aws.smithy.kotlin.runtime.telemetry.trace.traceSpan
 import kotlin.coroutines.coroutineContext
 
 /**
