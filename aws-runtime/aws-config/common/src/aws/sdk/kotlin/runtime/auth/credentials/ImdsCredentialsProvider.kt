@@ -19,8 +19,8 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
-import aws.smithy.kotlin.runtime.tracing.info
-import aws.smithy.kotlin.runtime.tracing.warn
+import aws.smithy.kotlin.runtime.telemetry.logging.info
+import aws.smithy.kotlin.runtime.telemetry.logging.warn
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider

@@ -9,7 +9,7 @@ import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
-import aws.smithy.kotlin.runtime.http.operation.getLogger
+import aws.smithy.kotlin.runtime.telemetry.logging.trace
 import aws.smithy.kotlin.runtime.http.operation.setResolvedEndpoint
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.url
@@ -50,8 +50,7 @@ internal class TokenMiddleware(
     }
 
     private suspend fun getToken(clock: Clock, req: SdkHttpRequest): Token {
-        val logger = coroutineContext.getLogger<TokenMiddleware>()
-        logger.trace { "refreshing IMDS token" }
+        coroutineContext.trace<TokenMiddleware> { "refreshing IMDS token" }
 
         val tokenReq = HttpRequestBuilder().apply {
             method = HttpMethod.PUT

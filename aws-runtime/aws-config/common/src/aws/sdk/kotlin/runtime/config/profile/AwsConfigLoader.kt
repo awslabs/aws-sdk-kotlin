@@ -9,8 +9,8 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.io.internal.SdkDispatchers
-import aws.smithy.kotlin.runtime.tracing.traceSpan
-import aws.smithy.kotlin.runtime.tracing.withChildTraceSpan
+import aws.smithy.kotlin.runtime.telemetry.trace.withSpan
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlinx.coroutines.withContext
@@ -30,20 +30,21 @@ public suspend fun loadAwsSharedConfig(
     platform: PlatformProvider,
     profileNameOverride: String? = null,
 ): AwsSharedConfig =
-    coroutineContext.withChildTraceSpan("loadAwsSharedConfig") {
+    withSpan("AwsSharedConfig", "loadAwsSharedConfig") {
         // Determine active profile and location of configuration files
         val source = resolveConfigSource(platform, profileNameOverride)
+        val logger = coroutineContext.logger("AwsConfigParser")
 
         // merged AWS configuration based on optional configuration and credential file contents
         withContext(SdkDispatchers.IO) {
             mergeFiles(
                 parse(
-                    coroutineContext.traceSpan,
+                    logger,
                     FileType.CONFIGURATION,
                     platform.readFileOrNull(source.configPath)?.decodeToString(),
                 ),
                 parse(
-                    coroutineContext.traceSpan,
+                    logger,
                     FileType.CREDENTIAL,
                     platform.readFileOrNull(source.credentialsPath)?.decodeToString(),
                 ),

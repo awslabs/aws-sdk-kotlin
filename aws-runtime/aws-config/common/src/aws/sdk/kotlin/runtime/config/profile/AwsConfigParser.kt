@@ -6,7 +6,8 @@
 package aws.sdk.kotlin.runtime.config.profile
 
 import aws.sdk.kotlin.runtime.ConfigurationException
-import aws.smithy.kotlin.runtime.tracing.*
+import aws.smithy.kotlin.runtime.telemetry.logging.Logger
+import aws.smithy.kotlin.runtime.telemetry.logging.warn
 
 // Map keyed by section type to map of sections keyed by name
 internal typealias TypedSectionMap = Map<ConfigSectionType, SectionMap>
@@ -28,13 +29,13 @@ public class AwsConfigParseException(message: String, lineNumber: Int) : Configu
  * @param input The payload to parse
  * @return map of section name to section
  */
-internal fun parse(traceSpan: TraceSpan, type: FileType, input: String?): TypedSectionMap {
+internal fun parse(logger: Logger, type: FileType, input: String?): TypedSectionMap {
     // Inaccessible File: If a file is not found or cannot be opened in the configured location, the implementation must
     // treat it as an empty file, and must not attempt to fall back to any other location.
     if (input.isNullOrBlank()) return emptyMap()
 
     val tokens = tokenize(type, input)
-    val sections = tokens.toSectionMap(traceSpan)
+    val sections = tokens.toSectionMap(logger)
     return mergeSections(sections)
 }
 
@@ -69,7 +70,7 @@ internal fun tokenize(type: FileType, input: String): List<Pair<FileLine, Token>
 /**
  * Convert the contents of a token list into a section mapping
  */
-internal fun List<Pair<FileLine, Token>>.toSectionMap(traceSpan: TraceSpan): Map<Token.Section, MutableMap<String, AwsConfigValue>> = buildMap {
+internal fun List<Pair<FileLine, Token>>.toSectionMap(logger: Logger): Map<Token.Section, MutableMap<String, AwsConfigValue>> = buildMap {
     var currentSection: Token.Section? = null
     var currentProperty: Token.Property? = null
     var currentParentMap: MutableMap<String, String>? = null
@@ -82,7 +83,7 @@ internal fun List<Pair<FileLine, Token>>.toSectionMap(traceSpan: TraceSpan): Map
 
                 if (containsKey(token)) continue
                 if (!token.isValid) {
-                    traceSpan.warnParse(line) { "Ignoring invalid ${token.sectionName} '${token.name}'" }
+                    logger.warnParse(line) { "Ignoring invalid ${token.sectionName} '${token.name}'" }
                     continue
                 }
 
@@ -93,21 +94,21 @@ internal fun List<Pair<FileLine, Token>>.toSectionMap(traceSpan: TraceSpan): Map
                 currentProperty = token
 
                 if (!token.isValid) {
-                    traceSpan.warnParse(line) { "Ignoring invalid property '${token.key}'" }
+                    logger.warnParse(line) { "Ignoring invalid property '${token.key}'" }
                     continue
                 }
                 if (!currentSection.isValid) {
-                    traceSpan.warnParse(line) { "Ignoring property under invalid ${currentSection.sectionName} '${currentSection.name}'" }
+                    logger.warnParse(line) { "Ignoring property under invalid ${currentSection.sectionName} '${currentSection.name}'" }
                     continue
                 }
 
                 val profile = this[currentSection]!!
                 if (profile.containsKey(token.key)) {
-                    traceSpan.warnParse(line) { "'${token.key}' defined multiple times in ${currentSection.sectionName} '${currentSection.name}'" }
+                    logger.warnParse(line) { "'${token.key}' defined multiple times in ${currentSection.sectionName} '${currentSection.name}'" }
                 }
 
                 if (profile.containsKey(token.key)) {
-                    traceSpan.warnParse(line) { "Overwriting previously-defined property '${token.key}'" }
+                    logger.warnParse(line) { "Overwriting previously-defined property '${token.key}'" }
                 }
                 profile[token.key] = AwsConfigValue.String(token.value)
             }
@@ -124,7 +125,7 @@ internal fun List<Pair<FileLine, Token>>.toSectionMap(traceSpan: TraceSpan): Map
                 currentProperty as Token.Property
 
                 if (!token.isValid) {
-                    traceSpan.warnParse(line) { "Ignoring invalid sub-property '${token.key}'" }
+                    logger.warnParse(line) { "Ignoring invalid sub-property '${token.key}'" }
                     continue
                 }
 
@@ -132,7 +133,7 @@ internal fun List<Pair<FileLine, Token>>.toSectionMap(traceSpan: TraceSpan): Map
                 val property = profile[currentProperty.key]
                 if (property is AwsConfigValue.String) { // convert newly recognized parent to map
                     if (property.value.isNotEmpty()) {
-                        traceSpan.warnParse(line) { "Overwriting previously-defined property '${token.key}'" }
+                        logger.warnParse(line) { "Overwriting previously-defined property '${token.key}'" }
                     }
                     currentParentMap = mutableMapOf()
                     profile[currentProperty.key] = AwsConfigValue.Map(currentParentMap)
@@ -196,6 +197,6 @@ private fun mergeSections(sections: List<ConfigSection>): SectionMap = buildMap 
     }
 }
 
-private inline fun TraceSpan.warnParse(line: FileLine, crossinline content: () -> String) = warn("AwsConfigParser") {
+private inline fun Logger.warnParse(line: FileLine, crossinline content: () -> String) = warn {
     contextMessage(content(), line.lineNumber)
 }

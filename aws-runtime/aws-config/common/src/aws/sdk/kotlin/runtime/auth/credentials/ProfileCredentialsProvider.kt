@@ -16,7 +16,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvide
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.http.operation.getLogger
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Attributes
@@ -95,7 +95,7 @@ public class ProfileCredentialsProvider(
     )
 
     override suspend fun resolve(attributes: Attributes): Credentials {
-        val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
+        val logger = coroutineContext.logger<ProfileCredentialsProvider>()
         val sharedConfig = loadAwsSharedConfig(platformProvider, profileName)
         logger.debug { "Loading credentials from profile `${sharedConfig.activeProfile.name}`" }
         val chain = ProfileChain.resolve(sharedConfig)

@@ -33,6 +33,7 @@ import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -68,7 +69,7 @@ public class EcsCredentialsProvider internal constructor(
     private val manageEngine = httpClient == null
     private val httpClient = httpClient ?: DefaultHttpEngine()
     override suspend fun resolve(attributes: Attributes): Credentials {
-        val logger = coroutineContext.getLogger<EcsCredentialsProvider>()
+        val logger = coroutineContext.logger<EcsCredentialsProvider>()
         val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
         val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
         val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)

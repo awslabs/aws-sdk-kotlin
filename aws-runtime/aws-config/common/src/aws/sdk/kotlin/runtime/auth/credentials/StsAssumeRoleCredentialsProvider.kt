@@ -17,8 +17,9 @@ import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
+import aws.smithy.kotlin.runtime.telemetry.telemetryProvider
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
-import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -60,17 +61,17 @@ public class StsAssumeRoleCredentialsProvider(
 ) : CredentialsProvider {
 
     override suspend fun resolve(attributes: Attributes): Credentials {
-        val traceSpan = coroutineContext.traceSpan
-        val logger = traceSpan.logger<StsAssumeRoleCredentialsProvider>()
+        val logger = coroutineContext.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials" }
 
         // NOTE: multi region access points require regional STS endpoints
         val provider = this
+        val telemetry = coroutineContext.telemetryProvider
         val client = StsClient {
             region = provider.region ?: GLOBAL_STS_PARTITION_ENDPOINT
             credentialsProvider = provider.credentialsProvider
             httpClient = provider.httpClient
-            tracer = traceSpan.asNestedTracer("STS-")
+            telemetryProvider = telemetry
         }
 
         val resp = try {

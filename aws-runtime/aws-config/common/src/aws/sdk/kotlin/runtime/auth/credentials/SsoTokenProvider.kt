@@ -18,9 +18,10 @@ import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.telemetry.telemetryProvider
+import aws.smithy.kotlin.runtime.telemetry.logging.debug
+import aws.smithy.kotlin.runtime.telemetry.logging.error
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.tracing.debug
-import aws.smithy.kotlin.runtime.tracing.error
 import aws.smithy.kotlin.runtime.util.*
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
@@ -118,9 +119,11 @@ public class SsoTokenProvider(
     }
 
     private suspend fun refreshToken(oldToken: SsoToken): SsoToken {
+        val telemetry = coroutineContext.telemetryProvider
         SsoOidcClient {
             region = ssoRegion
             httpClient = this@SsoTokenProvider.httpClient
+            telemetryProvider = telemetry
         }.use { client ->
             val resp = client.createToken {
                 clientId = oldToken.clientId
