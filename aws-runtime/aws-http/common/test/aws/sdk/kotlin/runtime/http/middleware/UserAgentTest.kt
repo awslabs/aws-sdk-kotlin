@@ -49,9 +49,10 @@ class UserAgentTest {
         assertTrue(request.headers.contains(USER_AGENT))
         assertTrue(request.headers.contains(X_AMZ_USER_AGENT))
         assertEquals("aws-sdk-kotlin/1.2.3", request.headers[X_AMZ_USER_AGENT])
-        // FIXME re-enable once user agent strings can be longer
-        // assertTrue(request.headers[USER_AGENT]!!.startsWith("aws-sdk-kotlin/1.2.3 api/test-service/1.2.3"))
-        assertTrue(request.headers[USER_AGENT]!!.startsWith("aws-sdk-kotlin/1.2.3"))
+        assertTrue(
+            request.headers[USER_AGENT]!!.startsWith("aws-sdk-kotlin/1.2.3 ua/2.0 api/test-service#1.2.3"),
+            "$USER_AGENT header didn't start with expected value. Found: ${request.headers[USER_AGENT]}",
+        )
     }
 
     @Test
@@ -62,7 +63,7 @@ class UserAgentTest {
         op.roundTrip(client, Unit)
         val request = op.context[HttpOperationContext.HttpCallList].last().request
 
-        request.headers[USER_AGENT]!!.shouldContain("md/foo/bar")
+        request.headers[USER_AGENT]!!.shouldContain("md/foo#bar")
 
         // verify per/request metadata is actually per/request
         val op2 = initializeOp()
@@ -71,8 +72,8 @@ class UserAgentTest {
         op2.roundTrip(client, Unit)
         val request2 = op2.context[HttpOperationContext.HttpCallList].last().request
 
-        request2.headers[USER_AGENT]!!.shouldNotContain("md/foo/bar")
-        request2.headers[USER_AGENT]!!.shouldContain("md/baz/quux")
+        request2.headers[USER_AGENT]!!.shouldNotContain("md/foo#bar")
+        request2.headers[USER_AGENT]!!.shouldContain("md/baz#quux")
     }
 
     @Test
@@ -94,10 +95,10 @@ class UserAgentTest {
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val uaString = request.headers[USER_AGENT]!!
 
-        uaString.shouldContain("md/foo/bar")
-        uaString.shouldContain("md/baz/quux")
-        uaString.shouldContain("md/blerg/blarg")
-        uaString.shouldNotContain("md/baz/qux") // This was overwritten by "baz/quux"
+        uaString.shouldContain("md/foo#bar")
+        uaString.shouldContain("md/baz#quux")
+        uaString.shouldContain("md/blerg#blarg")
+        uaString.shouldNotContain("md/baz#qux") // This was overwritten by "baz#quux"
     }
 
     @Test
@@ -115,7 +116,7 @@ class UserAgentTest {
         val request = op.context[HttpOperationContext.HttpCallList].last().request
         val uaString = request.headers[USER_AGENT]!!
 
-        uaString.shouldContain("md/foo/bar")
-        uaString.shouldContain("md/baz/qux")
+        uaString.shouldContain("md/foo#bar")
+        uaString.shouldContain("md/baz#qux")
     }
 }

@@ -13389,7 +13389,7 @@
                 "RecommendationStatus": {
                     "target": "com.amazonaws.sagemaker#RecommendationStatus",
                     "traits": {
-                        "smithy.api#documentation": "<p>Status of the deployment recommendation. <code>NOT_APPLICABLE</code> means that SageMaker\n         is unable to provide a default recommendation for the model using the information provided.</p>",
+                        "smithy.api#documentation": "<p>Status of the deployment recommendation. The status <code>NOT_APPLICABLE</code> means that SageMaker\n         is unable to provide a default recommendation for the model using the information provided. If the deployment status is <code>IN_PROGRESS</code>,\n         retry your API call after a few seconds to get a <code>COMPLETED</code> deployment recommendation.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -13401,7 +13401,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A set of recommended deployment configurations for the model.</p>"
+                "smithy.api#documentation": "<p>A set of recommended deployment configurations for the model. To get more advanced recommendations, see\n         <a href=\"https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateInferenceRecommendationsJob.html\">CreateInferenceRecommendationsJob</a>\n         to create an inference recommendation job.</p>"
             }
         },
         "com.amazonaws.sagemaker#DeploymentStage": {
@@ -19092,6 +19092,12 @@
                     "target": "com.amazonaws.sagemaker#ParallelismConfiguration",
                     "traits": {
                         "smithy.api#documentation": "<p>The parallelism configuration applied to the pipeline.</p>"
+                    }
+                },
+                "SelectiveExecutionConfig": {
+                    "target": "com.amazonaws.sagemaker#SelectiveExecutionConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The selective execution configuration applied to the pipeline run.</p>"
                     }
                 }
             },
@@ -42239,6 +42245,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Contains a list of pipeline parameters. This list can be empty. </p>"
                     }
+                },
+                "SelectiveExecutionConfig": {
+                    "target": "com.amazonaws.sagemaker#SelectiveExecutionConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The selective execution configuration applied to the pipeline run.</p>"
+                    }
                 }
             },
             "traits": {
@@ -42382,6 +42394,12 @@
                     "target": "com.amazonaws.sagemaker#PipelineExecutionStepMetadata",
                     "traits": {
                         "smithy.api#documentation": "<p>Metadata to run the pipeline step.</p>"
+                    }
+                },
+                "SelectiveExecutionResult": {
+                    "target": "com.amazonaws.sagemaker#SelectiveExecutionResult",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ARN from an execution of the current pipeline from which\n           results are reused for this step.</p>"
                     }
                 }
             },
@@ -45925,7 +45943,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A collection of settings that configure user interaction with the\n                <code>RStudioServerPro</code> app. <code>RStudioServerProAppSettings</code> cannot\n            be updated. The <code>RStudioServerPro</code> app must be deleted and a new one created\n            to make any changes.</p>"
+                "smithy.api#documentation": "<p>A collection of settings that configure user interaction with the\n                <code>RStudioServerPro</code> app.</p>"
             }
         },
         "com.amazonaws.sagemaker#RStudioServerProDomainSettings": {
@@ -50200,6 +50218,69 @@
                 "smithy.api#default": 0
             }
         },
+        "com.amazonaws.sagemaker#SelectedStep": {
+            "type": "structure",
+            "members": {
+                "StepName": {
+                    "target": "com.amazonaws.sagemaker#String256",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the pipeline step.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A step selected to run in selective execution mode.</p>"
+            }
+        },
+        "com.amazonaws.sagemaker#SelectedStepList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.sagemaker#SelectedStep"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 50
+                }
+            }
+        },
+        "com.amazonaws.sagemaker#SelectiveExecutionConfig": {
+            "type": "structure",
+            "members": {
+                "SourcePipelineExecutionArn": {
+                    "target": "com.amazonaws.sagemaker#PipelineExecutionArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ARN from a reference execution of the current pipeline. \n        Used to copy input collaterals needed for the selected steps to run.\n        The execution status of the pipeline can be either <code>Failed</code>\n        or <code>Success</code>.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "SelectedSteps": {
+                    "target": "com.amazonaws.sagemaker#SelectedStepList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of pipeline steps to run. All step(s) in all path(s) between\n        two selected steps should be included.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The selective execution configuration applied to the pipeline run.</p>"
+            }
+        },
+        "com.amazonaws.sagemaker#SelectiveExecutionResult": {
+            "type": "structure",
+            "members": {
+                "SourcePipelineExecutionArn": {
+                    "target": "com.amazonaws.sagemaker#PipelineExecutionArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ARN from an execution of the current pipeline.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The ARN from an execution of the current pipeline.</p>"
+            }
+        },
         "com.amazonaws.sagemaker#SendPipelineExecutionStepFailure": {
             "type": "operation",
             "input": {
@@ -51325,6 +51406,12 @@
                     "target": "com.amazonaws.sagemaker#ParallelismConfiguration",
                     "traits": {
                         "smithy.api#documentation": "<p>This configuration, if specified, overrides the parallelism configuration \n            of the parent pipeline for this specific run.</p>"
+                    }
+                },
+                "SelectiveExecutionConfig": {
+                    "target": "com.amazonaws.sagemaker#SelectiveExecutionConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The selective execution configuration applied to the pipeline run.</p>"
                     }
                 }
             },

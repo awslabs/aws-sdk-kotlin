@@ -28,3 +28,4 @@ aws.sdk.kotlin.codegen.customization.s3.TruncatablePaginationIntegration
 aws.sdk.kotlin.codegen.customization.s3control.HostPrefixFilter
 aws.sdk.kotlin.codegen.customization.s3control.ClientConfigIntegration
 aws.sdk.kotlin.codegen.protocols.endpoints.BindAwsEndpointBuiltins
+aws.sdk.kotlin.codegen.customization.s3.HostPrefixRequestRouteFilter
