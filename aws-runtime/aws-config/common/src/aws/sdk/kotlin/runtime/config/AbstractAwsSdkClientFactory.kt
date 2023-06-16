@@ -50,11 +50,7 @@ public abstract class AbstractAwsSdkClientFactory<
         if (block != null) builder.config.apply(block)
 
         // FIXME - use a default telemetry provider that at least wires up SLF4j logging
-        val telemetryProvider = if (builder is TelemetryConfig.Builder) {
-            builder.telemetryProvider ?: TelemetryProvider.None
-        } else {
-            TelemetryProvider.None
-        }
+        val telemetryProvider = (builder as? TelemetryConfig.Builder)?.telemetryProvider ?: TelemetryProvider.None
         val tracer = telemetryProvider.tracerProvider.getOrCreateTracer("AwsSdkClientFactory")
 
         tracer.withSpan("fromEnvironment") {

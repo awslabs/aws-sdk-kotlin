@@ -15,7 +15,7 @@ import software.amazon.smithy.model.shapes.OperationShape
 
 private const val AWS_SPAN_INTERCEPTOR_NAME = "AwsSpanInterceptor"
 
-class AwsSpanInterceptor : ProtocolMiddleware {
+class AwsSpanInterceptorMiddleware : ProtocolMiddleware {
     override val name: String = AWS_SPAN_INTERCEPTOR_NAME
     private val interceptorSymbol = buildSymbol {
         name = AWS_SPAN_INTERCEPTOR_NAME

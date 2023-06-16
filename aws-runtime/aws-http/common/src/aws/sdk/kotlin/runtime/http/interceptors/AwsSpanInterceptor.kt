@@ -24,9 +24,7 @@ public object AwsSpanInterceptor : HttpInterceptor {
         // ensure each attempt span gets request ID attributes
         val httpResp = context.protocolResponse
         val span = coroutineContext.traceSpan
-        if (httpResp != null && span != null) {
-            setAwsRequestIdAttrs(span, httpResp)
-        }
+        setAwsRequestIdAttrs(span, httpResp)
         return super.modifyBeforeAttemptCompletion(context)
     }
 
@@ -34,13 +32,12 @@ public object AwsSpanInterceptor : HttpInterceptor {
         // ensure the overall operation span gets request ID attributes
         val httpResp = context.protocolResponse
         val span = coroutineContext.traceSpan
-        if (httpResp != null && span != null) {
-            setAwsRequestIdAttrs(span, httpResp)
-        }
+        setAwsRequestIdAttrs(span, httpResp)
         return super.modifyBeforeCompletion(context)
     }
 
-    private fun setAwsRequestIdAttrs(span: TraceSpan, httpResp: HttpResponse) {
+    private fun setAwsRequestIdAttrs(span: TraceSpan?, httpResp: HttpResponse?) {
+        if (span == null || httpResp == null) return
         // https://repost.aws/knowledge-center/s3-request-id-values
         // https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/instrumentation/aws-sdk/
         httpResp.headers["x-amz-request-id"]?.let {
