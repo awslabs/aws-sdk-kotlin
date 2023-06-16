@@ -6,8 +6,8 @@
 package aws.sdk.kotlin.codegen.protocols.core
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.core.*
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
 import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
@@ -32,10 +32,14 @@ open class AwsHttpProtocolClientGenerator(
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
-        writer.write("public const val ServiceId: String = #S", ctx.service.sdkId)
         writer.write("public const val ServiceApiVersion: String = #S", ctx.service.version)
-        writer.write("public const val SdkVersion: String = #S", ctx.settings.pkg.version)
         writer.write("\n\n")
+        // set AWS specific span attributes for an operation
+        // https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/instrumentation/aws-sdk/
+        val addAwsSpanAttrWriter = SectionWriter { w, _ ->
+            w.write("#S to #S", "rpc.system", "aws-api")
+        }
+        writer.registerSectionWriter(OperationSpanAttributes, addAwsSpanAttrWriter)
         super.render(writer)
     }
 
@@ -81,7 +85,7 @@ open class AwsHttpProtocolClientGenerator(
 
         writer.dokka("merge the defaults configured for the service into the execution context before firing off a request")
         writer.withBlock(
-            "private suspend fun mergeServiceDefaults(ctx: #T) {",
+            "private fun mergeServiceDefaults(ctx: #T) {",
             "}",
             RuntimeTypes.Core.ExecutionContext,
         ) {

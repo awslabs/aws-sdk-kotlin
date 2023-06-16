@@ -12,10 +12,11 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.serde.json.*
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
+import aws.smithy.kotlin.runtime.telemetry.telemetryProvider
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.fromEpochMilliseconds
-import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.*
 import kotlin.coroutines.coroutineContext
 
@@ -106,8 +107,7 @@ public class SsoCredentialsProvider public constructor(
     }
 
     override suspend fun resolve(attributes: Attributes): Credentials {
-        val traceSpan = coroutineContext.traceSpan
-        val logger = traceSpan.logger<SsoCredentialsProvider>()
+        val logger = coroutineContext.logger<SsoCredentialsProvider>()
 
         val token = if (ssoTokenProvider != null) {
             logger.trace { "Attempting to load token using token provider for sso-session: `$ssoSessionName`" }
@@ -117,10 +117,11 @@ public class SsoCredentialsProvider public constructor(
             legacyLoadTokenFile()
         }
 
+        val telemetry = coroutineContext.telemetryProvider
         val client = SsoClient {
             region = ssoRegion
             httpClient = this@SsoCredentialsProvider.httpClient
-            tracer = traceSpan.asNestedTracer("SSO-")
+            telemetryProvider = telemetry
             // FIXME - create an anonymous credential provider to explicitly avoid default chain creation (technically the transform should remove need for sigv4 cred provider since it's all anon auth)
         }
 

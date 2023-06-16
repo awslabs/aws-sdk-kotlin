@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.config.profile
 
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.telemetry.logging.Logger
 import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -34,12 +34,12 @@ class AwsProfileParserTest {
             .forEachIndexed { index, testCase ->
                 when (testCase) {
                     is TestCase.MatchConfigOutputCase -> {
-                        val actual = parse(NoOpTraceSpan, FileType.CONFIGURATION, testCase.configInput).toJsonElement()
+                        val actual = parse(Logger.None, FileType.CONFIGURATION, testCase.configInput).toJsonElement()
                         val expectedJson = Json.parseToJsonElement(testCase.expectedOutput)
                         assertEquals(expectedJson, actual, message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchCredentialOutputCase -> {
-                        val actual = parse(NoOpTraceSpan, FileType.CREDENTIAL, testCase.credentialInput).toJsonElement()
+                        val actual = parse(Logger.None, FileType.CREDENTIAL, testCase.credentialInput).toJsonElement()
                         assertEquals(testCase.expectedOutput, actual.toString(), message = "[idx=$index]: $testCase")
                     }
                     is TestCase.MatchConfigAndCredentialOutputCase -> {
@@ -134,8 +134,8 @@ class AwsProfileParserTest {
      */
     private fun loadConfiguration(configurationFn: () -> String?, credentialsFn: () -> String?): TypedSectionMap =
         mergeFiles(
-            parse(NoOpTraceSpan, FileType.CONFIGURATION, configurationFn()),
-            parse(NoOpTraceSpan, FileType.CREDENTIAL, credentialsFn()),
+            parse(Logger.None, FileType.CONFIGURATION, configurationFn()),
+            parse(Logger.None, FileType.CREDENTIAL, credentialsFn()),
         )
 }
 
