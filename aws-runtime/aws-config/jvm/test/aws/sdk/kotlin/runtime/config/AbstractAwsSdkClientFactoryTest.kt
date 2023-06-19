@@ -6,13 +6,8 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
-import aws.sdk.kotlin.runtime.http.retries.AwsDefaultRetryPolicy
-import aws.smithy.kotlin.runtime.client.AbstractSdkClientBuilder
-import aws.smithy.kotlin.runtime.client.LogMode
-import aws.smithy.kotlin.runtime.client.SdkClient
-import aws.smithy.kotlin.runtime.client.SdkClientConfig
+import aws.smithy.kotlin.runtime.client.*
 import aws.smithy.kotlin.runtime.retries.Outcome
-import aws.smithy.kotlin.runtime.retries.RetryOptions
 import aws.smithy.kotlin.runtime.retries.RetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
@@ -66,22 +61,19 @@ private interface TestClient : SdkClient {
         override fun newClient(config: Config): TestClient = DefaultTestClient(config)
     }
 
-    class Config private constructor(builder: Config.Builder) : SdkClientConfig, AwsSdkClientConfig {
+    class Config private constructor(builder: Builder) : SdkClientConfig, AwsSdkClientConfig, RetryStrategyClientConfig {
         override val clientName: String = builder.clientName
         override val logMode: LogMode = builder.logMode ?: LogMode.Default
-        override val retryPolicy: RetryPolicy<Any?> = builder.retryPolicy ?: AwsDefaultRetryPolicy
         override val retryStrategy: RetryStrategy = builder.retryStrategy ?: TestRetryStrategy()
         override val region: String = builder.region ?: error("region is required")
         override var useFips: Boolean = builder.useFips ?: false
         override var useDualStack: Boolean = builder.useDualStack ?: false
 
         // new: inherits builder equivalents for Config base classes
-        class Builder : AwsSdkClientConfig.Builder, SdkClientConfig.Builder<Config> {
+        class Builder : AwsSdkClientConfig.Builder, SdkClientConfig.Builder<Config>, RetryStrategyClientConfig.Builder by RetryStrategyClientConfigImpl.BuilderImpl() {
             override var clientName: String = "Test"
             override var logMode: LogMode? = LogMode.Default
             override var region: String? = null
-            override var retryPolicy: RetryPolicy<Any?>? = null
-            override var retryStrategy: RetryStrategy? = null
             override var useFips: Boolean? = null
             override var useDualStack: Boolean? = null
             override fun build(): Config = Config(this)
@@ -97,7 +89,7 @@ private class DefaultTestClient(
 
 // some non standard retry strategy used as a marker
 private class TestRetryStrategy : RetryStrategy {
-    override val options: RetryOptions
+    override val config: RetryStrategy.Config
         get() = error("not needed for test")
 
     override suspend fun <R> retry(policy: RetryPolicy<R>, block: suspend () -> R): Outcome<R> {

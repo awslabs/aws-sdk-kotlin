@@ -12,6 +12,7 @@ import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.smithy.kotlin.runtime.client.RetryStrategyClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
@@ -38,8 +39,10 @@ public abstract class AbstractAwsSdkClientFactory<
     TClientBuilder : SdkClient.Builder<TConfig, TConfigBuilder, TClient>,
     > : SdkClientFactory<TConfig, TConfigBuilder, TClient, TClientBuilder>
     where TConfig : SdkClientConfig,
+          TConfig : RetryStrategyClientConfig,
           TConfig : AwsSdkClientConfig,
           TConfigBuilder : SdkClientConfig.Builder<TConfig>,
+          TConfigBuilder : RetryStrategyClientConfig.Builder,
           TConfigBuilder : AwsSdkClientConfig.Builder {
     /**
      * Construct a [TClient] by resolving the configuration from the current environment.
