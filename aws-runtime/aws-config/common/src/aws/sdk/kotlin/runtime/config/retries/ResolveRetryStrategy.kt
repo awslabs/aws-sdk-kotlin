@@ -31,9 +31,6 @@ public suspend fun resolveRetryStrategy(
 ): RetryStrategy {
     val maxAttempts = AwsSdkSetting.AwsMaxAttempts.resolve(platformProvider)
         ?: profile.get().maxAttempts
-    if (maxAttempts != null && maxAttempts < 1) {
-        throw ConfigurationException("max attempts was $maxAttempts, but should be at least 1")
-    }
 
     val retryMode = AwsSdkSetting.AwsRetryMode.resolve(platformProvider)
         ?: profile.get().retryMode
@@ -45,6 +42,9 @@ public suspend fun resolveRetryStrategy(
     }
 
     return factory {
-        maxAttempts?.let { this.maxAttempts = it }
+        maxAttempts?.let {
+            if (it < 1) { throw ConfigurationException("max attempts was $it, but should be at least 1") }
+            this.maxAttempts = it
+        }
     }
 }
