@@ -36,7 +36,6 @@ kotlin {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
                 api("aws.smithy.kotlin:aws-credentials:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-auth:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:telemetry-api:$smithyKotlinVersion")
