@@ -47,7 +47,7 @@ class AwsRetryHeaderMiddlewareTest {
         op.roundTrip(client, Unit)
 
         val calls = op.context.attributes[HttpOperationContext.HttpCallList]
-        val sdkRequestId = op.context.sdkRequestId
+        val sdkRequestId = op.context.sdkInvocationId
 
         assertTrue(calls.all { it.request.headers[AMZ_SDK_INVOCATION_ID_HEADER] == sdkRequestId })
         calls.forEachIndexed { idx, call ->
