@@ -15,9 +15,11 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerato
 import software.amazon.smithy.kotlin.codegen.rendering.serde.StructuredDataParserGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.serde.bodyDeserializer
 import software.amazon.smithy.kotlin.codegen.rendering.serde.bodyDeserializerName
+import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.EventHeaderTrait
 import software.amazon.smithy.model.traits.EventPayloadTrait
+import software.amazon.smithy.model.traits.StreamingTrait
 
 /**
  * Implements rendering deserialize implementation for event streams implemented using the
@@ -60,26 +62,31 @@ class EventStreamParserGenerator(
         val streamShape = ctx.model.expectShape<UnionShape>(streamingMember.target)
         val streamSymbol = ctx.symbolProvider.toSymbol(streamShape)
 
-        // TODO - handle RPC bound protocol bindings where the initial response is bound to an event stream document
-        //        possibly by decoding the first Message
-
         val messageTypeSymbol = RuntimeTypes.AwsEventStream.MessageType
         val baseExceptionSymbol = ExceptionBaseClassGenerator.baseExceptionSymbol(ctx.settings)
 
         writer.write("val chan = body.#T() ?: return", RuntimeTypes.Http.toSdkByteReadChannel)
         writer.write("val events = #T(chan)", RuntimeTypes.AwsEventStream.decodeFrames)
             .indent()
-            .withBlock(".#T { message ->", "}", RuntimeTypes.KotlinxCoroutines.Flow.map) {
-                withBlock("when(val mt = message.#T()) {", "}", RuntimeTypes.AwsEventStream.MessageTypeExt) {
-                    withBlock("is #T.Event -> when(mt.shapeType) {", "}", messageTypeSymbol) {
+            .withBlock(".#T { message ->", "}", RuntimeTypes.KotlinxCoroutines.Flow.mapNotNull) {
+                withBlock("when (val mt = message.#T()) {", "}", RuntimeTypes.AwsEventStream.MessageTypeExt) {
+                    withBlock("is #T.Event -> when (mt.shapeType) {", "}", messageTypeSymbol) {
                         streamShape.filterEventStreamErrors(ctx.model).forEach { member ->
                             withBlock("#S -> {", "}", member.memberName) {
                                 renderDeserializeEventVariant(ctx, streamSymbol, member, writer)
                             }
                         }
+
+                        if (ctx.protocol.isRpcBoundProtocol) {
+                            withBlock("\"initial-response\" -> {", "}") {
+                                renderDeserializeInitialResponse(ctx, output, writer)
+                                write("null")
+                            }
+                        }
+
                         write("else -> #T.SdkUnknown", streamSymbol)
                     }
-                    withBlock("is #T.Exception -> when(mt.shapeType){", "}", messageTypeSymbol) {
+                    withBlock("is #T.Exception -> when (mt.shapeType) {", "}", messageTypeSymbol) {
                         // errors are completely bound to payload (at least according to design docs)
                         val errorMembers = streamShape.members().filter {
                             val target = ctx.model.expectShape(it.target)
@@ -167,6 +174,30 @@ class EventStreamParserGenerator(
         writer.write("#T.#L(e)", unionSymbol, member.unionVariantName())
     }
 
+    /**
+     * Renders deserialization logic for a message with the `initial-response` type.
+     */
+    private fun renderDeserializeInitialResponse(ctx: ProtocolGenerator.GenerationContext, outputShape: StructureShape, writer: KotlinWriter) {
+        // get all the shape's members which aren't an event stream
+        val initialResponseMembers = outputShape.members().filter {
+            val targetShape = ctx.model.getShape(it.target).getOrNull()
+            targetShape?.hasTrait<StreamingTrait>() == false
+        }
+
+        if (initialResponseMembers.isNotEmpty()) {
+            // A custom function which only deserializes `initialResponseMembers`
+            val initialResponseDeserializeFn = sdg.payloadDeserializer(ctx, outputShape, initialResponseMembers)
+
+            // Deserialize into `initialResponse`, then apply it to the actual response builder
+            writer.write("val initialResponse = #T(message.payload)", initialResponseDeserializeFn)
+            writer.withBlock("builder.apply {", "}") {
+                initialResponseMembers.forEach { member ->
+                    writer.write("#L = initialResponse.#L", member.defaultName(), member.defaultName())
+                }
+            }
+        }
+    }
+
     private fun renderDeserializeExplicitEventPayloadMember(
         ctx: ProtocolGenerator.GenerationContext,
         member: MemberShape,
@@ -185,4 +216,15 @@ class EventStreamParserGenerator(
             else -> throw CodegenException("unsupported shape type `${target.type}` for target: $target; expected blob, string, structure, or union for eventPayload member: $member")
         }
     }
+
+    private val ShapeId.isRpcBoundProtocol: Boolean
+        get() = run {
+            val rpcBoundProtocols = setOf(
+                "awsJson1_0",
+                "awsJson1_1",
+                "awsQuery",
+                "ec2Query",
+            )
+            return rpcBoundProtocols.contains(name)
+        }
 }
