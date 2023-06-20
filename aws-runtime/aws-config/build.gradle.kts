@@ -55,6 +55,7 @@ kotlin {
                 implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:telemetry-defaults:$smithyKotlinVersion")
 
                 // additional dependencies required by generated sso provider(s)
                 implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
