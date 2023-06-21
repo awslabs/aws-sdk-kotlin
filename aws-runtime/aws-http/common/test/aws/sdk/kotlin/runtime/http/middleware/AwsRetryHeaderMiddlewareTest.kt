@@ -8,10 +8,6 @@ import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.httptest.TestEngine
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
-import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
-import aws.smithy.kotlin.runtime.retries.delay.DelayProvider
-import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucket
-import aws.smithy.kotlin.runtime.retries.delay.StandardRetryTokenBucketOptions
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -35,13 +31,8 @@ class AwsRetryHeaderMiddlewareTest {
             }
         }
 
-        val delayProvider = DelayProvider { }
-        val strategy = StandardRetryStrategy(
-            StandardRetryStrategyOptions.Default,
-            StandardRetryTokenBucket(StandardRetryTokenBucketOptions.Default),
-            delayProvider,
-        )
-        val maxAttempts = strategy.options.maxAttempts
+        val strategy = StandardRetryStrategy()
+        val maxAttempts = strategy.config.maxAttempts
 
         op.install(AwsRetryHeaderMiddleware())
         op.roundTrip(client, Unit)
