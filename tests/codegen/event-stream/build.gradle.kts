@@ -151,6 +151,7 @@ dependencies {
     implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
+    implementation("aws.smithy.kotlin:telemetry-defaults:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
     api(project(":aws-runtime:aws-config"))

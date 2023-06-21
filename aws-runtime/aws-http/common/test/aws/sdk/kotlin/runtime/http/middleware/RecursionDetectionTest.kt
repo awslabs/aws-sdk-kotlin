@@ -43,6 +43,7 @@ class RecursionDetectionTest {
             deserializer = IdentityDeserializer
             context {
                 operationName = "testOperation"
+                serviceName = "TestService"
             }
         }
 

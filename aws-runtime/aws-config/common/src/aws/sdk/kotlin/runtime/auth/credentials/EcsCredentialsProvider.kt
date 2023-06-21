@@ -85,6 +85,7 @@ public class EcsCredentialsProvider internal constructor(
             deserializer = EcsCredentialsDeserializer()
             context {
                 operationName = "EcsCredentialsProvider"
+                serviceName = "EcsContainerMetadata"
             }
             execution.endpointResolver = EndpointResolver { Endpoint(url) }
         }

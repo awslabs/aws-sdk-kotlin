@@ -37,9 +37,11 @@ open class AwsHttpProtocolClientGenerator(
         // set AWS specific span attributes for an operation
         // https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/instrumentation/aws-sdk/
         val addAwsSpanAttrWriter = SectionWriter { w, _ ->
-            w.write("#S to #S", "rpc.system", "aws-api")
+            w.withBlock("attributes = #T {", "}", RuntimeTypes.Core.Utils.attributesOf) {
+                write("#S to #S", "rpc.system", "aws-api")
+            }
         }
-        writer.registerSectionWriter(OperationSpanAttributes, addAwsSpanAttrWriter)
+        writer.registerSectionWriter(OperationTelemetryBuilder, addAwsSpanAttrWriter)
         super.render(writer)
     }
 
