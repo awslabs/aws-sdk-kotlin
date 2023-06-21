@@ -7,10 +7,7 @@ package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.smithy.kotlin.runtime.client.*
-import aws.smithy.kotlin.runtime.retries.Outcome
-import aws.smithy.kotlin.runtime.retries.RetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
-import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import io.kotest.extensions.system.withSystemProperties
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -61,10 +58,9 @@ private interface TestClient : SdkClient {
         override fun newClient(config: Config): TestClient = DefaultTestClient(config)
     }
 
-    class Config private constructor(builder: Builder) : SdkClientConfig, AwsSdkClientConfig, RetryStrategyClientConfig {
+    class Config private constructor(builder: Builder) : SdkClientConfig, AwsSdkClientConfig, RetryStrategyClientConfig by builder.buildRetryStrategyClientConfig() {
         override val clientName: String = builder.clientName
         override val logMode: LogMode = builder.logMode ?: LogMode.Default
-        override val retryStrategy: RetryStrategy = builder.retryStrategy ?: TestRetryStrategy()
         override val region: String = builder.region ?: error("region is required")
         override var useFips: Boolean = builder.useFips ?: false
         override var useDualStack: Boolean = builder.useDualStack ?: false
@@ -85,14 +81,4 @@ private class DefaultTestClient(
     override val config: TestClient.Config,
 ) : TestClient {
     override fun close() { }
-}
-
-// some non standard retry strategy used as a marker
-private class TestRetryStrategy : RetryStrategy {
-    override val config: RetryStrategy.Config
-        get() = error("not needed for test")
-
-    override suspend fun <R> retry(policy: RetryPolicy<R>, block: suspend () -> R): Outcome<R> {
-        error("not needed for test")
-    }
 }
