@@ -39,33 +39,37 @@ public abstract class AbstractAwsSdkClientFactory<
     TClientBuilder : SdkClient.Builder<TConfig, TConfigBuilder, TClient>,
     > : SdkClientFactory<TConfig, TConfigBuilder, TClient, TClientBuilder>
     where TConfig : SdkClientConfig,
-          TConfig : RetryStrategyClientConfig,
           TConfig : AwsSdkClientConfig,
           TConfigBuilder : SdkClientConfig.Builder<TConfig>,
-          TConfigBuilder : RetryStrategyClientConfig.Builder,
           TConfigBuilder : AwsSdkClientConfig.Builder {
     /**
      * Construct a [TClient] by resolving the configuration from the current environment.
      */
     public suspend fun fromEnvironment(block: (TConfigBuilder.() -> Unit)? = null): TClient {
         val builder = builder()
-        if (block != null) builder.config.apply(block)
+        val config = builder.config
 
-        val tracer = if (builder is TracingClientConfig.Builder) {
-            if (builder.tracer == null) builder.tracer = defaultTracer(builder.config.clientName)
-            builder.tracer!!
+        if (block != null) config.apply(block)
+
+        val tracer = if (config is TracingClientConfig.Builder) {
+            if (config.tracer == null) config.tracer = defaultTracer(config.clientName)
+            config.tracer!!
         } else {
-            defaultTracer(builder.config.clientName)
+            defaultTracer(config.clientName)
         }
 
         coroutineContext.withRootTraceSpan(tracer.createRootSpan("Config resolution")) {
             val profile = asyncLazy { loadAwsSharedConfig(PlatformProvider.System).activeProfile }
 
-            builder.config.logMode = builder.config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
-            builder.config.region = builder.config.region ?: resolveRegion(profile = profile)
-            builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy(profile = profile)
-            builder.config.useFips = builder.config.useFips ?: resolveUseFips(profile = profile)
-            builder.config.useDualStack = builder.config.useDualStack ?: resolveUseDualStack(profile = profile)
+            config.logMode = config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
+            config.region = config.region ?: resolveRegion(profile = profile)
+
+            if (config is RetryStrategyClientConfig.Builder) {
+                config.retryStrategy = config.retryStrategy ?: resolveRetryStrategy(profile = profile)
+            }
+
+            config.useFips = config.useFips ?: resolveUseFips(profile = profile)
+            config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             finalizeConfig(builder, profile)
         }
         return builder.build()
