@@ -119,6 +119,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             }
             context {
                 operationName = path
+                serviceName = "IMDS"
 
                 // artifact of re-using ServiceEndpointResolver middleware
                 set(SdkClientOption.LogMode, logMode)

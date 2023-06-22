@@ -11,7 +11,7 @@ import aws.smithy.kotlin.runtime.io.Handler
 
 /**
  * The per/operation unique client side ID header name. This will match
- * the [HttpOperationContext.SdkRequestId]
+ * the [HttpOperationContext.SdkInvocationId]
  */
 internal const val AMZ_SDK_INVOCATION_ID_HEADER = "amz-sdk-invocation-id"
 
@@ -34,7 +34,7 @@ public class AwsRetryHeaderMiddleware<O> : MutateMiddleware<O> {
 
     override suspend fun <H : Handler<SdkHttpRequest, O>> handle(request: SdkHttpRequest, next: H): O {
         attempt++
-        request.subject.header(AMZ_SDK_INVOCATION_ID_HEADER, request.context.sdkRequestId)
+        request.subject.header(AMZ_SDK_INVOCATION_ID_HEADER, request.context.sdkInvocationId)
         onAttempt(request, attempt)
         return next.call(request)
     }
