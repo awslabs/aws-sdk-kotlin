@@ -33,6 +33,7 @@ class UserAgentTest {
             deserializer = IdentityDeserializer
             context {
                 operationName = "testOperation"
+                serviceName = "TestService"
             }
         }.apply {
             val apiMd = ApiMetadata("Test Service", "1.2.3")
