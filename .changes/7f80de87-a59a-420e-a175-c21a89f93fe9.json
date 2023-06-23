@@ -1,0 +1,8 @@
+{
+    "id": "7f80de87-a59a-420e-a175-c21a89f93fe9",
+    "type": "feature",
+    "description": "Route 53 custom error unmarshalling",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#242"
+    ]
+}
