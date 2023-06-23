@@ -79,8 +79,7 @@ private suspend fun throwChangeResourceRecordSetsError(context: ExecutionContext
 
 @InternalApi
 public suspend fun parseRestXmlErrorResponse(payload: ByteArray): ErrorDetails {
-    val details =
-        ErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
+    val details = ErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
         ?: XmlErrorDeserializer.deserialize(XmlDeserializer(payload, true))
         ?: InvalidChangeBatchDeserializer.deserialize(XmlDeserializer(payload, true))
         ?: InvalidChangeBatchMessageDeserializer.deserialize(XmlDeserializer(payload, true))
@@ -179,8 +178,9 @@ internal object InvalidChangeBatchDeserializer {
                 }
             }
             XmlErrorResponse(messages, requestId ?: messages?.requestId)
+        } catch (e: DeserializationException) {
+            null // return so an appropriate exception type can be instantiated above here.
         }
-        catch (e: DeserializationException) { null }// return so an appropriate exception type can be instantiated above here.
     }
 }
 
@@ -197,7 +197,7 @@ internal object InvalidChangeBatchMessageDeserializer {
 
     suspend fun deserialize(deserializer: Deserializer): XmlError? {
         var message: String? = null
-        var code:String? = null
+        var code: String? = null
         var requestId: String? = null
 
         return try {
@@ -213,8 +213,9 @@ internal object InvalidChangeBatchMessageDeserializer {
                 }
             }
             XmlError(requestId, code, message)
+        } catch (e: DeserializationException) {
+            null // return so an appropriate exception type can be instantiated above here.
         }
-        catch (e: DeserializationException) { null } // return so an appropriate exception type can be instantiated above here.
     }
 }
 
