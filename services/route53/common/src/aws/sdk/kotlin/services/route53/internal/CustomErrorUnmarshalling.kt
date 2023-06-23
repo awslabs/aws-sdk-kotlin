@@ -17,47 +17,19 @@ import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
 import aws.smithy.kotlin.runtime.serde.xml.XmlNamespace
 import aws.smithy.kotlin.runtime.serde.xml.XmlSerialName
 
-// Operation deserializer from ChangeResourceRecordSetsOperationDeserializer
 internal class ChangeResourceRecordSetsOperationDeserializer : HttpDeserialize<ChangeResourceRecordSetsResponse> {
-
     override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): ChangeResourceRecordSetsResponse {
         if (!response.status.isSuccess()) {
             throwChangeResourceRecordSetsError(context, response)
         }
-        val builder = ChangeResourceRecordSetsResponse.Builder()
 
+        val builder = ChangeResourceRecordSetsResponse.Builder()
         val payload = response.body.readAll()
         if (payload != null) {
             deserializeChangeResourceRecordSetsOperationBody(builder, payload)
         }
         return builder.build()
     }
-}
-
-private suspend fun throwChangeResourceRecordSetsError(context: ExecutionContext, response: HttpResponse): kotlin.Nothing {
-    val payload = response.body.readAll()
-    val wrappedResponse = response.withPayload(payload)
-
-    val errorDetails = try {
-        checkNotNull(payload) { "unable to parse error from empty response" }
-        parseRestXmlErrorResponse(payload)
-    } catch (ex: Exception) {
-        throw Route53Exception("Failed to parse response as 'restXml' error", ex).also {
-            setAseErrorMetadata(it, wrappedResponse, null)
-        }
-    }
-
-    val ex = when (errorDetails.code) {
-        "InvalidChangeBatch" -> InvalidChangeBatchDeserializer().deserialize(context, wrappedResponse)
-        "InvalidInput" -> InvalidInputDeserializer().deserialize(context, wrappedResponse)
-        "NoSuchHealthCheck" -> NoSuchHealthCheckDeserializer().deserialize(context, wrappedResponse)
-        "NoSuchHostedZone" -> NoSuchHostedZoneDeserializer().deserialize(context, wrappedResponse)
-        "PriorRequestNotComplete" -> PriorRequestNotCompleteDeserializer().deserialize(context, wrappedResponse)
-        else -> Route53Exception(errorDetails.message)
-    }
-
-    setAseErrorMetadata(ex, wrappedResponse, errorDetails)
-    throw ex
 }
 
 private fun deserializeChangeResourceRecordSetsOperationBody(builder: ChangeResourceRecordSetsResponse.Builder, payload: ByteArray) {
@@ -80,10 +52,173 @@ private fun deserializeChangeResourceRecordSetsOperationBody(builder: ChangeReso
     }
 }
 
+private suspend fun throwChangeResourceRecordSetsError(context: ExecutionContext, response: HttpResponse): kotlin.Nothing {
+    val payload = response.body.readAll()
+    val wrappedResponse = response.withPayload(payload)
+
+    val errorDetails = try {
+        checkNotNull(payload) { "unable to parse error from empty response" }
+        parseRestXmlErrorResponse(payload)
+    } catch (ex: Exception) {
+        throw Route53Exception("Failed to parse response as 'restXml' error", ex).also {
+            setAseErrorMetadata(it, wrappedResponse, null)
+        }
+    }
+
+    val ex = when (errorDetails.code) {
+        "InvalidInput" -> InvalidInputDeserializer().deserialize(context, wrappedResponse)
+        "NoSuchHealthCheck" -> NoSuchHealthCheckDeserializer().deserialize(context, wrappedResponse)
+        "NoSuchHostedZone" -> NoSuchHostedZoneDeserializer().deserialize(context, wrappedResponse)
+        "PriorRequestNotComplete" -> PriorRequestNotCompleteDeserializer().deserialize(context, wrappedResponse)
+        else -> Route53Exception(errorDetails.message)
+    }
+
+    setAseErrorMetadata(ex, wrappedResponse, errorDetails)
+    throw ex
+}
+
+@InternalApi
+public suspend fun parseRestXmlErrorResponse(payload: ByteArray): ErrorDetails {
+    val details =
+        ErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
+        ?: XmlErrorDeserializer.deserialize(XmlDeserializer(payload, true))
+        ?: InvalidChangeBatchDeserializer.deserialize(XmlDeserializer(payload, true))
+        ?: InvalidChangeBatchMessageDeserializer.deserialize(XmlDeserializer(payload, true))
+        ?: throw DeserializationException("Unable to deserialize RestXml error.")
+    return ErrorDetails(details.code, details.message, details.requestId)
+}
+
+internal object ErrorResponseDeserializer {
+    private val ERROR_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName("Error"))
+    private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
+    private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+        trait(XmlSerialName("ErrorResponse"))
+        field(ERROR_DESCRIPTOR)
+        field(REQUESTID_DESCRIPTOR)
+    }
+
+    suspend fun deserialize(deserializer: Deserializer): XmlErrorResponse? {
+        var requestId: String? = null
+        var xmlError: XmlError? = null
+
+        return try {
+            deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
+                loop@ while (true) {
+                    when (findNextFieldIndex()) {
+                        ERROR_DESCRIPTOR.index -> xmlError = XmlErrorDeserializer.deserialize(deserializer)
+                        REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
+                        null -> break@loop
+                        else -> skipValue()
+                    }
+                }
+            }
+            XmlErrorResponse(xmlError, requestId ?: xmlError?.requestId)
+        } catch (e: DeserializationException) {
+            null // return so an appropriate exception type can be instantiated above here.
+        }
+    }
+}
+
+internal object XmlErrorDeserializer {
+    private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
+    private val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Code"))
+    private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
+    private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+        trait(XmlSerialName("Error"))
+        field(MESSAGE_DESCRIPTOR)
+        field(CODE_DESCRIPTOR)
+        field(REQUESTID_DESCRIPTOR)
+    }
+
+    suspend fun deserialize(deserializer: Deserializer): XmlError? {
+        var message: String? = null
+        var code: String? = null
+        var requestId: String? = null
+
+        return try {
+            deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
+                loop@ while (true) {
+                    when (findNextFieldIndex()) {
+                        MESSAGE_DESCRIPTOR.index -> message = deserializeString()
+                        CODE_DESCRIPTOR.index -> code = deserializeString()
+                        REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
+                        null -> break@loop
+                        else -> skipValue()
+                    }
+                }
+            }
+            XmlError(requestId, code, message)
+        } catch (e: DeserializationException) {
+            null // return so an appropriate exception type can be instantiated above here.
+        }
+    }
+}
+
+internal object InvalidChangeBatchDeserializer {
+    private val MESSAGES_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName("Messages"))
+    private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
+    private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+        trait(XmlSerialName("InvalidChangeBatch"))
+        field(MESSAGES_DESCRIPTOR)
+        field(REQUESTID_DESCRIPTOR)
+    }
+
+    suspend fun deserialize(deserializer: Deserializer): XmlErrorResponse? {
+        var requestId: String? = null
+        var messages: XmlError? = null
+
+        return try {
+            deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
+                loop@ while (true) {
+                    when (findNextFieldIndex()) {
+                        MESSAGES_DESCRIPTOR.index -> messages = InvalidChangeBatchMessageDeserializer.deserialize(deserializer)
+                        REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
+                        null -> break@loop
+                        else -> skipValue()
+                    }
+                }
+            }
+            XmlErrorResponse(messages, requestId ?: messages?.requestId)
+        }
+        catch (e: DeserializationException) { null }// return so an appropriate exception type can be instantiated above here.
+    }
+}
+
+internal object InvalidChangeBatchMessageDeserializer {
+    private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
+    private val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Code"))
+    private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
+    private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+        trait(XmlSerialName("Messages"))
+        field(MESSAGE_DESCRIPTOR)
+        field(CODE_DESCRIPTOR)
+        field(REQUESTID_DESCRIPTOR)
+    }
+
+    suspend fun deserialize(deserializer: Deserializer): XmlError? {
+        var message: String? = null
+        var code:String? = null
+        var requestId: String? = null
+
+        return try {
+            deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
+                loop@ while (true) {
+                    when (findNextFieldIndex()) {
+                        MESSAGE_DESCRIPTOR.index -> message = deserializeString()
+                        CODE_DESCRIPTOR.index -> code = deserializeString()
+                        REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
+                        null -> break@loop
+                        else -> skipValue()
+                    }
+                }
+            }
+            XmlError(requestId, code, message)
+        }
+        catch (e: DeserializationException) { null } // return so an appropriate exception type can be instantiated above here.
+    }
+}
+
 // XML Error response parser from RestXMLErrorDeserializer
-/**
- * Provides access to specific values regardless of message form
- */
 internal interface RestXmlErrorDetails {
     val requestId: String?
     val code: String?
@@ -105,82 +240,3 @@ internal data class XmlError(
     override val code: String?,
     override val message: String?,
 ) : RestXmlErrorDetails
-
-/**
- * Deserializes rest XML protocol errors as specified by:
- * https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#error-response-serialization
- *
- * Returns parsed data in normalized form or throws IllegalArgumentException if response cannot be parsed.
- * NOTE: we use an explicit XML deserializer here because we rely on validating the root element name
- * for dealing with the alternate error response forms
- */
-@InternalApi
-public suspend fun parseRestXmlErrorResponse(payload: ByteArray): ErrorDetails {
-    val details = ErrorResponseDeserializer.deserialize(XmlDeserializer(payload, true))
-        ?: XmlErrorDeserializer.deserialize(XmlDeserializer(payload, true))
-        ?: throw DeserializationException("Unable to deserialize RestXml error.")
-    return ErrorDetails(details.code, details.message, details.requestId)
-}
-
-internal object ErrorResponseDeserializer {
-    private val MESSAGES_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName("Messages"))
-    private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
-    private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-        trait(XmlSerialName("InvalidChangeBatch"))
-        field(MESSAGES_DESCRIPTOR)
-        field(REQUESTID_DESCRIPTOR)
-    }
-
-    suspend fun deserialize(deserializer: Deserializer): XmlErrorResponse? {
-        var requestId: String? = null
-        var xmlError: XmlError? = null
-
-        return try {
-            deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
-                loop@ while (true) {
-                    when (findNextFieldIndex()) {
-                        MESSAGES_DESCRIPTOR.index -> xmlError = XmlErrorDeserializer.deserialize(deserializer)
-                        REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
-                        null -> break@loop
-                        else -> skipValue()
-                    }
-                }
-            }
-
-            XmlErrorResponse(xmlError, requestId ?: xmlError?.requestId)
-        } catch (e: DeserializationException) {
-            null // return so an appropriate exception type can be instantiated above here.
-        }
-    }
-}
-
-internal object XmlErrorDeserializer {
-    private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
-    private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
-    private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-        trait(XmlSerialName("Error"))
-        field(MESSAGE_DESCRIPTOR)
-        field(REQUESTID_DESCRIPTOR)
-    }
-
-    suspend fun deserialize(deserializer: Deserializer): XmlError? {
-        var message: String? = null
-        var requestId: String? = null
-
-        return try {
-            deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
-                loop@ while (true) {
-                    when (findNextFieldIndex()) {
-                        MESSAGE_DESCRIPTOR.index -> message = deserializeString()
-                        REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
-                        null -> break@loop
-                        else -> skipValue()
-                    }
-                }
-            }
-            XmlError(requestId, null, message)
-        } catch (e: DeserializationException) {
-            null // return so an appropriate exception type can be instantiated above here.
-        }
-    }
-}
