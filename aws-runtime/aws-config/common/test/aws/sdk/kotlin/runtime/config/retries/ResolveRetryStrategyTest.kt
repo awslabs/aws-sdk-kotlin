@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.config.retries
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.ClientException
+import aws.smithy.kotlin.runtime.retries.AdaptiveRetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,10 +16,10 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ResolveRetryStrategyTest {
-
     @Test
     fun itResolvesMaxAttemptsFromEnvironmentVariables() = runTest {
         val expectedMaxAttempts = 50
@@ -27,7 +28,8 @@ class ResolveRetryStrategyTest {
             env = mapOf(AwsSdkSetting.AwsMaxAttempts.envVar to expectedMaxAttempts.toString()),
         )
 
-        assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).config.maxAttempts)
+        val strategy = assertIs<StandardRetryStrategy>(resolveRetryStrategy(platform))
+        assertEquals(expectedMaxAttempts, strategy.config.maxAttempts)
     }
 
     @Test
@@ -37,7 +39,8 @@ class ResolveRetryStrategyTest {
             props = mapOf(AwsSdkSetting.AwsMaxAttempts.sysProp to expectedMaxAttempts.toString()),
         )
 
-        assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).config.maxAttempts)
+        val strategy = assertIs<StandardRetryStrategy>(resolveRetryStrategy(platform))
+        assertEquals(expectedMaxAttempts, strategy.config.maxAttempts)
     }
 
     @Test
@@ -54,7 +57,8 @@ class ResolveRetryStrategyTest {
             ),
         )
 
-        assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).config.maxAttempts)
+        val strategy = assertIs<StandardRetryStrategy>(resolveRetryStrategy(platform))
+        assertEquals(expectedMaxAttempts, strategy.config.maxAttempts)
     }
 
     @Test
@@ -100,16 +104,17 @@ class ResolveRetryStrategyTest {
         assertFailsWith<ConfigurationException> { resolveRetryStrategy(platform) }
     }
 
-    // TODO: Remove this test after https://github.com/awslabs/aws-sdk-kotlin/issues/701 is complete
     @Test
-    fun itThrowsOnUnimplementedAdaptiveRetryStrategy() = runTest {
+    fun itResolvesAdaptiveRetryStrategy() = runTest {
+        val expectedMaxAttempts = StandardRetryStrategy.Config.DEFAULT_MAX_ATTEMPTS
         val adaptiveRetryMode = "adaptive"
 
         val platform = TestPlatformProvider(
             env = mapOf(AwsSdkSetting.AwsRetryMode.envVar to adaptiveRetryMode),
         )
 
-        assertFailsWith<NotImplementedError> { resolveRetryStrategy(platform) }
+        val strategy = assertIs<AdaptiveRetryStrategy>(resolveRetryStrategy(platform))
+        assertEquals(expectedMaxAttempts, strategy.config.maxAttempts)
     }
 
     @Test
@@ -145,7 +150,8 @@ class ResolveRetryStrategyTest {
             ),
         )
 
-        assertFailsWith<NotImplementedError> { resolveRetryStrategy(platform) }
+        val strategy = assertIs<AdaptiveRetryStrategy>(resolveRetryStrategy(platform))
+        assertEquals(expectedMaxAttempts, strategy.config.maxAttempts)
     }
 
     @Test
@@ -160,7 +166,8 @@ class ResolveRetryStrategyTest {
             ),
         )
 
-        assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).config.maxAttempts)
+        val strategy = assertIs<StandardRetryStrategy>(resolveRetryStrategy(platform))
+        assertEquals(expectedMaxAttempts, strategy.config.maxAttempts)
     }
 
     @Test
@@ -177,7 +184,8 @@ class ResolveRetryStrategyTest {
             ),
         )
 
-        assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).config.maxAttempts)
+        val strategy = assertIs<StandardRetryStrategy>(resolveRetryStrategy(platform))
+        assertEquals(expectedMaxAttempts, strategy.config.maxAttempts)
     }
 
     @Test
@@ -199,7 +207,8 @@ class ResolveRetryStrategyTest {
             ),
         )
 
-        assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).config.maxAttempts)
+        val strategy = assertIs<StandardRetryStrategy>(resolveRetryStrategy(platform))
+        assertEquals(expectedMaxAttempts, strategy.config.maxAttempts)
     }
 
     @Test
@@ -223,7 +232,8 @@ class ResolveRetryStrategyTest {
             ),
         )
 
-        assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).config.maxAttempts)
+        val strategy = assertIs<StandardRetryStrategy>(resolveRetryStrategy(platform))
+        assertEquals(expectedMaxAttempts, strategy.config.maxAttempts)
     }
 
     @Test
@@ -232,6 +242,7 @@ class ResolveRetryStrategyTest {
 
         val platform = TestPlatformProvider() // no environment variables / system properties / profile
 
-        assertEquals(expectedMaxAttempts, resolveRetryStrategy(platform).config.maxAttempts)
+        val strategy = assertIs<StandardRetryStrategy>(resolveRetryStrategy(platform))
+        assertEquals(expectedMaxAttempts, strategy.config.maxAttempts)
     }
 }

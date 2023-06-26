@@ -49,8 +49,6 @@ public abstract class AbstractAwsSdkClientFactory<
         val builder = builder()
         val config = builder.config
 
-        if (block != null) config.apply(block)
-
         val tracer = if (config is TracingClientConfig.Builder) {
             if (config.tracer == null) config.tracer = defaultTracer(config.clientName)
             config.tracer!!
@@ -61,13 +59,16 @@ public abstract class AbstractAwsSdkClientFactory<
         coroutineContext.withRootTraceSpan(tracer.createRootSpan("Config resolution")) {
             val profile = asyncLazy { loadAwsSharedConfig(PlatformProvider.System).activeProfile }
 
-            config.logMode = config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
-            config.region = config.region ?: resolveRegion(profile = profile)
-
+            // As a DslBuilderProperty, the value of retryStrategy cannot be checked for nullability because it may have
+            // been set using a DSL. Thus, set the resolved strategy _first_ to ensure it's used as the fallback.
             if (config is RetryStrategyClientConfig.Builder) {
-                config.retryStrategy = config.retryStrategy ?: resolveRetryStrategy(profile = profile)
+                config.retryStrategy = resolveRetryStrategy(profile = profile)
             }
 
+            if (block != null) config.apply(block)
+
+            config.logMode = config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
+            config.region = config.region ?: resolveRegion(profile = profile)
             config.useFips = config.useFips ?: resolveUseFips(profile = profile)
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             finalizeConfig(builder, profile)
