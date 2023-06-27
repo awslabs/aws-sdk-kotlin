@@ -1,8 +1,0 @@
-{
-    "id": "9b1c774d-9502-4b23-9bdb-623362d1162a",
-    "type": "bugfix",
-    "description": "Fix a bug in forming S3 WriteGetObjectResponse's host path",
-    "issues": [
-        "https://github.com/awslabs/aws-sdk-kotlin/issues/815"
-    ]
-}

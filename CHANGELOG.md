@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.27.2-beta] - 06/22/2023
+
+### Miscellaneous
+* Sync AWS service models
+
+## [0.27.1-beta] - 06/19/2023
+
+### Fixes
+* [#815](https://github.com/awslabs/aws-sdk-kotlin/issues/815) Fix a bug in forming S3 WriteGetObjectResponse's host path
+
+### Miscellaneous
+* Sync AWS service models.
+* Update user agent header to new cross-SDK format
+
 ## [0.27.0-beta] - 06/09/2023
 
 ### Miscellaneous
