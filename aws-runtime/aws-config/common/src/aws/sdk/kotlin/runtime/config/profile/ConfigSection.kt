@@ -31,4 +31,5 @@ public data class ConfigSection internal constructor(
 internal enum class ConfigSectionType {
     PROFILE,
     SSO_SESSION,
+    SERVICES
 }

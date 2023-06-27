@@ -8,6 +8,7 @@ internal object Literals {
     const val DEFAULT_PROFILE = "default"
     const val PROFILE_KEYWORD = "profile"
     const val SSO_SESSION_KEYWORD = "sso-session"
+    const val SERVICES_KEYWORD = "services"
     const val COMMENT_1 = "#"
     const val COMMENT_2 = ";"
     const val INLINE_COMMENT_1 = " $COMMENT_1"

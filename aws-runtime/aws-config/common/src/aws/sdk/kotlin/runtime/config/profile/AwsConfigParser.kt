@@ -148,6 +148,7 @@ private val Token.Section.sectionName: String
     get() = when (type) {
         ConfigSectionType.PROFILE -> "profile"
         ConfigSectionType.SSO_SESSION -> "sso-session"
+        ConfigSectionType.SERVICES -> "services"
     }
 
 /**
