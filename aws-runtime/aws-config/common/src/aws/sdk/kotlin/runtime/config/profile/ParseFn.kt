@@ -29,10 +29,10 @@ internal fun configurationSection(input: FileLine, currentSection: Token.Section
     val hasSectionPrefix = parts.firstOrNull() in setOf(
         Literals.PROFILE_KEYWORD,
         Literals.SSO_SESSION_KEYWORD,
-        Literals.SERVICES_KEYWORD
+        Literals.SERVICES_KEYWORD,
     )
 
-    val sectionType = when(parts[0]) {
+    val sectionType = when (parts[0]) {
         Literals.SSO_SESSION_KEYWORD -> ConfigSectionType.SSO_SESSION
         Literals.SERVICES_KEYWORD -> ConfigSectionType.SERVICES
         else -> ConfigSectionType.PROFILE
