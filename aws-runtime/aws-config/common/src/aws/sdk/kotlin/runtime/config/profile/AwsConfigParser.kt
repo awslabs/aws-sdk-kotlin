@@ -146,9 +146,10 @@ internal fun List<Pair<FileLine, Token>>.toSectionMap(traceSpan: TraceSpan): Map
 
 private val Token.Section.sectionName: String
     get() = when (type) {
-        ConfigSectionType.PROFILE -> "profile"
-        ConfigSectionType.SSO_SESSION -> "sso-session"
-        ConfigSectionType.SERVICES -> "services"
+        ConfigSectionType.PROFILE -> Literals.PROFILE_KEYWORD
+        ConfigSectionType.SSO_SESSION -> Literals.SSO_SESSION_KEYWORD
+        ConfigSectionType.SERVICES -> Literals.SERVICES_KEYWORD
+        ConfigSectionType.UNKNOWN -> "unknown section"
     }
 
 /**

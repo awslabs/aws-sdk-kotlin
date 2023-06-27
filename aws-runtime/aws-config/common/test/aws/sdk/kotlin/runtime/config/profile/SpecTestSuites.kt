@@ -799,6 +799,26 @@ internal const val parserTestSuiteJson = """
           }
         }
       }
+    },
+    {
+      "name": "Unknown section is successfully parsed",
+      "input": {
+        "configFile": "[default]\nregion = us-weast-4\n[foobar my-custom-section]\napple =\n\tbanana = cherry"
+      },
+      "output": {
+        "profiles": {
+          "default": { 
+            "region": "us-weast-4"
+          }
+        },
+        "unknown": {
+          "my-custom-section": {
+            "apple": {
+              "banana": "cherry"
+            }
+          }
+        }
+      }
     }
   ]
 }

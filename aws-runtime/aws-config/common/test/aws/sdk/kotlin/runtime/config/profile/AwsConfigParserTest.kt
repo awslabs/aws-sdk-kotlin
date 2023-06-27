@@ -147,6 +147,7 @@ private fun TypedSectionMap.toJsonElement(): JsonElement {
             ConfigSectionType.PROFILE -> "profiles"
             ConfigSectionType.SSO_SESSION -> "sso-sessions"
             ConfigSectionType.SERVICES -> "services"
+            ConfigSectionType.UNKNOWN -> "unknown"
         }
         if (value.isNotEmpty()) {
             map[sectionKey] = sectionMapToJsonElement(value)

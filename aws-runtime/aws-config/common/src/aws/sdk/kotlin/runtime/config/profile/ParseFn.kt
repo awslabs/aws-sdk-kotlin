@@ -26,16 +26,13 @@ internal fun configurationSection(input: FileLine, currentSection: Token.Section
         .dropLast(1)
         .splitWhitespace(limit = 2)
 
-    val hasSectionPrefix = parts.firstOrNull() in setOf(
-        Literals.PROFILE_KEYWORD,
-        Literals.SSO_SESSION_KEYWORD,
-        Literals.SERVICES_KEYWORD,
-    )
+    val hasSectionPrefix = parts.firstOrNull() != Literals.DEFAULT_PROFILE
 
     val sectionType = when (parts[0]) {
         Literals.SSO_SESSION_KEYWORD -> ConfigSectionType.SSO_SESSION
         Literals.SERVICES_KEYWORD -> ConfigSectionType.SERVICES
-        else -> ConfigSectionType.PROFILE
+        Literals.PROFILE_KEYWORD, Literals.DEFAULT_PROFILE -> ConfigSectionType.PROFILE
+        else -> ConfigSectionType.UNKNOWN
     }
 
     // sso-session name is required, only default profile can omit name
