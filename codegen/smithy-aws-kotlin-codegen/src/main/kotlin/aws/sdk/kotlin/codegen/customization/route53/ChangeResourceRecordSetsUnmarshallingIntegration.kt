@@ -15,7 +15,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClie
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 
-class CustomErrorUnmarshallingIntegration : KotlinIntegration {
+class ChangeResourceRecordSetsUnmarshallingIntegration : KotlinIntegration {
     companion object {
         private val overrideCustomErrorUnmarshallingWriter = SectionWriter { writer, default ->
             val op = writer.getContextValue(HttpProtocolClientGenerator.OperationDeserializerBinding.Operation)

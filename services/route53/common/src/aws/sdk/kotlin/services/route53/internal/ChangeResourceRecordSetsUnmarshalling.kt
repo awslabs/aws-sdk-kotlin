@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.services.route53.internal
 
 import aws.sdk.kotlin.services.route53.model.ChangeResourceRecordSetsResponse

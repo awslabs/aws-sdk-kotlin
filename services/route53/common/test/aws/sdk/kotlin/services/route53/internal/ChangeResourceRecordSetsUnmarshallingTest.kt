@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.services.route53.internal
 
 import aws.sdk.kotlin.services.route53.model.Route53Exception
@@ -11,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 
-class CustomErrorUnmarshallingTest {
+class ChangeResourceRecordSetsUnmarshallingTest {
     @Test
     fun unmarshallChangeResourceRecordSetsInvaildChangeBatchResponse() {
         val bodyText = """
