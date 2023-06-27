@@ -16,6 +16,7 @@ import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestResp
 import software.amazon.smithy.aws.traits.protocols.AwsQueryCompatibleTrait
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
+import software.amazon.smithy.kotlin.codegen.integration.SectionId
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
@@ -99,6 +100,8 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             }
         }
 
+    object ProtocolErrorDeserialization: SectionId
+    
     protected open fun renderThrowOperationError(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
@@ -110,7 +113,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             .write("")
             .write("val errorDetails = try {")
             .indent()
-            .call {
+            .declareSection(ProtocolErrorDeserialization) {
                 renderDeserializeErrorDetails(ctx, op, writer)
             }
             .dedent()
