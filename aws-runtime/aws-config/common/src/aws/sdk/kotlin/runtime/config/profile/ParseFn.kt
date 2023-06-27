@@ -42,7 +42,7 @@ internal fun configurationSection(input: FileLine, currentSection: Token.Section
     val name = parts.lastOrNull() ?: ""
 
     val isValid = (parts.size == 1 && parts[0] == Literals.DEFAULT_PROFILE) ||
-        (parts.size == 2 && name.isNotEmpty() && (parts[0] == Literals.PROFILE_KEYWORD || parts[0] == Literals.SSO_SESSION_KEYWORD || parts[0] == Literals.SERVICES_KEYWORD) && parts[1].isValidIdentifier())
+        (parts.size == 2 && name.isNotEmpty() && hasSectionPrefix && parts[1].isValidIdentifier())
 
     return Token.Section(name, sectionType, hasSectionPrefix, isValid)
 }
