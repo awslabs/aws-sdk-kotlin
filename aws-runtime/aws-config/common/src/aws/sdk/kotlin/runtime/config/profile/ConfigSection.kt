@@ -32,5 +32,5 @@ internal enum class ConfigSectionType {
     PROFILE,
     SSO_SESSION,
     SERVICES,
-    UNKNOWN
+    UNKNOWN,
 }
