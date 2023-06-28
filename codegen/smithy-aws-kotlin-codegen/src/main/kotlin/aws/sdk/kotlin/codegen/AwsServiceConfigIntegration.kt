@@ -9,8 +9,8 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.asNullable
-import software.amazon.smithy.kotlin.codegen.model.boxed
 import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
+import software.amazon.smithy.kotlin.codegen.model.nullable
 import software.amazon.smithy.kotlin.codegen.rendering.*
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
@@ -22,7 +22,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
         val RegionProp: ConfigProperty = ConfigProperty {
             name = "region"
-            symbol = KotlinTypes.String.toBuilder().boxed().build()
+            symbol = KotlinTypes.String.toBuilder().nullable().build()
             baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
             useNestedBuilderBaseClass()
             documentation = """

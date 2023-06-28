@@ -23,6 +23,7 @@ class RemoveEventStreamOperationsTest {
             input: BlobInput
         }
         structure BlobInput {
+            @required
             blob: StreamingBlob
         }
         @streaming
