@@ -100,8 +100,8 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             }
         }
 
-    object ProtocolErrorDeserialization: SectionId
-    
+    object ProtocolErrorDeserialization : SectionId
+
     protected open fun renderThrowOperationError(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,

@@ -18,13 +18,14 @@ import software.amazon.smithy.model.transform.ModelTransformer
 class ChangeResourceRecordSetsUnmarshallingIntegration : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding> = listOf(
         SectionWriterBinding(AwsHttpBindingProtocolGenerator.ProtocolErrorDeserialization) { writer, originalValue ->
-            writer.write("aws.sdk.kotlin.services.route53.internal.parseCustomXmlErrorResponse(payload) ?: #L", originalValue)
-        }
+            val lines = originalValue?.split("\n")
+            writer.write("#L\naws.sdk.kotlin.services.route53.internal.parseCustomXmlErrorResponse(payload) ?: #L", lines?.get(0) ?: "", lines?.get(1) ?: "")
+        },
     )
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
         val transformer = ModelTransformer.create()
-        return transformer.mapShapes(model)  { shape ->
+        return transformer.mapShapes(model) { shape ->
             if (shape.id.name == "ChangeResourceRecordsSet" && shape is OperationShape) {
                 shape.errors.removeIf { error -> error.name == "InvalidChangeBatch" }
             }
