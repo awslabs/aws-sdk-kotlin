@@ -779,6 +779,46 @@ internal const val parserTestSuiteJson = """
         "configFile": "[sso-session]\nname = value\n"
       },
       "output": {}
+    },
+    {
+      "name": "Services section is successfully parsed",
+      "input": {
+        "configFile": "[default]\nservices = my-services\n[services my-services]\ns3 =\n\tendpoint_url = https://s3-endpoint-override.aws"
+      },
+      "output": {
+        "profiles": {
+          "default": { 
+            "services": "my-services"
+          }
+        },
+        "services": {
+          "my-services": {
+            "s3": {
+              "endpoint_url": "https://s3-endpoint-override.aws"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Unknown section is successfully parsed",
+      "input": {
+        "configFile": "[default]\nregion = us-weast-4\n[foobar my-custom-section]\napple =\n\tbanana = cherry"
+      },
+      "output": {
+        "profiles": {
+          "default": { 
+            "region": "us-weast-4"
+          }
+        },
+        "unknown": {
+          "my-custom-section": {
+            "apple": {
+              "banana": "cherry"
+            }
+          }
+        }
+      }
     }
   ]
 }
