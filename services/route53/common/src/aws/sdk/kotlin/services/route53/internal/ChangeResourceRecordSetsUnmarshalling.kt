@@ -83,3 +83,26 @@ private object InvalidChangeBatchMessageDeserializer {
         }
     }
 }
+
+// XML Error response parser from RestXMLErrorDeserializer
+private interface RestXmlErrorDetails {
+    val requestId: String?
+    val code: String?
+    val message: String?
+}
+
+// Models "ErrorResponse" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
+private data class XmlErrorResponse(
+    val error: XmlError?,
+    override val requestId: String? = error?.requestId,
+) : RestXmlErrorDetails {
+    override val code: String? = error?.code
+    override val message: String? = error?.message
+}
+
+// Models "Error" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
+private data class XmlError(
+    override val requestId: String?,
+    override val code: String?,
+    override val message: String?,
+) : RestXmlErrorDetails
