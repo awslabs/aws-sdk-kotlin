@@ -70,4 +70,20 @@ class ChangeResourceRecordSetsUnmarshallingTest {
         }
         assertEquals("This is a ChangeResourceRecordSets generic error message", exception.message)
     }
+
+    @Test
+    fun emptyResponse() {
+        val response: HttpResponse = HttpResponse(
+            HttpStatusCode(400, "Bad Request"),
+            Headers.invoke { },
+            HttpBody.fromBytes("".encodeToByteArray()),
+        )
+
+        val exception = assertThrows<Route53Exception> {
+            runBlocking {
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
+            }
+        }
+        assertEquals("Failed to parse response as 'restXml' error", exception.message)
+    }
 }
