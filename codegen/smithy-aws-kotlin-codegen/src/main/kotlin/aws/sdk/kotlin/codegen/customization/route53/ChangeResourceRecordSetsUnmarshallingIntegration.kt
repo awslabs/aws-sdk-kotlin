@@ -18,8 +18,10 @@ import software.amazon.smithy.model.transform.ModelTransformer
 class ChangeResourceRecordSetsUnmarshallingIntegration : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding> = listOf(
         SectionWriterBinding(AwsHttpBindingProtocolGenerator.ProtocolErrorDeserialization) { writer, originalValue ->
-            writer.write("checkNotNull(payload){ \"unable to parse error from empty response\" }")
-            writer.write("aws.sdk.kotlin.services.route53.internal.parseCustomXmlErrorResponse(payload) ?: parseRestXmlErrorResponse(payload)")
+            requireNotNull(originalValue) { "Unexpectedly empty original value" }
+            val (nullCheckLine, parseLine) = originalValue.split("\n", limit = 2)
+            writer.write("#L", nullCheckLine)
+            writer.write("aws.sdk.kotlin.services.route53.internal.parseCustomXmlErrorResponse(payload) ?: #L", parseLine)
         },
     )
 
