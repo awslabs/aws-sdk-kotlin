@@ -16,7 +16,7 @@ import software.amazon.smithy.model.shapes.ServiceShape
 
 class ChangeResourceRecordSetsUnmarshallingIntegration : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding> = listOf(
-        SectionWriterBinding(AwsHttpBindingProtocolGenerator.ProtocolErrorDeserialization) { writer, originalValue ->
+        SectionWriterBinding(AwsHttpBindingProtocolGenerator.ProtocolErrorDeserialization) { writer, _ ->
             writer.withBlock("payload?.let {", "}\n") {
                 withBlock("aws.sdk.kotlin.services.route53.internal.parseCustomXmlErrorResponse(payload)?.let {", "}") {
                     write("val exception = Route53Exception(it.message)")
