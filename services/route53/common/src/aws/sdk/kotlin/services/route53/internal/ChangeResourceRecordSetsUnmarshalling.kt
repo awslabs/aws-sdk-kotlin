@@ -18,7 +18,7 @@ public suspend fun parseCustomXmlErrorResponse(payload: ByteArray): ErrorDetails
     return ErrorDetails(details.code, details.message, details.requestId)
 }
 
-internal object InvalidChangeBatchDeserializer {
+private object InvalidChangeBatchDeserializer {
     private val MESSAGES_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName("Messages"))
     private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
     private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
@@ -49,7 +49,7 @@ internal object InvalidChangeBatchDeserializer {
     }
 }
 
-internal object InvalidChangeBatchMessageDeserializer {
+private object InvalidChangeBatchMessageDeserializer {
     private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
     private val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Code"))
     private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
@@ -83,26 +83,3 @@ internal object InvalidChangeBatchMessageDeserializer {
         }
     }
 }
-
-// XML Error response parser from RestXMLErrorDeserializer
-internal interface RestXmlErrorDetails {
-    val requestId: String?
-    val code: String?
-    val message: String?
-}
-
-// Models "ErrorResponse" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-internal data class XmlErrorResponse(
-    val error: XmlError?,
-    override val requestId: String? = error?.requestId,
-) : RestXmlErrorDetails {
-    override val code: String? = error?.code
-    override val message: String? = error?.message
-}
-
-// Models "Error" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-internal data class XmlError(
-    override val requestId: String?,
-    override val code: String?,
-    override val message: String?,
-) : RestXmlErrorDetails
