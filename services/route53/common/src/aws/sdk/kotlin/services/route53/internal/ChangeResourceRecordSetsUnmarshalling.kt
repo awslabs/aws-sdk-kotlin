@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.services.route53.internal
 
 import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.awsprotocol.AwsErrorDetails
 import aws.smithy.kotlin.runtime.awsprotocol.ErrorDetails
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
@@ -29,7 +30,7 @@ private object InvalidChangeBatchDeserializer {
 
     suspend fun deserialize(deserializer: Deserializer): XmlErrorResponse? {
         var requestId: String? = null
-        var messages: XmlError? = null
+        var messages: ErrorDetails? = null
 
         return try {
             deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
@@ -60,7 +61,7 @@ private object InvalidChangeBatchMessageDeserializer {
         field(REQUESTID_DESCRIPTOR)
     }
 
-    suspend fun deserialize(deserializer: Deserializer): XmlError? {
+    suspend fun deserialize(deserializer: Deserializer): ErrorDetails? {
         var message: String? = null
         var code: String? = null
         var requestId: String? = null
@@ -77,9 +78,17 @@ private object InvalidChangeBatchMessageDeserializer {
                     }
                 }
             }
-            XmlError(requestId, code, message)
+            ErrorDetails(requestId, code, message)
         } catch (e: DeserializationException) {
             null // return so an appropriate exception type can be instantiated above here.
         }
     }
+}
+
+private data class XmlErrorResponse(
+    val error: ErrorDetails?,
+    override val requestId: String? = error?.requestId,
+) : AwsErrorDetails {
+    override val code: String? = error?.code
+    override val message: String? = error?.message
 }
