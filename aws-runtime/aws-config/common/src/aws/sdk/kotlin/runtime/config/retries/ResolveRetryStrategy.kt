@@ -14,9 +14,9 @@ import aws.sdk.kotlin.runtime.config.profile.maxAttempts
 import aws.sdk.kotlin.runtime.config.profile.retryMode
 import aws.smithy.kotlin.runtime.client.config.RetryMode
 import aws.smithy.kotlin.runtime.config.resolve
+import aws.smithy.kotlin.runtime.retries.AdaptiveRetryStrategy
 import aws.smithy.kotlin.runtime.retries.RetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
-import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
@@ -32,16 +32,20 @@ public suspend fun resolveRetryStrategy(
 ): RetryStrategy {
     val maxAttempts = AwsSdkSetting.AwsMaxAttempts.resolve(platformProvider)
         ?: profile.get().maxAttempts
-        ?: StandardRetryStrategyOptions.Default.maxAttempts
-
-    if (maxAttempts < 1) { throw ConfigurationException("max attempts was $maxAttempts, but should be at least 1") }
 
     val retryMode = AwsSdkSetting.AwsRetryMode.resolve(platformProvider)
         ?: profile.get().retryMode
         ?: RetryMode.STANDARD
 
-    return when (retryMode) {
-        RetryMode.STANDARD, RetryMode.LEGACY -> StandardRetryStrategy(StandardRetryStrategyOptions(maxAttempts))
-        RetryMode.ADAPTIVE -> throw NotImplementedError("Retry mode $retryMode is not implemented yet. https://github.com/awslabs/aws-sdk-kotlin/issues/701")
+    val factory = when (retryMode) {
+        RetryMode.STANDARD, RetryMode.LEGACY -> StandardRetryStrategy
+        RetryMode.ADAPTIVE -> AdaptiveRetryStrategy
+    }
+
+    return factory {
+        maxAttempts?.let {
+            if (it < 1) { throw ConfigurationException("max attempts was $it, but should be at least 1") }
+            this.maxAttempts = it
+        }
     }
 }

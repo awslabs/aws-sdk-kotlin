@@ -20,19 +20,19 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.net.Url
-import aws.smithy.kotlin.runtime.retries.StandardRetryStrategyOptions
+import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import io.kotest.matchers.string.shouldContain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class EcsCredentialsProviderTest {
     private val epoch = Instant.fromIso8601("2020-10-16T03:56:00Z")
     private val expectedExpiration = epoch + 15.minutes
@@ -213,7 +213,7 @@ class EcsCredentialsProviderTest {
     @Test
     fun testThrottledErrorResponse() = runTest {
         val engine = buildTestConnection {
-            repeat(StandardRetryStrategyOptions.Default.maxAttempts) {
+            repeat(StandardRetryStrategy.Config.DEFAULT_MAX_ATTEMPTS) {
                 expect(
                     ecsRequest("http://169.254.170.2/relative"),
                     errorResponse(statusCode = HttpStatusCode.TooManyRequests),
@@ -266,7 +266,7 @@ class EcsCredentialsProviderTest {
     @Test
     fun testThrottledJsonErrorResponse() = runTest {
         val engine = buildTestConnection {
-            repeat(StandardRetryStrategyOptions.Default.maxAttempts) {
+            repeat(StandardRetryStrategy.Config.DEFAULT_MAX_ATTEMPTS) {
                 expect(
                     ecsRequest("http://169.254.170.2/relative"),
                     errorResponse(
@@ -298,7 +298,7 @@ class EcsCredentialsProviderTest {
     @Test
     fun test5XXErrorResponse() = runTest {
         val engine = buildTestConnection {
-            repeat(StandardRetryStrategyOptions.Default.maxAttempts) {
+            repeat(StandardRetryStrategy.Config.DEFAULT_MAX_ATTEMPTS) {
                 expect(
                     ecsRequest("http://169.254.170.2/relative"),
                     errorResponse(

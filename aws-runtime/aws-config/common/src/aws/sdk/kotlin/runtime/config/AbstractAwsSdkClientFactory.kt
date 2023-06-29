@@ -12,6 +12,7 @@ import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.smithy.kotlin.runtime.client.RetryStrategyClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
@@ -46,23 +47,30 @@ public abstract class AbstractAwsSdkClientFactory<
      */
     public suspend fun fromEnvironment(block: (TConfigBuilder.() -> Unit)? = null): TClient {
         val builder = builder()
-        if (block != null) builder.config.apply(block)
+        val config = builder.config
 
-        val tracer = if (builder is TracingClientConfig.Builder) {
-            if (builder.tracer == null) builder.tracer = defaultTracer(builder.config.clientName)
-            builder.tracer!!
+        val tracer = if (config is TracingClientConfig.Builder) {
+            if (config.tracer == null) config.tracer = defaultTracer(config.clientName)
+            config.tracer!!
         } else {
-            defaultTracer(builder.config.clientName)
+            defaultTracer(config.clientName)
         }
 
         coroutineContext.withRootTraceSpan(tracer.createRootSpan("Config resolution")) {
             val profile = asyncLazy { loadAwsSharedConfig(PlatformProvider.System).activeProfile }
 
-            builder.config.logMode = builder.config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
-            builder.config.region = builder.config.region ?: resolveRegion(profile = profile)
-            builder.config.retryStrategy = builder.config.retryStrategy ?: resolveRetryStrategy(profile = profile)
-            builder.config.useFips = builder.config.useFips ?: resolveUseFips(profile = profile)
-            builder.config.useDualStack = builder.config.useDualStack ?: resolveUseDualStack(profile = profile)
+            // As a DslBuilderProperty, the value of retryStrategy cannot be checked for nullability because it may have
+            // been set using a DSL. Thus, set the resolved strategy _first_ to ensure it's used as the fallback.
+            if (config is RetryStrategyClientConfig.Builder) {
+                config.retryStrategy = resolveRetryStrategy(profile = profile)
+            }
+
+            if (block != null) config.apply(block)
+
+            config.logMode = config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
+            config.region = config.region ?: resolveRegion(profile = profile)
+            config.useFips = config.useFips ?: resolveUseFips(profile = profile)
+            config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             finalizeConfig(builder, profile)
         }
         return builder.build()

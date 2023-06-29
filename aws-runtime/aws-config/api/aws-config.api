@@ -160,7 +160,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/RetryClientConfig, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
 	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Companion;
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getAuthSchemes ()Ljava/util/List;
@@ -180,11 +180,12 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/RetryClientConfig$Builder, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
 	public fun <init> ()V
 	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config;
 	public synthetic fun build ()Ljava/lang/Object;
 	public fun buildHttpEngineConfig ()Laws/smithy/kotlin/runtime/http/config/HttpEngineConfig;
+	public fun buildRetryStrategyClientConfig ()Laws/smithy/kotlin/runtime/client/RetryStrategyClientConfig;
 	public fun getAuthSchemes ()Ljava/util/List;
 	public fun getClientName ()Ljava/lang/String;
 	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
@@ -201,6 +202,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 	public fun getUseFips ()Ljava/lang/Boolean;
 	public fun httpClient (Laws/smithy/kotlin/runtime/http/config/EngineFactory;Lkotlin/jvm/functions/Function1;)V
 	public fun httpClient (Lkotlin/jvm/functions/Function1;)V
+	public fun retryStrategy (Laws/smithy/kotlin/runtime/util/DslFactory;Lkotlin/jvm/functions/Function1;)V
+	public fun retryStrategy (Lkotlin/jvm/functions/Function1;)V
 	public fun setAuthSchemes (Ljava/util/List;)V
 	public fun setClientName (Ljava/lang/String;)V
 	public fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
@@ -471,7 +474,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoO
 	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/RetryClientConfig, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
 	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Companion;
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getAuthSchemes ()Ljava/util/List;
@@ -491,11 +494,12 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoO
 	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/RetryClientConfig$Builder, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
 	public fun <init> ()V
 	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config;
 	public synthetic fun build ()Ljava/lang/Object;
 	public fun buildHttpEngineConfig ()Laws/smithy/kotlin/runtime/http/config/HttpEngineConfig;
+	public fun buildRetryStrategyClientConfig ()Laws/smithy/kotlin/runtime/client/RetryStrategyClientConfig;
 	public fun getAuthSchemes ()Ljava/util/List;
 	public fun getClientName ()Ljava/lang/String;
 	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
@@ -512,6 +516,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoO
 	public fun getUseFips ()Ljava/lang/Boolean;
 	public fun httpClient (Laws/smithy/kotlin/runtime/http/config/EngineFactory;Lkotlin/jvm/functions/Function1;)V
 	public fun httpClient (Lkotlin/jvm/functions/Function1;)V
+	public fun retryStrategy (Laws/smithy/kotlin/runtime/util/DslFactory;Lkotlin/jvm/functions/Function1;)V
+	public fun retryStrategy (Lkotlin/jvm/functions/Function1;)V
 	public fun setAuthSchemes (Ljava/util/List;)V
 	public fun setClientName (Ljava/lang/String;)V
 	public fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
@@ -971,7 +977,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/RetryClientConfig, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/tracing/TracingClientConfig {
 	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Companion;
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getAuthSchemes ()Ljava/util/List;
@@ -991,11 +997,12 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/RetryClientConfig$Builder, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/tracing/TracingClientConfig$Builder {
 	public fun <init> ()V
 	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config;
 	public synthetic fun build ()Ljava/lang/Object;
 	public fun buildHttpEngineConfig ()Laws/smithy/kotlin/runtime/http/config/HttpEngineConfig;
+	public fun buildRetryStrategyClientConfig ()Laws/smithy/kotlin/runtime/client/RetryStrategyClientConfig;
 	public fun getAuthSchemes ()Ljava/util/List;
 	public fun getClientName ()Ljava/lang/String;
 	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
@@ -1012,6 +1019,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 	public fun getUseFips ()Ljava/lang/Boolean;
 	public fun httpClient (Laws/smithy/kotlin/runtime/http/config/EngineFactory;Lkotlin/jvm/functions/Function1;)V
 	public fun httpClient (Lkotlin/jvm/functions/Function1;)V
+	public fun retryStrategy (Laws/smithy/kotlin/runtime/util/DslFactory;Lkotlin/jvm/functions/Function1;)V
+	public fun retryStrategy (Lkotlin/jvm/functions/Function1;)V
 	public fun setAuthSchemes (Ljava/util/List;)V
 	public fun setClientName (Ljava/lang/String;)V
 	public fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V

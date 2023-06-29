@@ -28,7 +28,7 @@ public class AwsRetryHeaderMiddleware<O> : MutateMiddleware<O> {
     private var attempt = 0
     private var maxAttempts: Int? = null
     override fun install(op: SdkHttpOperation<*, O>) {
-        maxAttempts = op.execution.retryStrategy.options.maxAttempts
+        maxAttempts = op.execution.retryStrategy.config.maxAttempts
         op.execution.onEachAttempt.register(this)
     }
 
