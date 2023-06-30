@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.services.route53.internal
 
+import aws.sdk.kotlin.services.route53.model.InvalidChangeBatch
 import aws.sdk.kotlin.services.route53.model.Route53Exception
 import aws.sdk.kotlin.services.route53.transform.ChangeResourceRecordSetsOperationDeserializer
 import aws.smithy.kotlin.runtime.http.Headers
@@ -35,7 +36,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
-        val exception = assertThrows<Route53Exception> {
+        val exception = assertThrows<InvalidChangeBatch> {
             runBlocking {
                 ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
             }
