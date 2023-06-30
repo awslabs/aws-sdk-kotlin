@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.28.0-beta] - 06/29/2023
+
+### Features
+* [#701](https://github.com/awslabs/aws-sdk-kotlin/issues/701) **Breaking**: Simplify mechanisms for setting/updating retry strategies in client config. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/964) for more details.
+* [#701](https://github.com/awslabs/aws-sdk-kotlin/issues/701) Add adaptive retry mode
+
+### Miscellaneous
+* Sync AWS models and bump smithy-kotlin version
+
 ## [0.27.2-beta] - 06/22/2023
 
 ### Miscellaneous

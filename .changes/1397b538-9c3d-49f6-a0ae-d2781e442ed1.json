@@ -1,8 +1,0 @@
-{
-    "id": "1397b538-9c3d-49f6-a0ae-d2781e442ed1",
-    "type": "feature",
-    "description": "Add adaptive retry mode",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#701"
-    ]
-}
