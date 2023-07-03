@@ -12,6 +12,7 @@ import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
+import aws.smithy.kotlin.runtime.serde.DeserializationException
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -19,12 +20,12 @@ import kotlin.test.assertEquals
 
 class ChangeResourceRecordSetsUnmarshallingTest {
     @Test
-    fun unmarshallChangeResourceRecordSetsInvaildChangeBatchResponse() {
+    fun changeResourceRecordSetsInvalidChangeBatchMessage() {
         val bodyText = """
             <?xml version="1.0" encoding="UTF-8"?>
             <InvalidChangeBatch xmlns="https://route53.amazonaws.com/doc/2013-04-01/">
               <Messages>
-                <Message>This is a ChangeResourceRecordSets InvaildChangeBatchResponse message</Message>
+                <Message>This is a ChangeResourceRecordSets InvalidChangeBatch response message</Message>
               </Messages>
               <RequestId>b25f48e8-84fd-11e6-80d9-574e0c4664cb</RequestId>
             </InvalidChangeBatch>
@@ -41,11 +42,90 @@ class ChangeResourceRecordSetsUnmarshallingTest {
                 ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
             }
         }
-        assertEquals("This is a ChangeResourceRecordSets InvaildChangeBatchResponse message", exception.message)
+        assertEquals("This is a ChangeResourceRecordSets InvalidChangeBatch response message", exception.message)
     }
 
     @Test
-    fun unmarshallChangeResourceRecordSetsGenericErrorResponse() {
+    fun changeResourceRecordSetsInvalidChangeBatchMessages() {
+        val bodyText = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <InvalidChangeBatch xmlns="https://route53.amazonaws.com/doc/2013-04-01/">
+              <Messages>
+                <Message>This is a ChangeResourceRecordSets InvalidChangeBatch response message</Message>
+                <Message>This is also a ChangeResourceRecordSets InvalidChangeBatch response message</Message>
+              </Messages>
+              <RequestId>b25f48e8-84fd-11e6-80d9-574e0c4664cb</RequestId>
+            </InvalidChangeBatch>
+        """.trimIndent()
+
+        val response: HttpResponse = HttpResponse(
+            HttpStatusCode(400, "Bad Request"),
+            Headers.invoke { },
+            HttpBody.fromBytes(bodyText.encodeToByteArray()),
+        )
+
+        val exception = assertThrows<InvalidChangeBatch> {
+            runBlocking {
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
+            }
+        }
+        assertEquals(
+            "This is a ChangeResourceRecordSets InvalidChangeBatch response message + " +
+                "This is also a ChangeResourceRecordSets InvalidChangeBatch response message",
+            exception.message,
+        )
+    }
+
+    @Test
+    fun changeResourceRecordSetsInvalidChangeBatchNoMessage() {
+        val bodyText = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <InvalidChangeBatch xmlns="https://route53.amazonaws.com/doc/2013-04-01/">
+              <Messages>
+              </Messages>
+              <RequestId>b25f48e8-84fd-11e6-80d9-574e0c4664cb</RequestId>
+            </InvalidChangeBatch>
+        """.trimIndent()
+
+        val response: HttpResponse = HttpResponse(
+            HttpStatusCode(400, "Bad Request"),
+            Headers.invoke { },
+            HttpBody.fromBytes(bodyText.encodeToByteArray()),
+        )
+
+        val exception = assertThrows<DeserializationException> {
+            runBlocking {
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
+            }
+        }
+        assertEquals("Missing message in InvalidChangeBatch XML response", exception.message)
+    }
+
+    @Test
+    fun changeResourceRecordSetsInvalidChangeBatchNoMessages() {
+        val bodyText = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <InvalidChangeBatch xmlns="https://route53.amazonaws.com/doc/2013-04-01/">
+              <RequestId>b25f48e8-84fd-11e6-80d9-574e0c4664cb</RequestId>
+            </InvalidChangeBatch>
+        """.trimIndent()
+
+        val response: HttpResponse = HttpResponse(
+            HttpStatusCode(400, "Bad Request"),
+            Headers.invoke { },
+            HttpBody.fromBytes(bodyText.encodeToByteArray()),
+        )
+
+        val exception = assertThrows<DeserializationException> {
+            runBlocking {
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
+            }
+        }
+        assertEquals("Missing message in InvalidChangeBatch XML response", exception.message)
+    }
+
+    @Test
+    fun changeResourceRecordSetsGenericError() {
         val bodyText = """
             <?xml version="1.0"?>
             <ErrorResponse xmlns="http://route53.amazonaws.com/doc/2016-09-07/">

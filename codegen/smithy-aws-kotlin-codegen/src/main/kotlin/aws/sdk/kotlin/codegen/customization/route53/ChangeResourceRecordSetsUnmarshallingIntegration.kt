@@ -18,12 +18,9 @@ class ChangeResourceRecordSetsUnmarshallingIntegration : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding> = listOf(
         SectionWriterBinding(AwsHttpBindingProtocolGenerator.ProtocolErrorDeserialization) { writer, _ ->
             writer.withBlock("payload?.let {", "}\n") {
-                withBlock("aws.sdk.kotlin.services.route53.internal.parseCustomXmlErrorResponse(payload)?.let {", "}") {
-                    write("val builder = aws.sdk.kotlin.services.route53.model.InvalidChangeBatch.Builder()")
-                    write("builder.message = it.message")
-                    write("val exception = builder.build()")
-                    write("setAseErrorMetadata(exception, wrappedResponse, it)")
-                    write("throw exception")
+                withBlock("aws.sdk.kotlin.services.route53.internal.parseInvalidChangeBatchRestXmlErrorResponse(payload)?.let {", "}") {
+                    write("setAseErrorMetadata(it.exception, wrappedResponse, it.errorDetails)")
+                    write("throw it.exception")
                 }
             }
         },

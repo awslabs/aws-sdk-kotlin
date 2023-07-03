@@ -4,18 +4,24 @@
  */
 package aws.sdk.kotlin.services.route53.internal
 
-import aws.smithy.kotlin.runtime.InternalApi
+import aws.sdk.kotlin.services.route53.model.InvalidChangeBatch
 import aws.smithy.kotlin.runtime.awsprotocol.ErrorDetails
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
 import aws.smithy.kotlin.runtime.serde.xml.XmlSerialName
 
-@InternalApi
-public suspend fun parseCustomXmlErrorResponse(payload: ByteArray): ErrorDetails? {
-    val details = InvalidChangeBatchDeserializer.deserialize(XmlDeserializer(payload, true))
-        ?: InvalidChangeBatchMessageDeserializer.deserialize(XmlDeserializer(payload, true))
-        ?: return null
-    return ErrorDetails(details.code, details.message, details.requestId)
+internal suspend fun parseInvalidChangeBatchRestXmlErrorResponse(payload: ByteArray): InvalidChangeBatchErrorResponse? {
+    val details = InvalidChangeBatchDeserializer.deserialize(XmlDeserializer(payload, true)) ?: return null
+    val exception = buildInvalidChangeBatchException(details.messages)
+    val errorDetails = ErrorDetails("InvalidChangeBatch", details.messages, details.requestId)
+    return InvalidChangeBatchErrorResponse(errorDetails, exception)
+}
+
+private fun buildInvalidChangeBatchException(messages: String?): InvalidChangeBatch {
+    messages ?: throw DeserializationException("Missing message in InvalidChangeBatch XML response")
+    val builder = InvalidChangeBatch.Builder()
+    builder.message = messages // TODO: Invalid change batch exception has no field for request ID
+    return builder.build()
 }
 
 private object InvalidChangeBatchDeserializer {
@@ -27,82 +33,62 @@ private object InvalidChangeBatchDeserializer {
         field(REQUESTID_DESCRIPTOR)
     }
 
-    suspend fun deserialize(deserializer: Deserializer): XmlErrorResponse? {
+    suspend fun deserialize(deserializer: Deserializer): InvalidChangeBatchError? {
         var requestId: String? = null
-        var messages: XmlError? = null
+        var messages: String? = null
 
         return try {
             deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
                 loop@ while (true) {
                     when (findNextFieldIndex()) {
-                        MESSAGES_DESCRIPTOR.index -> messages = InvalidChangeBatchMessageDeserializer.deserialize(deserializer)
+                        MESSAGES_DESCRIPTOR.index -> messages = InvalidChangeBatchMessagesDeserializer.deserialize(deserializer)
                         REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
                         null -> break@loop
                         else -> skipValue()
                     }
                 }
             }
-            XmlErrorResponse(messages, requestId ?: messages?.requestId)
+            InvalidChangeBatchError(messages, requestId)
         } catch (e: DeserializationException) {
             null // return so an appropriate exception type can be instantiated above here.
         }
     }
 }
 
-private object InvalidChangeBatchMessageDeserializer {
+private object InvalidChangeBatchMessagesDeserializer {
     private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
-    private val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Code"))
-    private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
     private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-        trait(XmlSerialName("Messages"))
+        trait(XmlSerialName("Messages")) // TODO: The generic 'XmlErrorDeserializer' can't replace this one because this one is different
         field(MESSAGE_DESCRIPTOR)
-        field(CODE_DESCRIPTOR)
-        field(REQUESTID_DESCRIPTOR)
     }
 
-    suspend fun deserialize(deserializer: Deserializer): XmlError? {
-        var message: String? = null
-        var code: String? = null
-        var requestId: String? = null
+    suspend fun deserialize(deserializer: Deserializer): String? {
+        var messages: String? = null
 
         return try {
             deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
                 loop@ while (true) {
                     when (findNextFieldIndex()) {
-                        MESSAGE_DESCRIPTOR.index -> message = deserializeString()
-                        CODE_DESCRIPTOR.index -> code = deserializeString()
-                        REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
+                        MESSAGE_DESCRIPTOR.index ->
+                            if (messages == null) messages = deserializeString() else messages = messages + " + " + deserializeString() // TODO: What separator should I use?
                         null -> break@loop
                         else -> skipValue()
                     }
                 }
             }
-            XmlError(requestId, code, message)
+            messages // TODO: I looked at other deserializers and they only return a message, no request ID
         } catch (e: DeserializationException) {
             null // return so an appropriate exception type can be instantiated above here.
         }
     }
 }
 
-// XML Error response parser from RestXMLErrorDeserializer
-private interface RestXmlErrorDetails {
-    val requestId: String?
-    val code: String?
-    val message: String?
-}
+internal data class InvalidChangeBatchErrorResponse(
+    val errorDetails: ErrorDetails,
+    val exception: InvalidChangeBatch,
+)
 
-// Models "ErrorResponse" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-private data class XmlErrorResponse(
-    val error: XmlError?,
-    override val requestId: String? = error?.requestId,
-) : RestXmlErrorDetails {
-    override val code: String? = error?.code
-    override val message: String? = error?.message
-}
-
-// Models "Error" type in https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#operation-error-serialization
-private data class XmlError(
-    override val requestId: String?,
-    override val code: String?,
-    override val message: String?,
-) : RestXmlErrorDetails
+private data class InvalidChangeBatchError(
+    val messages: String?,
+    val requestId: String?,
+)
