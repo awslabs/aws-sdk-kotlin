@@ -43,7 +43,7 @@ private const val PROVIDER_NAME = "WebIdentityToken"
 public class StsWebIdentityCredentialsProvider(
     private val roleArn: String,
     private val webIdentityTokenFilePath: String,
-    private val region: String,
+    private val region: String?,
     private val roleSessionName: String? = null,
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
@@ -67,7 +67,7 @@ public class StsWebIdentityCredentialsProvider(
         ): StsWebIdentityCredentialsProvider {
             val resolvedRoleArn = platformProvider.resolve(roleArn, AwsSdkSetting.AwsRoleArn, "roleArn")
             val resolvedTokenFilePath = platformProvider.resolve(webIdentityTokenFilePath, AwsSdkSetting.AwsWebIdentityTokenFile, "webIdentityTokenFilePath")
-            val resolvedRegion = platformProvider.resolve(region, AwsSdkSetting.AwsRegion, "region")
+            val resolvedRegion = region ?: AwsSdkSetting.AwsRegion.resolve(platformProvider)
             return StsWebIdentityCredentialsProvider(resolvedRoleArn, resolvedTokenFilePath, resolvedRegion, roleSessionName, duration, platformProvider, httpClient)
         }
     }
