@@ -20,7 +20,7 @@ internal suspend fun parseInvalidChangeBatchRestXmlErrorResponse(payload: ByteAr
 private fun buildInvalidChangeBatchException(messages: String?): InvalidChangeBatch {
     messages ?: throw DeserializationException("Missing message in InvalidChangeBatch XML response")
     val builder = InvalidChangeBatch.Builder()
-    builder.message = messages // TODO: Invalid change batch exception has no field for request ID
+    builder.message = messages
     return builder.build()
 }
 
@@ -58,7 +58,7 @@ private object InvalidChangeBatchDeserializer {
 private object InvalidChangeBatchMessagesDeserializer {
     private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
     private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-        trait(XmlSerialName("Messages")) // TODO: The generic 'XmlErrorDeserializer' can't replace this one because this one is different
+        trait(XmlSerialName("Messages"))
         field(MESSAGE_DESCRIPTOR)
     }
 
@@ -70,13 +70,13 @@ private object InvalidChangeBatchMessagesDeserializer {
                 loop@ while (true) {
                     when (findNextFieldIndex()) {
                         MESSAGE_DESCRIPTOR.index ->
-                            if (messages == null) messages = deserializeString() else messages = messages + " + " + deserializeString() // TODO: What separator should I use?
+                            if (messages == null) messages = deserializeString() else messages += "\n" + deserializeString()
                         null -> break@loop
                         else -> skipValue()
                     }
                 }
             }
-            messages // TODO: I looked at other deserializers and they only return a message, no request ID
+            messages
         } catch (e: DeserializationException) {
             null // return so an appropriate exception type can be instantiated above here.
         }

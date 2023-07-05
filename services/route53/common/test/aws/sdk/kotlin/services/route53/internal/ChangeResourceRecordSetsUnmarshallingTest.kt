@@ -70,7 +70,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
             }
         }
         assertEquals(
-            "This is a ChangeResourceRecordSets InvalidChangeBatch response message + " +
+            "This is a ChangeResourceRecordSets InvalidChangeBatch response message\n" +
                 "This is also a ChangeResourceRecordSets InvalidChangeBatch response message",
             exception.message,
         )
