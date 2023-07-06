@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.28.1-beta] - 07/06/2023
+
+### Miscellaneous
+* Upgrade smithy-kotlin and sync service models.
+
 ## [0.28.0-beta] - 06/29/2023
 
 ### Features
