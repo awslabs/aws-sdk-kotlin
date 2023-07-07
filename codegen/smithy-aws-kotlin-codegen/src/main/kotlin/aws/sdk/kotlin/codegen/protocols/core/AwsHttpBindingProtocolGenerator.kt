@@ -111,7 +111,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         writer.write("val payload = response.body.#T()", RuntimeTypes.Http.readAll)
             .write("val wrappedResponse = response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
             .write("")
-            .declareSection(ProtocolErrorDeserialization) { }
+            .declareSection(ProtocolErrorDeserialization)
             .write("val errorDetails = try {")
             .indent()
             .call {
