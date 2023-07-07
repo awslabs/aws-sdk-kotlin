@@ -7,88 +7,53 @@ package aws.sdk.kotlin.services.route53.internal
 import aws.sdk.kotlin.services.route53.model.InvalidChangeBatch
 import aws.smithy.kotlin.runtime.awsprotocol.ErrorDetails
 import aws.smithy.kotlin.runtime.serde.*
-import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
-import aws.smithy.kotlin.runtime.serde.xml.XmlSerialName
+import aws.smithy.kotlin.runtime.serde.xml.*
 
-internal suspend fun parseInvalidChangeBatchRestXmlErrorResponse(payload: ByteArray): InvalidChangeBatchErrorResponse? {
-    val details = InvalidChangeBatchDeserializer.deserialize(XmlDeserializer(payload, true)) ?: return null
-    val exception = buildInvalidChangeBatchException(details.messages)
-    val errorDetails = ErrorDetails("InvalidChangeBatch", details.messages, details.requestId)
-    return InvalidChangeBatchErrorResponse(errorDetails, exception)
+internal fun parseRestXmlInvalidChangeBatchResponse(payload: ByteArray): InvalidChangeBatchErrorResponse? {
+    return deserializeInvalidChangeBatchError(InvalidChangeBatch.Builder(), payload)
 }
 
-private fun buildInvalidChangeBatchException(messages: String?): InvalidChangeBatch {
-    messages ?: throw DeserializationException("Missing message in InvalidChangeBatch XML response")
-    val builder = InvalidChangeBatch.Builder()
-    builder.message = messages
-    return builder.build()
-}
-
-private object InvalidChangeBatchDeserializer {
-    private val MESSAGES_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Struct, XmlSerialName("Messages"))
-    private val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
-    private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
+internal fun deserializeInvalidChangeBatchError(builder: InvalidChangeBatch.Builder, payload: ByteArray): InvalidChangeBatchErrorResponse? {
+    val deserializer = XmlDeserializer(payload)
+    val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("message"), XmlAliasName("Message"))
+    val MESSAGES_DESCRIPTOR = SdkFieldDescriptor(SerialKind.List, XmlSerialName("messages"), XmlAliasName("Messages"), XmlCollectionName("Message"))
+    val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
+    val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
         trait(XmlSerialName("InvalidChangeBatch"))
+        trait(XmlNamespace("https://route53.amazonaws.com/doc/2013-04-01/"))
+        field(MESSAGE_DESCRIPTOR)
         field(MESSAGES_DESCRIPTOR)
         field(REQUESTID_DESCRIPTOR)
     }
+    var requestId: String? = null
 
-    suspend fun deserialize(deserializer: Deserializer): InvalidChangeBatchError? {
-        var requestId: String? = null
-        var messages: String? = null
-
-        return try {
-            deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
-                loop@ while (true) {
-                    when (findNextFieldIndex()) {
-                        MESSAGES_DESCRIPTOR.index -> messages = InvalidChangeBatchMessagesDeserializer.deserialize(deserializer)
-                        REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
-                        null -> break@loop
-                        else -> skipValue()
-                    }
+    return try {
+        deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
+            loop@while (true) {
+                when (findNextFieldIndex()) {
+                    MESSAGE_DESCRIPTOR.index -> builder.message = deserializeString()
+                    REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
+                    MESSAGES_DESCRIPTOR.index ->
+                        builder.messages = deserializer.deserializeList(MESSAGES_DESCRIPTOR) {
+                            val col0 = mutableListOf<String>()
+                            while (hasNextElement()) {
+                                val el0 = if (nextHasValue()) { deserializeString() } else { deserializeNull(); continue }
+                                col0.add(el0)
+                            }
+                            col0
+                        }
+                    null -> break@loop
+                    else -> skipValue()
                 }
             }
-            InvalidChangeBatchError(messages, requestId)
-        } catch (e: DeserializationException) {
-            null // return so an appropriate exception type can be instantiated above here.
         }
-    }
-}
-
-private object InvalidChangeBatchMessagesDeserializer {
-    private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
-    private val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-        trait(XmlSerialName("Messages"))
-        field(MESSAGE_DESCRIPTOR)
-    }
-
-    suspend fun deserialize(deserializer: Deserializer): String? {
-        var messages: String? = null
-
-        return try {
-            deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
-                loop@ while (true) {
-                    when (findNextFieldIndex()) {
-                        MESSAGE_DESCRIPTOR.index ->
-                            if (messages == null) messages = deserializeString() else messages += "\n" + deserializeString()
-                        null -> break@loop
-                        else -> skipValue()
-                    }
-                }
-            }
-            messages
-        } catch (e: DeserializationException) {
-            null // return so an appropriate exception type can be instantiated above here.
-        }
+        InvalidChangeBatchErrorResponse(ErrorDetails("InvalidChangeBatch", builder.message, requestId), builder.build())
+    } catch (e: DeserializationException) {
+        null // return so an appropriate exception type can be instantiated above here.
     }
 }
 
 internal data class InvalidChangeBatchErrorResponse(
     val errorDetails: ErrorDetails,
     val exception: InvalidChangeBatch,
-)
-
-private data class InvalidChangeBatchError(
-    val messages: String?,
-    val requestId: String?,
 )
