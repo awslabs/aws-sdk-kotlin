@@ -1,0 +1,9 @@
+{
+    "id": "59b05d2f-0ec8-457f-b08a-b3f902c654e5",
+    "type": "feature",
+    "description": "Enable **Timestream Query** and **Timestream Write** service clients",
+    "issues": [
+        "awslabs/smithy-kotlin#146",
+        "awslabs/aws-sdk-kotlin#800"
+    ]
+}

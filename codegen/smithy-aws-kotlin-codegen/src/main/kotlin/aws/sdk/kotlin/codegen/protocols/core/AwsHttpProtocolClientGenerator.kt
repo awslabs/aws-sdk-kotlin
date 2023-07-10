@@ -67,6 +67,7 @@ open class AwsHttpProtocolClientGenerator(
     }
 
     override fun renderAdditionalMethods(writer: KotlinWriter) {
+        super.renderAdditionalMethods(writer)
         renderMergeServiceDefaults(writer)
     }
 
