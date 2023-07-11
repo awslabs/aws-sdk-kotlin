@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRole
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.RegionDisabledException
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
+import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
@@ -18,7 +19,9 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
-import aws.smithy.kotlin.runtime.tracing.*
+import aws.smithy.kotlin.runtime.tracing.asNestedTracer
+import aws.smithy.kotlin.runtime.tracing.logger
+import aws.smithy.kotlin.runtime.tracing.traceSpan
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -52,12 +55,20 @@ private const val PROVIDER_NAME = "AssumeRoleProvider"
 public class StsAssumeRoleCredentialsProvider(
     private val credentialsProvider: CredentialsProvider,
     private val roleArn: String,
-    private val region: String? = null,
+    private var region: String? = null,
     private val roleSessionName: String? = null,
     private val externalId: String? = null,
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val httpClient: HttpClientEngine? = null,
 ) : CredentialsProvider {
+
+    @InternalApi
+    public fun getRegion(): String? = region
+
+    @InternalApi
+    public fun setRegion(region: String) {
+        this.region = region
+    }
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val traceSpan = coroutineContext.traceSpan

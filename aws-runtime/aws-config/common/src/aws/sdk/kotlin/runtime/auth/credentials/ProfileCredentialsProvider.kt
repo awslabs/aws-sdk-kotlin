@@ -12,6 +12,7 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
@@ -75,7 +76,7 @@ import kotlin.coroutines.coroutineContext
  */
 public class ProfileCredentialsProvider(
     private val profileName: String? = null,
-    private val region: String? = null,
+    private var region: String? = null,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
@@ -93,6 +94,14 @@ public class ProfileCredentialsProvider(
         ),
         "EcsContainer" to EcsCredentialsProvider(platformProvider, httpClient),
     )
+
+    @InternalApi
+    public fun getRegion(): String? = region
+
+    @InternalApi
+    public fun setRegion(region: String) {
+        this.region = region
+    }
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.getLogger<ProfileCredentialsProvider>()
