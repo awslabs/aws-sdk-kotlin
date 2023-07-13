@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.28.2-beta] - 07/13/2023
+
+### Fixes
+* [#242](https://github.com/awslabs/aws-sdk-kotlin/issues/242) Correctly handle and throw `InvalidChangeBatch` responses from Route53
+
+### Miscellaneous
+* Sync AWS service models
+
 ## [0.28.1-beta] - 07/06/2023
 
 ### Miscellaneous
