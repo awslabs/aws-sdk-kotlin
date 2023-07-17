@@ -1,5 +1,5 @@
 {
     "id": "5b1a8324-02da-4281-bd23-81c565eed973",
     "type": "misc",
-    "description": "**BREAKING**: Refactor observability API and configuration."
+    "description": "**BREAKING**: Refactor observability API and configuration. See the [discussion](https://github.com/awslabs/aws-sdk-kotlin/discussions/981) for more information."
 }
