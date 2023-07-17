@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.runtime.http.middleware
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.header
@@ -23,7 +24,7 @@ internal const val AMZ_SDK_REQUEST_HEADER = "amz-sdk-request"
 /**
  * This middleware adds AWS specific retry headers
  */
-@InternalApi
+@InternalSdkApi
 public class AwsRetryHeaderMiddleware<O> : MutateMiddleware<O> {
     private var attempt = 0
     private var maxAttempts: Int? = null

@@ -31,13 +31,6 @@ public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion {
 	public final fun fromEnvironment (Laws/sdk/kotlin/runtime/http/ApiMetadata;)Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;
 }
 
-public final class aws/sdk/kotlin/runtime/http/middleware/AwsRetryHeaderMiddleware : aws/smithy/kotlin/runtime/http/operation/MutateMiddleware {
-	public fun <init> ()V
-	public fun handle (Laws/smithy/kotlin/runtime/http/operation/OperationRequest;Laws/smithy/kotlin/runtime/io/Handler;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public synthetic fun handle (Ljava/lang/Object;Laws/smithy/kotlin/runtime/io/Handler;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun install (Laws/smithy/kotlin/runtime/http/operation/SdkHttpOperation;)V
-}
-
 public final class aws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata {
 	public fun <init> ()V
 	public fun <init> (Ljava/util/Map;Ljava/util/List;)V
