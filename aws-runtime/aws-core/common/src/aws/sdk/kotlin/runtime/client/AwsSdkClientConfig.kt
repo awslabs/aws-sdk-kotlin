@@ -17,7 +17,7 @@ public interface AwsSdkClientConfig : SdkClientConfig {
      * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
      * information
      */
-    public val region: String
+    public val region: String?
 
     /**
      * Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
