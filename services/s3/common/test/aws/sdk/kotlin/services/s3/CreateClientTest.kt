@@ -5,11 +5,9 @@
 
 package aws.sdk.kotlin.services.s3
 
-import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
 /**
  * Validate the way service clients can be constructed.
@@ -18,12 +16,10 @@ import kotlin.test.assertFailsWith
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 class CreateClientTest {
-
     @Test
     fun testMissingRegion() {
-        assertFailsWith<IllegalArgumentException> {
-            S3Client { }
-        }.message.shouldContain("region is a required configuration property")
+        // Should _not_ throw an exception since region is optional
+        S3Client { }
     }
 
     @Test

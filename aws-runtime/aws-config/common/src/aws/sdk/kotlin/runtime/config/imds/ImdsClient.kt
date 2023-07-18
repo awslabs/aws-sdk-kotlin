@@ -23,6 +23,7 @@ import aws.smithy.kotlin.runtime.io.middleware.Phase
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -118,6 +119,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
             }
             context {
                 operationName = path
+                serviceName = "IMDS"
 
                 // artifact of re-using ServiceEndpointResolver middleware
                 set(SdkClientOption.LogMode, logMode)
@@ -125,7 +127,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
 
             execution.endpointResolver = imdsEndpointProvider
         }
-        op.execution.retryPolicy = ImdsRetryPolicy()
+        op.execution.retryPolicy = ImdsRetryPolicy(coroutineContext)
 
         op.install(userAgentMiddleware)
         op.install(tokenMiddleware)

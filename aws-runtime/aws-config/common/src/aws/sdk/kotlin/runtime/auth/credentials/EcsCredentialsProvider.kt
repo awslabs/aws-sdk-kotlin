@@ -29,6 +29,7 @@ import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
@@ -68,7 +69,7 @@ public class EcsCredentialsProvider internal constructor(
     private val manageEngine = httpClient == null
     private val httpClient = httpClient ?: DefaultHttpEngine()
     override suspend fun resolve(attributes: Attributes): Credentials {
-        val logger = coroutineContext.getLogger<EcsCredentialsProvider>()
+        val logger = coroutineContext.logger<EcsCredentialsProvider>()
         val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
         val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
         val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)
@@ -84,6 +85,7 @@ public class EcsCredentialsProvider internal constructor(
             deserializer = EcsCredentialsDeserializer()
             context {
                 operationName = "EcsCredentialsProvider"
+                serviceName = "EcsContainerMetadata"
             }
             execution.endpointResolver = EndpointResolver { Endpoint(url) }
         }

@@ -12,17 +12,19 @@ import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.client.RetryStrategyClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
 import aws.smithy.kotlin.runtime.client.config.ClientSettings
 import aws.smithy.kotlin.runtime.config.resolve
-import aws.smithy.kotlin.runtime.tracing.*
+import aws.smithy.kotlin.runtime.telemetry.TelemetryConfig
+import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
+import aws.smithy.kotlin.runtime.telemetry.trace.withSpan
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
-import kotlin.coroutines.coroutineContext
 
 /**
  * Abstract base class all AWS client companion objects inherit from
@@ -45,18 +47,16 @@ public abstract class AbstractAwsSdkClientFactory<
     /**
      * Construct a [TClient] by resolving the configuration from the current environment.
      */
+    @OptIn(ExperimentalApi::class)
     public suspend fun fromEnvironment(block: (TConfigBuilder.() -> Unit)? = null): TClient {
         val builder = builder()
         val config = builder.config
 
-        val tracer = if (config is TracingClientConfig.Builder) {
-            if (config.tracer == null) config.tracer = defaultTracer(config.clientName)
-            config.tracer!!
-        } else {
-            defaultTracer(config.clientName)
-        }
+        // FIXME - use a default telemetry provider that at least wires up SLF4j logging
+        val telemetryProvider = (builder as? TelemetryConfig.Builder)?.telemetryProvider ?: TelemetryProvider.None
+        val tracer = telemetryProvider.tracerProvider.getOrCreateTracer("AwsSdkClientFactory")
 
-        coroutineContext.withRootTraceSpan(tracer.createRootSpan("Config resolution")) {
+        tracer.withSpan("fromEnvironment") {
             val profile = asyncLazy { loadAwsSharedConfig(PlatformProvider.System).activeProfile }
 
             // As a DslBuilderProperty, the value of retryStrategy cannot be checked for nullability because it may have
@@ -80,6 +80,4 @@ public abstract class AbstractAwsSdkClientFactory<
      * Inject any client-specific config.
      */
     protected open suspend fun finalizeConfig(builder: TClientBuilder, profile: LazyAsyncValue<AwsProfile>) { }
-
-    private fun defaultTracer(clientName: String): Tracer = DefaultTracer(LoggingTraceProbe, clientName)
 }
