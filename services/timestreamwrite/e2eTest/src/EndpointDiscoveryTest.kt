@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.services.timestreamwrite
 
 import aws.sdk.kotlin.services.timestreamwrite.model.DescribeEndpointsResponse
+import aws.sdk.kotlin.services.timestreamwrite.model.ListDatabasesResponse
 import aws.smithy.kotlin.runtime.client.ResponseInterceptorContext
 import aws.smithy.kotlin.runtime.client.operationName
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
@@ -12,6 +13,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
@@ -28,12 +30,16 @@ class EndpointDiscoveryTest {
             ) {
                 operationLog += context.executionContext.operationName!!
 
-                val response = context.response.getOrNull()
-                if (response is DescribeEndpointsResponse) {
-                    discoveredHost = response.endpoints!!.first().address
-                } else {
-                    // Make sure every request _except_ DescribeEndpoints uses the discovered endpoint
-                    assertEquals(discoveredHost, context.protocolRequest!!.url.host.toString())
+                when (val response = context.response.getOrNull()) {
+                    is DescribeEndpointsResponse -> discoveredHost = response.endpoints!!.first().address
+
+                    is ListDatabasesResponse -> {
+                        // Make sure every request _except_ DescribeEndpoints uses the discovered endpoint
+                        assertNotNull(discoveredHost)
+                        assertEquals(discoveredHost, context.protocolRequest!!.url.host.toString())
+                    }
+
+                    else -> error("Unexpected response $response")
                 }
             }
         }
