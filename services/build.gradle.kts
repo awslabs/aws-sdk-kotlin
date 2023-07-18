@@ -1,3 +1,5 @@
+import java.time.LocalDateTime
+
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
@@ -15,6 +17,7 @@ val smithyKotlinVersion: String by project
 val kotlinVersion: String by project
 val coroutinesVersion: String by project
 val kotestVersion: String by project
+val slf4jVersion: String by project
 
 val optinAnnotations = listOf(
     "aws.smithy.kotlin.runtime.InternalApi",
@@ -88,6 +91,7 @@ subprojects {
                             implementation(kotlin("test"))
                             implementation(kotlin("test-junit5"))
                             implementation(project(":tests:e2e-test-util"))
+                            implementation("org.slf4j:slf4j-simple:$slf4jVersion")
                         }
                     }
 
@@ -116,6 +120,11 @@ subprojects {
                             showExceptions = true
                             exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
                         }
+
+                        // model a random input to enable re-running e2e tests back to back without
+                        // up-to-date checks or cache getting in the way
+                        inputs.property("integration.datetime", LocalDateTime.now())
+                        systemProperty("org.slf4j.simpleLogger.defaultLogLevel", System.getProperty("org.slf4j.simpleLogger.defaultLogLevel", "WARN"))
                     }
                 }
             }
