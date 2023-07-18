@@ -15,8 +15,9 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH
 import aws.smithy.kotlin.runtime.config.EnvironmentSetting
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
+import aws.smithy.kotlin.runtime.telemetry.telemetryProvider
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.tracing.*
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
@@ -43,7 +44,7 @@ private const val PROVIDER_NAME = "WebIdentityToken"
 public class StsWebIdentityCredentialsProvider(
     private val roleArn: String,
     private val webIdentityTokenFilePath: String,
-    private val region: String,
+    private val region: String?,
     private val roleSessionName: String? = null,
     private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
@@ -67,14 +68,13 @@ public class StsWebIdentityCredentialsProvider(
         ): StsWebIdentityCredentialsProvider {
             val resolvedRoleArn = platformProvider.resolve(roleArn, AwsSdkSetting.AwsRoleArn, "roleArn")
             val resolvedTokenFilePath = platformProvider.resolve(webIdentityTokenFilePath, AwsSdkSetting.AwsWebIdentityTokenFile, "webIdentityTokenFilePath")
-            val resolvedRegion = platformProvider.resolve(region, AwsSdkSetting.AwsRegion, "region")
+            val resolvedRegion = region ?: AwsSdkSetting.AwsRegion.resolve(platformProvider)
             return StsWebIdentityCredentialsProvider(resolvedRoleArn, resolvedTokenFilePath, resolvedRegion, roleSessionName, duration, platformProvider, httpClient)
         }
     }
 
     override suspend fun resolve(attributes: Attributes): Credentials {
-        val traceSpan = coroutineContext.traceSpan
-        val logger = traceSpan.logger<StsAssumeRoleCredentialsProvider>()
+        val logger = coroutineContext.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials via web identity" }
         val provider = this
 
@@ -82,11 +82,13 @@ public class StsWebIdentityCredentialsProvider(
             .readFileOrNull(webIdentityTokenFilePath)
             ?.decodeToString() ?: throw CredentialsProviderException("failed to read webIdentityToken from $webIdentityTokenFilePath")
 
+        val telemetry = coroutineContext.telemetryProvider
+
         val client = StsClient {
             region = provider.region
             httpClient = provider.httpClient
             // NOTE: credentials provider not needed for this operation
-            tracer = traceSpan.asNestedTracer("STS-")
+            telemetryProvider = telemetry
         }
 
         val resp = try {

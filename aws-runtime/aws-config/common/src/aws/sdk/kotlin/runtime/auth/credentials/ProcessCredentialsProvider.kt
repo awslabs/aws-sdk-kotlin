@@ -7,12 +7,13 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
-import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlin.coroutines.coroutineContext
 
 internal expect suspend fun executeCommand(
     command: String,
@@ -48,7 +49,7 @@ public class ProcessCredentialsProvider(
     private val timeoutMillis: Long = 60_000,
 ) : CredentialsProvider {
     override suspend fun resolve(attributes: Attributes): Credentials {
-        val logger = Logger.getLogger<ProcessCredentialsProvider>()
+        val logger = coroutineContext.logger<ProcessCredentialsProvider>()
 
         val (exitCode, output) = try {
             executeCommand(credentialProcess, platformProvider, maxOutputLengthBytes, timeoutMillis)

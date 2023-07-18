@@ -1,0 +1,8 @@
+{
+    "id": "137f993a-88e6-4158-b55d-9ae0076d8501",
+    "type": "feature",
+    "description": "Make `region` an optional client config parameter to support multi-region use cases",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#969"
+    ]
+}

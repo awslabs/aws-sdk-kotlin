@@ -45,7 +45,7 @@ object S3TestUtils {
             client.createBucket {
                 bucket = testBucket
                 createBucketConfiguration {
-                    locationConstraint = BucketLocationConstraint.fromValue(client.config.region)
+                    locationConstraint = BucketLocationConstraint.fromValue(client.config.region!!)
                 }
             }
 

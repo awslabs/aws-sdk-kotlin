@@ -5,8 +5,9 @@
 
 package aws.sdk.kotlin.runtime.region
 
-import aws.smithy.kotlin.runtime.logging.Logger
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.util.asyncLazy
+import kotlin.coroutines.coroutineContext
 
 /**
  * Composite [RegionProvider] that delegates to a chain of providers.
@@ -17,7 +18,6 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
 public open class RegionProviderChain(
     protected vararg val providers: RegionProvider,
 ) : RegionProvider {
-    private val logger = Logger.getLogger<RegionProviderChain>()
 
     private val resolvedRegion = asyncLazy(::resolveRegion)
 
@@ -31,6 +31,7 @@ public open class RegionProviderChain(
     override suspend fun getRegion(): String? = resolvedRegion.get()
 
     private suspend fun resolveRegion(): String? {
+        val logger = coroutineContext.logger<RegionProviderChain>()
         for (provider in providers) {
             try {
                 val region = provider.getRegion()

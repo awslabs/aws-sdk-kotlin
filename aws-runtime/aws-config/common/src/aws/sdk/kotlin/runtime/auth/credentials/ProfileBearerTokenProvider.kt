@@ -14,7 +14,7 @@ import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.smithy.kotlin.runtime.http.auth.BearerToken
 import aws.smithy.kotlin.runtime.http.auth.BearerTokenProvider
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.http.operation.getLogger
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -64,7 +64,7 @@ internal class ProfileBearerTokenProvider(
     private val sharedConfig = asyncLazy { loadAwsSharedConfig(platformProvider, profileName) }
 
     override suspend fun resolve(attributes: Attributes): BearerToken {
-        val logger = coroutineContext.getLogger<ProfileBearerTokenProvider>()
+        val logger = coroutineContext.logger<ProfileBearerTokenProvider>()
         val config = sharedConfig.get()
         logger.debug { "Loading bearer token from profile `${config.activeProfile.name}`" }
 

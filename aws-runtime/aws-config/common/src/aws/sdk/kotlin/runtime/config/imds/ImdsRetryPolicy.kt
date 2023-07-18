@@ -7,12 +7,15 @@ package aws.sdk.kotlin.runtime.config.imds
 
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.category
-import aws.smithy.kotlin.runtime.logging.Logger
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
 import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
+import kotlin.coroutines.CoroutineContext
 
-internal class ImdsRetryPolicy : RetryPolicy<Any?> {
+internal class ImdsRetryPolicy(
+    private val callContext: CoroutineContext,
+) : RetryPolicy<Any?> {
     override fun evaluate(result: Result<Any?>): RetryDirective = when {
         result.isSuccess -> RetryDirective.TerminateAndSucceed
         else -> evaluate(result.exceptionOrNull()!!)
@@ -26,7 +29,7 @@ internal class ImdsRetryPolicy : RetryPolicy<Any?> {
                 // 401 indicates the token has expired, this is retryable
                 status == HttpStatusCode.Unauthorized -> RetryDirective.RetryError(RetryErrorType.ServerSide)
                 else -> {
-                    val logger = Logger.getLogger<ImdsRetryPolicy>()
+                    val logger = callContext.logger<ImdsRetryPolicy>()
                     logger.debug { "Non retryable IMDS error: statusCode=${throwable.statusCode}; ${throwable.message}" }
                     RetryDirective.TerminateAndFail
                 }

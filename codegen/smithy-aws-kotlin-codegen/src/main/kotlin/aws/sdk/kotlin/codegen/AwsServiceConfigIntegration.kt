@@ -30,7 +30,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
                 information
             """.trimIndent()
-            propertyType = ConfigPropertyType.Required()
             order = -100
         }
 
