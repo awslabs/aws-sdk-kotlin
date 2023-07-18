@@ -94,13 +94,6 @@ data class AwsService(
 
 )
 
-val disabledServices = setOf(
-    // timestream requires endpoint discovery
-    // https://github.com/awslabs/smithy-kotlin/issues/146
-    "timestream-write",
-    "timestream-query",
-)
-
 // Manually create the projections rather than using the extension to avoid unnecessary configuration evaluation.
 // Otherwise we would be reading the models from disk on every gradle invocation for unrelated projects/tasks
 fun awsServiceProjections(): Provider<List<SmithyProjection>> {
@@ -194,11 +187,6 @@ fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File -
 
         applyFilters && !protocolMembership.isMember(protocol) -> {
             logger.info("skipping ${file.absolutePath}, $protocol not a member of $protocolMembership")
-            null
-        }
-
-        applyFilters && filename in disabledServices -> {
-            logger.warn("skipping ${file.absolutePath}, it is explicitly disabled")
             null
         }
 
