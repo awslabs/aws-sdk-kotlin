@@ -1,6 +1,7 @@
 package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.services.s3.model.S3Exception
+import aws.sdk.kotlin.services.s3.transform.GetBucketLocationOperationDeserializer
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -100,7 +101,7 @@ class GetBucketLocationOperationDeserializerTest {
     }
 
     @Test
-    fun deserializeErrorMessage(){
+    fun deserializeErrorMessage() {
         val responseXML = """
             <?xml version="1.0" encoding="UTF-8"?>
             <Error>
