@@ -12,7 +12,7 @@ import org.junit.jupiter.api.assertThrows
 
 class GetBucketLocationOperationDeserializerTest {
     @Test
-    fun deserializeUnwrappedResponse(){
+    fun deserializeUnwrappedResponse() {
         val responseXML = """
             <?xml version="1.0" encoding="UTF-8"?>
             <LocationConstraint xmlns="http://s3.amazonaws.com/doc/2006-03-01/">us-west-2</LocationConstraint>
@@ -32,7 +32,7 @@ class GetBucketLocationOperationDeserializerTest {
     }
 
     @Test
-    fun deserializeWrappedResponse(){
+    fun deserializeWrappedResponse() {
         val responseXML = """
             <?xml version="1.0" encoding="UTF-8"?>
             <LocationConstraint>
@@ -54,7 +54,7 @@ class GetBucketLocationOperationDeserializerTest {
     }
 
     @Test
-    fun deserializeUnwrappedResponseMissingLocation(){
+    fun deserializeUnwrappedResponseMissingLocation() {
         val responseXML = """
             <?xml version="1.0" encoding="UTF-8"?>
             <LocationConstraint xmlns="http://s3.amazonaws.com/doc/2006-03-01/"></LocationConstraint>
@@ -75,7 +75,7 @@ class GetBucketLocationOperationDeserializerTest {
     }
 
     @Test
-    fun deserializeWrappedResponseMissingLocation(){
+    fun deserializeWrappedResponseMissingLocation() {
         val responseXML = """
             <?xml version="1.0" encoding="UTF-8"?>
             <LocationConstraint>
@@ -97,6 +97,4 @@ class GetBucketLocationOperationDeserializerTest {
 
         assertEquals("Did not receive a value for 'LocationConstraint' in response.", exception.message)
     }
-
-
 }
