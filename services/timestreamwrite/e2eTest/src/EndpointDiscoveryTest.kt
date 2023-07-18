@@ -39,7 +39,7 @@ class EndpointDiscoveryTest {
                         assertEquals(discoveredHost, context.protocolRequest!!.url.host.toString())
                     }
 
-                    else -> error("Unexpected response $response")
+                    else -> error("Unexpected response ${context.response}")
                 }
             }
         }
