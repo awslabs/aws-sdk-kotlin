@@ -36,10 +36,9 @@ kotlin {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
                 api("aws.smithy.kotlin:aws-credentials:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-auth:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:tracing-core:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:telemetry-api:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
                 implementation(project(":aws-runtime:aws-http"))
 
@@ -56,6 +55,7 @@ kotlin {
                 implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
+                implementation("aws.smithy.kotlin:telemetry-defaults:$smithyKotlinVersion")
 
                 // additional dependencies required by generated sso provider(s)
                 implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")

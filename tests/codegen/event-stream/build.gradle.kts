@@ -135,7 +135,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
     testImplementation("aws.smithy.kotlin:smithy-test:$smithyKotlinVersion")
     testImplementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
-    testImplementation("aws.smithy.kotlin:tracing-core:$smithyKotlinVersion")
+    testImplementation("aws.smithy.kotlin:telemetry-api:$smithyKotlinVersion")
 
     // have to manually add all the dependencies of the generated client(s)
     // doing it this way (as opposed to doing what we do for protocol-tests) allows
@@ -151,6 +151,7 @@ dependencies {
     implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
+    implementation("aws.smithy.kotlin:telemetry-defaults:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")
     implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
     api(project(":aws-runtime:aws-config"))

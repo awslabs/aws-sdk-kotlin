@@ -15,7 +15,6 @@ kotlin {
             dependencies {
                 api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
                 api("aws.smithy.kotlin:smithy-client:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
             }
         }
 
