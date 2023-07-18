@@ -14,8 +14,8 @@ import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
- * Registers an integration that replaces the codegened S3 *GetBucketLocationDeserializer* with
- * custom deserialization logic **(for non errors only)**.
+ * Registers an integration that replaces the codegen-ed S3 *GetBucketLocationDeserializer* with
+ * custom deserialization logic **for non errors only**.
  */
 class GetBucketLocationDeserializerIntegration : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding> = listOf(

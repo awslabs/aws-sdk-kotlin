@@ -10,19 +10,20 @@ import aws.smithy.kotlin.runtime.serde.xml.dom.parseDom
 import aws.smithy.kotlin.runtime.serde.xml.xmlStreamReader
 
 /**
- * Custom deserializer for the GetBucketLocation operation.  This operation does not conform to the model.
+ * Custom deserializer for the  S3 GetBucketLocation operation. This operation does not conform to the model.
  * In the model, there is a nested tag of the same name as the top-level tag, however in practice
- * this child tag is not passed from the service.  In this implementation the model is not used for
- * deserialization.
+ * this child tag is not passed from the service.
  */
 internal fun deserializeGetBucketLocationOperationBody(builder: GetBucketLocationResponse.Builder, payload: ByteArray) {
     val dom = parseDom(xmlStreamReader(payload))
     check(dom.name.local == "LocationConstraint") { "Expected top-level tag of 'LocationConstraint' but found ${dom.name}." }
+
     if (dom.children.isEmpty()) {
         val rawLocationConstraint = checkNotNull(dom.text) { "Did not receive a value for 'LocationConstraint' in response." }
         builder.locationConstraint = BucketLocationConstraint.fromValue(rawLocationConstraint)
     } else {
         check(dom.children["LocationConstraint"]?.get(0)?.name?.local == "LocationConstraint") { "Expected second-level tag of 'LocationConstraint' but found ${dom.name}." }
+
         val rawLocationConstraint = checkNotNull(dom.children["LocationConstraint"]?.get(0)?.text) { "Did not receive a value for 'LocationConstraint' in response." }
         builder.locationConstraint = BucketLocationConstraint.fromValue(rawLocationConstraint)
     }
