@@ -1,5 +1,6 @@
 package aws.sdk.kotlin.services.s3.internal
 
+import aws.sdk.kotlin.services.s3.model.S3Exception
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -19,7 +20,7 @@ class GetBucketLocationOperationDeserializerTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
+            HttpStatusCode(200, "Success"),
             Headers.invoke { },
             HttpBody.fromBytes(responseXML.encodeToByteArray()),
         )
@@ -41,7 +42,7 @@ class GetBucketLocationOperationDeserializerTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
+            HttpStatusCode(200, "Success"),
             Headers.invoke { },
             HttpBody.fromBytes(responseXML.encodeToByteArray()),
         )
@@ -61,7 +62,7 @@ class GetBucketLocationOperationDeserializerTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
+            HttpStatusCode(200, "Success"),
             Headers.invoke { },
             HttpBody.fromBytes(responseXML.encodeToByteArray()),
         )
@@ -84,7 +85,7 @@ class GetBucketLocationOperationDeserializerTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
+            HttpStatusCode(200, "Success"),
             Headers.invoke { },
             HttpBody.fromBytes(responseXML.encodeToByteArray()),
         )
@@ -96,5 +97,30 @@ class GetBucketLocationOperationDeserializerTest {
         }
 
         assertEquals("Did not receive a value for 'LocationConstraint' in response.", exception.message)
+    }
+
+    @Test
+    fun deserializeErrorMessage(){
+        val responseXML = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <Error>
+               <Message>Some message</Message>
+               <RequestId>Some request ID</RequestId>
+            </Error>
+        """.trimIndent()
+
+        val response: HttpResponse = HttpResponse(
+            HttpStatusCode(400, "Bad Request"),
+            Headers.invoke { },
+            HttpBody.fromBytes(responseXML.encodeToByteArray()),
+        )
+
+        val exception = assertThrows<S3Exception> {
+            runBlocking {
+                GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), response)
+            }
+        }
+
+        assertEquals("Some message", exception.message)
     }
 }

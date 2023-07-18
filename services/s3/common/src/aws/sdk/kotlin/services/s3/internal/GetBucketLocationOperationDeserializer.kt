@@ -39,7 +39,7 @@ internal class GetBucketLocationOperationDeserializer : HttpDeserialize<GetBucke
     }
 }
 
-private suspend fun throwGetBucketLocationError(context: ExecutionContext, response: HttpResponse): kotlin.Nothing {
+private suspend fun throwGetBucketLocationError(context: ExecutionContext, response: HttpResponse) {
     val payload = response.body.readAll()
     val wrappedResponse = response.withPayload(payload)
 
