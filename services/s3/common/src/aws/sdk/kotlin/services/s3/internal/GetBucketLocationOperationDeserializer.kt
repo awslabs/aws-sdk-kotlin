@@ -47,7 +47,7 @@ private suspend fun throwGetBucketLocationError(context: ExecutionContext, respo
         if (payload == null && response.status == HttpStatusCode.NotFound) {
             S3ErrorDetails(code = "NotFound")
         } else {
-            checkNotNull(payload){ "unable to parse error from empty response" }
+            checkNotNull(payload) { "unable to parse error from empty response" }
             parseS3ErrorResponse(payload)
         }
     } catch (ex: Exception) {
@@ -56,7 +56,7 @@ private suspend fun throwGetBucketLocationError(context: ExecutionContext, respo
         }
     }
 
-    val ex = when(errorDetails.code) {
+    val ex = when (errorDetails.code) {
         else -> S3Exception(errorDetails.message)
     }
 
