@@ -6,17 +6,11 @@ package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
 import software.amazon.smithy.build.MockManifest
-import software.amazon.smithy.codegen.core.SymbolProvider
-import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.CodegenContext
-import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.test.TestContext
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.shouldContainOnlyOnceWithDiff
+import software.amazon.smithy.kotlin.codegen.test.toCodegenContext
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
-import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -290,12 +284,4 @@ class PresignerGeneratorTest {
 
         actual.shouldContainOnlyOnceWithDiff(expected)
     }
-}
-
-private fun TestContext.toCodegenContext() = object : CodegenContext {
-    override val model: Model = generationCtx.model
-    override val symbolProvider: SymbolProvider = generationCtx.symbolProvider
-    override val settings: KotlinSettings = generationCtx.settings
-    override val protocolGenerator: ProtocolGenerator = generator
-    override val integrations: List<KotlinIntegration> = generationCtx.integrations
 }

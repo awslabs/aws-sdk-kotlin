@@ -13,7 +13,7 @@ import aws.sdk.kotlin.runtime.config.profile.FileType
 import aws.sdk.kotlin.runtime.config.profile.parse
 import aws.sdk.kotlin.runtime.config.profile.toSharedConfig
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.tracing.NoOpTraceSpan
+import aws.smithy.kotlin.runtime.telemetry.logging.Logger
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
@@ -500,7 +500,7 @@ class ProfileChainTest {
     @Test
     fun testProfileChainResolution() {
         tests.forEachIndexed { idx, test ->
-            val profiles = parse(NoOpTraceSpan, FileType.CONFIGURATION, test.profile.trimIndent())
+            val profiles = parse(Logger.None, FileType.CONFIGURATION, test.profile.trimIndent())
             val source = AwsConfigurationSource(test.activeProfile, "not-needed", "not-needed")
             val config = profiles.toSharedConfig(source)
             val result = runCatching { ProfileChain.resolve(config) }

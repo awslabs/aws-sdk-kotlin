@@ -8,6 +8,7 @@ import aws.sdk.kotlin.codegen.AwsEndpointDelegator
 import aws.sdk.kotlin.codegen.AwsKotlinDependency
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamParserGenerator
 import aws.sdk.kotlin.codegen.protocols.eventstream.EventStreamSerializerGenerator
+import aws.sdk.kotlin.codegen.protocols.middleware.AwsSpanInterceptorMiddleware
 import aws.sdk.kotlin.codegen.protocols.middleware.RecursionDetectionMiddleware
 import aws.sdk.kotlin.codegen.protocols.middleware.UserAgentMiddleware
 import aws.sdk.kotlin.codegen.protocols.protocoltest.AwsHttpProtocolUnitTestErrorGenerator
@@ -46,6 +47,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         val middleware = super.getDefaultHttpMiddleware(ctx).toMutableList()
         middleware.add(UserAgentMiddleware())
         middleware.add(RecursionDetectionMiddleware())
+        middleware.add(AwsSpanInterceptorMiddleware())
         return middleware
     }
 

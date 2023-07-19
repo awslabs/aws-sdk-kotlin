@@ -18,14 +18,12 @@ kotlin {
                 api(project(":aws-runtime:aws-endpoint"))
                 api("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
                 api("aws.smithy.kotlin:http-client:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:logging:$smithyKotlinVersion")
             }
         }
 
         commonTest {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-                implementation("aws.smithy.kotlin:tracing-core:$smithyKotlinVersion")
                 implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
             }
         }

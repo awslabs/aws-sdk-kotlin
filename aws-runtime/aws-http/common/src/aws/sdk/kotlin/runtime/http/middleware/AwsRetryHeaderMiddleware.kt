@@ -4,14 +4,14 @@
  */
 package aws.sdk.kotlin.runtime.http.middleware
 
-import aws.smithy.kotlin.runtime.InternalApi
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.io.Handler
 
 /**
  * The per/operation unique client side ID header name. This will match
- * the [HttpOperationContext.SdkRequestId]
+ * the [HttpOperationContext.SdkInvocationId]
  */
 internal const val AMZ_SDK_INVOCATION_ID_HEADER = "amz-sdk-invocation-id"
 
@@ -23,7 +23,7 @@ internal const val AMZ_SDK_REQUEST_HEADER = "amz-sdk-request"
 /**
  * This middleware adds AWS specific retry headers
  */
-@InternalApi
+@InternalSdkApi
 public class AwsRetryHeaderMiddleware<O> : MutateMiddleware<O> {
     private var attempt = 0
     private var maxAttempts: Int? = null
@@ -34,7 +34,7 @@ public class AwsRetryHeaderMiddleware<O> : MutateMiddleware<O> {
 
     override suspend fun <H : Handler<SdkHttpRequest, O>> handle(request: SdkHttpRequest, next: H): O {
         attempt++
-        request.subject.header(AMZ_SDK_INVOCATION_ID_HEADER, request.context.sdkRequestId)
+        request.subject.header(AMZ_SDK_INVOCATION_ID_HEADER, request.context.sdkInvocationId)
         onAttempt(request, attempt)
         return next.call(request)
     }
