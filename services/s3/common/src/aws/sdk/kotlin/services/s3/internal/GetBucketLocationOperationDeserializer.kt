@@ -12,7 +12,8 @@ import aws.smithy.kotlin.runtime.serde.xml.xmlStreamReader
 /**
  * Custom deserializer for the  S3 GetBucketLocation operation. This operation does not conform to the model.
  * In the model, there is a nested tag of the same name as the top-level tag, however in practice
- * this child tag is not passed from the service.
+ * this child tag is not passed from the service. S3 is sometimes unreliable in how it delivers responses so both
+ * possible response types (nested and un-nested) will be considered.
  */
 internal fun deserializeGetBucketLocationOperationBody(builder: GetBucketLocationResponse.Builder, payload: ByteArray) {
     val dom = parseDom(xmlStreamReader(payload))
