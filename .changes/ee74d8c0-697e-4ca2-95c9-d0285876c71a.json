@@ -1,0 +1,8 @@
+{
+  "id": "4e8e536e-a39c-41a8-acfb-3877528a321f",
+  "type": "feature",
+  "description": "Validate returned content length on S3 `GetObject` responses.",
+  "issues": [
+    "awslabs/aws-sdk-kotlin#745"
+  ]
+}
