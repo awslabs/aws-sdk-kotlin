@@ -17,15 +17,15 @@ class GetObjectResponseLengthValidationIntegration : KotlinIntegration {
 
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
         resolved + responseLengthValidationMiddleware
+}
 
-    private val responseLengthValidationMiddleware = object : ProtocolMiddleware {
-        override val name: String = "ResponseLengthValidationMiddleware"
+internal val responseLengthValidationMiddleware = object : ProtocolMiddleware {
+    override val name: String = "ResponseLengthValidationMiddleware"
 
-        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape) = op.id.name == "GetObjectRequest"
+    override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape) = op.id.name == "GetObjectRequest"
 
-        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            val interceptorSymbol = RuntimeTypes.HttpClient.Interceptors.ResponseLengthValidationInterceptor
-            writer.write("op.interceptors.add(#T())", interceptorSymbol)
-        }
+    override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+        val interceptorSymbol = RuntimeTypes.HttpClient.Interceptors.ResponseLengthValidationInterceptor
+        writer.write("op.interceptors.add(#T())", interceptorSymbol)
     }
 }

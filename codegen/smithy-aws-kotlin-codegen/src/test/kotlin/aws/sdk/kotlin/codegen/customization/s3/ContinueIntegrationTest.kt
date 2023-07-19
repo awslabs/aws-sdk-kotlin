@@ -109,7 +109,7 @@ private fun Model.codegenContext() = object : CodegenContext {
     override val integrations: List<KotlinIntegration> = listOf()
 }
 
-private fun model(serviceName: String): Model =
+internal fun model(serviceName: String): Model =
     """
         @http(method: "PUT", uri: "/foo")
         operation Foo { }
