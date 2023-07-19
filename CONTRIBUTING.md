@@ -46,15 +46,26 @@ Contributions via pull requests are much appreciated. Before sending us a pull r
 To send us a pull request, please:
 
 1. Fork the repository.
-2. Modify the source; please focus on the specific change you are contributing. If you also reformat all the code, it will be hard for us to focus on your change.
+2. Modify the source; please focus on a specific change in each pull request. If you incorporate multiple unrelated
+   features or reformat all the code, it will be hard for us to focus on your change.
    * Ensure your modifications are accompanied by a [changelog entry](#Changelog) where necessary.
-3. Ensure local tests pass.
+3. Ensure existing local tests pass. Add additional tests to cover the change.
 4. Commit to your fork using clear commit messages.
 5. Send us a pull request, answering any default questions in the pull request interface.
 6. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
 
 GitHub provides additional document on [forking a repository](https://help.github.com/articles/fork-a-repo/) and 
 [creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
+
+### API and style guidelines
+
+The AWS SDK for Kotlin is a multiplatform library intended to work for a wide variety of environments and use cases.
+Please see JetBrains's Kotlin-specific
+[library creators' guidelines](https://kotlinlang.org/docs/jvm-api-guidelines-introduction.html) for general guidance,
+in particular the section on
+[backward compatibility](https://kotlinlang.org/docs/jvm-api-guideliens-backward-compatibility.html). These guidelines
+are not necessarily firm requirements which all contributions must follow, but you should be prepared to discuss PRs
+which deviate from the guidelines.
 
 ### Changelog
 Merges to this repository must include one or more changelog entries which describe the modifications made.
