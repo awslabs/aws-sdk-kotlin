@@ -26,7 +26,7 @@ class GetObjectResponseLengthValidationIntegration : KotlinIntegration {
 internal val responseLengthValidationMiddleware = object : ProtocolMiddleware {
     override val name: String = "ResponseLengthValidationMiddleware"
 
-    override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape) = op.id.name == "GetObjectRequest"
+    override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape) = op.id.name == "GetObject"
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         val interceptorSymbol = RuntimeTypes.HttpClient.Interceptors.ResponseLengthValidationInterceptor
