@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.29.0-beta] - 07/20/2023
+
+### Features
+* [#146](https://github.com/awslabs/smithy-kotlin/issues/146), [#800](https://github.com/awslabs/aws-sdk-kotlin/issues/800) Enable **Timestream Query** and **Timestream Write** service clients
+* [#969](https://github.com/awslabs/aws-sdk-kotlin/issues/969) Make `region` an optional client config parameter to support multi-region use cases
+
+### Miscellaneous
+* **BREAKING**: Refactor observability API and configuration. See the [discussion](https://github.com/awslabs/aws-sdk-kotlin/discussions/981) for more information.
+* Sync AWS service models.
+
 ## [0.28.2-beta] - 07/13/2023
 
 ### Fixes
