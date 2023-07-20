@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.codegen.customization.s3
 
+import aws.sdk.kotlin.codegen.testutil.model
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.kotlin.codegen.test.defaultSettings
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
