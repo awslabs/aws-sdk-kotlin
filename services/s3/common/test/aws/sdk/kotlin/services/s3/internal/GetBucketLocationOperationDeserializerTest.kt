@@ -61,51 +61,6 @@ class GetBucketLocationOperationDeserializerTest {
     }
 
     @Test
-    fun deserializeUnwrappedResponseMissingLocation() {
-        val responseXML = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <LocationConstraint xmlns="http://s3.amazonaws.com/doc/2006-03-01/"></LocationConstraint>
-        """.trimIndent()
-
-        val response: HttpResponse = HttpResponse(
-            HttpStatusCode(200, "Success"),
-            Headers.invoke { },
-            HttpBody.fromBytes(responseXML.encodeToByteArray()),
-        )
-
-        val exception = assertThrows<IllegalStateException> {
-            runBlocking {
-                GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), response)
-            }
-        }
-        assertEquals("Did not receive a value for 'LocationConstraint' in response.", exception.message)
-    }
-
-    @Test
-    fun deserializeWrappedResponseMissingLocation() {
-        val responseXML = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <LocationConstraint>
-               <LocationConstraint xmlns="http://s3.amazonaws.com/doc/2006-03-01/"></LocationConstraint>
-            </LocationConstraint>
-        """.trimIndent()
-
-        val response: HttpResponse = HttpResponse(
-            HttpStatusCode(200, "Success"),
-            Headers.invoke { },
-            HttpBody.fromBytes(responseXML.encodeToByteArray()),
-        )
-
-        val exception = assertThrows<IllegalStateException> {
-            runBlocking {
-                GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), response)
-            }
-        }
-
-        assertEquals("Did not receive a value for 'LocationConstraint' in response.", exception.message)
-    }
-
-    @Test
     fun deserializeErrorMessage() {
         val responseXML = """
             <?xml version="1.0" encoding="UTF-8"?>
