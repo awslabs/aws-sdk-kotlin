@@ -73,7 +73,6 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-
 // Reusable license copySpec
 val licenseSpec = copySpec {
     from("${project.rootDir}/LICENSE")
