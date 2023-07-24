@@ -2,6 +2,8 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URL
 import java.time.Duration
 import java.util.Properties
@@ -41,6 +43,17 @@ allprojects {
             """,
         )
         pluginsMapConfiguration.set(pluginConfigMap)
+    }
+
+    tasks.withType<KotlinCompile> {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
+        }
+    }
+
+    tasks.withType<JavaCompile> {
+        sourceCompatibility = JavaVersion.VERSION_1_8.toString()
+        targetCompatibility = JavaVersion.VERSION_1_8.toString()
     }
 }
 
@@ -166,7 +179,7 @@ tasks.register<JavaExec>("ktlint") {
     description = "Check Kotlin code style."
     group = "Verification"
     classpath = configurations.getByName("ktlint")
-    main = "com.pinterest.ktlint.Main"
+    mainClass.set("com.pinterest.ktlint.Main")
     args = lintPaths
     jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
@@ -175,7 +188,7 @@ tasks.register<JavaExec>("ktlintFormat") {
     description = "Auto fix Kotlin code style violations"
     group = "formatting"
     classpath = configurations.getByName("ktlint")
-    main = "com.pinterest.ktlint.Main"
+    mainClass.set("com.pinterest.ktlint.Main")
     args = listOf("-F") + lintPaths
     jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }

@@ -8,7 +8,7 @@ allprojects {
 
     jacoco {
         toolVersion = "$jacocoVersion"
-        reportsDir = file("${buildDir}/jacoco-reports")
+        reportsDirectory = file("${buildDir}/jacoco-reports")
     }
 }
 
@@ -48,11 +48,11 @@ subprojects {
         }
 
         reports {
-            xml.enabled true
-            csv.enabled false
-            html.enabled true
+            xml.required = true
+            csv.required = false
+            html.required = true
 
-            html.destination file("${buildDir}/jacoco-reports/html")
+            html.outputLocation = file("${buildDir}/jacoco-reports/html")
         }
     }
 
@@ -105,9 +105,10 @@ task testCoverage(type: JacocoReport) {
     additionalSourceDirs.from files(coverageSources)
 
     reports {
-        xml.enabled true
-        csv.enabled false
-        html.enabled true
-        html.destination file("${buildDir}/jacoco-reports/html")
+        xml.required = true
+        csv.required = false
+        html.required = true
+
+        html.outputLocation = file("${buildDir}/jacoco-reports/html")
     }
 }

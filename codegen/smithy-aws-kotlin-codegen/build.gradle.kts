@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
@@ -18,8 +20,8 @@ val kotestVersion: String by project
 val kotlinVersion: String by project
 val junitVersion: String by project
 val smithyKotlinVersion: String by project
-val kotlinJVMTargetVersion: String by project
 val slf4jVersion: String by project
+val defaultJvmToolchainVersion: String by project
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -56,13 +58,21 @@ val generateSdkRuntimeVersion by tasks.registering {
 }
 
 tasks.compileKotlin {
-    kotlinOptions.jvmTarget = kotlinJVMTargetVersion
     dependsOn(generateSdkRuntimeVersion)
 }
 
-tasks.compileTestKotlin {
-    kotlinOptions.jvmTarget = kotlinJVMTargetVersion
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(defaultJvmToolchainVersion))
+    }
 }
+
+tasks.withType<KotlinCompile> {
+    compilerOptions {
+        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+    }
+}
+
 
 // Reusable license copySpec
 val licenseSpec = copySpec {
@@ -93,9 +103,9 @@ tasks.test {
 // Configure jacoco (code coverage) to generate an HTML report
 tasks.jacocoTestReport {
     reports {
-        xml.isEnabled = false
-        csv.isEnabled = false
-        html.destination = file("$buildDir/reports/jacoco")
+        xml.required.set(false)
+        csv.required.set(false)
+        html.outputLocation.set(file("$buildDir/reports/jacoco"))
     }
 }
 
@@ -105,7 +115,7 @@ tasks["test"].finalizedBy(tasks["jacocoTestReport"])
 val sourcesJar by tasks.creating(Jar::class) {
     group = "publishing"
     description = "Assembles Kotlin sources jar"
-    classifier = "sources"
+    archiveClassifier.set("sources")
     from(sourceSets.getByName("main").allSource)
 }
 
