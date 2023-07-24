@@ -4,7 +4,7 @@ Amazon Simple Storage Service
 
 ## Binary Data
 
-Binary data (streams) are represented as an [software.aws.clientrt.content.ByteStream].
+Binary data (streams) are represented as an [aws.smithy.kotlin.runtime.content.ByteStream].
 
 To supply a `ByteStream` there are several convenience functions including:
 
@@ -15,13 +15,12 @@ val req = PutObjectRequest {
     // body = ByteStream.fromBytes(byteArray)
     // body = ByteStream.fromString("string")
 }
-
 ```
 
 Consuming a `ByteStream` similarly has easy ways to consume the stream:
 
 ```kt
-s3.getObjet(req) { resp -> {
+s3.getObject(req) { resp -> {
     // resp.body is a ByteStream instance
     resp.body?.writeToFile(path)
     
@@ -29,7 +28,6 @@ s3.getObjet(req) { resp -> {
     // resp.body?.toByteArray()
     // resp.body?.decodeToString()
 }
-
 ```
 
 See [aws.sdk.kotlin.services.s3.model.GetObjectResponse]
