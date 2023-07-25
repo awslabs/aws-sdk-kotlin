@@ -14,14 +14,14 @@ import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
- * Registers an integration that replaces the codegen-ed S3 *GetBucketLocationDeserializer* with
- * custom deserialization logic **for non errors only**.
+ * Registers an integration that tries deserializing the `GetBucketLocationOperation`
+ * response as wrapped XML response when doing so as [unwrapped](https://smithy.io/2.0/aws/customizations/s3-customizations.html#aws-customizations-s3unwrappedxmloutput-trait) is unsuccessful.
  */
 class GetBucketLocationDeserializerIntegration : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding> = listOf(
         SectionWriterBinding(payloadDeserializer) { writer, default ->
             if (isGetBucketLocation(writer)) {
-                writer.write("aws.sdk.kotlin.services.s3.internal.deserializeGetBucketLocationOperationBody(builder, payload)")
+                writer.write("if (builder.locationConstraint == null) aws.sdk.kotlin.services.s3.internal.deserializeWrapped(builder, payload)")
             } else {
                 writer.write(default)
             }
