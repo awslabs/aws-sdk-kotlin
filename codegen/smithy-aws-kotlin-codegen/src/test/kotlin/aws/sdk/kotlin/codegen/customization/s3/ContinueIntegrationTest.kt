@@ -5,17 +5,13 @@
 package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.testutil.lines
+import aws.sdk.kotlin.codegen.testutil.model
 import org.junit.jupiter.api.Test
-import software.amazon.smithy.codegen.core.SymbolProvider
-import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientConfigGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.test.*
-import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import kotlin.test.*
 
@@ -100,25 +96,6 @@ class ContinueIntegrationTest {
         barMethod.shouldNotContainOnlyOnceWithDiff(expectedInterceptor)
     }
 }
-
-private fun Model.codegenContext() = object : CodegenContext {
-    override val model: Model = this@codegenContext
-    override val symbolProvider: SymbolProvider get() = fail("Unexpected call to `symbolProvider`")
-    override val settings: KotlinSettings get() = fail("Unexpected call to `settings`")
-    override val protocolGenerator: ProtocolGenerator? = null
-    override val integrations: List<KotlinIntegration> = listOf()
-}
-
-private fun model(serviceName: String): Model =
-    """
-        @http(method: "PUT", uri: "/foo")
-        operation Foo { }
-        
-        @http(method: "POST", uri: "/bar")
-        operation Bar { }
-    """
-        .prependNamespaceAndService(operations = listOf("Foo", "Bar"), serviceName = serviceName)
-        .toSmithyModel()
 
 object FooMiddleware : ProtocolMiddleware {
     override val name: String = "FooMiddleware"
