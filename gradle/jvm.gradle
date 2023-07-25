@@ -8,10 +8,6 @@ kotlin {
         fromPreset(presets.jvm, 'jvm')
     }
 
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(defaultJvmToolchainVersion))
-    }
-
     sourceSets {
         jvmMain.dependencies {
             api group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: kotlinVersion

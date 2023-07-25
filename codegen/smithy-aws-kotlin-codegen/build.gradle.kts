@@ -21,7 +21,6 @@ val kotlinVersion: String by project
 val junitVersion: String by project
 val smithyKotlinVersion: String by project
 val slf4jVersion: String by project
-val defaultJvmToolchainVersion: String by project
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -59,12 +58,6 @@ val generateSdkRuntimeVersion by tasks.registering {
 
 tasks.compileKotlin {
     dependsOn(generateSdkRuntimeVersion)
-}
-
-kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(defaultJvmToolchainVersion))
-    }
 }
 
 tasks.withType<KotlinCompile> {
