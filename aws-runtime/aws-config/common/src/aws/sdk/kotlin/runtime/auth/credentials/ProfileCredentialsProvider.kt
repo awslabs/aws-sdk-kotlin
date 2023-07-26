@@ -19,10 +19,7 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.util.Attributes
-import aws.smithy.kotlin.runtime.util.LazyAsyncValue
-import aws.smithy.kotlin.runtime.util.PlatformProvider
-import aws.smithy.kotlin.runtime.util.asyncLazy
+import aws.smithy.kotlin.runtime.util.*
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -102,7 +99,7 @@ public class ProfileCredentialsProvider(
 
         // if profile is overridden for this provider, attempt to resolve it from there first
         val profileOverride = profileName?.let { sharedConfig.profiles[it] }
-        val region = asyncLazy { region ?: profileOverride?.getOrNull("region") ?: resolveRegion(platformProvider) }
+        val region = asyncLazy { region ?: profileOverride?.getOrNull("region") ?: attributes.getOrNull(AttributeKey("region")) ?: resolveRegion(platformProvider) }
 
         val leaf = chain.leaf.toCredentialsProvider(region)
         logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
