@@ -5,22 +5,9 @@
 import java.time.LocalDateTime
 import aws.sdk.kotlin.gradle.kmp.*
 
-buildscript {
-    dependencies {
-        // Add our custom gradle plugin(s) to buildscript classpath (comes from github source)
-        classpath("aws.sdk.kotlin:build-plugins") {
-            version {
-                branch = "kmp-plugin"
-            }
-        }
-    }
-}
-
 plugins {
     id("org.jetbrains.dokka")
 }
-
-apply(plugin="aws.sdk.kotlin.kmp")
 
 val sdkVersion: String by project
 val smithyKotlinVersion: String by project

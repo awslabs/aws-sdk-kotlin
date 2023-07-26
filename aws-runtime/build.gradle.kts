@@ -4,17 +4,6 @@
  */
 import aws.sdk.kotlin.gradle.kmp.*
 
-buildscript {
-    dependencies {
-        // Add our custom gradle plugin(s) to buildscript classpath (comes from github source)
-        classpath("aws.sdk.kotlin:build-plugins") {
-            version {
-                branch = "kmp-plugin"
-            }
-        }
-    }
-}
-
 description = "AWS client runtime support for generated service clients"
 
 plugins {
@@ -23,8 +12,6 @@ plugins {
     jacoco
 }
 
-// configures subprojects with our own KMP conventions and some default dependencies
-apply(plugin="aws.sdk.kotlin.kmp")
 
 val sdkVersion: String by project
 

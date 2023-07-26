@@ -6,11 +6,25 @@ import java.net.URL
 import java.time.Duration
 import java.util.Properties
 
+buildscript {
+    dependencies {
+        // Add our custom gradle plugin(s) to buildscript classpath (comes from github source)
+        classpath("aws.sdk.kotlin:build-plugins") {
+            version {
+                branch = "kmp-plugin"
+            }
+        }
+    }
+}
+
 plugins {
     kotlin("jvm") version "1.8.22" apply false
     id("org.jetbrains.dokka")
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
+
+// configures (KMP) subprojects with our own KMP conventions and some default dependencies
+apply(plugin="aws.sdk.kotlin.kmp")
 
 allprojects {
     repositories {
