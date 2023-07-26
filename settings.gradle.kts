@@ -21,6 +21,13 @@ pluginManagement {
     }
 }
 
+sourceControl {
+    // gitRepository(java.net.URI("https://github.com/awslabs/aws-kotlin-repo-tools.git")){
+    gitRepository(java.net.URI("file:///Users/todaaron/sandbox/aws-kotlin-repo-tools")){
+        producesModule("aws.sdk.kotlin:build-plugins")
+    }
+}
+
 rootProject.name = "aws-sdk-kotlin"
 
 includeBuild("./gradle/sdk-plugins")

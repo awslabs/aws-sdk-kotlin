@@ -1,16 +1,26 @@
-import java.time.LocalDateTime
-
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import java.time.LocalDateTime
+import aws.sdk.kotlin.gradle.kmp.*
+
+buildscript {
+    dependencies {
+        // Add our custom gradle plugin(s) to buildscript classpath (comes from github source)
+        classpath("aws.sdk.kotlin:build-plugins") {
+            version {
+                branch = "kmp-plugin"
+            }
+        }
+    }
+}
 
 plugins {
-    kotlin("multiplatform")
     id("org.jetbrains.dokka")
 }
 
-val platforms = listOf("common", "jvm")
+apply(plugin="aws.sdk.kotlin.kmp")
 
 val sdkVersion: String by project
 val smithyKotlinVersion: String by project
@@ -25,10 +35,6 @@ val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
 )
 
-kotlin {
-    jvm() // Create a JVM target with the default name 'jvm'
-}
-
 subprojects {
     group = "aws.sdk.kotlin"
     version = sdkVersion
@@ -40,26 +46,11 @@ subprojects {
 
     logger.info("configuring: $project")
 
-    platforms.forEach { platform ->
-        configure(listOf(project)) {
-            apply(from = rootProject.file("gradle/$platform.gradle"))
-        }
-    }
-
     kotlin {
         explicitApi()
 
         sourceSets {
             all {
-                val srcDir = if (name.endsWith("Main")) "src" else "test"
-                val resourcesPrefix = if (name.endsWith("Test")) "test-" else ""
-                // the name is always the platform followed by a suffix of either "Main" or "Test" (e.g. jvmMain, commonTest, etc)
-                val platform = name.substring(0, name.length - 4)
-                kotlin.srcDir("$platform/$srcDir")
-                resources.srcDir("$platform/${resourcesPrefix}resources")
-
-                languageSettings.progressiveMode = true
-
                 // have generated sdk's opt-in to internal runtime features
                 optinAnnotations.forEach { languageSettings.optIn(it) }
             }
