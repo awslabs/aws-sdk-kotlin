@@ -8,6 +8,8 @@ package aws.sdk.kotlin.dokka
 import aws.sdk.kotlin.dokka.transformers.FilterInternalApis
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.plugability.DokkaPlugin
+import org.jetbrains.dokka.plugability.DokkaPluginApiPreview
+import org.jetbrains.dokka.plugability.PluginApiPreviewAcknowledgement
 
 /**
  * Dokka plugin for customizing the AWS Kotlin SDK generated API docs
@@ -22,4 +24,7 @@ class AwsDokkaPlugin : DokkaPlugin() {
     val filterInternalApis by extending {
         dokkaBase.preMergeDocumentableTransformer providing ::FilterInternalApis
     }
+
+    @OptIn(DokkaPluginApiPreview::class)
+    override fun pluginApiPreviewAcknowledgement(): PluginApiPreviewAcknowledgement = PluginApiPreviewAcknowledgement
 }

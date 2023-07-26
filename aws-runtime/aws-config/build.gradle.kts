@@ -245,6 +245,7 @@ listOf("apiElements", "runtimeElements").forEach {
 
 // suppress internal generated clients
 tasks.named<DokkaTaskPartial>("dokkaHtmlPartial") {
+    dependsOn(codegenTask)
     dokkaSourceSets.configureEach {
         perPackageOption {
             matchingRegex.set(""".*\.internal.*""")
