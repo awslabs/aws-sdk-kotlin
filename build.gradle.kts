@@ -180,9 +180,6 @@ tasks.register<JavaExec>("ktlintFormat") {
     jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
-// configure coverage for the entire project
-apply(from = rootProject.file("gradle/codecoverage.gradle"))
-
 tasks.register("showRepos") {
     doLast {
         println("All repos:")
