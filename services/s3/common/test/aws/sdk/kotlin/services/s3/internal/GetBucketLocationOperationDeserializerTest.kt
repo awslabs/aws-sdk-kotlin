@@ -37,29 +37,7 @@ class GetBucketLocationOperationDeserializerTest {
 
         assertEquals("UsWest2", actual.locationConstraint.toString())
     }
-
-    @Test
-    fun deserializeWrappedResponse() {
-        val responseXML = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <LocationConstraint>
-               <LocationConstraint xmlns="http://s3.amazonaws.com/doc/2006-03-01/">us-west-2</LocationConstraint>
-            </LocationConstraint>
-        """.trimIndent()
-
-        val response: HttpResponse = HttpResponse(
-            HttpStatusCode(200, "Success"),
-            Headers.invoke { },
-            HttpBody.fromBytes(responseXML.encodeToByteArray()),
-        )
-
-        val actual = runBlocking {
-            GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), response)
-        }
-
-        assertEquals("UsWest2", actual.locationConstraint.toString())
-    }
-
+    
     @Test
     fun deserializeErrorMessage() {
         val responseXML = """

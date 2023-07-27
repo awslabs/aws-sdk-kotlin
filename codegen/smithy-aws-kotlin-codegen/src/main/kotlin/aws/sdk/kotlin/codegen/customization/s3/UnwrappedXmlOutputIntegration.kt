@@ -16,13 +16,9 @@ import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.transform.ModelTransformer
 
-private val SHAPE_IDS = setOf(
-    "com.amazonaws.s3#GetBucketLocationOutput",
-)
-
 /**
  * Applies the [UnwrappedXmlOutput] custom-made [annotation trait](https://smithy.io/2.0/spec/model.html?highlight=annotation#annotation-traits) to structures
- * to mark when special unwrapped xml output deserialization is required.
+ * whose operation is annotated with `S3UnwrappedXmlOutput` trait to mark when special unwrapped xml output deserialization is required.
  */
 class UnwrappedXmlOutputIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
