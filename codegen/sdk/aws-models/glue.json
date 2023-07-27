@@ -2164,7 +2164,7 @@
                 "Data": {
                     "target": "com.amazonaws.glue#AmazonRedshiftNodeData",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the data of the Amazon Reshift target node.</p>"
+                        "smithy.api#documentation": "<p>Specifies the data of the Amazon Redshift target node.</p>"
                     }
                 },
                 "Inputs": {
@@ -5282,6 +5282,24 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Specifies your data quality evaluation criteria. Allows multiple input data and returns a collection of Dynamic Frames.</p>"
                     }
+                },
+                "Recipe": {
+                    "target": "com.amazonaws.glue#Recipe",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies a Glue DataBrew recipe node.</p>"
+                    }
+                },
+                "SnowflakeSource": {
+                    "target": "com.amazonaws.glue#SnowflakeSource",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies a Snowflake data source.</p>"
+                    }
+                },
+                "SnowflakeTarget": {
+                    "target": "com.amazonaws.glue#SnowflakeTarget",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies a target that writes to a Snowflake data source.</p>"
+                    }
                 }
             },
             "traits": {
@@ -6986,6 +7004,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Specifies Apache Iceberg data store targets.</p>"
                     }
+                },
+                "HudiTargets": {
+                    "target": "com.amazonaws.glue#HudiTargetList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies Apache Hudi data store targets.</p>"
+                    }
                 }
             },
             "traits": {
@@ -8123,7 +8147,7 @@
                 "WorkerType": {
                     "target": "com.amazonaws.glue#WorkerType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n      Standard, G.1X, G.2X, or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs.</p>\n         <ul>\n            <li>\n               <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p>\n            </li>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPU, 4 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 M-DPU (8vCPU, 64 GB of m\n          emory, 128 GB disk), and provides up to 8 Ray workers based on the\n          autoscaler.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n      G.1X, G.2X, G.4X, G.8X or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs.</p>\n         <ul>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPUs, 16 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPUs, 32 GB of memory) with 128GB disk (approximately 77GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.4X</code> worker type, each worker maps to 4 DPU (16 vCPUs, 64 GB of memory) with 256GB disk (approximately 235GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs in the following Amazon Web Services Regions: US East (Ohio), US East (N. Virginia), US West (Oregon), Asia Pacific (Singapore), Asia Pacific (Sydney), Asia Pacific (Tokyo), Canada (Central), Europe (Frankfurt), Europe (Ireland), and Europe (Stockholm).</p>\n            </li>\n            <li>\n               <p>For the <code>G.8X</code> worker type, each worker maps to 8 DPU (32 vCPUs, 128 GB of memory) with 512GB disk (approximately 487GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs, in the same Amazon Web Services Regions as supported for the <code>G.4X</code> worker type.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPUs, 4 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 M-DPU (8vCPUs, 64 GB of memory) with 128 GB disk (approximately 120GB free), and provides up to 8 Ray workers based on the autoscaler.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "CodeGenConfigurationNodes": {
@@ -8998,7 +9022,7 @@
                 "WorkerType": {
                     "target": "com.amazonaws.glue#WorkerType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated to use for the session. Accepts a value of Standard, G.1X, G.2X, or G.025X.</p>\n         <ul>\n            <li>\n               <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p>\n            </li>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPU, 4 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n      G.1X, G.2X, G.4X, or G.8X for Spark jobs. Accepts the value Z.2X for Ray notebooks.</p>\n         <ul>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPUs, 16 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPUs, 32 GB of memory) with 128GB disk (approximately 77GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.4X</code> worker type, each worker maps to 4 DPU (16 vCPUs, 64 GB of memory) with 256GB disk (approximately 235GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs in the following Amazon Web Services Regions: US East (Ohio), US East (N. Virginia), US West (Oregon), Asia Pacific (Singapore), Asia Pacific (Sydney), Asia Pacific (Tokyo), Canada (Central), Europe (Frankfurt), Europe (Ireland), and Europe (Stockholm).</p>\n            </li>\n            <li>\n               <p>For the <code>G.8X</code> worker type, each worker maps to 8 DPU (32 vCPUs, 128 GB of memory) with 512GB disk (approximately 487GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs, in the same Amazon Web Services Regions as supported for the <code>G.4X</code> worker type.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 M-DPU (8vCPUs, 64 GB of memory) with 128 GB disk (approximately 120GB free), and provides up to 8 Ray workers based on the autoscaler.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "SecurityConfiguration": {
@@ -19741,6 +19765,38 @@
                 "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\t]*$"
             }
         },
+        "com.amazonaws.glue#HudiTarget": {
+            "type": "structure",
+            "members": {
+                "Paths": {
+                    "target": "com.amazonaws.glue#PathList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An array of Amazon S3 location strings for Hudi, each indicating the root folder with which the metadata files for a Hudi table resides. The Hudi folder may be located in a child folder of the root folder.</p>\n         <p>The crawler will scan all folders underneath a path for a Hudi folder.</p>"
+                    }
+                },
+                "ConnectionName": {
+                    "target": "com.amazonaws.glue#ConnectionName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the connection to use to connect to the Hudi target. If your Hudi files are stored in buckets that require VPC authorization, you can set their connection properties here.</p>"
+                    }
+                },
+                "Exclusions": {
+                    "target": "com.amazonaws.glue#PathList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of glob patterns used to exclude from the crawl.\n      For more information, see <a href=\"https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html\">Catalog Tables with a Crawler</a>.</p>"
+                    }
+                },
+                "MaximumTraversalDepth": {
+                    "target": "com.amazonaws.glue#NullableInteger",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum depth of Amazon S3 paths that the crawler can traverse to discover the Hudi metadata folder in your Amazon S3 path. Used to limit the crawler run time.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Specifies an Apache Hudi data source.</p>"
+            }
+        },
         "com.amazonaws.glue#HudiTargetCompressionType": {
             "type": "enum",
             "members": {
@@ -19768,6 +19824,12 @@
                         "smithy.api#enumValue": "snappy"
                     }
                 }
+            }
+        },
+        "com.amazonaws.glue#HudiTargetList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.glue#HudiTarget"
             }
         },
         "com.amazonaws.glue#IcebergInput": {
@@ -20663,7 +20725,7 @@
                 "WorkerType": {
                     "target": "com.amazonaws.glue#WorkerType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n      Standard, G.1X, G.2X, G.4X, G.8X, or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs.</p>\n         <ul>\n            <li>\n               <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p>\n            </li>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.4X</code> worker type, each worker maps to 4 DPU (16 vCPU, 64 GB of memory, 256 GB disk), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs in the following Amazon Web Services Regions: US East (Ohio), US East (N. Virginia), US West (Oregon), Asia Pacific (Singapore), Asia Pacific (Sydney), Asia Pacific (Tokyo), Canada (Central), Europe (Frankfurt), Europe (Ireland), and Europe (Stockholm).</p>\n            </li>\n            <li>\n               <p>For the <code>G.8X</code> worker type, each worker maps to 8 DPU (32 vCPU, 128 GB of memory, 512 GB disk), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs, in the same Amazon Web Services Regions as supported for the <code>G.4X</code> worker type.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPU, 4 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 M-DPU (8vCPU, 64 GB of m\n          emory, 128 GB disk), and provides a default of 8 Ray workers (1 per vCPU).</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n      G.1X, G.2X, G.4X, G.8X or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs.</p>\n         <ul>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPUs, 16 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPUs, 32 GB of memory) with 128GB disk (approximately 77GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.4X</code> worker type, each worker maps to 4 DPU (16 vCPUs, 64 GB of memory) with 256GB disk (approximately 235GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs in the following Amazon Web Services Regions: US East (Ohio), US East (N. Virginia), US West (Oregon), Asia Pacific (Singapore), Asia Pacific (Sydney), Asia Pacific (Tokyo), Canada (Central), Europe (Frankfurt), Europe (Ireland), and Europe (Stockholm).</p>\n            </li>\n            <li>\n               <p>For the <code>G.8X</code> worker type, each worker maps to 8 DPU (32 vCPUs, 128 GB of memory) with 512GB disk (approximately 487GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs, in the same Amazon Web Services Regions as supported for the <code>G.4X</code> worker type.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPUs, 4 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 M-DPU (8vCPUs, 64 GB of memory) with 128 GB disk (approximately 120GB free), and provides up to 8 Ray workers based on the autoscaler.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "NumberOfWorkers": {
@@ -20972,7 +21034,7 @@
                 "WorkerType": {
                     "target": "com.amazonaws.glue#WorkerType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n      Standard, G.1X, G.2X, or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs.</p>\n         <ul>\n            <li>\n               <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p>\n            </li>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPU, 4 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 M-DPU (8vCPU, 64 GB of m\n          emory, 128 GB disk), and provides up to 8 Ray workers (one per vCPU) based on the\n          autoscaler.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n          G.1X, G.2X, G.4X, G.8X or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs.</p>\n         <ul>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPUs, 16 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPUs, 32 GB of memory) with 128GB disk (approximately 77GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.4X</code> worker type, each worker maps to 4 DPU (16 vCPUs, 64 GB of memory) with 256GB disk (approximately 235GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs in the following Amazon Web Services Regions: US East (Ohio), US East (N. Virginia), US West (Oregon), Asia Pacific (Singapore), Asia Pacific (Sydney), Asia Pacific (Tokyo), Canada (Central), Europe (Frankfurt), Europe (Ireland), and Europe (Stockholm).</p>\n            </li>\n            <li>\n               <p>For the <code>G.8X</code> worker type, each worker maps to 8 DPU (32 vCPUs, 128 GB of memory) with 512GB disk (approximately 487GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs, in the same Amazon Web Services Regions as supported for the <code>G.4X</code> worker type.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPUs, 4 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 M-DPU (8vCPUs, 64 GB of memory) with 128 GB disk (approximately 120GB free), and provides up to 8 Ray workers based on the autoscaler.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "NumberOfWorkers": {
@@ -21170,7 +21232,7 @@
                 "WorkerType": {
                     "target": "com.amazonaws.glue#WorkerType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n      Standard, G.1X, G.2X, or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs.</p>\n         <ul>\n            <li>\n               <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p>\n            </li>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPU, 4 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 M-DPU (8vCPU, 64 GB of m\n          emory, 128 GB disk), and provides up to 8 Ray workers based on the\n          autoscaler.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n      G.1X, G.2X, G.4X, G.8X or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs.</p>\n         <ul>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPUs, 16 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPUs, 32 GB of memory) with 128GB disk (approximately 77GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.4X</code> worker type, each worker maps to 4 DPU (16 vCPUs, 64 GB of memory) with 256GB disk (approximately 235GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs in the following Amazon Web Services Regions: US East (Ohio), US East (N. Virginia), US West (Oregon), Asia Pacific (Singapore), Asia Pacific (Sydney), Asia Pacific (Tokyo), Canada (Central), Europe (Frankfurt), Europe (Ireland), and Europe (Stockholm).</p>\n            </li>\n            <li>\n               <p>For the <code>G.8X</code> worker type, each worker maps to 8 DPU (32 vCPUs, 128 GB of memory) with 512GB disk (approximately 487GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs, in the same Amazon Web Services Regions as supported for the <code>G.4X</code> worker type.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPUs, 4 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 M-DPU (8vCPUs, 64 GB of memory) with 128 GB disk (approximately 120GB free), and provides up to 8 Ray workers based on the autoscaler.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "NumberOfWorkers": {
@@ -25936,6 +25998,66 @@
                 }
             }
         },
+        "com.amazonaws.glue#Recipe": {
+            "type": "structure",
+            "members": {
+                "Name": {
+                    "target": "com.amazonaws.glue#NodeName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the Glue Studio node.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Inputs": {
+                    "target": "com.amazonaws.glue#OneInput",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The nodes that are inputs to the recipe node, identified by id.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "RecipeReference": {
+                    "target": "com.amazonaws.glue#RecipeReference",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A reference to the DataBrew recipe used by the node.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A Glue Studio node that uses a Glue DataBrew recipe in Glue jobs.</p>"
+            }
+        },
+        "com.amazonaws.glue#RecipeReference": {
+            "type": "structure",
+            "members": {
+                "RecipeArn": {
+                    "target": "com.amazonaws.glue#EnclosedInStringProperty",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ARN of the DataBrew recipe.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "RecipeVersion": {
+                    "target": "com.amazonaws.glue#RecipeVersion",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The RecipeVersion of the DataBrew recipe.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A reference to a Glue DataBrew recipe.</p>"
+            }
+        },
+        "com.amazonaws.glue#RecipeVersion": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 16
+                }
+            }
+        },
         "com.amazonaws.glue#RecordsCount": {
             "type": "long"
         },
@@ -28770,6 +28892,198 @@
                 "smithy.api#documentation": "<p>Specifies skewed values in a table. Skewed values are those that occur with very high\n      frequency.</p>"
             }
         },
+        "com.amazonaws.glue#SnowflakeNodeData": {
+            "type": "structure",
+            "members": {
+                "SourceType": {
+                    "target": "com.amazonaws.glue#GenericLimitedString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies how retrieved data is specified. Valid values: <code>\"table\"</code>, <code>\n      \"query\"</code>.</p>"
+                    }
+                },
+                "Connection": {
+                    "target": "com.amazonaws.glue#Option",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies a Glue Data Catalog Connection to a Snowflake endpoint.</p>"
+                    }
+                },
+                "Schema": {
+                    "target": "com.amazonaws.glue#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies a Snowflake database schema for your node to use.</p>"
+                    }
+                },
+                "Table": {
+                    "target": "com.amazonaws.glue#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies a Snowflake table for your node to use.</p>"
+                    }
+                },
+                "Database": {
+                    "target": "com.amazonaws.glue#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies a Snowflake database for your node to use.</p>"
+                    }
+                },
+                "TempDir": {
+                    "target": "com.amazonaws.glue#EnclosedInStringProperty",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Not currently used.</p>"
+                    }
+                },
+                "IamRole": {
+                    "target": "com.amazonaws.glue#Option",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Not currently used.</p>"
+                    }
+                },
+                "AdditionalOptions": {
+                    "target": "com.amazonaws.glue#AdditionalOptions",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies additional options passed to the Snowflake connector. If options are specified\n      elsewhere in this node, this will take precedence.</p>"
+                    }
+                },
+                "SampleQuery": {
+                    "target": "com.amazonaws.glue#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A SQL string used to retrieve data with the <code>query</code> sourcetype.</p>"
+                    }
+                },
+                "PreAction": {
+                    "target": "com.amazonaws.glue#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A SQL string run before the Snowflake connector performs its standard actions.</p>"
+                    }
+                },
+                "PostAction": {
+                    "target": "com.amazonaws.glue#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A SQL string run after the Snowflake connector performs its standard actions.</p>"
+                    }
+                },
+                "Action": {
+                    "target": "com.amazonaws.glue#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies what action to take when writing to a table with preexisting data. Valid values: <code>\n      append</code>, <code>merge</code>, <code>truncate</code>, <code>drop</code>.</p>"
+                    }
+                },
+                "Upsert": {
+                    "target": "com.amazonaws.glue#BooleanValue",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>Used when Action is <code>append</code>. Specifies the resolution behavior when a row\n      already exists. If true, preexisting rows will be updated. If false, those rows will be inserted.</p>"
+                    }
+                },
+                "MergeAction": {
+                    "target": "com.amazonaws.glue#GenericLimitedString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies a merge action. Valid values: <code>simple</code>, <code>custom</code>. If\n      simple, merge behavior is defined by <code>MergeWhenMatched</code> and <code>\n      MergeWhenNotMatched</code>. If custom, defined by <code>MergeClause</code>.</p>"
+                    }
+                },
+                "MergeWhenMatched": {
+                    "target": "com.amazonaws.glue#GenericLimitedString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies how to resolve records that match preexisting data when merging. Valid values: <code>\n      update</code>, <code>delete</code>.</p>"
+                    }
+                },
+                "MergeWhenNotMatched": {
+                    "target": "com.amazonaws.glue#GenericLimitedString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies how to process records that do not match preexisting data when merging. Valid\n      values: <code>insert</code>, <code>none</code>.</p>"
+                    }
+                },
+                "MergeClause": {
+                    "target": "com.amazonaws.glue#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A SQL statement that specifies a custom merge behavior.</p>"
+                    }
+                },
+                "StagingTable": {
+                    "target": "com.amazonaws.glue#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of a staging table used when performing <code>merge</code> or upsert <code>append</code>\n      actions. Data is written to this table, then moved to <code>table</code> by a generated\n      postaction.</p>"
+                    }
+                },
+                "SelectedColumns": {
+                    "target": "com.amazonaws.glue#OptionList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the columns combined to identify a record when detecting matches for merges and\n      upserts. A list of structures with <code>value</code>, <code>label</code> and <code>\n      description</code> keys. Each structure describes a column.</p>"
+                    }
+                },
+                "AutoPushdown": {
+                    "target": "com.amazonaws.glue#BooleanValue",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>Specifies whether automatic query pushdown is enabled. If pushdown\n      is enabled, then when a query is run on Spark, if part of the query can be \"pushed down\" to\n      the\n      Snowflake server, it is pushed down. This improves performance of some queries.</p>"
+                    }
+                },
+                "TableSchema": {
+                    "target": "com.amazonaws.glue#OptionList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Manually defines the target schema for the node. A list of structures with <code>value</code>\n      , <code>label</code> and <code>description</code> keys. Each structure defines a column.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Specifies configuration for Snowflake nodes in Glue Studio.</p>"
+            }
+        },
+        "com.amazonaws.glue#SnowflakeSource": {
+            "type": "structure",
+            "members": {
+                "Name": {
+                    "target": "com.amazonaws.glue#NodeName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the Snowflake data source.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Data": {
+                    "target": "com.amazonaws.glue#SnowflakeNodeData",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Configuration for the Snowflake data source.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "OutputSchemas": {
+                    "target": "com.amazonaws.glue#GlueSchemas",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies user-defined schemas for your output data.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Specifies a Snowflake data source.</p>"
+            }
+        },
+        "com.amazonaws.glue#SnowflakeTarget": {
+            "type": "structure",
+            "members": {
+                "Name": {
+                    "target": "com.amazonaws.glue#NodeName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the Snowflake target.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Data": {
+                    "target": "com.amazonaws.glue#SnowflakeNodeData",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the data of the Snowflake target node.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Inputs": {
+                    "target": "com.amazonaws.glue#OneInput",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The nodes that are inputs to the data target.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Specifies a Snowflake target.</p>"
+            }
+        },
         "com.amazonaws.glue#Sort": {
             "type": "enum",
             "members": {
@@ -29760,7 +30074,7 @@
                 "WorkerType": {
                     "target": "com.amazonaws.glue#WorkerType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n      Standard, G.1X, G.2X, or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs.</p>\n         <ul>\n            <li>\n               <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p>\n            </li>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPU, 4 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 DPU (8vCPU, 64 GB of m\n          emory, 128 GB disk), and provides up to 8 Ray workers (one per vCPU) based on the\n          autoscaler.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The type of predefined worker that is allocated when a job runs. Accepts a value of\n          G.1X, G.2X, G.4X, G.8X or G.025X for Spark jobs. Accepts the value Z.2X for Ray jobs.</p>\n         <ul>\n            <li>\n               <p>For the <code>G.1X</code> worker type, each worker maps to 1 DPU (4 vCPUs, 16 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.2X</code> worker type, each worker maps to 2 DPU (8 vCPUs, 32 GB of memory) with 128GB disk (approximately 77GB free), and provides 1 executor per worker. We recommend this worker type for workloads such as data transforms, joins, and queries, to offers a scalable and cost effective way to run most jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>G.4X</code> worker type, each worker maps to 4 DPU (16 vCPUs, 64 GB of memory) with 256GB disk (approximately 235GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs in the following Amazon Web Services Regions: US East (Ohio), US East (N. Virginia), US West (Oregon), Asia Pacific (Singapore), Asia Pacific (Sydney), Asia Pacific (Tokyo), Canada (Central), Europe (Frankfurt), Europe (Ireland), and Europe (Stockholm).</p>\n            </li>\n            <li>\n               <p>For the <code>G.8X</code> worker type, each worker maps to 8 DPU (32 vCPUs, 128 GB of memory) with 512GB disk (approximately 487GB free), and provides 1 executor per worker. We recommend this worker type for jobs whose workloads contain your most demanding transforms, aggregations, joins, and queries. This worker type is available only for Glue version 3.0 or later Spark ETL jobs, in the same Amazon Web Services Regions as supported for the <code>G.4X</code> worker type.</p>\n            </li>\n            <li>\n               <p>For the <code>G.025X</code> worker type, each worker maps to 0.25 DPU (2 vCPUs, 4 GB of memory) with 84GB disk (approximately 34GB free), and provides 1 executor per worker. We recommend this worker type for low volume streaming jobs. This worker type is only available for Glue version 3.0 streaming jobs.</p>\n            </li>\n            <li>\n               <p>For the <code>Z.2X</code> worker type, each worker maps to 2 M-DPU (8vCPUs, 64 GB of memory) with 128 GB disk (approximately 120GB free), and provides up to 8 Ray workers based on the autoscaler.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "NumberOfWorkers": {

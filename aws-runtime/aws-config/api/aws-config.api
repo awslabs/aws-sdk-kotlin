@@ -1097,6 +1097,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/As
 	public final fun getExternalId ()Ljava/lang/String;
 	public final fun getPolicy ()Ljava/lang/String;
 	public final fun getPolicyArns ()Ljava/util/List;
+	public final fun getProvidedContexts ()Ljava/util/List;
 	public final fun getRoleArn ()Ljava/lang/String;
 	public final fun getRoleSessionName ()Ljava/lang/String;
 	public final fun getSerialNumber ()Ljava/lang/String;
@@ -1116,6 +1117,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/As
 	public final fun getExternalId ()Ljava/lang/String;
 	public final fun getPolicy ()Ljava/lang/String;
 	public final fun getPolicyArns ()Ljava/util/List;
+	public final fun getProvidedContexts ()Ljava/util/List;
 	public final fun getRoleArn ()Ljava/lang/String;
 	public final fun getRoleSessionName ()Ljava/lang/String;
 	public final fun getSerialNumber ()Ljava/lang/String;
@@ -1127,6 +1129,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/As
 	public final fun setExternalId (Ljava/lang/String;)V
 	public final fun setPolicy (Ljava/lang/String;)V
 	public final fun setPolicyArns (Ljava/util/List;)V
+	public final fun setProvidedContexts (Ljava/util/List;)V
 	public final fun setRoleArn (Ljava/lang/String;)V
 	public final fun setRoleSessionName (Ljava/lang/String;)V
 	public final fun setSerialNumber (Ljava/lang/String;)V
@@ -1475,6 +1478,32 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Po
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType$Companion {
 	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType;
+}
+
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext {
+	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext$Companion;
+	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContextAssertion ()Ljava/lang/String;
+	public final fun getProviderArn ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext$Builder {
+	public fun <init> ()V
+	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;)V
+	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;
+	public final fun getContextAssertion ()Ljava/lang/String;
+	public final fun getProviderArn ()Ljava/lang/String;
+	public final fun setContextAssertion (Ljava/lang/String;)V
+	public final fun setProviderArn (Ljava/lang/String;)V
+}
+
+public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext$Companion {
+	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException : aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/StsException {
