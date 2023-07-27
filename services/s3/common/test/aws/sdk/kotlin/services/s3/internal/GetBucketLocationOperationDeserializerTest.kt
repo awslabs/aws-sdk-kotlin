@@ -37,7 +37,7 @@ class GetBucketLocationOperationDeserializerTest {
 
         assertEquals("UsWest2", actual.locationConstraint.toString())
     }
-    
+
     @Test
     fun deserializeErrorMessage() {
         val responseXML = """

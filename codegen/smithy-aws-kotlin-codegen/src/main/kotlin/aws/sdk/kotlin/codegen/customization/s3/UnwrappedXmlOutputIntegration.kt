@@ -36,7 +36,7 @@ class UnwrappedXmlOutputIntegration : KotlinIntegration {
                     }
                     else -> shape
                 }
-        }
+            }
 
         return ModelTransformer
             .create()
