@@ -13,20 +13,20 @@ import software.amazon.smithy.model.Model
 import kotlin.test.assertTrue
 
 /**
- * Verify [UnwrappedXMLOutputIntegration] is enabled for proper service (S3)
+ * Verify [UnwrappedXmlOutputIntegration] is enabled for proper service (S3)
  */
-class UnwrappedXMLOutputIntegrationTest {
+class UnwrappedXmlOutputIntegrationTest {
     @Test
     fun test() {
         val model = model("NotS3")
-        val actual = UnwrappedXMLOutputIntegration().enabledForService(model, model.defaultSettings())
+        val actual = UnwrappedXmlOutputIntegration().enabledForService(model, model.defaultSettings())
         assertFalse(actual)
     }
 
     @Test
     fun test2() {
         val model = model("S3")
-        val actual = UnwrappedXMLOutputIntegration().enabledForService(model, model.defaultSettings())
+        val actual = UnwrappedXmlOutputIntegration().enabledForService(model, model.defaultSettings())
         assertTrue(actual)
     }
 }
