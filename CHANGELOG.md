@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.29.1-beta] - 07/27/2023
+
+### Features
+* [#745](https://github.com/awslabs/aws-sdk-kotlin/issues/745) Validate returned content length on S3 `GetObject` responses.
+
+### Miscellaneous
+* Sync AWS models and bump smithy-kotlin version
+
 ## [0.29.0-beta] - 07/20/2023
 
 ### Features
