@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProvider
 import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
+import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
@@ -99,7 +100,7 @@ public class ProfileCredentialsProvider(
 
         // if profile is overridden for this provider, attempt to resolve it from there first
         val profileOverride = profileName?.let { sharedConfig.profiles[it] }
-        val region = asyncLazy { region ?: profileOverride?.getOrNull("region") ?: attributes.getOrNull(AttributeKey("region")) ?: resolveRegion(platformProvider) }
+        val region = asyncLazy { region ?: profileOverride?.getOrNull("region") ?: attributes.getOrNull(AwsClientOption.Region) ?: resolveRegion(platformProvider) }
 
         val leaf = chain.leaf.toCredentialsProvider(region)
         logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
