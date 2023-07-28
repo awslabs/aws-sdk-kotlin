@@ -37,6 +37,8 @@ tasks["jar"].enabled = false
 fun getProperty(name: String): String? {
     if (project.hasProperty(name)) {
         return project.properties[name].toString()
+    } else if (project.ext.has(name)) {
+        return project.ext[name].toString()
     }
 
     val localProperties = Properties()
