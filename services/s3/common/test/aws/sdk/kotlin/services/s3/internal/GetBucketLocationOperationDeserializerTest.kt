@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.services.s3.internal
 
+import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.S3Exception
 import aws.sdk.kotlin.services.s3.transform.GetBucketLocationOperationDeserializer
 import aws.smithy.kotlin.runtime.http.Headers
@@ -35,7 +36,7 @@ class GetBucketLocationOperationDeserializerTest {
             GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), response)
         }
 
-        assertEquals("UsWest2", actual.locationConstraint.toString())
+        assertEquals(BucketLocationConstraint.UsWest2, actual.locationConstraint)
     }
 
     @Test

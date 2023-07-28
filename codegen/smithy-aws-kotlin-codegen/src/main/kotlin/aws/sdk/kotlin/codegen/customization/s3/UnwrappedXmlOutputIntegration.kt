@@ -11,7 +11,6 @@ import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.traits.UnwrappedXmlOutput
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.transform.ModelTransformer
@@ -25,27 +24,18 @@ class UnwrappedXmlOutputIntegration : KotlinIntegration {
         model.expectShape<ServiceShape>(settings.service).isS3
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
-        val unwrappedStructures = mutableSetOf<String>()
-        ModelTransformer
-            .create()
-            .mapShapes(model) { shape ->
-                when {
-                    shape is OperationShape && shape.hasTrait<S3UnwrappedXmlOutputTrait>() -> {
-                        if (shape.outputShape.toString() != "smithy.api#Unit") unwrappedStructures.add(shape.outputShape.toString())
-                        shape
-                    }
-                    else -> shape
-                }
-            }
+        val unwrappedStructures = model
+            .operationShapes
+            .filter { it.hasTrait<S3UnwrappedXmlOutputTrait>() }
+            .map { it.outputShape }
+            .toSet()
 
         return ModelTransformer
             .create()
             .mapShapes(model) { shape ->
                 when {
-                    shape.id.toString() in unwrappedStructures -> {
-                        check(shape is StructureShape) { "Cannot apply UnwrappedXMLOutput to non-structure shape" }
-                        shape.toBuilder().addTrait(UnwrappedXmlOutput()).build()
-                    }
+                    shape.id in unwrappedStructures ->
+                        (shape as StructureShape).toBuilder().addTrait(UnwrappedXmlOutput()).build()
                     else -> shape
                 }
             }
