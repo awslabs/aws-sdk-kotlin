@@ -9,6 +9,8 @@ import java.time.Duration
 buildscript {
     dependencies {
         // Add our custom gradle plugin(s) to buildscript classpath (comes from github source)
+        // NOTE: buildscript classpath for the root project is the parent classloader for the subprojects, we
+        // only need to include it here, imports in subprojects will work automagically
         classpath("aws.sdk.kotlin:build-plugins") {
             version {
                 branch = "kmp-plugin"
