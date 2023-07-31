@@ -7,7 +7,7 @@ import java.time.Duration
 import java.util.Properties
 
 plugins {
-    kotlin("jvm") version "1.8.10" apply false
+    kotlin("jvm") version "1.8.22" apply false
     id("org.jetbrains.dokka")
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
