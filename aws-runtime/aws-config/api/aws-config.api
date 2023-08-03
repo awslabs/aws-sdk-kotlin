@@ -1665,6 +1665,7 @@ public abstract interface class aws/sdk/kotlin/runtime/region/RegionProvider {
 }
 
 public class aws/sdk/kotlin/runtime/region/RegionProviderChain : aws/sdk/kotlin/runtime/region/RegionProvider {
+	public fun <init> (Ljava/util/List;)V
 	public fun <init> ([Laws/sdk/kotlin/runtime/region/RegionProvider;)V
 	protected final fun getProviders ()[Laws/sdk/kotlin/runtime/region/RegionProvider;
 	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
