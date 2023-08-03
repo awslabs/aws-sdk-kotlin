@@ -2,7 +2,7 @@
 
 Beta releases of the AWS SDK for Kotlin are published to Maven Central with the `-beta` qualifier. 
 **NOTE: Beta releases are not meant for production workloads**.
-Consult the [stability guide](stability.md) for more information on SDK stability and maintenance.
+Consult the [stability guide](../VERSIONING.md#stability-of-the-aws-sdk-for-kotlin) for more information on SDK stability and maintenance.
 
 1. Add the repository to your Gradle or Maven configuration
 
