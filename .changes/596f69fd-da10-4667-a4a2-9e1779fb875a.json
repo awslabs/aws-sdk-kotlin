@@ -1,0 +1,5 @@
+{
+    "id": "596f69fd-da10-4667-a4a2-9e1779fb875a",
+    "type": "feature",
+    "description": "Make RegionProviderChain accept list of RegionProvider"
+}
