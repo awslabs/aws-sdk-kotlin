@@ -1,0 +1,8 @@
+{
+    "id": "bcac069f-17fa-45ec-aa1e-e392a4c99042",
+    "type": "feature",
+    "description": "Make RegionProviderChain accept a list of RegionProvider",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1004"
+    ]
+}

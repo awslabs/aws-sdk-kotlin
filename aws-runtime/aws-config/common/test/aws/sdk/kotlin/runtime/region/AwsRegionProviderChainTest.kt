@@ -33,4 +33,17 @@ class AwsRegionProviderChainTest {
 
         assertEquals("us-east-1", chain.getRegion())
     }
+
+    @Test
+    fun testChainList() = runTest {
+        val providers = listOf<RegionProvider>(
+            TestProvider(null),
+            TestProvider("us-east-1"),
+            TestProvider("us-east-2"),
+        )
+
+        val chain = RegionProviderChain(providers)
+
+        assertEquals("us-east-1", chain.getRegion())
+    }
 }
