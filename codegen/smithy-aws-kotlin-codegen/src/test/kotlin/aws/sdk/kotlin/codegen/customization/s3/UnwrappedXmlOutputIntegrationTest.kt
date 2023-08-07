@@ -17,14 +17,14 @@ import kotlin.test.assertTrue
  */
 class UnwrappedXmlOutputIntegrationTest {
     @Test
-    fun test() {
+    fun testNonS3Model() {
         val model = model("NotS3")
         val actual = UnwrappedXmlOutputIntegration().enabledForService(model, model.defaultSettings())
         assertFalse(actual)
     }
 
     @Test
-    fun test2() {
+    fun testS3Model() {
         val model = model("S3")
         val actual = UnwrappedXmlOutputIntegration().enabledForService(model, model.defaultSettings())
         assertTrue(actual)
