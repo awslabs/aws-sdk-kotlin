@@ -1,0 +1,8 @@
+{
+    "id": "f4579d2b-4173-489e-b4fa-872beed6b1ef",
+    "type": "feature",
+    "description": "Make user-supplied region available to config resolution providers",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#583"
+    ]
+}
