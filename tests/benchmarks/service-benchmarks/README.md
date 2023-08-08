@@ -15,41 +15,41 @@ To run the benchmarks:
 * `./gradlew :tests:benchmarks:service-benchmarks:run`
   This runs the benchmark suite and prints the results to the console formatted as a Markdown table.
 
-## Baseline as of 7/28/2023
+## Baseline as of 8/8/2023
 
 The following benchmark run serves as a baseline for future runs:
 
-### Host machine
+### Environment
 
-| Hardware type  | Operating system | Date      |
-|----------------|------------------|-----------|
-| EC2 m5.4xlarge | Amazon Linux 2   | 7/28/2023 |
+| Hardware type  | Operating system | SDK version     |
+|----------------|------------------|-----------------|
+| EC2 m5.4xlarge | Amazon Linux 2   | 0.30.0-SNAPSHOT |
 
 ### Results
 
 |                       | Overhead (ms) |    n |   min |   avg |   med |   p90 |    p99 |    max |
 | :---                  |          ---: | ---: |  ---: |  ---: |  ---: |  ---: |   ---: |   ---: |
 | **S3**                |               |      |       |       |       |       |        |        |
-|   —HeadObject         |               | 1618 | 0.340 | 0.605 | 0.417 | 0.638 |  4.864 | 14.672 |
-|   —PutObject          |               |  766 | 0.310 | 0.557 | 0.392 | 0.675 |  4.008 | 13.358 |
+|   —HeadObject         |               | 1715 | 0.334 | 0.561 | 0.379 | 0.521 |  3.149 | 20.071 |
+|   —PutObject          |               |  739 | 0.306 | 0.492 | 0.337 | 0.389 |  7.958 | 16.556 |
 | **SNS**               |               |      |       |       |       |       |        |        |
-|   —GetTopicAttributes |               | 3458 | 0.233 | 0.514 | 0.373 | 0.515 |  4.378 | 18.719 |
-|   —Publish            |               | 1082 | 0.192 | 0.432 | 0.255 | 0.454 |  3.006 | 19.466 |
+|   —GetTopicAttributes |               | 3041 | 0.235 | 0.494 | 0.354 | 0.461 |  2.964 | 17.129 |
+|   —Publish            |               | 1001 | 0.199 | 0.394 | 0.224 | 0.420 |  1.262 | 16.160 |
 | **STS**               |               |      |       |       |       |       |        |        |
-|   —AssumeRole         |               | 1054 | 0.269 | 0.442 | 0.349 | 0.525 |  0.844 | 19.312 |
-|   —GetCallerIdentity  |               | 4202 | 0.158 | 0.270 | 0.204 | 0.287 |  0.462 | 19.110 |
+|   —AssumeRole         |               | 1081 | 0.273 | 0.419 | 0.349 | 0.485 |  0.622 | 14.781 |
+|   —GetCallerIdentity  |               | 4705 | 0.157 | 0.242 | 0.184 | 0.217 |  0.414 | 13.459 |
 | **CloudWatch**        |               |      |       |       |       |       |        |        |
-|   —GetMetricData      |               | 1500 | 0.177 | 1.501 | 0.266 | 5.510 | 13.842 | 18.671 |
-|   —PutMetricData      |               | 2470 | 0.131 | 1.211 | 0.143 | 3.206 | 11.461 | 15.233 |
+|   —GetMetricData      |               | 1500 | 0.174 | 1.352 | 0.219 | 3.239 | 13.830 | 15.193 |
+|   —PutMetricData      |               | 2452 | 0.133 | 1.194 | 0.144 | 1.911 | 13.007 | 14.862 |
 | **CloudWatch Events** |               |      |       |       |       |       |        |        |
-|   —DescribeEventBus   |               | 1500 | 0.169 | 0.380 | 0.248 | 0.449 |  3.642 | 11.034 |
-|   —PutEvents          |               | 4007 | 0.159 | 0.340 | 0.210 | 0.344 |  4.881 | 12.941 |
+|   —DescribeEventBus   |               | 1500 | 0.156 | 0.290 | 0.187 | 0.238 |  0.530 | 18.934 |
+|   —PutEvents          |               | 4577 | 0.152 | 0.293 | 0.176 | 0.378 |  3.921 | 10.022 |
 | **DynamoDB**          |               |      |       |       |       |       |        |        |
-|   —GetItem            |               | 3547 | 0.135 | 0.187 | 0.164 | 0.250 |  0.344 |  4.114 |
-|   —PutItem            |               | 2659 | 0.127 | 0.181 | 0.159 | 0.246 |  0.324 |  2.353 |
+|   —GetItem            |               | 4223 | 0.135 | 0.154 | 0.148 | 0.164 |  0.216 |  2.415 |
+|   —PutItem            |               | 3059 | 0.130 | 0.154 | 0.145 | 0.178 |  0.193 |  1.771 |
 | **Pinpoint**          |               |      |       |       |       |       |        |        |
-|   —GetEndpoint        |               |  368 | 0.245 | 0.436 | 0.380 | 0.669 |  0.824 |  1.238 |
-|   —PutEvents          |               |  297 | 0.277 | 0.376 | 0.351 | 0.505 |  0.696 |  0.717 |
+|   —GetEndpoint        |               |  555 | 0.220 | 0.401 | 0.406 | 0.452 |  0.506 |  6.606 |
+|   —PutEvents          |               |  415 | 0.242 | 0.400 | 0.420 | 0.466 |  0.619 |  2.762 |
 
 ## Methodology
 
