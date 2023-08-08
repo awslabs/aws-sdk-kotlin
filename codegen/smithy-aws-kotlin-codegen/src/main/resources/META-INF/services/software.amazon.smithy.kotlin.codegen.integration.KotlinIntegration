@@ -6,7 +6,6 @@ aws.sdk.kotlin.codegen.GradleGenerator
 aws.sdk.kotlin.codegen.AwsServiceConfigIntegration
 aws.sdk.kotlin.codegen.customization.s3.S3SigningConfig
 aws.sdk.kotlin.codegen.customization.s3.S3ErrorMetadataIntegration
-aws.sdk.kotlin.codegen.customization.s3.GetBucketLocationDeserializerIntegration
 aws.sdk.kotlin.codegen.customization.PresignableModelIntegration
 aws.sdk.kotlin.codegen.PresignerGenerator
 aws.sdk.kotlin.codegen.customization.apigateway.ApiGatewayAddAcceptHeader
@@ -31,3 +30,4 @@ aws.sdk.kotlin.codegen.customization.s3control.HostPrefixFilter
 aws.sdk.kotlin.codegen.customization.s3control.ClientConfigIntegration
 aws.sdk.kotlin.codegen.protocols.endpoints.BindAwsEndpointBuiltins
 aws.sdk.kotlin.codegen.customization.s3.HostPrefixRequestRouteFilter
+aws.sdk.kotlin.codegen.customization.s3.UnwrappedXmlOutputIntegration
