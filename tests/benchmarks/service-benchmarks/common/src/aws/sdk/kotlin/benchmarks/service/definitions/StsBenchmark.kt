@@ -43,6 +43,7 @@ class StsBenchmark : ServiceBenchmark<StsClient> {
                 iamRoleArn = resp.role!!.arn!!
             }
 
+
             // It takes a while for newly-created roles to fully propagate to STS. In the meantime, trying to assume the
             // role causes an exception. Example:
             // | StsException: User: arn:aws:iam::123456789012:user/Username is not authorized to perform:

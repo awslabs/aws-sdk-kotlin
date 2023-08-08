@@ -8,6 +8,31 @@ import kotlin.math.round
 private const val NAME_FIELD = "name"
 private const val COUNT_FIELD = "n"
 
+/**
+ * A set of results from service benchmarks. The results are keyed first by service, then by operation, then by metric
+ * name. For instance:
+ *
+ * ```json
+ * {
+ *   "S3": {
+ *     "HeadObject": {
+ *       "Overhead (ms)": {
+ *         "count": 1618,
+ *         "statistics": {
+ *           "min": 0.340,
+ *           "avg": 0.605,
+ *           "med": 0.417,
+ *           ...
+ *         }
+ *       },
+ *       ...
+ *     },
+ *     ...
+ *   },
+ *   ...
+ * }
+ * ```
+ */
 private typealias Results = Map<String, Map<String, Map<String, MetricSummary>>>
 
 class ResultsTable private constructor(private val columns: List<Column>, private val rows: List<Array<String>>) {

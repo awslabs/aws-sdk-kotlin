@@ -32,7 +32,7 @@ platforms.forEach { platform ->
 }
 
 val requiredServices = setOf(
-    // Top 7 services called by Kotlin SDK customers as of 7/25/2023
+    // Top 7 services called by Kotlin SDK customers as of 7/25/2023, in descending order of call volume
     "s3",
     "sns",
     "sts",
@@ -42,7 +42,7 @@ val requiredServices = setOf(
     "pinpoint",
 
     // Services required as prerequisites for setup
-    "iam", // Create roles for SNS::AssumeRole
+    "iam", // Create roles for STS::AssumeRole
 )
 
 val missingServices = requiredServices.filterNot { rootProject.file("services/$it/build.gradle.kts").exists() }
