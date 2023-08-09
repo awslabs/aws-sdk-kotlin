@@ -35,6 +35,7 @@ include(":aws-runtime:aws-config")
 include(":aws-runtime:aws-endpoint")
 include(":aws-runtime:aws-http")
 include(":tests")
+include(":tests:benchmarks:service-benchmarks")
 include(":tests:codegen:event-stream")
 include(":tests:e2e-test-util")
 

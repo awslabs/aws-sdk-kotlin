@@ -1,0 +1,8 @@
+{
+    "id": "2fcce0d9-a174-41ab-bb48-f18bbd5a3c5f",
+    "type": "misc",
+    "description": "Add service-level benchmarks",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#968"
+    ]
+}
