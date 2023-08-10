@@ -13,7 +13,7 @@ buildscript {
         // only need to include it here, imports in subprojects will work automagically
         classpath("aws.sdk.kotlin:build-plugins") {
             version {
-                branch = "kmp-plugin"
+                require("0.1.0")
             }
         }
     }
