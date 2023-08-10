@@ -2,8 +2,8 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-import java.time.LocalDateTime
 import aws.sdk.kotlin.gradle.kmp.*
+import java.time.LocalDateTime
 
 plugins {
     id("org.jetbrains.dokka")

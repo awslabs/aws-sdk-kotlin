@@ -12,7 +12,6 @@ plugins {
     jacoco
 }
 
-
 val sdkVersion: String by project
 
 val coroutinesVersion: String by project
@@ -29,7 +28,6 @@ subprojects {
         plugin("org.jetbrains.kotlin.multiplatform")
         plugin("org.jetbrains.dokka")
     }
-
 
     apply(from = rootProject.file("gradle/publish.gradle"))
 
