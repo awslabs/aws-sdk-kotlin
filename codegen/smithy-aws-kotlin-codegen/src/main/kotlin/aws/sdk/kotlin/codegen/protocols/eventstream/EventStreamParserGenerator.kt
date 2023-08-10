@@ -68,7 +68,7 @@ class EventStreamParserGenerator(
         writer.write("val chan = body.#T() ?: return", RuntimeTypes.Http.toSdkByteReadChannel)
         writer.write("val events = #T(chan)", RuntimeTypes.AwsEventStream.decodeFrames)
             .indent()
-            .withBlock(".#T { message ->", "}", RuntimeTypes.KotlinxCoroutines.Flow.mapNotNull) {
+            .withBlock(".#T { message ->", "}", RuntimeTypes.KotlinxCoroutines.Flow.map) {
                 withBlock("when (val mt = message.#T()) {", "}", RuntimeTypes.AwsEventStream.MessageTypeExt) {
                     withBlock("is #T.Event -> when (mt.shapeType) {", "}", messageTypeSymbol) {
                         streamShape.filterEventStreamErrors(ctx.model).forEach { member ->
@@ -77,10 +77,10 @@ class EventStreamParserGenerator(
                             }
                         }
 
-                        if (ctx.protocol.isRpcBoundProtocol) {
+                        if (ctx.protocol.isRpcBoundProtocol && output.initialResponseMembers.isNotEmpty()) {
                             withBlock("\"initial-response\" -> {", "}") {
                                 renderDeserializeInitialResponse(ctx, output, writer)
-                                write("null")
+                                write("#T.SdkUnknown", streamSymbol)
                             }
                         }
 
@@ -108,7 +108,20 @@ class EventStreamParserGenerator(
                 }
             }
             .dedent()
-            .write("builder.#L = events", streamingMember.defaultName())
+        .write("")
+
+        if (ctx.protocol.isRpcBoundProtocol && output.initialResponseMembers.isNotEmpty()) {
+            writer.addImport(listOf(RuntimeTypes.KotlinxCoroutines.Flow.take, RuntimeTypes.KotlinxCoroutines.Flow.drop))
+            writer.withBlock("events.take(1).collect {", "}") {
+                writer.openBlock("if (it == #T.SdkUnknown) {", streamSymbol)
+                    .write("builder.#L = events.drop(1)", streamingMember.defaultName())
+                .closeAndOpenBlock("} else {")
+                    .write("builder.#L = events", streamingMember.defaultName())
+                .closeBlock("}")
+            }
+        } else {
+            writer.write("builder.#L = events", streamingMember.defaultName())
+        }
     }
 
     private fun renderDeserializeEventVariant(ctx: ProtocolGenerator.GenerationContext, unionSymbol: Symbol, member: MemberShape, writer: KotlinWriter) {
@@ -178,24 +191,26 @@ class EventStreamParserGenerator(
      * Renders deserialization logic for a message with the `initial-response` type.
      */
     private fun renderDeserializeInitialResponse(ctx: ProtocolGenerator.GenerationContext, outputShape: StructureShape, writer: KotlinWriter) {
-        // get all the shape's members which aren't an event stream
-        val initialResponseMembers = outputShape.members().filter {
-            val targetShape = ctx.model.getShape(it.target).getOrNull()
-            targetShape?.hasTrait<StreamingTrait>() == false
-        }
-
-        if (initialResponseMembers.isNotEmpty()) {
+        if (outputShape.initialResponseMembers.isNotEmpty()) {
             // A custom function which only deserializes `initialResponseMembers`
-            val initialResponseDeserializeFn = sdg.payloadDeserializer(ctx, outputShape, initialResponseMembers)
+            val initialResponseDeserializeFn = sdg.payloadDeserializer(ctx, outputShape, outputShape.initialResponseMembers)
 
             // Deserialize into `initialResponse`, then apply it to the actual response builder
             writer.write("val initialResponse = #T(message.payload)", initialResponseDeserializeFn)
             writer.withBlock("builder.apply {", "}") {
-                initialResponseMembers.forEach { member ->
+                outputShape.initialResponseMembers.forEach { member ->
                     writer.write("#L = initialResponse.#L", member.defaultName(), member.defaultName())
                 }
             }
         }
+    }
+
+    /**
+     * Get all the shape's members which aren't an event stream
+     */
+    private val StructureShape.initialResponseMembers get() = members().filter {
+        val targetShape = ctx.model.getShape(it.target).getOrNull()
+        targetShape?.hasTrait<StreamingTrait>() == false
     }
 
     private fun renderDeserializeExplicitEventPayloadMember(
