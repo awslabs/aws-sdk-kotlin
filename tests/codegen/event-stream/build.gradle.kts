@@ -19,6 +19,7 @@ dependencies {
 data class EventStreamTest(
     val projectionName: String,
     val protocolName: String,
+    val modelTemplate: File? = null
 ) {
     val model: File
         get() = buildDir.resolve("$projectionName/model.smithy")
@@ -26,10 +27,11 @@ data class EventStreamTest(
 
 val tests = listOf(
     EventStreamTest("restJson1", "restJson1"),
+    EventStreamTest("awsJson11", "awsJson1_1", file("event-stream-initial-request-response-model-template.smithy"))
 )
 
-fun fillInModel(output: File, protocolName: String) {
-    val template = file("event-stream-model-template.smithy")
+fun fillInModel(output: File, protocolName: String, template: File?) {
+    val template = template ?: file("event-stream-model-template.smithy")
     val input = template.readText()
     val opTraits = when (protocolName) {
         "restJson1", "restXml" -> """@http(method: "POST", uri: "/test-eventstream", code: 200)"""
@@ -60,7 +62,7 @@ codegen {
 
             smithyKotlinPlugin {
                 serviceShapeId = testServiceShapeId
-                packageName = "aws.sdk.kotlin.test.eventstream.${test.protocolName.toLowerCase()}"
+                packageName = "aws.sdk.kotlin.test.eventstream.${test.projectionName.toLowerCase()}"
                 packageVersion = "1.0"
                 buildSettings {
                     generateFullProject = false
@@ -77,7 +79,7 @@ codegen {
 
 tasks.named("generateSmithyBuildConfig") {
     doFirst {
-        tests.forEach { test -> fillInModel(test.model, test.protocolName) }
+        tests.forEach { test -> fillInModel(test.model, test.protocolName, test.modelTemplate) }
     }
 }
 
