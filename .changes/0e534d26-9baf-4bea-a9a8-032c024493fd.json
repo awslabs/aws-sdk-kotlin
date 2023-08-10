@@ -1,0 +1,5 @@
+{
+    "id": "0e534d26-9baf-4bea-a9a8-032c024493fd",
+    "type": "misc",
+    "description": "Sync AWS service models and **smithy-kotlin** to latest versions"
+}
