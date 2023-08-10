@@ -192,7 +192,7 @@ class EventStreamParserGenerator(
      */
     private fun renderDeserializeInitialResponse(ctx: ProtocolGenerator.GenerationContext, outputShape: StructureShape, writer: KotlinWriter) {
         if (outputShape.initialResponseMembers.isNotEmpty()) {
-            // A custom function which only deserializes `initialResponseMembers`
+            // A custom function which only deserializes the initial response members
             val initialResponseDeserializeFn = sdg.payloadDeserializer(ctx, outputShape, outputShape.initialResponseMembers)
 
             // Deserialize into `initialResponse`, then apply it to the actual response builder
