@@ -108,16 +108,16 @@ class EventStreamParserGenerator(
                 }
             }
             .dedent()
-        .write("")
+            .write("")
 
         if (ctx.protocol.isRpcBoundProtocol && output.initialResponseMembers.isNotEmpty()) {
             writer.addImport(listOf(RuntimeTypes.KotlinxCoroutines.Flow.take, RuntimeTypes.KotlinxCoroutines.Flow.drop))
             writer.withBlock("events.take(1).collect {", "}") {
                 writer.openBlock("if (it == #T.SdkUnknown) {", streamSymbol)
                     .write("builder.#L = events.drop(1)", streamingMember.defaultName())
-                .closeAndOpenBlock("} else {")
+                    .closeAndOpenBlock("} else {")
                     .write("builder.#L = events", streamingMember.defaultName())
-                .closeBlock("}")
+                    .closeBlock("}")
             }
         } else {
             writer.write("builder.#L = events", streamingMember.defaultName())

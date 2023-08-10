@@ -19,7 +19,7 @@ dependencies {
 data class EventStreamTest(
     val projectionName: String,
     val protocolName: String,
-    val modelTemplate: File? = null
+    val modelTemplate: File? = null,
 ) {
     val model: File
         get() = buildDir.resolve("$projectionName/model.smithy")
@@ -27,7 +27,7 @@ data class EventStreamTest(
 
 val tests = listOf(
     EventStreamTest("restJson1", "restJson1"),
-    EventStreamTest("awsJson11", "awsJson1_1", file("event-stream-initial-request-response-model-template.smithy"))
+    EventStreamTest("awsJson11", "awsJson1_1", file("event-stream-initial-request-response-model-template.smithy")),
 )
 
 fun fillInModel(output: File, protocolName: String, template: File?) {
