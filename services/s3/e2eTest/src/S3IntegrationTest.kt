@@ -111,6 +111,25 @@ class S3BucketOpsIntegrationTest {
     }
 
     @Test
+    fun testGetEmptyObject(): Unit = runBlocking {
+        // See https://github.com/awslabs/aws-sdk-kotlin/issues/1014
+        val keyName = "get-empty-obj.txt"
+
+        client.putObject {
+            bucket = testBucket
+            key = keyName
+            body = ByteStream.fromBytes(byteArrayOf())
+        }
+
+        val req = GetObjectRequest {
+            bucket = testBucket
+            key = keyName
+        }
+        val actualLength = client.getObject(req) { it.contentLength }
+        assertEquals(0, actualLength)
+    }
+
+    @Test
     fun testQueryParameterEncoding(): Unit = runBlocking {
         // see: https://github.com/awslabs/aws-sdk-kotlin/issues/448
 
