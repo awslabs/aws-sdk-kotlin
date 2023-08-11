@@ -1,5 +1,0 @@
-{
-    "id": "753bb105-1872-43e4-82c6-f800e610661b",
-    "type": "misc",
-    "description": "Upgrade kotlinx.coroutines to 1.7.3"
-}

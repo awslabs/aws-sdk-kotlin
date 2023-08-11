@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.30.0-beta] - 08/11/2023
+
+### Features
+* [#583](https://github.com/awslabs/aws-sdk-kotlin/issues/583) Make user-supplied region available to config resolution providers
+* [#745](https://github.com/awslabs/aws-sdk-kotlin/issues/745) Validate returned content length on S3 `GetObject` responses.
+* [#1004](https://github.com/awslabs/aws-sdk-kotlin/issues/1004) Make RegionProviderChain accept a list of RegionProvider
+
+### Fixes
+* [#194](https://github.com/awslabs/aws-sdk-kotlin/issues/194) Correctly parse and handle `GetBucketLocation` responses
+
+### Miscellaneous
+* Upgrade Kotlin to 1.8.22
+* [#968](https://github.com/awslabs/aws-sdk-kotlin/issues/968) Add service-level benchmarks
+* Upgrade kotlinx.coroutines to 1.7.3
+* Sync AWS service models and **smithy-kotlin** to latest versions
+
 ## [0.29.1-beta] - 07/27/2023
 
 ### Features

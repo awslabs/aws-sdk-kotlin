@@ -1,8 +1,0 @@
-{
-    "id": "4197c56c-e17a-4fb3-a680-4ca384267d2b",
-    "type": "bugfix",
-    "description": "Correctly parse and handle `GetBucketLocation` responses",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#194"
-    ]
-}
