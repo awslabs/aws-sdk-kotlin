@@ -937,7 +937,7 @@
                 "SecurityGroups": {
                     "target": "com.amazonaws.elasticloadbalancingv2#SecurityGroups",
                     "traits": {
-                        "smithy.api#documentation": "<p>[Application Load Balancers] The IDs of the security groups for the load balancer.</p>"
+                        "smithy.api#documentation": "<p>[Application Load Balancers and Network Load Balancers] The IDs of the security groups for\n      the load balancer.</p>"
                     }
                 },
                 "Scheme": {
@@ -1459,7 +1459,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Deregisters the specified targets from the specified target group. After the targets are\n      deregistered, they no longer receive traffic from the load balancer.</p>"
+                "smithy.api#documentation": "<p>Deregisters the specified targets from the specified target group. After the targets are\n      deregistered, they no longer receive traffic from the load balancer.</p>\n         <p>Note: If the specified target does not exist, the action returns successfully.</p>"
             }
         },
         "com.amazonaws.elasticloadbalancingv2#DeregisterTargetsInput": {
@@ -3564,6 +3564,26 @@
                 }
             }
         },
+        "com.amazonaws.elasticloadbalancingv2#EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic": {
+            "type": "string"
+        },
+        "com.amazonaws.elasticloadbalancingv2#EnforceSecurityGroupInboundRulesOnPrivateLinkTrafficEnum": {
+            "type": "enum",
+            "members": {
+                "on": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "on"
+                    }
+                },
+                "off": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "off"
+                    }
+                }
+            }
+        },
         "com.amazonaws.elasticloadbalancingv2#ErrorDescription": {
             "type": "string"
         },
@@ -3910,7 +3930,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Information about an Elastic Load Balancing resource limit for your Amazon Web Services\n      account.</p>"
+                "smithy.api#documentation": "<p>Information about an Elastic Load Balancing resource limit for your Amazon Web Services\n      account.</p>\n         <p>For more information, see the following:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html\">Quotas for your\n            Application Load Balancers</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html\">Quotas for your\n            Network Load Balancers</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/quotas-limits.html\">Quotas for your Gateway\n            Load Balancers</a>\n               </p>\n            </li>\n         </ul>"
             }
         },
         "com.amazonaws.elasticloadbalancingv2#Limits": {
@@ -4092,6 +4112,12 @@
                     "target": "com.amazonaws.elasticloadbalancingv2#CustomerOwnedIpv4Pool",
                     "traits": {
                         "smithy.api#documentation": "<p>[Application Load Balancers on Outposts] The ID of the customer-owned address pool.</p>"
+                    }
+                },
+                "EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic": {
+                    "target": "com.amazonaws.elasticloadbalancingv2#EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates whether to evaluate inbound security group rules for traffic sent to a \n      Network Load Balancer through Amazon Web Services PrivateLink.</p>"
                     }
                 }
             },
@@ -5338,7 +5364,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Information about a condition for a rule.</p>\n         <p>Each rule can optionally include up to one of each of the following conditions:\n        <code>http-request-method</code>, <code>host-header</code>, <code>path-pattern</code>, and\n        <code>source-ip</code>. Each rule can also optionally include one or more of each of the\n      following conditions: <code>http-header</code> and <code>query-string</code>. Note that the\n      value for a condition cannot be empty.</p>"
+                "smithy.api#documentation": "<p>Information about a condition for a rule.</p>\n         <p>Each rule can optionally include up to one of each of the following conditions:\n        <code>http-request-method</code>, <code>host-header</code>, <code>path-pattern</code>, and\n        <code>source-ip</code>. Each rule can also optionally include one or more of each of the\n      following conditions: <code>http-header</code> and <code>query-string</code>. Note that the\n      value for a condition cannot be empty.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html\">Quotas for your\n        Application Load Balancers</a>.</p>"
             }
         },
         "com.amazonaws.elasticloadbalancingv2#RuleConditionList": {
@@ -5467,7 +5493,7 @@
                 "IpAddressType": {
                     "target": "com.amazonaws.elasticloadbalancingv2#IpAddressType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The IP address type. The possible values are <code>ipv4</code> (for IPv4 addresses) and\n        <code>dualstack</code> (for IPv4 and IPv6 addresses).\n       You can’t specify\n        <code>dualstack</code> for a load balancer with a UDP or TCP_UDP listener.</p>",
+                        "smithy.api#documentation": "<p>The IP address type. The possible values are <code>ipv4</code> (for IPv4 addresses) and\n        <code>dualstack</code> (for IPv4 and IPv6 addresses).  You can’t specify <code>dualstack</code> for a load balancer\n      with a UDP or TCP_UDP listener.</p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -5562,7 +5588,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Associates the specified security groups with the specified Application Load Balancer. The\n      specified security groups override the previously associated security groups.</p>\n         <p>You can't specify a security group for a Network Load Balancer or Gateway Load\n      Balancer.</p>"
+                "smithy.api#documentation": "<p>Associates the specified security groups with the specified Application Load Balancer or\n      Network Load Balancer. The specified security groups override the previously associated\n      security groups.</p>\n         <p>You can't perform this operation on a Network Load Balancer unless you specified a\n      security group for the load balancer when you created it.</p>\n         <p>You can't associate a security group with a Gateway Load Balancer.</p>"
             }
         },
         "com.amazonaws.elasticloadbalancingv2#SetSecurityGroupsInput": {
@@ -5581,6 +5607,12 @@
                         "smithy.api#documentation": "<p>The IDs of the security groups.</p>",
                         "smithy.api#required": {}
                     }
+                },
+                "EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic": {
+                    "target": "com.amazonaws.elasticloadbalancingv2#EnforceSecurityGroupInboundRulesOnPrivateLinkTrafficEnum",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates whether to evaluate inbound security group rules for traffic sent to a \n      Network Load Balancer through Amazon Web Services PrivateLink. The default is <code>on</code>.</p>"
+                    }
                 }
             },
             "traits": {
@@ -5594,6 +5626,12 @@
                     "target": "com.amazonaws.elasticloadbalancingv2#SecurityGroups",
                     "traits": {
                         "smithy.api#documentation": "<p>The IDs of the security groups associated with the load balancer.</p>"
+                    }
+                },
+                "EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic": {
+                    "target": "com.amazonaws.elasticloadbalancingv2#EnforceSecurityGroupInboundRulesOnPrivateLinkTrafficEnum",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates whether to evaluate inbound security group rules for traffic sent to a \n      Network Load Balancer through Amazon Web Services PrivateLink.</p>"
                     }
                 }
             },
@@ -5658,7 +5696,7 @@
                 "IpAddressType": {
                     "target": "com.amazonaws.elasticloadbalancingv2#IpAddressType",
                     "traits": {
-                        "smithy.api#documentation": "<p>[Network Load Balancers] The type of IP addresses used by the subnets for your load\n      balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and\n        <code>dualstack</code> (for IPv4 and IPv6 addresses). You can’t specify\n        <code>dualstack</code> for a load balancer with a UDP or TCP_UDP listener.\n      .</p>"
+                        "smithy.api#documentation": "<p>[Network Load Balancers] The type of IP addresses used by the subnets for your load\n      balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and\n        <code>dualstack</code> (for IPv4 and IPv6 addresses). You can’t specify\n        <code>dualstack</code> for a load balancer with a UDP or TCP_UDP listener.</p>"
                     }
                 }
             },
@@ -5926,7 +5964,7 @@
                 "Port": {
                     "target": "com.amazonaws.elasticloadbalancingv2#Port",
                     "traits": {
-                        "smithy.api#documentation": "<p>The port on which the target is listening. If the target group protocol is GENEVE, the\n      supported port is 6081. If the target type is <code>alb</code>, the targeted Application Load\n      Balancer must have at least one listener whose port matches the target group port. Not used if\n      the target is a Lambda function.</p>"
+                        "smithy.api#documentation": "<p>The port on which the target is listening. If the target group protocol is GENEVE, the\n      supported port is 6081. If the target type is <code>alb</code>, the targeted Application Load\n      Balancer must have at least one listener whose port matches the target group port. This \n      parameter is not used if the target is a Lambda function.</p>"
                     }
                 },
                 "AvailabilityZone": {
@@ -5970,7 +6008,7 @@
                 "Port": {
                     "target": "com.amazonaws.elasticloadbalancingv2#Port",
                     "traits": {
-                        "smithy.api#documentation": "<p>The port on which the targets are listening. Not used if the target is a Lambda\n      function.</p>"
+                        "smithy.api#documentation": "<p>The port on which the targets are listening. This parameter is not used if the target is \n      a Lambda function.</p>"
                     }
                 },
                 "VpcId": {
@@ -6036,7 +6074,7 @@
                 "LoadBalancerArns": {
                     "target": "com.amazonaws.elasticloadbalancingv2#LoadBalancerArns",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Names (ARN) of the load balancers that route traffic to this target\n      group.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the load balancer that routes traffic to this target\n      group. You can use each target group with only one load balancer.</p>"
                     }
                 },
                 "TargetType": {
