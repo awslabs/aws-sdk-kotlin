@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 plugins {
     kotlin("jvm")
     id("software.amazon.smithy").version("0.5.3")

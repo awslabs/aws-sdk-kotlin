@@ -2,7 +2,8 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-import aws.sdk.kotlin.gradle.kmp.typedProp
+import aws.sdk.kotlin.gradle.dsl.configureLinting
+import aws.sdk.kotlin.gradle.util.typedProp
 import java.net.URL
 import java.time.Duration
 
@@ -13,7 +14,7 @@ buildscript {
         // only need to include it here, imports in subprojects will work automagically
         classpath("aws.sdk.kotlin:build-plugins") {
             version {
-                require("0.1.1")
+                require("0.2.0")
             }
         }
     }
@@ -144,43 +145,10 @@ if (
     }
 }
 
-val ktlint: Configuration by configurations.creating {
-    attributes {
-        attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
-    }
-}
-val ktlintVersion: String by project
-dependencies {
-    ktlint("com.pinterest:ktlint:$ktlintVersion")
-}
-
 val lintPaths = listOf(
     "**/*.{kt,kts}",
     "!**/generated-src/**",
     "!**/smithyprojections/**",
 )
 
-tasks.register<JavaExec>("ktlint") {
-    description = "Check Kotlin code style."
-    group = "Verification"
-    classpath = configurations.getByName("ktlint")
-    main = "com.pinterest.ktlint.Main"
-    args = lintPaths
-    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
-}
-
-tasks.register<JavaExec>("ktlintFormat") {
-    description = "Auto fix Kotlin code style violations"
-    group = "formatting"
-    classpath = configurations.getByName("ktlint")
-    main = "com.pinterest.ktlint.Main"
-    args = listOf("-F") + lintPaths
-    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
-}
-
-tasks.register("showRepos") {
-    doLast {
-        println("All repos:")
-        println(repositories.map { it.name })
-    }
-}
+configureLinting(lintPaths)

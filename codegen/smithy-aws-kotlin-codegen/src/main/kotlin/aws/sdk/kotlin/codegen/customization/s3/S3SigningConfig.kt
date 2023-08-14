@@ -29,9 +29,8 @@ class S3SigningConfig : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings) =
         model.expectShape<ServiceShape>(settings.service).isS3
 
-    override fun authSchemes(ctx: ProtocolGenerator.GenerationContext): List<AuthSchemeHandler> {
-        return listOf(S3AuthSchemeHandler())
-    }
+    override fun authSchemes(ctx: ProtocolGenerator.GenerationContext): List<AuthSchemeHandler> =
+        listOf(S3AuthSchemeHandler())
 }
 
 private class S3AuthSchemeHandler : SigV4AuthSchemeHandler() {

@@ -9,9 +9,8 @@ import aws.smithy.kotlin.runtime.awsprotocol.ErrorDetails
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.*
 
-internal fun parseRestXmlInvalidChangeBatchResponse(payload: ByteArray): InvalidChangeBatchErrorResponse? {
-    return deserializeInvalidChangeBatchError(InvalidChangeBatch.Builder(), payload)
-}
+internal fun parseRestXmlInvalidChangeBatchResponse(payload: ByteArray): InvalidChangeBatchErrorResponse? =
+    deserializeInvalidChangeBatchError(InvalidChangeBatch.Builder(), payload)
 
 internal fun deserializeInvalidChangeBatchError(builder: InvalidChangeBatch.Builder, payload: ByteArray): InvalidChangeBatchErrorResponse? {
     val deserializer = XmlDeserializer(payload)
