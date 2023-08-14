@@ -2,43 +2,25 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import aws.sdk.kotlin.gradle.kmp.*
 
 description = "AWS client runtime support for generated service clients"
 
 plugins {
-    kotlin("multiplatform")
     id("org.jetbrains.dokka")
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.12.1"
     jacoco
 }
 
-val platforms = listOf("common", "jvm")
-
-// Allow subprojects to use internal API's
-// See: https://kotlinlang.org/docs/reference/opt-in-requirements.html#opting-in-to-using-api
-val optinAnnotations = listOf(
-    "kotlin.RequiresOptIn",
-)
-
-fun projectNeedsPlatform(project: Project, platform: String): Boolean {
-    val files = project.projectDir.listFiles()
-    val hasPosix = files.any { it.name == "posix" }
-    val hasDarwin = files.any { it.name == "darwin" }
-
-    if (hasPosix && platform == "darwin") return false
-    if (hasDarwin && platform == "posix") return false
-    if (!hasPosix && !hasDarwin && platform == "darwin") return false
-    // add implicit JVM target if it has a common module
-    return files.any { it.name == platform || (it.name == "common" && platform == "jvm") }
-}
-
-kotlin {
-    jvm() // Create a JVM target with the default name 'jvm'
-}
-
 val sdkVersion: String by project
 
+val coroutinesVersion: String by project
+val kotestVersion: String by project
+val slf4jVersion: String by project
+
 subprojects {
+    if (!needsKmpConfigured) return@subprojects
+
     group = "aws.sdk.kotlin"
     version = sdkVersion
 
@@ -47,39 +29,41 @@ subprojects {
         plugin("org.jetbrains.dokka")
     }
 
-    logger.info("configuring: $project")
-
-    // this works by iterating over each platform name and inspecting the projects files. If the project contains
-    // a directory with the corresponding platform name we apply the common configuration settings for that platform
-    // (which includes adding the multiplatform target(s)). This makes adding platform support easy and implicit in each
-    // subproject.
-    platforms.forEach { platform ->
-        if (projectNeedsPlatform(project, platform)) {
-            configure(listOf(project)) {
-                logger.info("${project.name} needs platform: $platform")
-                apply(from = rootProject.file("gradle/$platform.gradle"))
-            }
-        }
-    }
+    apply(from = rootProject.file("gradle/publish.gradle"))
 
     kotlin {
         explicitApi()
 
         sourceSets {
-            all {
-                val srcDir = if (name.endsWith("Main")) "src" else "test"
-                val resourcesPrefix = if (name.endsWith("Test")) "test-" else ""
-                // the name is always the platform followed by a suffix of either "Main" or "Test" (e.g. jvmMain, commonTest, etc)
-                val platform = name.substring(0, name.length - 4)
-                kotlin.srcDir("$platform/$srcDir")
-                resources.srcDir("$platform/${resourcesPrefix}resources")
-                languageSettings.progressiveMode = true
-                optinAnnotations.forEach { languageSettings.optIn(it) }
+            // dependencies available for all subprojects
+            named("commonMain") {
+                dependencies {
+                    // FIXME - refactor to only projects that need this
+                    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                }
+            }
+
+            named("commonTest") {
+                dependencies {
+                    implementation("io.kotest:kotest-assertions-core:$kotestVersion")
+                }
+            }
+
+            named("jvmTest") {
+                dependencies {
+                    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-debug:$coroutinesVersion")
+                    implementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
+                    implementation("org.slf4j:slf4j-simple:$slf4jVersion")
+                }
             }
         }
     }
 
-    apply(from = rootProject.file("gradle/publish.gradle"))
+    kotlin.sourceSets.all {
+        // Allow subprojects to use internal APIs
+        // See https://kotlinlang.org/docs/reference/opt-in-requirements.html#opting-in-to-using-api
+        listOf("kotlin.RequiresOptIn").forEach { languageSettings.optIn(it) }
+    }
 
     dependencies {
         dokkaPlugin(project(":dokka-aws"))
