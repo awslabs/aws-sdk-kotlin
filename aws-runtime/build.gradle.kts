@@ -2,6 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import aws.sdk.kotlin.gradle.dsl.configurePublishing
 import aws.sdk.kotlin.gradle.kmp.*
 
 description = "AWS client runtime support for generated service clients"
@@ -29,7 +30,7 @@ subprojects {
         plugin("org.jetbrains.dokka")
     }
 
-    apply(from = rootProject.file("gradle/publish.gradle"))
+    configurePublishing("aws-sdk-kotlin")
 
     kotlin {
         explicitApi()
