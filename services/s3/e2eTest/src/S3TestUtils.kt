@@ -4,16 +4,9 @@
  */
 package aws.sdk.kotlin.e2etest
 
-import aws.sdk.kotlin.services.s3.S3Client
-import aws.sdk.kotlin.services.s3.createBucket
-import aws.sdk.kotlin.services.s3.deleteBucket
-import aws.sdk.kotlin.services.s3.deleteObject
-import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
-import aws.sdk.kotlin.services.s3.model.ExpirationStatus
-import aws.sdk.kotlin.services.s3.model.LifecycleRule
-import aws.sdk.kotlin.services.s3.model.LifecycleRuleFilter
+import aws.sdk.kotlin.services.s3.*
+import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
-import aws.sdk.kotlin.services.s3.putBucketLifecycleConfiguration
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import kotlinx.coroutines.*
@@ -80,16 +73,15 @@ object S3TestUtils {
             val dispatcher = Dispatchers.Default.limitedParallelism(64)
             val jobs = mutableListOf<Job>()
 
-            // FIXME - this should use the batch `DeleteObjects` request and delete by page rather than individual key
-            //         However the current XML serializer chokes on the BLNS keys used by the presign tests. Update after
-            //         new XML implementation is available
             client.listObjectsV2Paginated { bucket = bucketName }
-                .flatMapConcat { it.contents?.asFlow() ?: flowOf() }
-                .collect { obj ->
+                .mapNotNull { it.contents }
+                .collect { contents ->
                     val job = scope.launch(dispatcher) {
-                        client.deleteObject {
+                        client.deleteObjects {
                             bucket = bucketName
-                            key = obj.key
+                            delete {
+                                objects = contents.mapNotNull(Object::key).map { ObjectIdentifier { key = it } }
+                            }
                         }
                     }
                     jobs.add(job)

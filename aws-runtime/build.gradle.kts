@@ -15,7 +15,6 @@ plugins {
 
 val sdkVersion: String by project
 
-val coroutinesVersion: String by project
 val kotestVersion: String by project
 val slf4jVersion: String by project
 
@@ -37,12 +36,6 @@ subprojects {
 
         sourceSets {
             // dependencies available for all subprojects
-            named("commonMain") {
-                dependencies {
-                    // FIXME - refactor to only projects that need this
-                    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-                }
-            }
 
             named("commonTest") {
                 dependencies {
@@ -52,7 +45,6 @@ subprojects {
 
             named("jvmTest") {
                 dependencies {
-                    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-debug:$coroutinesVersion")
                     implementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
                     implementation("org.slf4j:slf4j-simple:$slf4jVersion")
                 }
