@@ -2,6 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import aws.sdk.kotlin.gradle.dsl.configurePublishing
 import aws.sdk.kotlin.gradle.kmp.*
 import java.time.LocalDateTime
 
@@ -120,5 +121,5 @@ subprojects {
         }
     }
 
-    apply(from = rootProject.file("gradle/publish.gradle"))
+    configurePublishing("aws-sdk-kotlin")
 }

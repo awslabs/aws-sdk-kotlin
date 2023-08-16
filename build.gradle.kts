@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.configureLinting
+import aws.sdk.kotlin.gradle.dsl.configureNexus
 import aws.sdk.kotlin.gradle.util.typedProp
 import java.net.URL
-import java.time.Duration
 
 buildscript {
     dependencies {
@@ -14,7 +14,7 @@ buildscript {
         // only need to include it here, imports in subprojects will work automagically
         classpath("aws.sdk.kotlin:build-plugins") {
             version {
-                require("0.2.0")
+                require("0.2.2")
             }
         }
     }
@@ -23,7 +23,6 @@ buildscript {
 plugins {
     kotlin("jvm") version "1.8.22" apply false
     id("org.jetbrains.dokka")
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
 // configures (KMP) subprojects with our own KMP conventions and some default dependencies
@@ -118,33 +117,10 @@ project.afterEvaluate {
     }
 }
 
-if (
-    project.hasProperty("sonatypeUsername") &&
-    project.hasProperty("sonatypePassword") &&
-    project.hasProperty("publishGroupName")
-) {
-    apply(plugin = "io.github.gradle-nexus.publish-plugin")
+// Publishing
+configureNexus()
 
-    val publishGroupName = project.property("publishGroupName") as String
-    group = publishGroupName
-
-    nexusPublishing {
-        repositories {
-            create("awsNexus") {
-                nexusUrl.set(uri("https://aws.oss.sonatype.org/service/local/"))
-                snapshotRepositoryUrl.set(uri("https://aws.oss.sonatype.org/content/repositories/snapshots/"))
-                username.set(project.property("sonatypeUsername") as String)
-                password.set(project.property("sonatypePassword") as String)
-            }
-        }
-
-        transitionCheckOptions {
-            maxRetries.set(180)
-            delayBetween.set(Duration.ofSeconds(10))
-        }
-    }
-}
-
+// Code Style
 val lintPaths = listOf(
     "**/*.{kt,kts}",
     "!**/generated-src/**",

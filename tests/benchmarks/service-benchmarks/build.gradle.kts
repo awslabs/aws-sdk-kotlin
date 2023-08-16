@@ -2,6 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import aws.sdk.kotlin.gradle.dsl.skipPublishing
 buildscript {
     repositories {
         mavenCentral()
@@ -23,7 +24,7 @@ application {
     mainClass.set("aws.sdk.kotlin.benchmarks.service.BenchmarkHarnessKt")
 }
 
-extra.set("skipPublish", true)
+skipPublishing()
 
 val requiredServices = setOf(
     // Top 7 services called by Kotlin SDK customers as of 7/25/2023, in descending order of call volume
