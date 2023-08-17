@@ -62,6 +62,9 @@ kotlin {
 
                 // atomics
                 implementation("org.jetbrains.kotlinx:atomicfu:$atomicFuVersion")
+
+                // coroutines
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
             }
         }
         commonTest {
