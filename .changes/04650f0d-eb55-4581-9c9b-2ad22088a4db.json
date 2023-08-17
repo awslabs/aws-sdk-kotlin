@@ -1,5 +1,0 @@
-{
-    "id": "04650f0d-eb55-4581-9c9b-2ad22088a4db",
-    "type": "misc",
-    "description": "Sync AWS models and bump smithy-kotlin version"
-}

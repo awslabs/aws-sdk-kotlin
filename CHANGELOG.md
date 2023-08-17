@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.30.1-beta] - 08/17/2023
+
+### Miscellaneous
+* Sync AWS models and bump smithy-kotlin version
+
 ## [0.30.0-beta] - 08/11/2023
 
 ### Features
