@@ -111,12 +111,14 @@ class EventStreamParserGenerator(
             .write("")
 
         if (ctx.protocol.isRpcBoundProtocol && output.initialResponseMembers.isNotEmpty()) {
-            writer.addImport(listOf(
-                RuntimeTypes.KotlinxCoroutines.Flow.take,
-                RuntimeTypes.KotlinxCoroutines.Flow.drop,
-                RuntimeTypes.KotlinxCoroutines.Flow.merge,
-                RuntimeTypes.KotlinxCoroutines.Flow.flowOf
-            ))
+            writer.addImport(
+                listOf(
+                    RuntimeTypes.KotlinxCoroutines.Flow.take,
+                    RuntimeTypes.KotlinxCoroutines.Flow.drop,
+                    RuntimeTypes.KotlinxCoroutines.Flow.merge,
+                    RuntimeTypes.KotlinxCoroutines.Flow.flowOf,
+                ),
+            )
             writer.withBlock("events.take(1).collect {", "}") {
                 writer.openBlock("if (it != #T.SdkUnknown) {", streamSymbol)
                     // replace the message we just pulled off, because it's not an initial-response

@@ -27,7 +27,7 @@ data class EventStreamTest(
 
 val tests = listOf(
     EventStreamTest("restJson1", "restJson1"),
-    EventStreamTest("awsJson11", "awsJson1_1", file("event-stream-initial-request-response.smithy"))
+    EventStreamTest("awsJson11", "awsJson1_1", file("event-stream-initial-request-response.smithy")),
 )
 
 fun fillInModel(output: File, protocolName: String, template: File?) {

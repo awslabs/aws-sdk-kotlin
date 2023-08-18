@@ -8,8 +8,6 @@ import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStreamOperationWithIn
 import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStreamOperationWithInitialRequestResponseResponse
 import aws.sdk.kotlin.test.eventstream.awsjson11.transform.deserializeTestStreamOperationWithInitialRequestResponseOperationBody
 import aws.sdk.kotlin.test.eventstream.awsjson11.transform.serializeTestStreamOperationWithInitialRequestResponseOperationBody
-import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStream as AwsJson11TestStream
-import aws.sdk.kotlin.test.eventstream.awsjson11.model.MessageWithString as AwsJson11MessageWithString
 import aws.sdk.kotlin.test.eventstream.restjson1.model.*
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.deserializeTestStreamOpOperationBody
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.serializeTestStreamOpOperationBody
@@ -27,7 +25,6 @@ import aws.smithy.kotlin.runtime.smithy.test.assertJsonStringsEqual
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
@@ -39,6 +36,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.milliseconds
+import aws.sdk.kotlin.test.eventstream.awsjson11.model.MessageWithString as AwsJson11MessageWithString
+import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStream as AwsJson11TestStream
 
 /**
  * Integration test suite that checks the generated event stream serialization and deserialization codegen
@@ -302,7 +301,7 @@ class EventStreamTests {
     fun testInitialRequest() = runTest {
         val eventStreamData = "Hello, this is the event stream"
         val event = AwsJson11TestStream.MessageWithString(
-            AwsJson11MessageWithString { data = eventStreamData }
+            AwsJson11MessageWithString { data = eventStreamData },
         )
         val initialRequestData = "This is the user's initial request!"
 
