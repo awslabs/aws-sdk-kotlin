@@ -2,6 +2,6 @@
   "name": "web identity profile no env",
   "docs": "web identity is configured in environment but profile should take precedence. Profile has incomplete configuration though and should result in an error. Web identity should not be tried",
   "result": {
-    "ErrorContains": "provider was not enabled"
+    "ErrorContains": "No identity could be resolved from the chain"
   }
 }

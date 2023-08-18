@@ -223,11 +223,8 @@ class DefaultChainCredentialsProviderTest {
     @Test
     fun testProfileName() = executeTest("profile_name")
 
-    // FIXME - need to discuss desired behavior. This tests precedence and assumes that if a provider
-    // is configured that any errors should surface and no further providers tried. Not all SDKs do this
-    // though (e.g. Java keeps trying until all providers are exhausted).
-    // @Test
-    // fun testProfileOverridesWebIdentity() = executeTest("profile_overrides_web_identity")
+    @Test
+    fun testProfileOverridesWebIdentity() = executeTest("profile_overrides_web_identity")
 
     @Test
     fun testProfileStaticKeys() = executeTest("profile_static_keys")
