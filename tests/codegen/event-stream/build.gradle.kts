@@ -27,17 +27,20 @@ data class EventStreamTest(
 
 val tests = listOf(
     EventStreamTest("restJson1", "restJson1"),
+    EventStreamTest("awsJson11", "awsJson1_1", file("event-stream-initial-request-response.smithy"))
 )
 
-fun fillInModel(output: File, protocolName: String) {
-    val template = file("event-stream-model-template.smithy")
+fun fillInModel(output: File, protocolName: String, template: File?) {
+    val template = template ?: file("event-stream-model-template.smithy")
     val input = template.readText()
     val opTraits = when (protocolName) {
         "restJson1", "restXml" -> """@http(method: "POST", uri: "/test-eventstream", code: 200)"""
         else -> ""
     }
-    val replaced = input.replace("{protocol-name}", protocolName)
+    val replaced = input
+        .replace("{protocol-name}", protocolName)
         .replace("{op-traits}", opTraits)
+
     output.parentFile.mkdirs()
     output.writeText(replaced)
 }
@@ -78,7 +81,7 @@ codegen {
 
 tasks.named("generateSmithyBuildConfig") {
     doFirst {
-        tests.forEach { test -> fillInModel(test.model, test.protocolName) }
+        tests.forEach { test -> fillInModel(test.model, test.protocolName, test.modelTemplate) }
     }
 }
 

@@ -4,6 +4,12 @@
  */
 
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
+import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStreamOperationWithInitialRequestResponseRequest
+import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStreamOperationWithInitialRequestResponseResponse
+import aws.sdk.kotlin.test.eventstream.awsjson11.transform.deserializeTestStreamOperationWithInitialRequestResponseOperationBody
+import aws.sdk.kotlin.test.eventstream.awsjson11.transform.serializeTestStreamOperationWithInitialRequestResponseOperationBody
+import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStream as AwsJson11TestStream
+import aws.sdk.kotlin.test.eventstream.awsjson11.model.MessageWithString as AwsJson11MessageWithString
 import aws.sdk.kotlin.test.eventstream.restjson1.model.*
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.deserializeTestStreamOpOperationBody
 import aws.sdk.kotlin.test.eventstream.restjson1.transform.serializeTestStreamOpOperationBody
@@ -21,6 +27,7 @@ import aws.smithy.kotlin.runtime.smithy.test.assertJsonStringsEqual
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
@@ -30,6 +37,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -269,5 +277,138 @@ class EventStreamTests {
         val deserialized = deserializedEvent(message)
         assertIs<TestStream.MessageWithUnboundPayloadTraits>(deserialized)
         assertEquals(event, deserialized)
+    }
+
+    fun getTestContext(): ExecutionContext {
+        val testContext = ExecutionContext.build {
+            attributes[AwsSigningAttributes.SigningRegion] = "us-east-2"
+            attributes[AwsSigningAttributes.SigningService] = "test"
+            attributes[AwsSigningAttributes.CredentialsProvider] = StaticCredentialsProvider(
+                Credentials("fake-access-key", "fake-secret-key"),
+            )
+            attributes[AwsSigningAttributes.Signer] = DefaultAwsSigner
+        }
+
+        testContext.launch {
+            // complete the request signature (giving enough time to setup the deferred)
+            delay(200.milliseconds)
+            testContext[AwsSigningAttributes.RequestSignature].complete(HashSpecification.EmptyBody.hash.encodeToByteArray())
+        }
+
+        return testContext
+    }
+
+    @Test
+    fun testInitialRequest() = runTest {
+        val eventStreamData = "Hello, this is the event stream"
+        val event = AwsJson11TestStream.MessageWithString(
+            AwsJson11MessageWithString { data = eventStreamData }
+        )
+        val initialRequestData = "This is the user's initial request!"
+
+        val messages = serializedMessages(event, initialRequestData)
+
+        // validate initial-request message
+        val initialMessage = messages[0]
+        assertEquals("initial-request", initialMessage.headers.single { it.name == ":event-type" }.value.toString())
+        assertEquals("{\"initial\": \"$initialRequestData\"}", initialMessage.payload.decodeToString())
+
+        // validate the event stream
+        val eventStreamMessage = messages[1]
+        assertEquals("MessageWithString", initialMessage.headers.single { it.name == ":event-type" }.value.toString())
+        assertEquals(eventStreamData, eventStreamMessage.payload.decodeToString())
+    }
+
+    /**
+     * Test handling a service response containing an initial-response event
+     */
+    @Test
+    fun testInitialResponse() = runTest {
+        val initialResponseData = "This is the service's initial response!"
+
+        val initialResponseMessage = buildMessage {
+            payload = "{\"initial\": \"$initialResponseData\"}".encodeToByteArray()
+            addHeader(":message-type", HeaderValue.String("event"))
+            addHeader(":event-type", HeaderValue.String("initial-response"))
+            addHeader(":content-type", HeaderValue.String("application/json"))
+        }
+
+        val eventStreamData = "Hello, this is the event stream"
+        val eventStreamResponse = buildMessage {
+            payload = eventStreamData.encodeToByteArray()
+            addHeader(":message-type", HeaderValue.String("event"))
+            addHeader(":event-type", HeaderValue.String("MessageWithString"))
+            addHeader(":content-type", HeaderValue.String("application/json"))
+        }
+
+        val responseBody = flowOf(initialResponseMessage, eventStreamResponse)
+            .encode()
+            .asEventStreamHttpBody(getTestContext())
+
+        val builder = TestStreamOperationWithInitialRequestResponseResponse.Builder()
+        deserializeTestStreamOperationWithInitialRequestResponseOperationBody(builder, responseBody)
+
+        assertEquals(builder.initial, initialResponseData)
+        val event = builder.value?.single() // this throws an exception if there's not exactly 1 event
+        assertEquals(eventStreamData, event?.asMessageWithString()?.data)
+    }
+
+    /**
+     * Test handling a service response where the initial-response is not present
+     * (because it's optional, it may not get returned every time)
+     */
+    @Test
+    fun testInitialResponseNotPresent() = runTest {
+        val eventStreamData = "Hello, this is the event stream"
+        val eventStreamResponse = buildMessage {
+            payload = eventStreamData.encodeToByteArray()
+            addHeader(":message-type", HeaderValue.String("event"))
+            addHeader(":event-type", HeaderValue.String("MessageWithString"))
+            addHeader(":content-type", HeaderValue.String("application/json"))
+        }
+
+        val responseBody = flowOf(eventStreamResponse)
+            .encode()
+            .asEventStreamHttpBody(getTestContext())
+
+        val builder = TestStreamOperationWithInitialRequestResponseResponse.Builder()
+        deserializeTestStreamOperationWithInitialRequestResponseOperationBody(builder, responseBody)
+
+        assertNull(builder.initial)
+        val event = builder.value?.single()
+        assertEquals(eventStreamData, event?.asMessageWithString()?.data)
+    }
+
+    private suspend fun serializedMessages(event: AwsJson11TestStream, initialRequestData: String? = null): List<Message> {
+        val req = TestStreamOperationWithInitialRequestResponseRequest {
+            initial = initialRequestData
+            value = flowOf(event)
+        }
+
+        val testContext = ExecutionContext.build {
+            attributes[AwsSigningAttributes.SigningRegion] = "us-east-2"
+            attributes[AwsSigningAttributes.SigningService] = "test"
+            attributes[AwsSigningAttributes.CredentialsProvider] = StaticCredentialsProvider(
+                Credentials("fake-access-key", "fake-secret-key"),
+            )
+            attributes[AwsSigningAttributes.Signer] = DefaultAwsSigner
+        }
+
+        testContext.launch {
+            // complete the request signature (giving enough time to setup the deferred)
+            delay(200.milliseconds)
+            testContext[AwsSigningAttributes.RequestSignature].complete(HashSpecification.EmptyBody.hash.encodeToByteArray())
+        }
+
+        val body = serializeTestStreamOperationWithInitialRequestResponseOperationBody(testContext, req)
+        assertIs<HttpBody.ChannelContent>(body)
+
+        // should be an optional initial-request, the event stream, and the empty end frame
+        val frames = decodeFrames(body.readFrom()).toList()
+        val expectedFramesSize = initialRequestData?.let { 3 } ?: 2
+
+        assertEquals(expectedFramesSize, frames.size)
+
+        return frames
     }
 }
