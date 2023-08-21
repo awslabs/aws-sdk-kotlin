@@ -31,10 +31,7 @@ import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
-import kotlin.test.assertNull
+import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 import aws.sdk.kotlin.test.eventstream.awsjson11.model.MessageWithString as AwsJson11MessageWithString
 import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStream as AwsJson11TestStream
@@ -308,13 +305,20 @@ class EventStreamTests {
         val messages = serializedMessages(event, initialRequestData)
 
         // validate initial-request message
-        val initialMessage = messages[0]
-        assertEquals("initial-request", initialMessage.headers.single { it.name == ":event-type" }.value.toString())
-        assertEquals("{\"initial\": \"$initialRequestData\"}", initialMessage.payload.decodeToString())
+        val buffer = SdkBuffer().also { it.write(messages[0].payload) }
+        val initialMessage = Message.decode(buffer)
+        val initialMessageHeaders = initialMessage.headers.associate { it.name to it.value }
+        assertEquals("event", initialMessageHeaders[":message-type"]?.expectString())
+        assertEquals("initial-request", initialMessageHeaders[":event-type"]?.expectString())
+        assertEquals("""{"initial":"$initialRequestData"}""", initialMessage.payload.decodeToString())
 
         // validate the event stream
-        val eventStreamMessage = messages[1]
-        assertEquals("MessageWithString", initialMessage.headers.single { it.name == ":event-type" }.value.toString())
+        buffer.write(messages[1].payload)
+        val eventStreamMessage = Message.decode(buffer)
+        val eventStreamMessageHeaders = eventStreamMessage.headers.associate { it.name to it.value }
+        assertEquals("event", eventStreamMessageHeaders[":message-type"]?.expectString())
+        assertEquals("MessageWithString", eventStreamMessageHeaders[":event-type"]?.expectString())
+        assertEquals("text/plain", eventStreamMessageHeaders[":content-type"]?.expectString())
         assertEquals(eventStreamData, eventStreamMessage.payload.decodeToString())
     }
 
@@ -326,7 +330,7 @@ class EventStreamTests {
         val initialResponseData = "This is the service's initial response!"
 
         val initialResponseMessage = buildMessage {
-            payload = "{\"initial\": \"$initialResponseData\"}".encodeToByteArray()
+            payload = """{"initial": "$initialResponseData"}""".encodeToByteArray()
             addHeader(":message-type", HeaderValue.String("event"))
             addHeader(":event-type", HeaderValue.String("initial-response"))
             addHeader(":content-type", HeaderValue.String("application/json"))
@@ -400,6 +404,8 @@ class EventStreamTests {
         }
 
         val body = serializeTestStreamOperationWithInitialRequestResponseOperationBody(testContext, req)
+        // the frames are now signed and serialized
+
         assertIs<HttpBody.ChannelContent>(body)
 
         // should be an optional initial-request, the event stream, and the empty end frame
