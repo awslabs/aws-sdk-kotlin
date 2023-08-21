@@ -40,7 +40,7 @@ import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStream as AwsJson11Te
  * Integration test suite that checks the generated event stream serialization and deserialization codegen
  * works as expected.
  */
-@OptIn(ExperimentalCoroutinesApi::class, InternalApi::class)
+@OptIn(InternalApi::class)
 class EventStreamTests {
     private suspend fun serializedMessage(event: TestStream): Message {
         val req = TestStreamOpRequest {
@@ -275,25 +275,6 @@ class EventStreamTests {
         assertEquals(event, deserialized)
     }
 
-    fun getTestContext(): ExecutionContext {
-        val testContext = ExecutionContext.build {
-            attributes[AwsSigningAttributes.SigningRegion] = "us-east-2"
-            attributes[AwsSigningAttributes.SigningService] = "test"
-            attributes[AwsSigningAttributes.CredentialsProvider] = StaticCredentialsProvider(
-                Credentials("fake-access-key", "fake-secret-key"),
-            )
-            attributes[AwsSigningAttributes.Signer] = DefaultAwsSigner
-        }
-
-        testContext.launch {
-            // complete the request signature (giving enough time to setup the deferred)
-            delay(200.milliseconds)
-            testContext[AwsSigningAttributes.RequestSignature].complete(HashSpecification.EmptyBody.hash.encodeToByteArray())
-        }
-
-        return testContext
-    }
-
     @Test
     fun testInitialRequest() = runTest {
         val eventStreamData = "Hello, this is the event stream"
@@ -346,7 +327,7 @@ class EventStreamTests {
 
         val responseBody = flowOf(initialResponseMessage, eventStreamResponse)
             .encode()
-            .asEventStreamHttpBody(getTestContext())
+            .asEventStreamHttpBody(this)
 
         val builder = TestStreamOperationWithInitialRequestResponseResponse.Builder()
         deserializeTestStreamOperationWithInitialRequestResponseOperationBody(builder, responseBody)
@@ -372,7 +353,7 @@ class EventStreamTests {
 
         val responseBody = flowOf(eventStreamResponse)
             .encode()
-            .asEventStreamHttpBody(getTestContext())
+            .asEventStreamHttpBody(this)
 
         val builder = TestStreamOperationWithInitialRequestResponseResponse.Builder()
         deserializeTestStreamOperationWithInitialRequestResponseOperationBody(builder, responseBody)
