@@ -207,7 +207,7 @@ class EventStreamParserGenerator(
             writer.write("val initialResponse = #T(message.payload)", initialResponseDeserializeFn)
             writer.withBlock("builder.apply {", "}") {
                 outputShape.initialResponseMembers.forEach { member ->
-                    writer.write("#L = initialResponse.#L", member.defaultName(), member.defaultName())
+                    writer.write("#1L = initialResponse.#1L", member.defaultName())
                 }
             }
         }
