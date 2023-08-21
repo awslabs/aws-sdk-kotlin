@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.test.eventstream.awsjson11.model.MessageWithString
 import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStream
@@ -26,7 +30,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.milliseconds
-
 
 /**
  * Integration test suite that checks the codegen for `initial-request` message serialization and
