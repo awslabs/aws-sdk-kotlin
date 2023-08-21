@@ -81,7 +81,7 @@ class EventStreamSerializerGenerator(
 
         writer.write("")
         val initialRequestMembers = input.initialRequestMembers(ctx)
-        if (initialRequestMembers.isNotEmpty()) {
+        if (ctx.protocol.isRpcBoundProtocol && initialRequestMembers.isNotEmpty()) {
             val serializerFn = sdg.payloadSerializer(ctx, input, initialRequestMembers)
 
             writer.withBlock("val initialRequest = buildMessage {", "}") {
@@ -223,4 +223,15 @@ class EventStreamSerializerGenerator(
         val targetShape = ctx.model.getShape(it.target).getOrNull()
         targetShape?.hasTrait<StreamingTrait>() == false
     }
+
+    private val ShapeId.isRpcBoundProtocol: Boolean
+        get() = run {
+            val rpcBoundProtocols = setOf(
+                "awsJson1_0",
+                "awsJson1_1",
+                "awsQuery",
+                "ec2Query",
+            )
+            return rpcBoundProtocols.contains(name)
+        }
 }
