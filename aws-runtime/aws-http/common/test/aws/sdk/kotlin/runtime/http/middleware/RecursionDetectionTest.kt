@@ -41,10 +41,8 @@ class RecursionDetectionTest {
         val op = SdkHttpOperation.build<Unit, HttpResponse> {
             serializer = if (existingTraceHeader != null) TraceHeaderSerializer(existingTraceHeader) else UnitSerializer
             deserializer = IdentityDeserializer
-            context {
-                operationName = "testOperation"
-                serviceName = "TestService"
-            }
+            operationName = "testOperation"
+            serviceName = "TestService"
         }
 
         val provider = TestPlatformProvider(env)
