@@ -223,15 +223,4 @@ class EventStreamSerializerGenerator(
         val targetShape = ctx.model.getShape(it.target).getOrNull()
         targetShape?.hasTrait<StreamingTrait>() == false
     }
-
-    private val ShapeId.isRpcBoundProtocol: Boolean
-        get() = run {
-            val rpcBoundProtocols = setOf(
-                "awsJson1_0",
-                "awsJson1_1",
-                "awsQuery",
-                "ec2Query",
-            )
-            return rpcBoundProtocols.contains(name)
-        }
 }

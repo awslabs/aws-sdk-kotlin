@@ -22,6 +22,22 @@ import software.amazon.smithy.model.traits.EventPayloadTrait
 import software.amazon.smithy.model.traits.StreamingTrait
 
 /**
+  * A set of RPC-bound Smithy protocols
+  */
+val RPC_BOUND_PROTOCOLS = setOf(
+    "awsJson1_0",
+    "awsJson1_1",
+    "awsQuery",
+    "ec2Query",
+)
+
+/**
+ * Represents whether the given ShapeId represents an RPC-bound Smithy protocol
+ */
+internal val ShapeId.isRpcBoundProtocol: Boolean
+    get() = RPC_BOUND_PROTOCOLS.contains(name)
+
+/**
  * Implements rendering deserialize implementation for event streams implemented using the
  * `vnd.amazon.event-stream` content-type
  *
@@ -234,15 +250,4 @@ class EventStreamParserGenerator(
             else -> throw CodegenException("unsupported shape type `${target.type}` for target: $target; expected blob, string, structure, or union for eventPayload member: $member")
         }
     }
-
-    private val ShapeId.isRpcBoundProtocol: Boolean
-        get() = run {
-            val rpcBoundProtocols = setOf(
-                "awsJson1_0",
-                "awsJson1_1",
-                "awsQuery",
-                "ec2Query",
-            )
-            return rpcBoundProtocols.contains(name)
-        }
 }
