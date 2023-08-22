@@ -90,7 +90,14 @@ class EventStreamSerializerGenerator(
                 writer.write("payload = #T(input)", serializerFn)
             }
 
-            writer.withBlock("val messages = #T(#T(initialRequest), stream.#T(::#T))", "", RuntimeTypes.KotlinxCoroutines.Flow.merge, RuntimeTypes.KotlinxCoroutines.Flow.flowOf, RuntimeTypes.KotlinxCoroutines.Flow.map, encodeFn) {
+            writer.withBlock(
+                "val messages = #T(#T(initialRequest), stream.#T(::#T))",
+                "",
+                RuntimeTypes.KotlinxCoroutines.Flow.merge,
+                RuntimeTypes.KotlinxCoroutines.Flow.flowOf,
+                RuntimeTypes.KotlinxCoroutines.Flow.map,
+                encodeFn,
+            ) {
                 write(".#T(context)", RuntimeTypes.AwsEventStream.sign)
                 write(".#T()", RuntimeTypes.AwsEventStream.encode)
             }

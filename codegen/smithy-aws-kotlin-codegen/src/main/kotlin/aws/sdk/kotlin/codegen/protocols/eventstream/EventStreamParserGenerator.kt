@@ -22,8 +22,8 @@ import software.amazon.smithy.model.traits.EventPayloadTrait
 import software.amazon.smithy.model.traits.StreamingTrait
 
 /**
-  * A set of RPC-bound Smithy protocols
-  */
+ * A set of RPC-bound Smithy protocols
+ */
 val RPC_BOUND_PROTOCOLS = setOf(
     "awsJson1_0",
     "awsJson1_1",
