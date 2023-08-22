@@ -66,21 +66,19 @@ class EventStreamParserGenerator(
         val baseExceptionSymbol = ExceptionBaseClassGenerator.baseExceptionSymbol(ctx.settings)
 
         writer.write("val chan = body.#T() ?: return", RuntimeTypes.Http.toSdkByteReadChannel)
-        writer.write("val events = #T(chan)", RuntimeTypes.AwsEventStream.decodeFrames)
-            .indent()
+        writer.write("val frames = #T(chan)", RuntimeTypes.AwsEventStream.decodeFrames)
+        if (ctx.protocol.isRpcBoundProtocol && output.initialResponseMembers.isNotEmpty()) {
+            renderDeserializeInitialResponse(ctx, output, writer)
+        } else {
+            writer.write("val events = frames")
+        }
+        writer.indent()
             .withBlock(".#T { message ->", "}", RuntimeTypes.KotlinxCoroutines.Flow.map) {
                 withBlock("when (val mt = message.#T()) {", "}", RuntimeTypes.AwsEventStream.MessageTypeExt) {
                     withBlock("is #T.Event -> when (mt.shapeType) {", "}", messageTypeSymbol) {
                         streamShape.filterEventStreamErrors(ctx.model).forEach { member ->
                             withBlock("#S -> {", "}", member.memberName) {
                                 renderDeserializeEventVariant(ctx, streamSymbol, member, writer)
-                            }
-                        }
-
-                        if (ctx.protocol.isRpcBoundProtocol && output.initialResponseMembers.isNotEmpty()) {
-                            withBlock("\"initial-response\" -> {", "}") {
-                                renderDeserializeInitialResponse(ctx, output, writer)
-                                write("#T.SdkUnknown", streamSymbol)
                             }
                         }
 
@@ -110,26 +108,7 @@ class EventStreamParserGenerator(
             .dedent()
             .write("")
 
-        if (ctx.protocol.isRpcBoundProtocol && output.initialResponseMembers.isNotEmpty()) {
-            writer.addImport(
-                listOf(
-                    RuntimeTypes.KotlinxCoroutines.Flow.take,
-                    RuntimeTypes.KotlinxCoroutines.Flow.drop,
-                    RuntimeTypes.KotlinxCoroutines.Flow.merge,
-                    RuntimeTypes.KotlinxCoroutines.Flow.flowOf,
-                ),
-            )
-            writer.withBlock("events.take(1).collect {", "}") {
-                writer.openBlock("if (it != #T.SdkUnknown) {", streamSymbol)
-                    // replace the message we just pulled off, because it's not an initial-response
-                    .write("builder.#L = merge(flowOf(it), events)", streamingMember.defaultName())
-                    .closeAndOpenBlock("} else {")
-                    .write("builder.#L = events", streamingMember.defaultName())
-                    .closeBlock("}")
-            }
-        } else {
-            writer.write("builder.#L = events", streamingMember.defaultName())
-        }
+        writer.write("builder.#L = events", streamingMember.defaultName())
     }
 
     private fun renderDeserializeEventVariant(ctx: ProtocolGenerator.GenerationContext, unionSymbol: Symbol, member: MemberShape, writer: KotlinWriter) {
@@ -199,18 +178,34 @@ class EventStreamParserGenerator(
      * Renders deserialization logic for a message with the `initial-response` type.
      */
     private fun renderDeserializeInitialResponse(ctx: ProtocolGenerator.GenerationContext, outputShape: StructureShape, writer: KotlinWriter) {
-        if (outputShape.initialResponseMembers.isNotEmpty()) {
-            // A custom function which only deserializes the initial response members
-            val initialResponseDeserializeFn = sdg.payloadDeserializer(ctx, outputShape, outputShape.initialResponseMembers)
+        // A custom function which only deserializes the initial response members
+        val initialResponseDeserializeFn = sdg.payloadDeserializer(ctx, outputShape, outputShape.initialResponseMembers)
 
+        writer.write(
+            "val firstMessage = frames.#T(1).#T()",
+            RuntimeTypes.KotlinxCoroutines.Flow.take,
+            RuntimeTypes.KotlinxCoroutines.Flow.single
+        )
+        writer.write("val firstMessageType = firstMessage.type()")
+        writer.openBlock(
+            "val events = if (firstMessageType is #T.Event && firstMessageType.shapeType == \"initial-response\") {",
+            RuntimeTypes.AwsEventStream.MessageType
+        )
             // Deserialize into `initialResponse`, then apply it to the actual response builder
-            writer.write("val initialResponse = #T(message.payload)", initialResponseDeserializeFn)
+            writer.write("val initialResponse = #T(firstMessage.payload)", initialResponseDeserializeFn)
             writer.withBlock("builder.apply {", "}") {
                 outputShape.initialResponseMembers.forEach { member ->
                     writer.write("#1L = initialResponse.#1L", member.defaultName())
                 }
             }
-        }
+            .write("frames")
+        .closeAndOpenBlock("} else {")
+            .write(
+                "#T(#T(firstMessage), frames)",
+                RuntimeTypes.KotlinxCoroutines.Flow.merge,
+                RuntimeTypes.KotlinxCoroutines.Flow.flowOf
+            )
+        .closeBlock("}")
     }
 
     /**
