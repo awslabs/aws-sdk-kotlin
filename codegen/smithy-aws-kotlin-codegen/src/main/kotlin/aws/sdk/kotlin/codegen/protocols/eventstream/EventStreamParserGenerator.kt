@@ -83,7 +83,7 @@ class EventStreamParserGenerator(
 
         writer.write("val chan = body.#T() ?: return", RuntimeTypes.Http.toSdkByteReadChannel)
         writer.write("val frames = #T(chan)", RuntimeTypes.AwsEventStream.decodeFrames)
-        if (ctx.protocol.isRpcBoundProtocol && output.initialResponseMembers.isNotEmpty()) {
+        if (ctx.protocol.isRpcBoundProtocol) {
             renderDeserializeInitialResponse(ctx, output, writer)
         } else {
             writer.write("val events = frames")
