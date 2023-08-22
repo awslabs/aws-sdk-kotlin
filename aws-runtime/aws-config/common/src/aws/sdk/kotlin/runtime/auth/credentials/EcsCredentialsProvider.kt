@@ -83,10 +83,8 @@ public class EcsCredentialsProvider internal constructor(
         val op = SdkHttpOperation.build<Unit, Credentials> {
             serializer = EcsCredentialsSerializer(authToken)
             deserializer = EcsCredentialsDeserializer()
-            context {
-                operationName = "EcsCredentialsProvider"
-                serviceName = "EcsContainerMetadata"
-            }
+            operationName = "EcsCredentialsProvider"
+            serviceName = "EcsContainerMetadata"
             execution.endpointResolver = EndpointResolver { Endpoint(url) }
         }
 

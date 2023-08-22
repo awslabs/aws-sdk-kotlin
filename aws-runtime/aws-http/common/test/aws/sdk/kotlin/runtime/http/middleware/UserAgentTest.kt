@@ -31,10 +31,8 @@ class UserAgentTest {
         SdkHttpOperation.build<Unit, HttpResponse> {
             serializer = UnitSerializer
             deserializer = IdentityDeserializer
-            context {
-                operationName = "testOperation"
-                serviceName = "TestService"
-            }
+            operationName = "testOperation"
+            serviceName = "TestService"
         }.apply {
             val apiMd = ApiMetadata("Test Service", "1.2.3")
             val metadata = loadAwsUserAgentMetadataFromEnvironment(platformProvider, apiMd)
