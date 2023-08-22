@@ -184,28 +184,28 @@ class EventStreamParserGenerator(
         writer.write(
             "val firstMessage = frames.#T(1).#T()",
             RuntimeTypes.KotlinxCoroutines.Flow.take,
-            RuntimeTypes.KotlinxCoroutines.Flow.single
+            RuntimeTypes.KotlinxCoroutines.Flow.single,
         )
         writer.write("val firstMessageType = firstMessage.type()")
         writer.openBlock(
             "val events = if (firstMessageType is #T.Event && firstMessageType.shapeType == \"initial-response\") {",
-            RuntimeTypes.AwsEventStream.MessageType
+            RuntimeTypes.AwsEventStream.MessageType,
         )
-            // Deserialize into `initialResponse`, then apply it to the actual response builder
-            writer.write("val initialResponse = #T(firstMessage.payload)", initialResponseDeserializeFn)
-            writer.withBlock("builder.apply {", "}") {
-                outputShape.initialResponseMembers.forEach { member ->
-                    writer.write("#1L = initialResponse.#1L", member.defaultName())
-                }
+        // Deserialize into `initialResponse`, then apply it to the actual response builder
+        writer.write("val initialResponse = #T(firstMessage.payload)", initialResponseDeserializeFn)
+        writer.withBlock("builder.apply {", "}") {
+            outputShape.initialResponseMembers.forEach { member ->
+                writer.write("#1L = initialResponse.#1L", member.defaultName())
             }
+        }
             .write("frames")
-        .closeAndOpenBlock("} else {")
+            .closeAndOpenBlock("} else {")
             .write(
                 "#T(#T(firstMessage), frames)",
                 RuntimeTypes.KotlinxCoroutines.Flow.merge,
-                RuntimeTypes.KotlinxCoroutines.Flow.flowOf
+                RuntimeTypes.KotlinxCoroutines.Flow.flowOf,
             )
-        .closeBlock("}")
+            .closeBlock("}")
     }
 
     /**
