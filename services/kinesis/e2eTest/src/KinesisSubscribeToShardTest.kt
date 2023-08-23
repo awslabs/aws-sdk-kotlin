@@ -4,18 +4,16 @@
  */
 package aws.sdk.kotlin.services.kinesis
 
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
-import kotlin.test.Test
-import kotlin.test.fail
-import kotlin.test.assertEquals
-import kotlin.time.Duration.Companion.seconds
-import aws.sdk.kotlin.services.kinesis.*
 import aws.sdk.kotlin.services.kinesis.model.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.first
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.fail
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Tests for Kinesis SubscribeToShard (an RPC-bound protocol)
@@ -84,13 +82,15 @@ class KinesisSubscribeToShardTest {
             streamArn = dataStreamArn
         }.shards?.single()!!.shardId
 
-        client.subscribeToShard(SubscribeToShardRequest {
-            consumerArn = dataStreamConsumerArn
-            shardId = dataStreamShardId
-            startingPosition = StartingPosition {
-                type = ShardIteratorType.TrimHorizon
-            }
-        }) {
+        client.subscribeToShard(
+            SubscribeToShardRequest {
+                consumerArn = dataStreamConsumerArn
+                shardId = dataStreamShardId
+                startingPosition = StartingPosition {
+                    type = ShardIteratorType.TrimHorizon
+                }
+            },
+        ) {
             val event = it.eventStream?.first()
             val record = event?.asSubscribeToShardEvent()?.records?.single()
             println("Got ${record?.data?.decodeToString()}")
