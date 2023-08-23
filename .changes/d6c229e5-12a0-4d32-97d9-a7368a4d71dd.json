@@ -1,0 +1,5 @@
+{
+    "id": "d6c229e5-12a0-4d32-97d9-a7368a4d71dd",
+    "type": "feature",
+    "description": "Support initial-request and initial-response for event streams using RPC-based protocols"
+}

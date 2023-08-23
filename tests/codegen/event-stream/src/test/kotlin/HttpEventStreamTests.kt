@@ -20,24 +20,21 @@ import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.smithy.test.assertJsonStringsEqual
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.get
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
+import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Integration test suite that checks the generated event stream serialization and deserialization codegen
- * works as expected.
+ * works as expected for an HTTP-bound service.
  */
-@OptIn(ExperimentalCoroutinesApi::class, InternalApi::class)
-class EventStreamTests {
+@OptIn(InternalApi::class)
+class HttpEventStreamTests {
     private suspend fun serializedMessage(event: TestStream): Message {
         val req = TestStreamOpRequest {
             value = flowOf(event)

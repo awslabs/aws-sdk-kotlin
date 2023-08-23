@@ -12,9 +12,11 @@ import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.serde.*
+import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.EventHeaderTrait
 import software.amazon.smithy.model.traits.EventPayloadTrait
+import software.amazon.smithy.model.traits.StreamingTrait
 
 /**
  * Implements rendering serialize implementation for event streams implemented using the
@@ -76,10 +78,35 @@ class EventStreamSerializerGenerator(
         )
 
         val encodeFn = encodeEventStreamMessage(ctx, op, streamShape)
-        writer.withBlock("val messages = stream", "") {
-            write(".#T(::#T)", RuntimeTypes.KotlinxCoroutines.Flow.map, encodeFn)
-            write(".#T(context)", RuntimeTypes.AwsEventStream.sign)
-            write(".#T()", RuntimeTypes.AwsEventStream.encode)
+
+        writer.write("")
+        val initialRequestMembers = input.initialRequestMembers(ctx)
+        if (ctx.protocol.isRpcBoundProtocol && initialRequestMembers.isNotEmpty()) {
+            val serializerFn = sdg.payloadSerializer(ctx, input, initialRequestMembers)
+
+            writer.withBlock("val initialRequest = buildMessage {", "}") {
+                writer.write("addHeader(\":message-type\", HeaderValue.String(\"event\"))")
+                writer.write("addHeader(\":event-type\", HeaderValue.String(\"initial-request\"))")
+                writer.write("payload = #T(input)", serializerFn)
+            }
+
+            writer.withBlock(
+                "val messages = #T(#T(initialRequest), stream.#T(::#T))",
+                "",
+                RuntimeTypes.KotlinxCoroutines.Flow.merge,
+                RuntimeTypes.KotlinxCoroutines.Flow.flowOf,
+                RuntimeTypes.KotlinxCoroutines.Flow.map,
+                encodeFn,
+            ) {
+                write(".#T(context)", RuntimeTypes.AwsEventStream.sign)
+                write(".#T()", RuntimeTypes.AwsEventStream.encode)
+            }
+        } else {
+            writer.withBlock("val messages = stream", "") {
+                write(".#T(::#T)", RuntimeTypes.KotlinxCoroutines.Flow.map, encodeFn)
+                write(".#T(context)", RuntimeTypes.AwsEventStream.sign)
+                write(".#T()", RuntimeTypes.AwsEventStream.encode)
+            }
         }
 
         writer.write("")
@@ -194,5 +221,13 @@ class EventStreamSerializerGenerator(
 
     private fun KotlinWriter.addStringHeader(name: String, value: String) {
         write("addHeader(#S, #T.String(#S))", name, RuntimeTypes.AwsEventStream.HeaderValue, value)
+    }
+
+    /**
+     * Get all the shape's members which aren't an event stream
+     */
+    private fun StructureShape.initialRequestMembers(ctx: ProtocolGenerator.GenerationContext) = members().filter {
+        val targetShape = ctx.model.getShape(it.target).getOrNull()
+        targetShape?.hasTrait<StreamingTrait>() == false
     }
 }
