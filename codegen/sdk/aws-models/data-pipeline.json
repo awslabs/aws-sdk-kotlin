@@ -79,14 +79,16 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for ActivatePipeline.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for ActivatePipeline.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#ActivatePipelineOutput": {
             "type": "structure",
             "members": {},
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of ActivatePipeline.</p>"
+                "smithy.api#documentation": "<p>Contains the output of ActivatePipeline.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#AddTags": {
@@ -134,14 +136,16 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for AddTags.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for AddTags.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#AddTagsOutput": {
             "type": "structure",
             "members": {},
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of AddTags.</p>"
+                "smithy.api#documentation": "<p>Contains the output of AddTags.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#CreatePipeline": {
@@ -195,7 +199,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for CreatePipeline.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for CreatePipeline.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#CreatePipelineOutput": {
@@ -210,7 +215,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of CreatePipeline.</p>"
+                "smithy.api#documentation": "<p>Contains the output of CreatePipeline.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#DataPipeline": {
@@ -352,9 +358,188 @@
                                     "type": "error"
                                 },
                                 {
+                                    "conditions": [
+                                        {
+                                            "fn": "booleanEquals",
+                                            "argv": [
+                                                {
+                                                    "ref": "UseDualStack"
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    ],
+                                    "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
+                                    "type": "error"
+                                },
+                                {
                                     "conditions": [],
+                                    "endpoint": {
+                                        "url": {
+                                            "ref": "Endpoint"
+                                        },
+                                        "properties": {},
+                                        "headers": {}
+                                    },
+                                    "type": "endpoint"
+                                }
+                            ]
+                        },
+                        {
+                            "conditions": [
+                                {
+                                    "fn": "isSet",
+                                    "argv": [
+                                        {
+                                            "ref": "Region"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "type": "tree",
+                            "rules": [
+                                {
+                                    "conditions": [
+                                        {
+                                            "fn": "aws.partition",
+                                            "argv": [
+                                                {
+                                                    "ref": "Region"
+                                                }
+                                            ],
+                                            "assign": "PartitionResult"
+                                        }
+                                    ],
                                     "type": "tree",
                                     "rules": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseFIPS"
+                                                        },
+                                                        true
+                                                    ]
+                                                },
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseDualStack"
+                                                        },
+                                                        true
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsFIPS"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsDualStack"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [],
+                                                            "endpoint": {
+                                                                "url": "https://datapipeline-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
+                                                    "type": "error"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseFIPS"
+                                                        },
+                                                        true
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsFIPS"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [],
+                                                            "endpoint": {
+                                                                "url": "https://datapipeline-fips.{Region}.{PartitionResult#dnsSuffix}",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "error": "FIPS is enabled but this partition does not support FIPS",
+                                                    "type": "error"
+                                                }
+                                            ]
+                                        },
                                         {
                                             "conditions": [
                                                 {
@@ -367,15 +552,50 @@
                                                     ]
                                                 }
                                             ],
-                                            "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
-                                            "type": "error"
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsDualStack"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [],
+                                                            "endpoint": {
+                                                                "url": "https://datapipeline.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "error": "DualStack is enabled but this partition does not support DualStack",
+                                                    "type": "error"
+                                                }
+                                            ]
                                         },
                                         {
                                             "conditions": [],
                                             "endpoint": {
-                                                "url": {
-                                                    "ref": "Endpoint"
-                                                },
+                                                "url": "https://datapipeline.{Region}.{PartitionResult#dnsSuffix}",
                                                 "properties": {},
                                                 "headers": {}
                                             },
@@ -387,258 +607,8 @@
                         },
                         {
                             "conditions": [],
-                            "type": "tree",
-                            "rules": [
-                                {
-                                    "conditions": [
-                                        {
-                                            "fn": "isSet",
-                                            "argv": [
-                                                {
-                                                    "ref": "Region"
-                                                }
-                                            ]
-                                        }
-                                    ],
-                                    "type": "tree",
-                                    "rules": [
-                                        {
-                                            "conditions": [
-                                                {
-                                                    "fn": "aws.partition",
-                                                    "argv": [
-                                                        {
-                                                            "ref": "Region"
-                                                        }
-                                                    ],
-                                                    "assign": "PartitionResult"
-                                                }
-                                            ],
-                                            "type": "tree",
-                                            "rules": [
-                                                {
-                                                    "conditions": [
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseFIPS"
-                                                                },
-                                                                true
-                                                            ]
-                                                        },
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseDualStack"
-                                                                },
-                                                                true
-                                                            ]
-                                                        }
-                                                    ],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsFIPS"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                },
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsDualStack"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "type": "tree",
-                                                            "rules": [
-                                                                {
-                                                                    "conditions": [],
-                                                                    "type": "tree",
-                                                                    "rules": [
-                                                                        {
-                                                                            "conditions": [],
-                                                                            "endpoint": {
-                                                                                "url": "https://datapipeline-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
-                                                                                "properties": {},
-                                                                                "headers": {}
-                                                                            },
-                                                                            "type": "endpoint"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "conditions": [],
-                                                            "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
-                                                            "type": "error"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "conditions": [
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseFIPS"
-                                                                },
-                                                                true
-                                                            ]
-                                                        }
-                                                    ],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsFIPS"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "type": "tree",
-                                                            "rules": [
-                                                                {
-                                                                    "conditions": [],
-                                                                    "type": "tree",
-                                                                    "rules": [
-                                                                        {
-                                                                            "conditions": [],
-                                                                            "endpoint": {
-                                                                                "url": "https://datapipeline-fips.{Region}.{PartitionResult#dnsSuffix}",
-                                                                                "properties": {},
-                                                                                "headers": {}
-                                                                            },
-                                                                            "type": "endpoint"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "conditions": [],
-                                                            "error": "FIPS is enabled but this partition does not support FIPS",
-                                                            "type": "error"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "conditions": [
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseDualStack"
-                                                                },
-                                                                true
-                                                            ]
-                                                        }
-                                                    ],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsDualStack"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "type": "tree",
-                                                            "rules": [
-                                                                {
-                                                                    "conditions": [],
-                                                                    "type": "tree",
-                                                                    "rules": [
-                                                                        {
-                                                                            "conditions": [],
-                                                                            "endpoint": {
-                                                                                "url": "https://datapipeline.{Region}.{PartitionResult#dualStackDnsSuffix}",
-                                                                                "properties": {},
-                                                                                "headers": {}
-                                                                            },
-                                                                            "type": "endpoint"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "conditions": [],
-                                                            "error": "DualStack is enabled but this partition does not support DualStack",
-                                                            "type": "error"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "conditions": [],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [],
-                                                            "endpoint": {
-                                                                "url": "https://datapipeline.{Region}.{PartitionResult#dnsSuffix}",
-                                                                "properties": {},
-                                                                "headers": {}
-                                                            },
-                                                            "type": "endpoint"
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "conditions": [],
-                                    "error": "Invalid Configuration: Missing Region",
-                                    "type": "error"
-                                }
-                            ]
+                            "error": "Invalid Configuration: Missing Region",
+                            "type": "error"
                         }
                     ]
                 },
@@ -1054,14 +1024,16 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for DeactivatePipeline.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for DeactivatePipeline.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#DeactivatePipelineOutput": {
             "type": "structure",
             "members": {},
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of DeactivatePipeline.</p>"
+                "smithy.api#documentation": "<p>Contains the output of DeactivatePipeline.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#DeletePipeline": {
@@ -1099,7 +1071,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for DeletePipeline.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for DeletePipeline.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#DescribeObjects": {
@@ -1165,7 +1138,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for DescribeObjects.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for DescribeObjects.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#DescribeObjectsOutput": {
@@ -1193,7 +1167,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of DescribeObjects.</p>"
+                "smithy.api#documentation": "<p>Contains the output of DescribeObjects.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#DescribePipelines": {
@@ -1234,7 +1209,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for DescribePipelines.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for DescribePipelines.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#DescribePipelinesOutput": {
@@ -1249,7 +1225,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of DescribePipelines.</p>"
+                "smithy.api#documentation": "<p>Contains the output of DescribePipelines.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#EvaluateExpression": {
@@ -1307,7 +1284,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for EvaluateExpression.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for EvaluateExpression.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#EvaluateExpressionOutput": {
@@ -1322,7 +1300,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of EvaluateExpression.</p>"
+                "smithy.api#documentation": "<p>Contains the output of EvaluateExpression.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#Field": {
@@ -1396,7 +1375,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for GetPipelineDefinition.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for GetPipelineDefinition.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#GetPipelineDefinitionOutput": {
@@ -1422,7 +1402,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of GetPipelineDefinition.</p>"
+                "smithy.api#documentation": "<p>Contains the output of GetPipelineDefinition.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#InstanceIdentity": {
@@ -1511,7 +1492,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for ListPipelines.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for ListPipelines.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#ListPipelinesOutput": {
@@ -1539,7 +1521,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of ListPipelines.</p>"
+                "smithy.api#documentation": "<p>Contains the output of ListPipelines.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#Operator": {
@@ -1563,30 +1546,38 @@
             }
         },
         "com.amazonaws.datapipeline#OperatorType": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "EQ",
-                        "name": "Equal"
-                    },
-                    {
-                        "value": "REF_EQ",
-                        "name": "ReferenceEqual"
-                    },
-                    {
-                        "value": "LE",
-                        "name": "LessThanOrEqual"
-                    },
-                    {
-                        "value": "GE",
-                        "name": "GreaterThanOrEqual"
-                    },
-                    {
-                        "value": "BETWEEN",
-                        "name": "Between"
+            "type": "enum",
+            "members": {
+                "Equal": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "EQ"
                     }
-                ]
+                },
+                "ReferenceEqual": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "REF_EQ"
+                    }
+                },
+                "LessThanOrEqual": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LE"
+                    }
+                },
+                "GreaterThanOrEqual": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GE"
+                    }
+                },
+                "Between": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "BETWEEN"
+                    }
+                }
             }
         },
         "com.amazonaws.datapipeline#ParameterAttribute": {
@@ -1861,7 +1852,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for PollForTask.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for PollForTask.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#PollForTaskOutput": {
@@ -1875,7 +1867,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of PollForTask.</p>"
+                "smithy.api#documentation": "<p>Contains the output of PollForTask.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#PutPipelineDefinition": {
@@ -1935,7 +1928,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for PutPipelineDefinition.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for PutPipelineDefinition.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#PutPipelineDefinitionOutput": {
@@ -1963,7 +1957,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of PutPipelineDefinition.</p>"
+                "smithy.api#documentation": "<p>Contains the output of PutPipelineDefinition.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#Query": {
@@ -2049,7 +2044,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for QueryObjects.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for QueryObjects.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#QueryObjectsOutput": {
@@ -2076,7 +2072,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of QueryObjects.</p>"
+                "smithy.api#documentation": "<p>Contains the output of QueryObjects.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#RemoveTags": {
@@ -2124,14 +2121,16 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for RemoveTags.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for RemoveTags.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#RemoveTagsOutput": {
             "type": "structure",
             "members": {},
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of RemoveTags.</p>"
+                "smithy.api#documentation": "<p>Contains the output of RemoveTags.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#ReportTaskProgress": {
@@ -2181,7 +2180,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for ReportTaskProgress.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for ReportTaskProgress.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#ReportTaskProgressOutput": {
@@ -2197,7 +2197,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of ReportTaskProgress.</p>"
+                "smithy.api#documentation": "<p>Contains the output of ReportTaskProgress.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#ReportTaskRunnerHeartbeat": {
@@ -2244,7 +2245,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for ReportTaskRunnerHeartbeat.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for ReportTaskRunnerHeartbeat.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#ReportTaskRunnerHeartbeatOutput": {
@@ -2260,7 +2262,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of ReportTaskRunnerHeartbeat.</p>"
+                "smithy.api#documentation": "<p>Contains the output of ReportTaskRunnerHeartbeat.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#Selector": {
@@ -2341,7 +2344,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for SetStatus.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for SetStatus.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#SetTaskStatus": {
@@ -2410,14 +2414,16 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for SetTaskStatus.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for SetTaskStatus.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#SetTaskStatusOutput": {
             "type": "structure",
             "members": {},
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of SetTaskStatus.</p>"
+                "smithy.api#documentation": "<p>Contains the output of SetTaskStatus.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#Tag": {
@@ -2490,22 +2496,26 @@
             }
         },
         "com.amazonaws.datapipeline#TaskStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "FINISHED",
-                        "name": "FINISHED"
-                    },
-                    {
-                        "value": "FAILED",
-                        "name": "FAILED"
-                    },
-                    {
-                        "value": "FALSE",
-                        "name": "FALSE"
+            "type": "enum",
+            "members": {
+                "FINISHED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FINISHED"
                     }
-                ]
+                },
+                "FAILED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FAILED"
+                    }
+                },
+                "FALSE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FALSE"
+                    }
+                }
             }
         },
         "com.amazonaws.datapipeline#ValidatePipelineDefinition": {
@@ -2565,7 +2575,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the parameters for ValidatePipelineDefinition.</p>"
+                "smithy.api#documentation": "<p>Contains the parameters for ValidatePipelineDefinition.</p>",
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.datapipeline#ValidatePipelineDefinitionOutput": {
@@ -2593,7 +2604,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains the output of ValidatePipelineDefinition.</p>"
+                "smithy.api#documentation": "<p>Contains the output of ValidatePipelineDefinition.</p>",
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.datapipeline#ValidationError": {
@@ -2655,7 +2667,7 @@
                     "min": 1,
                     "max": 256
                 },
-                "smithy.api#pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*"
+                "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
             }
         },
         "com.amazonaws.datapipeline#attributeValueString": {
@@ -2665,7 +2677,7 @@
                     "min": 0,
                     "max": 10240
                 },
-                "smithy.api#pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*"
+                "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
             }
         },
         "com.amazonaws.datapipeline#boolean": {
@@ -2693,7 +2705,7 @@
                     "min": 1,
                     "max": 256
                 },
-                "smithy.api#pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*"
+                "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
             }
         },
         "com.amazonaws.datapipeline#fieldStringValue": {
@@ -2703,7 +2715,7 @@
                     "min": 0,
                     "max": 10240
                 },
-                "smithy.api#pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*"
+                "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
             }
         },
         "com.amazonaws.datapipeline#id": {
@@ -2713,7 +2725,7 @@
                     "min": 1,
                     "max": 1024
                 },
-                "smithy.api#pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*"
+                "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
             }
         },
         "com.amazonaws.datapipeline#idList": {
@@ -2732,7 +2744,7 @@
                     "min": 0,
                     "max": 20971520
                 },
-                "smithy.api#pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*"
+                "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
             }
         },
         "com.amazonaws.datapipeline#pipelineList": {
@@ -2748,7 +2760,7 @@
                     "min": 0,
                     "max": 1024
                 },
-                "smithy.api#pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*"
+                "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
             }
         },
         "com.amazonaws.datapipeline#stringList": {
@@ -2794,7 +2806,7 @@
                     "min": 1,
                     "max": 2048
                 },
-                "smithy.api#pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*"
+                "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
             }
         },
         "com.amazonaws.datapipeline#timestamp": {
@@ -2807,7 +2819,7 @@
                     "min": 0,
                     "max": 10000
                 },
-                "smithy.api#pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*"
+                "smithy.api#pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
             }
         },
         "com.amazonaws.datapipeline#validationMessages": {
