@@ -41,4 +41,14 @@ class FlowUtilTest {
         val merged = mergeSequential(a, a).toList()
         assertEquals(listOf(1, 2, 3, 1, 2, 3), merged)
     }
+
+    @Test
+    fun testMergingMoreThanTwoFlows() = runTest {
+        val a = flowOf(1)
+        val b = flowOf(2)
+        val c = flowOf(3)
+
+        val merged = mergeSequential(a, b, c).toList()
+        assertEquals(listOf(1, 2, 3), merged)
+    }
 }
