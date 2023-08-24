@@ -1,8 +1,0 @@
-{
-    "id": "4557c47b-cc3a-4f49-9848-34617a35c5bf",
-    "type": "bugfix",
-    "description": "Update smithy-kotlin to 0.26.0",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1029"
-    ]
-}

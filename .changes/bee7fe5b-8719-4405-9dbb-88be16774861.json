@@ -1,5 +1,0 @@
-{
-    "id": "bee7fe5b-8719-4405-9dbb-88be16774861",
-    "type": "misc",
-    "description": "Refactor ClientOption to AttributeKey directly and track upstream HttpContext changes"
-}

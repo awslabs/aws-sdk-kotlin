@@ -1,5 +1,0 @@
-{
-    "id": "643fac3f-fefc-483a-a6a2-1f9034c9f531",
-    "type": "misc",
-    "description": "**BREAKING**: prefix generated endpoint and auth scheme providers with client name and track upstream changes"
-}
