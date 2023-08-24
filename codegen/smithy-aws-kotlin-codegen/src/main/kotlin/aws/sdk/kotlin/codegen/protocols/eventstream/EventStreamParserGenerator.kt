@@ -218,7 +218,7 @@ class EventStreamParserGenerator(
             .closeAndOpenBlock("} else {")
             .write(
                 "#T(#T(firstMessage), frames)",
-                RuntimeTypes.KotlinxCoroutines.Flow.merge,
+                RuntimeTypes.AwsEventStream.mergeSequential,
                 RuntimeTypes.KotlinxCoroutines.Flow.flowOf,
             )
             .closeBlock("}")

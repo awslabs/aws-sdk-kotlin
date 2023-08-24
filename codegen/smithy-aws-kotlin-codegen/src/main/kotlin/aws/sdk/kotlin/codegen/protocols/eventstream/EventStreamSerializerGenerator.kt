@@ -93,7 +93,7 @@ class EventStreamSerializerGenerator(
             writer.withBlock(
                 "val messages = #T(#T(initialRequest), stream.#T(::#T))",
                 "",
-                RuntimeTypes.KotlinxCoroutines.Flow.merge,
+                RuntimeTypes.AwsEventStream.mergeSequential,
                 RuntimeTypes.KotlinxCoroutines.Flow.flowOf,
                 RuntimeTypes.KotlinxCoroutines.Flow.map,
                 encodeFn,
