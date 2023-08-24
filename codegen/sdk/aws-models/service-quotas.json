@@ -62,7 +62,7 @@
                     "min": 1,
                     "max": 1011
                 },
-                "smithy.api#pattern": "arn:aws(-[\\w]+)*:*:.+:[0-9]{12}:.+"
+                "smithy.api#pattern": "^arn:aws(-[\\w]+)*:*:.+:[0-9]{12}:.+$"
             }
         },
         "com.amazonaws.servicequotas#AssociateServiceQuotaTemplate": {
@@ -105,11 +105,17 @@
         },
         "com.amazonaws.servicequotas#AssociateServiceQuotaTemplateRequest": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
         },
         "com.amazonaws.servicequotas#AssociateServiceQuotaTemplateResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.servicequotas#AwsRegion": {
             "type": "string",
@@ -118,7 +124,7 @@
                     "min": 1,
                     "max": 64
                 },
-                "smithy.api#pattern": "[a-zA-Z][a-zA-Z0-9-]{1,128}"
+                "smithy.api#pattern": "^[a-zA-Z][a-zA-Z0-9-]{1,128}$"
             }
         },
         "com.amazonaws.servicequotas#CustomerServiceEngagementId": {
@@ -192,11 +198,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#DeleteServiceQuotaIncreaseRequestFromTemplateResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.servicequotas#DependencyAccessDeniedException": {
             "type": "structure",
@@ -251,33 +263,45 @@
         },
         "com.amazonaws.servicequotas#DisassociateServiceQuotaTemplateRequest": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
         },
         "com.amazonaws.servicequotas#DisassociateServiceQuotaTemplateResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.servicequotas#ErrorCode": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "DEPENDENCY_ACCESS_DENIED_ERROR",
-                        "name": "DEPENDENCY_ACCESS_DENIED_ERROR"
-                    },
-                    {
-                        "value": "DEPENDENCY_THROTTLING_ERROR",
-                        "name": "DEPENDENCY_THROTTLING_ERROR"
-                    },
-                    {
-                        "value": "DEPENDENCY_SERVICE_ERROR",
-                        "name": "DEPENDENCY_SERVICE_ERROR"
-                    },
-                    {
-                        "value": "SERVICE_QUOTA_NOT_AVAILABLE_ERROR",
-                        "name": "SERVICE_QUOTA_NOT_AVAILABLE_ERROR"
+            "type": "enum",
+            "members": {
+                "DEPENDENCY_ACCESS_DENIED_ERROR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DEPENDENCY_ACCESS_DENIED_ERROR"
                     }
-                ]
+                },
+                "DEPENDENCY_THROTTLING_ERROR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DEPENDENCY_THROTTLING_ERROR"
+                    }
+                },
+                "DEPENDENCY_SERVICE_ERROR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DEPENDENCY_SERVICE_ERROR"
+                    }
+                },
+                "SERVICE_QUOTA_NOT_AVAILABLE_ERROR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SERVICE_QUOTA_NOT_AVAILABLE_ERROR"
+                    }
+                }
             }
         },
         "com.amazonaws.servicequotas#ErrorMessage": {
@@ -352,6 +376,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#GetAWSDefaultServiceQuotaResponse": {
@@ -363,6 +390,9 @@
                         "smithy.api#documentation": "<p>Information about the quota.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#GetAssociationForServiceQuotaTemplate": {
@@ -405,7 +435,10 @@
         },
         "com.amazonaws.servicequotas#GetAssociationForServiceQuotaTemplateRequest": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
         },
         "com.amazonaws.servicequotas#GetAssociationForServiceQuotaTemplateResponse": {
             "type": "structure",
@@ -416,6 +449,9 @@
                         "smithy.api#documentation": "<p>The association status. If the status is <code>ASSOCIATED</code>, the quota increase\n      requests in the template are automatically applied to new accounts in your\n      organization.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#GetRequestedServiceQuotaChange": {
@@ -457,6 +493,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#GetRequestedServiceQuotaChangeResponse": {
@@ -468,6 +507,9 @@
                         "smithy.api#documentation": "<p>Information about the quota increase request.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#GetServiceQuota": {
@@ -564,6 +606,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#GetServiceQuotaIncreaseRequestFromTemplateResponse": {
@@ -575,6 +620,9 @@
                         "smithy.api#documentation": "<p>Information about the quota increase request.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#GetServiceQuotaRequest": {
@@ -594,6 +642,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#GetServiceQuotaResponse": {
@@ -605,6 +656,9 @@
                         "smithy.api#documentation": "<p>Information about the quota.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#GlobalQuota": {
@@ -729,6 +783,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve the remaining\n      results, if any, make another call with the token returned from this call.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#ListAWSDefaultServiceQuotasResponse": {
@@ -746,6 +803,9 @@
                         "smithy.api#documentation": "<p>Information about the quotas.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#ListRequestedServiceQuotaChangeHistory": {
@@ -859,6 +919,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve the remaining\n      results, if any, make another call with the token returned from this call.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#ListRequestedServiceQuotaChangeHistoryByQuotaResponse": {
@@ -876,6 +939,9 @@
                         "smithy.api#documentation": "<p>Information about the quota increase requests.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#ListRequestedServiceQuotaChangeHistoryRequest": {
@@ -905,6 +971,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve the remaining\n      results, if any, make another call with the token returned from this call.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#ListRequestedServiceQuotaChangeHistoryResponse": {
@@ -922,6 +991,9 @@
                         "smithy.api#documentation": "<p>Information about the quota increase requests.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#ListServiceQuotaIncreaseRequestsInTemplate": {
@@ -995,6 +1067,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve the remaining\n      results, if any, make another call with the token returned from this call.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#ListServiceQuotaIncreaseRequestsInTemplateResponse": {
@@ -1012,6 +1087,9 @@
                         "smithy.api#documentation": "<p>The token to use to retrieve the next page of results. This value is null when there are\n      no more results to return.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#ListServiceQuotas": {
@@ -1074,6 +1152,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve the remaining\n      results, if any, make another call with the token returned from this call.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#ListServiceQuotasResponse": {
@@ -1091,6 +1172,9 @@
                         "smithy.api#documentation": "<p>Information about the quotas.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#ListServices": {
@@ -1143,6 +1227,9 @@
                         "smithy.api#documentation": "<p>The maximum number of results to return with a single call. To retrieve the remaining\n      results, if any, make another call with the token returned from this call.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#ListServicesResponse": {
@@ -1160,6 +1247,9 @@
                         "smithy.api#documentation": "<p>Information about the services.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#ListTagsForResource": {
@@ -1201,6 +1291,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#ListTagsForResourceResponse": {
@@ -1212,6 +1305,9 @@
                         "smithy.api#documentation": "<p>A complex data type that contains zero or more tag elements.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#MaxResults": {
@@ -1338,38 +1434,50 @@
             }
         },
         "com.amazonaws.servicequotas#PeriodUnit": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "MICROSECOND",
-                        "name": "MICROSECOND"
-                    },
-                    {
-                        "value": "MILLISECOND",
-                        "name": "MILLISECOND"
-                    },
-                    {
-                        "value": "SECOND",
-                        "name": "SECOND"
-                    },
-                    {
-                        "value": "MINUTE",
-                        "name": "MINUTE"
-                    },
-                    {
-                        "value": "HOUR",
-                        "name": "HOUR"
-                    },
-                    {
-                        "value": "DAY",
-                        "name": "DAY"
-                    },
-                    {
-                        "value": "WEEK",
-                        "name": "WEEK"
+            "type": "enum",
+            "members": {
+                "MICROSECOND": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MICROSECOND"
                     }
-                ]
+                },
+                "MILLISECOND": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MILLISECOND"
+                    }
+                },
+                "SECOND": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SECOND"
+                    }
+                },
+                "MINUTE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MINUTE"
+                    }
+                },
+                "HOUR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HOUR"
+                    }
+                },
+                "DAY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DAY"
+                    }
+                },
+                "WEEK": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "WEEK"
+                    }
+                }
             }
         },
         "com.amazonaws.servicequotas#PeriodValue": {
@@ -1450,6 +1558,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#PutServiceQuotaIncreaseRequestIntoTemplateResponse": {
@@ -1461,6 +1572,9 @@
                         "smithy.api#documentation": "<p>Information about the quota increase request.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#QuotaAdjustable": {
@@ -1479,7 +1593,7 @@
                     "min": 1,
                     "max": 128
                 },
-                "smithy.api#pattern": "[a-zA-Z][a-zA-Z0-9-]{1,128}"
+                "smithy.api#pattern": "^[a-zA-Z][a-zA-Z0-9-]{1,128}$"
             }
         },
         "com.amazonaws.servicequotas#QuotaExceededException": {
@@ -1543,7 +1657,7 @@
                     "min": 1,
                     "max": 128
                 },
-                "smithy.api#pattern": "[0-9a-zA-Z][a-zA-Z0-9-]{1,128}"
+                "smithy.api#pattern": "^[0-9a-zA-Z][a-zA-Z0-9-]{1,128}$"
             }
         },
         "com.amazonaws.servicequotas#RequestServiceQuotaIncrease": {
@@ -1611,6 +1725,9 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#RequestServiceQuotaIncreaseResponse": {
@@ -1622,33 +1739,44 @@
                         "smithy.api#documentation": "<p>Information about the quota increase request.</p>"
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.servicequotas#RequestStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "PENDING",
-                        "name": "PENDING"
-                    },
-                    {
-                        "value": "CASE_OPENED",
-                        "name": "CASE_OPENED"
-                    },
-                    {
-                        "value": "APPROVED",
-                        "name": "APPROVED"
-                    },
-                    {
-                        "value": "DENIED",
-                        "name": "DENIED"
-                    },
-                    {
-                        "value": "CASE_CLOSED",
-                        "name": "CASE_CLOSED"
+            "type": "enum",
+            "members": {
+                "PENDING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PENDING"
                     }
-                ]
+                },
+                "CASE_OPENED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CASE_OPENED"
+                    }
+                },
+                "APPROVED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "APPROVED"
+                    }
+                },
+                "DENIED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DENIED"
+                    }
+                },
+                "CASE_CLOSED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CASE_CLOSED"
+                    }
+                }
             }
         },
         "com.amazonaws.servicequotas#RequestedServiceQuotaChange": {
@@ -1773,7 +1901,7 @@
                     "min": 1,
                     "max": 63
                 },
-                "smithy.api#pattern": "[a-zA-Z][a-zA-Z0-9-]{1,63}"
+                "smithy.api#pattern": "^[a-zA-Z][a-zA-Z0-9-]{1,63}$"
             }
         },
         "com.amazonaws.servicequotas#ServiceException": {
@@ -1970,18 +2098,20 @@
             }
         },
         "com.amazonaws.servicequotas#ServiceQuotaTemplateAssociationStatus": {
-            "type": "string",
-            "traits": {
-                "smithy.api#enum": [
-                    {
-                        "value": "ASSOCIATED",
-                        "name": "ASSOCIATED"
-                    },
-                    {
-                        "value": "DISASSOCIATED",
-                        "name": "DISASSOCIATED"
+            "type": "enum",
+            "members": {
+                "ASSOCIATED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ASSOCIATED"
                     }
-                ]
+                },
+                "DISASSOCIATED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DISASSOCIATED"
+                    }
+                }
             }
         },
         "com.amazonaws.servicequotas#ServiceQuotaTemplateNotInUseException": {
@@ -2133,9 +2263,213 @@
                                     "type": "error"
                                 },
                                 {
+                                    "conditions": [
+                                        {
+                                            "fn": "booleanEquals",
+                                            "argv": [
+                                                {
+                                                    "ref": "UseDualStack"
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    ],
+                                    "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
+                                    "type": "error"
+                                },
+                                {
                                     "conditions": [],
+                                    "endpoint": {
+                                        "url": {
+                                            "ref": "Endpoint"
+                                        },
+                                        "properties": {},
+                                        "headers": {}
+                                    },
+                                    "type": "endpoint"
+                                }
+                            ]
+                        },
+                        {
+                            "conditions": [
+                                {
+                                    "fn": "isSet",
+                                    "argv": [
+                                        {
+                                            "ref": "Region"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "type": "tree",
+                            "rules": [
+                                {
+                                    "conditions": [
+                                        {
+                                            "fn": "aws.partition",
+                                            "argv": [
+                                                {
+                                                    "ref": "Region"
+                                                }
+                                            ],
+                                            "assign": "PartitionResult"
+                                        }
+                                    ],
                                     "type": "tree",
                                     "rules": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseFIPS"
+                                                        },
+                                                        true
+                                                    ]
+                                                },
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseDualStack"
+                                                        },
+                                                        true
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsFIPS"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsDualStack"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [],
+                                                            "endpoint": {
+                                                                "url": "https://servicequotas-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
+                                                    "type": "error"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseFIPS"
+                                                        },
+                                                        true
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsFIPS"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [
+                                                                {
+                                                                    "fn": "stringEquals",
+                                                                    "argv": [
+                                                                        "aws-us-gov",
+                                                                        {
+                                                                            "fn": "getAttr",
+                                                                            "argv": [
+                                                                                {
+                                                                                    "ref": "PartitionResult"
+                                                                                },
+                                                                                "name"
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ],
+                                                            "endpoint": {
+                                                                "url": "https://servicequotas.{Region}.amazonaws.com",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        },
+                                                        {
+                                                            "conditions": [],
+                                                            "endpoint": {
+                                                                "url": "https://servicequotas-fips.{Region}.{PartitionResult#dnsSuffix}",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "error": "FIPS is enabled but this partition does not support FIPS",
+                                                    "type": "error"
+                                                }
+                                            ]
+                                        },
                                         {
                                             "conditions": [
                                                 {
@@ -2148,15 +2482,50 @@
                                                     ]
                                                 }
                                             ],
-                                            "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
-                                            "type": "error"
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsDualStack"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [],
+                                                            "endpoint": {
+                                                                "url": "https://servicequotas.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "error": "DualStack is enabled but this partition does not support DualStack",
+                                                    "type": "error"
+                                                }
+                                            ]
                                         },
                                         {
                                             "conditions": [],
                                             "endpoint": {
-                                                "url": {
-                                                    "ref": "Endpoint"
-                                                },
+                                                "url": "https://servicequotas.{Region}.{PartitionResult#dnsSuffix}",
                                                 "properties": {},
                                                 "headers": {}
                                             },
@@ -2168,283 +2537,8 @@
                         },
                         {
                             "conditions": [],
-                            "type": "tree",
-                            "rules": [
-                                {
-                                    "conditions": [
-                                        {
-                                            "fn": "isSet",
-                                            "argv": [
-                                                {
-                                                    "ref": "Region"
-                                                }
-                                            ]
-                                        }
-                                    ],
-                                    "type": "tree",
-                                    "rules": [
-                                        {
-                                            "conditions": [
-                                                {
-                                                    "fn": "aws.partition",
-                                                    "argv": [
-                                                        {
-                                                            "ref": "Region"
-                                                        }
-                                                    ],
-                                                    "assign": "PartitionResult"
-                                                }
-                                            ],
-                                            "type": "tree",
-                                            "rules": [
-                                                {
-                                                    "conditions": [
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseFIPS"
-                                                                },
-                                                                true
-                                                            ]
-                                                        },
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseDualStack"
-                                                                },
-                                                                true
-                                                            ]
-                                                        }
-                                                    ],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsFIPS"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                },
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsDualStack"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "type": "tree",
-                                                            "rules": [
-                                                                {
-                                                                    "conditions": [],
-                                                                    "type": "tree",
-                                                                    "rules": [
-                                                                        {
-                                                                            "conditions": [],
-                                                                            "endpoint": {
-                                                                                "url": "https://servicequotas-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
-                                                                                "properties": {},
-                                                                                "headers": {}
-                                                                            },
-                                                                            "type": "endpoint"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "conditions": [],
-                                                            "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
-                                                            "type": "error"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "conditions": [
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseFIPS"
-                                                                },
-                                                                true
-                                                            ]
-                                                        }
-                                                    ],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsFIPS"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "type": "tree",
-                                                            "rules": [
-                                                                {
-                                                                    "conditions": [],
-                                                                    "type": "tree",
-                                                                    "rules": [
-                                                                        {
-                                                                            "conditions": [
-                                                                                {
-                                                                                    "fn": "stringEquals",
-                                                                                    "argv": [
-                                                                                        "aws-us-gov",
-                                                                                        {
-                                                                                            "fn": "getAttr",
-                                                                                            "argv": [
-                                                                                                {
-                                                                                                    "ref": "PartitionResult"
-                                                                                                },
-                                                                                                "name"
-                                                                                            ]
-                                                                                        }
-                                                                                    ]
-                                                                                }
-                                                                            ],
-                                                                            "endpoint": {
-                                                                                "url": "https://servicequotas.{Region}.amazonaws.com",
-                                                                                "properties": {},
-                                                                                "headers": {}
-                                                                            },
-                                                                            "type": "endpoint"
-                                                                        },
-                                                                        {
-                                                                            "conditions": [],
-                                                                            "endpoint": {
-                                                                                "url": "https://servicequotas-fips.{Region}.{PartitionResult#dnsSuffix}",
-                                                                                "properties": {},
-                                                                                "headers": {}
-                                                                            },
-                                                                            "type": "endpoint"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "conditions": [],
-                                                            "error": "FIPS is enabled but this partition does not support FIPS",
-                                                            "type": "error"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "conditions": [
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseDualStack"
-                                                                },
-                                                                true
-                                                            ]
-                                                        }
-                                                    ],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsDualStack"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "type": "tree",
-                                                            "rules": [
-                                                                {
-                                                                    "conditions": [],
-                                                                    "type": "tree",
-                                                                    "rules": [
-                                                                        {
-                                                                            "conditions": [],
-                                                                            "endpoint": {
-                                                                                "url": "https://servicequotas.{Region}.{PartitionResult#dualStackDnsSuffix}",
-                                                                                "properties": {},
-                                                                                "headers": {}
-                                                                            },
-                                                                            "type": "endpoint"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "conditions": [],
-                                                            "error": "DualStack is enabled but this partition does not support DualStack",
-                                                            "type": "error"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "conditions": [],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [],
-                                                            "endpoint": {
-                                                                "url": "https://servicequotas.{Region}.{PartitionResult#dnsSuffix}",
-                                                                "properties": {},
-                                                                "headers": {}
-                                                            },
-                                                            "type": "endpoint"
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "conditions": [],
-                                    "error": "Invalid Configuration: Missing Region",
-                                    "type": "error"
-                                }
-                            ]
+                            "error": "Invalid Configuration: Missing Region",
+                            "type": "error"
                         }
                     ]
                 },
@@ -3070,7 +3164,7 @@
                     "min": 1,
                     "max": 256
                 },
-                "smithy.api#pattern": "(Sum|Maximum)"
+                "smithy.api#pattern": "^(Sum|Maximum)$"
             }
         },
         "com.amazonaws.servicequotas#Tag": {
@@ -3170,11 +3264,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#TagResourceResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         },
         "com.amazonaws.servicequotas#TagValue": {
             "type": "string",
@@ -3271,11 +3371,17 @@
                         "smithy.api#required": {}
                     }
                 }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.servicequotas#UntagResourceResponse": {
             "type": "structure",
-            "members": {}
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
         }
     }
 }
