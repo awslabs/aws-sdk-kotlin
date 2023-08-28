@@ -95,7 +95,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "private suspend fun ${op.errorHandlerName()}(context: #T, call: #T): #Q {",
                 "}",
                 RuntimeTypes.Core.ExecutionContext,
-                RuntimeTypes.Http.Response.HttpCall,
+                RuntimeTypes.Http.HttpCall,
                 KotlinTypes.Nothing,
             ) {
                 renderThrowOperationError(ctx, op, writer)
