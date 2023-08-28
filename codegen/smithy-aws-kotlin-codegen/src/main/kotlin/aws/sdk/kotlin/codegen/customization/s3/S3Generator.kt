@@ -62,7 +62,7 @@ class S3Generator : RestXml() {
 
         writer.write("val payload = call.response.body.#T()", RuntimeTypes.Http.readAll)
             .write("val wrappedResponse = call.response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
-            .write("val wrappedCall = call.copy(response=wrappedResponse)")
+            .write("val wrappedCall = call.copy(response = wrappedResponse)")
             .write("")
             .write("val errorDetails = try {")
             .indent()

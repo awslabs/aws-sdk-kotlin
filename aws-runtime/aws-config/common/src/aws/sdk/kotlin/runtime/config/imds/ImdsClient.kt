@@ -13,10 +13,10 @@ import aws.smithy.kotlin.runtime.client.LogMode
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.*
-import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.io.middleware.Phase

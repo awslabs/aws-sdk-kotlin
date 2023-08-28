@@ -10,9 +10,9 @@ import aws.sdk.kotlin.services.s3.model.S3Exception
 import aws.sdk.kotlin.services.s3.transform.GetBucketLocationOperationDeserializer
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
+import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
-import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.Instant

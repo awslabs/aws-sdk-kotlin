@@ -15,12 +15,12 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderExceptio
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
-import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.net.Scheme
