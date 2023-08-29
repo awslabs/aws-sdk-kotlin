@@ -15,6 +15,7 @@ object AwsRuntimeTypes {
     object Core : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE) {
         val AwsErrorMetadata = symbol("AwsErrorMetadata")
         val ClientException = symbol("ClientException")
+        val mergeSequential = symbol("mergeSequential")
 
         object Client : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE, "client") {
             val AwsClientOption = symbol("AwsClientOption")

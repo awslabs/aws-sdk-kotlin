@@ -9,10 +9,10 @@ import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.ObjectCannedAcl
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
 import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
-import aws.smithy.kotlin.runtime.http.response.HttpCall
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.util.text.urlDecodeComponent
 import kotlinx.coroutines.test.runTest

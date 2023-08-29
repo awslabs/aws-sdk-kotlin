@@ -15,6 +15,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderExceptio
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.*
@@ -156,7 +157,8 @@ public class EcsCredentialsProvider internal constructor(
 }
 
 private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
-    override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): Credentials {
+    override suspend fun deserialize(context: ExecutionContext, call: HttpCall): Credentials {
+        val response = call.response
         if (!response.status.isSuccess()) {
             throwCredentialsResponseException(response)
         }

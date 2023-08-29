@@ -26,6 +26,9 @@ public class aws/sdk/kotlin/runtime/ConfigurationException : aws/sdk/kotlin/runt
 	public fun <init> (Ljava/lang/Throwable;)V
 }
 
+public final class aws/sdk/kotlin/runtime/FlowUtilKt {
+}
+
 public abstract interface annotation class aws/sdk/kotlin/runtime/InternalSdkApi : java/lang/annotation/Annotation {
 }
 

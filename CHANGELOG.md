@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.31.0-beta] - 08/24/2023
+
+### Features
+* Support initial-request and initial-response for event streams using RPC-based protocols
+
+### Fixes
+* [#1029](https://github.com/awslabs/aws-sdk-kotlin/issues/1029) Update smithy-kotlin to 0.26.0
+
+### Miscellaneous
+* **BREAKING**: prefix generated endpoint and auth scheme providers with client name and track upstream changes
+* Sync AWS models
+* Refactor ClientOption to AttributeKey directly and track upstream HttpContext changes
+
 ## [0.30.1-beta] - 08/17/2023
 
 ### Miscellaneous

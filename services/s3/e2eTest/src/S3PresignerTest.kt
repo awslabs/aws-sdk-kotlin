@@ -13,7 +13,7 @@ import aws.sdk.kotlin.testing.PRINTABLE_CHARS
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.http.SdkHttpClient
-import aws.smithy.kotlin.runtime.http.response.complete
+import aws.smithy.kotlin.runtime.http.complete
 import aws.smithy.kotlin.runtime.http.toByteStream
 import kotlinx.coroutines.*
 import org.junit.jupiter.api.AfterAll

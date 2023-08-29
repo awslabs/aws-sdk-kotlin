@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.codegen.protocols.eventstream
 
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
@@ -93,7 +94,7 @@ class EventStreamSerializerGenerator(
             writer.withBlock(
                 "val messages = #T(#T(initialRequest), stream.#T(::#T))",
                 "",
-                RuntimeTypes.KotlinxCoroutines.Flow.merge,
+                AwsRuntimeTypes.Core.mergeSequential,
                 RuntimeTypes.KotlinxCoroutines.Flow.flowOf,
                 RuntimeTypes.KotlinxCoroutines.Flow.map,
                 encodeFn,

@@ -10,7 +10,7 @@ import aws.sdk.kotlin.services.polly.model.VoiceId
 import aws.sdk.kotlin.services.polly.presigners.presignSynthesizeSpeech
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.http.SdkHttpClient
-import aws.smithy.kotlin.runtime.http.response.complete
+import aws.smithy.kotlin.runtime.http.complete
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
