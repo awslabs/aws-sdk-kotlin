@@ -13,7 +13,6 @@ import org.junit.jupiter.api.TestInstance
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.fail
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -22,6 +21,8 @@ import kotlin.time.Duration.Companion.seconds
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class KinesisSubscribeToShardTest {
     private val client = KinesisClient { region = "us-east-1" }
+    private val WAIT_TIMEOUT = 30.seconds
+    private val POLLING_RATE = 3.seconds
 
     private val STREAM_NAME_PREFIX = "aws-sdk-kotlin-e2e-test-stream"
     private val STREAM_CONSUMER_NAME_PREFIX = "aws-sdk-kotlin-e2e-test"
@@ -60,7 +61,7 @@ class KinesisSubscribeToShardTest {
      * Read one event and make sure the data matches what's expected.
      */
     @Test
-    fun testSubscribeToShard() = runBlocking {
+    fun testSubscribeToShard(): Unit = runBlocking {
         val dataStreamShardId = client.listShards {
             streamArn = dataStreamArn
         }.shards?.single()!!.shardId
@@ -76,7 +77,6 @@ class KinesisSubscribeToShardTest {
         ) {
             val event = it.eventStream?.first()
             val record = event?.asSubscribeToShardEvent()?.records?.single()
-            println("Got ${record?.data?.decodeToString()}")
             assertEquals(TEST_DATA, record?.data?.decodeToString())
         }
     }
@@ -96,14 +96,13 @@ class KinesisSubscribeToShardTest {
                 streamName = randomStreamName
                 shardCount = 1
             }
-            delay(10.seconds) // creating a stream is asynchronous...
 
-            listStreamsResp = listStreams { }
-
-            val newStreamArn = listStreamsResp
-                .streamSummaries
-                ?.find { it.streamName?.startsWith(STREAM_NAME_PREFIX) ?: false }
-                ?.streamArn ?: fail("Failed to create stream")
+            val newStreamArn = waitForResource {
+                listStreams { }
+                    .streamSummaries
+                    ?.find { it.streamName?.equals(randomStreamName) ?: false }
+                    ?.let { if (it.streamStatus == StreamStatus.Active) it.streamArn!! else null }
+            }
 
             putRecord {
                 data = TEST_DATA.encodeToByteArray()
@@ -121,19 +120,41 @@ class KinesisSubscribeToShardTest {
      * Assigns a value to the `lateinit var` [dataStreamConsumerArn]
      */
     private suspend fun KinesisClient.getOrRegisterStreamConsumer() {
-        val listStreamConsumersResp = listStreamConsumers {
-            streamArn = dataStreamArn
-        }
-
-        dataStreamConsumerArn = listStreamConsumersResp.consumers?.firstOrNull { it.consumerName?.startsWith(STREAM_CONSUMER_NAME_PREFIX) ?: false }?.consumerArn ?: run {
+        dataStreamConsumerArn = listStreamConsumers { streamArn = dataStreamArn }
+            .consumers
+            ?.firstOrNull { it.consumerName?.startsWith(STREAM_CONSUMER_NAME_PREFIX) ?: false }
+            ?.consumerArn ?: run {
             val randomConsumerName = STREAM_CONSUMER_NAME_PREFIX + UUID.randomUUID()
-            val registerStreamConsumerResp = registerStreamConsumer {
+            registerStreamConsumer {
                 consumerName = randomConsumerName
                 streamArn = dataStreamArn
             }
-            delay(10.seconds) // registering a consumer is asynchronous... (status needs to be ACTIVE)
 
-            registerStreamConsumerResp.consumer?.consumerArn ?: fail("Failed to register consumer")
+            waitForResource {
+                listStreamConsumers { streamArn = dataStreamArn }
+                    .consumers
+                    ?.firstOrNull { it.consumerName?.equals(randomConsumerName) ?: false }
+                    ?.let { if (it.consumerStatus == ConsumerStatus.Active) it.consumerArn else null }
+            }
         }
+    }
+
+    /**
+     * Poll at a predefined [POLLING_RATE] for a resource to exist and return its ARN.
+     * Throws an exception if this takes longer than the [WAIT_TIMEOUT] duration.
+     *
+     * @param getResourceArn a suspending function which returns the resource's ARN or null if it does not exist yet
+     * @return the ARN of the resource
+     */
+    private suspend fun KinesisClient.waitForResource(getResourceArn: suspend () -> String?): String = withTimeout(WAIT_TIMEOUT) {
+        var arn: String? = null
+        while (arn == null) {
+            arn = getResourceArn()
+            arn ?: run {
+                delay(POLLING_RATE)
+                yield()
+            }
+        }
+        return@withTimeout arn
     }
 }
