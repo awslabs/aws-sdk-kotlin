@@ -47,6 +47,26 @@ class StsAssumeRoleCredentialsProviderTest {
     }
 
     @Test
+    fun testSuccessWithAdditionalParams() = runTest {
+        val testEngine = buildTestConnection {
+            expect(StsTestUtils.stsResponse(testArn))
+        }
+
+        val provider = StsAssumeRoleCredentialsProvider(
+            credentialsProvider = sourceProvider,
+            httpClient = testEngine,
+            assumeRoleParameters = AssumeRoleParameters(
+                roleArn = testArn,
+                tags = mapOf("foo" to "bar", "baz" to "qux"),
+                policyArns = listOf("apple", "banana", "cherry"),
+            ),
+        )
+
+        val actual = provider.resolve()
+        assertEquals(StsTestUtils.expectedCredentialsBase, actual)
+    }
+
+    @Test
     fun testServiceFailure() = runTest {
         val errorResponseBody = """
         <ErrorResponse>

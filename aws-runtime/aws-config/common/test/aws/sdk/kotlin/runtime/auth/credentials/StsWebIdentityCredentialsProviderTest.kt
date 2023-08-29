@@ -95,6 +95,32 @@ class StsWebIdentityCredentialsProviderTest {
     }
 
     @Test
+    fun testSuccessWithAdditionalParams() = runTest {
+        val testEngine = buildTestConnection {
+            expect(stsResponse(testArn))
+        }
+
+        val testPlatform = TestPlatformProvider(
+            fs = mapOf("token-path" to "jwt-token"),
+        )
+
+        val provider = StsWebIdentityCredentialsProvider(
+            WebIdentityParameters(
+                roleArn = testArn,
+                webIdentityTokenFilePath = "token-path",
+                policyArns = listOf("apple", "banana", "cherry"),
+                policy = "foo!",
+            ),
+            region = "us-east-2",
+            httpClient = testEngine,
+            platformProvider = testPlatform,
+        )
+
+        val actual = provider.resolve()
+        assertEquals(expectedCredentialsBase, actual)
+    }
+
+    @Test
     fun testServiceFailure() = runTest {
         val errorResponseBody = """
         <ErrorResponse>
