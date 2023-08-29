@@ -10,9 +10,12 @@ import aws.sdk.kotlin.services.s3.model.S3Exception
 import aws.sdk.kotlin.services.s3.transform.GetBucketLocationOperationDeserializer
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
+import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
+import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -32,8 +35,10 @@ class GetBucketLocationOperationDeserializerTest {
             HttpBody.fromBytes(responseXML.encodeToByteArray()),
         )
 
+        val call = HttpCall(HttpRequestBuilder().build(), response, Instant.now(), Instant.now())
+
         val actual = runBlocking {
-            GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), response)
+            GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), call)
         }
 
         assertEquals(BucketLocationConstraint.UsWest2, actual.locationConstraint)
@@ -55,9 +60,10 @@ class GetBucketLocationOperationDeserializerTest {
             HttpBody.fromBytes(responseXML.encodeToByteArray()),
         )
 
+        val call = HttpCall(HttpRequestBuilder().build(), response, Instant.now(), Instant.now())
         val exception = assertThrows<S3Exception> {
             runBlocking {
-                GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), response)
+                GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), call)
             }
         }
 
