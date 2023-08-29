@@ -13,8 +13,13 @@ import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.auth.awssigning.DefaultAwsSigner
 import aws.smithy.kotlin.runtime.auth.awssigning.HashSpecification
 import aws.smithy.kotlin.runtime.awsprotocol.eventstream.*
+import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
+import aws.smithy.kotlin.runtime.http.HttpCall
+import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
+import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.smithy.test.assertJsonStringsEqual
@@ -69,10 +74,17 @@ class HttpEventStreamTests {
     private suspend fun deserializedEvent(message: Message): TestStream {
         val buffer = SdkBuffer()
         message.encode(buffer)
-        val body = ByteArrayContent(buffer.readByteArray())
+
+        val response = HttpResponse(
+            HttpStatusCode(200, "OK"),
+            Headers.invoke { },
+            ByteArrayContent(buffer.readByteArray())
+        )
+        val call = HttpCall(HttpRequestBuilder().build(), response)
+
         val builder = TestStreamOpResponse.Builder()
 
-        deserializeTestStreamOpOperationBody(builder, body)
+        deserializeTestStreamOpOperationBody(builder, call)
 
         val resp = builder.build()
         checkNotNull(resp.value)

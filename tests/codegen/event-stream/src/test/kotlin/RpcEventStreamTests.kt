@@ -15,7 +15,12 @@ import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.auth.awssigning.DefaultAwsSigner
 import aws.smithy.kotlin.runtime.auth.awssigning.HashSpecification
 import aws.smithy.kotlin.runtime.awsprotocol.eventstream.*
+import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
+import aws.smithy.kotlin.runtime.http.HttpCall
+import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.util.get
@@ -90,9 +95,9 @@ class RpcEventStreamTests {
         val responseBody = flowOf(initialResponseMessage, eventStreamResponse)
             .encode()
             .asEventStreamHttpBody(this)
-
         val builder = TestStreamOperationWithInitialRequestResponseResponse.Builder()
-        deserializeTestStreamOperationWithInitialRequestResponseOperationBody(builder, responseBody)
+
+        deserializeTestStreamOperationWithInitialRequestResponseOperationBody(builder, responseBody.asHttpCall())
 
         assertEquals(builder.initial, initialResponseData)
         val event = builder.value?.single() // this throws an exception if there's not exactly 1 event
@@ -118,7 +123,7 @@ class RpcEventStreamTests {
             .asEventStreamHttpBody(this)
 
         val builder = TestStreamOperationWithInitialRequestResponseResponse.Builder()
-        deserializeTestStreamOperationWithInitialRequestResponseOperationBody(builder, responseBody)
+        deserializeTestStreamOperationWithInitialRequestResponseOperationBody(builder, responseBody.asHttpCall())
 
         assertNull(builder.initial)
         val event = builder.value?.single()
@@ -158,5 +163,14 @@ class RpcEventStreamTests {
         assertEquals(expectedFramesSize, frames.size)
 
         return frames
+    }
+
+    private fun HttpBody.asHttpCall(): HttpCall {
+        val response = HttpResponse(
+            HttpStatusCode(200, "OK"),
+            Headers.invoke { },
+            this
+        )
+        return HttpCall(HttpRequestBuilder().build(), response)
     }
 }
