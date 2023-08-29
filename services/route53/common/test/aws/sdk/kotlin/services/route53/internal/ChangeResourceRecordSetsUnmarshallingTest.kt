@@ -97,9 +97,11 @@ class ChangeResourceRecordSetsUnmarshallingTest {
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
+        val call = HttpCall(HttpRequestBuilder().build(), response)
+
         val exception = assertThrows<InvalidChangeBatch> {
             runBlocking {
-                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
         }
         assertEquals(listOf<String>("InvalidChangeBatch message 1", "InvalidChangeBatch message 2"), exception.messages)
@@ -126,9 +128,11 @@ class ChangeResourceRecordSetsUnmarshallingTest {
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
+        val call = HttpCall(HttpRequestBuilder().build(), response)
+
         val exception = assertThrows<Route53Exception> {
             runBlocking {
-                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
         }
         assertEquals("ChangeResourceRecordSets error message", exception.message)
