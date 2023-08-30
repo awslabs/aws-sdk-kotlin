@@ -37,8 +37,8 @@ class KinesisSubscribeToShardTest {
      */
     @BeforeAll
     fun setup(): Unit = runBlocking {
-        client.getOrCreateStream()
-        client.getOrRegisterStreamConsumer()
+        dataStreamArn = client.getOrCreateStream()
+        dataStreamConsumerArn = client.getOrRegisterStreamConsumer()
     }
 
     /**
@@ -84,13 +84,13 @@ class KinesisSubscribeToShardTest {
     /**
      * Get a Kinesis data stream with the [STREAM_NAME_PREFIX], or if one does not exist,
      * create one and populate it with one test record.
-     *
-     * Assigns a value to the `lateinit var` [dataStreamArn]
+     * @return the ARN of the data stream
      */
-    private suspend fun KinesisClient.getOrCreateStream() {
-        var listStreamsResp = listStreams { }
-
-        dataStreamArn = listStreamsResp.streamSummaries?.find { it.streamName?.startsWith(STREAM_NAME_PREFIX) ?: false }?.streamArn ?: run {
+    private suspend fun KinesisClient.getOrCreateStream(): String =
+        listStreams { }
+            .streamSummaries
+            ?.find { it.streamName?.startsWith(STREAM_NAME_PREFIX) ?: false }
+            ?.streamArn ?: run {
             val randomStreamName = STREAM_NAME_PREFIX + UUID.randomUUID()
             createStream {
                 streamName = randomStreamName
@@ -112,15 +112,13 @@ class KinesisSubscribeToShardTest {
 
             newStreamArn
         }
-    }
 
     /**
      * Get a Kinesis data stream consumer, or if it doesn't exist, register a new one.
-     *
-     * Assigns a value to the `lateinit var` [dataStreamConsumerArn]
+     * @return the ARN of the stream consumer
      */
-    private suspend fun KinesisClient.getOrRegisterStreamConsumer() {
-        dataStreamConsumerArn = listStreamConsumers { streamArn = dataStreamArn }
+    private suspend fun KinesisClient.getOrRegisterStreamConsumer(): String =
+        listStreamConsumers { streamArn = dataStreamArn }
             .consumers
             ?.firstOrNull { it.consumerName?.startsWith(STREAM_CONSUMER_NAME_PREFIX) ?: false }
             ?.consumerArn ?: run {
