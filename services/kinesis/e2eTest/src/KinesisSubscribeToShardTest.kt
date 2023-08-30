@@ -6,7 +6,6 @@ package aws.sdk.kotlin.services.kinesis
 
 import aws.sdk.kotlin.services.kinesis.model.*
 import aws.sdk.kotlin.testing.withAllEngines
-import aws.smithy.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import org.junit.jupiter.api.AfterAll
