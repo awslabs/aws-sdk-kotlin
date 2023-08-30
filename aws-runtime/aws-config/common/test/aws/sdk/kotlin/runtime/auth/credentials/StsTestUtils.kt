@@ -7,32 +7,54 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.http.Headers
+import aws.smithy.kotlin.runtime.http.HttpBody
+import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
+import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
+import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.net.Url
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
+import aws.smithy.kotlin.runtime.util.text.urlEncodeComponent
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 object StsTestUtils {
-    val epoch = Instant.fromIso8601("2020-10-16T03:56:00Z")
-    val expectedCredentialsBase = Credentials(
+    const val ARN = "arn:aws:iam:1234567/test-role"
+    const val POLICY = "foo!"
+    const val REGION = "us-east-2"
+    const val SESSION_NAME = "aws-sdk-kotlin-1234567890"
+
+    val POLICY_ARNS = listOf("apple", "banana", "cherry")
+    val TAGS = mapOf("foo" to "bar", "baz" to "qux")
+    val EPOCH = Instant.fromIso8601("2020-10-16T03:56:00Z")
+    val CREDENTIALS = Credentials(
         "AKIDTest",
         "test-secret",
         "test-token",
-        epoch + 15.minutes,
+        EPOCH + 15.minutes,
         "AssumeRoleProvider",
     )
 
+    fun stsRequest(bodyParameters: Map<String, String>) = HttpRequestBuilder().apply {
+        val bodyBytes = bodyParameters
+            .entries
+            .joinToString("&") { (key, value) -> "${key.urlEncodeComponent()}=${value.urlEncodeComponent()}" }
+            .encodeToByteArray()
+
+        method = HttpMethod.GET
+        url(Url.parse("https://sts.$REGION.amazonaws.com/"))
+        body = HttpBody.fromBytes(bodyBytes)
+    }.build()
+
     // see https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html#API_AssumeRole_ResponseElements
     fun stsResponse(
-        roleArn: String,
+        roleArn: String = ARN,
         expiration: Instant? = null,
     ): HttpResponse {
         val roleId = roleArn.split("/").last()
-        val expiry = expiration ?: expectedCredentialsBase.expiration!!
+        val expiry = expiration ?: CREDENTIALS.expiration!!
         val body = """
             <AssumeRoleResponse xmlns="https://sts.amazonaws.com/doc/2011-06-15/">
               <AssumeRoleResult>

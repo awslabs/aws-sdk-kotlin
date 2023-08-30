@@ -37,7 +37,7 @@ private const val PROVIDER_NAME = "WebIdentityToken"
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class StsWebIdentityCredentialsProvider(
-    private val webIdentityParameters: WebIdentityParameters,
+    private val webIdentityParameters: AssumeRoleWithWebIdentityParameters,
     private val region: String?,
     private val platformProvider: PlatformProvider = PlatformProvider.System,
     private val httpClient: HttpClientEngine? = null,
@@ -68,7 +68,7 @@ public class StsWebIdentityCredentialsProvider(
         platformProvider: PlatformProvider = PlatformProvider.System,
         httpClient: HttpClientEngine? = null,
     ) : this(
-        WebIdentityParameters(
+        AssumeRoleWithWebIdentityParameters(
             roleArn = roleArn,
             webIdentityTokenFilePath = webIdentityTokenFilePath,
             roleSessionName = roleSessionName,
@@ -164,7 +164,7 @@ public class StsWebIdentityCredentialsProvider(
  * session policies
  * @param policy An IAM policy in JSON format that you want to use as an inline session policy
  */
-public class WebIdentityParameters(
+public class AssumeRoleWithWebIdentityParameters(
     public val roleArn: String,
     public val webIdentityTokenFilePath: String,
     public val roleSessionName: String? = null,

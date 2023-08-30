@@ -11,6 +11,7 @@ import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.httptest.CallAsserter
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
@@ -22,29 +23,26 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
+private const val TOKEN_PATH = "token-path"
+private const val TOKEN_VALUE = "jwt-token"
+
+private val CREDENTIALS = Credentials(
+    "AKIDTest",
+    "test-secret",
+    "test-token",
+    StsTestUtils.EPOCH + 15.minutes,
+    "WebIdentityToken",
+)
+
 class StsWebIdentityCredentialsProviderTest {
-
-    private val epoch = Instant.fromIso8601("2020-10-16T03:56:00Z")
-    private val expectedCredentialsBase = Credentials(
-        "AKIDTest",
-        "test-secret",
-        "test-token",
-        epoch + 15.minutes,
-        "WebIdentityToken",
-    )
-
-    private val testArn = "arn:aws:iam:1234567/test-role"
-
     // see https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html#API_AssumeRoleWithWebIdentity_ResponseElements
     private fun stsResponse(
-        roleArn: String,
+        roleArn: String = StsTestUtils.ARN,
         expiration: Instant? = null,
     ): HttpResponse {
         val roleId = roleArn.split("/").last()
-        val expiry = expiration ?: expectedCredentialsBase.expiration!!
+        val expiry = expiration ?: CREDENTIALS.expiration!!
         val body = """
         <AssumeRoleWithWebIdentityResponse xmlns="https://sts.amazonaws.com/doc/2011-06-15/">
           <AssumeRoleWithWebIdentityResult>
@@ -74,50 +72,78 @@ class StsWebIdentityCredentialsProviderTest {
 
     @Test
     fun testSuccess() = runTest {
+        val expectedBody = buildMap {
+            put("Action", "AssumeRoleWithWebIdentity")
+            put("Version", "2011-06-15")
+            put("DurationSeconds", "900")
+            put("RoleArn", StsTestUtils.ARN)
+            put("RoleSessionName", StsTestUtils.SESSION_NAME)
+            put("WebIdentityToken", TOKEN_VALUE)
+        }
+
         val testEngine = buildTestConnection {
-            expect(stsResponse(testArn))
+            expect(StsTestUtils.stsRequest(expectedBody), stsResponse())
         }
 
         val testPlatform = TestPlatformProvider(
-            fs = mapOf("token-path" to "jwt-token"),
+            fs = mapOf(TOKEN_PATH to TOKEN_VALUE),
         )
 
         val provider = StsWebIdentityCredentialsProvider(
-            roleArn = testArn,
-            webIdentityTokenFilePath = "token-path",
-            region = "us-east-2",
+            roleArn = StsTestUtils.ARN,
+            roleSessionName = StsTestUtils.SESSION_NAME,
+            webIdentityTokenFilePath = TOKEN_PATH,
+            region = StsTestUtils.REGION,
             httpClient = testEngine,
             platformProvider = testPlatform,
         )
 
         val actual = provider.resolve()
-        assertEquals(expectedCredentialsBase, actual)
+        assertEquals(CREDENTIALS, actual)
+
+        testEngine.assertRequests(CallAsserter.MatchingBodies)
     }
 
     @Test
     fun testSuccessWithAdditionalParams() = runTest {
+        val expectedBody = buildMap {
+            put("Action", "AssumeRoleWithWebIdentity")
+            put("Version", "2011-06-15")
+            put("DurationSeconds", "900")
+            put("Policy", StsTestUtils.POLICY)
+            StsTestUtils.POLICY_ARNS.forEachIndexed { i, arn ->
+                put("PolicyArns.member.${i + 1}.arn", arn)
+            }
+            put("RoleArn", StsTestUtils.ARN)
+            put("RoleSessionName", StsTestUtils.SESSION_NAME)
+            put("WebIdentityToken", TOKEN_VALUE)
+        }
+
         val testEngine = buildTestConnection {
-            expect(stsResponse(testArn))
+            expect(StsTestUtils.stsRequest(expectedBody), stsResponse())
         }
 
         val testPlatform = TestPlatformProvider(
-            fs = mapOf("token-path" to "jwt-token"),
+            fs = mapOf(TOKEN_PATH to TOKEN_VALUE),
         )
 
         val provider = StsWebIdentityCredentialsProvider(
-            WebIdentityParameters(
-                roleArn = testArn,
-                webIdentityTokenFilePath = "token-path",
-                policyArns = listOf("apple", "banana", "cherry"),
-                policy = "foo!",
+            AssumeRoleWithWebIdentityParameters(
+                roleArn = StsTestUtils.ARN,
+                roleSessionName = StsTestUtils.SESSION_NAME,
+                webIdentityTokenFilePath = TOKEN_PATH,
+                policyArns = StsTestUtils.POLICY_ARNS,
+                policy = StsTestUtils.POLICY,
             ),
-            region = "us-east-2",
+            region = StsTestUtils.REGION,
             httpClient = testEngine,
             platformProvider = testPlatform,
         )
 
         val actual = provider.resolve()
-        assertEquals(expectedCredentialsBase, actual)
+        assertEquals(CREDENTIALS, actual)
+
+        testEngine.assertRequests(CallAsserter.MatchingBodies)
     }
 
     @Test
@@ -138,13 +164,13 @@ class StsWebIdentityCredentialsProviderTest {
         }
 
         val testPlatform = TestPlatformProvider(
-            fs = mapOf("token-path" to "jwt-token"),
+            fs = mapOf(TOKEN_PATH to TOKEN_VALUE),
         )
 
         val provider = StsWebIdentityCredentialsProvider(
-            roleArn = testArn,
-            webIdentityTokenFilePath = "token-path",
-            region = "us-east-2",
+            roleArn = StsTestUtils.ARN,
+            webIdentityTokenFilePath = TOKEN_PATH,
+            region = StsTestUtils.REGION,
             httpClient = testEngine,
             platformProvider = testPlatform,
         )
@@ -161,9 +187,9 @@ class StsWebIdentityCredentialsProviderTest {
         val testPlatform = TestPlatformProvider()
 
         val provider = StsWebIdentityCredentialsProvider(
-            roleArn = testArn,
-            webIdentityTokenFilePath = "token-path",
-            region = "us-east-2",
+            roleArn = StsTestUtils.ARN,
+            webIdentityTokenFilePath = TOKEN_PATH,
+            region = StsTestUtils.REGION,
             httpClient = testEngine,
             platformProvider = testPlatform,
         )
@@ -179,7 +205,7 @@ class StsWebIdentityCredentialsProviderTest {
             env = mapOf(
                 "AWS_ROLE_ARN" to "my-role",
                 "AWS_WEB_IDENTITY_TOKEN_FILE" to "token-file-path",
-                "AWS_REGION" to "us-east-2",
+                "AWS_REGION" to StsTestUtils.REGION,
             ),
         )
 
@@ -190,7 +216,7 @@ class StsWebIdentityCredentialsProviderTest {
             val tp2 = TestPlatformProvider(
                 env = mapOf(
                     "AWS_WEB_IDENTITY_TOKEN_FILE" to "token-file-path",
-                    "AWS_REGION" to "us-east-2",
+                    "AWS_REGION" to StsTestUtils.REGION,
                 ),
             )
             StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = tp2)

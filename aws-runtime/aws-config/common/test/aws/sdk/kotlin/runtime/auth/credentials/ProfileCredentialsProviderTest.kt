@@ -132,7 +132,7 @@ class ProfileCredentialsProviderTest {
             httpClient = testEngine,
         )
         val actual = provider.resolve()
-        assertEquals(StsTestUtils.expectedCredentialsBase, actual)
+        assertEquals(StsTestUtils.CREDENTIALS, actual)
 
         testEngine.assertRequests()
         val req = testEngine.requests().first()
