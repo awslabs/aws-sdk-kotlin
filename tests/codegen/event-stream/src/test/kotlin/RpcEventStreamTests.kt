@@ -167,8 +167,8 @@ class RpcEventStreamTests {
 
     private fun HttpBody.asHttpCall(): HttpCall {
         val response = HttpResponse(
-            HttpStatusCode(200, "OK"),
-            Headers.invoke { },
+            HttpStatusCode.OK,
+            Headers.Empty,
             this,
         )
         return HttpCall(HttpRequestBuilder().build(), response)

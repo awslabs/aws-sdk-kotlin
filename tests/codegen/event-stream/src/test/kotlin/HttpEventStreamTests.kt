@@ -76,8 +76,8 @@ class HttpEventStreamTests {
         message.encode(buffer)
 
         val response = HttpResponse(
-            HttpStatusCode(200, "OK"),
-            Headers.invoke { },
+            HttpStatusCode.OK,
+            Headers.Empty,
             ByteArrayContent(buffer.readByteArray()),
         )
         val call = HttpCall(HttpRequestBuilder().build(), response)

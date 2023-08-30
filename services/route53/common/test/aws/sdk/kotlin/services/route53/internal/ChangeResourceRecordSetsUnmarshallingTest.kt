@@ -33,8 +33,8 @@ class ChangeResourceRecordSetsUnmarshallingTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
-            Headers.invoke { },
+            HttpStatusCode.BadRequest,
+            Headers.Empty,
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
@@ -62,8 +62,8 @@ class ChangeResourceRecordSetsUnmarshallingTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
-            Headers.invoke { },
+            HttpStatusCode.BadRequest,
+            Headers.Empty,
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
@@ -92,8 +92,8 @@ class ChangeResourceRecordSetsUnmarshallingTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
-            Headers.invoke { },
+            HttpStatusCode.BadRequest,
+            Headers.Empty,
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
@@ -123,8 +123,8 @@ class ChangeResourceRecordSetsUnmarshallingTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
-            Headers.invoke { },
+            HttpStatusCode.BadRequest,
+            Headers.Empty,
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
