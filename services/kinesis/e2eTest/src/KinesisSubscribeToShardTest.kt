@@ -24,8 +24,8 @@ class KinesisSubscribeToShardTest {
     private val WAIT_TIMEOUT = 30.seconds
     private val POLLING_RATE = 3.seconds
 
-    private val STREAM_NAME_PREFIX = "aws-sdk-kotlin-e2e-test-stream"
-    private val STREAM_CONSUMER_NAME_PREFIX = "aws-sdk-kotlin-e2e-test"
+    private val STREAM_NAME_PREFIX = "aws-sdk-kotlin-e2e-test-stream-"
+    private val STREAM_CONSUMER_NAME_PREFIX = "aws-sdk-kotlin-e2e-test-"
 
     private val TEST_DATA = "Bees, bees, bees, bees!"
 
@@ -91,6 +91,7 @@ class KinesisSubscribeToShardTest {
             .streamSummaries
             ?.find { it.streamName?.startsWith(STREAM_NAME_PREFIX) ?: false }
             ?.streamArn ?: run {
+            // Create a new data stream, then wait for it to be active
             val randomStreamName = STREAM_NAME_PREFIX + UUID.randomUUID()
             createStream {
                 streamName = randomStreamName
@@ -99,15 +100,35 @@ class KinesisSubscribeToShardTest {
 
             val newStreamArn = waitForResource {
                 listStreams { }
-                    .streamSummaries
+                    ?.streamSummaries
                     ?.firstOrNull { it.streamName == randomStreamName }
-                    ?.takeIf { it.streamStatus == StreamStatus.Active }
+                    ?.takeIf { it.streamStatus == StreamStatus.Active}
+                    ?.streamArn
             }
 
+            // Put a record, then wait for it to appear on the stream
             putRecord {
                 data = TEST_DATA.encodeToByteArray()
                 streamArn = newStreamArn
                 partitionKey = "Goodbye"
+            }
+
+            val newStreamShardId = client.listShards {
+                streamArn = newStreamArn
+            }.shards?.single()!!.shardId
+
+            val currentShardIterator = getShardIterator {
+                shardId = newStreamShardId
+                shardIteratorType = ShardIteratorType.TrimHorizon
+                streamArn = newStreamArn
+            }.shardIterator!!
+
+            waitForResource {
+                getRecords {
+                    shardIterator = currentShardIterator
+                    streamArn = newStreamArn
+                }.records
+                    ?.firstOrNull { it.data?.decodeToString() == TEST_DATA }
             }
 
             newStreamArn
@@ -122,6 +143,8 @@ class KinesisSubscribeToShardTest {
             .consumers
             ?.firstOrNull { it.consumerName?.startsWith(STREAM_CONSUMER_NAME_PREFIX) ?: false }
             ?.consumerArn ?: run {
+            // Register a new consumer and wait for it to be active
+
             val randomConsumerName = STREAM_CONSUMER_NAME_PREFIX + UUID.randomUUID()
             registerStreamConsumer {
                 consumerName = randomConsumerName
@@ -130,28 +153,29 @@ class KinesisSubscribeToShardTest {
 
             waitForResource {
                 listStreamConsumers { streamArn = dataStreamArn }
-                    .consumers
+                    ?.consumers
                     ?.firstOrNull { it.consumerName == randomConsumerName }
-                    ?.takeIf { it.consumerStatus == ConsumerStatus.Active }
+                    ?.takeIf { it.consumerStatus == ConsumerStatus.Active}
+                    ?.consumerArn
             }
         }
 
     /**
-     * Poll at a predefined [POLLING_RATE] for a resource to exist and return its ARN.
+     * Poll at a predefined [POLLING_RATE] for a resource to exist and it.
      * Throws an exception if this takes longer than the [WAIT_TIMEOUT] duration.
      *
-     * @param getResourceArn a suspending function which returns the resource's ARN or null if it does not exist yet
-     * @return the ARN of the resource
+     * @param getResource a suspending function which returns the resource or null if it does not exist yet
+     * @return the resource
      */
-    private suspend fun KinesisClient.waitForResource(getResourceArn: suspend () -> String?): String = withTimeout(WAIT_TIMEOUT) {
-        var arn: String? = null
-        while (arn == null) {
-            arn = getResourceArn()
-            arn ?: run {
+    private suspend fun <T> KinesisClient.waitForResource(getResource: suspend () -> T?): T = withTimeout(WAIT_TIMEOUT) {
+        var resource: T? = null
+        while (resource == null) {
+            resource = getResource()
+            resource ?: run {
                 delay(POLLING_RATE)
                 yield()
             }
         }
-        return@withTimeout arn
+        return@withTimeout resource
     }
 }
