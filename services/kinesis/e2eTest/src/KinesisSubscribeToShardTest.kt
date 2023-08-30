@@ -100,7 +100,7 @@ class KinesisSubscribeToShardTest {
             val newStreamArn = waitForResource {
                 listStreams { }
                     .streamSummaries
-                    ?.find { it.streamName?.equals(randomStreamName) ?: false }
+                    ?.firstOrNull { it.streamName == randomStreamName }
                     ?.takeIf { it.streamStatus == StreamStatus.Active }
             }
 
@@ -133,7 +133,7 @@ class KinesisSubscribeToShardTest {
             waitForResource {
                 listStreamConsumers { streamArn = dataStreamArn }
                     .consumers
-                    ?.firstOrNull { it.consumerName?.equals(randomConsumerName) ?: false }
+                    ?.firstOrNull { it.consumerName == randomConsumerName }
                     ?.takeIf { it.consumerStatus == ConsumerStatus.Active }
             }
         }
