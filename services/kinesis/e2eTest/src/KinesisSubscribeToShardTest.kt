@@ -161,7 +161,7 @@ class KinesisSubscribeToShardTest {
         }
 
     /**
-     * Poll at a predefined [POLLING_RATE] for a resource to exist and it.
+     * Poll at a predefined [POLLING_RATE] for a resource to exist and return it.
      * Throws an exception if this takes longer than the [WAIT_TIMEOUT] duration.
      *
      * @param getResource a suspending function which returns the resource or null if it does not exist yet
