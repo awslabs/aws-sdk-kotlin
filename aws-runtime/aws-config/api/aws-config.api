@@ -161,18 +161,6 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredent
 	public static synthetic fun fromEnvironment-TUY-ock$default (Laws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredentialsProvider$Companion;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLaws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredentialsProvider;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/WebIdentityParameters {
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getDuration-UwyO8pc ()J
-	public final fun getPolicy ()Ljava/lang/String;
-	public final fun getPolicyArns ()Ljava/util/List;
-	public final fun getProviderId ()Ljava/lang/String;
-	public final fun getRoleArn ()Ljava/lang/String;
-	public final fun getRoleSessionName ()Ljava/lang/String;
-	public final fun getWebIdentityTokenFilePath ()Ljava/lang/String;
-}
-
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ManagedBearerTokenProviderKt {
 	public static final fun manage (Laws/smithy/kotlin/runtime/http/auth/CloseableBearerTokenProvider;)Laws/smithy/kotlin/runtime/http/auth/BearerTokenProvider;
 }
