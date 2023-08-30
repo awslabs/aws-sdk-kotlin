@@ -135,7 +135,6 @@ class KinesisSubscribeToShardTest {
                     ?.takeIf { it.consumerStatus == ConsumerStatus.Active }
             }
         }
-    }
 
     /**
      * Poll at a predefined [POLLING_RATE] for a resource to exist and return its ARN.
