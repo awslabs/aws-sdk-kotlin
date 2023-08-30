@@ -5,6 +5,8 @@
 package aws.sdk.kotlin.services.kinesis
 
 import aws.sdk.kotlin.services.kinesis.model.*
+import aws.sdk.kotlin.testing.withAllEngines
+import aws.smithy.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import org.junit.jupiter.api.AfterAll
@@ -66,18 +68,29 @@ class KinesisSubscribeToShardTest {
             streamArn = dataStreamArn
         }.shards?.single()!!.shardId
 
-        client.subscribeToShard(
-            SubscribeToShardRequest {
-                consumerArn = dataStreamConsumerArn
-                shardId = dataStreamShardId
-                startingPosition = StartingPosition {
-                    type = ShardIteratorType.TrimHorizon
+        withAllEngines { engine ->
+            client.withConfig {
+                httpClient = engine
+            }.use { clientWithTestEngine ->
+                clientWithTestEngine.subscribeToShard(
+                    SubscribeToShardRequest {
+                        consumerArn = dataStreamConsumerArn
+                        shardId = dataStreamShardId
+                        startingPosition = StartingPosition {
+                            type = ShardIteratorType.TrimHorizon
+                        }
+                    },
+                ) {
+                    val event = it.eventStream?.first()
+                    val record = event?.asSubscribeToShardEvent()?.records?.single()
+                    assertEquals(TEST_DATA, record?.data?.decodeToString())
                 }
-            },
-        ) {
-            val event = it.eventStream?.first()
-            val record = event?.asSubscribeToShardEvent()?.records?.single()
-            assertEquals(TEST_DATA, record?.data?.decodeToString())
+
+                // Wait 5 seconds, otherwise a ResourceInUseException gets thrown. Source:
+                // https://docs.aws.amazon.com/kinesis/latest/APIReference/API_SubscribeToShard.html
+                // > If you call SubscribeToShard 5 seconds or more after a successful call, the second call takes over the subscription
+                delay(5.seconds)
+            }
         }
     }
 
