@@ -101,7 +101,7 @@ class KinesisSubscribeToShardTest {
                 listStreams { }
                     .streamSummaries
                     ?.find { it.streamName?.equals(randomStreamName) ?: false }
-                    ?.let { if (it.streamStatus == StreamStatus.Active) it.streamArn!! else null }
+                    ?.takeIf { it.streamStatus == StreamStatus.Active }
             }
 
             putRecord {
@@ -134,7 +134,7 @@ class KinesisSubscribeToShardTest {
                 listStreamConsumers { streamArn = dataStreamArn }
                     .consumers
                     ?.firstOrNull { it.consumerName?.equals(randomConsumerName) ?: false }
-                    ?.let { if (it.consumerStatus == ConsumerStatus.Active) it.consumerArn else null }
+                    ?.takeIf { it.consumerStatus == ConsumerStatus.Active }
             }
         }
     }
