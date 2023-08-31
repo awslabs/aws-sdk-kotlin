@@ -287,6 +287,7 @@
                     "arnNamespace": "datapipeline",
                     "cloudFormationName": "DataPipeline",
                     "cloudTrailEventSource": "datapipeline.amazonaws.com",
+                    "docId": "datapipeline-2012-10-29",
                     "endpointPrefix": "datapipeline"
                 },
                 "aws.auth#sigv4": {

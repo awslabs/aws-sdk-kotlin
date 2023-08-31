@@ -3685,6 +3685,7 @@
                     "arnNamespace": "kinesisanalytics",
                     "cloudFormationName": "KinesisAnalyticsV2",
                     "cloudTrailEventSource": "kinesisanalyticsv2.amazonaws.com",
+                    "docId": "kinesisanalyticsv2-2018-05-23",
                     "endpointPrefix": "kinesisanalytics"
                 },
                 "aws.auth#sigv4": {

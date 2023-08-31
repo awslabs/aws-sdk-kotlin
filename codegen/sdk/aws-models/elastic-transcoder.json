@@ -1264,6 +1264,7 @@
                     "arnNamespace": "elastictranscoder",
                     "cloudFormationName": "ElasticTranscoder",
                     "cloudTrailEventSource": "elastictranscoder.amazonaws.com",
+                    "docId": "elastictranscoder-2012-09-25",
                     "endpointPrefix": "elastictranscoder"
                 },
                 "aws.auth#sigv4": {

@@ -112,6 +112,7 @@
                     "arnNamespace": "servicecatalog",
                     "cloudFormationName": "ServiceCatalogAppRegistry",
                     "cloudTrailEventSource": "servicecatalogappregistry.amazonaws.com",
+                    "docId": "AWS242AppRegistry-2020-06-24",
                     "endpointPrefix": "servicecatalog-appregistry"
                 },
                 "aws.auth#sigv4": {

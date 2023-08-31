@@ -1,0 +1,5 @@
+{
+    "id": "4ee0bc65-8d21-4518-b29f-47a838b95b34",
+    "type": "misc",
+    "description": "Bump **smithy-kotlin** and AWS service models to latest versions"
+}

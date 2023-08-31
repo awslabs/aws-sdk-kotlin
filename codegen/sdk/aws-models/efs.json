@@ -2702,6 +2702,7 @@
                     "arnNamespace": "elasticfilesystem",
                     "cloudFormationName": "EFS",
                     "cloudTrailEventSource": "efs.amazonaws.com",
+                    "docId": "elasticfilesystem-2015-02-01",
                     "endpointPrefix": "elasticfilesystem"
                 },
                 "aws.auth#sigv4": {

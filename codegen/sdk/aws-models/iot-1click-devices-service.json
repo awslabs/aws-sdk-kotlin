@@ -682,6 +682,7 @@
                     "arnNamespace": "iot1click",
                     "cloudFormationName": "IoT1ClickDevicesService",
                     "cloudTrailEventSource": "iot1clickdevicesservice.amazonaws.com",
+                    "docId": "devices-2018-05-14",
                     "endpointPrefix": "devices.iot1click"
                 },
                 "aws.auth#sigv4": {

@@ -262,6 +262,7 @@
                     "arnNamespace": "cloudhsm",
                     "cloudFormationName": "CloudHSMV2",
                     "cloudTrailEventSource": "cloudhsmv2.amazonaws.com",
+                    "docId": "cloudhsmv2-2017-04-28",
                     "endpointPrefix": "cloudhsmv2"
                 },
                 "aws.auth#sigv4": {

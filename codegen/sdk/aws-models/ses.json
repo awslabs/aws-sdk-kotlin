@@ -6424,6 +6424,7 @@
                     "arnNamespace": "ses",
                     "cloudFormationName": "SES",
                     "cloudTrailEventSource": "ses.amazonaws.com",
+                    "docId": "email-2010-12-01",
                     "endpointPrefix": "email"
                 },
                 "aws.auth#sigv4": {

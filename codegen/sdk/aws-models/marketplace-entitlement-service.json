@@ -43,6 +43,7 @@
                     "arnNamespace": "aws-marketplace",
                     "cloudFormationName": "MarketplaceEntitlementService",
                     "cloudTrailEventSource": "marketplaceentitlementservice.amazonaws.com",
+                    "docId": "entitlement.marketplace-2017-01-11",
                     "endpointPrefix": "entitlement.marketplace"
                 },
                 "aws.auth#sigv4": {

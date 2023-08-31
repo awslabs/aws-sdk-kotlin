@@ -142,6 +142,7 @@
                     "arnNamespace": "states",
                     "cloudFormationName": "StepFunctions",
                     "cloudTrailEventSource": "sfn.amazonaws.com",
+                    "docId": "states-2016-11-23",
                     "endpointPrefix": "states"
                 },
                 "aws.auth#sigv4": {

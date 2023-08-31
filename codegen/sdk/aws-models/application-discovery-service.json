@@ -115,6 +115,7 @@
                     "arnNamespace": "discovery",
                     "cloudFormationName": "ApplicationDiscoveryService",
                     "cloudTrailEventSource": "applicationdiscoveryservice.amazonaws.com",
+                    "docId": "discovery-2015-11-01",
                     "endpointPrefix": "discovery"
                 },
                 "aws.auth#sigv4": {

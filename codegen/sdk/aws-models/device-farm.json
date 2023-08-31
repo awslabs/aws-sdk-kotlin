@@ -2346,6 +2346,7 @@
                     "arnNamespace": "devicefarm",
                     "cloudFormationName": "DeviceFarm",
                     "cloudTrailEventSource": "devicefarm.amazonaws.com",
+                    "docId": "devicefarm-2015-06-23",
                     "endpointPrefix": "devicefarm"
                 },
                 "aws.auth#sigv4": {
