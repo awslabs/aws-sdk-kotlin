@@ -5,7 +5,9 @@
 package aws.sdk.kotlin.services.kinesis
 
 import aws.sdk.kotlin.services.kinesis.model.*
+import aws.sdk.kotlin.services.kinesis.waiters.waitUntilStreamExists
 import aws.sdk.kotlin.testing.withAllEngines
+import aws.smithy.kotlin.runtime.retries.getOrThrow
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import org.junit.jupiter.api.AfterAll
@@ -15,9 +17,6 @@ import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
-import aws.sdk.kotlin.services.kinesis.waiters.waitUntilStreamExists
-import aws.smithy.kotlin.runtime.retries.Outcome
-import aws.smithy.kotlin.runtime.retries.getOrThrow
 
 /**
  * Tests for Kinesis SubscribeToShard (an RPC-bound protocol)
@@ -113,7 +112,7 @@ class KinesisSubscribeToShardTest {
                 shardCount = 1
             }
 
-            val newStreamArn = waitUntilStreamExists({streamName = randomStreamName})
+            val newStreamArn = waitUntilStreamExists({ streamName = randomStreamName })
                 .getOrThrow()
                 .streamDescription!!
                 .streamArn!!
