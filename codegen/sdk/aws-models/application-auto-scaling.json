@@ -140,6 +140,7 @@
                     "arnNamespace": "application-autoscaling",
                     "cloudFormationName": "ApplicationAutoScaling",
                     "cloudTrailEventSource": "applicationautoscaling.amazonaws.com",
+                    "docId": "application-autoscaling-2016-02-06",
                     "endpointPrefix": "application-autoscaling"
                 },
                 "aws.auth#sigv4": {

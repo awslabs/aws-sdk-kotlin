@@ -166,6 +166,7 @@
                     "arnNamespace": "lex",
                     "cloudFormationName": "LexModelBuildingService",
                     "cloudTrailEventSource": "lexmodelbuildingservice.amazonaws.com",
+                    "docId": "lex-models-2017-04-19",
                     "endpointPrefix": "models.lex"
                 },
                 "aws.auth#sigv4": {

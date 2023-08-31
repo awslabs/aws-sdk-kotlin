@@ -2817,6 +2817,7 @@
                     "arnNamespace": "mturk-requester",
                     "cloudFormationName": "MTurk",
                     "cloudTrailEventSource": "mturk.amazonaws.com",
+                    "docId": "mturk-requester-2017-01-17",
                     "endpointPrefix": "mturk-requester"
                 },
                 "aws.auth#sigv4": {

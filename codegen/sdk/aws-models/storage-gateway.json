@@ -8939,6 +8939,7 @@
                     "arnNamespace": "storagegateway",
                     "cloudFormationName": "StorageGateway",
                     "cloudTrailEventSource": "storagegateway.amazonaws.com",
+                    "docId": "storagegateway-2013-06-30",
                     "endpointPrefix": "storagegateway"
                 },
                 "aws.auth#sigv4": {

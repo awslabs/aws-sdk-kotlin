@@ -333,6 +333,7 @@
                     "arnNamespace": "marketplacecommerceanalytics",
                     "cloudFormationName": "MarketplaceCommerceAnalytics",
                     "cloudTrailEventSource": "marketplacecommerceanalytics.amazonaws.com",
+                    "docId": "marketplacecommerceanalytics-2015-07-01",
                     "endpointPrefix": "marketplacecommerceanalytics"
                 },
                 "aws.auth#sigv4": {

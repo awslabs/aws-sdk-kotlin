@@ -468,6 +468,10 @@
             ],
             "traits": {
                 "aws.iam#actionPermissionDescription": "Grants permission to create a new security data lake",
+                "aws.iam#conditionKeys": [
+                    "aws:TagKeys",
+                    "aws:RequestTag/${TagKey}"
+                ],
                 "aws.iam#requiredActions": [
                     "iam:CreateServiceLinkedRole",
                     "iam:GetRole",
@@ -710,6 +714,10 @@
             ],
             "traits": {
                 "aws.iam#actionPermissionDescription": "Grants permission to create a subscriber",
+                "aws.iam#conditionKeys": [
+                    "aws:TagKeys",
+                    "aws:RequestTag/${TagKey}"
+                ],
                 "aws.iam#requiredActions": [
                     "iam:GetRole",
                     "iam:PutRolePolicy",
@@ -2454,7 +2462,8 @@
                     "outputToken": "nextToken",
                     "pageSize": "maxResults",
                     "items": "exceptions"
-                }
+                },
+                "smithy.api#readonly": {}
             }
         },
         "com.amazonaws.securitylake#ListDataLakeExceptionsRequest": {
@@ -2613,7 +2622,8 @@
                     "outputToken": "nextToken",
                     "pageSize": "maxResults",
                     "items": "sources"
-                }
+                },
+                "smithy.api#readonly": {}
             }
         },
         "com.amazonaws.securitylake#ListLogSourcesRequest": {
@@ -2901,7 +2911,9 @@
         "com.amazonaws.securitylake#NextToken": {
             "type": "string",
             "traits": {
-                "smithy.api#pattern": "^[\\\\\\w\\-_:/.@=+]*$"
+                "smithy.api#length": {
+                    "max": 2048
+                }
             }
         },
         "com.amazonaws.securitylake#NotificationConfiguration": {
@@ -3140,6 +3152,23 @@
                 },
                 "aws.auth#sigv4": {
                     "name": "securitylake"
+                },
+                "aws.iam#defineConditionKeys": {
+                    "aws:ResourceTag/${TagKey}": {
+                        "type": "String",
+                        "documentation": "Filters access by the tags associated with the resource",
+                        "externalDocumentation": "${DocHomeURL}IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-resourcetag"
+                    },
+                    "aws:RequestTag/${TagKey}": {
+                        "type": "String",
+                        "documentation": "Filters access by tags that are passed in the request",
+                        "externalDocumentation": "${DocHomeURL}IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-requesttag"
+                    },
+                    "aws:TagKeys": {
+                        "type": "ArrayOfString",
+                        "documentation": "Filters access by tag keys that are passed in the request",
+                        "externalDocumentation": "${DocHomeURL}IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-tagkeys"
+                    }
                 },
                 "aws.iam#supportedPrincipalTypes": [
                     "Root",
@@ -4136,6 +4165,10 @@
                 }
             ],
             "traits": {
+                "aws.iam#conditionKeys": [
+                    "aws:TagKeys",
+                    "aws:RequestTag/${TagKey}"
+                ],
                 "smithy.api#documentation": "<p>Adds or updates one or more tags that are associated with an Amazon Security Lake resource: a subscriber, or the data lake configuration for your \n         Amazon Web Services account in a particular Amazon Web Services Region. A <i>tag</i> is a label that you can define and associate with \n         Amazon Web Services resources. Each tag consists of a required <i>tag key</i> and an associated <i>tag value</i>. A \n         <i>tag key</i> is a general label that acts as a category for a more specific tag value. A <i>tag value</i> acts as a \n         descriptor for a tag key. Tags can help you identify, categorize, and manage resources in different ways, such as by owner, environment, or other \n         criteria. For more information, see \n         <a href=\"https://docs.aws.amazon.com/security-lake/latest/userguide/tagging-resources.html\">Tagging Amazon Security Lake resources</a> in the \n         <i>Amazon Security Lake User Guide</i>.</p>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -4165,7 +4198,12 @@
                 }
             },
             "traits": {
-                "smithy.api#input": {}
+                "smithy.api#input": {},
+                "smithy.api#references": [
+                    {
+                        "resource": "com.amazonaws.securitylake#DataLake"
+                    }
+                ]
             }
         },
         "com.amazonaws.securitylake#TagResourceResponse": {
@@ -4254,6 +4292,9 @@
                 }
             ],
             "traits": {
+                "aws.iam#conditionKeys": [
+                    "aws:TagKeys"
+                ],
                 "smithy.api#documentation": "<p>Removes one or more tags (keys and values) from an Amazon Security Lake resource: a subscriber, or the data lake configuration for your \n         Amazon Web Services account in a particular Amazon Web Services Region.</p>",
                 "smithy.api#http": {
                     "method": "DELETE",
@@ -4284,7 +4325,12 @@
                 }
             },
             "traits": {
-                "smithy.api#input": {}
+                "smithy.api#input": {},
+                "smithy.api#references": [
+                    {
+                        "resource": "com.amazonaws.securitylake#DataLake"
+                    }
+                ]
             }
         },
         "com.amazonaws.securitylake#UntagResourceResponse": {

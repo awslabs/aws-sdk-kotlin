@@ -91,6 +91,7 @@
                     "arnNamespace": "mgh",
                     "cloudFormationName": "MigrationHub",
                     "cloudTrailEventSource": "migrationhub.amazonaws.com",
+                    "docId": "AWSMigrationHub-2017-05-31",
                     "endpointPrefix": "mgh"
                 },
                 "aws.auth#sigv4": {

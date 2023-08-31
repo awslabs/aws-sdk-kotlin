@@ -52,6 +52,7 @@
                     "arnNamespace": "cur",
                     "cloudFormationName": "CostandUsageReportService",
                     "cloudTrailEventSource": "costandusagereportservice.amazonaws.com",
+                    "docId": "cur-2017-01-06",
                     "endpointPrefix": "cur"
                 },
                 "aws.auth#sigv4": {

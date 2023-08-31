@@ -88,6 +88,7 @@
                     "arnNamespace": "iot1click",
                     "cloudFormationName": "IoT1Click",
                     "cloudTrailEventSource": "iot1clickprojects.amazonaws.com",
+                    "docId": "iot1click-projects-2018-05-14",
                     "endpointPrefix": "projects.iot1click"
                 },
                 "aws.auth#sigv4": {

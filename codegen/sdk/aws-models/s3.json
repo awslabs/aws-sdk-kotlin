@@ -8149,7 +8149,6 @@
                                 "ForcePathStyle": false,
                                 "Endpoint": "https://beta.example.com",
                                 "Region": "cn-north-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": true,
                                 "UseFIPS": false
                             }
@@ -8786,10 +8785,8 @@
                                 "ForcePathStyle": false,
                                 "UseArnRegion": false,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -8826,10 +8823,8 @@
                                 "Bucket": "arn:aws:s3:us-west-2:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "us-east-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -8868,10 +8863,8 @@
                                 "ForcePathStyle": false,
                                 "UseArnRegion": true,
                                 "Region": "us-east-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -11688,8 +11681,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -11728,8 +11720,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -11769,8 +11760,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -11809,8 +11799,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -11849,8 +11838,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -11890,8 +11878,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
                                 "UseDualStack": true,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -11919,8 +11906,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -11958,8 +11944,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -11998,8 +11983,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "cn-north-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12065,8 +12049,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12105,8 +12088,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12146,8 +12128,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12186,8 +12167,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12226,8 +12206,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -12267,8 +12246,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
                                 "UseDualStack": true,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -12296,8 +12274,7 @@
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -12336,8 +12313,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12404,8 +12380,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12445,8 +12420,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "us-west-2",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12472,10 +12446,8 @@
                                 "Bucket": "arn:PARTITION:s3-outposts:REGION:123456789012:outpost:op-01234567890123456:bucket:mybucket",
                                 "ForcePathStyle": true,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12514,8 +12486,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12552,8 +12523,7 @@
                                 "Bucket": "99a_b",
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12592,8 +12562,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12649,8 +12618,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12690,8 +12658,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "cn-north-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12717,10 +12684,8 @@
                                 "Bucket": "arn:PARTITION:s3-outposts:REGION:123456789012:outpost:op-01234567890123456:bucket:mybucket",
                                 "ForcePathStyle": true,
                                 "Region": "cn-north-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12759,8 +12724,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12797,8 +12761,7 @@
                                 "Bucket": "99a_b",
                                 "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12837,8 +12800,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12906,8 +12868,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12947,8 +12908,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "af-south-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -12974,10 +12934,8 @@
                                 "Bucket": "arn:PARTITION:s3-outposts:REGION:123456789012:outpost:op-01234567890123456:bucket:mybucket",
                                 "ForcePathStyle": true,
                                 "Region": "af-south-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13016,8 +12974,7 @@
                                 "ForcePathStyle": true,
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13054,8 +13011,7 @@
                                 "Bucket": "99a_b",
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13095,8 +13051,7 @@
                                 "Endpoint": "http://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13137,8 +13092,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13167,8 +13121,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -13197,8 +13150,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "us-west-2",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13227,8 +13179,7 @@
                                 "Endpoint": "http://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "us-west-2",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13267,10 +13218,8 @@
                                 "ForcePathStyle": false,
                                 "Endpoint": "https://beta.example.com",
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13310,8 +13259,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13352,8 +13300,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "cn-north-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13396,8 +13343,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "cn-north-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13451,10 +13397,8 @@
                                 "ForcePathStyle": false,
                                 "Endpoint": "https://beta.example.com",
                                 "Region": "cn-north-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13494,8 +13438,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13536,8 +13479,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13566,8 +13508,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -13596,8 +13537,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "af-south-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13626,8 +13566,7 @@
                                 "Endpoint": "https://control.vpce-1a2b3c4d-5e6f.s3.us-west-2.vpce.amazonaws.com",
                                 "Region": "af-south-1",
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13666,10 +13605,8 @@
                                 "ForcePathStyle": false,
                                 "Endpoint": "https://beta.example.com",
                                 "Region": "af-south-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13706,10 +13643,8 @@
                                 "Bucket": "arn:aws:s3:us-west-2:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13747,10 +13682,8 @@
                                 "Bucket": "arn:aws:s3:us-west-2:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -13776,10 +13709,8 @@
                                 "Bucket": "arn:aws:s3:us-west-2:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13818,10 +13749,8 @@
                                 "Bucket": "arn:aws:s3:us-west-2:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": true,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -13858,10 +13787,8 @@
                                 "Bucket": "arn:aws-cn:s3:cn-north-1:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "cn-north-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13874,7 +13801,6 @@
                                 "Bucket": "arn:aws-cn:s3:cn-north-1:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "cn-north-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
                                 "UseFIPS": true
                             }
@@ -13902,10 +13828,8 @@
                                 "Bucket": "arn:aws-cn:s3:cn-north-1:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "cn-north-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13918,7 +13842,6 @@
                                 "Bucket": "arn:aws-cn:s3:cn-north-1:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "cn-north-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": true,
                                 "UseFIPS": true
                             }
@@ -13957,10 +13880,8 @@
                                 "Bucket": "arn:aws:s3:af-south-1:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -13998,10 +13919,8 @@
                                 "Bucket": "arn:aws:s3:af-south-1:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -14027,10 +13946,8 @@
                                 "Bucket": "arn:aws:s3:af-south-1:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -14069,10 +13986,8 @@
                                 "Bucket": "arn:aws:s3:af-south-1:123456789012:accesspoint:myendpoint",
                                 "ForcePathStyle": false,
                                 "Region": "af-south-1",
-                                "RequiresAccountId": true,
                                 "UseDualStack": true,
-                                "UseFIPS": true,
-                                "___key": "key"
+                                "UseFIPS": true
                             }
                         },
                         {
@@ -14175,10 +14090,8 @@
                                 "ForcePathStyle": false,
                                 "UseArnRegion": false,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -14207,10 +14120,8 @@
                                 "ForcePathStyle": false,
                                 "UseArnRegion": false,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -14249,10 +14160,8 @@
                                 "ForcePathStyle": false,
                                 "UseArnRegion": true,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -14289,10 +14198,8 @@
                                 "Bucket": "arn:aws:s3-outposts:us-east-1:123456789012:outpost:op-01234567890123456:accesspoint:myaccesspoint",
                                 "ForcePathStyle": false,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -14319,10 +14226,8 @@
                                 "ForcePathStyle": false,
                                 "UseArnRegion": true,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -15070,10 +14975,8 @@
                                 "ForcePathStyle": false,
                                 "UseArnRegion": false,
                                 "Region": "us-west-2",
-                                "RequiresAccountId": true,
                                 "UseDualStack": false,
-                                "UseFIPS": false,
-                                "___key": "key"
+                                "UseFIPS": false
                             }
                         },
                         {
@@ -17382,16 +17285,13 @@
                 "smithy.api#documentation": "<p>Creates a new S3 bucket. To create a bucket, you must register with Amazon S3 and have a\n         valid Amazon Web Services Access Key ID to authenticate requests. Anonymous requests are never allowed to\n         create buckets. By creating the bucket, you become the bucket owner.</p>\n         <p>Not every string is an acceptable bucket name. For information about bucket naming\n         restrictions, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html\">Bucket naming\n         rules</a>.</p>\n         <p>If you want to create an Amazon S3 on Outposts bucket, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_CreateBucket.html\">Create Bucket</a>. </p>\n         <p>By default, the bucket is created in the US East (N. Virginia) Region. You can\n         optionally specify a Region in the request body. You might choose a Region to optimize\n         latency, minimize costs, or address regulatory requirements. For example, if you reside in\n         Europe, you will probably find it advantageous to create buckets in the Europe (Ireland)\n         Region. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro\">Accessing a\n            bucket</a>.</p>\n         <note>\n            <p>If you send your create bucket request to the <code>s3.amazonaws.com</code> endpoint,\n            the request goes to the <code>us-east-1</code> Region. Accordingly, the signature calculations in\n            Signature Version 4 must use <code>us-east-1</code> as the Region, even if the location constraint in\n            the request specifies another Region where the bucket is to be created. If you create a\n            bucket in a Region other than US East (N. Virginia), your application must be able to\n            handle 307 redirect. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html\">Virtual hosting of\n            buckets</a>.</p>\n         </note>\n         <dl>\n            <dt>Permissions</dt>\n            <dd>\n               <p>In addition to <code>s3:CreateBucket</code>, the following permissions are required when\n                  your <code>CreateBucket</code> request includes specific headers:</p>\n               <ul>\n                  <li>\n                     <p>\n                        <b>Access control lists (ACLs)</b> - If your <code>CreateBucket</code> request\n                        specifies access control list (ACL) permissions and the ACL is public-read, public-read-write,\n                        authenticated-read, or if you specify access permissions explicitly through any other\n                        ACL, both <code>s3:CreateBucket</code> and <code>s3:PutBucketAcl</code> permissions\n                        are needed. If the ACL for the <code>CreateBucket</code> request is private or if the request doesn't\n                        specify any ACLs, only <code>s3:CreateBucket</code> permission is needed. </p>\n                  </li>\n                  <li>\n                     <p>\n                        <b>Object Lock</b> - If <code>ObjectLockEnabledForBucket</code> is set to true in your\n                         <code>CreateBucket</code> request,\n                         <code>s3:PutBucketObjectLockConfiguration</code> and\n                         <code>s3:PutBucketVersioning</code> permissions are required.</p>\n                  </li>\n                  <li>\n                     <p>\n                        <b>S3 Object Ownership</b> - If your <code>CreateBucket</code> request includes the <code>x-amz-object-ownership</code> header, then the\n                        <code>s3:PutBucketOwnershipControls</code> permission is required. By default, <code>ObjectOwnership</code> is set to <code>BucketOWnerEnforced</code> and ACLs are disabled. We recommend keeping\n                     ACLs disabled, except in uncommon use cases where you must control access for each object individually. If you want to change the <code>ObjectOwnership</code> setting, you can use the \n                     <code>x-amz-object-ownership</code> header in your <code>CreateBucket</code> request to set the <code>ObjectOwnership</code> setting of your choice.\n                        For more information about S3 Object Ownership, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html\">Controlling object\n                           ownership </a> in the <i>Amazon S3 User Guide</i>.</p>\n                  </li>\n                  <li>\n                     <p>\n                        <b>S3 Block Public Access</b> - If your specific use case requires granting public access to your S3 resources, you can disable Block Public Access. You can create a new bucket with Block Public Access enabled, then separately call the <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeletePublicAccessBlock.html\">\n                           <code>DeletePublicAccessBlock</code>\n                        </a> API. To use this operation, you must have the\n                        <code>s3:PutBucketPublicAccessBlock</code> permission. By default, all Block\n                        Public Access settings are enabled for new buckets. To avoid inadvertent exposure of\n                        your resources, we recommend keeping the S3 Block Public Access settings enabled. For more information about S3 Block Public Access, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html\">Blocking public\n                           access to your Amazon S3 storage </a> in the <i>Amazon S3 User Guide</i>. </p>\n                  </li>\n               </ul>\n            </dd>\n         </dl>\n         <important>\n            <p> If your <code>CreateBucket</code> request sets <code>BucketOwnerEnforced</code> for Amazon S3 Object Ownership\n         and specifies a bucket ACL that provides access to an external Amazon Web Services account, your request fails with a <code>400</code> error and returns the <code>InvalidBucketAcLWithObjectOwnership</code> error code. For more information,\n         see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-ownership-existing-bucket.html\">Setting Object\n            Ownership on an existing bucket </a> in the <i>Amazon S3 User Guide</i>. </p>\n         </important>\n         <p>The following operations are related to <code>CreateBucket</code>:</p>\n         <ul>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html\">PutObject</a>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucket.html\">DeleteBucket</a>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#examples": [
                     {
-                        "title": "To create a bucket in a specific region",
-                        "documentation": "The following example creates a bucket. The request specifies an AWS region where to create the bucket.",
+                        "title": "To create a bucket ",
+                        "documentation": "The following example creates a bucket.",
                         "input": {
-                            "Bucket": "examplebucket",
-                            "CreateBucketConfiguration": {
-                                "LocationConstraint": "eu-west-1"
-                            }
+                            "Bucket": "examplebucket"
                         },
                         "output": {
-                            "Location": "http://examplebucket.<Region>.s3.amazonaws.com/"
+                            "Location": "/examplebucket"
                         }
                     }
                 ],

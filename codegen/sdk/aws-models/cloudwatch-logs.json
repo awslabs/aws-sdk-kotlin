@@ -3292,6 +3292,7 @@
                     "arnNamespace": "logs",
                     "cloudFormationName": "Logs",
                     "cloudTrailEventSource": "cloudwatchlogs.amazonaws.com",
+                    "docId": "logs-2014-03-28",
                     "endpointPrefix": "logs"
                 },
                 "aws.auth#sigv4": {

@@ -55,6 +55,7 @@
                     "arnNamespace": "cloudsearch",
                     "cloudFormationName": "CloudSearchDomain",
                     "cloudTrailEventSource": "cloudsearchdomain.amazonaws.com",
+                    "docId": "cloudsearchdomain-2013-01-01",
                     "endpointPrefix": "cloudsearchdomain"
                 },
                 "aws.auth#sigv4": {

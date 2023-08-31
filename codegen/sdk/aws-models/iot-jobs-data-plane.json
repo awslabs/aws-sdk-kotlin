@@ -309,6 +309,7 @@
                     "arnNamespace": "iot-jobs-data",
                     "cloudFormationName": "IoTJobsDataPlane",
                     "cloudTrailEventSource": "iotjobsdataplane.amazonaws.com",
+                    "docId": "iot-jobs-data-2017-09-29",
                     "endpointPrefix": "data.jobs.iot"
                 },
                 "aws.auth#sigv4": {

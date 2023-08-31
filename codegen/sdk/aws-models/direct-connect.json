@@ -5207,6 +5207,7 @@
                     "arnNamespace": "directconnect",
                     "cloudFormationName": "DirectConnect",
                     "cloudTrailEventSource": "directconnect.amazonaws.com",
+                    "docId": "directconnect-2012-10-25",
                     "endpointPrefix": "directconnect"
                 },
                 "aws.auth#sigv4": {

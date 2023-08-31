@@ -15408,6 +15408,7 @@
                     "arnNamespace": "iotwireless",
                     "cloudFormationName": "IoTWireless",
                     "cloudTrailEventSource": "iotwireless.amazonaws.com",
+                    "docId": "iotwireless-2020-11-22",
                     "endpointPrefix": "api.iotwireless"
                 },
                 "aws.auth#sigv4": {

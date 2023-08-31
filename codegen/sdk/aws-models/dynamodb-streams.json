@@ -216,6 +216,7 @@
                     "arnNamespace": "dynamodb",
                     "cloudFormationName": "DynamoDBStreams",
                     "cloudTrailEventSource": "dynamodbstreams.amazonaws.com",
+                    "docId": "streams-dynamodb-2012-08-10",
                     "endpointPrefix": "streams.dynamodb"
                 },
                 "aws.auth#sigv4": {
