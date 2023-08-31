@@ -17,7 +17,7 @@ class JvmCredentialsProviderTest {
     private fun provider(vararg vars: Pair<String, String>) = JvmCredentialsProvider((vars.toMap())::get)
 
     @Test
-    fun `it should read from environment variables (incl session token)`() = runTest {
+    fun readAllSystemProperties() = runTest {
         val provider = provider(
             AwsSdkSetting.AwsAccessKeyId.sysProp to "abc",
             AwsSdkSetting.AwsSecretAccessKey.sysProp to "def",
@@ -27,7 +27,7 @@ class JvmCredentialsProviderTest {
     }
 
     @Test
-    fun `it should read from environment variables (excl session token)`() = runTest {
+    fun readAllSystemPropertiesExceptSessionToken() = runTest {
         val provider = provider(
             AwsSdkSetting.AwsAccessKeyId.sysProp to "abc",
             AwsSdkSetting.AwsSecretAccessKey.sysProp to "def",
@@ -36,14 +36,14 @@ class JvmCredentialsProviderTest {
     }
 
     @Test
-    fun `it should throw an exception on missing access key`() = runTest {
+    fun throwsExceptionWhenMissingAccessKey() = runTest {
         assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsSecretAccessKey.sysProp to "def").resolve()
         }.message.shouldContain("Missing value for JVM system properties `aws.accessKeyId`")
     }
 
     @Test
-    fun `it should throw an exception on missing secret key`() = runTest {
+    fun throwsExceptionWhenMissingSecretKey() = runTest {
         assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsAccessKeyId.sysProp to "abc").resolve()
         }.message.shouldContain("Missing value for JVM system properties `aws.secretAccessKey`")
