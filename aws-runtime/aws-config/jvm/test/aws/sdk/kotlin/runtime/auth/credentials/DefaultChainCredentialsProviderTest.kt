@@ -13,10 +13,12 @@ import aws.smithy.kotlin.runtime.util.OperatingSystem
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.longOrNull
 import java.io.File
 import java.nio.file.Paths
 import kotlin.test.Test
@@ -24,7 +26,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 // TODO - refactor to make this work in common
-@OptIn(ExperimentalCoroutinesApi::class)
 class DefaultChainCredentialsProviderTest {
 
     class FsRootedAt(val root: File) : Filesystem {
@@ -47,6 +48,7 @@ class DefaultChainCredentialsProviderTest {
 
     class DefaultChainPlatformProvider(
         private val env: Map<String, String>,
+        private val jvm: Map<String, String>,
         private val fs: Filesystem,
     ) : PlatformProvider, Filesystem by fs {
         override fun osInfo(): OperatingSystem = OperatingSystem(OsFamily.Linux, "test")
@@ -56,8 +58,8 @@ class DefaultChainCredentialsProviderTest {
         override val isNode: Boolean = false
         override val isNative: Boolean = false
 
-        override fun getAllProperties(): Map<String, String> = mapOf()
-        override fun getProperty(key: String): String? = null
+        override fun getAllProperties(): Map<String, String> = jvm
+        override fun getProperty(key: String): String? = jvm[key]
         override fun getAllEnvVars(): Map<String, String> = env
         override fun getenv(key: String): String? = env[key]
     }
@@ -127,6 +129,14 @@ class DefaultChainCredentialsProviderTest {
             emptyMap()
         }
 
+        val jvmFile = testDir.resolve("jvm.json")
+        val jvm = if (jvmFile.exists()) {
+            val el = Json.parseToJsonElement(jvmFile.readText())
+            el.jsonObject.mapValues { it.value.jsonPrimitive.content }
+        } else {
+            emptyMap()
+        }
+
         val httpTrafficFile = testDir.resolve("http-traffic.json")
         val testEngine = if (httpTrafficFile.exists()) {
             val traffic = httpTrafficFile.readText()
@@ -136,8 +146,7 @@ class DefaultChainCredentialsProviderTest {
         }
 
         val fs = FsRootedAt(testDir.resolve("fs"))
-        // TODO - support for system props
-        val testProvider = DefaultChainPlatformProvider(env, fs)
+        val testProvider = DefaultChainPlatformProvider(env, jvm, fs)
 
         return TestCase(testResult, testProvider, testEngine)
     }
@@ -219,6 +228,9 @@ class DefaultChainCredentialsProviderTest {
 
     @Test
     fun testPreferEnvironment() = executeTest("prefer_environment")
+
+    @Test
+    fun testPreferJvm() = executeTest("prefer_jvm")
 
     @Test
     fun testProfileName() = executeTest("profile_name")

@@ -39,13 +39,13 @@ class JvmCredentialsProviderTest {
     fun `it should throw an exception on missing access key`() = runTest {
         assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsSecretAccessKey.sysProp to "def").resolve()
-        }.message.shouldContain("Missing value for JVM system properties `AWS_ACCESS_KEY_ID`")
+        }.message.shouldContain("Missing value for JVM system properties `aws.accessKeyId`")
     }
 
     @Test
     fun `it should throw an exception on missing secret key`() = runTest {
         assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsAccessKeyId.sysProp to "abc").resolve()
-        }.message.shouldContain("Missing value for JVM system properties `AWS_SECRET_ACCESS_KEY`")
+        }.message.shouldContain("Missing value for JVM system properties `aws.secretAccessKey`")
     }
 }

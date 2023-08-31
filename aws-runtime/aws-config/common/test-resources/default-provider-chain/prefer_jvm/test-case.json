@@ -1,0 +1,10 @@
+{
+  "name": "prefer jvm",
+  "docs": "prefer jvm variables over environment and profile",
+  "result": {
+    "Ok": {
+      "access_key_id": "correct_key",
+      "secret_access_key": "correct_secret"
+    }
+  }
+}
