@@ -1,5 +1,0 @@
-{
-    "id": "55fc25d8-eb87-49fd-adfa-8b5a47b7713b",
-    "type": "misc",
-    "description": "**BREAKING**: Refactor HttpCall and HttpResponse types"
-}
