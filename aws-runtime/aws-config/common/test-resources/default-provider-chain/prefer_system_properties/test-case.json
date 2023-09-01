@@ -1,6 +1,6 @@
 {
-  "name": "prefer jvm",
-  "docs": "prefer jvm variables over environment and profile",
+  "name": "prefer system properties",
+  "docs": "prefer system properties over environment and profile",
   "result": {
     "Ok": {
       "access_key_id": "correct_key",

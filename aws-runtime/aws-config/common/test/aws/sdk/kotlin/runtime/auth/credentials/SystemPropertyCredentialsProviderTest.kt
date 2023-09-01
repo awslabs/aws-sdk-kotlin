@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class JvmCredentialsProviderTest {
-    private fun provider(vararg vars: Pair<String, String>) = JvmCredentialsProvider((vars.toMap())::get)
+class SystemPropertyCredentialsProviderTest {
+    private fun provider(vararg vars: Pair<String, String>) = SystemPropertyCredentialsProvider((vars.toMap())::get)
 
     @Test
     fun readAllSystemProperties() = runTest {
@@ -23,7 +23,7 @@ class JvmCredentialsProviderTest {
             AwsSdkSetting.AwsSecretAccessKey.sysProp to "def",
             AwsSdkSetting.AwsSessionToken.sysProp to "ghi",
         )
-        assertEquals(provider.resolve(), Credentials("abc", "def", "ghi", providerName = "Jvm"))
+        assertEquals(provider.resolve(), Credentials("abc", "def", "ghi", providerName = "SystemProperties"))
     }
 
     @Test
@@ -32,20 +32,20 @@ class JvmCredentialsProviderTest {
             AwsSdkSetting.AwsAccessKeyId.sysProp to "abc",
             AwsSdkSetting.AwsSecretAccessKey.sysProp to "def",
         )
-        assertEquals(provider.resolve(), Credentials("abc", "def", null, providerName = "Jvm"))
+        assertEquals(provider.resolve(), Credentials("abc", "def", null, providerName = "SystemProperties"))
     }
 
     @Test
     fun throwsExceptionWhenMissingAccessKey() = runTest {
         assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsSecretAccessKey.sysProp to "def").resolve()
-        }.message.shouldContain("Missing value for JVM system properties `aws.accessKeyId`")
+        }.message.shouldContain("Missing value for system property `aws.accessKeyId`")
     }
 
     @Test
     fun throwsExceptionWhenMissingSecretKey() = runTest {
         assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsAccessKeyId.sysProp to "abc").resolve()
-        }.message.shouldContain("Missing value for JVM system properties `aws.secretAccessKey`")
+        }.message.shouldContain("Missing value for system property `aws.secretAccessKey`")
     }
 }

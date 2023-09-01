@@ -48,7 +48,7 @@ class DefaultChainCredentialsProviderTest {
 
     class DefaultChainPlatformProvider(
         private val env: Map<String, String>,
-        private val jvm: Map<String, String>,
+        private val systemProperties: Map<String, String>,
         private val fs: Filesystem,
     ) : PlatformProvider, Filesystem by fs {
         override fun osInfo(): OperatingSystem = OperatingSystem(OsFamily.Linux, "test")
@@ -58,8 +58,8 @@ class DefaultChainCredentialsProviderTest {
         override val isNode: Boolean = false
         override val isNative: Boolean = false
 
-        override fun getAllProperties(): Map<String, String> = jvm
-        override fun getProperty(key: String): String? = jvm[key]
+        override fun getAllProperties(): Map<String, String> = systemProperties
+        override fun getProperty(key: String): String? = systemProperties[key]
         override fun getAllEnvVars(): Map<String, String> = env
         override fun getenv(key: String): String? = env[key]
     }
@@ -129,9 +129,9 @@ class DefaultChainCredentialsProviderTest {
             emptyMap()
         }
 
-        val jvmFile = testDir.resolve("jvm.json")
-        val jvm = if (jvmFile.exists()) {
-            val el = Json.parseToJsonElement(jvmFile.readText())
+        val systemPropertiesFile = testDir.resolve("system-properties.json")
+        val systemProperties = if (systemPropertiesFile.exists()) {
+            val el = Json.parseToJsonElement(systemPropertiesFile.readText())
             el.jsonObject.mapValues { it.value.jsonPrimitive.content }
         } else {
             emptyMap()
@@ -146,7 +146,7 @@ class DefaultChainCredentialsProviderTest {
         }
 
         val fs = FsRootedAt(testDir.resolve("fs"))
-        val testProvider = DefaultChainPlatformProvider(env, jvm, fs)
+        val testProvider = DefaultChainPlatformProvider(env, systemProperties, fs)
 
         return TestCase(testResult, testProvider, testEngine)
     }
@@ -230,7 +230,7 @@ class DefaultChainCredentialsProviderTest {
     fun testPreferEnvironment() = executeTest("prefer_environment")
 
     @Test
-    fun testPreferJvm() = executeTest("prefer_jvm")
+    fun testPreferSystemProperties() = executeTest("prefer_system_properties")
 
     @Test
     fun testProfileName() = executeTest("profile_name")
