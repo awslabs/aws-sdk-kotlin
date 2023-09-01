@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.config.profile
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.client.config.RetryMode
+import aws.smithy.kotlin.runtime.net.Url
 
 /**
  * Represents an AWS config profile.
@@ -101,16 +102,48 @@ public val AwsProfile.useDualStack: Boolean?
     get() = getBooleanOrNull("use_dualstack_endpoint")
 
 /**
+ * The default endpoint URL that applies to all services.
+ */
+@InternalSdkApi
+public val AwsProfile.endpointUrl: Url?
+    get() = getUrlOrNull("endpoint_url")
+
+/**
+ * Whether to ignore configured endpoint URLs.
+ */
+@InternalSdkApi
+public val AwsProfile.ignoreEndpointUrls: Boolean?
+    get() = getBooleanOrNull("ignore_configured_endpoint_urls")
+
+/**
+ * The name of the services config section used by this profile.
+ */
+@InternalSdkApi
+public val AwsProfile.servicesSection: String?
+    get() = getOrNull("services")
+
+/**
  * Parse a config value as a boolean, ignoring case.
  */
 @InternalSdkApi
 public fun AwsProfile.getBooleanOrNull(key: String, subKey: String? = null): Boolean? =
     getOrNull(key, subKey)?.let {
         it.lowercase().toBooleanStrictOrNull() ?: throw ConfigurationException(
-            buildString {
-                append("Failed to parse config property $key")
-                subKey?.let { append(".$it") }
-                append(" as a boolean")
-            },
+            "Failed to parse config property ${buildKeyString(key, subKey)} as a boolean",
         )
+    }
+
+internal fun AwsProfile.getUrlOrNull(key: String, subKey: String? = null): Url? =
+    getOrNull(key, subKey)?.let {
+        try {
+            Url.parse(it)
+        } catch (e: Exception) {
+            throw ConfigurationException("Failed to parse config property ${buildKeyString(key, subKey)} as a URL", e)
+        }
+    }
+
+private fun buildKeyString(key: String, subKey: String? = null): String =
+    buildString {
+        append(key)
+        subKey?.let { append(".$it") }
     }
