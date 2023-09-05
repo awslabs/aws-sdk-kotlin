@@ -1663,7 +1663,6 @@ public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory 
 }
 
 public final class aws/sdk/kotlin/runtime/config/AwsSdkSettingKt {
-	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/AwsSdkSetting;Laws/smithy/kotlin/runtime/util/PlatformProvider;Ljava/lang/String;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/Url;
 }
 
 public final class aws/sdk/kotlin/runtime/config/endpoints/EndpointsKt {
