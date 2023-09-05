@@ -188,6 +188,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClien
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Companion : aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory {
 	public fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Builder;
 	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
+	public synthetic fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/RetryClientConfig, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/telemetry/TelemetryConfig {
@@ -521,6 +522,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoO
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Companion : aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory {
 	public fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Builder;
 	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
+	public synthetic fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/RetryClientConfig, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/telemetry/TelemetryConfig {
@@ -1043,6 +1045,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClien
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Companion : aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory {
 	public fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Builder;
 	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
+	public synthetic fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/RetryClientConfig, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/telemetry/TelemetryConfig {
@@ -1659,7 +1662,14 @@ public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory 
 	public fun invoke (Lkotlin/jvm/functions/Function1;)Laws/smithy/kotlin/runtime/client/SdkClient;
 }
 
+public final class aws/sdk/kotlin/runtime/config/AwsSdkSettingKt {
+	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/AwsSdkSetting;Laws/smithy/kotlin/runtime/util/PlatformProvider;Ljava/lang/String;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/Url;
+}
+
 public final class aws/sdk/kotlin/runtime/config/endpoints/EndpointsKt {
+}
+
+public final class aws/sdk/kotlin/runtime/config/endpoints/ResolveEndpointUrlKt {
 }
 
 public final class aws/sdk/kotlin/runtime/config/imds/EC2MetadataError : aws/sdk/kotlin/runtime/AwsServiceException {
@@ -1744,6 +1754,10 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsConfigParseException
 }
 
 public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
+}
+
+public final class aws/sdk/kotlin/runtime/config/profile/AwsSharedConfigKt {
+	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/profile/AwsSharedConfig;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/Url;
 }
 
 public final class aws/sdk/kotlin/runtime/config/retries/ResolveRetryStrategyKt {
