@@ -1,0 +1,8 @@
+{
+    "id": "72d2bb9a-8154-47b8-8b2d-b4af66b90ba7",
+    "type": "feature",
+    "description": "Add more parameters for fetching STS credentials",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1000"
+    ]
+}
