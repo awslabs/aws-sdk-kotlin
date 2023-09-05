@@ -143,7 +143,4 @@ internal fun AwsProfile.getUrlOrNull(key: String, subKey: String? = null): Url? 
     }
 
 private fun buildKeyString(key: String, subKey: String? = null): String =
-    buildString {
-        append(key)
-        subKey?.let { append(".$it") }
-    }
+    listOfNotNull(key, subKey).joinToString(".")

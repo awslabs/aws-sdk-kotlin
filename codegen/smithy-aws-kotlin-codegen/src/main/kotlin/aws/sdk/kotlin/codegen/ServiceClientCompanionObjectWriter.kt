@@ -82,17 +82,16 @@ internal data class EndpointUrlConfigNames(
 )
 
 internal fun String.toEndpointUrlConfigNames(): EndpointUrlConfigNames = EndpointUrlConfigNames(
-    withTransform(JVMSystemPropertySuffix),
+    withTransform(JvmSystemPropertySuffix),
     withTransform(SdkIdTransform.UpperSnakeCase),
     withTransform(SdkIdTransform.LowerSnakeCase),
 )
 
-// JVM system property names follow those used by the Java SDK, which for service-specific endpoint URL config uses the
-// pattern "aws.endpointUrl${BaseClientName}"
-//
-// this is an arbitrary sdkId transform to replicate the derivation of BaseClientName - see
-// https://github.com/aws/aws-sdk-java-v2/blob/master/codegen/src/main/java/software/amazon/awssdk/codegen/naming/DefaultNamingStrategy.java#L116
-private object JVMSystemPropertySuffix : SdkIdTransformer {
+// JVM system property names follow the pattern "aws.endpointUrl${BaseClientName}"
+// where BaseClientName is the PascalCased sdk ID with any forbidden suffixes dropped - this is the same as what we use
+// for our client names
+// e.g. sdkId "Elasticsearch Service" -> client name "ElasticsearchClient", prop "aws.endpointUrlElasticsearch"
+private object JvmSystemPropertySuffix : SdkIdTransformer {
     override fun transform(id: String): String =
-        id.toPascalCase().removePrefix("Amazon").removePrefix("Aws").removeSuffix("Service")
+        id.toPascalCase().removeSuffix("Service")
 }

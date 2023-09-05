@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.codegen
 
+private val whitespaceRegex = Regex("\\s")
+
 /**
  * Implements a single standardized sdkId transform.
  */
@@ -56,4 +58,4 @@ object SdkIdTransform {
  */
 fun String.withTransform(transformer: SdkIdTransformer): String = transformer.transform(this)
 
-private fun String.replaceWhitespace(replacement: String) = replace(Regex("\\s"), replacement)
+private fun String.replaceWhitespace(replacement: String) = replace(whitespaceRegex, replacement)

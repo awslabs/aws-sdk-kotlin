@@ -66,9 +66,7 @@ public abstract class AbstractAwsSdkClientFactory<
                 config.retryStrategy = resolveRetryStrategy(profile = profile)
             }
 
-            if (block != null) {
-                config.apply(block)
-            }
+            block?.let(config::apply)
 
             config.logMode = config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
             config.region = config.region ?: resolveRegion(profile = profile)

@@ -171,6 +171,7 @@ public object AwsSdkSetting {
 /**
  * Resolves an endpoint url for a given service.
  */
+@InternalSdkApi
 public fun AwsSdkSetting.resolveEndpointUrl(
     provider: PlatformProvider,
     sysPropSuffix: String,
