@@ -2705,6 +2705,7 @@
                     "arnNamespace": "iotevents",
                     "cloudFormationName": "IoTEvents",
                     "cloudTrailEventSource": "iotevents.amazonaws.com",
+                    "docId": "iotevents-2018-07-27",
                     "endpointPrefix": "iotevents"
                 },
                 "aws.auth#sigv4": {

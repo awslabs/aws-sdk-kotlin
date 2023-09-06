@@ -759,6 +759,7 @@
                     "arnNamespace": "tagging",
                     "cloudFormationName": "ResourceGroupsTaggingAPI",
                     "cloudTrailEventSource": "resourcegroupstaggingapi.amazonaws.com",
+                    "docId": "resourcegroupstaggingapi-2017-01-26",
                     "endpointPrefix": "tagging"
                 },
                 "aws.auth#sigv4": {

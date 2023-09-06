@@ -184,6 +184,7 @@
                     "arnNamespace": "elasticbeanstalk",
                     "cloudFormationName": "ElasticBeanstalk",
                     "cloudTrailEventSource": "elasticbeanstalk.amazonaws.com",
+                    "docId": "elasticbeanstalk-2010-12-01",
                     "endpointPrefix": "elasticbeanstalk"
                 },
                 "aws.auth#sigv4": {

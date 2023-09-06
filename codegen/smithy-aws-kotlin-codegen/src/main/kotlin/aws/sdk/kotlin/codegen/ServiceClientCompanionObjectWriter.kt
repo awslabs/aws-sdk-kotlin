@@ -5,17 +5,22 @@
 package aws.sdk.kotlin.codegen
 
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.getContextValue
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
+import software.amazon.smithy.kotlin.codegen.utils.toPascalCase
 
 /**
- * Overrides the service client companion object for how a client is constructed, with the ability to extend inside the
- * declaration itself.
+ * Overrides the service client companion object for how a client is constructed.
+ *
+ * Includes the ability to extend the config finalizer, which by default handles resolution of endpoint url config.
  */
-class ServiceClientCompanionObjectWriter(private val extend: (KotlinWriter.() -> Unit)? = null) : SectionWriter {
+class ServiceClientCompanionObjectWriter(
+    private val extendFinalizeConfig: (KotlinWriter.() -> Unit)? = null,
+) : SectionWriter {
     override fun write(writer: KotlinWriter, previousValue: String?) {
         val serviceSymbol = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
 
@@ -25,13 +30,68 @@ class ServiceClientCompanionObjectWriter(private val extend: (KotlinWriter.() ->
             AwsRuntimeTypes.Config.AbstractAwsSdkClientFactory,
             serviceSymbol,
         ) {
-            write("@#T", KotlinTypes.Jvm.JvmStatic)
-            write("override fun builder(): Builder = Builder()")
+            writeBuilder()
+            write("")
 
-            extend?.let {
+            writeFinalizeConfig()
+        }
+    }
+
+    private fun KotlinWriter.writeBuilder() {
+        write("@#T", KotlinTypes.Jvm.JvmStatic)
+        write("override fun builder(): Builder = Builder()")
+    }
+
+    private fun KotlinWriter.writeFinalizeConfig() {
+        withBlock(
+            "override suspend fun finalizeConfig(builder: Builder, sharedConfig: #T<#T>) {",
+            "}",
+            RuntimeTypes.Core.Utils.LazyAsyncValue,
+            AwsRuntimeTypes.Config.Profile.AwsSharedConfig,
+        ) {
+            writeResolveEndpointUrl()
+
+            extendFinalizeConfig?.let {
                 write("")
                 it()
             }
         }
     }
+
+    private fun KotlinWriter.writeResolveEndpointUrl() {
+        withBlock(
+            "builder.config.endpointUrl = builder.config.endpointUrl ?: #T(",
+            ")",
+            AwsRuntimeTypes.Config.Endpoints.resolveEndpointUrl,
+        ) {
+            val sdkId = getContextValue(ServiceClientGenerator.Sections.CompanionObject.SdkId)
+            val names = sdkId.toEndpointUrlConfigNames()
+
+            write("sharedConfig,")
+            write("#S,", names.sysPropSuffix)
+            write("#S,", names.envSuffix)
+            write("#S,", names.sharedConfigKey)
+        }
+    }
+}
+
+internal data class EndpointUrlConfigNames(
+    val sysPropSuffix: String,
+    val envSuffix: String,
+    val sharedConfigKey: String,
+)
+
+internal fun String.toEndpointUrlConfigNames(): EndpointUrlConfigNames = EndpointUrlConfigNames(
+    withTransform(JvmSystemPropertySuffix),
+    withTransform(SdkIdTransform.UpperSnakeCase),
+    withTransform(SdkIdTransform.LowerSnakeCase),
+)
+
+// JVM system property names follow the pattern "aws.endpointUrl${BaseClientName}"
+// where BaseClientName is the PascalCased sdk ID with any forbidden suffixes dropped - this is the same as what we use
+// for our client names
+// e.g. sdkId "Elasticsearch Service" -> client name "ElasticsearchClient", prop "aws.endpointUrlElasticsearch"
+private object JvmSystemPropertySuffix : SdkIdTransformer {
+    override fun transform(id: String): String =
+        id.toPascalCase().removeSuffix("Service")
 }

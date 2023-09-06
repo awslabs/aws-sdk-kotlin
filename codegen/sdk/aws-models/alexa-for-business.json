@@ -406,6 +406,7 @@
                     "arnNamespace": "a4b",
                     "cloudFormationName": "AlexaForBusiness",
                     "cloudTrailEventSource": "alexaforbusiness.amazonaws.com",
+                    "docId": "alexaforbusiness-2017-11-09",
                     "endpointPrefix": "a4b"
                 },
                 "aws.auth#sigv4": {

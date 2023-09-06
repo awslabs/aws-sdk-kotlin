@@ -30,8 +30,8 @@ class GetBucketLocationOperationDeserializerTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(200, "Success"),
-            Headers.invoke { },
+            HttpStatusCode.OK,
+            Headers.Empty,
             HttpBody.fromBytes(responseXML.encodeToByteArray()),
         )
 
@@ -55,8 +55,8 @@ class GetBucketLocationOperationDeserializerTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
-            Headers.invoke { },
+            HttpStatusCode.BadRequest,
+            Headers.Empty,
             HttpBody.fromBytes(responseXML.encodeToByteArray()),
         )
 

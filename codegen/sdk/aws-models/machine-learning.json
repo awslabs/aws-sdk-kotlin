@@ -217,6 +217,7 @@
                     "arnNamespace": "machinelearning",
                     "cloudFormationName": "MachineLearning",
                     "cloudTrailEventSource": "machinelearning.amazonaws.com",
+                    "docId": "machinelearning-2014-12-12",
                     "endpointPrefix": "machinelearning"
                 },
                 "aws.auth#sigv4": {

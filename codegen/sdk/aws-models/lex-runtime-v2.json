@@ -58,6 +58,7 @@
                     "arnNamespace": "lex",
                     "cloudFormationName": "LexRuntimeV2",
                     "cloudTrailEventSource": "lexruntimev2.amazonaws.com",
+                    "docId": "runtime.lex.v2-2020-08-07",
                     "endpointPrefix": "runtime-v2-lex"
                 },
                 "aws.auth#sigv4": {

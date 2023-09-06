@@ -58,6 +58,7 @@
                     "arnNamespace": "application-cost-profiler",
                     "cloudFormationName": "ApplicationCostProfiler",
                     "cloudTrailEventSource": "applicationcostprofiler.amazonaws.com",
+                    "docId": "AWSApplicationCostProfiler-2020-09-10",
                     "endpointPrefix": "application-cost-profiler"
                 },
                 "aws.auth#sigv4": {

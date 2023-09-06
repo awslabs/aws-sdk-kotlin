@@ -380,6 +380,7 @@
                     "arnNamespace": "iotdata",
                     "cloudFormationName": "IoTDataPlane",
                     "cloudTrailEventSource": "iotdataplane.amazonaws.com",
+                    "docId": "iot-data-2015-05-28",
                     "endpointPrefix": "data-ats.iot"
                 },
                 "aws.auth#sigv4": {

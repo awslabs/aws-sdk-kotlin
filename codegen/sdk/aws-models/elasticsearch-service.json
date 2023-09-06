@@ -512,6 +512,7 @@
                     "arnNamespace": "es",
                     "cloudFormationName": "Elasticsearch",
                     "cloudTrailEventSource": "elasticsearchservice.amazonaws.com",
+                    "docId": "es-2015-01-01",
                     "endpointPrefix": "es"
                 },
                 "aws.auth#sigv4": {

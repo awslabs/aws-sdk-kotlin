@@ -62,11 +62,11 @@ class EventStreamParserGenerator(
             // we just need to deserialize the event stream member (and/or the initial response)
             writer.withBlock(
                 // FIXME - revert to private, exposed as internal temporarily while we figure out integration tests
-                "internal suspend fun #L(builder: #T.Builder, body: #T) {",
+                "internal suspend fun #L(builder: #T.Builder, call: #T) {",
                 "}",
                 op.bodyDeserializerName(),
                 outputSymbol,
-                RuntimeTypes.Http.HttpBody,
+                RuntimeTypes.Http.HttpCall,
             ) {
                 renderDeserializeEventStream(ctx, op, writer)
             }
@@ -81,7 +81,7 @@ class EventStreamParserGenerator(
         val messageTypeSymbol = RuntimeTypes.AwsEventStream.MessageType
         val baseExceptionSymbol = ExceptionBaseClassGenerator.baseExceptionSymbol(ctx.settings)
 
-        writer.write("val chan = body.#T() ?: return", RuntimeTypes.Http.toSdkByteReadChannel)
+        writer.write("val chan = call.response.body.#T(call) ?: return", RuntimeTypes.Http.toSdkByteReadChannel)
         writer.write("val frames = #T(chan)", RuntimeTypes.AwsEventStream.decodeFrames)
         if (ctx.protocol.isRpcBoundProtocol) {
             renderDeserializeInitialResponse(ctx, output, writer)

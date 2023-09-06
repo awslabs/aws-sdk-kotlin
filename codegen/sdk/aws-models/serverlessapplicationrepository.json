@@ -1963,6 +1963,7 @@
                     "arnNamespace": "serverlessrepo",
                     "cloudFormationName": "ServerlessApplicationRepository",
                     "cloudTrailEventSource": "serverlessapplicationrepository.amazonaws.com",
+                    "docId": "serverlessrepo-2017-09-08",
                     "endpointPrefix": "serverlessrepo"
                 },
                 "aws.auth#sigv4": {

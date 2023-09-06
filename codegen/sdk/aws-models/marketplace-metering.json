@@ -52,6 +52,7 @@
                     "arnNamespace": "aws-marketplace",
                     "cloudFormationName": "MarketplaceMetering",
                     "cloudTrailEventSource": "marketplacemetering.amazonaws.com",
+                    "docId": "meteringmarketplace-2016-01-14",
                     "endpointPrefix": "metering.marketplace"
                 },
                 "aws.auth#sigv4": {

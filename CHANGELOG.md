@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.32.0-beta] - 08/31/2023
+
+### Miscellaneous
+* **BREAKING**: Refactor HttpCall and HttpResponse types
+* Bump **smithy-kotlin** and AWS service models to latest versions
+
 ## [0.31.0-beta] - 08/24/2023
 
 ### Features

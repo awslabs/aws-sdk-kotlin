@@ -7,7 +7,9 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRole
+import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.PolicyDescriptorType
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.RegionDisabledException
+import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.Tag
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
@@ -37,28 +39,57 @@ private const val PROVIDER_NAME = "AssumeRoleProvider"
  * to get AWS credentials for STS. Then, it will call STS to get assumed credentials for the desired role.
  *
  * @param credentialsProvider The underlying provider to use for source credentials
- * @param roleArn The ARN of the target role to assume, e.g. `arn:aws:iam:123456789:role/example`
+ * @param assumeRoleParameters The parameters to pass to the `AssumeRole` call
  * @param region The AWS region to assume the role in. If not set then the global STS endpoint will be used.
- * @param roleSessionName The name to associate with the session. Use the role session name to uniquely identify a session
- * when the same role is assumed by different principals or for different reasons. In cross-account scenarios, the
- * role session name is visible to, and can be logged by the account that owns the role. The role session name is also
- * in the ARN of the assumed role principal.
- * @param externalId A unique identifier that might be required when you assume a role in another account. If the
- * administrator of the account to which the role belongs provided you with an external ID, then provide that value
- * in this parameter.
- * @param duration The expiry duration of the STS credentials. Defaults to 15 minutes if not set.
  * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class StsAssumeRoleCredentialsProvider(
     private val credentialsProvider: CredentialsProvider,
-    private val roleArn: String,
+    private val assumeRoleParameters: AssumeRoleParameters,
     private val region: String? = null,
-    private val roleSessionName: String? = null,
-    private val externalId: String? = null,
-    private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
     private val httpClient: HttpClientEngine? = null,
 ) : CredentialsProvider {
+
+    /**
+     * A [CredentialsProvider] that uses another provider to assume a role from the AWS Security Token Service (STS).
+     *
+     * When asked to provide credentials, this provider will first invoke the inner credentials provider
+     * to get AWS credentials for STS. Then, it will call STS to get assumed credentials for the desired role.
+     *
+     * @param credentialsProvider The underlying provider to use for source credentials
+     * @param roleArn The ARN of the target role to assume, e.g. `arn:aws:iam:123456789:role/example`
+     * @param region The AWS region to assume the role in. If not set then the global STS endpoint will be used.
+     * @param roleSessionName The name to associate with the session. Use the role session name to uniquely identify a
+     * session when the same role is assumed by different principals or for different reasons. In cross-account
+     * scenarios, the role session name is visible to, and can be logged by the account that owns the role. The role
+     * session name is also in the ARN of the assumed role principal.
+     * @param externalId A unique identifier that might be required when you assume a role in another account. If the
+     * administrator of the account to which the role belongs provided you with an external ID, then provide that value
+     * in this parameter.
+     * @param duration The expiry duration of the STS credentials. Defaults to 15 minutes if not set.
+     * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and
+     * lifetime are NOT managed by the provider. Caller is responsible for closing.
+     */
+    public constructor(
+        credentialsProvider: CredentialsProvider,
+        roleArn: String,
+        region: String? = null,
+        roleSessionName: String? = null,
+        externalId: String? = null,
+        duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
+        httpClient: HttpClientEngine? = null,
+    ) : this(
+        credentialsProvider,
+        AssumeRoleParameters(
+            roleArn = roleArn,
+            roleSessionName = roleSessionName,
+            externalId = externalId,
+            duration = duration,
+        ),
+        region,
+        httpClient,
+    )
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<StsAssumeRoleCredentialsProvider>()
@@ -76,10 +107,19 @@ public class StsAssumeRoleCredentialsProvider(
 
         val resp = try {
             client.assumeRole {
-                roleArn = provider.roleArn
-                externalId = provider.externalId
-                roleSessionName = provider.roleSessionName ?: defaultSessionName()
-                durationSeconds = provider.duration.inWholeSeconds.toInt()
+                val params = provider.assumeRoleParameters
+
+                roleArn = params.roleArn
+                externalId = params.externalId
+                roleSessionName = params.roleSessionName ?: defaultSessionName()
+                durationSeconds = params.duration.inWholeSeconds.toInt()
+                policyArns = params.convertedPolicyArns
+                policy = params.policy
+                tags = params.convertedTags
+                transitiveTagKeys = params.transitiveTagKeys
+                serialNumber = params.serialNumber
+                tokenCode = params.tokenCode
+                sourceIdentity = params.sourceIdentity
             }
         } catch (ex: Exception) {
             logger.debug { "sts refused to grant assumed role credentials" }
@@ -105,6 +145,44 @@ public class StsAssumeRoleCredentialsProvider(
             providerName = PROVIDER_NAME,
         )
     }
+}
+
+/**
+ * Parameters passed to an `AssumeRole` call
+ * @param roleArn The ARN of the target role to assume, e.g. `arn:aws:iam:123456789:role/example`
+ * @param roleSessionName The name to associate with the session. Use the role session name to uniquely identify a
+ * session when the same role is assumed by different principals or for different reasons. In cross-account scenarios,
+ * the role session name is visible to, and can be logged by the account that owns the role. The role session name is
+ * also in the ARN of the assumed role principal.
+ * @param externalId A unique identifier that might be required when you assume a role in another account. If the
+ * administrator of the account to which the role belongs provided you with an external ID, then provide that value in
+ * this parameter.
+ * @param duration The expiry duration of the STS credentials. Defaults to 15 minutes if not set.
+ * @param policyArns The Amazon Resource Names (ARNs) of the IAM managed policies that you want to use as managed
+ * session policies
+ * @param policy An IAM policy in JSON format that you want to use as an inline session policy
+ * @param tags A list of session tags that you want to pass
+ * @param transitiveTagKeys A list of keys for session tags that you want to set as transitive
+ * @param serialNumber The identification number of the MFA device that is associated with the user who is making the
+ * `AssumeRole` call
+ * @param tokenCode The value provided by the MFA device, if the trust policy of the role being assumed requires MFA
+ * @param sourceIdentity The source identity specified by the principal that is calling the `AssumeRole` operation
+ */
+public class AssumeRoleParameters(
+    public val roleArn: String,
+    public val roleSessionName: String? = null,
+    public val externalId: String? = null,
+    public val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
+    public val policyArns: List<String>? = null,
+    public val policy: String? = null,
+    public val tags: Map<String, String>? = null,
+    public val transitiveTagKeys: List<String>? = null,
+    public val serialNumber: String? = null,
+    public val tokenCode: String? = null,
+    public val sourceIdentity: String? = null,
+) {
+    internal val convertedPolicyArns = policyArns?.map { PolicyDescriptorType { arn = it } }
+    internal val convertedTags = tags?.map { Tag { key = it.key; value = it.value } }
 }
 
 // role session name must be provided to assume a role, when the user doesn't provide one we choose a name for them
