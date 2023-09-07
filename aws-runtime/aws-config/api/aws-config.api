@@ -161,6 +161,13 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredent
 	public static synthetic fun fromEnvironment-TUY-ock$default (Laws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredentialsProvider$Companion;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLaws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredentialsProvider;
 }
 
+public final class aws/sdk/kotlin/runtime/auth/credentials/SystemPropertyCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
+	public fun <init> ()V
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ManagedBearerTokenProviderKt {
 	public static final fun manage (Laws/smithy/kotlin/runtime/http/auth/CloseableBearerTokenProvider;)Laws/smithy/kotlin/runtime/http/auth/BearerTokenProvider;
 }

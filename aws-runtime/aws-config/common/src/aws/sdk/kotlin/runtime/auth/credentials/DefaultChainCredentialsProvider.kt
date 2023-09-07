@@ -52,6 +52,7 @@ public class DefaultChainCredentialsProvider constructor(
     private val engine = httpClient ?: DefaultHttpEngine()
 
     private val chain = CredentialsProviderChain(
+        SystemPropertyCredentialsProvider(platformProvider::getProperty),
         EnvironmentCredentialsProvider(platformProvider::getenv),
         ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClient = engine, region = region),
         // STS web identity provider can be constructed from either the profile OR 100% from the environment
