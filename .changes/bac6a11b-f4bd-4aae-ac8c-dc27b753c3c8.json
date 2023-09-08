@@ -1,5 +1,0 @@
-{
-    "id": "bac6a11b-f4bd-4aae-ac8c-dc27b753c3c8",
-    "type": "feature",
-    "description": "Allow endpoint URL configuration via env and shared config."
-}

@@ -1,8 +1,0 @@
-{
-    "id": "ec4b3c6c-c63f-499d-a032-026139b4627e",
-    "type": "feature",
-    "description": "Add `SystemPropertyCredentialsProvider` and make it first in default chain credentials provider",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1033"
-    ]
-}

@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.32.1-beta] - 09/08/2023
+
+### Features
+* [#1033](https://github.com/awslabs/aws-sdk-kotlin/issues/1033) Add `SystemPropertyCredentialsProvider` and make it first in default chain credentials provider
+* Allow endpoint URL configuration via env and shared config.
+* [#1000](https://github.com/awslabs/aws-sdk-kotlin/issues/1000) Add more parameters for fetching STS credentials
+
+### Fixes
+* [#935](https://github.com/awslabs/smithy-kotlin/issues/935) Fix closing an event stream causing an IllegalStateException
+
+### Miscellaneous
+* Sync AWS models and bump smithy-kotlin
+
 ## [0.32.0-beta] - 08/31/2023
 
 ### Miscellaneous
