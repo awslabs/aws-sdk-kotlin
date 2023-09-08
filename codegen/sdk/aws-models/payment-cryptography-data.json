@@ -707,8 +707,7 @@
                 "KeyCheckValue": {
                     "target": "com.amazonaws.paymentcryptographydata#KeyCheckValue",
                     "traits": {
-                        "smithy.api#documentation": "<p>The key check value (KCV) of the encryption key. The KCV is used to check if all parties holding a given key have the same key or to detect that a key has changed. Amazon Web Services Payment Cryptography calculates the KCV by using standard algorithms, typically by encrypting 8 or 16 bytes or \"00\" or \"01\" and then truncating the result to the first 3 bytes, or 6 hex digits, of the resulting cryptogram.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The key check value (KCV) of the encryption key. The KCV is used to check if all parties holding a given key have the same key or to detect that a key has changed. Amazon Web Services Payment Cryptography calculates the KCV by using standard algorithms, typically by encrypting 8 or 16 bytes or \"00\" or \"01\" and then truncating the result to the first 3 bytes, or 6 hex digits, of the resulting cryptogram.</p>"
                     }
                 },
                 "CipherText": {
@@ -925,7 +924,7 @@
                     }
                 },
                 "MessageData": {
-                    "target": "com.amazonaws.paymentcryptographydata#HexLengthBetween2And4096",
+                    "target": "com.amazonaws.paymentcryptographydata#HexEvenLengthBetween2And4096",
                     "traits": {
                         "smithy.api#documentation": "<p>The data for which a MAC is under generation.</p>",
                         "smithy.api#required": {}
@@ -1112,6 +1111,17 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.paymentcryptographydata#HexEvenLengthBetween16And32": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 16,
+                    "max": 32
+                },
+                "smithy.api#pattern": "^(?:[0-9a-fA-F][0-9a-fA-F])+$",
+                "smithy.api#sensitive": {}
+            }
+        },
         "com.amazonaws.paymentcryptographydata#HexEvenLengthBetween16And4064": {
             "type": "string",
             "traits": {
@@ -1129,6 +1139,28 @@
                 "smithy.api#length": {
                     "min": 16,
                     "max": 4096
+                },
+                "smithy.api#pattern": "^(?:[0-9a-fA-F][0-9a-fA-F])+$",
+                "smithy.api#sensitive": {}
+            }
+        },
+        "com.amazonaws.paymentcryptographydata#HexEvenLengthBetween2And4096": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 2,
+                    "max": 4096
+                },
+                "smithy.api#pattern": "^(?:[0-9a-fA-F][0-9a-fA-F])+$",
+                "smithy.api#sensitive": {}
+            }
+        },
+        "com.amazonaws.paymentcryptographydata#HexEvenLengthBetween4And128": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 4,
+                    "max": 128
                 },
                 "smithy.api#pattern": "^(?:[0-9a-fA-F][0-9a-fA-F])+$",
                 "smithy.api#sensitive": {}
@@ -1201,16 +1233,6 @@
                 "smithy.api#length": {
                     "min": 2,
                     "max": 4
-                },
-                "smithy.api#pattern": "^[0-9a-fA-F]+$"
-            }
-        },
-        "com.amazonaws.paymentcryptographydata#HexLengthBetween2And4096": {
-            "type": "string",
-            "traits": {
-                "smithy.api#length": {
-                    "min": 2,
-                    "max": 4096
                 },
                 "smithy.api#pattern": "^[0-9a-fA-F]+$"
             }
@@ -3069,7 +3091,7 @@
                     }
                 },
                 "EncryptedPinBlock": {
-                    "target": "com.amazonaws.paymentcryptographydata#HexLengthBetween16And32",
+                    "target": "com.amazonaws.paymentcryptographydata#HexEvenLengthBetween16And32",
                     "traits": {
                         "smithy.api#documentation": "<p>The encrypted PIN block data that Amazon Web Services Payment Cryptography translates.</p>",
                         "smithy.api#required": {}
@@ -3527,14 +3549,14 @@
                     }
                 },
                 "MessageData": {
-                    "target": "com.amazonaws.paymentcryptographydata#HexLengthBetween2And4096",
+                    "target": "com.amazonaws.paymentcryptographydata#HexEvenLengthBetween2And4096",
                     "traits": {
                         "smithy.api#documentation": "<p>The data on for which MAC is under verification.</p>",
                         "smithy.api#required": {}
                     }
                 },
                 "Mac": {
-                    "target": "com.amazonaws.paymentcryptographydata#HexLengthBetween4And128",
+                    "target": "com.amazonaws.paymentcryptographydata#HexEvenLengthBetween4And128",
                     "traits": {
                         "smithy.api#documentation": "<p>The MAC being verified.</p>",
                         "smithy.api#required": {}

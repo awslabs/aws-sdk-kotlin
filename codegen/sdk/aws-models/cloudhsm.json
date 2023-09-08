@@ -61,6 +61,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Adds or overwrites one or more tags for the specified AWS CloudHSM resource.</p>\n         <p>Each tag consists of a key and a value. Tag keys must be unique to each\n      resource.</p>"
             }
         },
@@ -973,6 +976,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Creates a high-availability partition group. A high-availability partition group is a\n      group of partitions that spans multiple physical HSMs.</p>"
             }
         },
@@ -1027,6 +1033,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Creates an uninitialized HSM instance.</p>\n         <p>There is an upfront fee charged for each HSM instance that you create with the\n        <code>CreateHsm</code> operation. If you accidentally provision an HSM and want to request a\n      refund, delete the instance using the <a>DeleteHsm</a> operation, go to the <a href=\"https://console.aws.amazon.com/support/home\">AWS Support Center</a>, create a new case, and select\n        <b>Account and Billing Support</b>.</p>\n         <important>\n            <p>It can take up to 20 minutes to create and provision an HSM. You can monitor the\n        status of the HSM with the <a>DescribeHsm</a> operation. The HSM is ready to be\n        initialized when the status changes to <code>RUNNING</code>.</p>\n         </important>"
             }
         },
@@ -1134,6 +1143,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Creates an HSM client.</p>"
             }
         },
@@ -1194,6 +1206,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Deletes a high-availability partition group.</p>"
             }
         },
@@ -1249,6 +1264,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Deletes an HSM. After completion, this operation cannot be undone and your key material\n      cannot be recovered.</p>"
             }
         },
@@ -1306,6 +1324,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Deletes a client.</p>"
             }
         },
@@ -1359,6 +1380,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Retrieves information about a high-availability partition group.</p>"
             }
         },
@@ -1461,6 +1485,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Retrieves information about an HSM. You can identify the HSM by its ARN or its serial\n      number.</p>"
             }
         },
@@ -1637,6 +1664,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Retrieves information about an HSM client.</p>"
             }
         },
@@ -1730,6 +1760,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Gets the configuration files necessary to connect to all high availability partition\n      groups the client is associated with.</p>"
             }
         },
@@ -1929,6 +1962,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"
             }
         },
@@ -1974,6 +2010,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Lists the high-availability partition groups for the account.</p>\n         <p>This operation supports pagination with the use of the <code>NextToken</code> member.\n      If more results are available, the <code>NextToken</code> member of the response contains a\n      token that you pass in the next call to <code>ListHapgs</code> to retrieve the next set of\n      items.</p>"
             }
         },
@@ -2032,6 +2071,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Retrieves the identifiers of all of the HSMs provisioned for the current\n      customer.</p>\n         <p>This operation supports pagination with the use of the <code>NextToken</code> member.\n      If more results are available, the <code>NextToken</code> member of the response contains a\n      token that you pass in the next call to <code>ListHsms</code> to retrieve the next set of\n      items.</p>"
             }
         },
@@ -2090,6 +2132,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Lists all of the clients.</p>\n         <p>This operation supports pagination with the use of the <code>NextToken</code> member.\n      If more results are available, the <code>NextToken</code> member of the response contains a\n      token that you pass in the next call to <code>ListLunaClients</code> to retrieve the next set\n      of items.</p>"
             }
         },
@@ -2148,6 +2193,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>"
             }
         },
@@ -2201,6 +2249,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Modifies an existing high-availability partition group.</p>"
             }
         },
@@ -2265,6 +2316,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Modifies an HSM.</p>\n         <important>\n            <p>This operation can result in the HSM being offline for up to 15 minutes while the AWS\n        CloudHSM service is reconfigured. If you are modifying a production HSM, you should ensure\n        that your AWS CloudHSM service is configured for high availability, and consider executing this\n        operation during a maintenance window.</p>\n         </important>"
             }
         },
@@ -2350,6 +2404,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Modifies the certificate used by the client.</p>\n         <p>This action can potentially start a workflow to install the new certificate on the\n      client's HSMs.</p>"
             }
         },
@@ -2439,6 +2496,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This API is deprecated."
+                },
                 "smithy.api#documentation": "<p>This is documentation for <b>AWS CloudHSM Classic</b>. For\n      more information, see <a href=\"http://aws.amazon.com/cloudhsm/faqs-classic/\">AWS CloudHSM\n      Classic FAQs</a>, the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/userguide/\">AWS\n      CloudHSM Classic User Guide</a>, and the <a href=\"https://docs.aws.amazon.com/cloudhsm/classic/APIReference/\">AWS CloudHSM Classic API Reference</a>.</p>\n         <p>\n            <b>For information about the current version of AWS\n      CloudHSM</b>, see <a href=\"http://aws.amazon.com/cloudhsm/\">AWS CloudHSM</a>, the\n      <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/userguide/\">AWS CloudHSM User Guide</a>,\n      and the <a href=\"https://docs.aws.amazon.com/cloudhsm/latest/APIReference/\">AWS CloudHSM API\n      Reference</a>.</p>\n         <p>Removes one or more tags from the specified AWS CloudHSM resource.</p>\n         <p>To remove a tag, specify only the tag key to remove (not the value). To overwrite the\n      value for an existing tag, use <a>AddTagsToResource</a>.</p>"
             }
         },

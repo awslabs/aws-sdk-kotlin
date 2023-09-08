@@ -55,7 +55,7 @@
                     "name": "identitystore"
                 },
                 "aws.protocols#awsJson1_1": {},
-                "smithy.api#documentation": "<p>The Identity Store service used by AWS IAM Identity Center (successor to AWS Single Sign-On) provides a single place to retrieve all of\n         your identities (users and groups). For more information, see the <a href=\"https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html\">IAM Identity Center User\n            Guide</a>.</p>\n      \n         <note>\n            <p>Although AWS Single Sign-On was renamed, the <code>sso</code> and\n            <code>identitystore</code> API namespaces will continue to retain their original name for\n            backward compatibility purposes. For more information, see <a href=\"https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html#renamed\">IAM Identity Center rename</a>.</p>\n         </note>\n      \n         <p>This reference guide describes the identity store operations that you can call\n         programatically and includes detailed information about data types and errors.</p>",
+                "smithy.api#documentation": "<p>The Identity Store service used by IAM Identity Center provides a single place to retrieve all of\n         your identities (users and groups). For more information, see the <a href=\"https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html\">IAM Identity Center User\n            Guide</a>.</p>\n         <p>This reference guide describes the identity store operations that you can call\n         programmatically and includes detailed information about data types and errors.</p>\n         <note>\n            <p>IAM Identity Center uses the <code>sso</code> and <code>identitystore</code> API namespaces.</p>\n         </note>",
                 "smithy.api#title": "AWS SSO Identity Store",
                 "smithy.rules#endpointRuleSet": {
                     "version": "1.0",
@@ -1015,7 +1015,7 @@
                 "AttributeValue": {
                     "target": "com.amazonaws.identitystore#AttributeValue",
                     "traits": {
-                        "smithy.api#documentation": "<p>The value of the attribute. This is a <code>Document</code> type.\n         This type is not supported by Java V1, Go V1, and older versions of the AWS CLI.</p>"
+                        "smithy.api#documentation": "<p>The value of the attribute. This is a <code>Document</code> type.\n         This type is not supported by Java V1, Go V1, and older versions of the CLI.</p>"
                     }
                 }
             },
@@ -1048,7 +1048,7 @@
         "com.amazonaws.identitystore#AttributeValue": {
             "type": "document",
             "traits": {
-                "smithy.api#documentation": "<p>The value of the attribute. This is a <code>Document</code> type.\n         This type is not supported by Java V1, Go V1, and older versions of the AWS CLI.</p>"
+                "smithy.api#documentation": "<p>The value of the attribute. This is a <code>Document</code> type.\n         This type is not supported by Java V1, Go V1, and older versions of the CLI.</p>"
             }
         },
         "com.amazonaws.identitystore#ConflictException": {
@@ -1201,7 +1201,7 @@
                 "DisplayName": {
                     "target": "com.amazonaws.identitystore#GroupDisplayName",
                     "traits": {
-                        "smithy.api#documentation": "<p>A string containing the name of the group. This value is commonly displayed when the\n         group is referenced. \"Administrator\" and \"AWSAdministrators\" are reserved names and can't be used for users\n         or groups.</p>"
+                        "smithy.api#documentation": "<p>A string containing the name of the group. This value is commonly displayed when the\n         group is referenced. <code>Administrator</code> and <code>AWSAdministrators</code> are\n         reserved names and can't be used for users or groups.</p>"
                     }
                 },
                 "Description": {
@@ -1270,7 +1270,7 @@
                 "UserName": {
                     "target": "com.amazonaws.identitystore#UserName",
                     "traits": {
-                        "smithy.api#documentation": "<p>A unique string used to identify the user. The length limit is 128 characters. This\n         value can consist of letters, accented characters, symbols, numbers, and punctuation. This\n         value is specified at the time the user is created and stored as an attribute of the user\n         object in the identity store. \"Administrator\" and \"AWSAdministrators\" are reserved names and can't be used for users\n         or groups.</p>"
+                        "smithy.api#documentation": "<p>A unique string used to identify the user. The length limit is 128 characters. This\n         value can consist of letters, accented characters, symbols, numbers, and punctuation. This\n         value is specified at the time the user is created and stored as an attribute of the user\n         object in the identity store. <code>Administrator</code> and <code>AWSAdministrators</code>\n         are reserved names and can't be used for users or groups.</p>"
                     }
                 },
                 "Name": {
@@ -1524,7 +1524,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Retrieves the group metadata and attributes from <code>GroupId</code> in an identity\n         store.</p>",
+                "smithy.api#documentation": "<p>Retrieves the group metadata and attributes from <code>GroupId</code> in an identity\n         store.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>. </p>\n         </note>",
                 "smithy.api#readonly": {}
             }
         },
@@ -1545,7 +1545,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Retrieves membership metadata and attributes from <code>MembershipId</code> in an identity store.</p>",
+                "smithy.api#documentation": "<p>Retrieves membership metadata and attributes from <code>MembershipId</code> in an identity store.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>. </p>\n         </note>",
                 "smithy.api#readonly": {}
             }
         },
@@ -1673,7 +1673,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Retrieves the user metadata and attributes from the <code>UserId</code> in an identity store.</p>",
+                "smithy.api#documentation": "<p>Retrieves the user metadata and attributes from the <code>UserId</code> in an identity store.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>. </p>\n         </note>",
                 "smithy.api#readonly": {}
             }
         },
@@ -1948,7 +1948,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Retrieves <code>GroupId</code> in an identity store.</p>",
+                "smithy.api#documentation": "<p>Retrieves <code>GroupId</code> in an identity store.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>. </p>\n         </note>",
                 "smithy.api#readonly": {}
             }
         },
@@ -2007,7 +2007,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Retrieves the <code>MembershipId</code> in an identity store.</p>",
+                "smithy.api#documentation": "<p>Retrieves the <code>MembershipId</code> in an identity store.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>. </p>\n         </note>",
                 "smithy.api#readonly": {}
             }
         },
@@ -2073,7 +2073,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Retrieves the <code>UserId</code> in an identity store.</p>",
+                "smithy.api#documentation": "<p>Retrieves the <code>UserId</code> in an identity store.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>. </p>\n         </note>",
                 "smithy.api#readonly": {}
             }
         },
@@ -2366,7 +2366,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Checks the user's membership in all requested groups and returns if the member exists in all queried groups.</p>",
+                "smithy.api#documentation": "<p>Checks the user's membership in all requested groups and returns if the member exists in all queried groups.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>. </p>\n         </note>",
                 "smithy.api#readonly": {}
             }
         },
@@ -2425,7 +2425,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>For the specified group in the specified identity store, returns the list of all <code>GroupMembership</code> objects and returns results in paginated form.</p>",
+                "smithy.api#documentation": "<p>For the specified group in the specified identity store, returns the list of all <code>GroupMembership</code> objects and returns results in paginated form.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>. </p>\n         </note>",
                 "smithy.api#paginated": {
                     "inputToken": "NextToken",
                     "items": "GroupMemberships",
@@ -2452,7 +2452,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>For the specified member in the specified identity store, returns the list of all <code>GroupMembership</code> objects and returns results in paginated form.</p>",
+                "smithy.api#documentation": "<p>For the specified member in the specified identity store, returns the list of all <code>GroupMembership</code> objects and returns results in paginated form.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>. </p>\n         </note>",
                 "smithy.api#paginated": {
                     "inputToken": "NextToken",
                     "items": "GroupMemberships",
@@ -2577,7 +2577,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Lists all groups in the identity store. Returns a paginated list of complete <code>Group</code> objects. \n         Filtering for a <code>Group</code> by the <code>DisplayName</code> attribute is deprecated. Instead, use the <code>GetGroupId</code> API action.</p>",
+                "smithy.api#documentation": "<p>Lists all groups in the identity store. Returns a paginated list of complete <code>Group</code> objects. \n         Filtering for a <code>Group</code> by the <code>DisplayName</code> attribute is deprecated. Instead, use the <code>GetGroupId</code> API action.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>. </p>\n         </note>",
                 "smithy.api#paginated": {
                     "inputToken": "NextToken",
                     "items": "Groups",
@@ -2655,7 +2655,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Lists all users in the identity store. Returns a paginated list of complete <code>User</code> objects. \n         Filtering for a <code>User</code> by the <code>UserName</code> attribute is deprecated. Instead, use the <code>GetUserId</code> API action.</p>",
+                "smithy.api#documentation": "<p>Lists all users in the identity store. Returns a paginated list of complete <code>User</code> objects. \n         Filtering for a <code>User</code> by the <code>UserName</code> attribute is deprecated. Instead, use the <code>GetUserId</code> API action.</p>\n         <note>\n            <p>If you have administrator access to a member account, you can use this API from the member account. \n         Read about <a href=\"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html\">member accounts</a> in the \n         <i>Organizations User Guide</i>.</p>\n         </note>",
                 "smithy.api#paginated": {
                     "inputToken": "NextToken",
                     "items": "Users",
@@ -2790,7 +2790,7 @@
                     "min": 1,
                     "max": 65535
                 },
-                "smithy.api#pattern": "^[-a-zA-Z0-9+=/:]*$"
+                "smithy.api#pattern": "^[-a-zA-Z0-9+=/:_]*$"
             }
         },
         "com.amazonaws.identitystore#PhoneNumber": {
@@ -2992,7 +2992,7 @@
                 "AttributeValue": {
                     "target": "com.amazonaws.identitystore#AttributeValue",
                     "traits": {
-                        "smithy.api#documentation": "<p>The value of the attribute. This is a <code>Document</code> type.\n         This type is not supported by Java V1, Go V1, and older versions of the AWS CLI.</p>",
+                        "smithy.api#documentation": "<p>The value of the attribute. This is a <code>Document</code> type.\n         This type is not supported by Java V1, Go V1, and older versions of the CLI.</p>",
                         "smithy.api#required": {}
                     }
                 }
