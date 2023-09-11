@@ -86,7 +86,7 @@ public class DefaultChainCredentialsProvider constructor(
  * This allows it to be part of the default chain and any failures result in the chain to move onto the next provider.
  */
 private class StsWebIdentityProvider(
-    val platformProvider: PlatformProvider,
+    val platformProvider: PlatformProvider = PlatformProvider.System,
     val httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
     override suspend fun resolve(attributes: Attributes): Credentials {
