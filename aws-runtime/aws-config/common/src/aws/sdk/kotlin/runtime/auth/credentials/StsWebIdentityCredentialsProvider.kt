@@ -37,10 +37,10 @@ private const val PROVIDER_NAME = "WebIdentityToken"
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class StsWebIdentityCredentialsProvider(
-    private val webIdentityParameters: AssumeRoleWithWebIdentityParameters,
-    private val region: String?,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
-    private val httpClient: HttpClientEngine? = null,
+    public val webIdentityParameters: AssumeRoleWithWebIdentityParameters,
+    public val region: String?,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val httpClient: HttpClientEngine? = null,
 ) : CredentialsProvider {
 
     /**

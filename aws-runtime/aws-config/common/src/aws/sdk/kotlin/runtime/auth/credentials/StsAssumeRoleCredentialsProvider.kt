@@ -45,10 +45,10 @@ private const val PROVIDER_NAME = "AssumeRoleProvider"
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class StsAssumeRoleCredentialsProvider(
-    private val source: CredentialsProvider,
-    private val assumeRoleParameters: AssumeRoleParameters,
-    private val region: String? = null,
-    private val httpClient: HttpClientEngine? = null,
+    public val source: CredentialsProvider,
+    public val assumeRoleParameters: AssumeRoleParameters,
+    public val region: String? = null,
+    public val httpClient: HttpClientEngine? = null,
 ) : CredentialsProvider {
 
     /**

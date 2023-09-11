@@ -61,14 +61,14 @@ private const val PROVIDER_NAME = "EcsContainer"
  *
  */
 public class EcsCredentialsProvider internal constructor(
-    private val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
+    public val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
     public constructor() : this(PlatformProvider.System)
 
     private val manageEngine = httpClient == null
-    private val httpClient = httpClient ?: DefaultHttpEngine()
+    public val httpClient: HttpClientEngine = httpClient ?: DefaultHttpEngine()
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<EcsCredentialsProvider>()
         val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)

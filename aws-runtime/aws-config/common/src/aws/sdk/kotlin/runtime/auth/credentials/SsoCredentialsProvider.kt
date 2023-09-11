@@ -74,8 +74,8 @@ public class SsoCredentialsProvider public constructor(
     public val startUrl: String,
     public val ssoRegion: String,
     public val ssoSessionName: String? = null,
-    private val httpClient: HttpClientEngine? = null,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val httpClient: HttpClientEngine? = null,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
     private val clock: Clock = Clock.System,
 ) : CredentialsProvider {
 

@@ -14,7 +14,9 @@ import aws.smithy.kotlin.runtime.util.Attributes
  *
  * @param credentials The set of static credentials this provider will return
  */
-public class StaticCredentialsProvider public constructor(private val credentials: Credentials) : CredentialsProvider {
+public class StaticCredentialsProvider public constructor(
+    public val credentials: Credentials
+) : CredentialsProvider {
 
     private constructor(builder: Builder) : this(Credentials(builder.accessKeyId!!, builder.secretAccessKey!!, builder.sessionToken))
 

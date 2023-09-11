@@ -42,10 +42,10 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * @return the newly-constructed credentials provider
  */
 public class DefaultChainCredentialsProvider constructor(
-    private val profileName: String? = null,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val profileName: String? = null,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
-    region: String? = null,
+    public val region: String? = null,
 ) : CloseableCredentialsProvider {
 
     private val manageEngine = httpClient == null
