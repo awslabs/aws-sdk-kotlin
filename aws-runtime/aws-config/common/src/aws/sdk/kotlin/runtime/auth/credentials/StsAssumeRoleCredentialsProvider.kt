@@ -38,14 +38,14 @@ private const val PROVIDER_NAME = "AssumeRoleProvider"
  * When asked to provide credentials, this provider will first invoke the inner credentials provider
  * to get AWS credentials for STS. Then, it will call STS to get assumed credentials for the desired role.
  *
- * @param credentialsProvider The underlying provider to use for source credentials
+ * @param source The underlying provider to use for source credentials
  * @param assumeRoleParameters The parameters to pass to the `AssumeRole` call
  * @param region The AWS region to assume the role in. If not set then the global STS endpoint will be used.
  * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class StsAssumeRoleCredentialsProvider(
-    private val credentialsProvider: CredentialsProvider,
+    private val source: CredentialsProvider,
     private val assumeRoleParameters: AssumeRoleParameters,
     private val region: String? = null,
     private val httpClient: HttpClientEngine? = null,
@@ -57,7 +57,7 @@ public class StsAssumeRoleCredentialsProvider(
      * When asked to provide credentials, this provider will first invoke the inner credentials provider
      * to get AWS credentials for STS. Then, it will call STS to get assumed credentials for the desired role.
      *
-     * @param credentialsProvider The underlying provider to use for source credentials
+     * @param source The underlying provider to use for source credentials
      * @param roleArn The ARN of the target role to assume, e.g. `arn:aws:iam:123456789:role/example`
      * @param region The AWS region to assume the role in. If not set then the global STS endpoint will be used.
      * @param roleSessionName The name to associate with the session. Use the role session name to uniquely identify a
@@ -72,7 +72,7 @@ public class StsAssumeRoleCredentialsProvider(
      * lifetime are NOT managed by the provider. Caller is responsible for closing.
      */
     public constructor(
-        credentialsProvider: CredentialsProvider,
+        source: CredentialsProvider,
         roleArn: String,
         region: String? = null,
         roleSessionName: String? = null,
@@ -80,7 +80,7 @@ public class StsAssumeRoleCredentialsProvider(
         duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
         httpClient: HttpClientEngine? = null,
     ) : this(
-        credentialsProvider,
+        source,
         AssumeRoleParameters(
             roleArn = roleArn,
             roleSessionName = roleSessionName,
@@ -100,7 +100,7 @@ public class StsAssumeRoleCredentialsProvider(
         val telemetry = coroutineContext.telemetryProvider
         val client = StsClient {
             region = provider.region ?: GLOBAL_STS_PARTITION_ENDPOINT
-            credentialsProvider = provider.credentialsProvider
+            credentialsProvider = provider.source
             httpClient = provider.httpClient
             telemetryProvider = telemetry
         }
