@@ -22,9 +22,9 @@ private val SESSION_TOKEN = AwsSdkSetting.AwsSessionToken.envVar
 /**
  * A [CredentialsProvider] which reads from `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN`.
  */
-public class EnvironmentCredentialsProvider
-public constructor(private val getEnv: (String) -> String?) : CredentialsProvider {
-    public constructor() : this(PlatformProvider.System::getenv)
+public class EnvironmentCredentialsProvider(
+    private val getEnv: (String) -> String? = PlatformProvider.System::getenv
+) : CredentialsProvider {
 
     private fun requireEnv(variable: String): String =
         getEnv(variable) ?: throw ProviderConfigurationException("Missing value for environment variable `$variable`")
