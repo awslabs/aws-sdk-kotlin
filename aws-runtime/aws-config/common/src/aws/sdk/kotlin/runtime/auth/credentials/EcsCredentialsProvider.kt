@@ -61,7 +61,7 @@ private const val PROVIDER_NAME = "EcsContainer"
  *
  */
 public class EcsCredentialsProvider internal constructor(
-    private val platformProvider: PlatformEnvironProvider,
+    private val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
