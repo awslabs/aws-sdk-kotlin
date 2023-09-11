@@ -56,50 +56,27 @@ private const val PROVIDER_NAME = "SSO"
  * **Additional Resources**
  * * [Configuring the AWS CLI to use AWS Single Sign-On](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
  * * [AWS Single Sign-On User Guide](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html)
+ *
+ * @param accountId The AWS account ID that temporary AWS credentials will be resolved for
+ * @param roleName The IAM role in the AWS account that temporary AWS credentials will be resolved for
+ * @param startUrl The start URL (also known as the "User Portal URL") provided by the SSO service
+ * @param ssoRegion The AWS region where the SSO directory for the given [startUrl] is hosted.
+ * @param ssoSessionName The SSO Session name from the profile. If a session name is given an [SsoTokenProvider]
+ * will be used to fetch tokens.
+ * @param httpClient The [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
+ * are NOT managed by the provider. Caller is responsible for closing.
+ * @param platformProvider The platform provider
+ * @param clock The source of time for the provider
  */
 public class SsoCredentialsProvider public constructor(
-    /**
-     * The AWS account ID that temporary AWS credentials will be resolved for
-     */
     public val accountId: String,
-
-    /**
-     * The IAM role in the AWS account that temporary AWS credentials will be resolved for
-     */
     public val roleName: String,
-
-    /**
-     * The start URL (also known as the "User Portal URL") provided by the SSO service
-     */
     public val startUrl: String,
-
-    /**
-     * The AWS region where the SSO directory for the given [startUrl] is hosted.
-     */
     public val ssoRegion: String,
-
-    /**
-     * The SSO Session name from the profile. If a session name is given an [SsoTokenProvider]
-     * will be used to fetch tokens.
-     */
     public val ssoSessionName: String? = null,
-
-    /**
-     * The [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
-     * are NOT managed by the provider. Caller is responsible for closing.
-     */
     private val httpClient: HttpClientEngine? = null,
-
-    /**
-     * The platform provider
-     */
     private val platformProvider: PlatformProvider = PlatformProvider.System,
-
-    /**
-     * The source of time for the provider
-     */
     private val clock: Clock = Clock.System,
-
 ) : CredentialsProvider {
 
     private val ssoTokenProvider = ssoSessionName?.let { sessName ->
