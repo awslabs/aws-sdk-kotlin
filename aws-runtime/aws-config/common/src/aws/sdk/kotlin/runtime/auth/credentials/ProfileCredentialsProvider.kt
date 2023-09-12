@@ -164,7 +164,7 @@ public class ProfileCredentialsProvider(
         creds: Credentials,
         region: LazyAsyncValue<String?>,
     ): CredentialsProvider = StsAssumeRoleCredentialsProvider(
-        source = StaticCredentialsProvider(creds),
+        bootstrapCredentialsProvider = StaticCredentialsProvider(creds),
         roleArn = roleArn,
         region = region.get(),
         roleSessionName = sessionName,

@@ -57,7 +57,7 @@ public class StsAssumeRoleCredentialsProvider(
      * When asked to provide credentials, this provider will first invoke the inner credentials provider
      * to get AWS credentials for STS. Then, it will call STS to get assumed credentials for the desired role.
      *
-     * @param source The underlying provider to use for source credentials
+     * @param bootstrapCredentialsProvider The underlying provider to use for source credentials
      * @param roleArn The ARN of the target role to assume, e.g. `arn:aws:iam:123456789:role/example`
      * @param region The AWS region to assume the role in. If not set then the global STS endpoint will be used.
      * @param roleSessionName The name to associate with the session. Use the role session name to uniquely identify a
@@ -72,7 +72,7 @@ public class StsAssumeRoleCredentialsProvider(
      * lifetime are NOT managed by the provider. Caller is responsible for closing.
      */
     public constructor(
-        source: CredentialsProvider,
+        bootstrapCredentialsProvider: CredentialsProvider,
         roleArn: String,
         region: String? = null,
         roleSessionName: String? = null,
@@ -80,7 +80,7 @@ public class StsAssumeRoleCredentialsProvider(
         duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
         httpClient: HttpClientEngine? = null,
     ) : this(
-        source,
+        bootstrapCredentialsProvider,
         AssumeRoleParameters(
             roleArn = roleArn,
             roleSessionName = roleSessionName,
