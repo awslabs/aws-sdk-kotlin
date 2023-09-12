@@ -38,14 +38,14 @@ private const val PROVIDER_NAME = "AssumeRoleProvider"
  * When asked to provide credentials, this provider will first invoke the inner credentials provider
  * to get AWS credentials for STS. Then, it will call STS to get assumed credentials for the desired role.
  *
- * @param source The underlying provider to use for source credentials
+ * @param bootstrapCredentialsProvider The underlying provider to use for source credentials
  * @param assumeRoleParameters The parameters to pass to the `AssumeRole` call
  * @param region The AWS region to assume the role in. If not set then the global STS endpoint will be used.
  * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class StsAssumeRoleCredentialsProvider(
-    public val source: CredentialsProvider,
+    public val bootstrapCredentialsProvider: CredentialsProvider,
     public val assumeRoleParameters: AssumeRoleParameters,
     public val region: String? = null,
     public val httpClient: HttpClientEngine? = null,
@@ -100,7 +100,7 @@ public class StsAssumeRoleCredentialsProvider(
         val telemetry = coroutineContext.telemetryProvider
         val client = StsClient {
             region = provider.region ?: GLOBAL_STS_PARTITION_ENDPOINT
-            credentialsProvider = provider.source
+            credentialsProvider = provider.bootstrapCredentialsProvider
             httpClient = provider.httpClient
             telemetryProvider = telemetry
         }

@@ -76,7 +76,7 @@ class StsAssumeRoleCredentialsProviderTest {
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            source = sourceProvider,
+            bootstrapCredentialsProvider = sourceProvider,
             httpClient = testEngine,
             assumeRoleParameters = AssumeRoleParameters(
                 roleArn = StsTestUtils.ARN,
