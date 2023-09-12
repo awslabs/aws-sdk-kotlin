@@ -22,8 +22,9 @@ private val SESSION_TOKEN = AwsSdkSetting.AwsSessionToken.sysProp
 /**
  * A [CredentialsProvider] which reads `aws.accessKeyId`, `aws.secretAccessKey`, and `aws.sessionToken` from system properties.
  */
-public class SystemPropertyCredentialsProvider
-public constructor(private val getProperty: (String) -> String? = PlatformProvider.System::getProperty) : CredentialsProvider {
+public class SystemPropertyCredentialsProvider(
+    public val getProperty: (String) -> String? = PlatformProvider.System::getProperty,
+) : CredentialsProvider {
 
     private fun requireProperty(variable: String): String =
         getProperty(variable) ?: throw ProviderConfigurationException("Missing value for system property `$variable`")

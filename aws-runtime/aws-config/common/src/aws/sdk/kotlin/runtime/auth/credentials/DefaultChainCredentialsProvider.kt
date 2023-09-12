@@ -42,10 +42,10 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * @return the newly-constructed credentials provider
  */
 public class DefaultChainCredentialsProvider constructor(
-    private val profileName: String? = null,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val profileName: String? = null,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
-    region: String? = null,
+    public val region: String? = null,
 ) : CloseableCredentialsProvider {
 
     private val manageEngine = httpClient == null
@@ -86,7 +86,7 @@ public class DefaultChainCredentialsProvider constructor(
  * This allows it to be part of the default chain and any failures result in the chain to move onto the next provider.
  */
 private class StsWebIdentityProvider(
-    val platformProvider: PlatformProvider,
+    val platformProvider: PlatformProvider = PlatformProvider.System,
     val httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
     override suspend fun resolve(attributes: Attributes): Credentials {

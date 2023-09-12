@@ -51,9 +51,9 @@ internal expect class SdkIOException : Exception // FIXME move this to the prope
  * @param platformProvider the [PlatformEnvironProvider] instance
  */
 public class ImdsCredentialsProvider(
-    private val profileOverride: String? = null,
-    private val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
-    private val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
+    public val profileOverride: String? = null,
+    public val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
+    public val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
     private val clock: Clock = Clock.System,
 ) : CloseableCredentialsProvider {
     private var previousCredentials: Credentials? = null

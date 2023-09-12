@@ -72,10 +72,10 @@ import kotlin.coroutines.coroutineContext
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class ProfileCredentialsProvider(
-    private val profileName: String? = null,
-    private val region: String? = null,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
-    private val httpClient: HttpClientEngine? = null,
+    public val profileName: String? = null,
+    public val region: String? = null,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
@@ -164,7 +164,7 @@ public class ProfileCredentialsProvider(
         creds: Credentials,
         region: LazyAsyncValue<String?>,
     ): CredentialsProvider = StsAssumeRoleCredentialsProvider(
-        credentialsProvider = StaticCredentialsProvider(creds),
+        bootstrapCredentialsProvider = StaticCredentialsProvider(creds),
         roleArn = roleArn,
         region = region.get(),
         roleSessionName = sessionName,

@@ -42,7 +42,7 @@ class StsAssumeRoleCredentialsProviderTest {
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
+            bootstrapCredentialsProvider = sourceProvider,
             roleArn = StsTestUtils.ARN,
             roleSessionName = StsTestUtils.SESSION_NAME,
             httpClient = testEngine,
@@ -76,7 +76,7 @@ class StsAssumeRoleCredentialsProviderTest {
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
+            bootstrapCredentialsProvider = sourceProvider,
             httpClient = testEngine,
             assumeRoleParameters = AssumeRoleParameters(
                 roleArn = StsTestUtils.ARN,
@@ -109,7 +109,7 @@ class StsAssumeRoleCredentialsProviderTest {
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
+            bootstrapCredentialsProvider = sourceProvider,
             roleArn = StsTestUtils.ARN,
             httpClient = testEngine,
         )
@@ -136,7 +136,7 @@ class StsAssumeRoleCredentialsProviderTest {
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
+            bootstrapCredentialsProvider = sourceProvider,
             roleArn = StsTestUtils.ARN,
             region = "us-west-2",
             httpClient = testEngine,
@@ -157,7 +157,7 @@ class StsAssumeRoleCredentialsProviderTest {
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
+            bootstrapCredentialsProvider = sourceProvider,
             roleArn = StsTestUtils.ARN,
             httpClient = testEngine,
         )
@@ -175,7 +175,7 @@ class StsAssumeRoleCredentialsProviderTest {
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
+            bootstrapCredentialsProvider = sourceProvider,
             roleArn = StsTestUtils.ARN,
             region = "us-west-2",
             httpClient = testEngine,
