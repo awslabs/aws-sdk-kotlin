@@ -8,9 +8,7 @@
 [maven-badge]: https://img.shields.io/maven-central/v/aws.sdk.kotlin/s3.svg?label=Maven
 [maven-url]: https://search.maven.org/search?q=g:aws.sdk.kotlin
 
-This repo contains the AWS SDK for Kotlin and its [public roadmap](https://github.com/awslabs/aws-sdk-kotlin/projects/2)
-
-**The AWS SDK for Kotlin is currently in developer preview and is intended strictly for feedback purposes only. Do not use this SDK for production workloads. Refer to the SDK [stability](VERSIONING.md#stability-of-the-aws-sdk-for-kotlin) guidelines**
+This repo contains the AWS SDK for Kotlin and its [public roadmap](https://github.com/awslabs/aws-sdk-kotlin/projects/2).
 
 ## Getting Started
 
@@ -19,7 +17,7 @@ This repo contains the AWS SDK for Kotlin and its [public roadmap](https://githu
 * [API Reference](https://sdk.amazonaws.com/kotlin/api/latest/index.html)
 * [Samples](https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/kotlin)
 
-See the [Getting Started Guide](docs/GettingStarted.md) to learn how to use AWS SDKs in your program.
+See the [Getting Started Guide](docs/GettingStarted.md) to learn how to use the AWS SDK for Kotlin in your program.
 
 ## Feedback
 
