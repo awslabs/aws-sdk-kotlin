@@ -113,10 +113,14 @@ codegen {
                 buildSettings {
                     generateDefaultBuildFiles = false
                     generateFullProject = false
+                    visibilitySettings {
+                        serviceClient = "internal"
+                        structure = "internal"
+                        error = "internal"
+                    }
                 }
             }
 
-            // TODO - could we add a trait such that we change visibility to `internal` or a build setting...?
             transforms = listOf(
                 """
                 {
