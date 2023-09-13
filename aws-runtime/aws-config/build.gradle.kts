@@ -152,6 +152,11 @@ codegen {
                 buildSettings {
                     generateDefaultBuildFiles = false
                     generateFullProject = false
+                    visibilitySettings {
+                        serviceClient = "internal"
+                        structure = "internal"
+                        error = "internal"
+                    }
                 }
             }
 
@@ -184,6 +189,11 @@ codegen {
                 buildSettings {
                     generateDefaultBuildFiles = false
                     generateFullProject = false
+                    visibilitySettings {
+                        serviceClient = "internal"
+                        structure = "internal"
+                        error = "internal"
+                    }
                 }
             }
 
