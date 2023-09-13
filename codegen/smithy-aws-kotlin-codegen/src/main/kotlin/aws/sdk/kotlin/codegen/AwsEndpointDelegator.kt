@@ -43,7 +43,7 @@ class AwsEndpointDelegator : EndpointDelegator {
         val defaultProviderSymbol = DefaultEndpointProviderGenerator.getSymbol(ctx.settings)
 
         ctx.delegator.useFileWriter(providerSymbol) {
-            EndpointProviderGenerator(it, providerSymbol, paramsSymbol).render()
+            EndpointProviderGenerator(it, ctx.settings, providerSymbol, paramsSymbol).render()
         }
 
         val endpointFunctions = buildMap {
