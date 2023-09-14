@@ -36,7 +36,7 @@ open class AwsHttpProtocolClientGenerator(
         writer.write("\n\n")
         writer.write(
             "#L const val ServiceApiVersion: String = #S",
-            ctx.settings.api.visibility,
+            ctx.settings.api.visibility.value,
             ctx.service.version,
         )
         writer.write("\n\n")
