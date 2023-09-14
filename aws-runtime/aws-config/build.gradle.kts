@@ -154,7 +154,6 @@ codegen {
                 apiSettings {
                     visibility = "internal"
                 }
-
             }
 
             transforms = listOf(
