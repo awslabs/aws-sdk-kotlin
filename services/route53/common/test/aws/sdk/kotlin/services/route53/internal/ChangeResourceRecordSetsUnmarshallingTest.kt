@@ -9,7 +9,9 @@ import aws.sdk.kotlin.services.route53.model.Route53Exception
 import aws.sdk.kotlin.services.route53.transform.ChangeResourceRecordSetsOperationDeserializer
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
+import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import kotlinx.coroutines.runBlocking
@@ -31,14 +33,16 @@ class ChangeResourceRecordSetsUnmarshallingTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
-            Headers.invoke { },
+            HttpStatusCode.BadRequest,
+            Headers.Empty,
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
+        val call = HttpCall(HttpRequestBuilder().build(), response)
+
         val exception = assertThrows<InvalidChangeBatch> {
             runBlocking {
-                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
         }
         assertEquals(listOf<String>("InvalidChangeBatch message"), exception.messages)
@@ -58,14 +62,16 @@ class ChangeResourceRecordSetsUnmarshallingTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
-            Headers.invoke { },
+            HttpStatusCode.BadRequest,
+            Headers.Empty,
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
+        val call = HttpCall(HttpRequestBuilder().build(), response)
+
         val exception = assertThrows<InvalidChangeBatch> {
             runBlocking {
-                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
         }
         assertEquals(listOf<String>("InvalidChangeBatch message 1", "InvalidChangeBatch message 2"), exception.messages)
@@ -86,14 +92,16 @@ class ChangeResourceRecordSetsUnmarshallingTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
-            Headers.invoke { },
+            HttpStatusCode.BadRequest,
+            Headers.Empty,
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
+        val call = HttpCall(HttpRequestBuilder().build(), response)
+
         val exception = assertThrows<InvalidChangeBatch> {
             runBlocking {
-                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
         }
         assertEquals(listOf<String>("InvalidChangeBatch message 1", "InvalidChangeBatch message 2"), exception.messages)
@@ -115,14 +123,16 @@ class ChangeResourceRecordSetsUnmarshallingTest {
         """.trimIndent()
 
         val response: HttpResponse = HttpResponse(
-            HttpStatusCode(400, "Bad Request"),
-            Headers.invoke { },
+            HttpStatusCode.BadRequest,
+            Headers.Empty,
             HttpBody.fromBytes(bodyText.encodeToByteArray()),
         )
 
+        val call = HttpCall(HttpRequestBuilder().build(), response)
+
         val exception = assertThrows<Route53Exception> {
             runBlocking {
-                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), response)
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
         }
         assertEquals("ChangeResourceRecordSets error message", exception.message)

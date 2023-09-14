@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProvider
 import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
+import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
@@ -19,10 +20,7 @@ import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.util.Attributes
-import aws.smithy.kotlin.runtime.util.LazyAsyncValue
-import aws.smithy.kotlin.runtime.util.PlatformProvider
-import aws.smithy.kotlin.runtime.util.asyncLazy
+import aws.smithy.kotlin.runtime.util.*
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -74,10 +72,10 @@ import kotlin.coroutines.coroutineContext
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class ProfileCredentialsProvider(
-    private val profileName: String? = null,
-    private val region: String? = null,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
-    private val httpClient: HttpClientEngine? = null,
+    public val profileName: String? = null,
+    public val region: String? = null,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
@@ -102,7 +100,7 @@ public class ProfileCredentialsProvider(
 
         // if profile is overridden for this provider, attempt to resolve it from there first
         val profileOverride = profileName?.let { sharedConfig.profiles[it] }
-        val region = asyncLazy { region ?: profileOverride?.getOrNull("region") ?: resolveRegion(platformProvider) }
+        val region = asyncLazy { region ?: profileOverride?.getOrNull("region") ?: attributes.getOrNull(AwsClientOption.Region) ?: resolveRegion(platformProvider) }
 
         val leaf = chain.leaf.toCredentialsProvider(region)
         logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
@@ -166,7 +164,7 @@ public class ProfileCredentialsProvider(
         creds: Credentials,
         region: LazyAsyncValue<String?>,
     ): CredentialsProvider = StsAssumeRoleCredentialsProvider(
-        credentialsProvider = StaticCredentialsProvider(creds),
+        bootstrapCredentialsProvider = StaticCredentialsProvider(creds),
         roleArn = roleArn,
         region = region.get(),
         roleSessionName = sessionName,

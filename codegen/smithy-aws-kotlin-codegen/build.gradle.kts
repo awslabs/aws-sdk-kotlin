@@ -2,6 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import aws.sdk.kotlin.gradle.dsl.configurePublishing
 plugins {
     kotlin("jvm")
     jacoco
@@ -20,6 +21,7 @@ val junitVersion: String by project
 val smithyKotlinVersion: String by project
 val kotlinJVMTargetVersion: String by project
 val slf4jVersion: String by project
+val kotlinxSerializationVersion: String by project
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -39,6 +41,7 @@ dependencies {
 
     testImplementation("org.slf4j:slf4j-api:$slf4jVersion")
     testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
 }
 
 val generateSdkRuntimeVersion by tasks.registering {
@@ -118,4 +121,4 @@ publishing {
     }
 }
 
-apply(from = rootProject.file("gradle/publish.gradle"))
+configurePublishing("aws-sdk-kotlin")

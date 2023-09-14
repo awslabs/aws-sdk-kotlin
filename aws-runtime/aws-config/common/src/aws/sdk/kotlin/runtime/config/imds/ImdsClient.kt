@@ -13,10 +13,10 @@ import aws.smithy.kotlin.runtime.client.LogMode
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.*
-import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.io.middleware.Phase
@@ -108,7 +108,8 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         val op = SdkHttpOperation.build<Unit, String> {
             serializer = UnitSerializer
             deserializer = object : HttpDeserialize<String> {
-                override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): String {
+                override suspend fun deserialize(context: ExecutionContext, call: HttpCall): String {
+                    val response = call.response
                     if (response.status.isSuccess()) {
                         val payload = response.body.readAll() ?: throw EC2MetadataError(response.status.value, "no metadata payload")
                         return payload.decodeToString()
@@ -117,10 +118,9 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
                     }
                 }
             }
+            operationName = path
+            serviceName = "IMDS"
             context {
-                operationName = path
-                serviceName = "IMDS"
-
                 // artifact of re-using ServiceEndpointResolver middleware
                 set(SdkClientOption.LogMode, logMode)
             }

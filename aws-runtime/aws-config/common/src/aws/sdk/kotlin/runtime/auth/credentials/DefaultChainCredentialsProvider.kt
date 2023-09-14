@@ -42,16 +42,17 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * @return the newly-constructed credentials provider
  */
 public class DefaultChainCredentialsProvider constructor(
-    private val profileName: String? = null,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val profileName: String? = null,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
-    region: String? = null,
+    public val region: String? = null,
 ) : CloseableCredentialsProvider {
 
     private val manageEngine = httpClient == null
     private val engine = httpClient ?: DefaultHttpEngine()
 
     private val chain = CredentialsProviderChain(
+        SystemPropertyCredentialsProvider(platformProvider::getProperty),
         EnvironmentCredentialsProvider(platformProvider::getenv),
         ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClient = engine, region = region),
         // STS web identity provider can be constructed from either the profile OR 100% from the environment
@@ -85,7 +86,7 @@ public class DefaultChainCredentialsProvider constructor(
  * This allows it to be part of the default chain and any failures result in the chain to move onto the next provider.
  */
 private class StsWebIdentityProvider(
-    val platformProvider: PlatformProvider,
+    val platformProvider: PlatformProvider = PlatformProvider.System,
     val httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
     override suspend fun resolve(attributes: Attributes): Credentials {

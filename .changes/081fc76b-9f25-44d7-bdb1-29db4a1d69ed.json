@@ -1,0 +1,8 @@
+{
+    "id": "081fc76b-9f25-44d7-bdb1-29db4a1d69ed",
+    "type": "misc",
+    "description": "Refactor CredentialsProvider APIs",
+    "issues": [
+        "https://github.com/awslabs/aws-sdk-kotlin/issues/946"
+    ]
+}

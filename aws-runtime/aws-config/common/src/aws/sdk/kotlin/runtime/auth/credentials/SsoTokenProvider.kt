@@ -60,8 +60,8 @@ public class SsoTokenProvider(
     public val startUrl: String,
     public val ssoRegion: String,
     public val refreshBufferWindow: Duration = DEFAULT_SSO_TOKEN_REFRESH_BUFFER_SECONDS.seconds,
-    private val httpClient: HttpClientEngine? = null,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val httpClient: HttpClientEngine? = null,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
     private val clock: Clock = Clock.System,
 ) : BearerTokenProvider {
 

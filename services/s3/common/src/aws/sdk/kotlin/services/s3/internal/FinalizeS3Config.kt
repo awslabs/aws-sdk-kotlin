@@ -6,12 +6,13 @@ package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
+import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.sdk.kotlin.runtime.config.profile.getBooleanOrNull
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 
-internal suspend fun finalizeConfigImpl(builder: S3Client.Builder, profile: LazyAsyncValue<AwsProfile>) {
-    profile.get().let {
+internal suspend fun finalizeS3Config(builder: S3Client.Builder, sharedConfig: LazyAsyncValue<AwsSharedConfig>) {
+    sharedConfig.get().activeProfile.let {
         builder.config.forcePathStyle = builder.config.forcePathStyle ?: it.forcePathStyle
         builder.config.enableAccelerate = builder.config.enableAccelerate ?: it.enableAccelerate
     }

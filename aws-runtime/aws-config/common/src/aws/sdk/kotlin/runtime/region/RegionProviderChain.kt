@@ -19,6 +19,8 @@ public open class RegionProviderChain(
     protected vararg val providers: RegionProvider,
 ) : RegionProvider {
 
+    public constructor(providers: List<RegionProvider>) : this(*providers.toTypedArray())
+
     private val resolvedRegion = asyncLazy(::resolveRegion)
 
     init {

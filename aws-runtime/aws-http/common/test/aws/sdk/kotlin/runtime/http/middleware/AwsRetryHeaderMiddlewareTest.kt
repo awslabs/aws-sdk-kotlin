@@ -25,11 +25,8 @@ class AwsRetryHeaderMiddlewareTest {
         val op = SdkHttpOperation.build<Unit, Unit> {
             serializer = UnitSerializer
             deserializer = UnitDeserializer
-            context {
-                // required operation context
-                operationName = "TestOperation"
-                serviceName = "TestService"
-            }
+            operationName = "TestOperation"
+            serviceName = "TestService"
         }
 
         val strategy = StandardRetryStrategy()

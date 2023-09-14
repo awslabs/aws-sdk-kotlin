@@ -37,6 +37,6 @@ abstract class JsonHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerato
         op: OperationShape,
         writer: KotlinWriter,
     ) {
-        writer.write("#T.deserialize(response.headers, payload)", RuntimeTypes.AwsJsonProtocols.RestJsonErrorDeserializer)
+        writer.write("#T.deserialize(call.response.headers, payload)", RuntimeTypes.AwsJsonProtocols.RestJsonErrorDeserializer)
     }
 }

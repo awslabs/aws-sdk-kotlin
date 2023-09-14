@@ -1,16 +1,14 @@
-import java.time.LocalDateTime
-
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import aws.sdk.kotlin.gradle.dsl.configurePublishing
+import aws.sdk.kotlin.gradle.kmp.*
+import java.time.LocalDateTime
 
 plugins {
-    kotlin("multiplatform")
     id("org.jetbrains.dokka")
 }
-
-val platforms = listOf("common", "jvm")
 
 val sdkVersion: String by project
 val smithyKotlinVersion: String by project
@@ -25,10 +23,6 @@ val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
 )
 
-kotlin {
-    jvm() // Create a JVM target with the default name 'jvm'
-}
-
 subprojects {
     group = "aws.sdk.kotlin"
     version = sdkVersion
@@ -40,26 +34,11 @@ subprojects {
 
     logger.info("configuring: $project")
 
-    platforms.forEach { platform ->
-        configure(listOf(project)) {
-            apply(from = rootProject.file("gradle/$platform.gradle"))
-        }
-    }
-
     kotlin {
         explicitApi()
 
         sourceSets {
             all {
-                val srcDir = if (name.endsWith("Main")) "src" else "test"
-                val resourcesPrefix = if (name.endsWith("Test")) "test-" else ""
-                // the name is always the platform followed by a suffix of either "Main" or "Test" (e.g. jvmMain, commonTest, etc)
-                val platform = name.substring(0, name.length - 4)
-                kotlin.srcDir("$platform/$srcDir")
-                resources.srcDir("$platform/${resourcesPrefix}resources")
-
-                languageSettings.progressiveMode = true
-
                 // have generated sdk's opt-in to internal runtime features
                 optinAnnotations.forEach { languageSettings.optIn(it) }
             }
@@ -142,5 +121,5 @@ subprojects {
         }
     }
 
-    apply(from = rootProject.file("gradle/publish.gradle"))
+    configurePublishing("aws-sdk-kotlin")
 }

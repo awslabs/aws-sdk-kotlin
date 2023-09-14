@@ -13,31 +13,32 @@ import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.auth.awssigning.DefaultAwsSigner
 import aws.smithy.kotlin.runtime.auth.awssigning.HashSpecification
 import aws.smithy.kotlin.runtime.awsprotocol.eventstream.*
+import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
+import aws.smithy.kotlin.runtime.http.HttpCall
+import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
+import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.smithy.test.assertJsonStringsEqual
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.get
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
+import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Integration test suite that checks the generated event stream serialization and deserialization codegen
- * works as expected.
+ * works as expected for an HTTP-bound service.
  */
-@OptIn(ExperimentalCoroutinesApi::class, InternalApi::class)
-class EventStreamTests {
+@OptIn(InternalApi::class)
+class HttpEventStreamTests {
     private suspend fun serializedMessage(event: TestStream): Message {
         val req = TestStreamOpRequest {
             value = flowOf(event)
@@ -72,10 +73,17 @@ class EventStreamTests {
     private suspend fun deserializedEvent(message: Message): TestStream {
         val buffer = SdkBuffer()
         message.encode(buffer)
-        val body = ByteArrayContent(buffer.readByteArray())
+
+        val response = HttpResponse(
+            HttpStatusCode.OK,
+            Headers.Empty,
+            HttpBody.fromBytes(buffer.readByteArray()),
+        )
+        val call = HttpCall(HttpRequestBuilder().build(), response)
+
         val builder = TestStreamOpResponse.Builder()
 
-        deserializeTestStreamOpOperationBody(builder, body)
+        deserializeTestStreamOpOperationBody(builder, call)
 
         val resp = builder.build()
         checkNotNull(resp.value)

@@ -1,5 +1,75 @@
 # Changelog
 
+## [0.32.1-beta] - 09/08/2023
+
+### Features
+* [#1033](https://github.com/awslabs/aws-sdk-kotlin/issues/1033) Add `SystemPropertyCredentialsProvider` and make it first in default chain credentials provider
+* Allow endpoint URL configuration via env and shared config.
+* [#1000](https://github.com/awslabs/aws-sdk-kotlin/issues/1000) Add more parameters for fetching STS credentials
+
+### Fixes
+* [#935](https://github.com/awslabs/smithy-kotlin/issues/935) Fix closing an event stream causing an IllegalStateException
+
+### Miscellaneous
+* Sync AWS models and bump smithy-kotlin
+
+## [0.32.0-beta] - 08/31/2023
+
+### Miscellaneous
+* **BREAKING**: Refactor HttpCall and HttpResponse types
+* Bump **smithy-kotlin** and AWS service models to latest versions
+
+## [0.31.0-beta] - 08/24/2023
+
+### Features
+* Support initial-request and initial-response for event streams using RPC-based protocols
+
+### Fixes
+* [#1029](https://github.com/awslabs/aws-sdk-kotlin/issues/1029) Update smithy-kotlin to 0.26.0
+
+### Miscellaneous
+* **BREAKING**: prefix generated endpoint and auth scheme providers with client name and track upstream changes
+* Sync AWS models
+* Refactor ClientOption to AttributeKey directly and track upstream HttpContext changes
+
+## [0.30.1-beta] - 08/17/2023
+
+### Miscellaneous
+* Sync AWS models and bump smithy-kotlin version
+
+## [0.30.0-beta] - 08/11/2023
+
+### Features
+* [#583](https://github.com/awslabs/aws-sdk-kotlin/issues/583) Make user-supplied region available to config resolution providers
+* [#1004](https://github.com/awslabs/aws-sdk-kotlin/issues/1004) Make RegionProviderChain accept a list of RegionProvider
+
+### Fixes
+* [#194](https://github.com/awslabs/aws-sdk-kotlin/issues/194) Correctly parse and handle `GetBucketLocation` responses
+
+### Miscellaneous
+* Upgrade Kotlin to 1.8.22
+* [#968](https://github.com/awslabs/aws-sdk-kotlin/issues/968) Add service-level benchmarks
+* Upgrade kotlinx.coroutines to 1.7.3
+* Sync AWS service models and **smithy-kotlin** to latest versions
+
+## [0.29.1-beta] - 07/27/2023
+
+### Features
+* [#745](https://github.com/awslabs/aws-sdk-kotlin/issues/745) Validate returned content length on S3 `GetObject` responses.
+
+### Miscellaneous
+* Sync AWS models and bump smithy-kotlin version
+
+## [0.29.0-beta] - 07/20/2023
+
+### Features
+* [#146](https://github.com/awslabs/smithy-kotlin/issues/146), [#800](https://github.com/awslabs/aws-sdk-kotlin/issues/800) Enable **Timestream Query** and **Timestream Write** service clients
+* [#969](https://github.com/awslabs/aws-sdk-kotlin/issues/969) Make `region` an optional client config parameter to support multi-region use cases
+
+### Miscellaneous
+* **BREAKING**: Refactor observability API and configuration. See the [discussion](https://github.com/awslabs/aws-sdk-kotlin/discussions/981) for more information.
+* Sync AWS service models.
+
 ## [0.28.2-beta] - 07/13/2023
 
 ### Fixes

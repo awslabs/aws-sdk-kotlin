@@ -43,7 +43,7 @@ class AwsEndpointDelegator : EndpointDelegator {
         val defaultProviderSymbol = DefaultEndpointProviderGenerator.getSymbol(ctx.settings)
 
         ctx.delegator.useFileWriter(providerSymbol) {
-            EndpointProviderGenerator(it, paramsSymbol).render()
+            EndpointProviderGenerator(it, providerSymbol, paramsSymbol).render()
         }
 
         val endpointFunctions = buildMap {
@@ -58,7 +58,7 @@ class AwsEndpointDelegator : EndpointDelegator {
         }
         if (rules != null) {
             ctx.delegator.useFileWriter(defaultProviderSymbol) {
-                DefaultEndpointProviderGenerator(it, rules, providerSymbol, paramsSymbol, endpointFunctions, awsEndpointPropertyRenderers).render()
+                DefaultEndpointProviderGenerator(it, rules, defaultProviderSymbol, providerSymbol, paramsSymbol, endpointFunctions, awsEndpointPropertyRenderers).render()
             }
         }
     }

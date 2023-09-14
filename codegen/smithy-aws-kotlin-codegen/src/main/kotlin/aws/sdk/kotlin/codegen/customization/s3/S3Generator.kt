@@ -60,14 +60,15 @@ class S3Generator : RestXml() {
             namespace = "${ctx.settings.pkg.name}.internal"
         }
 
-        writer.write("val payload = response.body.#T()", RuntimeTypes.Http.readAll)
-            .write("val wrappedResponse = response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
+        writer.write("val payload = call.response.body.#T()", RuntimeTypes.Http.readAll)
+            .write("val wrappedResponse = call.response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
+            .write("val wrappedCall = call.copy(response = wrappedResponse)")
             .write("")
             .write("val errorDetails = try {")
             .indent()
             .call {
                 // customize error matching to handle HeadObject/HeadBucket error responses which have no payload
-                writer.write("if (payload == null && response.status == #T.NotFound) {", RuntimeTypes.Http.StatusCode)
+                writer.write("if (payload == null && call.response.status == #T.NotFound) {", RuntimeTypes.Http.StatusCode)
                     .indent()
                     .write("#T(code = #S)", s3ErrorDetails, "NotFound")
                     .dedent()
@@ -93,7 +94,7 @@ class S3Generator : RestXml() {
                     name = "${errSymbol.name}Deserializer"
                     namespace = "${ctx.settings.pkg.name}.transform"
                 }
-                writer.write("#S -> #T().deserialize(context, wrappedResponse)", getErrorCode(ctx, err), errDeserializerSymbol)
+                writer.write("#S -> #T().deserialize(context, wrappedCall)", getErrorCode(ctx, err), errDeserializerSymbol)
             }
             write("else -> #T(errorDetails.message)", exceptionBaseSymbol)
         }

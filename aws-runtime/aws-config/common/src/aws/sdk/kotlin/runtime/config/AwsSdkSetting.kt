@@ -8,6 +8,8 @@ package aws.sdk.kotlin.runtime.config
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.client.config.RetryMode
 import aws.smithy.kotlin.runtime.config.*
+import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 // NOTE: The JVM property names MUST match the ones defined in the Java SDK for any setting added.
 // see: https://github.com/aws/aws-sdk-java-v2/blob/master/core/sdk-core/src/main/java/software/amazon/awssdk/core/SdkSystemSetting.java
@@ -152,4 +154,29 @@ public object AwsSdkSetting {
      */
     public val AwsUseDualStackEndpoint: EnvironmentSetting<Boolean> =
         boolEnvSetting("aws.useDualstackEndpoint", "AWS_USE_DUALSTACK_ENDPOINT")
+
+    /**
+     * The globally-configured endpoint URL that applies to all services.
+     */
+    public val AwsEndpointUrl: EnvironmentSetting<Url> =
+        EnvironmentSetting(Url::parse)("aws.endpointUrl", "AWS_ENDPOINT_URL")
+
+    /**
+     * Whether to ignore configured endpoint URLs.
+     */
+    public val AwsIgnoreEndpointUrls: EnvironmentSetting<Boolean> =
+        boolEnvSetting("aws.ignoreConfiguredEndpointUrls", "AWS_IGNORE_CONFIGURED_ENDPOINT_URLS")
+}
+
+/**
+ * Resolves an endpoint url for a given service.
+ */
+@InternalSdkApi
+public fun AwsSdkSetting.resolveEndpointUrl(
+    provider: PlatformProvider,
+    sysPropSuffix: String,
+    envSuffix: String,
+): Url? {
+    val serviceSetting = EnvironmentSetting(Url::parse)("aws.endpointUrl$sysPropSuffix", "AWS_ENDPOINT_URL_$envSuffix")
+    return serviceSetting.resolve(provider) ?: AwsEndpointUrl.resolve(provider)
 }

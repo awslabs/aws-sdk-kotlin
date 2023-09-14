@@ -4,11 +4,9 @@
  */
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.ServiceClientCompanionObjectWriter
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
@@ -96,17 +94,12 @@ class ClientConfigIntegration : KotlinIntegration {
             SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, serviceClientCompanionObjectWriter),
         )
 
-    // inject env loading of S3-specific config
+    // add S3-specific config finalization
     private val serviceClientCompanionObjectWriter = ServiceClientCompanionObjectWriter {
-        val finalizeConfigImplSymbol = buildSymbol {
-            name = "finalizeConfigImpl"
+        val finalizeS3Config = buildSymbol {
+            name = "finalizeS3Config"
             namespace = "aws.sdk.kotlin.services.s3.internal"
         }
-        write(
-            "override suspend fun finalizeConfig(builder: Builder, profile: #T<#T>): Unit = #T(builder, profile)",
-            RuntimeTypes.Core.Utils.LazyAsyncValue,
-            AwsRuntimeTypes.Config.Profile.AwsProfile,
-            finalizeConfigImplSymbol,
-        )
+        write("#T(builder, sharedConfig)", finalizeS3Config)
     }
 }

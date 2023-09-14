@@ -15,6 +15,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderExceptio
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.*
+import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.*
@@ -60,14 +61,13 @@ private const val PROVIDER_NAME = "EcsContainer"
  *
  */
 public class EcsCredentialsProvider internal constructor(
-    private val platformProvider: PlatformEnvironProvider,
+    public val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
-    public constructor() : this(PlatformProvider.System)
-
     private val manageEngine = httpClient == null
-    private val httpClient = httpClient ?: DefaultHttpEngine()
+    private val httpClient: HttpClientEngine = httpClient ?: DefaultHttpEngine()
+
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<EcsCredentialsProvider>()
         val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
@@ -83,10 +83,8 @@ public class EcsCredentialsProvider internal constructor(
         val op = SdkHttpOperation.build<Unit, Credentials> {
             serializer = EcsCredentialsSerializer(authToken)
             deserializer = EcsCredentialsDeserializer()
-            context {
-                operationName = "EcsCredentialsProvider"
-                serviceName = "EcsContainerMetadata"
-            }
+            operationName = "EcsCredentialsProvider"
+            serviceName = "EcsContainerMetadata"
             execution.endpointResolver = EndpointResolver { Endpoint(url) }
         }
 
@@ -158,7 +156,8 @@ public class EcsCredentialsProvider internal constructor(
 }
 
 private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
-    override suspend fun deserialize(context: ExecutionContext, response: HttpResponse): Credentials {
+    override suspend fun deserialize(context: ExecutionContext, call: HttpCall): Credentials {
+        val response = call.response
         if (!response.status.isSuccess()) {
             throwCredentialsResponseException(response)
         }

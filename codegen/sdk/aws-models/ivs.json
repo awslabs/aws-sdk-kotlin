@@ -204,9 +204,188 @@
                                     "type": "error"
                                 },
                                 {
+                                    "conditions": [
+                                        {
+                                            "fn": "booleanEquals",
+                                            "argv": [
+                                                {
+                                                    "ref": "UseDualStack"
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    ],
+                                    "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
+                                    "type": "error"
+                                },
+                                {
                                     "conditions": [],
+                                    "endpoint": {
+                                        "url": {
+                                            "ref": "Endpoint"
+                                        },
+                                        "properties": {},
+                                        "headers": {}
+                                    },
+                                    "type": "endpoint"
+                                }
+                            ]
+                        },
+                        {
+                            "conditions": [
+                                {
+                                    "fn": "isSet",
+                                    "argv": [
+                                        {
+                                            "ref": "Region"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "type": "tree",
+                            "rules": [
+                                {
+                                    "conditions": [
+                                        {
+                                            "fn": "aws.partition",
+                                            "argv": [
+                                                {
+                                                    "ref": "Region"
+                                                }
+                                            ],
+                                            "assign": "PartitionResult"
+                                        }
+                                    ],
                                     "type": "tree",
                                     "rules": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseFIPS"
+                                                        },
+                                                        true
+                                                    ]
+                                                },
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseDualStack"
+                                                        },
+                                                        true
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsFIPS"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsDualStack"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [],
+                                                            "endpoint": {
+                                                                "url": "https://ivs-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
+                                                    "type": "error"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "UseFIPS"
+                                                        },
+                                                        true
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsFIPS"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [],
+                                                            "endpoint": {
+                                                                "url": "https://ivs-fips.{Region}.{PartitionResult#dnsSuffix}",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "error": "FIPS is enabled but this partition does not support FIPS",
+                                                    "type": "error"
+                                                }
+                                            ]
+                                        },
                                         {
                                             "conditions": [
                                                 {
@@ -219,15 +398,50 @@
                                                     ]
                                                 }
                                             ],
-                                            "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
-                                            "type": "error"
+                                            "type": "tree",
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "booleanEquals",
+                                                            "argv": [
+                                                                true,
+                                                                {
+                                                                    "fn": "getAttr",
+                                                                    "argv": [
+                                                                        {
+                                                                            "ref": "PartitionResult"
+                                                                        },
+                                                                        "supportsDualStack"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "type": "tree",
+                                                    "rules": [
+                                                        {
+                                                            "conditions": [],
+                                                            "endpoint": {
+                                                                "url": "https://ivs.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                                                "properties": {},
+                                                                "headers": {}
+                                                            },
+                                                            "type": "endpoint"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "error": "DualStack is enabled but this partition does not support DualStack",
+                                                    "type": "error"
+                                                }
+                                            ]
                                         },
                                         {
                                             "conditions": [],
                                             "endpoint": {
-                                                "url": {
-                                                    "ref": "Endpoint"
-                                                },
+                                                "url": "https://ivs.{Region}.{PartitionResult#dnsSuffix}",
                                                 "properties": {},
                                                 "headers": {}
                                             },
@@ -239,258 +453,8 @@
                         },
                         {
                             "conditions": [],
-                            "type": "tree",
-                            "rules": [
-                                {
-                                    "conditions": [
-                                        {
-                                            "fn": "isSet",
-                                            "argv": [
-                                                {
-                                                    "ref": "Region"
-                                                }
-                                            ]
-                                        }
-                                    ],
-                                    "type": "tree",
-                                    "rules": [
-                                        {
-                                            "conditions": [
-                                                {
-                                                    "fn": "aws.partition",
-                                                    "argv": [
-                                                        {
-                                                            "ref": "Region"
-                                                        }
-                                                    ],
-                                                    "assign": "PartitionResult"
-                                                }
-                                            ],
-                                            "type": "tree",
-                                            "rules": [
-                                                {
-                                                    "conditions": [
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseFIPS"
-                                                                },
-                                                                true
-                                                            ]
-                                                        },
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseDualStack"
-                                                                },
-                                                                true
-                                                            ]
-                                                        }
-                                                    ],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsFIPS"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                },
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsDualStack"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "type": "tree",
-                                                            "rules": [
-                                                                {
-                                                                    "conditions": [],
-                                                                    "type": "tree",
-                                                                    "rules": [
-                                                                        {
-                                                                            "conditions": [],
-                                                                            "endpoint": {
-                                                                                "url": "https://ivs-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
-                                                                                "properties": {},
-                                                                                "headers": {}
-                                                                            },
-                                                                            "type": "endpoint"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "conditions": [],
-                                                            "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
-                                                            "type": "error"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "conditions": [
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseFIPS"
-                                                                },
-                                                                true
-                                                            ]
-                                                        }
-                                                    ],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsFIPS"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "type": "tree",
-                                                            "rules": [
-                                                                {
-                                                                    "conditions": [],
-                                                                    "type": "tree",
-                                                                    "rules": [
-                                                                        {
-                                                                            "conditions": [],
-                                                                            "endpoint": {
-                                                                                "url": "https://ivs-fips.{Region}.{PartitionResult#dnsSuffix}",
-                                                                                "properties": {},
-                                                                                "headers": {}
-                                                                            },
-                                                                            "type": "endpoint"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "conditions": [],
-                                                            "error": "FIPS is enabled but this partition does not support FIPS",
-                                                            "type": "error"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "conditions": [
-                                                        {
-                                                            "fn": "booleanEquals",
-                                                            "argv": [
-                                                                {
-                                                                    "ref": "UseDualStack"
-                                                                },
-                                                                true
-                                                            ]
-                                                        }
-                                                    ],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [
-                                                                {
-                                                                    "fn": "booleanEquals",
-                                                                    "argv": [
-                                                                        true,
-                                                                        {
-                                                                            "fn": "getAttr",
-                                                                            "argv": [
-                                                                                {
-                                                                                    "ref": "PartitionResult"
-                                                                                },
-                                                                                "supportsDualStack"
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ],
-                                                            "type": "tree",
-                                                            "rules": [
-                                                                {
-                                                                    "conditions": [],
-                                                                    "type": "tree",
-                                                                    "rules": [
-                                                                        {
-                                                                            "conditions": [],
-                                                                            "endpoint": {
-                                                                                "url": "https://ivs.{Region}.{PartitionResult#dualStackDnsSuffix}",
-                                                                                "properties": {},
-                                                                                "headers": {}
-                                                                            },
-                                                                            "type": "endpoint"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            "conditions": [],
-                                                            "error": "DualStack is enabled but this partition does not support DualStack",
-                                                            "type": "error"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "conditions": [],
-                                                    "type": "tree",
-                                                    "rules": [
-                                                        {
-                                                            "conditions": [],
-                                                            "endpoint": {
-                                                                "url": "https://ivs.{Region}.{PartitionResult#dnsSuffix}",
-                                                                "properties": {},
-                                                                "headers": {}
-                                                            },
-                                                            "type": "endpoint"
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "conditions": [],
-                                    "error": "Invalid Configuration: Missing Region",
-                                    "type": "error"
-                                }
-                            ]
+                            "error": "Invalid Configuration: Missing Region",
+                            "type": "error"
                         }
                     ]
                 },
@@ -1057,6 +1021,15 @@
             },
             "errors": [
                 {
+                    "target": "com.amazonaws.ivs#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.ivs#PendingVerification"
+                },
+                {
+                    "target": "com.amazonaws.ivs#ThrottlingException"
+                },
+                {
                     "target": "com.amazonaws.ivs#ValidationException"
                 }
             ],
@@ -1203,7 +1176,7 @@
                 "type": {
                     "target": "com.amazonaws.ivs#ChannelType",
                     "traits": {
-                        "smithy.api#documentation": "<p>Channel type, which determines the allowable resolution and bitrate. <i>If you\n        exceed the allowable input resolution or bitrate, the stream probably will disconnect\n        immediately.</i> Some types generate multiple qualities (renditions) from the\n      original input; this automatically gives viewers the best experience for their devices and\n      network conditions. Some types provide transcoded video; transcoding allows higher playback\n      quality across a range of download speeds. Default: <code>STANDARD</code>. Valid\n      values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>BASIC</code>: Video is transmuxed: Amazon IVS delivers the original input\n          quality to viewers. The viewer’s video-quality choice is limited to the original input.\n          Input resolution can be up to 1080p and bitrate can be up to 1.5 Mbps for 480p and up to\n          3.5 Mbps for resolutions between 480p and 1080p. Original audio is passed through.</p>\n            </li>\n            <li>\n               <p>\n                  <code>STANDARD</code>: Video is transcoded: multiple qualities are generated from the\n          original input, to automatically give viewers the best experience for their devices and\n          network conditions. Transcoding allows higher playback quality across a range of download\n          speeds. Resolution can be up to 1080p and bitrate can be up to 8.5 Mbps. Audio is\n          transcoded only for renditions 360p and below; above that, audio is passed through. This\n          is the default when you create a channel.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADVANCED_SD</code>: Video is transcoded; multiple qualities are generated from\n          the original input, to automatically give viewers the best experience for their devices\n          and network conditions. Input resolution can be up to 1080p and bitrate can be up to 8.5\n          Mbps; output is capped at SD quality (480p). You can select an optional transcode preset\n          (see below). Audio for all renditions is transcoded, and an audio-only rendition is\n          available.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADVANCED_HD</code>: Video is transcoded; multiple qualities are generated from\n          the original input, to automatically give viewers the best experience for their devices\n          and network conditions. Input resolution can be up to 1080p and bitrate can be up to 8.5\n          Mbps; output is capped at HD quality (720p). You can select an optional transcode preset\n          (see below). Audio for all renditions is transcoded, and an audio-only rendition is\n          available.</p>\n            </li>\n         </ul>\n         <p>Optional <i>transcode presets</i> (available for the <code>ADVANCED</code>\n      types) allow you to trade off available download bandwidth and video quality, to optimize the\n      viewing experience. There are two presets:</p>\n         <ul>\n            <li>\n               <p>\n                  <i>Constrained bandwidth delivery</i> uses a lower bitrate for each\n          quality level. Use it if you have low download bandwidth and/or simple video content\n          (e.g., talking heads)</p>\n            </li>\n            <li>\n               <p>\n                  <i>Higher bandwidth delivery</i> uses a higher bitrate for each quality\n          level. Use it if you have high download bandwidth and/or complex video content (e.g.,\n          flashes and quick scene changes).</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Channel type, which determines the allowable resolution and bitrate. <i>If you\n      exceed the allowable input resolution or bitrate, the stream probably will disconnect\n      immediately.</i> Default: <code>STANDARD</code>. For details, see <a href=\"https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html\">Channel Types</a>.</p>"
                     }
                 },
                 "recordingConfigurationArn": {
@@ -1384,7 +1357,7 @@
                 "type": {
                     "target": "com.amazonaws.ivs#ChannelType",
                     "traits": {
-                        "smithy.api#documentation": "<p>Channel type, which determines the allowable resolution and bitrate. <i>If you\n        exceed the allowable input resolution or bitrate, the stream probably will disconnect\n        immediately.</i> Some types generate multiple qualities (renditions) from the\n      original input; this automatically gives viewers the best experience for their devices and\n      network conditions. Some types provide transcoded video; transcoding allows higher playback\n      quality across a range of download speeds. Default: <code>STANDARD</code>. Valid\n      values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>BASIC</code>: Video is transmuxed: Amazon IVS delivers the original input\n          quality to viewers. The viewer’s video-quality choice is limited to the original input.\n          Input resolution can be up to 1080p and bitrate can be up to 1.5 Mbps for 480p and up to\n          3.5 Mbps for resolutions between 480p and 1080p. Original audio is passed through.</p>\n            </li>\n            <li>\n               <p>\n                  <code>STANDARD</code>: Video is transcoded: multiple qualities are generated from the\n          original input, to automatically give viewers the best experience for their devices and\n          network conditions. Transcoding allows higher playback quality across a range of download\n          speeds. Resolution can be up to 1080p and bitrate can be up to 8.5 Mbps. Audio is\n          transcoded only for renditions 360p and below; above that, audio is passed through. This\n          is the default when you create a channel.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADVANCED_SD</code>: Video is transcoded; multiple qualities are generated from\n          the original input, to automatically give viewers the best experience for their devices\n          and network conditions. Input resolution can be up to 1080p and bitrate can be up to 8.5\n          Mbps; output is capped at SD quality (480p). You can select an optional transcode preset\n          (see below). Audio for all renditions is transcoded, and an audio-only rendition is\n          available.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADVANCED_HD</code>: Video is transcoded; multiple qualities are generated from\n          the original input, to automatically give viewers the best experience for their devices\n          and network conditions. Input resolution can be up to 1080p and bitrate can be up to 8.5\n          Mbps; output is capped at HD quality (720p). You can select an optional transcode preset\n          (see below). Audio for all renditions is transcoded, and an audio-only rendition is\n          available.</p>\n            </li>\n         </ul>\n         <p>Optional <i>transcode presets</i> (available for the <code>ADVANCED</code>\n      types) allow you to trade off available download bandwidth and video quality, to optimize the\n      viewing experience. There are two presets:</p>\n         <ul>\n            <li>\n               <p>\n                  <i>Constrained bandwidth delivery</i> uses a lower bitrate for each\n          quality level. Use it if you have low download bandwidth and/or simple video content\n          (e.g., talking heads)</p>\n            </li>\n            <li>\n               <p>\n                  <i>Higher bandwidth delivery</i> uses a higher bitrate for each quality\n          level. Use it if you have high download bandwidth and/or complex video content (e.g.,\n          flashes and quick scene changes).</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Channel type, which determines the allowable resolution and bitrate. <i>If you\n      exceed the allowable input resolution or bitrate, the stream probably will disconnect\n      immediately.</i> Default: <code>STANDARD</code>. For details, see <a href=\"https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html\">Channel Types</a>.</p>"
                     }
                 },
                 "preset": {
@@ -1500,7 +1473,7 @@
                 "type": {
                     "target": "com.amazonaws.ivs#ChannelType",
                     "traits": {
-                        "smithy.api#documentation": "<p>Channel type, which determines the allowable resolution and bitrate. <i>If you\n        exceed the allowable input resolution or bitrate, the stream probably will disconnect\n        immediately.</i> Some types generate multiple qualities (renditions) from the\n      original input; this automatically gives viewers the best experience for their devices and\n      network conditions. Some types provide transcoded video; transcoding allows higher playback\n      quality across a range of download speeds. Default: <code>STANDARD</code>. Valid\n      values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>BASIC</code>: Video is transmuxed: Amazon IVS delivers the original input\n          quality to viewers. The viewer’s video-quality choice is limited to the original input.\n          Input resolution can be up to 1080p and bitrate can be up to 1.5 Mbps for 480p and up to\n          3.5 Mbps for resolutions between 480p and 1080p. Original audio is passed through.</p>\n            </li>\n            <li>\n               <p>\n                  <code>STANDARD</code>: Video is transcoded: multiple qualities are generated from the\n          original input, to automatically give viewers the best experience for their devices and\n          network conditions. Transcoding allows higher playback quality across a range of download\n          speeds. Resolution can be up to 1080p and bitrate can be up to 8.5 Mbps. Audio is\n          transcoded only for renditions 360p and below; above that, audio is passed through. This\n          is the default when you create a channel.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADVANCED_SD</code>: Video is transcoded; multiple qualities are generated from\n          the original input, to automatically give viewers the best experience for their devices\n          and network conditions. Input resolution can be up to 1080p and bitrate can be up to 8.5\n          Mbps; output is capped at SD quality (480p). You can select an optional transcode preset\n          (see below). Audio for all renditions is transcoded, and an audio-only rendition is\n          available.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADVANCED_HD</code>: Video is transcoded; multiple qualities are generated from\n          the original input, to automatically give viewers the best experience for their devices\n          and network conditions. Input resolution can be up to 1080p and bitrate can be up to 8.5\n          Mbps; output is capped at HD quality (720p). You can select an optional transcode preset\n          (see below). Audio for all renditions is transcoded, and an audio-only rendition is\n          available.</p>\n            </li>\n         </ul>\n         <p>Optional <i>transcode presets</i> (available for the <code>ADVANCED</code>\n      types) allow you to trade off available download bandwidth and video quality, to optimize the\n      viewing experience. There are two presets:</p>\n         <ul>\n            <li>\n               <p>\n                  <i>Constrained bandwidth delivery</i> uses a lower bitrate for each\n          quality level. Use it if you have low download bandwidth and/or simple video content\n          (e.g., talking heads)</p>\n            </li>\n            <li>\n               <p>\n                  <i>Higher bandwidth delivery</i> uses a higher bitrate for each quality\n          level. Use it if you have high download bandwidth and/or complex video content (e.g.,\n          flashes and quick scene changes).</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Channel type, which determines the allowable resolution and bitrate. <i>If you\n        exceed the allowable input resolution or bitrate, the stream probably will disconnect\n        immediately.</i> Default: <code>STANDARD</code>. For details, see <a href=\"https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html\">Channel Types</a>.</p>"
                     }
                 },
                 "authorized": {
@@ -1623,6 +1596,12 @@
                     "traits": {
                         "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>If a broadcast disconnects and then reconnects within the specified interval, the multiple\n      streams will be considered a single broadcast and merged together. Default: 0.</p>"
+                    }
+                },
+                "renditionConfiguration": {
+                    "target": "com.amazonaws.ivs#RenditionConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Object that describes which renditions should be recorded for a stream.</p>"
                     }
                 }
             }
@@ -3101,6 +3080,12 @@
                         "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>If a broadcast disconnects and then reconnects within the specified interval, the multiple\n      streams will be considered a single broadcast and merged together. Default: 0.</p>"
                     }
+                },
+                "renditionConfiguration": {
+                    "target": "com.amazonaws.ivs#RenditionConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Object that describes which renditions should be recorded for a stream.</p>"
+                    }
                 }
             },
             "traits": {
@@ -3218,6 +3203,74 @@
                 }
             }
         },
+        "com.amazonaws.ivs#RenditionConfiguration": {
+            "type": "structure",
+            "members": {
+                "renditionSelection": {
+                    "target": "com.amazonaws.ivs#RenditionConfigurationRenditionSelection",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates which set of renditions are recorded for a stream. For <code>BASIC</code>\n      channels, the <code>CUSTOM</code> value has no effect. If <code>CUSTOM</code> is specified, a\n      set of renditions must be specified in the <code>renditions</code> field. Default:\n        <code>ALL</code>.</p>"
+                    }
+                },
+                "renditions": {
+                    "target": "com.amazonaws.ivs#RenditionConfigurationRenditionList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates which renditions are recorded for a stream, if <code>renditionSelection</code>\n      is <code>CUSTOM</code>; otherwise, this field is irrelevant. The selected renditions are\n      recorded if they are available during the stream. If a selected rendition is unavailable, the\n      best available rendition is recorded. For details on the resolution dimensions of each\n      rendition, see <a href=\"https://docs.aws.amazon.com/ivs/latest/userguide/record-to-s3.html\">Auto-Record to Amazon S3</a>.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Object that describes which renditions should be recorded for a stream.</p>"
+            }
+        },
+        "com.amazonaws.ivs#RenditionConfigurationRendition": {
+            "type": "string",
+            "traits": {
+                "smithy.api#enum": [
+                    {
+                        "value": "FULL_HD",
+                        "name": "FULL_HD"
+                    },
+                    {
+                        "value": "HD",
+                        "name": "HD"
+                    },
+                    {
+                        "value": "SD",
+                        "name": "SD"
+                    },
+                    {
+                        "value": "LOWEST_RESOLUTION",
+                        "name": "LOWEST_RESOLUTION"
+                    }
+                ]
+            }
+        },
+        "com.amazonaws.ivs#RenditionConfigurationRenditionList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.ivs#RenditionConfigurationRendition"
+            }
+        },
+        "com.amazonaws.ivs#RenditionConfigurationRenditionSelection": {
+            "type": "string",
+            "traits": {
+                "smithy.api#enum": [
+                    {
+                        "value": "ALL",
+                        "name": "ALL"
+                    },
+                    {
+                        "value": "NONE",
+                        "name": "NONE"
+                    },
+                    {
+                        "value": "CUSTOM",
+                        "name": "CUSTOM"
+                    }
+                ]
+            }
+        },
         "com.amazonaws.ivs#ResourceArn": {
             "type": "string",
             "traits": {
@@ -3299,6 +3352,12 @@
                 },
                 {
                     "target": "com.amazonaws.ivs#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.ivs#PendingVerification"
+                },
+                {
+                    "target": "com.amazonaws.ivs#ResourceNotFoundException"
                 },
                 {
                     "target": "com.amazonaws.ivs#ThrottlingException"
@@ -3953,12 +4012,68 @@
                     "target": "com.amazonaws.ivs#TargetIntervalSeconds",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>The targeted thumbnail-generation interval in seconds. This is configurable (and required)\n      only if <code>recordingMode</code> is <code>INTERVAL</code>. Default: 60.</p>\n         <p>\n            <b>Important:</b> Setting a value for\n        <code>targetIntervalSeconds</code> does not guarantee that thumbnails are generated at the\n      specified interval. For thumbnails to be generated at the <code>targetIntervalSeconds</code>\n      interval, the <code>IDR/Keyframe</code> value for the input video must be less than the\n        <code>targetIntervalSeconds</code> value. See <a href=\"https://docs.aws.amazon.com/ivs/latest/userguide/streaming-config.html\"> Amazon IVS Streaming Configuration</a>\n      for information on setting <code>IDR/Keyframe</code> to the recommended value in video-encoder\n      settings.</p>"
+                        "smithy.api#documentation": "<p>The targeted thumbnail-generation interval in seconds. This is configurable (and required)\n      only if <code>recordingMode</code> is <code>INTERVAL</code>. Default: 60.</p>\n         <p>\n            <b>Important:</b> For the <code>BASIC</code> channel type,\n      setting a value for <code>targetIntervalSeconds</code> does not guarantee that thumbnails are\n      generated at the specified interval. For thumbnails to be generated at the\n        <code>targetIntervalSeconds</code> interval, the <code>IDR/Keyframe</code> value for the\n      input video must be less than the <code>targetIntervalSeconds</code> value. See <a href=\"https://docs.aws.amazon.com/ivs/latest/userguide/streaming-config.html\"> Amazon IVS Streaming\n        Configuration</a> for information on setting <code>IDR/Keyframe</code> to the\n      recommended value in video-encoder settings.</p>"
+                    }
+                },
+                "resolution": {
+                    "target": "com.amazonaws.ivs#ThumbnailConfigurationResolution",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates the desired resolution of recorded thumbnails. Thumbnails are recorded at the\n      selected resolution if the corresponding rendition is available during the stream; otherwise,\n      they are recorded at source resolution. For more information about resolution values and their\n      corresponding height and width dimensions, see <a href=\"https://docs.aws.amazon.com/ivs/latest/userguide/record-to-s3.html\">Auto-Record to Amazon S3</a>. Default:\n      Null (source resolution is returned).</p>"
+                    }
+                },
+                "storage": {
+                    "target": "com.amazonaws.ivs#ThumbnailConfigurationStorageList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates the format in which thumbnails are recorded. <code>SEQUENTIAL</code> records all\n      generated thumbnails in a serial manner, to the media/thumbnails directory.\n        <code>LATEST</code> saves the latest thumbnail in media/latest_thumbnail/thumb.jpg and\n      overwrites it at the interval specified by <code>targetIntervalSeconds</code>. You can enable\n      both <code>SEQUENTIAL</code> and <code>LATEST</code>. Default: <code>SEQUENTIAL</code>.</p>"
                     }
                 }
             },
             "traits": {
                 "smithy.api#documentation": "<p>An object representing a configuration of thumbnails for recorded video.</p>"
+            }
+        },
+        "com.amazonaws.ivs#ThumbnailConfigurationResolution": {
+            "type": "string",
+            "traits": {
+                "smithy.api#enum": [
+                    {
+                        "value": "FULL_HD",
+                        "name": "FULL_HD"
+                    },
+                    {
+                        "value": "HD",
+                        "name": "HD"
+                    },
+                    {
+                        "value": "SD",
+                        "name": "SD"
+                    },
+                    {
+                        "value": "LOWEST_RESOLUTION",
+                        "name": "LOWEST_RESOLUTION"
+                    }
+                ]
+            }
+        },
+        "com.amazonaws.ivs#ThumbnailConfigurationStorage": {
+            "type": "string",
+            "traits": {
+                "smithy.api#enum": [
+                    {
+                        "value": "SEQUENTIAL",
+                        "name": "SEQUENTIAL"
+                    },
+                    {
+                        "value": "LATEST",
+                        "name": "LATEST"
+                    }
+                ]
+            }
+        },
+        "com.amazonaws.ivs#ThumbnailConfigurationStorageList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.ivs#ThumbnailConfigurationStorage"
             }
         },
         "com.amazonaws.ivs#Time": {
@@ -4095,7 +4210,7 @@
                 "type": {
                     "target": "com.amazonaws.ivs#ChannelType",
                     "traits": {
-                        "smithy.api#documentation": "<p>Channel type, which determines the allowable resolution and bitrate. <i>If you\n        exceed the allowable input resolution or bitrate, the stream probably will disconnect\n        immediately.</i> Some types generate multiple qualities (renditions) from the\n      original input; this automatically gives viewers the best experience for their devices and\n      network conditions. Some types provide transcoded video; transcoding allows higher playback\n      quality across a range of download speeds. Default: <code>STANDARD</code>. Valid\n      values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>BASIC</code>: Video is transmuxed: Amazon IVS delivers the original input\n          quality to viewers. The viewer’s video-quality choice is limited to the original input.\n          Input resolution can be up to 1080p and bitrate can be up to 1.5 Mbps for 480p and up to\n          3.5 Mbps for resolutions between 480p and 1080p. Original audio is passed through.</p>\n            </li>\n            <li>\n               <p>\n                  <code>STANDARD</code>: Video is transcoded: multiple qualities are generated from the\n          original input, to automatically give viewers the best experience for their devices and\n          network conditions. Transcoding allows higher playback quality across a range of download\n          speeds. Resolution can be up to 1080p and bitrate can be up to 8.5 Mbps. Audio is\n          transcoded only for renditions 360p and below; above that, audio is passed through. This\n          is the default when you create a channel.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADVANCED_SD</code>: Video is transcoded; multiple qualities are generated from\n          the original input, to automatically give viewers the best experience for their devices\n          and network conditions. Input resolution can be up to 1080p and bitrate can be up to 8.5\n          Mbps; output is capped at SD quality (480p). You can select an optional transcode preset\n          (see below). Audio for all renditions is transcoded, and an audio-only rendition is\n          available.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADVANCED_HD</code>: Video is transcoded; multiple qualities are generated from\n          the original input, to automatically give viewers the best experience for their devices\n          and network conditions. Input resolution can be up to 1080p and bitrate can be up to 8.5\n          Mbps; output is capped at HD quality (720p). You can select an optional transcode preset\n          (see below). Audio for all renditions is transcoded, and an audio-only rendition is\n          available.</p>\n            </li>\n         </ul>\n         <p>Optional <i>transcode presets</i> (available for the <code>ADVANCED</code>\n      types) allow you to trade off available download bandwidth and video quality, to optimize the\n      viewing experience. There are two presets:</p>\n         <ul>\n            <li>\n               <p>\n                  <i>Constrained bandwidth delivery</i> uses a lower bitrate for each\n          quality level. Use it if you have low download bandwidth and/or simple video content\n          (e.g., talking heads)</p>\n            </li>\n            <li>\n               <p>\n                  <i>Higher bandwidth delivery</i> uses a higher bitrate for each quality\n          level. Use it if you have high download bandwidth and/or complex video content (e.g.,\n          flashes and quick scene changes).</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Channel type, which determines the allowable resolution and bitrate. <i>If you\n      exceed the allowable input resolution or bitrate, the stream probably will disconnect\n      immediately.</i> Default: <code>STANDARD</code>. For details, see <a href=\"https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html\">Channel Types</a>.</p>"
                     }
                 },
                 "authorized": {

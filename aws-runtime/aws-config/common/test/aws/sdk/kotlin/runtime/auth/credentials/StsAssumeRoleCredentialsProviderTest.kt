@@ -11,6 +11,7 @@ import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.httptest.CallAsserter
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.net.Host
 import io.kotest.matchers.string.shouldContain
@@ -19,31 +20,76 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 class StsAssumeRoleCredentialsProviderTest {
     private val sourceProvider = StaticCredentialsProvider {
         accessKeyId = "AKID"
         secretAccessKey = "secret"
     }
 
-    private val testArn = "arn:aws:iam:1234567/test-role"
-
     @Test
     fun testSuccess() = runTest {
+        val expectedBody = buildMap {
+            put("Action", "AssumeRole")
+            put("Version", "2011-06-15")
+            put("DurationSeconds", "900")
+            put("RoleArn", StsTestUtils.ARN)
+            put("RoleSessionName", StsTestUtils.SESSION_NAME)
+        }
+
         val testEngine = buildTestConnection {
-            expect(StsTestUtils.stsResponse(testArn))
+            expect(StsTestUtils.stsRequest(expectedBody), StsTestUtils.stsResponse())
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
-            roleArn = testArn,
+            bootstrapCredentialsProvider = sourceProvider,
+            roleArn = StsTestUtils.ARN,
+            roleSessionName = StsTestUtils.SESSION_NAME,
             httpClient = testEngine,
         )
 
         val actual = provider.resolve()
-        assertEquals(StsTestUtils.expectedCredentialsBase, actual)
+        assertEquals(StsTestUtils.CREDENTIALS, actual)
+
+        testEngine.assertRequests(CallAsserter.MatchingBodies)
+    }
+
+    @Test
+    fun testSuccessWithAdditionalParams() = runTest {
+        val expectedBody = buildMap {
+            put("Action", "AssumeRole")
+            put("Version", "2011-06-15")
+            put("DurationSeconds", "900")
+            StsTestUtils.POLICY_ARNS.forEachIndexed { i, arn ->
+                put("PolicyArns.member.${i + 1}.arn", arn)
+            }
+            put("RoleArn", StsTestUtils.ARN)
+            put("RoleSessionName", StsTestUtils.SESSION_NAME)
+            StsTestUtils.TAGS.entries.forEachIndexed { i, (key, value) ->
+                put("Tags.member.${i + 1}.Key", key)
+                put("Tags.member.${i + 1}.Value", value)
+            }
+        }
+
+        val testEngine = buildTestConnection {
+            expect(StsTestUtils.stsRequest(expectedBody), StsTestUtils.stsResponse())
+        }
+
+        val provider = StsAssumeRoleCredentialsProvider(
+            bootstrapCredentialsProvider = sourceProvider,
+            httpClient = testEngine,
+            assumeRoleParameters = AssumeRoleParameters(
+                roleArn = StsTestUtils.ARN,
+                roleSessionName = StsTestUtils.SESSION_NAME,
+                tags = StsTestUtils.TAGS,
+                policyArns = StsTestUtils.POLICY_ARNS,
+            ),
+        )
+
+        val actual = provider.resolve()
+        assertEquals(StsTestUtils.CREDENTIALS, actual)
+
+        testEngine.assertRequests(CallAsserter.MatchingBodies)
     }
 
     @Test
@@ -63,8 +109,8 @@ class StsAssumeRoleCredentialsProviderTest {
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
-            roleArn = testArn,
+            bootstrapCredentialsProvider = sourceProvider,
+            roleArn = StsTestUtils.ARN,
             httpClient = testEngine,
         )
 
@@ -90,8 +136,8 @@ class StsAssumeRoleCredentialsProviderTest {
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
-            roleArn = testArn,
+            bootstrapCredentialsProvider = sourceProvider,
+            roleArn = StsTestUtils.ARN,
             region = "us-west-2",
             httpClient = testEngine,
         )
@@ -107,17 +153,17 @@ class StsAssumeRoleCredentialsProviderTest {
     @Test
     fun testGlobalEndpoint() = runTest {
         val testEngine = buildTestConnection {
-            expect(StsTestUtils.stsResponse(testArn))
+            expect(StsTestUtils.stsResponse())
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
-            roleArn = testArn,
+            bootstrapCredentialsProvider = sourceProvider,
+            roleArn = StsTestUtils.ARN,
             httpClient = testEngine,
         )
 
         val actual = provider.resolve()
-        assertEquals(StsTestUtils.expectedCredentialsBase, actual)
+        assertEquals(StsTestUtils.CREDENTIALS, actual)
         val req = testEngine.requests().first()
         assertEquals(Host.Domain("sts.amazonaws.com"), req.actual.url.host)
     }
@@ -125,18 +171,18 @@ class StsAssumeRoleCredentialsProviderTest {
     @Test
     fun testRegionalEndpoint() = runTest {
         val testEngine = buildTestConnection {
-            expect(StsTestUtils.stsResponse(testArn))
+            expect(StsTestUtils.stsResponse())
         }
 
         val provider = StsAssumeRoleCredentialsProvider(
-            credentialsProvider = sourceProvider,
-            roleArn = testArn,
+            bootstrapCredentialsProvider = sourceProvider,
+            roleArn = StsTestUtils.ARN,
             region = "us-west-2",
             httpClient = testEngine,
         )
 
         val actual = provider.resolve()
-        assertEquals(StsTestUtils.expectedCredentialsBase, actual)
+        assertEquals(StsTestUtils.CREDENTIALS, actual)
         val req = testEngine.requests().first()
         assertEquals(Host.Domain("sts.us-west-2.amazonaws.com"), req.actual.url.host)
     }

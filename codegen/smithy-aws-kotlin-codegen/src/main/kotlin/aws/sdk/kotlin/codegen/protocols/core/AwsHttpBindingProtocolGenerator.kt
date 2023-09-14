@@ -92,10 +92,10 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     override fun operationErrorHandler(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Symbol =
         op.errorHandler(ctx.settings) { writer ->
             writer.withBlock(
-                "private suspend fun ${op.errorHandlerName()}(context: #T, response: #T): #Q {",
+                "private suspend fun ${op.errorHandlerName()}(context: #T, call: #T): #Q {",
                 "}",
                 RuntimeTypes.Core.ExecutionContext,
-                RuntimeTypes.Http.Response.HttpResponse,
+                RuntimeTypes.Http.HttpCall,
                 KotlinTypes.Nothing,
             ) {
                 renderThrowOperationError(ctx, op, writer)
@@ -110,8 +110,9 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         writer: KotlinWriter,
     ) {
         val exceptionBaseSymbol = ExceptionBaseClassGenerator.baseExceptionSymbol(ctx.settings)
-        writer.write("val payload = response.body.#T()", RuntimeTypes.Http.readAll)
-            .write("val wrappedResponse = response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
+        writer.write("val payload = call.response.body.#T()", RuntimeTypes.Http.readAll)
+            .write("val wrappedResponse = call.response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
+            .write("val wrappedCall = call.copy(response = wrappedResponse)")
             .write("")
             .declareSection(ProtocolErrorDeserialization)
             .write("val errorDetails = try {")
@@ -129,7 +130,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
 
         if (ctx.service.hasTrait<AwsQueryCompatibleTrait>()) {
             writer.write("var queryErrorDetails: #T? = null", RuntimeTypes.AwsProtocolCore.AwsQueryCompatibleErrorDetails)
-            writer.withBlock("response.headers[#T]?.let {", "}", RuntimeTypes.AwsProtocolCore.XAmznQueryErrorHeader) {
+            writer.withBlock("call.response.headers[#T]?.let {", "}", RuntimeTypes.AwsProtocolCore.XAmznQueryErrorHeader) {
                 openBlock("queryErrorDetails = try {")
                 write("#T.parse(it)", RuntimeTypes.AwsProtocolCore.AwsQueryCompatibleErrorDetails)
                 closeAndOpenBlock("} catch (ex: Exception) {")
@@ -148,7 +149,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                     name = "${errSymbol.name}Deserializer"
                     namespace = "${ctx.settings.pkg.name}.transform"
                 }
-                writer.write("#S -> #T().deserialize(context, wrappedResponse)", getErrorCode(ctx, err), errDeserializerSymbol)
+                writer.write("#S -> #T().deserialize(context, wrappedCall)", getErrorCode(ctx, err), errDeserializerSymbol)
             }
             write("else -> #T(errorDetails.message)", exceptionBaseSymbol)
         }

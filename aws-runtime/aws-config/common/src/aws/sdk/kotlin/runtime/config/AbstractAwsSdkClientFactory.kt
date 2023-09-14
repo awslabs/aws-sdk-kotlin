@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.config
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseFips
-import aws.sdk.kotlin.runtime.config.profile.AwsProfile
+import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
 import aws.sdk.kotlin.runtime.region.resolveRegion
@@ -57,7 +57,8 @@ public abstract class AbstractAwsSdkClientFactory<
         val tracer = telemetryProvider.tracerProvider.getOrCreateTracer("AwsSdkClientFactory")
 
         tracer.withSpan("fromEnvironment") {
-            val profile = asyncLazy { loadAwsSharedConfig(PlatformProvider.System).activeProfile }
+            val sharedConfig = asyncLazy { loadAwsSharedConfig(PlatformProvider.System) }
+            val profile = asyncLazy { sharedConfig.get().activeProfile }
 
             // As a DslBuilderProperty, the value of retryStrategy cannot be checked for nullability because it may have
             // been set using a DSL. Thus, set the resolved strategy _first_ to ensure it's used as the fallback.
@@ -65,13 +66,13 @@ public abstract class AbstractAwsSdkClientFactory<
                 config.retryStrategy = resolveRetryStrategy(profile = profile)
             }
 
-            if (block != null) config.apply(block)
+            block?.let(config::apply)
 
             config.logMode = config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
             config.region = config.region ?: resolveRegion(profile = profile)
             config.useFips = config.useFips ?: resolveUseFips(profile = profile)
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
-            finalizeConfig(builder, profile)
+            finalizeConfig(builder, sharedConfig)
         }
         return builder.build()
     }
@@ -79,5 +80,5 @@ public abstract class AbstractAwsSdkClientFactory<
     /**
      * Inject any client-specific config.
      */
-    protected open suspend fun finalizeConfig(builder: TClientBuilder, profile: LazyAsyncValue<AwsProfile>) { }
+    protected open suspend fun finalizeConfig(builder: TClientBuilder, sharedConfig: LazyAsyncValue<AwsSharedConfig>) { }
 }

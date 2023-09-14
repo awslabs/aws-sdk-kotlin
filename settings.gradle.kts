@@ -22,6 +22,13 @@ pluginManagement {
     }
 }
 
+sourceControl {
+    gitRepository(java.net.URI("https://github.com/awslabs/aws-kotlin-repo-tools.git")) {
+        producesModule("aws.sdk.kotlin:build-plugins")
+        producesModule("aws.sdk.kotlin:ktlint-rules")
+    }
+}
+
 rootProject.name = "aws-sdk-kotlin"
 
 includeBuild("./gradle/sdk-plugins")
@@ -36,6 +43,7 @@ include(":aws-runtime:aws-config")
 include(":aws-runtime:aws-endpoint")
 include(":aws-runtime:aws-http")
 include(":tests")
+include(":tests:benchmarks:service-benchmarks")
 include(":tests:codegen:event-stream")
 include(":tests:e2e-test-util")
 

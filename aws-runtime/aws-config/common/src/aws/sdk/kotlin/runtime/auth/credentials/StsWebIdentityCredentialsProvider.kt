@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRoleWithWebIdentity
+import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.PolicyDescriptorType
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
@@ -29,27 +30,54 @@ private const val PROVIDER_NAME = "WebIdentityToken"
 /**
  * A [CredentialsProvider] that exchanges a Web Identity Token for credentials from the AWS Security Token Service (STS).
  *
- * @param roleArn The ARN of the target role to assume, e.g. `arn:aws:iam:123456789:role/example`
- * @param webIdentityTokenFilePath The path to the file containing a JWT token
+ * @param webIdentityParameters The parameters to pass to the `AssumeRoleWithWebIdentity` call
  * @param region The AWS region to assume the role in
- * @param roleSessionName The name to associate with the session. Use the role session name to uniquely identify a session
- * when the same role is assumed by different principals or for different reasons. In cross-account scenarios, the
- * role session name is visible to, and can be logged by the account that owns the role. The role session name is also
- * in the ARN of the assumed role principal.
- * @param duration The expiry duration of the credentials. Defaults to 15 minutes if not set.
  * @param platformProvider The platform API provider
  * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class StsWebIdentityCredentialsProvider(
-    private val roleArn: String,
-    private val webIdentityTokenFilePath: String,
-    private val region: String?,
-    private val roleSessionName: String? = null,
-    private val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
-    private val httpClient: HttpClientEngine? = null,
+    public val webIdentityParameters: AssumeRoleWithWebIdentityParameters,
+    public val region: String?,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val httpClient: HttpClientEngine? = null,
 ) : CredentialsProvider {
+
+    /**
+     * A [CredentialsProvider] that exchanges a Web Identity Token for credentials from the AWS Security Token Service
+     * (STS).
+     *
+     * @param roleArn The ARN of the target role to assume, e.g. `arn:aws:iam:123456789:role/example`
+     * @param webIdentityTokenFilePath The path to the file containing a JWT token
+     * @param region The AWS region to assume the role in
+     * @param roleSessionName The name to associate with the session. Use the role session name to uniquely identify a
+     * session when the same role is assumed by different principals or for different reasons. In cross-account
+     * scenarios, the role session name is visible to, and can be logged by the account that owns the role. The role
+     * session name is also in the ARN of the assumed role principal.
+     * @param duration The expiry duration of the credentials. Defaults to 15 minutes if not set.
+     * @param platformProvider The platform API provider
+     * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and
+     * lifetime are NOT managed by the provider. Caller is responsible for closing.
+     */
+    public constructor(
+        roleArn: String,
+        webIdentityTokenFilePath: String,
+        region: String?,
+        roleSessionName: String? = null,
+        duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
+        platformProvider: PlatformProvider = PlatformProvider.System,
+        httpClient: HttpClientEngine? = null,
+    ) : this(
+        AssumeRoleWithWebIdentityParameters(
+            roleArn = roleArn,
+            webIdentityTokenFilePath = webIdentityTokenFilePath,
+            roleSessionName = roleSessionName,
+            duration = duration,
+        ),
+        region,
+        platformProvider,
+        httpClient,
+    )
 
     public companion object {
         /**
@@ -77,10 +105,11 @@ public class StsWebIdentityCredentialsProvider(
         val logger = coroutineContext.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials via web identity" }
         val provider = this
+        val params = provider.webIdentityParameters
 
         val token = platformProvider
-            .readFileOrNull(webIdentityTokenFilePath)
-            ?.decodeToString() ?: throw CredentialsProviderException("failed to read webIdentityToken from $webIdentityTokenFilePath")
+            .readFileOrNull(params.webIdentityTokenFilePath)
+            ?.decodeToString() ?: throw CredentialsProviderException("failed to read webIdentityToken from ${params.webIdentityTokenFilePath}")
 
         val telemetry = coroutineContext.telemetryProvider
 
@@ -93,10 +122,13 @@ public class StsWebIdentityCredentialsProvider(
 
         val resp = try {
             client.assumeRoleWithWebIdentity {
-                roleArn = provider.roleArn
+                roleArn = params.roleArn
                 webIdentityToken = token
-                durationSeconds = provider.duration.inWholeSeconds.toInt()
-                roleSessionName = provider.roleSessionName ?: defaultSessionName(platformProvider)
+                durationSeconds = params.duration.inWholeSeconds.toInt()
+                roleSessionName = params.roleSessionName ?: defaultSessionName(platformProvider)
+                providerId = params.providerId
+                policyArns = params.convertedPolicyArns
+                policy = params.policy
             }
         } catch (ex: Exception) {
             logger.debug { "sts refused to grant assumed role credentials from web identity" }
@@ -116,6 +148,32 @@ public class StsWebIdentityCredentialsProvider(
             providerName = PROVIDER_NAME,
         )
     }
+}
+
+/**
+ * Parameters passed to an `AssumeRoleWithWebIdentity` call
+ * @param roleArn The ARN of the target role to assume, e.g. `arn:aws:iam:123456789:role/example`
+ * @param webIdentityTokenFilePath The path to the file containing a JWT token
+ * @param roleSessionName The name to associate with the session. Use the role session name to uniquely identify a
+ * session when the same role is assumed by different principals or for different reasons. In cross-account scenarios,
+ * the role session name is visible to, and can be logged by the account that owns the role. The role session name is
+ * also in the ARN of the assumed role principal.
+ * @param duration The expiry duration of the credentials. Defaults to 15 minutes if not set.
+ * @param providerId The fully qualified host component of the domain name of the OAuth 2.0 identity provider
+ * @param policyArns The Amazon Resource Names (ARNs) of the IAM managed policies that you want to use as managed
+ * session policies
+ * @param policy An IAM policy in JSON format that you want to use as an inline session policy
+ */
+public class AssumeRoleWithWebIdentityParameters(
+    public val roleArn: String,
+    public val webIdentityTokenFilePath: String,
+    public val roleSessionName: String? = null,
+    public val duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
+    public val providerId: String? = null,
+    public val policyArns: List<String>? = null,
+    public val policy: String? = null,
+) {
+    internal val convertedPolicyArns = policyArns?.map { PolicyDescriptorType { arn = it } }
 }
 
 // convenience function to resolve parameters for fromEnvironment()

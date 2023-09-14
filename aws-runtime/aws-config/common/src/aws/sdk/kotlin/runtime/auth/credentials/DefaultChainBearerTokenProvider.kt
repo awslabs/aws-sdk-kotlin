@@ -30,9 +30,9 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * are NOT managed by the provider. Caller is responsible for closing.
  */
 public class DefaultChainBearerTokenProvider(
-    private val profileName: String? = null,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
-    httpClient: HttpClientEngine? = null,
+    public val profileName: String? = null,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val httpClient: HttpClientEngine? = null,
 ) : CloseableBearerTokenProvider {
 
     private val chain = BearerTokenProviderChain(

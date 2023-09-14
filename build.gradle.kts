@@ -2,15 +2,31 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import aws.sdk.kotlin.gradle.dsl.configureLinting
+import aws.sdk.kotlin.gradle.dsl.configureNexus
+import aws.sdk.kotlin.gradle.util.typedProp
 import java.net.URL
-import java.time.Duration
-import java.util.Properties
+
+buildscript {
+    dependencies {
+        // Add our custom gradle plugin(s) to buildscript classpath (comes from github source)
+        // NOTE: buildscript classpath for the root project is the parent classloader for the subprojects, we
+        // only need to include it here, imports in subprojects will work automagically
+        classpath("aws.sdk.kotlin:build-plugins") {
+            version {
+                require("0.2.2")
+            }
+        }
+    }
+}
 
 plugins {
-    kotlin("jvm") version "1.8.10" apply false
+    kotlin("jvm") version "1.8.22" apply false
     id("org.jetbrains.dokka")
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
+
+// configures (KMP) subprojects with our own KMP conventions and some default dependencies
+apply(plugin = "aws.sdk.kotlin.kmp")
 
 allprojects {
     repositories {
@@ -75,25 +91,7 @@ subprojects {
     }
 }
 
-val localProperties: Map<String, Any> by lazy {
-    val props = Properties()
-
-    listOf(
-        File(rootProject.projectDir, "local.properties"), // Project-specific local properties
-        File(rootProject.projectDir.parent, "local.properties"), // Workspace-specific local properties
-        File(System.getProperty("user.home"), ".sdkdev/local.properties"), // User-specific local properties
-    )
-        .filter(File::exists)
-        .map(File::inputStream)
-        .forEach(props::load)
-
-    props.mapKeys { (k, _) -> k.toString() }
-}
-
-fun Project.prop(name: String): Any? =
-    this.properties[name] ?: localProperties[name]
-
-if (project.prop("kotlinWarningsAsErrors")?.toString()?.toBoolean() == true) {
+if (project.typedProp<Boolean>("kotlinWarningsAsErrors") == true) {
     subprojects {
         tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
             kotlinOptions.allWarningsAsErrors = true
@@ -119,73 +117,14 @@ project.afterEvaluate {
     }
 }
 
-if (
-    project.hasProperty("sonatypeUsername") &&
-    project.hasProperty("sonatypePassword") &&
-    project.hasProperty("publishGroupName")
-) {
-    apply(plugin = "io.github.gradle-nexus.publish-plugin")
+// Publishing
+configureNexus()
 
-    val publishGroupName = project.property("publishGroupName") as String
-    group = publishGroupName
-
-    nexusPublishing {
-        repositories {
-            create("awsNexus") {
-                nexusUrl.set(uri("https://aws.oss.sonatype.org/service/local/"))
-                snapshotRepositoryUrl.set(uri("https://aws.oss.sonatype.org/content/repositories/snapshots/"))
-                username.set(project.property("sonatypeUsername") as String)
-                password.set(project.property("sonatypePassword") as String)
-            }
-        }
-
-        transitionCheckOptions {
-            maxRetries.set(180)
-            delayBetween.set(Duration.ofSeconds(10))
-        }
-    }
-}
-
-val ktlint: Configuration by configurations.creating {
-    attributes {
-        attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
-    }
-}
-val ktlintVersion: String by project
-dependencies {
-    ktlint("com.pinterest:ktlint:$ktlintVersion")
-}
-
+// Code Style
 val lintPaths = listOf(
     "**/*.{kt,kts}",
     "!**/generated-src/**",
     "!**/smithyprojections/**",
 )
 
-tasks.register<JavaExec>("ktlint") {
-    description = "Check Kotlin code style."
-    group = "Verification"
-    classpath = configurations.getByName("ktlint")
-    main = "com.pinterest.ktlint.Main"
-    args = lintPaths
-    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
-}
-
-tasks.register<JavaExec>("ktlintFormat") {
-    description = "Auto fix Kotlin code style violations"
-    group = "formatting"
-    classpath = configurations.getByName("ktlint")
-    main = "com.pinterest.ktlint.Main"
-    args = listOf("-F") + lintPaths
-    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
-}
-
-// configure coverage for the entire project
-apply(from = rootProject.file("gradle/codecoverage.gradle"))
-
-tasks.register("showRepos") {
-    doLast {
-        println("All repos:")
-        println(repositories.map { it.name })
-    }
-}
+configureLinting(lintPaths)
