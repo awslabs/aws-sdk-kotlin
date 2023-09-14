@@ -113,11 +113,9 @@ codegen {
                 buildSettings {
                     generateDefaultBuildFiles = false
                     generateFullProject = false
-                    visibilitySettings {
-                        serviceClient = "internal"
-                        structure = "internal"
-                        error = "internal"
-                    }
+                }
+                apiSettings {
+                    visibility = "internal"
                 }
             }
 
@@ -152,12 +150,11 @@ codegen {
                 buildSettings {
                     generateDefaultBuildFiles = false
                     generateFullProject = false
-                    visibilitySettings {
-                        serviceClient = "internal"
-                        structure = "internal"
-                        error = "internal"
-                    }
                 }
+                apiSettings {
+                    visibility = "internal"
+                }
+
             }
 
             transforms = listOf(
@@ -189,11 +186,9 @@ codegen {
                 buildSettings {
                     generateDefaultBuildFiles = false
                     generateFullProject = false
-                    visibilitySettings {
-                        serviceClient = "internal"
-                        structure = "internal"
-                        error = "internal"
-                    }
+                }
+                apiSettings {
+                    visibility = "internal"
                 }
             }
 
