@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.32.2-beta] - 09/15/2023
+
+### Miscellaneous
+* [#946](https://github.com/awslabs/aws-sdk-kotlin/issues/946) Refactor CredentialsProvider APIs
+* Sync smithy-kotlin and AWS service models.
+
 ## [0.32.1-beta] - 09/08/2023
 
 ### Features
