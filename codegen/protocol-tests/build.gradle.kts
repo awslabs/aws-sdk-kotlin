@@ -11,9 +11,8 @@ plugins {
 
 description = "Smithy protocol test suite"
 
-val smithyVersion: String by project
 dependencies {
-    implementation("software.amazon.smithy:smithy-aws-protocol-tests:$smithyVersion")
+    implementation(libs.smithy.aws.protocol.tests)
 }
 
 data class ProtocolTest(val projectionName: String, val serviceShapeId: String, val sdkId: String? = null) {

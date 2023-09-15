@@ -12,22 +12,8 @@ plugins {
 description = "Support for AWS configuration"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.config"
 
-val smithyKotlinVersion: String by project
-val kotestVersion: String by project
-val coroutinesVersion: String by project
-val atomicFuVersion: String by project
+val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
 
-buildscript {
-    val atomicFuVersion: String by project
-
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:$atomicFuVersion")
-    }
-}
 apply(plugin = "kotlinx-atomicfu")
 
 kotlin {
@@ -61,25 +47,23 @@ kotlin {
                 implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
 
                 // atomics
-                implementation("org.jetbrains.kotlinx:atomicfu:$atomicFuVersion")
+                implementation(libs.kotlinx.atomicfu)
 
                 // coroutines
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation(libs.kotlinx.coroutines.core)
             }
         }
         commonTest {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+                implementation(libs.kotlinx.coroutines.test)
                 implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
-                val kotlinxSerializationVersion: String by project
-                val mockkVersion: String by project
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-                implementation("io.mockk:mockk:$mockkVersion")
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.mockk)
             }
         }
         jvmTest {
             dependencies {
-                implementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+                implementation(libs.kotest.runner.junit5)
             }
         }
 

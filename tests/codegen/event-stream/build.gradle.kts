@@ -127,15 +127,16 @@ tasks.test {
     }
 }
 
+val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
+
 dependencies {
-    val coroutinesVersion: String by project
-    val smithyKotlinVersion: String by project
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation(libs.kotlinx.coroutines.core)
 
-    testImplementation(kotlin("test"))
-    testImplementation(kotlin("test-junit5"))
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.kotlinx.coroutines.test)
+
     testImplementation("aws.smithy.kotlin:smithy-test:$smithyKotlinVersion")
     testImplementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
     testImplementation("aws.smithy.kotlin:telemetry-api:$smithyKotlinVersion")

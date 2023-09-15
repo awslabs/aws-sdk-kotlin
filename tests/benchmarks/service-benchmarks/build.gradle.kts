@@ -3,17 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.skipPublishing
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    val atomicFuVersion: String by project
-
-    dependencies {
-        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:$atomicFuVersion")
-    }
-}
 
 plugins {
     kotlin("multiplatform")
@@ -41,6 +30,7 @@ val requiredServices = setOf(
 )
 
 val missingServices = requiredServices.filterNot { rootProject.file("services/$it/build.gradle.kts").exists() }
+val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
 
 if (missingServices.isEmpty()) {
     val optinAnnotations = listOf("kotlin.RequiresOptIn", "aws.smithy.kotlin.runtime.InternalApi")
@@ -51,16 +41,13 @@ if (missingServices.isEmpty()) {
                 optinAnnotations.forEach { languageSettings.optIn(it) }
             }
 
-            val atomicFuVersion: String by project
-            val coroutinesVersion: String by project
-            val smithyKotlinVersion: String by project
-
             commonMain {
                 dependencies {
                     api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
                     implementation(project(":aws-runtime:aws-core"))
-                    implementation("org.jetbrains.kotlinx:atomicfu:$atomicFuVersion")
-                    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                    implementation(libs.kotlinx.atomicfu)
+                    implementation(libs.kotlinx.coroutines.core)
+
 
                     requiredServices.forEach { implementation(project(":services:$it")) }
                 }

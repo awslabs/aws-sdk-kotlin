@@ -23,10 +23,9 @@ plugins {
 }
 
 buildscript {
-    val smithyVersion: String by project
     dependencies {
-        classpath("software.amazon.smithy:smithy-model:$smithyVersion")
-        classpath("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
+        classpath(libs.smithy.model)
+        classpath(libs.smithy.aws.traits)
     }
 }
 

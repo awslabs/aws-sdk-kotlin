@@ -7,8 +7,7 @@ description = "AWS client runtime core"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: Client Runtime"
 extra["moduleName"] = "aws.sdk.kotlin.runtime"
 
-val smithyKotlinVersion: String by project
-val coroutinesVersion: String by project
+val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
 
 kotlin {
     sourceSets {
@@ -21,7 +20,7 @@ kotlin {
 
         commonTest {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+                implementation(libs.kotlinx.coroutines.test)
             }
         }
 

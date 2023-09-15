@@ -7,7 +7,7 @@ description = "AWS Endpoint Support"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: Endpoint"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.endpoint"
 
-val smithyKotlinVersion: String by project
+val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
 
 kotlin {
     sourceSets {

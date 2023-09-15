@@ -8,7 +8,7 @@ plugins {
 
 description = "Test utilities for integration and e2e tests"
 
-val smithyKotlinVersion: String by project
+val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
 
 dependencies {
     api("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
