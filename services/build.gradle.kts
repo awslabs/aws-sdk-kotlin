@@ -4,10 +4,12 @@
  */
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
 import aws.sdk.kotlin.gradle.kmp.*
+import aws.sdk.kotlin.gradle.util.typedProp
 import java.time.LocalDateTime
 
 plugins {
     id("org.jetbrains.dokka")
+    `maven-publish`
 }
 
 val sdkVersion: String by project
@@ -122,4 +124,13 @@ subprojects {
     }
 
     configurePublishing("aws-sdk-kotlin")
+    publishing {
+        publications.all {
+            if (this !is MavenPublication) return@all
+            project.afterEvaluate {
+                val sdkId = project.typedProp<String>("aws.sdk.id") ?: error("service build `${project.name}` is missing `aws.sdk.id` property required for publishing")
+                pom.properties.put("aws.sdk.id", sdkId)
+            }
+        }
+    }
 }
