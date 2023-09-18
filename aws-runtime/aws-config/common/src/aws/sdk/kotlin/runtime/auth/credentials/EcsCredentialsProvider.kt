@@ -60,7 +60,7 @@ private const val PROVIDER_NAME = "EcsContainer"
  * are NOT managed by the provider. Caller is responsible for closing.
  *
  */
-public class EcsCredentialsProvider internal constructor(
+public class EcsCredentialsProvider(
     public val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
