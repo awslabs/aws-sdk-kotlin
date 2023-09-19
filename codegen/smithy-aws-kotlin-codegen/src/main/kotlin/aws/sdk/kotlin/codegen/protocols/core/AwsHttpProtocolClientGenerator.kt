@@ -34,7 +34,11 @@ open class AwsHttpProtocolClientGenerator(
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
-        writer.write("public const val ServiceApiVersion: String = #S", ctx.service.version)
+        writer.write(
+            "#L const val ServiceApiVersion: String = #S",
+            ctx.settings.api.visibility,
+            ctx.service.version,
+        )
         writer.write("\n\n")
         // set AWS specific span attributes for an operation
         // https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/instrumentation/aws-sdk/
