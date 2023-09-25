@@ -12,12 +12,10 @@ import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import aws.smithy.kotlin.runtime.util.attributesOf
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ProfileCredentialsProviderTest {
     @Test
     fun testDefaultProfile() = runTest {

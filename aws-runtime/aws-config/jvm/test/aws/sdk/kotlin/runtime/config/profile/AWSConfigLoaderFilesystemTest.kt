@@ -11,7 +11,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -25,7 +24,6 @@ import kotlin.test.assertEquals
 /**
  * Tests that exercise logic associated with the filesystem
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class AWSConfigLoaderFilesystemTest {
 
     @TempDir

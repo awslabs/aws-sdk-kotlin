@@ -7,13 +7,11 @@ package aws.sdk.kotlin.runtime.region
 
 import aws.sdk.kotlin.runtime.util.TestInstanceMetadataProvider
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DefaultRegionProviderChainTest {
     private data class RegionProviderChainTest(
         val name: String,

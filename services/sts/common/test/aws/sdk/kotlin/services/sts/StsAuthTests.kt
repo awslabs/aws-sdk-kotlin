@@ -18,7 +18,6 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.Instant
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -28,7 +27,6 @@ import kotlin.test.assertTrue
 /**
  * Tests related to STS model and whether requests need to be signed or not
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class StsAuthTests {
 
     private val mockEngine = object : HttpClientEngineBase("mock-engine") {
