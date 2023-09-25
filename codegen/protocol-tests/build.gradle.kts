@@ -35,6 +35,10 @@ val enabledProtocols = listOf(
     ProtocolTest("apigateway", "com.amazonaws.apigateway#BackplaneControlService"),
     ProtocolTest("glacier", "com.amazonaws.glacier#Glacier"),
     ProtocolTest("machinelearning", "com.amazonaws.machinelearning#AmazonML_20141212", sdkId = "Machine Learning"),
+
+    // Custom hand written tests
+    ProtocolTest("error-correction-json", "aws.protocoltests.errorcorrection#RequiredValueJson"),
+    ProtocolTest("error-correction-xml", "aws.protocoltests.errorcorrection#RequiredValueXml"),
 )
 
 codegen {
