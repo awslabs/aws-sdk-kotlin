@@ -73,7 +73,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
 
                 // FIXME - xmlns incorrect in XML maps, see https://github.com/awslabs/smithy-kotlin/issues/957
                 "RestXmlXmlMapWithXmlNamespace",
-            )
+            ),
         )
 
         // The following can be used to generate only a specific test by name.
