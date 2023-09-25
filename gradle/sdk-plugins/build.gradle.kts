@@ -5,6 +5,7 @@
 import java.util.Properties
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 }
@@ -15,6 +16,7 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     gradlePluginPortal()
 }

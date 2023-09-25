@@ -31,7 +31,7 @@ dependencies {
     api("software.amazon.smithy:smithy-aws-iam-traits:$smithyVersion")
     api("software.amazon.smithy:smithy-aws-cloudformation-traits:$smithyVersion")
     api("software.amazon.smithy:smithy-protocol-test-traits:$smithyVersion")
-    implementation("software.amazon.smithy:smithy-rules-engine:$smithyVersion")
+    implementation("software.amazon.smithy:smithy-aws-endpoints:$smithyVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")

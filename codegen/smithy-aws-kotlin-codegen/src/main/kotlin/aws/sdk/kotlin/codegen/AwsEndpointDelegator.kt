@@ -56,6 +56,7 @@ class AwsEndpointDelegator : EndpointDelegator {
                 },
             )
         }
+
         if (rules != null) {
             ctx.delegator.useFileWriter(defaultProviderSymbol) {
                 DefaultEndpointProviderGenerator(it, rules, defaultProviderSymbol, providerSymbol, paramsSymbol, ctx.settings, endpointFunctions, awsEndpointPropertyRenderers).render()

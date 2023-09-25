@@ -12,7 +12,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.endpoints.ExpressionRende
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.node.ObjectNode
-import software.amazon.smithy.rulesengine.language.syntax.expr.Expression
+import software.amazon.smithy.rulesengine.language.syntax.expressions.Expression
 import java.util.*
 
 val awsEndpointFunctions = mapOf(
@@ -23,9 +23,6 @@ val awsEndpointFunctions = mapOf(
 val awsEndpointPropertyRenderers = mapOf(
     "authSchemes" to ::renderAuthSchemes,
 )
-
-// valid auth scheme names that can appear in a smithy endpoint's properties
-private val validAuthSchemeNames = setOf("sigv4", "sigv4a")
 
 private fun String.toSigningContextClassName(): String? =
     when (this) {
