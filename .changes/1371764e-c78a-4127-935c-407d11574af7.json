@@ -1,0 +1,5 @@
+{
+    "id": "1371764e-c78a-4127-935c-407d11574af7",
+    "type": "misc",
+    "description": "Generate internal-only clients with `internal` visibility"
+}

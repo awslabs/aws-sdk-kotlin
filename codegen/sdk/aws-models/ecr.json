@@ -1994,7 +1994,7 @@
                 "repositoryName": {
                     "target": "com.amazonaws.ecr#RepositoryName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name to use for the repository. The repository name may be specified on its own\n            (such as <code>nginx-web-app</code>) or it can be prepended with a namespace to group\n            the repository into a category (such as <code>project-a/nginx-web-app</code>).</p>",
+                        "smithy.api#documentation": "<p>The name to use for the repository. The repository name may be specified on its own\n            (such as <code>nginx-web-app</code>) or it can be prepended with a namespace to group\n            the repository into a category (such as <code>project-a/nginx-web-app</code>).</p>\n         <p>The repository name must start with a letter and can only contain lowercase letters,\n            numbers, hyphens, underscores, and forward slashes.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -2171,6 +2171,9 @@
                 },
                 {
                     "target": "com.amazonaws.ecr#ServerException"
+                },
+                {
+                    "target": "com.amazonaws.ecr#ValidationException"
                 }
             ],
             "traits": {
@@ -3505,6 +3508,9 @@
                 },
                 {
                     "target": "com.amazonaws.ecr#ServerException"
+                },
+                {
+                    "target": "com.amazonaws.ecr#ValidationException"
                 }
             ],
             "traits": {
@@ -3531,6 +3537,9 @@
                 },
                 {
                     "target": "com.amazonaws.ecr#ServerException"
+                },
+                {
+                    "target": "com.amazonaws.ecr#ValidationException"
                 }
             ],
             "traits": {
@@ -5669,6 +5678,9 @@
                 },
                 {
                     "target": "com.amazonaws.ecr#ServerException"
+                },
+                {
+                    "target": "com.amazonaws.ecr#ValidationException"
                 }
             ],
             "traits": {
@@ -6006,7 +6018,7 @@
                 "scanFrequency": {
                     "target": "com.amazonaws.ecr#ScanFrequency",
                     "traits": {
-                        "smithy.api#documentation": "<p>The frequency that scans are performed at for a private registry. When the\n                <code>ENHANCED</code> scan type is specified, the supported scan frequencies are\n                <code>CONTINUOUS_SCAN</code> and <code>SCAN_ON_PUSH</code>. When the\n                <code>BASIC</code> scan type is specified, the <code>SCAN_ON_PUSH</code> and\n                <code>MANUAL</code> scan frequencies are supported.</p>",
+                        "smithy.api#documentation": "<p>The frequency that scans are performed at for a private registry. When the\n                <code>ENHANCED</code> scan type is specified, the supported scan frequencies are\n                <code>CONTINUOUS_SCAN</code> and <code>SCAN_ON_PUSH</code>. When the\n                <code>BASIC</code> scan type is specified, the <code>SCAN_ON_PUSH</code> scan\n            frequency is supported. If scan on push is not specified, then the <code>MANUAL</code>\n            scan frequency is set by default.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -6174,7 +6186,7 @@
                 "repositoryArn": {
                     "target": "com.amazonaws.ecr#Arn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) that identifies the repository. The ARN contains the <code>arn:aws:ecr</code> namespace, followed by the region of the\n    repository, Amazon Web Services account ID of the repository owner, repository namespace, and repository name.\n    For example, <code>arn:aws:ecr:region:012345678910:repository/test</code>.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) that identifies the repository. The ARN contains the <code>arn:aws:ecr</code> namespace, followed by the region of the\n    repository, Amazon Web Services account ID of the repository owner, repository namespace, and repository name.\n    For example, <code>arn:aws:ecr:region:012345678910:repository-namespace/repository-name</code>.</p>"
                     }
                 },
                 "registryId": {
@@ -6255,7 +6267,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The filter settings used with image replication. Specifying a repository filter to a\n            replication rule provides a method for controlling which repositories in a private\n            registry are replicated. If no repository filter is specified, all images in the\n            repository are replicated.</p>"
+                "smithy.api#documentation": "<p>The filter settings used with image replication. Specifying a repository filter to a\n            replication rule provides a method for controlling which repositories in a private\n            registry are replicated. If no filters are added, the contents of all repositories are\n            replicated.</p>"
             }
         },
         "com.amazonaws.ecr#RepositoryFilterList": {
@@ -6956,6 +6968,9 @@
                 },
                 {
                     "target": "com.amazonaws.ecr#ServerException"
+                },
+                {
+                    "target": "com.amazonaws.ecr#ValidationException"
                 }
             ],
             "traits": {
@@ -7030,13 +7045,15 @@
                 "Key": {
                     "target": "com.amazonaws.ecr#TagKey",
                     "traits": {
-                        "smithy.api#documentation": "<p>One part of a key-value pair that make up a tag. A <code>key</code> is a general label\n            that acts like a category for more specific tag values.</p>"
+                        "smithy.api#documentation": "<p>One part of a key-value pair that make up a tag. A <code>key</code> is a general label\n            that acts like a category for more specific tag values.</p>",
+                        "smithy.api#required": {}
                     }
                 },
                 "Value": {
                     "target": "com.amazonaws.ecr#TagValue",
                     "traits": {
-                        "smithy.api#documentation": "<p>A <code>value</code> acts as a descriptor within a tag category (key).</p>"
+                        "smithy.api#documentation": "<p>A <code>value</code> acts as a descriptor within a tag category (key).</p>",
+                        "smithy.api#required": {}
                     }
                 }
             },

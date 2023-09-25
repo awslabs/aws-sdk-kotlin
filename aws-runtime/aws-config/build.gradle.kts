@@ -114,9 +114,11 @@ codegen {
                     generateDefaultBuildFiles = false
                     generateFullProject = false
                 }
+                apiSettings {
+                    visibility = "internal"
+                }
             }
 
-            // TODO - could we add a trait such that we change visibility to `internal` or a build setting...?
             transforms = listOf(
                 """
                 {
@@ -149,6 +151,9 @@ codegen {
                     generateDefaultBuildFiles = false
                     generateFullProject = false
                 }
+                apiSettings {
+                    visibility = "internal"
+                }
             }
 
             transforms = listOf(
@@ -180,6 +185,9 @@ codegen {
                 buildSettings {
                     generateDefaultBuildFiles = false
                     generateFullProject = false
+                }
+                apiSettings {
+                    visibility = "internal"
                 }
             }
 
