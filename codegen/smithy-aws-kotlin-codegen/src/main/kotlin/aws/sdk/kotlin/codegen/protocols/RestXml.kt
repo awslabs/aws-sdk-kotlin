@@ -62,7 +62,6 @@ class RestXmlParserGenerator(
         writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
-    // @OptIn(ExperimentalContracts::class)
     override fun payloadDeserializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
