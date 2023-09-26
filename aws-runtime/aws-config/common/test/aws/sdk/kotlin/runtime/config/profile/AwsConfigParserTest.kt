@@ -14,12 +14,10 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.*
 import kotlin.test.*
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class AwsProfileParserTest {
 
     @Test

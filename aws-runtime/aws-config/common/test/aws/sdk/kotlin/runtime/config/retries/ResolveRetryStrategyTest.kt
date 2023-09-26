@@ -11,14 +11,12 @@ import aws.smithy.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.retries.AdaptiveRetryStrategy
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ResolveRetryStrategyTest {
     @Test
     fun itResolvesMaxAttemptsFromEnvironmentVariables() = runTest {

@@ -15,7 +15,6 @@ import aws.smithy.kotlin.runtime.io.SdkByteChannel
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import aws.smithy.kotlin.runtime.io.SdkSource
 import aws.smithy.kotlin.runtime.util.encodeToHex
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
@@ -26,7 +25,6 @@ import kotlin.test.fail
 
 private const val megabyte = 1024 * 1024
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class TreeHasherTest {
     @Test
     fun testCalculateHashes() = runTest {

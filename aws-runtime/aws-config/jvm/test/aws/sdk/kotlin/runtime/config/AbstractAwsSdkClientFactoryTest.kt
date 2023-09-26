@@ -9,13 +9,11 @@ import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.smithy.kotlin.runtime.client.*
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import io.kotest.extensions.system.withSystemProperties
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class AbstractAwsSdkClientFactoryTest {
     @Test
     fun testFromEnvironmentFavorsExplicitConfig() = runTest {

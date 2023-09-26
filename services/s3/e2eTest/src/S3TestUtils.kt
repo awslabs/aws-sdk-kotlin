@@ -64,7 +64,7 @@ object S3TestUtils {
         testBucket
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun deleteBucketAndAllContents(client: S3Client, bucketName: String): Unit = coroutineScope {
         val scope = this
 

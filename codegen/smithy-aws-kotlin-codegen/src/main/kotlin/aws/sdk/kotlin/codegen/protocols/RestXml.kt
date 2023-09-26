@@ -62,7 +62,6 @@ class RestXmlParserGenerator(
         writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
-    @OptIn(ExperimentalContracts::class)
     override fun payloadDeserializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
@@ -118,7 +117,6 @@ class RestXmlSerializerGenerator(
         writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
-    @OptIn(ExperimentalContracts::class)
     override fun payloadSerializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
@@ -164,7 +162,7 @@ class RestXmlSerializerGenerator(
     }
 }
 
-@ExperimentalContracts
+@OptIn(ExperimentalContracts::class)
 private fun isXmlNamedMemberShape(shape: Shape): Boolean {
     contract {
         returns(true) implies (shape is MemberShape)

@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.services.s3
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
@@ -14,7 +13,6 @@ import kotlin.test.Test
  *
  * These are written against S3 but apply generically to any client.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class CreateClientTest {
     @Test
     fun testMissingRegion() {

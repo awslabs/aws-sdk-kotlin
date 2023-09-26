@@ -9,14 +9,12 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderExceptio
 import aws.smithy.kotlin.runtime.time.Instant
 import io.mockk.coEvery
 import io.mockk.mockkStatic
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ProcessCredentialsProviderTest {
     @Test
     fun testSuccessWithExpiringCredentials() = runTest {

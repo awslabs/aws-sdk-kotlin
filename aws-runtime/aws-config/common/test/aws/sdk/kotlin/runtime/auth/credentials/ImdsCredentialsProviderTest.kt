@@ -33,7 +33,6 @@ import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import io.kotest.matchers.string.shouldContain
 import io.mockk.coVerify
 import io.mockk.spyk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -48,7 +47,6 @@ private val ec2MetadataDisabledPlatform = TestPlatformProvider(
 )
 private val ec2MetadataEnabledPlatform = TestPlatformProvider()
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ImdsCredentialsProviderTest {
 
     @Test

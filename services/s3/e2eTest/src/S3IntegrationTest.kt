@@ -34,12 +34,10 @@ import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 /**
  * Tests for bucket operations and presigner
  */
-@OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3BucketOpsIntegrationTest {
     private val client = S3Client {
