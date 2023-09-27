@@ -27,7 +27,7 @@ class AwsJsonProtocolSerdeDescriptorGenerator(
 
     /**
      * Adds a trait to ignore `__type` in union shapes for `AWS Json 1.0`, `AWS Json 1.1`, `RestJson 1.0` protocols
-     * Sometimes the unnecessary trait `__type` is added and needs to be ignored
+     * Sometimes the unnecessary field `__type` is added and needs to be ignored
      *
      * NOTE: Will be ignored unless it's in the model
      *
