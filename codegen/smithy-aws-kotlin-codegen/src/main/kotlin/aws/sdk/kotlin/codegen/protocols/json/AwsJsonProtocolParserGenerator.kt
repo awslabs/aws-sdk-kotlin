@@ -13,6 +13,11 @@ import software.amazon.smithy.kotlin.codegen.rendering.serde.JsonSerdeDescriptor
 import software.amazon.smithy.model.shapes.MemberShape
 import software.amazon.smithy.model.shapes.Shape
 
+/**
+ * Overrides the [JsonParserGenerator] when using `AWS Json 1.0`, `AWS Json 1.1`, and `RestJson 1.0` protocols.
+ *
+ * See https://github.com/smithy-lang/smithy/pull/1945
+ */
 class AwsJsonProtocolParserGenerator(
     private val protocolGenerator: ProtocolGenerator,
     private val supportsJsonNameTrait: Boolean = true,

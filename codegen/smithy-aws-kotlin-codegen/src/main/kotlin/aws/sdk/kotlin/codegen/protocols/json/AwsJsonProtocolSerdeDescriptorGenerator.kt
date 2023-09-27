@@ -14,6 +14,11 @@ import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.model.shapes.MemberShape
 import software.amazon.smithy.model.shapes.Shape
 
+/**
+ * Overrides the [JsonSerdeDescriptorGenerator] when using `AWS Json 1.0`, `AWS Json 1.1`, and `RestJson 1.0` protocols.
+ *
+ * See: https://github.com/smithy-lang/smithy/pull/1945
+ */
 class AwsJsonProtocolSerdeDescriptorGenerator(
     ctx: RenderingContext<Shape>,
     memberShapes: List<MemberShape>? = null,
@@ -21,7 +26,7 @@ class AwsJsonProtocolSerdeDescriptorGenerator(
 ) : JsonSerdeDescriptorGenerator(ctx, memberShapes, supportsJsonNameTrait) {
 
     /**
-     * Adds a trait to ignore `__type` in union shapes for AWS specific JSON protocols
+     * Adds a trait to ignore `__type` in union shapes for `AWS Json 1.0`, `AWS Json 1.1`, `RestJson 1.0` protocols
      * Sometimes the unnecessary trait `__type` is added and needs to be ignored
      *
      * NOTE: Will be ignored unless it's in the model
@@ -30,7 +35,12 @@ class AwsJsonProtocolSerdeDescriptorGenerator(
      */
     override fun getObjectDescriptorTraits(): List<SdkFieldDescriptorTrait> {
         val traitList = super.getObjectDescriptorTraits().toMutableList()
-        if (ctx.shape?.isUnionShape == true) traitList.add(RuntimeTypes.Serde.IgnoreKey, "__type".dq(), "false")
+        val typeMember = memberShapes.find { it.memberName == "__type" }
+
+        if (ctx.shape?.isUnionShape == true && typeMember == null) {
+            traitList.add(RuntimeTypes.Serde.SerdeJson.IgnoreKey, "__type".dq())
+        }
+
         return traitList
     }
 }
