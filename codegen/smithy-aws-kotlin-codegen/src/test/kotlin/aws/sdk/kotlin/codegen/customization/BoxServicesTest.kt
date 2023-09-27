@@ -7,6 +7,7 @@ package aws.sdk.kotlin.codegen.customization
 
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
+import software.amazon.smithy.kotlin.codegen.model.isNullable
 import software.amazon.smithy.kotlin.codegen.model.isNumberShape
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
 import software.amazon.smithy.kotlin.codegen.test.prependNamespaceAndService
@@ -55,6 +56,9 @@ class BoxServicesTest {
                 assertFalse(target.hasTrait<@Suppress("DEPRECATION") software.amazon.smithy.model.traits.BoxTrait>())
                 assertFalse(it.hasTrait<@Suppress("DEPRECATION") software.amazon.smithy.model.traits.BoxTrait>())
             }
+
+            val memberSymbol = ctx.generationCtx.symbolProvider.toSymbol(it)
+            assertTrue(memberSymbol.isNullable)
         }
     }
 }
