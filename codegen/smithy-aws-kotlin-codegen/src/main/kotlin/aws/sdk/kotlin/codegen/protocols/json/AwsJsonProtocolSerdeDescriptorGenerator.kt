@@ -15,7 +15,7 @@ import software.amazon.smithy.model.shapes.MemberShape
 import software.amazon.smithy.model.shapes.Shape
 
 /**
- * Overrides the [JsonSerdeDescriptorGenerator] when using `AWS Json 1.0`, `AWS Json 1.1`, and `RestJson 1.0` protocols.
+ * Overrides the [JsonSerdeDescriptorGenerator] when using `AWS Json 1.0`, `AWS Json 1.1`, and `AWS RestJson 1` protocols.
  *
  * See: https://github.com/smithy-lang/smithy/pull/1945
  */
