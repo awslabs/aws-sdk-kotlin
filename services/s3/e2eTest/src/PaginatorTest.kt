@@ -16,14 +16,12 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.time.Duration.Companion.seconds
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PaginatorTest {
     private val client = S3Client {
         region = S3TestUtils.DEFAULT_REGION
@@ -31,12 +29,12 @@ class PaginatorTest {
 
     private lateinit var testBucket: String
 
-    @BeforeAll
+    @BeforeTest
     fun createResources(): Unit = runBlocking {
         testBucket = S3TestUtils.getTestBucket(client)
     }
 
-    @AfterAll
+    @AfterTest
     fun cleanup() = runBlocking {
         S3TestUtils.deleteBucketAndAllContents(client, testBucket)
     }

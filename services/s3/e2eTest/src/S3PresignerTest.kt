@@ -16,30 +16,32 @@ import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.complete
 import aws.smithy.kotlin.runtime.http.toByteStream
 import kotlinx.coroutines.*
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
+import kotlin.test.BeforeClass
+import kotlin.test.AfterClass
+import kotlin.test.AfterClass
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3PresignerTest {
     private val client = S3Client {
         region = S3TestUtils.DEFAULT_REGION
     }
 
-    private lateinit var testBucket: String
+    companion object {
+        lateinit var testBucket: String
 
-    @BeforeAll
-    fun createResources(): Unit = runBlocking {
-        testBucket = S3TestUtils.getTestBucket(client)
-    }
+        @BeforeClass
+        @JvmStatic
+        fun createResources(): Unit = runBlocking {
+            testBucket = S3TestUtils.getTestBucket(client)
+        }
 
-    @AfterAll
-    fun cleanup(): Unit = runBlocking {
-        S3TestUtils.deleteBucketAndAllContents(client, testBucket)
-        client.close()
+        @AfterClass
+        fun cleanup() = runBlocking {
+            S3TestUtils.deleteBucketAndAllContents(client, testBucket)
+            client.close()
+        }
     }
 
     @Test

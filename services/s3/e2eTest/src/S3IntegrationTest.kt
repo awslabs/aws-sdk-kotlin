@@ -22,12 +22,11 @@ import aws.smithy.kotlin.runtime.testing.RandomTempFile
 import aws.smithy.kotlin.runtime.util.encodeToHex
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.toList
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.TestInstance
 import java.io.File
 import java.util.UUID
 import kotlin.test.Test
+import kotlin.test.BeforeClass
+import kotlin.test.AfterClass
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -38,22 +37,24 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * Tests for bucket operations and presigner
  */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3BucketOpsIntegrationTest {
+    companion object {
+        lateinit var testBucket: String
+
+        @BeforeClass
+        @JvmStatic
+        fun createResources(): Unit = runBlocking {
+            testBucket = S3TestUtils.getTestBucket(client)
+        }
+
+        @AfterClass
+        fun cleanup() = runBlocking {
+            S3TestUtils.deleteBucketAndAllContents(client, testBucket)
+        }
+    }
+
     private val client = S3Client {
         region = S3TestUtils.DEFAULT_REGION
-    }
-
-    private lateinit var testBucket: String
-
-    @BeforeAll
-    fun createResources(): Unit = runBlocking {
-        testBucket = S3TestUtils.getTestBucket(client)
-    }
-
-    @AfterAll
-    fun cleanup() = runBlocking {
-        S3TestUtils.deleteBucketAndAllContents(client, testBucket)
     }
 
     @Test

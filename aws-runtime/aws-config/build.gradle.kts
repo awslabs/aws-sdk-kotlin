@@ -72,14 +72,14 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
                 implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
                 val kotlinxSerializationVersion: String by project
-                val mockkVersion: String by project
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-                implementation("io.mockk:mockk:$mockkVersion")
             }
         }
         jvmTest {
             dependencies {
                 implementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+                val mockkVersion: String by project
+                implementation("io.mockk:mockk:$mockkVersion")
             }
         }
 

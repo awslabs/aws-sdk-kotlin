@@ -15,6 +15,8 @@ buildscript {
     }
 }
 
+apply(plugin = "kotlinx-atomicfu")
+
 plugins {
     kotlin("multiplatform")
     application
