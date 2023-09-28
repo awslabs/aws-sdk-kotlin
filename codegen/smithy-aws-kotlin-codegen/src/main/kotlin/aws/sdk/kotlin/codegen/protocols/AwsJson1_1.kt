@@ -8,11 +8,13 @@ package aws.sdk.kotlin.codegen.protocols
 import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.json.AwsJsonHttpBindingResolver
 import aws.sdk.kotlin.codegen.protocols.json.AwsJsonProtocolMiddleware
+import aws.sdk.kotlin.codegen.protocols.json.AwsJsonProtocolParserGenerator
 import aws.sdk.kotlin.codegen.protocols.json.JsonHttpBindingProtocolGenerator
 import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.serde.StructuredDataParserGenerator
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.ShapeId
@@ -38,4 +40,7 @@ class AwsJson1_1 : JsonHttpBindingProtocolGenerator() {
 
     override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
         AwsJsonHttpBindingResolver(model, serviceShape, "application/x-amz-json-1.1")
+
+    override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
+        AwsJsonProtocolParserGenerator(this, supportsJsonNameTrait)
 }
