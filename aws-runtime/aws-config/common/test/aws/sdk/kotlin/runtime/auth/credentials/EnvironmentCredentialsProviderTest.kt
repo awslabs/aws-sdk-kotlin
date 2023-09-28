@@ -17,7 +17,7 @@ class EnvironmentCredentialsProviderTest {
     private fun provider(vararg vars: Pair<String, String>) = EnvironmentCredentialsProvider((vars.toMap())::get)
 
     @Test
-    fun `it should read from environment variables (incl session token)`() = runTest {
+    fun `it should read from environment variables including session token`() = runTest {
         val provider = provider(
             AwsSdkSetting.AwsAccessKeyId.envVar to "abc",
             AwsSdkSetting.AwsSecretAccessKey.envVar to "def",
@@ -27,7 +27,7 @@ class EnvironmentCredentialsProviderTest {
     }
 
     @Test
-    fun `it should read from environment variables (excl session token)`() = runTest {
+    fun `it should read from environment variables excluding session token`() = runTest {
         val provider = provider(
             AwsSdkSetting.AwsAccessKeyId.envVar to "abc",
             AwsSdkSetting.AwsSecretAccessKey.envVar to "def",
