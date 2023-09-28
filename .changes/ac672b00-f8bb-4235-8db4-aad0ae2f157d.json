@@ -1,8 +1,0 @@
-{
-    "id": "ac672b00-f8bb-4235-8db4-aad0ae2f157d",
-    "type": "bugfix",
-    "description": "ignore `__type` when deserializing union for AWS JSON 1.0, AWS JSON 1.1, and AWS restJson 1",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1044"
-    ]
-}
