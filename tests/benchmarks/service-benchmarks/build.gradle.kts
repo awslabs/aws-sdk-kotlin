@@ -57,7 +57,7 @@ if (missingServices.isEmpty()) {
             val coroutinesVersion: String by project
             val smithyKotlinVersion: String by project
 
-            commonMain {
+            jvmMain {
                 dependencies {
                     api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
                     implementation(project(":aws-runtime:aws-core"))
