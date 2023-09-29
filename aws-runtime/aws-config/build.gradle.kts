@@ -213,12 +213,20 @@ NOTE: We need the following tasks to depend on codegen for gradle caching/up-to-
 * `compileKotlinJvm` (Type=KotlinCompile)
 * `compileKotlinMetadata` (Type=KotlinCompileCommon)
 * `sourcesJar` and `jvmSourcesJar` (Type=org.gradle.jvm.tasks.Jar)
+*
+* For Kotlin/Native, an additional dependency is introduced:
+* `compileKotlin<Platform>` (Type=KotlinNativeCompile) (e.g. compileKotlinLinuxX64)
 */
 val codegenTask = tasks.named("generateSmithyProjections")
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     dependsOn(codegenTask)
 
     // generated sts/sso credential providers have quite a few warnings
+    kotlinOptions.allWarningsAsErrors = false
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
+    dependsOn(codegenTask)
     kotlinOptions.allWarningsAsErrors = false
 }
 
