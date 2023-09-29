@@ -16,10 +16,9 @@ import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.complete
 import aws.smithy.kotlin.runtime.http.toByteStream
 import kotlinx.coroutines.*
-import kotlin.test.Test
+import kotlin.test.AfterClass
 import kotlin.test.BeforeClass
-import kotlin.test.AfterClass
-import kotlin.test.AfterClass
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
 
