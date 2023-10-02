@@ -1,0 +1,5 @@
+{
+    "id": "5c47545c-ec59-4078-b795-22ba5de23919",
+    "type": "feature",
+    "description": "**BREAKING**: Update codegen to improve nullability of generated types."
+}
