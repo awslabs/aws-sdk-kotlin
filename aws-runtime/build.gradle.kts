@@ -9,12 +9,11 @@ description = "AWS client runtime support for generated service clients"
 
 plugins {
     id("org.jetbrains.dokka")
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.12.1"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
     jacoco
 }
 
 val sdkVersion: String by project
-
 val kotestVersion: String by project
 val slf4jVersion: String by project
 
