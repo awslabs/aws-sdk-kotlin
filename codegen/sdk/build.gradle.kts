@@ -245,7 +245,7 @@ fun parseMembership(rawList: String?): Membership {
         when {
             item.startsWith('-') -> exclusions.add(item.substring(1))
             item.startsWith('+') -> inclusions.add(item.substring(1))
-            else -> error("Must specify inclusion (+) or exclusion (-) prefix character to $item.")
+            else -> inclusions.add(item)
         }
     }
 

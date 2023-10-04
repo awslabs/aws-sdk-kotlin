@@ -7,8 +7,6 @@ description = "HTTP core for AWS service clients"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: HTTP"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.http"
 
-val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
-
 kotlin {
     sourceSets {
         commonMain {
