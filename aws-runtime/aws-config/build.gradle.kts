@@ -12,8 +12,6 @@ plugins {
 description = "Support for AWS configuration"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.config"
 
-val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
-
 apply(plugin = "kotlinx-atomicfu")
 
 kotlin {
@@ -21,30 +19,27 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
-                api("aws.smithy.kotlin:aws-credentials:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:http-auth:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:telemetry-api:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
+                api(libs.smithy.kotlin.aws.credentials)
+                implementation(libs.smithy.kotlin.http)
+                implementation(libs.smithy.kotlin.http.auth)
+                implementation(libs.smithy.kotlin.telemetry.api)
+                implementation(libs.smithy.kotlin.http.client.engine.default)
                 implementation(project(":aws-runtime:aws-http"))
 
                 // parsing common JSON credentials responses
-                implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
+                implementation(libs.smithy.kotlin.serde.json)
+
+                // additional dependencies required by generated clients
+                implementation(libs.bundles.smithy.kotlin.service.client)
+                implementation(project(":aws-runtime:aws-endpoint"))
 
                 // additional dependencies required by generated sts provider
-                implementation("aws.smithy.kotlin:http-client:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:serde-form-url:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:aws-xml-protocols:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:aws-protocol-core:$smithyKotlinVersion")
-                implementation(project(":aws-runtime:aws-endpoint"))
-                implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:telemetry-defaults:$smithyKotlinVersion")
+                implementation(libs.smithy.kotlin.serde.xml)
+                implementation(libs.smithy.kotlin.serde.formurl)
+                implementation(libs.smithy.kotlin.aws.xml.protocols)
 
                 // additional dependencies required by generated sso provider(s)
-                implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
+                implementation(libs.smithy.kotlin.aws.json.protocols)
 
                 // atomics
                 implementation(libs.kotlinx.atomicfu)
@@ -56,7 +51,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(libs.kotlinx.coroutines.test)
-                implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
+                implementation(libs.smithy.kotlin.http.test)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.mockk)
             }

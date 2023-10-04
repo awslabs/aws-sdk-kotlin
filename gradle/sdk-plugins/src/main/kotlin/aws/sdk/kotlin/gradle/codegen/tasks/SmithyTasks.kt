@@ -13,7 +13,6 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 import software.amazon.smithy.model.node.Node

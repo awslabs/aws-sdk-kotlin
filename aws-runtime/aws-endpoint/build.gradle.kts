@@ -15,8 +15,8 @@ kotlin {
             dependencies {
                 implementation(project(":aws-runtime:aws-core"))
                 // exposes Endpoint
-                api("aws.smithy.kotlin:http-client:$smithyKotlinVersion")
-                api("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
+                api(libs.smithy.kotlin.http.client)
+                api(libs.smithy.kotlin.aws.signing.common)
             }
         }
 

@@ -25,7 +25,6 @@ plugins {
     alias(libs.plugins.dokka)
 }
 
-
 // configures (KMP) subprojects with our own KMP conventions and some default dependencies
 apply(plugin = "aws.sdk.kotlin.kmp")
 

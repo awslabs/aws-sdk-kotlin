@@ -15,15 +15,15 @@ kotlin {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
                 api(project(":aws-runtime:aws-endpoint"))
-                api("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
-                api("aws.smithy.kotlin:http-client:$smithyKotlinVersion")
+                api(libs.smithy.kotlin.aws.signing.common)
+                api(libs.smithy.kotlin.http.client)
             }
         }
 
         commonTest {
             dependencies {
                 implementation(libs.kotlinx.coroutines.test)
-                implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
+                api(libs.smithy.kotlin.http.test)
             }
         }
 

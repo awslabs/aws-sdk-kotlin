@@ -18,7 +18,6 @@ val kotlinJVMTargetVersion: String by project
 
 dependencies {
 
-
     implementation(libs.kotlin.stdlib.jdk8)
     api(libs.smithy.kotlin.codegen)
 
@@ -33,7 +32,6 @@ dependencies {
     testImplementation(libs.kotest.assertions.core.jvm)
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.smithy.kotlin.codegen.testutils)
-
 
     testImplementation(libs.slf4j.api)
     testImplementation(libs.slf4j.simple)

@@ -7,14 +7,12 @@ description = "AWS client runtime core"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: Client Runtime"
 extra["moduleName"] = "aws.sdk.kotlin.runtime"
 
-val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
-
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
-                api("aws.smithy.kotlin:smithy-client:$smithyKotlinVersion")
+                api(libs.smithy.kotlin.runtime.core)
+                api(libs.smithy.kotlin.smithy.client)
             }
         }
 

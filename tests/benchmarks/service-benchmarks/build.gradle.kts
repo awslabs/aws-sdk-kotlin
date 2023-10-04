@@ -30,7 +30,6 @@ val requiredServices = setOf(
 )
 
 val missingServices = requiredServices.filterNot { rootProject.file("services/$it/build.gradle.kts").exists() }
-val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
 
 if (missingServices.isEmpty()) {
     val optinAnnotations = listOf("kotlin.RequiresOptIn", "aws.smithy.kotlin.runtime.InternalApi")
@@ -43,11 +42,10 @@ if (missingServices.isEmpty()) {
 
             commonMain {
                 dependencies {
-                    api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
+                    api(libs.smithy.kotlin.runtime.core)
                     implementation(project(":aws-runtime:aws-core"))
                     implementation(libs.kotlinx.atomicfu)
                     implementation(libs.kotlinx.coroutines.core)
-
 
                     requiredServices.forEach { implementation(project(":services:$it")) }
                 }

@@ -2,7 +2,6 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-import java.util.Properties
 buildscript {
     repositories {
         mavenLocal()
@@ -20,7 +19,6 @@ repositories {
     mavenCentral()
     gradlePluginPortal()
 }
-
 
 dependencies {
     implementation(libs.smithy.gradle.plugin)

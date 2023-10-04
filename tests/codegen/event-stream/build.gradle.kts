@@ -88,7 +88,7 @@ val generateProjectionsTask = tasks.named<SmithyBuild>("generateSmithyProjection
     addCompileClasspath = true
 
     // ensure the generated tests use the same version of the runtime as the aws aws-runtime
-    val smithyKotlinVersion: String by project
+    val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
     doFirst {
         System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinVersion)
     }
@@ -127,8 +127,6 @@ tasks.test {
     }
 }
 
-val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
-
 dependencies {
 
     implementation(libs.kotlinx.coroutines.core)
@@ -137,30 +135,22 @@ dependencies {
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.kotlinx.coroutines.test)
 
-    testImplementation("aws.smithy.kotlin:smithy-test:$smithyKotlinVersion")
-    testImplementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
-    testImplementation("aws.smithy.kotlin:telemetry-api:$smithyKotlinVersion")
+    testImplementation(libs.smithy.kotlin.smithy.test)
+    testImplementation(libs.smithy.kotlin.aws.signing.default)
+    testImplementation(libs.smithy.kotlin.telemetry.api)
 
     // have to manually add all the dependencies of the generated client(s)
     // doing it this way (as opposed to doing what we do for protocol-tests) allows
     // the tests to work without a publish to maven-local step at the cost of maintaining
     // this set of dependencies manually
     // <-- BEGIN GENERATED DEPENDENCY LIST -->
-    implementation("aws.smithy.kotlin:aws-credentials:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:aws-event-stream:$smithyKotlinVersion")
+    implementation(libs.bundles.smithy.kotlin.service.client)
+    implementation(libs.smithy.kotlin.aws.event.stream)
     implementation(project(":aws-runtime:aws-http"))
-    implementation("aws.smithy.kotlin:aws-protocol-core:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:telemetry-defaults:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:serde:$smithyKotlinVersion")
-    implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
+    implementation(libs.smithy.kotlin.aws.json.protocols)
+    implementation(libs.smithy.kotlin.serde.json)
     api(project(":aws-runtime:aws-config"))
     api(project(":aws-runtime:aws-core"))
     api(project(":aws-runtime:aws-endpoint"))
-    api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
     // <-- END GENERATED DEPENDENCY LIST -->
 }
