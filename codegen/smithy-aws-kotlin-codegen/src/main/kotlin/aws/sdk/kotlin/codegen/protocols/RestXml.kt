@@ -89,7 +89,7 @@ class RestXmlParserGenerator(
         return buildSymbol {
             val xmlName = xmlNameTrait.value.replaceFirstChar(Char::uppercase)
             name = "deserialize${memberSymbol.name}PayloadWithXmlName$xmlName"
-            namespace = ctx.settings.pkg.subpackage("transform")
+            namespace = ctx.settings.pkg.serde
             definitionFile = "${memberSymbol.name}PayloadDeserializer.kt"
             renderBy = { writer ->
                 addNestedDocumentDeserializers(ctx, targetShape, writer)
@@ -145,7 +145,7 @@ class RestXmlSerializerGenerator(
         return buildSymbol {
             val xmlName = xmlNameTrait.value.replaceFirstChar(Char::uppercase)
             name = "serialize${memberSymbol.name}PayloadWithXmlName$xmlName"
-            namespace = ctx.settings.pkg.subpackage("transform")
+            namespace = ctx.settings.pkg.serde
             // TODO - it would be nice to just inline this into the operation file as a private function instead
             //  since that is the only place it should be accessed
             definitionFile = "${memberSymbol.name}PayloadSerializer.kt"
