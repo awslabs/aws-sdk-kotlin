@@ -56,7 +56,7 @@ abstract class QueryHttpBindingProtocolGenerator : AwsHttpBindingProtocolGenerat
             val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
             val version = service.version
             writer.write("""val content = "Action=$action&Version=$version"""")
-            writer.write("builder.body = #T(content.encodeToByteArray())", RuntimeTypes.Http.ByteArrayContent)
+            writer.write("builder.body = #T.fromBytes(content.encodeToByteArray())", RuntimeTypes.Http.HttpBody)
         } else {
             super.renderSerializeHttpBody(ctx, op, writer)
         }
