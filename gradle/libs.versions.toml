@@ -66,6 +66,7 @@ smithy-kotlin-aws-xml-protocols = { module = "aws.smithy.kotlin:aws-xml-protocol
 smithy-kotlin-aws-json-protocols = { module = "aws.smithy.kotlin:aws-json-protocols", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-telemetry-api = { module = "aws.smithy.kotlin:telemetry-api", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-telemetry-defaults = { module = "aws.smithy.kotlin:telemetry-defaults", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-testing = { module = "aws.smithy.kotlin:testing", version.ref = "smithy-kotlin-version" }
 
 smithy-kotlin-codegen = { module = "software.amazon.smithy.kotlin:smithy-kotlin-codegen", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-codegen-testutils = { module = "software.amazon.smithy.kotlin:smithy-kotlin-codegen-testutils", version.ref = "smithy-kotlin-version" }

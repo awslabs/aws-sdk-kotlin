@@ -8,8 +8,6 @@ plugins {
 
 description = "Test utilities for integration and e2e tests"
 
-val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
-
 dependencies {
     api(libs.smithy.kotlin.http.client.engine.default)
     api(libs.smithy.kotlin.http.client.engine.crt)

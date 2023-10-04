@@ -14,7 +14,6 @@ plugins {
 }
 
 val sdkVersion: String by project
-val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
 
 val optinAnnotations = listOf(
     "aws.smithy.kotlin.runtime.InternalApi",
@@ -68,7 +67,7 @@ subprojects {
                         dependsOn(sourceSets.getByName("jvmMain"))
 
                         dependencies {
-                            api("aws.smithy.kotlin:testing:$smithyKotlinVersion")
+                            api(libraries.smithy.kotlin.testing)
                             implementation(libraries.kotlin.test)
                             implementation(libraries.kotlin.test.junit5)
                             implementation(project(":tests:e2e-test-util"))
