@@ -7,8 +7,8 @@ import aws.sdk.kotlin.test.eventstream.awsjson11.model.MessageWithString
 import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStream
 import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStreamOperationWithInitialRequestResponseRequest
 import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStreamOperationWithInitialRequestResponseResponse
-import aws.sdk.kotlin.test.eventstream.awsjson11.transform.deserializeTestStreamOperationWithInitialRequestResponseOperationBody
-import aws.sdk.kotlin.test.eventstream.awsjson11.transform.serializeTestStreamOperationWithInitialRequestResponseOperationBody
+import aws.sdk.kotlin.test.eventstream.awsjson11.serde.deserializeTestStreamOperationWithInitialRequestResponseOperationBody
+import aws.sdk.kotlin.test.eventstream.awsjson11.serde.serializeTestStreamOperationWithInitialRequestResponseOperationBody
 import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
