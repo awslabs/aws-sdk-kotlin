@@ -8,7 +8,7 @@ package aws.sdk.kotlin.services.glacier.internal
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.hashing.HashFunction
 import aws.smithy.kotlin.runtime.hashing.Sha256
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
+import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.toHttpBody
 import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteChannel
@@ -37,7 +37,7 @@ class TreeHasherTest {
         val chunkSize = 3
         val hasher = TreeHasherImpl(chunkSize) { RollingSumHashFunction(chunkSize) }
 
-        val body = ByteArrayContent(payload)
+        val body = HttpBody.fromBytes(payload)
         val hashes = hasher.calculateHashes(body)
 
         assertContentEquals(fullHash, hashes.fullHash)

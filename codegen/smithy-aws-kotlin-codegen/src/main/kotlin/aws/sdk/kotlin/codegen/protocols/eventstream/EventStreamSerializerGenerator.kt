@@ -122,7 +122,7 @@ class EventStreamSerializerGenerator(
         val streamSymbol = ctx.symbolProvider.toSymbol(streamShape)
         val fnName = "encode${op.capitalizedDefaultName()}${streamSymbol.name}EventMessage"
         name = fnName
-        namespace = ctx.settings.pkg.subpackage("transform")
+        namespace = ctx.settings.pkg.serde
         // place it in same file as the operation serializer
         definitionFile = "${op.serializerName()}.kt"
 

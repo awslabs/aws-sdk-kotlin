@@ -121,7 +121,7 @@ class PresignerGenerator : KotlinIntegration {
             val serializerSymbol = buildSymbol {
                 definitionFile = "${op.serializerName()}.kt"
                 name = op.serializerName()
-                namespace = "${ctx.settings.pkg.name}.transform"
+                namespace = ctx.settings.pkg.serde
             }
 
             val contextMap: Map<SectionKey<*>, Any> = mapOf(

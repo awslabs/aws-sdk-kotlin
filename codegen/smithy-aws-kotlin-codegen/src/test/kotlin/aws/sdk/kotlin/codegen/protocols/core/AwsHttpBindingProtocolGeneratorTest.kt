@@ -56,13 +56,13 @@ class AwsHttpBindingProtocolGeneratorTest {
         val fn = unit.operationErrorHandler(testCtx.generationCtx, op)
 
         // use the symbol to ensure it's generated via GeneratedDependency
-        testCtx.generationCtx.delegator.useFileWriter("GetFooOperationDeserializer.kt", "com.test.transform") {
+        testCtx.generationCtx.delegator.useFileWriter("GetFooOperationDeserializer.kt", "com.test.serde") {
             it.write("#T(context, response)", fn)
         }
 
         testCtx.generationCtx.delegator.finalize()
         testCtx.generationCtx.delegator.flushWriters()
-        val actual = testCtx.manifest.expectFileString("src/main/kotlin/com/test/transform/GetFooOperationDeserializer.kt")
+        val actual = testCtx.manifest.expectFileString("src/main/kotlin/com/test/serde/GetFooOperationDeserializer.kt")
         val expected = """
             throw ${serviceSdkName}Exception("Failed to parse response as 'restJson1' error", ex).also {
         """.trimIndent()

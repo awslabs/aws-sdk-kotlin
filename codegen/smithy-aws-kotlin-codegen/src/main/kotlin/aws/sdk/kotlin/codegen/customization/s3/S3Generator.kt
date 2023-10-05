@@ -92,7 +92,7 @@ class S3Generator : RestXml() {
                 val errSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(err))
                 val errDeserializerSymbol = buildSymbol {
                     name = "${errSymbol.name}Deserializer"
-                    namespace = "${ctx.settings.pkg.name}.transform"
+                    namespace = ctx.settings.pkg.serde
                 }
                 writer.write("#S -> #T().deserialize(context, wrappedCall)", getErrorCode(ctx, err), errDeserializerSymbol)
             }
