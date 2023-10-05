@@ -28,10 +28,10 @@ class SetUpstreamVersions(Builder.Action):
 
         print("discovered dependency versions: {}".format(discovered_versions))
         if "smithy-kotlin" in discovered_versions:
-            _replace_gradle_property(proj, "smithyKotlinVersion", discovered_versions["smithy-kotlin"])
+            _replace_version_catalog_version(proj, "smithy-kotlin-version", discovered_versions["smithy-kotlin"])
 
         if "aws-crt-kotlin" in discovered_versions:
-            _replace_gradle_property(proj, "crtKotlinVersion", discovered_versions["aws-crt-kotlin"])
+            _replace_gradle_property(proj, "crt-kotlin-version", discovered_versions["aws-crt-kotlin"])
 
 
 def _replace_gradle_property(proj, prop_name, new_value):
@@ -53,6 +53,24 @@ def _replace_gradle_property(proj, prop_name, new_value):
             else:
                 f.write(line)
 
+def _replace_version_catalog_version(proj, prop_name, new_value):
+    """
+    Replaces the named version catalog version with the value if the version exists in `libs.versions.toml`
+    """
+    version_catalog = os.path.join(proj.path, "gradle", "libs.versions.toml")
+
+    with open(version_catalog, "r") as f:
+        lines = f.readlines()
+
+    with open(version_catalog, "w") as f:
+        for line in lines:
+            needle = "{} =".format(prop_name)
+            if needle in line:
+                replacement = "{} = \"{}\"\n".format(prop_name, new_value)
+                f.write(replacement)
+                print("replaced {} with {}".format(line.strip(), replacement.strip()))
+            else:
+                f.write(line)
 
 def _get_dependency_version(env, dep): 
     """
