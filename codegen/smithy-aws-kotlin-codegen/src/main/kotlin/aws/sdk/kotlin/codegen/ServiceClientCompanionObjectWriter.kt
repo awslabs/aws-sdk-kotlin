@@ -32,6 +32,7 @@ class ServiceClientCompanionObjectWriter(
         ) {
             writeBuilder()
             write("")
+            writer.write("// this is a different test")
 
             writeFinalizeConfig()
         }
