@@ -109,6 +109,7 @@ jobs:
           popd
 
       - name: Generate diffs
+        id: generate-diff
         run: |
           pushd $SDK_DIR
           $CODEGEN_DIFF_REVISIONS \
