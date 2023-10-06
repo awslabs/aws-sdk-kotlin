@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.32.4-beta] - 10/06/2023
+
+### Miscellaneous
+* Track upstream changes that make `ByteArrayContent` and friends internal. Users should only be using `ByteStream.fromBytes()`, `ByteStream.fromString()`, and `HttpBody.fromBytes()`.
+
 ## [0.32.3-beta] - 09/28/2023
 
 ### Fixes
