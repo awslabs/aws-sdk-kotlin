@@ -9,9 +9,9 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.http.Headers
+import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
@@ -54,7 +54,7 @@ class EcsCredentialsProviderTest {
             "Expiration" : "${expectedExpiration.format(TimestampFormat.ISO_8601)}"
         }
         """.encodeToByteArray()
-        return HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(payload))
+        return HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.fromBytes(payload))
     }
 
     private fun errorResponse(
@@ -62,7 +62,7 @@ class EcsCredentialsProviderTest {
         headers: Headers = Headers.Empty,
         body: String = "",
     ): HttpResponse =
-        HttpResponse(statusCode, headers, ByteArrayContent(body.encodeToByteArray()))
+        HttpResponse(statusCode, headers, HttpBody.fromBytes(body.encodeToByteArray()))
 
     private fun ecsRequest(url: String, authToken: String? = null): HttpRequest {
         val resolvedUrl = Url.parse(url)

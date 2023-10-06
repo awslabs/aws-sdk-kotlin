@@ -11,9 +11,8 @@ plugins {
 
 description = "Smithy protocol test suite"
 
-val smithyVersion: String by project
 dependencies {
-    implementation("software.amazon.smithy:smithy-aws-protocol-tests:$smithyVersion")
+    implementation(libs.smithy.aws.protocol.tests)
 }
 
 data class ProtocolTest(val projectionName: String, val serviceShapeId: String, val sdkId: String? = null) {
@@ -79,7 +78,7 @@ tasks.named<SmithyBuild>("generateSmithyProjections") {
     addCompileClasspath = true
 
     // ensure the generated clients use the same version of the runtime as the aws aws-runtime
-    val smithyKotlinVersion: String by project
+    val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
     doFirst {
         System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinVersion)
     }

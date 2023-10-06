@@ -8,22 +8,21 @@ import aws.sdk.kotlin.gradle.util.typedProp
 import java.time.LocalDateTime
 
 plugins {
-    id("org.jetbrains.dokka")
     `maven-publish`
+    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
+    alias(libs.plugins.dokka)
 }
 
 val sdkVersion: String by project
-val smithyKotlinVersion: String by project
-val kotlinVersion: String by project
-val coroutinesVersion: String by project
-val kotestVersion: String by project
-val slf4jVersion: String by project
 
 val optinAnnotations = listOf(
     "aws.smithy.kotlin.runtime.InternalApi",
     "aws.sdk.kotlin.runtime.InternalSdkApi",
     "kotlin.RequiresOptIn",
 )
+
+// capture locally - scope issue with custom KMP plugin
+val libraries = libs
 
 subprojects {
     group = "aws.sdk.kotlin"
@@ -53,7 +52,7 @@ subprojects {
                 kotlin.srcDir("generated-src/test")
 
                 dependencies {
-                    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+                    implementation(libraries.kotlinx.coroutines.test)
                 }
             }
         }
@@ -68,11 +67,11 @@ subprojects {
                         dependsOn(sourceSets.getByName("jvmMain"))
 
                         dependencies {
-                            api("aws.smithy.kotlin:testing:$smithyKotlinVersion")
-                            implementation(kotlin("test"))
-                            implementation(kotlin("test-junit5"))
+                            api(libraries.smithy.kotlin.testing)
+                            implementation(libraries.kotlin.test)
+                            implementation(libraries.kotlin.test.junit5)
                             implementation(project(":tests:e2e-test-util"))
-                            implementation("org.slf4j:slf4j-simple:$slf4jVersion")
+                            implementation(libraries.slf4j.simple)
                         }
                     }
 
