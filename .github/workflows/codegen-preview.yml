@@ -116,8 +116,8 @@ jobs:
             generate-diffs \
             --base-sha ${{ github.event.pull_request.base.sha }} \
             $BASE_BRANCH_NAME $HEAD_BRANCH_NAME
-          echo "codegen-diff-msg<<EOF" >> $GITHUB_OUTPUT
-          cat ./tmp-codegen-diff/bot-message) >> $GITHUB_OUTPUT
+          echo "codegen-diff-msg=<<EOF" >> $GITHUB_OUTPUT
+          cat ./tmp-codegen-diff/bot-message >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
           popd
 
