@@ -31,9 +31,9 @@ public object AwsDefaultRetryPolicy : StandardRetryPolicy() {
         "ThrottlingException" to Throttling,
         "TooManyRequestsException" to Throttling,
         "TransactionInProgressException" to Throttling,
-        "RequestTimeTooSkewed" to Skew,
-        "RequestExpired" to Skew,
-        "RequestInTheFuture" to Skew,
+        "RequestTimeTooSkewed" to ClientSide,
+        "RequestExpired" to ClientSide,
+        "RequestInTheFuture" to ClientSide,
     )
 
     internal val knownStatusCodes = mapOf(
