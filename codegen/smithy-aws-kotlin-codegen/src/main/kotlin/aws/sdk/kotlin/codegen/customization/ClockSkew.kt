@@ -27,9 +27,13 @@ class ClockSkew : KotlinIntegration {
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean = true
 
-        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+        override fun renderProperties(writer: KotlinWriter) {
             val interceptorSymbol = RuntimeTypes.HttpClient.Interceptors.ClockSkewInterceptor
-            writer.write("op.interceptors.add(#T())", interceptorSymbol)
+            writer.write("private val clockSkewInterceptor = #T()", interceptorSymbol)
+        }
+
+        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            writer.write("op.interceptors.add(clockSkewInterceptor)")
         }
     }
 }
