@@ -121,8 +121,8 @@ jobs:
             echo 'codegen-diff-msg<<DIFF_MSG_EOF'
             echo "$(cat ./tmp-codegen-diff/bot-message)"
             echo 'DIFF_MSG_EOF'
-          } >> $GITHUB_OUTPUT
-          popd
+          } >> "$GITHUB_OUTPUT"
+          echo $GITHUB_OUTPUT
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
