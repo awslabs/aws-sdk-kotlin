@@ -85,8 +85,18 @@ jobs:
       - name: Generate code for head ref
         run: |
           branch=$(python3 $REPO_TOOLS/scripts/ci.py get-branch $SDK_DIR)
-          echo "using branch $branch"
-          python3 $REPO_TOOLS/scripts/ci.py -v set-branch --branch $branch $SMITHY_KOTLIN_DIR
+          pushd $SMITHY_KOTLIN_DIR
+          if git ls-remote --quiet --exit-code --heads origin refs/heads/$branch
+          then
+            echo "using smithy-kotlin branch $branch for head ref codegen"
+          else
+            # in the case of feature branches with tentacles we may or may not have a corresponding base ref in smithy-kotlin
+            # if we do let's use that, otherwise fallback to main
+            echo "$branch does not exist in smithy-kotlin, will attempt base ref $GITHUB_BASE_REF"
+            branch=$GITHUB_BASE_REF
+          fi
+          python3 $REPO_TOOLS/scripts/ci.py -v set-branch --branch $branch
+          popd
           pushd $SDK_DIR
           git checkout -b $HEAD_BRANCH_NAME
           $CODEGEN_DIFF_REVISIONS codegen --bootstrap ${{ env.PREVIEW_SERVICES }}
