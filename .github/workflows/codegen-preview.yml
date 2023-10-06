@@ -80,7 +80,7 @@ jobs:
           SDK_DIR=$GITHUB_WORKSPACE/aws-sdk-kotlin
           branch=$(python3 $REPO_TOOLS/scripts/ci.py get-branch $SDK_DIR)
           echo "using branch $branch"
-          python3 $REPO_TOOLS/scripts/ci.py set-branch --branch $branch $SMITHY_KOTLIN_DIR
+          python3 $REPO_TOOLS/scripts/ci.py -v set-branch --branch $branch $SMITHY_KOTLIN_DIR
           pushd $SDK_DIR
           git checkout -b $HEAD_BRANCH_NAME
           .github/scripts/codegen-diff-revisions.py codegen --bootstrap ${{ env.PREVIEW_SERVICES }}
@@ -95,12 +95,12 @@ jobs:
           echo "checkout smithy-kotlin at $branch"
           pushd $SMITHY_KOTLIN_DIR
           git switch -f main
-          python3 $REPO_TOOLS/scripts/ci.py set-branch --branch $branch
+          python3 $REPO_TOOLS/scripts/ci.py -v set-branch --branch $branch
           popd
           echo "resetting aws-sdk-kotlin"
           pushd $SDK_DIR
           git switch -f main
-          python3 $REPO_TOOLS/scripts/ci.py set-branch --branch $branch 
+          python3 $REPO_TOOLS/scripts/ci.py -v set-branch --branch $branch 
           git checkout -b $BASE_BRANCH_NAME
           .github/scripts/codegen-diff-revisions.py codegen --bootstrap ${{ env.PREVIEW_SERVICES }}
           popd
