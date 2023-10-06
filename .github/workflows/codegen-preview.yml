@@ -75,8 +75,8 @@ jobs:
           npm install -g diff2html-cli@${{ env.DIFF2HTML_VERSION }}
           env | sort
           # store off a copy of head ref of ci.py, otherwise base ref generation will use a different version of this script
-          cp $GITHUB_WORKSPACE/aws-sdk-kotlin/.github/scripts/codegen-diff-revisions.py $GITHUB_WORSKPACE/codegen-diff-revisions.py
-          CODEGEN_DIFF_REVISIONS=$GITHUB_WORSKPACE/codegen-diff-revisions.py
+          cp $GITHUB_WORKSPACE/aws-sdk-kotlin/.github/scripts/codegen-diff-revisions.py /tmp/codegen-diff-revisions.py
+          CODEGEN_DIFF_REVISIONS=/tmp/codegen-diff-revisions.py
           REPO_TOOLS=$GITHUB_WORKSPACE/aws-kotlin-repo-tools
           SMITHY_KOTLIN_DIR=$GITHUB_WORKSPACE/smithy-kotlin
           SDK_DIR=$GITHUB_WORKSPACE/aws-sdk-kotlin
