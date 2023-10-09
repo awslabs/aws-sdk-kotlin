@@ -44,7 +44,7 @@ public object AwsSpanInterceptor : HttpInterceptor {
             span.setAttribute("aws.request_id", it)
         }
         httpResp.headers["x-amz-id-2"]?.let {
-            span.setAttribute("aws.request_id2", it)
+            span.setAttribute("aws.extended_request_id", it)
         }
     }
 }
