@@ -16,6 +16,13 @@ version = sdkVersion
 
 val kotlinJVMTargetVersion: String by project
 
+// codegen uses
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 dependencies {
 
     implementation(libs.kotlin.stdlib.jdk8)
