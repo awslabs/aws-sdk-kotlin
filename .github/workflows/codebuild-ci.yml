@@ -34,7 +34,7 @@ jobs:
         env:
           BUILD_ID: ${{ steps.e2e-tests.outputs.aws-build-id }}
         run: |
-          if [ -z "$BUILD_ID"]; then
+          if [ ! -z "$BUILD_ID"]; then
             echo "cancelling in-progress build: id=$BUILD_ID"
             aws codebuild stop-build --id $BUILD_ID
           fi
@@ -58,7 +58,7 @@ jobs:
         env:
           BUILD_ID: ${{ steps.svc-check-batch.outputs.aws-build-id }}
         run: |
-          if [ -z "$BUILD_ID"]; then
+          if [ ! -z "$BUILD_ID" ]; then
             echo "cancelling in-progress batch build: id=$BUILD_ID"
             aws codebuild stop-build --id $BUILD_ID
           fi
