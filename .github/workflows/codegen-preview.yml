@@ -20,10 +20,6 @@ concurrency:
 
 env:
   JAVA_VERSION: 11
-  BUILDER_VERSION: v0.8.22
-  BUILDER_SOURCE: releases
-  BUILDER_HOST: https://d19elf31gohf1l.cloudfront.net
-  PACKAGE_NAME: aws-sdk-kotlin
   RUN: ${{ github.run_id }}-${{ github.run_number }}
   DIFF2HTML_VERSION: 5.2.5
   # Below is the set of services that are generated for codegen preview
@@ -35,6 +31,8 @@ env:
   #  - @restJson1: polly
   #  - @restXml: s3
   PREVIEW_SERVICES: +dynamodb,+codebuild,+sts,+ec2,+polly,+s3
+  HEAD_BRANCH_NAME: __tmp-localonly-head
+  BASE_BRANCH_NAME: __tmp-localonly-base
 
 jobs:
 
@@ -44,9 +42,20 @@ jobs:
     outputs:
       bot-message: ${{ steps.generate-diff.outputs.codegen-diff-msg }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          path: 'aws-sdk-kotlin'
+      - uses: actions/checkout@v4
+        with:
+          repository: 'awslabs/aws-kotlin-repo-tools'
+          ref: 'ci-utils'
+          path: 'aws-kotlin-repo-tools'
+      - uses: actions/checkout@v4
+        with:
+          repository: 'awslabs/smithy-kotlin'
+          fetch-depth: 0
+          path: 'smithy-kotlin'
       - uses: actions/cache@v2
         name: Gradle Cache
         with:
@@ -60,46 +69,86 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ env.JAVA_VERSION }}
-      - name: Install and build deps
-        # abuse crt builder to download and build upstream dependencies like smithy-kotlin
+
+      - name: Install deps and setup environment
         run: |
           npm install -g diff2html-cli@${{ env.DIFF2HTML_VERSION }}
-          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
-          chmod a+x builder.pyz
-          ./builder.pyz build -p ${{ env.PACKAGE_NAME }} --variant codegen-preview
-      - name: Generate diff
+          env | sort
+          # store off a copy of head ref of ci.py, otherwise base ref generation will use a different version of this script
+          CODEGEN_DIFF_REVISIONS=${{ runner.temp }}/codegen-diff-revisions.py
+          cp $GITHUB_WORKSPACE/aws-sdk-kotlin/.github/scripts/codegen-diff-revisions.py $CODEGEN_DIFF_REVISIONS
+          echo "CODEGEN_DIFF_REVISIONS=$CODEGEN_DIFF_REVISIONS" >> "$GITHUB_ENV"
+          echo "REPO_TOOLS=$GITHUB_WORKSPACE/aws-kotlin-repo-tools" >> "$GITHUB_ENV"
+          echo "SMITHY_KOTLIN_DIR=$GITHUB_WORKSPACE/smithy-kotlin" >> "$GITHUB_ENV"
+          echo "SDK_DIR=$GITHUB_WORKSPACE/aws-sdk-kotlin" >> "$GITHUB_ENV"
+
+      - name: Generate code for head ref
+        run: |
+          branch=$(python3 $REPO_TOOLS/scripts/ci.py get-branch $SDK_DIR)
+          pushd $SMITHY_KOTLIN_DIR
+          if git ls-remote --quiet --exit-code --heads origin refs/heads/$branch
+          then
+            echo "using smithy-kotlin branch $branch for head ref codegen"
+          else
+            # in the case of feature branches with tentacles we may or may not have a corresponding base ref in smithy-kotlin
+            # if we do let's use that, otherwise fallback to main
+            echo "$branch does not exist in smithy-kotlin, will attempt base ref $GITHUB_BASE_REF"
+            branch=$GITHUB_BASE_REF
+          fi
+          python3 $REPO_TOOLS/scripts/ci.py -v set-branch --branch $branch
+          popd
+          pushd $SDK_DIR
+          git checkout -b $HEAD_BRANCH_NAME
+          $CODEGEN_DIFF_REVISIONS codegen --bootstrap ${{ env.PREVIEW_SERVICES }}
+          popd
+
+      - name: Generate code for base ref
+        run: |
+          branch=$GITHUB_BASE_REF
+          echo "checkout smithy-kotlin at base ref: $branch"
+          pushd $SMITHY_KOTLIN_DIR
+          git switch -f main
+          python3 $REPO_TOOLS/scripts/ci.py -v set-branch --branch $branch
+          popd
+          echo "resetting aws-sdk-kotlin"
+          pushd $SDK_DIR
+          git switch -f main
+          python3 $REPO_TOOLS/scripts/ci.py -v set-branch --branch $branch 
+          git checkout -b $BASE_BRANCH_NAME
+          $CODEGEN_DIFF_REVISIONS codegen --bootstrap ${{ env.PREVIEW_SERVICES }}
+          popd
+
+      - name: Generate diffs
         id: generate-diff
         run: |
-          # codegen-diff-revisions requires a clean index, set-upstream-versions.py can modify local repo state
-          # we don't push these branches/commits anywhere so just commit it if necessary and move on
-          if ! git diff --quiet gradle.properties
-          then
-            echo "gradle.properties is dirty, committing before generating diffs"
-            git add gradle.properties
-            PRE_COMMIT_ALLOW_NO_CONFIG=1 git \
-            -c "user.name=GitHub Action (generated code preview)" \
-            -c "user.email=generated-code-action@github.com" \
-            commit -m "codegen diff autocommit" --allow-empty
-          fi
-          .github/scripts/codegen-diff-revisions.py \
-            --bootstrap ${{ env.PREVIEW_SERVICES }} \
+          pushd $SDK_DIR
+          $CODEGEN_DIFF_REVISIONS \
             --head-sha ${{ github.event.pull_request.head.sha }} \
-            . ${{ github.event.pull_request.base.sha }}
-          echo "codegen-diff-msg<<EOF" >> $GITHUB_OUTPUT
-          cat ./tmp-codegen-diff/bot-message) >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+            generate-diffs \
+            --base-sha ${{ github.event.pull_request.base.sha }} \
+            $BASE_BRANCH_NAME $HEAD_BRANCH_NAME
+          cat ./tmp-codegen-diff/bot-message
+          {
+            echo 'codegen-diff-msg<<DIFF_MSG_EOF'
+            echo "$(cat ./tmp-codegen-diff/bot-message)"
+            echo 'DIFF_MSG_EOF'
+          } >> "$GITHUB_OUTPUT"
+          echo $GITHUB_OUTPUT
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
+
       - name: Upload diff to S3
         run: |
+          SDK_DIR=$GITHUB_WORKSPACE/aws-sdk-kotlin
+          pushd $SDK_DIR
           if [[ -d ./tmp-codegen-diff/${{ github.event.pull_request.base.sha }} ]]; then
             aws s3 cp ./tmp-codegen-diff/${{ github.event.pull_request.base.sha }} \
                 "s3://${{ secrets.CDN_S3_BUCKET_NAME }}/codegen-diff/${{ github.event.pull_request.base.sha }}" --recursive
           fi
-
 
   # TODO - generate doc preview for N services and upload and link as well
   post-bot-comment:
