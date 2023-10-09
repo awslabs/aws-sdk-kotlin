@@ -9,6 +9,11 @@ on:
       - 'feat-*'
   workflow_dispatch:
 
+# Allow one instance of this workflow per pull request, and cancel older runs when new changes are pushed
+concurrency:
+  group: ci-pr-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   BUILDER_VERSION: v0.8.22
   BUILDER_SOURCE: releases

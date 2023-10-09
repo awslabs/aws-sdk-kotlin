@@ -5,6 +5,11 @@ on:
     types: [ opened, synchronize, reopened ]
     branches: [ main ]
 
+# Allow one instance of this workflow per pull request, and cancel older runs when new changes are pushed
+concurrency:
+  group: ci-release-check-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   release-check:
     runs-on: ubuntu-latest
