@@ -29,11 +29,6 @@ plugins {
 apply(plugin = "aws.sdk.kotlin.kmp")
 
 allprojects {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-
     tasks.withType<org.jetbrains.dokka.gradle.AbstractDokkaTask>().configureEach {
         val sdkVersion: String by project
         moduleVersion.set(sdkVersion)

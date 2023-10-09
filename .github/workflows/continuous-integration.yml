@@ -22,8 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v2
-      - uses: actions/cache@v2
+        uses: actions/checkout@v4
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -42,8 +42,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v2
-      - uses: actions/cache@v2
+        uses: actions/checkout@v4
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -62,8 +62,8 @@ jobs:
     runs-on: windows-2019
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
+        uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '11'
