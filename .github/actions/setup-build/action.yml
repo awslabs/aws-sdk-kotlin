@@ -28,9 +28,6 @@ runs:
     - name: Build smithy-kotlin
       shell: bash
       run: |
-        echo "REPO_TOOLS=$GITHUB_WORKSPACE/aws-kotlin-repo-tools" >> "$GITHUB_ENV"
-        echo "SMITHY_KOTLIN_DIR=$GITHUB_WORKSPACE/smithy-kotlin" >> "$GITHUB_ENV"
-        echo "SDK_DIR=$GITHUB_WORKSPACE/aws-sdk-kotlin" >> "$GITHUB_ENV"
-        pushd $SMITHY_KOTLIN_DIR
+        pushd "$GITHUB_WORKSPACE/smithy-kotlin
         ./gradlew assemble publishToMavenLocal
         popd

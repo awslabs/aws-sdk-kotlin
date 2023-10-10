@@ -32,8 +32,6 @@ jobs:
           path: 'aws-sdk-kotlin'
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
-        with:
-          path: 'aws-sdk-kotlin'
       - name: Test
         run: |
           pwd
