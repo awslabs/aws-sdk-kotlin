@@ -50,18 +50,20 @@ val generateSdkRuntimeVersion by tasks.registering {
     }
 }
 
+val jvmTargetVersion = JavaVersion.VERSION_17.toString()
+
 tasks.compileKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+    kotlinOptions.jvmTarget = jvmTargetVersion
     dependsOn(generateSdkRuntimeVersion)
 }
 
 tasks.compileTestKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+    kotlinOptions.jvmTarget = jvmTargetVersion
 }
 
 tasks.withType<JavaCompile> {
-    sourceCompatibility = JavaVersion.VERSION_1_8.toString()
-    targetCompatibility = JavaVersion.VERSION_1_8.toString()
+    sourceCompatibility = jvmTargetVersion
+    targetCompatibility = jvmTargetVersion
 }
 
 // Reusable license copySpec
