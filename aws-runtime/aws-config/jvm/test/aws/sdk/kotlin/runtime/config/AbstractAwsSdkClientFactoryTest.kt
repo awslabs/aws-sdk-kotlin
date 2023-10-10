@@ -119,7 +119,7 @@ private interface TestClient : SdkClient {
     class Config private constructor(builder: Builder) : SdkClientConfig, AwsSdkClientConfig, RetryStrategyClientConfig by builder.buildRetryStrategyClientConfig() {
         override val clientName: String = builder.clientName
         override val logMode: LogMode = builder.logMode ?: LogMode.Default
-        override val region: String = builder.region ?: error("region is required")
+        override val region: String? = builder.region
         override var useFips: Boolean = builder.useFips ?: false
         override var useDualStack: Boolean = builder.useDualStack ?: false
         override val sdkUserAgentAppId: String? = builder.sdkUserAgentAppId
