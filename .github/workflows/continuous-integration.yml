@@ -26,27 +26,23 @@ jobs:
   linux-compat:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-      - name: Checkout tools
-        uses: actions/checkout@v4
+      - name: Setup Build
+        uses: ./github/actions/setup-build
         with:
-          path: 'aws-kotlin-repo-tools'
-          repository: 'awslabs/aws-kotlin-repo-tools'
-          ref: 'gh-action'
-          sparse-checkout: |
-            .github
-      - name: Checkout smithy-kotlin
-        uses: ./aws-kotlin-repo-tools/.github/actions/checkout-head
-        with:
-          path: 'smithy-kotlin'
-          repository: 'awslabs/smithy-kotlin'
-      - name: Build and Test ${{ env.PACKAGE_NAME }}
+          path: 'aws-sdk-kotlin'
+      - name: Test
         run: |
           pwd
           ls -lsa
-          cd smithy-kotlin
-          git branch --show-current
+          pushd "$GITHUB_WORKSPACE/aws-sdk-kotlin"
+          ./gradlew publishToMavenLocal
+          ./gradlew apiCheck
+          ./gradlew test allTests",
+          systeminfo
+          ./gradlew --status
+          ./gradlew --stop
+          systeminfo
+          ./gradlew testAllProtocols
 
 #  linux-compat:
 #    runs-on: ubuntu-latest
