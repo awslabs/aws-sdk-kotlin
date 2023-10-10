@@ -25,10 +25,3 @@ runs:
         distribution: 'corretto'
         java-version: 17
         cache: 'gradle'
-    - name: Build smithy-kotlin
-      shell: bash
-      run: |
-        pushd "$GITHUB_WORKSPACE/smithy-kotlin"
-        ./gradlew --parallel assemble 
-        ./gradlew publishToMavenLocal
-        popd

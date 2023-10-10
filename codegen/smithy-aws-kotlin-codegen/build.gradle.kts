@@ -14,8 +14,6 @@ description = "Codegen support for AWS protocols"
 group = "software.amazon.smithy.kotlin"
 version = sdkVersion
 
-val kotlinJVMTargetVersion: String by project
-
 dependencies {
 
     implementation(libs.kotlin.stdlib.jdk8)
@@ -53,17 +51,17 @@ val generateSdkRuntimeVersion by tasks.registering {
 }
 
 tasks.compileKotlin {
-    kotlinOptions.jvmTarget = kotlinJVMTargetVersion
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
     dependsOn(generateSdkRuntimeVersion)
 }
 
 tasks.compileTestKotlin {
-    kotlinOptions.jvmTarget = kotlinJVMTargetVersion
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
 }
 
 tasks.withType<JavaCompile> {
-    sourceCompatibility = JavaVersion.toVersion(kotlinJVMTargetVersion).toString()
-    targetCompatibility = JavaVersion.toVersion(kotlinJVMTargetVersion).toString()
+    sourceCompatibility = JavaVersion.VERSION_1_8.toString()
+    targetCompatibility = JavaVersion.VERSION_1_8.toString()
 }
 
 // Reusable license copySpec
@@ -107,7 +105,7 @@ tasks["test"].finalizedBy(tasks["jacocoTestReport"])
 val sourcesJar by tasks.creating(Jar::class) {
     group = "publishing"
     description = "Assembles Kotlin sources jar"
-    classifier = "sources"
+    archiveClassifier.set("sources")
     from(sourceSets.getByName("main").allSource)
 }
 

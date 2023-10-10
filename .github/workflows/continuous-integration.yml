@@ -23,7 +23,7 @@ jobs:
           - 8
           - 11
           - 17
-          - 19
+          - 21
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -52,12 +52,19 @@ jobs:
           path: 'aws-sdk-kotlin'
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
+      - name: Build smithy-kotlin
+        working-directory: ./smithy-kotlin
+        shell: bash
+        run: |
+          # protocol tests require everything is published
+          pwd
+          ./gradlew --parallel assemble 
+          ./gradlew publishToMavenLocal
       - name: Test
         working-directory: ./aws-sdk-kotlin
         shell: bash
         run: |
           pwd
-          # protocol tests require everything is published
           ./gradlew publishToMavenLocal
           ./gradlew apiCheck
           ./gradlew test allTests
