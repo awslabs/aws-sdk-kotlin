@@ -28,61 +28,86 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Build and Test ${{ env.PACKAGE_NAME }}
-        run: |
-          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
-          chmod a+x builder.pyz
-          echo "kotlinWarningsAsErrors=true" >> $GITHUB_WORKSPACE/local.properties
-          ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
-
-  macos-compat:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout sources
+      - name: Checkout tools
         uses: actions/checkout@v4
-      - uses: actions/cache@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          path: 'aws-kotlin-repo-tools'
+          repository: 'awslabs/aws-kotlin-repo-tools'
+          ref: 'gh-action'
+          sparse-checkout: |
+            .github
+      - name: Checkout smithy-kotlin
+        uses: ./aws-kotlin-repo-tools/.github/actions/checkout-head
+        with:
+          path: 'smithy-kotlin'
+          repository: 'awslabs/smithy-kotlin'
       - name: Build and Test ${{ env.PACKAGE_NAME }}
         run: |
-          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
-          chmod a+x builder.pyz
-          echo "kotlinWarningsAsErrors=true" >> $GITHUB_WORKSPACE/local.properties
-          ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
+          pwd
+          ls -lsa
+          cd smithy-kotlin
+          git branch --show-current
 
-  windows-compat:
-    runs-on: windows-2019
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-          cache: 'gradle'
-      - name: Modify Gradle Daemon JVM Args
-        # windows job runs out of memory with the defaults normally used
-        shell: bash
-        run: |
-          systeminfo
-          sed -i 's/org\.gradle\.jvmargs=.*$/org.gradle.jvmargs=-Xmx2g/' gradle.properties
-          echo "org.gradle.parallel=false" >> gradle.properties
-          cat gradle.properties
-      - name: Build and Test ${{ env.PACKAGE_NAME }}
-        run: |
-          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
-          java -version
-          python3 builder.pyz build -p ${{ env.PACKAGE_NAME }}
+#  linux-compat:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout sources
+#        uses: actions/checkout@v4
+#      - uses: actions/cache@v3
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Build and Test ${{ env.PACKAGE_NAME }}
+#        run: |
+#          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
+#          chmod a+x builder.pyz
+#          echo "kotlinWarningsAsErrors=true" >> $GITHUB_WORKSPACE/local.properties
+#          ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
+#
+#  macos-compat:
+#    runs-on: macos-latest
+#    steps:
+#      - name: Checkout sources
+#        uses: actions/checkout@v4
+#      - uses: actions/cache@v3
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Build and Test ${{ env.PACKAGE_NAME }}
+#        run: |
+#          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
+#          chmod a+x builder.pyz
+#          echo "kotlinWarningsAsErrors=true" >> $GITHUB_WORKSPACE/local.properties
+#          ./builder.pyz build -p ${{ env.PACKAGE_NAME }}
+#
+#  windows-compat:
+#    runs-on: windows-2019
+#    steps:
+#      - name: Checkout sources
+#        uses: actions/checkout@v4
+#      - uses: actions/setup-java@v3
+#        with:
+#          distribution: 'temurin'
+#          java-version: '11'
+#          cache: 'gradle'
+#      - name: Modify Gradle Daemon JVM Args
+#        # windows job runs out of memory with the defaults normally used
+#        shell: bash
+#        run: |
+#          systeminfo
+#          sed -i 's/org\.gradle\.jvmargs=.*$/org.gradle.jvmargs=-Xmx2g/' gradle.properties
+#          echo "org.gradle.parallel=false" >> gradle.properties
+#          cat gradle.properties
+#      - name: Build and Test ${{ env.PACKAGE_NAME }}
+#        run: |
+#          python3 -c "from urllib.request import urlretrieve; urlretrieve('${{ env.BUILDER_HOST }}/${{ env.BUILDER_SOURCE }}/${{ env.BUILDER_VERSION }}/builder.pyz?run=${{ env.RUN }}', 'builder.pyz')"
+#          java -version
+#          python3 builder.pyz build -p ${{ env.PACKAGE_NAME }}

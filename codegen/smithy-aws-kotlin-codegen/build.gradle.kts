@@ -16,13 +16,6 @@ version = sdkVersion
 
 val kotlinJVMTargetVersion: String by project
 
-// codegen uses
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
 dependencies {
 
     implementation(libs.kotlin.stdlib.jdk8)
@@ -66,6 +59,11 @@ tasks.compileKotlin {
 
 tasks.compileTestKotlin {
     kotlinOptions.jvmTarget = kotlinJVMTargetVersion
+}
+
+tasks.withType<JavaCompile> {
+    sourceCompatibility = JavaVersion.valueOf(kotlinJVMTargetVersion).toString()
+    targetCompatibility = JavaVersion.valueOf(kotlinJVMTargetVersion).toString()
 }
 
 // Reusable license copySpec
