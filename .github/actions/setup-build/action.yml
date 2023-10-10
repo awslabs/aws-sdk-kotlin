@@ -28,6 +28,6 @@ runs:
     - name: Build smithy-kotlin
       shell: bash
       run: |
-        pushd "$GITHUB_WORKSPACE/smithy-kotlin
+        pushd "$GITHUB_WORKSPACE/smithy-kotlin"
         ./gradlew assemble publishToMavenLocal
         popd
