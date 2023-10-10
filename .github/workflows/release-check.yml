@@ -15,14 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache@v3
+      - name: Configure JDK
+        uses: actions/setup-java@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          distribution: 'corretto'
+          java-version: 17
+          cache: 'gradle'
       - name: Check for snapshot versions
         run: |
           # We aren't releasable if we (1) directly depend on a snapshot version of a dependency OR (2) can't build the project without unreleased changes
