@@ -4,9 +4,6 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches:
-      - main
-      - 'feat-*'
   workflow_dispatch:
 
 # Allow one instance of this workflow per pull request, and cancel older runs when new changes are pushed
