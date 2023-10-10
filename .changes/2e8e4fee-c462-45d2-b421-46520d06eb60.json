@@ -1,0 +1,8 @@
+{
+    "id": "2e8e4fee-c462-45d2-b421-46520d06eb60",
+    "type": "feature",
+    "description": "Add new sources for user agent app id (explicit, from profile)",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#945"
+    ]
+}
