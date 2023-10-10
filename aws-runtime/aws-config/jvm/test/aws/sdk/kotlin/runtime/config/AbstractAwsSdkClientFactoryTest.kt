@@ -24,6 +24,7 @@ import kotlin.io.path.writeText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.time.Duration.Companion.seconds
 
 class AbstractAwsSdkClientFactoryTest {
     @JvmField
@@ -58,7 +59,9 @@ class AbstractAwsSdkClientFactoryTest {
     }
 
     @Test
-    fun testFromEnvironmentResolvesAppId() = runTest {
+    fun testFromEnvironmentResolvesAppId() = runTest(
+        timeout = 20.seconds,
+    ) {
         val credentialsFile = tempDir!!.resolve("credentials")
         val configFile = tempDir!!.resolve("config")
 
