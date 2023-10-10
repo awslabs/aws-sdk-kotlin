@@ -46,6 +46,11 @@ public object AwsSdkSetting {
     public val AwsRegion: EnvironmentSetting<String> = strEnvSetting("aws.region", "AWS_REGION")
 
     /**
+     * Configure the user agent app ID
+     */
+    public val AwsAppId: EnvironmentSetting<String> = strEnvSetting("aws.userAgentAppId", "AWS_SDK_UA_APP_ID")
+
+    /**
      * Configure the default path to the shared config file.
      */
     public val AwsConfigFile: EnvironmentSetting<String> = strEnvSetting("aws.configFile", "AWS_CONFIG_FILE")

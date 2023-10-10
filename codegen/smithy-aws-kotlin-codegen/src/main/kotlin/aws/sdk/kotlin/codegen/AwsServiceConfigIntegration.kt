@@ -33,6 +33,16 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             order = -100
         }
 
+        val SdkUserAgentAppId: ConfigProperty = ConfigProperty {
+            name = "sdkUserAgentAppId"
+            symbol = KotlinTypes.String.toBuilder().nullable().build()
+            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            useNestedBuilderBaseClass()
+            documentation = """
+                The SDK user agent app ID used to identify applications.
+            """.trimIndent()
+        }
+
         // override the credentials provider prop registered by the Sigv4AuthSchemeIntegration, updates the
         // documentation and sets a default value for AWS SDK to the default chain.
         val CredentialsProviderProp: ConfigProperty = ConfigProperty {
@@ -142,6 +152,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> = buildList {
         add(RegionProp)
+        add(SdkUserAgentAppId)
         if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.settings.getService(ctx.model))) {
             add(CredentialsProviderProp)
         }

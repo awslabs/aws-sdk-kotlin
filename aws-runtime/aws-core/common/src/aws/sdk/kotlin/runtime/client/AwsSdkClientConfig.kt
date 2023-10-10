@@ -32,6 +32,11 @@ public interface AwsSdkClientConfig : SdkClientConfig {
      */
     public val useDualStack: Boolean
 
+    /**
+     * The SDK user agent app ID used to identify applications.
+     */
+    public val sdkUserAgentAppId: String?
+
     public interface Builder {
         /**
          * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
@@ -52,5 +57,10 @@ public interface AwsSdkClientConfig : SdkClientConfig {
          * Disabled by default.
          */
         public var useDualStack: Boolean?
+
+        /**
+         * The sdk user agent app ID.
+         */
+        public var sdkUserAgentAppId: String?
     }
 }
