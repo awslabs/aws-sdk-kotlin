@@ -28,7 +28,11 @@ plugins {
 // configures (KMP) subprojects with our own KMP conventions and some default dependencies
 apply(plugin = "aws.sdk.kotlin.kmp")
 
-val testJavaVersion = typedProp<String>("test.java.version")
+val testJavaVersion = typedProp<String>("test.java.version")?.let {
+    JavaLanguageVersion.of(it)
+}?.also {
+    println("configuring tests to run with jdk $it")
+}
 
 allprojects {
     tasks.withType<org.jetbrains.dokka.gradle.AbstractDokkaTask>().configureEach {
@@ -93,9 +97,11 @@ allprojects {
     if (testJavaVersion != null) {
         tasks.withType<Test> {
             val toolchains = project.extensions.getByType<JavaToolchainService>()
-            javaLauncher.set(toolchains.launcherFor {
-                languageVersion.set(JavaLanguageVersion.of(testJavaVersion))
-            })
+            javaLauncher.set(
+                toolchains.launcherFor {
+                    languageVersion.set(testJavaVersion)
+                },
+            )
         }
     }
 }

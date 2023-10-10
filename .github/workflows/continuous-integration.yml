@@ -39,7 +39,7 @@ jobs:
         run: |
           pwd
           ls -lsa
-          ./gradlew -Djava.test.version=${{ matrix.java-version }} jvmTest --stacktrace
+          ./gradlew -Ptest.java.version=${{ matrix.java-version }} jvmTest --stacktrace
 
   all-platforms:
     runs-on: ${{ matrix.os }}
