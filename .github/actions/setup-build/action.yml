@@ -29,5 +29,6 @@ runs:
       shell: bash
       run: |
         pushd "$GITHUB_WORKSPACE/smithy-kotlin"
-        ./gradlew assemble publishToMavenLocal
+        ./gradlew --parallel assemble 
+        ./gradlew publishToMavenLocal
         popd

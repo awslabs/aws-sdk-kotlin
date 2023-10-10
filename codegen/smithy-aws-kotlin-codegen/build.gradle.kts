@@ -62,8 +62,8 @@ tasks.compileTestKotlin {
 }
 
 tasks.withType<JavaCompile> {
-    sourceCompatibility = JavaVersion.valueOf(kotlinJVMTargetVersion).toString()
-    targetCompatibility = JavaVersion.valueOf(kotlinJVMTargetVersion).toString()
+    sourceCompatibility = JavaVersion.toVersion(kotlinJVMTargetVersion).toString()
+    targetCompatibility = JavaVersion.toVersion(kotlinJVMTargetVersion).toString()
 }
 
 // Reusable license copySpec
