@@ -28,7 +28,13 @@ public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata {
 }
 
 public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion {
-	public final fun fromEnvironment (Laws/sdk/kotlin/runtime/http/ApiMetadata;)Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;
+	public final fun fromEnvironment (Laws/sdk/kotlin/runtime/http/ApiMetadata;Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;
+	public static synthetic fun fromEnvironment$default (Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion;Laws/sdk/kotlin/runtime/http/ApiMetadata;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;
+}
+
+public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadataKt {
+	public static final field AWS_APP_ID_ENV Ljava/lang/String;
+	public static final field AWS_APP_ID_PROP Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata {

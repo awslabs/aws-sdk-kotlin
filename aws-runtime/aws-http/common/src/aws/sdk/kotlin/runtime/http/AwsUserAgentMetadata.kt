@@ -13,10 +13,10 @@ import aws.smithy.kotlin.runtime.util.*
 import kotlin.jvm.JvmInline
 
 internal const val AWS_EXECUTION_ENV = "AWS_EXECUTION_ENV"
-internal const val AWS_APP_ID_ENV = "AWS_SDK_UA_APP_ID"
+public const val AWS_APP_ID_ENV: String = "AWS_SDK_UA_APP_ID"
 
 // non-standard environment variables/properties
-internal const val AWS_APP_ID_PROP = "aws.userAgentAppId"
+public const val AWS_APP_ID_PROP: String = "aws.userAgentAppId"
 internal const val FRAMEWORK_METADATA_ENV = "AWS_FRAMEWORK_METADATA"
 internal const val FRAMEWORK_METADATA_PROP = "aws.frameworkMetadata"
 
@@ -39,7 +39,8 @@ public data class AwsUserAgentMetadata(
          */
         public fun fromEnvironment(
             apiMeta: ApiMetadata,
-        ): AwsUserAgentMetadata = loadAwsUserAgentMetadataFromEnvironment(PlatformProvider.System, apiMeta)
+            appId: String? = null,
+        ): AwsUserAgentMetadata = loadAwsUserAgentMetadataFromEnvironment(PlatformProvider.System, apiMeta, appId)
     }
 
     /**
@@ -87,12 +88,12 @@ public data class AwsUserAgentMetadata(
         get() = "$sdkMetadata"
 }
 
-internal fun loadAwsUserAgentMetadataFromEnvironment(platform: PlatformProvider, apiMeta: ApiMetadata): AwsUserAgentMetadata {
+internal fun loadAwsUserAgentMetadataFromEnvironment(platform: PlatformProvider, apiMeta: ApiMetadata, appIdValue: String? = null): AwsUserAgentMetadata {
     val sdkMeta = SdkMetadata("kotlin", apiMeta.version)
     val osInfo = platform.osInfo()
     val osMetadata = OsMetadata(osInfo.family, osInfo.version)
     val langMeta = platformLanguageMetadata()
-    val appId = platform.getProperty(AWS_APP_ID_PROP) ?: platform.getenv(AWS_APP_ID_ENV)
+    val appId = appIdValue ?: platform.getProperty(AWS_APP_ID_PROP) ?: platform.getenv(AWS_APP_ID_ENV)
 
     val frameworkMetadata = FrameworkMetadata.fromEnvironment(platform)
     val customMetadata = CustomUserAgentMetadata.fromEnvironment(platform)
