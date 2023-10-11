@@ -1,0 +1,38 @@
+name: Release Checks
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    branches: [ main ]
+
+# Allow one instance of this workflow per pull request, and cancel older runs when new changes are pushed
+concurrency:
+  group: ci-release-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: 17
+          cache: 'gradle'
+      - name: Check for snapshot versions
+        run: |
+          # We aren't releasable if we (1) directly depend on a snapshot version of a dependency OR (2) can't build the project without unreleased changes
+          if grep -q -i snapshot ./gradle/libs.versions.toml; then
+            echo "::error ::found snapshot version in libs.versions.toml"
+            exit 1
+          fi
+      - name: Build check
+        run: |
+          # Our CI is implemented as a "live at HEAD" model where we build against the latest of all our 1P deps (either
+          # main branch or matching branch name). Double check that without this "live at HEAD" mode we still build 
+          # successfully (which is how it is built during release).
+          # This should help prevent the cases where we forgot to bump smithy-kotlin versions and don't catch it
+          # because CI is masking it
+          ./gradlew test jvmTest
