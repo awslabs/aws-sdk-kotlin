@@ -11,7 +11,7 @@ import aws.sdk.kotlin.runtime.config.endpoints.resolveUseFips
 import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
-import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgent
+import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgentAppId
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.client.RetryStrategyClientConfig
@@ -74,7 +74,7 @@ public abstract class AbstractAwsSdkClientFactory<
             config.region = config.region ?: resolveRegion(profile = profile)
             config.useFips = config.useFips ?: resolveUseFips(profile = profile)
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
-            config.sdkUserAgentAppId = config.sdkUserAgentAppId ?: resolveUserAgent(platform, profile)
+            config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)
 
             finalizeConfig(builder, sharedConfig)
         }

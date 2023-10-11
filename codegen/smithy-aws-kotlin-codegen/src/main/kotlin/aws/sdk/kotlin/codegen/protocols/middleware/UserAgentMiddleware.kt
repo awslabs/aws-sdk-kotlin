@@ -40,7 +40,7 @@ class UserAgentMiddleware : ProtocolMiddleware {
         writer.addImport(apiMetaSymbol)
         writer.addImport(middlewareSymbol)
         writer.write(
-            "private val awsUserAgentMetadata = #T.fromEnvironment(#T(ServiceId, SdkVersion), config.sdkUserAgentAppId)",
+            "private val awsUserAgentMetadata = #T.fromEnvironment(#T(ServiceId, SdkVersion), config.applicationId)",
             uaSymbol,
             apiMetaSymbol,
         )

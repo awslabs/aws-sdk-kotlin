@@ -33,14 +33,24 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             order = -100
         }
 
-        val SdkUserAgentAppId: ConfigProperty = ConfigProperty {
-            name = "sdkUserAgentAppId"
+        val userAgentAppId: ConfigProperty = ConfigProperty {
+            name = "applicationId"
             symbol = KotlinTypes.String.toBuilder().nullable().build()
             baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
             useNestedBuilderBaseClass()
             documentation = """
-                The SDK user agent app ID used to identify applications.
+                 An optional application specific identifier.
+                 When set it will be appended to the User-Agent header of every request in the form of: `app/{applicationId}`.
+                 When not explicitly set, this field will attempt to be sourced from the following locations:
+                 
+                 - JVM System Properties: aws.userAgentAppId
+                 - Environment variables: AWS_SDK_UA_APP_ID
+                 - Shared configuration profile attribute: sdk_ua_app_id
+                 
+                 See [shared configuration settings](https://docs.aws.amazon.com/sdkref/latest/guide/settings-reference.html)
+                 reference for more information on environment variables and shared config settings.
             """.trimIndent()
+            order = 100
         }
 
         // override the credentials provider prop registered by the Sigv4AuthSchemeIntegration, updates the
@@ -152,7 +162,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> = buildList {
         add(RegionProp)
-        add(SdkUserAgentAppId)
         if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.settings.getService(ctx.model))) {
             add(CredentialsProviderProp)
         }
@@ -169,5 +178,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         add(UseDualStackProp)
         add(EndpointUrlProp)
         add(AwsRetryPolicy)
+        add(userAgentAppId)
     }
 }

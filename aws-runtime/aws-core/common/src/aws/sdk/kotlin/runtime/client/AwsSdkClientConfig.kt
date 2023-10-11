@@ -33,9 +33,18 @@ public interface AwsSdkClientConfig : SdkClientConfig {
     public val useDualStack: Boolean
 
     /**
-     * The SDK user agent app ID used to identify applications.
+     * An optional application specific identifier.
+     * When set it will be appended to the User-Agent header of every request in the form of: `app/{applicationId}`.
+     * When not explicitly set, this field will attempt to be sourced from the following locations:
+     *
+     * - JVM System Properties: aws.userAgentAppId
+     * - Environment variables: AWS_SDK_UA_APP_ID
+     * - Shared configuration profile attribute: sdk_ua_app_id
+     *
+     * See [shared configuration settings](https://docs.aws.amazon.com/sdkref/latest/guide/settings-reference.html)
+     * reference for more information on environment variables and shared config settings.
      */
-    public val sdkUserAgentAppId: String?
+    public val applicationId: String?
 
     public interface Builder {
         /**
@@ -59,8 +68,17 @@ public interface AwsSdkClientConfig : SdkClientConfig {
         public var useDualStack: Boolean?
 
         /**
-         * The sdk user agent app ID.
+         * An optional application specific identifier.
+         * When set it will be appended to the User-Agent header of every request in the form of: `app/{applicationId}`.
+         * When not explicitly set, this field will attempt to be sourced from the following locations:
+         *
+         * - JVM System Properties: aws.userAgentAppId
+         * - Environment variables: AWS_SDK_UA_APP_ID
+         * - Shared configuration profile attribute: sdk_ua_app_id
+         *
+         * See [shared configuration settings](https://docs.aws.amazon.com/sdkref/latest/guide/settings-reference.html)
+         * reference for more information on environment variables and shared config settings.
          */
-        public var sdkUserAgentAppId: String?
+        public var applicationId: String?
     }
 }
