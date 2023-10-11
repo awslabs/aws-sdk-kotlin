@@ -1,5 +1,5 @@
 {
     "id": "8665c18c-d742-4212-b920-6fea43f70c2c",
     "type": "feature",
-    "description": "Implement clock skew correction"
+    "description": "Detect and automatically correct clock skew to prevent signing errors"
 }
