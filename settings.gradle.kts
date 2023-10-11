@@ -37,6 +37,7 @@ rootProject.name = "aws-sdk-kotlin"
 includeBuild("./gradle/sdk-plugins")
 
 include(":dokka-aws")
+include(":bom")
 include(":codegen:sdk")
 include(":codegen:smithy-aws-kotlin-codegen")
 include(":codegen:protocol-tests")
