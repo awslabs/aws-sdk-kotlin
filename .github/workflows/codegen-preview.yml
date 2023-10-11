@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  JAVA_VERSION: 11
+  JAVA_VERSION: 17
   RUN: ${{ github.run_id }}-${{ github.run_number }}
   DIFF2HTML_VERSION: 5.2.5
   # Below is the set of services that are generated for codegen preview
@@ -49,27 +49,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: 'awslabs/aws-kotlin-repo-tools'
-          ref: 'ci-utils'
           path: 'aws-kotlin-repo-tools'
       - uses: actions/checkout@v4
         with:
           repository: 'awslabs/smithy-kotlin'
           fetch-depth: 0
           path: 'smithy-kotlin'
-      - uses: actions/cache@v2
-        name: Gradle Cache
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Set up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ env.JAVA_VERSION }}
-
+          distribution: 'corretto'
+          cache: 'gradle'
       - name: Install deps and setup environment
         run: |
           npm install -g diff2html-cli@${{ env.DIFF2HTML_VERSION }}
