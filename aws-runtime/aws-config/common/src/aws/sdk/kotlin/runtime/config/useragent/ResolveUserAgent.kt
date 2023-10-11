@@ -14,7 +14,8 @@ import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
- * Attempts to resolve user agent from specified sources. Returns null if none found
+ * Attempts to resolve user agent from specified sources.
+ * @return The user agent app id if found, null if not
  */
 @InternalSdkApi
 public suspend fun resolveUserAgentAppId(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): String? =

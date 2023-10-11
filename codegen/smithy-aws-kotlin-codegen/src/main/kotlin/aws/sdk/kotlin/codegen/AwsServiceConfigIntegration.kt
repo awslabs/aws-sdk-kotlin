@@ -33,9 +33,9 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             order = -100
         }
 
-        val userAgentAppId: ConfigProperty = ConfigProperty {
+        val UserAgentAppId: ConfigProperty = ConfigProperty {
             name = "applicationId"
-            symbol = KotlinTypes.String.toBuilder().nullable().build()
+            symbol = KotlinTypes.String.asNullable()
             baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
             useNestedBuilderBaseClass()
             documentation = """
@@ -178,6 +178,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         add(UseDualStackProp)
         add(EndpointUrlProp)
         add(AwsRetryPolicy)
-        add(userAgentAppId)
+        add(UserAgentAppId)
     }
 }
