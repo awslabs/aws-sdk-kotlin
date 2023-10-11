@@ -30,6 +30,7 @@ fi
 
 BUILD_ID=$(echo ${START_RESULT} | jq '.buildBatch.id' -r)
 echo "Build id $BUILD_ID"
+echo "aws-build-id=$BUILD_ID" >> "$GITHUB_OUTPUT"
 
 BUILD_STATUS="IN_PROGRESS"
 while [ "$BUILD_STATUS" == "IN_PROGRESS" ]; do

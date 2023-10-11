@@ -1,5 +1,0 @@
-{
-    "id": "b0f89880-988f-46c1-87dc-f1741587860d",
-    "type": "misc",
-    "description": "Track upstream changes that make `ByteArrayContent` and friends internal. Users should only be using `ByteStream.fromBytes()`, `ByteStream.fromString()`, and `HttpBody.fromBytes()`."
-}

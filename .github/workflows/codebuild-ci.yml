@@ -10,6 +10,11 @@ permissions:
   id-token: write
   contents: read
 
+# Allow one instance of this workflow per pull request, and cancel older runs when new changes are pushed
+concurrency:
+  group: ci-codebuild-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
@@ -20,9 +25,19 @@ jobs:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
       - name: Run E2E Tests
+        id: e2e-tests
         uses: aws-actions/aws-codebuild-run-build@v1
         with:
           project-name: gh-aws-sdk-kotlin-e2e-tests
+      - name: Cancel build
+        if: ${{ cancelled() }}
+        env:
+          BUILD_ID: ${{ steps.e2e-tests.outputs.aws-build-id }}
+        run: |
+          if [ ! -z "$BUILD_ID"]; then
+            echo "cancelling in-progress build: id=$BUILD_ID"
+            aws codebuild stop-build --id $BUILD_ID
+          fi
 
   service-check-batch:
     runs-on: ubuntu-latest
@@ -35,5 +50,15 @@ jobs:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
       - name: Run Service Check Batch
+        id: svc-check-batch
         run: |
           .github/scripts/run-codebuild-batch-job.sh gh-aws-sdk-kotlin-svc-check-batch ${{ github.event.pull_request.head.sha }}
+      - name: Cancel build
+        if: ${{ cancelled() }}
+        env:
+          BUILD_ID: ${{ steps.svc-check-batch.outputs.aws-build-id }}
+        run: |
+          if [ ! -z "$BUILD_ID" ]; then
+            echo "cancelling in-progress batch build: id=$BUILD_ID"
+            aws codebuild stop-build --id $BUILD_ID
+          fi
