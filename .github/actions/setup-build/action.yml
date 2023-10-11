@@ -10,7 +10,7 @@ runs:
       with:
         path: 'aws-kotlin-repo-tools'
         repository: 'awslabs/aws-kotlin-repo-tools'
-        ref: 'gh-action'
+        ref: '0.2.3'
         sparse-checkout: |
           .github
     - name: Checkout smithy-kotlin
