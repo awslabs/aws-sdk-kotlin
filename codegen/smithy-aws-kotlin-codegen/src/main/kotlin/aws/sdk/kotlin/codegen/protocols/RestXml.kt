@@ -30,6 +30,21 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = RestXmlTrait.ID
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.DATE_TIME
 
+    override fun renderContentTypeHeader(
+        ctx: ProtocolGenerator.GenerationContext,
+        op: OperationShape,
+        writer: KotlinWriter,
+    ) {
+        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
+        val contentType = resolver.determineRequestContentType(op)
+
+        if (!op.isBlobShape) {
+            contentType.let {
+                writer.write("builder.headers.setMissing(\"Content-Type\", #S)", contentType)
+            }
+        }
+    }
+
     // See https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#content-type
     override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
         HttpTraitResolver(model, serviceShape, ProtocolContentTypes.consistent("application/xml"))
