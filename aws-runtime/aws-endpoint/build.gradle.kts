@@ -7,16 +7,14 @@ description = "AWS Endpoint Support"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: Endpoint"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.endpoint"
 
-val smithyKotlinVersion: String by project
-
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
                 implementation(project(":aws-runtime:aws-core"))
                 // exposes Endpoint
-                api("aws.smithy.kotlin:http-client:$smithyKotlinVersion")
-                api("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
+                api(libs.smithy.kotlin.http.client)
+                api(libs.smithy.kotlin.aws.signing.common)
             }
         }
 

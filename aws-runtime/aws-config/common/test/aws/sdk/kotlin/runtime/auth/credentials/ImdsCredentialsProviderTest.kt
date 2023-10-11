@@ -14,7 +14,6 @@ import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
@@ -241,7 +240,7 @@ class ImdsCredentialsProviderTest {
                 HttpResponse(
                     HttpStatusCode.NotFound,
                     Headers.Empty,
-                    ByteArrayContent(
+                    HttpBody.fromBytes(
                         """<?xml version="1.0" encoding="iso-8859-1"?>
                         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
                                 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

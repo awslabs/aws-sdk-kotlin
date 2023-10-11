@@ -1646,6 +1646,12 @@
                     "method": "POST",
                     "uri": "/getImages",
                     "code": 200
+                },
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "items": "Images",
+                    "pageSize": "MaxResults"
                 }
             }
         },
@@ -2126,6 +2132,12 @@
                     "method": "POST",
                     "uri": "/listFragments",
                     "code": 200
+                },
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "items": "Fragments",
+                    "pageSize": "MaxResults"
                 }
             }
         },

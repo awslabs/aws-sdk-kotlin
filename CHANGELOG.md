@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.32.4-beta] - 10/06/2023
+
+### Miscellaneous
+* Track upstream changes that make `ByteArrayContent` and friends internal. Users should only be using `ByteStream.fromBytes()`, `ByteStream.fromString()`, and `HttpBody.fromBytes()`.
+
+## [0.32.3-beta] - 09/28/2023
+
+### Fixes
+* [#1048](https://github.com/awslabs/aws-sdk-kotlin/issues/1048) Restore public constructor for `EcsCredentialsProvider`
+* [#1044](https://github.com/awslabs/aws-sdk-kotlin/issues/1044) ignore `__type` when deserializing union for AWS JSON 1.0, AWS JSON 1.1, and AWS restJson 1
+
+### Miscellaneous
+* Generate internal-only clients with `internal` visibility
+* sync AWS models and upgrade smithy kotlin
+
 ## [0.32.2-beta] - 09/15/2023
 
 ### Miscellaneous

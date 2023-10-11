@@ -7,16 +7,17 @@ import aws.sdk.kotlin.gradle.kmp.*
 
 description = "AWS client runtime support for generated service clients"
 
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 plugins {
-    id("org.jetbrains.dokka")
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.12.1"
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.kotlinx.binary.compatibility.validator)
     jacoco
 }
 
 val sdkVersion: String by project
 
-val kotestVersion: String by project
-val slf4jVersion: String by project
+// capture locally - scope issue with custom KMP plugin
+val libraries = libs
 
 subprojects {
     if (!needsKmpConfigured) return@subprojects
@@ -39,14 +40,14 @@ subprojects {
 
             named("commonTest") {
                 dependencies {
-                    implementation("io.kotest:kotest-assertions-core:$kotestVersion")
+                    implementation(libraries.kotest.assertions.core)
                 }
             }
 
             named("jvmTest") {
                 dependencies {
-                    implementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-                    implementation("org.slf4j:slf4j-simple:$slf4jVersion")
+                    implementation(libraries.kotest.assertions.core.jvm)
+                    implementation(libraries.slf4j.simple)
                 }
             }
         }

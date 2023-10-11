@@ -12,22 +12,6 @@ plugins {
 description = "Support for AWS configuration"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.config"
 
-val smithyKotlinVersion: String by project
-val kotestVersion: String by project
-val coroutinesVersion: String by project
-val atomicFuVersion: String by project
-
-buildscript {
-    val atomicFuVersion: String by project
-
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:$atomicFuVersion")
-    }
-}
 apply(plugin = "kotlinx-atomicfu")
 
 kotlin {
@@ -35,51 +19,46 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
-                api("aws.smithy.kotlin:aws-credentials:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:http:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:http-auth:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:telemetry-api:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:http-client-engine-default:$smithyKotlinVersion")
+                api(libs.smithy.kotlin.aws.credentials)
+                implementation(libs.smithy.kotlin.http)
+                implementation(libs.smithy.kotlin.http.auth)
+                implementation(libs.smithy.kotlin.telemetry.api)
+                implementation(libs.smithy.kotlin.http.client.engine.default)
                 implementation(project(":aws-runtime:aws-http"))
 
                 // parsing common JSON credentials responses
-                implementation("aws.smithy.kotlin:serde-json:$smithyKotlinVersion")
+                implementation(libs.smithy.kotlin.serde.json)
+
+                // additional dependencies required by generated clients
+                implementation(libs.bundles.smithy.kotlin.service.client)
+                implementation(project(":aws-runtime:aws-endpoint"))
 
                 // additional dependencies required by generated sts provider
-                implementation("aws.smithy.kotlin:http-client:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:serde-form-url:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:serde-xml:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:aws-xml-protocols:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:aws-protocol-core:$smithyKotlinVersion")
-                implementation(project(":aws-runtime:aws-endpoint"))
-                implementation("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:aws-signing-default:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:http-auth-aws:$smithyKotlinVersion")
-                implementation("aws.smithy.kotlin:telemetry-defaults:$smithyKotlinVersion")
+                implementation(libs.smithy.kotlin.serde.xml)
+                implementation(libs.smithy.kotlin.serde.formurl)
+                implementation(libs.smithy.kotlin.aws.xml.protocols)
 
                 // additional dependencies required by generated sso provider(s)
-                implementation("aws.smithy.kotlin:aws-json-protocols:$smithyKotlinVersion")
+                implementation(libs.smithy.kotlin.aws.json.protocols)
 
                 // atomics
-                implementation("org.jetbrains.kotlinx:atomicfu:$atomicFuVersion")
+                implementation(libs.kotlinx.atomicfu)
 
                 // coroutines
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation(libs.kotlinx.coroutines.core)
             }
         }
         commonTest {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-                implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
-                val kotlinxSerializationVersion: String by project
-                val mockkVersion: String by project
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-                implementation("io.mockk:mockk:$mockkVersion")
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.smithy.kotlin.http.test)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.mockk)
             }
         }
         jvmTest {
             dependencies {
-                implementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+                implementation(libs.kotest.runner.junit5)
             }
         }
 
