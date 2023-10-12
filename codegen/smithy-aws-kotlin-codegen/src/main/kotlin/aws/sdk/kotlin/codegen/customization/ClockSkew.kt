@@ -11,7 +11,7 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 
 /**
- * Adds a middleware which applies an interceptor that detects and corrects clock skew
+ * Adds a section writer which applies an interceptor that detects and corrects clock skew
  */
 class ClockSkew : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding>
