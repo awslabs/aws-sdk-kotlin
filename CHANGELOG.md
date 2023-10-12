@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.32.5-beta] - 10/12/2023
+
+### Features
+* [#945](https://github.com/awslabs/aws-sdk-kotlin/issues/945) Add new sources for User-Agent app id
+
+### Miscellaneous
+* Sync to the latest versions of **smithy-kotlin** and AWS service models
+
 ## [0.32.4-beta] - 10/06/2023
 
 ### Miscellaneous
