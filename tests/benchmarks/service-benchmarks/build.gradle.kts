@@ -3,19 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.skipPublishing
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    val atomicFuVersion: String by project
-
-    dependencies {
-        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:$atomicFuVersion")
-    }
-}
-
-apply(plugin = "kotlinx-atomicfu")
 
 plugins {
     kotlin("multiplatform")
@@ -53,10 +40,6 @@ if (missingServices.isEmpty()) {
                 optinAnnotations.forEach { languageSettings.optIn(it) }
             }
 
-            val atomicFuVersion: String by project
-            val coroutinesVersion: String by project
-            val smithyKotlinVersion: String by project
-
             jvmMain {
                 dependencies {
                     api(libs.smithy.kotlin.runtime.core)
@@ -72,7 +55,7 @@ if (missingServices.isEmpty()) {
 } else {
     logger.warn(
         "Skipping build for {} project, missing the following services: {}. To ensure this project builds, run the " +
-            "{}:bootstrapAll task.",
+                "{}:bootstrapAll task.",
         project.name,
         missingServices.joinToString(", "),
         project.path,
