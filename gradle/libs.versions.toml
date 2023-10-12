@@ -1,10 +1,10 @@
 [versions]
-kotlin-version = "1.8.22"
-dokka-version = "1.7.10"
+kotlin-version = "1.9.10"
+dokka-version = "1.9.0"
 
 # libs
 coroutines-version = "1.7.3"
-atomicfu-version = "0.19.0"
+atomicfu-version = "0.22.0"
 
 # smithy-kotlin codegen and runtime are versioned together
 smithy-kotlin-version = "0.27.7"
@@ -17,7 +17,7 @@ smithy-gradle-version = "0.6.0"
 junit-version = "5.9.2"
 kotest-version = "5.5.4"
 kotlinx-benchmark-version = "0.4.7"
-kotlinx-serialization-version = "1.4.1"
+kotlinx-serialization-version = "1.6.0"
 mockk-version = "1.13.3"
 slf4j-version = "2.0.6"
 
