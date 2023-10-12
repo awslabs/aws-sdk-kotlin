@@ -15,8 +15,8 @@ smithy-gradle-version = "0.6.0"
 
 # testing
 junit-version = "5.9.2"
-kotest-version = "5.5.4"
-kotlinx-benchmark-version = "0.4.7"
+kotest-version = "5.7.2"
+kotlinx-benchmark-version = "0.4.9"
 kotlinx-serialization-version = "1.6.0"
 mockk-version = "1.13.3"
 slf4j-version = "2.0.6"
@@ -118,6 +118,6 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka-version"}
 kotlin-jvm = {id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 kotlin-multiplatform = {id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin-version" }
 kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlinx-benchmark-version" }
-kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.12.1" }
+kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version"}
 smithy-gradle = { id = "software.amazon.smithy", version.ref = "smithy-gradle-version" }
