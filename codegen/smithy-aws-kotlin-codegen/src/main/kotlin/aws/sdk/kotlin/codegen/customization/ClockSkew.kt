@@ -22,7 +22,7 @@ class ClockSkew : KotlinIntegration {
         override val name: String = "ClockSkew"
 
         override fun renderProperties(writer: KotlinWriter) {
-            val interceptorSymbol = RuntimeTypes.HttpClient.Interceptors.ClockSkewInterceptor
+            val interceptorSymbol = RuntimeTypes.AwsProtocolCore.ClockSkewInterceptor
             writer.write("private val clockSkewInterceptor = #T()", interceptorSymbol)
         }
 
