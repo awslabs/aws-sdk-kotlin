@@ -6,15 +6,31 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
+import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
+import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgentAppId
+import aws.sdk.kotlin.runtime.config.utils.mockPlatform
 import aws.smithy.kotlin.runtime.client.*
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
+import aws.smithy.kotlin.runtime.util.PlatformProvider
+import aws.smithy.kotlin.runtime.util.asyncLazy
+import io.kotest.extensions.system.withEnvironment
 import io.kotest.extensions.system.withSystemProperties
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.io.TempDir
+import java.nio.file.Path
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.writeText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.time.Duration.Companion.seconds
 
 class AbstractAwsSdkClientFactoryTest {
+    @JvmField
+    @TempDir
+    var tempDir: Path? = null
+
     @Test
     fun testFromEnvironmentFavorsExplicitConfig() = runTest {
         val explicitRegion = "explicit-region"
@@ -41,6 +57,53 @@ class AbstractAwsSdkClientFactoryTest {
             assertIs<StandardRetryStrategy>(client.config.retryStrategy)
         }
     }
+
+    @Test
+    fun testFromEnvironmentResolvesAppId() = runTest(
+        timeout = 20.seconds,
+    ) {
+        val credentialsFile = tempDir!!.resolve("credentials")
+        val configFile = tempDir!!.resolve("config")
+
+        configFile.writeText("[profile foo]\nsdk_ua_app_id = profile-app-id")
+
+        val testPlatform = mockPlatform(
+            pathSegment = PlatformProvider.System.filePathSeparator,
+            awsProfileEnv = "foo",
+            homeEnv = "/home/user",
+            awsConfigFileEnv = configFile.absolutePathString(),
+            awsSharedCredentialsFileEnv = credentialsFile.absolutePathString(),
+            os = PlatformProvider.System.osInfo(),
+        )
+
+        val sharedConfig = asyncLazy { loadAwsSharedConfig(testPlatform) }
+        val profile = asyncLazy { sharedConfig.get().activeProfile }
+
+        assertEquals("profile-app-id", resolveUserAgentAppId(testPlatform, profile))
+
+        configFile.deleteIfExists()
+        credentialsFile.deleteIfExists()
+
+        withEnvironment(
+            mapOf(
+                AwsSdkSetting.AwsAppId.envVar to "env-app-id",
+            ),
+        ) {
+            assertEquals("env-app-id", TestClient.fromEnvironment().config.applicationId)
+
+            withSystemProperties(
+                mapOf(
+                    AwsSdkSetting.AwsAppId.sysProp to "system-properties-app-id",
+                ),
+            ) {
+                assertEquals("system-properties-app-id", TestClient.fromEnvironment().config.applicationId)
+                assertEquals(
+                    "explicit-app-id",
+                    TestClient.fromEnvironment { applicationId = "explicit-app-id" }.config.applicationId,
+                )
+            }
+        }
+    }
 }
 
 private interface TestClient : SdkClient {
@@ -59,9 +122,10 @@ private interface TestClient : SdkClient {
     class Config private constructor(builder: Builder) : SdkClientConfig, AwsSdkClientConfig, RetryStrategyClientConfig by builder.buildRetryStrategyClientConfig() {
         override val clientName: String = builder.clientName
         override val logMode: LogMode = builder.logMode ?: LogMode.Default
-        override val region: String = builder.region ?: error("region is required")
+        override val region: String? = builder.region
         override var useFips: Boolean = builder.useFips ?: false
         override var useDualStack: Boolean = builder.useDualStack ?: false
+        override val applicationId: String? = builder.applicationId
 
         // new: inherits builder equivalents for Config base classes
         class Builder : AwsSdkClientConfig.Builder, SdkClientConfig.Builder<Config>, RetryStrategyClientConfig.Builder by RetryStrategyClientConfigImpl.BuilderImpl() {
@@ -70,6 +134,7 @@ private interface TestClient : SdkClient {
             override var region: String? = null
             override var useFips: Boolean? = null
             override var useDualStack: Boolean? = null
+            override var applicationId: String? = null
             override fun build(): Config = Config(this)
         }
     }
