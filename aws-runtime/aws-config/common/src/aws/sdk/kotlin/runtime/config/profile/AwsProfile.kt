@@ -123,6 +123,13 @@ public val AwsProfile.servicesSection: String?
     get() = getOrNull("services")
 
 /**
+ * The SDK user agent app ID used to identify applications.
+ */
+@InternalSdkApi
+public val AwsProfile.sdkUserAgentAppId: String?
+    get() = getOrNull("sdk_ua_app_id")
+
+/**
  * Parse a config value as a boolean, ignoring case.
  */
 @InternalSdkApi

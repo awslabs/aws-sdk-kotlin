@@ -9,7 +9,6 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
@@ -169,7 +168,7 @@ class SsoCredentialsProviderTest {
 
         val engine = buildTestConnection {
             expect(
-                HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(serviceResp.encodeToByteArray())),
+                HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.fromBytes(serviceResp.encodeToByteArray())),
             )
         }
 

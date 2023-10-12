@@ -1,0 +1,123 @@
+[versions]
+kotlin-version = "1.8.22"
+dokka-version = "1.7.10"
+
+# libs
+coroutines-version = "1.7.3"
+atomicfu-version = "0.19.0"
+
+# smithy-kotlin codegen and runtime are versioned together
+smithy-kotlin-version = "0.27.7"
+
+# codegen
+smithy-version = "1.39.0"
+smithy-gradle-version = "0.6.0"
+
+# testing
+junit-version = "5.9.2"
+kotest-version = "5.5.4"
+kotlinx-benchmark-version = "0.4.7"
+kotlinx-serialization-version = "1.4.1"
+mockk-version = "1.13.3"
+slf4j-version = "2.0.6"
+
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin-version"}
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin-version"}
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin-version" }
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin-version" }
+dokka-core = { module = "org.jetbrains.dokka:dokka-core", version.ref = "dokka-version" }
+dokka-base = { module = "org.jetbrains.dokka:dokka-base", version.ref = "dokka-version" }
+
+kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu-version" }
+kotlinx-atomicfu-plugin = { module = "org.jetbrains.kotlinx:atomicfu-gradle-plugin", version.ref = "atomicfu-version" }
+
+kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug", version.ref = "coroutines-version" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-version" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines-version" }
+kotlinx-coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "coroutines-version" }
+kotlinx-coroutines-slf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j", version.ref = "coroutines-version" }
+
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j-version" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j-version" }
+
+smithy-kotlin-aws-credentials = { module = "aws.smithy.kotlin:aws-credentials", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-aws-event-stream = { module = "aws.smithy.kotlin:aws-event-stream", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-aws-signing-common = { module = "aws.smithy.kotlin:aws-signing-common", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-aws-signing-default = { module = "aws.smithy.kotlin:aws-signing-default", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-runtime-core = { module = "aws.smithy.kotlin:runtime-core", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-smithy-client = { module = "aws.smithy.kotlin:smithy-client", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-smithy-test = { module = "aws.smithy.kotlin:smithy-test", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-identity-api = { module = "aws.smithy.kotlin:identity-api", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-http = { module = "aws.smithy.kotlin:http", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-http-auth = { module = "aws.smithy.kotlin:http-auth", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-http-auth-aws = { module = "aws.smithy.kotlin:http-auth-aws", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-http-client = { module = "aws.smithy.kotlin:http-client", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-http-client-engine-default = { module = "aws.smithy.kotlin:http-client-engine-default", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-http-client-engine-crt = { module = "aws.smithy.kotlin:http-client-engine-crt", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-http-test = { module = "aws.smithy.kotlin:http-test", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-serde-core = { module = "aws.smithy.kotlin:serde", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-serde-json = { module = "aws.smithy.kotlin:serde-json", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-serde-xml = { module = "aws.smithy.kotlin:serde-xml", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-serde-formurl = { module = "aws.smithy.kotlin:serde-form-url", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-aws-protocol-core = { module = "aws.smithy.kotlin:aws-protocol-core", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-aws-xml-protocols = { module = "aws.smithy.kotlin:aws-xml-protocols", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-aws-json-protocols = { module = "aws.smithy.kotlin:aws-json-protocols", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-telemetry-api = { module = "aws.smithy.kotlin:telemetry-api", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-telemetry-defaults = { module = "aws.smithy.kotlin:telemetry-defaults", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-testing = { module = "aws.smithy.kotlin:testing", version.ref = "smithy-kotlin-version" }
+
+smithy-kotlin-codegen = { module = "software.amazon.smithy.kotlin:smithy-kotlin-codegen", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-codegen-testutils = { module = "software.amazon.smithy.kotlin:smithy-kotlin-codegen-testutils", version.ref = "smithy-kotlin-version" }
+
+smithy-codegen-core = { module = "software.amazon.smithy:smithy-codegen-core", version.ref = "smithy-version" }
+smithy-cli = { module = "software.amazon.smithy:smithy-cli", version.ref = "smithy-version" }
+smithy-waiters = { module = "software.amazon.smithy:smithy-waiters", version.ref = "smithy-version" }
+smithy-aws-endpoints = { module = "software.amazon.smithy:smithy-aws-endpoints", version.ref = "smithy-version" }
+smithy-aws-traits = { module = "software.amazon.smithy:smithy-aws-traits", version.ref = "smithy-version" }
+smithy-aws-protocol-tests = { module = "software.amazon.smithy:smithy-aws-protocol-tests", version.ref = "smithy-version" }
+smithy-aws-iam-traits = { module = "software.amazon.smithy:smithy-aws-iam-traits", version.ref = "smithy-version" }
+smithy-aws-cloudformation-traits = { module = "software.amazon.smithy:smithy-aws-cloudformation-traits", version.ref = "smithy-version" }
+smithy-model = { module = "software.amazon.smithy:smithy-model", version.ref = "smithy-version" }
+smithy-protocol-test-traits = { module = "software.amazon.smithy:smithy-protocol-test-traits", version.ref = "smithy-version" }
+smithy-gradle-plugin = { module = "software.amazon.smithy:smithy-gradle-plugin", version.ref = "smithy-gradle-version" }
+
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-version" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-version" }
+
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest-version" }
+kotest-assertions-core-jvm = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest-version" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest-version" }
+kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinx-benchmark-version" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-version" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk-version" }
+
+[bundles]
+# bundle of smithy-kotlin dependencies all AWS service clients have
+smithy-kotlin-service-client = [
+    "smithy-kotlin-runtime-core",
+    "smithy-kotlin-smithy-client",
+    "smithy-kotlin-http-client",
+    "smithy-kotlin-http-client-engine-default",
+    "smithy-kotlin-http",
+    "smithy-kotlin-http-auth",
+    "smithy-kotlin-http-auth-aws",
+    "smithy-kotlin-aws-protocol-core",
+    "smithy-kotlin-serde-core",
+    "smithy-kotlin-aws-signing-common",
+    "smithy-kotlin-aws-signing-default",
+    "smithy-kotlin-identity-api",
+    "smithy-kotlin-aws-credentials",
+    "smithy-kotlin-telemetry-api",
+    "smithy-kotlin-telemetry-defaults",
+]
+
+[plugins]
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka-version"}
+kotlin-jvm = {id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+kotlin-multiplatform = {id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin-version" }
+kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlinx-benchmark-version" }
+kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.12.1" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version"}
+smithy-gradle = { id = "software.amazon.smithy", version.ref = "smithy-gradle-version" }

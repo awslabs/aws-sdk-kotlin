@@ -7,7 +7,7 @@ package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.S3Exception
-import aws.sdk.kotlin.services.s3.transform.GetBucketLocationOperationDeserializer
+import aws.sdk.kotlin.services.s3.serde.GetBucketLocationOperationDeserializer
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpCall

@@ -55,8 +55,7 @@ class RestJson1 : JsonHttpBindingProtocolGenerator() {
             val target = ctx.model.expectShape(httpPayload.member.target)
             writer.withBlock("if (input.#L == null) {", "}", memberName) {
                 if (target is StructureShape) {
-                    addImport(RuntimeTypes.Http.ByteArrayContent)
-                    write("builder.body = #T(#S.encodeToByteArray())", RuntimeTypes.Http.ByteArrayContent, "{}")
+                    write("builder.body = #T.fromBytes(#S.encodeToByteArray())", RuntimeTypes.Http.HttpBody, "{}")
                 }
                 // Content-Type still needs to be set for non-structured payloads
                 // https://github.com/awslabs/smithy/blob/main/smithy-aws-protocol-tests/model/restJson1/http-content-type.smithy#L174

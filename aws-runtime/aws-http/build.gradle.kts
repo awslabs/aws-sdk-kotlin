@@ -7,24 +7,21 @@ description = "HTTP core for AWS service clients"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: HTTP"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.http"
 
-val coroutinesVersion: String by project
-val smithyKotlinVersion: String by project
-
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
                 api(project(":aws-runtime:aws-endpoint"))
-                api("aws.smithy.kotlin:aws-signing-common:$smithyKotlinVersion")
-                api("aws.smithy.kotlin:http-client:$smithyKotlinVersion")
+                api(libs.smithy.kotlin.aws.signing.common)
+                api(libs.smithy.kotlin.http.client)
             }
         }
 
         commonTest {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-                implementation("aws.smithy.kotlin:http-test:$smithyKotlinVersion")
+                implementation(libs.kotlinx.coroutines.test)
+                api(libs.smithy.kotlin.http.test)
             }
         }
 

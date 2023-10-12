@@ -33,8 +33,6 @@ import subprocess
 import tempfile
 import shlex
 
-HEAD_BRANCH_NAME = "__tmp-localonly-head"
-BASE_BRANCH_NAME = "__tmp-localonly-base"
 OUTPUT_PATH = "tmp-codegen-diff/"
 
 COMMIT_AUTHOR_NAME = "GitHub Action (generated codegen diff)"
@@ -138,9 +136,11 @@ def write_html_template(title, subtitle, tmp_file):
     tmp_file.flush()
 
 
-def make_diff(title, path_to_diff, base_sha, head_sha, suffix, ignore_whitespace):
+def make_diff(opts, title, path_to_diff, suffix, ignore_whitespace):
+    base_sha = opts.base_sha
+    head_sha = opts.head_sha
     ws_flag = "-b" if ignore_whitespace else ""
-    diff_exists = get_cmd_status(f"git diff --quiet {ws_flag} {BASE_BRANCH_NAME} {HEAD_BRANCH_NAME} -- {path_to_diff}")
+    diff_exists = get_cmd_status(f"git diff --quiet {ws_flag} {opts.base_branch} {opts.head_branch} -- {path_to_diff}")
 
     if diff_exists == 0:
         eprint(f"No diff output for {base_sha}..{head_sha}")
@@ -156,7 +156,7 @@ def make_diff(title, path_to_diff, base_sha, head_sha, suffix, ignore_whitespace
         # All arguments after the first `--` go to the `git diff` command.
         diff_cmd = f"diff2html -s line -f html -d word -i command --hwt " \
                    f"{tmp_file.name} -F {OUTPUT_PATH}/{dest_path} -- " \
-                   f"-U20 {ws_flag} {BASE_BRANCH_NAME} {HEAD_BRANCH_NAME} -- {path_to_diff}"
+                   f"-U20 {ws_flag} {opts.base_branch} {opts.head_branch} -- {path_to_diff}"
         eprint(f"Running diff cmd: {diff_cmd}")
         run(diff_cmd)
     return dest_path
@@ -169,14 +169,22 @@ def diff_link(diff_text, empty_diff_text, diff_location, alternate_text, alterna
     return f"[{diff_text}]({CDN_URL}/codegen-diff/{diff_location}) ([{alternate_text}]({CDN_URL}/codegen-diff/{alternate_location}))"
 
 
-def make_diffs(base_sha, head_sha):
-    sdk_ws = make_diff('AWS SDK', f'{OUTPUT_PATH}/services', base_sha, head_sha, 'aws-sdk', ignore_whitespace=False)
-    sdk_no_ws = make_diff('AWS SDK', f'{OUTPUT_PATH}/services', base_sha, head_sha, 'aws-sdk-ignore-ws',
-                          ignore_whitespace=True)
-
+def make_diffs(opts):
+    sdk_ws = make_diff(opts, 'AWS SDK', f'{OUTPUT_PATH}/services', 'aws-sdk', ignore_whitespace=False)
+    sdk_no_ws = make_diff(opts, 'AWS SDK', f'{OUTPUT_PATH}/services', 'aws-sdk-ignore-ws', ignore_whitespace=True)
     sdk_links = diff_link('AWS SDK', 'No codegen difference in the AWS SDK', sdk_ws, 'ignoring whitespace', sdk_no_ws)
 
     return f'A new generated diff is ready to view.\\n\\n- {sdk_links}\\n'
+
+
+def _codegen_cmd(opts):
+    generate_and_commit_generated_code(opts.head_sha, opts.bootstrap)
+
+
+def _generate_diffs_cmd(opts):
+    bot_message = make_diffs(opts)
+    with open(f"{OUTPUT_PATH}/bot-message", 'w') as f:
+        f.write(bot_message)
 
 
 def create_cli():
@@ -186,11 +194,20 @@ def create_cli():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
 
-    parser.add_argument("repo_root", help="repository root")
-    parser.add_argument("base_sha", help="base commit to diff against (SHA-like)")
-    parser.add_argument("--bootstrap", help="services to pass to bootstrap and include in diff output",
-                        default="+dynamodb,+codebuild,+sts,+ec2,+polly,+s3")
     parser.add_argument("--head-sha", help="head commit to use (defaults to whatever current HEAD) is")
+
+    subparsers = parser.add_subparsers()
+    codegen = subparsers.add_parser("codegen", help="generate and commit generated code")
+    codegen.add_argument("--bootstrap", help="services to pass to bootstrap and include in diff output",
+                         default="+dynamodb,+codebuild,+sts,+ec2,+polly,+s3")
+    codegen.set_defaults(cmd=_codegen_cmd)
+
+    generate_diffs = subparsers.add_parser("generate-diffs",
+                                           help="generate diffs between two branches and output bot message")
+    generate_diffs.add_argument("--base-sha", help="base commit to diff against (SHA-like)")
+    generate_diffs.add_argument("base_branch", help="name of the base branch to diff against")
+    generate_diffs.add_argument("head_branch", help="name of the head branch to diff against")
+    generate_diffs.set_defaults(cmd=_generate_diffs_cmd)
 
     return parser
 
@@ -200,39 +217,12 @@ def main():
     opts = cli.parse_args()
     print(opts)
 
-    os.chdir(opts.repo_root)
-
     if opts.head_sha is None:
-        head_sha = get_cmd_output("git rev-parse HEAD")
-    else:
-        head_sha = opts.head_sha
+        opts.head_sha = get_cmd_output("git rev-parse HEAD")
 
-    print(f"using head sha is {head_sha}")
+    print(f"using head sha: {opts.head_sha}")
 
-    # Make sure the working tree is clean
-    if get_cmd_status("git diff --quiet") != 0:
-        eprint("working tree is not clean. aborting")
-        sys.exit(1)
-
-    # Generate code for HEAD
-    print(f"Creating temporary branch with generated code for the HEAD revision {head_sha}")
-    run(f"git checkout {head_sha} -b {HEAD_BRANCH_NAME}")
-    generate_and_commit_generated_code(head_sha, opts.bootstrap)
-
-    # Generate code for base
-    print(f"Creating temporary branch with generated code for the base revision {opts.base_sha}")
-    run(f"git checkout {opts.base_sha} -b {BASE_BRANCH_NAME}")
-    generate_and_commit_generated_code(opts.base_sha, opts.bootstrap)
-
-    bot_message = make_diffs(opts.base_sha, head_sha)
-    with open(f"{OUTPUT_PATH}/bot-message", 'w') as f:
-        f.write(bot_message)
-
-    # cleanup
-    if not running_in_github_action():
-        run(f"git checkout main")
-        run(f"git branch -D {BASE_BRANCH_NAME}")
-        run(f"git branch -D {HEAD_BRANCH_NAME}")
+    opts.cmd(opts)
 
 
 if __name__ == '__main__':

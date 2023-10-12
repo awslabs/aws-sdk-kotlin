@@ -10,8 +10,9 @@ import aws.sdk.kotlin.gradle.codegen.dsl.codegenExtension
 import aws.sdk.kotlin.gradle.codegen.dsl.withObjectMember
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.provideDelegate
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 import software.amazon.smithy.model.node.Node
@@ -112,10 +113,13 @@ private fun Project.createCodegenConfiguration(): Configuration {
 internal fun Project.createSmithyCliConfiguration(): Configuration {
     // see: https://github.com/awslabs/smithy-gradle-plugin/blob/main/src/main/java/software/amazon/smithy/gradle/SmithyPlugin.java#L119
     val smithyCliConfig = configurations.maybeCreate("smithyCli")
+
+    // FIXME - this is tightly coupled to our project
+    val versionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
+    val smithyVersion = versionCatalog.findVersion("smithy-version").get()
     dependencies {
         // smithy plugin requires smithy-cli to be on the classpath, for whatever reason configuring the plugin
         // from this plugin doesn't work correctly so we explicitly set it
-        val smithyVersion: String by project
         smithyCliConfig("software.amazon.smithy:smithy-cli:$smithyVersion")
 
         // add aws traits to the compile classpath so that the smithy build task can discover them

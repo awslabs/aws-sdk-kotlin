@@ -9,9 +9,8 @@ plugins {
 description = "Custom Dokka plugin for AWS Kotlin SDK API docs"
 
 dependencies {
-    val dokkaVersion: String by project
-    compileOnly("org.jetbrains.dokka:dokka-base:$dokkaVersion")
-    compileOnly("org.jetbrains.dokka:dokka-core:$dokkaVersion")
+    compileOnly(libs.dokka.base)
+    compileOnly(libs.dokka.core)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

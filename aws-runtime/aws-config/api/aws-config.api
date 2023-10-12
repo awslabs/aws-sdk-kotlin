@@ -316,6 +316,9 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsSharedConfigKt {
 public final class aws/sdk/kotlin/runtime/config/retries/ResolveRetryStrategyKt {
 }
 
+public final class aws/sdk/kotlin/runtime/config/useragent/ResolveUserAgentKt {
+}
+
 public abstract interface class aws/sdk/kotlin/runtime/region/RegionProvider {
 	public abstract fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }

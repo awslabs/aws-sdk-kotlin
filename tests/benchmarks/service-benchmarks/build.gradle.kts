@@ -59,10 +59,10 @@ if (missingServices.isEmpty()) {
 
             jvmMain {
                 dependencies {
-                    api("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
+                    api(libs.smithy.kotlin.runtime.core)
                     implementation(project(":aws-runtime:aws-core"))
-                    implementation("org.jetbrains.kotlinx:atomicfu:$atomicFuVersion")
-                    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                    implementation(libs.kotlinx.atomicfu)
+                    implementation(libs.kotlinx.coroutines.core)
 
                     requiredServices.forEach { implementation(project(":services:$it")) }
                 }

@@ -6,7 +6,7 @@ package aws.sdk.kotlin.services.route53.internal
 
 import aws.sdk.kotlin.services.route53.model.InvalidChangeBatch
 import aws.sdk.kotlin.services.route53.model.Route53Exception
-import aws.sdk.kotlin.services.route53.transform.ChangeResourceRecordSetsOperationDeserializer
+import aws.sdk.kotlin.services.route53.serde.ChangeResourceRecordSetsOperationDeserializer
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpCall

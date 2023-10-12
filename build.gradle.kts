@@ -8,10 +8,10 @@ import aws.sdk.kotlin.gradle.util.typedProp
 import java.net.URL
 
 buildscript {
+    // NOTE: buildscript classpath for the root project is the parent classloader for the subprojects, we
+    // only need to add e.g. atomic-fu and build-plugins here for imports and plugins to be available in subprojects.
     dependencies {
-        // Add our custom gradle plugin(s) to buildscript classpath (comes from github source)
-        // NOTE: buildscript classpath for the root project is the parent classloader for the subprojects, we
-        // only need to include it here, imports in subprojects will work automagically
+        classpath(libs.kotlinx.atomicfu.plugin)
         classpath("aws.sdk.kotlin:build-plugins") {
             version {
                 require("0.2.2")
@@ -21,19 +21,20 @@ buildscript {
 }
 
 plugins {
-    kotlin("jvm") version "1.9.10" apply false
-    id("org.jetbrains.dokka")
+    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
+    alias(libs.plugins.dokka)
 }
 
 // configures (KMP) subprojects with our own KMP conventions and some default dependencies
 apply(plugin = "aws.sdk.kotlin.kmp")
 
-allprojects {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
+val testJavaVersion = typedProp<String>("test.java.version")?.let {
+    JavaLanguageVersion.of(it)
+}?.also {
+    println("configuring tests to run with jdk $it")
+}
 
+allprojects {
     tasks.withType<org.jetbrains.dokka.gradle.AbstractDokkaTask>().configureEach {
         val sdkVersion: String by project
         moduleVersion.set(sdkVersion)
@@ -58,9 +59,7 @@ allprojects {
         )
         pluginsMapConfiguration.set(pluginConfigMap)
     }
-}
 
-subprojects {
     tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
         // each module can include their own top-level module documentation
         // see https://kotlinlang.org/docs/kotlin-doc.html#module-and-package-documentation
@@ -72,12 +71,11 @@ subprojects {
 
         val smithyKotlinPackageListUrl: String? by project
         val smithyKotlinDocBaseUrl: String? by project
-        val smithyKotlinVersion: String by project
 
         // Configure Dokka to link to smithy-kotlin types if specified in properties
         // These optional properties are supplied api the api docs build job but are unneeded otherwise
         smithyKotlinDocBaseUrl.takeUnless { it.isNullOrEmpty() }?.let { docBaseUrl ->
-            val expandedDocBaseUrl = docBaseUrl.replace("\$smithyKotlinVersion", smithyKotlinVersion)
+            val expandedDocBaseUrl = docBaseUrl.replace("\$smithyKotlinVersion", libs.versions.smithy.kotlin.version.get())
             dokkaSourceSets.configureEach {
                 externalDocumentationLink {
                     url.set(URL(expandedDocBaseUrl))
@@ -89,12 +87,21 @@ subprojects {
             }
         }
     }
-}
 
-if (project.typedProp<Boolean>("kotlinWarningsAsErrors") == true) {
-    subprojects {
+    if (rootProject.typedProp<Boolean>("kotlinWarningsAsErrors") == true) {
         tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
             kotlinOptions.allWarningsAsErrors = true
+        }
+    }
+
+    if (testJavaVersion != null) {
+        tasks.withType<Test> {
+            val toolchains = project.extensions.getByType<JavaToolchainService>()
+            javaLauncher.set(
+                toolchains.launcherFor {
+                    languageVersion.set(testJavaVersion)
+                },
+            )
         }
     }
 }
