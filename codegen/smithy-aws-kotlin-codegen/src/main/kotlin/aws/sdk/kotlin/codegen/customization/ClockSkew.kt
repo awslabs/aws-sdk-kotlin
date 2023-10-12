@@ -4,30 +4,21 @@
  */
 package aws.sdk.kotlin.codegen.customization
 
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
-import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
+import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 
 /**
  * Adds a middleware which applies an interceptor that detects and corrects clock skew
  */
 class ClockSkew : KotlinIntegration {
-    override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
-        resolved + clockSkewMiddleware
+    override val sectionWriters: List<SectionWriterBinding>
+        get() = listOf(SectionWriterBinding(ServiceClientGenerator.Sections.FinalizeConfig, clockSkewSectionWriter))
 
-    private val clockSkewMiddleware = object : ProtocolMiddleware {
-        override val name: String = "ClockSkew"
-
-        override fun renderProperties(writer: KotlinWriter) {
-            val interceptorSymbol = RuntimeTypes.AwsProtocolCore.ClockSkewInterceptor
-            writer.write("private val clockSkewInterceptor = #T()", interceptorSymbol)
-        }
-
-        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            writer.write("op.interceptors.add(clockSkewInterceptor)")
-        }
+    private val clockSkewSectionWriter = SectionWriter { writer, _ ->
+        val interceptorSymbol = RuntimeTypes.AwsProtocolCore.ClockSkewInterceptor
+        writer.write("builder.config.interceptors.add(0, #T())", interceptorSymbol)
     }
 }
