@@ -34,14 +34,11 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
         writer: KotlinWriter,
+        resolver: HttpBindingResolver,
     ) {
-        val resolver = getProtocolHttpBindingResolver(ctx.model, ctx.service)
         val contentType = resolver.determineRequestContentType(op)
-
-        if (!op.isBlobShape) {
-            contentType.let {
-                writer.write("builder.headers.setMissing(\"Content-Type\", #S)", contentType)
-            }
+        contentType.let {
+            writer.write("builder.headers.setMissing(\"Content-Type\", #S)", contentType)
         }
     }
 

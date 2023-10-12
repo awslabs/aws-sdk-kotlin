@@ -50,6 +50,7 @@ class RestJson1 : JsonHttpBindingProtocolGenerator() {
         val requestBindings = resolver.requestBindings(op)
         val httpPayload = requestBindings.firstOrNull { it.location == HttpBinding.Location.PAYLOAD }
         if (httpPayload != null) {
+            // TODO: this is replacing `renderExplicitHttpPayloadSerializer`
             // explicit payload member as the sole payload
             val memberName = httpPayload.member.defaultName()
             val target = ctx.model.expectShape(httpPayload.member.target)
@@ -59,9 +60,19 @@ class RestJson1 : JsonHttpBindingProtocolGenerator() {
                 }
                 // Content-Type still needs to be set for non-structured payloads
                 // https://github.com/awslabs/smithy/blob/main/smithy-aws-protocol-tests/model/restJson1/http-content-type.smithy#L174
-                write("builder.headers.setMissing(\"Content-Type\", #S)", resolver.determineRequestContentType(op))
+                renderContentTypeHeader(ctx, op, writer, resolver)
             }
         }
+    }
+
+    override fun renderContentTypeHeader(
+        ctx: ProtocolGenerator.GenerationContext,
+        op: OperationShape,
+        writer: KotlinWriter,
+        resolver: HttpBindingResolver,
+    ) {
+        val contentType = resolver.determineRequestContentType(op)
+        writer.write("builder.headers.setMissing(\"Content-Type\", #S)", contentType)
     }
 
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
