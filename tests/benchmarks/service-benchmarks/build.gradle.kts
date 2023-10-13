@@ -55,7 +55,7 @@ if (missingServices.isEmpty()) {
 } else {
     logger.warn(
         "Skipping build for {} project, missing the following services: {}. To ensure this project builds, run the " +
-                "{}:bootstrapAll task.",
+            "{}:bootstrapAll task.",
         project.name,
         missingServices.joinToString(", "),
         project.path,
