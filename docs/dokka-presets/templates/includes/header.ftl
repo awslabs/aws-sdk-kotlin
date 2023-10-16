@@ -1,7 +1,6 @@
 <#import "source_set_selector.ftl" as source_set_selector>
 <#macro display>
 <div class="navigation" id="navigation">
-    <button id="menu-toggle" class="menu-toggle" aria-label="Open navigation menu"></button>
     <div class="library-name">
         <@template_cmd name="pathToRoot">
             <a href="${pathToRoot}index.html">
@@ -18,6 +17,7 @@
     <div class="pull-right d-flex">
         <@source_set_selector.display/>
         <button id="theme-toggle-button" class="navigation-controls--theme"><span id="theme-toggle"></span></button>
+        <label for="pages-search" id="pages-search-label">Search</label>
         <div id="searchBar"></div>
     </div>
 </div>
