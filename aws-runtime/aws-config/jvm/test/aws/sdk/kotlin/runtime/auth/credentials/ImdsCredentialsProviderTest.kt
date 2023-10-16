@@ -20,6 +20,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestEngine
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.io.IOException
 import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.net.Scheme
 import aws.smithy.kotlin.runtime.net.Url
@@ -464,7 +465,7 @@ class ImdsCredentialsProviderTest {
 
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 if (successfulCallCount >= 2) {
-                    throw SdkIOException()
+                    throw IOException()
                 } else {
                     successfulCallCount += 1
 
@@ -530,7 +531,7 @@ class ImdsCredentialsProviderTest {
 
     @Test
     fun testThrowsExceptionOnReadTimeoutWhenMissingPreviousCredentials() = runTest {
-        val readTimeoutEngine = TestEngine { _, _ -> throw SdkIOException() }
+        val readTimeoutEngine = TestEngine { _, _ -> throw IOException() }
         val testClock = ManualClock()
 
         val client = ImdsClient {
