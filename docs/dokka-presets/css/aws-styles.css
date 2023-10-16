@@ -3,26 +3,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
-:root {
-    --color-dark: #232f3e;
+#searchBar {
+    height: 40px;
 }
 
-#leftToggler {
-    background: none;
-    border: none;
-    padding: 0;
-}
-
-#pages-search {
-    margin: 0;
-    padding-top: 10px;
-}
-
-#pages-search:focus {
-    outline: revert;
-}
-
-#pages-search-label {
-    display: none;
+/* copied from Dokka except for `width` attribute */
+.sideMenuPart > .overview:before {
+    box-sizing: border-box;
+    content: '';
+    top: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: -1;
+    /*width: var(--sidebar-width); */
+    /* the var --sidebar-width was not properly sized. changing it broke other formatting,
+       so just changing it here for the specific element
+    */
+    width: 1000px;
 }
