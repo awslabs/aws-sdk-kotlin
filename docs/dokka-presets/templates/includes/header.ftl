@@ -1,4 +1,4 @@
-<#-- This is an unchanged copy of Dokka's header.ftl -->
+<#-- This is a modified copy of Dokka's header.ftl, adding a label to the search icon to allow focusing on it. -->
 <#import "source_set_selector.ftl" as source_set_selector>
 <#macro display>
     <nav class="navigation" id="navigation-wrapper">
