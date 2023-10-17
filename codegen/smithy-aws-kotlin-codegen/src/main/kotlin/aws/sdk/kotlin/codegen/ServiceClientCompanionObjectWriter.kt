@@ -4,10 +4,7 @@
  */
 package aws.sdk.kotlin.codegen
 
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.getContextValue
-import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
@@ -49,8 +46,8 @@ class ServiceClientCompanionObjectWriter(
             RuntimeTypes.Core.Utils.LazyAsyncValue,
             AwsRuntimeTypes.Config.Profile.AwsSharedConfig,
         ) {
+            declareSection(ServiceClientGenerator.Sections.FinalizeConfig)
             writeResolveEndpointUrl()
-
             extendFinalizeConfig?.let {
                 write("")
                 it()
