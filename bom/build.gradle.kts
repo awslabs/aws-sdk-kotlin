@@ -52,6 +52,20 @@ fun createBomConstraintsAndVersionCatalog() {
             }
         }
     }
+
+
+    // add smithy-kotlin versions to our BOM and allow direct aliasing in the catalog
+    val smithyKotlinCatalog = extensions.getByType<VersionCatalogsExtension>().named("smithyKotlin")
+    catalogExt.versionCatalog {
+        smithyKotlinCatalog.libraryAliases.forEach {  alias ->
+            val coordinates = smithyKotlinCatalog.findLibrary(alias).get()
+            bomConstraints.api(coordinates)
+            val newAlias = "runtime-smithykotlin-$alias"
+            library(newAlias, coordinates.get().toString())
+        }
+    }
+
+
 }
 
 fun Project.artifactId(target: KotlinTarget): String = when (target) {

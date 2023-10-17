@@ -23,6 +23,12 @@ dependencyResolutionManagement {
         mavenLocal()
         mavenCentral()
     }
+
+    versionCatalogs {
+        create("smithyKotlin") {
+            from("aws.smithy.kotlin:version-catalog:0.28.0-SNAPSHOT")
+        }
+    }
 }
 
 sourceControl {
