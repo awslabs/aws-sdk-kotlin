@@ -56,7 +56,7 @@ class SystemPropertyCredentialsProviderTest {
                 AwsSdkSetting.AwsAccessKeyId.sysProp to "",
                 AwsSdkSetting.AwsSecretAccessKey.sysProp to "abc",
             ).resolve()
-        }.message.shouldContain("Missing value for system property `AWS_ACCESS_KEY_ID`")
+        }.message.shouldContain("Missing value for system property `aws.accessKeyId`")
     }
 
     @Test
@@ -66,6 +66,6 @@ class SystemPropertyCredentialsProviderTest {
                 AwsSdkSetting.AwsAccessKeyId.sysProp to "abc",
                 AwsSdkSetting.AwsSecretAccessKey.sysProp to "",
             ).resolve()
-        }.message.shouldContain("Missing value for system property `AWS_SECRET_ACCESS_KEY`")
+        }.message.shouldContain("Missing value for system property `aws.secretAccessKey`")
     }
 }
