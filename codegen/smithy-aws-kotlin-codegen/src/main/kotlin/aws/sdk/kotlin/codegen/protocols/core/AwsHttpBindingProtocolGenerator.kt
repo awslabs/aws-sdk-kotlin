@@ -70,9 +70,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
 
                 // FIXME - missing Content-Type on restXml empty payloads, see https://github.com/awslabs/aws-sdk-kotlin/issues/1050
                 "RestXmlHttpPayloadWithUnsetUnion",
-
-                // FIXME - xmlns incorrect in XML maps, see https://github.com/awslabs/smithy-kotlin/issues/957
-                "RestXmlXmlMapWithXmlNamespace",
             ),
         )
 
