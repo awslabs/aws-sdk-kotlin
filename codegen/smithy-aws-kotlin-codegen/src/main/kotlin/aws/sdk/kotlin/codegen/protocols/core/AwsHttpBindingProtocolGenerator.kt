@@ -67,9 +67,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsJson1_1",
                 "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsQuery",
                 "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_ec2Query",
-
-                // FIXME - xmlns incorrect in XML maps, see https://github.com/awslabs/smithy-kotlin/issues/957
-                "RestXmlXmlMapWithXmlNamespace",
             ),
         )
 
