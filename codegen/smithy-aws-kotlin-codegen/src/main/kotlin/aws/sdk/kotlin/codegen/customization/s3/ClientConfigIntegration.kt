@@ -37,6 +37,7 @@ class ClientConfigIntegration : KotlinIntegration {
             """.trimIndent()
         }
 
+        // FIXME: default signer doesn't yet implement sigv4a, default to mrap OFF until it does
         val DisableMrapProp: ConfigProperty = ConfigProperty {
             name = "disableMrap"
             useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")

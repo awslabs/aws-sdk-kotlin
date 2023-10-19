@@ -1,5 +1,5 @@
 {
     "id": "5adb30dd-3a4f-4a3c-aa31-e6455785c9c4",
     "type": "misc",
-    "description": "**Breaking** Removed `enableAccelerate` & `forcePathStyle` from S3 config"
+    "description": "**Breaking** Removed `enableAccelerate` & `forcePathStyle` from S3 config. As well as `use_accelerate_endpoint` & `addressing_style` from AWS profile configuration"
 }
