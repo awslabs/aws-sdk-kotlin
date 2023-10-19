@@ -27,7 +27,7 @@ public class EnvironmentCredentialsProvider(
 ) : CredentialsProvider {
 
     private fun requireEnv(variable: String): String =
-        getEnv(variable) ?: throw ProviderConfigurationException("Missing value for environment variable `$variable`")
+        getEnv(variable)?.takeIf(String::isNotBlank) ?: throw ProviderConfigurationException("Missing value for environment variable `$variable`")
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         coroutineContext.trace<EnvironmentCredentialsProvider> {

@@ -17,7 +17,7 @@ class EnvironmentCredentialsProviderTest {
     private fun provider(vararg vars: Pair<String, String>) = EnvironmentCredentialsProvider((vars.toMap())::get)
 
     @Test
-    fun `it should read from environment variables (incl session token)`() = runTest {
+    fun testReadFromEnvironmentIncludingSessionToken() = runTest {
         val provider = provider(
             AwsSdkSetting.AwsAccessKeyId.envVar to "abc",
             AwsSdkSetting.AwsSecretAccessKey.envVar to "def",
@@ -27,7 +27,7 @@ class EnvironmentCredentialsProviderTest {
     }
 
     @Test
-    fun `it should read from environment variables (excl session token)`() = runTest {
+    fun testReadFromEnvironmentExcludingSessionToken() = runTest {
         val provider = provider(
             AwsSdkSetting.AwsAccessKeyId.envVar to "abc",
             AwsSdkSetting.AwsSecretAccessKey.envVar to "def",
@@ -36,16 +36,36 @@ class EnvironmentCredentialsProviderTest {
     }
 
     @Test
-    fun `it should throw an exception on missing access key`() = runTest {
+    fun testThrowsWhenMissingAccessKey() = runTest {
         assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsSecretAccessKey.envVar to "def").resolve()
         }.message.shouldContain("Missing value for environment variable `AWS_ACCESS_KEY_ID`")
     }
 
     @Test
-    fun `it should throw an exception on missing secret key`() = runTest {
+    fun testThrowsWhenMissingSecretKey() = runTest {
         assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsAccessKeyId.envVar to "abc").resolve()
+        }.message.shouldContain("Missing value for environment variable `AWS_SECRET_ACCESS_KEY`")
+    }
+
+    @Test
+    fun testIgnoresEmptyAccessKey() = runTest {
+        assertFailsWith<ProviderConfigurationException> {
+            provider(
+                AwsSdkSetting.AwsAccessKeyId.envVar to "",
+                AwsSdkSetting.AwsSecretAccessKey.envVar to "abc",
+            ).resolve()
+        }.message.shouldContain("Missing value for environment variable `AWS_ACCESS_KEY_ID`")
+    }
+
+    @Test
+    fun testIgnoresEmptySecretKey() = runTest {
+        assertFailsWith<ProviderConfigurationException> {
+            provider(
+                AwsSdkSetting.AwsAccessKeyId.envVar to "abc",
+                AwsSdkSetting.AwsSecretAccessKey.envVar to "",
+            ).resolve()
         }.message.shouldContain("Missing value for environment variable `AWS_SECRET_ACCESS_KEY`")
     }
 }

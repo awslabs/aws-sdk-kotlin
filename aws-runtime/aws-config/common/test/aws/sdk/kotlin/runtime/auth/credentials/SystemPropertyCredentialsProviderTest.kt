@@ -17,7 +17,7 @@ class SystemPropertyCredentialsProviderTest {
     private fun provider(vararg vars: Pair<String, String>) = SystemPropertyCredentialsProvider((vars.toMap())::get)
 
     @Test
-    fun readAllSystemProperties() = runTest {
+    fun testReadAllSystemProperties() = runTest {
         val provider = provider(
             AwsSdkSetting.AwsAccessKeyId.sysProp to "abc",
             AwsSdkSetting.AwsSecretAccessKey.sysProp to "def",
@@ -27,7 +27,7 @@ class SystemPropertyCredentialsProviderTest {
     }
 
     @Test
-    fun readAllSystemPropertiesExceptSessionToken() = runTest {
+    fun testReadAllSystemPropertiesExceptSessionToken() = runTest {
         val provider = provider(
             AwsSdkSetting.AwsAccessKeyId.sysProp to "abc",
             AwsSdkSetting.AwsSecretAccessKey.sysProp to "def",
@@ -36,16 +36,36 @@ class SystemPropertyCredentialsProviderTest {
     }
 
     @Test
-    fun throwsExceptionWhenMissingAccessKey() = runTest {
+    fun testThrowsExceptionWhenMissingAccessKey() = runTest {
         assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsSecretAccessKey.sysProp to "def").resolve()
         }.message.shouldContain("Missing value for system property `aws.accessKeyId`")
     }
 
     @Test
-    fun throwsExceptionWhenMissingSecretKey() = runTest {
+    fun testThrowsExceptionWhenMissingSecretKey() = runTest {
         assertFailsWith<ProviderConfigurationException> {
             provider(AwsSdkSetting.AwsAccessKeyId.sysProp to "abc").resolve()
+        }.message.shouldContain("Missing value for system property `aws.secretAccessKey`")
+    }
+
+    @Test
+    fun testIgnoresEmptyAccessKey() = runTest {
+        assertFailsWith<ProviderConfigurationException> {
+            provider(
+                AwsSdkSetting.AwsAccessKeyId.sysProp to "",
+                AwsSdkSetting.AwsSecretAccessKey.sysProp to "abc",
+            ).resolve()
+        }.message.shouldContain("Missing value for system property `aws.accessKeyId`")
+    }
+
+    @Test
+    fun testIgnoresEmptySecretKey() = runTest {
+        assertFailsWith<ProviderConfigurationException> {
+            provider(
+                AwsSdkSetting.AwsAccessKeyId.sysProp to "abc",
+                AwsSdkSetting.AwsSecretAccessKey.sysProp to "",
+            ).resolve()
         }.message.shouldContain("Missing value for system property `aws.secretAccessKey`")
     }
 }
