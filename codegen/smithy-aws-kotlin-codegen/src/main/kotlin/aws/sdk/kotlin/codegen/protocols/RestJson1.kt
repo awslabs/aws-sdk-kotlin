@@ -50,7 +50,6 @@ class RestJson1 : JsonHttpBindingProtocolGenerator() {
         val requestBindings = resolver.requestBindings(op)
         val httpPayload = requestBindings.firstOrNull { it.location == HttpBinding.Location.PAYLOAD }
         if (httpPayload != null) {
-            // TODO: this is replacing `renderExplicitHttpPayloadSerializer`
             // explicit payload member as the sole payload
             val memberName = httpPayload.member.defaultName()
             val target = ctx.model.expectShape(httpPayload.member.target)
