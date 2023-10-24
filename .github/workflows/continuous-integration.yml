@@ -69,7 +69,7 @@ jobs:
           pwd
           ./gradlew publishToMavenLocal
           ./gradlew apiCheck
-          ./gradlew test allTests
+          ./gradlew test jvmTest
           ./gradlew testAllProtocols
       - name: Save Test Reports
         if: failure()
