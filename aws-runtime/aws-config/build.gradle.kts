@@ -35,7 +35,7 @@ kotlin {
 
                 // additional dependencies required by generated sts provider
                 implementation(libs.smithy.kotlin.serde.xml)
-                implementation(libs.smithy.kotlin.serde.formurl)
+                implementation(libs.smithy.kotlin.serde.form.url)
                 implementation(libs.smithy.kotlin.aws.xml.protocols)
 
                 // additional dependencies required by generated sso provider(s)

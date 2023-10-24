@@ -44,28 +44,35 @@ slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j-version
 
 smithy-kotlin-aws-credentials = { module = "aws.smithy.kotlin:aws-credentials", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-aws-event-stream = { module = "aws.smithy.kotlin:aws-event-stream", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-aws-json-protocols = { module = "aws.smithy.kotlin:aws-json-protocols", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-aws-protocol-core = { module = "aws.smithy.kotlin:aws-protocol-core", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-aws-signing-common = { module = "aws.smithy.kotlin:aws-signing-common", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-aws-signing-crt = { module = "aws.smithy.kotlin:aws-signing-crt", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-aws-signing-default = { module = "aws.smithy.kotlin:aws-signing-default", version.ref = "smithy-kotlin-version" }
-smithy-kotlin-runtime-core = { module = "aws.smithy.kotlin:runtime-core", version.ref = "smithy-kotlin-version" }
-smithy-kotlin-smithy-client = { module = "aws.smithy.kotlin:smithy-client", version.ref = "smithy-kotlin-version" }
-smithy-kotlin-smithy-test = { module = "aws.smithy.kotlin:smithy-test", version.ref = "smithy-kotlin-version" }
-smithy-kotlin-identity-api = { module = "aws.smithy.kotlin:identity-api", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-aws-xml-protocols = { module = "aws.smithy.kotlin:aws-xml-protocols", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-crt-util = { module = "aws.smithy.kotlin:crt-util", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-http = { module = "aws.smithy.kotlin:http", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-http-auth = { module = "aws.smithy.kotlin:http-auth", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-http-auth-api = { module = "aws.smithy.kotlin:http-auth-api", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-http-auth-aws = { module = "aws.smithy.kotlin:http-auth-aws", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-http-client = { module = "aws.smithy.kotlin:http-client", version.ref = "smithy-kotlin-version" }
-smithy-kotlin-http-client-engine-default = { module = "aws.smithy.kotlin:http-client-engine-default", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-http-client-engine-crt = { module = "aws.smithy.kotlin:http-client-engine-crt", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-http-client-engine-default = { module = "aws.smithy.kotlin:http-client-engine-default", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-http-client-engine-okhttp = { module = "aws.smithy.kotlin:http-client-engine-okhttp", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-http-test = { module = "aws.smithy.kotlin:http-test", version.ref = "smithy-kotlin-version" }
-smithy-kotlin-serde-core = { module = "aws.smithy.kotlin:serde", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-identity-api = { module = "aws.smithy.kotlin:identity-api", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-logging-slf4j2 = { module = "aws.smithy.kotlin:logging-slf4j2", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-runtime-core = { module = "aws.smithy.kotlin:runtime-core", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-serde = { module = "aws.smithy.kotlin:serde", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-serde-form-url = { module = "aws.smithy.kotlin:serde-form-url", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-serde-json = { module = "aws.smithy.kotlin:serde-json", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-serde-xml = { module = "aws.smithy.kotlin:serde-xml", version.ref = "smithy-kotlin-version" }
-smithy-kotlin-serde-formurl = { module = "aws.smithy.kotlin:serde-form-url", version.ref = "smithy-kotlin-version" }
-smithy-kotlin-aws-protocol-core = { module = "aws.smithy.kotlin:aws-protocol-core", version.ref = "smithy-kotlin-version" }
-smithy-kotlin-aws-xml-protocols = { module = "aws.smithy.kotlin:aws-xml-protocols", version.ref = "smithy-kotlin-version" }
-smithy-kotlin-aws-json-protocols = { module = "aws.smithy.kotlin:aws-json-protocols", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-smithy-client = { module = "aws.smithy.kotlin:smithy-client", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-smithy-test = { module = "aws.smithy.kotlin:smithy-test", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-telemetry-api = { module = "aws.smithy.kotlin:telemetry-api", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-telemetry-defaults = { module = "aws.smithy.kotlin:telemetry-defaults", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-telemetry-provider-otel = { module = "aws.smithy.kotlin:telemetry-provider-otel", version.ref = "smithy-kotlin-version" }
+smithy-kotlin-test-suite = { module = "aws.smithy.kotlin:test-suite", version.ref = "smithy-kotlin-version" }
 smithy-kotlin-testing = { module = "aws.smithy.kotlin:testing", version.ref = "smithy-kotlin-version" }
 
 smithy-kotlin-codegen = { module = "software.amazon.smithy.kotlin:smithy-kotlin-codegen", version.ref = "smithy-kotlin-version" }
@@ -96,19 +103,19 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk-version" }
 [bundles]
 # bundle of smithy-kotlin dependencies all AWS service clients have
 smithy-kotlin-service-client = [
-    "smithy-kotlin-runtime-core",
-    "smithy-kotlin-smithy-client",
-    "smithy-kotlin-http-client",
-    "smithy-kotlin-http-client-engine-default",
+    "smithy-kotlin-aws-credentials",
+    "smithy-kotlin-aws-protocol-core",
+    "smithy-kotlin-aws-signing-common",
+    "smithy-kotlin-aws-signing-default",
     "smithy-kotlin-http",
     "smithy-kotlin-http-auth",
     "smithy-kotlin-http-auth-aws",
-    "smithy-kotlin-aws-protocol-core",
-    "smithy-kotlin-serde-core",
-    "smithy-kotlin-aws-signing-common",
-    "smithy-kotlin-aws-signing-default",
+    "smithy-kotlin-http-client",
+    "smithy-kotlin-http-client-engine-default",
     "smithy-kotlin-identity-api",
-    "smithy-kotlin-aws-credentials",
+    "smithy-kotlin-runtime-core",
+    "smithy-kotlin-serde",
+    "smithy-kotlin-smithy-client",
     "smithy-kotlin-telemetry-api",
     "smithy-kotlin-telemetry-defaults",
 ]
