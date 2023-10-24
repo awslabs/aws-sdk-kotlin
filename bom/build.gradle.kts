@@ -52,6 +52,28 @@ fun createBomConstraintsAndVersionCatalog() {
             }
         }
     }
+
+    val ignoredSmithyKotlin = setOf(
+        "smithy.kotlin.codegen",
+        "smithy.kotlin.http.test",
+        "smithy.kotlin.test",
+        "smithy.kotlin.smithy.test",
+        "smithy.kotlin.aws.signing.test",
+    )
+
+    // add smithy-kotlin versions to our BOM and allow direct aliasing in the catalog
+    catalogExt.versionCatalog {
+        val libsCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
+        libsCatalog.libraryAliases
+            .filter {
+                it.startsWith("smithy.kotlin") && ignoredSmithyKotlin.none { prefix -> it.startsWith(prefix) }
+            }.forEach { alias ->
+                val coordinates = libsCatalog.findLibrary(alias).get()
+                bomConstraints.api(coordinates)
+                val newAlias = "runtime-${alias.replace('.', '-')}"
+                library(newAlias, coordinates.get().toString())
+            }
+    }
 }
 
 fun Project.artifactId(target: KotlinTarget): String = when (target) {
