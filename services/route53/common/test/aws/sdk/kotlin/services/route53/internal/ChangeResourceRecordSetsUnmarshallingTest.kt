@@ -16,8 +16,8 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class ChangeResourceRecordSetsUnmarshallingTest {
     @Test
