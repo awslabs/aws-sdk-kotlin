@@ -15,8 +15,8 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import kotlin.test.Test
+import kotlin.test.assertFailsWith
 import kotlin.test.assertEquals
 
 class ChangeResourceRecordSetsUnmarshallingTest {
@@ -40,7 +40,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val call = HttpCall(HttpRequestBuilder().build(), response)
 
-        val exception = assertThrows<InvalidChangeBatch> {
+        val exception = assertFailsWith<InvalidChangeBatch> {
             runBlocking {
                 ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
@@ -69,7 +69,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val call = HttpCall(HttpRequestBuilder().build(), response)
 
-        val exception = assertThrows<InvalidChangeBatch> {
+        val exception = assertFailsWith<InvalidChangeBatch> {
             runBlocking {
                 ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
@@ -99,7 +99,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val call = HttpCall(HttpRequestBuilder().build(), response)
 
-        val exception = assertThrows<InvalidChangeBatch> {
+        val exception = assertFailsWith<InvalidChangeBatch> {
             runBlocking {
                 ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
@@ -130,7 +130,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val call = HttpCall(HttpRequestBuilder().build(), response)
 
-        val exception = assertThrows<Route53Exception> {
+        val exception = assertFailsWith<Route53Exception> {
             runBlocking {
                 ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
