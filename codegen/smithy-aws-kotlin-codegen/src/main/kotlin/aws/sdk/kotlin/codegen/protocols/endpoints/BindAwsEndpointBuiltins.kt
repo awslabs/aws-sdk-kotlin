@@ -50,8 +50,6 @@ fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: Kotl
                 "AWS::UseFIPS" -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.UseFipsProp.propertyName)
                 "AWS::UseDualStack" -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.UseDualStackProp.propertyName)
 
-                "AWS::S3::Accelerate" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.EnableAccelerateProp.propertyName)
-                "AWS::S3::ForcePathStyle" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.ForcePathStyleProp.propertyName)
                 "AWS::S3::DisableMultiRegionAccessPoints" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.DisableMrapProp.propertyName)
                 "AWS::S3::UseArnRegion" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.DisableMrapProp.propertyName)
                 "AWS::S3Control::UseArnRegion" -> renderBasicConfigBinding(writer, it, S3ControlClientConfigIntegration.UseArnRegionProp.propertyName)
