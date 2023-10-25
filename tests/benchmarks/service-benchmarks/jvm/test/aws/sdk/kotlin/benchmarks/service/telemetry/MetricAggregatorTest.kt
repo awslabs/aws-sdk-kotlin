@@ -4,8 +4,8 @@
  */
 package aws.sdk.kotlin.benchmarks.service.telemetry
 
-import org.junit.jupiter.api.Test
 import kotlin.math.max
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 

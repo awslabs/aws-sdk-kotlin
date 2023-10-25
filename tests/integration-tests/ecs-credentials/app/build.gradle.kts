@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 plugins {
-    kotlin("jvm") version "1.8.22"
+    kotlin("jvm") version "1.9.10"
     application
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }

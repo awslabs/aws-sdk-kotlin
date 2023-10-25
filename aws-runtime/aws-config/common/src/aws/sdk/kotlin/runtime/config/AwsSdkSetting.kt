@@ -6,6 +6,8 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.http.AWS_APP_ID_ENV
+import aws.sdk.kotlin.runtime.http.AWS_APP_ID_PROP
 import aws.smithy.kotlin.runtime.client.config.RetryMode
 import aws.smithy.kotlin.runtime.config.*
 import aws.smithy.kotlin.runtime.net.Url
@@ -44,6 +46,11 @@ public object AwsSdkSetting {
      * Configure the default region.
      */
     public val AwsRegion: EnvironmentSetting<String> = strEnvSetting("aws.region", "AWS_REGION")
+
+    /**
+     * Configure the user agent app ID
+     */
+    public val AwsAppId: EnvironmentSetting<String> = strEnvSetting(AWS_APP_ID_PROP, AWS_APP_ID_ENV)
 
     /**
      * Configure the default path to the shared config file.

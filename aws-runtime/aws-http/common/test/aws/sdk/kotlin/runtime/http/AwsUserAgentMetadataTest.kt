@@ -109,4 +109,27 @@ class AwsUserAgentMetadataTest {
             actual.xAmzUserAgent.shouldContain(test.expected)
         }
     }
+
+    @Test
+    fun testExplicitAppId() {
+        val testEnvironments = listOf(
+            EnvironmentTest(
+                TestPlatformProvider(
+                    env = mapOf(AWS_APP_ID_ENV to "app-id-1"),
+                ),
+                "app/explicit-app-id",
+            ),
+            EnvironmentTest(
+                TestPlatformProvider(
+                    env = mapOf(AWS_APP_ID_ENV to "app-id-1"),
+                    props = mapOf(AWS_APP_ID_PROP to "app-id-2"),
+                ),
+                "app/explicit-app-id",
+            ),
+        )
+        testEnvironments.forEach { test ->
+            val actual = loadAwsUserAgentMetadataFromEnvironment(test.provider, ApiMetadata("Test Service", "1.2.3"), "explicit-app-id")
+            actual.xAmzUserAgent.shouldContain(test.expected)
+        }
+    }
 }

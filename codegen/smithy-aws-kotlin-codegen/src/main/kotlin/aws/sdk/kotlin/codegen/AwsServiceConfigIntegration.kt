@@ -33,6 +33,26 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             order = -100
         }
 
+        val UserAgentAppId: ConfigProperty = ConfigProperty {
+            name = "applicationId"
+            symbol = KotlinTypes.String.asNullable()
+            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            useNestedBuilderBaseClass()
+            documentation = """
+                 An optional application specific identifier.
+                 When set it will be appended to the User-Agent header of every request in the form of: `app/{applicationId}`.
+                 When not explicitly set, the value will be loaded from the following locations:
+                 
+                 - JVM System Property: `aws.userAgentAppId`
+                 - Environment variable: `AWS_SDK_UA_APP_ID`
+                 - Shared configuration profile attribute: `sdk_ua_app_id`
+                 
+                 See [shared configuration settings](https://docs.aws.amazon.com/sdkref/latest/guide/settings-reference.html)
+                 reference for more information on environment variables and shared config settings.
+            """.trimIndent()
+            order = 100
+        }
+
         // override the credentials provider prop registered by the Sigv4AuthSchemeIntegration, updates the
         // documentation and sets a default value for AWS SDK to the default chain.
         val CredentialsProviderProp: ConfigProperty = ConfigProperty {
@@ -158,5 +178,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         add(UseDualStackProp)
         add(EndpointUrlProp)
         add(AwsRetryPolicy)
+        add(UserAgentAppId)
     }
 }
