@@ -30,23 +30,27 @@ class PollyPresignerTest {
             text = "hello world"
         }
 
-        val presignedRequest = PollyClient {
+        val pollyClient = PollyClient {
             region = "us-east-2"
             credentialsProvider = StaticCredentialsProvider {
                 accessKeyId = "AKID"
                 secretAccessKey = "secret"
             }
             httpClient = NoHttpEngine
-        }.use { polly ->
-            polly.presignSynthesizeSpeech(request, 10.seconds)
         }
 
-        assertEquals(HttpMethod.GET, presignedRequest.method)
-        assertTrue("Host".equals(presignedRequest.headers.entries().single().key, ignoreCase = true))
-        assertEquals("polly.us-east-2.amazonaws.com", presignedRequest.headers["Host"])
-        assertEquals("/v1/speech", presignedRequest.url.path)
-        val expectedQueryParameters = setOf("OutputFormat", "Text", "VoiceId", "X-Amz-Algorithm", "X-Amz-Credential", "X-Amz-Date", "X-Amz-SignedHeaders", "X-Amz-Expires", "X-Amz-Signature")
-        assertEquals(expectedQueryParameters, presignedRequest.url.parameters.entries().map { it.key }.toSet())
+        try {
+            val presignedRequest = pollyClient.presignSynthesizeSpeech(request, 10.seconds)
+
+            assertEquals(HttpMethod.GET, presignedRequest.method)
+            assertTrue("Host".equals(presignedRequest.headers.entries().single().key, ignoreCase = true))
+            assertEquals("polly.us-east-2.amazonaws.com", presignedRequest.headers["Host"])
+            assertEquals("/v1/speech", presignedRequest.url.path)
+            val expectedQueryParameters = setOf("OutputFormat", "Text", "VoiceId", "X-Amz-Algorithm", "X-Amz-Credential", "X-Amz-Date", "X-Amz-SignedHeaders", "X-Amz-Expires", "X-Amz-Signature")
+            assertEquals(expectedQueryParameters, presignedRequest.url.parameters.entries().map { it.key }.toSet())
+        } finally {
+            pollyClient.close()
+        }
     }
 }
 

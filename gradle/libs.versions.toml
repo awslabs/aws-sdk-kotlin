@@ -1,13 +1,13 @@
 [versions]
-kotlin-version = "1.8.22"
-dokka-version = "1.7.10"
+kotlin-version = "1.9.10"
+dokka-version = "1.9.0"
 
 # libs
 coroutines-version = "1.7.3"
-atomicfu-version = "0.19.0"
+atomicfu-version = "0.22.0"
 
 # smithy-kotlin codegen and runtime are versioned together
-smithy-kotlin-version = "0.27.8-SNAPSHOT"
+smithy-kotlin-version = "0.28.0-SNAPSHOT"
 
 # codegen
 smithy-version = "1.39.0"
@@ -15,9 +15,9 @@ smithy-gradle-version = "0.6.0"
 
 # testing
 junit-version = "5.9.2"
-kotest-version = "5.5.4"
-kotlinx-benchmark-version = "0.4.7"
-kotlinx-serialization-version = "1.4.1"
+kotest-version = "5.7.2"
+kotlinx-benchmark-version = "0.4.9"
+kotlinx-serialization-version = "1.6.0"
 mockk-version = "1.13.3"
 slf4j-version = "2.0.6"
 
@@ -125,6 +125,6 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka-version"}
 kotlin-jvm = {id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 kotlin-multiplatform = {id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin-version" }
 kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlinx-benchmark-version" }
-kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.12.1" }
+kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version"}
 smithy-gradle = { id = "software.amazon.smithy", version.ref = "smithy-gradle-version" }

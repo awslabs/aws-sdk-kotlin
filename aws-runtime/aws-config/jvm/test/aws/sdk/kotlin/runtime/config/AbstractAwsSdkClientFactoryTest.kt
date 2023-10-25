@@ -21,6 +21,7 @@ import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.writeText
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -58,6 +59,8 @@ class AbstractAwsSdkClientFactoryTest {
         }
     }
 
+    // FIXME java.lang.reflect.InaccessibleObjectException: Unable to make field private final java.util.Map java.util.Collections$UnmodifiableMap.m accessible: module java.base does not "opens java.util" to unnamed module @7ee7980d
+    @Ignore
     @Test
     fun testFromEnvironmentResolvesAppId() = runTest(
         timeout = 20.seconds,
