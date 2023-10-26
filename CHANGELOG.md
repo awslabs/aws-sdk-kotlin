@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.33.0-beta] - 10/26/2023
+
+### Features
+* **BREAKING**: Update codegen to improve nullability of generated types.
+* [#605](https://github.com/awslabs/aws-sdk-kotlin/issues/605), [#805](https://github.com/awslabs/aws-sdk-kotlin/issues/805) Publish a BOM and a Version Catalog
+* Detect and automatically correct clock skew to prevent signing errors
+
+### Fixes
+* Ignore empty environment variable and system property strings when evaluating AWS credentials
+
+### Miscellaneous
+* Upgrade Kotlin to 1.9.10
+* Sync AWS models and upgrade smithy-kotlin
+* Upgrade Dokka to 1.9.0
+* **Breaking** Removed `enableAccelerate` & `forcePathStyle` from S3 config. As well as `use_accelerate_endpoint` & `addressing_style` from AWS profile configuration
+* **BREAKING**: Remove `smithy.client.request.size`, `smithy.client.response.size`, `smithy.client.retries` metrics. Rename all `smithy.client.*` metrics to `smithy.client.call.*`.
+* Remove GameSparks service
+* Add skeleton implementation of a second KMP target
+* Added `s3_use_arn_region` & `s3_disable_multiregion_access_points` to AWS profile configuration
+
 ## [0.32.5-beta] - 10/12/2023
 
 ### Features

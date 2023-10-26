@@ -1,5 +1,0 @@
-{
-    "id": "86e02b43-e485-46be-ba3f-429c59e45078",
-    "type": "misc",
-    "description": "Added `s3_use_arn_region` & `s3_disable_multiregion_access_points` to AWS profile configuration"
-}
