@@ -23,8 +23,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
-import aws.smithy.kotlin.runtime.net.Scheme
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.*
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
@@ -33,7 +32,6 @@ import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.Attributes
-import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
 
@@ -61,7 +59,7 @@ private const val PROVIDER_NAME = "EcsContainer"
  *
  */
 public class EcsCredentialsProvider(
-    public val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
 ) : CloseableCredentialsProvider {
 
@@ -70,7 +68,6 @@ public class EcsCredentialsProvider(
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<EcsCredentialsProvider>()
-        val authToken = AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
         val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
         val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)
 
@@ -81,7 +78,7 @@ public class EcsCredentialsProvider(
         }
 
         val op = SdkHttpOperation.build<Unit, Credentials> {
-            serializer = EcsCredentialsSerializer(authToken)
+            serializer = EcsCredentialsSerializer(loadAuthToken())
             deserializer = EcsCredentialsDeserializer()
             operationName = "EcsCredentialsProvider"
             serviceName = "EcsContainerMetadata"
@@ -107,6 +104,22 @@ public class EcsCredentialsProvider(
         return creds
     }
 
+    private suspend fun loadAuthToken(): String? {
+        val token = AwsSdkSetting.AwsContainerAuthorizationTokenFile.resolve(platformProvider)?.let { loadAuthTokenFromFile(it) }
+            ?: AwsSdkSetting.AwsContainerAuthorizationToken.resolve(platformProvider)
+            ?: return null
+
+        if (token.contains("\r\n")) {
+            throw CredentialsProviderException("Token contains illegal line break sequence.")
+        }
+
+        return token
+    }
+
+    private suspend fun loadAuthTokenFromFile(path: String): String =
+        platformProvider.readFileOrNull(path)?.decodeToString()
+            ?: throw CredentialsProviderException("Could not read token file.")
+
     /**
      * Validate that the [relativeUri] can be combined with the static ECS endpoint to form a valid URL
      */
@@ -127,7 +140,6 @@ public class EcsCredentialsProvider(
      * @return the validated URL
      */
     private suspend fun validateFullUri(uri: String): Url {
-        // full URI requires verification either https OR that the host resolves to loopback device
         val url = try {
             Url.parse(uri)
         } catch (ex: Exception) {
@@ -136,16 +148,22 @@ public class EcsCredentialsProvider(
 
         if (url.scheme == Scheme.HTTPS) return url
 
-        // TODO - validate loopback via DNS resolution instead of fixed set. Custom host names (including localhost) that
-        //  resolve to loopback won't work until then. ALL resolved addresses MUST resolve to the loopback device
-        val allowedHosts = setOf("127.0.0.1", "::1")
+        when (url.host) {
+            is Host.IpAddress -> {
+                if (allowedAddrs.contains((url.host as Host.IpAddress).address)) {
+                    return url
+                }
 
-        if (url.host.toString() !in allowedHosts) {
-            throw ProviderConfigurationException(
-                "The container credentials full URI ($uri) has an invalid host. Host can only be one of [${allowedHosts.joinToString()}].",
+                throw ProviderConfigurationException(
+                    "The container credentials full URI ($uri) has an invalid host. Host can only be one of [${allowedAddrs.joinToString()}].",
+                )
+            }
+
+            // TODO - resolve hostnames
+            is Host.Domain -> throw ProviderConfigurationException(
+                "The container credentials full URI ($uri) is specified via hostname which is not currently supported.",
             )
         }
-        return url
     }
 
     override fun close() {
@@ -228,3 +246,11 @@ internal class EcsCredentialsRetryPolicy : RetryPolicy<Any?> {
         else -> RetryDirective.TerminateAndFail
     }
 }
+
+private val ecsV4Addr = IpV4Addr(169u, 254u, 170u, 2u)
+
+private val eksV4Addr = IpV4Addr(169u, 254u, 170u, 23u)
+
+private val eksV6Addr = IpV6Addr(0xfd00u, 0xec2u, 0u, 0u, 0u, 0u, 0u, 0x23u)
+
+private val allowedAddrs = setOf(IpV4Addr.LOCALHOST, IpV6Addr.LOCALHOST, ecsV4Addr, eksV4Addr, eksV6Addr)

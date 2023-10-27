@@ -130,7 +130,7 @@ class EcsCredentialsProviderTest {
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<ProviderConfigurationException> {
             provider.resolve()
-        }.message.shouldContain("The container credentials full URI ($uri) has an invalid host. Host can only be one of [127.0.0.1, ::1].")
+        }.message.shouldContain("The container credentials full URI (http://amazonaws.com/full) is specified via hostname which is not currently supported.")
     }
 
     @Test
@@ -151,6 +151,96 @@ class EcsCredentialsProviderTest {
         val actual = provider.resolve()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
+    }
+
+    @Test
+    fun testFullUriEcs() = runTest {
+        val uri = "https://169.254.170.2/full"
+        val engine = buildTestConnection {
+            expect(
+                ecsRequest(uri),
+                ecsResponse(),
+            )
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        val actual = provider.resolve()
+        assertEquals(expectedCredentials, actual)
+        engine.assertRequests()
+    }
+
+    @Test
+    fun testFullUriEksV4() = runTest {
+        val uri = "https://169.254.170.23/full"
+        val engine = buildTestConnection {
+            expect(
+                ecsRequest(uri),
+                ecsResponse(),
+            )
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        val actual = provider.resolve()
+        assertEquals(expectedCredentials, actual)
+        engine.assertRequests()
+    }
+
+    @Test
+    fun testFullUriEksV6() = runTest {
+        val uri = "https://[fd00:ec2:0::23]/full"
+        val engine = buildTestConnection {
+            expect(
+                ecsRequest(uri),
+                ecsResponse(),
+            )
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        val actual = provider.resolve()
+        assertEquals(expectedCredentials, actual)
+        engine.assertRequests()
+    }
+
+    @Test
+    fun testFullUriForbiddenV4() = runTest {
+        val uri = "http://192.168.1.1/full"
+        val engine = TestConnection()
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<ProviderConfigurationException> {
+            provider.resolve()
+        }.message.shouldContain("The container credentials full URI (http://192.168.1.1/full) has an invalid host.")
+    }
+
+    @Test
+    fun testFullUriForbiddenV6() = runTest {
+        val uri = "http://[fd00:0:ec2::23]/full"
+        val engine = TestConnection()
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<ProviderConfigurationException> {
+            provider.resolve()
+        }.message.shouldContain("The container credentials full URI (http://[fd00:0:ec2::23]/full) has an invalid host.")
     }
 
     @Test
@@ -185,6 +275,94 @@ class EcsCredentialsProviderTest {
         val actual = provider.resolve()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
+    }
+
+    @Test
+    fun testAuthTokenFile() = runTest {
+        val tokenFile = "/path/to/token"
+        val token = "auth-token"
+        val staticToken = "static-auth-token"
+        val engine = buildTestConnection {
+            expect(
+                ecsRequest("http://169.254.170.2/relative", token),
+                ecsResponse(),
+            )
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(
+                AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative",
+                AwsSdkSetting.AwsContainerAuthorizationTokenFile.envVar to tokenFile,
+                AwsSdkSetting.AwsContainerAuthorizationToken.envVar to staticToken, // should be ignored
+            ),
+            fs = mapOf(
+                tokenFile to token,
+            ),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        val actual = provider.resolve()
+        assertEquals(expectedCredentials, actual)
+        engine.assertRequests()
+    }
+
+    @Test
+    fun testAuthTokenFileInvalid() = runTest {
+        val tokenFile = "/path/to/token"
+        val engine = TestConnection()
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(
+                AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative",
+                AwsSdkSetting.AwsContainerAuthorizationTokenFile.envVar to tokenFile,
+            ),
+            fs = mapOf(),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<CredentialsProviderException> {
+            provider.resolve()
+        }.message.shouldContain("Could not read token file.")
+    }
+
+    @Test
+    fun testAuthTokenIllegal() = runTest {
+        val token = "auth\r\ntoken"
+        val engine = TestConnection()
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(
+                AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative",
+                AwsSdkSetting.AwsContainerAuthorizationToken.envVar to token,
+            ),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<CredentialsProviderException> {
+            provider.resolve()
+        }.message.shouldContain("Token contains illegal line break sequence.")
+    }
+
+    @Test
+    fun testAuthTokenFileIllegal() = runTest {
+        val tokenFile = "/path/to/token"
+        val token = "auth\r\ntoken"
+        val engine = TestConnection()
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(
+                AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative",
+                AwsSdkSetting.AwsContainerAuthorizationTokenFile.envVar to tokenFile,
+            ),
+            fs = mapOf(
+                tokenFile to token,
+            ),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<CredentialsProviderException> {
+            provider.resolve()
+        }.message.shouldContain("Token contains illegal line break sequence.")
     }
 
     @Test
