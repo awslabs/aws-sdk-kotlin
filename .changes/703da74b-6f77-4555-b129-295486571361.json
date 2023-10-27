@@ -1,9 +1,0 @@
-{
-    "id": "703da74b-6f77-4555-b129-295486571361",
-    "type": "feature",
-    "description": "Publish a BOM and a Version Catalog",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#605",
-        "awslabs/aws-sdk-kotlin#805"
-    ]
-}

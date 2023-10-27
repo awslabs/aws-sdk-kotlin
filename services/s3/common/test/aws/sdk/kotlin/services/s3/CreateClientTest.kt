@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.services.s3
 
+import aws.smithy.kotlin.runtime.io.use
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 

@@ -7,6 +7,12 @@
     position: relative;
     --logo-width: 72px;
     margin-left: calc(var(--logo-width) + 5px);
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-right: 8px;
 }
 
 .library-name a::before {
@@ -17,6 +23,17 @@
     position: absolute;
     width: 59px;
     height: 35px;
-    top: -10px;
     left: calc(-1 * var(--logo-width) - 5px);
+    margin-right: 5px;
+}
+
+/* Copied from Dokka except `top` replaced with `margin-top` attribute */
+.library-version {
+    position: relative;
+    margin-left: 3px;
+    color: rgba(255,255,255,.7);
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 16px;
+    margin-top: 19px;
 }

@@ -1,5 +1,0 @@
-{
-    "id": "e965338d-28c5-41e2-b585-121d9d56393f",
-    "type": "misc",
-    "description": "**BREAKING**: Remove `smithy.client.request.size`, `smithy.client.response.size`, `smithy.client.retries` metrics. Rename all `smithy.client.*` metrics to `smithy.client.call.*`."
-}

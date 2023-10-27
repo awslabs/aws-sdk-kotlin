@@ -19,7 +19,7 @@
             "!test_steps": [
                 "{gradlew} publishToMavenLocal",
                 "{gradlew} apiCheck",
-                "{gradlew} test allTests",
+                "{gradlew} test jvmTest",
                 "systeminfo",
                 "{gradlew} --status",
                 "{gradlew} --stop",
@@ -40,7 +40,7 @@
     ],
     "test_steps": [
         "{gradlew} apiCheck",
-        "{gradlew} test allTests",
+        "{gradlew} test jvmTest",
         "{gradlew} testAllProtocols"
     ],
     "upstream": [
@@ -55,7 +55,7 @@
         "codebuild-svc-check": {
             "!imports": [],
             "!test_steps": [
-                "{gradlew} test allTests"
+                "{gradlew} test jvmTest"
             ]
         }
     }

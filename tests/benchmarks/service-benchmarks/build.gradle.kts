@@ -40,7 +40,7 @@ if (missingServices.isEmpty()) {
                 optinAnnotations.forEach { languageSettings.optIn(it) }
             }
 
-            commonMain {
+            jvmMain {
                 dependencies {
                     api(libs.smithy.kotlin.runtime.core)
                     implementation(project(":aws-runtime:aws-core"))

@@ -3,15 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 :root {
-    --color-dark: #232f3e;
+    --aws-color-dark: #232f3e;
+    --horizontal-spacing-for-content: 16px;
+    --default-font-family: JetBrains Sans, Inter, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI,Roboto, Oxygen, Ubuntu,Cantarell, Droid Sans, Helvetica Neue, Arial, sans-serif;
 }
 
-#leftToggler {
+.menu-toggle {
     background: none;
-    border: none;
-    padding: 0;
+}
+
+.menu-toggle:focus {
+    outline: 2px solid #fff; /* White outline */
+    outline-offset: 2px;    /* Space between the outline and the button */
 }
 
 #pages-search {
@@ -25,4 +29,22 @@
 
 #pages-search-label {
     display: none;
+}
+
+/* copied from Dokka except for background-color attribute */
+.navigation {
+    display: flex;
+    justify-content: space-between;
+
+    color: #fff;
+    background-color: var(--aws-color-dark);
+    font-family: var(--default-font-family);
+    letter-spacing: -0.1px;
+
+    /* Reset margin and use padding for border */
+    margin-left: 0;
+    margin-right: 0;
+    padding: 10px var(--horizontal-spacing-for-content);
+
+    z-index: 4;
 }

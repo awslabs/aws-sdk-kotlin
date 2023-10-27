@@ -28,40 +28,23 @@ class ClientConfigIntegration : KotlinIntegration {
         model.expectShape<ServiceShape>(settings.service).isS3
 
     companion object {
-        val EnableAccelerateProp: ConfigProperty = ConfigProperty {
-            name = "enableAccelerate"
+        val UseArnRegionProp: ConfigProperty = ConfigProperty {
+            name = "useArnRegion"
             useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
-            documentation = """
-                Flag to support [S3 transfer acceleration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html)
-                with this client.
-            """.trimIndent()
-        }
-
-        val ForcePathStyleProp: ConfigProperty = ConfigProperty {
-            name = "forcePathStyle"
-            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
-            documentation = """
-                Flag to use legacy path-style addressing when making requests.
-            """.trimIndent()
-        }
-
-        val UseArnRegionProp: ConfigProperty = ConfigProperty.Boolean(
-            "useArnRegion",
-            defaultValue = false,
             documentation = """
                 Flag to enforce using a bucket arn with a region matching the client config when making requests with
                 [S3 access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points.html).
-            """.trimIndent(),
-        )
+            """.trimIndent()
+        }
 
-        // FUTURE: default signer doesn't yet implement sigv4a, default to mrap OFF until it does
-        val DisableMrapProp: ConfigProperty = ConfigProperty.Boolean(
-            "disableMrap",
-            defaultValue = true,
+        // FIXME: default signer doesn't yet implement sigv4a, default to mrap OFF until it does
+        val DisableMrapProp: ConfigProperty = ConfigProperty {
+            name = "disableMrap"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")
             documentation = """
                 Flag to disable [S3 multi-region access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html).
-            """.trimIndent(),
-        )
+            """.trimIndent()
+        }
     }
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
@@ -83,8 +66,6 @@ class ClientConfigIntegration : KotlinIntegration {
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
         listOf(
-            EnableAccelerateProp,
-            ForcePathStyleProp,
             UseArnRegionProp,
             DisableMrapProp,
         )

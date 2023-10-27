@@ -14,7 +14,7 @@ buildscript {
         classpath(libs.kotlinx.atomicfu.plugin)
         classpath("aws.sdk.kotlin:build-plugins") {
             version {
-                require("0.2.2")
+                require("0.2.8")
             }
         }
     }
@@ -115,7 +115,9 @@ project.afterEvaluate {
         // This is especially important for inter-repo linking (e.g., via externalDocumentationLink) because the
         // package-list doesn't contain enough project path information to indicate where modules' documentation are
         // located.
-        fileLayout.set { parent, child -> parent.outputDirectory.get().resolve(child.project.name) }
+        fileLayout.set { parent, child ->
+            parent.outputDirectory.dir(child.moduleName)
+        }
 
         includes.from(
             // NOTE: these get concatenated
