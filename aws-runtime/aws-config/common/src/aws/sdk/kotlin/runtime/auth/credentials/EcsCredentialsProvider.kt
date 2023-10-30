@@ -68,6 +68,7 @@ public class EcsCredentialsProvider(
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<EcsCredentialsProvider>()
+        val authToken = loadAuthToken()
         val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
         val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)
 
@@ -78,7 +79,7 @@ public class EcsCredentialsProvider(
         }
 
         val op = SdkHttpOperation.build<Unit, Credentials> {
-            serializer = EcsCredentialsSerializer(loadAuthToken())
+            serializer = EcsCredentialsSerializer(authToken)
             deserializer = EcsCredentialsDeserializer()
             operationName = "EcsCredentialsProvider"
             serviceName = "EcsContainerMetadata"
