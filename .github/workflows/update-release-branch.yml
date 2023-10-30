@@ -91,5 +91,3 @@ jobs:
             # fixme - actually push up changes
             echo "git push origin release";
           fi
-          git commit -m "test commit" --allow-empty
-          git log -n 5
