@@ -1,6 +1,7 @@
 name: Update release branch
 
 on:
+  # FIXME - remove, can't manually test workflow_dispatch from a branch
   push:
   workflow_dispatch:
     inputs:
@@ -23,7 +24,6 @@ concurrency:
 
 jobs:
   update-release:
-    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
