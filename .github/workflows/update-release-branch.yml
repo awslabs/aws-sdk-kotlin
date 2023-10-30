@@ -1,0 +1,86 @@
+name: Update release branch
+description: >
+  Merge unreleased changes from main into the release branch 
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        description: |
+          The merge commit message to use for non fast-forward merges.
+        required: false
+        type: string
+      dry_run:
+        description: Dry runs will only attempt to merge but the result will not be pushed to the release branch
+        required: true
+        type: boolean
+        default: true
+
+concurrency:
+  group: release-manual-${{ github.ref }}
+  cancel-in-progress: true
+
+# TODO - GH token
+
+jobs:
+  check-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: 17
+          cache: 'gradle'
+      - name: Check merge base
+        shell: bash
+        run: |
+          git status
+          git branch -vv
+          git fetch
+          main_sha=$(git rev-parse main)
+          release_sha=$(git rev-parse origin/release)
+          echo "main_sha=$main_sha" >> $GITHUB_ENV
+          echo "release_sha=$release_sha" >> $GITHUB_ENV
+          if git merge-base --is-ancestor $main_sha $release_sha; then
+              echo "main@$main_sha already exists in origin/release, nothing to update";
+              echo "MERGE_NEEDED=false" >> $GITHUB_ENV;
+          else
+              echo "MERGE_NEEDED=true" >> $GITHUB_ENV
+          fi
+      - name: Release Check - snapshot versions
+        if: env.MERGE_NEEDED == 'true'
+        run: |
+          # We aren't releasable if we (1) directly depend on a snapshot version of a dependency OR (2) can't build the project without unreleased changes
+          if grep -q -i snapshot ./gradle/libs.versions.toml; then
+            echo "::error ::found snapshot version in libs.versions.toml"
+            exit 1
+          fi
+      - name: Release Check - build
+        if: env.MERGE_NEEDED == 'true'
+        run: |
+          # Our CI is implemented as a "live at HEAD" model where we build against the latest of all our 1P deps (either
+          # main branch or matching branch name). Double check that without this "live at HEAD" mode we still build 
+          # successfully (which is how it is built during release).
+          # This should help prevent the cases where we forgot to bump smithy-kotlin versions and don't catch it
+          # because CI is masking it
+          ./gradlew test jvmTest
+      - name: Merge
+        if: env.MERGE_NEEDED == 'true'
+        shell: bash
+        run: |
+          echo "merging main @ $main_sha into release @ $release_sha";
+          git switch release;
+          input_message=${{ inputs.commit_message }}
+          message=${input_message:-"Merging main into release"}
+          echo "message=$message"
+          git merge -m $message main;
+          if [ ${{ inputs.dry_run == "true" ]; then
+            echo "dry run, skipping push to remote";
+            git log -n 10 --oneline;
+          else
+            echo "pushing changes to release branch"
+            # fixme - actually push up changes
+            echo "git push origin release"
+          fi
