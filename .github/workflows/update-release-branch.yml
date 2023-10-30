@@ -1,6 +1,4 @@
 name: Update release branch
-description: >
-  Merge unreleased changes from main into the release branch 
 
 on:
   push:
@@ -78,7 +76,7 @@ jobs:
           message=${input_message:-"Merging main into release"}
           echo "message=$message"
           git merge -m $message main;
-          if [ ${{ inputs.dry_run == "true" ]; then
+          if [ ${{ inputs.dry_run }} == "true" ]; then
             echo "dry run, skipping push to remote";
             git log -n 10 --oneline;
           else
