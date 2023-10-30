@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           git config user.name aws-sdk-kotlin-ci 
-          git config user.email "aws-kotlin-sdk-automation@amazon.com>"
+          git config user.email "aws-kotlin-sdk-automation@amazon.com"
       - name: Configure JDK
         uses: actions/setup-java@v3
         with:
