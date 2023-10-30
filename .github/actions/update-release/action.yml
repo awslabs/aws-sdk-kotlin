@@ -1,0 +1,42 @@
+name: Update release branch
+description: >
+  Merge unreleased changes from main into the release branch 
+
+inputs:
+  commit_message:
+    description: |
+      The merge commit message to use for non fast-forward merges.
+    required: false
+  dry_run:
+    description: Dry runs will only attempt to merge but the result will not be pushed to the release branch
+    required: true
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Check main against release branch
+      shell: bash
+      run: |
+        git status
+        git branch -vv
+        git fetch
+        main_sha=$(git rev-parse main)
+        release_sha=$(git rev-parse origin/release)
+        if git merge-base --is-ancestor $main_sha $release_sha; then
+            echo "main@$main_sha already exists in origin/release, nothing to update";
+        else
+          echo "merging main into release";
+          git switch release;
+          git merge -m $message main;
+          if [ ${{ inputs.dry_run == "true" ]; then
+            echo "dry run, skipping push to remote";
+            git log -n 10 --oneline;
+          else
+            echo "pushing changes to release branch"
+            # fixme - actually push up changes
+            echo "git push origin release"
+          fi
+        fi
