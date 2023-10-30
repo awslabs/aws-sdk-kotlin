@@ -20,8 +20,6 @@ concurrency:
   group: release-manual-${{ github.ref }}
   cancel-in-progress: true
 
-# TODO - GH token
-
 jobs:
   update-release:
     runs-on: ubuntu-latest
@@ -30,6 +28,7 @@ jobs:
         with:
           ref: 'main'
           fetch-depth: 0
+          token: {{ secrets.CI_USER_PAT }}
       - name: Configure JDK
         uses: actions/setup-java@v3
         with:
@@ -69,7 +68,7 @@ jobs:
           # successfully (which is how it is built during release).
           # This should help prevent the cases where we forgot to bump smithy-kotlin versions and don't catch it
           # because CI is masking it
-          ./gradlew test jvmTest
+          ./gradlew -Paws.kotlin.native=false test jvmTest
       - name: Merge
         if: env.MERGE_NEEDED == 'true'
         shell: bash
@@ -80,11 +79,11 @@ jobs:
           message=${input_message:-"Merging main into release"}
           echo "message=$message"
           git merge -m "$message" main;
-          if [ ${{ inputs.dry_run }} == "true" ]; then
+          if [ "${{ inputs.dry_run }}" == "true" ]; then
             echo "dry run, skipping push to remote";
             git log -n 10 --oneline;
           else
-            echo "pushing changes to release branch"
+            echo "pushing changes to release branch";
             # fixme - actually push up changes
-            echo "git push origin release"
+            echo "git push origin release";
           fi
