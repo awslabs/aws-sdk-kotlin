@@ -28,7 +28,7 @@ jobs:
         with:
           ref: 'main'
           fetch-depth: 0
-          token: {{ secrets.CI_USER_PAT }}
+          token: ${{ secrets.CI_USER_PAT }}
       - name: Configure JDK
         uses: actions/setup-java@v3
         with:
