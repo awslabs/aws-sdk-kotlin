@@ -3,6 +3,7 @@ description: >
   Merge unreleased changes from main into the release branch 
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       commit_message:
@@ -23,7 +24,8 @@ concurrency:
 # TODO - GH token
 
 jobs:
-  check-commits:
+  update-release:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
