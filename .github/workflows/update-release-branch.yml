@@ -79,7 +79,7 @@ jobs:
           input_message=${{ inputs.commit_message }}
           message=${input_message:-"Merging main into release"}
           echo "message=$message"
-          git merge -m $message main;
+          git merge -m "$message" main;
           if [ ${{ inputs.dry_run }} == "true" ]; then
             echo "dry run, skipping push to remote";
             git log -n 10 --oneline;
