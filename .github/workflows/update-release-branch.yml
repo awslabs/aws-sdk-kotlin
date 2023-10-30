@@ -47,7 +47,6 @@ jobs:
           echo "release_sha=$release_sha" >> $GITHUB_ENV
           if git merge-base --is-ancestor $main_sha $release_sha; then
               echo "main@$main_sha already exists in origin/release, nothing to update";
-              # FIXME - revert to false before merge
               echo "MERGE_NEEDED=true" >> $GITHUB_ENV;
           else
               echo "MERGE_NEEDED=true" >> $GITHUB_ENV
@@ -87,3 +86,5 @@ jobs:
             # fixme - actually push up changes
             echo "git push origin release";
           fi
+          git commit -m "test commit" --allow-empty
+          git log -n 5
