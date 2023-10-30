@@ -52,7 +52,7 @@ jobs:
           echo "release_sha=$release_sha" >> $GITHUB_ENV
           if git merge-base --is-ancestor $main_sha $release_sha; then
               echo "main@$main_sha already exists in origin/release, nothing to update";
-              echo "MERGE_NEEDED=true" >> $GITHUB_ENV;
+              echo "MERGE_NEEDED=false" >> $GITHUB_ENV;
           else
               echo "MERGE_NEEDED=true" >> $GITHUB_ENV
           fi
