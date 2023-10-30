@@ -1,8 +1,6 @@
 name: Update release branch
 
 on:
-  # FIXME - remove, can't manually test workflow_dispatch from a branch
-  push:
   workflow_dispatch:
     inputs:
       commit_message:
@@ -88,6 +86,5 @@ jobs:
             git log -n 10 --oneline;
           else
             echo "pushing changes to release branch";
-            # fixme - actually push up changes
-            echo "git push origin release";
+            git push origin release;
           fi
