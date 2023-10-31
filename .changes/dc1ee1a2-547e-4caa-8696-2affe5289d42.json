@@ -1,5 +1,0 @@
-{
-    "id": "dc1ee1a2-547e-4caa-8696-2affe5289d42",
-    "type": "feature",
-    "description": "Support EKS endpoints and auth token file in container credentials provider."
-}
