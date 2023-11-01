@@ -89,6 +89,8 @@ class FinalizeConfigTest {
 
     @Test
     fun testConfigPropertiesPresent() {
+        // regression test to verify that these config properties are generated and can be set
+        // see https://github.com/awslabs/aws-sdk-kotlin/issues/1098
         val builder = S3Client.builder()
         builder.config.disableMrap = true
         builder.config.useArnRegion = true

@@ -54,9 +54,10 @@ class ClientConfigIntegration : KotlinIntegration {
             """.trimIndent()
         }
 
+        // FIXME: default signer doesn't yet implement sigv4a, default to mrap OFF until it does
         val DisableMrapProp: ConfigProperty = ConfigProperty {
             name = "disableMrap"
-            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")
             documentation = """
                 Flag to disable [S3 multi-region access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html).
             """.trimIndent()
