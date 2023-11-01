@@ -110,6 +110,14 @@ codegen {
                     }
                 }
                 """,
+                """
+                {
+                    "name": "AwsSdkKotlinRemoveDeprecatedShapes",
+                    "args": {
+                        "since": "1970-01-01"
+                    }
+                }
+                """
             )
         }
 
@@ -146,6 +154,14 @@ codegen {
                     }
                 }
                 """,
+                """
+                {
+                    "name": "AwsSdkKotlinRemoveDeprecatedShapes",
+                    "args": {
+                        "since": "1970-01-01"
+                    }
+                }
+                """
             )
         }
 
@@ -180,6 +196,14 @@ codegen {
                     ]
                 }
             }
+            """,
+            """
+            {
+                "name": "AwsSdkKotlinRemoveDeprecatedShapes",
+                "args": {
+                    "since": "1970-01-01"
+                }
+            }            
             """,
             )
         }
