@@ -258,7 +258,7 @@ public final class aws/sdk/kotlin/runtime/config/imds/EndpointConfiguration$Mode
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class aws/sdk/kotlin/runtime/config/imds/EndpointMode : java/lang/Enum {
+public class aws/sdk/kotlin/runtime/config/imds/EndpointMode : java/lang/Enum {
 	public static final field Companion Laws/sdk/kotlin/runtime/config/imds/EndpointMode$Companion;
 	public static final field IPv4 Laws/sdk/kotlin/runtime/config/imds/EndpointMode;
 	public static final field IPv6 Laws/sdk/kotlin/runtime/config/imds/EndpointMode;
