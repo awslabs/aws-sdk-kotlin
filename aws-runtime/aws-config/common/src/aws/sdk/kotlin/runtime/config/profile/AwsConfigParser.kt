@@ -83,7 +83,7 @@ internal fun List<Pair<FileLine, Token>>.toSectionMap(logger: Logger): Map<Token
 
                 if (containsKey(token)) continue
                 if (!token.isValid) {
-                    logger.warnParse(line) { "Ignoring invalid ${token.sectionName} '${token.name}'" }
+                    logger.warnParse(line, "Ignoring invalid ${token.sectionName} '${token.name}'")
                     continue
                 }
 
@@ -94,21 +94,21 @@ internal fun List<Pair<FileLine, Token>>.toSectionMap(logger: Logger): Map<Token
                 currentProperty = token
 
                 if (!token.isValid) {
-                    logger.warnParse(line) { "Ignoring invalid property '${token.key}'" }
+                    logger.warnParse(line, "Ignoring invalid property '${token.key}'")
                     continue
                 }
                 if (!currentSection.isValid) {
-                    logger.warnParse(line) { "Ignoring property under invalid ${currentSection.sectionName} '${currentSection.name}'" }
+                    logger.warnParse(line, "Ignoring property under invalid ${currentSection.sectionName} '${currentSection.name}'")
                     continue
                 }
 
                 val profile = this[currentSection]!!
                 if (profile.containsKey(token.key)) {
-                    logger.warnParse(line) { "'${token.key}' defined multiple times in ${currentSection.sectionName} '${currentSection.name}'" }
+                    logger.warnParse(line, "'${token.key}' defined multiple times in ${currentSection.sectionName} '${currentSection.name}'")
                 }
 
                 if (profile.containsKey(token.key)) {
-                    logger.warnParse(line) { "Overwriting previously-defined property '${token.key}'" }
+                    logger.warnParse(line, "Overwriting previously-defined property '${token.key}'")
                 }
                 profile[token.key] = AwsConfigValue.String(token.value)
             }
@@ -125,7 +125,7 @@ internal fun List<Pair<FileLine, Token>>.toSectionMap(logger: Logger): Map<Token
                 currentProperty as Token.Property
 
                 if (!token.isValid) {
-                    logger.warnParse(line) { "Ignoring invalid sub-property '${token.key}'" }
+                    logger.warnParse(line, "Ignoring invalid sub-property '${token.key}'")
                     continue
                 }
 
@@ -133,7 +133,7 @@ internal fun List<Pair<FileLine, Token>>.toSectionMap(logger: Logger): Map<Token
                 val property = profile[currentProperty.key]
                 if (property is AwsConfigValue.String) { // convert newly recognized parent to map
                     if (property.value.isNotEmpty()) {
-                        logger.warnParse(line) { "Overwriting previously-defined property '${token.key}'" }
+                        logger.warnParse(line, "Overwriting previously-defined property '${token.key}'")
                     }
                     currentParentMap = mutableMapOf()
                     profile[currentProperty.key] = AwsConfigValue.Map(currentParentMap)
@@ -199,6 +199,9 @@ private fun mergeSections(sections: List<ConfigSection>): SectionMap = buildMap 
     }
 }
 
-private inline fun Logger.warnParse(line: FileLine, crossinline content: () -> String) = warn {
-    contextMessage(content(), line.lineNumber)
+// FIXME: K2 forced signature change
+// https://youtrack.jetbrains.com/issue/KT-61869/K2-Smart-cast-to-kotlin-CharSequence-is-impossible-because-foo-is-a-local-variable-that-is-captured-by-a-changing-closure
+// https://youtrack.jetbrains.com/issue/KT-60087/K2-Introduced-SMARTCASTIMPOSSIBLE
+private inline fun Logger.warnParse(line: FileLine, content: String) = warn {
+    contextMessage(content, line.lineNumber)
 }
