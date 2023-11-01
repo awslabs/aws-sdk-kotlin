@@ -109,14 +109,6 @@ codegen {
                         ]
                     }
                 }
-                """,
-                """
-                {
-                    "name": "AwsSdkKotlinRemoveDeprecatedShapes",
-                    "args": {
-                        "since": "1970-01-01"
-                    }
-                }
                 """
             )
         }
@@ -151,14 +143,6 @@ codegen {
                         "operations": [
                             "com.amazonaws.sso#GetRoleCredentials"
                         ]
-                    }
-                }
-                """,
-                """
-                {
-                    "name": "AwsSdkKotlinRemoveDeprecatedShapes",
-                    "args": {
-                        "since": "1970-01-01"
                     }
                 }
                 """
@@ -196,15 +180,7 @@ codegen {
                     ]
                 }
             }
-            """,
             """
-            {
-                "name": "AwsSdkKotlinRemoveDeprecatedShapes",
-                "args": {
-                    "since": "1970-01-01"
-                }
-            }            
-            """,
             )
         }
     }
