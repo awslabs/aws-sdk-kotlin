@@ -28,6 +28,23 @@ class ClientConfigIntegration : KotlinIntegration {
         model.expectShape<ServiceShape>(settings.service).isS3
 
     companion object {
+        val EnableAccelerateProp: ConfigProperty = ConfigProperty {
+            name = "enableAccelerate"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
+            documentation = """
+                Flag to support [S3 transfer acceleration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html)
+                with this client.
+            """.trimIndent()
+        }
+
+        val ForcePathStyleProp: ConfigProperty = ConfigProperty {
+            name = "forcePathStyle"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
+            documentation = """
+                Flag to use legacy path-style addressing when making requests.
+            """.trimIndent()
+        }
+
         val UseArnRegionProp: ConfigProperty = ConfigProperty {
             name = "useArnRegion"
             useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
@@ -37,10 +54,9 @@ class ClientConfigIntegration : KotlinIntegration {
             """.trimIndent()
         }
 
-        // FIXME: default signer doesn't yet implement sigv4a, default to mrap OFF until it does
         val DisableMrapProp: ConfigProperty = ConfigProperty {
             name = "disableMrap"
-            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             documentation = """
                 Flag to disable [S3 multi-region access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html).
             """.trimIndent()
@@ -66,6 +82,8 @@ class ClientConfigIntegration : KotlinIntegration {
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
         listOf(
+            EnableAccelerateProp,
+            ForcePathStyleProp,
             UseArnRegionProp,
             DisableMrapProp,
         )
