@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.33.1-beta] - 11/01/2023
+
+### Features
+* Support EKS endpoints and auth token file in container credentials provider.
+
+### Fixes
+* [#1098](https://github.com/awslabs/aws-sdk-kotlin/issues/1098) Add `forcePathStyle` and `enableAccelerate` config properties back to the S3 client.
+
+### Miscellaneous
+* Upgrade to the latest version of **smithy-kotlin**
+
 ## [0.33.0-beta] - 10/26/2023
 
 ### Features
