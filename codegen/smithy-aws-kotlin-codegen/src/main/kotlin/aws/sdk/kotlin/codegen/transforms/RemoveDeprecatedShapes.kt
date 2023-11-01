@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.codegen.transforms
 
 import software.amazon.smithy.build.TransformContext
@@ -42,17 +46,18 @@ class RemoveDeprecatedShapes : ConfigurableProjectionTransformer<RemoveDeprecate
 internal fun shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil: LocalDate) = Predicate<Shape> { shape ->
     val deprecatedSince = shape
         .takeIf { it.isDeprecated }
-        ?.let { shape
-            .expectTrait<DeprecatedTrait>()
-            .since.getOrNull()
-            ?.let {
-                try {
-                    it.toLocalDate()
-                } catch (e: DateTimeException) {
-                    println("Failed to parse `since` field $it as a date, skipping removal of deprecated shape $shape")
-                    return@Predicate false
+        ?.let {
+            shape
+                .expectTrait<DeprecatedTrait>()
+                .since.getOrNull()
+                ?.let {
+                    try {
+                        it.toLocalDate()
+                    } catch (e: DateTimeException) {
+                        println("Failed to parse `since` field $it as a date, skipping removal of deprecated shape $shape")
+                        return@Predicate false
+                    }
                 }
-            }
         }
 
     (deprecatedSince?.let { it < removeDeprecatedShapesUntil } ?: false).also {
@@ -61,7 +66,6 @@ internal fun shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil: LocalDate)
         }
     }
 }
-
 
 /**
  * Parses a string of yyyy-MM-dd format to [LocalDate].

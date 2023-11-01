@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.codegen.transforms
 
 import software.amazon.smithy.model.shapes.FloatShape
@@ -12,12 +16,12 @@ class RemoveDeprecatedShapesTest {
     private fun shapeDeprecatedSince(since: String): Shape {
         val deprecatedTrait = DeprecatedTrait.builder()
             .since(since)
-        .build()
+            .build()
 
         return FloatShape.builder()
             .addTrait(deprecatedTrait)
             .id(ShapeId.from("aws.sdk.kotlin#testing"))
-        .build()
+            .build()
     }
 
     @Test

@@ -162,7 +162,7 @@ fun removeDeprecatedShapesTransform(removeDeprecatedShapesUntil: String): String
             "until": "$removeDeprecatedShapesUntil"
         }
     }
-    """.trimIndent()
+""".trimIndent()
 
 val discoveredServices: List<AwsService> by lazy { discoverServices() }
 
