@@ -30,7 +30,7 @@ class RemoveDeprecatedShapes : ConfigurableProjectionTransformer<RemoveDeprecate
         val removeDeprecatedShapesUntil = try { config.until.toLocalDate() } catch (e: DateTimeException) {
             throw IllegalArgumentException("Failed to parse configured `until` date ${config.until}", e)
         }
-        println("Transforming using configured `until` date $removeDeprecatedShapesUntil")
+        println("Removing deprecated shapes using the configured `until` date $removeDeprecatedShapesUntil")
 
         val shouldRemoveDeprecatedShape = Predicate<Shape> { shape ->
             val deprecatedSince = shape
