@@ -52,6 +52,4 @@ internal fun shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil: LocalDate)
 /**
  * Parses a string of yyyy-MM-dd format to [LocalDate], returning `null` if parsing fails.
  */
-internal fun String.toLocalDate(): LocalDate? {
-    return try { LocalDate.parse(this, DEPRECATED_SINCE_DATE_FORMATTER) } catch (e: DateTimeException) { null }
-}
+internal fun String.toLocalDate(): LocalDate? = try { LocalDate.parse(this, DEPRECATED_SINCE_DATE_FORMATTER) } catch (e: DateTimeException) { null }
