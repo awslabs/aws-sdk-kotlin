@@ -16,6 +16,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.function.Predicate
 
+// A date formatter used to parse Smithy @deprecated trait's `since` field
 private val DEPRECATED_SINCE_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
 class RemoveDeprecatedShapes : ConfigurableProjectionTransformer<RemoveDeprecatedShapes.Config>() {
