@@ -13,10 +13,12 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class RemoveDeprecatedShapesTest {
-    private fun shapeDeprecatedSince(since: String): Shape {
-        val deprecatedTrait = DeprecatedTrait.builder()
-            .since(since)
-            .build()
+    private fun shapeDeprecatedSince(since: String?): Shape {
+        val deprecatedTrait = since?.let {
+            DeprecatedTrait.builder()
+                .since(since)
+                .build()
+        } ?: DeprecatedTrait.builder().build()
 
         return FloatShape.builder()
             .addTrait(deprecatedTrait)
@@ -41,6 +43,13 @@ class RemoveDeprecatedShapesTest {
     @Test
     fun testShouldNotBeRemovedIfDeprecatedSameDay() {
         val shape = shapeDeprecatedSince("2023-01-01")
+        val removeDeprecatedShapesUntil = "2023-01-01".toLocalDate()
+        assertFalse(shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil).test(shape))
+    }
+
+    @Test
+    fun testShouldNotBeRemovedIfMissingSinceField() {
+        val shape = shapeDeprecatedSince(null)
         val removeDeprecatedShapesUntil = "2023-01-01".toLocalDate()
         assertFalse(shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil).test(shape))
     }
