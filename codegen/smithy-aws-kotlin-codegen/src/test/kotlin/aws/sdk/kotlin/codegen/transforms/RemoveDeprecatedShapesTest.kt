@@ -14,11 +14,9 @@ import kotlin.test.assertTrue
 
 class RemoveDeprecatedShapesTest {
     private fun shapeDeprecatedSince(since: String?): Shape {
-        val deprecatedTrait = since?.let {
-            DeprecatedTrait.builder()
-                .since(since)
-                .build()
-        } ?: DeprecatedTrait.builder().build()
+        val deprecatedTrait = DeprecatedTrait.builder()
+            .since(since)
+            .build()
 
         return FloatShape.builder()
             .addTrait(deprecatedTrait)
@@ -29,28 +27,28 @@ class RemoveDeprecatedShapesTest {
     @Test
     fun testShouldBeRemoved() {
         val shape = shapeDeprecatedSince("2022-01-01")
-        val removeDeprecatedShapesUntil = "2023-01-01".toLocalDate()
+        val removeDeprecatedShapesUntil = "2023-01-01".toLocalDate()!!
         assertTrue(shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil).test(shape))
     }
 
     @Test
     fun testShouldNotBeRemoved() {
         val shape = shapeDeprecatedSince("2024-01-01")
-        val removeDeprecatedShapesUntil = "2023-01-01".toLocalDate()
+        val removeDeprecatedShapesUntil = "2023-01-01".toLocalDate()!!
         assertFalse(shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil).test(shape))
     }
 
     @Test
     fun testShouldNotBeRemovedIfDeprecatedSameDay() {
         val shape = shapeDeprecatedSince("2023-01-01")
-        val removeDeprecatedShapesUntil = "2023-01-01".toLocalDate()
+        val removeDeprecatedShapesUntil = "2023-01-01".toLocalDate()!!
         assertFalse(shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil).test(shape))
     }
 
     @Test
     fun testShouldNotBeRemovedIfMissingSinceField() {
         val shape = shapeDeprecatedSince(null)
-        val removeDeprecatedShapesUntil = "2023-01-01".toLocalDate()
+        val removeDeprecatedShapesUntil = "2023-01-01".toLocalDate()!!
         assertFalse(shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil).test(shape))
     }
 }

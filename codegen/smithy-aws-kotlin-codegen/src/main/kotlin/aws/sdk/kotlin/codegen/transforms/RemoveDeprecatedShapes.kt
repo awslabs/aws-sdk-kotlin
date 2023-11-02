@@ -16,6 +16,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.function.Predicate
 
+private val DEPRECATED_SINCE_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
 class RemoveDeprecatedShapes : ConfigurableProjectionTransformer<RemoveDeprecatedShapes.Config>() {
     class Config {
         var until: String = "1970-01-01" // yyyy-MM-dd
@@ -30,13 +32,8 @@ class RemoveDeprecatedShapes : ConfigurableProjectionTransformer<RemoveDeprecate
      * NOTE: Smithy supports modeling `since` as a version _or_ date, this transformer only considers those modeled as a date.
      */
     override fun transformWithConfig(context: TransformContext, config: Config): Model {
-        val until = try {
-            config.until.toLocalDate().also {
-                println("Removing deprecated shapes using the configured `until` date $it")
-            }
-        } catch (e: DateTimeException) {
-            throw IllegalArgumentException("Failed to parse configured `until` date ${config.until}", e)
-        }
+        val until = requireNotNull(config.until.toLocalDate()) { "Failed to parse configured `until` date ${config.until}" }
+        println("Removing deprecated shapes using the configured `until` date $until")
 
         return context.transformer.removeShapesIf(context.model, shouldRemoveDeprecatedShape(until))
     }
@@ -45,24 +42,16 @@ class RemoveDeprecatedShapes : ConfigurableProjectionTransformer<RemoveDeprecate
 internal fun shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil: LocalDate) = Predicate<Shape> { shape ->
     val since = shape.getTrait<DeprecatedTrait>()?.since?.getOrNull() ?: return@Predicate false
 
-    val deprecatedDate = try { since.toLocalDate() } catch (e: DateTimeException) {
+    val deprecatedDate = since.toLocalDate() ?: return@Predicate false.also {
         println("Failed to parse `since` field $since as a date, skipping removal of deprecated shape $shape")
-        return@Predicate false
     }
 
-    val shouldRemove = deprecatedDate < removeDeprecatedShapesUntil
-
-    shouldRemove.also {
-        if (it) {
-            println("Removing deprecated shape $shape since its modeled `since` field $deprecatedDate comes before the configured $removeDeprecatedShapesUntil date.")
-        }
-    }
+    deprecatedDate < removeDeprecatedShapesUntil
 }
 
 /**
- * Parses a string of yyyy-MM-dd format to [LocalDate].
+ * Parses a string of yyyy-MM-dd format to [LocalDate], returning `null` if parsing fails.
  */
-internal fun String.toLocalDate(): LocalDate {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    return LocalDate.parse(this, formatter)
+internal fun String.toLocalDate(): LocalDate? {
+    return try { LocalDate.parse(this, DEPRECATED_SINCE_DATE_FORMATTER) } catch (e: DateTimeException) { null }
 }
