@@ -6,8 +6,7 @@ package aws.sdk.kotlin.codegen.transforms
 
 import software.amazon.smithy.build.TransformContext
 import software.amazon.smithy.build.transforms.ConfigurableProjectionTransformer
-import software.amazon.smithy.kotlin.codegen.model.expectTrait
-import software.amazon.smithy.kotlin.codegen.model.isDeprecated
+import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.Shape
@@ -44,25 +43,18 @@ class RemoveDeprecatedShapes : ConfigurableProjectionTransformer<RemoveDeprecate
 }
 
 internal fun shouldRemoveDeprecatedShape(removeDeprecatedShapesUntil: LocalDate) = Predicate<Shape> { shape ->
-    val deprecatedSince = shape
-        .takeIf { it.isDeprecated }
-        ?.let {
-            shape
-                .expectTrait<DeprecatedTrait>()
-                .since.getOrNull()
-                ?.let {
-                    try {
-                        it.toLocalDate()
-                    } catch (e: DateTimeException) {
-                        println("Failed to parse `since` field $it as a date, skipping removal of deprecated shape $shape")
-                        return@Predicate false
-                    }
-                }
-        }
+    val since = shape.getTrait<DeprecatedTrait>()?.since?.getOrNull() ?: return@Predicate false
 
-    (deprecatedSince?.let { it < removeDeprecatedShapesUntil } ?: false).also {
+    val deprecatedDate = try { since.toLocalDate() } catch (e: DateTimeException) {
+        println("Failed to parse `since` field $since as a date, skipping removal of deprecated shape $shape")
+        return@Predicate false
+    }
+
+    val shouldRemove = deprecatedDate < removeDeprecatedShapesUntil
+
+    shouldRemove.also {
         if (it) {
-            println("Removing deprecated shape $shape since its modeled `since` field $deprecatedSince comes before the configured $removeDeprecatedShapesUntil date.")
+            println("Removing deprecated shape $shape since its modeled `since` field $deprecatedDate comes before the configured $removeDeprecatedShapesUntil date.")
         }
     }
 }
