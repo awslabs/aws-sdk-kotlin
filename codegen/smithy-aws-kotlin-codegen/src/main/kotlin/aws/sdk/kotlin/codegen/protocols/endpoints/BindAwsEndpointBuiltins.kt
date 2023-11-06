@@ -53,7 +53,7 @@ fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: Kotl
                 "AWS::S3::Accelerate" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.EnableAccelerateProp.propertyName)
                 "AWS::S3::ForcePathStyle" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.ForcePathStyleProp.propertyName)
                 "AWS::S3::DisableMultiRegionAccessPoints" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.DisableMrapProp.propertyName)
-                "AWS::S3::UseArnRegion" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.DisableMrapProp.propertyName)
+                "AWS::S3::UseArnRegion" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.UseArnRegionProp.propertyName)
                 "AWS::S3Control::UseArnRegion" -> renderBasicConfigBinding(writer, it, S3ControlClientConfigIntegration.UseArnRegionProp.propertyName)
 
                 "SDK::Endpoint" ->

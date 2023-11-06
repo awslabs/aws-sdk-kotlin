@@ -1,0 +1,8 @@
+{
+    "id": "34157ab1-1bd3-4ac8-9845-661c4709475b",
+    "type": "bugfix",
+    "description": "Fix endpoint builtin bound to wrong config parameter",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1101"
+    ]
+}
