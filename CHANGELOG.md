@@ -3,12 +3,12 @@
 ## [0.34.0-beta] - 11/06/2023
 
 ### Features
-* (**arn:aws:trebuchet:::service:v1:f361927243404cf0854add0d05d8129f**) This release adds support for Apache Airflow version 2.7.2. This version release includes support for deferrable operators and triggers.
 * (**awslily**) Added new API that allows Amazon Connect Outbound Campaigns to create contacts in Amazon Connect when ingesting your dial requests.
 * (**codebuild**) AWS CodeBuild now supports AWS Lambda compute.
 * (**docdb**) Update the input of CreateDBInstance and ModifyDBInstance to support setting CA Certificates. Update the output of DescribeDBInstance and DescribeDBEngineVersions to show current and supported CA certificates.
 * (**iam**) Add partitional endpoint for iso-e.
 * (**iis**) This release extends the GetReservationPurchaseRecommendation API to support recommendations for Amazon MemoryDB reservations.
+* (**mwaa**) This release adds support for Apache Airflow version 2.7.2. This version release includes support for deferrable operators and triggers.
 * (**polly**) Amazon Polly adds new US English voices - Danielle and Gregory. Danielle and Gregory are available as Neural voices only.
 * (**route53**) Add partitional endpoints for iso-e and iso-f.
 * **BREAKING**: Remove operations/fields which were marked deprecated before 11/28/2023. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/1103) for more details.
