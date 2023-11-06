@@ -112,7 +112,7 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                     importPaths.add(service.modelExtrasDir)
                 }
                 imports = importPaths
-                transforms = transformsForService(service) ?: emptyList()
+                transforms = (transformsForService(service) ?: emptyList()) + removeDeprecatedShapesTransform("2023-11-28")
 
                 smithyKotlinPlugin {
                     serviceShapeId = service.serviceShapeId
@@ -154,6 +154,15 @@ fun transformsForService(service: AwsService): List<String>? {
         transformFile.readText()
     }
 }
+
+fun removeDeprecatedShapesTransform(removeDeprecatedShapesUntil: String): String = """
+    {
+        "name": "AwsSdkKotlinRemoveDeprecatedShapes",
+        "args": {
+            "until": "$removeDeprecatedShapesUntil"
+        }
+    }
+""".trimIndent()
 
 val discoveredServices: List<AwsService> by lazy { discoverServices() }
 

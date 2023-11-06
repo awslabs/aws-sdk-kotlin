@@ -1,0 +1,6 @@
+{
+    "id": "c79af2ed-bfad-4196-bf5c-87d647ecbcd1",
+    "type": "feature",
+    "description": "**BREAKING**: Remove operations/fields which were marked deprecated before 11/28/2023. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/1103) for more details.",
+    "requiresMinorVersionBump": true
+}

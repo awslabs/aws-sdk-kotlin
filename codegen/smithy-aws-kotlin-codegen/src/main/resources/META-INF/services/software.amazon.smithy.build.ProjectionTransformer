@@ -1,1 +1,2 @@
 aws.sdk.kotlin.codegen.transforms.IncludeOperations
+aws.sdk.kotlin.codegen.transforms.RemoveDeprecatedShapes
