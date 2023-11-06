@@ -11,6 +11,7 @@ import aws.sdk.kotlin.gradle.codegen.dsl.projectionRootDir
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
 import java.util.*
@@ -114,6 +115,14 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                 imports = importPaths
                 transforms = transformsForService(service) ?: emptyList()
 
+                val packageSettingsFile = file(service.packageSettings)
+                val packageSettings = if (packageSettingsFile.exists()) {
+                    val node = Node.parse(packageSettingsFile.inputStream())
+                    node.asObjectNode().get()
+                } else {
+                    Node.objectNode()
+                }
+
                 smithyKotlinPlugin {
                     serviceShapeId = service.serviceShapeId
                     packageName = service.packageName
@@ -123,6 +132,9 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                     buildSettings {
                         generateFullProject = false
                         generateDefaultBuildFiles = false
+                    }
+                    apiSettings {
+                        enableEndpointAuthProvider = packageSettings.getBooleanMember("enableEndpointAuthProvider").orNull()?.value
                     }
                 }
             }
@@ -285,6 +297,12 @@ val AwsService.modelExtrasDir: String
  */
 val AwsService.transformsDir: String
     get() = rootProject.file("$destinationDir/transforms").absolutePath
+
+/**
+ * Service specific package settings
+ */
+val AwsService.packageSettings: String
+    get() = rootProject.file("$destinationDir/package.json").absolutePath
 
 fun forwardProperty(name: String) {
     getProperty(name)?.let {
