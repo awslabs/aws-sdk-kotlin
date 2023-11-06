@@ -3,7 +3,7 @@
 ## [0.34.0-beta] - 11/06/2023
 
 ### Features
-* (**arn:aws:trebuchet:::service:v1:f361927243404cf0854add0d05d8129f**) This release adds support for Apache Airflow version 2.7.2. This version release includes support for deferrable operators and triggers.
+* (**mwaa**) This release adds support for Apache Airflow version 2.7.2. This version release includes support for deferrable operators and triggers.
 * (**awslily**) Added new API that allows Amazon Connect Outbound Campaigns to create contacts in Amazon Connect when ingesting your dial requests.
 * (**codebuild**) AWS CodeBuild now supports AWS Lambda compute.
 * (**docdb**) Update the input of CreateDBInstance and ModifyDBInstance to support setting CA Certificates. Update the output of DescribeDBInstance and DescribeDBEngineVersions to show current and supported CA certificates.
