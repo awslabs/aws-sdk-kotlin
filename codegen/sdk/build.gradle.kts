@@ -126,7 +126,7 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                 if (!packageSettings.isEmpty) {
                     packageSettings.expectMember("sdkId", "${packageSettingsFile.absolutePath} does not contain member `sdkId`")
                     val packageSdkId = packageSettings.getStringMember("sdkId").get().value
-                    check(service.sdkId == packageSdkId) { "${packageSettingsFile.absolutePath} `sdkId` ($packageSdkId) does not match expected `${service.sdkId}`"}
+                    check(service.sdkId == packageSdkId) { "${packageSettingsFile.absolutePath} `sdkId` ($packageSdkId) does not match expected `${service.sdkId}`" }
                 }
 
                 smithyKotlinPlugin {
