@@ -75,7 +75,7 @@ allprojects {
         // Configure Dokka to link to smithy-kotlin types if specified in properties
         // These optional properties are supplied api the api docs build job but are unneeded otherwise
         smithyKotlinDocBaseUrl.takeUnless { it.isNullOrEmpty() }?.let { docBaseUrl ->
-            val expandedDocBaseUrl = docBaseUrl.replace("\$smithyKotlinVersion", libs.versions.smithy.kotlin.version.get())
+            val expandedDocBaseUrl = docBaseUrl.replace("\$smithyKotlinRuntimeVersion", libs.versions.smithy.kotlin.runtime.version.get())
             dokkaSourceSets.configureEach {
                 externalDocumentationLink {
                     url.set(URL(expandedDocBaseUrl))
