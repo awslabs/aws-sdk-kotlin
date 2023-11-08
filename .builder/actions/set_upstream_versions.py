@@ -28,7 +28,7 @@ class SetUpstreamVersions(Builder.Action):
 
         print("discovered dependency versions: {}".format(discovered_versions))
         if "smithy-kotlin" in discovered_versions:
-            _replace_version_catalog_version(proj, "smithy-kotlin-version", discovered_versions["smithy-kotlin"])
+            _replace_version_catalog_version(proj, "smithy-kotlin-runtime-version", discovered_versions["smithy-kotlin"])
 
         if "aws-crt-kotlin" in discovered_versions:
             _replace_gradle_property(proj, "crt-kotlin-version", discovered_versions["aws-crt-kotlin"])
