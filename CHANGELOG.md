@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.34.2-beta] - 11/08/2023
+
+### Features
+* (**connect**) This release clarifies in our public documentation that InstanceId is a requirement for SearchUsers API requests.
+* (**connectcases**) This release adds the ability to add/view comment authors through CreateRelatedItem and SearchRelatedItems API. For more information see https://docs.aws.amazon.com/cases/latest/APIReference/Welcome.html
+* (**datasync**) This change allows for 0 length access keys and secret keys for object storage locations. Users can now pass in empty string credentials.
+* (**guardduty**) Added API support for new GuardDuty EKS Audit Log finding types.
+* (**lambda**) Add Node 20 (nodejs20.x) support to AWS Lambda.
+* (**lexmodelsv2**) AWS Lex now supports selective log capture in conversation logs. When you enable this option within the conversation log settings, only the utterances that trigger intents and slots specified in session attributes will be logged.
+* (**omics**) Adding Run UUID and Run Output URI: GetRun and StartRun API response has two new fields "uuid" and "runOutputUri".
+* (**redshiftserverless**) Added a new parameter in the workgroup that helps you control your cost for compute resources. This feature provides a ceiling for RPUs that Amazon Redshift Serverless can scale up to. When automatic compute scaling is required, having a higher value for MaxRPU can enhance query throughput.
+* (**resiliencehub**) AWS Resilience Hub enhances Resiliency Score, providing actionable recommendations to improve application resilience. Amazon Elastic Kubernetes Service (EKS) operational recommendations have been added to help improve the resilience posture of your applications.
+* (**sqs**) This release enables customers to call SQS using AWS JSON-1.0 protocol.
+
+### Documentation
+* (**rds**) This Amazon RDS release adds support for patching the OS of an RDS Custom for Oracle DB instance. You can now upgrade the database or operating system using the modify-db-instance command.
+
 ## [0.34.1-beta] - 11/07/2023
 
 ### Features
