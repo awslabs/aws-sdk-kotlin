@@ -27,8 +27,8 @@ val awsEndpointPropertyRenderers = mapOf(
 
 private fun String.toAuthOptionFactoryFn(): Symbol? =
     when (this) {
-        "sigv4" -> RuntimeTypes.Auth.HttpAuthAws.sigv4
-        "sigv4a" -> RuntimeTypes.Auth.HttpAuthAws.sigv4A
+        "sigv4" -> RuntimeTypes.Auth.HttpAuthAws.sigV4
+        "sigv4a" -> RuntimeTypes.Auth.HttpAuthAws.sigV4A
         else -> null
     }
 
