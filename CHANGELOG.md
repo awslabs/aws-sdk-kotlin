@@ -3,7 +3,7 @@
 ## [0.34.1-beta] - 11/07/2023
 
 ### Features
-* (**arn:aws:trebuchet:::service:v1:7941e50651524cbfb5f7a393a79dc0c8**) Updated SendDataSetNotificationRequest Comment to be maximum length 4096.
+* (**dataexchange**) Updated SendDataSetNotificationRequest Comment to be maximum length 4096.
 * (**lifecycle**) Added support for pre and post scripts in Amazon Data Lifecycle Manager EBS snapshot lifecycle policies.
 * (**rds**) This Amazon RDS release adds support for the multi-tenant configuration. In this configuration, an RDS DB instance can contain multiple tenant databases. In RDS for Oracle, a tenant database is a pluggable database (PDB).
 
