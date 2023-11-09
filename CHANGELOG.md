@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.34.4-beta] - 11/09/2023
+
+### Features
+* (**cloudformation**) Added new ConcurrencyMode feature for AWS CloudFormation StackSets for faster deployments to target accounts.
+* (**cloudtrail**) The Insights in Lake feature lets customers enable CloudTrail Insights on a source CloudTrail Lake event data store and create a destination event data store to collect Insights events based on unusual management event activity in the source event data store.
+* (**cloudwatchlogs**) Update to support new APIs for delivery of logs from AWS services.
+* (**comprehend**) This release adds support for toxicity detection and prompt safety classification.
+* (**connect**) This release adds the ability to integrate customer lambda functions with Connect attachments for scanning and updates the ListIntegrationAssociations API to support filtering on IntegrationArn.
+* (**ec2**) AWS EBS now supports Block Public Access for EBS Snapshots. This release introduces the EnableSnapshotBlockPublicAccess, DisableSnapshotBlockPublicAccess and GetSnapshotBlockPublicAccessState APIs to manage account-level public access settings for EBS Snapshots in an AWS Region.
+* (**eks**) Adding EKS Anywhere subscription related operations.
+* (**lambda**) Add Custom runtime on Amazon Linux 2023 (provided.al2023) support to AWS Lambda.
+* (**omics**) Support UBAM filetype for Omics Storage and make referenceArn optional
+
 ## [0.34.3-beta] - 11/09/2023
 
 ### Features
