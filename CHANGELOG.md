@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.34.3-beta] - 11/09/2023
+
+### Features
+* (**sqs**) This release enables customers to call SQS using AWS JSON-1.0 protocol and bug fix.
+
 ## [0.34.2-beta] - 11/08/2023
 
 ### Features
