@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.34.5-beta] - 11/10/2023
+
+### Features
+* (**controltower**) AWS Control Tower supports tagging for enabled controls. This release introduces TagResource, UntagResource and ListTagsForResource APIs to manage tags in existing enabled controls. It updates EnabledControl API to tag resources at creation time.
+* (**costandusagereportservice**) This release adds support for tagging and customers can now tag report definitions. Additionally, ReportStatus is now added to report definition to show when the last delivered time stamp and if it succeeded or not.
+* (**ec2**) EC2 adds API updates to enable ENA Express at instance launch time.
+* (**marketplaceentitlementservice**) Add paginators to GetEntitlements.
+* (**mediaconvert**) This release includes the ability to specify any input source as the primary input for corresponding follow modes, and allows users to specify fit and fill behaviors without resizing content.
+
+### Documentation
+* (**fms**) Adds optimizeUnassociatedWebACL flag to ManagedServiceData, updates third-party firewall examples, and other minor documentation updates.
+* (**rds**) Updates Amazon RDS documentation for zero-ETL integrations.
+
 ## [0.34.4-beta] - 11/09/2023
 
 ### Features
