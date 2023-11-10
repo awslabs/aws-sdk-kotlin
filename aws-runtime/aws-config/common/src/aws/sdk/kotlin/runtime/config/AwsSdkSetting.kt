@@ -140,6 +140,12 @@ public object AwsSdkSetting {
         strEnvSetting("aws.containerAuthorizationToken", "AWS_CONTAINER_AUTHORIZATION_TOKEN")
 
     /**
+     * A path to a file which contains an authorization token to pass to a container metadata service.
+     */
+    public val AwsContainerAuthorizationTokenFile: EnvironmentSetting<String> =
+        strEnvSetting("aws.containerAuthorizationTokenFile", "AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE")
+
+    /**
      * The maximum number of request attempts to perform. This is one more than the number of retries, so
      * aws.maxAttempts = 1 will have 0 retries.
      */

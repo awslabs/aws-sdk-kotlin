@@ -1,5 +1,0 @@
-{
-    "id": "1691b2fe-15ba-4bf8-8f27-382b59c792c8",
-    "type": "bugfix",
-    "description": "Ignore empty environment variable and system property strings when evaluating AWS credentials"
-}

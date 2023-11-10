@@ -1,5 +1,94 @@
 # Changelog
 
+## [0.34.4-beta] - 11/09/2023
+
+### Features
+* (**cloudformation**) Added new ConcurrencyMode feature for AWS CloudFormation StackSets for faster deployments to target accounts.
+* (**cloudtrail**) The Insights in Lake feature lets customers enable CloudTrail Insights on a source CloudTrail Lake event data store and create a destination event data store to collect Insights events based on unusual management event activity in the source event data store.
+* (**cloudwatchlogs**) Update to support new APIs for delivery of logs from AWS services.
+* (**comprehend**) This release adds support for toxicity detection and prompt safety classification.
+* (**connect**) This release adds the ability to integrate customer lambda functions with Connect attachments for scanning and updates the ListIntegrationAssociations API to support filtering on IntegrationArn.
+* (**ec2**) AWS EBS now supports Block Public Access for EBS Snapshots. This release introduces the EnableSnapshotBlockPublicAccess, DisableSnapshotBlockPublicAccess and GetSnapshotBlockPublicAccessState APIs to manage account-level public access settings for EBS Snapshots in an AWS Region.
+* (**eks**) Adding EKS Anywhere subscription related operations.
+* (**lambda**) Add Custom runtime on Amazon Linux 2023 (provided.al2023) support to AWS Lambda.
+* (**omics**) Support UBAM filetype for Omics Storage and make referenceArn optional
+
+## [0.34.3-beta] - 11/09/2023
+
+### Features
+* (**sqs**) This release enables customers to call SQS using AWS JSON-1.0 protocol and bug fix.
+
+## [0.34.2-beta] - 11/08/2023
+
+### Features
+* (**connect**) This release clarifies in our public documentation that InstanceId is a requirement for SearchUsers API requests.
+* (**connectcases**) This release adds the ability to add/view comment authors through CreateRelatedItem and SearchRelatedItems API. For more information see https://docs.aws.amazon.com/cases/latest/APIReference/Welcome.html
+* (**datasync**) This change allows for 0 length access keys and secret keys for object storage locations. Users can now pass in empty string credentials.
+* (**guardduty**) Added API support for new GuardDuty EKS Audit Log finding types.
+* (**lambda**) Add Node 20 (nodejs20.x) support to AWS Lambda.
+* (**lexmodelsv2**) AWS Lex now supports selective log capture in conversation logs. When you enable this option within the conversation log settings, only the utterances that trigger intents and slots specified in session attributes will be logged.
+* (**omics**) Adding Run UUID and Run Output URI: GetRun and StartRun API response has two new fields "uuid" and "runOutputUri".
+* (**redshiftserverless**) Added a new parameter in the workgroup that helps you control your cost for compute resources. This feature provides a ceiling for RPUs that Amazon Redshift Serverless can scale up to. When automatic compute scaling is required, having a higher value for MaxRPU can enhance query throughput.
+* (**resiliencehub**) AWS Resilience Hub enhances Resiliency Score, providing actionable recommendations to improve application resilience. Amazon Elastic Kubernetes Service (EKS) operational recommendations have been added to help improve the resilience posture of your applications.
+* (**sqs**) This release enables customers to call SQS using AWS JSON-1.0 protocol.
+
+### Documentation
+* (**rds**) This Amazon RDS release adds support for patching the OS of an RDS Custom for Oracle DB instance. You can now upgrade the database or operating system using the modify-db-instance command.
+
+## [0.34.1-beta] - 11/07/2023
+
+### Features
+* (**dataexchange**) Updated SendDataSetNotificationRequest Comment to be maximum length 4096.
+* (**lifecycle**) Added support for pre and post scripts in Amazon Data Lifecycle Manager EBS snapshot lifecycle policies.
+* (**rds**) This Amazon RDS release adds support for the multi-tenant configuration. In this configuration, an RDS DB instance can contain multiple tenant databases. In RDS for Oracle, a tenant database is a pluggable database (PDB).
+
+## [0.34.0-beta] - 11/06/2023
+
+### Features
+* (**awslily**) Added new API that allows Amazon Connect Outbound Campaigns to create contacts in Amazon Connect when ingesting your dial requests.
+* (**codebuild**) AWS CodeBuild now supports AWS Lambda compute.
+* (**docdb**) Update the input of CreateDBInstance and ModifyDBInstance to support setting CA Certificates. Update the output of DescribeDBInstance and DescribeDBEngineVersions to show current and supported CA certificates.
+* (**iam**) Add partitional endpoint for iso-e.
+* (**iis**) This release extends the GetReservationPurchaseRecommendation API to support recommendations for Amazon MemoryDB reservations.
+* (**mwaa**) This release adds support for Apache Airflow version 2.7.2. This version release includes support for deferrable operators and triggers.
+* (**polly**) Amazon Polly adds new US English voices - Danielle and Gregory. Danielle and Gregory are available as Neural voices only.
+* (**route53**) Add partitional endpoints for iso-e and iso-f.
+* **BREAKING**: Remove operations/fields which were marked deprecated before 11/28/2023. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/1103) for more details.
+
+### Fixes
+* [#1101](https://github.com/awslabs/aws-sdk-kotlin/issues/1101) Fix endpoint builtin bound to wrong config parameter
+
+## [0.33.1-beta] - 11/01/2023
+
+### Features
+* Support EKS endpoints and auth token file in container credentials provider.
+
+### Fixes
+* [#1098](https://github.com/awslabs/aws-sdk-kotlin/issues/1098) Add `forcePathStyle` and `enableAccelerate` config properties back to the S3 client.
+
+### Miscellaneous
+* Upgrade to the latest version of **smithy-kotlin**
+
+## [0.33.0-beta] - 10/26/2023
+
+### Features
+* **BREAKING**: Update codegen to improve nullability of generated types.
+* [#605](https://github.com/awslabs/aws-sdk-kotlin/issues/605), [#805](https://github.com/awslabs/aws-sdk-kotlin/issues/805) Publish a BOM and a Version Catalog
+* Detect and automatically correct clock skew to prevent signing errors
+
+### Fixes
+* Ignore empty environment variable and system property strings when evaluating AWS credentials
+
+### Miscellaneous
+* Upgrade Kotlin to 1.9.10
+* Sync AWS models and upgrade smithy-kotlin
+* Upgrade Dokka to 1.9.0
+* **Breaking** Removed `enableAccelerate` & `forcePathStyle` from S3 config. As well as `use_accelerate_endpoint` & `addressing_style` from AWS profile configuration
+* **BREAKING**: Remove `smithy.client.request.size`, `smithy.client.response.size`, `smithy.client.retries` metrics. Rename all `smithy.client.*` metrics to `smithy.client.call.*`.
+* Remove GameSparks service
+* Add skeleton implementation of a second KMP target
+* Added `s3_use_arn_region` & `s3_disable_multiregion_access_points` to AWS profile configuration
+
 ## [0.32.5-beta] - 10/12/2023
 
 ### Features

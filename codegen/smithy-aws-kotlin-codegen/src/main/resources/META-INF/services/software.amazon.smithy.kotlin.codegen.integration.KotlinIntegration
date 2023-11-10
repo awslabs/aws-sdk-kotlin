@@ -12,7 +12,6 @@ aws.sdk.kotlin.codegen.customization.apigateway.ApiGatewayAddAcceptHeader
 aws.sdk.kotlin.codegen.customization.glacier.GlacierAddVersionHeader
 aws.sdk.kotlin.codegen.customization.glacier.GlacierAccountIdDefault
 aws.sdk.kotlin.codegen.customization.polly.PollyPresigner
-aws.sdk.kotlin.codegen.customization.BoxServices
 aws.sdk.kotlin.codegen.customization.glacier.GlacierBodyChecksum
 aws.sdk.kotlin.codegen.customization.machinelearning.MachineLearningEndpointCustomization
 aws.sdk.kotlin.codegen.customization.BackfillOptionalAuth
@@ -31,3 +30,4 @@ aws.sdk.kotlin.codegen.protocols.endpoints.BindAwsEndpointBuiltins
 aws.sdk.kotlin.codegen.customization.s3.HostPrefixRequestRouteFilter
 aws.sdk.kotlin.codegen.customization.s3.UnwrappedXmlOutputIntegration
 aws.sdk.kotlin.codegen.customization.ClockSkew
+aws.sdk.kotlin.codegen.customization.ec2.EC2MakePrimitivesOptional

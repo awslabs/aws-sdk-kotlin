@@ -20,6 +20,7 @@ val sdkVersion: String by project
 
 group = "aws.sdk.kotlin"
 version = sdkVersion
+description = "Provides a BOM"
 
 val evaluateAfter = listOf(":services", ":aws-runtime", ":tests", ":codegen")
 evaluateAfter.forEach { evaluationDependsOn(it) }
@@ -106,6 +107,7 @@ publishing {
 
         create<MavenPublication>("versionCatalog") {
             artifactId = "version-catalog"
+            description = "Provides a version catalog"
             from(components["versionCatalog"])
         }
     }
