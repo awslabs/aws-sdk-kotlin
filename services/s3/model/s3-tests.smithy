@@ -71,10 +71,7 @@ apply CreateBucket @httpRequestTests([
         uri: "/",
         host: "s3.us-west-2.amazonaws.com",
         body: "",
-        headers: {
-            "Content-Type": "application/xml",
-        },
-        forbidHeaders: ["Content-Length"],
+        forbidHeaders: ["Content-Type", "Content-Length"],
         params: {
             Bucket: "mybucket",
         }
