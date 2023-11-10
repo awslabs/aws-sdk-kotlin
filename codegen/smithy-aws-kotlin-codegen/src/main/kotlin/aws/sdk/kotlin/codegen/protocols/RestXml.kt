@@ -38,7 +38,7 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
         writer: KotlinWriter,
-        resolver: HttpBindingResolver
+        resolver: HttpBindingResolver,
     ) {
         if (op.payloadIsUnionShape(ctx.model)) {
             writer.write("builder.headers.setMissing(\"Content-Type\", #S)", resolver.determineRequestContentType(op))
