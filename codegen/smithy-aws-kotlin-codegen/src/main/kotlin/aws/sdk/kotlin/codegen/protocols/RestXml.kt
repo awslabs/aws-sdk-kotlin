@@ -9,13 +9,16 @@ import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.xml.RestXmlSerdeDescriptorGenerator
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.core.*
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.kotlin.codegen.rendering.serde.*
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.*
-import software.amazon.smithy.model.traits.*
+import software.amazon.smithy.model.traits.TimestampFormatTrait
+import software.amazon.smithy.model.traits.XmlNameTrait
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -30,15 +33,15 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
     override val protocol: ShapeId = RestXmlTrait.ID
     override val defaultTimestampFormat: TimestampFormatTrait.Format = TimestampFormatTrait.Format.DATE_TIME
 
+    // See: https://github.com/awslabs/aws-sdk-kotlin/issues/1050
     override fun renderContentTypeHeader(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
         writer: KotlinWriter,
         resolver: HttpBindingResolver,
     ) {
-        val contentType = resolver.determineRequestContentType(op)
-        contentType.let {
-            writer.write("builder.headers.setMissing(\"Content-Type\", #S)", contentType)
+        if(op.inputIsUnionShape(ctx.model)){
+            writer.write("builder.headers.setMissing(\"Content-Type\", #S)", resolver.determineRequestContentType(op))
         }
     }
 
