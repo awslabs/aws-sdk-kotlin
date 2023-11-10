@@ -67,9 +67,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsJson1_1",
                 "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsQuery",
                 "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_ec2Query",
-
-                // FIXME - missing Content-Type on restXml empty payloads, see https://github.com/awslabs/aws-sdk-kotlin/issues/1050
-                "RestXmlHttpPayloadWithUnsetUnion",
             ),
         )
 

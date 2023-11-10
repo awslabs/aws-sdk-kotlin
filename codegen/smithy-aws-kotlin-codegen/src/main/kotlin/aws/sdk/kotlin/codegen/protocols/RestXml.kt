@@ -12,7 +12,10 @@ import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
-import software.amazon.smithy.kotlin.codegen.model.*
+import software.amazon.smithy.kotlin.codegen.model.buildSymbol
+import software.amazon.smithy.kotlin.codegen.model.expectShape
+import software.amazon.smithy.kotlin.codegen.model.expectTrait
+import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.kotlin.codegen.rendering.serde.*
 import software.amazon.smithy.model.Model
@@ -40,9 +43,14 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
         writer: KotlinWriter,
         resolver: HttpBindingResolver,
     ) {
-        if (op.inputIsUnionShape(ctx.model)) {
-            writer.write("builder.headers.setMissing(\"Content-Type\", #S)", resolver.determineRequestContentType(op))
-        }
+//        if (op.inputIsUnionShape(ctx.model)) {
+//            val contentType = resolver.determineRequestContentType(op)
+//            contentType.let {
+//                writer.write("builder.headers.setMissing(\"Content-Type\", #S)", contentType)
+//            }
+//        } else {
+            super.renderContentTypeHeader(ctx, op, writer, resolver)
+//        }
     }
 
     // See https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#content-type
