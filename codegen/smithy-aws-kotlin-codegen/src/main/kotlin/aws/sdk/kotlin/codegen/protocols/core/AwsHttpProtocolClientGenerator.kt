@@ -10,6 +10,8 @@ import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.SmithyClient.SdkClientOption
+import software.amazon.smithy.kotlin.codegen.integration.SectionId
+import software.amazon.smithy.kotlin.codegen.integration.SectionKey
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
 import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
@@ -31,6 +33,9 @@ open class AwsHttpProtocolClientGenerator(
     middlewares: List<ProtocolMiddleware>,
     httpBindingResolver: HttpBindingResolver,
 ) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
+    object MergeServiceDefaults : SectionId {
+        val GenerationContext: SectionKey<ProtocolGenerator.GenerationContext> = SectionKey("GenerationContext")
+    }
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
@@ -109,11 +114,13 @@ open class AwsHttpProtocolClientGenerator(
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
                 putIfAbsent(SdkClientOption, "IdempotencyTokenProvider", nullable = true)
             }
+
+            writer.declareSection(MergeServiceDefaults)
         }
     }
 }
 
-private fun KotlinWriter.putIfAbsent(
+internal fun KotlinWriter.putIfAbsent(
     attributesSymbol: Symbol,
     name: String,
     literalValue: String? = null,
