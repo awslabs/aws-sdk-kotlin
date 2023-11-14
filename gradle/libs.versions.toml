@@ -1,6 +1,6 @@
 [versions]
-kotlin-version = "1.9.10"
-dokka-version = "1.9.0"
+kotlin-version = "1.9.20"
+dokka-version = "1.9.10"
 
 # libs
 coroutines-version = "1.7.3"
@@ -11,16 +11,16 @@ smithy-kotlin-runtime-version = "0.28.2"
 smithy-kotlin-codegen-version = "0.28.2"
 
 # codegen
-smithy-version = "1.39.0"
-smithy-gradle-version = "0.6.0"
+smithy-version = "1.41.0"
+smithy-gradle-version = "0.7.0"
 
 # testing
-junit-version = "5.9.2"
-kotest-version = "5.7.2"
+junit-version = "5.10.1"
+kotest-version = "5.8.0"
 kotlinx-benchmark-version = "0.4.9"
 kotlinx-serialization-version = "1.6.0"
-mockk-version = "1.13.3"
-slf4j-version = "2.0.6"
+mockk-version = "1.13.7"
+slf4j-version = "2.0.9"
 
 
 [libraries]
