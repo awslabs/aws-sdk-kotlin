@@ -6,7 +6,8 @@
       "access_key_id": "ASIARCORRECT",
       "secret_access_key": "secretkeycorrect",
       "session_token": "tokencorrect",
-      "expiry": 1641240833
+      "expiry": 1641240833,
+      "accountId": "123456789"
     }
   }
 }

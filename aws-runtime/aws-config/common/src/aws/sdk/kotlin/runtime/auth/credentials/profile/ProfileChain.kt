@@ -6,10 +6,10 @@
 package aws.sdk.kotlin.runtime.auth.credentials.profile
 
 import aws.sdk.kotlin.runtime.auth.credentials.ProviderConfigurationException
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProviderResult.Err
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 
 /**
  * A chain of profile providers
@@ -121,6 +121,7 @@ internal const val WEB_IDENTITY_TOKEN_FILE = "web_identity_token_file"
 internal const val AWS_ACCESS_KEY_ID = "aws_access_key_id"
 internal const val AWS_SECRET_ACCESS_KEY = "aws_secret_access_key"
 internal const val AWS_SESSION_TOKEN = "aws_session_token"
+internal const val AWS_ACCOUNT_ID = "aws_account_id"
 
 internal const val SSO_START_URL = "sso_start_url"
 internal const val SSO_REGION = "sso_region"
@@ -254,13 +255,14 @@ private fun AwsProfile.processCreds(): LeafProviderResult? {
 private fun AwsProfile.staticCreds(): LeafProviderResult {
     val accessKeyId = getOrNull(AWS_ACCESS_KEY_ID)
     val secretKey = getOrNull(AWS_SECRET_ACCESS_KEY)
+    val accountId = getOrNull(AWS_ACCOUNT_ID)
     return when {
         accessKeyId == null && secretKey == null -> LeafProviderResult.Err("profile ($name) did not contain credential information")
         accessKeyId == null -> LeafProviderResult.Err("profile ($name) missing `aws_access_key_id`")
         secretKey == null -> LeafProviderResult.Err("profile ($name) missing `aws_secret_access_key`")
         else -> {
             val sessionToken = getOrNull(AWS_SESSION_TOKEN)
-            val provider = LeafProvider.AccessKey(Credentials(accessKeyId, secretKey, sessionToken))
+            val provider = LeafProvider.AccessKey(credentials(accessKeyId, secretKey, sessionToken, accountId = accountId))
             LeafProviderResult.Ok(provider)
         }
     }
