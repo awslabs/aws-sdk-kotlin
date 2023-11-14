@@ -88,9 +88,9 @@ val generateProjectionsTask = tasks.named<SmithyBuild>("generateSmithyProjection
     addCompileClasspath = true
 
     // ensure the generated tests use the same version of the runtime as the aws aws-runtime
-    val smithyKotlinVersion = libs.versions.smithy.kotlin.version.get()
+    val smithyKotlinRuntimeVersion = libs.versions.smithy.kotlin.runtime.version.get()
     doFirst {
-        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinVersion)
+        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinRuntimeVersion)
     }
 }
 
