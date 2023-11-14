@@ -14,7 +14,7 @@ buildscript {
         classpath(libs.kotlinx.atomicfu.plugin)
         classpath("aws.sdk.kotlin:build-plugins") {
             version {
-                require("0.2.8")
+                require("0.2.9")
             }
         }
     }

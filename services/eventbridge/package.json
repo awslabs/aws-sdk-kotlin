@@ -1,0 +1,4 @@
+{
+  "sdkId": "EventBridge",
+  "enableEndpointAuthProvider": true
+}
