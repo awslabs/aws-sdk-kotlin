@@ -13,10 +13,16 @@ import java.util.*
 
 class SmithyKotlinApiSettings : ToNode {
     var visibility: String? = null
+    var nullabilityCheckMode: String? = null
+    var defaultValueSerializationMode: String? = null
+    var enableEndpointAuthProvider: Boolean? = null
 
     override fun toNode(): Node {
         val builder = ObjectNode.objectNodeBuilder()
         builder.withNullableMember("visibility", visibility)
+        builder.withNullableMember("nullabilityCheckMode", nullabilityCheckMode)
+        builder.withNullableMember("defaultValueSerializationMode", defaultValueSerializationMode)
+        builder.withNullableMember("enableEndpointAuthProvider", enableEndpointAuthProvider)
         return builder.build()
     }
 }
