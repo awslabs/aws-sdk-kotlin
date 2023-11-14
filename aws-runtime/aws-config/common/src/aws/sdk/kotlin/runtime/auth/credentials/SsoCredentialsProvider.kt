@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.SsoClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
@@ -116,12 +117,13 @@ public class SsoCredentialsProvider public constructor(
 
         val roleCredentials = resp.roleCredentials ?: throw CredentialsProviderException("Expected SSO roleCredentials to not be null")
 
-        return Credentials(
+        return credentials(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in SSO roleCredentials response" },
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in SSO roleCredentials response" },
             sessionToken = roleCredentials.sessionToken,
             expiration = Instant.fromEpochMilliseconds(roleCredentials.expiration),
             PROVIDER_NAME,
+            accountId = accountId,
         )
     }
 

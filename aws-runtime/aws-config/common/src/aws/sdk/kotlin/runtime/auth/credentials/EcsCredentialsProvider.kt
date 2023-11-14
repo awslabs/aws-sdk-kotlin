@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsContainerCredentialsRelativeUri
 import aws.smithy.kotlin.runtime.ErrorMetadata
@@ -188,12 +189,13 @@ private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
             throw CredentialsProviderException("HTTP credentials response was not of expected format")
         }
 
-        return Credentials(
+        return credentials(
             resp.accessKeyId,
             resp.secretAccessKey,
             resp.sessionToken,
             resp.expiration,
             PROVIDER_NAME,
+            resp.accountId,
         )
     }
 }

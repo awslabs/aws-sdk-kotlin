@@ -48,6 +48,11 @@ public object AwsSdkSetting {
     public val AwsRegion: EnvironmentSetting<String> = strEnvSetting("aws.region", "AWS_REGION")
 
     /**
+     * Configure the AWS account ID
+     */
+    public val AwsAccountId: EnvironmentSetting<String> = strEnvSetting("aws.accountId", "AWS_ACCOUNT_ID")
+
+    /**
      * Configure the user agent app ID
      */
     public val AwsAppId: EnvironmentSetting<String> = strEnvSetting(AWS_APP_ID_PROP, AWS_APP_ID_ENV)

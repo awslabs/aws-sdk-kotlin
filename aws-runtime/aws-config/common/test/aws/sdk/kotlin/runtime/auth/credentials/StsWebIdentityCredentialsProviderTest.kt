@@ -5,7 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
@@ -27,12 +27,13 @@ import kotlin.time.Duration.Companion.minutes
 private const val TOKEN_PATH = "token-path"
 private const val TOKEN_VALUE = "jwt-token"
 
-private val CREDENTIALS = Credentials(
+private val CREDENTIALS = credentials(
     "AKIDTest",
     "test-secret",
     "test-token",
     StsTestUtils.EPOCH + 15.minutes,
     "WebIdentityToken",
+    "1234567",
 )
 
 class StsWebIdentityCredentialsProviderTest {
