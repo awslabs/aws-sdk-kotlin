@@ -1,0 +1,6 @@
+{
+    "id": "873fb1ab-bfbb-4110-89cd-bf7ac352bc86",
+    "type": "feature",
+    "description": "⚠️ **IMPORTANT**: Enable account ID based endpoint routing for services that use it",
+    "requiresMinorVersionBump": true
+}
