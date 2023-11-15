@@ -4,9 +4,12 @@
  */
 package aws.sdk.kotlin.codegen.protocols.endpoints
 
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.AwsServiceConfigIntegration
+import aws.sdk.kotlin.codegen.customization.AccountIdEndpointBuiltinCustomization
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
@@ -29,7 +32,7 @@ class BindAwsEndpointBuiltins : KotlinIntegration {
         writer: KotlinWriter,
     ) {
         val builtins = rules.parameters?.toList()?.filter(Parameter::isBuiltIn) ?: return
-        writer.write("#T(config)", bindAwsBuiltinsSymbol(ctx, builtins))
+        writer.write("#T(config, request)", bindAwsBuiltinsSymbol(ctx, builtins))
     }
 }
 
@@ -39,10 +42,11 @@ class BindAwsEndpointBuiltins : KotlinIntegration {
  */
 fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: KotlinWriter, builtinParams: List<Parameter>) {
     writer.withBlock(
-        "private fun #T.Builder.bindAwsBuiltins(config: #T.Config) {",
+        "private fun #T.Builder.bindAwsBuiltins(config: #T.Config, request: #T) {",
         "}",
         EndpointParametersGenerator.getSymbol(ctx.settings),
         ctx.symbolProvider.toSymbol(ctx.service),
+        RuntimeTypes.HttpClient.Operation.ResolveEndpointRequest,
     ) {
         builtinParams.forEach {
             when (it.builtIn.get()) {
@@ -62,6 +66,14 @@ fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: Kotl
                 // as a newer SDK we do NOT support these values, they are always false
                 "AWS::S3::UseGlobalEndpoint", "AWS::STS::UseGlobalEndpoint" ->
                     writer.write("#L = false", it.defaultName())
+
+                "AWS::Auth::AccountId" ->
+                    writer.write(
+                        "#L = #T(config.#L, request.identity.attributes)",
+                        it.defaultName(),
+                        AwsRuntimeTypes.Config.Endpoints.resolveAccountId,
+                        AccountIdEndpointBuiltinCustomization.AccountIdEndpointModeProp.propertyName,
+                    )
             }
         }
     }

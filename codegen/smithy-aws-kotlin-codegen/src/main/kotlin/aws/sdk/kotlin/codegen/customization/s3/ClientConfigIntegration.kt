@@ -4,9 +4,9 @@
  */
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.ServiceClientCompanionObjectWriter
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
+import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
@@ -90,16 +90,14 @@ class ClientConfigIntegration : KotlinIntegration {
         )
 
     override val sectionWriters: List<SectionWriterBinding>
-        get() = listOf(
-            SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, serviceClientCompanionObjectWriter),
-        )
+        get() = listOf(SectionWriterBinding(ServiceClientGenerator.Sections.FinalizeConfig, finalizeS3ConfigWriter))
 
     // add S3-specific config finalization
-    private val serviceClientCompanionObjectWriter = ServiceClientCompanionObjectWriter {
+    private val finalizeS3ConfigWriter = AppendingSectionWriter { writer ->
         val finalizeS3Config = buildSymbol {
             name = "finalizeS3Config"
             namespace = "aws.sdk.kotlin.services.s3.internal"
         }
-        write("#T(builder, sharedConfig)", finalizeS3Config)
+        writer.write("#T(builder, sharedConfig)", finalizeS3Config)
     }
 }

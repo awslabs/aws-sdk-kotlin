@@ -5,8 +5,8 @@
 package aws.sdk.kotlin.codegen.customization
 
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 
@@ -17,7 +17,7 @@ class ClockSkew : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(SectionWriterBinding(ServiceClientGenerator.Sections.FinalizeConfig, clockSkewSectionWriter))
 
-    private val clockSkewSectionWriter = SectionWriter { writer, _ ->
+    private val clockSkewSectionWriter = AppendingSectionWriter { writer ->
         val interceptorSymbol = RuntimeTypes.AwsProtocolCore.ClockSkewInterceptor
         writer.write("builder.config.interceptors.add(0, #T())", interceptorSymbol)
     }
