@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.34.7-beta] - 11/14/2023
+
+### Features
+* (**backup**) AWS Backup - Features: Provide Job Summary for your backup activity.
+* (**cleanrooms**) This feature provides the ability for the collaboration creator to configure either the member who can run queries or a different member in the collaboration to be billed for query compute costs.
+* (**connect**) Introducing SegmentAttributes parameter for StartChatContact API
+* (**glue**) Introduces new storage optimization APIs to support automatic compaction of Apache Iceberg tables.
+* (**iot**) This release introduces new attributes in API CreateSecurityProfile, UpdateSecurityProfile and DescribeSecurityProfile to support management of Metrics Export for AWS IoT Device Defender Detect.
+* (**lambda**) Add Python 3.12 (python3.12) support to AWS Lambda
+* (**mediatailor**) Removed unnecessary default values.
+* (**pipes**) Added support (via new LogConfiguration field in CreatePipe and UpdatePipe APIs) for logging to Amazon CloudWatch Logs, Amazon Simple Storage Service (Amazon S3), and Amazon Kinesis Data Firehose
+* (**resourceexplorer2**) Resource Explorer supports multi-account search. You can now use Resource Explorer to search and discover resources across AWS accounts within your organization or organizational unit.
+* (**sagemaker**) This release makes Model Registry Inference Specification fields as not required.
+* (**sfn**) This release adds support to redrive executions in AWS Step Functions with a new RedriveExecution operation.
+* Enable auth scheme resolution via endpoints for S3 and EventBridge
+
+### Documentation
+* (**signer**) Documentation updates for AWS Signer
+
 ## [0.34.6-beta] - 11/13/2023
 
 ### Features

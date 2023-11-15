@@ -1,5 +1,0 @@
-{
-    "id": "38a790e8-0d9a-4dfb-9a8d-05fba0325f1e",
-    "type": "feature",
-    "description": "Enable auth scheme resolution via endpoints for S3 and EventBridge"
-}
