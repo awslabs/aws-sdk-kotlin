@@ -21,7 +21,7 @@ private const val ARN_COMPONENT_COUNT = 6
  *  [Service Authorization Reference](https://docs.aws.amazon.com/service-authorization/latest/reference/),
  *  open the page for the service, and navigate to the resource types table.
  */
-public class Arn(
+internal class Arn(
     public val partition: String,
     public val service: String,
     public val region: String?,
@@ -120,7 +120,7 @@ public class Arn(
 /**
  * The separator to use between the `resource-type` and `resource-id` in an ARN
  */
-public enum class ArnResourceTypeSeparator(public val separator: String) {
+internal enum class ArnResourceTypeSeparator(public val separator: String) {
     SLASH("/"),
     COLON(":"),
     ;
@@ -146,7 +146,7 @@ public enum class ArnResourceTypeSeparator(public val separator: String) {
  *
  *  This is controlled by [resourceTypeSeparator].
  */
-public class ArnResource(
+internal class ArnResource(
     public val id: String,
     public val type: String? = null,
     public val resourceTypeSeparator: ArnResourceTypeSeparator = ArnResourceTypeSeparator.COLON,
