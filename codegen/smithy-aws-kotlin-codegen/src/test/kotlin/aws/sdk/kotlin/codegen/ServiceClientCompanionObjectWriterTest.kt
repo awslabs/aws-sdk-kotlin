@@ -27,7 +27,7 @@ class ServiceClientCompanionObjectWriterTest {
                 @JvmStatic
                 override fun builder(): Builder = Builder()
 
-                override suspend fun finalizeConfig(builder: Builder, sharedConfig: LazyAsyncValue<AwsSharedConfig>) {
+                override suspend fun finalizeConfig(builder: Builder, sharedConfig: LazyAsyncValue<AwsSharedConfig>, activeProfile: LazyAsyncValue<AwsProfile>) {
                     builder.config.endpointUrl = builder.config.endpointUrl ?: resolveEndpointUrl(
                         sharedConfig,
                         "TestGenerator",
