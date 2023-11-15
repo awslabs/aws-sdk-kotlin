@@ -151,9 +151,11 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProv
 	public fun <init> ()V
 	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProvider;
 	public final fun getAccessKeyId ()Ljava/lang/String;
+	public final fun getAccountId ()Ljava/lang/String;
 	public final fun getSecretAccessKey ()Ljava/lang/String;
 	public final fun getSessionToken ()Ljava/lang/String;
 	public final fun setAccessKeyId (Ljava/lang/String;)V
+	public final fun setAccountId (Ljava/lang/String;)V
 	public final fun setSecretAccessKey (Ljava/lang/String;)V
 	public final fun setSessionToken (Ljava/lang/String;)V
 }
@@ -209,7 +211,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ManagedCrede
 
 public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory : aws/smithy/kotlin/runtime/client/SdkClientFactory {
 	public fun <init> ()V
-	protected fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	protected fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun fromEnvironment (Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun fromEnvironment$default (Laws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public fun invoke (Lkotlin/jvm/functions/Function1;)Laws/smithy/kotlin/runtime/client/SdkClient;
@@ -218,10 +220,16 @@ public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory 
 public final class aws/sdk/kotlin/runtime/config/AwsSdkSettingKt {
 }
 
-public final class aws/sdk/kotlin/runtime/config/endpoints/EndpointsKt {
+public final class aws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode : java/lang/Enum {
+	public static final field DISABLED Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
+	public static final field PREFERRED Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
+	public static final field REQUIRED Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
+	public static fun values ()[Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
 }
 
-public final class aws/sdk/kotlin/runtime/config/endpoints/ResolveEndpointUrlKt {
+public final class aws/sdk/kotlin/runtime/config/endpoints/ResolversKt {
 }
 
 public final class aws/sdk/kotlin/runtime/config/imds/EC2MetadataError : aws/sdk/kotlin/runtime/AwsServiceException {
