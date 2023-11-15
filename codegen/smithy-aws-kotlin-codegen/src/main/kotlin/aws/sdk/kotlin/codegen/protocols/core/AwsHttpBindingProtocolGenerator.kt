@@ -67,11 +67,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsJson1_1",
                 "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsQuery",
                 "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_ec2Query",
-
-                // FIXME - Some shapes are not being serialized
-                "AwsJson10ClientPopulatesDefaultValuesInInput", // missing many shapes
-                "AwsJson10ClientUsesExplicitlyProvidedMemberValuesOverDefaults", // missing defaultBoolean
-                "AwsJson10ClientPopulatesNestedDefaultValuesWhenMissing", // missing `greeting` and `phrase`
             ),
         )
 
