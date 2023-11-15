@@ -129,6 +129,8 @@ private interface TestClient : SdkClient {
         override var useFips: Boolean = builder.useFips ?: false
         override var useDualStack: Boolean = builder.useDualStack ?: false
         override val applicationId: String? = builder.applicationId
+        override val disableRequestCompression: Boolean? = builder.disableRequestCompression
+        override val requestMinCompressionSizeBytes: Int? = builder.requestMinCompressionSizeBytes
 
         // new: inherits builder equivalents for Config base classes
         class Builder : AwsSdkClientConfig.Builder, SdkClientConfig.Builder<Config>, RetryStrategyClientConfig.Builder by RetryStrategyClientConfigImpl.BuilderImpl() {
@@ -138,6 +140,8 @@ private interface TestClient : SdkClient {
             override var useFips: Boolean? = null
             override var useDualStack: Boolean? = null
             override var applicationId: String? = null
+            override var disableRequestCompression: Boolean? = null
+            override var requestMinCompressionSizeBytes: Int? = null
             override fun build(): Config = Config(this)
         }
     }

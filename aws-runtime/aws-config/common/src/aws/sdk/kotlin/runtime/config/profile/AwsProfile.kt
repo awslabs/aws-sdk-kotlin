@@ -66,9 +66,7 @@ public val AwsProfile.sourceProfile: String?
  */
 @InternalSdkApi
 public val AwsProfile.maxAttempts: Int?
-    get() = getOrNull("max_attempts")?.run {
-        toIntOrNull() ?: throw ConfigurationException("Failed to parse maxAttempts $this as an integer")
-    }
+    get() = getIntOrNull("max_attempts")
 
 /**
  * The command which the SDK will invoke to retrieve credentials
@@ -130,6 +128,21 @@ public val AwsProfile.sdkUserAgentAppId: String?
     get() = getOrNull("sdk_ua_app_id")
 
 /**
+ * Determines when a request should be compressed or not
+ */
+@InternalSdkApi
+public val AwsProfile.disableRequestCompression: Boolean?
+    get() = getBooleanOrNull("disable_request_compression")
+
+/**
+ * The threshold used to determine when a request should be compressed
+ */
+@InternalSdkApi
+public val AwsProfile.requestMinCompressionSizeBytes: Int?
+    get() = getIntOrNull("request_min_compression_size_bytes")
+
+
+/**
  * Parse a config value as a boolean, ignoring case.
  */
 @InternalSdkApi
@@ -137,6 +150,17 @@ public fun AwsProfile.getBooleanOrNull(key: String, subKey: String? = null): Boo
     getOrNull(key, subKey)?.let {
         it.lowercase().toBooleanStrictOrNull() ?: throw ConfigurationException(
             "Failed to parse config property ${buildKeyString(key, subKey)} as a boolean",
+        )
+    }
+
+/**
+ * Parse a config value as an int.
+ */
+@InternalSdkApi
+public fun AwsProfile.getIntOrNull(key: String, subKey: String? = null): Int? =
+    getOrNull(key, subKey)?.let {
+        it.toIntOrNull() ?: throw ConfigurationException(
+            "Failed to parse config property ${buildKeyString(key, subKey)} as an integer"
         )
     }
 

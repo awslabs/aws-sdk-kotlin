@@ -4,14 +4,15 @@
  */
 package aws.sdk.kotlin.codegen
 
-import software.amazon.smithy.kotlin.codegen.core.*
+import software.amazon.smithy.kotlin.codegen.core.CodegenContext
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.asNullable
 import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.model.nullable
-import software.amazon.smithy.kotlin.codegen.rendering.*
+import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.rendering.util.RuntimeConfigProperty
@@ -153,6 +154,30 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 },
             )
         }
+
+        val DisableRequestCompression: ConfigProperty = ConfigProperty {
+            name = "disableRequestCompression"
+            symbol = KotlinTypes.Boolean.asNullable()
+            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            useNestedBuilderBaseClass()
+            documentation = """
+                Flag used to determine when a request should be compressed or not.
+                False by default.
+            """.trimIndent()
+        }
+
+        val RequestMinCompressionSizeBytes: ConfigProperty = ConfigProperty {
+            name = "requestMinCompressionSizeBytes"
+            symbol = KotlinTypes.Int.asNullable()
+            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            useNestedBuilderBaseClass()
+            documentation = """
+                The threshold in bytes used to determine when a request should be compressed.
+                Looks at payload size.
+                Should be in range: 0-10485760.
+                10240 by default.
+            """.trimIndent()
+        }
     }
 
     override val sectionWriters: List<SectionWriterBinding> =
@@ -179,5 +204,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         add(EndpointUrlProp)
         add(AwsRetryPolicy)
         add(UserAgentAppId)
+        add(DisableRequestCompression)
+        add(RequestMinCompressionSizeBytes)
     }
 }

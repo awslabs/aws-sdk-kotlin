@@ -10,6 +10,8 @@ import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseFips
 import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
+import aws.sdk.kotlin.runtime.config.requestcompression.resolveDisableRequestCompression
+import aws.sdk.kotlin.runtime.config.requestcompression.resolveRequestMinCompressionSizeBytes
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
 import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgentAppId
 import aws.sdk.kotlin.runtime.region.resolveRegion
@@ -75,6 +77,8 @@ public abstract class AbstractAwsSdkClientFactory<
             config.useFips = config.useFips ?: resolveUseFips(profile = profile)
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)
+            config.disableRequestCompression = config.disableRequestCompression ?: resolveDisableRequestCompression(platform, profile) ?: false
+            config.requestMinCompressionSizeBytes = config.requestMinCompressionSizeBytes ?: resolveRequestMinCompressionSizeBytes(platform, profile) ?: 10240
 
             finalizeConfig(builder, sharedConfig)
         }
