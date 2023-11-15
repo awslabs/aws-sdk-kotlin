@@ -91,7 +91,6 @@ class BenchmarkHarness {
     }
 }
 
-@OptIn(ExperimentalTime::class)
 private inline fun forAtLeast(runMode: RunMode, block: () -> Unit) {
     val start = TimeSource.Monotonic.markNow()
 
