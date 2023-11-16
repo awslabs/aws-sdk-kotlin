@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.protocols.endpoints.AwsBuiltins
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
@@ -28,7 +29,8 @@ class AccountIdEndpointBuiltinCustomization : KotlinIntegration {
             name = "accountIdEndpointMode"
             symbol = AwsRuntimeTypes.Config.Endpoints.AccountIdEndpointMode
             documentation = """
-                Control the way account ID is bound to the endpoint resolver parameters.
+                Control the way account ID is bound to the endpoint resolver parameters. 
+                Defaults to [AccountIdEndpointMode.PREFERRED].
             """.trimIndent()
             propertyType = ConfigPropertyType.RequiredWithDefault("AccountIdEndpointMode.PREFERRED")
         }
@@ -36,7 +38,7 @@ class AccountIdEndpointBuiltinCustomization : KotlinIntegration {
 
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
         val rules = model.expectShape<ServiceShape>(settings.service).getEndpointRules()
-        return rules?.parameters?.find { it.isBuiltIn && it.builtIn.get() == "AWS::Auth::AccountId" } != null
+        return rules?.parameters?.find { it.isBuiltIn && it.builtIn.get() == AwsBuiltins.ACCOUNT_ID } != null
     }
 
     override val sectionWriters: List<SectionWriterBinding>

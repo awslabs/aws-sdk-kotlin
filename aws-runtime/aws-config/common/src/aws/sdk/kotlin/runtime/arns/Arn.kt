@@ -126,11 +126,10 @@ internal enum class ArnResourceTypeSeparator(public val separator: String) {
     ;
 
     public companion object {
-        public fun fromValue(value: String): ArnResourceTypeSeparator = when (value) {
-            "/" -> SLASH
-            ":" -> COLON
-            else -> error("unknown ARN resource type separator `$value`, expected one of ${values().map { it.separator }}")
-        }
+        public fun fromValue(value: String): ArnResourceTypeSeparator =
+            checkNotNull(entries.find { it.separator == value }) {
+                "unknown ARN resource type separator `$value`, expected one of ${entries.map { it.separator }}"
+            }
     }
 }
 
@@ -186,14 +185,8 @@ internal class ArnResource(
         }
     }
 
-    override fun toString(): String = buildString {
-        if (type != null) {
-            append("$type")
-            append(resourceTypeSeparator.separator)
-        }
-
-        append(id)
-    }
+    override fun toString(): String =
+        listOfNotNull(type, id).joinToString(resourceTypeSeparator.separator)
 
     override fun hashCode(): Int {
         var result = id.hashCode()
@@ -205,6 +198,7 @@ internal class ArnResource(
         if (this === other) return true
         if (other !is ArnResource) return false
         if (id != other.id) return false
+        if (resourceTypeSeparator != other.resourceTypeSeparator) return false
         return type == other.type
     }
 

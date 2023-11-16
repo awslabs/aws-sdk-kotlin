@@ -73,11 +73,11 @@ class ArnTest {
             },
         )
 
-        tests.forEach { test ->
-            val parsed = Arn.parse(test.first)
-            assertEquals(test.second, parsed)
+        tests.forEach { (arnString, arnExpected) ->
+            val parsed = Arn.parse(arnString)
+            assertEquals(arnExpected, parsed)
             // test round trip
-            assertEquals(test.first, parsed.toString())
+            assertEquals(arnString, parsed.toString())
         }
     }
 

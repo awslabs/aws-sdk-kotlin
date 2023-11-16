@@ -50,24 +50,24 @@ fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: Kotl
     ) {
         builtinParams.forEach {
             when (it.builtIn.get()) {
-                "AWS::Region" -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.RegionProp.propertyName)
-                "AWS::UseFIPS" -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.UseFipsProp.propertyName)
-                "AWS::UseDualStack" -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.UseDualStackProp.propertyName)
+                AwsBuiltins.REGION -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.RegionProp.propertyName)
+                AwsBuiltins.USE_FIPS -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.UseFipsProp.propertyName)
+                AwsBuiltins.USE_DUAL_STACK -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.UseDualStackProp.propertyName)
 
-                "AWS::S3::Accelerate" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.EnableAccelerateProp.propertyName)
-                "AWS::S3::ForcePathStyle" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.ForcePathStyleProp.propertyName)
-                "AWS::S3::DisableMultiRegionAccessPoints" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.DisableMrapProp.propertyName)
-                "AWS::S3::UseArnRegion" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.UseArnRegionProp.propertyName)
-                "AWS::S3Control::UseArnRegion" -> renderBasicConfigBinding(writer, it, S3ControlClientConfigIntegration.UseArnRegionProp.propertyName)
+                AwsBuiltins.S3_ACCELERATE -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.EnableAccelerateProp.propertyName)
+                AwsBuiltins.S3_FORCE_PATH_STYLE -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.ForcePathStyleProp.propertyName)
+                AwsBuiltins.S3_DISABLE_MRAP -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.DisableMrapProp.propertyName)
+                AwsBuiltins.S3_USE_ARN_REGION -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.UseArnRegionProp.propertyName)
+                AwsBuiltins.S3_CONTROL_USE_ARN_REGION -> renderBasicConfigBinding(writer, it, S3ControlClientConfigIntegration.UseArnRegionProp.propertyName)
 
-                "SDK::Endpoint" ->
+                AwsBuiltins.SDK_ENDPOINT ->
                     writer.write("#L = config.#L?.toString()", it.defaultName(), AwsServiceConfigIntegration.EndpointUrlProp.propertyName)
 
                 // as a newer SDK we do NOT support these values, they are always false
-                "AWS::S3::UseGlobalEndpoint", "AWS::STS::UseGlobalEndpoint" ->
+                AwsBuiltins.S3_USE_GLOBAL_ENDPOINT, AwsBuiltins.STS_USE_GLOBAL_ENDPOINT ->
                     writer.write("#L = false", it.defaultName())
 
-                "AWS::Auth::AccountId" ->
+                AwsBuiltins.ACCOUNT_ID ->
                     writer.write(
                         "#L = #T(config.#L, request.identity.attributes)",
                         it.defaultName(),

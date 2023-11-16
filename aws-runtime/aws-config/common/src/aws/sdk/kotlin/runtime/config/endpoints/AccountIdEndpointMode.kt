@@ -10,8 +10,7 @@ package aws.sdk.kotlin.runtime.config.endpoints
  */
 public enum class AccountIdEndpointMode {
     /**
-     * Endpoint parameters are populated on a best effort basis. This is the default when not
-     * explicitly set.
+     * Endpoint parameters are populated on a best effort basis.
      */
     PREFERRED,
 

@@ -27,6 +27,8 @@ import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -44,9 +46,9 @@ class EcsCredentialsProviderTest {
     )
 
     private fun ecsResponse(accountId: String? = null): HttpResponse {
-        val kvp = buildMap {
+        val payload = buildJsonObject {
             put("Code", "Success")
-            put("LastUpdated", "2021-09-17T20to57to08Z")
+            put("LastUpdated", "2021-09-17T20:57:08Z")
             put("Type", "AWS-HMAC")
             put("AccessKeyId", "AKID")
             put("SecretAccessKey", "test-secret")
@@ -55,11 +57,7 @@ class EcsCredentialsProviderTest {
             if (accountId != null) {
                 put("AccountId", accountId)
             }
-        }
-
-        val payload = kvp.entries.joinToString(prefix = "{", postfix = "}", separator = ",") {
-            "\"${it.key}\":\"${it.value}\""
-        }.encodeToByteArray()
+        }.toString().encodeToByteArray()
 
         return HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.fromBytes(payload))
     }
