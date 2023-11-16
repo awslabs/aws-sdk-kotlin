@@ -47,7 +47,7 @@ class RequestCompressionTrait : KotlinIntegration {
                     """.trimIndent()
                     symbol = Symbol.builder().build() // TODO: Write proper values for these
                     baseClass = Symbol.builder().build() // TODO: Write proper values for these
-                    // TODO: Do a little research into what the rest of the possible properties do
+                    // TODO: Do a little research into what the rest of the possible properties do now
                 }
         )
     }
