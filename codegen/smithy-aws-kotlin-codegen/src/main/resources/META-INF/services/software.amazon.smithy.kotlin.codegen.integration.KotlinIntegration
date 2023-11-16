@@ -32,3 +32,4 @@ aws.sdk.kotlin.codegen.customization.machinelearning.MachineLearningEndpointCust
 aws.sdk.kotlin.codegen.customization.route53.TrimResourcePrefix
 aws.sdk.kotlin.codegen.customization.route53.ChangeResourceRecordSetsUnmarshallingIntegration
 aws.sdk.kotlin.codegen.customization.ec2.EC2MakePrimitivesOptional
+aws.sdk.kotlin.codegen.customization.RemoveDefaults
