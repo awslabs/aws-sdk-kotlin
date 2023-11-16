@@ -26,7 +26,7 @@ internal class Arn(
     public val service: String,
     public val region: String?,
     public val accountId: String?,
-    public val resource: ArnResource,
+    public val resource: String,
 ) {
     public companion object {
 
@@ -47,7 +47,7 @@ internal class Arn(
                 service = parts[2]
                 region = parts[3].takeIf(String::isNotBlank)
                 accountId = parts[4].takeIf(String::isNotBlank)
-                resource = ArnResource.parse(parts[5])
+                resource = parts[5]
             }
         }
     }
@@ -101,11 +101,7 @@ internal class Arn(
         public var service: String? = null
         public var region: String? = null
         public var accountId: String? = null
-        public var resource: ArnResource? = null
-
-        public fun resource(block: ArnResource.Builder.() -> Unit) {
-            resource = ArnResource.Builder().apply(block).build()
-        }
+        public var resource: String? = null
 
         @PublishedApi
         internal fun build(): Arn {
@@ -113,104 +109,6 @@ internal class Arn(
             require(!service.isNullOrBlank()) { "ARN service must not be null or blank" }
             requireNotNull(resource) { "ARN resource must not be null" }
             return Arn(this)
-        }
-    }
-}
-
-/**
- * The separator to use between the `resource-type` and `resource-id` in an ARN
- */
-internal enum class ArnResourceTypeSeparator(public val separator: String) {
-    SLASH("/"),
-    COLON(":"),
-    ;
-
-    public companion object {
-        public fun fromValue(value: String): ArnResourceTypeSeparator =
-            checkNotNull(entries.find { it.separator == value }) {
-                "unknown ARN resource type separator `$value`, expected one of ${entries.map { it.separator }}"
-            }
-    }
-}
-
-/**
- * Represents the resource portion of an Amazon Resource Name (ARN).
- *
- * Some ARNs use a `/` to separate `resource-type` and `resource-id`, others use a `:`. The following ARN formats
- * are all valid.
- *
- *  * `arn:partition:service:region:account-id:resource-type:resource-id`
- *  * `arn:partition:service:region:account-id:resource-type:resource-id:qualifier`
- *  * `arn:partition:service:region:account-id:resource-type:resource-id/qualifier`
- *
- *  This is controlled by [resourceTypeSeparator].
- */
-internal class ArnResource(
-    public val id: String,
-    public val type: String? = null,
-    public val resourceTypeSeparator: ArnResourceTypeSeparator = ArnResourceTypeSeparator.COLON,
-) {
-    internal constructor(builder: Builder) : this(builder.id!!, builder.type, builder.resourceTypeSeparator)
-
-    init {
-        require(type == null || type.isNotBlank()) { "ARN resource type must not be blank" }
-    }
-
-    public companion object {
-        /**
-         * Parse an ARN resource from a string. ARN resources support multiple formats which may contain
-         * the same delimiters used to separate `<resource-type>` and `<resource-id>`. This may result in
-         * the parsed representation interpreting these parts as the resource type incorrectly.
-         */
-        public fun parse(resource: String): ArnResource {
-            // <resource-id> || <resource-type>[:/]<resource-id>
-            require(resource.isNotEmpty()) { "ARN resource must not be empty" }
-
-            val delims = charArrayOf(':', '/')
-            val firstDelim = resource.indexOfAny(delims)
-
-            val builder = Builder()
-            when {
-                firstDelim != -1 -> {
-                    val delim = resource[firstDelim]
-                    val parts = resource.split(delim, limit = 2)
-                    builder.type = parts[0]
-                    builder.id = parts[1]
-                    builder.resourceTypeSeparator = ArnResourceTypeSeparator.fromValue(delim.toString())
-                }
-                else -> builder.id = resource
-            }
-
-            return builder.build()
-        }
-    }
-
-    override fun toString(): String =
-        listOfNotNull(type, id).joinToString(resourceTypeSeparator.separator)
-
-    override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + (type?.hashCode() ?: 0)
-        return result
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is ArnResource) return false
-        if (id != other.id) return false
-        if (resourceTypeSeparator != other.resourceTypeSeparator) return false
-        return type == other.type
-    }
-
-    public class Builder {
-        public var id: String? = null
-        public var type: String? = null
-        public var resourceTypeSeparator: ArnResourceTypeSeparator = ArnResourceTypeSeparator.COLON
-
-        @PublishedApi
-        internal fun build(): ArnResource {
-            require(!id.isNullOrBlank()) { "ARN resource id must not be null or blank" }
-            return ArnResource(this)
         }
     }
 }

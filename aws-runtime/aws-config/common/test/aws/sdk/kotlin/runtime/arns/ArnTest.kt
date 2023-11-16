@@ -16,60 +16,40 @@ class ArnTest {
                 partition = "aws"
                 service = "iam"
                 accountId = "123456789012"
-                resource {
-                    id = "johndoe"
-                    type = "user"
-                    resourceTypeSeparator = ArnResourceTypeSeparator.SLASH
-                }
+                resource = "user/johndoe"
             },
             "arn:aws:sns:us-east-1:123456789012:example-sns-topic-name" to Arn {
                 partition = "aws"
                 service = "sns"
                 region = "us-east-1"
                 accountId = "123456789012"
-                resource {
-                    id = "example-sns-topic-name"
-                }
+                resource = "example-sns-topic-name"
             },
             "arn:aws:ec2:us-east-1:123456789012:vpc/vpc-0e9801d129EXAMPLE" to Arn {
                 partition = "aws"
                 service = "ec2"
                 region = "us-east-1"
                 accountId = "123456789012"
-                resource {
-                    id = "vpc-0e9801d129EXAMPLE"
-                    type = "vpc"
-                    resourceTypeSeparator = ArnResourceTypeSeparator.SLASH
-                }
+                resource = "vpc/vpc-0e9801d129EXAMPLE"
             },
             "arn:aws:s3:::bucket/key" to Arn {
                 partition = "aws"
                 service = "s3"
-                resource {
-                    id = "key"
-                    type = "bucket"
-                    resourceTypeSeparator = ArnResourceTypeSeparator.SLASH
-                }
+                resource = "bucket/key"
             },
             "arn:aws:lambda:us-east-2:12345:function" to Arn {
                 partition = "aws"
                 service = "lambda"
                 region = "us-east-2"
                 accountId = "12345"
-                resource {
-                    id = "function"
-                }
+                resource = "function"
             },
             "arn:aws:lambda:us-east-2:12345:function:version" to Arn {
                 partition = "aws"
                 service = "lambda"
                 region = "us-east-2"
                 accountId = "12345"
-                resource {
-                    id = "version"
-                    type = "function"
-                    resourceTypeSeparator = ArnResourceTypeSeparator.COLON
-                }
+                resource = "function:version"
             },
         )
 
