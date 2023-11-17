@@ -29,10 +29,11 @@ import kotlin.coroutines.coroutineContext
 public suspend fun loadAwsSharedConfig(
     platform: PlatformProvider,
     profileNameOverride: String? = null,
+    configurationSource: AwsConfigurationSource? = null
 ): AwsSharedConfig =
     withSpan("AwsSharedConfig", "loadAwsSharedConfig") {
         // Determine active profile and location of configuration files
-        val source = resolveConfigSource(platform, profileNameOverride)
+        val source = configurationSource ?: resolveConfigSource(platform, profileNameOverride)
         val logger = coroutineContext.logger("AwsConfigParser")
 
         // merged AWS configuration based on optional configuration and credential file contents
