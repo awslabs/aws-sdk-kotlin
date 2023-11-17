@@ -41,7 +41,7 @@ class PollyPresigner : KotlinIntegration {
         val defaultTimestampFormat = writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.DefaultTimestampFormat)
 
         writer.write("unsignedRequest.method = #T.GET", RuntimeTypes.Http.HttpMethod)
-        writer.withBlock("unsignedRequest.url.#T {", "}", RuntimeTypes.Core.Net.parameters) {
+        writer.withBlock("unsignedRequest.url.parameters.encodedParameters {", "}") {
             val bindings = resolver.requestBindings(operation)
             HttpStringValuesMapSerializer(ctx.model, ctx.symbolProvider, ctx.settings, bindings, resolver, defaultTimestampFormat).render(writer)
         }

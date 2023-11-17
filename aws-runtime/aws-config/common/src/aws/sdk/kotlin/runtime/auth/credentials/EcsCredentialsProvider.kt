@@ -7,7 +7,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsContainerCredentialsRelativeUri
 import aws.smithy.kotlin.runtime.ErrorMetadata
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
@@ -24,7 +23,11 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
-import aws.smithy.kotlin.runtime.net.*
+import aws.smithy.kotlin.runtime.net.Host
+import aws.smithy.kotlin.runtime.net.IpV4Addr
+import aws.smithy.kotlin.runtime.net.IpV6Addr
+import aws.smithy.kotlin.runtime.net.Scheme
+import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType

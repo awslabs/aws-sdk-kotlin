@@ -19,10 +19,14 @@ import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.telemetry.logging.debug
 import aws.smithy.kotlin.runtime.telemetry.logging.error
 import aws.smithy.kotlin.runtime.telemetry.telemetryProvider
+import aws.smithy.kotlin.runtime.text.encoding.encodeToHex
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.util.*
+import aws.smithy.kotlin.runtime.util.Attributes
+import aws.smithy.kotlin.runtime.util.PlatformProvider
+import aws.smithy.kotlin.runtime.util.SingleFlightGroup
+import aws.smithy.kotlin.runtime.util.emptyAttributes
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds

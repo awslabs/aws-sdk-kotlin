@@ -318,7 +318,7 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 }
 
 public final class aws/sdk/kotlin/runtime/config/profile/AwsSharedConfigKt {
-	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/profile/AwsSharedConfig;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/Url;
+	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/profile/AwsSharedConfig;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/url/Url;
 }
 
 public final class aws/sdk/kotlin/runtime/config/retries/ResolveRetryStrategyKt {

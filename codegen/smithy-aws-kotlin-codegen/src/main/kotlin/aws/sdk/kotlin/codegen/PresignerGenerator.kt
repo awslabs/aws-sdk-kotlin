@@ -228,13 +228,13 @@ class PresignerGenerator : KotlinIntegration {
         if (presignableOp.liftBodyToQueryString) {
             write("unsignedRequest.method = #T.GET", RuntimeTypes.Http.HttpMethod)
             withBlock(
-                "unsignedRequest.body.#T()?.#T()?.#T()?.let { bodyParams ->",
+                "unsignedRequest.body.#T()?.#T()?.let {",
                 "}",
                 RuntimeTypes.Http.toByteStream,
                 RuntimeTypes.Core.Content.decodeToString,
-                RuntimeTypes.Core.Net.splitAsQueryParameters,
             ) {
-                write("unsignedRequest.url.parameters.appendAll(bodyParams)")
+                write("val bodyParams = #T.parseEncoded(it)", RuntimeTypes.Core.Net.Url.QueryParameters)
+                write("unsignedRequest.url.parameters.addAll(bodyParams)")
             }
             write("")
         }

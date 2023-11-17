@@ -267,8 +267,9 @@ class PresignerGeneratorTest {
                 }
                 val unsignedRequest = GetFooOperationSerializer().serialize(ctx, input)
                 unsignedRequest.method = HttpMethod.GET
-                unsignedRequest.body.toByteStream()?.decodeToString()?.splitAsQueryParameters()?.let { bodyParams ->
-                    unsignedRequest.url.parameters.appendAll(bodyParams)
+                unsignedRequest.body.toByteStream()?.decodeToString()?.let {
+                    val bodyParams = QueryParameters.parseEncoded(it)
+                    unsignedRequest.url.parameters.addAll(bodyParams)
                 }
             
                 val endpointResolver = EndpointResolverAdapter(config)

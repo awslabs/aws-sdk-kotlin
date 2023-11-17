@@ -13,10 +13,10 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
+import aws.smithy.kotlin.runtime.text.encoding.PercentEncoding
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.util.text.urlEncodeComponent
 import kotlin.time.Duration.Companion.minutes
 
 object StsTestUtils {
@@ -40,7 +40,11 @@ object StsTestUtils {
     fun stsRequest(bodyParameters: Map<String, String>) = HttpRequestBuilder().apply {
         val bodyBytes = bodyParameters
             .entries
-            .joinToString("&") { (key, value) -> "${key.urlEncodeComponent()}=${value.urlEncodeComponent()}" }
+            .joinToString("&") { (key, value) ->
+                val kEnc = PercentEncoding.FormUrl.encode(key)
+                val vEnc = PercentEncoding.FormUrl.encode(value)
+                "$kEnc=$vEnc"
+            }
             .encodeToByteArray()
 
         method = HttpMethod.GET
