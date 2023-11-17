@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.awscredentials.copy
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -22,6 +23,7 @@ class StaticCredentialsProviderTest {
             secretAccessKey = expected.secretAccessKey
             sessionToken = expected.sessionToken
         }
-        assertEquals(expected, provider2.resolve())
+        val actual = provider2.resolve().copy(providerName = null)
+        assertEquals(expected, actual)
     }
 }

@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.config
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseFips
+import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
@@ -76,7 +77,7 @@ public abstract class AbstractAwsSdkClientFactory<
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)
 
-            finalizeConfig(builder, sharedConfig)
+            finalizeConfig(builder, sharedConfig, profile)
         }
         return builder.build()
     }
@@ -84,5 +85,10 @@ public abstract class AbstractAwsSdkClientFactory<
     /**
      * Inject any client-specific config.
      */
-    protected open suspend fun finalizeConfig(builder: TClientBuilder, sharedConfig: LazyAsyncValue<AwsSharedConfig>) { }
+    protected open suspend fun finalizeConfig(
+        builder: TClientBuilder,
+        sharedConfig: LazyAsyncValue<AwsSharedConfig>,
+        activeProfile: LazyAsyncValue<AwsProfile>,
+    ) {
+    }
 }

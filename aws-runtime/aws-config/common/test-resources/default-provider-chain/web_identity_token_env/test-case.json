@@ -6,7 +6,8 @@
       "access_key_id": "AKIDTEST",
       "secret_access_key": "SECRETKEYTEST",
       "session_token": "SESSIONTOKEN_TEST",
-      "expiry": 1629147173
+      "expiry": 1629147173,
+      "accountId": "123456789012"
     }
   }
 }

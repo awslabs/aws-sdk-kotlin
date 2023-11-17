@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.time.Instant
@@ -135,5 +136,38 @@ class ProcessCredentialsProviderTest {
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
         val ex = assertFailsWith<CredentialsProviderException> { processCredentialsProvider.resolve() }
         assertContains(ex.message!!, stderr) // the exception message should contain the program's stderr
+    }
+
+    @Test
+    fun testSuccessWithAccountId() = runTest {
+        mockkStatic(::executeCommand)
+        coEvery { executeCommand(any(), any(), any(), any(), any()) }.returns(
+            Pair(
+                0,
+                """
+            {
+                "Version": 1,
+                "AccessKeyId": "AccessKeyId",
+                "SecretAccessKey": "SecretAccessKey",
+                "AccountId": "12345",
+                "SessionToken": "SessionToken",
+                "Expiration": "2022-10-14T00:00:00Z"
+            }
+                """.trimIndent(),
+            ),
+        )
+
+        val expectedCredentials = credentials(
+            accessKeyId = "AccessKeyId",
+            secretAccessKey = "SecretAccessKey",
+            sessionToken = "SessionToken",
+            expiration = Instant.fromEpochSeconds(1665705600),
+            providerName = "Process",
+            accountId = "12345",
+        )
+
+        val processCredentialsProvider = ProcessCredentialsProvider("anyString")
+        val actualCredentials = processCredentialsProvider.resolve()
+        assertEquals(expectedCredentials, actualCredentials)
     }
 }

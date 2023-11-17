@@ -15,9 +15,7 @@ import software.amazon.smithy.kotlin.codegen.utils.toPascalCase
  *
  * Includes the ability to extend the config finalizer, which by default handles resolution of endpoint url config.
  */
-class ServiceClientCompanionObjectWriter(
-    private val extendFinalizeConfig: (KotlinWriter.() -> Unit)? = null,
-) : SectionWriter {
+class ServiceClientCompanionObjectWriter : SectionWriter {
     override fun write(writer: KotlinWriter, previousValue: String?) {
         val serviceSymbol = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
 
@@ -41,17 +39,14 @@ class ServiceClientCompanionObjectWriter(
 
     private fun KotlinWriter.writeFinalizeConfig() {
         withBlock(
-            "override suspend fun finalizeConfig(builder: Builder, sharedConfig: #T<#T>) {",
+            "override suspend fun finalizeConfig(builder: Builder, sharedConfig: #1T<#2T>, activeProfile: #1T<#3T>) {",
             "}",
             RuntimeTypes.Core.Utils.LazyAsyncValue,
             AwsRuntimeTypes.Config.Profile.AwsSharedConfig,
+            AwsRuntimeTypes.Config.Profile.AwsProfile,
         ) {
-            declareSection(ServiceClientGenerator.Sections.FinalizeConfig)
             writeResolveEndpointUrl()
-            extendFinalizeConfig?.let {
-                write("")
-                it()
-            }
+            declareSection(ServiceClientGenerator.Sections.FinalizeConfig)
         }
     }
 

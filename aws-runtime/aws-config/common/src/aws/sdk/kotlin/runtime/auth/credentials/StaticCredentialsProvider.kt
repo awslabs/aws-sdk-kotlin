@@ -5,9 +5,12 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.util.Attributes
+
+private const val PROVIDER_NAME = "Static"
 
 /**
  * A credentials provider for a fixed set of credentials
@@ -16,7 +19,15 @@ import aws.smithy.kotlin.runtime.util.Attributes
  */
 public class StaticCredentialsProvider(public val credentials: Credentials) : CredentialsProvider {
 
-    private constructor(builder: Builder) : this(Credentials(builder.accessKeyId!!, builder.secretAccessKey!!, builder.sessionToken))
+    private constructor(builder: Builder) : this(
+        credentials(
+            builder.accessKeyId!!,
+            builder.secretAccessKey!!,
+            builder.sessionToken,
+            providerName = PROVIDER_NAME,
+            accountId = builder.accountId,
+        ),
+    )
 
     override suspend fun resolve(attributes: Attributes): Credentials = credentials
 
@@ -31,6 +42,7 @@ public class StaticCredentialsProvider(public val credentials: Credentials) : Cr
         public var accessKeyId: String? = null
         public var secretAccessKey: String? = null
         public var sessionToken: String? = null
+        public var accountId: String? = null
 
         public fun build(): StaticCredentialsProvider {
             if (accessKeyId == null || secretAccessKey == null) {

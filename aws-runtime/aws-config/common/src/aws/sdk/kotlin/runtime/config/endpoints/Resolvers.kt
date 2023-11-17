@@ -4,14 +4,40 @@
  */
 package aws.sdk.kotlin.runtime.config.endpoints
 
+import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.*
 import aws.sdk.kotlin.runtime.config.resolveEndpointUrl
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import aws.smithy.kotlin.runtime.util.asyncLazy
+
+/**
+ * Attempts to resolve the enabled state of FIPS endpoints from the environment.
+ */
+@InternalSdkApi
+public suspend fun resolveUseFips(
+    provider: PlatformProvider = PlatformProvider.System,
+    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadAwsSharedConfig(provider).activeProfile },
+): Boolean? =
+    AwsSdkSetting.AwsUseFipsEndpoint.resolve(provider)
+        ?: profile.get().useFips
+
+/**
+ * Attempts to resolve the enabled state of dual-stack endpoints from the environment.
+ */
+@InternalSdkApi
+public suspend fun resolveUseDualStack(
+    provider: PlatformProvider = PlatformProvider.System,
+    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadAwsSharedConfig(provider).activeProfile },
+): Boolean? =
+    AwsSdkSetting.AwsUseDualStackEndpoint.resolve(provider)
+        ?: profile.get().useDualStack
 
 /**
  * Attempts to find the configured endpoint URL for a specific service.
@@ -54,3 +80,24 @@ private suspend fun resolveIgnoreEndpointUrls(
     AwsSdkSetting.AwsIgnoreEndpointUrls.resolve(provider)
         ?: sharedConfig.get().activeProfile.ignoreEndpointUrls
         ?: false
+
+/**
+ * Resolve the [AccountIdEndpointMode] from the environment.
+ */
+@InternalSdkApi
+public suspend fun resolveAccountIdEndpointMode(
+    provider: PlatformProvider = PlatformProvider.System,
+    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadAwsSharedConfig(provider).activeProfile },
+): AccountIdEndpointMode =
+    AwsSdkSetting.AwsAccountIdEndpointMode.resolve(provider)
+        ?: profile.get().accountIdEndpointMode ?: AccountIdEndpointMode.PREFERRED
+
+/**
+ * Resolve the account ID from the given [attributes] while respecting the given [AccountIdEndpointMode]
+ */
+@InternalSdkApi
+public fun resolveAccountId(endpointMode: AccountIdEndpointMode, attributes: Attributes): String? = when (endpointMode) {
+    AccountIdEndpointMode.PREFERRED -> attributes.getOrNull(AwsClientOption.AccountId)
+    AccountIdEndpointMode.DISABLED -> null
+    AccountIdEndpointMode.REQUIRED -> attributes.getOrNull(AwsClientOption.AccountId) ?: throw ConfigurationException("AccountIdEndpointMode is set to required but no AWS account ID found")
+}

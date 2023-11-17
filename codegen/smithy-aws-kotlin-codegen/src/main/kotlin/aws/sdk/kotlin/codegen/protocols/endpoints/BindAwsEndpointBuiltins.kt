@@ -4,9 +4,12 @@
  */
 package aws.sdk.kotlin.codegen.protocols.endpoints
 
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.AwsServiceConfigIntegration
+import aws.sdk.kotlin.codegen.customization.AccountIdEndpointBuiltinCustomization
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
@@ -29,7 +32,7 @@ class BindAwsEndpointBuiltins : KotlinIntegration {
         writer: KotlinWriter,
     ) {
         val builtins = rules.parameters?.toList()?.filter(Parameter::isBuiltIn) ?: return
-        writer.write("#T(config)", bindAwsBuiltinsSymbol(ctx, builtins))
+        writer.write("#T(config, request)", bindAwsBuiltinsSymbol(ctx, builtins))
     }
 }
 
@@ -39,29 +42,38 @@ class BindAwsEndpointBuiltins : KotlinIntegration {
  */
 fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: KotlinWriter, builtinParams: List<Parameter>) {
     writer.withBlock(
-        "private fun #T.Builder.bindAwsBuiltins(config: #T.Config) {",
+        "private fun #T.Builder.bindAwsBuiltins(config: #T.Config, request: #T) {",
         "}",
         EndpointParametersGenerator.getSymbol(ctx.settings),
         ctx.symbolProvider.toSymbol(ctx.service),
+        RuntimeTypes.HttpClient.Operation.ResolveEndpointRequest,
     ) {
         builtinParams.forEach {
             when (it.builtIn.get()) {
-                "AWS::Region" -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.RegionProp.propertyName)
-                "AWS::UseFIPS" -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.UseFipsProp.propertyName)
-                "AWS::UseDualStack" -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.UseDualStackProp.propertyName)
+                AwsBuiltins.REGION -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.RegionProp.propertyName)
+                AwsBuiltins.USE_FIPS -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.UseFipsProp.propertyName)
+                AwsBuiltins.USE_DUAL_STACK -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.UseDualStackProp.propertyName)
 
-                "AWS::S3::Accelerate" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.EnableAccelerateProp.propertyName)
-                "AWS::S3::ForcePathStyle" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.ForcePathStyleProp.propertyName)
-                "AWS::S3::DisableMultiRegionAccessPoints" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.DisableMrapProp.propertyName)
-                "AWS::S3::UseArnRegion" -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.UseArnRegionProp.propertyName)
-                "AWS::S3Control::UseArnRegion" -> renderBasicConfigBinding(writer, it, S3ControlClientConfigIntegration.UseArnRegionProp.propertyName)
+                AwsBuiltins.S3_ACCELERATE -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.EnableAccelerateProp.propertyName)
+                AwsBuiltins.S3_FORCE_PATH_STYLE -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.ForcePathStyleProp.propertyName)
+                AwsBuiltins.S3_DISABLE_MRAP -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.DisableMrapProp.propertyName)
+                AwsBuiltins.S3_USE_ARN_REGION -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.UseArnRegionProp.propertyName)
+                AwsBuiltins.S3_CONTROL_USE_ARN_REGION -> renderBasicConfigBinding(writer, it, S3ControlClientConfigIntegration.UseArnRegionProp.propertyName)
 
-                "SDK::Endpoint" ->
+                AwsBuiltins.SDK_ENDPOINT ->
                     writer.write("#L = config.#L?.toString()", it.defaultName(), AwsServiceConfigIntegration.EndpointUrlProp.propertyName)
 
                 // as a newer SDK we do NOT support these values, they are always false
-                "AWS::S3::UseGlobalEndpoint", "AWS::STS::UseGlobalEndpoint" ->
+                AwsBuiltins.S3_USE_GLOBAL_ENDPOINT, AwsBuiltins.STS_USE_GLOBAL_ENDPOINT ->
                     writer.write("#L = false", it.defaultName())
+
+                AwsBuiltins.ACCOUNT_ID ->
+                    writer.write(
+                        "#L = #T(config.#L, request.identity.attributes)",
+                        it.defaultName(),
+                        AwsRuntimeTypes.Config.Endpoints.resolveAccountId,
+                        AccountIdEndpointBuiltinCustomization.AccountIdEndpointModeProp.propertyName,
+                    )
             }
         }
     }

@@ -5,8 +5,10 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.util.attributesOf
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -67,5 +69,23 @@ class EnvironmentCredentialsProviderTest {
                 AwsSdkSetting.AwsSecretAccessKey.envVar to "",
             ).resolve()
         }.message.shouldContain("Missing value for environment variable `AWS_SECRET_ACCESS_KEY`")
+    }
+
+    @Test
+    fun testAccountIdIsResolved() = runTest {
+        val provider = provider(
+            AwsSdkSetting.AwsAccessKeyId.envVar to "abc",
+            AwsSdkSetting.AwsSecretAccessKey.envVar to "def",
+            AwsSdkSetting.AwsAccountId.envVar to "12345",
+        )
+
+        val actual = provider.resolve()
+        val expected = Credentials(
+            "abc",
+            "def",
+            providerName = "Environment",
+            attributes = attributesOf { AwsClientOption.AccountId to "12345" },
+        )
+        assertEquals(expected, actual)
     }
 }
