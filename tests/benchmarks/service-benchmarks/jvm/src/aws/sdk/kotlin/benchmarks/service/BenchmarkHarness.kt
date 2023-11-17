@@ -9,7 +9,6 @@ import aws.sdk.kotlin.benchmarks.service.telemetry.MetricSummary
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.io.use
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 import kotlin.time.TimeSource
 
 val DEFAULT_WARMUP_TIME = 5.seconds
@@ -91,7 +90,6 @@ class BenchmarkHarness {
     }
 }
 
-@OptIn(ExperimentalTime::class)
 private inline fun forAtLeast(runMode: RunMode, block: () -> Unit) {
     val start = TimeSource.Monotonic.markNow()
 

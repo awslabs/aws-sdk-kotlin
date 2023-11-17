@@ -236,6 +236,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#UnauthorizedPartnerIntegrationFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -1496,6 +1499,24 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The ID of the Key Management Service (KMS) key used to encrypt and store the cluster's admin credentials secret.</p>"
                     }
+                },
+                "IpAddressType": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The IP address type for the cluster. Possible values are <code>ipv4</code> and <code>dualstack</code>.</p>"
+                    }
+                },
+                "MultiAZ": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A boolean value that, if true, indicates that the cluster is deployed in two Availability Zones.</p>"
+                    }
+                },
+                "MultiAZSecondary": {
+                    "target": "com.amazonaws.redshift#SecondaryClusterInfo",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The secondary compute unit of a cluster, if Multi-AZ deployment is turned on.</p>"
+                    }
                 }
             },
             "traits": {
@@ -2265,6 +2286,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The list of tags for the cluster subnet group.</p>"
                     }
+                },
+                "SupportedClusterIpAddressTypes": {
+                    "target": "com.amazonaws.redshift#ValueStringList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The IP address types supported by this cluster subnet group. Possible values are <code>ipv4</code> and <code>dualstack</code>.</p>"
+                    }
                 }
             },
             "traits": {
@@ -2446,6 +2473,23 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.redshift#ConflictPolicyUpdateFault": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "com.amazonaws.redshift#ExceptionMessage"
+                }
+            },
+            "traits": {
+                "aws.protocols#awsQueryError": {
+                    "code": "ConflictPolicyUpdateFault",
+                    "httpResponseCode": 409
+                },
+                "smithy.api#documentation": "<p>There is a conflict while updating the resource policy.</p>",
+                "smithy.api#error": "client",
+                "smithy.api#httpError": 409
+            }
+        },
         "com.amazonaws.redshift#CopyClusterSnapshot": {
             "type": "operation",
             "input": {
@@ -2455,6 +2499,9 @@
                 "target": "com.amazonaws.redshift#CopyClusterSnapshotResult"
             },
             "errors": [
+                {
+                    "target": "com.amazonaws.redshift#ClusterNotFoundFault"
+                },
                 {
                     "target": "com.amazonaws.redshift#ClusterSnapshotAlreadyExistsFault"
                 },
@@ -2665,6 +2712,9 @@
                     "target": "com.amazonaws.redshift#InvalidVPCNetworkStateFault"
                 },
                 {
+                    "target": "com.amazonaws.redshift#Ipv6CidrBlockNotFoundFault"
+                },
+                {
                     "target": "com.amazonaws.redshift#LimitExceededFault"
                 },
                 {
@@ -2681,6 +2731,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#UnauthorizedOperation"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -2910,6 +2963,18 @@
                     "target": "com.amazonaws.redshift#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The ID of the Key Management Service (KMS) key used to encrypt and store the cluster's admin credentials secret. \n            You can only use this parameter if <code>ManageMasterPassword</code> is true.</p>"
+                    }
+                },
+                "IpAddressType": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The IP address types that the cluster supports. Possible values are <code>ipv4</code> and <code>dualstack</code>.</p>"
+                    }
+                },
+                "MultiAZ": {
+                    "target": "com.amazonaws.redshift#BooleanOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If true, Amazon Redshift will deploy the cluster in two Availability Zones (AZ).</p>"
                     }
                 }
             },
@@ -3706,6 +3771,9 @@
             },
             "errors": [
                 {
+                    "target": "com.amazonaws.redshift#ClusterNotFoundFault"
+                },
+                {
                     "target": "com.amazonaws.redshift#InvalidScheduledActionFault"
                 },
                 {
@@ -3722,6 +3790,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#UnauthorizedOperation"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -4155,7 +4226,7 @@
                     "min": 1,
                     "max": 253
                 },
-                "smithy.api#pattern": "^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$"
+                "smithy.api#pattern": "^(((?!-)[A-Za-z0-9-]{0,62}[A-Za-z0-9])\\.)+((?!-)[A-Za-z0-9-]{1,62}[A-Za-z0-9])$"
             }
         },
         "com.amazonaws.redshift#CustomerStorageMessage": {
@@ -4828,6 +4899,9 @@
                     "target": "com.amazonaws.redshift#CustomCnameAssociationFault"
                 },
                 {
+                    "target": "com.amazonaws.redshift#CustomDomainAssociationNotFoundFault"
+                },
+                {
                     "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
@@ -4843,6 +4917,14 @@
                     "traits": {
                         "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The identifier of the cluster to delete a custom domain association for.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "CustomDomainName": {
+                    "target": "com.amazonaws.redshift#CustomDomainNameString",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The custom domain name for the custom domain association.</p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -5024,10 +5106,49 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#UnauthorizedPartnerIntegrationFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
                 "smithy.api#documentation": "<p>Deletes a partner integration from a cluster. Data can still flow to the cluster until the integration is deleted at the partner's website.</p>"
+            }
+        },
+        "com.amazonaws.redshift#DeleteResourcePolicy": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshift#DeleteResourcePolicyMessage"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshift#ResourceNotFoundFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Deletes the resource policy for a specified resource.</p>"
+            }
+        },
+        "com.amazonaws.redshift#DeleteResourcePolicyMessage": {
+            "type": "structure",
+            "members": {
+                "ResourceArn": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the resource of which its resource policy is deleted.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "com.amazonaws.redshift#DeleteScheduledAction": {
@@ -6812,6 +6933,67 @@
                 "smithy.api#input": {}
             }
         },
+        "com.amazonaws.redshift#DescribeInboundIntegrations": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshift#DescribeInboundIntegrationsMessage"
+            },
+            "output": {
+                "target": "com.amazonaws.redshift#InboundIntegrationsMessage"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshift#IntegrationNotFoundFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#InvalidNamespaceFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Returns a list of inbound integrations.</p>",
+                "smithy.api#paginated": {
+                    "inputToken": "Marker",
+                    "outputToken": "Marker",
+                    "items": "InboundIntegrations",
+                    "pageSize": "MaxRecords"
+                }
+            }
+        },
+        "com.amazonaws.redshift#DescribeInboundIntegrationsMessage": {
+            "type": "structure",
+            "members": {
+                "IntegrationArn": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the inbound integration.</p>"
+                    }
+                },
+                "TargetArn": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the target of an inbound integration.</p>"
+                    }
+                },
+                "MaxRecords": {
+                    "target": "com.amazonaws.redshift#IntegerOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum number of response records to return in each call. If the number of\n            remaining response records exceeds the specified <code>MaxRecords</code> value, a value\n            is returned in a <code>marker</code> field of the response. You can retrieve the next\n            set of records by retrying the command with the returned marker value. </p>\n         <p>Default: <code>100</code>\n         </p>\n         <p>Constraints: minimum 20, maximum 100.</p>"
+                    }
+                },
+                "Marker": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An optional parameter that specifies the starting point to return a set of response\n            records. When the results of a <a>DescribeInboundIntegrations</a> request\n            exceed the value specified in <code>MaxRecords</code>, Amazon Web Services returns a value in the\n            <code>Marker</code> field of the response. You can retrieve the next set of response\n            records by providing the returned marker value in the <code>Marker</code> parameter and\n            retrying the request. </p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
         "com.amazonaws.redshift#DescribeLoggingStatus": {
             "type": "operation",
             "input": {
@@ -6823,6 +7005,9 @@
             "errors": [
                 {
                     "target": "com.amazonaws.redshift#ClusterNotFoundFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -7005,6 +7190,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#UnauthorizedPartnerIntegrationFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -7265,6 +7453,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#ResizeNotFoundFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -7749,6 +7940,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#InvalidClusterStateFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -7792,6 +7986,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#UnauthorizedOperation"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -7982,6 +8179,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#InvalidS3KeyPrefixFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -8746,6 +8946,59 @@
         "com.amazonaws.redshift#ExceptionMessage": {
             "type": "string"
         },
+        "com.amazonaws.redshift#FailoverPrimaryCompute": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshift#FailoverPrimaryComputeInputMessage"
+            },
+            "output": {
+                "target": "com.amazonaws.redshift#FailoverPrimaryComputeResult"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshift#ClusterNotFoundFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#InvalidClusterStateFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnauthorizedOperation"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Fails over the primary compute unit of the specified Multi-AZ cluster to another Availability Zone.</p>"
+            }
+        },
+        "com.amazonaws.redshift#FailoverPrimaryComputeInputMessage": {
+            "type": "structure",
+            "members": {
+                "ClusterIdentifier": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The unique identifier of the cluster for which the primary compute unit will be failed over to another Availability Zone.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.redshift#FailoverPrimaryComputeResult": {
+            "type": "structure",
+            "members": {
+                "Cluster": {
+                    "target": "com.amazonaws.redshift#Cluster"
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.redshift#GetClusterCredentials": {
             "type": "operation",
             "input": {
@@ -9055,6 +9308,59 @@
                     "target": "com.amazonaws.redshift#ReservedNodeOfferingList",
                     "traits": {
                         "smithy.api#documentation": "<p>Returns an array of <a>ReservedNodeOffering</a> objects.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.redshift#GetResourcePolicy": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshift#GetResourcePolicyMessage"
+            },
+            "output": {
+                "target": "com.amazonaws.redshift#GetResourcePolicyResult"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshift#InvalidPolicyFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#ResourceNotFoundFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Get the resource policy for a specified resource.</p>"
+            }
+        },
+        "com.amazonaws.redshift#GetResourcePolicyMessage": {
+            "type": "structure",
+            "members": {
+                "ResourceArn": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the resource of which its resource policy is fetched.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.redshift#GetResourcePolicyResult": {
+            "type": "structure",
+            "members": {
+                "ResourcePolicy": {
+                    "target": "com.amazonaws.redshift#ResourcePolicy",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The content of the resource policy.</p>"
                     }
                 }
             },
@@ -9393,6 +9699,79 @@
                 "smithy.api#httpError": 400
             }
         },
+        "com.amazonaws.redshift#InboundIntegration": {
+            "type": "structure",
+            "members": {
+                "IntegrationArn": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of an inbound integration.</p>"
+                    }
+                },
+                "SourceArn": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the source of an inbound integration.</p>"
+                    }
+                },
+                "TargetArn": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the target of an inbound integration.</p>"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.redshift#ZeroETLIntegrationStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The status of an inbound integration.</p>"
+                    }
+                },
+                "Errors": {
+                    "target": "com.amazonaws.redshift#IntegrationErrorList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The outstanding errors of an inbound  integration. Each item is an \"IntegrationError\". This is null if there is no error.</p>"
+                    }
+                },
+                "CreateTime": {
+                    "target": "com.amazonaws.redshift#TStamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The creation time of an inbound integration.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The content of an inbound integration.</p>"
+            }
+        },
+        "com.amazonaws.redshift#InboundIntegrationList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.redshift#InboundIntegration",
+                "traits": {
+                    "smithy.api#xmlName": "InboundIntegration"
+                }
+            }
+        },
+        "com.amazonaws.redshift#InboundIntegrationsMessage": {
+            "type": "structure",
+            "members": {
+                "Marker": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A value that indicates the starting point for the next set of response records in a\n            subsequent request. If a value is returned in a response, you can retrieve the next set\n            of records by providing this returned marker value in the <code>Marker</code> parameter\n            and retrying the command. If the <code>Marker</code> field is empty, all response\n            records have been retrieved for the request. </p>"
+                    }
+                },
+                "InboundIntegrations": {
+                    "target": "com.amazonaws.redshift#InboundIntegrationList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of <a>InboundIntegration</a> instances.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.redshift#IncompatibleOrderableOptions": {
             "type": "structure",
             "members": {
@@ -9449,6 +9828,54 @@
         },
         "com.amazonaws.redshift#IntegerOptional": {
             "type": "integer"
+        },
+        "com.amazonaws.redshift#IntegrationError": {
+            "type": "structure",
+            "members": {
+                "ErrorCode": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The error code of an inbound integration error.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ErrorMessage": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The error message of an inbound integration error.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The error of an inbound integration.</p>"
+            }
+        },
+        "com.amazonaws.redshift#IntegrationErrorList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.redshift#IntegrationError",
+                "traits": {
+                    "smithy.api#xmlName": "IntegrationError"
+                }
+            }
+        },
+        "com.amazonaws.redshift#IntegrationNotFoundFault": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "com.amazonaws.redshift#ExceptionMessage"
+                }
+            },
+            "traits": {
+                "aws.protocols#awsQueryError": {
+                    "code": "IntegrationNotFoundFault",
+                    "httpResponseCode": 404
+                },
+                "smithy.api#documentation": "<p>The integration can't be found.</p>",
+                "smithy.api#error": "client",
+                "smithy.api#httpError": 404
+            }
         },
         "com.amazonaws.redshift#InvalidAuthenticationProfileRequestFault": {
             "type": "structure",
@@ -9722,6 +10149,23 @@
                 "smithy.api#httpError": 400
             }
         },
+        "com.amazonaws.redshift#InvalidPolicyFault": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "com.amazonaws.redshift#ExceptionMessage"
+                }
+            },
+            "traits": {
+                "aws.protocols#awsQueryError": {
+                    "code": "InvalidPolicyFault",
+                    "httpResponseCode": 400
+                },
+                "smithy.api#documentation": "<p>The resource policy isn't valid.</p>",
+                "smithy.api#error": "client",
+                "smithy.api#httpError": 400
+            }
+        },
         "com.amazonaws.redshift#InvalidReservedNodeStateFault": {
             "type": "structure",
             "members": {
@@ -9956,6 +10400,23 @@
                     "httpResponseCode": 400
                 },
                 "smithy.api#documentation": "<p>The cluster subnet group does not cover all Availability Zones.</p>",
+                "smithy.api#error": "client",
+                "smithy.api#httpError": 400
+            }
+        },
+        "com.amazonaws.redshift#Ipv6CidrBlockNotFoundFault": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "com.amazonaws.redshift#ExceptionMessage"
+                }
+            },
+            "traits": {
+                "aws.protocols#awsQueryError": {
+                    "code": "Ipv6CidrBlockNotFoundFault",
+                    "httpResponseCode": 400
+                },
+                "smithy.api#documentation": "<p>There are no subnets in your VPC with associated IPv6 CIDR blocks. To use dual-stack mode,\n            associate an IPv6 CIDR block with each subnet in your VPC.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
             }
@@ -10283,6 +10744,9 @@
                     "target": "com.amazonaws.redshift#InvalidRetentionPeriodFault"
                 },
                 {
+                    "target": "com.amazonaws.redshift#Ipv6CidrBlockNotFoundFault"
+                },
+                {
                     "target": "com.amazonaws.redshift#LimitExceededFault"
                 },
                 {
@@ -10325,6 +10789,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#InvalidClusterStateFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -10675,6 +11142,18 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The ID of the Key Management Service (KMS) key used to encrypt and store the cluster's admin credentials secret. \n            You can only use this parameter if <code>ManageMasterPassword</code> is true.</p>"
                     }
+                },
+                "IpAddressType": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The IP address types that the cluster supports. Possible values are <code>ipv4</code> and <code>dualstack</code>.</p>"
+                    }
+                },
+                "MultiAZ": {
+                    "target": "com.amazonaws.redshift#BooleanOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If true and the cluster is currently only deployed in a single Availability Zone, the cluster will be modified to be deployed in two Availability Zones.</p>"
+                    }
                 }
             },
             "traits": {
@@ -10941,6 +11420,9 @@
                     "target": "com.amazonaws.redshift#CustomCnameAssociationFault"
                 },
                 {
+                    "target": "com.amazonaws.redshift#CustomDomainAssociationNotFoundFault"
+                },
+                {
                     "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
@@ -10954,13 +11436,17 @@
                 "CustomDomainName": {
                     "target": "com.amazonaws.redshift#CustomDomainNameString",
                     "traits": {
-                        "smithy.api#documentation": "<p>The custom domain name for a changed custom domain association.</p>"
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The custom domain name for a changed custom domain association.</p>",
+                        "smithy.api#required": {}
                     }
                 },
                 "CustomDomainCertificateArn": {
                     "target": "com.amazonaws.redshift#CustomDomainCertificateArnString",
                     "traits": {
-                        "smithy.api#documentation": "<p>The certificate Amazon Resource Name (ARN) for the changed custom domain association.</p>"
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The certificate Amazon Resource Name (ARN) for the changed custom domain association.</p>",
+                        "smithy.api#required": {}
                     }
                 },
                 "ClusterIdentifier": {
@@ -11177,6 +11663,9 @@
             },
             "errors": [
                 {
+                    "target": "com.amazonaws.redshift#ClusterNotFoundFault"
+                },
+                {
                     "target": "com.amazonaws.redshift#InvalidScheduledActionFault"
                 },
                 {
@@ -11190,6 +11679,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#UnauthorizedOperation"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -11448,6 +11940,12 @@
                     "target": "com.amazonaws.redshift#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The Availability Zone. </p>"
+                    }
+                },
+                "Ipv6Address": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The IPv6 address of the network interface within the subnet. </p>"
                     }
                 }
             },
@@ -12047,6 +12545,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#InvalidClusterStateFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -12214,6 +12715,70 @@
             "members": {
                 "ReservedNode": {
                     "target": "com.amazonaws.redshift#ReservedNode"
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.redshift#PutResourcePolicy": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshift#PutResourcePolicyMessage"
+            },
+            "output": {
+                "target": "com.amazonaws.redshift#PutResourcePolicyResult"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshift#ConflictPolicyUpdateFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#InvalidPolicyFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#ResourceNotFoundFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Updates the resource policy for a specified resource.</p>"
+            }
+        },
+        "com.amazonaws.redshift#PutResourcePolicyMessage": {
+            "type": "structure",
+            "members": {
+                "ResourceArn": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the resource of which its resource policy is updated.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Policy": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The content of the resource policy being updated.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.redshift#PutResourcePolicyResult": {
+            "type": "structure",
+            "members": {
+                "ResourcePolicy": {
+                    "target": "com.amazonaws.redshift#ResourcePolicy",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The content of the updated resource policy.</p>"
+                    }
                 }
             },
             "traits": {
@@ -12422,6 +12987,9 @@
                     "target": "com.amazonaws.redshift#DeletePartner"
                 },
                 {
+                    "target": "com.amazonaws.redshift#DeleteResourcePolicy"
+                },
+                {
                     "target": "com.amazonaws.redshift#DeleteScheduledAction"
                 },
                 {
@@ -12506,6 +13074,9 @@
                     "target": "com.amazonaws.redshift#DescribeHsmConfigurations"
                 },
                 {
+                    "target": "com.amazonaws.redshift#DescribeInboundIntegrations"
+                },
+                {
                     "target": "com.amazonaws.redshift#DescribeLoggingStatus"
                 },
                 {
@@ -12566,6 +13137,9 @@
                     "target": "com.amazonaws.redshift#EnableSnapshotCopy"
                 },
                 {
+                    "target": "com.amazonaws.redshift#FailoverPrimaryCompute"
+                },
+                {
                     "target": "com.amazonaws.redshift#GetClusterCredentials"
                 },
                 {
@@ -12576,6 +13150,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#GetReservedNodeExchangeOfferings"
+                },
+                {
+                    "target": "com.amazonaws.redshift#GetResourcePolicy"
                 },
                 {
                     "target": "com.amazonaws.redshift#ModifyAquaConfiguration"
@@ -12633,6 +13210,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#PurchaseReservedNodeOffering"
+                },
+                {
+                    "target": "com.amazonaws.redshift#PutResourcePolicy"
                 },
                 {
                     "target": "com.amazonaws.redshift#RebootCluster"
@@ -14567,6 +15147,26 @@
                 "smithy.api#httpError": 404
             }
         },
+        "com.amazonaws.redshift#ResourcePolicy": {
+            "type": "structure",
+            "members": {
+                "ResourceArn": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The resources that a policy is attached to.</p>"
+                    }
+                },
+                "Policy": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The content of a resource policy.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The policy that is attached to a resource.</p>"
+            }
+        },
         "com.amazonaws.redshift#RestorableNodeTypeList": {
             "type": "list",
             "member": {
@@ -14647,6 +15247,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#InvalidVPCNetworkStateFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#Ipv6CidrBlockNotFoundFault"
                 },
                 {
                     "target": "com.amazonaws.redshift#LimitExceededFault"
@@ -14900,6 +15503,18 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The ID of the Key Management Service (KMS) key used to encrypt and store the cluster's admin credentials secret. \n            You can only use this parameter if <code>ManageMasterPassword</code> is true.</p>"
                     }
+                },
+                "IpAddressType": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The IP address type for the cluster. Possible values are <code>ipv4</code> and <code>dualstack</code>.</p>"
+                    }
+                },
+                "MultiAZ": {
+                    "target": "com.amazonaws.redshift#BooleanOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If true, the snapshot will be restored to a cluster deployed in two Availability Zones.</p>"
+                    }
                 }
             },
             "traits": {
@@ -15098,6 +15713,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#InvalidClusterStateFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -15391,6 +16009,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#InvalidClusterStateFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -15816,6 +16437,26 @@
                 "traits": {
                     "smithy.api#xmlName": "SnapshotTime"
                 }
+            }
+        },
+        "com.amazonaws.redshift#SecondaryClusterInfo": {
+            "type": "structure",
+            "members": {
+                "AvailabilityZone": {
+                    "target": "com.amazonaws.redshift#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the Availability Zone in which the secondary compute unit of the cluster is located.</p>"
+                    }
+                },
+                "ClusterNodes": {
+                    "target": "com.amazonaws.redshift#ClusterNodesList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The nodes in the secondary compute unit.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The AvailabilityZone and ClusterNodes information of the secondary compute unit.</p>"
             }
         },
         "com.amazonaws.redshift#SensitiveString": {
@@ -17182,6 +17823,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshift#UnauthorizedPartnerIntegrationFault"
+                },
+                {
+                    "target": "com.amazonaws.redshift#UnsupportedOperationFault"
                 }
             ],
             "traits": {
@@ -17555,6 +18199,53 @@
                 "target": "com.amazonaws.redshift#VpcSecurityGroupMembership",
                 "traits": {
                     "smithy.api#xmlName": "VpcSecurityGroup"
+                }
+            }
+        },
+        "com.amazonaws.redshift#ZeroETLIntegrationStatus": {
+            "type": "enum",
+            "members": {
+                "CREATING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "creating"
+                    }
+                },
+                "ACTIVE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "active"
+                    }
+                },
+                "MODIFYING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "modifying"
+                    }
+                },
+                "FAILED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "failed"
+                    }
+                },
+                "DELETING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "deleting"
+                    }
+                },
+                "SYNCING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "syncing"
+                    }
+                },
+                "NEEDS_ATTENTION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "needs_attention"
+                    }
                 }
             }
         }
