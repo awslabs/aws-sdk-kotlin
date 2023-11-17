@@ -1,0 +1,6 @@
+{
+    "id": "4b6c1e1d-aacb-461a-b21a-233c6a84213c",
+    "type": "bugfix",
+    "description": "**Breaking**: Make all booleans and numbers nullable for S3",
+    "requiresMinorVersionBump": true
+}
