@@ -23,6 +23,7 @@ aws.sdk.kotlin.codegen.customization.s3.HostPrefixRequestRouteFilter
 aws.sdk.kotlin.codegen.customization.s3.UnwrappedXmlOutputIntegration
 aws.sdk.kotlin.codegen.customization.s3control.HostPrefixFilter
 aws.sdk.kotlin.codegen.customization.s3control.ClientConfigIntegration
+aws.sdk.kotlin.codegen.customization.s3.S3ErrorWith200StatusIntegration
 aws.sdk.kotlin.codegen.customization.apigateway.ApiGatewayAddAcceptHeader
 aws.sdk.kotlin.codegen.customization.glacier.GlacierAddVersionHeader
 aws.sdk.kotlin.codegen.customization.glacier.GlacierAccountIdDefault
