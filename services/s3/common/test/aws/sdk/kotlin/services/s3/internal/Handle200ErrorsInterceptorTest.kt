@@ -25,28 +25,26 @@ class Handle200ErrorsInterceptorTest {
     object TestCredentialsProvider : CredentialsProvider {
         override suspend fun resolve(attributes: Attributes): Credentials = Credentials("AKID", "SECRET")
     }
-
-    private fun newTestClient(): S3Client {
-        val content = """
+    private val errorResponsePayload = """
             <Error>
                 <Code>SlowDown</Code>
                 <Message>Please reduce your request rate.</Message>
                 <RequestId>K2H6N7ZGQT6WHCEG</RequestId>
                 <HostId>WWoZlnK4pTjKCYn6eNV7GgOurabfqLkjbSyqTvDMGBaI9uwzyNhSaDhOCPs8paFGye7S6b/AB3A=</HostId>
             </Error>
-        """.trimIndent().encodeToByteArray()
+    """.trimIndent().encodeToByteArray()
 
-        return S3Client {
+    private fun newTestClient(payload: ByteArray = errorResponsePayload): S3Client =
+        S3Client {
             region = "us-east-1"
             credentialsProvider = TestCredentialsProvider
             retryStrategy {
                 maxAttempts = 1
             }
             httpClient = buildTestConnection {
-                expect(HttpResponse(HttpStatusCode.OK, body = HttpBody.fromBytes(content)))
+                expect(HttpResponse(HttpStatusCode.OK, body = HttpBody.fromBytes(payload)))
             }
         }
-    }
 
     fun assertException(ex: S3Exception) {
         val expectedMessage = "Please reduce your request rate."
@@ -73,5 +71,20 @@ class Handle200ErrorsInterceptorTest {
             s3.deleteObjects { bucket = "test" }
         }
         assertException(ex)
+    }
+
+    @Test
+    fun testNonErrorPayload() = runTest {
+        val payload = """
+           <?xml version="1.0" encoding="UTF-8"?>
+           <DeleteResult>
+              <Deleted>
+                 <Key>my-key</Key>
+              </Deleted>
+           </DeleteResult>
+        """.trimIndent().encodeToByteArray()
+        val s3 = newTestClient(payload)
+        val response = s3.deleteObjects { bucket = "test" }
+        assertEquals("my-key", response.deleted?.first()?.key)
     }
 }
