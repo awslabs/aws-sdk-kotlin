@@ -1,6 +1,0 @@
-{
-    "id": "190be92b-a106-476b-99b3-224a80f81d7d",
-    "type": "bugfix",
-    "description": "**Breaking**: Make some types for various services optional by removing default values",
-    "requiresMinorVersionBump": true
-}
