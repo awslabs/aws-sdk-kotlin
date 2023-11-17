@@ -11,7 +11,7 @@ smithy-kotlin-runtime-version = "0.28.3-SNAPSHOT"
 smithy-kotlin-codegen-version = "0.28.3-SNAPSHOT"
 
 # codegen
-smithy-version = "1.41.0"
+smithy-version = "1.41.1"
 smithy-gradle-version = "0.6.0"
 
 # testing
