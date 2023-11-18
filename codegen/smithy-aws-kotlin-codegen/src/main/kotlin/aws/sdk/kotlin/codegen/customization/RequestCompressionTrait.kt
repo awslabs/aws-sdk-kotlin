@@ -12,9 +12,10 @@ import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.model.defaultValue
+import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
-import software.amazon.smithy.kotlin.codegen.model.shapes
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
@@ -26,8 +27,11 @@ class RequestCompressionTrait : KotlinIntegration {
 
     // Will determine if middleware is registered for service
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean = model
-            .shapes<OperationShape>() // TODO: We should not directly iterate operation shapes like this, we always need to consult the service closure.
-            .any { it.hasTrait<RequestCompressionTrait>() }
+        .serviceShapes.any { serviceShape ->
+            serviceShape.operations.any { operation ->
+                model.expectShape<OperationShape>(operation).hasTrait<RequestCompressionTrait>()
+            }
+        }
 
     // Registers middleware
     override fun customizeMiddleware(
@@ -45,9 +49,10 @@ class RequestCompressionTrait : KotlinIntegration {
                         More compression algorithms can be added and may override an existing implementation.
                         Use the `compressionAlgorithm` interface to create one.
                     """.trimIndent()
-                    symbol = Symbol.builder().build() // TODO: Write proper values for these
-                    baseClass = Symbol.builder().build() // TODO: Write proper values for these
-                    // TODO: Do a little research into what the rest of the possible properties do now
+                    symbol = Symbol.builder() // TODO: Not sure if this imports the right thing
+                        .name("List<CompressionAlgorithm>")
+                        .defaultValue("listOf(Gzip())")
+                        .build()
                 }
         )
     }
