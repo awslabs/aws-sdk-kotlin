@@ -42,7 +42,7 @@ class PollyPresigner : KotlinIntegration {
         val defaultTimestampFormat = writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.DefaultTimestampFormat)
 
         writer.write("unsignedRequest.method = #T.GET", RuntimeTypes.Http.HttpMethod)
-        writer.withBlock("unsignedRequest.url.parameters.encodedParameters {", "}") {
+        writer.withBlock("unsignedRequest.url.parameters.decodedParameters {", "}") {
             val bindings = resolver
                 .requestBindings(operation)
                 .map { it.copy(location = HttpBinding.Location.QUERY_PARAMS) }
