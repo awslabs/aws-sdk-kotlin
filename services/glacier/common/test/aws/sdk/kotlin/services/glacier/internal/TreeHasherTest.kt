@@ -14,7 +14,7 @@ import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.io.SdkByteChannel
 import aws.smithy.kotlin.runtime.io.SdkByteReadChannel
 import aws.smithy.kotlin.runtime.io.SdkSource
-import aws.smithy.kotlin.runtime.util.encodeToHex
+import aws.smithy.kotlin.runtime.text.encoding.encodeToHex
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
