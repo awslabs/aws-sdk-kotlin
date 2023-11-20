@@ -34,7 +34,10 @@ class Handle200ErrorsInterceptorTest {
             </Error>
     """.trimIndent().encodeToByteArray()
 
-    private fun newTestClient(payload: ByteArray = errorResponsePayload): S3Client =
+    private fun newTestClient(
+        status: HttpStatusCode = HttpStatusCode.OK,
+        payload: ByteArray = errorResponsePayload,
+    ): S3Client =
         S3Client {
             region = "us-east-1"
             credentialsProvider = TestCredentialsProvider
@@ -42,7 +45,7 @@ class Handle200ErrorsInterceptorTest {
                 maxAttempts = 1
             }
             httpClient = buildTestConnection {
-                expect(HttpResponse(HttpStatusCode.OK, body = HttpBody.fromBytes(payload)))
+                expect(HttpResponse(status, body = HttpBody.fromBytes(payload)))
             }
         }
 
@@ -83,7 +86,7 @@ class Handle200ErrorsInterceptorTest {
               </Deleted>
            </DeleteResult>
         """.trimIndent().encodeToByteArray()
-        val s3 = newTestClient(payload)
+        val s3 = newTestClient(payload = payload)
         val response = s3.deleteObjects { bucket = "test" }
         assertEquals("my-key", response.deleted?.first()?.key)
     }
@@ -99,7 +102,7 @@ class Handle200ErrorsInterceptorTest {
                 <HostId>rid2</HostId>
             </Error>
         """.trimIndent().encodeToByteArray()
-        val s3 = newTestClient(payload)
+        val s3 = newTestClient(HttpStatusCode.BadRequest, payload)
         val ex = assertFailsWith<S3Exception> {
             s3.deleteObjects { bucket = "test" }
         }
