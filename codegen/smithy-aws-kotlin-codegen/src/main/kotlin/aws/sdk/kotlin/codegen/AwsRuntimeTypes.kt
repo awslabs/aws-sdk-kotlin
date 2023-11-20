@@ -63,7 +63,7 @@ object AwsRuntimeTypes {
         }
 
         object Retries {
-            val AwsDefaultRetryPolicy = symbol("AwsDefaultRetryPolicy", "retries")
+            val AwsRetryPolicy = symbol("AwsRetryPolicy", "retries")
         }
 
         object Middleware {

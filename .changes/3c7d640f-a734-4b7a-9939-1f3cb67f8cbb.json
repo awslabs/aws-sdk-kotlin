@@ -1,0 +1,9 @@
+{
+    "id": "3c7d640f-a734-4b7a-9939-1f3cb67f8cbb",
+    "type": "feature",
+    "description": "Make region providers public and allow profile name override",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1002",
+        "awslabs/aws-sdk-kotlin#1003"
+    ]
+}
