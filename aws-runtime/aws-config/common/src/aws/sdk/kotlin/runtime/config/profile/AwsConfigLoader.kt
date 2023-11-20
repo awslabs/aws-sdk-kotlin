@@ -23,6 +23,7 @@ import kotlin.coroutines.coroutineContext
  *
  * @param platform Platform from which to resolve configuration environment
  * @param profileNameOverride Optional profile name to use as the active profile
+ * @param configurationSource Optional configuration source to use
  * @return A [AwsSharedConfig] instance
  */
 @InternalSdkApi
