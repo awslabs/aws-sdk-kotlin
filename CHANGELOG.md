@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.35.1-beta] - 11/20/2023
+
+### Features
+* (**codestarconnections**) This release updates a few CodeStar Connections related APIs.
+* (**docdb**) Amazon DocumentDB updates for new cluster storage configuration: Amazon DocumentDB I/O-Optimized.
+* (**ec2**) This release adds support for Security group referencing over Transit gateways, enabling you to simplify Security group management and control of instance-to-instance traffic across VPCs that are connected by Transit gateway.
+
 ## [0.35.0-beta] - 11/17/2023
 
 ### Features
