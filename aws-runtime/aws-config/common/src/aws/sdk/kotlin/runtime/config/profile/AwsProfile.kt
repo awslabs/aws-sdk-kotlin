@@ -141,7 +141,6 @@ public val AwsProfile.disableRequestCompression: Boolean?
 public val AwsProfile.requestMinCompressionSizeBytes: Int?
     get() = getIntOrNull("request_min_compression_size_bytes")
 
-
 /**
  * Parse a config value as a boolean, ignoring case.
  */
@@ -160,7 +159,7 @@ public fun AwsProfile.getBooleanOrNull(key: String, subKey: String? = null): Boo
 public fun AwsProfile.getIntOrNull(key: String, subKey: String? = null): Int? =
     getOrNull(key, subKey)?.let {
         it.toIntOrNull() ?: throw ConfigurationException(
-            "Failed to parse config property ${buildKeyString(key, subKey)} as an integer"
+            "Failed to parse config property ${buildKeyString(key, subKey)} as an integer",
         )
     }
 
