@@ -50,7 +50,7 @@ class Handle200ErrorsInterceptorTest {
         val expectedMessage = "Please reduce your request rate."
         assertEquals("SlowDown", ex.sdkErrorMetadata.errorCode)
         assertEquals(expectedMessage, ex.sdkErrorMetadata.errorMessage)
-        assertEquals(expectedMessage, ex.sdkErrorMetadata.errorMessage)
+        assertEquals(expectedMessage, ex.message)
         assertEquals("K2H6N7ZGQT6WHCEG", ex.sdkErrorMetadata.requestId)
         assertEquals("WWoZlnK4pTjKCYn6eNV7GgOurabfqLkjbSyqTvDMGBaI9uwzyNhSaDhOCPs8paFGye7S6b/AB3A=", ex.sdkErrorMetadata.requestId2)
     }
@@ -86,5 +86,28 @@ class Handle200ErrorsInterceptorTest {
         val s3 = newTestClient(payload)
         val response = s3.deleteObjects { bucket = "test" }
         assertEquals("my-key", response.deleted?.first()?.key)
+    }
+
+    @Test
+    fun testErrorPayloadUnmodified() = runTest {
+        val payload = """
+           <?xml version="1.0" encoding="UTF-8"?>
+            <Error>
+                <Code>FooError</Code>
+                <Message>Please use less foos.</Message>
+                <RequestId>rid</RequestId>
+                <HostId>rid2</HostId>
+            </Error>
+        """.trimIndent().encodeToByteArray()
+        val s3 = newTestClient(payload)
+        val ex = assertFailsWith<S3Exception> {
+            s3.deleteObjects { bucket = "test" }
+        }
+        val expectedMessage = "Please use less foos."
+        assertEquals(expectedMessage, ex.message)
+        assertEquals(expectedMessage, ex.sdkErrorMetadata.errorMessage)
+        assertEquals("FooError", ex.sdkErrorMetadata.errorCode)
+        assertEquals("rid", ex.sdkErrorMetadata.requestId)
+        assertEquals("rid2", ex.sdkErrorMetadata.requestId2)
     }
 }
