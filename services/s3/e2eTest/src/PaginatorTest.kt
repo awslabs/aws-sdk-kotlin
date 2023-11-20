@@ -73,8 +73,9 @@ class PaginatorTest {
                     key = "list-parts-test"
                     uploadId = id
                 }
-                    .transform { it.parts?.forEach { emit(it.partNumber) } }
+                    .transform { it.parts?.forEach { it.partNumber?.let { emit(it) } } }
                     .toList()
+                    .sorted()
             }
 
             assertContentEquals(expectedParts, actualParts)
