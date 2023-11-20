@@ -7,10 +7,8 @@ package aws.sdk.kotlin.services.sts
 import aws.sdk.kotlin.services.sts.model.GetCallerIdentityRequest
 import aws.sdk.kotlin.services.sts.presigners.presignGetCallerIdentity
 import aws.sdk.kotlin.testing.withAllEngines
-import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.complete
-import aws.smithy.kotlin.runtime.http.toByteStream
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
