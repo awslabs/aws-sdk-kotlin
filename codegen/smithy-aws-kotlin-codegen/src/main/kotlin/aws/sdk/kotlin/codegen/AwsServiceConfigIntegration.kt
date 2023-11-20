@@ -121,8 +121,8 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             .RetryPolicy
             .toBuilder()
             .apply {
-                propertyType = ConfigPropertyType.RequiredWithDefault("AwsDefaultRetryPolicy")
-                additionalImports = listOf(AwsRuntimeTypes.Http.Retries.AwsDefaultRetryPolicy)
+                propertyType = ConfigPropertyType.RequiredWithDefault("AwsRetryPolicy.Default")
+                additionalImports = listOf(AwsRuntimeTypes.Http.Retries.AwsRetryPolicy)
             }
             .build()
 
