@@ -46,7 +46,7 @@ class RequestCompressionTrait : KotlinIntegration {
                     More compression algorithms can be added and may override an existing implementation.
                     Use the `compressionAlgorithm` interface to create one.
                 """.trimIndent()
-                symbol = Symbol.builder() // TODO: Not sure if this imports the right thing ... look at examples
+                symbol = Symbol.builder()
                     .name("List<CompressionAlgorithm>")
                     .defaultValue("listOf(Gzip())")
                     .build()
