@@ -75,7 +75,6 @@ class PaginatorTest {
                 }
                     .transform { it.parts?.forEach { emit(it.partNumber) } }
                     .toList()
-                    .sorted()
             }
 
             assertContentEquals(expectedParts, actualParts)
