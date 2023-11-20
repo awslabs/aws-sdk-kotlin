@@ -32,8 +32,6 @@ class StsPresignerTest {
 
         withAllEngines { engine ->
             val httpClient = SdkHttpClient(engine)
-
-            println("Calling ${presignedRequest.method} ${presignedRequest.url}, body = ${presignedRequest.body.toByteStream()?.decodeToString()} headers ${presignedRequest.headers.entries().map { (k, v) -> "$k: ${v.joinToString(", ")}}" }.joinToString("; ")}")
             val call = httpClient.call(presignedRequest)
             call.complete()
 
