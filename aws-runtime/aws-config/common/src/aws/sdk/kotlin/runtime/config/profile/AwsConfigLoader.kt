@@ -29,7 +29,7 @@ import kotlin.coroutines.coroutineContext
 public suspend fun loadAwsSharedConfig(
     platform: PlatformProvider,
     profileNameOverride: String? = null,
-    configurationSource: AwsConfigurationSource? = null
+    configurationSource: AwsConfigurationSource? = null,
 ): AwsSharedConfig =
     withSpan("AwsSharedConfig", "loadAwsSharedConfig") {
         // Determine active profile and location of configuration files
