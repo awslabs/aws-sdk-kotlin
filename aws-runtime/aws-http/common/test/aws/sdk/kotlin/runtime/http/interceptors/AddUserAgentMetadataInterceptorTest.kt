@@ -6,8 +6,8 @@ package aws.sdk.kotlin.runtime.http.interceptors
 
 import aws.sdk.kotlin.runtime.http.operation.CustomUserAgentMetadata
 import aws.smithy.kotlin.runtime.client.RequestInterceptorContext
+import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
-import aws.smithy.kotlin.runtime.util.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -11,6 +11,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
+import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
@@ -18,7 +19,7 @@ import aws.smithy.kotlin.runtime.telemetry.telemetryProvider
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.fromEpochMilliseconds
-import aws.smithy.kotlin.runtime.util.*
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
 
 private const val PROVIDER_NAME = "SSO"

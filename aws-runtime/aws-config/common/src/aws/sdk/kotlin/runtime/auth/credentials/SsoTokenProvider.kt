@@ -10,6 +10,8 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.ssooidc.SsoOidcClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.ssooidc.createToken
 import aws.sdk.kotlin.runtime.auth.credentials.internal.ssooidc.model.CreateTokenResponse
 import aws.sdk.kotlin.runtime.config.profile.normalizePath
+import aws.smithy.kotlin.runtime.collections.Attributes
+import aws.smithy.kotlin.runtime.collections.emptyAttributes
 import aws.smithy.kotlin.runtime.hashing.sha1
 import aws.smithy.kotlin.runtime.http.auth.BearerToken
 import aws.smithy.kotlin.runtime.http.auth.BearerTokenProvider
@@ -23,10 +25,8 @@ import aws.smithy.kotlin.runtime.text.encoding.encodeToHex
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.SingleFlightGroup
-import aws.smithy.kotlin.runtime.util.emptyAttributes
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
