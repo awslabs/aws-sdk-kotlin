@@ -13,7 +13,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * [RegionProvider] that checks `AWS_REGION` region environment variable
  * @param environ the environment mapping to lookup keys in (defaults to the system environment)
  */
-internal class EnvironmentRegionProvider(
+public class EnvironmentRegionProvider(
     private val environ: EnvironmentProvider = PlatformProvider.System,
 ) : RegionProvider {
     override suspend fun getRegion(): String? = environ.getenv(AwsSdkSetting.AwsRegion.envVar)

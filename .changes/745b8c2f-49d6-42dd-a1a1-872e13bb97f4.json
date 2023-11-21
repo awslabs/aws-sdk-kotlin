@@ -1,0 +1,8 @@
+{
+    "id": "745b8c2f-49d6-42dd-a1a1-872e13bb97f4",
+    "type": "feature",
+    "description": "Handle S3 errors returned with an HTTP 200 response",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#199"
+    ]
+}
