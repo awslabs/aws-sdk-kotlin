@@ -1,6 +1,6 @@
 {
     "id": "5df56428-7b7d-40d0-9432-287c3322ba92",
     "type": "feature",
-    "description": "BREAKING: Always serialize default values",
+    "description": "BREAKING: Always serialize default values for operations",
     "requiresMinorVersionBump": true
 }
