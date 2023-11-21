@@ -1,6 +1,0 @@
-{
-    "id": "a965bace-fc72-45ec-8a67-b5d0163621e3",
-    "type": "bugfix",
-    "description": "**Breaking**: Make properties of S3Control PublicAccessBlockConfiguration optional by removing default values. Previously they defaulted to false, which caused invalid requests",
-    "requiresMinorVersionBump": true
-}

@@ -1,9 +1,0 @@
-{
-    "id": "4cbc20ed-789f-4040-b81c-328ecd3d0700",
-    "type": "feature",
-    "description": "**BREAKING**: Make the AWS retry policy inheritable",
-    "requiresMinorVersionBump": true,
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1055"
-    ]
-}
