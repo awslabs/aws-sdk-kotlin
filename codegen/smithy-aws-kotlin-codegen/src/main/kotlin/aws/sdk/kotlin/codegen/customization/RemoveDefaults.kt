@@ -25,37 +25,43 @@ import software.amazon.smithy.utils.ToSmithyBuilder
  */
 class RemoveDefaults : KotlinIntegration {
     // Service shape id -> Shape id of each root shape to remove default values from.
-    private val removeDefaultsFrom = mapOf(
-        ShapeId.from("com.amazonaws.amplifyuibuilder#AmplifyUIBuilder") to setOf(
-            ShapeId.from("com.amazonaws.amplifyuibuilder#ListComponentsLimit"),
-            ShapeId.from("com.amazonaws.amplifyuibuilder#ListFormsLimit"),
-            ShapeId.from("com.amazonaws.amplifyuibuilder#ListThemesLimit"),
+    private val removeDefaultsFrom: Map<ShapeId, Set<ShapeId>> = mapOf(
+        "com.amazonaws.amplifyuibuilder#AmplifyUIBuilder" to setOf(
+            "com.amazonaws.amplifyuibuilder#ListComponentsLimit",
+            "com.amazonaws.amplifyuibuilder#ListFormsLimit",
+            "com.amazonaws.amplifyuibuilder#ListThemesLimit",
         ),
-        ShapeId.from("com.amazonaws.drs#ElasticDisasterRecoveryService") to setOf(
-            ShapeId.from("com.amazonaws.drs#Validity"),
-            ShapeId.from("com.amazonaws.drs#CostOptimizationConfiguration\$burstBalanceThreshold"),
-            ShapeId.from("com.amazonaws.drs#CostOptimizationConfiguration\$burstBalanceDeltaThreshold"),
-            ShapeId.from("com.amazonaws.drs#ListStagingAccountsRequest\$maxResults"),
-            ShapeId.from("com.amazonaws.drs#StrictlyPositiveInteger"),
-            ShapeId.from("com.amazonaws.drs#MaxResultsType"),
-            ShapeId.from("com.amazonaws.drs#MaxResultsReplicatingSourceServers"),
-            ShapeId.from("com.amazonaws.drs#LaunchActionOrder"),
+        "com.amazonaws.drs#ElasticDisasterRecoveryService" to setOf(
+            "com.amazonaws.drs#Validity",
+            "com.amazonaws.drs#CostOptimizationConfiguration\$burstBalanceThreshold",
+            "com.amazonaws.drs#CostOptimizationConfiguration\$burstBalanceDeltaThreshold",
+            "com.amazonaws.drs#ListStagingAccountsRequest\$maxResults",
+            "com.amazonaws.drs#StrictlyPositiveInteger",
+            "com.amazonaws.drs#MaxResultsType",
+            "com.amazonaws.drs#MaxResultsReplicatingSourceServers",
+            "com.amazonaws.drs#LaunchActionOrder",
         ),
-        ShapeId.from("com.amazonaws.evidently#Evidently") to setOf(
-            ShapeId.from("com.amazonaws.evidently#ResultsPeriod"),
+        "com.amazonaws.evidently#Evidently" to setOf(
+            "com.amazonaws.evidently#ResultsPeriod",
         ),
-        ShapeId.from("com.amazonaws.location#LocationService") to setOf(
-            ShapeId.from("com.amazonaws.location#ListPlaceIndexesRequest\$MaxResults"),
-            ShapeId.from("com.amazonaws.location#SearchPlaceIndexForSuggestionsRequest\$MaxResults"),
-            ShapeId.from("com.amazonaws.location#PlaceIndexSearchResultLimit"),
+        "com.amazonaws.location#LocationService" to setOf(
+            "com.amazonaws.location#ListPlaceIndexesRequest\$MaxResults",
+            "com.amazonaws.location#SearchPlaceIndexForSuggestionsRequest\$MaxResults",
+            "com.amazonaws.location#PlaceIndexSearchResultLimit",
         ),
-        ShapeId.from("com.amazonaws.paymentcryptographydata#PaymentCryptographyDataPlane") to setOf(
-            ShapeId.from("com.amazonaws.paymentcryptographydata#IntegerRangeBetween4And12"),
+        "com.amazonaws.paymentcryptographydata#PaymentCryptographyDataPlane" to setOf(
+            "com.amazonaws.paymentcryptographydata#IntegerRangeBetween4And12",
         ),
-        ShapeId.from("com.amazonaws.emrserverless#AwsToledoWebService") to setOf(
-            ShapeId.from("com.amazonaws.emrserverless#WorkerCounts"),
+        "com.amazonaws.emrserverless#AwsToledoWebService" to setOf(
+            "com.amazonaws.emrserverless#WorkerCounts",
         ),
-    )
+        "com.amazonaws.s3control#AWSS3ControlServiceV20180820" to setOf(
+            "com.amazonaws.s3control#PublicAccessBlockConfiguration\$BlockPublicAcls",
+            "com.amazonaws.s3control#PublicAccessBlockConfiguration\$IgnorePublicAcls",
+            "com.amazonaws.s3control#PublicAccessBlockConfiguration\$BlockPublicPolicy",
+            "com.amazonaws.s3control#PublicAccessBlockConfiguration\$RestrictPublicBuckets",
+        ),
+    ).map { (k, v) -> ShapeId.from(k) to v.map { ShapeId.from(it) }.toSet() }.toMap()
 
     override val order: Byte = 0
 
