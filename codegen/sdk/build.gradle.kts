@@ -138,6 +138,7 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                     }
                     apiSettings {
                         enableEndpointAuthProvider = packageSettings.getBooleanMember("enableEndpointAuthProvider").orNull()?.value
+                        defaultValueSerializationMode = "always"
                     }
                 }
             }
