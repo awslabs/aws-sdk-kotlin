@@ -14,7 +14,7 @@ import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
-import aws.smithy.kotlin.runtime.util.Attributes
+import aws.smithy.kotlin.runtime.collections.Attributes
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
