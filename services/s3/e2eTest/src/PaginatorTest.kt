@@ -11,6 +11,7 @@ import aws.sdk.kotlin.services.s3.model.CompletedPart
 import aws.sdk.kotlin.services.s3.paginators.listPartsPaginated
 import aws.sdk.kotlin.services.s3.uploadPart
 import aws.smithy.kotlin.runtime.content.ByteStream
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.runBlocking
@@ -72,7 +73,7 @@ class PaginatorTest {
                     key = "list-parts-test"
                     uploadId = id
                 }
-                    .transform { it.parts?.forEach { emit(it.partNumber!!) } }
+                    .transform { it.parts?.forEach { it.partNumber?.let { emit(it) } } }
                     .toList()
                     .sorted()
             }

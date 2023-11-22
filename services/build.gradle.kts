@@ -53,6 +53,7 @@ subprojects {
 
                 dependencies {
                     implementation(libraries.kotlinx.coroutines.test)
+                    implementation(libraries.smithy.kotlin.http.test)
                 }
             }
         }

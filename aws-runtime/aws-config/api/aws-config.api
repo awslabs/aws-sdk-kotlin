@@ -327,6 +327,43 @@ public final class aws/sdk/kotlin/runtime/config/retries/ResolveRetryStrategyKt 
 public final class aws/sdk/kotlin/runtime/config/useragent/ResolveUserAgentKt {
 }
 
+public final class aws/sdk/kotlin/runtime/region/DefaultRegionProviderChain : aws/sdk/kotlin/runtime/region/RegionProviderChain, aws/sdk/kotlin/runtime/region/RegionProvider, java/io/Closeable {
+	public fun <init> ()V
+	public fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun close ()V
+}
+
+public final class aws/sdk/kotlin/runtime/region/EnvironmentRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider {
+	public fun <init> ()V
+	public fun <init> (Laws/smithy/kotlin/runtime/util/EnvironmentProvider;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/EnvironmentProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/region/ImdsRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider, java/io/Closeable {
+	public fun <init> ()V
+	public fun <init> (Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;)V
+	public synthetic fun <init> (Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun close ()V
+	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/region/JvmSystemPropRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider {
+	public fun <init> ()V
+	public fun <init> (Laws/smithy/kotlin/runtime/util/PropertyProvider;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/PropertyProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/region/ProfileRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider {
+	public fun <init> ()V
+	public fun <init> (Laws/smithy/kotlin/runtime/util/LazyAsyncValue;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/LazyAsyncValue;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;)V
+	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public abstract interface class aws/sdk/kotlin/runtime/region/RegionProvider {
 	public abstract fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
