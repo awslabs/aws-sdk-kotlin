@@ -42,26 +42,12 @@ class PollyPresigner : KotlinIntegration {
         val defaultTimestampFormat = writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.DefaultTimestampFormat)
 
         writer.write("unsignedRequest.method = #T.GET", RuntimeTypes.Http.HttpMethod)
-        writer.withBlock("unsignedRequest.url.parameters.encodedParameters {", "}") {
-            // Set up a temporary map for the query labels
-            writer.write("val labels = #T<String, String>()", RuntimeTypes.Core.Collections.mutableMultiMapOf)
-
+        writer.withBlock("unsignedRequest.url.parameters.decodedParameters(#T.SmithyLabel) {", "}", RuntimeTypes.Core.Text.Encoding.PercentEncoding) {
             val bindings = resolver
                 .requestBindings(operation)
                 .map { it.copy(location = HttpBinding.Location.QUERY_PARAMS) }
 
             HttpStringValuesMapSerializer(ctx.model, ctx.symbolProvider, ctx.settings, bindings, resolver, defaultTimestampFormat).render(writer)
-
-            // Transfer encoded labels into query params map
-            openBlock("labels")
-            write(".entries")
-            withBlock(".associateTo(this) { (key, values) ->", "}") {
-                write(
-                    "#1T.SmithyLabel.encode(key) to values.mapTo(mutableListOf(), #1T.SmithyLabel::encode)",
-                    RuntimeTypes.Core.Text.Encoding.PercentEncoding,
-                )
-            }
-            dedent()
         }
 
         // Remove the headers that were created by the default HTTP operation serializer
