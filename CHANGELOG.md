@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.36.1-beta] - 11/22/2023
+
+### Features
+* (**kinesis**) This release adds support for resource based policies on streams and consumers.
+* (**s3control**) Amazon S3 Batch Operations now manages buckets or prefixes in a single step.
+* (**sagemaker**) This feature adds the end user license agreement status as a model access configuration parameter.
+
 ## [0.36.0-beta] - 11/21/2023
 
 ### Features
