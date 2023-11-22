@@ -12,7 +12,7 @@ import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.http.request.headers
-import aws.smithy.kotlin.runtime.util.encodeToHex
+import aws.smithy.kotlin.runtime.text.encoding.encodeToHex
 
 private const val defaultChunkSizeBytes = 1024 * 1024 // 1MB
 

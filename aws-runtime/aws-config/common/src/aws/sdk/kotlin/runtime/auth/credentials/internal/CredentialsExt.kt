@@ -6,11 +6,11 @@ package aws.sdk.kotlin.runtime.auth.credentials.internal
 
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.collections.emptyAttributes
+import aws.smithy.kotlin.runtime.collections.mutableAttributes
+import aws.smithy.kotlin.runtime.collections.setIfValueNotNull
 import aws.smithy.kotlin.runtime.identity.IdentityAttributes
 import aws.smithy.kotlin.runtime.time.Instant
-import aws.smithy.kotlin.runtime.util.emptyAttributes
-import aws.smithy.kotlin.runtime.util.mutableAttributes
-import aws.smithy.kotlin.runtime.util.setIfValueNotNull
 
 internal fun credentials(
     accessKeyId: String,

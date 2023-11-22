@@ -153,7 +153,7 @@ internal const val imdsTestSuite = """
       },
       "fs": {},
       "result": {
-        "Err": "is not a valid inet host"
+        "Err": "Cannot parse \"not a uri\" as a URL"
       }
     },
     {

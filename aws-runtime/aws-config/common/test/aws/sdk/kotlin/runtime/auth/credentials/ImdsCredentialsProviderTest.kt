@@ -19,7 +19,7 @@ import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.io.IOException
 import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.net.Scheme
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
@@ -450,7 +450,11 @@ class ImdsCredentialsProviderTest {
                     return HttpCall(
                         HttpRequest(
                             HttpMethod.GET,
-                            Url(Scheme.HTTP, Host.parse("test"), Scheme.HTTP.defaultPort, "/path/foo/bar"),
+                            Url {
+                                scheme = Scheme.HTTP
+                                host = Host.parse("test")
+                                path.encoded = "/path/foo/bar"
+                            },
                             Headers.Empty,
                             HttpBody.Empty,
                         ),
@@ -534,7 +538,11 @@ class ImdsCredentialsProviderTest {
             HttpCall(
                 HttpRequest(
                     HttpMethod.GET,
-                    Url(Scheme.HTTP, Host.parse("test"), Scheme.HTTP.defaultPort, "/path/foo/bar"),
+                    Url {
+                        scheme = Scheme.HTTP
+                        host = Host.parse("test")
+                        path.encoded = "/path/foo/bar"
+                    },
                     Headers.Empty,
                     HttpBody.Empty,
                 ),

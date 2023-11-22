@@ -8,7 +8,7 @@ import aws.sdk.kotlin.runtime.config.profile.AwsConfigurationSource
 import aws.sdk.kotlin.runtime.config.profile.FileType
 import aws.sdk.kotlin.runtime.config.profile.parse
 import aws.sdk.kotlin.runtime.config.profile.toSharedConfig
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.telemetry.logging.Logger
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy

@@ -11,7 +11,7 @@ import aws.sdk.kotlin.runtime.http.AWS_APP_ID_ENV
 import aws.sdk.kotlin.runtime.http.AWS_APP_ID_PROP
 import aws.smithy.kotlin.runtime.client.config.RetryMode
 import aws.smithy.kotlin.runtime.config.*
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 // NOTE: The JVM property names MUST match the ones defined in the Java SDK for any setting added.

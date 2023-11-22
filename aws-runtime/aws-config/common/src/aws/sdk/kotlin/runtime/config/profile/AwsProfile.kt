@@ -9,7 +9,7 @@ import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
 import aws.smithy.kotlin.runtime.client.config.RetryMode
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 
 /**
  * Represents an AWS config profile.

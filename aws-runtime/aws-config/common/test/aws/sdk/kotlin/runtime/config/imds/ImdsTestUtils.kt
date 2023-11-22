@@ -12,13 +12,12 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 
 fun tokenRequest(host: String, ttl: Int): HttpRequest = HttpRequest {
-    val parsed = Url.parse(host)
-    url(parsed)
+    url(Url.parse(host))
     method = HttpMethod.PUT
-    url.path = "/latest/api/token"
+    url.path.encoded = "/latest/api/token"
     headers.append(X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS, ttl.toString())
 }
 

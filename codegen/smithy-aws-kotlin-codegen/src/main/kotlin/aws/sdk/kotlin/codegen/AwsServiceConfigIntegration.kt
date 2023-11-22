@@ -104,7 +104,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         val EndpointUrlProp = ConfigProperty {
             name = "endpointUrl"
-            symbol = RuntimeTypes.Core.Net.Url.asNullable()
+            symbol = RuntimeTypes.Core.Net.Url.Url.asNullable()
             documentation = """
                 A custom endpoint to route requests to. The endpoint set here is passed to the configured
                 [endpointProvider], which may inspect and modify it as needed.

@@ -4,7 +4,8 @@
  */
 
 package aws.sdk.kotlin.runtime.client
-import aws.smithy.kotlin.runtime.util.AttributeKey
+
+import aws.smithy.kotlin.runtime.collections.AttributeKey
 
 /**
  * A collection of AWS service client options. NOTE: most options are configured by default through the service

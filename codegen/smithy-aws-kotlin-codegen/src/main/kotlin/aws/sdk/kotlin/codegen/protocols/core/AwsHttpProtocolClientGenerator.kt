@@ -48,7 +48,7 @@ open class AwsHttpProtocolClientGenerator(
         // set AWS specific span attributes for an operation
         // https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/instrumentation/aws-sdk/
         val addAwsSpanAttrWriter = SectionWriter { w, _ ->
-            w.withBlock("attributes = #T {", "}", RuntimeTypes.Core.Utils.attributesOf) {
+            w.withBlock("attributes = #T {", "}", RuntimeTypes.Core.Collections.attributesOf) {
                 write("#S to #S", "rpc.system", "aws-api")
             }
         }
@@ -126,7 +126,7 @@ internal fun KotlinWriter.putIfAbsent(
     literalValue: String? = null,
     nullable: Boolean = false,
 ) {
-    val putSymbol = if (nullable) RuntimeTypes.Core.Utils.putIfAbsentNotNull else RuntimeTypes.Core.Utils.putIfAbsent
+    val putSymbol = if (nullable) RuntimeTypes.Core.Collections.putIfAbsentNotNull else RuntimeTypes.Core.Collections.putIfAbsent
     val actualValue = literalValue ?: "config.${name.replaceFirstChar(Char::lowercaseChar)}"
     write("ctx.#T(#T.#L, #L)", putSymbol, attributesSymbol, name, actualValue)
 }

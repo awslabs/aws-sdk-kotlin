@@ -19,7 +19,7 @@ import aws.smithy.kotlin.runtime.http.HttpException
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.testing.RandomTempFile
-import aws.smithy.kotlin.runtime.util.encodeToHex
+import aws.smithy.kotlin.runtime.text.encoding.encodeToHex
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.toList
 import org.junit.jupiter.api.AfterAll
