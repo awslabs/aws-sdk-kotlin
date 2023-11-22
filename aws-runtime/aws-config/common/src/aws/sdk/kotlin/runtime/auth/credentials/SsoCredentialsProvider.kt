@@ -11,6 +11,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
+import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.serde.json.*
@@ -101,6 +102,7 @@ public class SsoCredentialsProvider public constructor(
             region = ssoRegion
             httpClient = this@SsoCredentialsProvider.httpClient
             telemetryProvider = telemetry
+            logMode = attributes.getOrNull(SdkClientOption.LogMode)
             // FIXME - create an anonymous credential provider to explicitly avoid default chain creation (technically the transform should remove need for sigv4 cred provider since it's all anon auth)
         }
 
