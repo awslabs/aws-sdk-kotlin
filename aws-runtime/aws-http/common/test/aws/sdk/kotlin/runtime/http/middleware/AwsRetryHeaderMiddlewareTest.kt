@@ -4,18 +4,16 @@
  */
 package aws.sdk.kotlin.runtime.http.middleware
 
+import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.httptest.TestEngine
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
-import aws.smithy.kotlin.runtime.util.get
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class AwsRetryHeaderMiddlewareTest {
     private val client = SdkHttpClient(TestEngine())
 

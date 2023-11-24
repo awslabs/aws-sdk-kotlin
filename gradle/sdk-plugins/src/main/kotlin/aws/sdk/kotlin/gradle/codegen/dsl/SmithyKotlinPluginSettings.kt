@@ -11,6 +11,22 @@ import software.amazon.smithy.model.node.ObjectNode
 import software.amazon.smithy.model.node.ToNode
 import java.util.*
 
+class SmithyKotlinApiSettings : ToNode {
+    var visibility: String? = null
+    var nullabilityCheckMode: String? = null
+    var defaultValueSerializationMode: String? = null
+    var enableEndpointAuthProvider: Boolean? = null
+
+    override fun toNode(): Node {
+        val builder = ObjectNode.objectNodeBuilder()
+        builder.withNullableMember("visibility", visibility)
+        builder.withNullableMember("nullabilityCheckMode", nullabilityCheckMode)
+        builder.withNullableMember("defaultValueSerializationMode", defaultValueSerializationMode)
+        builder.withNullableMember("enableEndpointAuthProvider", enableEndpointAuthProvider)
+        return builder.build()
+    }
+}
+
 class SmithyKotlinBuildSettings : ToNode {
     var generateFullProject: Boolean? = null
     var generateDefaultBuildFiles: Boolean? = null
@@ -24,6 +40,7 @@ class SmithyKotlinBuildSettings : ToNode {
 
         val optInArrNode = optInAnnotations?.map { Node.from(it) }?.let { ArrayNode.fromNodes(it) }
         builder.withOptionalMember("optInAnnotations", Optional.ofNullable(optInArrNode))
+
         return builder.build()
     }
 }
@@ -41,6 +58,12 @@ class SmithyKotlinPluginSettings : SmithyBuildPlugin {
     fun buildSettings(configure: SmithyKotlinBuildSettings.() -> Unit) {
         if (buildSettings == null) buildSettings = SmithyKotlinBuildSettings()
         buildSettings!!.apply(configure)
+    }
+
+    internal var apiSettings: SmithyKotlinApiSettings? = null
+    fun apiSettings(configure: SmithyKotlinApiSettings.() -> Unit) {
+        if (apiSettings == null) apiSettings = SmithyKotlinApiSettings()
+        apiSettings!!.apply(configure)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -79,6 +102,7 @@ class SmithyKotlinPluginSettings : SmithyBuildPlugin {
             }
             .withNullableMember("sdkId", sdkId)
             .withNullableMember("build", buildSettings)
+            .withNullableMember("api", apiSettings)
 
         return obj.build()
     }

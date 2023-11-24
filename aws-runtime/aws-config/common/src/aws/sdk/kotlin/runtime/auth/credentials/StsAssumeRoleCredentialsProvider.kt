@@ -5,6 +5,8 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.arns.Arn
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRole
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.PolicyDescriptorType
@@ -15,6 +17,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH_SECONDS
+import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
@@ -22,7 +25,6 @@ import aws.smithy.kotlin.runtime.telemetry.telemetryProvider
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
-import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
@@ -135,14 +137,16 @@ public class StsAssumeRoleCredentialsProvider(
         }
 
         val roleCredentials = resp.credentials ?: throw CredentialsProviderException("STS credentials must not be null")
-        logger.debug { "obtained assumed credentials; expiration=${roleCredentials.expiration?.format(TimestampFormat.ISO_8601)}" }
+        val accountId = resp.assumedRoleUser?.arn?.let { Arn.parse(it).accountId }
+        logger.debug { "obtained assumed credentials; expiration=${roleCredentials.expiration.format(TimestampFormat.ISO_8601)}" }
 
-        return Credentials(
-            accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRole response" },
-            secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRole response" },
+        return credentials(
+            accessKeyId = roleCredentials.accessKeyId,
+            secretAccessKey = roleCredentials.secretAccessKey,
             sessionToken = roleCredentials.sessionToken,
             expiration = roleCredentials.expiration,
             providerName = PROVIDER_NAME,
+            accountId = accountId,
         )
     }
 }

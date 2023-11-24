@@ -11,9 +11,8 @@ plugins {
 
 description = "Smithy protocol test suite"
 
-val smithyVersion: String by project
 dependencies {
-    implementation("software.amazon.smithy:smithy-aws-protocol-tests:$smithyVersion")
+    implementation(libs.smithy.aws.protocol.tests)
 }
 
 data class ProtocolTest(val projectionName: String, val serviceShapeId: String, val sdkId: String? = null) {
@@ -35,6 +34,10 @@ val enabledProtocols = listOf(
     ProtocolTest("apigateway", "com.amazonaws.apigateway#BackplaneControlService"),
     ProtocolTest("glacier", "com.amazonaws.glacier#Glacier"),
     ProtocolTest("machinelearning", "com.amazonaws.machinelearning#AmazonML_20141212", sdkId = "Machine Learning"),
+
+    // Custom hand written tests
+    ProtocolTest("error-correction-json", "aws.protocoltests.errorcorrection#RequiredValueJson"),
+    ProtocolTest("error-correction-xml", "aws.protocoltests.errorcorrection#RequiredValueXml"),
 )
 
 codegen {
@@ -63,6 +66,9 @@ codegen {
                         "aws.sdk.kotlin.runtime.InternalSdkApi",
                     )
                 }
+                apiSettings {
+                    defaultValueSerializationMode = "always"
+                }
             }
         }
     }
@@ -75,9 +81,9 @@ tasks.named<SmithyBuild>("generateSmithyProjections") {
     addCompileClasspath = true
 
     // ensure the generated clients use the same version of the runtime as the aws aws-runtime
-    val smithyKotlinVersion: String by project
+    val smithyKotlinRuntimeVersion = libs.versions.smithy.kotlin.runtime.version.get()
     doFirst {
-        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinVersion)
+        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinRuntimeVersion)
     }
 }
 

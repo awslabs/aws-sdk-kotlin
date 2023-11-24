@@ -7,8 +7,9 @@ package aws.sdk.kotlin.runtime.config.profile
 
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
 import aws.smithy.kotlin.runtime.client.config.RetryMode
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 
 /**
  * Represents an AWS config profile.
@@ -67,7 +68,7 @@ public val AwsProfile.sourceProfile: String?
 @InternalSdkApi
 public val AwsProfile.maxAttempts: Int?
     get() = getOrNull("max_attempts")?.run {
-        toIntOrNull() ?: throw ConfigurationException("Failed to parse maxAttempts $this as an integer")
+        toIntOrNull() ?: throw ConfigurationException("Failed to parse max_attempts $this as an integer")
     }
 
 /**
@@ -84,7 +85,11 @@ public val AwsProfile.credentialProcess: String?
 public val AwsProfile.retryMode: RetryMode?
     get() = getOrNull("retry_mode")?.run {
         RetryMode.values().firstOrNull { it.name.equals(this, ignoreCase = true) }
-            ?: throw ConfigurationException("Retry mode $this is not supported, should be one of: ${RetryMode.values().joinToString(", ")}")
+            ?: throw ConfigurationException(
+                "retry_mode $this is not supported, should be one of: ${
+                    RetryMode.values().joinToString(", ") { it.name.lowercase() }
+                }",
+            )
     }
 
 /**
@@ -121,6 +126,27 @@ public val AwsProfile.ignoreEndpointUrls: Boolean?
 @InternalSdkApi
 public val AwsProfile.servicesSection: String?
     get() = getOrNull("services")
+
+/**
+ * The SDK user agent app ID used to identify applications.
+ */
+@InternalSdkApi
+public val AwsProfile.sdkUserAgentAppId: String?
+    get() = getOrNull("sdk_ua_app_id")
+
+/**
+ * Whether service clients should make requests to the dual-stack endpoint variant.
+ */
+@InternalSdkApi
+public val AwsProfile.accountIdEndpointMode: AccountIdEndpointMode?
+    get() = getOrNull("account_id_endpoint_mode")?.run {
+        AccountIdEndpointMode.values().firstOrNull { it.name.equals(this, ignoreCase = true) }
+            ?: throw ConfigurationException(
+                "account_id_endpoint_mode $this is not supported, should be one of: ${
+                    AccountIdEndpointMode.values().joinToString(", ") { it.name.lowercase() }
+                }",
+            )
+    }
 
 /**
  * Parse a config value as a boolean, ignoring case.

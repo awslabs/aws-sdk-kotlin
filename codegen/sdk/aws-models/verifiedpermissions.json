@@ -47,7 +47,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains information about an action for a request for which an authorization decision\n            is made.</p>\n         <p>This data type is used as an request parameter to the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html\">IsAuthorized</a> and <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html\">IsAuthorizedWithToken</a> operations.</p>\n         <p>Example: <code>{ \"actionId\": \"&lt;action name&gt;\", \"actionType\": \"Action\"\n            }</code>\n         </p>"
+                "smithy.api#documentation": "<p>Contains information about an action for a request for which an authorization decision\n            is made.</p>\n         <p>This data type is used as a request parameter to the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html\">IsAuthorized</a>, <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_BatchIsAuthorized.html\">BatchIsAuthorized</a>, and <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html\">IsAuthorizedWithToken</a>\n            operations.</p>\n         <p>Example: <code>{ \"actionId\": \"&lt;action name&gt;\", \"actionType\": \"Action\"\n            }</code>\n         </p>"
             }
         },
         "com.amazonaws.verifiedpermissions#ActionType": {
@@ -67,7 +67,7 @@
                 "boolean": {
                     "target": "com.amazonaws.verifiedpermissions#BooleanAttribute",
                     "traits": {
-                        "smithy.api#documentation": "<p>An attribute value of <a href=\"https://docs.cedarpolicy.com/syntax-datatypes.html#boolean\">Boolean</a> type.</p>\n         <p>Example: <code>{\"boolean\": true}</code>\n         </p>"
+                        "smithy.api#documentation": "<p>An attribute value of <a href=\"https://docs.cedarpolicy.com/policies/syntax-datatypes.html#boolean\">Boolean</a>\n            type.</p>\n         <p>Example: <code>{\"boolean\": true}</code>\n         </p>"
                     }
                 },
                 "entityIdentifier": {
@@ -79,30 +79,178 @@
                 "long": {
                     "target": "com.amazonaws.verifiedpermissions#LongAttribute",
                     "traits": {
-                        "smithy.api#documentation": "<p>An attribute value of <a href=\"https://docs.cedarpolicy.com/syntax-datatypes.html#long\">Long</a> type.</p>\n         <p>Example: <code>{\"long\": 0}</code>\n         </p>"
+                        "smithy.api#documentation": "<p>An attribute value of <a href=\"https://docs.cedarpolicy.com/policies/syntax-datatypes.html#long\">Long</a> type.</p>\n         <p>Example: <code>{\"long\": 0}</code>\n         </p>"
                     }
                 },
                 "string": {
                     "target": "com.amazonaws.verifiedpermissions#StringAttribute",
                     "traits": {
-                        "smithy.api#documentation": "<p>An attribute value of <a href=\"https://docs.cedarpolicy.com/syntax-datatypes.html#string\">String</a> type.</p>\n         <p>Example: <code>{\"string\": \"abc\"}</code>\n         </p>"
+                        "smithy.api#documentation": "<p>An attribute value of <a href=\"https://docs.cedarpolicy.com/policies/syntax-datatypes.html#string\">String</a>\n            type.</p>\n         <p>Example: <code>{\"string\": \"abc\"}</code>\n         </p>"
                     }
                 },
                 "set": {
                     "target": "com.amazonaws.verifiedpermissions#SetAttribute",
                     "traits": {
-                        "smithy.api#documentation": "<p>An attribute value of <a href=\"https://docs.cedarpolicy.com/syntax-datatypes.html#set\">Set</a> type.</p>\n         <p>Example: <code>{\"set\": [ {} ] }</code>\n         </p>"
+                        "smithy.api#documentation": "<p>An attribute value of <a href=\"https://docs.cedarpolicy.com/policies/syntax-datatypes.html#set\">Set</a> type.</p>\n         <p>Example: <code>{\"set\": [ {} ] }</code>\n         </p>"
                     }
                 },
                 "record": {
                     "target": "com.amazonaws.verifiedpermissions#RecordAttribute",
                     "traits": {
-                        "smithy.api#documentation": "<p>An attribute value of <a href=\"https://docs.cedarpolicy.com/syntax-datatypes.html#record\">Record</a> type.</p>\n         <p>Example: <code>{\"record\": { \"keyName\": {} } }</code>\n         </p>"
+                        "smithy.api#documentation": "<p>An attribute value of <a href=\"https://docs.cedarpolicy.com/policies/syntax-datatypes.html#record\">Record</a>\n            type.</p>\n         <p>Example: <code>{\"record\": { \"keyName\": {} } }</code>\n         </p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The value of an attribute.</p>\n         <p>Contains information about the runtime context for a request for which an\n            authorization decision is made. </p>\n         <p>This data type is used as a member of the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_ContextDefinition.html\">ContextDefinition</a> structure\n            which is uses as a request parameter for the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html\">IsAuthorized</a> and <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html\">IsAuthorizedWithToken</a> operations.</p>"
+                "smithy.api#documentation": "<p>The value of an attribute.</p>\n         <p>Contains information about the runtime context for a request for which an\n            authorization decision is made. </p>\n         <p>This data type is used as a member of the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_ContextDefinition.html\">ContextDefinition</a> structure\n            which is uses as a request parameter for the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html\">IsAuthorized</a>, <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_BatchIsAuthorized.html\">BatchIsAuthorized</a>, and <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html\">IsAuthorizedWithToken</a>\n            operations.</p>"
+            }
+        },
+        "com.amazonaws.verifiedpermissions#BatchIsAuthorized": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.verifiedpermissions#BatchIsAuthorizedInput"
+            },
+            "output": {
+                "target": "com.amazonaws.verifiedpermissions#BatchIsAuthorizedOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.verifiedpermissions#ResourceNotFoundException"
+                }
+            ],
+            "traits": {
+                "aws.iam#actionName": "IsAuthorized",
+                "aws.iam#actionPermissionDescription": "Grants permission to make a batch authorization decision about a service request described in the parameters",
+                "smithy.api#documentation": "<p>Makes a series of decisions about multiple authorization requests for one principal or\n            resource. Each request contains the equivalent content of an <code>IsAuthorized</code>\n            request: principal, action, resource, and context. Either the <code>principal</code> or\n            the <code>resource</code> parameter must be identical across all requests. For example,\n            Verified Permissions won't evaluate a pair of requests where <code>bob</code> views\n                <code>photo1</code> and <code>alice</code> views <code>photo2</code>. Authorization\n            of <code>bob</code> to view <code>photo1</code> and <code>photo2</code>, or\n                <code>bob</code> and <code>alice</code> to view <code>photo1</code>, are valid\n            batches. </p>\n         <p>The request is evaluated against all policies in the specified policy store that match the\n            entities that you declare. The result of the decisions is a series of <code>Allow</code>\n            or <code>Deny</code> responses, along with the IDs of the policies that produced each\n            decision.</p>\n         <p>The <code>entities</code> of a <code>BatchIsAuthorized</code> API request can contain up to 100 principals and up\n            to 100 resources. The <code>requests</code> of a <code>BatchIsAuthorized</code> API request can contain up to 30\n            requests.</p>",
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.verifiedpermissions#BatchIsAuthorizedInput": {
+            "type": "structure",
+            "members": {
+                "policyStoreId": {
+                    "target": "com.amazonaws.verifiedpermissions#PolicyStoreId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the ID of the policy store. Policies in this policy store will be used to make the\n            authorization decisions for the input.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "entities": {
+                    "target": "com.amazonaws.verifiedpermissions#EntitiesDefinition",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the list of resources and principals and their associated attributes that\n            Verified Permissions can examine when evaluating the policies. </p>\n         <note>\n            <p>You can include only principal and resource entities in this parameter; you can't\n                include actions. You must specify actions in the schema.</p>\n         </note>"
+                    }
+                },
+                "requests": {
+                    "target": "com.amazonaws.verifiedpermissions#BatchIsAuthorizedInputList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An array of up to 30 requests that you want Verified Permissions to evaluate.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.verifiedpermissions#BatchIsAuthorizedInputItem": {
+            "type": "structure",
+            "members": {
+                "principal": {
+                    "target": "com.amazonaws.verifiedpermissions#EntityIdentifier",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the principal for which the authorization decision is to be made.</p>"
+                    }
+                },
+                "action": {
+                    "target": "com.amazonaws.verifiedpermissions#ActionIdentifier",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the requested action to be authorized. For example, is the principal\n            authorized to perform this action on the resource?</p>"
+                    }
+                },
+                "resource": {
+                    "target": "com.amazonaws.verifiedpermissions#EntityIdentifier",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the resource for which the authorization decision is to be made.</p>"
+                    }
+                },
+                "context": {
+                    "target": "com.amazonaws.verifiedpermissions#ContextDefinition",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies additional context that can be used to make more granular authorization\n            decisions.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>An authorization request that you include in a <code>BatchIsAuthorized</code> API\n            request.</p>"
+            }
+        },
+        "com.amazonaws.verifiedpermissions#BatchIsAuthorizedInputList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.verifiedpermissions#BatchIsAuthorizedInputItem"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1
+                }
+            }
+        },
+        "com.amazonaws.verifiedpermissions#BatchIsAuthorizedOutput": {
+            "type": "structure",
+            "members": {
+                "results": {
+                    "target": "com.amazonaws.verifiedpermissions#BatchIsAuthorizedOutputList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A series of <code>Allow</code> or <code>Deny</code> decisions for each request, and\n            the policies that produced them.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.verifiedpermissions#BatchIsAuthorizedOutputItem": {
+            "type": "structure",
+            "members": {
+                "request": {
+                    "target": "com.amazonaws.verifiedpermissions#BatchIsAuthorizedInputItem",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The authorization request that initiated the decision.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "decision": {
+                    "target": "com.amazonaws.verifiedpermissions#Decision",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An authorization decision that indicates if the authorization request should be\n            allowed or denied.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "determiningPolicies": {
+                    "target": "com.amazonaws.verifiedpermissions#DeterminingPolicyList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of determining policies used to make the authorization decision. For example,\n            if there are two matching policies, where one is a forbid and the other is a permit,\n            then the forbid policy will be the determining policy. In the case of multiple matching\n            permit policies then there would be multiple determining policies. In the case that no\n            policies match, and hence the response is DENY, there would be no determining\n            policies.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "errors": {
+                    "target": "com.amazonaws.verifiedpermissions#EvaluationErrorList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Errors that occurred while making an authorization decision, for example, a policy\n            references an Entity or entity Attribute that does not exist in the slice.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The decision, based on policy evaluation, from an individual authorization request in\n            a <code>BatchIsAuthorized</code> API request.</p>"
+            }
+        },
+        "com.amazonaws.verifiedpermissions#BatchIsAuthorizedOutputList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.verifiedpermissions#BatchIsAuthorizedOutputItem"
             }
         },
         "com.amazonaws.verifiedpermissions#BooleanAttribute": {
@@ -198,12 +346,12 @@
                 "contextMap": {
                     "target": "com.amazonaws.verifiedpermissions#ContextMap",
                     "traits": {
-                        "smithy.api#documentation": "<p>An list of attributes that are needed to successfully evaluate an authorization\n            request. Each attribute in this array must include a map of a data type and its\n            value.</p>\n         <p>Example:\n                <code>\"Context\":{\"&lt;KeyName1&gt;\":{\"boolean\":true},\"&lt;KeyName2&gt;\":{\"long\":1234}}</code>\n         </p>"
+                        "smithy.api#documentation": "<p>An list of attributes that are needed to successfully evaluate an authorization\n            request. Each attribute in this array must include a map of a data type and its\n            value.</p>\n         <p>Example:\n                <code>\"contextMap\":{\"&lt;KeyName1&gt;\":{\"boolean\":true},\"&lt;KeyName2&gt;\":{\"long\":1234}}</code>\n         </p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains additional details about the context of the request. Verified Permissions evaluates this\n            information in an authorization request as part of the <code>when</code> and\n                <code>unless</code> clauses in a policy.</p>\n         <p>This data type is used as a request parameter for the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html\">IsAuthorized</a> and <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html\">IsAuthorizedWithToken</a> operations.</p>\n         <p>Example:\n                <code>\"context\":{\"Context\":{\"&lt;KeyName1&gt;\":{\"boolean\":true},\"&lt;KeyName2&gt;\":{\"long\":1234}}}</code>\n         </p>"
+                "smithy.api#documentation": "<p>Contains additional details about the context of the request. Verified Permissions evaluates this\n            information in an authorization request as part of the <code>when</code> and\n                <code>unless</code> clauses in a policy.</p>\n         <p>This data type is used as a request parameter for the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html\">IsAuthorized</a>, <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_BatchIsAuthorized.html\">BatchIsAuthorized</a>, and <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html\">IsAuthorizedWithToken</a>\n            operations.</p>\n         <p>Example:\n                <code>\"context\":{\"contextMap\":{\"&lt;KeyName1&gt;\":{\"boolean\":true},\"&lt;KeyName2&gt;\":{\"long\":1234}}}</code>\n         </p>"
             }
         },
         "com.amazonaws.verifiedpermissions#ContextMap": {
@@ -224,6 +372,9 @@
                 "target": "com.amazonaws.verifiedpermissions#CreateIdentitySourceOutput"
             },
             "errors": [
+                {
+                    "target": "com.amazonaws.verifiedpermissions#ConflictException"
+                },
                 {
                     "target": "com.amazonaws.verifiedpermissions#ResourceNotFoundException"
                 },
@@ -317,6 +468,9 @@
                 "target": "com.amazonaws.verifiedpermissions#CreatePolicyOutput"
             },
             "errors": [
+                {
+                    "target": "com.amazonaws.verifiedpermissions#ConflictException"
+                },
                 {
                     "target": "com.amazonaws.verifiedpermissions#ResourceNotFoundException"
                 },
@@ -424,12 +578,15 @@
             },
             "errors": [
                 {
+                    "target": "com.amazonaws.verifiedpermissions#ConflictException"
+                },
+                {
                     "target": "com.amazonaws.verifiedpermissions#ServiceQuotaExceededException"
                 }
             ],
             "traits": {
                 "aws.iam#actionPermissionDescription": "Grants permission to create a Cedar policy and save it in the specified policy store",
-                "smithy.api#documentation": "<p>Creates a policy store. A policy store is a container for policy resources.</p>\n         <note>\n            <p>Although <a href=\"https://docs.cedarpolicy.com/schema.html#namespace\">Cedar\n                    supports multiple namespaces</a>, Verified Permissions currently supports only one\n                namespace per policy store.</p>\n         </note>\n         <note>\n            <p>Verified Permissions is <i>\n                  <a href=\"https://wikipedia.org/wiki/Eventual_consistency\">eventually consistent</a>\n               </i>. It can take a few seconds for a new or changed element to be propagate through\n    the service and be visible in the results of other Verified Permissions operations.</p>\n         </note>",
+                "smithy.api#documentation": "<p>Creates a policy store. A policy store is a container for policy resources.</p>\n         <note>\n            <p>Although <a href=\"https://docs.cedarpolicy.com/schema/schema.html#namespace\">Cedar supports multiple namespaces</a>, Verified Permissions currently supports only one\n                namespace per policy store.</p>\n         </note>\n         <note>\n            <p>Verified Permissions is <i>\n                  <a href=\"https://wikipedia.org/wiki/Eventual_consistency\">eventually consistent</a>\n               </i>. It can take a few seconds for a new or changed element to be propagate through\n    the service and be visible in the results of other Verified Permissions operations.</p>\n         </note>",
                 "smithy.api#idempotent": {}
             }
         },
@@ -500,6 +657,9 @@
                 "target": "com.amazonaws.verifiedpermissions#CreatePolicyTemplateOutput"
             },
             "errors": [
+                {
+                    "target": "com.amazonaws.verifiedpermissions#ConflictException"
+                },
                 {
                     "target": "com.amazonaws.verifiedpermissions#ResourceNotFoundException"
                 },
@@ -802,7 +962,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains information about one of the policies that determined an authorization\n            decision.</p>\n         <p>This data type is used as an element in a response parameter for the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html\">IsAuthorized</a>\n            and <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html\">IsAuthorizedWithToken</a> operations.</p>\n         <p>Example: <code>\"determiningPolicies\":[{\"policyId\":\"SPEXAMPLEabcdefg111111\"}]</code>\n         </p>"
+                "smithy.api#documentation": "<p>Contains information about one of the policies that determined an authorization\n            decision.</p>\n         <p>This data type is used as an element in a response parameter for the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html\">IsAuthorized</a>, <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_BatchIsAuthorized.html\">BatchIsAuthorized</a>, and <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html\">IsAuthorizedWithToken</a>\n            operations.</p>\n         <p>Example: <code>\"determiningPolicies\":[{\"policyId\":\"SPEXAMPLEabcdefg111111\"}]</code>\n         </p>"
             }
         },
         "com.amazonaws.verifiedpermissions#DeterminingPolicyList": {
@@ -956,7 +1116,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Contains a description of an evaluation error.</p>\n         <p>This data type is used as a request parameter in the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html\">IsAuthorized</a> and <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html\">IsAuthorizedWithToken</a> operations.</p>",
+                "smithy.api#documentation": "<p>Contains a description of an evaluation error.</p>\n         <p>This data type is a response parameter of the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html\">IsAuthorized</a>, <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_BatchIsAuthorized.html\">BatchIsAuthorized</a>, and <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html\">IsAuthorizedWithToken</a> operations.</p>",
                 "smithy.api#sensitive": {}
             }
         },
@@ -2414,6 +2574,9 @@
             },
             "operations": [
                 {
+                    "target": "com.amazonaws.verifiedpermissions#BatchIsAuthorized"
+                },
+                {
                     "target": "com.amazonaws.verifiedpermissions#GetSchema"
                 },
                 {
@@ -2835,7 +2998,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 1,
-                    "max": 10000
+                    "max": 100000
                 },
                 "smithy.api#sensitive": {}
             }
@@ -3439,7 +3602,7 @@
             ],
             "traits": {
                 "aws.iam#actionPermissionDescription": "Grants permission to update the specified policy template",
-                "smithy.api#documentation": "<p>Updates the specified policy template. You can update only the description and the some elements\n            of the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_UpdatePolicyTemplate.html#amazonverifiedpermissions-UpdatePolicyTemplate-request-policyBody\">policyBody</a>. </p>\n         <important>\n            <p>Changes you make to the policy template content are immediately reflected in authorization\n                decisions that involve all template-linked policies instantiated from this template.</p>\n         </important>\n         <note>\n            <p>Verified Permissions is <i>\n                  <a href=\"https://wikipedia.org/wiki/Eventual_consistency\">eventually consistent</a>\n               </i>. It can take a few seconds for a new or changed element to be propagate through\n    the service and be visible in the results of other Verified Permissions operations.</p>\n         </note>",
+                "smithy.api#documentation": "<p>Updates the specified policy template. You can update only the description and the some elements\n            of the <a href=\"https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_UpdatePolicyTemplate.html#amazonverifiedpermissions-UpdatePolicyTemplate-request-policyBody\">policyBody</a>. </p>\n         <important>\n            <p>Changes you make to the policy template content are immediately (within the constraints of\n                eventual consistency) reflected in authorization decisions that involve all template-linked policies\n                instantiated from this template.</p>\n         </important>\n         <note>\n            <p>Verified Permissions is <i>\n                  <a href=\"https://wikipedia.org/wiki/Eventual_consistency\">eventually consistent</a>\n               </i>. It can take a few seconds for a new or changed element to be propagate through\n    the service and be visible in the results of other Verified Permissions operations.</p>\n         </note>",
                 "smithy.api#idempotent": {}
             }
         },
@@ -3562,7 +3725,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The request failed because one or more input parameters don't satisfy their constraint\n            requirements. The output is provided as a list of fields and a reason for each field that\n            isn't valid.</p>\n         <p>The possible reasons include the following:</p>\n         <ul>\n            <li>\n               <p>\n                  <b>UnrecognizedEntityType</b>\n               </p>\n               <p>The policy includes an entity type that isn't found in the schema.</p>\n            </li>\n            <li>\n               <p>\n                  <b>UnrecognizedActionId</b>\n               </p>\n               <p>The policy includes an action id that isn't found in the schema.</p>\n            </li>\n            <li>\n               <p>\n                  <b>InvalidActionApplication</b>\n               </p>\n               <p>The policy includes an action that, according to the schema, doesn't support\n                    the specified principal and resource.</p>\n            </li>\n            <li>\n               <p>\n                  <b>UnexpectedType</b>\n               </p>\n               <p>The policy included an operand that isn't a valid type for the specified\n                    operation.</p>\n            </li>\n            <li>\n               <p>\n                  <b>IncompatibleTypes</b>\n               </p>\n               <p>The types of elements included in a <code>set</code>, or the types of\n                    expressions used in an <code>if...then...else</code> clause aren't compatible in\n                    this context.</p>\n            </li>\n            <li>\n               <p>\n                  <b>MissingAttribute</b>\n               </p>\n               <p>The policy attempts to access a record or entity attribute that isn't\n                    specified in the schema. Test for the existence of the attribute first before\n                    attempting to access its value. For more information, see the <a href=\"https://docs.cedarpolicy.com/syntax-operators.html#has-presence-of-attribute-test\">has (presence of attribute test) operator</a> in the\n                        <i>Cedar Policy Language Guide</i>.</p>\n            </li>\n            <li>\n               <p>\n                  <b>UnsafeOptionalAttributeAccess</b>\n               </p>\n               <p>The policy attempts to access a record or entity attribute that is optional\n                    and isn't guaranteed to be present. Test for the existence of the attribute\n                    first before attempting to access its value. For more information, see the\n                        <a href=\"https://docs.cedarpolicy.com/syntax-operators.html#has-presence-of-attribute-test\">has (presence of attribute test) operator</a> in the\n                        <i>Cedar Policy Language Guide</i>.</p>\n            </li>\n            <li>\n               <p>\n                  <b>ImpossiblePolicy</b>\n               </p>\n               <p>Cedar has determined that a policy condition always evaluates to false. If\n                    the policy is always false, it can never apply to any query, and so it can never\n                    affect an authorization decision.</p>\n            </li>\n            <li>\n               <p>\n                  <b>WrongNumberArguments</b>\n               </p>\n               <p>The policy references an extension type with the wrong number of\n                    arguments.</p>\n            </li>\n            <li>\n               <p>\n                  <b>FunctionArgumentValidationError</b>\n               </p>\n               <p>Cedar couldn't parse the argument passed to an extension type. For example,\n                    a string that is to be parsed as an IPv4 address can contain only digits and the\n                    period character.</p>\n            </li>\n         </ul>",
+                "smithy.api#documentation": "<p>The request failed because one or more input parameters don't satisfy their constraint\n            requirements. The output is provided as a list of fields and a reason for each field that\n            isn't valid.</p>\n         <p>The possible reasons include the following:</p>\n         <ul>\n            <li>\n               <p>\n                  <b>UnrecognizedEntityType</b>\n               </p>\n               <p>The policy includes an entity type that isn't found in the schema.</p>\n            </li>\n            <li>\n               <p>\n                  <b>UnrecognizedActionId</b>\n               </p>\n               <p>The policy includes an action id that isn't found in the schema.</p>\n            </li>\n            <li>\n               <p>\n                  <b>InvalidActionApplication</b>\n               </p>\n               <p>The policy includes an action that, according to the schema, doesn't support\n                    the specified principal and resource.</p>\n            </li>\n            <li>\n               <p>\n                  <b>UnexpectedType</b>\n               </p>\n               <p>The policy included an operand that isn't a valid type for the specified\n                    operation.</p>\n            </li>\n            <li>\n               <p>\n                  <b>IncompatibleTypes</b>\n               </p>\n               <p>The types of elements included in a <code>set</code>, or the types of\n                    expressions used in an <code>if...then...else</code> clause aren't compatible in\n                    this context.</p>\n            </li>\n            <li>\n               <p>\n                  <b>MissingAttribute</b>\n               </p>\n               <p>The policy attempts to access a record or entity attribute that isn't\n                    specified in the schema. Test for the existence of the attribute first before\n                    attempting to access its value. For more information, see the <a href=\"https://docs.cedarpolicy.com/policies/syntax-operators.html#has-presence-of-attribute-test\">has (presence of attribute test) operator</a> in the\n                        <i>Cedar Policy Language Guide</i>.</p>\n            </li>\n            <li>\n               <p>\n                  <b>UnsafeOptionalAttributeAccess</b>\n               </p>\n               <p>The policy attempts to access a record or entity attribute that is optional\n                    and isn't guaranteed to be present. Test for the existence of the attribute\n                    first before attempting to access its value. For more information, see the\n                        <a href=\"https://docs.cedarpolicy.com/policies/syntax-operators.html#has-presence-of-attribute-test\">has (presence of attribute test) operator</a> in the\n                        <i>Cedar Policy Language Guide</i>.</p>\n            </li>\n            <li>\n               <p>\n                  <b>ImpossiblePolicy</b>\n               </p>\n               <p>Cedar has determined that a policy condition always evaluates to false. If\n                    the policy is always false, it can never apply to any query, and so it can never\n                    affect an authorization decision.</p>\n            </li>\n            <li>\n               <p>\n                  <b>WrongNumberArguments</b>\n               </p>\n               <p>The policy references an extension type with the wrong number of\n                    arguments.</p>\n            </li>\n            <li>\n               <p>\n                  <b>FunctionArgumentValidationError</b>\n               </p>\n               <p>Cedar couldn't parse the argument passed to an extension type. For example,\n                    a string that is to be parsed as an IPv4 address can contain only digits and the\n                    period character.</p>\n            </li>\n         </ul>",
                 "smithy.api#error": "client"
             }
         },
@@ -3711,7 +3874,6 @@
                                     ]
                                 }
                             ],
-                            "type": "tree",
                             "rules": [
                                 {
                                     "conditions": [
@@ -3730,7 +3892,6 @@
                                 },
                                 {
                                     "conditions": [],
-                                    "type": "tree",
                                     "rules": [
                                         {
                                             "conditions": [
@@ -3758,13 +3919,14 @@
                                             },
                                             "type": "endpoint"
                                         }
-                                    ]
+                                    ],
+                                    "type": "tree"
                                 }
-                            ]
+                            ],
+                            "type": "tree"
                         },
                         {
                             "conditions": [],
-                            "type": "tree",
                             "rules": [
                                 {
                                     "conditions": [
@@ -3777,7 +3939,6 @@
                                             ]
                                         }
                                     ],
-                                    "type": "tree",
                                     "rules": [
                                         {
                                             "conditions": [
@@ -3791,7 +3952,6 @@
                                                     "assign": "PartitionResult"
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
@@ -3814,7 +3974,6 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [
@@ -3849,11 +4008,9 @@
                                                                     ]
                                                                 }
                                                             ],
-                                                            "type": "tree",
                                                             "rules": [
                                                                 {
                                                                     "conditions": [],
-                                                                    "type": "tree",
                                                                     "rules": [
                                                                         {
                                                                             "conditions": [],
@@ -3864,16 +4021,19 @@
                                                                             },
                                                                             "type": "endpoint"
                                                                         }
-                                                                    ]
+                                                                    ],
+                                                                    "type": "tree"
                                                                 }
-                                                            ]
+                                                            ],
+                                                            "type": "tree"
                                                         },
                                                         {
                                                             "conditions": [],
                                                             "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
                                                             "type": "error"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [
@@ -3887,14 +4047,12 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [
                                                                 {
                                                                     "fn": "booleanEquals",
                                                                     "argv": [
-                                                                        true,
                                                                         {
                                                                             "fn": "getAttr",
                                                                             "argv": [
@@ -3903,15 +4061,14 @@
                                                                                 },
                                                                                 "supportsFIPS"
                                                                             ]
-                                                                        }
+                                                                        },
+                                                                        true
                                                                     ]
                                                                 }
                                                             ],
-                                                            "type": "tree",
                                                             "rules": [
                                                                 {
                                                                     "conditions": [],
-                                                                    "type": "tree",
                                                                     "rules": [
                                                                         {
                                                                             "conditions": [],
@@ -3922,16 +4079,19 @@
                                                                             },
                                                                             "type": "endpoint"
                                                                         }
-                                                                    ]
+                                                                    ],
+                                                                    "type": "tree"
                                                                 }
-                                                            ]
+                                                            ],
+                                                            "type": "tree"
                                                         },
                                                         {
                                                             "conditions": [],
                                                             "error": "FIPS is enabled but this partition does not support FIPS",
                                                             "type": "error"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [
@@ -3945,7 +4105,6 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [
@@ -3965,11 +4124,9 @@
                                                                     ]
                                                                 }
                                                             ],
-                                                            "type": "tree",
                                                             "rules": [
                                                                 {
                                                                     "conditions": [],
-                                                                    "type": "tree",
                                                                     "rules": [
                                                                         {
                                                                             "conditions": [],
@@ -3980,20 +4137,22 @@
                                                                             },
                                                                             "type": "endpoint"
                                                                         }
-                                                                    ]
+                                                                    ],
+                                                                    "type": "tree"
                                                                 }
-                                                            ]
+                                                            ],
+                                                            "type": "tree"
                                                         },
                                                         {
                                                             "conditions": [],
                                                             "error": "DualStack is enabled but this partition does not support DualStack",
                                                             "type": "error"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -4004,18 +4163,22 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         }
-                                    ]
+                                    ],
+                                    "type": "tree"
                                 },
                                 {
                                     "conditions": [],
                                     "error": "Invalid Configuration: Missing Region",
                                     "type": "error"
                                 }
-                            ]
+                            ],
+                            "type": "tree"
                         }
                     ]
                 },

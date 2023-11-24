@@ -8,12 +8,10 @@ package aws.sdk.kotlin.runtime.region
 import aws.sdk.kotlin.runtime.config.profile.AwsConfigValue
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.smithy.kotlin.runtime.util.asyncLazy
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ProfileRegionProviderTest {
     @Test
     fun testSuccessDefaultProfile() = runTest {

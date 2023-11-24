@@ -13,8 +13,8 @@ import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
-import aws.smithy.kotlin.runtime.util.text.urlDecodeComponent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -47,10 +47,10 @@ class PresignersTest {
         assertNotNull(aclHeader, "Expected x-amz-acl header to be included in presigned request")
         assertEquals("bucket-owner-full-control", aclHeader)
 
-        val signedHeadersString = presigned.url.parameters["X-Amz-SignedHeaders"]
+        val signedHeadersString = presigned.url.parameters.decodedParameters["X-Amz-SignedHeaders"]?.single()
         assertNotNull(signedHeadersString, "Expected X-Amz-SignedHeaders query parameter in URL")
 
-        val signedHeaders = signedHeadersString.urlDecodeComponent().split(';')
+        val signedHeaders = signedHeadersString.split(';')
         assertTrue(signedHeaders.contains("x-amz-acl"), "Expected x-amz-acl to be signed but only found $signedHeaders")
     }
 }

@@ -28,7 +28,13 @@ public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata {
 }
 
 public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion {
-	public final fun fromEnvironment (Laws/sdk/kotlin/runtime/http/ApiMetadata;)Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;
+	public final fun fromEnvironment (Laws/sdk/kotlin/runtime/http/ApiMetadata;Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;
+	public static synthetic fun fromEnvironment$default (Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion;Laws/sdk/kotlin/runtime/http/ApiMetadata;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;
+}
+
+public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadataKt {
+	public static final field AWS_APP_ID_ENV Ljava/lang/String;
+	public static final field AWS_APP_ID_PROP Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata {
@@ -43,7 +49,13 @@ public final class aws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata
 	public static final fun getCustomUserAgentMetadata (Laws/smithy/kotlin/runtime/operation/ExecutionContext;)Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;
 }
 
-public final class aws/sdk/kotlin/runtime/http/retries/AwsDefaultRetryPolicy : aws/smithy/kotlin/runtime/retries/policy/StandardRetryPolicy {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/http/retries/AwsDefaultRetryPolicy;
+public class aws/sdk/kotlin/runtime/http/retries/AwsRetryPolicy : aws/smithy/kotlin/runtime/retries/policy/StandardRetryPolicy {
+	public static final field Companion Laws/sdk/kotlin/runtime/http/retries/AwsRetryPolicy$Companion;
+	public fun <init> ()V
+	protected fun evaluateSpecificExceptions (Ljava/lang/Throwable;)Laws/smithy/kotlin/runtime/retries/policy/RetryDirective;
+}
+
+public final class aws/sdk/kotlin/runtime/http/retries/AwsRetryPolicy$Companion {
+	public final fun getDefault ()Laws/sdk/kotlin/runtime/http/retries/AwsRetryPolicy;
 }
 

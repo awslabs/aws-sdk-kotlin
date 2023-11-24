@@ -5,11 +5,11 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.http.Headers
+import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.CallAsserter
 import aws.smithy.kotlin.runtime.httptest.TestConnection
@@ -27,12 +27,13 @@ import kotlin.time.Duration.Companion.minutes
 private const val TOKEN_PATH = "token-path"
 private const val TOKEN_VALUE = "jwt-token"
 
-private val CREDENTIALS = Credentials(
+private val CREDENTIALS = credentials(
     "AKIDTest",
     "test-secret",
     "test-token",
     StsTestUtils.EPOCH + 15.minutes,
     "WebIdentityToken",
+    "1234567",
 )
 
 class StsWebIdentityCredentialsProviderTest {
@@ -67,7 +68,7 @@ class StsWebIdentityCredentialsProviderTest {
         </AssumeRoleWithWebIdentityResponse>
         """.trimIndent()
 
-        return HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(body.encodeToByteArray()))
+        return HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.fromBytes(body.encodeToByteArray()))
     }
 
     @Test
@@ -160,7 +161,7 @@ class StsWebIdentityCredentialsProviderTest {
         """
 
         val testEngine = buildTestConnection {
-            expect(HttpResponse(HttpStatusCode.BadRequest, Headers.Empty, ByteArrayContent(errorResponseBody.encodeToByteArray())))
+            expect(HttpResponse(HttpStatusCode.BadRequest, Headers.Empty, HttpBody.fromBytes(errorResponseBody.encodeToByteArray())))
         }
 
         val testPlatform = TestPlatformProvider(

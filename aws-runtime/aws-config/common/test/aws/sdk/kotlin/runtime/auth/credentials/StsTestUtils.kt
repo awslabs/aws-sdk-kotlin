@@ -5,23 +5,22 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpMethod
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
+import aws.smithy.kotlin.runtime.text.encoding.PercentEncoding
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.util.text.urlEncodeComponent
 import kotlin.time.Duration.Companion.minutes
 
 object StsTestUtils {
-    const val ARN = "arn:aws:iam:1234567/test-role"
+    const val ARN = "arn:aws:iam::1234567:role/test-role"
     const val POLICY = "foo!"
     const val REGION = "us-east-2"
     const val SESSION_NAME = "aws-sdk-kotlin-1234567890"
@@ -29,18 +28,23 @@ object StsTestUtils {
     val POLICY_ARNS = listOf("apple", "banana", "cherry")
     val TAGS = mapOf("foo" to "bar", "baz" to "qux")
     val EPOCH = Instant.fromIso8601("2020-10-16T03:56:00Z")
-    val CREDENTIALS = Credentials(
+    val CREDENTIALS = credentials(
         "AKIDTest",
         "test-secret",
         "test-token",
         EPOCH + 15.minutes,
         "AssumeRoleProvider",
+        "1234567",
     )
 
     fun stsRequest(bodyParameters: Map<String, String>) = HttpRequestBuilder().apply {
         val bodyBytes = bodyParameters
             .entries
-            .joinToString("&") { (key, value) -> "${key.urlEncodeComponent()}=${value.urlEncodeComponent()}" }
+            .joinToString("&") { (key, value) ->
+                val kEnc = PercentEncoding.FormUrl.encode(key)
+                val vEnc = PercentEncoding.FormUrl.encode(value)
+                "$kEnc=$vEnc"
+            }
             .encodeToByteArray()
 
         method = HttpMethod.GET
@@ -76,6 +80,6 @@ object StsTestUtils {
               </ResponseMetadata>
             </AssumeRoleResponse>
         """.trimIndent()
-        return HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(body.encodeToByteArray()))
+        return HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.fromBytes(body.encodeToByteArray()))
     }
 }

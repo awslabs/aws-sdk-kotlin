@@ -7,8 +7,8 @@ package aws.sdk.kotlin.runtime.http.operation
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.http.uaPair
+import aws.smithy.kotlin.runtime.collections.AttributeKey
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
-import aws.smithy.kotlin.runtime.util.AttributeKey
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 
 private const val CUSTOM_METADATA_ENV_PREFIX = "AWS_CUSTOM_METADATA_"

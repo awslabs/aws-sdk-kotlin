@@ -14,34 +14,26 @@ description = "Codegen support for AWS protocols"
 group = "software.amazon.smithy.kotlin"
 version = sdkVersion
 
-val smithyVersion: String by project
-val kotestVersion: String by project
-val kotlinVersion: String by project
-val junitVersion: String by project
-val smithyKotlinVersion: String by project
-val kotlinJVMTargetVersion: String by project
-val slf4jVersion: String by project
-val kotlinxSerializationVersion: String by project
-
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    api("software.amazon.smithy.kotlin:smithy-kotlin-codegen:$smithyKotlinVersion")
 
-    api("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
-    api("software.amazon.smithy:smithy-aws-iam-traits:$smithyVersion")
-    api("software.amazon.smithy:smithy-aws-cloudformation-traits:$smithyVersion")
-    api("software.amazon.smithy:smithy-protocol-test-traits:$smithyVersion")
-    implementation("software.amazon.smithy:smithy-rules-engine:$smithyVersion")
+    implementation(libs.kotlin.stdlib.jdk8)
+    api(libs.smithy.kotlin.codegen)
 
-    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-    testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")
-    testImplementation("software.amazon.smithy.kotlin:smithy-kotlin-codegen-testutils:$smithyKotlinVersion")
+    api(libs.smithy.aws.traits)
+    api(libs.smithy.aws.iam.traits)
+    api(libs.smithy.aws.cloudformation.traits)
+    api(libs.smithy.protocol.test.traits)
+    implementation(libs.smithy.aws.endpoints)
 
-    testImplementation("org.slf4j:slf4j-api:$slf4jVersion")
-    testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.kotest.assertions.core.jvm)
+    testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.smithy.kotlin.codegen.testutils)
+
+    testImplementation(libs.slf4j.api)
+    testImplementation(libs.slf4j.simple)
+    testImplementation(libs.kotlinx.serialization.json)
 }
 
 val generateSdkRuntimeVersion by tasks.registering {
@@ -58,13 +50,20 @@ val generateSdkRuntimeVersion by tasks.registering {
     }
 }
 
+val jvmTargetVersion = JavaVersion.VERSION_17.toString()
+
 tasks.compileKotlin {
-    kotlinOptions.jvmTarget = kotlinJVMTargetVersion
+    kotlinOptions.jvmTarget = jvmTargetVersion
     dependsOn(generateSdkRuntimeVersion)
 }
 
 tasks.compileTestKotlin {
-    kotlinOptions.jvmTarget = kotlinJVMTargetVersion
+    kotlinOptions.jvmTarget = jvmTargetVersion
+}
+
+tasks.withType<JavaCompile> {
+    sourceCompatibility = jvmTargetVersion
+    targetCompatibility = jvmTargetVersion
 }
 
 // Reusable license copySpec
@@ -108,7 +107,7 @@ tasks["test"].finalizedBy(tasks["jacocoTestReport"])
 val sourcesJar by tasks.creating(Jar::class) {
     group = "publishing"
     description = "Assembles Kotlin sources jar"
-    classifier = "sources"
+    archiveClassifier.set("sources")
     from(sourceSets.getByName("main").allSource)
 }
 

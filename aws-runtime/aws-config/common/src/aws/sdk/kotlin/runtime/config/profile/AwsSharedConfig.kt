@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.config.profile
 
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 
 /**
  * Represents shared configuration (profiles, SSO sessions, credentials, etc)

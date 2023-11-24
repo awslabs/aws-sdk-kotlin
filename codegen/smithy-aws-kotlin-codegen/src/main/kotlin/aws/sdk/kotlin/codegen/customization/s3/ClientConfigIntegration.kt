@@ -4,9 +4,9 @@
  */
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.ServiceClientCompanionObjectWriter
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
+import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
@@ -45,23 +45,23 @@ class ClientConfigIntegration : KotlinIntegration {
             """.trimIndent()
         }
 
-        val UseArnRegionProp: ConfigProperty = ConfigProperty.Boolean(
-            "useArnRegion",
-            defaultValue = false,
+        val UseArnRegionProp: ConfigProperty = ConfigProperty {
+            name = "useArnRegion"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             documentation = """
                 Flag to enforce using a bucket arn with a region matching the client config when making requests with
                 [S3 access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points.html).
-            """.trimIndent(),
-        )
+            """.trimIndent()
+        }
 
-        // FUTURE: default signer doesn't yet implement sigv4a, default to mrap OFF until it does
-        val DisableMrapProp: ConfigProperty = ConfigProperty.Boolean(
-            "disableMrap",
-            defaultValue = true,
+        // FIXME: default signer doesn't yet implement sigv4a, default to mrap OFF until it does
+        val DisableMrapProp: ConfigProperty = ConfigProperty {
+            name = "disableMrap"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")
             documentation = """
                 Flag to disable [S3 multi-region access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html).
-            """.trimIndent(),
-        )
+            """.trimIndent()
+        }
     }
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
@@ -90,16 +90,14 @@ class ClientConfigIntegration : KotlinIntegration {
         )
 
     override val sectionWriters: List<SectionWriterBinding>
-        get() = listOf(
-            SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, serviceClientCompanionObjectWriter),
-        )
+        get() = listOf(SectionWriterBinding(ServiceClientGenerator.Sections.FinalizeConfig, finalizeS3ConfigWriter))
 
     // add S3-specific config finalization
-    private val serviceClientCompanionObjectWriter = ServiceClientCompanionObjectWriter {
+    private val finalizeS3ConfigWriter = AppendingSectionWriter { writer ->
         val finalizeS3Config = buildSymbol {
             name = "finalizeS3Config"
             namespace = "aws.sdk.kotlin.services.s3.internal"
         }
-        write("#T(builder, sharedConfig)", finalizeS3Config)
+        writer.write("#T(builder, sharedConfig)", finalizeS3Config)
     }
 }

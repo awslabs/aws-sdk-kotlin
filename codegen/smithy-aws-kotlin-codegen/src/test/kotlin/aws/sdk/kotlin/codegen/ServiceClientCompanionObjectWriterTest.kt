@@ -27,47 +27,13 @@ class ServiceClientCompanionObjectWriterTest {
                 @JvmStatic
                 override fun builder(): Builder = Builder()
 
-                override suspend fun finalizeConfig(builder: Builder, sharedConfig: LazyAsyncValue<AwsSharedConfig>) {
+                override suspend fun finalizeConfig(builder: Builder, sharedConfig: LazyAsyncValue<AwsSharedConfig>, activeProfile: LazyAsyncValue<AwsProfile>) {
                     builder.config.endpointUrl = builder.config.endpointUrl ?: resolveEndpointUrl(
                         sharedConfig,
                         "TestGenerator",
                         "TEST_GENERATOR",
                         "test_generator",
                     )
-                }
-            }
-        """.trimIndent()
-
-        writer.toString().shouldContainOnlyOnceWithDiff(expected)
-    }
-
-    @Test
-    fun testExtendFinalizeConfig() {
-        val writer = KotlinWriter(TestModelDefault.NAMESPACE)
-        writer.putContext(
-            mapOf(
-                "ServiceSymbol" to buildSymbol { name = "TestGeneratorClient" },
-                "SdkId" to "Test Generator",
-            ),
-        )
-        ServiceClientCompanionObjectWriter {
-            write("// extended")
-        }.write(writer, null)
-
-        val expected = """
-            public companion object : AbstractAwsSdkClientFactory<Config, Config.Builder, TestGeneratorClient, Builder>() {
-                @JvmStatic
-                override fun builder(): Builder = Builder()
-
-                override suspend fun finalizeConfig(builder: Builder, sharedConfig: LazyAsyncValue<AwsSharedConfig>) {
-                    builder.config.endpointUrl = builder.config.endpointUrl ?: resolveEndpointUrl(
-                        sharedConfig,
-                        "TestGenerator",
-                        "TEST_GENERATOR",
-                        "test_generator",
-                    )
-
-                    // extended
                 }
             }
         """.trimIndent()

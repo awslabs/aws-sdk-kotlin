@@ -8,22 +8,20 @@ package aws.sdk.kotlin.runtime.http.middleware
 import aws.sdk.kotlin.runtime.http.ApiMetadata
 import aws.sdk.kotlin.runtime.http.loadAwsUserAgentMetadataFromEnvironment
 import aws.sdk.kotlin.runtime.http.operation.customUserAgentMetadata
+import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestEngine
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
-import aws.smithy.kotlin.runtime.util.get
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class UserAgentTest {
     private val client = SdkHttpClient(TestEngine())
 

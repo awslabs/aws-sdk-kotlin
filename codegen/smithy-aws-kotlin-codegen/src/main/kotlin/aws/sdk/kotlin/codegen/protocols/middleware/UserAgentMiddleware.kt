@@ -39,7 +39,11 @@ class UserAgentMiddleware : ProtocolMiddleware {
         writer.addImport(uaSymbol)
         writer.addImport(apiMetaSymbol)
         writer.addImport(middlewareSymbol)
-        writer.write("private val awsUserAgentMetadata = #T.fromEnvironment(#T(ServiceId, SdkVersion))", uaSymbol, apiMetaSymbol)
+        writer.write(
+            "private val awsUserAgentMetadata = #T.fromEnvironment(#T(ServiceId, SdkVersion), config.applicationId)",
+            uaSymbol,
+            apiMetaSymbol,
+        )
     }
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {

@@ -9,13 +9,16 @@ import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.protocols.xml.RestXmlSerdeDescriptorGenerator
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.codegen.core.Symbol
-import software.amazon.smithy.kotlin.codegen.core.*
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.kotlin.codegen.rendering.serde.*
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.*
-import software.amazon.smithy.model.traits.*
+import software.amazon.smithy.model.traits.TimestampFormatTrait
+import software.amazon.smithy.model.traits.XmlNameTrait
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -33,6 +36,20 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
     // See https://awslabs.github.io/smithy/1.0/spec/aws/aws-restxml-protocol.html#content-type
     override fun getProtocolHttpBindingResolver(model: Model, serviceShape: ServiceShape): HttpBindingResolver =
         HttpTraitResolver(model, serviceShape, ProtocolContentTypes.consistent("application/xml"))
+
+    // See: https://github.com/awslabs/aws-sdk-kotlin/issues/1050
+    override fun renderContentTypeHeader(
+        ctx: ProtocolGenerator.GenerationContext,
+        op: OperationShape,
+        writer: KotlinWriter,
+        resolver: HttpBindingResolver,
+    ) {
+        if (op.payloadIsUnionShape(ctx.model)) {
+            writer.write("builder.headers.setMissing(\"Content-Type\", #S)", resolver.determineRequestContentType(op))
+        } else {
+            super.renderContentTypeHeader(ctx, op, writer, resolver)
+        }
+    }
 
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
         RestXmlParserGenerator(this, defaultTimestampFormat)
@@ -62,7 +79,6 @@ class RestXmlParserGenerator(
         writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
-    @OptIn(ExperimentalContracts::class)
     override fun payloadDeserializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
@@ -90,7 +106,7 @@ class RestXmlParserGenerator(
         return buildSymbol {
             val xmlName = xmlNameTrait.value.replaceFirstChar(Char::uppercase)
             name = "deserialize${memberSymbol.name}PayloadWithXmlName$xmlName"
-            namespace = ctx.settings.pkg.subpackage("transform")
+            namespace = ctx.settings.pkg.serde
             definitionFile = "${memberSymbol.name}PayloadDeserializer.kt"
             renderBy = { writer ->
                 addNestedDocumentDeserializers(ctx, targetShape, writer)
@@ -118,7 +134,6 @@ class RestXmlSerializerGenerator(
         writer: KotlinWriter,
     ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
 
-    @OptIn(ExperimentalContracts::class)
     override fun payloadSerializer(
         ctx: ProtocolGenerator.GenerationContext,
         shape: Shape,
@@ -147,7 +162,7 @@ class RestXmlSerializerGenerator(
         return buildSymbol {
             val xmlName = xmlNameTrait.value.replaceFirstChar(Char::uppercase)
             name = "serialize${memberSymbol.name}PayloadWithXmlName$xmlName"
-            namespace = ctx.settings.pkg.subpackage("transform")
+            namespace = ctx.settings.pkg.serde
             // TODO - it would be nice to just inline this into the operation file as a private function instead
             //  since that is the only place it should be accessed
             definitionFile = "${memberSymbol.name}PayloadSerializer.kt"
@@ -164,7 +179,7 @@ class RestXmlSerializerGenerator(
     }
 }
 
-@ExperimentalContracts
+@OptIn(ExperimentalContracts::class)
 private fun isXmlNamedMemberShape(shape: Shape): Boolean {
     contract {
         returns(true) implies (shape is MemberShape)

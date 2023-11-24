@@ -5,6 +5,7 @@
 
 pluginManagement {
     repositories {
+        mavenLocal()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -12,12 +13,15 @@ pluginManagement {
     // configure default plugin versions
     plugins {
         val kotlinVersion: String by settings
-        val dokkaVersion: String by settings
-        val smithyGradleVersion: String by settings
-        id("org.jetbrains.dokka") version dokkaVersion
         id("org.jetbrains.kotlin.jvm") version kotlinVersion
         id("org.jetbrains.kotlin.multiplatform") version kotlinVersion
-        id("software.amazon.smithy") version smithyGradleVersion
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
     }
 }
 
@@ -33,6 +37,7 @@ rootProject.name = "aws-sdk-kotlin"
 includeBuild("./gradle/sdk-plugins")
 
 include(":dokka-aws")
+include(":bom")
 include(":codegen:sdk")
 include(":codegen:smithy-aws-kotlin-codegen")
 include(":codegen:protocol-tests")
@@ -41,6 +46,7 @@ include(":aws-runtime:aws-core")
 include(":aws-runtime:aws-config")
 include(":aws-runtime:aws-endpoint")
 include(":aws-runtime:aws-http")
+include(":services")
 include(":tests")
 include(":tests:benchmarks:service-benchmarks")
 include(":tests:codegen:event-stream")
@@ -75,13 +81,13 @@ file("services").listFiles().forEach {
 val compositeProjectList = try {
     val localProperties = java.util.Properties()
     localProperties.load(File(rootProject.projectDir, "local.properties").inputStream())
-    val filePaths = localProperties.getProperty("compositeProjects")
-        ?.splitToSequence(",") // Split comma delimited string into sequence
-        ?.map { it.replaceFirst("^~".toRegex(), System.getProperty("user.home")) } // expand user dir
-        ?.filter { it.isNotBlank() }
-        ?.map { file(it) } // Create file from path
-        ?.toList()
-        ?: emptyList()
+    val propertyVal = localProperties.getProperty("compositeProjects") ?: "../smithy-kotlin"
+    val filePaths = propertyVal
+        .splitToSequence(",") // Split comma delimited string into sequence
+        .map { it.replaceFirst("^~".toRegex(), System.getProperty("user.home")) } // expand user dir
+        .filter { it.isNotBlank() }
+        .map { file(it) } // Create file from path
+        .toList()
 
     if (filePaths.isNotEmpty()) println("Adding ${filePaths.size} composite build directories from local.properties.")
     filePaths

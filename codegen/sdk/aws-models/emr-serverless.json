@@ -119,6 +119,15 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The specification applied to each worker type.</p>"
                     }
+                },
+                "runtimeConfiguration": {
+                    "target": "com.amazonaws.emrserverless#ConfigurationList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The <a href=\"https://docs.aws.amazon.com/emr-serverless/latest/APIReference/API_Configuration.html\">Configuration</a> \n         specifications of an application. Each configuration consists of a classification and properties. You use this \n      parameter when creating or updating an application. To see the runtimeConfiguration object of an application,\n      run the <a href=\"https://docs.aws.amazon.com/emr-serverless/latest/APIReference/API_GetApplication.html\">GetApplication</a> API operation.</p>"
+                    }
+                },
+                "monitoringConfiguration": {
+                    "target": "com.amazonaws.emrserverless#MonitoringConfiguration"
                 }
             },
             "traits": {
@@ -472,7 +481,6 @@
                                     ]
                                 }
                             ],
-                            "type": "tree",
                             "rules": [
                                 {
                                     "conditions": [
@@ -515,7 +523,8 @@
                                     },
                                     "type": "endpoint"
                                 }
-                            ]
+                            ],
+                            "type": "tree"
                         },
                         {
                             "conditions": [
@@ -528,7 +537,6 @@
                                     ]
                                 }
                             ],
-                            "type": "tree",
                             "rules": [
                                 {
                                     "conditions": [
@@ -542,7 +550,6 @@
                                             "assign": "PartitionResult"
                                         }
                                     ],
-                                    "type": "tree",
                                     "rules": [
                                         {
                                             "conditions": [
@@ -565,7 +572,6 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
@@ -600,7 +606,6 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -611,14 +616,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [
@@ -632,14 +639,12 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
                                                         {
                                                             "fn": "booleanEquals",
                                                             "argv": [
-                                                                true,
                                                                 {
                                                                     "fn": "getAttr",
                                                                     "argv": [
@@ -648,11 +653,11 @@
                                                                         },
                                                                         "supportsFIPS"
                                                                     ]
-                                                                }
+                                                                },
+                                                                true
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -663,14 +668,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "FIPS is enabled but this partition does not support FIPS",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [
@@ -684,7 +691,6 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
@@ -704,7 +710,6 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -715,14 +720,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "DualStack is enabled but this partition does not support DualStack",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [],
@@ -733,9 +740,11 @@
                                             },
                                             "type": "endpoint"
                                         }
-                                    ]
+                                    ],
+                                    "type": "tree"
                                 }
-                            ]
+                            ],
+                            "type": "tree"
                         },
                         {
                             "conditions": [],
@@ -1432,6 +1441,18 @@
                     "target": "com.amazonaws.emrserverless#WorkerTypeSpecificationInputMap",
                     "traits": {
                         "smithy.api#documentation": "<p>The key-value pairs that specify worker type to\n            <code>WorkerTypeSpecificationInput</code>. This parameter must contain all valid worker\n         types for a Spark or Hive application. Valid worker types include <code>Driver</code> and\n            <code>Executor</code> for Spark applications and <code>HiveDriver</code> and\n            <code>TezTask</code> for Hive applications. You can either set image details in this\n         parameter for each worker type, or in <code>imageConfiguration</code> for all worker\n         types.</p>"
+                    }
+                },
+                "runtimeConfiguration": {
+                    "target": "com.amazonaws.emrserverless#ConfigurationList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The <a href=\"https://docs.aws.amazon.com/emr-serverless/latest/APIReference/API_Configuration.html\">Configuration</a> \n         specifications to use when creating an application. Each configuration consists of a classification and properties.\n      This configuration is applied to all the job runs submitted under the application.</p>"
+                    }
+                },
+                "monitoringConfiguration": {
+                    "target": "com.amazonaws.emrserverless#MonitoringConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration setting for monitoring.</p>"
                     }
                 }
             }
@@ -3409,6 +3430,18 @@
                     "target": "com.amazonaws.emrserverless#ReleaseLabel",
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon EMR release label for the application. You can change the release\n         label to use a different release of Amazon EMR.</p>"
+                    }
+                },
+                "runtimeConfiguration": {
+                    "target": "com.amazonaws.emrserverless#ConfigurationList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The <a href=\"https://docs.aws.amazon.com/emr-serverless/latest/APIReference/API_Configuration.html\">Configuration</a> \n         specifications to use when updating an application. Each configuration consists of a classification and properties.\n      This configuration is applied across all the job runs submitted under the application.</p>"
+                    }
+                },
+                "monitoringConfiguration": {
+                    "target": "com.amazonaws.emrserverless#MonitoringConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration setting for monitoring.</p>"
                     }
                 }
             }

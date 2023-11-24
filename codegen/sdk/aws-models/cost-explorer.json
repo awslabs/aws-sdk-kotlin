@@ -205,7 +205,6 @@
                                     ]
                                 }
                             ],
-                            "type": "tree",
                             "rules": [
                                 {
                                     "conditions": [
@@ -248,7 +247,8 @@
                                     },
                                     "type": "endpoint"
                                 }
-                            ]
+                            ],
+                            "type": "tree"
                         },
                         {
                             "conditions": [
@@ -261,7 +261,6 @@
                                     ]
                                 }
                             ],
-                            "type": "tree",
                             "rules": [
                                 {
                                     "conditions": [
@@ -275,7 +274,6 @@
                                             "assign": "PartitionResult"
                                         }
                                     ],
-                                    "type": "tree",
                                     "rules": [
                                         {
                                             "conditions": [
@@ -400,7 +398,6 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
@@ -435,7 +432,6 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -446,14 +442,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [
@@ -467,14 +465,12 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
                                                         {
                                                             "fn": "booleanEquals",
                                                             "argv": [
-                                                                true,
                                                                 {
                                                                     "fn": "getAttr",
                                                                     "argv": [
@@ -483,11 +479,11 @@
                                                                         },
                                                                         "supportsFIPS"
                                                                     ]
-                                                                }
+                                                                },
+                                                                true
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -498,14 +494,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "FIPS is enabled but this partition does not support FIPS",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [
@@ -519,7 +517,6 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
@@ -539,7 +536,6 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -550,14 +546,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "DualStack is enabled but this partition does not support DualStack",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [],
@@ -568,9 +566,11 @@
                                             },
                                             "type": "endpoint"
                                         }
-                                    ]
+                                    ],
+                                    "type": "tree"
                                 }
-                            ]
+                            ],
+                            "type": "tree"
                         },
                         {
                             "conditions": [],
@@ -1476,7 +1476,6 @@
         "com.amazonaws.costexplorer#CostAllocationTagsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 1000
@@ -1585,7 +1584,6 @@
         "com.amazonaws.costexplorer#CostCategoryMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -2989,7 +2987,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Details about the Amazon EC2 instances that Amazon Web Services recommends that you\n            purchase.</p>"
+                "smithy.api#documentation": "<p>Details about the Amazon EC2 reservations that Amazon Web Services recommends that you\n            purchase.</p>"
             }
         },
         "com.amazonaws.costexplorer#EC2ResourceDetails": {
@@ -3149,7 +3147,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Details about the Amazon OpenSearch Service instances that Amazon Web Services recommends\n            that you purchase.</p>"
+                "smithy.api#documentation": "<p>Details about the Amazon OpenSearch Service reservations that Amazon Web Services\n            recommends that you purchase.</p>"
             }
         },
         "com.amazonaws.costexplorer#ElastiCacheInstanceDetails": {
@@ -3195,7 +3193,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Details about the Amazon ElastiCache instances that Amazon Web Services recommends that\n            you purchase.</p>"
+                "smithy.api#documentation": "<p>Details about the Amazon ElastiCache reservations that Amazon Web Services recommends\n            that you purchase.</p>"
             }
         },
         "com.amazonaws.costexplorer#Entity": {
@@ -4014,7 +4012,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.costexplorer#MaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>This field is only used when the <code>SortBy</code> value is provided in the\n      request.</p>\n         <p>The maximum number of objects that are returned for this request. If\n        <code>MaxResults</code> isn't specified with the <code>SortBy</code> value, the request\n      returns 1000 results as the default value for this parameter.</p>\n         <p>For <code>GetCostCategories</code>, MaxResults has an upper quota of 1000.</p>"
                     }
                 },
@@ -4220,7 +4217,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.costexplorer#MaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>This field is only used when SortBy is provided in the request. The maximum number of\n      objects that are returned for this request. If MaxResults isn't specified with SortBy, the\n      request returns 1000 results as the default value for this parameter.</p>\n         <p>For <code>GetDimensionValues</code>, MaxResults has an upper limit of 1000.</p>"
                     }
                 },
@@ -4342,7 +4338,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.costexplorer#MaxResults",
                     "traits": {
-                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of objects that you returned for this request. If more objects are\n      available, in the response, Amazon Web Services provides a NextPageToken value that you can use\n      in a subsequent call to get the next batch of objects.</p>"
                     }
                 }
@@ -4561,7 +4556,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.costexplorer#MaxResults",
                     "traits": {
-                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of objects that you returned for this request. If more objects are\n      available, in the response, Amazon Web Services provides a NextPageToken value that you can use\n      in a subsequent call to get the next batch of objects.</p>"
                     }
                 }
@@ -4818,7 +4812,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.costexplorer#MaxResults",
                     "traits": {
-                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The number of items to be returned in a response. The default is <code>20</code>, with a\n      minimum value of <code>1</code>.</p>"
                     }
                 },
@@ -5040,7 +5033,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.costexplorer#MaxResults",
                     "traits": {
-                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The number of items to be returned in a response. The default is <code>20</code>, with a\n      minimum value of <code>1</code>.</p>"
                     }
                 },
@@ -5205,7 +5197,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.costexplorer#MaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>This field is only used when SortBy is provided in the request. The maximum number of\n      objects that are returned for this request. If MaxResults isn't specified with SortBy, the\n      request returns 1000 results as the default value for this parameter.</p>\n         <p>For <code>GetTags</code>, MaxResults has an upper quota of 1000.</p>"
                     }
                 },
@@ -5494,36 +5485,42 @@
                 "EC2InstanceDetails": {
                     "target": "com.amazonaws.costexplorer#EC2InstanceDetails",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon EC2 instances that Amazon Web Services recommends that you purchase.</p>"
+                        "smithy.api#documentation": "<p>The Amazon EC2 reservations that Amazon Web Services recommends that you\n            purchase.</p>"
                     }
                 },
                 "RDSInstanceDetails": {
                     "target": "com.amazonaws.costexplorer#RDSInstanceDetails",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon RDS instances that Amazon Web Services recommends that you purchase.</p>"
+                        "smithy.api#documentation": "<p>The Amazon RDS reservations that Amazon Web Services recommends that you\n            purchase.</p>"
                     }
                 },
                 "RedshiftInstanceDetails": {
                     "target": "com.amazonaws.costexplorer#RedshiftInstanceDetails",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Redshift instances that Amazon Web Services recommends that you\n            purchase.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Redshift reservations that Amazon Web Services recommends that you\n            purchase.</p>"
                     }
                 },
                 "ElastiCacheInstanceDetails": {
                     "target": "com.amazonaws.costexplorer#ElastiCacheInstanceDetails",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ElastiCache instances that Amazon Web Services recommends that you purchase.</p>"
+                        "smithy.api#documentation": "<p>The ElastiCache reservations that Amazon Web Services recommends that you\n            purchase.</p>"
                     }
                 },
                 "ESInstanceDetails": {
                     "target": "com.amazonaws.costexplorer#ESInstanceDetails",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon OpenSearch Service instances that Amazon Web Services recommends that you\n            purchase.</p>"
+                        "smithy.api#documentation": "<p>The Amazon OpenSearch Service reservations that Amazon Web Services recommends that you\n            purchase.</p>"
+                    }
+                },
+                "MemoryDBInstanceDetails": {
+                    "target": "com.amazonaws.costexplorer#MemoryDBInstanceDetails",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The MemoryDB reservations that Amazon Web Services recommends that you purchase.</p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Details about the instances that Amazon Web Services recommends that you\n            purchase.</p>"
+                "smithy.api#documentation": "<p>Details about the reservations that Amazon Web Services recommends that you\n            purchase.</p>"
             }
         },
         "com.amazonaws.costexplorer#InvalidNextTokenException": {
@@ -5614,7 +5611,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.costexplorer#CostAllocationTagsMaxResults",
                     "traits": {
-                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of objects that are returned for this request. By default, the request\n      returns 100 results. </p>"
                     }
                 }
@@ -5683,7 +5679,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.costexplorer#CostCategoryMaxResults",
                     "traits": {
-                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The number of entries a paginated response contains. </p>"
                     }
                 }
@@ -5922,10 +5917,49 @@
         "com.amazonaws.costexplorer#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1
                 }
+            }
+        },
+        "com.amazonaws.costexplorer#MemoryDBInstanceDetails": {
+            "type": "structure",
+            "members": {
+                "Family": {
+                    "target": "com.amazonaws.costexplorer#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The instance family of the recommended reservation.</p>"
+                    }
+                },
+                "NodeType": {
+                    "target": "com.amazonaws.costexplorer#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The node type of the recommended reservation.</p>"
+                    }
+                },
+                "Region": {
+                    "target": "com.amazonaws.costexplorer#GenericString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the recommended reservation.</p>"
+                    }
+                },
+                "CurrentGeneration": {
+                    "target": "com.amazonaws.costexplorer#GenericBoolean",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>Determines whether the recommendation is for a current generation instance.</p>"
+                    }
+                },
+                "SizeFlexEligible": {
+                    "target": "com.amazonaws.costexplorer#GenericBoolean",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>Determines whether the recommended reservation is size flexible.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Details about the MemoryDB reservations that Amazon Web Services recommends that you\n            purchase.</p>"
             }
         },
         "com.amazonaws.costexplorer#Metric": {
@@ -6427,7 +6461,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Details about the Amazon RDS instances that Amazon Web Services recommends that you\n            purchase.</p>"
+                "smithy.api#documentation": "<p>Details about the Amazon RDS reservations that Amazon Web Services recommends that you\n            purchase.</p>"
             }
         },
         "com.amazonaws.costexplorer#RICostForUnusedHours": {
@@ -6727,7 +6761,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Details about the Amazon Redshift instances that Amazon Web Services recommends that\n            you purchase.</p>"
+                "smithy.api#documentation": "<p>Details about the Amazon Redshift reservations that Amazon Web Services recommends that\n            you purchase.</p>"
             }
         },
         "com.amazonaws.costexplorer#RequestChangedException": {
@@ -6946,7 +6980,7 @@
                 "InstanceDetails": {
                     "target": "com.amazonaws.costexplorer#InstanceDetails",
                     "traits": {
-                        "smithy.api#documentation": "<p>Details about the instances that Amazon Web Services recommends that you\n            purchase.</p>"
+                        "smithy.api#documentation": "<p>Details about the reservations that Amazon Web Services recommends that you\n            purchase.</p>"
                     }
                 },
                 "RecommendedNumberOfInstancesToPurchase": {

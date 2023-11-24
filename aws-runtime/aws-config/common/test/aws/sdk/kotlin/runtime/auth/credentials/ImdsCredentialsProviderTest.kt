@@ -2,28 +2,24 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.*
+import aws.sdk.kotlin.runtime.config.imds.DEFAULT_TOKEN_TTL_SECONDS
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
-import aws.smithy.kotlin.runtime.http.Headers
-import aws.smithy.kotlin.runtime.http.HttpBody
-import aws.smithy.kotlin.runtime.http.HttpCall
-import aws.smithy.kotlin.runtime.http.HttpMethod
-import aws.smithy.kotlin.runtime.http.HttpStatusCode
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
+import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineBase
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngineConfig
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestEngine
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.io.IOException
 import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.net.Scheme
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.ManualClock
@@ -31,25 +27,16 @@ import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.time.fromEpochMilliseconds
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import io.kotest.matchers.string.shouldContain
-import io.mockk.coVerify
-import io.mockk.spyk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertIs
-import kotlin.test.assertNotEquals
-import kotlin.time.Duration.Companion.minutes
+import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 
-private val ec2MetadataDisabledPlatform = TestPlatformProvider(
-    env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.envVar to "true"),
-)
-private val ec2MetadataEnabledPlatform = TestPlatformProvider()
-
-@OptIn(ExperimentalCoroutinesApi::class)
 class ImdsCredentialsProviderTest {
+
+    private val ec2MetadataDisabledPlatform = TestPlatformProvider(
+        env = mapOf(AwsSdkSetting.AwsEc2MetadataDisabled.envVar to "true"),
+    )
+    private val ec2MetadataEnabledPlatform = TestPlatformProvider()
 
     @Test
     fun testImdsDisabled() = runTest {
@@ -76,7 +63,10 @@ class ImdsCredentialsProviderTest {
                 imdsResponse("imds-test-role"),
             )
             expect(
-                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
+                imdsRequest(
+                    "http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role",
+                    "TOKEN_A",
+                ),
                 imdsResponse(
                     """
                     {
@@ -98,7 +88,10 @@ class ImdsCredentialsProviderTest {
                 imdsResponse("imds-test-role-2"),
             )
             expect(
-                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role-2", "TOKEN_A"),
+                imdsRequest(
+                    "http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role-2",
+                    "TOKEN_A",
+                ),
                 imdsResponse(
                     """
                     {
@@ -161,7 +154,10 @@ class ImdsCredentialsProviderTest {
             )
             // no request for profile, go directly to retrieving role credentials
             expect(
-                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
+                imdsRequest(
+                    "http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role",
+                    "TOKEN_A",
+                ),
                 imdsResponse(
                     """
                     {
@@ -243,7 +239,7 @@ class ImdsCredentialsProviderTest {
                 HttpResponse(
                     HttpStatusCode.NotFound,
                     Headers.Empty,
-                    ByteArrayContent(
+                    HttpBody.fromBytes(
                         """<?xml version="1.0" encoding="iso-8859-1"?>
                         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
                                 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -289,7 +285,10 @@ class ImdsCredentialsProviderTest {
                 tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
             )
             expect(
-                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
+                imdsRequest(
+                    "http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role",
+                    "TOKEN_A",
+                ),
                 imdsResponse(
                     """
                     {
@@ -332,128 +331,6 @@ class ImdsCredentialsProviderTest {
         assertEquals(expected, actual)
     }
 
-    // SDK can perform 3 successive requests with expired credentials. IMDS must only be called once.
-    @Test
-    fun testSuccessiveRequestsOnlyCallIMDSOnce() = runTest {
-        val connection = buildTestConnection {
-            expect(
-                tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
-                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
-            )
-            expect(
-                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
-                imdsResponse(
-                    """
-                    {
-                        "Code" : "Success",
-                        "LastUpdated" : "2021-09-17T20:57:08Z",
-                        "Type" : "AWS-HMAC",
-                        "AccessKeyId" : "ASIARTEST",
-                        "SecretAccessKey" : "xjtest",
-                        "Token" : "IQote///test",
-                        "Expiration" : "2021-09-18T03:31:56Z"
-                    }
-                """,
-                ),
-            )
-        }
-
-        val testClock = ManualClock()
-
-        val client = spyk(
-            ImdsClient {
-                engine = connection
-                clock = testClock
-            },
-        )
-
-        val provider = ImdsCredentialsProvider(
-            profileOverride = "imds-test-role",
-            client = lazyOf(client),
-            clock = testClock,
-            platformProvider = ec2MetadataEnabledPlatform,
-        )
-
-        // call resolve 3 times
-        repeat(3) {
-            provider.resolve()
-        }
-
-        // make sure ImdsClient only gets called once
-        coVerify(exactly = 1) {
-            client.get(any())
-        }
-    }
-
-    @Test
-    fun testDontRefreshUntilNextRefreshTimeHasPassed() = runTest {
-        val connection = buildTestConnection {
-            expect(
-                tokenRequest("http://169.254.169.254", DEFAULT_TOKEN_TTL_SECONDS),
-                tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
-            )
-            expect(
-                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
-                imdsResponse(
-                    """
-                    {
-                        "Code" : "Success",
-                        "LastUpdated" : "2021-09-17T20:57:08Z",
-                        "Type" : "AWS-HMAC",
-                        "AccessKeyId" : "ASIARTEST",
-                        "SecretAccessKey" : "xjtest",
-                        "Token" : "IQote///test",
-                        "Expiration" : "2021-09-18T03:31:56Z"
-                    }
-                """,
-                ),
-            )
-            expect(
-                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
-                imdsResponse(
-                    """
-                    {
-                        "Code" : "Success",
-                        "LastUpdated" : "2021-09-17T20:57:08Z",
-                        "Type" : "AWS-HMAC",
-                        "AccessKeyId" : "NEWCREDENTIALS",
-                        "SecretAccessKey" : "shhh",
-                        "Token" : "IQote///test",
-                        "Expiration" : "2022-10-05T03:31:56Z"
-                    }
-                """,
-                ),
-            )
-        }
-
-        val testClock = ManualClock()
-
-        val client = spyk(
-            ImdsClient {
-                engine = connection
-                clock = testClock
-            },
-        )
-
-        val provider = ImdsCredentialsProvider(
-            profileOverride = "imds-test-role",
-            client = lazyOf(client),
-            clock = testClock,
-            platformProvider = ec2MetadataEnabledPlatform,
-        )
-
-        val first = provider.resolve()
-        testClock.advance(20.minutes) // 20 minutes later, we should try to refresh the expired credentials
-        val second = provider.resolve()
-
-        coVerify(exactly = 2) {
-            client.get(any())
-        }
-
-        // make sure we did not just serve the previous credentials
-        assertNotEquals(first, second)
-    }
-
     @Test
     fun testUsesPreviousCredentialsOnReadTimeout() = runTest {
         val testClock = ManualClock()
@@ -467,7 +344,7 @@ class ImdsCredentialsProviderTest {
 
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 if (successfulCallCount >= 2) {
-                    throw SdkIOException()
+                    throw IOException()
                 } else {
                     successfulCallCount += 1
 
@@ -478,8 +355,12 @@ class ImdsCredentialsProviderTest {
                             testClock.now(),
                             testClock.now(),
                         )
+
                         else -> HttpCall(
-                            imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
+                            imdsRequest(
+                                "http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role",
+                                "TOKEN_A",
+                            ),
                             imdsResponse(
                                 """
                             {
@@ -533,7 +414,7 @@ class ImdsCredentialsProviderTest {
 
     @Test
     fun testThrowsExceptionOnReadTimeoutWhenMissingPreviousCredentials() = runTest {
-        val readTimeoutEngine = TestEngine { _, _ -> throw SdkIOException() }
+        val readTimeoutEngine = TestEngine { _, _ -> throw IOException() }
         val testClock = ManualClock()
 
         val client = ImdsClient {
@@ -567,7 +448,16 @@ class ImdsCredentialsProviderTest {
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
                 if (successfulCallCount >= 2) {
                     return HttpCall(
-                        HttpRequest(HttpMethod.GET, Url(Scheme.HTTP, Host.parse("test"), Scheme.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
+                        HttpRequest(
+                            HttpMethod.GET,
+                            Url {
+                                scheme = Scheme.HTTP
+                                host = Host.parse("test")
+                                path.encoded = "/path/foo/bar"
+                            },
+                            Headers.Empty,
+                            HttpBody.Empty,
+                        ),
                         HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
                         testClock.now(),
                         testClock.now(),
@@ -582,8 +472,12 @@ class ImdsCredentialsProviderTest {
                             testClock.now(),
                             testClock.now(),
                         )
+
                         else -> HttpCall(
-                            imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role", "TOKEN_A"),
+                            imdsRequest(
+                                "http://169.254.169.254/latest/meta-data/iam/security-credentials/imds-test-role",
+                                "TOKEN_A",
+                            ),
                             imdsResponse(
                                 """
                             {
@@ -642,7 +536,16 @@ class ImdsCredentialsProviderTest {
         // this engine just returns 500 errors
         val internalServerErrorEngine = TestEngine { _, _ ->
             HttpCall(
-                HttpRequest(HttpMethod.GET, Url(Scheme.HTTP, Host.parse("test"), Scheme.HTTP.defaultPort, "/path/foo/bar"), Headers.Empty, HttpBody.Empty),
+                HttpRequest(
+                    HttpMethod.GET,
+                    Url {
+                        scheme = Scheme.HTTP
+                        host = Host.parse("test")
+                        path.encoded = "/path/foo/bar"
+                    },
+                    Headers.Empty,
+                    HttpBody.Empty,
+                ),
                 HttpResponse(HttpStatusCode.InternalServerError, Headers.Empty, HttpBody.Empty),
                 testClock.now(),
                 testClock.now(),

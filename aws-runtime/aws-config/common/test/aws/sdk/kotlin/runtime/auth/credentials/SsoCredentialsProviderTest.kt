@@ -5,11 +5,10 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
-import aws.smithy.kotlin.runtime.http.content.ByteArrayContent
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
@@ -18,13 +17,11 @@ import aws.smithy.kotlin.runtime.time.ManualClock
 import aws.smithy.kotlin.runtime.time.epochMilliseconds
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import io.kotest.matchers.string.shouldContain
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SsoCredentialsProviderTest {
 
     @Test
@@ -171,7 +168,7 @@ class SsoCredentialsProviderTest {
 
         val engine = buildTestConnection {
             expect(
-                HttpResponse(HttpStatusCode.OK, Headers.Empty, ByteArrayContent(serviceResp.encodeToByteArray())),
+                HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.fromBytes(serviceResp.encodeToByteArray())),
             )
         }
 
@@ -204,7 +201,7 @@ class SsoCredentialsProviderTest {
         )
 
         val actual = provider.resolve()
-        val expected = Credentials("AKID", "secret", "session-token", expectedExpiration, "SSO")
+        val expected = credentials("AKID", "secret", "session-token", expectedExpiration, "SSO", "123456789")
         assertEquals(expected, actual)
     }
 }

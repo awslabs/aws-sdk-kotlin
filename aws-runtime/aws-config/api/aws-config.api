@@ -39,7 +39,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/DefaultChainBearerTok
 	public final fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
 	public final fun getProfileName ()Ljava/lang/String;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/DefaultChainCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
@@ -50,14 +50,16 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/DefaultChainCredentia
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
 	public final fun getProfileName ()Ljava/lang/String;
 	public final fun getRegion ()Ljava/lang/String;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/EcsCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
 	public fun <init> ()V
+	public fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
-	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/EnvironmentCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
@@ -65,7 +67,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/EnvironmentCredential
 	public fun <init> (Lkotlin/jvm/functions/Function1;)V
 	public synthetic fun <init> (Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getGetEnv ()Lkotlin/jvm/functions/Function1;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/ImdsCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
@@ -76,7 +78,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/ImdsCredentialsProvid
 	public final fun getClient ()Lkotlin/Lazy;
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;
 	public final fun getProfileOverride ()Ljava/lang/String;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/InvalidJsonCredentialsException : aws/sdk/kotlin/runtime/ClientException {
@@ -92,7 +94,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/InvalidSsoTokenExcept
 public final class aws/sdk/kotlin/runtime/auth/credentials/ProcessCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
 	public fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;JJ)V
 	public synthetic fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;JJILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/ProfileCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
@@ -104,7 +106,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/ProfileCredentialsPro
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
 	public final fun getProfileName ()Ljava/lang/String;
 	public final fun getRegion ()Ljava/lang/String;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/ProviderConfigurationException : aws/sdk/kotlin/runtime/ConfigurationException {
@@ -122,7 +124,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/SsoCredentialsProvide
 	public final fun getSsoRegion ()Ljava/lang/String;
 	public final fun getSsoSessionName ()Ljava/lang/String;
 	public final fun getStartUrl ()Ljava/lang/String;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/SsoTokenProvider : aws/smithy/kotlin/runtime/http/auth/BearerTokenProvider {
@@ -134,7 +136,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/SsoTokenProvider : aw
 	public final fun getSsoRegion ()Ljava/lang/String;
 	public final fun getSsoSessionName ()Ljava/lang/String;
 	public final fun getStartUrl ()Ljava/lang/String;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
@@ -142,16 +144,18 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProv
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProvider$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun <init> (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;)V
 	public final fun getCredentials ()Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProvider$Builder {
 	public fun <init> ()V
 	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProvider;
 	public final fun getAccessKeyId ()Ljava/lang/String;
+	public final fun getAccountId ()Ljava/lang/String;
 	public final fun getSecretAccessKey ()Ljava/lang/String;
 	public final fun getSessionToken ()Ljava/lang/String;
 	public final fun setAccessKeyId (Ljava/lang/String;)V
+	public final fun setAccountId (Ljava/lang/String;)V
 	public final fun setSecretAccessKey (Ljava/lang/String;)V
 	public final fun setSessionToken (Ljava/lang/String;)V
 }
@@ -169,7 +173,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StsAssumeRoleCredenti
 	public final fun getBootstrapCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public final fun getRegion ()Ljava/lang/String;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
@@ -182,7 +186,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredent
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
 	public final fun getRegion ()Ljava/lang/String;
 	public final fun getWebIdentityParameters ()Laws/sdk/kotlin/runtime/auth/credentials/AssumeRoleWithWebIdentityParameters;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredentialsProvider$Companion {
@@ -195,7 +199,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/SystemPropertyCredent
 	public fun <init> (Lkotlin/jvm/functions/Function1;)V
 	public synthetic fun <init> (Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getGetProperty ()Lkotlin/jvm/functions/Function1;
-	public fun resolve (Laws/smithy/kotlin/runtime/util/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ManagedBearerTokenProviderKt {
@@ -205,1495 +209,9 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ManagedBeare
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ManagedCredentialsProviderKt {
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/DefaultSsoClientKt {
-	public static final field ServiceApiVersion Ljava/lang/String;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient : aws/smithy/kotlin/runtime/client/SdkClient {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Companion;
-	public static fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Builder;
-	public abstract fun getConfig ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config;
-	public abstract fun getRoleCredentials (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Builder : aws/smithy/kotlin/runtime/client/AbstractSdkClientBuilder {
-	public fun getConfig ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder;
-	public synthetic fun getConfig ()Laws/smithy/kotlin/runtime/client/SdkClientConfig$Builder;
-	public synthetic fun newClient (Laws/smithy/kotlin/runtime/client/SdkClientConfig;)Laws/smithy/kotlin/runtime/client/SdkClient;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Companion : aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory {
-	public fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Builder;
-	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
-	public synthetic fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/RetryClientConfig, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/telemetry/TelemetryConfig {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getAuthSchemeProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/auth/SsoAuthSchemeProvider;
-	public fun getAuthSchemes ()Ljava/util/List;
-	public fun getClientName ()Ljava/lang/String;
-	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
-	public final fun getEndpointProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointProvider;
-	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
-	public fun getInterceptors ()Ljava/util/List;
-	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
-	public fun getRegion ()Ljava/lang/String;
-	public fun getRetryPolicy ()Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;
-	public fun getRetryStrategy ()Laws/smithy/kotlin/runtime/retries/RetryStrategy;
-	public fun getTelemetryProvider ()Laws/smithy/kotlin/runtime/telemetry/TelemetryProvider;
-	public fun getUseDualStack ()Z
-	public fun getUseFips ()Z
-	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/RetryClientConfig$Builder, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/telemetry/TelemetryConfig$Builder {
-	public fun <init> ()V
-	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config;
-	public synthetic fun build ()Ljava/lang/Object;
-	public fun buildHttpEngineConfig ()Laws/smithy/kotlin/runtime/http/config/HttpEngineConfig;
-	public fun buildRetryStrategyClientConfig ()Laws/smithy/kotlin/runtime/client/RetryStrategyClientConfig;
-	public final fun getAuthSchemeProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/auth/SsoAuthSchemeProvider;
-	public fun getAuthSchemes ()Ljava/util/List;
-	public fun getClientName ()Ljava/lang/String;
-	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
-	public final fun getEndpointProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointProvider;
-	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
-	public fun getInterceptors ()Ljava/util/List;
-	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
-	public fun getRegion ()Ljava/lang/String;
-	public fun getRetryPolicy ()Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;
-	public fun getRetryStrategy ()Laws/smithy/kotlin/runtime/retries/RetryStrategy;
-	public fun getTelemetryProvider ()Laws/smithy/kotlin/runtime/telemetry/TelemetryProvider;
-	public fun getUseDualStack ()Ljava/lang/Boolean;
-	public fun getUseFips ()Ljava/lang/Boolean;
-	public fun httpClient (Laws/smithy/kotlin/runtime/http/config/EngineFactory;Lkotlin/jvm/functions/Function1;)V
-	public fun httpClient (Lkotlin/jvm/functions/Function1;)V
-	public fun retryStrategy (Laws/smithy/kotlin/runtime/util/DslFactory;Lkotlin/jvm/functions/Function1;)V
-	public fun retryStrategy (Lkotlin/jvm/functions/Function1;)V
-	public final fun setAuthSchemeProvider (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/auth/SsoAuthSchemeProvider;)V
-	public fun setAuthSchemes (Ljava/util/List;)V
-	public fun setClientName (Ljava/lang/String;)V
-	public fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
-	public final fun setEndpointProvider (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointProvider;)V
-	public final fun setEndpointUrl (Laws/smithy/kotlin/runtime/net/Url;)V
-	public fun setHttpClient (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
-	public fun setInterceptors (Ljava/util/List;)V
-	public fun setLogMode (Laws/smithy/kotlin/runtime/client/LogMode;)V
-	public fun setRegion (Ljava/lang/String;)V
-	public fun setRetryPolicy (Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;)V
-	public fun setRetryStrategy (Laws/smithy/kotlin/runtime/retries/RetryStrategy;)V
-	public fun setTelemetryProvider (Laws/smithy/kotlin/runtime/telemetry/TelemetryProvider;)V
-	public fun setUseDualStack (Ljava/lang/Boolean;)V
-	public fun setUseFips (Ljava/lang/Boolean;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient$Config;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClientKt {
-	public static final field SdkVersion Ljava/lang/String;
-	public static final field ServiceId Ljava/lang/String;
-	public static final fun getRoleCredentials (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun withConfig (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient;Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/SsoClient;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/auth/DefaultSsoAuthSchemeProvider : aws/sdk/kotlin/runtime/auth/credentials/internal/sso/auth/SsoAuthSchemeProvider {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/auth/DefaultSsoAuthSchemeProvider;
-	public fun resolveAuthScheme (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/auth/SsoAuthSchemeParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public synthetic fun resolveAuthScheme (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/auth/SsoAuthSchemeParameters {
-	public abstract fun getOperationName ()Ljava/lang/String;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/auth/SsoAuthSchemeProvider : aws/smithy/kotlin/runtime/auth/AuthSchemeProvider {
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/DefaultSsoEndpointProvider : aws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointProvider {
-	public fun <init> ()V
-	public fun resolveEndpoint (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public synthetic fun resolveEndpoint (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getEndpoint ()Ljava/lang/String;
-	public final fun getRegion ()Ljava/lang/String;
-	public final fun getUseDualStack ()Ljava/lang/Boolean;
-	public final fun getUseFips ()Ljava/lang/Boolean;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters$Builder {
-	public fun <init> ()V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters;
-	public final fun getEndpoint ()Ljava/lang/String;
-	public final fun getRegion ()Ljava/lang/String;
-	public final fun getUseDualStack ()Ljava/lang/Boolean;
-	public final fun getUseFips ()Ljava/lang/Boolean;
-	public final fun setEndpoint (Ljava/lang/String;)V
-	public final fun setRegion (Ljava/lang/String;)V
-	public final fun setUseDualStack (Ljava/lang/Boolean;)V
-	public final fun setUseFips (Ljava/lang/Boolean;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointParameters;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/endpoints/SsoEndpointProvider : aws/smithy/kotlin/runtime/client/endpoints/EndpointProvider {
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAccessToken ()Ljava/lang/String;
-	public final fun getAccountId ()Ljava/lang/String;
-	public final fun getRoleName ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest;
-	public final fun getAccessToken ()Ljava/lang/String;
-	public final fun getAccountId ()Ljava/lang/String;
-	public final fun getRoleName ()Ljava/lang/String;
-	public final fun setAccessToken (Ljava/lang/String;)V
-	public final fun setAccountId (Ljava/lang/String;)V
-	public final fun setRoleName (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsRequest;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getRoleCredentials ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse;
-	public final fun getRoleCredentials ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials;
-	public final fun roleCredentials (Lkotlin/jvm/functions/Function1;)V
-	public final fun setRoleCredentials (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/GetRoleCredentialsResponse;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException : aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/SsoException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/InvalidRequestException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException : aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/SsoException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/ResourceNotFoundException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAccessKeyId ()Ljava/lang/String;
-	public final fun getExpiration ()J
-	public final fun getSecretAccessKey ()Ljava/lang/String;
-	public final fun getSessionToken ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials;
-	public final fun getAccessKeyId ()Ljava/lang/String;
-	public final fun getExpiration ()J
-	public final fun getSecretAccessKey ()Ljava/lang/String;
-	public final fun getSessionToken ()Ljava/lang/String;
-	public final fun setAccessKeyId (Ljava/lang/String;)V
-	public final fun setExpiration (J)V
-	public final fun setSecretAccessKey (Ljava/lang/String;)V
-	public final fun setSessionToken (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/RoleCredentials;
-}
-
-public class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/SsoException : aws/sdk/kotlin/runtime/AwsServiceException {
-	public fun <init> ()V
-	public fun <init> (Ljava/lang/String;)V
-	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
-	public fun <init> (Ljava/lang/Throwable;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException : aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/SsoException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/TooManyRequestsException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException : aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/SsoException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sso/model/UnauthorizedException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/DefaultSsoOidcClientKt {
-	public static final field ServiceApiVersion Ljava/lang/String;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient : aws/smithy/kotlin/runtime/client/SdkClient {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Companion;
-	public static fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Builder;
-	public abstract fun createToken (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun getConfig ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Builder : aws/smithy/kotlin/runtime/client/AbstractSdkClientBuilder {
-	public fun getConfig ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder;
-	public synthetic fun getConfig ()Laws/smithy/kotlin/runtime/client/SdkClientConfig$Builder;
-	public synthetic fun newClient (Laws/smithy/kotlin/runtime/client/SdkClientConfig;)Laws/smithy/kotlin/runtime/client/SdkClient;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Companion : aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory {
-	public fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Builder;
-	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
-	public synthetic fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/RetryClientConfig, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/telemetry/TelemetryConfig {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getAuthSchemeProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/auth/SsoOidcAuthSchemeProvider;
-	public fun getAuthSchemes ()Ljava/util/List;
-	public fun getClientName ()Ljava/lang/String;
-	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
-	public final fun getEndpointProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointProvider;
-	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
-	public fun getInterceptors ()Ljava/util/List;
-	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
-	public fun getRegion ()Ljava/lang/String;
-	public fun getRetryPolicy ()Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;
-	public fun getRetryStrategy ()Laws/smithy/kotlin/runtime/retries/RetryStrategy;
-	public fun getTelemetryProvider ()Laws/smithy/kotlin/runtime/telemetry/TelemetryProvider;
-	public fun getUseDualStack ()Z
-	public fun getUseFips ()Z
-	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/RetryClientConfig$Builder, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/telemetry/TelemetryConfig$Builder {
-	public fun <init> ()V
-	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config;
-	public synthetic fun build ()Ljava/lang/Object;
-	public fun buildHttpEngineConfig ()Laws/smithy/kotlin/runtime/http/config/HttpEngineConfig;
-	public fun buildRetryStrategyClientConfig ()Laws/smithy/kotlin/runtime/client/RetryStrategyClientConfig;
-	public final fun getAuthSchemeProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/auth/SsoOidcAuthSchemeProvider;
-	public fun getAuthSchemes ()Ljava/util/List;
-	public fun getClientName ()Ljava/lang/String;
-	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
-	public final fun getEndpointProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointProvider;
-	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
-	public fun getInterceptors ()Ljava/util/List;
-	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
-	public fun getRegion ()Ljava/lang/String;
-	public fun getRetryPolicy ()Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;
-	public fun getRetryStrategy ()Laws/smithy/kotlin/runtime/retries/RetryStrategy;
-	public fun getTelemetryProvider ()Laws/smithy/kotlin/runtime/telemetry/TelemetryProvider;
-	public fun getUseDualStack ()Ljava/lang/Boolean;
-	public fun getUseFips ()Ljava/lang/Boolean;
-	public fun httpClient (Laws/smithy/kotlin/runtime/http/config/EngineFactory;Lkotlin/jvm/functions/Function1;)V
-	public fun httpClient (Lkotlin/jvm/functions/Function1;)V
-	public fun retryStrategy (Laws/smithy/kotlin/runtime/util/DslFactory;Lkotlin/jvm/functions/Function1;)V
-	public fun retryStrategy (Lkotlin/jvm/functions/Function1;)V
-	public final fun setAuthSchemeProvider (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/auth/SsoOidcAuthSchemeProvider;)V
-	public fun setAuthSchemes (Ljava/util/List;)V
-	public fun setClientName (Ljava/lang/String;)V
-	public fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
-	public final fun setEndpointProvider (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointProvider;)V
-	public final fun setEndpointUrl (Laws/smithy/kotlin/runtime/net/Url;)V
-	public fun setHttpClient (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
-	public fun setInterceptors (Ljava/util/List;)V
-	public fun setLogMode (Laws/smithy/kotlin/runtime/client/LogMode;)V
-	public fun setRegion (Ljava/lang/String;)V
-	public fun setRetryPolicy (Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;)V
-	public fun setRetryStrategy (Laws/smithy/kotlin/runtime/retries/RetryStrategy;)V
-	public fun setTelemetryProvider (Laws/smithy/kotlin/runtime/telemetry/TelemetryProvider;)V
-	public fun setUseDualStack (Ljava/lang/Boolean;)V
-	public fun setUseFips (Ljava/lang/Boolean;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient$Config;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClientKt {
-	public static final field SdkVersion Ljava/lang/String;
-	public static final field ServiceId Ljava/lang/String;
-	public static final fun createToken (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun withConfig (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient;Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/SsoOidcClient;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/auth/DefaultSsoOidcAuthSchemeProvider : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/auth/SsoOidcAuthSchemeProvider {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/auth/DefaultSsoOidcAuthSchemeProvider;
-	public fun resolveAuthScheme (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/auth/SsoOidcAuthSchemeParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public synthetic fun resolveAuthScheme (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/auth/SsoOidcAuthSchemeParameters {
-	public abstract fun getOperationName ()Ljava/lang/String;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/auth/SsoOidcAuthSchemeProvider : aws/smithy/kotlin/runtime/auth/AuthSchemeProvider {
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/DefaultSsoOidcEndpointProvider : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointProvider {
-	public fun <init> ()V
-	public fun resolveEndpoint (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public synthetic fun resolveEndpoint (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getEndpoint ()Ljava/lang/String;
-	public final fun getRegion ()Ljava/lang/String;
-	public final fun getUseDualStack ()Ljava/lang/Boolean;
-	public final fun getUseFips ()Ljava/lang/Boolean;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters$Builder {
-	public fun <init> ()V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters;
-	public final fun getEndpoint ()Ljava/lang/String;
-	public final fun getRegion ()Ljava/lang/String;
-	public final fun getUseDualStack ()Ljava/lang/Boolean;
-	public final fun getUseFips ()Ljava/lang/Boolean;
-	public final fun setEndpoint (Ljava/lang/String;)V
-	public final fun setRegion (Ljava/lang/String;)V
-	public final fun setUseDualStack (Ljava/lang/Boolean;)V
-	public final fun setUseFips (Ljava/lang/Boolean;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointParameters;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/endpoints/SsoOidcEndpointProvider : aws/smithy/kotlin/runtime/client/endpoints/EndpointProvider {
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AccessDeniedException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/AuthorizationPendingException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getClientId ()Ljava/lang/String;
-	public final fun getClientSecret ()Ljava/lang/String;
-	public final fun getCode ()Ljava/lang/String;
-	public final fun getDeviceCode ()Ljava/lang/String;
-	public final fun getGrantType ()Ljava/lang/String;
-	public final fun getRedirectUri ()Ljava/lang/String;
-	public final fun getRefreshToken ()Ljava/lang/String;
-	public final fun getScope ()Ljava/util/List;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest;
-	public final fun getClientId ()Ljava/lang/String;
-	public final fun getClientSecret ()Ljava/lang/String;
-	public final fun getCode ()Ljava/lang/String;
-	public final fun getDeviceCode ()Ljava/lang/String;
-	public final fun getGrantType ()Ljava/lang/String;
-	public final fun getRedirectUri ()Ljava/lang/String;
-	public final fun getRefreshToken ()Ljava/lang/String;
-	public final fun getScope ()Ljava/util/List;
-	public final fun setClientId (Ljava/lang/String;)V
-	public final fun setClientSecret (Ljava/lang/String;)V
-	public final fun setCode (Ljava/lang/String;)V
-	public final fun setDeviceCode (Ljava/lang/String;)V
-	public final fun setGrantType (Ljava/lang/String;)V
-	public final fun setRedirectUri (Ljava/lang/String;)V
-	public final fun setRefreshToken (Ljava/lang/String;)V
-	public final fun setScope (Ljava/util/List;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenRequest;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAccessToken ()Ljava/lang/String;
-	public final fun getExpiresIn ()I
-	public final fun getIdToken ()Ljava/lang/String;
-	public final fun getRefreshToken ()Ljava/lang/String;
-	public final fun getTokenType ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse;
-	public final fun getAccessToken ()Ljava/lang/String;
-	public final fun getExpiresIn ()I
-	public final fun getIdToken ()Ljava/lang/String;
-	public final fun getRefreshToken ()Ljava/lang/String;
-	public final fun getTokenType ()Ljava/lang/String;
-	public final fun setAccessToken (Ljava/lang/String;)V
-	public final fun setExpiresIn (I)V
-	public final fun setIdToken (Ljava/lang/String;)V
-	public final fun setRefreshToken (Ljava/lang/String;)V
-	public final fun setTokenType (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/CreateTokenResponse;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/ExpiredTokenException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InternalServerException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidClientException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidGrantException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidRequestException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/InvalidScopeException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SlowDownException;
-}
-
-public class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException : aws/sdk/kotlin/runtime/AwsServiceException {
-	public fun <init> ()V
-	public fun <init> (Ljava/lang/String;)V
-	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
-	public fun <init> (Ljava/lang/Throwable;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnauthorizedClientException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException : aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/SsoOidcException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException;
-	public final fun getError ()Ljava/lang/String;
-	public final fun getErrorDescription ()Ljava/lang/String;
-	public final fun setError (Ljava/lang/String;)V
-	public final fun setErrorDescription (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/ssooidc/model/UnsupportedGrantTypeException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/DefaultStsClientKt {
-	public static final field ServiceApiVersion Ljava/lang/String;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient : aws/smithy/kotlin/runtime/client/SdkClient {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Companion;
-	public abstract fun assumeRole (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun assumeRoleWithWebIdentity (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Builder;
-	public abstract fun getConfig ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Builder : aws/smithy/kotlin/runtime/client/AbstractSdkClientBuilder {
-	public fun getConfig ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder;
-	public synthetic fun getConfig ()Laws/smithy/kotlin/runtime/client/SdkClientConfig$Builder;
-	public synthetic fun newClient (Laws/smithy/kotlin/runtime/client/SdkClientConfig;)Laws/smithy/kotlin/runtime/client/SdkClient;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Companion : aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory {
-	public fun builder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Builder;
-	public synthetic fun builder ()Laws/smithy/kotlin/runtime/client/SdkClient$Builder;
-	public synthetic fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig, aws/smithy/kotlin/runtime/client/RetryClientConfig, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig, aws/smithy/kotlin/runtime/client/SdkClientConfig, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig, aws/smithy/kotlin/runtime/http/config/HttpClientConfig, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig, aws/smithy/kotlin/runtime/telemetry/TelemetryConfig {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getAuthSchemeProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/auth/StsAuthSchemeProvider;
-	public fun getAuthSchemes ()Ljava/util/List;
-	public fun getClientName ()Ljava/lang/String;
-	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
-	public final fun getEndpointProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointProvider;
-	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
-	public fun getInterceptors ()Ljava/util/List;
-	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
-	public fun getRegion ()Ljava/lang/String;
-	public fun getRetryPolicy ()Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;
-	public fun getRetryStrategy ()Laws/smithy/kotlin/runtime/retries/RetryStrategy;
-	public fun getTelemetryProvider ()Laws/smithy/kotlin/runtime/telemetry/TelemetryProvider;
-	public fun getUseDualStack ()Z
-	public fun getUseFips ()Z
-	public final fun toBuilder ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Builder : aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder, aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProviderConfig$Builder, aws/smithy/kotlin/runtime/client/RetryClientConfig$Builder, aws/smithy/kotlin/runtime/client/RetryStrategyClientConfig$Builder, aws/smithy/kotlin/runtime/client/SdkClientConfig$Builder, aws/smithy/kotlin/runtime/http/auth/HttpAuthConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpClientConfig$Builder, aws/smithy/kotlin/runtime/http/config/HttpEngineConfig$Builder, aws/smithy/kotlin/runtime/telemetry/TelemetryConfig$Builder {
-	public fun <init> ()V
-	public fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config;
-	public synthetic fun build ()Ljava/lang/Object;
-	public fun buildHttpEngineConfig ()Laws/smithy/kotlin/runtime/http/config/HttpEngineConfig;
-	public fun buildRetryStrategyClientConfig ()Laws/smithy/kotlin/runtime/client/RetryStrategyClientConfig;
-	public final fun getAuthSchemeProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/auth/StsAuthSchemeProvider;
-	public fun getAuthSchemes ()Ljava/util/List;
-	public fun getClientName ()Ljava/lang/String;
-	public fun getCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
-	public final fun getEndpointProvider ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointProvider;
-	public final fun getEndpointUrl ()Laws/smithy/kotlin/runtime/net/Url;
-	public fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
-	public fun getInterceptors ()Ljava/util/List;
-	public fun getLogMode ()Laws/smithy/kotlin/runtime/client/LogMode;
-	public fun getRegion ()Ljava/lang/String;
-	public fun getRetryPolicy ()Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;
-	public fun getRetryStrategy ()Laws/smithy/kotlin/runtime/retries/RetryStrategy;
-	public fun getTelemetryProvider ()Laws/smithy/kotlin/runtime/telemetry/TelemetryProvider;
-	public fun getUseDualStack ()Ljava/lang/Boolean;
-	public fun getUseFips ()Ljava/lang/Boolean;
-	public fun httpClient (Laws/smithy/kotlin/runtime/http/config/EngineFactory;Lkotlin/jvm/functions/Function1;)V
-	public fun httpClient (Lkotlin/jvm/functions/Function1;)V
-	public fun retryStrategy (Laws/smithy/kotlin/runtime/util/DslFactory;Lkotlin/jvm/functions/Function1;)V
-	public fun retryStrategy (Lkotlin/jvm/functions/Function1;)V
-	public final fun setAuthSchemeProvider (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/auth/StsAuthSchemeProvider;)V
-	public fun setAuthSchemes (Ljava/util/List;)V
-	public fun setClientName (Ljava/lang/String;)V
-	public fun setCredentialsProvider (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
-	public final fun setEndpointProvider (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointProvider;)V
-	public final fun setEndpointUrl (Laws/smithy/kotlin/runtime/net/Url;)V
-	public fun setHttpClient (Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;)V
-	public fun setInterceptors (Ljava/util/List;)V
-	public fun setLogMode (Laws/smithy/kotlin/runtime/client/LogMode;)V
-	public fun setRegion (Ljava/lang/String;)V
-	public fun setRetryPolicy (Laws/smithy/kotlin/runtime/retries/policy/RetryPolicy;)V
-	public fun setRetryStrategy (Laws/smithy/kotlin/runtime/retries/RetryStrategy;)V
-	public fun setTelemetryProvider (Laws/smithy/kotlin/runtime/telemetry/TelemetryProvider;)V
-	public fun setUseDualStack (Ljava/lang/Boolean;)V
-	public fun setUseFips (Ljava/lang/Boolean;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient$Config;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClientKt {
-	public static final field SdkVersion Ljava/lang/String;
-	public static final field ServiceId Ljava/lang/String;
-	public static final fun assumeRole (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun assumeRoleWithWebIdentity (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun withConfig (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient;Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/StsClient;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/auth/DefaultStsAuthSchemeProvider : aws/sdk/kotlin/runtime/auth/credentials/internal/sts/auth/StsAuthSchemeProvider {
-	public static final field INSTANCE Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/auth/DefaultStsAuthSchemeProvider;
-	public fun resolveAuthScheme (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/auth/StsAuthSchemeParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public synthetic fun resolveAuthScheme (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/auth/StsAuthSchemeParameters {
-	public abstract fun getOperationName ()Ljava/lang/String;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/auth/StsAuthSchemeProvider : aws/smithy/kotlin/runtime/auth/AuthSchemeProvider {
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/DefaultStsEndpointProvider : aws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointProvider {
-	public fun <init> ()V
-	public fun resolveEndpoint (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public synthetic fun resolveEndpoint (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getEndpoint ()Ljava/lang/String;
-	public final fun getRegion ()Ljava/lang/String;
-	public final fun getUseDualStack ()Ljava/lang/Boolean;
-	public final fun getUseFips ()Ljava/lang/Boolean;
-	public final fun getUseGlobalEndpoint ()Ljava/lang/Boolean;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters$Builder {
-	public fun <init> ()V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters;
-	public final fun getEndpoint ()Ljava/lang/String;
-	public final fun getRegion ()Ljava/lang/String;
-	public final fun getUseDualStack ()Ljava/lang/Boolean;
-	public final fun getUseFips ()Ljava/lang/Boolean;
-	public final fun getUseGlobalEndpoint ()Ljava/lang/Boolean;
-	public final fun setEndpoint (Ljava/lang/String;)V
-	public final fun setRegion (Ljava/lang/String;)V
-	public final fun setUseDualStack (Ljava/lang/Boolean;)V
-	public final fun setUseFips (Ljava/lang/Boolean;)V
-	public final fun setUseGlobalEndpoint (Ljava/lang/Boolean;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointParameters;
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/endpoints/StsEndpointProvider : aws/smithy/kotlin/runtime/client/endpoints/EndpointProvider {
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDurationSeconds ()Ljava/lang/Integer;
-	public final fun getExternalId ()Ljava/lang/String;
-	public final fun getPolicy ()Ljava/lang/String;
-	public final fun getPolicyArns ()Ljava/util/List;
-	public final fun getProvidedContexts ()Ljava/util/List;
-	public final fun getRoleArn ()Ljava/lang/String;
-	public final fun getRoleSessionName ()Ljava/lang/String;
-	public final fun getSerialNumber ()Ljava/lang/String;
-	public final fun getSourceIdentity ()Ljava/lang/String;
-	public final fun getTags ()Ljava/util/List;
-	public final fun getTokenCode ()Ljava/lang/String;
-	public final fun getTransitiveTagKeys ()Ljava/util/List;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest;
-	public final fun getDurationSeconds ()Ljava/lang/Integer;
-	public final fun getExternalId ()Ljava/lang/String;
-	public final fun getPolicy ()Ljava/lang/String;
-	public final fun getPolicyArns ()Ljava/util/List;
-	public final fun getProvidedContexts ()Ljava/util/List;
-	public final fun getRoleArn ()Ljava/lang/String;
-	public final fun getRoleSessionName ()Ljava/lang/String;
-	public final fun getSerialNumber ()Ljava/lang/String;
-	public final fun getSourceIdentity ()Ljava/lang/String;
-	public final fun getTags ()Ljava/util/List;
-	public final fun getTokenCode ()Ljava/lang/String;
-	public final fun getTransitiveTagKeys ()Ljava/util/List;
-	public final fun setDurationSeconds (Ljava/lang/Integer;)V
-	public final fun setExternalId (Ljava/lang/String;)V
-	public final fun setPolicy (Ljava/lang/String;)V
-	public final fun setPolicyArns (Ljava/util/List;)V
-	public final fun setProvidedContexts (Ljava/util/List;)V
-	public final fun setRoleArn (Ljava/lang/String;)V
-	public final fun setRoleSessionName (Ljava/lang/String;)V
-	public final fun setSerialNumber (Ljava/lang/String;)V
-	public final fun setSourceIdentity (Ljava/lang/String;)V
-	public final fun setTags (Ljava/util/List;)V
-	public final fun setTokenCode (Ljava/lang/String;)V
-	public final fun setTransitiveTagKeys (Ljava/util/List;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleRequest;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAssumedRoleUser ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;
-	public final fun getCredentials ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;
-	public final fun getPackedPolicySize ()Ljava/lang/Integer;
-	public final fun getSourceIdentity ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse;)V
-	public final fun assumedRoleUser (Lkotlin/jvm/functions/Function1;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse;
-	public final fun credentials (Lkotlin/jvm/functions/Function1;)V
-	public final fun getAssumedRoleUser ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;
-	public final fun getCredentials ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;
-	public final fun getPackedPolicySize ()Ljava/lang/Integer;
-	public final fun getSourceIdentity ()Ljava/lang/String;
-	public final fun setAssumedRoleUser (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;)V
-	public final fun setCredentials (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;)V
-	public final fun setPackedPolicySize (Ljava/lang/Integer;)V
-	public final fun setSourceIdentity (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleResponse;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDurationSeconds ()Ljava/lang/Integer;
-	public final fun getPolicy ()Ljava/lang/String;
-	public final fun getPolicyArns ()Ljava/util/List;
-	public final fun getProviderId ()Ljava/lang/String;
-	public final fun getRoleArn ()Ljava/lang/String;
-	public final fun getRoleSessionName ()Ljava/lang/String;
-	public final fun getWebIdentityToken ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest;
-	public final fun getDurationSeconds ()Ljava/lang/Integer;
-	public final fun getPolicy ()Ljava/lang/String;
-	public final fun getPolicyArns ()Ljava/util/List;
-	public final fun getProviderId ()Ljava/lang/String;
-	public final fun getRoleArn ()Ljava/lang/String;
-	public final fun getRoleSessionName ()Ljava/lang/String;
-	public final fun getWebIdentityToken ()Ljava/lang/String;
-	public final fun setDurationSeconds (Ljava/lang/Integer;)V
-	public final fun setPolicy (Ljava/lang/String;)V
-	public final fun setPolicyArns (Ljava/util/List;)V
-	public final fun setProviderId (Ljava/lang/String;)V
-	public final fun setRoleArn (Ljava/lang/String;)V
-	public final fun setRoleSessionName (Ljava/lang/String;)V
-	public final fun setWebIdentityToken (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityRequest;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAssumedRoleUser ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;
-	public final fun getAudience ()Ljava/lang/String;
-	public final fun getCredentials ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;
-	public final fun getPackedPolicySize ()Ljava/lang/Integer;
-	public final fun getProvider ()Ljava/lang/String;
-	public final fun getSourceIdentity ()Ljava/lang/String;
-	public final fun getSubjectFromWebIdentityToken ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse;)V
-	public final fun assumedRoleUser (Lkotlin/jvm/functions/Function1;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse;
-	public final fun credentials (Lkotlin/jvm/functions/Function1;)V
-	public final fun getAssumedRoleUser ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;
-	public final fun getAudience ()Ljava/lang/String;
-	public final fun getCredentials ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;
-	public final fun getPackedPolicySize ()Ljava/lang/Integer;
-	public final fun getProvider ()Ljava/lang/String;
-	public final fun getSourceIdentity ()Ljava/lang/String;
-	public final fun getSubjectFromWebIdentityToken ()Ljava/lang/String;
-	public final fun setAssumedRoleUser (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;)V
-	public final fun setAudience (Ljava/lang/String;)V
-	public final fun setCredentials (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;)V
-	public final fun setPackedPolicySize (Ljava/lang/Integer;)V
-	public final fun setProvider (Ljava/lang/String;)V
-	public final fun setSourceIdentity (Ljava/lang/String;)V
-	public final fun setSubjectFromWebIdentityToken (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumeRoleWithWebIdentityResponse;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getArn ()Ljava/lang/String;
-	public final fun getAssumedRoleId ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;
-	public final fun getArn ()Ljava/lang/String;
-	public final fun getAssumedRoleId ()Ljava/lang/String;
-	public final fun setArn (Ljava/lang/String;)V
-	public final fun setAssumedRoleId (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/AssumedRoleUser;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAccessKeyId ()Ljava/lang/String;
-	public final fun getExpiration ()Laws/smithy/kotlin/runtime/time/Instant;
-	public final fun getSecretAccessKey ()Ljava/lang/String;
-	public final fun getSessionToken ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;
-	public final fun getAccessKeyId ()Ljava/lang/String;
-	public final fun getExpiration ()Laws/smithy/kotlin/runtime/time/Instant;
-	public final fun getSecretAccessKey ()Ljava/lang/String;
-	public final fun getSessionToken ()Ljava/lang/String;
-	public final fun setAccessKeyId (Ljava/lang/String;)V
-	public final fun setExpiration (Laws/smithy/kotlin/runtime/time/Instant;)V
-	public final fun setSecretAccessKey (Ljava/lang/String;)V
-	public final fun setSessionToken (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Credentials;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException : aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/StsException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ExpiredTokenException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException : aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/StsException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpCommunicationErrorException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException : aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/StsException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/IdpRejectedClaimException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException : aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/StsException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/InvalidIdentityTokenException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException : aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/StsException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/MalformedPolicyDocumentException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException : aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/StsException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PackedPolicyTooLargeException;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getArn ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType;
-	public final fun getArn ()Ljava/lang/String;
-	public final fun setArn (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/PolicyDescriptorType;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getContextAssertion ()Ljava/lang/String;
-	public final fun getProviderArn ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;
-	public final fun getContextAssertion ()Ljava/lang/String;
-	public final fun getProviderArn ()Ljava/lang/String;
-	public final fun setContextAssertion (Ljava/lang/String;)V
-	public final fun setProviderArn (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/ProvidedContext;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException : aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/StsException {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun setMessage (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/RegionDisabledException;
-}
-
-public class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/StsException : aws/sdk/kotlin/runtime/AwsServiceException {
-	public fun <init> ()V
-	public fun <init> (Ljava/lang/String;)V
-	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
-	public fun <init> (Ljava/lang/Throwable;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag {
-	public static final field Companion Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag$Companion;
-	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun copy (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getKey ()Ljava/lang/String;
-	public final fun getValue ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag$Builder {
-	public fun <init> ()V
-	public fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag;)V
-	public final fun build ()Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag;
-	public final fun getKey ()Ljava/lang/String;
-	public final fun getValue ()Ljava/lang/String;
-	public final fun setKey (Ljava/lang/String;)V
-	public final fun setValue (Ljava/lang/String;)V
-}
-
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/auth/credentials/internal/sts/model/Tag;
-}
-
 public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory : aws/smithy/kotlin/runtime/client/SdkClientFactory {
 	public fun <init> ()V
-	protected fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	protected fun finalizeConfig (Laws/smithy/kotlin/runtime/client/SdkClient$Builder;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun fromEnvironment (Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun fromEnvironment$default (Laws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public fun invoke (Lkotlin/jvm/functions/Function1;)Laws/smithy/kotlin/runtime/client/SdkClient;
@@ -1702,10 +220,16 @@ public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory 
 public final class aws/sdk/kotlin/runtime/config/AwsSdkSettingKt {
 }
 
-public final class aws/sdk/kotlin/runtime/config/endpoints/EndpointsKt {
+public final class aws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode : java/lang/Enum {
+	public static final field DISABLED Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
+	public static final field PREFERRED Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
+	public static final field REQUIRED Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
+	public static fun values ()[Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
 }
 
-public final class aws/sdk/kotlin/runtime/config/endpoints/ResolveEndpointUrlKt {
+public final class aws/sdk/kotlin/runtime/config/endpoints/ResolversKt {
 }
 
 public final class aws/sdk/kotlin/runtime/config/imds/EC2MetadataError : aws/sdk/kotlin/runtime/AwsServiceException {
@@ -1746,6 +270,7 @@ public final class aws/sdk/kotlin/runtime/config/imds/EndpointMode : java/lang/E
 	public static final field Companion Laws/sdk/kotlin/runtime/config/imds/EndpointMode$Companion;
 	public static final field IPv4 Laws/sdk/kotlin/runtime/config/imds/EndpointMode;
 	public static final field IPv6 Laws/sdk/kotlin/runtime/config/imds/EndpointMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/config/imds/EndpointMode;
 	public static fun values ()[Laws/sdk/kotlin/runtime/config/imds/EndpointMode;
 }
@@ -1793,10 +318,50 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 }
 
 public final class aws/sdk/kotlin/runtime/config/profile/AwsSharedConfigKt {
-	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/profile/AwsSharedConfig;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/Url;
+	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/profile/AwsSharedConfig;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/url/Url;
 }
 
 public final class aws/sdk/kotlin/runtime/config/retries/ResolveRetryStrategyKt {
+}
+
+public final class aws/sdk/kotlin/runtime/config/useragent/ResolveUserAgentKt {
+}
+
+public final class aws/sdk/kotlin/runtime/region/DefaultRegionProviderChain : aws/sdk/kotlin/runtime/region/RegionProviderChain, aws/sdk/kotlin/runtime/region/RegionProvider, java/io/Closeable {
+	public fun <init> ()V
+	public fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun close ()V
+}
+
+public final class aws/sdk/kotlin/runtime/region/EnvironmentRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider {
+	public fun <init> ()V
+	public fun <init> (Laws/smithy/kotlin/runtime/util/EnvironmentProvider;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/EnvironmentProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/region/ImdsRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider, java/io/Closeable {
+	public fun <init> ()V
+	public fun <init> (Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;)V
+	public synthetic fun <init> (Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun close ()V
+	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/region/JvmSystemPropRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider {
+	public fun <init> ()V
+	public fun <init> (Laws/smithy/kotlin/runtime/util/PropertyProvider;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/PropertyProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/region/ProfileRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider {
+	public fun <init> ()V
+	public fun <init> (Laws/smithy/kotlin/runtime/util/LazyAsyncValue;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/LazyAsyncValue;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;)V
+	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface class aws/sdk/kotlin/runtime/region/RegionProvider {

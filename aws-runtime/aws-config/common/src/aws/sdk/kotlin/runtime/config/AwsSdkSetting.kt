@@ -6,9 +6,12 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
+import aws.sdk.kotlin.runtime.http.AWS_APP_ID_ENV
+import aws.sdk.kotlin.runtime.http.AWS_APP_ID_PROP
 import aws.smithy.kotlin.runtime.client.config.RetryMode
 import aws.smithy.kotlin.runtime.config.*
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 // NOTE: The JVM property names MUST match the ones defined in the Java SDK for any setting added.
@@ -44,6 +47,16 @@ public object AwsSdkSetting {
      * Configure the default region.
      */
     public val AwsRegion: EnvironmentSetting<String> = strEnvSetting("aws.region", "AWS_REGION")
+
+    /**
+     * Configure the AWS account ID
+     */
+    public val AwsAccountId: EnvironmentSetting<String> = strEnvSetting("aws.accountId", "AWS_ACCOUNT_ID")
+
+    /**
+     * Configure the user agent app ID
+     */
+    public val AwsAppId: EnvironmentSetting<String> = strEnvSetting(AWS_APP_ID_PROP, AWS_APP_ID_ENV)
 
     /**
      * Configure the default path to the shared config file.
@@ -133,6 +146,12 @@ public object AwsSdkSetting {
         strEnvSetting("aws.containerAuthorizationToken", "AWS_CONTAINER_AUTHORIZATION_TOKEN")
 
     /**
+     * A path to a file which contains an authorization token to pass to a container metadata service.
+     */
+    public val AwsContainerAuthorizationTokenFile: EnvironmentSetting<String> =
+        strEnvSetting("aws.containerAuthorizationTokenFile", "AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE")
+
+    /**
      * The maximum number of request attempts to perform. This is one more than the number of retries, so
      * aws.maxAttempts = 1 will have 0 retries.
      */
@@ -166,6 +185,11 @@ public object AwsSdkSetting {
      */
     public val AwsIgnoreEndpointUrls: EnvironmentSetting<Boolean> =
         boolEnvSetting("aws.ignoreConfiguredEndpointUrls", "AWS_IGNORE_CONFIGURED_ENDPOINT_URLS")
+
+    /**
+     * The mode to use when resolving endpoints that make use of the AWS account ID.
+     */
+    public val AwsAccountIdEndpointMode: EnvironmentSetting<AccountIdEndpointMode> = enumEnvSetting("aws.accountIdEndpointMode", "AWS_ACCOUNT_ID_ENDPOINT_MODE")
 }
 
 /**

@@ -7,7 +7,6 @@ package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.protocols.endpoints.*
 import software.amazon.smithy.codegen.core.CodegenException
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.useFileWriter
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.*
@@ -43,7 +42,7 @@ class AwsEndpointDelegator : EndpointDelegator {
         val defaultProviderSymbol = DefaultEndpointProviderGenerator.getSymbol(ctx.settings)
 
         ctx.delegator.useFileWriter(providerSymbol) {
-            EndpointProviderGenerator(it, providerSymbol, paramsSymbol).render()
+            EndpointProviderGenerator(it, ctx.settings, providerSymbol, paramsSymbol).render()
         }
 
         val endpointFunctions = buildMap {
@@ -56,22 +55,17 @@ class AwsEndpointDelegator : EndpointDelegator {
                 },
             )
         }
+
         if (rules != null) {
             ctx.delegator.useFileWriter(defaultProviderSymbol) {
-                DefaultEndpointProviderGenerator(it, rules, defaultProviderSymbol, providerSymbol, paramsSymbol, endpointFunctions, awsEndpointPropertyRenderers).render()
+                DefaultEndpointProviderGenerator(it, rules, defaultProviderSymbol, providerSymbol, paramsSymbol, ctx.settings, endpointFunctions, awsEndpointPropertyRenderers).render()
             }
         }
     }
 
     override fun generateEndpointResolverAdapter(ctx: ProtocolGenerator.GenerationContext) {
         ctx.delegator.useFileWriter(EndpointResolverAdapterGenerator.getSymbol(ctx.settings)) {
-            EndpointResolverAdapterGenerator(ctx, it) {
-                it.write(
-                    "endpoint.#T?.#T(request.context)",
-                    RuntimeTypes.SmithyClient.Endpoints.signingContext,
-                    RuntimeTypes.Auth.Signing.AwsSigningCommon.mergeInto,
-                )
-            }.render()
+            EndpointResolverAdapterGenerator(ctx, it).render()
         }
     }
 

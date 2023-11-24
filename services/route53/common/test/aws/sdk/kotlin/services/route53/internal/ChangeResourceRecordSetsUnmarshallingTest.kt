@@ -6,7 +6,7 @@ package aws.sdk.kotlin.services.route53.internal
 
 import aws.sdk.kotlin.services.route53.model.InvalidChangeBatch
 import aws.sdk.kotlin.services.route53.model.Route53Exception
-import aws.sdk.kotlin.services.route53.transform.ChangeResourceRecordSetsOperationDeserializer
+import aws.sdk.kotlin.services.route53.serde.ChangeResourceRecordSetsOperationDeserializer
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpCall
@@ -15,9 +15,9 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class ChangeResourceRecordSetsUnmarshallingTest {
     @Test
@@ -40,7 +40,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val call = HttpCall(HttpRequestBuilder().build(), response)
 
-        val exception = assertThrows<InvalidChangeBatch> {
+        val exception = assertFailsWith<InvalidChangeBatch> {
             runBlocking {
                 ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
@@ -69,7 +69,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val call = HttpCall(HttpRequestBuilder().build(), response)
 
-        val exception = assertThrows<InvalidChangeBatch> {
+        val exception = assertFailsWith<InvalidChangeBatch> {
             runBlocking {
                 ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
@@ -99,7 +99,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val call = HttpCall(HttpRequestBuilder().build(), response)
 
-        val exception = assertThrows<InvalidChangeBatch> {
+        val exception = assertFailsWith<InvalidChangeBatch> {
             runBlocking {
                 ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }
@@ -130,7 +130,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val call = HttpCall(HttpRequestBuilder().build(), response)
 
-        val exception = assertThrows<Route53Exception> {
+        val exception = assertFailsWith<Route53Exception> {
             runBlocking {
                 ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
             }

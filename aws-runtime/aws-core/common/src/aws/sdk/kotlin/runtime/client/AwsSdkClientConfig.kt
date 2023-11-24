@@ -32,6 +32,20 @@ public interface AwsSdkClientConfig : SdkClientConfig {
      */
     public val useDualStack: Boolean
 
+    /**
+     * An optional application specific identifier.
+     * When set it will be appended to the User-Agent header of every request in the form of: `app/{applicationId}`.
+     * When not explicitly set, the value will be loaded from the following locations:
+     *
+     * - JVM System Property: `aws.userAgentAppId`
+     * - Environment variable: `AWS_SDK_UA_APP_ID`
+     * - Shared configuration profile attribute: `sdk_ua_app_id`
+     *
+     * See [shared configuration settings](https://docs.aws.amazon.com/sdkref/latest/guide/settings-reference.html)
+     * reference for more information on environment variables and shared config settings.
+     */
+    public val applicationId: String?
+
     public interface Builder {
         /**
          * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
@@ -52,5 +66,19 @@ public interface AwsSdkClientConfig : SdkClientConfig {
          * Disabled by default.
          */
         public var useDualStack: Boolean?
+
+        /**
+         * An optional application specific identifier.
+         * When set it will be appended to the User-Agent header of every request in the form of: `app/{applicationId}`.
+         * When not explicitly set, the value will be loaded from the following locations:
+         *
+         * - JVM System Property: `aws.userAgentAppId`
+         * - Environment variable: `AWS_SDK_UA_APP_ID`
+         * - Shared configuration profile attribute: `sdk_ua_app_id`
+         *
+         * See [shared configuration settings](https://docs.aws.amazon.com/sdkref/latest/guide/settings-reference.html)
+         * reference for more information on environment variables and shared config settings.
+         */
+        public var applicationId: String?
     }
 }

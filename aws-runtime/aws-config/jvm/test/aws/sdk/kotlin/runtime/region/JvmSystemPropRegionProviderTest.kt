@@ -6,13 +6,11 @@
 package aws.sdk.kotlin.runtime.region
 
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class JvmSystemPropRegionProviderTest {
 
     @Test

@@ -35,6 +35,7 @@
                 "Message": {
                     "target": "com.amazonaws.wellarchitected#ExceptionMessage",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -140,10 +141,7 @@
                     }
                 },
                 "IsApplicable": {
-                    "target": "com.amazonaws.wellarchitected#IsApplicable",
-                    "traits": {
-                        "smithy.api#default": false
-                    }
+                    "target": "com.amazonaws.wellarchitected#IsApplicable"
                 },
                 "Risk": {
                     "target": "com.amazonaws.wellarchitected#Risk"
@@ -231,10 +229,7 @@
                     }
                 },
                 "IsApplicable": {
-                    "target": "com.amazonaws.wellarchitected#IsApplicable",
-                    "traits": {
-                        "smithy.api#default": false
-                    }
+                    "target": "com.amazonaws.wellarchitected#IsApplicable"
                 },
                 "Risk": {
                     "target": "com.amazonaws.wellarchitected#Risk"
@@ -316,6 +311,7 @@
                 "LensAliases": {
                     "target": "com.amazonaws.wellarchitected#LensAliases",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -375,6 +371,7 @@
                 "ProfileArns": {
                     "target": "com.amazonaws.wellarchitected#ProfileArns",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The list of profile ARNs to associate with the workload.</p>",
                         "smithy.api#required": {}
                     }
@@ -488,7 +485,6 @@
                 "FlaggedResources": {
                     "target": "com.amazonaws.wellarchitected#FlaggedResources",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Count of flagged resources associated to the check.</p>"
                     }
                 },
@@ -596,7 +592,6 @@
         "com.amazonaws.wellarchitected#CheckStatusCount": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 101
@@ -937,6 +932,7 @@
                 "Status": {
                     "target": "com.amazonaws.wellarchitected#ChoiceStatus",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The status of a choice.</p>",
                         "smithy.api#required": {}
                     }
@@ -992,18 +988,21 @@
                 "Message": {
                     "target": "com.amazonaws.wellarchitected#ExceptionMessage",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ResourceId": {
                     "target": "com.amazonaws.wellarchitected#ExceptionResourceId",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ResourceType": {
                     "target": "com.amazonaws.wellarchitected#ExceptionResourceType",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -1047,7 +1046,6 @@
                 "LensesAppliedCount": {
                     "target": "com.amazonaws.wellarchitected#LensesAppliedCount",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The total number of lenses applied to the workload.</p>"
                     }
                 }
@@ -1065,7 +1063,6 @@
         "com.amazonaws.wellarchitected#Count": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#documentation": "<p>A non-negative integer that denotes how many.</p>",
                 "smithy.api#range": {
                     "min": 0
@@ -1125,12 +1122,14 @@
                 "SharedWith": {
                     "target": "com.amazonaws.wellarchitected#SharedWith",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
                     }
@@ -1204,6 +1203,7 @@
                 "LensVersion": {
                     "target": "com.amazonaws.wellarchitected#LensVersion",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The version of the lens being created.</p>",
                         "smithy.api#required": {}
                     }
@@ -1211,13 +1211,13 @@
                 "IsMajorVersion": {
                     "target": "com.amazonaws.wellarchitected#IsMajorVersion",
                     "traits": {
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to true if this new major lens version.</p>"
                     }
                 },
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
                     }
@@ -1300,12 +1300,14 @@
                 "MilestoneName": {
                     "target": "com.amazonaws.wellarchitected#MilestoneName",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
                     }
@@ -1323,10 +1325,7 @@
                     "target": "com.amazonaws.wellarchitected#WorkloadId"
                 },
                 "MilestoneNumber": {
-                    "target": "com.amazonaws.wellarchitected#MilestoneNumber",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MilestoneNumber"
                 }
             },
             "traits": {
@@ -1377,6 +1376,7 @@
                 "ProfileName": {
                     "target": "com.amazonaws.wellarchitected#ProfileName",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>Name of the profile.</p>",
                         "smithy.api#required": {}
                     }
@@ -1384,6 +1384,7 @@
                 "ProfileDescription": {
                     "target": "com.amazonaws.wellarchitected#ProfileDescription",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The profile description.</p>",
                         "smithy.api#required": {}
                     }
@@ -1391,6 +1392,7 @@
                 "ProfileQuestions": {
                     "target": "com.amazonaws.wellarchitected#ProfileQuestionUpdates",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The profile questions.</p>",
                         "smithy.api#required": {}
                     }
@@ -1398,6 +1400,7 @@
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
                     }
@@ -1487,12 +1490,14 @@
                 "SharedWith": {
                     "target": "com.amazonaws.wellarchitected#SharedWith",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
                     }
@@ -1513,6 +1518,197 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The profile ARN.</p>"
                     }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#CreateReviewTemplate": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#CreateReviewTemplateInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#CreateReviewTemplateOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ServiceQuotaExceededException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Create a review template.</p>\n         <note>\n            <p>\n               <b>Disclaimer</b>\n            </p>\n            <p>Do not include or gather personal identifiable information (PII) of end users or\n                other identifiable individuals in or via your review templates. If your review\n                template or those shared with you and used in your account do include or collect PII\n                you are responsible for: ensuring that the included PII is processed in accordance\n                with applicable law, providing adequate privacy notices, and obtaining necessary\n                consents for processing such data.</p>\n         </note>",
+                "smithy.api#http": {
+                    "method": "POST",
+                    "uri": "/reviewTemplates",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#CreateReviewTemplateInput": {
+            "type": "structure",
+            "members": {
+                "TemplateName": {
+                    "target": "com.amazonaws.wellarchitected#TemplateName",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>Name of the review template.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Description": {
+                    "target": "com.amazonaws.wellarchitected#TemplateDescription",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The review template description.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Lenses": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateLenses",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>Lenses applied to the review template.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Notes": {
+                    "target": "com.amazonaws.wellarchitected#Notes"
+                },
+                "Tags": {
+                    "target": "com.amazonaws.wellarchitected#TagMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The tags assigned to the review template.</p>"
+                    }
+                },
+                "ClientRequestToken": {
+                    "target": "com.amazonaws.wellarchitected#ClientRequestToken",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#idempotencyToken": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#CreateReviewTemplateOutput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#CreateTemplateShare": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#CreateTemplateShareInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#CreateTemplateShareOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ServiceQuotaExceededException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Create a review template share.</p>\n         <p>The owner of a review template can share it with other Amazon Web Services accounts,\n            users, an organization, and organizational units (OUs) in the same Amazon Web Services Region. </p>\n         <p> Shared access to a review template is not removed until the review template share\n            invitation is deleted.</p>\n         <p>If you share a review template with an organization or OU, all accounts in the\n            organization or OU are granted access to the review template.</p>\n         <note>\n            <p>\n               <b>Disclaimer</b>\n            </p>\n            <p>By sharing your review template with other Amazon Web Services accounts, you\n                acknowledge that Amazon Web Services will make your review template available to\n                those other accounts.</p>\n         </note>",
+                "smithy.api#http": {
+                    "method": "POST",
+                    "uri": "/templates/shares/{TemplateArn}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#CreateTemplateShareInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "SharedWith": {
+                    "target": "com.amazonaws.wellarchitected#SharedWith",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "ClientRequestToken": {
+                    "target": "com.amazonaws.wellarchitected#ClientRequestToken",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#idempotencyToken": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#CreateTemplateShareOutput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
+                    }
+                },
+                "ShareId": {
+                    "target": "com.amazonaws.wellarchitected#ShareId"
                 }
             },
             "traits": {
@@ -1551,7 +1747,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Create a new workload.</p>\n         <p>The owner of a workload can share the workload with other Amazon Web Services accounts, users,\n            an organization, and organizational units (OUs) \n            in the same Amazon Web Services Region. Only the owner of a workload can delete it.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/wellarchitected/latest/userguide/define-workload.html\">Defining a Workload</a> in the\n                <i>Well-Architected Tool User Guide</i>.</p>\n         <important>\n            <p>Either <code>AwsRegions</code>, <code>NonAwsRegions</code>, or both must be specified when\n                creating a workload.</p>\n            <p>You also must specify <code>ReviewOwner</code>, even though the\n                parameter is listed as not being required in the following section.\n            </p>\n         </important>",
+                "smithy.api#documentation": "<p>Create a new workload.</p>\n         <p>The owner of a workload can share the workload with other Amazon Web Services accounts, users,\n            an organization, and organizational units (OUs) \n            in the same Amazon Web Services Region. Only the owner of a workload can delete it.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/wellarchitected/latest/userguide/define-workload.html\">Defining a Workload</a> in the\n                <i>Well-Architected Tool User Guide</i>.</p>\n         <important>\n            <p>Either <code>AwsRegions</code>, <code>NonAwsRegions</code>, or both must be specified when\n                creating a workload.</p>\n            <p>You also must specify <code>ReviewOwner</code>, even though the\n                parameter is listed as not being required in the following section.\n            </p>\n         </important>\n         <p>When creating a workload using a review template, you must have the following IAM permissions:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>wellarchitected:GetReviewTemplate</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>wellarchitected:GetReviewTemplateAnswer</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>wellarchitected:ListReviewTemplateAnswers</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>wellarchitected:GetReviewTemplateLensReview</code>\n               </p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
                     "method": "POST",
                     "uri": "/workloads",
@@ -1565,18 +1761,21 @@
                 "WorkloadName": {
                     "target": "com.amazonaws.wellarchitected#WorkloadName",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "Description": {
                     "target": "com.amazonaws.wellarchitected#WorkloadDescription",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "Environment": {
                     "target": "com.amazonaws.wellarchitected#WorkloadEnvironment",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
@@ -1607,6 +1806,7 @@
                 "Lenses": {
                     "target": "com.amazonaws.wellarchitected#WorkloadLenses",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
@@ -1616,6 +1816,7 @@
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
                     }
@@ -1642,6 +1843,12 @@
                     "target": "com.amazonaws.wellarchitected#WorkloadProfileArns",
                     "traits": {
                         "smithy.api#documentation": "<p>The list of profile ARNs associated with the workload.</p>"
+                    }
+                },
+                "ReviewTemplateArns": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateArns",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of review template ARNs to associate with the workload.</p>"
                     }
                 }
             },
@@ -1718,18 +1925,21 @@
                 "SharedWith": {
                     "target": "com.amazonaws.wellarchitected#SharedWith",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "PermissionType": {
                     "target": "com.amazonaws.wellarchitected#PermissionType",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
                     }
@@ -1822,6 +2032,7 @@
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#httpQuery": "ClientRequestToken",
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
@@ -1830,6 +2041,7 @@
                 "LensStatus": {
                     "target": "com.amazonaws.wellarchitected#LensStatusType",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The status of the lens to be deleted.</p>",
                         "smithy.api#httpQuery": "LensStatus",
                         "smithy.api#required": {}
@@ -1897,6 +2109,7 @@
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#httpQuery": "ClientRequestToken",
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
@@ -1958,6 +2171,7 @@
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#httpQuery": "ClientRequestToken",
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
@@ -2026,6 +2240,138 @@
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#httpQuery": "ClientRequestToken",
+                        "smithy.api#idempotencyToken": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#DeleteReviewTemplate": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#DeleteReviewTemplateInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Delete a review template.</p>\n         <p>Only the owner of a review template can delete it.</p>\n         <p>After the review template is deleted, Amazon Web Services accounts, users,\n            organizations, and organizational units (OUs) that you shared the review template with\n            will no longer be able to apply it to new workloads.</p>",
+                "smithy.api#http": {
+                    "method": "DELETE",
+                    "uri": "/reviewTemplates/{TemplateArn}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#DeleteReviewTemplateInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "ClientRequestToken": {
+                    "target": "com.amazonaws.wellarchitected#ClientRequestToken",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#httpQuery": "ClientRequestToken",
+                        "smithy.api#idempotencyToken": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#DeleteTemplateShare": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#DeleteTemplateShareInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Delete a review template share.</p>\n         <p>After the review template share is deleted, Amazon Web Services accounts, users,\n            organizations, and organizational units (OUs) that you shared the review template with\n            will no longer be able to apply it to new workloads.</p>",
+                "smithy.api#http": {
+                    "method": "DELETE",
+                    "uri": "/templates/shares/{TemplateArn}/{ShareId}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#DeleteTemplateShareInput": {
+            "type": "structure",
+            "members": {
+                "ShareId": {
+                    "target": "com.amazonaws.wellarchitected#ShareId",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "ClientRequestToken": {
+                    "target": "com.amazonaws.wellarchitected#ClientRequestToken",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#httpQuery": "ClientRequestToken",
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
@@ -2086,6 +2432,7 @@
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#httpQuery": "ClientRequestToken",
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
@@ -2154,6 +2501,7 @@
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#httpQuery": "ClientRequestToken",
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
@@ -2238,6 +2586,7 @@
                 "LensAliases": {
                     "target": "com.amazonaws.wellarchitected#LensAliases",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -2297,6 +2646,7 @@
                 "ProfileArns": {
                     "target": "com.amazonaws.wellarchitected#ProfileArns",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The list of profile ARNs to disassociate from the workload.</p>",
                         "smithy.api#required": {}
                     }
@@ -2423,7 +2773,6 @@
         "com.amazonaws.wellarchitected#FlaggedResources": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 9999
@@ -2491,7 +2840,6 @@
                 "MilestoneNumber": {
                     "target": "com.amazonaws.wellarchitected#MilestoneNumber",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "MilestoneNumber"
                     }
                 }
@@ -2508,10 +2856,7 @@
                     "target": "com.amazonaws.wellarchitected#WorkloadId"
                 },
                 "MilestoneNumber": {
-                    "target": "com.amazonaws.wellarchitected#MilestoneNumber",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MilestoneNumber"
                 },
                 "LensAlias": {
                     "target": "com.amazonaws.wellarchitected#LensAlias"
@@ -2576,6 +2921,7 @@
                 "Format": {
                     "target": "com.amazonaws.wellarchitected#ReportFormat",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The format of the consolidated report.</p>\n         <p>For <code>PDF</code>, <code>Base64String</code> is returned. For <code>JSON</code>, \n            <code>Metrics</code> is returned.</p>",
                         "smithy.api#httpQuery": "Format",
                         "smithy.api#required": {}
@@ -2584,7 +2930,6 @@
                 "IncludeSharedResources": {
                     "target": "com.amazonaws.wellarchitected#IncludeSharedResources",
                     "traits": {
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Set to <code>true</code> to have shared resources included in the report.</p>",
                         "smithy.api#httpQuery": "IncludeSharedResources"
                     }
@@ -2598,7 +2943,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#GetConsolidatedReportMaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>",
                         "smithy.api#httpQuery": "MaxResults"
                     }
@@ -2611,7 +2955,6 @@
         "com.amazonaws.wellarchitected#GetConsolidatedReportMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 15
@@ -2762,7 +3105,6 @@
                 "MilestoneNumber": {
                     "target": "com.amazonaws.wellarchitected#MilestoneNumber",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "MilestoneNumber"
                     }
                 }
@@ -2779,10 +3121,7 @@
                     "target": "com.amazonaws.wellarchitected#WorkloadId"
                 },
                 "MilestoneNumber": {
-                    "target": "com.amazonaws.wellarchitected#MilestoneNumber",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MilestoneNumber"
                 },
                 "LensReview": {
                     "target": "com.amazonaws.wellarchitected#LensReview"
@@ -2847,7 +3186,6 @@
                 "MilestoneNumber": {
                     "target": "com.amazonaws.wellarchitected#MilestoneNumber",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "MilestoneNumber"
                     }
                 }
@@ -2864,10 +3202,7 @@
                     "target": "com.amazonaws.wellarchitected#WorkloadId"
                 },
                 "MilestoneNumber": {
-                    "target": "com.amazonaws.wellarchitected#MilestoneNumber",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MilestoneNumber"
                 },
                 "LensReviewReport": {
                     "target": "com.amazonaws.wellarchitected#LensReviewReport"
@@ -3026,7 +3361,6 @@
                 "MilestoneNumber": {
                     "target": "com.amazonaws.wellarchitected#MilestoneNumber",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpLabel": {},
                         "smithy.api#required": {}
                     }
@@ -3178,6 +3512,234 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.wellarchitected#GetReviewTemplate": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#GetReviewTemplateInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#GetReviewTemplateOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Get review template.</p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/reviewTemplates/{TemplateArn}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#GetReviewTemplateAnswer": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#GetReviewTemplateAnswerInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#GetReviewTemplateAnswerOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Get review template answer.</p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}/answers/{QuestionId}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#GetReviewTemplateAnswerInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LensAlias": {
+                    "target": "com.amazonaws.wellarchitected#LensAlias",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "QuestionId": {
+                    "target": "com.amazonaws.wellarchitected#QuestionId",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#GetReviewTemplateAnswerOutput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
+                    }
+                },
+                "LensAlias": {
+                    "target": "com.amazonaws.wellarchitected#LensAlias"
+                },
+                "Answer": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateAnswer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An answer of the question.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#GetReviewTemplateInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#GetReviewTemplateLensReview": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#GetReviewTemplateLensReviewInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#GetReviewTemplateLensReviewOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Get a lens review associated with a review template.</p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#GetReviewTemplateLensReviewInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LensAlias": {
+                    "target": "com.amazonaws.wellarchitected#LensAlias",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#GetReviewTemplateLensReviewOutput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
+                    }
+                },
+                "LensReview": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateLensReview",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A lens review of a question.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#GetReviewTemplateOutput": {
+            "type": "structure",
+            "members": {
+                "ReviewTemplate": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplate",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.wellarchitected#GetWorkload": {
             "type": "operation",
             "input": {
@@ -3299,6 +3861,7 @@
                 "JSONString": {
                     "target": "com.amazonaws.wellarchitected#LensJSON",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The JSON representation of a lens.</p>",
                         "smithy.api#required": {}
                     }
@@ -3306,6 +3869,7 @@
                 "ClientRequestToken": {
                     "target": "com.amazonaws.wellarchitected#ClientRequestToken",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#idempotencyToken": {},
                         "smithy.api#required": {}
                     }
@@ -3413,10 +3977,7 @@
             }
         },
         "com.amazonaws.wellarchitected#IncludeSharedResources": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#default": false
-            }
+            "type": "boolean"
         },
         "com.amazonaws.wellarchitected#InternalServerException": {
             "type": "structure",
@@ -3424,6 +3985,7 @@
                 "Message": {
                     "target": "com.amazonaws.wellarchitected#ExceptionMessage",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -3437,21 +3999,14 @@
         "com.amazonaws.wellarchitected#IsApplicable": {
             "type": "boolean",
             "traits": {
-                "smithy.api#default": false,
                 "smithy.api#documentation": "<p>Defines whether this question is applicable to a lens review.</p>"
             }
         },
         "com.amazonaws.wellarchitected#IsMajorVersion": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#default": false
-            }
+            "type": "boolean"
         },
         "com.amazonaws.wellarchitected#IsReviewOwnerUpdateAcknowledged": {
-            "type": "boolean",
-            "traits": {
-                "smithy.api#default": false
-            }
+            "type": "boolean"
         },
         "com.amazonaws.wellarchitected#Lens": {
             "type": "structure",
@@ -3922,6 +4477,15 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The latest version of the lens.</p>"
                     }
+                },
+                "ResourceArn": {
+                    "target": "com.amazonaws.wellarchitected#ResourceArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n            <code>ResourceArn</code> of the lens being upgraded</p>"
+                    }
+                },
+                "ResourceName": {
+                    "target": "com.amazonaws.wellarchitected#WorkloadName"
                 }
             },
             "traits": {
@@ -3940,7 +4504,6 @@
         "com.amazonaws.wellarchitected#LensesAppliedCount": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -4011,7 +4574,6 @@
                 "MilestoneNumber": {
                     "target": "com.amazonaws.wellarchitected#MilestoneNumber",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "MilestoneNumber"
                     }
                 },
@@ -4024,7 +4586,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#ListAnswersMaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>",
                         "smithy.api#httpQuery": "MaxResults"
                     }
@@ -4045,7 +4606,6 @@
         "com.amazonaws.wellarchitected#ListAnswersMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -4059,10 +4619,7 @@
                     "target": "com.amazonaws.wellarchitected#WorkloadId"
                 },
                 "MilestoneNumber": {
-                    "target": "com.amazonaws.wellarchitected#MilestoneNumber",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MilestoneNumber"
                 },
                 "LensAlias": {
                     "target": "com.amazonaws.wellarchitected#LensAlias"
@@ -4138,14 +4695,12 @@
                     "target": "com.amazonaws.wellarchitected#NextToken"
                 },
                 "MaxResults": {
-                    "target": "com.amazonaws.wellarchitected#MaxResults",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MaxResults"
                 },
                 "LensArn": {
                     "target": "com.amazonaws.wellarchitected#LensArn",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>Well-Architected Lens ARN.</p>",
                         "smithy.api#required": {}
                     }
@@ -4153,18 +4708,21 @@
                 "PillarId": {
                     "target": "com.amazonaws.wellarchitected#PillarId",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "QuestionId": {
                     "target": "com.amazonaws.wellarchitected#QuestionId",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ChoiceId": {
                     "target": "com.amazonaws.wellarchitected#ChoiceId",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -4243,14 +4801,12 @@
                     "target": "com.amazonaws.wellarchitected#NextToken"
                 },
                 "MaxResults": {
-                    "target": "com.amazonaws.wellarchitected#MaxResults",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MaxResults"
                 },
                 "LensArn": {
                     "target": "com.amazonaws.wellarchitected#LensArn",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>Well-Architected Lens ARN.</p>",
                         "smithy.api#required": {}
                     }
@@ -4258,18 +4814,21 @@
                 "PillarId": {
                     "target": "com.amazonaws.wellarchitected#PillarId",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "QuestionId": {
                     "target": "com.amazonaws.wellarchitected#QuestionId",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ChoiceId": {
                     "target": "com.amazonaws.wellarchitected#ChoiceId",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -4360,7 +4919,6 @@
                 "MilestoneNumber": {
                     "target": "com.amazonaws.wellarchitected#MilestoneNumber",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "MilestoneNumber"
                     }
                 },
@@ -4373,7 +4931,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#ListLensReviewImprovementsMaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>",
                         "smithy.api#httpQuery": "MaxResults"
                     }
@@ -4394,7 +4951,6 @@
         "com.amazonaws.wellarchitected#ListLensReviewImprovementsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4408,10 +4964,7 @@
                     "target": "com.amazonaws.wellarchitected#WorkloadId"
                 },
                 "MilestoneNumber": {
-                    "target": "com.amazonaws.wellarchitected#MilestoneNumber",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MilestoneNumber"
                 },
                 "LensAlias": {
                     "target": "com.amazonaws.wellarchitected#LensAlias"
@@ -4486,7 +5039,6 @@
                 "MilestoneNumber": {
                     "target": "com.amazonaws.wellarchitected#MilestoneNumber",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "MilestoneNumber"
                     }
                 },
@@ -4499,7 +5051,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#MaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "MaxResults"
                     }
                 }
@@ -4516,10 +5067,7 @@
                     "target": "com.amazonaws.wellarchitected#WorkloadId"
                 },
                 "MilestoneNumber": {
-                    "target": "com.amazonaws.wellarchitected#MilestoneNumber",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MilestoneNumber"
                 },
                 "LensReviewSummaries": {
                     "target": "com.amazonaws.wellarchitected#LensReviewSummaries"
@@ -4585,7 +5133,7 @@
                 "SharedWithPrefix": {
                     "target": "com.amazonaws.wellarchitected#SharedWithPrefix",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services account ID, IAM role, organization ID, or organizational unit (OU) ID with which the lens is shared.</p>",
+                        "smithy.api#documentation": "<p>The Amazon Web Services account ID, organization ID, or organizational unit (OU) ID with which the lens is shared.</p>",
                         "smithy.api#httpQuery": "SharedWithPrefix"
                     }
                 },
@@ -4598,7 +5146,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#ListWorkloadSharesMaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>",
                         "smithy.api#httpQuery": "MaxResults"
                     }
@@ -4679,7 +5226,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#MaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "MaxResults"
                     }
                 },
@@ -4777,10 +5323,7 @@
                     "target": "com.amazonaws.wellarchitected#NextToken"
                 },
                 "MaxResults": {
-                    "target": "com.amazonaws.wellarchitected#MaxResults",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MaxResults"
                 }
             },
             "traits": {
@@ -4854,8 +5397,13 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#ListNotificationsMaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>"
+                    }
+                },
+                "ResourceArn": {
+                    "target": "com.amazonaws.wellarchitected#ResourceArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ARN for the related resource for the notification.</p>\n         <note>\n            <p>Only one of <code>WorkloadID</code> or <code>ResourceARN</code> should be specified.</p>\n         </note>"
                     }
                 }
             },
@@ -4866,7 +5414,6 @@
         "com.amazonaws.wellarchitected#ListNotificationsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -4944,7 +5491,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#MaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "MaxResults"
                     }
                 }
@@ -5023,7 +5569,7 @@
                 "SharedWithPrefix": {
                     "target": "com.amazonaws.wellarchitected#SharedWithPrefix",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services account ID, IAM role, organization ID, or organizational unit (OU) ID with which the profile is shared.</p>",
+                        "smithy.api#documentation": "<p>The Amazon Web Services account ID, organization ID, or organizational unit (OU) ID with which the profile is shared.</p>",
                         "smithy.api#httpQuery": "SharedWithPrefix"
                     }
                 },
@@ -5036,7 +5582,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#ListProfileSharesMaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>",
                         "smithy.api#httpQuery": "MaxResults"
                     }
@@ -5055,7 +5600,6 @@
         "com.amazonaws.wellarchitected#ListProfileSharesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -5121,7 +5665,7 @@
                 "ProfileNamePrefix": {
                     "target": "com.amazonaws.wellarchitected#ProfileNamePrefix",
                     "traits": {
-                        "smithy.api#documentation": "<p>Prefix for profile name.</p>",
+                        "smithy.api#documentation": "<p>An optional string added to the beginning of each profile name returned in the\n            results.</p>",
                         "smithy.api#httpQuery": "ProfileNamePrefix"
                     }
                 },
@@ -5141,7 +5685,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#MaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#httpQuery": "MaxResults"
                     }
                 }
@@ -5157,6 +5700,195 @@
                     "target": "com.amazonaws.wellarchitected#ProfileSummaries",
                     "traits": {
                         "smithy.api#documentation": "<p>Profile summaries.</p>"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.wellarchitected#NextToken"
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#ListReviewTemplateAnswers": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#ListReviewTemplateAnswersInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#ListReviewTemplateAnswersOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>List the answers of a review template.</p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}/answers",
+                    "code": 200
+                },
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "pageSize": "MaxResults"
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#ListReviewTemplateAnswersInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ARN of the review template.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LensAlias": {
+                    "target": "com.amazonaws.wellarchitected#LensAlias",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "PillarId": {
+                    "target": "com.amazonaws.wellarchitected#PillarId",
+                    "traits": {
+                        "smithy.api#httpQuery": "PillarId"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.wellarchitected#NextToken",
+                    "traits": {
+                        "smithy.api#httpQuery": "NextToken"
+                    }
+                },
+                "MaxResults": {
+                    "target": "com.amazonaws.wellarchitected#ListReviewTemplateAnswersMaxResults",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>",
+                        "smithy.api#httpQuery": "MaxResults"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#ListReviewTemplateAnswersMaxResults": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#range": {
+                    "min": 1,
+                    "max": 50
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#ListReviewTemplateAnswersOutput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ARN of the review template.</p>"
+                    }
+                },
+                "LensAlias": {
+                    "target": "com.amazonaws.wellarchitected#LensAlias"
+                },
+                "AnswerSummaries": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateAnswerSummaries",
+                    "traits": {
+                        "smithy.api#documentation": "<p>List of answer summaries of a lens review in a review template.</p>"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.wellarchitected#NextToken"
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#ListReviewTemplates": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#ListReviewTemplatesInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#ListReviewTemplatesOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>List review templates.</p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/reviewTemplates",
+                    "code": 200
+                },
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "pageSize": "MaxResults"
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#ListReviewTemplatesInput": {
+            "type": "structure",
+            "members": {
+                "NextToken": {
+                    "target": "com.amazonaws.wellarchitected#NextToken",
+                    "traits": {
+                        "smithy.api#httpQuery": "NextToken"
+                    }
+                },
+                "MaxResults": {
+                    "target": "com.amazonaws.wellarchitected#MaxResults",
+                    "traits": {
+                        "smithy.api#httpQuery": "MaxResults"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#ListReviewTemplatesOutput": {
+            "type": "structure",
+            "members": {
+                "ReviewTemplates": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplates",
+                    "traits": {
+                        "smithy.api#documentation": "<p>List of review templates.</p>"
                     }
                 },
                 "NextToken": {
@@ -5190,7 +5922,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>List  the workload invitations.</p>",
+                "smithy.api#documentation": "<p>List the share invitations.</p>\n         <p>\n            <code>WorkloadNamePrefix</code>, <code>LensNamePrefix</code>,\n                <code>ProfileNamePrefix</code>, and <code>TemplateNamePrefix</code> are mutually\n            exclusive. Use the parameter that matches your <code>ShareResourceType</code>.</p>",
                 "smithy.api#http": {
                     "method": "GET",
                     "uri": "/shareInvitations",
@@ -5235,7 +5967,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#ListShareInvitationsMaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>",
                         "smithy.api#httpQuery": "MaxResults"
                     }
@@ -5243,8 +5974,15 @@
                 "ProfileNamePrefix": {
                     "target": "com.amazonaws.wellarchitected#ProfileNamePrefix",
                     "traits": {
-                        "smithy.api#documentation": "<p>Profile name prefix.</p>",
+                        "smithy.api#documentation": "<p>An optional string added to the beginning of each profile name returned in the\n            results.</p>",
                         "smithy.api#httpQuery": "ProfileNamePrefix"
+                    }
+                },
+                "TemplateNamePrefix": {
+                    "target": "com.amazonaws.wellarchitected#TemplateNamePrefix",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An optional string added to the beginning of each review template name returned in the\n            results.</p>",
+                        "smithy.api#httpQuery": "TemplateNamePrefix"
                     }
                 }
             },
@@ -5256,7 +5994,6 @@
         "com.amazonaws.wellarchitected#ListShareInvitationsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -5298,7 +6035,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>List the tags for a resource.</p>\n         <note>\n            <p>The WorkloadArn parameter can be a workload ARN, a custom lens ARN, or a profile ARN.</p>\n         </note>",
+                "smithy.api#documentation": "<p>List the tags for a resource.</p>\n         <note>\n            <p>The WorkloadArn parameter can be a workload ARN, a custom lens ARN, a profile ARN, or review template ARN.</p>\n         </note>",
                 "smithy.api#http": {
                     "method": "GET",
                     "uri": "/tags/{WorkloadArn}",
@@ -5329,6 +6066,119 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The tags for the resource.</p>"
                     }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#ListTemplateShares": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#ListTemplateSharesInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#ListTemplateSharesOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>List review template shares.</p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/templates/shares/{TemplateArn}",
+                    "code": 200
+                },
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "pageSize": "MaxResults"
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#ListTemplateSharesInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "SharedWithPrefix": {
+                    "target": "com.amazonaws.wellarchitected#SharedWithPrefix",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services account ID, organization ID, or organizational unit\n            (OU) ID with which the profile is shared.</p>",
+                        "smithy.api#httpQuery": "SharedWithPrefix"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.wellarchitected#NextToken",
+                    "traits": {
+                        "smithy.api#httpQuery": "NextToken"
+                    }
+                },
+                "MaxResults": {
+                    "target": "com.amazonaws.wellarchitected#ListTemplateSharesMaxResults",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>",
+                        "smithy.api#httpQuery": "MaxResults"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.wellarchitected#ShareStatus",
+                    "traits": {
+                        "smithy.api#httpQuery": "Status"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#ListTemplateSharesMaxResults": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#range": {
+                    "min": 1,
+                    "max": 50
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#ListTemplateSharesOutput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
+                    }
+                },
+                "TemplateShareSummaries": {
+                    "target": "com.amazonaws.wellarchitected#TemplateShareSummaries",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A review template share summary return object.</p>"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.wellarchitected#NextToken"
                 }
             },
             "traits": {
@@ -5387,7 +6237,7 @@
                 "SharedWithPrefix": {
                     "target": "com.amazonaws.wellarchitected#SharedWithPrefix",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services account ID, IAM role, organization ID, or organizational unit (OU) ID with which the workload is shared.</p>",
+                        "smithy.api#documentation": "<p>The Amazon Web Services account ID, organization ID, or organizational unit (OU) ID with which the workload is shared.</p>",
                         "smithy.api#httpQuery": "SharedWithPrefix"
                     }
                 },
@@ -5400,7 +6250,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#ListWorkloadSharesMaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>",
                         "smithy.api#httpQuery": "MaxResults"
                     }
@@ -5420,7 +6269,6 @@
         "com.amazonaws.wellarchitected#ListWorkloadSharesMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -5493,7 +6341,6 @@
                 "MaxResults": {
                     "target": "com.amazonaws.wellarchitected#ListWorkloadsMaxResults",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>"
                     }
                 }
@@ -5506,7 +6353,6 @@
         "com.amazonaws.wellarchitected#ListWorkloadsMaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 50
@@ -5531,7 +6377,6 @@
         "com.amazonaws.wellarchitected#MaxResults": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#documentation": "<p>The maximum number of results to return for this request.</p>",
                 "smithy.api#range": {
                     "min": 1,
@@ -5542,7 +6387,6 @@
         "com.amazonaws.wellarchitected#MaxSelectedProfileChoices": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -5563,10 +6407,7 @@
             "type": "structure",
             "members": {
                 "MilestoneNumber": {
-                    "target": "com.amazonaws.wellarchitected#MilestoneNumber",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MilestoneNumber"
                 },
                 "MilestoneName": {
                     "target": "com.amazonaws.wellarchitected#MilestoneName"
@@ -5595,7 +6436,6 @@
         "com.amazonaws.wellarchitected#MilestoneNumber": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#documentation": "<p>The milestone number.</p>\n         <p>A workload can have a maximum of 100 milestones.</p>",
                 "smithy.api#range": {
                     "min": 1,
@@ -5616,10 +6456,7 @@
             "type": "structure",
             "members": {
                 "MilestoneNumber": {
-                    "target": "com.amazonaws.wellarchitected#MilestoneNumber",
-                    "traits": {
-                        "smithy.api#default": 0
-                    }
+                    "target": "com.amazonaws.wellarchitected#MilestoneNumber"
                 },
                 "MilestoneName": {
                     "target": "com.amazonaws.wellarchitected#MilestoneName"
@@ -5638,7 +6475,6 @@
         "com.amazonaws.wellarchitected#MinSelectedProfileChoices": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 0
                 }
@@ -5653,7 +6489,7 @@
         "com.amazonaws.wellarchitected#Notes": {
             "type": "string",
             "traits": {
-                "smithy.api#documentation": "<p>The notes associated with the workload.</p>",
+                "smithy.api#documentation": "<p>The notes associated with the workload.</p>\n         <p>For a review template, these are the notes that will be associated with the workload when the template is applied.</p>",
                 "smithy.api#length": {
                     "min": 0,
                     "max": 2084
@@ -5827,7 +6663,7 @@
                 "target": "com.amazonaws.wellarchitected#Notes"
             },
             "traits": {
-                "smithy.api#documentation": "<p>List of pillar notes of a lens review in a workload.</p>"
+                "smithy.api#documentation": "<p>List of pillar notes of a lens review in a workload.</p>\n         <p>For a review template, these are the notes that will be associated with the workload when the template is applied.</p>"
             }
         },
         "com.amazonaws.wellarchitected#PillarReviewSummaries": {
@@ -6100,14 +6936,12 @@
                 "MinSelectedChoices": {
                     "target": "com.amazonaws.wellarchitected#MinSelectedProfileChoices",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum number of selected choices.</p>"
                     }
                 },
                 "MaxSelectedChoices": {
                     "target": "com.amazonaws.wellarchitected#MaxSelectedProfileChoices",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of selected choices.</p>"
                     }
                 }
@@ -6291,14 +7125,12 @@
                 "MinSelectedChoices": {
                     "target": "com.amazonaws.wellarchitected#MinSelectedProfileChoices",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The minimum number of choices selected.</p>"
                     }
                 },
                 "MaxSelectedChoices": {
                     "target": "com.amazonaws.wellarchitected#MaxSelectedProfileChoices",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of choices selected.</p>"
                     }
                 }
@@ -6321,6 +7153,32 @@
                     "max": 32
                 },
                 "smithy.api#pattern": "^[A-Za-z0-9-]+$"
+            }
+        },
+        "com.amazonaws.wellarchitected#Question": {
+            "type": "enum",
+            "members": {
+                "UNANSWERED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "UNANSWERED"
+                    }
+                },
+                "ANSWERED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ANSWERED"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#QuestionCounts": {
+            "type": "map",
+            "key": {
+                "target": "com.amazonaws.wellarchitected#Question"
+            },
+            "value": {
+                "target": "com.amazonaws.wellarchitected#Count"
             }
         },
         "com.amazonaws.wellarchitected#QuestionDescription": {
@@ -6462,24 +7320,37 @@
                 }
             }
         },
+        "com.amazonaws.wellarchitected#ResourceArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 50,
+                    "max": 250
+                },
+                "smithy.api#pattern": "^arn:aws(-us-gov|-iso(-[a-z])?|-cn)?:wellarchitected:[a-z]{2}(-gov|-iso([a-z])?)?-[a-z]+-\\d:\\d{12}:(review-template)/[a-f0-9]{32}$"
+            }
+        },
         "com.amazonaws.wellarchitected#ResourceNotFoundException": {
             "type": "structure",
             "members": {
                 "Message": {
                     "target": "com.amazonaws.wellarchitected#ExceptionMessage",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ResourceId": {
                     "target": "com.amazonaws.wellarchitected#ExceptionResourceId",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ResourceType": {
                     "target": "com.amazonaws.wellarchitected#ExceptionResourceType",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -6488,6 +7359,385 @@
                 "smithy.api#documentation": "<p>The requested resource was not found.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 404
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplate": {
+            "type": "structure",
+            "members": {
+                "Description": {
+                    "target": "com.amazonaws.wellarchitected#TemplateDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template description.</p>"
+                    }
+                },
+                "Lenses": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateLenses",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The lenses applied to the review template.</p>"
+                    }
+                },
+                "Notes": {
+                    "target": "com.amazonaws.wellarchitected#Notes"
+                },
+                "QuestionCounts": {
+                    "target": "com.amazonaws.wellarchitected#QuestionCounts",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A count of how many total questions are answered and unanswered in the review template.</p>"
+                    }
+                },
+                "Owner": {
+                    "target": "com.amazonaws.wellarchitected#AwsAccountId"
+                },
+                "UpdatedAt": {
+                    "target": "com.amazonaws.wellarchitected#Timestamp"
+                },
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
+                    }
+                },
+                "TemplateName": {
+                    "target": "com.amazonaws.wellarchitected#TemplateName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the review template.</p>"
+                    }
+                },
+                "Tags": {
+                    "target": "com.amazonaws.wellarchitected#TagMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The tags assigned to the review template.</p>"
+                    }
+                },
+                "UpdateStatus": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateUpdateStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The latest status of a review template.</p>"
+                    }
+                },
+                "ShareInvitationId": {
+                    "target": "com.amazonaws.wellarchitected#ShareInvitationId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ID assigned to the template share invitation.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A review template.</p>"
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplateAnswer": {
+            "type": "structure",
+            "members": {
+                "QuestionId": {
+                    "target": "com.amazonaws.wellarchitected#QuestionId"
+                },
+                "PillarId": {
+                    "target": "com.amazonaws.wellarchitected#PillarId"
+                },
+                "QuestionTitle": {
+                    "target": "com.amazonaws.wellarchitected#QuestionTitle"
+                },
+                "QuestionDescription": {
+                    "target": "com.amazonaws.wellarchitected#QuestionDescription"
+                },
+                "ImprovementPlanUrl": {
+                    "target": "com.amazonaws.wellarchitected#ImprovementPlanUrl"
+                },
+                "HelpfulResourceUrl": {
+                    "target": "com.amazonaws.wellarchitected#HelpfulResourceUrl"
+                },
+                "HelpfulResourceDisplayText": {
+                    "target": "com.amazonaws.wellarchitected#DisplayText",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The helpful resource text to be displayed for a custom lens.</p>\n         <note>\n            <p>This field does not apply to Amazon Web Services official lenses.</p>\n         </note>"
+                    }
+                },
+                "Choices": {
+                    "target": "com.amazonaws.wellarchitected#Choices"
+                },
+                "SelectedChoices": {
+                    "target": "com.amazonaws.wellarchitected#SelectedChoices"
+                },
+                "ChoiceAnswers": {
+                    "target": "com.amazonaws.wellarchitected#ChoiceAnswers",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of selected choices to a question in your review template.</p>"
+                    }
+                },
+                "IsApplicable": {
+                    "target": "com.amazonaws.wellarchitected#IsApplicable"
+                },
+                "AnswerStatus": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateAnswerStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The status of whether or not this question has been answered.</p>"
+                    }
+                },
+                "Notes": {
+                    "target": "com.amazonaws.wellarchitected#Notes"
+                },
+                "Reason": {
+                    "target": "com.amazonaws.wellarchitected#AnswerReason",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The reason why the question is not applicable to your review template.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>An answer of the question.</p>"
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplateAnswerStatus": {
+            "type": "enum",
+            "members": {
+                "UNANSWERED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "UNANSWERED"
+                    }
+                },
+                "ANSWERED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ANSWERED"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplateAnswerSummaries": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.wellarchitected#ReviewTemplateAnswerSummary"
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplateAnswerSummary": {
+            "type": "structure",
+            "members": {
+                "QuestionId": {
+                    "target": "com.amazonaws.wellarchitected#QuestionId"
+                },
+                "PillarId": {
+                    "target": "com.amazonaws.wellarchitected#PillarId"
+                },
+                "QuestionTitle": {
+                    "target": "com.amazonaws.wellarchitected#QuestionTitle"
+                },
+                "Choices": {
+                    "target": "com.amazonaws.wellarchitected#Choices"
+                },
+                "SelectedChoices": {
+                    "target": "com.amazonaws.wellarchitected#SelectedChoices"
+                },
+                "ChoiceAnswerSummaries": {
+                    "target": "com.amazonaws.wellarchitected#ChoiceAnswerSummaries",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of selected choices to a question in the review template.</p>"
+                    }
+                },
+                "IsApplicable": {
+                    "target": "com.amazonaws.wellarchitected#IsApplicable"
+                },
+                "AnswerStatus": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateAnswerStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The status of whether or not this question has been answered.</p>"
+                    }
+                },
+                "Reason": {
+                    "target": "com.amazonaws.wellarchitected#AnswerReason",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The reason why a choice is not-applicable to a question in the review template.</p>"
+                    }
+                },
+                "QuestionType": {
+                    "target": "com.amazonaws.wellarchitected#QuestionType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of question.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The summary of review template answers.</p>"
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplateArns": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.wellarchitected#TemplateArn"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 1
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplateLensAliases": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.wellarchitected#LensAlias"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 10
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplateLensReview": {
+            "type": "structure",
+            "members": {
+                "LensAlias": {
+                    "target": "com.amazonaws.wellarchitected#LensAlias"
+                },
+                "LensArn": {
+                    "target": "com.amazonaws.wellarchitected#LensArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The lens ARN.</p>"
+                    }
+                },
+                "LensVersion": {
+                    "target": "com.amazonaws.wellarchitected#LensVersion",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The version of the lens.</p>"
+                    }
+                },
+                "LensName": {
+                    "target": "com.amazonaws.wellarchitected#LensName"
+                },
+                "LensStatus": {
+                    "target": "com.amazonaws.wellarchitected#LensStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The status of the lens.</p>"
+                    }
+                },
+                "PillarReviewSummaries": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplatePillarReviewSummaries",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Pillar review summaries of a lens review.</p>"
+                    }
+                },
+                "UpdatedAt": {
+                    "target": "com.amazonaws.wellarchitected#Timestamp"
+                },
+                "Notes": {
+                    "target": "com.amazonaws.wellarchitected#Notes"
+                },
+                "QuestionCounts": {
+                    "target": "com.amazonaws.wellarchitected#QuestionCounts",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A count of how many questions are answered and unanswered in the lens review.</p>"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.wellarchitected#NextToken"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The lens review of a review template.</p>"
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplateLenses": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.wellarchitected#LensAlias"
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplatePillarReviewSummaries": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.wellarchitected#ReviewTemplatePillarReviewSummary"
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplatePillarReviewSummary": {
+            "type": "structure",
+            "members": {
+                "PillarId": {
+                    "target": "com.amazonaws.wellarchitected#PillarId"
+                },
+                "PillarName": {
+                    "target": "com.amazonaws.wellarchitected#PillarName"
+                },
+                "Notes": {
+                    "target": "com.amazonaws.wellarchitected#Notes"
+                },
+                "QuestionCounts": {
+                    "target": "com.amazonaws.wellarchitected#QuestionCounts",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A count of how many questions are answered and unanswered in the requested pillar of the lens review.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Summary of a review template.</p>"
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplateSummary": {
+            "type": "structure",
+            "members": {
+                "Description": {
+                    "target": "com.amazonaws.wellarchitected#TemplateDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Description of the review template.</p>"
+                    }
+                },
+                "Lenses": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateLenses",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Lenses associated with the review template.</p>"
+                    }
+                },
+                "Owner": {
+                    "target": "com.amazonaws.wellarchitected#AwsAccountId"
+                },
+                "UpdatedAt": {
+                    "target": "com.amazonaws.wellarchitected#Timestamp"
+                },
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
+                    }
+                },
+                "TemplateName": {
+                    "target": "com.amazonaws.wellarchitected#TemplateName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the review template.</p>"
+                    }
+                },
+                "UpdateStatus": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateUpdateStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The latest status of a review template.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Summary of a review template.</p>"
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplateUpdateStatus": {
+            "type": "enum",
+            "members": {
+                "CURRENT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CURRENT"
+                    }
+                },
+                "LENS_NOT_CURRENT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LENS_NOT_CURRENT"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#ReviewTemplates": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.wellarchitected#ReviewTemplateSummary"
             }
         },
         "com.amazonaws.wellarchitected#Risk": {
@@ -6573,6 +7823,7 @@
                 "Message": {
                     "target": "com.amazonaws.wellarchitected#ExceptionMessage",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
@@ -6585,12 +7836,14 @@
                 "QuotaCode": {
                     "target": "com.amazonaws.wellarchitected#QuotaCode",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "ServiceCode": {
                     "target": "com.amazonaws.wellarchitected#ServiceCode",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -6639,6 +7892,12 @@
                     "target": "com.amazonaws.wellarchitected#ProfileArn",
                     "traits": {
                         "smithy.api#documentation": "<p>The profile ARN.</p>"
+                    }
+                },
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
                     }
                 }
             },
@@ -6728,6 +7987,18 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The profile ARN.</p>"
                     }
+                },
+                "TemplateName": {
+                    "target": "com.amazonaws.wellarchitected#TemplateName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the review template.</p>"
+                    }
+                },
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
+                    }
                 }
             },
             "traits": {
@@ -6753,6 +8024,12 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "PROFILE"
+                    }
+                },
+                "TEMPLATE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "TEMPLATE"
                     }
                 }
             }
@@ -6816,7 +8093,7 @@
         "com.amazonaws.wellarchitected#SharedWith": {
             "type": "string",
             "traits": {
-                "smithy.api#documentation": "<p>The Amazon Web Services account ID, IAM role, organization ID, or organizational unit (OU) ID with which the workload, lens, or profile is shared.</p>",
+                "smithy.api#documentation": "<p>The Amazon Web Services account ID, organization ID, or organizational unit (OU) ID with which \n            the workload, lens, profile, or review template is shared.</p>",
                 "smithy.api#length": {
                     "min": 12,
                     "max": 2048
@@ -6894,7 +8171,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Adds one or more tags to the specified resource.</p>\n         <note>\n            <p>The WorkloadArn parameter can be a workload ARN, a custom lens ARN, or a profile ARN.</p>\n         </note>",
+                "smithy.api#documentation": "<p>Adds one or more tags to the specified resource.</p>\n         <note>\n            <p>The WorkloadArn parameter can be a workload ARN, a custom lens ARN, a profile ARN, or review template ARN.</p>\n         </note>",
                 "smithy.api#http": {
                     "method": "POST",
                     "uri": "/tags/{WorkloadArn}",
@@ -6915,6 +8192,7 @@
                 "Tags": {
                     "target": "com.amazonaws.wellarchitected#TagMap",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The tags for the resource.</p>",
                         "smithy.api#required": {}
                     }
@@ -6940,10 +8218,79 @@
                 }
             }
         },
+        "com.amazonaws.wellarchitected#TemplateArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 50,
+                    "max": 250
+                },
+                "smithy.api#pattern": "^arn:aws(-us-gov|-iso(-[a-z])?|-cn)?:wellarchitected:[a-z]{2}(-gov|-iso([a-z])?)?-[a-z]+-\\d:\\d{12}:(review-template)/[a-f0-9]{32}$"
+            }
+        },
+        "com.amazonaws.wellarchitected#TemplateDescription": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 3,
+                    "max": 250
+                },
+                "smithy.api#pattern": "^[A-Za-z0-9-_.,:/()@!&?#+'’\\s]+$"
+            }
+        },
+        "com.amazonaws.wellarchitected#TemplateName": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 3,
+                    "max": 100
+                },
+                "smithy.api#pattern": "^[A-Za-z0-9-_.,:/()@!&?#+'’\\s]+$"
+            }
+        },
+        "com.amazonaws.wellarchitected#TemplateNamePrefix": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 100
+                },
+                "smithy.api#pattern": "^[A-Za-z0-9-_.,:/()@!&?#+'’\\s]+$"
+            }
+        },
         "com.amazonaws.wellarchitected#TemplateQuestions": {
             "type": "list",
             "member": {
                 "target": "com.amazonaws.wellarchitected#ProfileTemplateQuestion"
+            }
+        },
+        "com.amazonaws.wellarchitected#TemplateShareSummaries": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.wellarchitected#TemplateShareSummary"
+            }
+        },
+        "com.amazonaws.wellarchitected#TemplateShareSummary": {
+            "type": "structure",
+            "members": {
+                "ShareId": {
+                    "target": "com.amazonaws.wellarchitected#ShareId"
+                },
+                "SharedWith": {
+                    "target": "com.amazonaws.wellarchitected#SharedWith"
+                },
+                "Status": {
+                    "target": "com.amazonaws.wellarchitected#ShareStatus"
+                },
+                "StatusMessage": {
+                    "target": "com.amazonaws.wellarchitected#StatusMessage",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Review template share invitation status message. </p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Summary of a review template share.</p>"
             }
         },
         "com.amazonaws.wellarchitected#ThrottlingException": {
@@ -6952,6 +8299,7 @@
                 "Message": {
                     "target": "com.amazonaws.wellarchitected#ExceptionMessage",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
@@ -7008,7 +8356,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Deletes specified tags from a resource.</p>\n         <note>\n            <p>The WorkloadArn parameter can be a workload ARN, a custom lens ARN, or a profile ARN.</p>\n         </note>\n         <p>To specify multiple tags, use separate <b>tagKeys</b> parameters, for example:</p>\n         <p>\n            <code>DELETE /tags/WorkloadArn?tagKeys=key1&tagKeys=key2</code>\n         </p>",
+                "smithy.api#documentation": "<p>Deletes specified tags from a resource.</p>\n         <note>\n            <p>The WorkloadArn parameter can be a workload ARN, a custom lens ARN, a profile ARN, or review template ARN.</p>\n         </note>\n         <p>To specify multiple tags, use separate <b>tagKeys</b> parameters, for example:</p>\n         <p>\n            <code>DELETE /tags/WorkloadArn?tagKeys=key1&tagKeys=key2</code>\n         </p>",
                 "smithy.api#http": {
                     "method": "DELETE",
                     "uri": "/tags/{WorkloadArn}",
@@ -7029,6 +8377,7 @@
                 "TagKeys": {
                     "target": "com.amazonaws.wellarchitected#TagKeyList",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>A list of tag keys. Existing tags of the resource \n            whose keys are members of this list are removed from the resource.</p>",
                         "smithy.api#httpQuery": "tagKeys",
                         "smithy.api#required": {}
@@ -7120,10 +8469,7 @@
                     "target": "com.amazonaws.wellarchitected#Notes"
                 },
                 "IsApplicable": {
-                    "target": "com.amazonaws.wellarchitected#IsApplicable",
-                    "traits": {
-                        "smithy.api#default": false
-                    }
+                    "target": "com.amazonaws.wellarchitected#IsApplicable"
                 },
                 "Reason": {
                     "target": "com.amazonaws.wellarchitected#AnswerReason",
@@ -7375,6 +8721,297 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.wellarchitected#UpdateReviewTemplate": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#UpdateReviewTemplateInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#UpdateReviewTemplateOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Update a review template.</p>",
+                "smithy.api#http": {
+                    "method": "PATCH",
+                    "uri": "/reviewTemplates/{TemplateArn}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#UpdateReviewTemplateAnswer": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#UpdateReviewTemplateAnswerInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#UpdateReviewTemplateAnswerOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Update a review template answer.</p>",
+                "smithy.api#http": {
+                    "method": "PATCH",
+                    "uri": "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}/answers/{QuestionId}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#UpdateReviewTemplateAnswerInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LensAlias": {
+                    "target": "com.amazonaws.wellarchitected#LensAlias",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "QuestionId": {
+                    "target": "com.amazonaws.wellarchitected#QuestionId",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "SelectedChoices": {
+                    "target": "com.amazonaws.wellarchitected#SelectedChoices"
+                },
+                "ChoiceUpdates": {
+                    "target": "com.amazonaws.wellarchitected#ChoiceUpdates",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of choices to be updated.</p>"
+                    }
+                },
+                "Notes": {
+                    "target": "com.amazonaws.wellarchitected#Notes"
+                },
+                "IsApplicable": {
+                    "target": "com.amazonaws.wellarchitected#IsApplicable"
+                },
+                "Reason": {
+                    "target": "com.amazonaws.wellarchitected#AnswerReason",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The update reason.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#UpdateReviewTemplateAnswerOutput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
+                    }
+                },
+                "LensAlias": {
+                    "target": "com.amazonaws.wellarchitected#LensAlias"
+                },
+                "Answer": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateAnswer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An answer of the question.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#UpdateReviewTemplateInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "TemplateName": {
+                    "target": "com.amazonaws.wellarchitected#TemplateName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template name.</p>"
+                    }
+                },
+                "Description": {
+                    "target": "com.amazonaws.wellarchitected#TemplateDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template description.</p>"
+                    }
+                },
+                "Notes": {
+                    "target": "com.amazonaws.wellarchitected#Notes"
+                },
+                "LensesToAssociate": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateLensAliases",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of lens aliases or ARNs to apply to the review template.</p>"
+                    }
+                },
+                "LensesToDisassociate": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateLensAliases",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of lens aliases or ARNs to unapply to the review template. The <code>wellarchitected</code> lens cannot be unapplied.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#UpdateReviewTemplateLensReview": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#UpdateReviewTemplateLensReviewInput"
+            },
+            "output": {
+                "target": "com.amazonaws.wellarchitected#UpdateReviewTemplateLensReviewOutput"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Update a lens review associated with a review template.</p>",
+                "smithy.api#http": {
+                    "method": "PATCH",
+                    "uri": "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#UpdateReviewTemplateLensReviewInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LensAlias": {
+                    "target": "com.amazonaws.wellarchitected#LensAlias",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LensNotes": {
+                    "target": "com.amazonaws.wellarchitected#Notes"
+                },
+                "PillarNotes": {
+                    "target": "com.amazonaws.wellarchitected#PillarNotes"
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#UpdateReviewTemplateLensReviewOutput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The review template ARN.</p>"
+                    }
+                },
+                "LensReview": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplateLensReview",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A lens review of a question.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.wellarchitected#UpdateReviewTemplateOutput": {
+            "type": "structure",
+            "members": {
+                "ReviewTemplate": {
+                    "target": "com.amazonaws.wellarchitected#ReviewTemplate",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A review template.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.wellarchitected#UpdateShareInvitation": {
             "type": "operation",
             "input": {
@@ -7426,6 +9063,7 @@
                 "ShareInvitationAction": {
                     "target": "com.amazonaws.wellarchitected#ShareInvitationAction",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -7526,7 +9164,6 @@
                 "IsReviewOwnerUpdateAcknowledged": {
                     "target": "com.amazonaws.wellarchitected#IsReviewOwnerUpdateAcknowledged",
                     "traits": {
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Flag indicating whether the workload owner has acknowledged that the <i>Review\n                owner</i> field is required.</p>\n         <p>If a <b>Review owner</b> is not added to the workload within\n            60 days of acknowledgement, access to the workload is restricted until an owner is\n            added.</p>"
                     }
                 },
@@ -7629,6 +9266,7 @@
                 "PermissionType": {
                     "target": "com.amazonaws.wellarchitected#PermissionType",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -7710,6 +9348,7 @@
                 "MilestoneName": {
                     "target": "com.amazonaws.wellarchitected#MilestoneName",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
@@ -7790,6 +9429,69 @@
                 "smithy.api#input": {}
             }
         },
+        "com.amazonaws.wellarchitected#UpgradeReviewTemplateLensReview": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.wellarchitected#UpgradeReviewTemplateLensReviewInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.wellarchitected#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Upgrade the lens review of a review template.</p>",
+                "smithy.api#http": {
+                    "method": "PUT",
+                    "uri": "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}/upgrade",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.wellarchitected#UpgradeReviewTemplateLensReviewInput": {
+            "type": "structure",
+            "members": {
+                "TemplateArn": {
+                    "target": "com.amazonaws.wellarchitected#TemplateArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ARN of the review template.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LensAlias": {
+                    "target": "com.amazonaws.wellarchitected#LensAlias",
+                    "traits": {
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "ClientRequestToken": {
+                    "target": "com.amazonaws.wellarchitected#ClientRequestToken"
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
         "com.amazonaws.wellarchitected#Urls": {
             "type": "list",
             "member": {
@@ -7802,6 +9504,7 @@
                 "Message": {
                     "target": "com.amazonaws.wellarchitected#ExceptionMessage",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
@@ -7824,12 +9527,14 @@
                 "Name": {
                     "target": "com.amazonaws.wellarchitected#ValidationExceptionFieldName",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 },
                 "Message": {
                     "target": "com.amazonaws.wellarchitected#ExceptionMessage",
                     "traits": {
+                        "smithy.api#clientOptional": {},
                         "smithy.api#required": {}
                     }
                 }
@@ -7925,6 +9630,12 @@
                     "target": "com.amazonaws.wellarchitected#CreateProfileShare"
                 },
                 {
+                    "target": "com.amazonaws.wellarchitected#CreateReviewTemplate"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#CreateTemplateShare"
+                },
+                {
                     "target": "com.amazonaws.wellarchitected#CreateWorkload"
                 },
                 {
@@ -7941,6 +9652,12 @@
                 },
                 {
                     "target": "com.amazonaws.wellarchitected#DeleteProfileShare"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#DeleteReviewTemplate"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#DeleteTemplateShare"
                 },
                 {
                     "target": "com.amazonaws.wellarchitected#DeleteWorkload"
@@ -7985,6 +9702,15 @@
                     "target": "com.amazonaws.wellarchitected#GetProfileTemplate"
                 },
                 {
+                    "target": "com.amazonaws.wellarchitected#GetReviewTemplate"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#GetReviewTemplateAnswer"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#GetReviewTemplateLensReview"
+                },
+                {
                     "target": "com.amazonaws.wellarchitected#GetWorkload"
                 },
                 {
@@ -8027,10 +9753,19 @@
                     "target": "com.amazonaws.wellarchitected#ListProfileShares"
                 },
                 {
+                    "target": "com.amazonaws.wellarchitected#ListReviewTemplateAnswers"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ListReviewTemplates"
+                },
+                {
                     "target": "com.amazonaws.wellarchitected#ListShareInvitations"
                 },
                 {
                     "target": "com.amazonaws.wellarchitected#ListTagsForResource"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#ListTemplateShares"
                 },
                 {
                     "target": "com.amazonaws.wellarchitected#ListWorkloads"
@@ -8057,6 +9792,15 @@
                     "target": "com.amazonaws.wellarchitected#UpdateProfile"
                 },
                 {
+                    "target": "com.amazonaws.wellarchitected#UpdateReviewTemplate"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#UpdateReviewTemplateAnswer"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#UpdateReviewTemplateLensReview"
+                },
+                {
                     "target": "com.amazonaws.wellarchitected#UpdateShareInvitation"
                 },
                 {
@@ -8070,6 +9814,9 @@
                 },
                 {
                     "target": "com.amazonaws.wellarchitected#UpgradeProfileVersion"
+                },
+                {
+                    "target": "com.amazonaws.wellarchitected#UpgradeReviewTemplateLensReview"
                 }
             ],
             "traits": {
@@ -8128,7 +9875,6 @@
                                     ]
                                 }
                             ],
-                            "type": "tree",
                             "rules": [
                                 {
                                     "conditions": [
@@ -8171,7 +9917,8 @@
                                     },
                                     "type": "endpoint"
                                 }
-                            ]
+                            ],
+                            "type": "tree"
                         },
                         {
                             "conditions": [
@@ -8184,7 +9931,6 @@
                                     ]
                                 }
                             ],
-                            "type": "tree",
                             "rules": [
                                 {
                                     "conditions": [
@@ -8198,7 +9944,6 @@
                                             "assign": "PartitionResult"
                                         }
                                     ],
-                                    "type": "tree",
                                     "rules": [
                                         {
                                             "conditions": [
@@ -8221,7 +9966,6 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
@@ -8256,7 +10000,6 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -8267,14 +10010,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [
@@ -8288,14 +10033,12 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
                                                         {
                                                             "fn": "booleanEquals",
                                                             "argv": [
-                                                                true,
                                                                 {
                                                                     "fn": "getAttr",
                                                                     "argv": [
@@ -8304,11 +10047,11 @@
                                                                         },
                                                                         "supportsFIPS"
                                                                     ]
-                                                                }
+                                                                },
+                                                                true
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -8319,14 +10062,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "FIPS is enabled but this partition does not support FIPS",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [
@@ -8340,7 +10085,6 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
@@ -8360,7 +10104,6 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -8371,14 +10114,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "DualStack is enabled but this partition does not support DualStack",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [],
@@ -8389,9 +10134,11 @@
                                             },
                                             "type": "endpoint"
                                         }
-                                    ]
+                                    ],
+                                    "type": "tree"
                                 }
-                            ]
+                            ],
+                            "type": "tree"
                         },
                         {
                             "conditions": [],
@@ -8979,7 +10726,6 @@
                 "IsReviewOwnerUpdateAcknowledged": {
                     "target": "com.amazonaws.wellarchitected#IsReviewOwnerUpdateAcknowledged",
                     "traits": {
-                        "smithy.api#default": false,
                         "smithy.api#documentation": "<p>Flag indicating whether the workload owner has acknowledged that the <i>Review\n                owner</i> field is required.</p>\n         <p>If a <b>Review owner</b> is not added to the workload within\n            60 days of acknowledgement, access to the workload is restricted until an owner is\n            added.</p>"
                     }
                 },
@@ -9225,7 +10971,7 @@
                 "target": "com.amazonaws.wellarchitected#LensAlias"
             },
             "traits": {
-                "smithy.api#documentation": "<p>The list of lenses associated with the workload. Each lens is identified by its <a>LensSummary$LensAlias</a>.</p>"
+                "smithy.api#documentation": "<p>The list of lenses associated with the workload. Each lens is identified by its <a>LensSummary$LensAlias</a>.</p>\n         <p>If a review template that specifies lenses is applied to the workload, those lenses are applied\n        to the workload in addition to these lenses.</p>"
             }
         },
         "com.amazonaws.wellarchitected#WorkloadName": {

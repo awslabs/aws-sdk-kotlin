@@ -184,7 +184,6 @@
                                     ]
                                 }
                             ],
-                            "type": "tree",
                             "rules": [
                                 {
                                     "conditions": [
@@ -227,7 +226,8 @@
                                     },
                                     "type": "endpoint"
                                 }
-                            ]
+                            ],
+                            "type": "tree"
                         },
                         {
                             "conditions": [
@@ -240,7 +240,6 @@
                                     ]
                                 }
                             ],
-                            "type": "tree",
                             "rules": [
                                 {
                                     "conditions": [
@@ -254,7 +253,6 @@
                                             "assign": "PartitionResult"
                                         }
                                     ],
-                                    "type": "tree",
                                     "rules": [
                                         {
                                             "conditions": [
@@ -277,7 +275,6 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
@@ -312,7 +309,6 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -323,14 +319,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [
@@ -344,14 +342,12 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
                                                         {
                                                             "fn": "booleanEquals",
                                                             "argv": [
-                                                                true,
                                                                 {
                                                                     "fn": "getAttr",
                                                                     "argv": [
@@ -360,11 +356,11 @@
                                                                         },
                                                                         "supportsFIPS"
                                                                     ]
-                                                                }
+                                                                },
+                                                                true
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -375,14 +371,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "FIPS is enabled but this partition does not support FIPS",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [
@@ -396,7 +394,6 @@
                                                     ]
                                                 }
                                             ],
-                                            "type": "tree",
                                             "rules": [
                                                 {
                                                     "conditions": [
@@ -416,7 +413,6 @@
                                                             ]
                                                         }
                                                     ],
-                                                    "type": "tree",
                                                     "rules": [
                                                         {
                                                             "conditions": [],
@@ -427,14 +423,16 @@
                                                             },
                                                             "type": "endpoint"
                                                         }
-                                                    ]
+                                                    ],
+                                                    "type": "tree"
                                                 },
                                                 {
                                                     "conditions": [],
                                                     "error": "DualStack is enabled but this partition does not support DualStack",
                                                     "type": "error"
                                                 }
-                                            ]
+                                            ],
+                                            "type": "tree"
                                         },
                                         {
                                             "conditions": [],
@@ -445,9 +443,11 @@
                                             },
                                             "type": "endpoint"
                                         }
-                                    ]
+                                    ],
+                                    "type": "tree"
                                 }
-                            ]
+                            ],
+                            "type": "tree"
                         },
                         {
                             "conditions": [],
@@ -956,7 +956,10 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Adds a user account to a permission group to grant permissions for actions a user can perform in FinSpace.</p>",
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
+                "smithy.api#documentation": "<p>Adds a user to a permission group to grant permissions for actions a user can perform in FinSpace.</p>",
                 "smithy.api#http": {
                     "method": "POST",
                     "uri": "/permission-group/{permissionGroupId}/users/{userId}",
@@ -1041,7 +1044,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p> The credentials required to access the external Dataview from the S3 location.</p>"
+                "smithy.api#documentation": "<p> The credentials required to access the external Dataview from the S3 location.</p>",
+                "smithy.api#sensitive": {}
             }
         },
         "com.amazonaws.finspacedata#Boolean": {
@@ -1416,6 +1420,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Creates a new Changeset in a FinSpace Dataset.</p>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -1519,6 +1526,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Creates a Dataview for a Dataset.</p>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -1637,6 +1647,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Creates a new FinSpace Dataset.</p>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -1750,6 +1763,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Creates a group of permissions for various actions that a user can perform in FinSpace.</p>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -1836,6 +1852,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Creates a new user in FinSpace.</p>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -1873,7 +1892,7 @@
                         "smithy.api#documentation": "<p>The last name of the user that you want to register.</p>"
                     }
                 },
-                "ApiAccess": {
+                "apiAccess": {
                     "target": "com.amazonaws.finspacedata#ApiAccess",
                     "traits": {
                         "smithy.api#documentation": "<p>The option to indicate whether the user can use the <code>GetProgrammaticAccessCredentials</code> API to obtain credentials that can then be used to access other FinSpace Data API operations.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>ENABLED</code> – The user has permissions to use the APIs.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DISABLED</code> – The user does not have permissions to use any APIs.</p>\n            </li>\n         </ul>"
@@ -1934,7 +1953,8 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Short term API credentials.</p>"
+                "smithy.api#documentation": "<p>Short term API credentials.</p>",
+                "smithy.api#sensitive": {}
             }
         },
         "com.amazonaws.finspacedata#DataViewArn": {
@@ -2382,6 +2402,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Deletes a FinSpace Dataset.</p>",
                 "smithy.api#http": {
                     "method": "DELETE",
@@ -2462,6 +2485,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Deletes a permission group. This action is irreversible.</p>",
                 "smithy.api#http": {
                     "method": "DELETE",
@@ -2537,6 +2563,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Denies access to the FinSpace web application and API for the specified user.</p>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -2551,7 +2580,7 @@
                 "userId": {
                     "target": "com.amazonaws.finspacedata#UserId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The unique identifier for the user account that you want to disable.</p>",
+                        "smithy.api#documentation": "<p>The unique identifier for the user that you want to deactivate.</p>",
                         "smithy.api#httpLabel": {},
                         "smithy.api#required": {}
                     }
@@ -2574,7 +2603,7 @@
                 "userId": {
                     "target": "com.amazonaws.finspacedata#UserId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The unique identifier for the disabled user account.</p>"
+                        "smithy.api#documentation": "<p>The unique identifier for the deactivated user.</p>"
                     }
                 }
             },
@@ -2611,7 +2640,10 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Removes a user account from a permission group.</p>",
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
+                "smithy.api#documentation": "<p>Removes a user from a permission group.</p>",
                 "smithy.api#http": {
                     "method": "DELETE",
                     "uri": "/permission-group/{permissionGroupId}/users/{userId}",
@@ -2710,6 +2742,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p> Allows the specified user to access the FinSpace web application and API.</p>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -2724,7 +2759,7 @@
                 "userId": {
                     "target": "com.amazonaws.finspacedata#UserId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The unique identifier for the user account that you want to enable.</p>",
+                        "smithy.api#documentation": "<p>The unique identifier for the user that you want to activate.</p>",
                         "smithy.api#httpLabel": {},
                         "smithy.api#required": {}
                     }
@@ -2747,7 +2782,7 @@
                 "userId": {
                     "target": "com.amazonaws.finspacedata#UserId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The unique identifier for the enabled user account.</p>"
+                        "smithy.api#documentation": "<p>The unique identifier for the active user.</p>"
                     }
                 }
             },
@@ -2896,6 +2931,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Get information about a Changeset.</p>",
                 "smithy.api#http": {
                     "method": "GET",
@@ -3045,6 +3083,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Gets information about a Dataview.</p>",
                 "smithy.api#http": {
                     "method": "GET",
@@ -3192,6 +3233,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Returns information about a Dataset.</p>",
                 "smithy.api#http": {
                     "method": "GET",
@@ -3314,6 +3358,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Returns the credentials to access the external Dataview from an S3 location. To call this API:</p>\n         <ul>\n            <li>\n               <p>You must retrieve the programmatic credentials.</p>\n            </li>\n            <li>\n               <p>You must be a member of a FinSpace user group, where the dataset that you want to access has <code>Read Dataset Data</code> permissions.</p>\n            </li>\n         </ul>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -3392,6 +3439,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Retrieves the details of a specific permission group.</p>",
                 "smithy.api#http": {
                     "method": "GET",
@@ -3450,7 +3500,10 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Request programmatic credentials to use with FinSpace SDK.</p>",
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
+                "smithy.api#documentation": "<p>Request programmatic credentials to use with FinSpace SDK. For more information, see <a href=\"https://docs.aws.amazon.com/finspace/latest/data-api/fs-using-the-finspace-api.html#accessing-credentials\">Step 2. Access credentials programmatically using IAM access key id and secret access key</a>.</p>",
                 "smithy.api#http": {
                     "method": "GET",
                     "uri": "/credentials/programmatic",
@@ -3464,7 +3517,6 @@
                 "durationInMinutes": {
                     "target": "com.amazonaws.finspacedata#SessionDuration",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The time duration in which the credentials remain valid. </p>",
                         "smithy.api#httpQuery": "durationInMinutes"
                     }
@@ -3495,7 +3547,6 @@
                 "durationInMinutes": {
                     "target": "com.amazonaws.finspacedata#SessionDuration",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>Returns the duration in which the credentials will remain valid.</p>"
                     }
                 }
@@ -3531,6 +3582,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Retrieves details for a specific user.</p>",
                 "smithy.api#http": {
                     "method": "GET",
@@ -3561,13 +3615,13 @@
                 "userId": {
                     "target": "com.amazonaws.finspacedata#UserId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The unique identifier for the user account that is retrieved.</p>"
+                        "smithy.api#documentation": "<p>The unique identifier for the user that is retrieved.</p>"
                     }
                 },
                 "status": {
                     "target": "com.amazonaws.finspacedata#UserStatus",
                     "traits": {
-                        "smithy.api#documentation": "<p>The current status of the user account. </p>\n         <ul>\n            <li>\n               <p>\n                  <code>CREATING</code> – The user account creation is in progress.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ENABLED</code> – The user account is created and is currently active.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DISABLED</code> – The user account is currently inactive.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The current status of the user. </p>\n         <ul>\n            <li>\n               <p>\n                  <code>CREATING</code> – The creation is in progress.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ENABLED</code> – The user is created and is currently active.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DISABLED</code> – The user is currently inactive.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "firstName": {
@@ -3610,28 +3664,28 @@
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>The timestamp at which the user account was created in FinSpace. The value is determined as epoch time in milliseconds. </p>"
+                        "smithy.api#documentation": "<p>The timestamp at which the user was created in FinSpace. The value is determined as epoch time in milliseconds. </p>"
                     }
                 },
                 "lastEnabledTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>Describes the last time the user account was enabled. The value is determined as epoch time in milliseconds.</p>"
+                        "smithy.api#documentation": "<p>Describes the last time the user was activated. The value is determined as epoch time in milliseconds.</p>"
                     }
                 },
                 "lastDisabledTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>Describes the last time the user account was disabled. The value is determined as epoch time in milliseconds.</p>"
+                        "smithy.api#documentation": "<p>Describes the last time the user was deactivated. The value is determined as epoch time in milliseconds.</p>"
                     }
                 },
                 "lastModifiedTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>Describes the last time the user account was updated. The value is determined as epoch time in milliseconds.</p>"
+                        "smithy.api#documentation": "<p>Describes the last time the user details were updated. The value is determined as epoch time in milliseconds.</p>"
                     }
                 },
                 "lastLoginTime": {
@@ -3669,6 +3723,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>A temporary Amazon S3 location, where you can copy your files from a source location to stage or use\n      as a scratch space in FinSpace notebook.</p>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -3830,6 +3887,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Lists the FinSpace Changesets for a Dataset.</p>",
                 "smithy.api#http": {
                     "method": "GET",
@@ -3858,7 +3918,6 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
-                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -3923,6 +3982,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Lists all available Dataviews for a Dataset.</p>",
                 "smithy.api#http": {
                     "method": "GET",
@@ -3958,7 +4020,6 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
-                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -4015,6 +4076,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Lists all of the active Datasets that a user has access to.</p>",
                 "smithy.api#http": {
                     "method": "GET",
@@ -4042,7 +4106,6 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
-                        "smithy.api#default": null,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults"
                     }
@@ -4097,6 +4160,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Lists all available permission groups in FinSpace.</p>",
                 "smithy.api#http": {
                     "method": "GET",
@@ -4137,7 +4203,10 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Lists all the permission groups that are associated with a specific user account.</p>",
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
+                "smithy.api#documentation": "<p>Lists all the permission groups that are associated with a specific user.</p>",
                 "smithy.api#http": {
                     "method": "GET",
                     "uri": "/user/{userId}/permission-groups",
@@ -4166,7 +4235,6 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults",
                         "smithy.api#required": {}
@@ -4210,7 +4278,6 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults",
                         "smithy.api#required": {}
@@ -4264,7 +4331,10 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Lists all available user accounts in FinSpace.</p>",
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
+                "smithy.api#documentation": "<p>Lists all available users in FinSpace.</p>",
                 "smithy.api#http": {
                     "method": "GET",
                     "uri": "/user",
@@ -4304,6 +4374,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Lists details of all the users in a specific permission group.</p>",
                 "smithy.api#http": {
                     "method": "GET",
@@ -4333,7 +4406,6 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults",
                         "smithy.api#required": {}
@@ -4377,7 +4449,6 @@
                 "maxResults": {
                     "target": "com.amazonaws.finspacedata#ResultLimit",
                     "traits": {
-                        "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The maximum number of results per page.</p>",
                         "smithy.api#httpQuery": "maxResults",
                         "smithy.api#required": {}
@@ -4394,7 +4465,7 @@
                 "users": {
                     "target": "com.amazonaws.finspacedata#UserList",
                     "traits": {
-                        "smithy.api#documentation": "<p>A list of all the user accounts.</p>"
+                        "smithy.api#documentation": "<p>A list of all the users.</p>"
                     }
                 },
                 "nextToken": {
@@ -4486,7 +4557,7 @@
                 "membershipStatus": {
                     "target": "com.amazonaws.finspacedata#PermissionGroupMembershipStatus",
                     "traits": {
-                        "smithy.api#documentation": "<p>Indicates the status of the user account within a permission group.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>ADDITION_IN_PROGRESS</code> – The user account is currently being added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADDITION_SUCCESS</code> – The user account is successfully added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>REMOVAL_IN_PROGRESS</code> – The user is currently being removed from the permission group.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Indicates the status of the user within a permission group.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>ADDITION_IN_PROGRESS</code> – The user is currently being added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADDITION_SUCCESS</code> – The user is successfully added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>REMOVAL_IN_PROGRESS</code> – The user is currently being removed from the permission group.</p>\n            </li>\n         </ul>"
                     }
                 }
             },
@@ -4512,12 +4583,12 @@
                 "membershipStatus": {
                     "target": "com.amazonaws.finspacedata#PermissionGroupMembershipStatus",
                     "traits": {
-                        "smithy.api#documentation": "<p>Indicates the status of the user account within a permission group.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>ADDITION_IN_PROGRESS</code> – The user account is currently being added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADDITION_SUCCESS</code> – The user account is successfully added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>REMOVAL_IN_PROGRESS</code> – The user is currently being removed from the permission group.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Indicates the status of the user within a permission group.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>ADDITION_IN_PROGRESS</code> – The user is currently being added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADDITION_SUCCESS</code> – The user is successfully added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>REMOVAL_IN_PROGRESS</code> – The user is currently being removed from the permission group.</p>\n            </li>\n         </ul>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The structure of a permission group associated with a user account.</p>"
+                "smithy.api#documentation": "<p>The structure of a permission group associated with a user.</p>"
             }
         },
         "com.amazonaws.finspacedata#PermissionGroupByUserList": {
@@ -4647,6 +4718,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Resets the password for a specified user ID and generates a temporary one. Only a superuser can reset password for other users. Resetting the password immediately invalidates the previous password associated with the user.</p>",
                 "smithy.api#http": {
                     "method": "POST",
@@ -4690,7 +4764,7 @@
                 "temporaryPassword": {
                     "target": "com.amazonaws.finspacedata#Password",
                     "traits": {
-                        "smithy.api#documentation": "<p>A randomly generated temporary password for the requested user account. This password expires in 7 days.</p>"
+                        "smithy.api#documentation": "<p>A randomly generated temporary password for the requested user. This password expires in 7 days.</p>"
                     }
                 }
             },
@@ -4740,7 +4814,6 @@
         "com.amazonaws.finspacedata#ResultLimit": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
                     "min": 1,
                     "max": 100
@@ -4856,10 +4929,9 @@
         "com.amazonaws.finspacedata#SessionDuration": {
             "type": "long",
             "traits": {
-                "smithy.api#default": 0,
                 "smithy.api#range": {
-                    "min": 60,
-                    "max": 720
+                    "min": 1,
+                    "max": 60
                 }
             }
         },
@@ -4997,6 +5069,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Updates a FinSpace Changeset.</p>",
                 "smithy.api#http": {
                     "method": "PUT",
@@ -5101,6 +5176,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Updates a FinSpace Dataset.</p>",
                 "smithy.api#http": {
                     "method": "PUT",
@@ -5209,6 +5287,9 @@
                 }
             ],
             "traits": {
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
                 "smithy.api#documentation": "<p>Modifies the details of a permission group. You cannot modify a <code>permissionGroupID</code>.</p>",
                 "smithy.api#http": {
                     "method": "PUT",
@@ -5301,7 +5382,10 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Modifies the details of the specified user account. You cannot update the <code>userId</code> for a user.</p>",
+                "smithy.api#deprecated": {
+                    "message": "This method will be discontinued."
+                },
+                "smithy.api#documentation": "<p>Modifies the details of the specified user. You cannot update the <code>userId</code> for a user.</p>",
                 "smithy.api#http": {
                     "method": "PUT",
                     "uri": "/user/{userId}",
@@ -5315,7 +5399,7 @@
                 "userId": {
                     "target": "com.amazonaws.finspacedata#UserId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The unique identifier for the user account to update.</p>",
+                        "smithy.api#documentation": "<p>The unique identifier for the user that you want to update.</p>",
                         "smithy.api#httpLabel": {},
                         "smithy.api#required": {}
                     }
@@ -5368,7 +5452,7 @@
                 "userId": {
                     "target": "com.amazonaws.finspacedata#UserId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The unique identifier of the updated user account.</p>"
+                        "smithy.api#documentation": "<p>The unique identifier of the updated user.</p>"
                     }
                 }
             },
@@ -5388,7 +5472,7 @@
                 "status": {
                     "target": "com.amazonaws.finspacedata#UserStatus",
                     "traits": {
-                        "smithy.api#documentation": "<p>The current status of the user account. </p>\n         <ul>\n            <li>\n               <p>\n                  <code>CREATING</code> – The user account creation is in progress.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ENABLED</code> – The user account is created and is currently active.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DISABLED</code> – The user account is currently inactive.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The current status of the user. </p>\n         <ul>\n            <li>\n               <p>\n                  <code>CREATING</code> – The user creation is in progress.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ENABLED</code> – The user is created and is currently active.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DISABLED</code> – The user is currently inactive.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "firstName": {
@@ -5431,28 +5515,28 @@
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>The timestamp at which the user account was created in FinSpace. The value is determined as epoch time in milliseconds. </p>"
+                        "smithy.api#documentation": "<p>The timestamp at which the user was created in FinSpace. The value is determined as epoch time in milliseconds. </p>"
                     }
                 },
                 "lastEnabledTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p> Describes the last time the user account was enabled. The value is determined as epoch time in milliseconds.\n    </p>"
+                        "smithy.api#documentation": "<p> Describes the last time the user was activated. The value is determined as epoch time in milliseconds.\n    </p>"
                     }
                 },
                 "lastDisabledTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>Describes the last time the user account was disabled. The value is determined as epoch time in milliseconds.</p>"
+                        "smithy.api#documentation": "<p>Describes the last time the user was deactivated. The value is determined as epoch time in milliseconds.</p>"
                     }
                 },
                 "lastModifiedTime": {
                     "target": "com.amazonaws.finspacedata#TimestampEpoch",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>Describes the last time the user account was updated. The value is determined as epoch time in milliseconds.\n    </p>"
+                        "smithy.api#documentation": "<p>Describes the last time the user was updated. The value is determined as epoch time in milliseconds.\n    </p>"
                     }
                 },
                 "lastLoginTime": {
@@ -5464,7 +5548,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The details of the user account.</p>"
+                "smithy.api#documentation": "<p>The details of the user.</p>"
             }
         },
         "com.amazonaws.finspacedata#UserByPermissionGroup": {
@@ -5479,7 +5563,7 @@
                 "status": {
                     "target": "com.amazonaws.finspacedata#UserStatus",
                     "traits": {
-                        "smithy.api#documentation": "<p>The current status of the user account. </p>\n         <ul>\n            <li>\n               <p>\n                  <code>CREATING</code> – The user account creation is in progress.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ENABLED</code> – The user account is created and is currently active.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DISABLED</code> – The user account is currently inactive.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The current status of the user. </p>\n         <ul>\n            <li>\n               <p>\n                  <code>CREATING</code> – The user creation is in progress.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ENABLED</code> – The user is created and is currently active.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DISABLED</code> – The user is currently inactive.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "firstName": {
@@ -5521,12 +5605,12 @@
                 "membershipStatus": {
                     "target": "com.amazonaws.finspacedata#PermissionGroupMembershipStatus",
                     "traits": {
-                        "smithy.api#documentation": "<p>Indicates the status of the user account within a permission group.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>ADDITION_IN_PROGRESS</code> – The user account is currently being added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADDITION_SUCCESS</code> – The user account is successfully added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>REMOVAL_IN_PROGRESS</code> – The user is currently being removed from the permission group.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Indicates the status of the user within a permission group.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>ADDITION_IN_PROGRESS</code> – The user is currently being added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>ADDITION_SUCCESS</code> – The user is successfully added to the permission group.</p>\n            </li>\n            <li>\n               <p>\n                  <code>REMOVAL_IN_PROGRESS</code> – The user is currently being removed from the permission group.</p>\n            </li>\n         </ul>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The structure of a user account associated with a permission group.</p>"
+                "smithy.api#documentation": "<p>The structure of a user associated with a permission group.</p>"
             }
         },
         "com.amazonaws.finspacedata#UserByPermissionGroupList": {

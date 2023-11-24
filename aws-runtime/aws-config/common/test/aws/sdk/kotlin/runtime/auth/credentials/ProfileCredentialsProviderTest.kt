@@ -5,19 +5,18 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.collections.attributesOf
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
-import aws.smithy.kotlin.runtime.util.attributesOf
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ProfileCredentialsProviderTest {
     @Test
     fun testDefaultProfile() = runTest {
@@ -104,7 +103,7 @@ class ProfileCredentialsProviderTest {
     fun testBasicAssumeRole() = runTest {
         // smoke test for assume role, more involved scenarios are tested through the default chain
 
-        val testArn = "arn:aws:iam:1234567/test-role"
+        val testArn = "arn:aws:iam::1234567:role/test-role"
         val testProvider = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
@@ -142,7 +141,7 @@ class ProfileCredentialsProviderTest {
 
     @Test
     fun testExplicitRegion() = runTest {
-        val testArn = "arn:aws:iam:1234567/test-role"
+        val testArn = "arn:aws:iam::1234567:role/test-role"
         val testProvider = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
@@ -183,7 +182,7 @@ class ProfileCredentialsProviderTest {
 
     @Test
     fun testProfileRegion() = runTest {
-        val testArn = "arn:aws:iam:1234567/test-role"
+        val testArn = "arn:aws:iam::1234567:role/test-role"
         val testProvider = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
@@ -224,7 +223,7 @@ class ProfileCredentialsProviderTest {
 
     @Test
     fun testAttributeRegion() = runTest {
-        val testArn = "arn:aws:iam:1234567/test-role"
+        val testArn = "arn:aws:iam::1234567:role/test-role"
         val testProvider = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
@@ -263,7 +262,7 @@ class ProfileCredentialsProviderTest {
 
     @Test
     fun testPlatformRegion() = runTest {
-        val testArn = "arn:aws:iam:1234567/test-role"
+        val testArn = "arn:aws:iam::1234567:role/test-role"
         val testProvider = TestPlatformProvider(
             env = mapOf(
                 "AWS_CONFIG_FILE" to "config",
@@ -294,5 +293,29 @@ class ProfileCredentialsProviderTest {
         testEngine.assertRequests()
         val requests = testEngine.requests().first()
         assertEquals(Host.Domain("sts.us-west-2.amazonaws.com"), requests.actual.url.host)
+    }
+
+    @Test
+    fun testAccountId() = runTest {
+        val testProvider = TestPlatformProvider(
+            env = mapOf("AWS_CONFIG_FILE" to "config"),
+            fs = mapOf(
+                "config" to """
+                [default]
+                aws_access_key_id = AKID-Default
+                aws_secret_access_key = Default-Secret
+                aws_account_id = 12345
+                """.trimIndent(),
+            ),
+        )
+        val testEngine = TestConnection()
+
+        val provider = ProfileCredentialsProvider(
+            platformProvider = testProvider,
+            httpClient = testEngine,
+        )
+        val actual = provider.resolve()
+        val expected = credentials("AKID-Default", "Default-Secret", accountId = "12345")
+        assertEquals(expected, actual)
     }
 }

@@ -10,6 +10,8 @@ import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.SmithyClient.SdkClientOption
+import software.amazon.smithy.kotlin.codegen.integration.SectionId
+import software.amazon.smithy.kotlin.codegen.integration.SectionKey
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.model.hasIdempotentTokenMember
 import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
@@ -31,15 +33,22 @@ open class AwsHttpProtocolClientGenerator(
     middlewares: List<ProtocolMiddleware>,
     httpBindingResolver: HttpBindingResolver,
 ) : HttpProtocolClientGenerator(ctx, middlewares, httpBindingResolver) {
+    object MergeServiceDefaults : SectionId {
+        val GenerationContext: SectionKey<ProtocolGenerator.GenerationContext> = SectionKey("GenerationContext")
+    }
 
     override fun render(writer: KotlinWriter) {
         writer.write("\n\n")
-        writer.write("public const val ServiceApiVersion: String = #S", ctx.service.version)
+        writer.write(
+            "#L const val ServiceApiVersion: String = #S",
+            ctx.settings.api.visibility,
+            ctx.service.version,
+        )
         writer.write("\n\n")
         // set AWS specific span attributes for an operation
         // https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/instrumentation/aws-sdk/
         val addAwsSpanAttrWriter = SectionWriter { w, _ ->
-            w.withBlock("attributes = #T {", "}", RuntimeTypes.Core.Utils.attributesOf) {
+            w.withBlock("attributes = #T {", "}", RuntimeTypes.Core.Collections.attributesOf) {
                 write("#S to #S", "rpc.system", "aws-api")
             }
         }
@@ -105,17 +114,19 @@ open class AwsHttpProtocolClientGenerator(
             if (ctx.service.hasIdempotentTokenMember(ctx.model)) {
                 putIfAbsent(SdkClientOption, "IdempotencyTokenProvider", nullable = true)
             }
+
+            writer.declareSection(MergeServiceDefaults)
         }
     }
 }
 
-private fun KotlinWriter.putIfAbsent(
+internal fun KotlinWriter.putIfAbsent(
     attributesSymbol: Symbol,
     name: String,
     literalValue: String? = null,
     nullable: Boolean = false,
 ) {
-    val putSymbol = if (nullable) RuntimeTypes.Core.Utils.putIfAbsentNotNull else RuntimeTypes.Core.Utils.putIfAbsent
+    val putSymbol = if (nullable) RuntimeTypes.Core.Collections.putIfAbsentNotNull else RuntimeTypes.Core.Collections.putIfAbsent
     val actualValue = literalValue ?: "config.${name.replaceFirstChar(Char::lowercaseChar)}"
     write("ctx.#T(#T.#L, #L)", putSymbol, attributesSymbol, name, actualValue)
 }

@@ -11,6 +11,7 @@ import aws.sdk.kotlin.gradle.codegen.dsl.projectionRootDir
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
 import java.util.*
@@ -23,10 +24,9 @@ plugins {
 }
 
 buildscript {
-    val smithyVersion: String by project
     dependencies {
-        classpath("software.amazon.smithy:smithy-model:$smithyVersion")
-        classpath("software.amazon.smithy:smithy-aws-traits:$smithyVersion")
+        classpath(libs.smithy.model)
+        classpath(libs.smithy.aws.traits)
     }
 }
 
@@ -113,7 +113,18 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                     importPaths.add(service.modelExtrasDir)
                 }
                 imports = importPaths
-                transforms = transformsForService(service) ?: emptyList()
+                transforms = (transformsForService(service) ?: emptyList()) + removeDeprecatedShapesTransform("2023-11-28")
+
+                val packageSettingsFile = file(service.packageSettings)
+                val packageSettings = if (packageSettingsFile.exists()) {
+                    val node = Node.parse(packageSettingsFile.inputStream()).asObjectNode().get()
+                    node.expectMember("sdkId", "${packageSettingsFile.absolutePath} does not contain member `sdkId`")
+                    val packageSdkId = node.getStringMember("sdkId").get().value
+                    check(service.sdkId == packageSdkId) { "${packageSettingsFile.absolutePath} `sdkId` ($packageSdkId) does not match expected `${service.sdkId}`" }
+                    node
+                } else {
+                    Node.objectNode()
+                }
 
                 smithyKotlinPlugin {
                     serviceShapeId = service.serviceShapeId
@@ -124,6 +135,9 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                     buildSettings {
                         generateFullProject = false
                         generateDefaultBuildFiles = false
+                    }
+                    apiSettings {
+                        enableEndpointAuthProvider = packageSettings.getBooleanMember("enableEndpointAuthProvider").orNull()?.value
                     }
                 }
             }
@@ -155,6 +169,15 @@ fun transformsForService(service: AwsService): List<String>? {
         transformFile.readText()
     }
 }
+
+fun removeDeprecatedShapesTransform(removeDeprecatedShapesUntil: String): String = """
+    {
+        "name": "AwsSdkKotlinRemoveDeprecatedShapes",
+        "args": {
+            "until": "$removeDeprecatedShapesUntil"
+        }
+    }
+""".trimIndent()
 
 val discoveredServices: List<AwsService> by lazy { discoverServices() }
 
@@ -246,7 +269,7 @@ fun parseMembership(rawList: String?): Membership {
         when {
             item.startsWith('-') -> exclusions.add(item.substring(1))
             item.startsWith('+') -> inclusions.add(item.substring(1))
-            else -> error("Must specify inclusion (+) or exclusion (-) prefix character to $item.")
+            else -> inclusions.add(item)
         }
     }
 
@@ -286,6 +309,12 @@ val AwsService.modelExtrasDir: String
  */
 val AwsService.transformsDir: String
     get() = rootProject.file("$destinationDir/transforms").absolutePath
+
+/**
+ * Service specific package settings
+ */
+val AwsService.packageSettings: String
+    get() = rootProject.file("$destinationDir/package.json").absolutePath
 
 fun forwardProperty(name: String) {
     getProperty(name)?.let {

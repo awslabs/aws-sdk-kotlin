@@ -8,9 +8,11 @@ package aws.sdk.kotlin.runtime.config
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseFips
+import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
+import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgentAppId
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.client.RetryStrategyClientConfig
@@ -57,7 +59,8 @@ public abstract class AbstractAwsSdkClientFactory<
         val tracer = telemetryProvider.tracerProvider.getOrCreateTracer("AwsSdkClientFactory")
 
         tracer.withSpan("fromEnvironment") {
-            val sharedConfig = asyncLazy { loadAwsSharedConfig(PlatformProvider.System) }
+            val platform = PlatformProvider.System
+            val sharedConfig = asyncLazy { loadAwsSharedConfig(platform) }
             val profile = asyncLazy { sharedConfig.get().activeProfile }
 
             // As a DslBuilderProperty, the value of retryStrategy cannot be checked for nullability because it may have
@@ -68,11 +71,13 @@ public abstract class AbstractAwsSdkClientFactory<
 
             block?.let(config::apply)
 
-            config.logMode = config.logMode ?: ClientSettings.LogMode.resolve(platform = PlatformProvider.System)
+            config.logMode = config.logMode ?: ClientSettings.LogMode.resolve(platform = platform)
             config.region = config.region ?: resolveRegion(profile = profile)
             config.useFips = config.useFips ?: resolveUseFips(profile = profile)
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
-            finalizeConfig(builder, sharedConfig)
+            config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)
+
+            finalizeConfig(builder, sharedConfig, profile)
         }
         return builder.build()
     }
@@ -80,5 +85,10 @@ public abstract class AbstractAwsSdkClientFactory<
     /**
      * Inject any client-specific config.
      */
-    protected open suspend fun finalizeConfig(builder: TClientBuilder, sharedConfig: LazyAsyncValue<AwsSharedConfig>) { }
+    protected open suspend fun finalizeConfig(
+        builder: TClientBuilder,
+        sharedConfig: LazyAsyncValue<AwsSharedConfig>,
+        activeProfile: LazyAsyncValue<AwsProfile>,
+    ) {
+    }
 }

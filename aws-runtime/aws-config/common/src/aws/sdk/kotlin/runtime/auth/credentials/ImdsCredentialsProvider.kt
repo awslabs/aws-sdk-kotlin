@@ -14,14 +14,15 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH_SECONDS
+import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import aws.smithy.kotlin.runtime.io.IOException
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.telemetry.logging.info
 import aws.smithy.kotlin.runtime.telemetry.logging.warn
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
-import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlinx.coroutines.sync.Mutex
@@ -32,8 +33,6 @@ import kotlin.time.Duration.Companion.seconds
 private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/security-credentials"
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
 private const val PROVIDER_NAME = "IMDSv2"
-
-internal expect class SdkIOException : Exception // FIXME move this to the proper place when we do the larger KMP Exception refactor
 
 /**
  * [CredentialsProvider] that uses EC2 instance metadata service (IMDS) to provide credentials information.
@@ -145,7 +144,7 @@ public class ImdsCredentialsProvider(
     }
 
     private suspend fun useCachedCredentials(ex: Exception): Credentials? = when {
-        ex is SdkIOException || ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
+        ex is IOException || ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
             mu.withLock {
                 previousCredentials?.apply { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
             }

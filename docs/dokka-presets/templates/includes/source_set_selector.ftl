@@ -1,3 +1,4 @@
+<#-- This is an unchanged copy of Dokka's source_set_selector.ftl -->
 <#macro display>
     <#if sourceSets?has_content>
         <div class="filter-section" id="filter-section">

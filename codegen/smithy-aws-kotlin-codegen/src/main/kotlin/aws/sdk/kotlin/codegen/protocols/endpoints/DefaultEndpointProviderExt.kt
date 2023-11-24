@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.codegen.protocols.endpoints
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
@@ -12,7 +13,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.endpoints.ExpressionRende
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.node.ObjectNode
-import software.amazon.smithy.rulesengine.language.syntax.expr.Expression
+import software.amazon.smithy.rulesengine.language.syntax.expressions.Expression
 import java.util.*
 
 val awsEndpointFunctions = mapOf(
@@ -24,13 +25,10 @@ val awsEndpointPropertyRenderers = mapOf(
     "authSchemes" to ::renderAuthSchemes,
 )
 
-// valid auth scheme names that can appear in a smithy endpoint's properties
-private val validAuthSchemeNames = setOf("sigv4", "sigv4a")
-
-private fun String.toSigningContextClassName(): String? =
+private fun String.toAuthOptionFactoryFn(): Symbol? =
     when (this) {
-        "sigv4" -> "SigV4"
-        "sigv4a" -> "SigV4A"
+        "sigv4" -> RuntimeTypes.Auth.HttpAuthAws.sigV4
+        "sigv4a" -> RuntimeTypes.Auth.HttpAuthAws.sigV4A
         else -> null
     }
 
@@ -40,16 +38,16 @@ private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, exp
         authSchemes.toNode().expectArrayNode().forEach {
             val scheme = it.expectObjectNode()
             val schemeName = scheme.expectStringMember("name").value
-            val className = schemeName.toSigningContextClassName() ?: return@forEach
+            val authFactoryFn = schemeName.toAuthOptionFactoryFn() ?: return@forEach
 
-            withBlock("#T.#L(", "),", RuntimeTypes.SmithyClient.Endpoints.SigningContext, className) {
+            withBlock("#T(", "),", authFactoryFn) {
                 // we delegate back to the expression visitor for each of these fields because it's possible to
                 // encounter template strings throughout
 
-                writeInline("signingName = ")
+                writeInline("serviceName = ")
                 renderOrElse(expressionRenderer, scheme.getStringMember("signingName"), "null")
 
-                writeInline("disableDoubleEncoding = ")
+                writeInline("disableDoubleUriEncode = ")
                 renderOrElse(expressionRenderer, scheme.getBooleanMember("disableDoubleEncoding"), "false")
 
                 when (schemeName) {
