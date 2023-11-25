@@ -61,6 +61,13 @@ class RemoveDefaults : KotlinIntegration {
             "com.amazonaws.s3control#PublicAccessBlockConfiguration\$BlockPublicPolicy",
             "com.amazonaws.s3control#PublicAccessBlockConfiguration\$RestrictPublicBuckets",
         ),
+        "com.amazonaws.iot#AWSIotService" to setOf(
+            "com.amazonaws.iot#ThingConnectivity\$connected",
+            "com.amazonaws.iot#UpdateProvisioningTemplateRequest\$enabled",
+            "com.amazonaws.iot#CreateProvisioningTemplateRequest\$enabled",
+            "com.amazonaws.iot#DescribeProvisioningTemplateResponse\$enabled",
+            "com.amazonaws.iot#ProvisioningTemplateSummary\$enabled",
+        ),
     ).map { (k, v) -> ShapeId.from(k) to v.map { ShapeId.from(it) }.toSet() }.toMap()
 
     override val order: Byte = 0
