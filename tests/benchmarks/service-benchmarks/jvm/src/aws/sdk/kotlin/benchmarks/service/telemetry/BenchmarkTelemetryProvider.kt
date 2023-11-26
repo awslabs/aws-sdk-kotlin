@@ -11,7 +11,7 @@ import aws.smithy.kotlin.runtime.telemetry.context.ContextManager
 import aws.smithy.kotlin.runtime.telemetry.logging.LoggerProvider
 import aws.smithy.kotlin.runtime.telemetry.metrics.*
 import aws.smithy.kotlin.runtime.telemetry.trace.TracerProvider
-import aws.smithy.kotlin.runtime.util.Attributes
+import aws.smithy.kotlin.runtime.collections.Attributes
 
 private val capturedMetrics = mapOf(
     "smithy.client.attempt_overhead_duration" to "Overhead",
