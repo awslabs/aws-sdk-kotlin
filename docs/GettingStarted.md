@@ -1,7 +1,7 @@
-# Beta Release Quickstart
+# Getting Started
 
-Beta releases of the AWS SDK for Kotlin are published to Maven Central with the `-beta` qualifier. 
-**NOTE: Beta releases are not meant for production workloads**.
+Releases of the AWS SDK for Kotlin are published to Maven Central . 
+**NOTE: Beta releases ending with the `-beta` qualifier are not meant for production workloads**.
 Consult the [stability guide](../VERSIONING.md#stability-of-the-aws-sdk-for-kotlin) for more information on SDK stability and maintenance.
 
 1. Add the repository to your Gradle or Maven configuration
@@ -26,7 +26,7 @@ Consult the [stability guide](../VERSIONING.md#stability-of-the-aws-sdk-for-kotl
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
         
         // The following line adds a dependency on the dynamodb client.
-        implementation("aws.sdk.kotlin:dynamodb:0.+")
+        implementation("aws.sdk.kotlin:dynamodb:1.+")
     }
     ```
 
