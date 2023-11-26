@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0] - 11/26/2023
+
+### Features
+* [#659](https://github.com/awslabs/smithy-kotlin/issues/659) BREAKING: Overhaul URL APIs to clarify content encoding, when data is in which state, and to reduce the number of times data is encoded/decoded
+
+### Fixes
+* **Breaking**: Make some properties of IoT types optional. Previously they defaulted to false, which isn't what the service expects.
+
 ## [0.36.1-beta] - 11/22/2023
 
 ### Features

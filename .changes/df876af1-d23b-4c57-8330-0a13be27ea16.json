@@ -1,8 +1,0 @@
-{
-    "id": "df876af1-d23b-4c57-8330-0a13be27ea16",
-    "type": "feature",
-    "description": "BREAKING: Overhaul URL APIs to clarify content encoding, when data is in which state, and to reduce the number of times data is encoded/decoded",
-    "issues": [
-        "https://github.com/awslabs/smithy-kotlin/issues/659"
-    ]
-}

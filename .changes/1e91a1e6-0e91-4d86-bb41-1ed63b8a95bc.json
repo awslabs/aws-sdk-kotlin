@@ -1,5 +1,0 @@
-{
-  "id": "1e91a1e6-0e91-4d86-bb41-1ed63b8a95bc",
-  "type": "bugfix",
-  "description": "**Breaking**: Make some properties of IoT types optional. Previously they defaulted to false, which isn't what the service expects."
-}
