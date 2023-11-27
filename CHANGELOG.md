@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.2] - 11/27/2023
+
+### Features
+* (**appsync**) This update enables introspection of Aurora cluster databases using the RDS Data API
+* (**b2bi**) This is the initial SDK release for AWS B2B Data Interchange.
+* (**backup**) AWS Backup now supports restore testing, a new feature that allows customers to automate restore testing and validating their backups. Additionally, this release adds support for EBS Snapshots Archive tier.
+* (**controltower**) This release adds the following support: 1. The EnableControl API can configure controls that are configurable.  2. The GetEnabledControl API shows the configured parameters on an enabled control. 3. The new UpdateEnabledControl API can change parameters on an enabled control.
+* (**efs**) Adding support for EFS Replication to existing file system.
+* (**fis**) AWS FIS adds support for multi-account experiments & empty target resolution. This release also introduces the CreateTargetAccountConfiguration API that allows experiments across multiple AWS accounts, and the ListExperimentResolvedTargets API to list target details.
+* (**glue**) add observations support to DQ CodeGen config model + update document for connectiontypes supported by ConnectorData entities
+* (**securityhub**) Adds and updates APIs to support central configuration. This feature allows the Security Hub delegated administrator to configure Security Hub for their entire AWS Org across multiple regions from a home Region. With this release, findings also include account name and application metadata.
+* (**transcribe**) This release adds support for AWS HealthScribe APIs within Amazon Transcribe
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation for support for RDS for Db2.
+
 ## [1.0.1] - 11/27/2023
 
 ### Features
