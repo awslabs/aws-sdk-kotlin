@@ -17,6 +17,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH_SECONDS
+import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
@@ -105,6 +106,7 @@ public class StsAssumeRoleCredentialsProvider(
             credentialsProvider = provider.bootstrapCredentialsProvider
             httpClient = provider.httpClient
             telemetryProvider = telemetry
+            logMode = attributes.getOrNull(SdkClientOption.LogMode)
         }
 
         val resp = try {

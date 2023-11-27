@@ -15,6 +15,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH_SECONDS
+import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.config.EnvironmentSetting
 import aws.smithy.kotlin.runtime.config.resolve
@@ -120,6 +121,7 @@ public class StsWebIdentityCredentialsProvider(
             httpClient = provider.httpClient
             // NOTE: credentials provider not needed for this operation
             telemetryProvider = telemetry
+            logMode = attributes.getOrNull(SdkClientOption.LogMode)
         }
 
         val resp = try {
