@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.4] - 11/28/2023
+
+### Features
+* (**accessanalyzer**) This release adds support for external access findings for S3 directory buckets to help you easily identify cross-account access. Updated service API, documentation, and paginators.
+* (**bedrock**) This release adds support for customization types, model life cycle status and minor versions/aliases for model identifiers.
+* (**bedrockagent**) This release introduces Agents for Amazon Bedrock
+* (**bedrockagentruntime**) This release introduces Agents for Amazon Bedrock Runtime
+* (**bedrockruntime**) This release adds support for minor versions/aliases for invoke model identifier.
+* (**connect**) Added support for following capabilities: Amazon Connect's in-app, web, and video calling. Two-way SMS integrations. Contact Lens real-time chat analytics feature. Amazon Connect Analytics Datalake capability. Capability to configure real time chat rules.
+* (**customerprofiles**) This release introduces DetectProfileObjectType API to auto generate object type mapping.
+* (**qbusiness**) Amazon Q - a generative AI powered application that your employees can use to ask questions and get answers from knowledge spread across disparate content repositories, summarize reports, write articles, take actions, and much more - all within their company's connected content repositories.
+* (**qconnect**) Amazon Q in Connect, an LLM-enhanced evolution of Amazon Connect Wisdom. This release adds generative AI support to Amazon Q Connect QueryAssistant and GetRecommendations APIs.
+* (**s3**) Adds support for S3 Express One Zone.
+* (**s3control**) Adds support for S3 Express One Zone, and InvocationSchemaVersion 2.0 for S3 Batch Operations.
+
 ## [1.0.3] - 11/28/2023
 
 ### Features
