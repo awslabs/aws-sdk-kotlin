@@ -56,7 +56,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         // override the credentials provider prop registered by the Sigv4AuthSchemeIntegration, updates the
         // documentation and sets a default value for AWS SDK to the default chain.
-        val CredentialsProviderProp: ConfigProperty = ConfigProperty {
+        val CredentialsProviderProp: ConfigProperty = ConfigProperty { // TODO: Look here ... this one is conditional
             symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
             baseClass = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProviderConfig
             useNestedBuilderBaseClass()
@@ -157,7 +157,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         val DisableRequestCompression: ConfigProperty = ConfigProperty {
             name = "disableRequestCompression"
-            symbol = KotlinTypes.Boolean.asNullable()
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
             useNestedBuilderBaseClass()
             documentation = """
@@ -168,7 +168,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         val RequestMinCompressionSizeBytes: ConfigProperty = ConfigProperty {
             name = "requestMinCompressionSizeBytes"
-            symbol = KotlinTypes.Int.asNullable()
+            useSymbolWithNullableBuilder(KotlinTypes.Int, "10240")
             baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
             useNestedBuilderBaseClass()
             documentation = """

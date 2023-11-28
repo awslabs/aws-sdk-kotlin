@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package aws.sdk.kotlin.codegen.customization.requestcompression
+package aws.sdk.kotlin.codegen.customization
 
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
@@ -13,9 +13,7 @@ import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.defaultValue
-import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.getTrait
-import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
@@ -23,14 +21,10 @@ import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.traits.RequestCompressionTrait
 
-class RequestCompressionTrait : KotlinIntegration {
+class RequestCompressionTraitIntegration : KotlinIntegration {
 
-    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean = model
-        .serviceShapes.any { serviceShape ->
-            serviceShape.operations.any { operation ->
-                model.expectShape<OperationShape>(operation).hasTrait<RequestCompressionTrait>()
-            }
-        }
+    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
+        model.isTraitApplied(RequestCompressionTrait::class.java)
 
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
@@ -42,13 +36,13 @@ class RequestCompressionTrait : KotlinIntegration {
             ConfigProperty {
                 name = "compressionAlgorithms"
                 documentation = """
-                    The mutable list of compression algorithms supported by the SDK.
-                    More compression algorithms can be added and may override an existing implementation.
-                    Use the `compressionAlgorithm` interface to create one.
+                The mutable list of compression algorithms supported by the SDK.
+                More compression algorithms can be added and may override an existing implementation.
+                Use the `CompressionAlgorithm` interface to create one.
                 """.trimIndent()
                 symbol = Symbol.builder()
-                    .name("List<CompressionAlgorithm>")
-                    .defaultValue("listOf(Gzip())")
+                    .name("MutableList<${RuntimeTypes.HttpClient.Interceptors.CompressionAlgorithm}>")
+                    .defaultValue("mutableListOf(${RuntimeTypes.HttpClient.Interceptors.Gzip}())")
                     .build()
             },
         )
@@ -56,11 +50,11 @@ class RequestCompressionTrait : KotlinIntegration {
 
 private val requestCompressionTraitMiddleware = object : ProtocolMiddleware {
     private val interceptorSymbol = RuntimeTypes.HttpClient.Interceptors.RequestCompressionTraitInterceptor
-    override val name: String = "RequestCompressionTrait"
+    override val name: String = "RequestCompressionTraitMiddleware"
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         op.getTrait<RequestCompressionTrait>()?.let { trait ->
-            val requestedCompressionAlgorithms = trait.encodings
+            val supportedCompressionAlgorithms = trait.encodings
 
             writer.withBlock(
                 "if (config.disableRequestCompression == false) {",
@@ -73,7 +67,7 @@ private val requestCompressionTraitMiddleware = object : ProtocolMiddleware {
                 ) {
                     write("config.requestMinCompressionSizeBytes,")
                     write(
-                        "listOf(${requestedCompressionAlgorithms.joinToString(
+                        "listOf(${supportedCompressionAlgorithms.joinToString(
                             separator = ", ",
                             transform = {
                                 "\"$it\""
