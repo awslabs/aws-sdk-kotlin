@@ -31,4 +31,3 @@ aws.sdk.kotlin.codegen.customization.s3.HostPrefixRequestRouteFilter
 aws.sdk.kotlin.codegen.customization.s3.UnwrappedXmlOutputIntegration
 aws.sdk.kotlin.codegen.customization.ClockSkew
 aws.sdk.kotlin.codegen.customization.ec2.EC2MakePrimitivesOptional
-aws.sdk.kotlin.codegen.customization.RequestCompressionTraitIntegration

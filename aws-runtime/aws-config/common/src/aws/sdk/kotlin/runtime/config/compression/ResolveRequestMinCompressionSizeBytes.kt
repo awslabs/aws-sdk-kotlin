@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package aws.sdk.kotlin.runtime.config.requestcompression
+package aws.sdk.kotlin.runtime.config.compression
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
@@ -18,5 +18,5 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * @return The requestMinCompressionSizeBytes setting if found, null if not
  */
 @InternalSdkApi
-public suspend fun resolveRequestMinCompressionSizeBytes(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): Int? =
+public suspend fun resolveRequestMinCompressionSizeBytes(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): Long? =
     AwsSdkSetting.AwsRequestMinCompressionSizeBytes.resolve(platform) ?: profile.get().requestMinCompressionSizeBytes

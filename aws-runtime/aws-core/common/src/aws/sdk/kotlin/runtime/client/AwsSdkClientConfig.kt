@@ -46,20 +46,6 @@ public interface AwsSdkClientConfig : SdkClientConfig {
      */
     public val applicationId: String?
 
-    /**
-     * Flag used to determine when a request should be compressed or not.
-     * False by default.
-     */
-    public val disableRequestCompression: Boolean?
-
-    /**
-     * The threshold in bytes used to determine when a request should be compressed.
-     * Looks at payload size.
-     * Should be in range: 0-10485760.
-     * 10240 by default.
-     */
-    public val requestMinCompressionSizeBytes: Int?
-
     public interface Builder {
         /**
          * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
@@ -94,19 +80,5 @@ public interface AwsSdkClientConfig : SdkClientConfig {
          * reference for more information on environment variables and shared config settings.
          */
         public var applicationId: String?
-
-        /**
-         * Flag used to determine when a request should be compressed or not.
-         * False by default.
-         */
-        public var disableRequestCompression: Boolean?
-
-        /**
-         * The threshold in bytes used to determine when a request should be compressed.
-         * Looks at payload size.
-         * Should be in range: 0-10485760.
-         * 10240 by default.
-         */
-        public var requestMinCompressionSizeBytes: Int?
     }
 }

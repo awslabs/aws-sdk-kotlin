@@ -138,8 +138,8 @@ public val AwsProfile.disableRequestCompression: Boolean?
  * The threshold used to determine when a request should be compressed
  */
 @InternalSdkApi
-public val AwsProfile.requestMinCompressionSizeBytes: Int?
-    get() = getIntOrNull("request_min_compression_size_bytes")
+public val AwsProfile.requestMinCompressionSizeBytes: Long?
+    get() = getLongOrNull("request_min_compression_size_bytes")
 
 /**
  * Parse a config value as a boolean, ignoring case.
@@ -160,6 +160,17 @@ public fun AwsProfile.getIntOrNull(key: String, subKey: String? = null): Int? =
     getOrNull(key, subKey)?.let {
         it.toIntOrNull() ?: throw ConfigurationException(
             "Failed to parse config property ${buildKeyString(key, subKey)} as an integer",
+        )
+    }
+
+/**
+ * Parse a config value as a long.
+ */
+@InternalSdkApi
+public fun AwsProfile.getLongOrNull(key: String, subKey: String? = null): Long? =
+    getOrNull(key, subKey)?.let {
+        it.toLongOrNull() ?: throw ConfigurationException(
+            "Failed to parse config property ${buildKeyString(key, subKey)} as a long",
         )
     }
 

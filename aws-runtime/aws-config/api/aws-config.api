@@ -218,6 +218,12 @@ public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory 
 public final class aws/sdk/kotlin/runtime/config/AwsSdkSettingKt {
 }
 
+public final class aws/sdk/kotlin/runtime/config/compression/ResolveDisableRequestCompressionKt {
+}
+
+public final class aws/sdk/kotlin/runtime/config/compression/ResolveRequestMinCompressionSizeBytesKt {
+}
+
 public final class aws/sdk/kotlin/runtime/config/endpoints/EndpointsKt {
 }
 
@@ -311,12 +317,6 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 
 public final class aws/sdk/kotlin/runtime/config/profile/AwsSharedConfigKt {
 	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/profile/AwsSharedConfig;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/Url;
-}
-
-public final class aws/sdk/kotlin/runtime/config/requestcompression/ResolveDisableRequestCompressionKt {
-}
-
-public final class aws/sdk/kotlin/runtime/config/requestcompression/ResolveRequestMinCompressionSizeBytesKt {
 }
 
 public final class aws/sdk/kotlin/runtime/config/retries/ResolveRetryStrategyKt {

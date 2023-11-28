@@ -78,6 +78,9 @@
                     "method": "DELETE",
                     "uri": "/{Bucket}/{Key+}?x-id=AbortMultipartUpload",
                     "code": 204
+                },
+                "smithy.api#requestCompression": {
+                  "encodings": ["gzip"]
                 }
             }
         },

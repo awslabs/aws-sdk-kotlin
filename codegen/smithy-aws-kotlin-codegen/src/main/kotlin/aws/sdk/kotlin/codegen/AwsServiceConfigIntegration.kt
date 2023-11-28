@@ -154,30 +154,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 },
             )
         }
-
-        val DisableRequestCompression: ConfigProperty = ConfigProperty {
-            name = "disableRequestCompression"
-            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
-            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
-            useNestedBuilderBaseClass()
-            documentation = """
-                Flag used to determine when a request should be compressed or not.
-                False by default.
-            """.trimIndent()
-        }
-
-        val RequestMinCompressionSizeBytes: ConfigProperty = ConfigProperty {
-            name = "requestMinCompressionSizeBytes"
-            useSymbolWithNullableBuilder(KotlinTypes.Int, "10240")
-            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
-            useNestedBuilderBaseClass()
-            documentation = """
-                The threshold in bytes used to determine when a request should be compressed.
-                Looks at payload size.
-                Should be in range: 0-10485760.
-                10240 by default.
-            """.trimIndent()
-        }
     }
 
     override val sectionWriters: List<SectionWriterBinding> =
@@ -204,7 +180,5 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         add(EndpointUrlProp)
         add(AwsRetryPolicy)
         add(UserAgentAppId)
-        add(DisableRequestCompression)
-        add(RequestMinCompressionSizeBytes)
     }
 }
