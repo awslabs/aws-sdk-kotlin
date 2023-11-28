@@ -56,7 +56,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         // override the credentials provider prop registered by the Sigv4AuthSchemeIntegration, updates the
         // documentation and sets a default value for AWS SDK to the default chain.
-        val CredentialsProviderProp: ConfigProperty = ConfigProperty { // TODO: Look here ... this one is conditional
+        val CredentialsProviderProp: ConfigProperty = ConfigProperty {
             symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
             baseClass = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProviderConfig
             useNestedBuilderBaseClass()
