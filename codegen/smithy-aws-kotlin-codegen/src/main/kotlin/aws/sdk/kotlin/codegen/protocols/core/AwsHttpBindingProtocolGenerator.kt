@@ -54,7 +54,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
         val ignoredTests = TestMemberDelta(
             setOf(
-                // FIXME - compression not yet supported, see https://github.com/awslabs/smithy-kotlin/issues/955
+                // TODO: Remove these tests
                 "SDKAppliedContentEncoding_awsJson1_0",
                 "SDKAppliedContentEncoding_awsJson1_1",
                 "SDKAppliedContentEncoding_awsQuery",

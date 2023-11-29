@@ -79,9 +79,6 @@
                     "uri": "/{Bucket}/{Key+}?x-id=AbortMultipartUpload",
                     "code": 204
                 },
-                "smithy.api#requestCompression": {
-                  "encodings": ["gzip"]
-                }
             }
         },
         "com.amazonaws.s3#AbortMultipartUploadOutput": {
