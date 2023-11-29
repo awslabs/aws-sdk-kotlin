@@ -78,7 +78,7 @@
                     "method": "DELETE",
                     "uri": "/{Bucket}/{Key+}?x-id=AbortMultipartUpload",
                     "code": 204
-                },
+                }
             }
         },
         "com.amazonaws.s3#AbortMultipartUploadOutput": {
