@@ -67,13 +67,7 @@ public val AwsProfile.sourceProfile: String?
  */
 @InternalSdkApi
 public val AwsProfile.maxAttempts: Int?
-<<<<<<< HEAD
     get() = getIntOrNull("max_attempts")
-=======
-    get() = getOrNull("max_attempts")?.run {
-        toIntOrNull() ?: throw ConfigurationException("Failed to parse max_attempts $this as an integer")
-    }
->>>>>>> 32b2fa0806840ec86b13e0e3ac0329bce2bffa6c
 
 /**
  * The command which the SDK will invoke to retrieve credentials

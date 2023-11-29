@@ -226,8 +226,6 @@ public final class aws/sdk/kotlin/runtime/config/compression/ResolveDisableReque
 public final class aws/sdk/kotlin/runtime/config/compression/ResolveRequestMinCompressionSizeBytesKt {
 }
 
-public final class aws/sdk/kotlin/runtime/config/endpoints/EndpointsKt {
-
 public final class aws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode : java/lang/Enum {
 	public static final field DISABLED Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
 	public static final field PREFERRED Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
