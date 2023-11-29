@@ -195,13 +195,13 @@ public object AwsSdkSetting {
      * Determines when a request should be compressed or not
      */
     public val AwsDisableRequestCompression: EnvironmentSetting<Boolean> =
-            boolEnvSetting("aws.disableRequestCompression", "AWS_DISABLE_REQUEST_COMPRESSION")
+        boolEnvSetting("aws.disableRequestCompression", "AWS_DISABLE_REQUEST_COMPRESSION")
 
     /**
      * The threshold used to determine when a request should be compressed
      */
     public val AwsRequestMinCompressionSizeBytes: EnvironmentSetting<Long> =
-            longEnvSetting("aws.requestMinCompressionSizeBytes", "AWS_REQUEST_MIN_COMPRESSION_SIZE_BYTES")
+        longEnvSetting("aws.requestMinCompressionSizeBytes", "AWS_REQUEST_MIN_COMPRESSION_SIZE_BYTES")
 }
 
 /**
