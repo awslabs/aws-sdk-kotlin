@@ -10,6 +10,7 @@ import aws.sdk.kotlin.runtime.config.compression.resolveDisableRequestCompressio
 import aws.sdk.kotlin.runtime.config.compression.resolveRequestMinCompressionSizeBytes
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseFips
+import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
@@ -83,7 +84,7 @@ public abstract class AbstractAwsSdkClientFactory<
                 config.requestMinCompressionSizeBytes = config.requestMinCompressionSizeBytes ?: resolveRequestMinCompressionSizeBytes(platform, profile) ?: 10240
             }
 
-            finalizeConfig(builder, sharedConfig)
+            finalizeConfig(builder, sharedConfig, profile)
         }
         return builder.build()
     }
@@ -91,5 +92,10 @@ public abstract class AbstractAwsSdkClientFactory<
     /**
      * Inject any client-specific config.
      */
-    protected open suspend fun finalizeConfig(builder: TClientBuilder, sharedConfig: LazyAsyncValue<AwsSharedConfig>) { }
+    protected open suspend fun finalizeConfig(
+        builder: TClientBuilder,
+        sharedConfig: LazyAsyncValue<AwsSharedConfig>,
+        activeProfile: LazyAsyncValue<AwsProfile>,
+    ) {
+    }
 }

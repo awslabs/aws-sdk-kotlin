@@ -12,7 +12,6 @@ import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
 import aws.smithy.kotlin.runtime.http.operation.setResolvedEndpoint
 import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
-import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.telemetry.logging.trace
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.CachedValue
@@ -56,9 +55,7 @@ internal class TokenMiddleware(
             method = HttpMethod.PUT
             headers.append(X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS, ttl.inWholeSeconds.toString())
             req.subject.headers["User-Agent"]?.let { headers.append("User-Agent", it) }
-            url {
-                path = "/latest/api/token"
-            }
+            url.path.encoded = "/latest/api/token"
         }
 
         // endpoint resolution for the request happens right before signing, need to resolve the endpoint ourselves

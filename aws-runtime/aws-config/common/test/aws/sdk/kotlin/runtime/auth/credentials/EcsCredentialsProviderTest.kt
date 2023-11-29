@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
@@ -19,13 +20,15 @@ import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.TimestampFormat
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -42,18 +45,20 @@ class EcsCredentialsProviderTest {
         "EcsContainer",
     )
 
-    private fun ecsResponse(): HttpResponse {
-        val payload = """
-        {
-            "Code" : "Success",
-            "LastUpdated" : "2021-09-17T20:57:08Z",
-            "Type" : "AWS-HMAC",
-            "AccessKeyId" : "AKID",
-            "SecretAccessKey" : "test-secret",
-            "Token" : "test-token",
-            "Expiration" : "${expectedExpiration.format(TimestampFormat.ISO_8601)}"
-        }
-        """.encodeToByteArray()
+    private fun ecsResponse(accountId: String? = null): HttpResponse {
+        val payload = buildJsonObject {
+            put("Code", "Success")
+            put("LastUpdated", "2021-09-17T20:57:08Z")
+            put("Type", "AWS-HMAC")
+            put("AccessKeyId", "AKID")
+            put("SecretAccessKey", "test-secret")
+            put("Token", "test-token")
+            put("Expiration", expectedExpiration.format(TimestampFormat.ISO_8601))
+            if (accountId != null) {
+                put("AccountId", accountId)
+            }
+        }.toString().encodeToByteArray()
+
         return HttpResponse(HttpStatusCode.OK, Headers.Empty, HttpBody.fromBytes(payload))
     }
 
@@ -493,6 +498,33 @@ class EcsCredentialsProviderTest {
             provider.resolve()
         }.message.shouldContain("Error retrieving credentials from container service: HTTP 502: Bad Gateway")
 
+        engine.assertRequests()
+    }
+
+    @Test
+    fun testAccountIdResolves() = runTest {
+        val engine = buildTestConnection {
+            expect(
+                ecsRequest("http://169.254.170.2/relative?foo=bar"),
+                ecsResponse("12345"),
+            )
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsRelativeUri.envVar to "/relative?foo=bar"),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        val actual = provider.resolve()
+        val expected = credentials(
+            "AKID",
+            "test-secret",
+            "test-token",
+            expectedExpiration,
+            "EcsContainer",
+            "12345",
+        )
+        assertEquals(expected, actual)
         engine.assertRequests()
     }
 }

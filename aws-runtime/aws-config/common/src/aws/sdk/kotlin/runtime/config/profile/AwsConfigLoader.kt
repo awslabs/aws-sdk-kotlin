@@ -23,16 +23,18 @@ import kotlin.coroutines.coroutineContext
  *
  * @param platform Platform from which to resolve configuration environment
  * @param profileNameOverride Optional profile name to use as the active profile
+ * @param configurationSource Optional configuration source to use
  * @return A [AwsSharedConfig] instance
  */
 @InternalSdkApi
 public suspend fun loadAwsSharedConfig(
     platform: PlatformProvider,
     profileNameOverride: String? = null,
+    configurationSource: AwsConfigurationSource? = null,
 ): AwsSharedConfig =
     withSpan("AwsSharedConfig", "loadAwsSharedConfig") {
         // Determine active profile and location of configuration files
-        val source = resolveConfigSource(platform, profileNameOverride)
+        val source = configurationSource ?: resolveConfigSource(platform, profileNameOverride)
         val logger = coroutineContext.logger("AwsConfigParser")
 
         // merged AWS configuration based on optional configuration and credential file contents

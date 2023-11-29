@@ -11,11 +11,11 @@ import aws.sdk.kotlin.services.s3.model.S3Exception
 import aws.smithy.kotlin.runtime.ServiceErrorMetadata
 import aws.smithy.kotlin.runtime.awsprotocol.AwsErrorDetails
 import aws.smithy.kotlin.runtime.awsprotocol.setAseErrorMetadata
+import aws.smithy.kotlin.runtime.collections.setIfValueNotNull
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
 import aws.smithy.kotlin.runtime.serde.xml.XmlSerialName
-import aws.smithy.kotlin.runtime.util.setIfValueNotNull
 
 /**
  * Default header name identifying secondary request ID

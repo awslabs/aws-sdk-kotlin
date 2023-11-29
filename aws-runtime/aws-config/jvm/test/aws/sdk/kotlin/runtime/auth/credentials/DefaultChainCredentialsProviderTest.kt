@@ -5,7 +5,9 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.awscredentials.copy
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.Filesystem
@@ -89,11 +91,12 @@ class DefaultChainCredentialsProviderTest {
                 return when {
                     "Ok" in result -> {
                         val o = checkNotNull(result["Ok"]).jsonObject
-                        val creds = Credentials(
+                        val creds = credentials(
                             checkNotNull(o["access_key_id"]).jsonPrimitive.content,
                             checkNotNull(o["secret_access_key"]).jsonPrimitive.content,
                             o["session_token"]?.jsonPrimitive?.content,
                             o["expiry"]?.jsonPrimitive?.longOrNull?.let { Instant.fromEpochSeconds(it) },
+                            accountId = o["accountId"]?.jsonPrimitive?.content,
                         )
                         Ok(name, docs, creds)
                     }

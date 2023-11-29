@@ -6,11 +6,12 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
 import aws.sdk.kotlin.runtime.http.AWS_APP_ID_ENV
 import aws.sdk.kotlin.runtime.http.AWS_APP_ID_PROP
 import aws.smithy.kotlin.runtime.client.config.RetryMode
 import aws.smithy.kotlin.runtime.config.*
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 // NOTE: The JVM property names MUST match the ones defined in the Java SDK for any setting added.
@@ -46,6 +47,11 @@ public object AwsSdkSetting {
      * Configure the default region.
      */
     public val AwsRegion: EnvironmentSetting<String> = strEnvSetting("aws.region", "AWS_REGION")
+
+    /**
+     * Configure the AWS account ID
+     */
+    public val AwsAccountId: EnvironmentSetting<String> = strEnvSetting("aws.accountId", "AWS_ACCOUNT_ID")
 
     /**
      * Configure the user agent app ID
@@ -181,16 +187,21 @@ public object AwsSdkSetting {
         boolEnvSetting("aws.ignoreConfiguredEndpointUrls", "AWS_IGNORE_CONFIGURED_ENDPOINT_URLS")
 
     /**
+     * The mode to use when resolving endpoints that make use of the AWS account ID.
+     */
+    public val AwsAccountIdEndpointMode: EnvironmentSetting<AccountIdEndpointMode> = enumEnvSetting("aws.accountIdEndpointMode", "AWS_ACCOUNT_ID_ENDPOINT_MODE")
+
+    /**
      * Determines when a request should be compressed or not
      */
     public val AwsDisableRequestCompression: EnvironmentSetting<Boolean> =
-        boolEnvSetting("aws.disableRequestCompression", "AWS_DISABLE_REQUEST_COMPRESSION")
+            boolEnvSetting("aws.disableRequestCompression", "AWS_DISABLE_REQUEST_COMPRESSION")
 
     /**
      * The threshold used to determine when a request should be compressed
      */
     public val AwsRequestMinCompressionSizeBytes: EnvironmentSetting<Long> =
-        longEnvSetting("aws.requestMinCompressionSizeBytes", "AWS_REQUEST_MIN_COMPRESSION_SIZE_BYTES")
+            longEnvSetting("aws.requestMinCompressionSizeBytes", "AWS_REQUEST_MIN_COMPRESSION_SIZE_BYTES")
 }
 
 /**

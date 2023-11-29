@@ -13,6 +13,7 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpStringValuesMapSerializer
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.knowledge.HttpBinding
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
@@ -41,8 +42,11 @@ class PollyPresigner : KotlinIntegration {
         val defaultTimestampFormat = writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.DefaultTimestampFormat)
 
         writer.write("unsignedRequest.method = #T.GET", RuntimeTypes.Http.HttpMethod)
-        writer.withBlock("unsignedRequest.url.#T {", "}", RuntimeTypes.Core.Net.parameters) {
-            val bindings = resolver.requestBindings(operation)
+        writer.withBlock("unsignedRequest.url.parameters.decodedParameters(#T.SmithyLabel) {", "}", RuntimeTypes.Core.Text.Encoding.PercentEncoding) {
+            val bindings = resolver
+                .requestBindings(operation)
+                .map { it.copy(location = HttpBinding.Location.QUERY_PARAMS) }
+
             HttpStringValuesMapSerializer(ctx.model, ctx.symbolProvider, ctx.settings, bindings, resolver, defaultTimestampFormat).render(writer)
         }
 

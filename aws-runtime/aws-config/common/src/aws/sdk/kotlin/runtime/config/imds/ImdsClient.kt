@@ -132,7 +132,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         op.install(userAgentMiddleware)
         op.install(tokenMiddleware)
         op.execution.mutate.intercept(Phase.Order.Before) { req, next ->
-            req.subject.url.path = path
+            req.subject.url.path.encoded = path
             next.call(req)
         }
 

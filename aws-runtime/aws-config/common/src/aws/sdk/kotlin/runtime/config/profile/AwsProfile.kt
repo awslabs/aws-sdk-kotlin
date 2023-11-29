@@ -7,8 +7,9 @@ package aws.sdk.kotlin.runtime.config.profile
 
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
 import aws.smithy.kotlin.runtime.client.config.RetryMode
-import aws.smithy.kotlin.runtime.net.Url
+import aws.smithy.kotlin.runtime.net.url.Url
 
 /**
  * Represents an AWS config profile.
@@ -66,7 +67,13 @@ public val AwsProfile.sourceProfile: String?
  */
 @InternalSdkApi
 public val AwsProfile.maxAttempts: Int?
+<<<<<<< HEAD
     get() = getIntOrNull("max_attempts")
+=======
+    get() = getOrNull("max_attempts")?.run {
+        toIntOrNull() ?: throw ConfigurationException("Failed to parse max_attempts $this as an integer")
+    }
+>>>>>>> 32b2fa0806840ec86b13e0e3ac0329bce2bffa6c
 
 /**
  * The command which the SDK will invoke to retrieve credentials
@@ -82,7 +89,11 @@ public val AwsProfile.credentialProcess: String?
 public val AwsProfile.retryMode: RetryMode?
     get() = getOrNull("retry_mode")?.run {
         RetryMode.values().firstOrNull { it.name.equals(this, ignoreCase = true) }
-            ?: throw ConfigurationException("Retry mode $this is not supported, should be one of: ${RetryMode.values().joinToString(", ")}")
+            ?: throw ConfigurationException(
+                "retry_mode $this is not supported, should be one of: ${
+                    RetryMode.values().joinToString(", ") { it.name.lowercase() }
+                }",
+            )
     }
 
 /**
@@ -126,6 +137,20 @@ public val AwsProfile.servicesSection: String?
 @InternalSdkApi
 public val AwsProfile.sdkUserAgentAppId: String?
     get() = getOrNull("sdk_ua_app_id")
+
+/**
+ * Whether service clients should make requests to the dual-stack endpoint variant.
+ */
+@InternalSdkApi
+public val AwsProfile.accountIdEndpointMode: AccountIdEndpointMode?
+    get() = getOrNull("account_id_endpoint_mode")?.run {
+        AccountIdEndpointMode.values().firstOrNull { it.name.equals(this, ignoreCase = true) }
+            ?: throw ConfigurationException(
+                "account_id_endpoint_mode $this is not supported, should be one of: ${
+                    AccountIdEndpointMode.values().joinToString(", ") { it.name.lowercase() }
+                }",
+            )
+    }
 
 /**
  * Determines when a request should be compressed or not

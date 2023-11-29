@@ -14,25 +14,25 @@ import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class AwsDefaultRetryPolicyTest {
+class AwsRetryPolicyTest {
     @Test
     fun testErrorsByErrorCode() {
-        AwsDefaultRetryPolicy.knownErrorTypes.forEach { (errorCode, errorType) ->
+        AwsRetryPolicy.knownErrorTypes.forEach { (errorCode, errorType) ->
             val ex = ServiceException()
             ex.sdkErrorMetadata.attributes[ServiceErrorMetadata.ErrorCode] = errorCode
-            val result = AwsDefaultRetryPolicy.evaluate(Result.failure(ex))
+            val result = AwsRetryPolicy.Default.evaluate(Result.failure(ex))
             assertEquals(RetryDirective.RetryError(errorType), result)
         }
     }
 
     @Test
     fun testErrorsByStatusCode() {
-        AwsDefaultRetryPolicy.knownStatusCodes.forEach { (statusCode, errorType) ->
+        AwsRetryPolicy.knownStatusCodes.forEach { (statusCode, errorType) ->
             val modeledStatusCode = HttpStatusCode.fromValue(statusCode)
             val response = HttpResponse(modeledStatusCode, Headers.Empty, HttpBody.Empty)
             val ex = ServiceException()
             ex.sdkErrorMetadata.attributes[ServiceErrorMetadata.ProtocolResponse] = response
-            val result = AwsDefaultRetryPolicy.evaluate(Result.failure(ex))
+            val result = AwsRetryPolicy.Default.evaluate(Result.failure(ex))
             assertEquals(RetryDirective.RetryError(errorType), result)
         }
     }

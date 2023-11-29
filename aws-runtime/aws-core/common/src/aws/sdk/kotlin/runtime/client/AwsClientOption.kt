@@ -4,7 +4,8 @@
  */
 
 package aws.sdk.kotlin.runtime.client
-import aws.smithy.kotlin.runtime.util.AttributeKey
+
+import aws.smithy.kotlin.runtime.collections.AttributeKey
 
 /**
  * A collection of AWS service client options. NOTE: most options are configured by default through the service
@@ -15,5 +16,10 @@ public object AwsClientOption {
      * The AWS region the client should use. Note this is not always the same as [AwsSigningAttributes.SigningRegion] in
      * the case of global services like IAM
      */
-    public val Region: AttributeKey<String> = AttributeKey("AwsRegion")
+    public val Region: AttributeKey<String> = AttributeKey("aws.sdk.kotlin#AwsRegion")
+
+    /**
+     * The ID of the AWS account requests are routed to.
+     */
+    public val AccountId: AttributeKey<String> = AttributeKey("aws.sdk.kotlin#AccountId")
 }

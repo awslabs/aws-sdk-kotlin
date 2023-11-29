@@ -66,6 +66,9 @@ codegen {
                         "aws.sdk.kotlin.runtime.InternalSdkApi",
                     )
                 }
+                apiSettings {
+                    defaultValueSerializationMode = "always"
+                }
             }
         }
     }

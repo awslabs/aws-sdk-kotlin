@@ -5,6 +5,8 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.arns.Arn
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.StsClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRoleWithWebIdentity
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.PolicyDescriptorType
@@ -13,13 +15,14 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH_SECONDS
+import aws.smithy.kotlin.runtime.client.SdkClientOption
+import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.config.EnvironmentSetting
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.telemetry.telemetryProvider
 import aws.smithy.kotlin.runtime.time.TimestampFormat
-import aws.smithy.kotlin.runtime.util.Attributes
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
@@ -118,6 +121,7 @@ public class StsWebIdentityCredentialsProvider(
             httpClient = provider.httpClient
             // NOTE: credentials provider not needed for this operation
             telemetryProvider = telemetry
+            logMode = attributes.getOrNull(SdkClientOption.LogMode)
         }
 
         val resp = try {
@@ -138,14 +142,16 @@ public class StsWebIdentityCredentialsProvider(
         }
 
         val roleCredentials = resp.credentials ?: throw CredentialsProviderException("STS credentials must not be null")
-        logger.debug { "obtained assumed credentials via web identity; expiration=${roleCredentials.expiration?.format(TimestampFormat.ISO_8601)}" }
+        logger.debug { "obtained assumed credentials via web identity; expiration=${roleCredentials.expiration.format(TimestampFormat.ISO_8601)}" }
+        val accountId = resp.assumedRoleUser?.arn?.let { Arn.parse(it) }?.accountId
 
-        return Credentials(
-            accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in STS assumeRoleWithWebIdentity response" },
-            secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in STS assumeRoleWithWebIdentity response" },
+        return credentials(
+            accessKeyId = roleCredentials.accessKeyId,
+            secretAccessKey = roleCredentials.secretAccessKey,
             sessionToken = roleCredentials.sessionToken,
             expiration = roleCredentials.expiration,
             providerName = PROVIDER_NAME,
+            accountId = accountId,
         )
     }
 }

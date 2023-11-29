@@ -34,7 +34,8 @@ public abstract interface annotation class aws/sdk/kotlin/runtime/InternalSdkApi
 
 public final class aws/sdk/kotlin/runtime/client/AwsClientOption {
 	public static final field INSTANCE Laws/sdk/kotlin/runtime/client/AwsClientOption;
-	public final fun getRegion ()Laws/smithy/kotlin/runtime/util/AttributeKey;
+	public final fun getAccountId ()Laws/smithy/kotlin/runtime/collections/AttributeKey;
+	public final fun getRegion ()Laws/smithy/kotlin/runtime/collections/AttributeKey;
 }
 
 public abstract interface class aws/sdk/kotlin/runtime/client/AwsSdkClientConfig : aws/smithy/kotlin/runtime/client/SdkClientConfig {

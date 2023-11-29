@@ -11,7 +11,7 @@ import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.util.LazyAsyncValue
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
-internal actual class DefaultRegionProviderChain actual constructor(
+public actual class DefaultRegionProviderChain actual constructor(
     platformProvider: PlatformProvider,
     imdsClient: Lazy<InstanceMetadataProvider>,
     profile: LazyAsyncValue<AwsProfile>,
