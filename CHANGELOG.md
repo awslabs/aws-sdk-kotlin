@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.7] - 11/30/2023
+
+### Features
+* (**arczonalshift**) This release adds a new capability, zonal autoshift. You can configure zonal autoshift so that AWS shifts traffic for a resource away from an Availability Zone, on your behalf, when AWS determines that there is an issue that could potentially affect customers in the Availability Zone.
+* (**glue**) Adds observation and analyzer support to the GetDataQualityResult and BatchGetDataQualityResult APIs.
+* (**sagemaker**) This release adds support for 1/ Code Editor, based on Code-OSS, Visual Studio Code Open Source, a new fully managed IDE option in SageMaker Studio  2/ JupyterLab, a new fully managed JupyterLab IDE experience in SageMaker Studio
+
 ## [1.0.6] - 11/30/2023
 
 ### Features
