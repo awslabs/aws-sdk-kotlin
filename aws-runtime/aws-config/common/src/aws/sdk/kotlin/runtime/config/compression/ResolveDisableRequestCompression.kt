@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.config.compression
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.disableRequestCompression
 import aws.smithy.kotlin.runtime.config.resolve
@@ -19,4 +18,4 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  */
 @InternalSdkApi
 public suspend fun resolveDisableRequestCompression(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): Boolean? =
-    AwsSdkSetting.AwsDisableRequestCompression.resolve(platform) ?: profile.get().disableRequestCompression
+    CompressionSettings.AwsDisableRequestCompression.resolve(platform) ?: profile.get().disableRequestCompression

@@ -190,18 +190,6 @@ public object AwsSdkSetting {
      * The mode to use when resolving endpoints that make use of the AWS account ID.
      */
     public val AwsAccountIdEndpointMode: EnvironmentSetting<AccountIdEndpointMode> = enumEnvSetting("aws.accountIdEndpointMode", "AWS_ACCOUNT_ID_ENDPOINT_MODE")
-
-    /**
-     * Determines when a request should be compressed or not
-     */
-    public val AwsDisableRequestCompression: EnvironmentSetting<Boolean> =
-        boolEnvSetting("aws.disableRequestCompression", "AWS_DISABLE_REQUEST_COMPRESSION")
-
-    /**
-     * The threshold used to determine when a request should be compressed
-     */
-    public val AwsRequestMinCompressionSizeBytes: EnvironmentSetting<Long> =
-        longEnvSetting("aws.requestMinCompressionSizeBytes", "AWS_REQUEST_MIN_COMPRESSION_SIZE_BYTES")
 }
 
 /**

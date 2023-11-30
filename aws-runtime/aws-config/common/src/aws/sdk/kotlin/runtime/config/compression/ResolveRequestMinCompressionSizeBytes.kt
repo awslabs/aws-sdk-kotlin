@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.config.compression
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.requestMinCompressionSizeBytes
 import aws.smithy.kotlin.runtime.config.resolve
@@ -19,4 +18,4 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  */
 @InternalSdkApi
 public suspend fun resolveRequestMinCompressionSizeBytes(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): Long? =
-    AwsSdkSetting.AwsRequestMinCompressionSizeBytes.resolve(platform) ?: profile.get().requestMinCompressionSizeBytes
+    CompressionSettings.AwsRequestMinCompressionSizeBytes.resolve(platform) ?: profile.get().requestMinCompressionSizeBytes

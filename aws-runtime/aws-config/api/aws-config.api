@@ -220,6 +220,12 @@ public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory 
 public final class aws/sdk/kotlin/runtime/config/AwsSdkSettingKt {
 }
 
+public final class aws/sdk/kotlin/runtime/config/compression/CompressionSettings {
+	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/compression/CompressionSettings;
+	public final fun getAwsDisableRequestCompression ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
+	public final fun getAwsRequestMinCompressionSizeBytes ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
+}
+
 public final class aws/sdk/kotlin/runtime/config/compression/ResolveDisableRequestCompressionKt {
 }
 
