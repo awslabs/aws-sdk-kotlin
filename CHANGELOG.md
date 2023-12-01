@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.8] - 12/01/2023
+
+### Features
+* (**qconnect**) This release adds the PutFeedback API and allows providing feedback against the specified assistant for the specified target.
+* (**rbin**) Added resource identifier in the output and updated error handling.
+* (**verifiedpermissions**) Adds description field to PolicyStore API's and namespaces field to GetSchema.
+* [#1132](https://github.com/awslabs/aws-sdk-kotlin/issues/1132) Pass client-configured LogMode through to internal credentials providers
+
+### Miscellaneous
+* Add optional `configurationSource` parameter to `ProfileCredentialsProvider`
+
 ## [1.0.7] - 11/30/2023
 
 ### Features

@@ -1,8 +1,0 @@
-{
-    "id": "c8ccff8e-460a-4e91-8f81-d09180636dea",
-    "type": "feature",
-    "description": "Pass client-configured LogMode through to internal credentials providers",
-    "issues": [
-        "https://github.com/awslabs/aws-sdk-kotlin/issues/1132"
-    ]
-}
