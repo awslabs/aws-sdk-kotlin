@@ -1,0 +1,5 @@
+{
+    "id": "d7c1e490-7fc3-48fe-8faf-914a5f09c671",
+    "type": "misc",
+    "description": "Add optional configurationSource parameter to ProfileCredentialsProvider"
+}
