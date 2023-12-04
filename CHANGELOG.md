@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.9] - 12/04/2023
+
+### Features
+* (**billingconductor**) This release adds the ability to specify a linked account of the billing group for the custom line item resource.
+* (**braket**) This release enhances service support to create quantum tasks and hybrid jobs associated with Braket Direct Reservations.
+* (**cloud9**) This release adds the requirement to include the imageId parameter in the CreateEnvironmentEC2 API call.
+* (**cloudformation**) Including UPDATE_* states as a success status for CreateStack waiter.
+* (**finspace**) Release General Purpose type clusters
+* (**medialive**) Adds support for custom color correction on channels using 3D LUT files.
+
+### Documentation
+* (**servicecatalogappregistry**) Documentation-only updates for Dawn
+
 ## [1.0.8] - 12/01/2023
 
 ### Features
