@@ -127,6 +127,7 @@ public class SsoCredentialsProvider public constructor(
             expiration = Instant.fromEpochMilliseconds(roleCredentials.expiration),
             PROVIDER_NAME,
             accountId = accountId,
+//            scope = roleCredentials.credentialScope // TODO When will SSO service add credentialScope to their model?
         )
     }
 

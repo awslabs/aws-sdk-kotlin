@@ -44,6 +44,11 @@ public object AwsSdkSetting {
     public val AwsSessionToken: EnvironmentSetting<String> = strEnvSetting("aws.sessionToken", "AWS_SESSION_TOKEN")
 
     /**
+     * An optional regional scope of credentials.
+     */
+    public val AwsCredentialScope: EnvironmentSetting<String> = strEnvSetting("aws.credentialScope", "AWS_CREDENTIAL_SCOPE")
+
+    /**
      * Configure the default region.
      */
     public val AwsRegion: EnvironmentSetting<String> = strEnvSetting("aws.region", "AWS_REGION")

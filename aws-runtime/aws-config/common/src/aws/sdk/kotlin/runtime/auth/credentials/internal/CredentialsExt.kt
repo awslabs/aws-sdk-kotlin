@@ -19,6 +19,7 @@ internal fun credentials(
     expiration: Instant? = null,
     providerName: String? = null,
     accountId: String? = null,
+    scope: String? = null,
 ): Credentials {
     val attributes = when {
         providerName != null || accountId != null -> mutableAttributes().apply {
@@ -27,5 +28,5 @@ internal fun credentials(
         }
         else -> emptyAttributes()
     }
-    return Credentials(accessKeyId, secretAccessKey, sessionToken, expiration, attributes = attributes)
+    return Credentials(accessKeyId, secretAccessKey, sessionToken, expiration, attributes = attributes, scope = scope)
 }

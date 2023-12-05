@@ -20,6 +20,7 @@ private val ACCESS_KEY_ID = AwsSdkSetting.AwsAccessKeyId.envVar
 private val SECRET_ACCESS_KEY = AwsSdkSetting.AwsSecretAccessKey.envVar
 private val SESSION_TOKEN = AwsSdkSetting.AwsSessionToken.envVar
 private val ACCOUNT_ID = AwsSdkSetting.AwsAccountId.envVar
+private val CREDENTIAL_SCOPE = AwsSdkSetting.AwsCredentialScope.envVar
 
 /**
  * A [CredentialsProvider] which reads from `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN`.
@@ -41,6 +42,7 @@ public class EnvironmentCredentialsProvider(
             sessionToken = getEnv(SESSION_TOKEN),
             providerName = PROVIDER_NAME,
             accountId = getEnv(ACCOUNT_ID),
+            scope = getEnv(CREDENTIAL_SCOPE)
         )
     }
 }

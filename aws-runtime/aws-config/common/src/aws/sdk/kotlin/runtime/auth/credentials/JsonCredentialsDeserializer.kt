@@ -29,6 +29,7 @@ internal sealed class JsonCredentialsResponse {
         val sessionToken: String,
         val expiration: Instant?,
         val accountId: String? = null,
+        val scope: String? = null
     ) : JsonCredentialsResponse()
 
     // TODO - add support for static credentials
@@ -147,6 +148,7 @@ internal fun deserializeJsonProcessCredentials(deserializer: Deserializer): Json
     val EXPIRATION_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Timestamp, JsonSerialName("Expiration"))
     val VERSION_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Version"))
     val ACCOUNT_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccountId"))
+    val CREDENTIAL_SCOPE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("CredentialScope"))
 
     val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
         field(ACCESS_KEY_ID_DESCRIPTOR)
@@ -155,6 +157,7 @@ internal fun deserializeJsonProcessCredentials(deserializer: Deserializer): Json
         field(EXPIRATION_DESCRIPTOR)
         field(VERSION_DESCRIPTOR)
         field(ACCOUNT_ID_DESCRIPTOR)
+        field(CREDENTIAL_SCOPE_DESCRIPTOR)
     }
 
     var accessKeyId: String? = null
@@ -163,6 +166,7 @@ internal fun deserializeJsonProcessCredentials(deserializer: Deserializer): Json
     var expiration: Instant? = null
     var version: Int? = null
     var accountId: String? = null
+    var credentialScope: String? = null
 
     try {
         deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
@@ -174,6 +178,7 @@ internal fun deserializeJsonProcessCredentials(deserializer: Deserializer): Json
                     EXPIRATION_DESCRIPTOR.index -> expiration = Instant.fromIso8601(deserializeString())
                     VERSION_DESCRIPTOR.index -> version = deserializeInt()
                     ACCOUNT_ID_DESCRIPTOR.index -> accountId = deserializeString()
+                    CREDENTIAL_SCOPE_DESCRIPTOR.index -> credentialScope = deserializeString()
                     null -> break@loop
                     else -> skipValue()
                 }
@@ -188,5 +193,5 @@ internal fun deserializeJsonProcessCredentials(deserializer: Deserializer): Json
     if (sessionToken == null) throw InvalidJsonCredentialsException("missing field `${SESSION_TOKEN_DESCRIPTOR.serialName}`")
     if (version == null) throw InvalidJsonCredentialsException("missing field `${VERSION_DESCRIPTOR.serialName}`")
     if (version != 1) throw InvalidJsonCredentialsException("version $version is not supported")
-    return JsonCredentialsResponse.SessionCredentials(accessKeyId!!, secretAccessKey!!, sessionToken!!, expiration, accountId)
+    return JsonCredentialsResponse.SessionCredentials(accessKeyId!!, secretAccessKey!!, sessionToken!!, expiration, accountId, credentialScope)
 }

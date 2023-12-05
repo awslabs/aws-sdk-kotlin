@@ -20,6 +20,7 @@ private val ACCESS_KEY_ID = AwsSdkSetting.AwsAccessKeyId.sysProp
 private val SECRET_ACCESS_KEY = AwsSdkSetting.AwsSecretAccessKey.sysProp
 private val SESSION_TOKEN = AwsSdkSetting.AwsSessionToken.sysProp
 private val ACCOUNT_ID = AwsSdkSetting.AwsAccountId.sysProp
+private val CREDENTIAL_SCOPE = AwsSdkSetting.AwsCredentialScope.sysProp
 
 /**
  * A [CredentialsProvider] which reads `aws.accessKeyId`, `aws.secretAccessKey`, and `aws.sessionToken` from system properties.
@@ -41,6 +42,7 @@ public class SystemPropertyCredentialsProvider(
             sessionToken = getProperty(SESSION_TOKEN),
             providerName = PROVIDER_NAME,
             accountId = getProperty(ACCOUNT_ID),
+            scope = getProperty(CREDENTIAL_SCOPE)
         )
     }
 }

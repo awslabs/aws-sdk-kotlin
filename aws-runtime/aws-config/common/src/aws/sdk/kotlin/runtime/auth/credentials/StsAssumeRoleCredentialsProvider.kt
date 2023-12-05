@@ -149,6 +149,7 @@ public class StsAssumeRoleCredentialsProvider(
             expiration = roleCredentials.expiration,
             providerName = PROVIDER_NAME,
             accountId = accountId,
+            // scope = roleCredentials.credentialScope // FIXME When will STS add credentialScope to their model?
         )
     }
 }

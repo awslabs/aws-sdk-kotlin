@@ -122,6 +122,7 @@ internal const val AWS_ACCESS_KEY_ID = "aws_access_key_id"
 internal const val AWS_SECRET_ACCESS_KEY = "aws_secret_access_key"
 internal const val AWS_SESSION_TOKEN = "aws_session_token"
 internal const val AWS_ACCOUNT_ID = "aws_account_id"
+internal const val AWS_CREDENTIAL_SCOPE = "aws_credential_scope"
 
 internal const val SSO_START_URL = "sso_start_url"
 internal const val SSO_REGION = "sso_region"
@@ -262,7 +263,8 @@ private fun AwsProfile.staticCreds(): LeafProviderResult {
         secretKey == null -> LeafProviderResult.Err("profile ($name) missing `aws_secret_access_key`")
         else -> {
             val sessionToken = getOrNull(AWS_SESSION_TOKEN)
-            val provider = LeafProvider.AccessKey(credentials(accessKeyId, secretKey, sessionToken, accountId = accountId))
+            val credentialScope = getOrNull(AWS_CREDENTIAL_SCOPE)
+            val provider = LeafProvider.AccessKey(credentials(accessKeyId, secretKey, sessionToken, accountId = accountId, scope = credentialScope))
             LeafProviderResult.Ok(provider)
         }
     }

@@ -76,6 +76,7 @@ public abstract class AbstractAwsSdkClientFactory<
             config.useFips = config.useFips ?: resolveUseFips(profile = profile)
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)
+            // FIXME Wire up credentialScope here?
 
             finalizeConfig(builder, sharedConfig, profile)
         }
