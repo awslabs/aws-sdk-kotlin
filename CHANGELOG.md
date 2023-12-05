@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.10] - 12/05/2023
+
+### Features
+* (**athena**) Adding IdentityCenter enabled request for interactive query
+* (**cleanroomsml**) Updated service title from cleanroomsml to CleanRoomsML.
+* (**ec2**) Adds A10G, T4G, and H100 as accelerator name options and Habana as an accelerator manufacturer option for attribute based selection
+
+### Documentation
+* (**cloudformation**) Documentation update, December 2023
+
 ## [1.0.9] - 12/04/2023
 
 ### Features
