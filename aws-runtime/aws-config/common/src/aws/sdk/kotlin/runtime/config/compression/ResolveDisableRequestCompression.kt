@@ -14,8 +14,8 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
  * Attempts to resolve disableRequestCompression from specified sources.
- * @return The disableRequestCompression setting if found, null if not
+ * @return The disableRequestCompression setting if found, the default value if not
  */
 @InternalSdkApi
-public suspend fun resolveDisableRequestCompression(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): Boolean? =
-    CompressionSettings.AwsDisableRequestCompression.resolve(platform) ?: profile.get().disableRequestCompression
+public suspend fun resolveDisableRequestCompression(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): Boolean =
+    CompressionSettings.AwsDisableRequestCompression.resolve(platform) ?: profile.get().disableRequestCompression ?: false

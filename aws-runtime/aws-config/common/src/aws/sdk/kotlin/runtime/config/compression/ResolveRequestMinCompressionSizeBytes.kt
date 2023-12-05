@@ -14,8 +14,8 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
  * Attempts to resolve requestMinCompressionSizeBytes from specified sources.
- * @return The requestMinCompressionSizeBytes setting if found, null if not
+ * @return The requestMinCompressionSizeBytes setting if found, the default value if not
  */
 @InternalSdkApi
-public suspend fun resolveRequestMinCompressionSizeBytes(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): Long? =
-    CompressionSettings.AwsRequestMinCompressionSizeBytes.resolve(platform) ?: profile.get().requestMinCompressionSizeBytes
+public suspend fun resolveRequestMinCompressionSizeBytes(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): Long =
+    CompressionSettings.AwsRequestMinCompressionSizeBytes.resolve(platform) ?: profile.get().requestMinCompressionSizeBytes ?: 10240

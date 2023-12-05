@@ -80,8 +80,8 @@ public abstract class AbstractAwsSdkClientFactory<
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)
             if (config is CompressionClientConfig.Builder) {
-                config.disableRequestCompression = config.disableRequestCompression ?: resolveDisableRequestCompression(platform, profile) ?: false
-                config.requestMinCompressionSizeBytes = config.requestMinCompressionSizeBytes ?: resolveRequestMinCompressionSizeBytes(platform, profile) ?: 10240
+                config.disableRequestCompression = config.disableRequestCompression ?: resolveDisableRequestCompression(platform, profile)
+                config.requestMinCompressionSizeBytes = config.requestMinCompressionSizeBytes ?: resolveRequestMinCompressionSizeBytes(platform, profile)
             }
 
             finalizeConfig(builder, sharedConfig, profile)

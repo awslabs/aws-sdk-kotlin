@@ -52,10 +52,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     }
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
-        val ignoredTests = TestMemberDelta(
-            setOf(),
-        )
-
         // The following can be used to generate only a specific test by name.
         // val targetedTest = TestMemberDelta(setOf("RestJsonComplexErrorWithNoMessage"), TestContainmentMode.RUN_TESTS)
 
@@ -68,7 +64,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             requestTestBuilder,
             responseTestBuilder,
             errorTestBuilder,
-            ignoredTests,
         ).generateProtocolTests()
     }
 
