@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.11] - 12/06/2023
+
+### Features
+* (**backup**) AWS Backup - Features: Add VaultType to the output of DescribeRecoveryPoint, ListRecoveryPointByBackupVault API and add ResourceType to the input of ListRestoreJobs API
+* (**connect**) Releasing Tagging Support for Instance Management APIS
+* (**ec2**) Releasing the new cpuManufacturer attribute within the DescribeInstanceTypes API response which notifies our customers with information on who the Manufacturer is for the processor attached to the instance, for example: Intel.
+* (**paymentcryptography**) AWS Payment Cryptography IPEK feature release
+
+### Documentation
+* (**comprehend**) Documentation updates for Trust and Safety features.
+
 ## [1.0.10] - 12/05/2023
 
 ### Features
