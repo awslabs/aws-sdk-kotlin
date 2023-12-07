@@ -46,6 +46,10 @@ class DefaultChainCredentialsProviderTest {
         override suspend fun writeFile(path: String, data: ByteArray) {
             error("not needed for test")
         }
+
+        override fun fileExists(path: String): Boolean {
+            error("not needed for test")
+        }
     }
 
     class DefaultChainPlatformProvider(
