@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.12] - 12/07/2023
+
+### Features
+* (**codedeploy**) This release adds support for two new CodeDeploy features: 1) zonal deployments for Amazon EC2 in-place deployments, 2) deployments triggered by Auto Scaling group termination lifecycle hook events.
+
 ## [1.0.11] - 12/06/2023
 
 ### Features
