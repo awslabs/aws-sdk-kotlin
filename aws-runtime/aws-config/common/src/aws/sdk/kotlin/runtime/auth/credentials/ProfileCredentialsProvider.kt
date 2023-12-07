@@ -82,7 +82,7 @@ public class ProfileCredentialsProvider(
     public val region: String? = null,
     public val platformProvider: PlatformProvider = PlatformProvider.System,
     public val httpClient: HttpClientEngine? = null,
-    private val configurationSource: AwsConfigurationSource? = null,
+    public val configurationSource: AwsConfigurationSource? = null,
 ) : CloseableCredentialsProvider {
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
