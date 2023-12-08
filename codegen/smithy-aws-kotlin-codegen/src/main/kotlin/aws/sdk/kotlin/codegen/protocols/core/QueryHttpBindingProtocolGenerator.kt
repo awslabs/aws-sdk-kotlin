@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.codegen.protocols.core
 
-import aws.sdk.kotlin.codegen.protocols.middleware.MutateHeadersMiddleware
+import aws.sdk.kotlin.codegen.middleware.MutateHeadersMiddleware
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes

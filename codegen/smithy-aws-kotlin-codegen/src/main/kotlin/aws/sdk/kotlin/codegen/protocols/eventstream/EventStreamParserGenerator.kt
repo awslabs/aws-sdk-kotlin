@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.codegen.protocols.eventstream
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.codegen.core.CodegenException
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
@@ -118,7 +117,7 @@ class EventStreamParserGenerator(
                     // this is a service exception still, just un-modeled
                     write("is #T.Error -> throw #T(\"error processing event stream: errorCode=\${mt.errorCode}; message=\${mt.message}\")", messageTypeSymbol, baseExceptionSymbol)
                     // this is a client exception because we failed to parse it
-                    write("is #T.SdkUnknown -> throw #T(\"unrecognized event stream message `:message-type`: \${mt.messageType}\")", messageTypeSymbol, AwsRuntimeTypes.Core.ClientException)
+                    write("is #T.SdkUnknown -> throw #T(\"unrecognized event stream message `:message-type`: \${mt.messageType}\")", messageTypeSymbol, RuntimeTypes.Core.ClientException)
                 }
             }
             .dedent()
@@ -218,7 +217,7 @@ class EventStreamParserGenerator(
             .closeAndOpenBlock("} else {")
             .write(
                 "#T(#T(firstMessage), frames)",
-                AwsRuntimeTypes.Core.mergeSequential,
+                RuntimeTypes.Core.Utils.mergeSequential,
                 RuntimeTypes.KotlinxCoroutines.Flow.flowOf,
             )
             .closeBlock("}")
