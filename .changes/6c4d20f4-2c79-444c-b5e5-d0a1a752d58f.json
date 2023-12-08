@@ -1,0 +1,8 @@
+{
+    "id": "6c4d20f4-2c79-444c-b5e5-d0a1a752d58f",
+    "type": "bugfix",
+    "description": "Upgrade to [**smithy-kotlin** 1.0.3](https://github.com/awslabs/smithy-kotlin/releases/tag/v1.0.3) to consume fixes for URL signing special characters",
+    "issues": [
+        "awslabs/smithy-kotlin#1008"
+    ]
+}
