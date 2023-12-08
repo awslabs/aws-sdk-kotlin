@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.codegen.customization
+package aws.sdk.kotlin.codegen.middleware
 
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
@@ -10,7 +10,6 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 
-// FIXME - should this be pulled in by all AWS protocols and not just the AWS SDK
 /**
  * Adds a section writer which applies an interceptor that detects and corrects clock skew
  */

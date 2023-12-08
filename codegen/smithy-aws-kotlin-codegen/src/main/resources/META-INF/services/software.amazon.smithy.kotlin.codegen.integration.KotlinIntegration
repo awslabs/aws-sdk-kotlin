@@ -1,1 +1,2 @@
 aws.sdk.kotlin.codegen.SdkProtocolGeneratorSupplier
+aws.sdk.kotlin.codegen.middleware.ClockSkew

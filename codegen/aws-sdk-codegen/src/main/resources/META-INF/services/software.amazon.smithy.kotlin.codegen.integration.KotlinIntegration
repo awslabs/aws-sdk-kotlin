@@ -5,7 +5,6 @@ aws.sdk.kotlin.codegen.GradleGenerator
 aws.sdk.kotlin.codegen.AwsRetryHeaderIntegration
 aws.sdk.kotlin.codegen.customization.ReplaceServiceExceptionBase
 aws.sdk.kotlin.codegen.customization.DefaultMiddleware
-aws.sdk.kotlin.codegen.customization.ClockSkew
 aws.sdk.kotlin.codegen.customization.AccountIdEndpointBuiltinCustomization
 aws.sdk.kotlin.codegen.customization.PresignableModelIntegration
 aws.sdk.kotlin.codegen.customization.BackfillOptionalAuth
