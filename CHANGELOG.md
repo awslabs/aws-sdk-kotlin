@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.13] - 12/08/2023
+
+### Features
+* (**cloudwatch**) Adds support for the OpenTelemetry 1.0 output format in CloudWatch Metric Streams.
+* (**ec2**) M2 Mac instances are built on Apple M2 Mac mini computers. I4i instances are powered by 3rd generation Intel Xeon Scalable processors. C7i compute optimized, M7i general purpose and R7i memory optimized instances are powered by custom 4th Generation Intel Xeon Scalable processors.
+* (**finspace**) Releasing Scaling Group, Dataview, and Volume APIs
+
 ## [1.0.12] - 12/07/2023
 
 ### Features
