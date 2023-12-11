@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.14] - 12/11/2023
+
+### Features
+* (**neptune**) This release adds a new parameter configuration setting to the Neptune cluster related APIs that can be leveraged to switch between the underlying supported storage modes.
+* (**securityhub**) Added new resource detail objects to ASFF, including resources for AwsDynamoDbTable, AwsEc2ClientVpnEndpoint, AwsMskCluster, AwsS3AccessPoint, AwsS3Bucket
+
+### Documentation
+* (**pinpoint**) This release includes Amazon Pinpoint API documentation updates pertaining to campaign message sending rate limits.
+
 ## [1.0.13] - 12/08/2023
 
 ### Features
