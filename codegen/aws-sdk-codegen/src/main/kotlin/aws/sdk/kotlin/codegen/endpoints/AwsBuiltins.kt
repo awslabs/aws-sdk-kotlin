@@ -9,7 +9,6 @@ object AwsBuiltins {
     const val REGION = "AWS::Region"
     const val USE_FIPS = "AWS::UseFIPS"
     const val USE_DUAL_STACK = "AWS::UseDualStack"
-    const val SDK_ENDPOINT = "SDK::Endpoint"
     const val S3_ACCELERATE = "AWS::S3::Accelerate"
     const val S3_FORCE_PATH_STYLE = "AWS::S3::ForcePathStyle"
     const val S3_DISABLE_MRAP = "AWS::S3::DisableMultiRegionAccessPoints"

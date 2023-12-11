@@ -20,6 +20,7 @@ import software.amazon.smithy.model.traits.HttpBearerAuthTrait
 
 class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
+        // FIXME - should this be triggered by endpoint builtin?
         val RegionProp: ConfigProperty = ConfigProperty {
             name = "region"
             symbol = KotlinTypes.String.toBuilder().nullable().build()
@@ -79,44 +80,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             )
         }
 
-        val UseFipsProp: ConfigProperty = ConfigProperty {
-            name = "useFips"
-            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
-            documentation = """
-                Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
-     `          Disabled by default.
-            """.trimIndent()
-            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
-            useNestedBuilderBaseClass()
-        }
-
-        val UseDualStackProp: ConfigProperty = ConfigProperty {
-            name = "useDualStack"
-            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
-            documentation = """
-                Flag to toggle whether to use dual-stack endpoints when making requests.
-                See [https://docs.aws.amazon.com/sdkref/latest/guide/feature-endpoints.html] for more information.
-     `          Disabled by default.
-            """.trimIndent()
-            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
-            useNestedBuilderBaseClass()
-        }
-
-        val EndpointUrlProp = ConfigProperty {
-            name = "endpointUrl"
-            symbol = RuntimeTypes.Core.Net.Url.Url.asNullable()
-            documentation = """
-                A custom endpoint to route requests to. The endpoint set here is passed to the configured
-                [endpointProvider], which may inspect and modify it as needed.
-
-                Setting a custom endpointUrl should generally be preferred to overriding the [endpointProvider] and is
-                the recommended way to route requests to development or preview instances of a service.
-
-                **This is an advanced config option.**
-            """.trimIndent()
-            propertyType = ConfigPropertyType.SymbolDefault
-        }
-
         val AwsRetryPolicy = RuntimeConfigProperty
             .RetryPolicy
             .toBuilder()
@@ -174,9 +137,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             add(BearerTokenProviderProp)
         }
 
-        add(UseFipsProp)
-        add(UseDualStackProp)
-        add(EndpointUrlProp)
         add(AwsRetryPolicy)
         add(UserAgentAppId)
     }

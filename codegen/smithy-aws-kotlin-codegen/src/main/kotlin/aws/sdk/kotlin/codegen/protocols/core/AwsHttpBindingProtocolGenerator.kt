@@ -18,46 +18,44 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ShapeId
 
-// FIXME - support updating list of tests to be ignored? We may just be able to leave test generation here and just add section writers where needed to customize for AWS SDK
-
 /**
  * Base class for all AWS HTTP protocol generators
  */
 abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() {
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
-        // val ignoredTests = TestMemberDelta(
-        //     setOf(
-        //         // FIXME - compression not yet supported, see https://github.com/awslabs/smithy-kotlin/issues/955
-        //         "SDKAppliedContentEncoding_awsJson1_0",
-        //         "SDKAppliedContentEncoding_awsJson1_1",
-        //         "SDKAppliedContentEncoding_awsQuery",
-        //         "SDKAppliedContentEncoding_ec2Query",
-        //         "SDKAppliedContentEncoding_restJson1",
-        //         "SDKAppliedContentEncoding_restXml",
-        //         "SDKAppendedGzipAfterProvidedEncoding_restJson1",
-        //         "SDKAppendedGzipAfterProvidedEncoding_restXml",
-        //         "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsJson1_0",
-        //         "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsJson1_1",
-        //         "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsQuery",
-        //         "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_ec2Query",
-        //     ),
-        // )
-        //
-        // // The following can be used to generate only a specific test by name.
-        // // val targetedTest = TestMemberDelta(setOf("RestJsonComplexErrorWithNoMessage"), TestContainmentMode.RUN_TESTS)
-        //
-        // val requestTestBuilder = AwsHttpProtocolUnitTestRequestGenerator.Builder()
-        // val responseTestBuilder = AwsHttpProtocolUnitTestResponseGenerator.Builder()
-        // val errorTestBuilder = AwsHttpProtocolUnitTestErrorGenerator.Builder()
-        //
-        // HttpProtocolTestGenerator(
-        //     ctx,
-        //     requestTestBuilder,
-        //     responseTestBuilder,
-        //     errorTestBuilder,
-        //     ignoredTests,
-        // ).generateProtocolTests()
+        val ignoredTests = TestMemberDelta(
+            setOf(
+                // FIXME - compression not yet supported, see https://github.com/awslabs/smithy-kotlin/issues/955
+                "SDKAppliedContentEncoding_awsJson1_0",
+                "SDKAppliedContentEncoding_awsJson1_1",
+                "SDKAppliedContentEncoding_awsQuery",
+                "SDKAppliedContentEncoding_ec2Query",
+                "SDKAppliedContentEncoding_restJson1",
+                "SDKAppliedContentEncoding_restXml",
+                "SDKAppendedGzipAfterProvidedEncoding_restJson1",
+                "SDKAppendedGzipAfterProvidedEncoding_restXml",
+                "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsJson1_0",
+                "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsJson1_1",
+                "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsQuery",
+                "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_ec2Query",
+            ),
+        )
+
+        // The following can be used to generate only a specific test by name.
+        // val targetedTest = TestMemberDelta(setOf("RestJsonComplexErrorWithNoMessage"), TestContainmentMode.RUN_TESTS)
+
+        val requestTestBuilder = HttpProtocolUnitTestRequestGenerator.Builder()
+        val responseTestBuilder = HttpProtocolUnitTestResponseGenerator.Builder()
+        val errorTestBuilder = HttpProtocolUnitTestErrorGenerator.Builder()
+
+        HttpProtocolTestGenerator(
+            ctx,
+            requestTestBuilder,
+            responseTestBuilder,
+            errorTestBuilder,
+            ignoredTests,
+        ).generateProtocolTests()
     }
 
     /**
@@ -155,6 +153,4 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
 
         writer.write("throw ex")
     }
-
-    // override fun endpointDelegator(ctx: ProtocolGenerator.GenerationContext): EndpointDelegator = AwsEndpointDelegator()
 }
