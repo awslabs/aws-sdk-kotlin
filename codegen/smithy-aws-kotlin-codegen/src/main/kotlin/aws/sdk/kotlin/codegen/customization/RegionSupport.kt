@@ -41,6 +41,10 @@ class RegionSupport : KotlinIntegration {
         }
     }
 
+    // Allow other integrations to customize the service config props, later integrations take precedence.
+    // This is used by AWS SDK codegen to customize the base class and documentation for this property
+    override val order: Byte = -50
+
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
         val service = model.expectShape<ServiceShape>(settings.service)
         val supportsSigv4 = AwsSignatureVersion4.isSupportedAuthentication(model, service)
