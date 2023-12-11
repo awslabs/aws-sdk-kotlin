@@ -5,7 +5,6 @@
 package aws.sdk.kotlin.codegen.endpoints
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import aws.sdk.kotlin.codegen.AwsServiceConfigIntegration
 import aws.sdk.kotlin.codegen.customization.AccountIdEndpointBuiltinCustomization
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
@@ -85,7 +84,6 @@ fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: Kotl
     ) {
         builtinParams.forEach {
             when (it.builtIn.get()) {
-                AwsBuiltins.REGION -> renderBasicConfigBinding(writer, it, AwsServiceConfigIntegration.RegionProp.propertyName)
                 AwsBuiltins.USE_FIPS -> renderBasicConfigBinding(writer, it, BindAwsEndpointBuiltins.UseFipsProp.propertyName)
                 AwsBuiltins.USE_DUAL_STACK -> renderBasicConfigBinding(writer, it, BindAwsEndpointBuiltins.UseDualStackProp.propertyName)
 

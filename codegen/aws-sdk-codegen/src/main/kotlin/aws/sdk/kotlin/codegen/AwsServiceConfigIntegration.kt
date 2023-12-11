@@ -20,7 +20,7 @@ import software.amazon.smithy.model.traits.HttpBearerAuthTrait
 
 class AwsServiceConfigIntegration : KotlinIntegration {
     companion object {
-        // FIXME - should this be triggered by endpoint builtin?
+        // Override the region property registered by AWS protocol support
         val RegionProp: ConfigProperty = ConfigProperty {
             name = "region"
             symbol = KotlinTypes.String.toBuilder().nullable().build()
