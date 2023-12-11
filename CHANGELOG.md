@@ -1,5 +1,78 @@
 # Changelog
 
+## [1.0.14] - 12/11/2023
+
+### Features
+* (**neptune**) This release adds a new parameter configuration setting to the Neptune cluster related APIs that can be leveraged to switch between the underlying supported storage modes.
+* (**securityhub**) Added new resource detail objects to ASFF, including resources for AwsDynamoDbTable, AwsEc2ClientVpnEndpoint, AwsMskCluster, AwsS3AccessPoint, AwsS3Bucket
+
+### Documentation
+* (**pinpoint**) This release includes Amazon Pinpoint API documentation updates pertaining to campaign message sending rate limits.
+
+## [1.0.13] - 12/08/2023
+
+### Features
+* (**cloudwatch**) Adds support for the OpenTelemetry 1.0 output format in CloudWatch Metric Streams.
+* (**ec2**) M2 Mac instances are built on Apple M2 Mac mini computers. I4i instances are powered by 3rd generation Intel Xeon Scalable processors. C7i compute optimized, M7i general purpose and R7i memory optimized instances are powered by custom 4th Generation Intel Xeon Scalable processors.
+* (**finspace**) Releasing Scaling Group, Dataview, and Volume APIs
+
+## [1.0.12] - 12/07/2023
+
+### Features
+* (**codedeploy**) This release adds support for two new CodeDeploy features: 1) zonal deployments for Amazon EC2 in-place deployments, 2) deployments triggered by Auto Scaling group termination lifecycle hook events.
+
+## [1.0.11] - 12/06/2023
+
+### Features
+* (**backup**) AWS Backup - Features: Add VaultType to the output of DescribeRecoveryPoint, ListRecoveryPointByBackupVault API and add ResourceType to the input of ListRestoreJobs API
+* (**connect**) Releasing Tagging Support for Instance Management APIS
+* (**ec2**) Releasing the new cpuManufacturer attribute within the DescribeInstanceTypes API response which notifies our customers with information on who the Manufacturer is for the processor attached to the instance, for example: Intel.
+* (**paymentcryptography**) AWS Payment Cryptography IPEK feature release
+
+### Documentation
+* (**comprehend**) Documentation updates for Trust and Safety features.
+
+## [1.0.10] - 12/05/2023
+
+### Features
+* (**athena**) Adding IdentityCenter enabled request for interactive query
+* (**cleanroomsml**) Updated service title from cleanroomsml to CleanRoomsML.
+* (**ec2**) Adds A10G, T4G, and H100 as accelerator name options and Habana as an accelerator manufacturer option for attribute based selection
+
+### Documentation
+* (**cloudformation**) Documentation update, December 2023
+
+## [1.0.9] - 12/04/2023
+
+### Features
+* (**billingconductor**) This release adds the ability to specify a linked account of the billing group for the custom line item resource.
+* (**braket**) This release enhances service support to create quantum tasks and hybrid jobs associated with Braket Direct Reservations.
+* (**cloud9**) This release adds the requirement to include the imageId parameter in the CreateEnvironmentEC2 API call.
+* (**cloudformation**) Including UPDATE_* states as a success status for CreateStack waiter.
+* (**finspace**) Release General Purpose type clusters
+* (**medialive**) Adds support for custom color correction on channels using 3D LUT files.
+
+### Documentation
+* (**servicecatalogappregistry**) Documentation-only updates for Dawn
+
+## [1.0.8] - 12/01/2023
+
+### Features
+* (**qconnect**) This release adds the PutFeedback API and allows providing feedback against the specified assistant for the specified target.
+* (**rbin**) Added resource identifier in the output and updated error handling.
+* (**verifiedpermissions**) Adds description field to PolicyStore API's and namespaces field to GetSchema.
+* [#1132](https://github.com/awslabs/aws-sdk-kotlin/issues/1132) Pass client-configured LogMode through to internal credentials providers
+
+### Miscellaneous
+* Add optional `configurationSource` parameter to `ProfileCredentialsProvider`
+
+## [1.0.7] - 11/30/2023
+
+### Features
+* (**arczonalshift**) This release adds a new capability, zonal autoshift. You can configure zonal autoshift so that AWS shifts traffic for a resource away from an Availability Zone, on your behalf, when AWS determines that there is an issue that could potentially affect customers in the Availability Zone.
+* (**glue**) Adds observation and analyzer support to the GetDataQualityResult and BatchGetDataQualityResult APIs.
+* (**sagemaker**) This release adds support for 1/ Code Editor, based on Code-OSS, Visual Studio Code Open Source, a new fully managed IDE option in SageMaker Studio  2/ JupyterLab, a new fully managed JupyterLab IDE experience in SageMaker Studio
+
 ## [1.0.6] - 11/30/2023
 
 ### Features

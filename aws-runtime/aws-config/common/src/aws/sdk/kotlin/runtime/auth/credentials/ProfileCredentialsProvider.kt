@@ -11,6 +11,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
+import aws.sdk.kotlin.runtime.config.profile.AwsConfigurationSource
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
@@ -73,12 +74,15 @@ import kotlin.coroutines.coroutineContext
  * @param platformProvider The platform API provider
  * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
+ * @param configurationSource An optional configuration source to use for loading shared config. If not provided,
+ * it will be resolved from the environment.
  */
 public class ProfileCredentialsProvider(
     public val profileName: String? = null,
     public val region: String? = null,
     public val platformProvider: PlatformProvider = PlatformProvider.System,
     public val httpClient: HttpClientEngine? = null,
+    public val configurationSource: AwsConfigurationSource? = null,
 ) : CloseableCredentialsProvider {
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
@@ -97,7 +101,7 @@ public class ProfileCredentialsProvider(
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<ProfileCredentialsProvider>()
-        val sharedConfig = loadAwsSharedConfig(platformProvider, profileName)
+        val sharedConfig = loadAwsSharedConfig(platformProvider, profileName, configurationSource)
         logger.debug { "Loading credentials from profile `${sharedConfig.activeProfile.name}`" }
         val chain = ProfileChain.resolve(sharedConfig)
 
