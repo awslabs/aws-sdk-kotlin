@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.15] - 12/12/2023
+
+### Features
+* (**cloudwatchlogs**) This release introduces the StartLiveTail API to tail ingested logs in near real time.
+* (**imagebuilder**) This release adds the Image Workflows feature to give more flexibility and control over the image building and testing process.
+* (**location**) This release 1)  adds sub-municipality field in Places API for searching and getting places information, and 2) allows optimizing route calculation based on expected arrival time.
+
+### Fixes
+* [#1008](https://github.com/awslabs/smithy-kotlin/issues/1008) Upgrade to [**smithy-kotlin** 1.0.3](https://github.com/awslabs/smithy-kotlin/releases/tag/v1.0.3) to consume fixes for URL signing special characters
+
 ## [1.0.14] - 12/11/2023
 
 ### Features
