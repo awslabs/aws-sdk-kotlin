@@ -14,17 +14,3 @@ import software.amazon.smithy.model.shapes.ServiceShape
  */
 val ServiceShape.sdkId: String
     get() = expectTrait<ServiceTrait>().sdkId
-
-/**
- * Get the [arnNamespace](https://awslabs.github.io/smithy/1.0/spec/aws/aws-core.html#service-arn-namespace)
- * from the (AWS) service shape
- */
-val ServiceShape.arnNamespace: String
-    get() = expectTrait<ServiceTrait>().arnNamespace
-
-/**
- * Get the [endpointPrefix](https://awslabs.github.io/smithy/1.0/spec/aws/aws-core.html#endpointprefix)
- * from the (AWS) service shape
- */
-val ServiceShape.endpointPrefix: String
-    get() = expectTrait<ServiceTrait>().endpointPrefix
