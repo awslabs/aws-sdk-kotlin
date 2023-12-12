@@ -4,9 +4,9 @@
  */
 package aws.sdk.kotlin.codegen.customization.route53
 
-import aws.sdk.kotlin.codegen.protocols.core.AwsHttpBindingProtocolGenerator
 import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
+import software.amazon.smithy.kotlin.codegen.aws.protocols.core.AwsHttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
