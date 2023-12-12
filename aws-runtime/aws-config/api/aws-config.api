@@ -227,7 +227,14 @@ public final class aws/sdk/kotlin/runtime/config/compression/CompressionSettings
 	public final fun getAwsRequestMinCompressionSizeBytes ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 }
 
-public final class aws/sdk/kotlin/runtime/config/compression/ResolveRequestCompressionKt {
+public final class aws/sdk/kotlin/runtime/config/compression/ResolveDisableRequestCompressionKt {
+	public static final fun resolveDisableRequestCompression (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resolveDisableRequestCompression$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/config/compression/ResolveRequestMinCompressionSizeBytesKt {
+	public static final fun resolveRequestMinCompressionSizeBytes (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resolveRequestMinCompressionSizeBytes$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode : java/lang/Enum {

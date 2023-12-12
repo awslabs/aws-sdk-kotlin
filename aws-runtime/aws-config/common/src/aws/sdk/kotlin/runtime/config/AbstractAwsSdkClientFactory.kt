@@ -6,7 +6,8 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
-import aws.sdk.kotlin.runtime.config.compression.resolveRequestCompression
+import aws.sdk.kotlin.runtime.config.compression.resolveDisableRequestCompression
+import aws.sdk.kotlin.runtime.config.compression.resolveRequestMinCompressionSizeBytes
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseFips
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
@@ -80,7 +81,13 @@ public abstract class AbstractAwsSdkClientFactory<
             config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)
 
             if (config is CompressionClientConfig.Builder) {
-                config.requestCompression = resolveRequestCompression(platform, profile)
+                config.requestCompression.disableRequestCompression =
+                    config.requestCompression.disableRequestCompression
+                        ?: resolveDisableRequestCompression(platform, profile)
+
+                config.requestCompression.requestMinCompressionSizeBytes =
+                    config.requestCompression.requestMinCompressionSizeBytes
+                        ?: resolveRequestMinCompressionSizeBytes(platform, profile)
             }
 
             finalizeConfig(builder, sharedConfig, profile)
