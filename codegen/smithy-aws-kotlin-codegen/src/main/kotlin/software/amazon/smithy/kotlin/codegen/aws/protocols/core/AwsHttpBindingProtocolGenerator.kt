@@ -25,7 +25,9 @@ import software.amazon.smithy.model.shapes.ShapeId
 abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() {
 
     object Sections {
-        object ProtocolErrorDeserialization : SectionId
+        object ProtocolErrorDeserialization : SectionId {
+            val Operation = SectionKey<OperationShape>("Operation")
+        }
 
         object RenderThrowOperationError : SectionId {
             val Context = SectionKey<ProtocolGenerator.GenerationContext>("Context")
@@ -120,7 +122,12 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
                 .write("val wrappedResponse = call.response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
                 .write("val wrappedCall = call.copy(response = wrappedResponse)")
                 .write("")
-                .declareSection(Sections.ProtocolErrorDeserialization)
+                .declareSection(
+                    Sections.ProtocolErrorDeserialization,
+                    mapOf(
+                        Sections.ProtocolErrorDeserialization.Operation to op,
+                    ),
+                )
                 .write("val errorDetails = try {")
                 .indent()
                 .call {
