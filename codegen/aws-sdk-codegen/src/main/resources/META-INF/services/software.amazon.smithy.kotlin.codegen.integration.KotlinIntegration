@@ -1,6 +1,5 @@
 aws.sdk.kotlin.codegen.AddUserAgentMetadataIntegration
 aws.sdk.kotlin.codegen.AwsServiceConfigIntegration
-aws.sdk.kotlin.codegen.customization.s3.S3GeneratorSupplier
 aws.sdk.kotlin.codegen.GradleGenerator
 aws.sdk.kotlin.codegen.AwsRetryHeaderIntegration
 aws.sdk.kotlin.codegen.customization.ReplaceServiceExceptionBase
@@ -14,6 +13,7 @@ aws.sdk.kotlin.codegen.PresignerGenerator
 aws.sdk.kotlin.codegen.customization.flexiblechecksums.FlexibleChecksumsRequest
 aws.sdk.kotlin.codegen.customization.flexiblechecksums.FlexibleChecksumsResponse
 aws.sdk.kotlin.codegen.customization.AddAwsSpanAttributes
+aws.sdk.kotlin.codegen.customization.s3.S3OperationErrorHandler
 aws.sdk.kotlin.codegen.customization.s3.S3SigningConfig
 aws.sdk.kotlin.codegen.customization.s3.S3ErrorMetadataIntegration
 aws.sdk.kotlin.codegen.customization.s3.ClientConfigIntegration

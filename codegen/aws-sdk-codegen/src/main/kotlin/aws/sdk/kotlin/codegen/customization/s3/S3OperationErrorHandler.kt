@@ -6,11 +6,14 @@
 package aws.sdk.kotlin.codegen.customization.s3
 
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.aws.protocols.RestXml
+import software.amazon.smithy.kotlin.codegen.aws.protocols.core.AwsHttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.getContextValue
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
@@ -19,29 +22,26 @@ import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
-// FIXME - need to ensure the ordering of this doesn't conflict with the default restXml protocol generator. Perhaps
-// we should preprocess the model to replace the protocol when the sdkId matches s3's sdkId to something custom.
-
 /**
- * Supplies a customized protocol generator just for S3
+ * Customized error handling for S3
  */
-class S3GeneratorSupplier : KotlinIntegration {
-    override val order: Byte = -20
+class S3OperationErrorHandler : KotlinIntegration {
 
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
         val service = model.expectShape<ServiceShape>(settings.service)
         return service.isS3
     }
 
-    override val protocolGenerators: List<ProtocolGenerator> = listOf(S3Generator())
-}
+    override val sectionWriters: List<SectionWriterBinding>
+        get() = listOf(SectionWriterBinding(ExceptionBaseClassGenerator.ExceptionBaseClassSection, overrideThrowOperationErrors))
 
-/**
- * Customized protocol generator just for S3
- */
-class S3Generator : RestXml() {
+    private val overrideThrowOperationErrors = SectionWriter { writer, _ ->
+        val ctx = writer.getContextValue(AwsHttpBindingProtocolGenerator.Sections.RenderThrowOperationError.Context)
+        val op = writer.getContextValue(AwsHttpBindingProtocolGenerator.Sections.RenderThrowOperationError.Operation)
+        renderThrowOperationError(ctx, op, writer)
+    }
 
-    override fun renderThrowOperationError(
+    private fun renderThrowOperationError(
         ctx: ProtocolGenerator.GenerationContext,
         op: OperationShape,
         writer: KotlinWriter,
@@ -97,7 +97,7 @@ class S3Generator : RestXml() {
                     name = "${errSymbol.name}Deserializer"
                     namespace = ctx.settings.pkg.serde
                 }
-                writer.write("#S -> #T().deserialize(context, wrappedCall)", getErrorCode(ctx, err), errDeserializerSymbol)
+                writer.write("#S -> #T().deserialize(context, wrappedCall)", err.name, errDeserializerSymbol)
             }
             write("else -> #T(errorDetails.message)", exceptionBaseSymbol)
         }

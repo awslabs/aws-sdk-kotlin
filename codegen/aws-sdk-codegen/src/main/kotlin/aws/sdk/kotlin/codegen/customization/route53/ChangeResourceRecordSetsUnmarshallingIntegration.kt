@@ -14,9 +14,10 @@ import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 
+// FIXME - this looks like it applies too broadly
 class ChangeResourceRecordSetsUnmarshallingIntegration : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding> = listOf(
-        SectionWriterBinding(AwsHttpBindingProtocolGenerator.ProtocolErrorDeserialization) { writer, _ ->
+        SectionWriterBinding(AwsHttpBindingProtocolGenerator.Sections.ProtocolErrorDeserialization) { writer, _ ->
             writer.withBlock("payload?.let {", "}\n") {
                 withBlock("aws.sdk.kotlin.services.route53.internal.parseRestXmlInvalidChangeBatchResponse(payload)?.let {", "}") {
                     write("setAseErrorMetadata(it.exception, wrappedResponse, it.errorDetails)")
