@@ -17,7 +17,6 @@ object AwsRuntimeTypes {
         val ClientException = symbol("ClientException")
 
         object Client : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE, "client") {
-            val AwsClientOption = symbol("AwsClientOption")
             val AwsSdkClientConfig = symbol("AwsSdkClientConfig")
         }
     }

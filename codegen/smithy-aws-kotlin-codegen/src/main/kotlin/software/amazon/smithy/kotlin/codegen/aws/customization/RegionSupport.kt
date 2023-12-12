@@ -8,6 +8,8 @@ import software.amazon.smithy.aws.traits.ServiceTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.getContextValue
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
@@ -15,8 +17,10 @@ import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointCustomization
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolUnitTestRequestGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.putIfAbsent
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -73,10 +77,33 @@ class RegionSupport : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(
             SectionWriterBinding(HttpProtocolUnitTestRequestGenerator.ConfigureServiceClient, renderHttpProtocolRequestTestConfigureServiceClient),
+            SectionWriterBinding(HttpProtocolClientGenerator.MergeServiceDefaults, renderRegionOperationContextDefault),
         )
 
+    // sets a default region for protocol tests
     private val renderHttpProtocolRequestTestConfigureServiceClient = AppendingSectionWriter { writer ->
         // specify a default region
         writer.write("region = #S", "us-east-1")
+    }
+
+    // sets (initial) region/signing region in the execution context
+    private val renderRegionOperationContextDefault = AppendingSectionWriter { writer ->
+        val ctx = writer.getContextValue(HttpProtocolClientGenerator.MergeServiceDefaults.GenerationContext)
+        val isAwsSdk = ctx.service.hasTrait<ServiceTrait>()
+
+        if (isAwsSdk) {
+            val awsClientOption = buildSymbol {
+                name = "AwsClientOption"
+                namespace = "aws.sdk.kotlin.runtime.client"
+            }
+            writer.putIfAbsent(awsClientOption, "Region", nullable = true)
+        }
+
+        writer.putIfAbsent(
+            RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes,
+            "SigningRegion",
+            "config.region",
+            nullable = true,
+        )
     }
 }
