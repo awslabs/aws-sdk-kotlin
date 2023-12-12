@@ -33,7 +33,7 @@ class S3OperationErrorHandler : KotlinIntegration {
     }
 
     override val sectionWriters: List<SectionWriterBinding>
-        get() = listOf(SectionWriterBinding(ExceptionBaseClassGenerator.ExceptionBaseClassSection, overrideThrowOperationErrors))
+        get() = listOf(SectionWriterBinding(AwsHttpBindingProtocolGenerator.Sections.RenderThrowOperationError, overrideThrowOperationErrors))
 
     private val overrideThrowOperationErrors = SectionWriter { writer, _ ->
         val ctx = writer.getContextValue(AwsHttpBindingProtocolGenerator.Sections.RenderThrowOperationError.Context)
