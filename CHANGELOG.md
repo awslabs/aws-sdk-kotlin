@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.16] - 12/13/2023
+
+### Features
+* (**drs**) Adding AgentVersion to SourceServer and RecoveryInstance structures
+
 ## [1.0.15] - 12/12/2023
 
 ### Features
