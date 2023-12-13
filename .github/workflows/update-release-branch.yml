@@ -72,7 +72,7 @@ jobs:
           # because CI is masking it
           ./gradlew -Paws.kotlin.native=false test jvmTest
       - name: Release Check - build an SDK client
-        if: env.MERGED_NEEDED == 'true'
+#        if: env.MERGED_NEEDED == 'true'
         shell: bash
         run: |
           ./gradlew -Paws.services=s3 -Paws.kotlin.native=false bootstrap; 
