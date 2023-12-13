@@ -22,8 +22,8 @@ import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
 import aws.smithy.kotlin.runtime.client.config.ClientSettings
+import aws.smithy.kotlin.runtime.client.config.CompressionClientConfig
 import aws.smithy.kotlin.runtime.config.resolve
-import aws.smithy.kotlin.runtime.http.config.CompressionClientConfig
 import aws.smithy.kotlin.runtime.telemetry.TelemetryConfig
 import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
 import aws.smithy.kotlin.runtime.telemetry.trace.withSpan
