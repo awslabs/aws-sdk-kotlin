@@ -4,14 +4,15 @@
  */
 package aws.sdk.kotlin.codegen.customization
 
-import aws.sdk.kotlin.codegen.AwsKotlinDependency
-import software.amazon.smithy.codegen.core.Symbol
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.CodegenContext
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.declareSection
 import software.amazon.smithy.kotlin.codegen.core.getContextValue
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.integration.SectionId
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.namespace
 import software.amazon.smithy.kotlin.codegen.rendering.ExceptionBaseClassGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceExceptionBaseClassGenerator
 
@@ -27,11 +28,15 @@ class ReplaceServiceExceptionBase : KotlinIntegration {
 
     private val exceptionSectionWriter = SectionWriter { writer, _ ->
         val ctx = writer.getContextValue(ExceptionBaseClassGenerator.ExceptionBaseClassSection.CodegenContext)
-        ServiceExceptionBaseClassGenerator(exceptionBaseClassSymbol).render(ctx, writer)
+        AwsServiceExceptionBaseClassGenerator().render(ctx, writer)
     }
+}
 
-    private val exceptionBaseClassSymbol: Symbol = buildSymbol {
-        name = "AwsServiceException"
-        namespace(AwsKotlinDependency.AWS_CORE)
+class AwsServiceExceptionBaseClassGenerator : ServiceExceptionBaseClassGenerator(AwsRuntimeTypes.Core.AwsServiceException) {
+    object Sections {
+        object RenderExtra : SectionId
+    }
+    override fun renderExtra(ctx: CodegenContext, writer: KotlinWriter) {
+        writer.declareSection(Sections.RenderExtra)
     }
 }

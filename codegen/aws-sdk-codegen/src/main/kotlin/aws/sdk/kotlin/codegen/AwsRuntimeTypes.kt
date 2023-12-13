@@ -14,6 +14,7 @@ import software.amazon.smithy.kotlin.codegen.core.RuntimeTypePackage
 object AwsRuntimeTypes {
     object Core : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE) {
         val AwsErrorMetadata = symbol("AwsErrorMetadata")
+        val AwsServiceException = symbol("AwsServiceException")
         val ClientException = symbol("ClientException")
 
         object Client : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE, "client") {
