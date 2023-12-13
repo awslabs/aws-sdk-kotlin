@@ -55,6 +55,12 @@ jobs:
           repository: 'awslabs/smithy-kotlin'
           fetch-depth: 0
           path: 'smithy-kotlin'
+      - uses: actions/checkout@v4
+        with:
+          repository: 'smithy-lang/smithy-rs'
+          path: 'smithy-rs'
+          sparse-checkout: | 
+            tools/ci-build/difftags
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -63,8 +69,6 @@ jobs:
           cache: 'gradle'
       - name: Install deps and setup environment
         run: |
-          npm install -g diff2html-cli@${{ env.DIFF2HTML_VERSION }}
-          env | sort
           # store off a copy of head ref of ci.py, otherwise base ref generation will use a different version of this script
           CODEGEN_DIFF_REVISIONS=${{ runner.temp }}/codegen-diff-revisions.py
           cp $GITHUB_WORKSPACE/aws-sdk-kotlin/.github/scripts/codegen-diff-revisions.py $CODEGEN_DIFF_REVISIONS
@@ -72,6 +76,11 @@ jobs:
           echo "REPO_TOOLS=$GITHUB_WORKSPACE/aws-kotlin-repo-tools" >> "$GITHUB_ENV"
           echo "SMITHY_KOTLIN_DIR=$GITHUB_WORKSPACE/smithy-kotlin" >> "$GITHUB_ENV"
           echo "SDK_DIR=$GITHUB_WORKSPACE/aws-sdk-kotlin" >> "$GITHUB_ENV"
+          echo "installing smithy-rs diff tooling"
+          pushd $GITHUB_WORKSPACE/smithy-rs/tools/ci-build/difftags
+          cargo install --path .
+          difftags --version
+          popd
 
       - name: Generate code for head ref
         run: |
