@@ -70,3 +70,14 @@
     /*outline: 2px solid #7F52FF;*/
     outline: 2px solid var(--active-tab-border-color); /* The color appears unresolved, but it is defined in Dokka style sheets */
 }
+
+/*
+    Dokka does not break links or code blocks properly by default. Add word-wrap to prevent left/right scrollbar from
+    appearing on small screens.
+*/
+.main-content a:not([data-name]) {
+    word-wrap: break-word;
+}
+.symbol {
+    overflow-wrap: break-word;
+}
