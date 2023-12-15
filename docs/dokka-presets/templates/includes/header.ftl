@@ -23,8 +23,6 @@
         </div>
         <div class="navigation-controls">
             <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
-            <label for="pages-search" id="pages-search-label">Search</label>
-            <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
         </div>
     </nav>
 </#macro>

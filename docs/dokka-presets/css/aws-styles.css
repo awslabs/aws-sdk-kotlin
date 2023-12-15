@@ -18,17 +18,8 @@
     outline-offset: 2px;    /* Space between the outline and the button */
 }
 
-#pages-search {
-    margin: 0;
-    padding-top: 10px;
-}
-
 #pages-search:focus {
     outline: revert;
-}
-
-#pages-search-label {
-    display: none;
 }
 
 /* copied from Dokka except for background-color attribute */
@@ -47,4 +38,20 @@
     padding: 10px var(--horizontal-spacing-for-content);
 
     z-index: 4;
+}
+
+/* Styles for section tabs like "Types" and "Functions" */
+.section-tab:focus, .section-tab:active {
+    outline: 2px solid var(--active-tab-border-color); /* The color appears unresolved, but it is defined in Dokka style sheets */
+}
+
+/*
+    Dokka does not break links or code blocks properly by default. Add word-wrap to prevent left/right scrollbar from
+    appearing on small screens.
+*/
+.main-content a:not([data-name]) {
+    word-wrap: break-word;
+}
+.symbol {
+    overflow-wrap: break-word;
 }
