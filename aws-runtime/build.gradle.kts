@@ -4,6 +4,7 @@
  */
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
 import aws.sdk.kotlin.gradle.kmp.*
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 description = "AWS client runtime support for generated service clients"
 
@@ -63,8 +64,14 @@ subprojects {
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "1.8"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
+            freeCompilerArgs.add("-Xexpect-actual-classes")
+        }
+    }
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
+        compilerOptions {
+            freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
 }
