@@ -18,17 +18,8 @@
     outline-offset: 2px;    /* Space between the outline and the button */
 }
 
-#pages-search {
-    margin: 0;
-    padding-top: 10px;
-}
-
 #pages-search:focus {
     outline: revert;
-}
-
-#pages-search-label {
-    display: none;
 }
 
 /* copied from Dokka except for background-color attribute */
